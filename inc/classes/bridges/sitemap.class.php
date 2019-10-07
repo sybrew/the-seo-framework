@@ -101,6 +101,7 @@ final class Sitemap {
 	 * Initializes scripts based on admin query.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 Can now parse non-ASCII URLs. No longer lowercases raw URIs.
 	 * @access private
 	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
@@ -108,8 +109,8 @@ final class Sitemap {
 
 		// The raw path(+query) of the requested URI.
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-			$raw_uri = strtolower(
-				\sanitize_text_field(
+			$raw_uri = rawurldecode(
+				\wp_check_invalid_utf8(
 					stripslashes( $_SERVER['REQUEST_URI'] )
 				)
 			) ?: '/';
@@ -187,13 +188,20 @@ final class Sitemap {
 		static $list;
 		/**
 		 * @since 4.0.0
+		 * @since 4.0.2 Made the endpoints' regex case-insensitive.
 		 * @link Example: https://github.com/sybrew/tsf-term-sitemap
-		 * @see $this->get_sitemap_endpoint_regex_list()
 		 * @param array $list The endpoints: {
 		 *   'id' => array: {
 		 *      'endpoint' => string   The expected "pretty" endpoint, meant for administrative display.
 		 *      'epregex'  => string   The endpoint regex, following the home path regex.
+		 *                             N.B. Be wary of case sensitivity. Append the i-flag.
+		 *                             N.B. Trailing slashes will cause the match to fail.
+		 *                             N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
 		 *      'callback' => callable The callback for the sitemap output.
+		 *                             Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
+		 *                             Tip: In the callback, use
+		 *                                  `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
+		 *                                  It returns the arguments you've passed in this filter; including your arbitrary indexes.
 		 *      'robots'   => bool     Whether the endpoint should be mentioned in the robots.txt file.
 		 *   }
 		 * }
@@ -203,19 +211,19 @@ final class Sitemap {
 			[
 				'base'           => [
 					'endpoint' => 'sitemap.xml',
-					'regex'    => '/^sitemap\.xml/',
+					'regex'    => '/^sitemap\.xml/i',
 					'callback' => static::class . '::output_base_sitemap',
 					'robots'   => true,
 				],
 				'index'          => [
 					'endpoint' => 'sitemap_index.xml',
-					'regex'    => '/^sitemap_index\.xml/',
+					'regex'    => '/^sitemap_index\.xml/i',
 					'callback' => static::class . '::output_base_sitemap',
 					'robots'   => false,
 				],
 				'xsl-stylesheet' => [
 					'endpoint' => 'sitemap.xsl',
-					'regex'    => '/^sitemap\.xsl/',
+					'regex'    => '/^sitemap\.xsl/i',
 					'callback' => static::class . '::output_stylesheet',
 					'robots'   => false,
 				],
@@ -365,8 +373,9 @@ final class Sitemap {
 	 * Gets the sitemap ID based on the current request URI.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 Can now parse Unicode-encoded URLs.
 	 *
-	 * @param string $raw_uri The raw request URI.
+	 * @param string $raw_uri The raw request URI. Unsafe.
 	 * @return string|false The endpoint ID on success, false on failure.
 	 */
 	private function get_sitemap_id_from_uri( $raw_uri ) {
@@ -375,12 +384,13 @@ final class Sitemap {
 		$path_info = $this->get_sitemap_base_path_info();
 
 		// A regex which detects $sitemap_path at the beginning of a string.
-		$path_regex = '/^' . preg_quote( $path_info['path'], '/' ) . '/';
+		$path_regex = '/^' . preg_quote( rawurldecode( $path_info['path'] ), '/' ) . '/ui';
 
 		// See if the base matches the endpoint. This is crucial for query-based endpoints.
 		if ( ! preg_match( $path_regex, $raw_uri ) ) return false;
 
 		$stripped_uri = preg_replace( $path_regex, '', rtrim( $raw_uri, '/' ) );
+
 		// Strip the base URI. If nothing's left, stop assimilating.
 		if ( ! $stripped_uri ) return false;
 
@@ -389,7 +399,7 @@ final class Sitemap {
 		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
 		if ( $path_info['use_query_var'] ) {
 			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
-				$_regex = '/^' . preg_quote( $_id, '/' ) . '/';
+				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
 				if ( preg_match( $_regex, $stripped_uri ) ) {
 					$sitemap_id = $_id;
 					break;

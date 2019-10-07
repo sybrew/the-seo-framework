@@ -226,6 +226,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 * **Changed:**
 	* Plugins that create a CMS on top of the WordPress CMS (which is ludicrous) now play along nicer with The SEO Framework. Among which are known to be BuddyPress and The Events Calendar.
 		* We've done this by testing for a valid query ID on seemingly valid post and term queries. When no such ID exists, the query is deemed invalid for use, and we disable TSF's SEO output and enhancements for the request.
+* **Fixed:**
+	* The sitemap(s) (and their stylesheet(s)) can now recognize different symbols for display requests:
+		* ASCII-typed subdirectories with capital letters are now correctly recognized.
+		* UTF8-typed (and URL-encoded) subdirectories (also with mixed case) are now correctly recognized.
+		* The endpoints used are now case-insensitive. So, `/SiTeMaP.xMl` should work, including the plain-permalink version thereof.
 
 **For translators:**
 
@@ -255,6 +260,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* **Added:**
 		* `the_seo_framework_ping_search_engines`, runs whenever it's time to ping Bing (on valid site update).
 			* N.B. This runs either at a cronjob or during post save.
+* **Filter notes:**
+	* **Changed:**
+		* `the_seo_framework_sitemap_endpoint_list` the endpoints' default regex is now case-insensitive.
 
 = 4.0.1 =
 
