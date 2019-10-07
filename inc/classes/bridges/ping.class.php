@@ -60,6 +60,7 @@ final class Ping {
 	 * @since 3.2.3 1. Now works as intended again.
 	 *              2. Removed Easter egg.
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
+	 * @since 4.0.2 Added action.
 	 *
 	 * @return void Early if blog is not public.
 	 */
@@ -71,15 +72,19 @@ final class Ping {
 
 		$transient = $tsf->generate_cache_key( 0, '', 'ping' );
 
-		//* NOTE: Use legacy get_transient to prevent ping spam.
+		//* NOTE: Use legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
-			//* Transient doesn't exist yet.
-
 			if ( $tsf->get_option( 'ping_google' ) )
 				static::ping_google();
 
 			if ( $tsf->get_option( 'ping_bing' ) )
 				static::ping_bing();
+
+			/**
+			 * @since 4.0.2
+			 * @param string $class The current class name.
+			 */
+			\do_action( 'the_seo_framework_ping_search_engines', static::class );
 
 			/**
 			 * @since 2.5.1

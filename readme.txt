@@ -237,19 +237,24 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 * **Changed:**
 	* The overloading trait-collection is now loaded during the plugin load phase, instead of at `plugins_loaded`.
 		* This addresses an issue where some plugins call The SEO Framework before it's loaded.
-* **Method changes:**
-	* In façade object `the_seo_framework()`:
-		* `get_post_meta()` now tests for an existing post ID before trying to fetch the metadata.
-		* `query_supports_seo()` now tests for existing post/term IDs on singular/term queries.
-		* To be more in line with the Post Metadata fetchers, these methods now test for a valid term ID, and will continue to use the filtered term object for processing:
-			* `update_term_edit_term_meta()`
-			* `update_quick_edit_term_meta()`
-			* `update_single_term_meta_item()`
-			* `save_term_meta()`
-		* `get_robots_txt_url()` now uses preferred URL scheme, instead of the current URL scheme.
-		* These methods now assert the correct tag taxonomy condition, which helps with tag-specific filters and translations:
-			`get_generated_archive_title()`
-			`get_generated_single_term_title()`
+* **Method notes:**
+	* **Changed:**
+		* In façade object `the_seo_framework()`:
+			* `get_post_meta()` now tests for an existing post ID before trying to fetch the metadata.
+			* `query_supports_seo()` now tests for existing post/term IDs on singular/term queries.
+			* To be more in line with the Post Metadata fetchers, these methods now test for a valid term ID, and will continue to use the filtered term object for processing:
+				* `update_term_edit_term_meta()`
+				* `update_quick_edit_term_meta()`
+				* `update_single_term_meta_item()`
+				* `save_term_meta()`
+			* `get_robots_txt_url()` now uses preferred URL scheme, instead of the current URL scheme.
+			* These methods now assert the correct tag taxonomy condition, which helps with tag-specific filters and translations:
+				`get_generated_archive_title()`
+				`get_generated_single_term_title()`
+* **Action notes:**
+	* **Added:**
+		* `the_seo_framework_ping_search_engines`, runs whenever it's time to ping Bing (on valid site update).
+			* N.B. This runs either at a cronjob or during post save.
 
 = 4.0.1 =
 
