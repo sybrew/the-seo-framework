@@ -371,6 +371,15 @@ final class SeoBar_Page extends SeoBar {
 							'base' => \__( "It's built using the page content.", 'autodescription' ),
 						],
 					],
+					'emptynoauto' => [
+						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
+						'title'  => \__( 'Description', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
+						'reason' => \__( 'Empty.', 'autodescription' ),
+						'assess' => [
+							'noauto' => \__( 'No page description is set.', 'autodescription' ),
+						],
+					],
 					'custom'    => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
@@ -403,6 +412,11 @@ final class SeoBar_Page extends SeoBar {
 					$item['assess']['homepage'] = \__( 'The description inputted at the Edit Page screen is used.', 'autodescription' );
 				}
 			}
+		} elseif ( ! static::$tsf->is_auto_description_enabled( $desc_args ) ) {
+			$item = $cache['defaults']['emptynoauto'];
+
+			// No description is found. There's no need to continue parsing.
+			return $item;
 		} else {
 			$item = $cache['defaults']['generated'];
 

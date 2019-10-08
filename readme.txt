@@ -231,6 +231,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 * **Added:**
 	* `noindex` headers are now also added to the XML-RPC pingback request endpoints.
+	* When description-generation is disabled (globally or on a per-page basis), you may now get more contextual SEO Bar entries.
 * **Changed:**
 	* Plugins that create a CMS on top of the WordPress CMS (which is ludicrous) now play along nicer with The SEO Framework. Among which are known to be BuddyPress and The Events Calendar.
 		* We've done this by testing for a valid query ID on seemingly valid post and term queries. When no such ID exists, the query is deemed invalid for use, and we disable TSF's SEO output and enhancements for the request.
