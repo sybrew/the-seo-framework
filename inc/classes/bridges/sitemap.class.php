@@ -400,6 +400,7 @@ final class Sitemap {
 		if ( $path_info['use_query_var'] ) {
 			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
 				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
+				// Yes, we know. It's not really checking for standardized query-variables.
 				if ( preg_match( $_regex, $stripped_uri ) ) {
 					$sitemap_id = $_id;
 					break;
@@ -441,6 +442,8 @@ final class Sitemap {
 		} elseif ( $wp_rewrite->using_permalinks() ) {
 			$path = "$home_path$prefix";
 		} else {
+			// Yes, we know. This is not really checking for standardized query-variables.
+			// It's straightforward and doesn't mess with the rest of the site, however.
 			$path = "$home_path$prefix?tsf-sitemap=";
 
 			$use_query_var = true;

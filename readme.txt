@@ -122,6 +122,12 @@ The SEO Framework works on many things without notifying you, because the best s
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
 * Ecommerce plugins, like WooCommerce and EDD.
 
+= Copyright legislation notice =
+
+When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain information on the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
+
+If you wish to learn more, please refer to the website of the [EU commission on copyright](https://ec.europa.eu/digital-single-market/en/modernisation-eu-copyright-rules). These rulings may propagate its effects through regions outside the EU.
+
 == Installation ==
 
 = This plugin requires: =
@@ -223,6 +229,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For everyone:**
 
+* **Added:**
+	* `noindex` headers are now also added to the XML-RPC pingback request endpoints.
 * **Changed:**
 	* Plugins that create a CMS on top of the WordPress CMS (which is ludicrous) now play along nicer with The SEO Framework. Among which are known to be BuddyPress and The Events Calendar.
 		* We've done this by testing for a valid query ID on seemingly valid post and term queries. When no such ID exists, the query is deemed invalid for use, and we disable TSF's SEO output and enhancements for the request.
@@ -234,6 +242,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For translators:**
 
+* **Added:**
+	* TODO New translations are available regarding the copyright legislation.
 * **Fixed:**
 	* A typo.
 
@@ -243,8 +253,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* The overloading trait-collection is now loaded during the plugin load phase, instead of at `plugins_loaded`.
 		* This addresses an issue where some plugins call The SEO Framework before it's loaded.
 * **Method notes:**
-	* **Changed:**
-		* In façade object `the_seo_framework()`:
+	* In façade object `the_seo_framework()`:
+		* **Changed:**
 			* `get_post_meta()` now tests for an existing post ID before trying to fetch the metadata.
 			* `query_supports_seo()` now tests for existing post/term IDs on singular/term queries.
 			* To be more in line with the Post Metadata fetchers, these methods now test for a valid term ID, and will continue to use the filtered term object for processing:
