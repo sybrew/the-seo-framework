@@ -362,7 +362,7 @@ final class SeoBar_Page extends SeoBar {
 					'foundmanydupe' => \__( 'Found too many duplicated words.', 'autodescription' ),
 				],
 				'defaults' => [
-					'generated' => [
+					'generated'   => [
 						'symbol' => \_x( 'DG', 'Description Generated', 'autodescription' ),
 						'title'  => \__( 'Description, generated', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
@@ -380,7 +380,7 @@ final class SeoBar_Page extends SeoBar {
 							'noauto' => \__( 'No page description is set.', 'autodescription' ),
 						],
 					],
-					'custom'    => [
+					'custom'      => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
