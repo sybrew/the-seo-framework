@@ -256,6 +256,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* This addresses an issue where some plugins call The SEO Framework before it's loaded.
 * **Method notes:**
 	* In façade object `the_seo_framework()`:
+		* **Added:**
+			* `get_largest_acceptable_image_src()`, returns the largest WordPress image source based on parameters.
+			* `s_url_relative_to_current_scheme()`, makes non-relative URLs absolute, corrects the scheme to most preferred when the domain matches the current site, and makes it safer regardless afterward.
 		* **Changed:**
 			* `get_post_meta()` now tests for an existing post ID before trying to fetch the metadata.
 			* `query_supports_seo()` now tests for existing post/term IDs on singular/term queries.
@@ -268,6 +271,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 			* These methods now assert the correct tag taxonomy condition, which helps with tag-specific filters and translations:
 				`get_generated_archive_title()`
 				`get_generated_single_term_title()`
+			* `s_image_details()` now finds smaller images when they're over 4K.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_ping_search_engines`, runs whenever it's time to ping Bing (on valid site update).

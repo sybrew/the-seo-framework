@@ -511,4 +511,35 @@ class Generate_Image extends Generate_Url {
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Fix `wp_get_attachment_image()` first.
 		return $src_id ? trim( strip_tags( \get_post_meta( $src_id, '_wp_attachment_image_alt', true ) ) ) : '';
 	}
+
+	/**
+	 * Returns the largest acceptable image size's details.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param int $id       The image ID.
+	 * @param int $max_size The largest acceptable size in pixels. Accounts for both width and height.
+	 * @return false|array Returns an array (url, width, height, is_intermediate), or false, if no image is available.
+	 */
+	public function get_largest_acceptable_image_src( $id, $max_size = 4096 ) {
+
+		// Imply there's a correct ID set. When there's not, the loop won't run.
+		$meta  = \wp_get_attachment_metadata( $id );
+		$sizes = ! empty( $meta['sizes'] ) && is_array( $meta['sizes'] ) ? $meta['sizes'] : [];
+
+		// law = largest accepted width.
+		$law  = 0;
+		$size = '';
+
+		foreach ( $sizes as $_s => $_d ) {
+			if ( isset( $_d['width'], $_d['height'] ) ) {
+				if ( $_d['width'] <= $max_size && $_d['height'] <= $max_size && $_d['width'] > $law ) {
+					$law  = $_d['width'];
+					$size = $_s;
+				}
+			}
+		}
+
+		return $size ? \wp_get_attachment_image_src( $id, $size ) : false;
+	}
 }
