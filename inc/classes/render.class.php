@@ -961,6 +961,7 @@ class Render extends Admin_Init {
 	 * Returns early if blog isn't public. WordPress Core will then output the meta tags.
 	 *
 	 * @since 2.0.0
+	 * @since 4.0.2 Thanks to special tags, output escaping has been added precautionarily.
 	 *
 	 * @return string The Robots meta tags.
 	 */
@@ -975,7 +976,7 @@ class Render extends Admin_Init {
 		if ( empty( $meta ) )
 			return '';
 
-		return sprintf( '<meta name="robots" content="%s" />' . PHP_EOL, implode( ',', $meta ) );
+		return sprintf( '<meta name="robots" content="%s" />' . PHP_EOL, \esc_attr( implode( ',', $meta ) ) );
 	}
 
 	/**

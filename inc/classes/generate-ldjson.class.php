@@ -562,15 +562,21 @@ class Generate_Ldjson extends Generate_Image {
 		foreach ( $tree_ids as $pos => $child_id ) :
 			$position = $pos + 2;
 
+			$_generator_args = [
+				'id'       => $child_id,
+				'taxonomy' => $taxonomy,
+			];
+
+			// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$cat_name = $this->get_filtered_raw_custom_field_title( [ 'id' => $child_id, 'taxonomy' => $taxonomy ] )
-					?: (
-						$this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
-						?: $this->get_static_untitled_title()
-					);
+				$cat_name = $this->get_filtered_raw_custom_field_title( $_generator_args )
+						 ?: $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
+						 ?: $this->get_static_untitled_title();
 			} else {
-				$cat_name = $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) ) ?: $this->get_static_untitled_title();
+				$cat_name = $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
+						 ?: $this->get_static_untitled_title();
 			}
+			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 			//* Store in cache.
 			$items[] = [
@@ -580,10 +586,7 @@ class Generate_Ldjson extends Generate_Image {
 					'@id'  => $this->get_schema_url_id(
 						'breadcrumb',
 						'create',
-						[
-							'id'       => $child_id,
-							'taxonomy' => $taxonomy,
-						]
+						$_generator_args
 					),
 					'name' => $this->escape_title( $cat_name ),
 				],
@@ -737,12 +740,16 @@ class Generate_Ldjson extends Generate_Image {
 
 		$post_id = $this->get_the_real_ID();
 
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$name = $this->get_filtered_raw_custom_field_title( [ 'id' => $post_id ] )
-				?: ( $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title() );
+				 ?: $this->get_generated_single_post_title( $post_id )
+				 ?: $this->get_static_untitled_title();
 		} else {
-			$name = $this->get_generated_single_post_title( $post_id ) ?: $this->get_static_untitled_title();
+			$name = $this->get_generated_single_post_title( $post_id )
+				 ?: $this->get_static_untitled_title();
 		}
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		$crumb = [
 			'@type'    => 'ListItem',

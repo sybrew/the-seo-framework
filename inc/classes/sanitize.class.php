@@ -282,6 +282,8 @@ class Sanitize extends Admin_Pages {
 				'paged_noindex',
 				'home_paged_noindex',
 
+				'set_copyright_directives',
+
 				'homepage_noindex',
 				'homepage_nofollow',
 				'homepage_noarchive',
@@ -453,6 +455,23 @@ class Sanitize extends Admin_Pages {
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'sitemap_query_limit',
+			]
+		);
+
+		$this->add_option_filter(
+			's_image_preview',
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[
+				'max_image_preview',
+			]
+		);
+
+		$this->add_option_filter(
+			's_snippet_length',
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[
+				'max_snippet_length',
+				'max_video_preview',
 			]
 		);
 	}
@@ -638,6 +657,8 @@ class Sanitize extends Admin_Pages {
 				's_twitter_card'        => [ $this, 's_twitter_card' ],
 				's_canonical_scheme'    => [ $this, 's_canonical_scheme' ],
 				's_min_max_sitemap'     => [ $this, 's_min_max_sitemap' ],
+				's_image_preview'       => [ $this, 's_image_preview' ],
+				's_snippet_length'      => [ $this, 's_snippet_length' ],
 			]
 		);
 	}
@@ -1595,6 +1616,43 @@ class Sanitize extends Admin_Pages {
 			$new_value = 1;
 		} elseif ( $new_value > 50000 ) {
 			$new_value = 50000;
+		}
+
+		return $new_value;
+	}
+
+	/**
+	 * Sanitizes image preview directive value.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param string $new_value String with potentially unwanted values.
+	 * @return string The robots image snippet preview directive value.
+	 */
+	public function s_image_preview( $new_value ) {
+
+		if ( ! in_array( $new_value, [ 'none', 'standard', 'large' ], true ) )
+			$new_value = 'standard';
+
+		return $new_value;
+	}
+
+	/**
+	 * Sanitizes video and snippet preview length directive values.
+	 *
+	 * @since 4.0.2
+	 *
+	 * @param int $new_value Integer with potentially unwanted values.
+	 * @return int The robots video and snippet preview directive value.
+	 */
+	public function s_snippet_length( $new_value ) {
+
+		$new_value = (int) $new_value;
+
+		if ( $new_value < 0 ) {
+			$new_value = -1;
+		} elseif ( $new_value > 600 ) {
+			$new_value = 600;
 		}
 
 		return $new_value;

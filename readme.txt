@@ -90,7 +90,7 @@ Visit our [extensions overview page](https://theseoframework.com/extensions/) fo
 
 = Unbranded, free and for the professionals =
 
-The SEO Framework is a uniquely white label plugin that blends seamlessly into your WordPress dashboard. This means that we don't even put the name "The SEO Framework" anywhere within your WordPress interface. No ads, no nags. Nobody has to know about the tools you've used to create your website. Note that we output standardized development-comments separating the plugin output in source code. You can remove these with our free [Incognito extension](https://theseoframework.com/?p=2301).
+The SEO Framework is a uniquely white label plugin that blends seamlessly into your WordPress dashboard. This means that we don't even put the name "The SEO Framework" anywhere within your WordPress interface. No ads, no nags. Nobody has to know about the tools you've used to create your website. Note that we output standardized development-comments distinguishing the plugin output in source code. You can remove these with our free [Incognito extension](https://theseoframework.com/?p=2301).
 
 = Behind the screens =
 
@@ -227,25 +227,40 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.2 =
 
+TODO rewrite in simpler English: Google just announced their copyright legislation compliance, and with that, they proposed new robots directives. The law applies to [French citizens and publishers only](https://france.googleblog.com/2019/09/comment-nous-respectons-le-droit-dauteur.html), but the directives may be effectively applied to websites worldwide. Because a relatively small percentage of users are affected, no notification will be sent out.
+
+TODO In this update, we prepared for the WordPress 5.3 update, we fixed a few bugs, and also added [various improvements](#TODO).
+
 **For everyone:**
 
 * **Added:**
-	* `noindex` headers are now also added to the XML-RPC pingback request endpoints.
+	* Various options regarding new copyright directive legislation compliance for content aggregators.
+		* These options are disabled for sites that upgrade from TSF < 4.0.2.
+		* These options are enabled with a preset default for new sites and sites that reset settings.
+		* Unlike other SEO plugins, which are doing it wrong, these options aren't affected by the indexing state. This is a different directive, circumstantially corresponding to but not explicitly modified by indexing.
+	* `noindex` robots-headers are now also added to the XML-RPC pingback request endpoints.
 	* When description-generation is disabled (globally or on a per-page basis), you may now get more contextual SEO Bar entries.
 	* More descriptive robots-meta states are added to the SEO Bar for site-wide category and tag directives.
-* **Changed:**
-	* Plugins that create a CMS on top of the WordPress CMS (which is ludicrous) now play along nicer with The SEO Framework. Among which are known to be BuddyPress and The Events Calendar.
-		* We've done this by testing for a valid query ID on seemingly valid post and term queries. When no such ID exists, the query is deemed invalid for use, and we disable TSF's SEO output and enhancements for the request.
+	* TODO WP 5.3 styling support. No other compatibility issues were found.
+* **Improved:**
+	* When known images over 4096 pixels in either width or height are used for social sharing or schema, the biggest version of that image under the limit will be considered.
+	* TODO make the dismissible notice-buttons from a to "button type=button" -> a11y
+		* Non-critical, can be punted, as they aren't perpetual and do auto-dismiss...
 * **Fixed:**
-	* The sitemap(s) (and their stylesheet(s)) can now recognize different symbols for display requests:
+	* The sitemap(s) (and their stylesheet(s)) can now recognize different symbols in the URL for display requests:
 		* ASCII-typed subdirectories with capital letters are now correctly recognized.
 		* UTF8-typed (and URL-encoded) subdirectories (also with mixed case) are now correctly recognized.
 		* The endpoints used are now case-insensitive. So, `/SiTeMaP.xMl` should work, including the plain-permalink version thereof.
+	* Unverified plugin conflicts with the new trait loader have been addressed. Keyword: Unverified.
+	* Plugins that create a CMS on top of the WordPress CMS (which is ludicrous) now play along nicer with The SEO Framework. Among which are known to be BuddyPress and The Events Calendar.
+		* We've done this by testing for a valid query ID on seemingly valid post and term queries. When no such ID exists, the query is deemed invalid for use, and we disable TSF's SEO output and enhancements for the request.
 
 **For translators:**
 
 * **Added:**
-	* TODO New translations are available regarding the copyright legislation.
+	* New translations are available regarding the copyright legislation.
+* **Updated:**
+	* TODO Translation POT file.
 * **Fixed:**
 	* A typo.
 
@@ -254,9 +269,18 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 * **Changed:**
 	* The overloading trait-collection is now loaded during the plugin load phase, instead of at `plugins_loaded`.
 		* This addresses an issue where some plugins call The SEO Framework before it's loaded.
+* **Option notes:**
+	* For option index `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
+		* **Added:**
+			* `set_copyright_directives`, int, either `1` or `0`. Default `1` for new sites, `0` for old sites.
+			* `max_image_preview`, string, either `none`, `standard`, or `large`. Default `standard`.
+			* `max_snippet_length`, int, from `-1` to `600`.
+			* `max_video_preview`, int, from `-1` to `600`.
 * **Method notes:**
 	* In façade object `the_seo_framework()`:
 		* **Added:**
+			* `s_image_preview()`, sanitizes the `max_image_preview` option.
+			* `s_snippet_length()`, sanitizes the `max_snippet_length` and `max_video_preview` options.
 			* `get_largest_acceptable_image_src()`, returns the largest WordPress image source based on parameters.
 			* `s_url_relative_to_current_scheme()`, makes non-relative URLs absolute, corrects the scheme to most preferred when the domain matches the current site, and makes it safer regardless afterward.
 		* **Changed:**
@@ -272,6 +296,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 				`get_generated_archive_title()`
 				`get_generated_single_term_title()`
 			* `s_image_details()` now finds smaller images when they're over 4K.
+			* `robots_meta()` now parses the new robots-meta values.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_ping_search_engines`, runs whenever it's time to ping Bing (on valid site update).
@@ -279,6 +304,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 * **Filter notes:**
 	* **Changed:**
 		* `the_seo_framework_sitemap_endpoint_list` the endpoints' default regex is now case-insensitive.
+		* `the_seo_framework_robots_meta_array` now has the new legislatorial robots-meta keys available. It's ill-advised to change them if you don't own the site, however. Rely on the new options, instead.
 
 = 4.0.1 =
 

@@ -101,6 +101,154 @@ switch ( $instance ) :
 			),
 			true
 		);
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Copyright Directive Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( "Some search engines allow you to control copyright directives on the content they aggregate. It's best to allow some content to be taken by these aggregators, as that can improve contextualized exposure via snippets and previews. When left unspecified, regional regulations may apply. It is up to the aggregator to honor these requests.", 'autodescription' ) );
+
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'set_copyright_directives',
+				esc_html__( 'Specify aggregator copyright compliance directives?', 'autodescription' ),
+				'',
+				false
+			),
+			true
+		);
+
+		$_text_snippet_types['default'] = [
+			-1 => __( 'Unlimited', 'autodescription' ),
+			0  => _x( 'None, disallow snippet', 'quanity: zero', 'autodescription' ),
+		];
+		foreach ( range( 1, 600, 1 ) as $_n ) {
+			/* translators: %d = number */
+			$_text_snippet_types['number'][ $_n ] = sprintf( _n( '%d character', '%d characters', $_n, 'autodescription' ), $_n );
+		}
+		$text_snippet_options = '';
+		$_current             = $this->get_option( 'max_snippet_length' );
+		foreach ( $_text_snippet_types as $_type => $_values ) {
+			$_label = 'default' === $_type
+					? __( 'Standard directive', 'autodescription' )
+					: __( 'Granular directive', 'autodescription' );
+
+			$_options = '';
+			foreach ( $_values as $_value => $_name ) {
+				$_options .= vsprintf(
+					'<option value="%s" %s>%s</option>',
+					[
+						esc_attr( $_value ),
+						selected( $_current, esc_attr( $_value ), false ),
+						esc_html( $_name ),
+					]
+				);
+			}
+
+			$text_snippet_options .= sprintf( '<optgroup label="%s">%s</optgroup>', esc_attr( $_label ), $_options );
+		}
+		$this->wrap_fields(
+			vsprintf(
+				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
+				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
+				[
+					$this->get_field_id( 'max_snippet_length' ),
+					esc_html__( 'Maximum text snippet length', 'autodescription' ),
+					$this->get_field_name( 'max_snippet_length' ),
+					$text_snippet_options,
+					$this->make_info(
+						__( 'This may limit the text snippet length for all pages on this site.', 'autodescription' ),
+						'',
+						false
+					),
+				]
+			),
+			true
+		);
+
+		$image_preview_options = '';
+		$_current              = $this->get_option( 'max_image_preview' );
+		$_image_preview_types  = [
+			'none'     => _x( 'None, disallow preview', 'quanity: zero', 'autodescription' ),
+			'standard' => __( 'Thumbnail or standard size', 'autodescription' ),
+			'large'    => __( 'Large or full size', 'autodescription' ),
+		];
+		foreach ( $_image_preview_types as $_value => $_name ) {
+			$image_preview_options .= vsprintf(
+				'<option value="%s" %s>%s</option>',
+				[
+					esc_attr( $_value ),
+					selected( $_current, esc_attr( $_value ), false ),
+					esc_html( $_name ),
+				]
+			);
+		}
+		$this->wrap_fields(
+			vsprintf(
+				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
+				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
+				[
+					$this->get_field_id( 'max_image_preview' ),
+					esc_html__( 'Maximum image preview size', 'autodescription' ),
+					$this->get_field_name( 'max_image_preview' ),
+					$image_preview_options,
+					$this->make_info(
+						__( 'This may limit the image preview size for all images from this site.', 'autodescription' ),
+						'',
+						false
+					),
+				]
+			),
+			true
+		);
+
+		$_video_snippet_types['default'] = [
+			-1 => __( 'Full video preview', 'autodescription' ),
+			0  => _x( 'None, disallow preview', 'quanity: zero', 'autodescription' ),
+		];
+		foreach ( range( 1, 600, 1 ) as $_n ) {
+			/* translators: %d = number */
+			$_video_snippet_types['number'][ $_n ] = sprintf( _n( '%d second', '%d seconds', $_n, 'autodescription' ), $_n );
+		}
+		$video_preview_options = '';
+		$_current             = $this->get_option( 'max_video_preview' );
+		foreach ( $_video_snippet_types as $_type => $_values ) {
+			$_label = 'default' === $_type
+					? __( 'Standard directive', 'autodescription' )
+					: __( 'Granular directive', 'autodescription' );
+
+			$_options = '';
+			foreach ( $_values as $_value => $_name ) {
+				$_options .= vsprintf(
+					'<option value="%s" %s>%s</option>',
+					[
+						esc_attr( $_value ),
+						selected( $_current, esc_attr( $_value ), false ),
+						esc_html( $_name ),
+					]
+				);
+			}
+
+			$video_preview_options .= sprintf( '<optgroup label="%s">%s</optgroup>', esc_attr( $_label ), $_options );
+		}
+		$this->wrap_fields(
+			vsprintf(
+				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
+				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
+				[
+					$this->get_field_id( 'max_video_preview' ),
+					esc_html__( 'Maximum video preview length', 'autodescription' ),
+					$this->get_field_name( 'max_video_preview' ),
+					$video_preview_options,
+					$this->make_info(
+						__( 'This may limit the video preview length for all videos on this site.', 'autodescription' ),
+						'',
+						false
+					),
+				]
+			),
+			true
+		);
 		break;
 
 	case 'the_seo_framework_robots_metabox_no':

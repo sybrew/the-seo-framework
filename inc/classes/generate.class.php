@@ -76,6 +76,8 @@ class Generate extends User_Data {
 	 * @since 4.0.0 1. Now tests for qubit metadata.
 	 *              2. Added custom query support.
 	 *              3. Added two parameters.
+	 * @since 4.0.2 1. Added new copyright directive tags.
+	 *              2. Now strictly parses the validity of robots directives via a boolean check.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -86,7 +88,7 @@ class Generate extends User_Data {
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array {
-	 *    string key : string key (repeated key!)
+	 *    string index : string value
 	 * }
 	 */
 	public function robots_meta( $args = null, $ignore = 0b00 ) {
@@ -99,16 +101,23 @@ class Generate extends User_Data {
 		}
 
 		$meta = [
-			'noindex'   => '',
-			'nofollow'  => '',
-			'noarchive' => '',
+			'noindex'            => '',
+			'nofollow'           => '',
+			'noarchive'          => '',
+			'max_snippet_length' => '',
+			'max_image_preview'  => '',
+			'max_video_preview'  => '',
 		];
 
-		foreach ( $_meta as $k => $v ) {
-			if ( $v ) {
-				$meta[ $k ] = $k;
-			}
-		}
+		foreach (
+			array_intersect_key( $_meta, array_flip( [ 'noindex', 'nofollow', 'noarchive' ] ) )
+			as $k => $v
+		) $v and $meta[ $k ] = $k;
+
+		foreach (
+			array_intersect_key( $_meta, array_flip( [ 'max_snippet_length', 'max_image_preview', 'max_video_preview' ] ) )
+			as $k => $v
+		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . "=$v";
 
 		/**
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
@@ -116,7 +125,7 @@ class Generate extends User_Data {
 		 * @since 2.6.0
 		 * @since 4.0.0 Added two parameters ($args and $ignore).
 		 *
-		 * @param array      $meta The current term meta.
+		 * @param array      $meta The current robots meta.
 		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
 		 *                         Is null when query is autodetermined.
 		 * @param int <bit>  $ignore The ignore level. {
@@ -126,20 +135,23 @@ class Generate extends User_Data {
 		 *    3 = 0b11: Ignore protection and post/term setting.
 		 * }
 		 */
-		return array_filter( (array) \apply_filters_ref_array(
-			'the_seo_framework_robots_meta_array',
-			[
-				$meta,
-				$args,
-				$ignore,
-			]
-		) );
+		return array_filter(
+			(array) \apply_filters_ref_array(
+				'the_seo_framework_robots_meta_array',
+				[
+					$meta,
+					$args,
+					$ignore,
+				]
+			)
+		);
 	}
 
 	/**
 	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from query.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 Added new copyright directive tags.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param int <bit> $ignore The ignore level. {
@@ -149,9 +161,12 @@ class Generate extends User_Data {
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array|null robots : {
-	 *    bool 'noindex'
-	 *    bool 'nofollow'
-	 *    bool 'noarchive'
+	 *    bool              'noindex'
+	 *    bool              'nofollow'
+	 *    bool              'noarchive'
+	 *    false|int <R>=-1> 'max_snippet_length'
+	 *    false|string      'max_image_preview'
+	 *    fasle|int <R>=-1> 'max_video_preview'
 	 * }
 	 */
 	protected function get_robots_meta_by_query( $ignore = 0b00 ) {
@@ -159,6 +174,14 @@ class Generate extends User_Data {
 		$noindex   = (bool) $this->get_option( 'site_noindex' );
 		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
 		$noarchive = (bool) $this->get_option( 'site_noarchive' );
+
+		$max_snippet_length = $max_image_preview = $max_video_preview = false;
+
+		if ( $this->get_option( 'set_copyright_directives' ) ) {
+			$max_snippet_length = $this->get_option( 'max_snippet_length' );
+			$max_image_preview  = $this->get_option( 'max_image_preview' );
+			$max_video_preview  = $this->get_option( 'max_video_preview' );
+		}
 
 		//* Check homepage SEO settings, set noindex, nofollow and noarchive
 		if ( $this->is_real_front_page() ) {
@@ -282,11 +305,7 @@ class Generate extends User_Data {
 			}
 		}
 
-		return [
-			'noindex'   => $noindex,
-			'nofollow'  => $nofollow,
-			'noarchive' => $noarchive,
-		];
+		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet_length', 'max_image_preview', 'max_video_preview' );
 	}
 
 	/**
@@ -295,6 +314,7 @@ class Generate extends User_Data {
 	 * Note that the home-as-blog page can be used for this method.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.2 Added new copyright directive tags.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -304,9 +324,12 @@ class Generate extends User_Data {
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
 	 * @return array|null robots : {
-	 *    bool 'noindex'
-	 *    bool 'nofollow'
-	 *    bool 'noarchive'
+	 *    bool              'noindex'
+	 *    bool              'nofollow'
+	 *    bool              'noarchive'
+	 *    false|int <R>=-1> 'max_snippet_length'
+	 *    false|string      'max_image_preview'
+	 *    fasle|int <R>=-1> 'max_video_preview'
 	 * }
 	 */
 	protected function get_robots_meta_by_args( $args, $ignore = 0b00 ) {
@@ -314,6 +337,14 @@ class Generate extends User_Data {
 		$noindex   = (bool) $this->get_option( 'site_noindex' );
 		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
 		$noarchive = (bool) $this->get_option( 'site_noarchive' );
+
+		$max_snippet_length = $max_image_preview = $max_video_preview = false;
+
+		if ( $this->get_option( 'set_copyright_directives' ) ) {
+			$max_snippet_length = $this->get_option( 'max_snippet_length' );
+			$max_image_preview  = $this->get_option( 'max_image_preview' );
+			$max_video_preview  = $this->get_option( 'max_video_preview' );
+		}
 
 		if ( $args['taxonomy'] ) {
 			if ( 'category' === $args['taxonomy'] ) {
@@ -391,11 +422,7 @@ class Generate extends User_Data {
 			endif;
 		}
 
-		return [
-			'noindex'   => $noindex,
-			'nofollow'  => $nofollow,
-			'noarchive' => $noarchive,
-		];
+		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet_length', 'max_image_preview', 'max_video_preview' );
 	}
 
 	/**

@@ -63,11 +63,11 @@ class Site_Options extends Sanitize {
 			$h_titleloc = 'right';
 		}
 
+		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
 		/**
 		 * @since 2.2.7
 		 * @param array $options The default site options.
 		 */
-		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
 		return (array) \apply_filters(
 			'the_seo_framework_default_site_options',
 			[
@@ -144,6 +144,12 @@ class Site_Options extends Sanitize {
 				// Robots pagination index.
 				'paged_noindex'      => 1, // Every second or later page noindex
 				'home_paged_noindex' => 0, // Every second or later homepage noindex
+
+				// Robots copyright.
+				'set_copyright_directives' => 1,          // Allow copyright directive settings.
+				'max_snippet_length'       => -1,         // Max text-snippet length. -1 = unlimited, 0 = disabled, R>0 = characters.
+				'max_image_preview'        => 'standard', // Max image-preview size. 'none', 'standard', 'large'.
+				'max_video_preview'        => -1,         // Max video-preview size. -1 = unlimited, 0 = disabled, R>0 = seconds.
 
 				// Robots home.
 				'homepage_noindex'   => 0, // Homepage robots noindex
