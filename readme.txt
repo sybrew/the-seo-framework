@@ -4,7 +4,7 @@ Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.9.0
 Tested up to: 5.2
 Requires PHP: 5.6.0
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -46,7 +46,7 @@ We focus on the quality of features you need over the quantity on features you d
 We built The SEO Framework for small to large corporations and enterprises. The interface is entirely accessible and seamlessly integrates within your dashboard. Therefore, interacting with this plugin feels natural. It might feel dull, but your WordPress dashboard shouldn't be a billboard for our branding. We won't ever change this.
 
 * **It improves search presence.**
-The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search, and by automatically generating titles and descriptions according to Google's guidelines. It also notifies Google, Bing, Yandex, and all connected search networks automatically of your website's changes with its built-in sitemap.
+The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search, and by automatically generating titles and descriptions according to Google's guidelines. It also notifies Google, Bing, and all connected search networks automatically of your website's changes with its built-in sitemap.
 
 * **It makes social sharing easy.**
 The SEO Framework automatically supports and allows you to further tailor the Open Graph, Facebook, and Twitter Cards protocols. It helps your posts stand out when they're shared on various social networks, including Pinterest, Discord, and Whatsapp.
@@ -124,7 +124,9 @@ The SEO Framework works on many things without notifying you, because the best s
 
 = Copyright legislation notice =
 
-When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain information on the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
+In a few words: The SEO Framework allows search engines to do what they've been doing for the past 20 years.
+
+When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
 
 If you wish to learn more, please refer to the website of the [EU commission on copyright](https://ec.europa.eu/digital-single-market/en/modernisation-eu-copyright-rules). These rulings may propagate its effects through regions outside the EU.
 
@@ -227,84 +229,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.2 =
 
-TODO rewrite in simpler English: Google just announced their copyright legislation compliance, and with that, they proposed new robots directives. The law applies to [French citizens and publishers only](https://france.googleblog.com/2019/09/comment-nous-respectons-le-droit-dauteur.html), but the directives may be effectively applied to websites worldwide. Because a relatively small percentage of users are affected, no notification will be sent out.
+France recently amended its [copyright laws](https://www.legifrance.gouv.fr/eli/loi/2019/7/24/MICX1902858L/jo/texte). In short, in France, it's now forbidden for content aggregators to display excerpts and previews of your content when no consent is given.
 
-TODO In this update, we prepared for the WordPress 5.3 update, we fixed a few bugs, and also added [various improvements](#TODO).
+To accommodate those laws, [Google will soon look for new directives](https://france.googleblog.com/2019/09/comment-nous-respectons-le-droit-dauteur.html), and we added new site-wide options to output those. These new options are disabled (unspecified) by default when you update The SEO Framework, but they are enabled (some access) by default when you install The SEO Framework on a new site. Please see [this issue](https://github.com/sybrew/the-seo-framework/issues/480) for our take on this.
 
-**For everyone:**
-
-* **Added:**
-	* Various options regarding new copyright directive legislation compliance for content aggregators.
-		* These options are disabled for sites that upgrade from TSF < 4.0.2.
-		* These options are enabled with a preset default for new sites and sites that reset settings.
-		* Unlike other SEO plugins, which are doing it wrong, these options aren't affected by the indexing state. This is a different directive, circumstantially corresponding to but not explicitly modified by indexing.
-	* `noindex` robots-headers are now also added to the XML-RPC pingback request endpoints.
-	* When description-generation is disabled (globally or on a per-page basis), you may now get more contextual SEO Bar entries.
-	* More descriptive robots-meta states are added to the SEO Bar for site-wide category and tag directives.
-	* TODO WP 5.3 styling support. No other compatibility issues were found.
-* **Improved:**
-	* When known images over 4096 pixels in either width or height are used for social sharing or schema, the biggest version of that image under the limit will be considered.
-	* TODO make the dismissible notice-buttons from a to "button type=button" -> a11y
-		* Non-critical, can be punted, as they aren't perpetual and do auto-dismiss...
-* **Fixed:**
-	* The sitemap(s) (and their stylesheet(s)) can now recognize different symbols in the URL for display requests:
-		* ASCII-typed subdirectories with capital letters are now correctly recognized.
-		* UTF8-typed (and URL-encoded) subdirectories (also with mixed case) are now correctly recognized.
-		* The endpoints used are now case-insensitive. So, `/SiTeMaP.xMl` should work, including the plain-permalink version thereof.
-	* Unverified plugin conflicts with the new trait loader have been addressed. Keyword: Unverified.
-	* Plugins that create a CMS on top of the WordPress CMS (which is ludicrous) now play along nicer with The SEO Framework. Among which are known to be BuddyPress and The Events Calendar.
-		* We've done this by testing for a valid query ID on seemingly valid post and term queries. When no such ID exists, the query is deemed invalid for use, and we disable TSF's SEO output and enhancements for the request.
-
-**For translators:**
-
-* **Added:**
-	* New translations are available regarding the copyright legislation.
-* **Updated:**
-	* TODO Translation POT file.
-* **Fixed:**
-	* A typo.
-
-**For developers:**
-
-* **Changed:**
-	* The overloading trait-collection is now loaded during the plugin load phase, instead of at `plugins_loaded`.
-		* This addresses an issue where some plugins call The SEO Framework before it's loaded.
-* **Option notes:**
-	* For option index `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
-		* **Added:**
-			* `set_copyright_directives`, int, either `1` or `0`. Default `1` for new sites, `0` for old sites.
-			* `max_image_preview`, string, either `none`, `standard`, or `large`. Default `standard`.
-			* `max_snippet_length`, int, from `-1` to `600`.
-			* `max_video_preview`, int, from `-1` to `600`.
-* **Method notes:**
-	* In façade object `the_seo_framework()`:
-		* **Added:**
-			* `s_image_preview()`, sanitizes the `max_image_preview` option.
-			* `s_snippet_length()`, sanitizes the `max_snippet_length` and `max_video_preview` options.
-			* `get_largest_acceptable_image_src()`, returns the largest WordPress image source based on parameters.
-			* `s_url_relative_to_current_scheme()`, makes non-relative URLs absolute, corrects the scheme to most preferred when the domain matches the current site, and makes it safer regardless afterward.
-		* **Changed:**
-			* `get_post_meta()` now tests for an existing post ID before trying to fetch the metadata.
-			* `query_supports_seo()` now tests for existing post/term IDs on singular/term queries.
-			* To be more in line with the Post Metadata fetchers, these methods now test for a valid term ID, and will continue to use the filtered term object for processing:
-				* `update_term_edit_term_meta()`
-				* `update_quick_edit_term_meta()`
-				* `update_single_term_meta_item()`
-				* `save_term_meta()`
-			* `get_robots_txt_url()` now uses preferred URL scheme, instead of the current URL scheme.
-			* These methods now assert the correct tag taxonomy condition, which helps with tag-specific filters and translations:
-				`get_generated_archive_title()`
-				`get_generated_single_term_title()`
-			* `s_image_details()` now finds smaller images when they're over 4K.
-			* `robots_meta()` now parses the new robots-meta values.
-* **Action notes:**
-	* **Added:**
-		* `the_seo_framework_ping_search_engines`, runs whenever it's time to ping Bing (on valid site update).
-			* N.B. This runs either at a cronjob or during post save.
-* **Filter notes:**
-	* **Changed:**
-		* `the_seo_framework_sitemap_endpoint_list` the endpoints' default regex is now case-insensitive.
-		* `the_seo_framework_robots_meta_array` now has the new legislatorial robots-meta keys available. It's ill-advised to change them if you don't own the site, however. Rely on the new options, instead.
+In this update, we also fixed a few bugs and added [various improvements](https://theseoframework.com/?p=3344#detailed).
 
 = 4.0.1 =
 

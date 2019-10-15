@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 4.0.0\n"
+"Project-Id-Version: The SEO Framework 4.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2019-09-09 04:50:56+00:00\n"
+"POT-Creation-Date: 2019-10-15 01:19:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -219,13 +219,13 @@ msgstr ""
 
 #: inc/classes/bridges/scripts.class.php:418
 #: inc/classes/bridges/scripts.class.php:484
-#: inc/classes/generate-title.class.php:1171
+#: inc/classes/generate-title.class.php:1173
 msgid "Private: %s"
 msgstr ""
 
 #: inc/classes/bridges/scripts.class.php:420
 #: inc/classes/bridges/scripts.class.php:486
-#: inc/classes/generate-title.class.php:1156
+#: inc/classes/generate-title.class.php:1158
 msgid "Protected: %s"
 msgstr ""
 
@@ -234,8 +234,8 @@ msgstr ""
 #. translators: 1 = 'Assessment(s)', 2 = A list of assessments.
 
 #: inc/classes/bridges/scripts.class.php:538
-#: inc/classes/generate-title.class.php:766
-#: inc/classes/generate-title.class.php:829
+#: inc/classes/generate-title.class.php:767
+#: inc/classes/generate-title.class.php:830
 #: inc/classes/interpreters/seobar.class.php:342
 msgid "%1$s: %2$s"
 msgstr ""
@@ -351,25 +351,25 @@ msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:146
 #: inc/classes/builders/seobar-page.class.php:343
-#: inc/classes/builders/seobar-term.class.php:150
-#: inc/classes/builders/seobar-term.class.php:324
+#: inc/classes/builders/seobar-term.class.php:160
+#: inc/classes/builders/seobar-term.class.php:334
 msgid "%1$s (%2$s)"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:147
 #: inc/classes/builders/seobar-page.class.php:344
-#: inc/classes/builders/seobar-term.class.php:151
-#: inc/classes/builders/seobar-term.class.php:325
+#: inc/classes/builders/seobar-term.class.php:161
+#: inc/classes/builders/seobar-term.class.php:335
 msgid "Estimated from the number of characters found. The pixel counter asserts the true length."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:150
-#: inc/classes/builders/seobar-term.class.php:154
+#: inc/classes/builders/seobar-term.class.php:164
 msgid "No title could be fetched."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:151
-#: inc/classes/builders/seobar-term.class.php:155
+#: inc/classes/builders/seobar-term.class.php:165
 msgid "No title could be fetched, \"Untitled\" is used instead."
 msgstr ""
 
@@ -378,81 +378,81 @@ msgid "A page protection state is added which increases the length."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:154
-#: inc/classes/builders/seobar-term.class.php:158
+#: inc/classes/builders/seobar-term.class.php:168
 msgid "It's not branded. Search engines may ignore your title."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:155
-#: inc/classes/builders/seobar-term.class.php:159
+#: inc/classes/builders/seobar-term.class.php:169
 msgid "It's manually branded."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:156
-#: inc/classes/builders/seobar-term.class.php:160
+#: inc/classes/builders/seobar-term.class.php:170
 msgid "It's automatically branded."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:158
-#: inc/classes/builders/seobar-term.class.php:162
+#: inc/classes/builders/seobar-term.class.php:172
 msgid "The blog name is found multiple times."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:161
-#: inc/classes/builders/seobar-term.class.php:165
+#: inc/classes/builders/seobar-term.class.php:175
 msgid "Incomplete."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:162
-#: inc/classes/builders/seobar-term.class.php:166
+#: inc/classes/builders/seobar-term.class.php:176
 msgid "The branding is duplicated."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:163
-#: inc/classes/builders/seobar-term.class.php:167
+#: inc/classes/builders/seobar-term.class.php:177
 msgid "Not branded."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:167
-#: inc/classes/builders/seobar-term.class.php:171
+#: inc/classes/builders/seobar-term.class.php:181
 msgctxt "Title Generated"
 msgid "TG"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:168
-#: inc/classes/builders/seobar-term.class.php:172
+#: inc/classes/builders/seobar-term.class.php:182
 msgid "Title, generated"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:170
 #: inc/classes/builders/seobar-page.class.php:369
-#: inc/classes/builders/seobar-term.class.php:174
-#: inc/classes/builders/seobar-term.class.php:347
+#: inc/classes/builders/seobar-term.class.php:184
+#: inc/classes/builders/seobar-term.class.php:357
 msgid "Automatically generated."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:172
-#: inc/classes/builders/seobar-term.class.php:176
+#: inc/classes/builders/seobar-term.class.php:186
 msgid "It's built using the page title."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:176
-#: inc/classes/builders/seobar-term.class.php:180
+#: inc/classes/builders/seobar-term.class.php:190
 msgctxt "Title"
 msgid "T"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:177
-#: inc/classes/builders/seobar-term.class.php:181
+#: inc/classes/builders/seobar-term.class.php:191
 msgid "Title"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:179
-#: inc/classes/builders/seobar-page.class.php:378
+#: inc/classes/builders/seobar-page.class.php:387
 msgid "Obtained from page SEO meta input."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:181
-#: inc/classes/builders/seobar-page.class.php:380
+#: inc/classes/builders/seobar-page.class.php:389
 msgid "It's built from page SEO meta input."
 msgstr ""
 
@@ -487,33 +487,35 @@ msgstr ""
 #. translators: %s = list of duplicated words
 
 #: inc/classes/builders/seobar-page.class.php:357
-#: inc/classes/builders/seobar-term.class.php:335
+#: inc/classes/builders/seobar-term.class.php:345
 msgid "Found duplicated words: %s"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:360
-#: inc/classes/builders/seobar-term.class.php:338
+#: inc/classes/builders/seobar-page.class.php:378
+#: inc/classes/builders/seobar-term.class.php:348
+#: inc/classes/builders/seobar-term.class.php:366
 msgid "Empty."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:361
-#: inc/classes/builders/seobar-term.class.php:339
+#: inc/classes/builders/seobar-term.class.php:349
 msgid "Found duplicated words."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:362
-#: inc/classes/builders/seobar-term.class.php:340
+#: inc/classes/builders/seobar-term.class.php:350
 msgid "Found too many duplicated words."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:366
-#: inc/classes/builders/seobar-term.class.php:344
+#: inc/classes/builders/seobar-term.class.php:354
 msgctxt "Description Generated"
 msgid "DG"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:367
-#: inc/classes/builders/seobar-term.class.php:345
+#: inc/classes/builders/seobar-term.class.php:355
 msgid "Description, generated"
 msgstr ""
 
@@ -522,109 +524,117 @@ msgid "It's built using the page content."
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:375
-#: inc/classes/builders/seobar-term.class.php:353
+#: inc/classes/builders/seobar-page.class.php:384
+#: inc/classes/builders/seobar-term.class.php:363
+#: inc/classes/builders/seobar-term.class.php:372
 msgctxt "Description"
 msgid "D"
 msgstr ""
 
 #: inc/classes/builders/seobar-page.class.php:376
-#: inc/classes/builders/seobar-term.class.php:354
+#: inc/classes/builders/seobar-page.class.php:385
+#: inc/classes/builders/seobar-term.class.php:364
+#: inc/classes/builders/seobar-term.class.php:373
 msgid "Description"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:401
+#: inc/classes/builders/seobar-page.class.php:380
+msgid "No page description is set."
+msgstr ""
+
+#: inc/classes/builders/seobar-page.class.php:410
 msgid "The description inputted at the SEO Settings screen is used."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:403
+#: inc/classes/builders/seobar-page.class.php:412
 msgid "The description inputted at the Edit Page screen is used."
 msgstr ""
 
 #. translators: 1: Word found, 2: Occurrences
 
-#: inc/classes/builders/seobar-page.class.php:447
-#: inc/classes/builders/seobar-term.class.php:407
+#: inc/classes/builders/seobar-page.class.php:461
+#: inc/classes/builders/seobar-term.class.php:431
 msgid "&#8220;%1$s&#8221; is used %2$d times."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:524
-#: inc/classes/builders/seobar-page.class.php:681
-#: inc/classes/builders/seobar-page.class.php:812
-#: inc/classes/builders/seobar-term.class.php:484
-#: inc/classes/builders/seobar-term.class.php:628
-#: inc/classes/builders/seobar-term.class.php:738
+#: inc/classes/builders/seobar-page.class.php:538
+#: inc/classes/builders/seobar-page.class.php:695
+#: inc/classes/builders/seobar-page.class.php:826
+#: inc/classes/builders/seobar-term.class.php:508
+#: inc/classes/builders/seobar-term.class.php:662
+#: inc/classes/builders/seobar-term.class.php:782
 msgid "The robots.txt file is nonstandard, and may still direct search engines differently."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:525
-#: inc/classes/builders/seobar-page.class.php:682
-#: inc/classes/builders/seobar-page.class.php:813
-#: inc/classes/builders/seobar-term.class.php:485
-#: inc/classes/builders/seobar-term.class.php:629
-#: inc/classes/builders/seobar-term.class.php:739
+#: inc/classes/builders/seobar-page.class.php:539
+#: inc/classes/builders/seobar-page.class.php:696
+#: inc/classes/builders/seobar-page.class.php:827
+#: inc/classes/builders/seobar-term.class.php:509
+#: inc/classes/builders/seobar-term.class.php:663
+#: inc/classes/builders/seobar-term.class.php:783
 msgid "WordPress discourages crawling via the Reading Settings."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:526
-#: inc/classes/builders/seobar-term.class.php:486
+#: inc/classes/builders/seobar-page.class.php:540
+#: inc/classes/builders/seobar-term.class.php:510
 msgid "Indexing is discouraged for the whole site at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:527
+#: inc/classes/builders/seobar-page.class.php:541
 msgid "Indexing is discouraged for this post type at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:528
+#: inc/classes/builders/seobar-page.class.php:542
 msgid "The page is protected, so indexing is discouraged."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:529
+#: inc/classes/builders/seobar-page.class.php:543
 msgid "The page SEO meta input overrides the indexing state."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:530
-#: inc/classes/builders/seobar-term.class.php:491
+#: inc/classes/builders/seobar-page.class.php:544
+#: inc/classes/builders/seobar-term.class.php:517
 msgid "A custom canonical URL is set that points to another page."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:533
-#: inc/classes/builders/seobar-page.class.php:689
-#: inc/classes/builders/seobar-page.class.php:820
-#: inc/classes/builders/seobar-term.class.php:494
-#: inc/classes/builders/seobar-term.class.php:636
-#: inc/classes/builders/seobar-term.class.php:746
+#: inc/classes/builders/seobar-page.class.php:547
+#: inc/classes/builders/seobar-page.class.php:703
+#: inc/classes/builders/seobar-page.class.php:834
+#: inc/classes/builders/seobar-term.class.php:520
+#: inc/classes/builders/seobar-term.class.php:672
+#: inc/classes/builders/seobar-term.class.php:792
 msgid "WordPress overrides the robots directive."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:534
+#: inc/classes/builders/seobar-page.class.php:548
 msgid "The page is protected."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:535
-#: inc/classes/builders/seobar-page.class.php:690
-#: inc/classes/builders/seobar-page.class.php:821
+#: inc/classes/builders/seobar-page.class.php:549
+#: inc/classes/builders/seobar-page.class.php:704
+#: inc/classes/builders/seobar-page.class.php:835
 msgid "The page is not published."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:536
-#: inc/classes/builders/seobar-term.class.php:497
+#: inc/classes/builders/seobar-page.class.php:550
+#: inc/classes/builders/seobar-term.class.php:523
 msgid "The canonical URL points to another page."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:540
-#: inc/classes/builders/seobar-page.class.php:549
-#: inc/classes/builders/seobar-page.class.php:558
-#: inc/classes/builders/seobar-term.class.php:501
-#: inc/classes/builders/seobar-term.class.php:510
+#: inc/classes/builders/seobar-page.class.php:554
+#: inc/classes/builders/seobar-page.class.php:563
+#: inc/classes/builders/seobar-page.class.php:572
+#: inc/classes/builders/seobar-term.class.php:527
+#: inc/classes/builders/seobar-term.class.php:536
 msgctxt "Indexing"
 msgid "I"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:541
-#: inc/classes/builders/seobar-page.class.php:550
-#: inc/classes/builders/seobar-page.class.php:559
-#: inc/classes/builders/seobar-term.class.php:502
-#: inc/classes/builders/seobar-term.class.php:511
+#: inc/classes/builders/seobar-page.class.php:555
+#: inc/classes/builders/seobar-page.class.php:564
+#: inc/classes/builders/seobar-page.class.php:573
+#: inc/classes/builders/seobar-term.class.php:528
+#: inc/classes/builders/seobar-term.class.php:537
 #: inc/views/admin/metaboxes/robots-metabox.php:54
 #: inc/views/edit/seo-settings-singular.php:196
 #: inc/views/edit/seo-settings-tt.php:60 inc/views/list/bulk-post.php:19
@@ -632,129 +642,129 @@ msgstr ""
 msgid "Indexing"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:543
+#: inc/classes/builders/seobar-page.class.php:557
 msgid "Page may be indexed."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:545
-#: inc/classes/builders/seobar-term.class.php:506
+#: inc/classes/builders/seobar-page.class.php:559
+#: inc/classes/builders/seobar-term.class.php:532
 msgid "The robots meta tag allows indexing."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:552
+#: inc/classes/builders/seobar-page.class.php:566
 msgid "Page may not be indexed."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:554
-#: inc/classes/builders/seobar-term.class.php:515
+#: inc/classes/builders/seobar-page.class.php:568
+#: inc/classes/builders/seobar-term.class.php:541
 msgid "The robots meta tag does not allow indexing."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:561
-#: inc/classes/builders/seobar-page.class.php:715
-#: inc/classes/builders/seobar-page.class.php:846
+#: inc/classes/builders/seobar-page.class.php:575
+#: inc/classes/builders/seobar-page.class.php:729
+#: inc/classes/builders/seobar-page.class.php:860
 msgid "Page is invisible."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:563
-#: inc/classes/builders/seobar-page.class.php:717
-#: inc/classes/builders/seobar-page.class.php:848
+#: inc/classes/builders/seobar-page.class.php:577
+#: inc/classes/builders/seobar-page.class.php:731
+#: inc/classes/builders/seobar-page.class.php:862
 msgid "This page isn't published and can't be found publicly."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:618
+#: inc/classes/builders/seobar-page.class.php:632
 msgid "Indexing is discouraged for the homepage at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:683
-#: inc/classes/builders/seobar-term.class.php:630
+#: inc/classes/builders/seobar-page.class.php:697
+#: inc/classes/builders/seobar-term.class.php:664
 msgid "Link following is discouraged for the whole site at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:684
+#: inc/classes/builders/seobar-page.class.php:698
 msgid "Link following is discouraged for this post type at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:685
+#: inc/classes/builders/seobar-page.class.php:699
 msgid "The page SEO meta input overrides the link following state."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:686
+#: inc/classes/builders/seobar-page.class.php:700
 msgid "The page may not be indexed, this may also discourage link following."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:694
-#: inc/classes/builders/seobar-page.class.php:703
-#: inc/classes/builders/seobar-page.class.php:712
-#: inc/classes/builders/seobar-term.class.php:640
-#: inc/classes/builders/seobar-term.class.php:649
+#: inc/classes/builders/seobar-page.class.php:708
+#: inc/classes/builders/seobar-page.class.php:717
+#: inc/classes/builders/seobar-page.class.php:726
+#: inc/classes/builders/seobar-term.class.php:676
+#: inc/classes/builders/seobar-term.class.php:685
 msgctxt "Following"
 msgid "F"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:695
-#: inc/classes/builders/seobar-page.class.php:704
-#: inc/classes/builders/seobar-page.class.php:713
-#: inc/classes/builders/seobar-term.class.php:641
-#: inc/classes/builders/seobar-term.class.php:650
+#: inc/classes/builders/seobar-page.class.php:709
+#: inc/classes/builders/seobar-page.class.php:718
+#: inc/classes/builders/seobar-page.class.php:727
+#: inc/classes/builders/seobar-term.class.php:677
+#: inc/classes/builders/seobar-term.class.php:686
 #: inc/views/admin/metaboxes/robots-metabox.php:60
 #: inc/views/list/quick-term.php:26
 msgid "Following"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:697
+#: inc/classes/builders/seobar-page.class.php:711
 msgid "Page links may be followed."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:699
-#: inc/classes/builders/seobar-term.class.php:645
+#: inc/classes/builders/seobar-page.class.php:713
+#: inc/classes/builders/seobar-term.class.php:681
 msgid "The robots meta tag allows link following."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:706
+#: inc/classes/builders/seobar-page.class.php:720
 msgid "Page links may not be followed."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:708
-#: inc/classes/builders/seobar-term.class.php:654
+#: inc/classes/builders/seobar-page.class.php:722
+#: inc/classes/builders/seobar-term.class.php:690
 msgid "The robots meta tag does not allow link following."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:760
+#: inc/classes/builders/seobar-page.class.php:774
 msgid "Link following is discouraged for the homepage at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:814
-#: inc/classes/builders/seobar-term.class.php:740
+#: inc/classes/builders/seobar-page.class.php:828
+#: inc/classes/builders/seobar-term.class.php:784
 msgid "Archiving is discouraged for the whole site at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:815
+#: inc/classes/builders/seobar-page.class.php:829
 msgid "Archiving is discouraged for this post type at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:816
+#: inc/classes/builders/seobar-page.class.php:830
 msgid "The page SEO meta input overrides the archiving state."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:817
+#: inc/classes/builders/seobar-page.class.php:831
 msgid "The page may not be indexed, this may also discourage archiving."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:825
-#: inc/classes/builders/seobar-page.class.php:834
-#: inc/classes/builders/seobar-page.class.php:843
-#: inc/classes/builders/seobar-term.class.php:750
-#: inc/classes/builders/seobar-term.class.php:759
+#: inc/classes/builders/seobar-page.class.php:839
+#: inc/classes/builders/seobar-page.class.php:848
+#: inc/classes/builders/seobar-page.class.php:857
+#: inc/classes/builders/seobar-term.class.php:796
+#: inc/classes/builders/seobar-term.class.php:805
 msgctxt "Archiving"
 msgid "A"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:826
-#: inc/classes/builders/seobar-page.class.php:835
-#: inc/classes/builders/seobar-page.class.php:844
-#: inc/classes/builders/seobar-term.class.php:751
-#: inc/classes/builders/seobar-term.class.php:760
+#: inc/classes/builders/seobar-page.class.php:840
+#: inc/classes/builders/seobar-page.class.php:849
+#: inc/classes/builders/seobar-page.class.php:858
+#: inc/classes/builders/seobar-term.class.php:797
+#: inc/classes/builders/seobar-term.class.php:806
 #: inc/views/admin/metaboxes/robots-metabox.php:66
 #: inc/views/edit/seo-settings-singular.php:212
 #: inc/views/edit/seo-settings-tt.php:86 inc/views/list/bulk-post.php:33
@@ -762,160 +772,188 @@ msgstr ""
 msgid "Archiving"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:828
+#: inc/classes/builders/seobar-page.class.php:842
 msgid "Page may be archived."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:830
-#: inc/classes/builders/seobar-term.class.php:755
+#: inc/classes/builders/seobar-page.class.php:844
+#: inc/classes/builders/seobar-term.class.php:801
 msgid "The robots meta tag allows archiving."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:837
+#: inc/classes/builders/seobar-page.class.php:851
 msgid "Page may not be archived."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:839
-#: inc/classes/builders/seobar-term.class.php:764
+#: inc/classes/builders/seobar-page.class.php:853
+#: inc/classes/builders/seobar-term.class.php:810
 msgid "The robots meta tag does not allow archiving."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:891
+#: inc/classes/builders/seobar-page.class.php:905
 msgid "Archiving is discouraged for the homepage at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:942
-#: inc/classes/builders/seobar-page.class.php:958
-#: inc/classes/builders/seobar-term.class.php:846
-#: inc/classes/builders/seobar-term.class.php:862
+#: inc/classes/builders/seobar-page.class.php:956
+#: inc/classes/builders/seobar-page.class.php:972
+#: inc/classes/builders/seobar-term.class.php:900
+#: inc/classes/builders/seobar-term.class.php:916
 msgctxt "Redirect"
 msgid "R"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:943
-#: inc/classes/builders/seobar-page.class.php:959
-#: inc/classes/builders/seobar-term.class.php:847
-#: inc/classes/builders/seobar-term.class.php:863
+#: inc/classes/builders/seobar-page.class.php:957
+#: inc/classes/builders/seobar-page.class.php:973
+#: inc/classes/builders/seobar-term.class.php:901
+#: inc/classes/builders/seobar-term.class.php:917
 msgid "Redirection"
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:945
+#: inc/classes/builders/seobar-page.class.php:959
 msgid "Page does not redirect visitors."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:947
-#: inc/classes/builders/seobar-term.class.php:851
+#: inc/classes/builders/seobar-page.class.php:961
+#: inc/classes/builders/seobar-term.class.php:905
 msgid "All visitors and crawlers may access this page."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:961
+#: inc/classes/builders/seobar-page.class.php:975
 msgid "Page redirects visitors."
 msgstr ""
 
-#: inc/classes/builders/seobar-page.class.php:963
-#: inc/classes/builders/seobar-term.class.php:867
+#: inc/classes/builders/seobar-page.class.php:977
+#: inc/classes/builders/seobar-term.class.php:921
 msgid "All visitors and crawlers are being redirected. So, no other SEO enhancements are effective."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:156
+#: inc/classes/builders/seobar-term.class.php:166
 msgid "A term label prefix is automatically added which increases the length."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:183
-#: inc/classes/builders/seobar-term.class.php:356
+#: inc/classes/builders/seobar-term.class.php:193
+#: inc/classes/builders/seobar-term.class.php:375
 msgid "Obtained from term SEO meta input."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:185
-#: inc/classes/builders/seobar-term.class.php:358
+#: inc/classes/builders/seobar-term.class.php:195
+#: inc/classes/builders/seobar-term.class.php:377
 msgid "It's built from term SEO meta input."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:333
+#: inc/classes/builders/seobar-term.class.php:343
 msgid "No description could be generated."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:349
+#: inc/classes/builders/seobar-term.class.php:359
 msgid "It's built using the term description field."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:487
+#: inc/classes/builders/seobar-term.class.php:368
+msgid "No term description is set."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:511
 msgid "Indexing is discouraged for all bound post types to this term at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:488
-msgid "The term SEO meta input overrides the indexing state."
-msgstr ""
-
-#: inc/classes/builders/seobar-term.class.php:489
-msgid "No posts are attached to this term, so indexing is disabled."
-msgstr ""
-
-#: inc/classes/builders/seobar-term.class.php:490
-msgid "No posts are attached to this term, so indexing should be disabled."
-msgstr ""
-
-#: inc/classes/builders/seobar-term.class.php:495
-msgid "The term is empty."
-msgstr ""
-
-#: inc/classes/builders/seobar-term.class.php:496
-msgid "The term is empty yet still indexed."
-msgstr ""
-
-#: inc/classes/builders/seobar-term.class.php:504
-msgid "Term may be indexed."
+#: inc/classes/builders/seobar-term.class.php:512
+msgid "Indexing is discouraged for all post categories at the SEO Settings screen."
 msgstr ""
 
 #: inc/classes/builders/seobar-term.class.php:513
+msgid "Indexing is discouraged for all post tags at the SEO Settings screen."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:514
+msgid "The term SEO meta input overrides the indexing state."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:515
+msgid "No posts are attached to this term, so indexing is disabled."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:516
+msgid "No posts are attached to this term, so indexing should be disabled."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:521
+msgid "The term is empty."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:522
+msgid "The term is empty yet still indexed."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:530
+msgid "Term may be indexed."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:539
 msgid "Term may not be indexed."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:631
+#: inc/classes/builders/seobar-term.class.php:665
 msgid "Link following is discouraged for all bound post types to this term at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:632
+#: inc/classes/builders/seobar-term.class.php:666
+msgid "Link following is discouraged for all post categories at the SEO Settings screen."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:667
+msgid "Link following is discouraged for all post tags at the SEO Settings screen."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:668
 msgid "The term SEO meta input overrides the link following state."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:633
+#: inc/classes/builders/seobar-term.class.php:669
 msgid "The term may not be indexed, this may also discourage link following."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:643
+#: inc/classes/builders/seobar-term.class.php:679
 msgid "Term links may be followed."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:652
+#: inc/classes/builders/seobar-term.class.php:688
 msgid "Term links may not be followed."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:741
+#: inc/classes/builders/seobar-term.class.php:785
 msgid "Archiving is discouraged for all bound post types to this term at the SEO Settings screen."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:742
+#: inc/classes/builders/seobar-term.class.php:786
+msgid "Archiving is discouraged for all post categories at the SEO Settings screen."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:787
+msgid "Archiving is discouraged for all post tags at the SEO Settings screen."
+msgstr ""
+
+#: inc/classes/builders/seobar-term.class.php:788
 msgid "The term SEO meta input overrides the archiving state."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:743
+#: inc/classes/builders/seobar-term.class.php:789
 msgid "The term may not be indexed, this may also discourage archiving."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:753
+#: inc/classes/builders/seobar-term.class.php:799
 msgid "Term may be archived."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:762
+#: inc/classes/builders/seobar-term.class.php:808
 msgid "Term may not be archived."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:849
+#: inc/classes/builders/seobar-term.class.php:903
 msgid "Term does not redirect visitors."
 msgstr ""
 
-#: inc/classes/builders/seobar-term.class.php:865
+#: inc/classes/builders/seobar-term.class.php:919
 msgid "Term redirects visitors."
 msgstr ""
 
@@ -1021,124 +1059,124 @@ msgstr ""
 
 #. translators: Category archive title. 1: Category name
 
-#: inc/classes/generate-title.class.php:755
-#: inc/classes/generate-title.class.php:776
+#: inc/classes/generate-title.class.php:756
+#: inc/classes/generate-title.class.php:777
 msgid "Category: %s"
 msgstr ""
 
 #. translators: Tag archive title. 1: Tag name
 
-#: inc/classes/generate-title.class.php:759
-#: inc/classes/generate-title.class.php:780
+#: inc/classes/generate-title.class.php:760
+#: inc/classes/generate-title.class.php:781
 msgid "Tag: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:770
-#: inc/classes/generate-title.class.php:832
+#: inc/classes/generate-title.class.php:771
+#: inc/classes/generate-title.class.php:833
 msgid "Archives"
 msgstr ""
 
 #. translators: Author archive title. 1: Author name
 
-#: inc/classes/generate-title.class.php:784
+#: inc/classes/generate-title.class.php:785
 msgid "Author: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:787
+#: inc/classes/generate-title.class.php:788
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
 #. translators: Yearly archive title. 1: Year
 
-#: inc/classes/generate-title.class.php:789
+#: inc/classes/generate-title.class.php:790
 msgid "Year: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:791
+#: inc/classes/generate-title.class.php:792
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
 #. translators: Monthly archive title. 1: Month name and year
 
-#: inc/classes/generate-title.class.php:793
+#: inc/classes/generate-title.class.php:794
 msgid "Month: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:795
+#: inc/classes/generate-title.class.php:796
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
 #. translators: Daily archive title. 1: Date
 
-#: inc/classes/generate-title.class.php:797
+#: inc/classes/generate-title.class.php:798
 msgid "Day: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:801
+#: inc/classes/generate-title.class.php:802
 msgctxt "post format archive title"
 msgid "Asides"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:803
+#: inc/classes/generate-title.class.php:804
 msgctxt "post format archive title"
 msgid "Galleries"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:805
+#: inc/classes/generate-title.class.php:806
 msgctxt "post format archive title"
 msgid "Images"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:807
+#: inc/classes/generate-title.class.php:808
 msgctxt "post format archive title"
 msgid "Videos"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:809
+#: inc/classes/generate-title.class.php:810
 msgctxt "post format archive title"
 msgid "Quotes"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:811
+#: inc/classes/generate-title.class.php:812
 msgctxt "post format archive title"
 msgid "Links"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:813
+#: inc/classes/generate-title.class.php:814
 msgctxt "post format archive title"
 msgid "Statuses"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:815
+#: inc/classes/generate-title.class.php:816
 msgctxt "post format archive title"
 msgid "Audio"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:817
+#: inc/classes/generate-title.class.php:818
 msgctxt "post format archive title"
 msgid "Chats"
 msgstr ""
 
 #. translators: Post type archive title. 1: Post type name
 
-#: inc/classes/generate-title.class.php:822
+#: inc/classes/generate-title.class.php:823
 msgid "Archives: %s"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:978
+#: inc/classes/generate-title.class.php:980
 msgid "Untitled"
 msgstr ""
 
 #. translators: %s: search phrase
 
-#: inc/classes/generate-title.class.php:990
+#: inc/classes/generate-title.class.php:992
 msgid "Search Results for &#8220;%s&#8221;"
 msgstr ""
 
-#: inc/classes/generate-title.class.php:1105
+#: inc/classes/generate-title.class.php:1107
 msgid "Page %s"
 msgstr ""
 
@@ -1183,7 +1221,7 @@ msgctxt "Twitter @username"
 msgid "@your-personal-username"
 msgstr ""
 
-#: inc/classes/render.class.php:1112
+#: inc/classes/render.class.php:1113
 msgid "by Sybre Waaijer"
 msgstr ""
 
@@ -1512,7 +1550,7 @@ msgid "This outputs the complete date including hours, minutes, and timezone."
 msgstr ""
 
 #: inc/views/admin/metaboxes/general-metabox.php:429
-#: inc/views/admin/metaboxes/robots-metabox.php:153
+#: inc/views/admin/metaboxes/robots-metabox.php:301
 msgid "Post Type Settings"
 msgstr ""
 
@@ -1529,7 +1567,7 @@ msgid "Select post types which should not receive any SEO optimization whatsoeve
 msgstr ""
 
 #: inc/views/admin/metaboxes/general-metabox.php:439
-#: inc/views/admin/metaboxes/robots-metabox.php:155
+#: inc/views/admin/metaboxes/robots-metabox.php:303
 msgid "These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect."
 msgstr ""
 
@@ -1786,22 +1824,111 @@ msgstr ""
 msgid "Apply `noindex` to every second or later archive page?"
 msgstr ""
 
-#. translators: 1 = noindex/nofollow/noarchive, 2 = Post, Post type, Category
-#. archives, the entire site, etc.
-
-#: inc/views/admin/metaboxes/robots-metabox.php:111
-msgid "Apply %1$s to %2$s?"
+#: inc/views/admin/metaboxes/robots-metabox.php:107
+msgid "Copyright Directive Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:116
-msgid "Robots Settings"
+#: inc/views/admin/metaboxes/robots-metabox.php:109
+msgid "Some search engines allow you to control copyright directives on the content they aggregate. It's best to allow some content to be taken by these aggregators, as that can improve contextualized exposure via snippets and previews. When left unspecified, regional regulations may apply. It is up to the aggregator to honor these requests."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:141
-msgid "Warning: No public site should ever enable this option."
+#: inc/views/admin/metaboxes/robots-metabox.php:114
+msgid "Specify aggregator copyright compliance directives?"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:122
+msgid "Unlimited"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:123
+msgctxt "quanity: zero"
+msgid "None, disallow snippet"
+msgstr ""
+
+#. translators: %d = number
+
+#: inc/views/admin/metaboxes/robots-metabox.php:127
+msgid "%d character"
+msgid_plural "%d characters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:133
+#: inc/views/admin/metaboxes/robots-metabox.php:217
+msgid "Standard directive"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:134
+#: inc/views/admin/metaboxes/robots-metabox.php:218
+msgid "Granular directive"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:156
+msgid "Maximum text snippet length"
 msgstr ""
 
 #: inc/views/admin/metaboxes/robots-metabox.php:160
+msgid "This may limit the text snippet length for all pages on this site."
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:172
+#: inc/views/admin/metaboxes/robots-metabox.php:207
+msgctxt "quanity: zero"
+msgid "None, disallow preview"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:173
+msgid "Thumbnail or standard size"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:174
+msgid "Large or full size"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:192
+msgid "Maximum image preview size"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:196
+msgid "This may limit the image preview size for all images from this site."
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:206
+msgid "Full video preview"
+msgstr ""
+
+#. translators: %d = number
+
+#: inc/views/admin/metaboxes/robots-metabox.php:211
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:240
+msgid "Maximum video preview length"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:244
+msgid "This may limit the video preview length for all videos on this site."
+msgstr ""
+
+#. translators: 1 = noindex/nofollow/noarchive, 2 = Post, Post type, Category
+#. archives, the entire site, etc.
+
+#: inc/views/admin/metaboxes/robots-metabox.php:259
+msgid "Apply %1$s to %2$s?"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:264
+msgid "Robots Settings"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:289
+msgid "Warning: No public site should ever enable this option."
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:308
 msgid "Warning: No site should enable these options for Posts and Pages."
 msgstr ""
 
@@ -2078,7 +2205,7 @@ msgid "The robots.txt output is the first thing search engines look for before c
 msgstr ""
 
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:171
-msgid "If you do not add the sitemap location to the robots.txt output, you should manually notify search engines manually through webmaster-interfaces provided by the search engines."
+msgid "If you do not add the sitemap location to the robots.txt output, you should notify search engines manually through webmaster-interfaces provided by the search engines."
 msgstr ""
 
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:178
