@@ -70,8 +70,8 @@ function the_seo_framework_pre_boot_test() {
 	}
 
 	$requirements = array(
-		'php' => '50600',
-		'wp'  => '37965',
+		'php' => 50600,
+		'wp'  => 38590,
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment

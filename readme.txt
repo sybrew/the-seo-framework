@@ -126,7 +126,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 In a few words: The SEO Framework allows search engines to do what they've been doing for the past 20 years.
 
-When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
+When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain and use information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
 
 If you wish to learn more, please refer to the website of the [EU commission on copyright](https://ec.europa.eu/digital-single-market/en/modernisation-eu-copyright-rules). These rulings may propagate its effects through regions outside the EU.
 
@@ -173,7 +173,7 @@ This plugin is all-inclusive. It's 100% freeware; not crippleware.
 
 = Is there a premium version? =
 
-No.
+No. We treat this plugin as a premium plugin already.
 
 However, we do offer many free and paid extensions that help support this free plugin. We provide these via our free [Extension Manager plugin](https://theseoframework.com/?p=2760).
 
@@ -188,7 +188,7 @@ We'll try to get back to you within 72 hours. Typically, we reply within a day.
 Any input is much appreciated, and everything will be considered.
 Please visit the [GitHub project page](https://github.com/sybrew/the-seo-framework) to submit issues or even pull requests.
 
-Feel free to [contribute](https://tsf.fyi/contributing)!
+Learn more [about contribute](https://tsf.fyi/contributing).
 
 = What do the colors tell me? =
 
@@ -226,6 +226,31 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.0.3 =
+
+**For everyone**
+
+* **Improved:**
+	* **Accessibility:** Focussing the SEO Bar will now add a high-contrast inner-ring.
+		* Fun fact: Because the items are stacked together so tightly, an outer ring wouldn't work.
+		* Sad fact: We wanted to round the edges of the SEO Bar--it's sooo nice on your eyes--, but doing so would either obstruct the tooltip, and the workaround would render your browser useless performancewise.
+			* Because the SEO Bar can restyle and shift its elements autonomously via CSS flexbox, we can't predict where the borders must be set on each item individually.
+			* Another workaround would be to duplicate each SEO Bar, and the top "invisible" layer would be the one rendering the tooltip, whereas the bottom inert one would render the SEO Bar styling. This is an accessibility nightmare.
+	* **Styling:** In response to the WP 5.3 update, we rounded the tabs on the settings page. Enjoy!
+	* **PHP:** TODO We alleviated one deprecation notice with the upcoming PHP v7.4 update.
+* **Other:**
+	* For the copyright directive brought in v4.0.2, an option for videos was wrongly described as "None, disallow preview"; it should've been "None, still image only".
+
+* TODO: Round the notification corners.
+* TODO: Use TSFEM's button for the notification, improving accessibility.
+
+**For translators**
+
+* **Added:**
+	* One short string.
+* **Updated:**
+	* TODO The POT translation file.
 
 = 4.0.2 =
 

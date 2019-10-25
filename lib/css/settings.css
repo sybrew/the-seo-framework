@@ -145,6 +145,7 @@ body.rtl .tsf-bottom-buttons {
 	background: #f1f1f1;
 	color: #555;
 	font-weight: 600;
+	border-radius: 3px 3px 0 0;
 }
 
 body.rtl .tsf-nav-tab {

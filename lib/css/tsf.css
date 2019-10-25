@@ -160,7 +160,6 @@ body.rtl #tsf-title-placeholder-prefix {
 	display: block;
 	width: 95%;
 	max-width: 190px;
-	border-radius: 0;
 	padding: 0;
 }
 
@@ -183,6 +182,11 @@ body.rtl #tsf-title-placeholder-prefix {
 	text-align: center;
 	border: 1px solid rgba(0,0,0,.1);
 	text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+.tsf-seo-bar-item:focus {
+	outline: none;
+	box-shadow: 0 0 0 1px currentColor inset;
 }
 
 body.no-js .tsf-seo-bar-item {

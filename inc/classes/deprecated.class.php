@@ -38,11 +38,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class Deprecated {
 
 	/**
-	 * Constructor. Does nothing.
-	 */
-	public function __construct() { }
-
-	/**
 	 * Returns a filterable sequential array of default scripts.
 	 *
 	 * @since 3.2.2

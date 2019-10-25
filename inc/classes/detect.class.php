@@ -680,6 +680,7 @@ class Detect extends Render {
 	 * Detect if the current screen type is a page or taxonomy.
 	 *
 	 * @since 2.3.1
+	 * @TODO unused... deprecate me.
 	 * @staticvar array $is_page
 	 *
 	 * @param string $type the Screen type

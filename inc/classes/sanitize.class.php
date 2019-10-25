@@ -1759,7 +1759,7 @@ class Sanitize extends Admin_Pages {
 		foreach ( [ 'clear', 'space' ] as $type ) {
 			if ( empty( $args[ $type ] ) ) continue;
 
-			$_regex   = sprintf( '<(%s)[^>]*?>((.*?)(<\/\1>))?', implode( $args[ $type ], '|' ) );
+			$_regex   = sprintf( '<(%s)[^>]*?>((.*?)(<\/\1>))?', implode( '|', $args[ $type ] ) );
 			$_replace = 'space' === $type ? ' $2 ' : ' ';
 
 			$input = preg_replace( "/$_regex/si", $_replace, $input );

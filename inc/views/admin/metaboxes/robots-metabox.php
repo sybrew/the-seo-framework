@@ -204,7 +204,7 @@ switch ( $instance ) :
 
 		$_video_snippet_types['default'] = [
 			-1 => __( 'Full video preview', 'autodescription' ),
-			0  => _x( 'None, disallow preview', 'quanity: zero', 'autodescription' ),
+			0  => _x( 'None, still image only', 'quanity: zero', 'autodescription' ),
 		];
 		foreach ( range( 1, 600, 1 ) as $_n ) {
 			/* translators: %d = number */

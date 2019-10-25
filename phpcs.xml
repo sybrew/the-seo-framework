@@ -45,9 +45,6 @@
 		<!-- Goto is bad when doing it Assembly-style (jumping through loops), but not outside in modern structure. Stop being numinous. -->
 		<!-- Besides, PHP errors out when jumping through loops with goto -->
 		<exclude name="Generic.PHP.DiscourageGoto"/>
-
-		<!-- TEMP - https://github.com/squizlabs/PHP_CodeSniffer/issues/2512 -->
-		<exclude name="Squiz.PHP.NonExecutableCode.Unreachable"/>
 	</rule>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
