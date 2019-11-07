@@ -779,14 +779,20 @@ class Generate_Url extends Generate_Title {
 	 * Adjusts category post link.
 	 *
 	 * @since 3.0.0
+	 * @since 4.0.3 Now fills in a fallback $post object when null.
 	 * @access private
 	 *
 	 * @param \WP_Term $term  The category to use in the permalink.
-	 * @param array    $terms Array of all categories (WP_Term objects) associated with the post.
+	 * @param array    $terms Array of all categories (WP_Term objects) associated with the post. Unused.
 	 * @param \WP_Post $post  The post in question.
 	 * @return \WP_Term The primary term.
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
+
+		if ( null === $post ) {
+			$post = \get_post( $this->get_the_real_ID() );
+		}
+
 		return $this->get_primary_term( $post->ID, $term->taxonomy ) ?: $term;
 	}
 

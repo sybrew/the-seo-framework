@@ -78,6 +78,8 @@ class Generate extends User_Data {
 	 *              3. Added two parameters.
 	 * @since 4.0.2 1. Added new copyright directive tags.
 	 *              2. Now strictly parses the validity of robots directives via a boolean check.
+	 * @since 4.0.3 1. Changed `max_snippet_length` to `max_snippet`
+	 *              2. Changed the copyright directive's spacer from `=` to `:`.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -101,12 +103,12 @@ class Generate extends User_Data {
 		}
 
 		$meta = [
-			'noindex'            => '',
-			'nofollow'           => '',
-			'noarchive'          => '',
-			'max_snippet_length' => '',
-			'max_image_preview'  => '',
-			'max_video_preview'  => '',
+			'noindex'           => '',
+			'nofollow'          => '',
+			'noarchive'         => '',
+			'max_snippet'       => '',
+			'max_image_preview' => '',
+			'max_video_preview' => '',
 		];
 
 		foreach (
@@ -115,15 +117,17 @@ class Generate extends User_Data {
 		) $v and $meta[ $k ] = $k;
 
 		foreach (
-			array_intersect_key( $_meta, array_flip( [ 'max_snippet_length', 'max_image_preview', 'max_video_preview' ] ) )
+			array_intersect_key( $_meta, array_flip( [ 'max_snippet', 'max_image_preview', 'max_video_preview' ] ) )
 			as $k => $v
-		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . "=$v";
+		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
 
 		/**
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
 		 *
 		 * @since 2.6.0
 		 * @since 4.0.0 Added two parameters ($args and $ignore).
+		 * @since 4.0.2 Now contains the copyright diretive values.
+		 * @since 4.0.3 Changed `$meta` key `max_snippet_length` to `max_snippet`
 		 *
 		 * @param array      $meta The current robots meta.
 		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
@@ -152,6 +156,7 @@ class Generate extends User_Data {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Added new copyright directive tags.
+	 * @since 4.0.3 Changed `max_snippet_length` to `max_snippet`
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param int <bit> $ignore The ignore level. {
@@ -164,7 +169,7 @@ class Generate extends User_Data {
 	 *    bool              'noindex'
 	 *    bool              'nofollow'
 	 *    bool              'noarchive'
-	 *    false|int <R>=-1> 'max_snippet_length'
+	 *    false|int <R>=-1> 'max_snippet'
 	 *    false|string      'max_image_preview'
 	 *    fasle|int <R>=-1> 'max_video_preview'
 	 * }
@@ -175,12 +180,12 @@ class Generate extends User_Data {
 		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
 		$noarchive = (bool) $this->get_option( 'site_noarchive' );
 
-		$max_snippet_length = $max_image_preview = $max_video_preview = false;
+		$max_snippet = $max_image_preview = $max_video_preview = false;
 
 		if ( $this->get_option( 'set_copyright_directives' ) ) {
-			$max_snippet_length = $this->get_option( 'max_snippet_length' );
-			$max_image_preview  = $this->get_option( 'max_image_preview' );
-			$max_video_preview  = $this->get_option( 'max_video_preview' );
+			$max_snippet       = $this->get_option( 'max_snippet_length' );
+			$max_image_preview = $this->get_option( 'max_image_preview' );
+			$max_video_preview = $this->get_option( 'max_video_preview' );
 		}
 
 		//* Check homepage SEO settings, set noindex, nofollow and noarchive
@@ -305,7 +310,7 @@ class Generate extends User_Data {
 			}
 		}
 
-		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet_length', 'max_image_preview', 'max_video_preview' );
+		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview' );
 	}
 
 	/**
@@ -315,6 +320,7 @@ class Generate extends User_Data {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Added new copyright directive tags.
+	 * @since 4.0.3 Changed `max_snippet_length` to `max_snippet`
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -327,7 +333,7 @@ class Generate extends User_Data {
 	 *    bool              'noindex'
 	 *    bool              'nofollow'
 	 *    bool              'noarchive'
-	 *    false|int <R>=-1> 'max_snippet_length'
+	 *    false|int <R>=-1> 'max_snippet'
 	 *    false|string      'max_image_preview'
 	 *    fasle|int <R>=-1> 'max_video_preview'
 	 * }
@@ -338,12 +344,12 @@ class Generate extends User_Data {
 		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
 		$noarchive = (bool) $this->get_option( 'site_noarchive' );
 
-		$max_snippet_length = $max_image_preview = $max_video_preview = false;
+		$max_snippet = $max_image_preview = $max_video_preview = false;
 
 		if ( $this->get_option( 'set_copyright_directives' ) ) {
-			$max_snippet_length = $this->get_option( 'max_snippet_length' );
-			$max_image_preview  = $this->get_option( 'max_image_preview' );
-			$max_video_preview  = $this->get_option( 'max_video_preview' );
+			$max_snippet       = $this->get_option( 'max_snippet_length' );
+			$max_image_preview = $this->get_option( 'max_image_preview' );
+			$max_video_preview = $this->get_option( 'max_video_preview' );
 		}
 
 		if ( $args['taxonomy'] ) {
@@ -422,7 +428,7 @@ class Generate extends User_Data {
 			endif;
 		}
 
-		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet_length', 'max_image_preview', 'max_video_preview' );
+		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview' );
 	}
 
 	/**

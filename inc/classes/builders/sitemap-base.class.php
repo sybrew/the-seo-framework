@@ -334,7 +334,7 @@ class Sitemap_Base extends Sitemap {
 	}
 
 	/**
-	 * Generates front-and blog page sitemap URL item values.
+	 * Generates sitemap URL item values.
 	 *
 	 * @since 4.0.0
 	 * @generator

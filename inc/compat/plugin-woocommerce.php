@@ -15,6 +15,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * Initializes WooCommerce compatibility.
  *
  * @since 3.1.0
+ * @since 4.0.3 Added primary term support to products.
  * @access private
  * @uses \is_product()
  */
@@ -30,6 +31,14 @@ function _init_wc_compat() {
 			}
 		}
 	);
+
+	$tsf = \the_seo_framework();
+
+	// Adjust the product link acknowledging the primary category.
+	\add_filter( 'wc_product_post_type_link_product_cat', [ $tsf, '_adjust_post_link_category' ], 10, 3 );
+
+	// Adjust the structured-data breadcrumb primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
+	\add_filter( 'woocommerce_breadcrumb_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 }
 
 \add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_image_generation_params', 10, 2 );

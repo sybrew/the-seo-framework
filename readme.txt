@@ -238,19 +238,34 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 			* Because the SEO Bar can restyle and shift its elements autonomously via CSS flexbox, we can't predict where the borders must be set on each item individually.
 			* Another workaround would be to duplicate each SEO Bar, and the top "invisible" layer would be the one rendering the tooltip, whereas the bottom inert one would render the SEO Bar styling. This is an accessibility nightmare.
 	* **Styling:** In response to the WP 5.3 update, we rounded the tabs on the settings page. Enjoy!
-	* **PHP:** TODO We alleviated one deprecation notice with the upcoming PHP v7.4 update.
+	* **PHP:** We alleviated one deprecation notice with the upcoming PHP v7.4 update.
+	* **Performance:** The Google and Bing sitemap pinging URLs now enforce HTTPS. So, we updated the pinging URLs to prevent a redirect.
+	* **Other:** On upgrade, the plugin now tests for the WordPress version for compatibility, instead of the WordPress database version.
+	* **Compatibility:** The primary term selection for WooCommerce's products is now respected for both the link and breadcrumbs output.
 * **Other:**
-	* For the copyright directive brought in v4.0.2, an option for videos was wrongly described as "None, disallow preview"; it should've been "None, still image only".
+	* **For the copyright directive brought in v4.0.2:**
+		* An option for videos was wrongly described as "None, disallow preview"; it should've been "None, still image only".
+		* The output was done in a non-Google way; yet, due to standards, it was still effective.
+		* TODO The output seems to affect other meta tags, such as the description meta tag. As such, we added a warning next to the text-snippet limit.
+		* TODO We disabled the "none" option for the restrictive image directive, because there's a bug on Google Search that makes it conflict with `nofollow` and `noarchive`.
+			* For more information, see [this tweet](https://twitter.com/SybreWaaijer/status/1192017921553375232).
+* **Fixed:**
+	* Empty terms can now be asserted for post type support again. With that, for example, redirects from empty categories works again.
+	* TODO On RTL-enabled websites, the save buttons are alligned correctly again.
 
-* TODO: Round the notification corners.
 * TODO: Use TSFEM's button for the notification, improving accessibility.
+* TODO: Add info-notice class-types (blue) while we're at it (notice-info).
+* TODO: Fix the save-button positioning on the SEttings page for RTL.
 
 **For translators**
 
-* **Added:**
-	* One short string.
 * **Updated:**
+	* We added and updated a few strings.
 	* TODO The POT translation file.
+
+**For developers**
+
+* `the_seo_framework()->convert_markdown()` now handles nested strong/em conversions gracefully.
 
 = 4.0.2 =
 

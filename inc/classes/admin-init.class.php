@@ -59,7 +59,7 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Adds post states in post/page edit.php query
+	 * Adds post states for the post/page edit.php query.
 	 *
 	 * @since 4.0.0
 	 *

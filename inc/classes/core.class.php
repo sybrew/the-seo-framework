@@ -771,10 +771,11 @@ class Core {
 	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).
 	 *
 	 * @since 2.8.0
-	 * @since 2.9.0 : 1. Removed word boundary requirement for strong.
-	 *                2. Now accepts regex count their numeric values in string.
-	 *                3. Fixed header 1~6 calculation.
-	 * @since 2.9.3 : Added $args parameter.
+	 * @since 2.9.0 1. Removed word boundary requirement for strong.
+	 *              2. Now accepts regex count their numeric values in string.
+	 *              3. Fixed header 1~6 calculation.
+	 * @since 2.9.3 Added $args parameter.
+	 * @since 4.0.3 Added a workaround for connected em/strong elements.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text    The text that might contain markdown. Expected to be escaped.
@@ -815,6 +816,17 @@ class Core {
 		];
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
+
+		if ( 2 === count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
+			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
+			for ( $i = 0; $i < $count; $i++ ) {
+				$text = str_replace(
+					$matches[0][ $i ],
+					sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
+					$text
+				);
+			}
+		endif;
 
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :

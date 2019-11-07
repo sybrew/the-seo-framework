@@ -103,10 +103,11 @@ final class Ping {
 	 * @since 2.2.9
 	 * @since 3.1.0 Updated ping URL. Old one still worked, too.
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
+	 * @since 4.0.3 Google now redirects to HTTPS. Updated URL scheme to accomodate.
 	 * @link https://support.google.com/webmasters/answer/6065812?hl=en
 	 */
 	public static function ping_google() {
-		$pingurl = 'http://www.google.com/ping?sitemap=' . rawurlencode(
+		$pingurl = 'https://www.google.com/ping?sitemap=' . rawurlencode(
 			\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
 		);
 		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
@@ -118,10 +119,11 @@ final class Ping {
 	 * @since 2.2.9
 	 * @since 3.2.3 Updated ping URL. Old one still worked, too.
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
+	 * @since 4.0.3 Bing now redirects to HTTPS. Updated URL scheme to accomodate.
 	 * @link https://www.bing.com/webmaster/help/how-to-submit-sitemaps-82a15bd4
 	 */
 	public static function ping_bing() {
-		$pingurl = 'http://www.bing.com/ping?sitemap=' . rawurlencode(
+		$pingurl = 'https://www.bing.com/ping?sitemap=' . rawurlencode(
 			\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
 		);
 		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
