@@ -42,17 +42,23 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 }
 
 .error.tsf-notice.tsf-show-icon p:before {
-	color: #dd3811;
+	color: #dc3232;
 	content: "\f534";
 }
 
 .notice-warning.tsf-notice.tsf-show-icon p:before {
-	color: #ffa01b;
+	color: #ffb900;
 	content: "\f227";
 }
 
+.notice-info.tsf-notice.tsf-show-icon p:before {
+	color: #00a0d2;
+	font-size: 16px;
+	content: "\f223";
+}
+
 .updated.tsf-notice.tsf-show-icon p:before {
-	color: #0cc34b;
+	color: #46b450;
 	font-size: 16px;
 	content: "\f147";
 }
@@ -60,10 +66,10 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 a.tsf-dismiss {
 	position: absolute;
 	top: 0;
-	right: 1px;
+	right: 0;
 	border: none;
 	margin: 0;
-	padding: 9px;
+	padding: 10px;
 	background: 0 0;
 	color: #72777c;
 	cursor: pointer;
@@ -72,7 +78,7 @@ a.tsf-dismiss {
 
 body.rtl a.tsf-dismiss {
 	right: initial;
-	left: 1px;
+	left: 0;
 }
 
 a.tsf-dismiss:before {

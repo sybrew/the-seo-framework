@@ -2,7 +2,7 @@
 Contributors: Cybr
 Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
 Requires at least: 4.9.0
-Tested up to: 5.2
+Tested up to: 5.3
 Requires PHP: 5.6.0
 Stable tag: 4.0.2
 License: GPLv3
@@ -232,12 +232,13 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 **For everyone**
 
 * **Improved:**
-	* **Accessibility:** Focussing the SEO Bar will now add a high-contrast inner-ring.
-		* Fun fact: Because the items are stacked together so tightly, an outer ring wouldn't work.
-		* Sad fact: We wanted to round the edges of the SEO Bar--it's sooo nice on your eyes--, but doing so would either obstruct the tooltip, and the workaround would render your browser useless performancewise.
-			* Because the SEO Bar can restyle and shift its elements autonomously via CSS flexbox, we can't predict where the borders must be set on each item individually.
-			* Another workaround would be to duplicate each SEO Bar, and the top "invisible" layer would be the one rendering the tooltip, whereas the bottom inert one would render the SEO Bar styling. This is an accessibility nightmare.
-	* **Styling:** In response to the WP 5.3 update, we rounded the tabs on the settings page. Enjoy!
+	* **Accessibility:**
+		* Focussing an SEO Bar item will now add a high-contrast inner-ring.
+		* You can now dismiss notices with your keyboard, by hitting "return".
+	* **Styling:**
+		* In response to the WP 5.3 update, we rounded the tabs on the settings page. Enjoy!
+		* We added support for "info" notice types.
+		* The dismiss icon is now centered better for most notifications.
 	* **PHP:** We alleviated one deprecation notice with the upcoming PHP v7.4 update.
 	* **Performance:** The Google and Bing sitemap pinging URLs now enforce HTTPS. So, we updated the pinging URLs to prevent a redirect.
 	* **Other:** On upgrade, the plugin now tests for the WordPress version for compatibility, instead of the WordPress database version.
@@ -251,11 +252,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 			* For more information, see [this tweet](https://twitter.com/SybreWaaijer/status/1192017921553375232).
 * **Fixed:**
 	* Empty terms can now be asserted for post type support again. With that, for example, redirects from empty categories works again.
-	* TODO On RTL-enabled websites, the save buttons are alligned correctly again.
-
-* TODO: Use TSFEM's button for the notification, improving accessibility.
-* TODO: Add info-notice class-types (blue) while we're at it (notice-info).
-* TODO: Fix the save-button positioning on the SEttings page for RTL.
+	* On RTL-enabled websites, the save buttons are alligned correctly again.
 
 **For translators**
 

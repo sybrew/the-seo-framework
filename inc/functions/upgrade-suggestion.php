@@ -121,7 +121,7 @@ function _suggest_extension_manager() {
 			[ 'a', 'strong' ],
 			[ 'a_internal' => false ]
 		),
-		'updated',
+		'info',
 		false,
 		false
 	);

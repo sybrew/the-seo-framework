@@ -273,7 +273,7 @@ function _do_upgrade_notice() {
 				[ 'a' ],
 				[ 'a_internal' => false ]
 			),
-			'updated',
+			'info',
 			false,
 			false
 		);
@@ -344,7 +344,7 @@ function _output_upgrade_notices() {
 
 	foreach ( $notices as $notice ) {
 		//* @TODO rtl?
-		\the_seo_framework()->do_dismissible_notice( 'SEO: ' . $notice, 'updated' );
+		\the_seo_framework()->do_dismissible_notice( 'SEO: ' . $notice, 'info' );
 	}
 }
 

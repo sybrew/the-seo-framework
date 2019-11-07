@@ -202,7 +202,7 @@ class Admin_Pages extends Profile {
 
 			case 'unchanged':
 				$message = \__( 'No SEO settings were changed, but the caches have been flushed.', 'autodescription' );
-				$type    = 'warning';
+				$type    = 'info';
 				break;
 
 			case 'reset':
@@ -353,6 +353,8 @@ class Admin_Pages extends Profile {
 	 * @since 2.6.0
 	 * @since 3.0.6 The messages are no longer auto-styled to "strong".
 	 * @since 4.0.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
+	 * @since 4.0.3 1. Keyboard navigation is now supported on the dismiss icon.
+	 *              2. The info notice type is now supported.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
@@ -372,6 +374,9 @@ class Admin_Pages extends Profile {
 		if ( 'warning' === $type )
 			$type = 'notice-warning';
 
+		if ( 'info' === $type )
+			$type = 'notice-info';
+
 		$a11y = $a11y ? 'tsf-show-icon' : '';
 
 		return vsprintf(
@@ -381,7 +386,7 @@ class Admin_Pages extends Profile {
 				( $a11y ? 'tsf-show-icon' : '' ),
 				( $escape ? \esc_html( $message ) : $message ),
 				sprintf(
-					'<a class="hide-if-no-tsf-js tsf-dismiss" title="%s" tabindex=0></a>',
+					'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s"></a>',
 					\esc_attr__( 'Dismiss this notice', 'autodescription' )
 				),
 			]
