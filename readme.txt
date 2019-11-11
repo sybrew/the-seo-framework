@@ -1,10 +1,10 @@
 === The SEO Framework ===
 Contributors: Cybr
-Tags: SEO, XML Sitemap, Google, Open Graph, Schema.org, Twitter
+Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
 Requires at least: 4.9.0
 Tested up to: 5.3
 Requires PHP: 5.6.0
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -188,7 +188,7 @@ We'll try to get back to you within 72 hours. Typically, we reply within a day.
 Any input is much appreciated, and everything will be considered.
 Please visit the [GitHub project page](https://github.com/sybrew/the-seo-framework) to submit issues or even pull requests.
 
-Learn more [about contribute](https://tsf.fyi/contributing).
+Learn more [about contributing](https://tsf.fyi/contributing).
 
 = What do the colors tell me? =
 
@@ -229,40 +229,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.3 =
 
-**For everyone**
+Google Search has a new bug in their parser, which causes pages to be deindexed unintentionally when a specific combination of robots-settings are used. To work around this bug, we changed how the recently introduced copyright directive settings work.
 
-* **Improved:**
-	* **Accessibility:**
-		* Focussing an SEO Bar item will now add a high-contrast inner-ring.
-		* You can now dismiss notices with your keyboard, by hitting "return".
-	* **Styling:**
-		* In response to the WP 5.3 update, we rounded the tabs on the settings page. Enjoy!
-		* We added support for "info" notice types.
-		* The dismiss icon is now centered better for most notifications.
-	* **PHP:** We alleviated one deprecation notice with the upcoming PHP v7.4 update.
-	* **Performance:** The Google and Bing sitemap pinging URLs now enforce HTTPS. So, we updated the pinging URLs to prevent a redirect.
-	* **Other:** On upgrade, the plugin now tests for the WordPress version for compatibility, instead of the WordPress database version.
-	* **Compatibility:** The primary term selection for WooCommerce's products is now respected for both the link and breadcrumbs output.
-* **Other:**
-	* **For the copyright directive brought in v4.0.2:**
-		* An option for videos was wrongly described as "None, disallow preview"; it should've been "None, still image only".
-		* The output was done in a non-Google way; yet, due to standards, it was still effective.
-		* TODO The output seems to affect other meta tags, such as the description meta tag. As such, we added a warning next to the text-snippet limit.
-		* TODO We disabled the "none" option for the restrictive image directive, because there's a bug on Google Search that makes it conflict with `nofollow` and `noarchive`.
-			* For more information, see [this tweet](https://twitter.com/SybreWaaijer/status/1192017921553375232).
-* **Fixed:**
-	* Empty terms can now be asserted for post type support again. With that, for example, redirects from empty categories works again.
-	* On RTL-enabled websites, the save buttons are alligned correctly again.
+For more information, see our KB entry on why the [Maximum Image Preview Size setting may now be ignored](https://kb.theseoframework.com/?p=82).
 
-**For translators**
-
-* **Updated:**
-	* We added and updated a few strings.
-	* TODO The POT translation file.
-
-**For developers**
-
-* `the_seo_framework()->convert_markdown()` now handles nested strong/em conversions gracefully.
+We also fixed three bugs and added [minor improvements](https://theseoframework.com/?p=3379#detailed).
 
 = 4.0.2 =
 

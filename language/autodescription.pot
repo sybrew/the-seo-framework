@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 4.0.2\n"
+"Project-Id-Version: The SEO Framework 4.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2019-10-15 01:19:53+00:00\n"
+"POT-Creation-Date: 2019-11-11 17:46:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -164,33 +164,33 @@ msgstr ""
 msgid "Multiple SEO tools have been detected. You should only use one."
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:385
+#: inc/classes/admin-pages.class.php:390
 msgid "Dismiss this notice"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:1036
+#: inc/classes/admin-pages.class.php:1041
 #: inc/classes/bridges/scripts.class.php:621
 msgctxt "Button hover"
 msgid "Select social image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:1047
+#: inc/classes/admin-pages.class.php:1052
 #: inc/classes/bridges/scripts.class.php:620
 msgid "Select Image"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:1093
+#: inc/classes/admin-pages.class.php:1098
 #: inc/classes/bridges/scripts.class.php:629
 msgid "Select Logo"
 msgstr ""
 
-#: inc/classes/admin-pages.class.php:1143
+#: inc/classes/admin-pages.class.php:1148
 msgid "Click to change the counter type"
 msgstr ""
 
 #. translators: %s = number
 
-#: inc/classes/admin-pages.class.php:1146
+#: inc/classes/admin-pages.class.php:1151
 msgid "Characters Used: %s"
 msgstr ""
 
@@ -1550,7 +1550,7 @@ msgid "This outputs the complete date including hours, minutes, and timezone."
 msgstr ""
 
 #: inc/views/admin/metaboxes/general-metabox.php:429
-#: inc/views/admin/metaboxes/robots-metabox.php:301
+#: inc/views/admin/metaboxes/robots-metabox.php:313
 msgid "Post Type Settings"
 msgstr ""
 
@@ -1567,7 +1567,7 @@ msgid "Select post types which should not receive any SEO optimization whatsoeve
 msgstr ""
 
 #: inc/views/admin/metaboxes/general-metabox.php:439
-#: inc/views/admin/metaboxes/robots-metabox.php:303
+#: inc/views/admin/metaboxes/robots-metabox.php:315
 msgid "These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect."
 msgstr ""
 
@@ -1854,81 +1854,96 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: inc/views/admin/metaboxes/robots-metabox.php:133
-#: inc/views/admin/metaboxes/robots-metabox.php:217
+#: inc/views/admin/metaboxes/robots-metabox.php:229
 msgid "Standard directive"
 msgstr ""
 
 #: inc/views/admin/metaboxes/robots-metabox.php:134
-#: inc/views/admin/metaboxes/robots-metabox.php:218
+#: inc/views/admin/metaboxes/robots-metabox.php:230
 msgid "Granular directive"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:156
+#: inc/views/admin/metaboxes/robots-metabox.php:157
 msgid "Maximum text snippet length"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:160
+#: inc/views/admin/metaboxes/robots-metabox.php:161
 msgid "This may limit the text snippet length for all pages on this site."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:172
-#: inc/views/admin/metaboxes/robots-metabox.php:207
+#: inc/views/admin/metaboxes/robots-metabox.php:165
+msgid "This directive also imposes a limit on meta descriptions and structured data, which unintentionally restricts the amount of information you can share. Therefore, it's best to use at least a 320 character limit."
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:174
 msgctxt "quanity: zero"
 msgid "None, disallow preview"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:173
+#: inc/views/admin/metaboxes/robots-metabox.php:175
 msgid "Thumbnail or standard size"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:174
+#: inc/views/admin/metaboxes/robots-metabox.php:176
 msgid "Large or full size"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:192
+#: inc/views/admin/metaboxes/robots-metabox.php:195
 msgid "Maximum image preview size"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:196
+#: inc/views/admin/metaboxes/robots-metabox.php:199
 msgid "This may limit the image preview size for all images from this site."
 msgstr ""
 
+#. translators: Backticks and hyperlink are Markdown! %s = link to
+#. documentation.
+
 #: inc/views/admin/metaboxes/robots-metabox.php:206
+msgid "The \"None, disallow preview\" setting will not be used when `nofollow` or `noarchive` are set for a page. This is to work around unexpected deindexing behavior in Google Search. [Learn more](%s)."
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:218
 msgid "Full video preview"
+msgstr ""
+
+#: inc/views/admin/metaboxes/robots-metabox.php:219
+msgctxt "quanity: zero"
+msgid "None, still image only"
 msgstr ""
 
 #. translators: %d = number
 
-#: inc/views/admin/metaboxes/robots-metabox.php:211
+#: inc/views/admin/metaboxes/robots-metabox.php:223
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:240
+#: inc/views/admin/metaboxes/robots-metabox.php:252
 msgid "Maximum video preview length"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:244
+#: inc/views/admin/metaboxes/robots-metabox.php:256
 msgid "This may limit the video preview length for all videos on this site."
 msgstr ""
 
 #. translators: 1 = noindex/nofollow/noarchive, 2 = Post, Post type, Category
 #. archives, the entire site, etc.
 
-#: inc/views/admin/metaboxes/robots-metabox.php:259
+#: inc/views/admin/metaboxes/robots-metabox.php:271
 msgid "Apply %1$s to %2$s?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:264
+#: inc/views/admin/metaboxes/robots-metabox.php:276
 msgid "Robots Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:289
+#: inc/views/admin/metaboxes/robots-metabox.php:301
 msgid "Warning: No public site should ever enable this option."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:308
+#: inc/views/admin/metaboxes/robots-metabox.php:320
 msgid "Warning: No site should enable these options for Posts and Pages."
 msgstr ""
 

@@ -122,6 +122,23 @@ class Generate extends User_Data {
 		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
 
 		/**
+		 * Drop-in Google Search bug patch.
+		 * "When you combine "max-image-preview:none" with either "nofollow" or "noarchive", the page is marked as "noindex"!"
+		 *
+		 * (It's probably defined as `<meta name=robots content=none/>` due to a regex bug at Google)
+		 *
+		 * @link <https://twitter.com/SybreWaaijer/status/1192017921553375232>
+		 * @link <https://kb.theseoframework.com/?p=82>
+		 * @since 4.0.3
+		 * @ignore Do not fix me. Do not place after the filter either; that's redundant, because there are more filters trickling down.
+		 * @TEMP
+		 */
+		if ( 'max-image-preview:none' === $meta['max_image_preview'] ) {
+			if ( $meta['nofollow'] || $meta['noarchive'] )
+				$meta['max_image_preview'] = '';
+		}
+
+		/**
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
 		 *
 		 * @since 2.6.0
