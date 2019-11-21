@@ -4,7 +4,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 4.9.0
 Tested up to: 5.3
 Requires PHP: 5.6.0
-Stable tag: 4.0.3
+Stable tag: 4.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -229,9 +229,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.4 =
 
-WordPress 5.3 has a [bug](https://core.trac.wordpress.org/ticket/48623) where the timezone set in PHP is taken into account when creating permalinks. Since this bug can cause canonical URLs with dates to point to a nonexistent page, we're sending out [this patch](https://theseoframework.com/?p=TODO#detailed) where TSF sets the timezone to flat UTC for its front-end generation.
+WordPress 5.3 has a [bug](https://core.trac.wordpress.org/ticket/48623) where the timezone set in PHP is taken into account when creating permalinks. Since this bug can cause canonical URLs with dates to point to a nonexistent page, we're sending out this patch where TSF sets the timezone to flat UTC for its front-end generation.
 
-The proper fix in WordPress 5.3.1 is due in about three weeks from now, after which we'll consider reverting these changes.
+The proper fix in WordPress 5.3.1 is due in about three weeks from now, after which we'll consider reverting [these changes](https://theseoframework.com/?p=3390#detailed).
 
 = 4.0.3 =
 
