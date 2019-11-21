@@ -63,13 +63,14 @@ abstract class Sitemap {
 	 * Prepares sitemap generation by raising the memory limit and fixing the timezone.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.4 Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 */
 	final public function prepare_generation() {
 
 		\wp_raise_memory_limit( 'sitemap' );
 
 		// Set timezone according to settings.
-		static::$tsf->set_timezone();
+		static::$tsf->set_timezone( 'UTC' );
 	}
 
 	/**

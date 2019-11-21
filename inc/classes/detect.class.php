@@ -533,6 +533,7 @@ class Detect extends Render {
 	 *
 	 * @since 4.0.0
 	 * @staticvar bool $detected
+	 * @TODO add filter?
 	 *
 	 * @return bool
 	 */

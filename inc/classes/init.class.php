@@ -341,6 +341,8 @@ class Init extends Query {
 	 * @since 3.1.0 1. Now no longer outputs anything on preview.
 	 *              2. Now no longer outputs anything on blocked post types.
 	 * @since 4.0.0 Now no longer outputs anything on Customizer.
+	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
+	 *              2. Now always sets timezone regardless of settings, because, again, bug.
 	 * @access private
 	 */
 	public function html_output() {
@@ -380,6 +382,9 @@ class Init extends Query {
 
 			$before_legacy = $this->get_legacy_header_filters_output( 'before' );
 
+			/** @since 4.0.4 : WP 5.3 patch, added. TEMP */
+			$this->set_timezone( 'UTC' );
+
 			//* Limit processing and redundant tags on 404 and search.
 			if ( $this->is_search() ) :
 				$output = $this->og_locale()
@@ -400,8 +405,9 @@ class Init extends Query {
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
 			else :
-				$set_timezone = $this->uses_time_in_timestamp_format() && ( $this->output_published_time() || $this->output_modified_time() );
-				$set_timezone and $this->set_timezone();
+				/** @since 4.0.4 : WP 5.3 patch, commented. TEMP */
+				// $set_timezone = $this->uses_time_in_timestamp_format() && ( $this->output_published_time() || $this->output_modified_time() );
+				// $set_timezone and $this->set_timezone();
 
 				$output = $this->the_description()
 						. $this->og_image()
@@ -431,8 +437,12 @@ class Init extends Query {
 						. $this->yandex_site_output()
 						. $this->pint_site_output();
 
-				$set_timezone and $this->reset_timezone();
+				/** @since 4.0.4 : WP 5.3 patch, commented. TEMP */
+				// $set_timezone and $this->reset_timezone();
 			endif;
+
+			/** @since 4.0.4 : WP 5.3 patch, added. TEMP */
+			$this->reset_timezone();
 
 			$after_legacy = $this->get_legacy_header_filters_output( 'after' );
 

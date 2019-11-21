@@ -227,6 +227,12 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.0.4 =
+
+WordPress 5.3 has a [bug](https://core.trac.wordpress.org/ticket/48623) where the timezone set in PHP is taken into account when creating permalinks. Since this bug can cause canonical URLs with dates to point to a nonexistent page, we're sending out [this patch](https://theseoframework.com/?p=TODO#detailed) where TSF sets the timezone to flat UTC for its front-end generation.
+
+The proper fix in WordPress 5.3.1 is due in about three weeks from now, after which we'll consider reverting these changes.
+
 = 4.0.3 =
 
 Google Search has a new bug in their parser, which causes pages to be deindexed unintentionally when a specific combination of robots-settings are used. To work around this bug, we changed how the recently introduced copyright directive settings work.
