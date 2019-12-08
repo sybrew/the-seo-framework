@@ -270,8 +270,8 @@ class Admin_Pages extends Profile {
 	 * Outputs in-post flex navigational wrapper and its content.
 	 *
 	 * @since 2.9.0
-	 * @since 3.0.0: Converted to view.
-	 * @since 4.0.0: Deprecated third parameter, silently.
+	 * @since 3.0.0 Converted to view.
+	 * @since 4.0.0 Deprecated third parameter, silently.
 	 *
 	 * @param string $id       The nav-tab ID
 	 * @param array  $tabs     The tab content {

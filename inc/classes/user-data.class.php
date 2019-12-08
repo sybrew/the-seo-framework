@@ -53,8 +53,8 @@ class User_Data extends Term_Data {
 	 * Returns the current post author ID.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.2: 1. Now no longer returns the latest post author ID on home-as-blog pages.
-	 *               2. Now always returns an integer.
+	 * @since 3.2.2 : 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *                2. Now always returns an integer.
 	 * @staticvar $cache
 	 *
 	 * @return int Post author ID on success, 0 on failure.

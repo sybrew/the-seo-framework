@@ -141,7 +141,7 @@ class Feed extends Cache {
 	protected function get_feed_entry_source_link() {
 		/**
 		 * @since 2.6.0
-		 * @since 2.7.2 or 2.7.3: Escaped output.
+		 * @since 2.7.2 or 2.7.3 : Escaped output.
 		 * @param string $source The source indication string.
 		 */
 		$source_i18n = (string) \apply_filters(

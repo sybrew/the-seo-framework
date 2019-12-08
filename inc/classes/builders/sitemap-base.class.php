@@ -418,8 +418,8 @@ class Sitemap_Base extends Sitemap {
 	 * Retrieves additional URLs and builds items from them.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.1: 1. Converted to generator and iterator. Therefore, renamed function.
-	 *               2. Now actually does something.
+	 * @since 4.0.1 : 1. Converted to generator and iterator. Therefore, renamed function.
+	 *                2. Now actually does something.
 	 * @generator
 	 * @iterator
 	 *

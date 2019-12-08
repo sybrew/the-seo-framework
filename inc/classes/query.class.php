@@ -690,7 +690,7 @@ class Query extends Core {
 	 *
 	 * @since 2.9.0
 	 * @since 2.9.3 Now tests for archive and 404 before testing homepage as blog.
-	 * @since 3.2.2: Removed SEO settings page check. This now returns false on that page.
+	 * @since 3.2.2 Removed SEO settings page check. This now returns false on that page.
 	 *
 	 * @param int $id The page ID, required. Can be 0.
 	 * @return bool True if ID if for the homepage.

@@ -418,7 +418,7 @@ switch ( $instance ) :
 					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
 					[
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ),
-						esc_attr__( 'Edit homepage page settings', 'autodescription' ),
+						esc_attr_x( 'Edit homepage page settings', 'Bear with me: the homepage can be edited globally, or via its page. Thus "homepage page".', 'autodescription' ),
 						esc_html__( 'Overwritten by page settings', 'autodescription' ),
 					]
 				)

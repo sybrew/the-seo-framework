@@ -248,8 +248,8 @@ class Site_Options extends Sanitize {
 
 				'sitemap_styles'       => 1,        // Whether to style the sitemap
 				'sitemap_logo'         => 1,        // Whether to add logo to sitemap
-				'sitemap_color_main'   => '333',    // Sitemap main color
-				'sitemap_color_accent' => '00cd98', // Sitemap accent color
+				'sitemap_color_main'   => '222222', // Sitemap main color
+				'sitemap_color_accent' => '00a0d2', // Sitemap accent color
 
 				// Feed.
 				'excerpt_the_feed' => 1, // Generate feed Excerpts

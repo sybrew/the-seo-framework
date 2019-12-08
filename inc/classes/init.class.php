@@ -470,11 +470,11 @@ class Init extends Query {
 	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.9.0
-	 * @since 3.1.0: 1. Now no longer redirects on preview.
-	 *               2. Now listens to post type settings.
-	 * @since 4.0.0: 1. No longer tries to redirect on "search".
-	 *               2. Added term redirect support.
-	 *               3. No longer redirects on Customizer.
+	 * @since 3.1.0 : 1. Now no longer redirects on preview.
+	 *                2. Now listens to post type settings.
+	 * @since 4.0.0 : 1. No longer tries to redirect on "search".
+	 *                2. Added term redirect support.
+	 *                3. No longer redirects on Customizer.
 	 * @access private
 	 *
 	 * @return void early on non-singular pages.
@@ -593,6 +593,8 @@ class Init extends Query {
 		if ( false === $output ) :
 			$output = '';
 
+			// TODO this doesn't assess whether it's actually being outputted on a subdirectory.
+			// For that, we need to check the $_REQUEST... in fact, this whole function call is misplaced?
 			if ( $this->is_subdirectory_installation() ) {
 				$output .= '# This is an invalid robots.txt location.' . "\r\n";
 				$output .= '# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' ) . "\r\n";

@@ -147,8 +147,8 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
-	 *               2. Now obtains custom field data for terms.
+	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
+	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
@@ -235,8 +235,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
-	 *               2. Now obtains custom field data for terms.
+	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
+	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
@@ -282,8 +282,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2: 1. Now tests for the homepage as page prior getting custom field data.
-	 *               2. Now obtains custom field data for terms.
+	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
+	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
@@ -865,7 +865,7 @@ class Generate_Description extends Generate {
 			// $excerpt = $matches[1];
 		// }
 
-		//* Remove leading commas and spaces.
+		//* Remove trailing commas and spaces.
 		$excerpt = rtrim( $excerpt, ' ,' );
 
 		if ( ';' === substr( $excerpt, -1 ) ) {

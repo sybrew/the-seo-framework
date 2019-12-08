@@ -227,15 +227,15 @@ class Term_Data extends Post_Data {
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @since 2.7.0
-	 * @since 4.0.0: 1. Renamed from `update_term_meta`
-	 *               2. noindex, nofollow, noarchive are now converted to qubits.
-	 *               3. Added new keys to sanitize.
-	 *               4. Now marked as private.
-	 *               5. Added more sanity protection.
-	 *               6. No longer runs when no `autodescription-meta` POST data is sent.
-	 *               7. Now uses the current term meta to set new values.
-	 *               8. No longer deletes meta from abstracting plugins on save when they're deactivated.
-	 *               9. Now allows updating during `WP_AJAX`.
+	 * @since 4.0.0 : 1. Renamed from `update_term_meta`
+	 *                2. noindex, nofollow, noarchive are now converted to qubits.
+	 *                3. Added new keys to sanitize.
+	 *                4. Now marked as private.
+	 *                5. Added more sanity protection.
+	 *                6. No longer runs when no `autodescription-meta` POST data is sent.
+	 *                7. Now uses the current term meta to set new values.
+	 *                8. No longer deletes meta from abstracting plugins on save when they're deactivated.
+	 *                9. Now allows updating during `WP_AJAX`.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 *         Use $this->save_term_meta() instead.
@@ -260,8 +260,8 @@ class Term_Data extends Post_Data {
 	 * Overwrites all of the term meta on term-edit.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
-	 *              2: Now continues using the filtered term object.
+	 * @since 4.0.2 : 1. Now tests for valid term ID in the term object.
+	 *                2. Now continues using the filtered term object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -290,8 +290,8 @@ class Term_Data extends Post_Data {
 	 * Overwrites a part of the term meta on quick-edit.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
-	 *              2: Now continues using the filtered term object.
+	 * @since 4.0.2 : 1. Now tests for valid term ID in the term object.
+	 *                2. Now continues using the filtered term object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -327,8 +327,8 @@ class Term_Data extends Post_Data {
 	 * as it reprocesses all term meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
-	 *              2: Now continues using the filtered term object.
+	 * @since 4.0.2 : 1. Now tests for valid term ID in the term object.
+	 *                2. Now continues using the filtered term object.
 	 * @uses $this->save_term_meta() to process all data.
 	 *
 	 * @param string $item     The item to update.
@@ -354,8 +354,8 @@ class Term_Data extends Post_Data {
 	 * Updates term meta from input.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 1: Now tests for valid term ID in the term object.
-	 *              2: Now continues using the filtered term object.
+	 * @since 4.0.2 : 1. Now tests for valid term ID in the term object.
+	 *                2. Now continues using the filtered term object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term Taxonomy ID.

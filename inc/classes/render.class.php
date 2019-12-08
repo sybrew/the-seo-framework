@@ -686,9 +686,9 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0: 1. Now checks for 0000 timestamps.
-	 *               2. Now uses timestamp formats.
-	 *               3. Now uses GMT time.
+	 * @since 3.0.0 : 1. Now checks for 0000 timestamps.
+	 *                2. Now uses timestamp formats.
+	 *                3. Now uses GMT time.
 	 *
 	 * @return string The Article Publishing Time meta tag.
 	 */
@@ -732,8 +732,8 @@ class Render extends Admin_Init {
 	 * @since 2.2.2
 	 * @since 2.7.0 Listens to $this->get_the_real_ID() instead of WordPress Core ID determination.
 	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0: 1. Now checks for 0000 timestamps.
-	 *               2. Now uses timestamp formats.
+	 * @since 3.0.0 : 1. Now checks for 0000 timestamps.
+	 *                2. Now uses timestamp formats.
 	 *
 	 * @return string The Article Modified Time meta tag, and optionally the Open Graph Updated Time.
 	 */

@@ -199,7 +199,7 @@ class Admin_Init extends Init {
 			'ml_IN' => 100 / 160, // Malayalam (മലയാളം)
 			'ja'    =>  70 / 160, // Japanese (日本語)
 			'ko_KR' =>  82 / 160, // Korean (한국어)
-			'ta_IN' => 120 / 160, // Talim (தமிழ்)
+			'ta_IN' => 120 / 160, // Tamil (தமிழ்)
 			'zh_TW' =>  70 / 160, // Taiwanese Mandarin (Traditional Chinese) (繁體中文)
 			'zh_HK' =>  70 / 160, // Hong Kong (Chinese version) (香港中文版)
 			'zh_CN' =>  70 / 160, // Mandarin (Simplified Chinese) (简体中文)

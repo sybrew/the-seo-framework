@@ -1279,8 +1279,8 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add or remove title branding additions.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2: 1. Added filter.
-	 *               2. Added strict taxonomical check.
+	 * @since 3.1.2 : 1. Added filter.
+	 *                2. Added strict taxonomical check.
 	 * @since 3.2.2 Now differentiates from query and parameter input.
 	 * @see $this->merge_title_branding()
 	 * @uses $this->use_title_branding_from_query()

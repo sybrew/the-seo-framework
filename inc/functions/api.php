@@ -59,9 +59,9 @@ namespace {
 	 * will fail to load views.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0: Added did_action and current_action check.
+	 * @since 2.8.0 Added `did_action()` check.
 	 *
-	 * @return string|bool The SEO Framework class name. False if The SEO Framework isn't loaded.
+	 * @return string|bool The SEO Framework class name. False if The SEO Framework isn't loaded (yet).
 	 */
 	function the_seo_framework_class() {
 
@@ -70,7 +70,8 @@ namespace {
 		if ( isset( $class ) )
 			return $class;
 
-		if ( ! ( did_action( 'plugins_loaded' ) || current_action( 'plugins_loaded' ) ) )
+		// did_action() checks for current action too.
+		if ( ! did_action( 'plugins_loaded' ) )
 			return false;
 
 		return $class = get_class( the_seo_framework() );

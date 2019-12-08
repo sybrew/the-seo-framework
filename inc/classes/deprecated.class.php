@@ -31,8 +31,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Contains all deprecated functions.
  *
  * @since 2.8.0
- * @since 3.1.0: Removed all methods deprecated in 3.0.0.
- * @since 4.0.0: Removed all methods deprecated in 3.1.0.
+ * @since 3.1.0 Removed all methods deprecated in 3.0.0.
+ * @since 4.0.0 Removed all methods deprecated in 3.1.0.
  * @ignore
  */
 final class Deprecated {
@@ -354,8 +354,8 @@ final class Deprecated {
 	 * Returns the stylesheet XSL location URL.
 	 *
 	 * @since 2.8.0
-	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
-	 *              2: Now takes query parameters (if any) and restores them correctly.
+	 * @since 3.0.0 : 1. No longer uses home URL from cache. But now uses `get_home_url()`.
+	 *                2. Now takes query parameters (if any) and restores them correctly.
 	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 * @global \WP_Rewrite $wp_rewrite
@@ -371,8 +371,8 @@ final class Deprecated {
 	 * Returns the sitemap XML location URL.
 	 *
 	 * @since 2.9.2
-	 * @since 3.0.0 1: No longer uses home URL from cache. But now uses `get_home_url()`.
-	 *              2: Now takes query parameters (if any) and restores them correctly.
+	 * @since 3.0.0 : 1. No longer uses home URL from cache. But now uses `get_home_url()`.
+	 *                2. Now takes query parameters (if any) and restores them correctly.
 	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 * @global \WP_Rewrite $wp_rewrite
@@ -670,8 +670,8 @@ final class Deprecated {
 	 * Returns unescaped URL from options input.
 	 *
 	 * @since 2.8.2
-	 * @since 2.9.4 1: Now converts URL scheme.
-	 *              2: $set_og_dimensions now works.
+	 * @since 2.9.4 : 1. Now converts URL scheme.
+	 *                2. $set_og_dimensions now works.
 	 * @since 4.0.0 Deprecated
 	 * @deprecated
 	 *
@@ -847,8 +847,8 @@ final class Deprecated {
 	 * Determines if the current theme supports the custom logo addition.
 	 *
 	 * @since 2.8.0
-	 * @since 3.1.0: 1. No longer checks for WP version 4.5+.
-	 *               2. No longer uses caching.
+	 * @since 3.1.0 : 1. No longer checks for WP version 4.5+.
+	 *                2. No longer uses caching.
 	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *

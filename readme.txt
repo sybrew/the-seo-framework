@@ -227,6 +227,41 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.0.5 =
+
+TODO:
+	1. Allow users to select social image resolution (or predefined size)
+	2. Allow users to select feed indexing options (for Google Podcasts support)
+	3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
+	4. Add sitemap purger for polylang? Like we have for WPML?
+	5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
+		* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] );
+	6. WordPress changed how do_robots() works in 5.3... where they no longer check for public.
+	7. Convert is_blog_public()'s option call to a weak check?
+	8. See TODO at robots_txt().
+
+TODO https://github.com/sybrew/the-seo-framework/issues/420
+	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
+
+	```php
+	if ( false !== strpos( $title, '%%' ) ) { foreach(...); }
+	// vs
+	if ( preg_match( '/%%(title|date|parent_title|etc)%%/', $title, $matches ) ) { foreach( $matches as ... ); }
+	```
+
+	PROBABLY, in custom field (front-end!? rendering):
+	if ( false !== strpos( $title, '%%' ) ) { $this->fix_yoast_tag( $title ); }
+	...
+	Can we automate this, so the next time the user saves, the title will be fixed??
+	That'd also automatically resolve the "verbose title" settings, which will be amazing.
+
+* **Added:**
+	* TODO: Feed noindex option (under Feed Settings). "Allow indexing of feeds? - [?]=Podcasts require feeds to be indexed. If you have podcasts, enable this option."
+		* Ref: https://developers.google.com/search/docs/guides/podcast-guidelines
+		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
+* **Changed:**
+	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
+
 = 4.0.4 =
 
 WordPress 5.3 has a [bug](https://core.trac.wordpress.org/ticket/48623) where the timezone set in PHP is taken into account when creating permalinks. Since this bug can cause canonical URLs with dates to point to a nonexistent page, we're sending out this patch where TSF sets the timezone to flat UTC for its front-end generation.

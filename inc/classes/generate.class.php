@@ -68,18 +68,18 @@ class Generate extends User_Data {
 	 * @since 2.2.4 Added robots SEO settings check.
 	 * @since 2.2.8 Added check for empty archives.
 	 * @since 2.8.0 Added check for protected/private posts.
-	 * @since 3.0.0 1: Removed noodp.
-	 *              2: Improved efficiency by grouping if statements.
-	 * @since 3.1.0 1. Simplified statements, often (not always) speeding things up.
-	 *              2. Now checks for wc_shop and blog types for pagination.
-	 *              3. Removed noydir.
-	 * @since 4.0.0 1. Now tests for qubit metadata.
-	 *              2. Added custom query support.
-	 *              3. Added two parameters.
-	 * @since 4.0.2 1. Added new copyright directive tags.
-	 *              2. Now strictly parses the validity of robots directives via a boolean check.
-	 * @since 4.0.3 1. Changed `max_snippet_length` to `max_snippet`
-	 *              2. Changed the copyright directive's spacer from `=` to `:`.
+	 * @since 3.0.0 : 1. Removed noodp.
+	 *                2. Improved efficiency by grouping if statements.
+	 * @since 3.1.0 : 1. Simplified statements, often (not always) speeding things up.
+	 *                2. Now checks for wc_shop and blog types for pagination.
+	 *                3. Removed noydir.
+	 * @since 4.0.0 : 1. Now tests for qubit metadata.
+	 *                2. Added custom query support.
+	 *                3. Added two parameters.
+	 * @since 4.0.2 : 1. Added new copyright directive tags.
+	 *                2. Now strictly parses the validity of robots directives via a boolean check.
+	 * @since 4.0.3 : 1. Changed `max_snippet_length` to `max_snippet`
+	 *                2. Changed the copyright directive's spacer from `=` to `:`.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.

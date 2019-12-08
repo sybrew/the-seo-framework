@@ -674,7 +674,7 @@ class Core {
 	 * @since 2.8.0
 	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
 	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
-	 * @since 3.0.4 : Now uses WCAG's relative luminance formula
+	 * @since 3.0.4 Now uses WCAG's relative luminance formula
 	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
 	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
 	 *
@@ -740,6 +740,7 @@ class Core {
 	 * Returns sitemap color scheme.
 	 *
 	 * @since 2.8.0
+	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
 	 *
 	 * @param bool $get_defaults Whether to get the default colors.
 	 * @return array The sitemap colors.
@@ -748,8 +749,8 @@ class Core {
 
 		if ( $get_defaults ) {
 			$colors = [
-				'main'   => '#333',
-				'accent' => '#00cd98',
+				'main'   => '#222222',
+				'accent' => '#00a0d2',
 			];
 		} else {
 			$main   = $this->s_color_hex( $this->get_option( 'sitemap_color_main' ) );

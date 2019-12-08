@@ -437,8 +437,8 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates LD+JSON Breadcrumbs script for Posts.
 	 *
 	 * @since 2.9.3
-	 * @since 3.0.0 1: Now only returns one crumb.
-	 *              2: Now listens to primary term ID.
+	 * @since 3.0.0 : 1. Now only returns one crumb.
+	 *                2. Now listens to primary term ID.
 	 *
 	 * @return string LD+JSON breadcrumbs script for Posts on success. Empty string on failure.
 	 */
@@ -682,9 +682,9 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates homepage LD+JSON breadcrumb.
 	 *
 	 * @since 2.9.3
-	 * @since 3.2.2: 1. The title now works for the homepage as blog.
-	 *               2. The image has been disabled for the homepage as blog.
-	 *                    - I couldn't fix it without evading the API, which is bad.
+	 * @since 3.2.2 : 1. The title now works for the homepage as blog.
+	 *                2. The image has been disabled for the homepage as blog.
+	 *                   i. I couldn't fix it without evading the API, which is bad.
 	 * @since 4.0.0 Removed the image input requirement.
 	 * @staticvar array $crumb
 	 *

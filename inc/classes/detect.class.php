@@ -315,7 +315,7 @@ class Detect extends Render {
 	 *
 	 * @since 1.3.0
 	 * @since 2.6.0 Uses new style detection.
-	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
 	 *
 	 * @return bool SEO plugin detected.
 	 */
@@ -360,8 +360,8 @@ class Detect extends Render {
 	 * Determines if other Open Graph or SEO plugins are active.
 	 *
 	 * @since 1.3.0
-	 * @since 2.8.0: No longer checks for old style filter.
-	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
+	 * @since 2.8.0 No longer checks for old style filter.
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
 	 *
 	 * @return bool True if OG or SEO plugin detected.
 	 */
@@ -410,7 +410,7 @@ class Detect extends Render {
 	 * Determines if other Twitter Card plugins are active.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
 	 * @staticvar bool $detected
 	 *
 	 * @return bool Twitter Card plugin detected.
@@ -476,7 +476,7 @@ class Detect extends Render {
 	 * Determines if other Sitemap plugins are active.
 	 *
 	 * @since 2.1.0
-	 * @since 3.1.0: The filter no longer short-circuits the function when it's false.
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
 	 * @staticvar bool $detected
 	 *
 	 * @return bool

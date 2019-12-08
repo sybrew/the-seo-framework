@@ -484,7 +484,7 @@ class Sanitize extends Admin_Pages {
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0: Uses external caching function.
+	 * @since 2.7.0 Uses external caching function.
 	 * @since 2.8.0 Renamed.
 	 * @since 4.0.0 Now caches its $option registration.
 	 * @staticvar array $cache
@@ -1340,10 +1340,10 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 3.0.0: 1. Now removes '@' from the URL path.
-	 *               2. Now removes spaces and tabs.
-	 * @since 4.0.0: 1. Now returns empty on lone `@` entries.
-	 *               2. Now returns empty when using only spaces and tabs.
+	 * @since 3.0.0 : 1. Now removes '@' from the URL path.
+	 *                2. Now removes spaces and tabs.
+	 * @since 4.0.0 : 1. Now returns empty on lone `@` entries.
+	 *                2. Now returns empty when using only spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
@@ -1375,8 +1375,8 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
-	 * @since 4.0.0: 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
-	 *               2. Now returns empty when using only spaces and tabs.
+	 * @since 4.0.0 : 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+	 *                2. Now returns empty when using only spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Facebook profile URL.
 	 * @return string String with 'correct' Facebook profile URL.

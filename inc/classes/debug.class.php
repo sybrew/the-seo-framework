@@ -658,6 +658,9 @@ final class Debug {
 		$is_multipage         = $tsf->is_multipage();
 		$is_singular_archive  = $tsf->is_singular_archive();
 		$is_term_meta_capable = $tsf->is_term_meta_capable();
+		$post_type            = \get_post_type();
+		$admin_post_type      = $tsf->get_admin_post_type();
+		$current_taxonomy     = $tsf->get_current_taxonomy();
 		$is_post_type_archive = \is_post_type_archive();
 
 		//* Don't debug the class object.
