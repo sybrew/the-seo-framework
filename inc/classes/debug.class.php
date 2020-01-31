@@ -622,6 +622,7 @@ final class Debug {
 
 		//* Only get true/false values.
 		$page_id              = $tsf->get_the_real_ID();
+		$is_query_exploited   = $tsf->is_query_exploited();
 		$is_404               = $tsf->is_404();
 		$is_admin             = $tsf->is_admin();
 		$is_attachment        = $tsf->is_attachment();

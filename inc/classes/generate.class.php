@@ -97,6 +97,10 @@ class Generate extends User_Data {
 
 		if ( null === $args ) {
 			$_meta = $this->get_robots_meta_by_query( $ignore );
+
+			if ( $this->is_query_exploited() ) {
+				$_meta['noindex'] = true;
+			}
 		} else {
 			$this->fix_generation_args( $args );
 			$_meta = $this->get_robots_meta_by_args( $args, $ignore );

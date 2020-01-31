@@ -181,13 +181,12 @@ class Admin_Pages extends Profile {
 	 * Outputs notices on SEO setting changes.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 This is no longer a static function.
 	 * @access private
 	 */
-	public static function _do_settings_page_notices() {
+	public function _do_settings_page_notices() {
 
-		$tsf = \the_seo_framework();
-
-		$notice = $tsf->get_static_cache( 'settings_notice' );
+		$notice = $this->get_static_cache( 'settings_notice' );
 
 		if ( ! $notice ) return;
 
@@ -216,9 +215,9 @@ class Admin_Pages extends Profile {
 				break;
 		}
 
-		$tsf->update_static_cache( 'settings_notice', '' );
+		$this->update_static_cache( 'settings_notice', '' );
 
-		$message and $tsf->do_dismissible_notice( $message, $type ?: 'updated' );
+		$message and $this->do_dismissible_notice( $message, $type ?: 'updated' );
 	}
 
 	/**

@@ -229,16 +229,63 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.5 =
 
+We accidentally bombarded our website via our private [shortlink service](https://tsf.fyi/links.php), where Google was trying to act smart by following non-anchored example links that didn't exist. When this happens on a large scale, your website can potentially drop in rankings.
+
+With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was broken](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
+
 TODO:
-	1. Allow users to select social image resolution (or predefined size)
-	2. Allow users to select feed indexing options (for Google Podcasts support)
-	3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
-	4. Add sitemap purger for polylang? Like we have for WPML?
-	5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
-		* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] );
-	6. WordPress changed how do_robots() works in 5.3... where they no longer check for public.
-	7. Convert is_blog_public()'s option call to a weak check?
-	8. See TODO at robots_txt().
+1. Allow users to select social image resolution (or predefined size)
+2. Allow users to select feed indexing options (for Google Podcasts support)
+3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
+4. Add sitemap purger for polylang? Like we have for WPML?
+5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
+	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] );
+6. WordPress changed how do_robots() works in 5.3... where they no longer check for public.
+7. Convert is_blog_public()'s option call to a weak check?
+8. See TODO at robots_txt().
+9. (done) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
+	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful.
+10. Reassess `max-image-preview:none` bug.
+11. Allow manipulating the oembeds (Discord...)
+12. Add theme color option?
+13. Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
+	- Override does work (only noindex is verified)
+14. Reintroduce the title additions example on the SEO Settings screen...
+	* The homepage example still works.
+15. Consider filtering svg images...
+	* TODO at least allow filtering of the image results... (we now only have a filter for the generator arguments)
+16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this.
+17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example).
+
+```css
+.tsf-flex.tsf-flex-inside-wrap {border: 1px solid #e2e4e7;border: 1px solid #e2e4e7;border-top: none;}
+
+div#tsf-flex-inpost-tabs-wrapper {
+    background-color: #f3f4f5;
+    border: 1px solid #e2e4e7;
+    font-weight: 600;
+}
+
+.tsf-flex-setting-label.tsf-flex {
+    background: none;
+}
+```
+
+TODO https://wordpress.org/support/topic/comment-pagination-pages-2-and-above-set-to-noindex/
+"You may get away with this filter, but I don't recommend using it due to other complex factors involved."
+```php
+add_filter( 'the_seo_framework_robots_meta_array', function( $meta, $args ) {
+
+	if ( null === $args && the_seo_framework()->is_singular() ) {
+		if (
+			the_seo_framework()->get_post_meta_item( '_genesis_noindex' ) < .33
+			&& (int) \get_query_var( 'cpage', 0 ) > 0
+		) unset( $meta['noindex'] );
+	}
+
+	return $meta;
+}, 10, 2 );
+```
 
 TODO https://github.com/sybrew/the-seo-framework/issues/420
 	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
@@ -250,7 +297,9 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	```
 
 	PROBABLY, in custom field (front-end!? rendering):
+	```php
 	if ( false !== strpos( $title, '%%' ) ) { $this->fix_yoast_tag( $title ); }
+	```
 	...
 	Can we automate this, so the next time the user saves, the title will be fixed??
 	That'd also automatically resolve the "verbose title" settings, which will be amazing.

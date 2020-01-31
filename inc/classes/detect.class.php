@@ -746,10 +746,147 @@ class Detect extends Render {
 		endswitch;
 
 		/**
+		 * This protects against (accidental) negative-SEO bombarding.
+		 * Support broken queries, so we can noindex them.
+		 */
+		if ( $this->is_query_exploited() ) {
+			$supported = true;
+		}
+
+		/**
 		 * @since 4.0.0
 		 * @param bool $supported Whether the query supports SEO.
 		 */
 		return $cache = (bool) \apply_filters( 'the_seo_framework_query_supports_seo', $supported );
+	}
+
+	/**
+	 * Determines when paged/page is exploited.
+	 *
+	 * Google is acting "smart" nowadays, and follows everything that remotely resembles a link. Therefore, unintentional
+	 * queries can occur in WordPress. WordPress deals with this well, alas, the query parser (WP_Query::parse_query)
+	 * doesn't rectify the mixed signals it receives. Instead, it only sanitizes it, resulting in a combobulated mess.
+	 * Where we lead to non-existing blog pages, among other failures.
+	 *
+	 * Example 1: `/?p=nonnumeric` will cause an issue. We will see a non-existing blog page. `is_home` is true, but
+	 * `page_id` leads to 0 while the database expects the blog page to be another page. So, `is_posts_page` is
+	 * incorrectly false. This is mitigated via the canonical URL, but that MUST output, thus overriding otherwise chosen
+	 * and expected behavior.
+	 *
+	 * Example 2: `/page/2/?p=nonnumeric` will cause a bigger issue. What happens is that `is_home` will again be true,
+	 * but so will `is_paged`. `paged` will be set to `2` (as per example URL). The page ID will again be set to `0`,
+	 * which is completely false. The canonical URL will be malformed. Even moreso, Google can ignore the canonical URL,
+	 * so we MUST output noindex.
+	 *
+	 * Example 3: `/page/2/?X=nonnumeric` will also cause the same issues as in example 2. Where X can be:
+	 * `page_id`, `attachment_id`, `year`, `monthnum`, `day`, `w`, `m`, and of course `p`.
+	 *
+	 * Example 4: `/?hour=nonnumeric`, the same issue as Example 1. The canonical URL is malformed, noindex is set, and
+	 * link relationships will be active. A complete mess. `minute` and `second` are also affected the same way.
+	 *
+	 * Example 5: `/page/2/?p=0`, this is the trickiest. It's indicative of a paginated blog, but also the homepage. When
+	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query. TODO what if <!--nextpage-->` is used?
+	 * view-source:http://tsf.testmijnphp7.nl/page/2/?p=0
+	 *
+	 * @since 4.0.5
+	 * @global \WP_Query $wp_query
+	 * @staticvar bool $exploited Cached whether the query is exploited.
+	 *
+	 * @return bool
+	 */
+	public function is_query_exploited() {
+		global $wp_query;
+
+		// When no special query data is registered, ignore this.
+		if ( ! isset( $wp_query->query ) ) return false;
+
+		static $exploited;
+
+		if ( isset( $exploited ) ) return $exploited;
+
+		/**
+		 * @since 4.0.5
+		 * @param array $exploitables The exploitable endpoints by type.
+		 */
+		$exploitables = \apply_filters(
+			'the_seo_framework_exploitable_query_endpoints',
+			[
+				'numeric'       => [
+					'page_id',
+					'attachment_id',
+					'year',
+					'monthnum',
+					'day',
+					'w',
+					'm',
+					'p',
+					'paged', // 'page' is mitigated by WordPress.
+					'hour',
+					'minute',
+					'second',
+					'subpost_id',
+				],
+				'numeric_array' => [
+					'cat',
+					'author',
+				],
+				'requires_s'    => [
+					'sentence',
+				],
+			]
+		);
+
+		$query     = $wp_query->query;
+		$exploited = false;
+
+		foreach ( $exploitables as $type => $qvs ) :
+			foreach ( $qvs as $qv ) :
+				// Don't guess "empty", because falsey or empty-array is also empty.
+				if ( ! isset( $query[ $qv ] ) ) continue;
+
+				switch ( $type ) :
+					case 'numeric':
+						// TODO also test for $this->get_the_real_ID() === 0?
+						if ( ! is_numeric( $query[ $qv ] ) ) {
+							$exploited = true;
+							break 3;
+						}
+						break;
+
+					case 'numeric_array':
+						// We can't protect non-pretty permalinks.
+						if ( ! $this->pretty_permalinks ) break;
+
+						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
+						// WordPress mitigates this via a 404 query when a numeric value is found.
+						if ( ! preg_match( '/[0-9]/', $query[ $qv ] ) ) {
+							$exploited = true;
+							break 3;
+						}
+						break;
+
+					case 'requires_s':
+						if ( ! isset( $query['s'] ) ) {
+							$exploited = true;
+							break 3;
+						}
+						break;
+
+					default:
+						break;
+				endswitch;
+			endforeach;
+		endforeach;
+
+		// TODO test for similar properties. I believe it's `get_the_real_ID() === 0` and `is_home()` always return true when exploited.
+		// In that, we can bypass the whole check beforehand. i.e. before the exploitable check-loop starts.
+
+		// TODO make option:
+		// T: Advanced query-attack protection -> is attack the best word?
+		// D: Some URL queries can cause WordPress to generate non-existing archives. When search engines spot these, they will index hundreds of pages that do not exist on your website.
+		// O: Enable advanced query-attack protection?
+
+		return $exploited;
 	}
 
 	/**
