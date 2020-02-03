@@ -204,8 +204,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			vsprintf(
 				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
-				<p><select name="%3$s" id="%1$s">%4$s</select></p>
-				<p class=description>%6$s</p>',
+				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
 				[
 					$this->get_field_id( 'max_image_preview' ),
 					esc_html__( 'Maximum image preview size', 'autodescription' ),
@@ -215,15 +214,6 @@ switch ( $instance ) :
 						__( 'This may limit the image preview size for all images from this site.', 'autodescription' ),
 						'',
 						false
-					),
-					$this->convert_markdown(
-						sprintf(
-							/* translators: Backticks and hyperlink are Markdown! %s = link to documentation. */
-							esc_html__( 'The "None, disallow preview" setting will not be used when `nofollow` or `noarchive` are set for a page. This is to work around unexpected deindexing behavior in Google Search. [Learn more](%s).', 'autodescription' ),
-							'https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/'
-						),
-						[ 'code', 'a' ],
-						[ 'a_external' => true ]
 					),
 				]
 			),

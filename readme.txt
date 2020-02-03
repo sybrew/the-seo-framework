@@ -245,8 +245,8 @@ TODO:
 8. See TODO at robots_txt().
 <!-- 9. (DONE) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
 	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful. -->
-10. Reassess `max-image-preview:none` bug.
-11. Allow manipulating the oembeds (Discord...) -- what does this mean?
+<!-- 10. (DONE) Reassess `max-image-preview:none` bug. -->
+11. Allow manipulating the oembeds (Discord...) -- i.e. stripping the author name from the embed.
 12. Add theme color option to social sharing (for Discord)?
 13. Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
 	- Override does work (only noindex is verified)
@@ -317,6 +317,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
+	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
 
 **For translators:**
 

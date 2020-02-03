@@ -80,6 +80,7 @@ class Generate extends User_Data {
 	 *                2. Now strictly parses the validity of robots directives via a boolean check.
 	 * @since 4.0.3 : 1. Changed `max_snippet_length` to `max_snippet`
 	 *                2. Changed the copyright directive's spacer from `=` to `:`.
+	 * @since 4.0.5 : The copyright directive bug has been fixed. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -124,23 +125,6 @@ class Generate extends User_Data {
 			array_intersect_key( $_meta, array_flip( [ 'max_snippet', 'max_image_preview', 'max_video_preview' ] ) )
 			as $k => $v
 		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
-
-		/**
-		 * Drop-in Google Search bug patch.
-		 * "When you combine "max-image-preview:none" with either "nofollow" or "noarchive", the page is marked as "noindex"!"
-		 *
-		 * (It's probably defined as `<meta name=robots content=none/>` due to a regex bug at Google)
-		 *
-		 * @link <https://twitter.com/SybreWaaijer/status/1192017921553375232>
-		 * @link <https://kb.theseoframework.com/?p=82>
-		 * @since 4.0.3
-		 * @ignore Do not fix me. Do not place after the filter either; that's redundant, because there are more filters trickling down.
-		 * @TEMP
-		 */
-		if ( 'max-image-preview:none' === $meta['max_image_preview'] ) {
-			if ( $meta['nofollow'] || $meta['noarchive'] )
-				$meta['max_image_preview'] = '';
-		}
 
 		/**
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
