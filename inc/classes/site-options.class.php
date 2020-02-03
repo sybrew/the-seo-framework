@@ -141,6 +141,9 @@ class Site_Options extends Sanitize {
 
 				$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
 
+				// Robots query protection
+				'advanced_query_protection' => 1,
+
 				// Robots pagination index.
 				'paged_noindex'      => 1, // Every second or later page noindex
 				'home_paged_noindex' => 0, // Every second or later homepage noindex

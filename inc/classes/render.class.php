@@ -988,7 +988,9 @@ class Render extends Admin_Init {
 	 * @return array
 	 */
 	public function get_robots_meta() {
+
 		static $cache = null;
+
 		/**
 		 * @since 2.6.0
 		 * @param array $meta The robots meta.

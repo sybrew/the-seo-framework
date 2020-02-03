@@ -177,6 +177,11 @@ function _do_upgrade() {
 		$version = '3300';
 	}
 
+	if ( $version < '4050' ) {
+		_do_upgrade_4050();
+		$version = '4050';
+	}
+
 	/**
 	 * @since 2.7.0
 	 */
@@ -582,6 +587,20 @@ function _do_upgrade_3300() {
 		_add_upgrade_notice(
 			\esc_html__( 'The positions in the "Meta Title Additions Location" setting for the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' )
 		);
+	}
+
+	\update_option( 'the_seo_framework_upgraded_db_version', '3300' );
+}
+
+/**
+ * Registers the advanced_query_protection option. 0 for existing sites. 1 for new sites.
+ *
+ * @since 4.0.5
+ */
+function _do_upgrade_4050() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
+		\the_seo_framework()->update_option( 'advanced_query_protection', 0 );
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '3300' );

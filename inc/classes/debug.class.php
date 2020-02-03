@@ -493,6 +493,7 @@ final class Debug {
 	 * This won't consider hiding the output.
 	 *
 	 * @since 2.6.5
+	 * @since 4.0.5 Now obtains the real rendered HTML output, instead of estimated.
 	 *
 	 * @return string Wrapped SEO meta tags output.
 	 */
@@ -509,34 +510,7 @@ final class Debug {
 		//* Start timer.
 		$this->timer( true );
 
-		$output = $tsf->robots()
-				. $tsf->the_description()
-				. $tsf->og_image()
-				. $tsf->og_locale()
-				. $tsf->og_type()
-				. $tsf->og_title()
-				. $tsf->og_description()
-				. $tsf->og_url()
-				. $tsf->og_sitename()
-				. $tsf->facebook_publisher()
-				. $tsf->facebook_author()
-				. $tsf->facebook_app_id()
-				. $tsf->article_published_time()
-				. $tsf->article_modified_time()
-				. $tsf->twitter_card()
-				. $tsf->twitter_site()
-				. $tsf->twitter_creator()
-				. $tsf->twitter_title()
-				. $tsf->twitter_description()
-				. $tsf->twitter_image()
-				. $tsf->shortlink()
-				. $tsf->canonical()
-				. $tsf->paged_urls()
-				. $tsf->ld_json()
-				. $tsf->google_site_output()
-				. $tsf->bing_site_output()
-				. $tsf->yandex_site_output()
-				. $tsf->pint_site_output();
+		$output = $tsf->get_html_output();
 
 		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>';
 

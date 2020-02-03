@@ -243,11 +243,11 @@ TODO:
 6. WordPress changed how do_robots() works in 5.3... where they no longer check for public.
 7. Convert is_blog_public()'s option call to a weak check?
 8. See TODO at robots_txt().
-9. (done) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
-	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful.
+<!-- 9. (DONE) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
+	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful. -->
 10. Reassess `max-image-preview:none` bug.
-11. Allow manipulating the oembeds (Discord...)
-12. Add theme color option?
+11. Allow manipulating the oembeds (Discord...) -- what does this mean?
+12. Add theme color option to social sharing (for Discord)?
 13. Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
 	- Override does work (only noindex is verified)
 14. Reintroduce the title additions example on the SEO Settings screen...
@@ -304,12 +304,38 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	Can we automate this, so the next time the user saves, the title will be fixed??
 	That'd also automatically resolve the "verbose title" settings, which will be amazing.
 
+
+**For everyone:**
+
 * **Added:**
+	* Advanced query protection.
+		* This protection helps mitigate against a new form of WordPress query exploitation we discovered. This can be invoked either intentionally or accidentally, causing Google to index thousands of pages that shouldn't exist.
+		* The option for this is enabled automatically for sites that install The SEO Framework for the first time. Otherwise, you'll have to tick a box under the Robots settings.
+		* When invoked, the meta tag `<meta name="tsf:aqp" value="1" />` will be outputted to indicate it's in effect, after the `noindex` attribute for robots. This tag will help us spot false positives.
 	* TODO: Feed noindex option (under Feed Settings). "Allow indexing of feeds? - [?]=Podcasts require feeds to be indexed. If you have podcasts, enable this option."
 		* Ref: https://developers.google.com/search/docs/guides/podcast-guidelines
 		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
+
+**For translators:**
+
+* **Added:**
+	* New translations are now available.
+* **Updated:**
+	* The POT translation file
+
+**For developers:**
+
+* **Option notes:**
+	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
+		* `advanced_query_protection`, either `1` or `0`.
+* **Method notes:**
+	* For object `the_seo_framework()`:
+		* **Added:**
+			* `is_query_exploited()`
+			* `get_html_output()`
+
 
 = 4.0.4 =
 

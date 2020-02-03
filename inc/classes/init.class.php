@@ -370,92 +370,10 @@ class Init extends Query {
 			$output    = false;
 		}
 
-		if ( false === $output ) :
-
-			$robots = $this->robots();
-
-			/**
-			 * @since 2.6.0
-			 * @param string $before The content before the SEO output. Stored in object cache.
-			 */
-			$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
-
-			$before_legacy = $this->get_legacy_header_filters_output( 'before' );
-
-			/** @since 4.0.4 : WP 5.3 patch, added. TEMP */
-			$this->set_timezone( 'UTC' );
-
-			//* Limit processing and redundant tags on 404 and search.
-			if ( $this->is_search() ) :
-				$output = $this->og_locale()
-						. $this->og_type()
-						. $this->og_title()
-						. $this->og_url()
-						. $this->og_sitename()
-						. $this->shortlink()
-						. $this->canonical()
-						. $this->paged_urls()
-						. $this->google_site_output()
-						. $this->bing_site_output()
-						. $this->yandex_site_output()
-						. $this->pint_site_output();
-			elseif ( $this->is_404() ) :
-				$output = $this->google_site_output()
-						. $this->bing_site_output()
-						. $this->yandex_site_output()
-						. $this->pint_site_output();
-			else :
-				/** @since 4.0.4 : WP 5.3 patch, commented. TEMP */
-				// $set_timezone = $this->uses_time_in_timestamp_format() && ( $this->output_published_time() || $this->output_modified_time() );
-				// $set_timezone and $this->set_timezone();
-
-				$output = $this->the_description()
-						. $this->og_image()
-						. $this->og_locale()
-						. $this->og_type()
-						. $this->og_title()
-						. $this->og_description()
-						. $this->og_url()
-						. $this->og_sitename()
-						. $this->facebook_publisher()
-						. $this->facebook_author()
-						. $this->facebook_app_id()
-						. $this->article_published_time()
-						. $this->article_modified_time()
-						. $this->twitter_card()
-						. $this->twitter_site()
-						. $this->twitter_creator()
-						. $this->twitter_title()
-						. $this->twitter_description()
-						. $this->twitter_image()
-						. $this->shortlink()
-						. $this->canonical()
-						. $this->paged_urls()
-						. $this->ld_json()
-						. $this->google_site_output()
-						. $this->bing_site_output()
-						. $this->yandex_site_output()
-						. $this->pint_site_output();
-
-				/** @since 4.0.4 : WP 5.3 patch, commented. TEMP */
-				// $set_timezone and $this->reset_timezone();
-			endif;
-
-			/** @since 4.0.4 : WP 5.3 patch, added. TEMP */
-			$this->reset_timezone();
-
-			$after_legacy = $this->get_legacy_header_filters_output( 'after' );
-
-			/**
-			 * @since 2.6.0
-			 * @param string $after The content after the SEO output. Stored in object cache.
-			 */
-			$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
-
-			$output = $robots . $before . $before_legacy . $output . $after_legacy . $after;
-
+		if ( false === $output ) {
+			$output = $this->get_html_output();
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
-		endif;
+		}
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- $output is escaped.
 		echo PHP_EOL, $this->get_plugin_indicator( 'before' ), $output, $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
@@ -464,6 +382,97 @@ class Init extends Query {
 		 * @since 2.6.0
 		 */
 		\do_action( 'the_seo_framework_do_after_output' );
+	}
+
+	/**
+	 * Generates front-end HTMl output.
+	 *
+	 * @since 4.0.5
+	 * @todo convert $output to array and allow filtering it.
+	 *
+	 * @return string The HTML output.
+	 */
+	public function get_html_output() {
+
+		$robots = $this->robots();
+
+		/** @since 4.0.4 : WP 5.3 patch, added. */
+		$this->set_timezone( 'UTC' );
+
+		/**
+		 * @since 2.6.0
+		 * @param string $before The content before the SEO output. Stored in object cache.
+		 */
+		$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
+
+		$before_legacy = $this->get_legacy_header_filters_output( 'before' );
+
+		//* Limit processing and redundant tags on 404 and search.
+		if ( $this->is_search() ) :
+			$output = $this->og_locale()
+					. $this->og_type()
+					. $this->og_title()
+					. $this->og_url()
+					. $this->og_sitename()
+					. $this->shortlink()
+					. $this->canonical()
+					. $this->paged_urls()
+					. $this->google_site_output()
+					. $this->bing_site_output()
+					. $this->yandex_site_output()
+					. $this->pint_site_output();
+		elseif ( $this->is_404() ) :
+			$output = $this->google_site_output()
+					. $this->bing_site_output()
+					. $this->yandex_site_output()
+					. $this->pint_site_output();
+		elseif ( $this->is_query_exploited() ) :
+			// aqp = advanced query protection
+			$output = '<meta name="tsf:aqp" value="1" />' . PHP_EOL;
+		else :
+			$output = $this->the_description()
+					. $this->og_image()
+					. $this->og_locale()
+					. $this->og_type()
+					. $this->og_title()
+					. $this->og_description()
+					. $this->og_url()
+					. $this->og_sitename()
+					. $this->facebook_publisher()
+					. $this->facebook_author()
+					. $this->facebook_app_id()
+					. $this->article_published_time()
+					. $this->article_modified_time()
+					. $this->twitter_card()
+					. $this->twitter_site()
+					. $this->twitter_creator()
+					. $this->twitter_title()
+					. $this->twitter_description()
+					. $this->twitter_image()
+					. $this->shortlink()
+					. $this->canonical()
+					. $this->paged_urls()
+					. $this->ld_json()
+					. $this->google_site_output()
+					. $this->bing_site_output()
+					. $this->yandex_site_output()
+					. $this->pint_site_output();
+		endif;
+
+		$after_legacy = $this->get_legacy_header_filters_output( 'after' );
+
+		/**
+		 * @since 2.6.0
+		 * @param string $after The content after the SEO output. Stored in object cache.
+		 */
+		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
+
+		/** @since 4.0.4 : WP 5.3 patch, added. */
+		$this->reset_timezone();
+
+		$output = $robots . $before . $before_legacy . $output . $after_legacy . $after;
+
+		return $output;
 	}
 
 	/**

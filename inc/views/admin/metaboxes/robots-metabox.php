@@ -84,6 +84,22 @@ switch ( $instance ) :
 
 	case 'the_seo_framework_robots_metabox_general':
 		?>
+		<h4><?php esc_html_e( 'Advanced Query Protection', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Some URL queries can cause WordPress to show faux archives. When search engines spot these, they will crawl and index them, which may cause a drop in ranking. Advanced query protection will prevent robots from indexing these archives.', 'autodescription' ) );
+
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'advanced_query_protection',
+				esc_html__( 'Enable advanced query protection?', 'autodescription' ),
+				'',
+				false
+			),
+			true
+		);
+		?>
+		<hr>
+
 		<h4><?php esc_html_e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ) );

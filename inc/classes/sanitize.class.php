@@ -279,6 +279,8 @@ class Sanitize extends Admin_Pages {
 				'search_noarchive',
 				'site_noarchive',
 
+				'advanced_query_protection',
+
 				'paged_noindex',
 				'home_paged_noindex',
 

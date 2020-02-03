@@ -740,16 +740,19 @@ class Detect extends Render {
 				$supported = $this->is_taxonomy_supported() && $this->get_the_real_ID();
 				break;
 
+			// Including 404.
 			default:
 				$supported = true;
 				break;
 		endswitch;
 
 		/**
+		 * Override false negatives on exploit.
+		 *
 		 * This protects against (accidental) negative-SEO bombarding.
 		 * Support broken queries, so we can noindex them.
 		 */
-		if ( $this->is_query_exploited() ) {
+		if ( ! $supported && $this->is_query_exploited() ) {
 			$supported = true;
 		}
 
@@ -785,8 +788,7 @@ class Detect extends Render {
 	 * link relationships will be active. A complete mess. `minute` and `second` are also affected the same way.
 	 *
 	 * Example 5: `/page/2/?p=0`, this is the trickiest. It's indicative of a paginated blog, but also the homepage. When
-	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query. TODO what if <!--nextpage-->` is used?
-	 * view-source:http://tsf.testmijnphp7.nl/page/2/?p=0
+	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query.
 	 *
 	 * @since 4.0.5
 	 * @global \WP_Query $wp_query
@@ -795,14 +797,23 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function is_query_exploited() {
-		global $wp_query;
-
-		// When no special query data is registered, ignore this.
-		if ( ! isset( $wp_query->query ) ) return false;
 
 		static $exploited;
 
 		if ( isset( $exploited ) ) return $exploited;
+
+		if ( ! $this->get_option( 'advanced_query_protection' ) )
+			return $exploited = false;
+
+		// When the page ID is not 0, a real page will always be returned.
+		if ( $this->get_the_real_ID() )
+			return $exploited = false;
+
+		global $wp_query;
+
+		// When no special query data is registered, ignore this. Don't set cache.
+		if ( ! isset( $wp_query->query ) )
+			return false;
 
 		/**
 		 * @since 4.0.5
@@ -846,8 +857,7 @@ class Detect extends Render {
 
 				switch ( $type ) :
 					case 'numeric':
-						// TODO also test for $this->get_the_real_ID() === 0?
-						if ( ! is_numeric( $query[ $qv ] ) ) {
+						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) ) {
 							$exploited = true;
 							break 3;
 						}
@@ -877,14 +887,6 @@ class Detect extends Render {
 				endswitch;
 			endforeach;
 		endforeach;
-
-		// TODO test for similar properties. I believe it's `get_the_real_ID() === 0` and `is_home()` always return true when exploited.
-		// In that, we can bypass the whole check beforehand. i.e. before the exploitable check-loop starts.
-
-		// TODO make option:
-		// T: Advanced query-attack protection -> is attack the best word?
-		// D: Some URL queries can cause WordPress to generate non-existing archives. When search engines spot these, they will index hundreds of pages that do not exist on your website.
-		// O: Enable advanced query-attack protection?
 
 		return $exploited;
 	}
