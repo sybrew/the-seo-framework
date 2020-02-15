@@ -769,7 +769,7 @@ class Detect extends Render {
 	 * Google is acting "smart" nowadays, and follows everything that remotely resembles a link. Therefore, unintentional
 	 * queries can occur in WordPress. WordPress deals with this well, alas, the query parser (WP_Query::parse_query)
 	 * doesn't rectify the mixed signals it receives. Instead, it only sanitizes it, resulting in a combobulated mess.
-	 * Where we lead to non-existing blog pages, among other failures.
+	 * Ultimately, this leads to non-existing blog archives, among other failures.
 	 *
 	 * Example 1: `/?p=nonnumeric` will cause an issue. We will see a non-existing blog page. `is_home` is true, but
 	 * `page_id` leads to 0 while the database expects the blog page to be another page. So, `is_posts_page` is
@@ -794,7 +794,11 @@ class Detect extends Render {
 	 * @global \WP_Query $wp_query
 	 * @staticvar bool $exploited Cached whether the query is exploited.
 	 *
-	 * @return bool
+	 * @return bool Whether the query is (accidentally) exploited.
+	 *              Defaults to false when `advanced_query_protection` option is disabled.
+	 *              False when there's a query-ID found.
+	 *              False when no custom query is set (for the homepage).
+	 *              Otherwise, it performs query tests.
 	 */
 	public function is_query_exploited() {
 

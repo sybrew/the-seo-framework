@@ -499,10 +499,7 @@ class Init extends Query {
 
 			$url = $this->get_post_meta_item( 'redirect' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
-			$term_meta = $this->get_current_term_meta();
-
-			if ( isset( $term_meta['redirect'] ) )
-				$url = $term_meta['redirect'] ?: '';
+			$url = $this->get_term_meta_item( 'redirect' ) ?: '';
 		}
 
 		$url and $this->do_redirect( $url );

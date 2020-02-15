@@ -256,6 +256,13 @@ TODO:
 	* TODO at least allow filtering of the image results... (we now only have a filter for the generator arguments)
 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this.
 17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example).
+18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
+	* https://core.trac.wordpress.org/ticket/43949
+	* Inform Kris of change: https://wordpress.org/support/topic/noindex-a-page-via-php/
+	* Note that we have (had) LEGACY filters in place. We need to come up with new names.
+19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.
+20. Allow filtering of the robots.txt output.
+	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead.
 
 ```css
 .tsf-flex.tsf-flex-inside-wrap {border: 1px solid #e2e4e7;border: 1px solid #e2e4e7;border-top: none;}
@@ -297,12 +304,22 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	```
 
 	PROBABLY, in custom field (front-end!? rendering):
+
 	```php
 	if ( false !== strpos( $title, '%%' ) ) { $this->fix_yoast_tag( $title ); }
 	```
+
 	...
 	Can we automate this, so the next time the user saves, the title will be fixed??
 	That'd also automatically resolve the "verbose title" settings, which will be amazing.
+
+	```php
+	if (  preg_match( '/%%\W+%%/', $title, $matches ) ) {
+		// "A generator symbol was found in the title/description. This won't be transformed. Consider replacing it with static input."
+		// Red warning.
+		// Note that some users have implemented custom generators. Will we neglect them? Use blue warning instead?
+	}
+	```
 
 
 **For everyone:**
@@ -318,6 +335,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
+* **Other:**
+	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 
 **For translators:**
 

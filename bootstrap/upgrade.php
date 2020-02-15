@@ -599,9 +599,9 @@ function _do_upgrade_3300() {
  */
 function _do_upgrade_4050() {
 
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4050' ) {
 		\the_seo_framework()->update_option( 'advanced_query_protection', 0 );
 	}
 
-	\update_option( 'the_seo_framework_upgraded_db_version', '3300' );
+	\update_option( 'the_seo_framework_upgraded_db_version', '4050' );
 }
