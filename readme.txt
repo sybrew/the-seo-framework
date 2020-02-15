@@ -237,8 +237,8 @@ TODO:
 1. Allow users to select social image resolution (or predefined size)
 2. Allow users to select feed indexing options (for Google Podcasts support)
 3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
-4. Add sitemap purger for polylang? Like we have for WPML?
-	* Also add these endpoints to the robots.txt? -> difficult?
+<!-- (Done) 4. Add sitemap purger for polylang? Like we have for WPML?
+	* Not possible: Also add these endpoints to the robots.txt? -> difficult? -->
 5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
 	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] );
 <!-- 6. (DONE) WordPress changed how do_robots() works in 5.3... where they no longer check for public. -->
@@ -334,6 +334,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* Ref: https://developers.google.com/search/docs/guides/podcast-guidelines
 		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
 		* NOTE: Google seems to ignore the noindex header at the moment... has this behavior changed since???
+	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 * **Changed:**

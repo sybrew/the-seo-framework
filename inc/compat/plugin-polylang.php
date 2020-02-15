@@ -107,3 +107,45 @@ function _fix_sitemap_prefix( $prefix = '' ) {
 function _fix_home_url( $url, $id ) {
 	return \the_seo_framework()->is_front_page_by_ID( $id ) && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
 }
+
+\add_action( 'the_seo_framework_delete_cache_sitemap', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10, 4 );
+/**
+ * Deletes all sitemap transients, instead of just one.
+ *
+ * @since 4.0.5
+ * @global \wpdb $wpdb
+ * @access private
+ * @staticvar bool $cleared
+ *
+ * @param string $type    The flush type. Comes in handy when you use a catch-all function.
+ * @param int    $id      The post, page or TT ID. Defaults to the_seo_framework()->get_the_real_ID().
+ * @param array  $args    Additional arguments. They can overwrite $type and $id.
+ * @param bool   $success Whether the action cleared.
+ */
+function _polylang_flush_sitemap( $type, $id, $args, $success ) {
+
+	static $cleared = false;
+	if ( $cleared ) return;
+
+	if ( $success ) {
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
+			)
+		); // No cache OK. DB call ok.
+
+		//? We didn't use a wildcard after "_transient_" to reduce scans.
+		//? A second query is faster on saturated sites.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
+			)
+		); // No cache OK. DB call ok.
+
+		$cleared = true;
+	}
+}
