@@ -311,7 +311,16 @@ class Generate extends User_Data {
 			 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
 			 */
 			if ( (int) \get_query_var( 'cpage', 0 ) > 0 ) {
-				$noindex = true;
+				/**
+				 * We do not recommend using this filter as it'll likely get those pages flagged as
+				 * duplicated by Google anyway; unless the theme strips or trims the content.
+				 *
+				 * This filter won't run when other conditions for noindex have been met.
+				 *
+				 * @since 4.0.5
+				 * @param bool $noindex Whether to enable comment pagination protection.
+				 */
+				$noindex = $noindex || \apply_filters( 'the_seo_framework_enable_noindex_comment_pagination', true );
 			}
 		}
 

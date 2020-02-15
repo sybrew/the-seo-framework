@@ -279,21 +279,6 @@ div#tsf-flex-inpost-tabs-wrapper {
 }
 ```
 
-TODO https://wordpress.org/support/topic/comment-pagination-pages-2-and-above-set-to-noindex/
-"You may get away with this filter, but I don't recommend using it due to other complex factors involved."
-```php
-add_filter( 'the_seo_framework_robots_meta_array', function( $meta, $args ) {
-
-	if ( null === $args && the_seo_framework()->is_singular() ) {
-		if (
-			the_seo_framework()->get_post_meta_item( '_genesis_noindex' ) < .33
-			&& (int) \get_query_var( 'cpage', 0 ) > 0
-		) unset( $meta['noindex'] );
-	}
-
-	return $meta;
-}, 10, 2 );
-```
 
 TODO https://github.com/sybrew/the-seo-framework/issues/420
 	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
@@ -359,6 +344,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_robots_txt`
+		* `the_seo_framework_enable_noindex_comment_pagination`
+			* TODO notify user: https://wordpress.org/support/topic/comment-pagination-pages-2-and-above-set-to-noindex/
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
