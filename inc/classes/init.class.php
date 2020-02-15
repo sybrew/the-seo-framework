@@ -566,28 +566,28 @@ class Init extends Query {
 
 	/**
 	 * Edits the robots.txt output.
-	 * Requires not to have a robots.txt file in the root directory.
+	 * Requires the site not to have a robots.txt file in the root directory.
 	 *
 	 * This methods completely hijacks default output, intentionally.
+	 *
 	 * The robots.txt file should be left as default, so to improve SEO.
 	 * The Robots Exclusion Protocol encourages you not to use this file for
-	 * non-administrative endpoints.
+	 * non-administrative endpoints. Use the robots meta tags (and headers) instead.
 	 *
 	 * @since 2.2.9
 	 * @since 2.9.3 Casts $public to string for check.
+	 * @since 4.0.5 : 1. The output is now filterable.
+	 *                2. Improved invalid location test.
+	 *                3. No longer shortcircuits on non-public sites.
+	 *                4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
 	 * @uses robots_txt filter located at WP core
+	 * @access private
 	 *
-	 * @param string $robots_txt The current robots_txt output.
-	 * @param string $public The blog_public option value.
+	 * @param string $robots_txt The current robots_txt output. Not used.
+	 * @param string $public The blog_public option value. Not used.
 	 * @return string Robots.txt output.
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
-
-		/**
-		 * Don't do anything if the blog isn't public.
-		 */
-		if ( '0' === (string) $public )
-			return $robots_txt;
 
 		if ( $this->use_object_cache ) {
 			$cache_key = $this->get_robots_txt_cache_key();
@@ -598,14 +598,6 @@ class Init extends Query {
 
 		if ( false === $output ) :
 			$output = '';
-
-			// TODO this doesn't assess whether it's actually being outputted on a subdirectory.
-			// For that, we need to check the $_REQUEST... in fact, this whole function call is misplaced?
-			if ( $this->is_subdirectory_installation() ) {
-				$output .= '# This is an invalid robots.txt location.' . "\r\n";
-				$output .= '# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' ) . "\r\n";
-				$output .= "\r\n";
-			}
 
 			$site_path = \esc_attr( parse_url( \site_url(), PHP_URL_PATH ) ) ?: '';
 
@@ -650,10 +642,29 @@ class Init extends Query {
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
 		endif;
 
-		// Completely override robots with output.
-		$robots_txt = $output;
+		$raw_uri = rawurldecode(
+			\wp_check_invalid_utf8(
+				stripslashes( $_SERVER['REQUEST_URI'] )
+			)
+		) ?: '/robots.txt';
 
-		return $robots_txt;
+		// Simple test for invalid directory depth. Even //robots.txt is an invalid location.
+		if ( strrpos( $raw_uri, '/' ) > 0 ) {
+			$error  = sprintf(
+				"%s\r\n%s\r\n\r\n",
+				'# This is an invalid robots.txt location.',
+				'# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' )
+			);
+			$output = $error . $output;
+		}
+
+		/**
+		 * The robots.txt output. This filter output not cached; however, the $output variable can be via object caching.
+		 *
+		 * @since 4.0.5
+		 * @param string $output The (cached) robots.txt output.
+		 */
+		return (string) \apply_filters( 'the_seo_framework_robots_txt', $output );
 	}
 
 	/**

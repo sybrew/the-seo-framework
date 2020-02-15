@@ -238,11 +238,12 @@ TODO:
 2. Allow users to select feed indexing options (for Google Podcasts support)
 3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
 4. Add sitemap purger for polylang? Like we have for WPML?
+	* Also add these endpoints to the robots.txt? -> difficult?
 5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
 	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] );
-6. WordPress changed how do_robots() works in 5.3... where they no longer check for public.
+<!-- 6. (DONE) WordPress changed how do_robots() works in 5.3... where they no longer check for public. -->
 7. Convert is_blog_public()'s option call to a weak check?
-8. See TODO at robots_txt().
+<!-- (Done) 8. See TODO at robots_txt(). -->
 <!-- 9. (DONE) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
 	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful. -->
 <!-- 10. (DONE) Reassess `max-image-preview:none` bug. -->
@@ -261,8 +262,8 @@ TODO:
 	* Inform Kris of change: https://wordpress.org/support/topic/noindex-a-page-via-php/
 	* Note that we have (had) LEGACY filters in place. We need to come up with new names.
 19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.
-20. Allow filtering of the robots.txt output.
-	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead.
+<!-- (Done) 20. Allow filtering of the robots.txt output.
+	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
 
 ```css
 .tsf-flex.tsf-flex-inside-wrap {border: 1px solid #e2e4e7;border: 1px solid #e2e4e7;border-top: none;}
@@ -332,9 +333,13 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* TODO: Feed noindex option (under Feed Settings). "Allow indexing of feeds? - [?]=Podcasts require feeds to be indexed. If you have podcasts, enable this option."
 		* Ref: https://developers.google.com/search/docs/guides/podcast-guidelines
 		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
+		* NOTE: Google seems to ignore the noindex header at the moment... has this behavior changed since???
+* **Improved:**
+	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
+	* The robots.txt output is now default when the blog is not public. This follows the behavior in WordPress 5.3.
 * **Other:**
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 
@@ -343,19 +348,23 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 * **Added:**
 	* New translations are now available.
 * **Updated:**
-	* The POT translation file
+	* TODO The POT translation file.
 
 **For developers:**
 
 * **Option notes:**
 	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
 		* `advanced_query_protection`, either `1` or `0`.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_robots_txt`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `is_query_exploited()`
 			* `get_html_output()`
-
+		* **Changed:**
+			* `robots_txt()` is now marked as private (internal use only). You should not call it.
 
 = 4.0.4 =
 
