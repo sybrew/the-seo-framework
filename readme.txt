@@ -2,7 +2,7 @@
 Contributors: Cybr
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
 Requires at least: 4.9.0
-Tested up to: 5.3
+Tested up to: 5.4
 Requires PHP: 5.6.0
 Stable tag: 4.0.4
 License: GPLv3
@@ -265,20 +265,6 @@ TODO:
 <!-- (Done) 20. Allow filtering of the robots.txt output.
 	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
 
-```css
-.tsf-flex.tsf-flex-inside-wrap {border: 1px solid #e2e4e7;border: 1px solid #e2e4e7;border-top: none;}
-
-div#tsf-flex-inpost-tabs-wrapper {
-    background-color: #f3f4f5;
-    border: 1px solid #e2e4e7;
-    font-weight: 600;
-}
-
-.tsf-flex-setting-label.tsf-flex {
-    background: none;
-}
-```
-
 
 TODO https://github.com/sybrew/the-seo-framework/issues/420
 	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
@@ -322,12 +308,19 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
+	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
+		* Also improved the painting performance by removing a redundant flexbox wrap.
+		* N.B. Advanced Custom Fields overrides the metabox handler styling globally. So, that's a thing.
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
 	* The robots.txt output is now default when the blog is not public. This follows the behavior in WordPress 5.3.
 * **Other:**
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
+* **Fixed:**
+	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
+		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
+		* N.B. The postbox-handler dropdown icons also shift when collapsing.
 
 **For translators:**
 
@@ -338,6 +331,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 
 **For developers:**
 
+* **General changes:**
+	* Added the `tsf-is-block-editor` class to the postbox class, specifying we're dealing with Gutenberg/Block-Editor.
 * **Option notes:**
 	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
 		* `advanced_query_protection`, either `1` or `0`.
@@ -345,7 +340,6 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* **Added:**
 		* `the_seo_framework_robots_txt`
 		* `the_seo_framework_enable_noindex_comment_pagination`
-			* TODO notify user: https://wordpress.org/support/topic/comment-pagination-pages-2-and-above-set-to-noindex/
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -353,6 +347,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `get_html_output()`
 		* **Changed:**
 			* `robots_txt()` is now marked as private (internal use only). You should not call it.
+
 
 = 4.0.4 =
 

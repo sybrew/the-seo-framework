@@ -42,6 +42,8 @@ final class PostSettings {
 	 * Registers the meta box for the Post edit screens.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 Now registers custom postbox classes.
+	 * @access private
 	 *
 	 * @param string $post_type The current Post Type.
 	 */
@@ -84,7 +86,12 @@ final class PostSettings {
 			$title = sprintf( \esc_html__( '%s SEO Settings', 'autodescription' ), $label );
 		}
 
-		\add_meta_box( 'tsf-inpost-box', $title, __CLASS__ . '::_meta_box', $post_type, $context, $priority, [] );
+		$box_id = 'tsf-inpost-box';
+		// Implies `\get_current_screen()->id`. Is always 'post'.
+		$screen_id = 'post';
+
+		\add_meta_box( $box_id, $title, __CLASS__ . '::_meta_box', $post_type, $context, $priority, [] );
+		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", __CLASS__ . '::_add_postbox_class' );
 	}
 
 	/**
@@ -134,6 +141,24 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pro_page_inpost_box' );
+	}
+
+	/**
+	 * Adds a Gutenberg/Block-editor box class.
+	 *
+	 * @since 4.0.5
+	 * @access private
+	 *
+	 * @param array $classes The registered postbox classes.
+	 * @return array
+	 */
+	public static function _add_postbox_class( $classes = [] ) {
+
+		if ( \the_seo_framework()->is_gutenberg_page() ) {
+			$classes[] = 'tsf-is-block-editor';
+		}
+
+		return $classes;
 	}
 
 	/**

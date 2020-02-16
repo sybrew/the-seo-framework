@@ -14,7 +14,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 $instance = $this->get_view_instance( 'inpost', $instance );
 
 //* Setup default vars.
-$post_id  = $this->get_the_real_ID(); // We also have access to object $post at the main call...
+$post_id = $this->get_the_real_ID(); // We also have access to object $post at the main call...
 
 $_generator_args = [
 	'id'       => $post_id,
