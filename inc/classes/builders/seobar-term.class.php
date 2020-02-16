@@ -51,6 +51,7 @@ final class SeoBar_Term extends SeoBar {
 	 * @abstract
 	 */
 	protected function prime_cache() {
+		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 		static::get_cache( 'general/i18n/inputguidelines' )
 			or static::set_cache(
 				'general/i18n/inputguidelines',
@@ -85,6 +86,7 @@ final class SeoBar_Term extends SeoBar {
 					],
 				]
 			);
+		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
 	}
 
 	/**
@@ -137,6 +139,8 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs title tests.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 1. Removed `['params']['prefixed'] from cache.
+	 *              2. Now tests for term title prefix per state.
 	 *
 	 * @return array $item : {
 	 *    string  $symbol : The displayed symbol that identifies your bar.
@@ -155,14 +159,17 @@ final class SeoBar_Term extends SeoBar {
 				'params'   => [
 					'untitled'        => static::$tsf->get_static_untitled_title(),
 					'blogname_quoted' => preg_quote( static::$tsf->get_blogname(), '/' ),
-					'prefixed'        => static::$tsf->use_generated_archive_prefix(),
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
 					'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
 					'estimated'       => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 				],
 				'assess'   => [
 					'empty'      => \__( 'No title could be fetched.', 'autodescription' ),
-					'untitled'   => \__( 'No title could be fetched, "Untitled" is used instead.', 'autodescription' ), // TODO use [params][untitled]?
+					'untitled'   => sprintf(
+						/* translators: %s = "Untitled" */
+						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
+						static::$tsf->get_static_untitled_title()
+					),
 					'prefixed'   => \__( 'A term label prefix is automatically added which increases the length.', 'autodescription' ),
 					'branding'   => [
 						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),
@@ -213,8 +220,7 @@ final class SeoBar_Term extends SeoBar {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			// Move this to defaults cache? It'll make the code unreadable, though...
-			if ( $cache['params']['prefixed'] ) {
+			if ( static::$tsf->use_generated_archive_prefix( $this->query_cache['term'] ) ) {
 				$item['assess']['prefixed'] = $cache['assess']['prefixed'];
 			}
 
@@ -253,6 +259,7 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 		}
 
+		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent
 		$brand_count =
 			strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
@@ -261,6 +268,7 @@ final class SeoBar_Term extends SeoBar {
 				$matches
 			)
 			: 0;
+		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
 
 		if ( ! $brand_count ) {
 			// Override branding state.

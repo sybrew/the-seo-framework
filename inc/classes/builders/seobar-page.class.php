@@ -51,6 +51,7 @@ final class SeoBar_Page extends SeoBar {
 	 * @abstract
 	 */
 	protected function prime_cache() {
+		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 		static::get_cache( 'general/i18n/inputguidelines' )
 			or static::set_cache(
 				'general/i18n/inputguidelines',
@@ -75,6 +76,7 @@ final class SeoBar_Page extends SeoBar {
 					],
 				]
 			);
+		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 	}
 
 	/**
@@ -148,7 +150,11 @@ final class SeoBar_Page extends SeoBar {
 				],
 				'assess'   => [
 					'empty'      => \__( 'No title could be fetched.', 'autodescription' ),
-					'untitled'   => \__( 'No title could be fetched, "Untitled" is used instead.', 'autodescription' ), // TODO use [params][untitled]?
+					'untitled'   => sprintf(
+						/* translators: %s = "Untitled" */
+						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
+						static::$tsf->get_static_untitled_title()
+					),
 					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
 						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),
@@ -262,6 +268,7 @@ final class SeoBar_Page extends SeoBar {
 			}
 		}
 
+		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent
 		$brand_count =
 			strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
@@ -270,6 +277,7 @@ final class SeoBar_Page extends SeoBar {
 				$matches
 			)
 			: 0;
+		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
 
 		if ( ! $brand_count ) {
 			// Override branding state.

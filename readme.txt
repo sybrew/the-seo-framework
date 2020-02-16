@@ -233,6 +233,8 @@ We accidentally bombarded our website via our private [shortlink service](https:
 
 With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was broken](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
 
+A few other quality-of-life changes have been made, as well. Most prominently, we added some filters.
+
 TODO:
 1. Allow users to select social image resolution (or predefined size)
 2. Allow users to select feed indexing options (for Google Podcasts support)
@@ -255,7 +257,7 @@ TODO:
 	* The homepage example still works.
 15. Consider filtering svg images...
 	* TODO at least allow filtering of the image results... (we now only have a filter for the generator arguments)
-16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this.
+<!-- (DONE) 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this. -->
 17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example).
 18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
 	* https://core.trac.wordpress.org/ticket/43949
@@ -318,6 +320,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 * **Other:**
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 * **Fixed:**
+	* The author title is now displayed on author archives without posts. Note that your theme may still not display the name.
+	* The correct "Untitled" title is now used in the "No title found"-SEO Bar warning.
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
 		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
@@ -340,6 +344,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* **Added:**
 		* `the_seo_framework_robots_txt`
 		* `the_seo_framework_enable_noindex_comment_pagination`
+		* `the_seo_framework_use_archive_prefix`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -347,7 +352,12 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `get_html_output()`
 		* **Changed:**
 			* `robots_txt()` is now marked as private (internal use only). You should not call it.
-
+			* `get_generated_archive_title()`:
+				1. Now no longer uses `get_the_author()` to fetch the author's display name, but uses the provided term object instead.
+				1. The first parameter now accepts `\WP_User` objects.
+			* `use_generated_archive_prefix()`:
+				1. Added first parameter `$term`.
+				1. Added filter `the_seo_framework_use_archive_prefix`.
 
 = 4.0.4 =
 
