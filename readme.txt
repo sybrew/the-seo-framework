@@ -233,7 +233,7 @@ We accidentally bombarded our website via our private [shortlink service](https:
 
 With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was broken](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
 
-A few other quality-of-life changes have been made, as well. Most prominently, we added some filters.
+A few other quality-of-life changes have been made, as well. Among adding new filters, streamlining the query handler, and fixing known corner-case bugs.
 
 TODO:
 1. Allow users to select social image resolution (or predefined size)
@@ -251,8 +251,8 @@ TODO:
 <!-- 10. (DONE) Reassess `max-image-preview:none` bug. -->
 11. Allow manipulating the oembeds (Discord...) -- i.e. stripping the author name from the embed.
 12. Add theme color option to social sharing (for Discord)?
-13. Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
-	- Override does work (only noindex is verified)
+<!-- 13. (DONE) Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
+	- Override does work (only noindex is verified) -->
 14. Reintroduce the title additions example on the SEO Settings screen...
 	* The homepage example still works.
 15. Consider filtering svg images...
@@ -266,7 +266,7 @@ TODO:
 19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.
 <!-- (Done) 20. Allow filtering of the robots.txt output.
 	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
-
+20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns)
 
 TODO https://github.com/sybrew/the-seo-framework/issues/420
 	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
@@ -308,6 +308,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
 		* NOTE: Google seems to ignore the noindex header at the moment... has this behavior changed since???
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
+	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads".
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
@@ -322,6 +323,13 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 * **Fixed:**
 	* The author title is now displayed on author archives without posts. Note that your theme may still not display the name.
 	* The correct "Untitled" title is now used in the "No title found"-SEO Bar warning.
+	* Global robots settings for post types no longer affect their respective singular-archives (blog, shop).
+		* For example, global `noindex` for `post` no longer sets `noindex` for the blog page erroneously.
+		* Another example: Global `noindex` for `product` no longer sets it for the shop page erroneously.
+	* Empty singular-archives (blog, shop) are no longer perceived as unsupported queries.
+	* Empty singular-archives (blog, shop) are no longer marked for `noindex` automatically.
+		* We'd rather have this marked as `noindex`, but the SEO Bar, Sitemap, and other APIs are not consistent with this data.
+		* We advise you to mark empty blog pages with `noindex`, or otherwise redirect them.
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
 		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
@@ -345,11 +353,18 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* `the_seo_framework_robots_txt`
 		* `the_seo_framework_enable_noindex_comment_pagination`
 		* `the_seo_framework_use_archive_prefix`
+		* `the_seo_framework_is_singular_archive`
+		* `the_seo_framework_is_product`
+		* `the_seo_framework_is_product_admin`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `is_query_exploited()`
 			* `get_html_output()`
+			* `get_post_type_real_ID()`
+			* `is_shop()`
+			* `is_product()`
+			* `is_product_admin()`
 		* **Changed:**
 			* `robots_txt()` is now marked as private (internal use only). You should not call it.
 			* `get_generated_archive_title()`:
@@ -358,6 +373,27 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `use_generated_archive_prefix()`:
 				1. Added first parameter `$term`.
 				1. Added filter `the_seo_framework_use_archive_prefix`.
+			* `get_robots_meta_by_query()` now bypasses singular-archives for no-posts-query-`noindex` tests.
+			* `is_singular_archive()`:
+				1. The output is now filterable.
+				1. Added caching.
+				1. Now has a first parameter `$post`.
+			* `is_wc_shop()` now has a first parameter `$post`.
+			* `check_the_real_ID()` no longer tries for WooCommerce shop and AnsPress question IDs.
+				* WooCommerce's check has been moved to a filter via the compatibility file.
+				* AnsPress now handles it via the same WordPress Core methods we use.
+			* For these methods, the `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`; mitigating issues with singular-archives (blog, shop).
+				* `is_post_type_supported()`
+				* `post_type_supports_taxonomies()`
+				* `is_post_type_disabled()`
+				* `get_hierarchical_taxonomies_as()`
+				* `get_robots_meta_by_query()`
+				* `is_post_type_robots_set()`
+		* **Deprecated:**
+			* Soft deprecation; no warnings are shown. This will change in a major update. Reason: Expanding ecommerce tool support.
+				* `is_wc_shop()`, use `is_shop()` instead.
+				* `is_wc_product()`, use `is_product()` instead.
+				* `is_wc_product_admin()`, use `is_product_admin()` instead.
 
 = 4.0.4 =
 

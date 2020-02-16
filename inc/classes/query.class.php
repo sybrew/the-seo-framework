@@ -52,7 +52,7 @@ class Query extends Core {
 	 *              2. Now asks for and passes $method.
 	 *              3. Now returns false on WP CLI.
 	 * @since 3.2.2 No longer spits out errors on production websites.
-	 * @staticvar bool $cache : Always true if set.
+	 * @staticvar bool $cache Always true once set.
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
 	 *
@@ -107,6 +107,21 @@ class Query extends Core {
 		}
 	}
 	// phpcs:enable -- Method unused in production.
+
+	/**
+	 * Returns the post type name from query input or real ID.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
+	 * @return string|false Post type on success, false on failure.
+	 */
+	public function get_post_type_real_ID( $post = null ) {
+
+		$post = is_null( $post ) ? $this->get_the_real_ID() : $post;
+
+		return \get_post_type( $post );
+	}
 
 	/**
 	 * Returns the post type name from current screen.
@@ -206,22 +221,14 @@ class Query extends Core {
 	 * @since 2.5.0
 	 * @since 3.1.0 1. Now checks for the feed.
 	 *              2. No longer caches.
+	 * @since 4.0.5 1. The shop ID is now handled via the filter.
+	 *              2. The question ID (AnsPress) is no longer called. This should work out-of-the-box since AnsPress 4.1.
 	 *
 	 * @return int The admin ID.
 	 */
 	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
-		$id = 0;
-
-		if ( $this->is_feed() ) {
-			$id = \get_the_ID();
-		} elseif ( $this->is_wc_shop() ) {
-			//* WooCommerce Shop. TODO set in compat file?
-			$id = \get_option( 'woocommerce_shop_page_id' );
-		} elseif ( function_exists( 'get_question_id' ) && \did_action( 'template_redirect' ) ) {
-			//* AnsPress. TODO set in compat file.
-			$id = \get_question_id();
-		}
+		$id =  $this->is_feed() ? \get_the_ID() : 0;
 
 		/**
 		 * @since 2.5.0
@@ -359,11 +366,46 @@ class Query extends Core {
 	 * Simply put, it detects a blog page and WooCommerce shop page.
 	 *
 	 * @since 3.1.0
+	 * @since 4.0.5 1. The output is now filterable.
+	 *              2. Added caching.
+	 *              3. Now has a first parameter `$post`.
 	 *
+	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool
 	 */
-	public function is_singular_archive() {
-		return $this->is_blog_page() || $this->is_wc_shop();
+	public function is_singular_archive( $post = null ) {
+
+		if ( isset( $post ) ) {
+			$post = \get_post( $post );
+			$id   = $post ? $post->ID : 0;
+		} else {
+			$id = $this->get_the_real_ID();
+		}
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
+			return $cache;
+
+		/**
+		 * @since 4.0.5
+		 * @param bool $is_singular_archive Whether the post ID is a singular archive.
+		 * @param int  $id                  The current or supplied post ID.
+		 */
+		$is_singular_archive = \apply_filters_ref_array(
+			'the_seo_framework_is_singular_archive',
+			[
+				$this->is_blog_page_by_id( $id ),
+				$id,
+			]
+		);
+
+		$this->set_query_cache(
+			__METHOD__,
+			$is_singular_archive,
+			$id
+		);
+
+		return $is_singular_archive;
 	}
 
 	/**
@@ -741,7 +783,6 @@ class Query extends Core {
 	 * Determines whether the query is for the blog page.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -767,7 +808,6 @@ class Query extends Core {
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @ignore not used internally, polar opposite of is_single().
-	 * @staticvar bool $cache
 	 * @uses $this->is_singular()
 	 *
 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
@@ -822,7 +862,6 @@ class Query extends Core {
 	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
 	 *              3. Added current_user_can() check.
 	 *              4. Added wp_verify_nonce() check.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -861,7 +900,6 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
-	 * @staticvar bool $cache
 	 * @uses The_SEO_Framework_Query::is_single_admin()
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
@@ -907,14 +945,12 @@ class Query extends Core {
 
 	/**
 	 * Determines if the current page is singular is holds singular items within the admin screen.
-	 * Replaces and expands default WordPress is_singular().
+	 * Replaces and expands default WordPress `is_singular()`.
 	 *
 	 * @since 2.5.2
 	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
 	 * @since 4.0.0 No longer processes integers as input.
-	 * @uses The_SEO_Framework_Query::is_singular_admin()
-	 * @uses The_SEO_Framework_Query::is_blog_page()
-	 * @uses The_SEO_Framework_Query::is_wc_shop()
+	 * @uses $this->is_singular_admin()
 	 *
 	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
 	 * @return bool Post Type is singular
@@ -981,7 +1017,6 @@ class Query extends Core {
 	/**
 	 * Detects tag archives.
 	 *
-	 * @staticvar bool $cache
 	 * @since 2.6.0
 	 * @uses $this->is_archive()
 	 *
@@ -1047,22 +1082,93 @@ class Query extends Core {
 	}
 
 	/**
-	 * Determines if the page is the WooCommerce plugin Shop page.
+	 * Determines if the $post is a shop page.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
+	 * @return bool
+	 */
+	public function is_shop( $post = null ) {
+		/**
+		 * @since 4.0.5
+		 * @param bool $is_shop Whether the post ID is a shop.
+		 * @param int  $id      The current or supplied post ID.
+		 */
+		return \apply_filters_ref_array( 'the_seo_framework_is_shop', [ false, $post ] );
+	}
+
+	/**
+	 * Determines if the page is a product page.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
+	 * @return bool True if on a WooCommerce Product page.
+	 */
+	public function is_product( $post = null ) {
+
+		if ( \is_admin() )
+			return $this->is_product_admin();
+
+		/**
+		 * @since 4.0.5
+		 * @param bool $is_product
+		 * @param int|WP_Post|null $post (Optional) Post ID or post object.
+		 */
+		return (bool) \apply_filters_ref_array( 'the_seo_framework_is_product', [ false, $post ] );
+	}
+
+	/**
+	 * Determines if the admin page is for a product page.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @return bool
+	 */
+	public function is_product_admin() {
+		/**
+		 * @since 4.0.5
+		 * @param bool $is_product_admin
+		 */
+		return (bool) \apply_filters( 'the_seo_framework_is_product_admin', false );
+	}
+
+	/**
+	 * Determines if the $post is the WooCommerce plugin shop page.
 	 *
 	 * @since 2.5.2
-	 * @staticvar bool $cache
+	 * @since 4.0.5 Now has a first parameter `$post`.
+	 * @since 4.0.5 Soft deprecated.
+	 * @deprecated
+	 * @internal
 	 *
+	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool True if on the WooCommerce shop page.
 	 */
-	public function is_wc_shop() {
+	public function is_wc_shop( $post = null ) {
+
+		if ( isset( $post ) ) {
+			$post = \get_post( $post );
+			$id   = $post ? $post->ID : 0;
+		} else {
+			$id = null;
+		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
 			return $cache;
+
+		if ( isset( $id ) ) {
+			$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
+		} else {
+			$is_shop = ! \is_admin() && function_exists( 'is_shop' ) && \is_shop();
+		}
 
 		$this->set_query_cache(
 			__METHOD__,
-			$is_shop = ! \is_admin() && function_exists( 'is_shop' ) && \is_shop()
+			$is_shop,
+			$id
 		);
 
 		return $is_shop;
@@ -1074,6 +1180,9 @@ class Query extends Core {
 	 * @since 2.5.2
 	 * @since 4.0.0 : 1. Added admin support.
 	 *                2. Added parameter for the Post ID or post to test.
+	 * @since 4.0.5 Soft deprecated.
+	 * @deprecated
+	 * @internal
 	 *
 	 * @param int|\WP_Post $post When set, checks if the post is of type product.
 	 * @return bool True if on a WooCommerce Product page.
@@ -1106,7 +1215,10 @@ class Query extends Core {
 	 * Detects products within the admin area.
 	 *
 	 * @since 4.0.0
-	 * @see The_SEO_Framework_Query::is_wc_product()
+	 * @see $this->is_wc_product()
+	 * @since 4.0.5 Soft deprecated.
+	 * @deprecated
+	 * @internal
 	 *
 	 * @return bool
 	 */
@@ -1401,13 +1513,13 @@ class Query extends Core {
 	 * Handles object cache for the query class.
 	 *
 	 * @since 2.7.0
-	 * @staticvar null|bool $can_cache_query : True when this function can run.
-	 * @staticvar mixed     $cache           : The cached query values.
+	 * @staticvar null|bool $can_cache_query True when this function can run.
+	 * @staticvar mixed     $cache           The cached query values.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
 	 * @param string $method       The method that wants to cache, used as the key to set or get.
 	 * @param mixed  $value_to_set The value to set.
-	 * @param mixed  ...$hash      Extra arguments, that will are used to differentiaty queries.
+	 * @param mixed  ...$hash      Extra arguments, that are used to differentiaty queries.
 	 * @return mixed : {
 	 *    mixed The cached value if set and $value_to_set is null.
 	 *       null If the query can't be cached yet, or when no value has been set.

@@ -41,11 +41,90 @@ function _init_wc_compat() {
 	\add_filter( 'woocommerce_breadcrumb_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 }
 
-\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_image_generation_params', 10, 2 );
+\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
+/**
+ * Sets the correct shop ID on the shop page.
+ *
+ * @since 4.0.5
+ * @access private
+ *
+ * @param int $id The current ID.
+ * @return int
+ */
+function _set_real_id_wc_shop( $id ) {
+
+	if ( \the_seo_framework()->is_wc_shop() ) {
+		$id = (int) \get_option( 'woocommerce_shop_page_id' );
+	}
+
+	return $id;
+}
+
+\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
+/**
+ * Sets singular archives for the WC shop page.
+ *
+ * @since 4.0.5
+ * @access private
+ *
+ * @param bool $is_singular_archive Whether the post ID is a singular archive.
+ * @param int  $id                  The current or supplied post ID.
+ * @return bool
+ */
+function _set_shop_singular_archive( $is_singular_archive, $id ) {
+	return $is_singular_archive || \the_seo_framework()->is_wc_shop( $id );
+}
+
+\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
+/**
+ * Sets the is_shop query.
+ *
+ * @since 4.0.5
+ * @access private
+ * @TODO is this redundant for TSF?
+ *
+ * @param bool             $is_shop Whether this is a shop page.
+ * @param int|WP_Post|null $post    Post ID or post object.
+ * @return bool
+ */
+function _set_wc_is_shop( $is_shop, $post ) {
+	return $is_shop || \the_seo_framework()->is_wc_shop( $post );
+}
+
+\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
+/**
+ * Sets the is_product query.
+ *
+ * @since 4.0.5
+ *
+ * @param bool             $is_product Whether this is a product page.
+ * @param int|WP_Post|null $post       Post ID or post object.
+ * @return bool
+ */
+function _set_wc_is_product( $is_product, $post ) {
+	return $is_product || \the_seo_framework()->is_wc_product( $post );
+}
+
+\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
+/**
+ * Sets the is_product_admin query.
+ *
+ * @since 4.0.5
+ * @access private
+ * @TODO is this redundant for TSF?
+ *
+ * @param bool $is_product_admin Whether this is a product admin query.
+ * @return bool
+ */
+function _set_wc_is_product_admin( $is_product_admin ) {
+	return $is_product_admin || \the_seo_framework()->is_wc_product_admin();
+}
+
+\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
 /**
  * Adjusts image generation parameters.
  *
- * @since 4.0.0
+ * @since 4.0.5 (introduced @ 4.0.0, renamed to prevent conflict)
  * @access private
  *
  * @param array      $params : [
@@ -58,7 +137,7 @@ function _init_wc_compat() {
  *                         Is null when query is autodetermined.
  * @return array $params
  */
-function _adjust_image_generation_params( $params, $args ) {
+function _adjust_wc_image_generation_params( $params, $args ) {
 
 	$is_product          = false;
 	$is_product_category = false;

@@ -457,6 +457,7 @@ class Term_Data extends Post_Data {
 	 * Returns hierarchical taxonomies for post type.
 	 *
 	 * @since 3.0.0
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`.
 	 *
 	 * @param string $get       Whether to get the names or objects.
 	 * @param string $post_type The post type. Will default to current post type.
@@ -464,8 +465,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
 
-		if ( ! $post_type )
-			$post_type = \get_post_type( $this->get_the_real_ID() );
+		$post_type = $post_type ?: $this->get_post_type_real_ID();
 
 		if ( ! $post_type )
 			return [];

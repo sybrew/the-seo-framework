@@ -899,13 +899,15 @@ class Detect extends Render {
 	 * Detects if the current or inputted post type is supported and not disabled.
 	 *
 	 * @since 3.1.0
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 *
 	 * @param string $post_type Optional. The post type to check.
 	 * @return bool
 	 */
 	public function is_post_type_supported( $post_type = '' ) {
 
-		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+		$post_type = $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
 
 		/**
 		 * @since 2.6.2
@@ -960,6 +962,8 @@ class Detect extends Render {
 	 * Checks (current) Post Type for having taxonomical archives.
 	 *
 	 * @since 2.9.3
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 * @staticvar array $cache
 	 * @global \WP_Screen $current_screen
 	 *
@@ -973,7 +977,7 @@ class Detect extends Render {
 		if ( isset( $cache[ $post_type ] ) )
 			return $cache[ $post_type ];
 
-		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+		$post_type = $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
 		if ( ! $post_type ) return false;
 
 		if ( \get_object_taxonomies( $post_type, 'names' ) )
@@ -1056,13 +1060,15 @@ class Detect extends Render {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.2 Now is fiterable.
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 *
 	 * @param string $post_type Optional. The post type to check.
 	 * @return bool True if disabled, false otherwise.
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {
 
-		$post_type = $post_type ?: \get_post_type() ?: $this->get_admin_post_type();
+		$post_type = $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
 
 		/**
 		 * @since 3.1.2

@@ -18,10 +18,10 @@ if ( ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_pag
 } elseif ( $taxonomy ) {
 	$type = $this->get_tax_type_label( $taxonomy );
 } else {
-	$type = $this->get_post_type_label( get_post_type() );
+	$type = $this->get_post_type_label( $this->get_post_type_real_ID() );
 }
 
-$cache_key = $this->generate_cache_key( $this->get_the_real_ID(), $taxonomy );
+$cache_key = $this->generate_cache_key( $id, $taxonomy );
 
 if ( is_admin() ) {
 	$bstyle = \is_rtl()

@@ -181,6 +181,9 @@ final class Load extends Feed {
 		if ( $this->detect_plugin( [ 'functions' => [ 'wc' ] ] ) ) {
 			//* WooCommerce.
 			$this->_include_compat( 'woocommerce', 'plugin' );
+		} elseif ( $this->detect_plugin( [ 'constants' => [ 'EDD_VERSION' ] ] ) ) {
+			//* Easy Digital Downloads.
+			$this->_include_compat( 'edd', 'plugin' );
 		}
 	}
 

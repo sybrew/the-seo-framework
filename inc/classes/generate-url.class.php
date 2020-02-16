@@ -345,6 +345,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via $this->paged().
 	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
+	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
 	 *
 	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
@@ -359,7 +360,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->remove_pagination_from_url( $url, $_page, false );
 		}
 
-		if ( $url && $this->is_singular_archive() ) {
+		if ( $url && $this->is_singular_archive( $id ) ) {
 			// Singular archives, like blog pages and shop pages, use the pagination base with paged.
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}

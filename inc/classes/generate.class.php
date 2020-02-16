@@ -162,6 +162,10 @@ class Generate extends User_Data {
 	 * @since 4.0.0
 	 * @since 4.0.2 Added new copyright directive tags.
 	 * @since 4.0.3 Changed `max_snippet_length` to `max_snippet`
+	 * @since 4.0.5 1. The `$post_type` test now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *                 mitigating issues with singular-archives pages (blog, shop, etc.).
+	 *              2. Now disregards empty blog pages for automatic `noindex`; although this protection is necessary,
+	 *                 it can not be reflected in the SEO Bar.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param int <bit> $ignore The ignore level. {
@@ -206,15 +210,29 @@ class Generate extends User_Data {
 		} else {
 			global $wp_query;
 
-			/**
-			 * Check for 404, or if archive is empty: set noindex for those.
-			 * Don't check this on the homepage. The homepage is sacred in this regard,
-			 * because page builders and templates can and will take over.
-			 *
-			 * Don't use empty(), null is regarded as indexable.
-			 */
-			if ( isset( $wp_query->post_count ) && ! $wp_query->post_count )
-				$noindex = true;
+			if ( $this->is_singular_archive() ) {
+				/**
+				 * Pagination overflow protection via 404 test.
+				 *
+				 * When there are no posts, the first page will NOT relay 404;
+				 * which is exactly as intended. All other pages will relay 404.
+				 *
+				 * We do not test the post_count here, because we want to have
+				 * the first page indexable via user-intend only.
+				 */
+				$noindex = $noindex || $this->is_404();
+			} else {
+				/**
+				 * Check for 404, or if archive is empty: set noindex for those.
+				 *
+				 * Don't check this on the homepage. The homepage is sacred in this regard,
+				 * because page builders and templates can and will take over.
+				 *
+				 * Don't use empty(), null is regarded as indexable.
+				 */
+				if ( isset( $wp_query->post_count ) && ! $wp_query->post_count )
+					$noindex = true;
+			}
 
 			if (
 				! $noindex
@@ -277,7 +295,7 @@ class Generate extends User_Data {
 			endif;
 		} elseif ( $this->is_singular() ) {
 
-			$post_type = \get_post_type() ?: $this->get_admin_post_type();
+			$post_type = $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
 			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
 			}
@@ -536,6 +554,8 @@ class Generate extends User_Data {
 	 * Determines if the post type has a robots value set.
 	 *
 	 * @since 3.1.0
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
@@ -544,7 +564,7 @@ class Generate extends User_Data {
 	public function is_post_type_robots_set( $type, $post_type = '' ) {
 		return isset(
 			$this->get_option( $this->get_robots_post_type_option_id( $type ) )[
-				$post_type ?: \get_post_type() ?: $this->get_admin_post_type()
+				$post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type()
 			]
 		);
 	}
@@ -668,7 +688,7 @@ class Generate extends User_Data {
 	 */
 	public function generate_og_type() {
 
-		if ( $this->is_wc_product() ) {
+		if ( $this->is_product() ) {
 			$type = 'product';
 		} elseif ( $this->is_single() && $this->get_image_from_cache() ) {
 			$type = 'article';

@@ -500,7 +500,7 @@ class Post_Data extends Detect {
 		//* Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 
-		$post_type = \get_post_type( $post->ID ) ?: false;
+		$post_type = \get_post_type( $post ) ?: false;
 		// Can this even fail?
 		if ( ! $post_type ) return;
 

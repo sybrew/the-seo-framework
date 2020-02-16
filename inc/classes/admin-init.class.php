@@ -107,7 +107,7 @@ class Admin_Init extends Init {
 			if ( $this->is_archive_admin() ) {
 				$prepare_edit_screen = $this->is_taxonomy_supported();
 			} elseif ( $this->is_singular_admin() ) {
-				$prepare_edit_screen = $this->is_post_type_supported();
+				$prepare_edit_screen = $this->is_post_type_supported( $this->get_admin_post_type() );
 			} else {
 				$prepare_edit_screen = false;
 			}
