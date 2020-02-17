@@ -100,7 +100,7 @@ class Site_Options extends Sanitize {
 				'disabled_post_types' => [], // Post Type support.
 
 				// Title.
-				'title_separator'     => 'pipe',    // Title separator, dropdown
+				'title_separator'     => 'hyphen',  // Title separator, dropdown
 				'title_location'      => $titleloc, // Title separation location
 				'title_rem_additions' => 0,         // Remove title additions
 				'title_rem_prefixes'  => 0,         // Remove title prefixes from archives.

@@ -168,7 +168,7 @@ switch ( $instance ) :
 			</legend>
 			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) : ?>
-				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $default_title_separator, $name ); ?> />
+				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" data-entity="<?php echo esc_attr( $html ); ?>" <?php checked( $default_title_separator, $name ); ?> />
 				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>"><?php echo esc_html( $html ); ?></label>
 			<?php endforeach; ?>
 			</p>

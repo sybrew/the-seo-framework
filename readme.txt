@@ -309,6 +309,9 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* NOTE: Google seems to ignore the noindex header at the moment... has this behavior changed since???
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
 	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads".
+	* We reintroduced the hyphen, it is now safe from incorrect texturization!
+		* Your titles and descriptions will now have the hyphen preserved as entered, making the pixel counter more accurate.
+		* However, when more than one sequential hyphen is enter, it will still be texturized by WordPress.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
@@ -318,6 +321,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
 	* The robots.txt output is now default when the blog is not public. This follows the behavior in WordPress 5.3.
+	* The default title separator is now a hyphen `&#x2d;`, instead of a pipe `|`.
+	* When you upgrade from TSF v3.2.4 or below, you'll now maintain the dash (now called hyphen) title-separator option.
 * **Other:**
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 * **Fixed:**
@@ -333,6 +338,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
 		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
+	* TODO The "remove blog name" option now has its state reflected in the example output again.
 
 **For translators:**
 
@@ -347,7 +353,10 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* Added the `tsf-is-block-editor` class to the postbox class, specifying we're dealing with Gutenberg/Block-Editor.
 * **Option notes:**
 	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
-		* `advanced_query_protection`, either `1` or `0`.
+		* **Added:**
+			* `advanced_query_protection`, either `1` or `0`.
+		* **Changed:**
+			* `title_separator` default value is changed from `pipe` to `hyphen`.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_robots_txt`
@@ -365,7 +374,11 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `is_shop()`
 			* `is_product()`
 			* `is_product_admin()`
+			* `s_hyphen()`
 		* **Changed:**
+			* `s_title_raw()` now normalizes hyphen entities.
+			* `s_description_raw()` now normalizes hyphen entities.
+			* `get_separator()` now utilizes the predefined separator list, instead of guessing the output.
 			* `robots_txt()` is now marked as private (internal use only). You should not call it.
 			* `get_generated_archive_title()`:
 				1. Now no longer uses `get_the_author()` to fetch the author's display name, but uses the provided term object instead.

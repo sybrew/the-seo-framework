@@ -167,12 +167,6 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
-			's_description',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[]
-		);
-
-		$this->add_option_filter(
 			's_description_raw',
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
@@ -859,6 +853,7 @@ class Sanitize extends Admin_Pages {
 	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
+	 * @since 4.0.5 Now normalized `-` entities.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -868,6 +863,7 @@ class Sanitize extends Admin_Pages {
 		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_nbsp( $new_value );
 		$new_value = $this->s_tabs( $new_value );
+		$new_value = $this->s_hyphen( $new_value );
 		$new_value = $this->s_bsol( $new_value );
 		$new_value = $this->s_dupe_space( $new_value );
 
@@ -1013,6 +1009,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.2
 	 * @since 4.0.0 Now normalizes `&` entities.
+	 * @since 4.0.5 Now normalized `-` entities.
 	 *
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
@@ -1022,6 +1019,7 @@ class Sanitize extends Admin_Pages {
 		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_nbsp( $new_value );
 		$new_value = $this->s_tabs( $new_value );
+		$new_value = $this->s_hyphen( $new_value );
 		$new_value = $this->s_bsol( $new_value );
 		$new_value = $this->s_dupe_space( $new_value );
 
@@ -1538,6 +1536,30 @@ class Sanitize extends Admin_Pages {
 			return $color;
 
 		return '';
+	}
+
+	/**
+	 * Replaces non-transformative hyphens with entity hyphens.
+	 * Duplicated simple hyphens are preserved.
+	 *
+	 * Regex challenge, make the columns without an x light up:
+	 * xxx - xx - xxx- - - xxxxxx xxxxxx- xxxxx - -
+	 * --- - -- - ---- - - ------ ------- ----- - -
+	 *
+	 * The answer? `/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/`
+	 * Sybre-kamisama.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @param string $text String with potential hyphens.
+	 * @return string A string with safe HTML encoded hyphens.
+	 */
+	public function s_hyphen( $text ) {
+
+		$text = preg_replace( '/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/', '&#x2d;', $text );
+
+		// This is faster than putting these alternative sequences in the `-|-` regex above.
+		return str_replace( [ '&#45;', "\xe2\x80\x90" ], '&#x2d;', $text );
 	}
 
 	/**

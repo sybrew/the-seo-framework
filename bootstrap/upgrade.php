@@ -544,6 +544,7 @@ function _do_upgrade_3103() {
  * refactored the whole API.
  *
  * @since 4.0.0
+ * @since 4.0.5 The upgrader now updates "dash" to "hyphen".
  */
 function _do_upgrade_3300() {
 
@@ -559,9 +560,9 @@ function _do_upgrade_3300() {
 
 		$defaults = _upgrade_default_site_options();
 
-		// Convert 'dash' title option to 'ndash', silently. Nothing really changes for the user.
+		// Convert 'dash' title option to 'hyphen', silently. Nothing really changes for the user.
 		if ( 'dash' === $tsf->get_option( 'title_separator', false ) )
-			$tsf->update_option( 'title_separator', 'ndash' );
+			$tsf->update_option( 'title_separator', 'hyphen' );
 
 		// Add default cron pinging option.
 		if ( isset( $defaults['ping_use_cron'] ) ) {
