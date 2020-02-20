@@ -253,8 +253,8 @@ TODO:
 12. Add theme color option to social sharing (for Discord)?
 <!-- 13. (DONE) Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
 	- Override does work (only noindex is verified) -->
-14. Reintroduce the title additions example on the SEO Settings screen...
-	* The homepage example still works.
+<!-- (DONE) 14. Reintroduce the title additions example on the SEO Settings screen...
+	* The homepage example still works. -->
 15. Consider filtering svg images...
 	* TODO at least allow filtering of the image results... (we now only have a filter for the generator arguments)
 <!-- (DONE) 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this. -->
@@ -307,6 +307,9 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* Ref: https://developers.google.com/search/docs/guides/podcast-guidelines
 		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
 		* NOTE: Google seems to ignore the noindex header at the moment... has this behavior changed since???
+			* Ref: https://support.google.com/googleplay/podcasts/answer/6260341?hl=en#robot
+			* > If you want to prevent Google from accessing your podcast feed, you can explicitly block our user agent 'Google-Podcast' on your site’s robots.txt file.
+			* Explicitely, not implicitely. It is/was probably a bug at Google's side?
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
 	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads".
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
@@ -317,6 +320,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
 		* Also improved the painting performance by removing a redundant flexbox wrap.
 		* N.B. Advanced Custom Fields overrides the metabox handler styling globally. So, that's a thing.
+	* Thanks to cleaning up leftover IE11 support, the Post SEO Settings header-navigation items can now have their text collapse vertically, as was initially intended.
+		* The collapsing now happens 4px before the text touches the icon (instead of 0px). Much neater.
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
@@ -335,10 +340,11 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* Empty singular-archives (blog, shop) are no longer marked for `noindex` automatically.
 		* We'd rather have this marked as `noindex`, but the SEO Bar, Sitemap, and other APIs are not consistent with this data.
 		* We advise you to mark empty blog pages with `noindex`, or otherwise redirect them.
+	* The "remove blog name" option now has its state reflected in the example output again.
+	* Also thanks to cleaning up leftover IE11 support, the Post SEO Settings can now fill the metabox on tablet-sized screens.
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
 		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
-	* TODO The "remove blog name" option now has its state reflected in the example output again.
 
 **For translators:**
 
@@ -378,7 +384,9 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* **Changed:**
 			* `s_title_raw()` now normalizes hyphen entities.
 			* `s_description_raw()` now normalizes hyphen entities.
-			* `get_separator()` now utilizes the predefined separator list, instead of guessing the output.
+			* `get_separator()`:
+				1. Now utilizes the predefined separator list, instead of guessing the output.
+				1. The default fallback value is now a hyphen.
 			* `robots_txt()` is now marked as private (internal use only). You should not call it.
 			* `get_generated_archive_title()`:
 				1. Now no longer uses `get_the_author()` to fetch the author's display name, but uses the provided term object instead.
@@ -407,6 +415,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 				* `is_wc_shop()`, use `is_shop()` instead.
 				* `is_wc_product()`, use `is_product()` instead.
 				* `is_wc_product_admin()`, use `is_product_admin()` instead.
+* **Other:**
+	* Cleaned up code, like removing more legacy browser syntax.
 
 = 4.0.4 =
 

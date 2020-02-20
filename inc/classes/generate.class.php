@@ -573,10 +573,11 @@ class Generate extends User_Data {
 	 * Returns cached and parsed separator option.
 	 *
 	 * @since 2.3.9
-	 * @since 3.1.0 : 1. Removed caching.
-	 *                2. Removed escaping parameter.
+	 * @since 3.1.0 1. Removed caching.
+	 *              2. Removed escaping parameter.
 	 * @since 4.0.0 No longer converts the `dash` separator option.
-	 * @since 4.0.5 Now utilizes the predefined separator list, instead of guessing the output.
+	 * @since 4.0.5 1. Now utilizes the predefined separator list, instead of guessing the output.
+	 *              2. The default fallback value is now a hyphen.
 	 *
 	 * @param string $type The separator type. Used to fetch option.
 	 * @return string The separator.
@@ -586,7 +587,7 @@ class Generate extends User_Data {
 		$sep_option = $this->get_option( $type . '_separator' );
 		$sep_list   = $this->get_separator_list();
 
-		return isset( $sep_list[ $sep_option ] ) ? $sep_list[ $sep_option ] : '|';
+		return isset( $sep_list[ $sep_option ] ) ? $sep_list[ $sep_option ] : '&#x2d;';
 	}
 
 	/**

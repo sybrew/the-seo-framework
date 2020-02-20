@@ -13,9 +13,7 @@
 }
 
 .tsf-flex-inside-wrap {
-	/* IE11 wrapper fix */
 	flex-direction: row;
-	flex: 1 1 auto;
 	width: 100%; /* WP 5.4+ fix */
 }
 
@@ -117,8 +115,6 @@ input.tsf-flex-nav-tab-radio {
 	border-bottom: 1px solid #dadada;
 	align-items: baseline;
 	flex-flow: row nowrap;
-	/* IE11 fix */
-	flex: 1 1 100%;
 	max-width: 100%;
 	overflow: hidden;
 	font-weight: 600;
@@ -131,8 +127,6 @@ input.tsf-flex-nav-tab-radio {
 
 .tsf-flex-nav-tab-inner {
 	flex-flow: row nowrap;
-	/* IE11 reverse fix for newer browsers */
-	flex: 1 0 auto;
 }
 
 .tsf-flex-nav-tab {
@@ -156,6 +150,7 @@ input.tsf-flex-nav-tab-radio {
 .tsf-flex-nav-name {
 	align-items: center;
 	justify-content: center;
+	margin: 0 2px;
 }
 
 .tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label {
