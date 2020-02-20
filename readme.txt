@@ -229,9 +229,13 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.5 =
 
+TODO this is too advanced, put it on the detailed log, not on w.org:
 We accidentally bombarded our website via our private [shortlink service](https://tsf.fyi/links.php), where Google was trying to act smart by following non-anchored example links that didn't exist. When this happens on a large scale, your website can potentially drop in rankings.
 
-With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was broken](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
+TODO this is too advanced, put it on the detailed log, not on w.org:
+With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was incoherent](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known Core-reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
+
+In this update, we [removed support for the "Connected Social Pages" feature](https://github.com/sybrew/the-seo-framework/issues/498). They have never proven to work, and they've been deprecated by Google. You won't be able to fill these fields in on new websites.
 
 A few other quality-of-life changes have been made, as well. Among adding new filters, streamlining the query handler, and fixing known corner-case bugs.
 
@@ -258,7 +262,7 @@ TODO:
 15. Consider filtering svg images...
 	* TODO at least allow filtering of the image results... (we now only have a filter for the generator arguments)
 <!-- (DONE) 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this. -->
-17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example).
+<!-- (DONE) 17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example). -->
 18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
 	* https://core.trac.wordpress.org/ticket/43949
 	* Inform Kris of change: https://wordpress.org/support/topic/noindex-a-page-via-php/
@@ -328,6 +332,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* The robots.txt output is now default when the blog is not public. This follows the behavior in WordPress 5.3.
 	* The default title separator is now a hyphen `&#x2d;`, instead of a pipe `|`.
 	* When you upgrade from TSF v3.2.4 or below, you'll now maintain the dash (now called hyphen) title-separator option.
+* **Deprecated:**
+	* The social profile links fields are deprecated. They will be removed from sight when you leave them empty. [Learn more](https://github.com/sybrew/the-seo-framework/issues/498).
 * **Other:**
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 * **Fixed:**

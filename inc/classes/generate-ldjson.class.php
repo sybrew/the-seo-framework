@@ -263,6 +263,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		/**
 		 * @since 2.7 or later.
+		 * @TODO deprecate
 		 * @param array The SEO Framework's option names used for sitelinks.
 		 */
 		$sameurls_options = (array) \apply_filters(

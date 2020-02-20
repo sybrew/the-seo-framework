@@ -188,16 +188,9 @@ switch ( $instance ) :
 			echo $this->get_logo_uploader_form( 'knowledge_logo' );
 			?>
 		</p>
-		<hr>
-
-		<h4><?php esc_html_e( 'Connected Social Pages', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
-		$this->description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
-		$this->description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		$connectedi18n = _x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
-
 		/**
 		 * @todo maybe genericons?
 		 */
@@ -241,7 +234,11 @@ switch ( $instance ) :
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
 				'desc'        => __( 'LinkedIn Profile', 'autodescription' ),
-				'placeholder' => 'https://www.linkedin.com/in/' . $connectedi18n,
+				/**
+				 * TODO switch to /in/ insteadof /company/ when knowledge-type is personal?
+				 * Note that this feature is DEPRECATED. https://developers.google.com/search/docs/data-types/social-profile
+				 */
+				'placeholder' => 'https://www.linkedin.com/company/' . $connectedi18n . '/',
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
 			'pinterest'  => [
@@ -267,26 +264,60 @@ switch ( $instance ) :
 			],
 		];
 
+		$output_social_precense = false;
+
 		foreach ( $socialsites as $key => $v ) {
-			?>
-			<p>
-				<label for="<?php $this->field_id( $v['option'] ); ?>">
-					<strong><?php echo esc_html( $v['desc'] ); ?></strong>
-					<?php
-					if ( $v['examplelink'] ) {
-						$this->make_info(
-							__( 'View your profile.', 'autodescription' ),
-							$v['examplelink']
-						);
-					}
-					?>
-				</label>
-			</p>
-			<p>
-				<input type="url" name="<?php $this->field_name( $v['option'] ); ?>" class="large-text" id="<?php $this->field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" autocomplete=off />
-			</p>
-			<?php
+			if ( strlen( $this->get_option( $v['option'] ) ) ) {
+				$output_social_precense = true;
+				break;
+			}
 		}
+
+		if ( $output_social_precense ) :
+			?>
+			<hr>
+
+			<h4><?php esc_html_e( 'Connected Social Pages', 'autodescription' ); ?></h4>
+			<?php
+			$this->description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
+			$this->description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
+			$this->description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
+			$this->attention_description_noesc(
+				$this->convert_markdown(
+					sprintf(
+						/* translators: %s = Learn more URL. Markdown! */
+						esc_html__( 'These settings are marked for removal. When you clear a field, it will be hidden forever. [Learn more](%s).', 'autodescription' ),
+						'https://developers.google.com/search/docs/data-types/social-profile'
+					),
+					[ 'a' ],
+					[ 'a_internal' => false ]
+				)
+			);
+
+			foreach ( $socialsites as $key => $v ) {
+
+				if ( ! strlen( $this->get_option( $v['option'] ) ) ) continue;
+
+				?>
+				<p>
+					<label for="<?php $this->field_id( $v['option'] ); ?>">
+						<strong><?php echo esc_html( $v['desc'] ); ?></strong>
+						<?php
+						if ( $v['examplelink'] ) {
+							$this->make_info(
+								__( 'View your profile.', 'autodescription' ),
+								$v['examplelink']
+							);
+						}
+						?>
+					</label>
+				</p>
+				<p>
+					<input type="url" name="<?php $this->field_name( $v['option'] ); ?>" class="large-text" id="<?php $this->field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" autocomplete=off />
+				</p>
+				<?php
+			}
+		endif; /* end $output_social_precense */
 		break;
 
 	default:
