@@ -310,6 +310,7 @@ class Sanitize extends Admin_Pages {
 
 				'excerpt_the_feed',
 				'source_the_feed',
+				'index_the_feed',
 
 				'ld_json_searchbox',
 				'ld_json_breadcrumbs',

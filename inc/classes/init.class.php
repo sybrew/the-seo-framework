@@ -684,13 +684,19 @@ class Init extends Query {
 	 * Sets the X-Robots-Tag headers on various endpoints.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 Added filter.
 	 * @access private
 	 */
 	public function _init_robots_headers() {
 
-		if ( $this->is_feed() || $this->is_robots() ) {
+		$noindex = $this->is_robots() || ( ! $this->get_option( 'index_the_feed' ) && $this->is_feed() );
+
+		/**
+		 * @since 4.0.5
+		 * @param bool $noindex Whether a noindex header must be set.
+		 */
+		if ( \apply_filters( 'the_seo_framework_set_noindex_header', $noindex ) )
 			$this->_output_robots_noindex_headers();
-		}
 	}
 
 	/**

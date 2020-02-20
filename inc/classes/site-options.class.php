@@ -256,6 +256,7 @@ class Site_Options extends Sanitize {
 				// Feed.
 				'excerpt_the_feed' => 1, // Generate feed Excerpts
 				'source_the_feed'  => 1, // Add backlink at the end of the feed
+				'index_the_feed'   => 0, // Add backlink at the end of the feed
 
 				// Schema
 				'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox

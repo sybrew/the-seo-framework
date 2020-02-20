@@ -307,17 +307,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* This protection helps mitigate against a new form of WordPress query exploitation we discovered. This can be invoked either intentionally or accidentally, causing Google to index thousands of pages that shouldn't exist.
 		* The option for this is enabled automatically for sites that install The SEO Framework for the first time. Otherwise, you'll have to tick a box under the Robots settings.
 		* When invoked, the meta tag `<meta name="tsf:aqp" value="1" />` will be outputted to indicate it's in effect, after the `noindex` attribute for robots. This tag will help us spot false positives.
-	* TODO: Feed noindex option (under Feed Settings). "Allow indexing of feeds? - [?]=Podcasts require feeds to be indexed. If you have podcasts, enable this option."
-		* Ref: https://developers.google.com/search/docs/guides/podcast-guidelines
-		* Ref: https://github.com/Yoast/wordpress-seo/pull/13143
-		* NOTE: Google seems to ignore the noindex header at the moment... has this behavior changed since???
-			* Ref: https://support.google.com/googleplay/podcasts/answer/6260341?hl=en#robot
-			* > If you want to prevent Google from accessing your podcast feed, you can explicitly block our user agent 'Google-Podcast' on your site’s robots.txt file.
-			* Explicitely, not implicitely. It is/was probably a bug at Google's side?
-		* -> https://webmasters.googleblog.com/2007/12/taking-feeds-out-of-our-web-search.html
-			* -> http://web.archive.org/web/20090315044133/http://publisher.yahoo.com/rss_guide/faq.php
-				* `<meta xmlns="http://www.w3.org/1999/xhtml" name="robots" content="noindex" />`
-				* Now, Yahoo! feeds have been abanadoned, so Google probably integrated new directive rules too aggressively.
+	* Feed indexing options (found under Feed Settings). This is useful for sites publishing podcasts.
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
 	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads" attribute for `og:type`.
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
@@ -373,6 +363,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
 		* **Added:**
 			* `advanced_query_protection`, either `1` or `0`.
+			* `index_the_feed`, either `1` or `0`.
 		* **Changed:**
 			* `title_separator` default value is changed from `pipe` to `hyphen`.
 		* **Removed:**
@@ -385,6 +376,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* `the_seo_framework_is_singular_archive`
 		* `the_seo_framework_is_product`
 		* `the_seo_framework_is_product_admin`
+		* `the_seo_framework_set_noindex_header`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
