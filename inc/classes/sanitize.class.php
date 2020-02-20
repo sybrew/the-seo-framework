@@ -238,7 +238,6 @@ class Sanitize extends Admin_Pages {
 				'display_pixel_counter',
 				'display_character_counter',
 
-				'cache_meta_schema',
 				'cache_sitemap',
 				'cache_object',
 

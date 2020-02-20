@@ -314,8 +314,12 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* Ref: https://support.google.com/googleplay/podcasts/answer/6260341?hl=en#robot
 			* > If you want to prevent Google from accessing your podcast feed, you can explicitly block our user agent 'Google-Podcast' on your site’s robots.txt file.
 			* Explicitely, not implicitely. It is/was probably a bug at Google's side?
+		* -> https://webmasters.googleblog.com/2007/12/taking-feeds-out-of-our-web-search.html
+			* -> http://web.archive.org/web/20090315044133/http://publisher.yahoo.com/rss_guide/faq.php
+				* `<meta xmlns="http://www.w3.org/1999/xhtml" name="robots" content="noindex" />`
+				* Now, Yahoo! feeds have been abanadoned, so Google probably integrated new directive rules too aggressively.
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
-	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads".
+	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads" attribute for `og:type`.
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
 		* Your titles and descriptions will now have the hyphen preserved as entered, making the pixel counter more accurate.
 		* However, when more than one sequential hyphen is enter, it will still be texturized by WordPress.
@@ -334,6 +338,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* When you upgrade from TSF v3.2.4 or below, you'll now maintain the dash (now called hyphen) title-separator option.
 * **Deprecated:**
 	* The social profile links fields are deprecated. They will be removed from sight when you leave them empty. [Learn more](https://github.com/sybrew/the-seo-framework/issues/498).
+* **Removed:**
+	* Caching of the JSON-LD scripts and all related options, it wasn't helping anyone, and it'll be redundant when we'll introduce HTML breadcrumbs.
 * **Other:**
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 * **Fixed:**
@@ -369,6 +375,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `advanced_query_protection`, either `1` or `0`.
 		* **Changed:**
 			* `title_separator` default value is changed from `pipe` to `hyphen`.
+		* **Removed:**
+			* `cache_meta_schema`, this used to enable transient caching for Schema.org output.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_robots_txt`
@@ -416,6 +424,10 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 				* `get_hierarchical_taxonomies_as()`
 				* `get_robots_meta_by_query()`
 				* `is_post_type_robots_set()`
+		* **Removed:**
+			* **Tip:** When you call a removed method in `the_seo_framework()` object, it'll return `null`.
+			* `get_ld_json_transient_name()`
+			* `delete_ld_json_transient()`
 		* **Deprecated:**
 			* Soft deprecation; no warnings are shown. This will change in a major update. Reason: Expanding ecommerce tool support.
 				* `is_wc_shop()`, use `is_shop()` instead.

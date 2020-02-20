@@ -81,7 +81,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( \has_filter( 'the_seo_framework_receive_json_data' ) ) {
 			/**
 			 * @since 2.9.3
-			 * @param array  $data The LD-JSON data.
+			 * @param array  $data The JSON-LD data.
 			 * @param string $key  The data key.
 			 */
 			$data = (array) \apply_filters_ref_array( 'the_seo_framework_receive_json_data', [ $data, $key ] );
@@ -140,37 +140,22 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer cares for json_ld plugins.
+	 * @since 4.0.5 Removed caching.
 	 *
 	 * @return string The LD+JSON scripts.
 	 */
 	public function render_ld_json_scripts() {
 
-		$use_cache      = (bool) $this->get_option( 'cache_meta_schema' );
-		$transient_name = $use_cache ? $this->get_ld_json_transient_name( $this->get_the_real_ID() ) : '';
+		if ( $this->is_real_front_page() ) {
+			//= Homepage Schema.
+			$output = '';
 
-		$output = $transient_name ? $this->get_transient( $transient_name ) : false;
-		if ( false === $output ) :
-			if ( $this->is_real_front_page() ) {
-				//= Homepage Schema.
-				$output = '';
-
-				$output .= $this->get_ld_json_website() ?: '';
-				$output .= $this->get_ld_json_links() ?: '';
-			} else {
-				//= All other pages' Schema.
-				$output = $this->get_ld_json_breadcrumbs() ?: '';
-			}
-
-			if ( $use_cache ) {
-				/**
-				 * Transient expiration: 1 week.
-				 * Keep the script for at most 1 week.
-				 */
-				$expiration = WEEK_IN_SECONDS;
-
-				$this->set_transient( $transient_name, $output, $expiration );
-			}
-		endif;
+			$output .= $this->get_ld_json_website() ?: '';
+			$output .= $this->get_ld_json_links() ?: '';
+		} else {
+			//= All other pages' Schema.
+			$output = $this->get_ld_json_breadcrumbs() ?: '';
+		}
 
 		return $output;
 	}
@@ -376,6 +361,7 @@ class Generate_Ldjson extends Generate_Image {
 		$output = '';
 
 		if ( $this->is_singular() && ! $this->is_real_front_page() ) {
+			// TODO Shouldn't this be is_post_type_hierarchical()?
 			if ( $this->is_single() ) {
 				$output = $this->get_ld_json_breadcrumbs_post();
 			} else {
@@ -848,7 +834,6 @@ class Generate_Ldjson extends Generate_Image {
 		/**
 		 * @since 2.9.0
 		 * @param bool $use_seo_title Whether to use the SEO title.
-		 * NOTE: Changing this does not affect the transient cache; wait for it to clear.
 		 */
 		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_use_breadcrumb_seo_title', true );
 	}

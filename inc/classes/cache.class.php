@@ -200,6 +200,7 @@ class Cache extends Site_Options {
 	 * @since 2.8.0
 	 * @since 2.9.3 $type = 'front' now also returns true.
 	 * @since 3.1.0 Added action.
+	 * @since 4.0.5 Removed all JSON-LD transient clear calls.
 	 *
 	 * @param string $type The type
 	 * @param int    $id The post, page or TT ID. Defaults to $this->get_the_real_ID().
@@ -217,7 +218,6 @@ class Cache extends Site_Options {
 				$front_id = $this->get_the_front_page_ID();
 
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $front_id, '', 'frontpage' ) );
-				$this->delete_ld_json_transient( $front_id, '', 'frontpage' );
 				$success = true;
 				break;
 
@@ -238,7 +238,6 @@ class Cache extends Site_Options {
 					}
 
 					$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, '', $post_type ) );
-					$this->delete_ld_json_transient( $id, '', $post_type );
 					$success = true;
 				}
 				break;
@@ -246,13 +245,11 @@ class Cache extends Site_Options {
 			//* Careful, this can only run on archive pages. For now.
 			case 'term':
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, $args['term'], 'term' ) );
-				$this->delete_ld_json_transient( $id, $args['term'], 'term' );
 				$success = true;
 				break;
 
 			case 'author':
 				$this->object_cache_delete( $this->get_meta_output_cache_key_by_type( $id, 'author', 'author' ) );
-				$this->delete_ld_json_transient( $id, 'author', 'author' );
 				$success = true;
 				break;
 
@@ -412,7 +409,7 @@ class Cache extends Site_Options {
 	 *
 	 * @param string $key   The Object cache key.
 	 * @param string $group The Object cache group.
-	 * @return mixed wp_cache_delete if object caching is allowed. False otherwise.
+	 * @return mixed `wp_cache_delete()` if object caching is allowed. False otherwise.
 	 */
 	public function object_cache_delete( $key, $group = 'the_seo_framework' ) {
 
@@ -446,35 +443,6 @@ class Cache extends Site_Options {
 	public function get_sitemap_transient_name() {
 		$sitemap_revision = '5';
 		return $this->get_option( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
-	}
-
-	/**
-	 * Returns ld_json transients for page ID.
-	 *
-	 * @since 3.1.0
-	 * @since 3.1.1 : The first parameter is now optional.
-	 *
-	 * @param int|string|bool $id       The Taxonomy or Post ID. If false it will generate for the blog page.
-	 * @param string          $taxonomy The taxonomy name.
-	 * @param string|null     $type     The post type.
-	 * @return string The ld_json cache key.
-	 */
-	public function get_ld_json_transient_name( $id = 0, $taxonomy = '', $type = null ) {
-
-		if ( ! $this->get_option( 'cache_meta_schema' ) )
-			return '';
-
-		$cache_key = $this->generate_cache_key( $id, $taxonomy, $type );
-
-		$revision = '7';
-
-		/**
-		 * Change key based on options.
-		 */
-		$options  = $this->enable_ld_json_breadcrumbs() ? '1' : '0';
-		$options .= $this->enable_ld_json_searchbox() ? '1' : '0';
-
-		return 'tsf_' . $revision . '_' . $options . '_ldjs_' . $cache_key;
 	}
 
 	/**
@@ -894,29 +862,6 @@ class Cache extends Site_Options {
 		}
 
 		return $run = true;
-	}
-
-	/**
-	 * Deletes transient for the LD+Json scripts on requests.
-	 *
-	 * @since 2.4.2
-	 * @since 2.8.0 Now listens to option 'cache_meta_schema' before deleting transient.
-	 * @since 2.9.1 Now no longer sets object property $this->ld_json_transient.
-	 * @since 2.9.4 Removed cache.
-	 *
-	 * @param mixed       $page_id  The page ID or identifier.
-	 * @param string      $taxonomy The tt name.
-	 * @param string|null $type     The post type.
-	 * @return bool true
-	 */
-	public function delete_ld_json_transient( $page_id, $taxonomy = '', $type = null ) {
-
-		if ( $this->get_option( 'cache_meta_schema' ) ) {
-			$transient = $this->get_ld_json_transient_name( $page_id, $taxonomy, $type );
-			$transient and \delete_transient( $transient );
-		}
-
-		return true;
 	}
 
 	/**
