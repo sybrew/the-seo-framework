@@ -107,9 +107,11 @@ final class Images {
 	 * Generates image URLs and IDs from the content.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 1. Now strips tags before looking for images.
+	 *              2. Now only yields at most 5 images.
 	 * @generator
-	 * TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
-	 *      Combine query, instead of using WP API? Only do that for the first image, instead?
+	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
+	 *       Combine query, instead of using WP API? Only do that for the first image, instead?
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                         Leave null to autodetermine query.
@@ -139,6 +141,15 @@ final class Images {
 
 		// strlen( '<img src=a>' ) === 11; yes, that's a valid self-closing tag with a relative source.
 		if ( strlen( $content ) > 10 && false !== stripos( $content, '<img' ) ) {
+			$content = $tsf->strip_tags_cs(
+				$content,
+				[
+					'space' => [],
+					'clear' =>
+						[ 'address', 'aside', 'blockquote', 'dd', 'dl', 'dt', 'fieldset', 'figcaption', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'nav', 'ol', 'pre', 'table', 'tfoot', 'ul', 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
+					'strip' => false,
+				]
+			);
 			preg_match_all(
 				'/<img[^>]+src=(\"|\')?([^\"\'>\s]+)\1?.*?>/mi',
 				$content,
@@ -148,12 +159,22 @@ final class Images {
 		}
 
 		if ( $matches ) {
+			$i = 0;
 			foreach ( $matches as $match ) {
 				// Assume every URL to be correct? Yes. WordPress assumes that too.
+				$the_match = $match[2] ?: '';
+
+				// false-esque matches, like '0', are so uncommon it's not worth dealing with them.
+				if ( ! $the_match )
+					continue;
+
 				yield [
-					'url' => $match[2] ?: '',
+					'url' => $the_match,
 					'id'  => 0,
 				];
+
+				// Get no more than 5 images.
+				if ( ++$i > 4 ) break;
 			}
 		} else {
 			yield [

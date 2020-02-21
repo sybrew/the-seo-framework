@@ -917,6 +917,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0
 	 * @since 2.8.2 : 1. Added $allow_shortcodes parameter.
 	 *                2. Added $escape parameter.
+	 * @since 3.2.4 Now selectively clears tags.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -933,7 +934,7 @@ class Sanitize extends Admin_Pages {
 			'space' =>
 				[ 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'figcaption', 'figure', 'footer', 'li', 'main', 'ol', 'p', 'section', 'tfoot', 'ul' ],
 			'clear' =>
-				[ 'address', 'bdo', 'br', 'button', 'canvas', 'code', 'fieldset', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'var', 'video' ],
+				[ 'address', 'bdo', 'br', 'button', 'canvas', 'code', 'fieldset', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'var', 'video' ],
 		];
 
 		/**
@@ -1739,7 +1740,12 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 3.2.4
 	 * @since 4.0.0 Now allows emptying the indexes `space` and `clear`.
-	 * @link: https://www.w3schools.com/html/html_blocks.asp
+	 * @since 4.0.5 1. Added the `strip` argument index to the second parameter for clearing leftover tags.
+	 *              2. Now also clears `iframe` tags by default.
+	 *              3. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
+	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
+	 * @link https://www.w3schools.com/html/html_blocks.asp
+	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 	 *
 	 * @param string $input The input text that needs its tags stripped.
 	 * @param array  $args  The input arguments: {
@@ -1749,9 +1755,10 @@ class Sanitize extends Admin_Pages {
 	 *                         'clear'   : @param array|null HTML elements that should be emptied and replaced with a space.
 	 *                                                       If not set or null, skip check.
 	 *                                                       If empty array, skips stripping; otherwise, use input.
+	 *                         'strip'   : @param bool       If set, strip_tags() is performed before returning the output.
 	 *                      }
-	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization.
-	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`.
+	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization/quoting.
+	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`. (togglable via `$args['strip']`)
 	 *                            Also note that their contents are maintained as-is, without added spaces.
 	 *                            It is why you should always list `style` and `script` in the `clear` array.
 	 * @return string The output string without tags.
@@ -1762,8 +1769,11 @@ class Sanitize extends Admin_Pages {
 			'space' =>
 				[ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
 			'clear' =>
-				[ 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
+				[ 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video', 'iframe' ],
+			'strip' => true,
 		];
+
+		$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' ];
 
 		if ( ! $args ) {
 			$args = $default_args;
@@ -1777,20 +1787,34 @@ class Sanitize extends Admin_Pages {
 					}
 				}
 			}
+			$args['strip'] = isset( $args['strip'] ) ? $args['strip'] : $default_args['strip'];
 		}
 
 		// Clear first, so there's less to process; then add spaces.
 		foreach ( [ 'clear', 'space' ] as $type ) {
 			if ( empty( $args[ $type ] ) ) continue;
 
-			$_regex   = sprintf( '<(%s)[^>]*?>((.*?)(<\/\1>))?', implode( '|', $args[ $type ] ) );
+			// void = element without content.
+			$void_query = array_intersect( $args[ $type ], $void );
+			// fill = Normal, template, raw text, escapable text, foreign.
+			$fill_query = array_diff( $args[ $type ], $void );
+
 			$_replace = 'space' === $type ? ' $2 ' : ' ';
 
-			$input = preg_replace( "/$_regex/si", $_replace, $input );
+			$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $args[ $type ] ) );
+
+			if ( $void_query ) {
+				$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $void_query ) );
+				$input  = preg_replace( "/$_regex/si", $_replace, $input );
+			}
+			if ( $fill_query ) {
+				$_regex = sprintf( '<(%s)\b[^>]*?>(.*?<\/\1>)?', implode( '|', $fill_query ) );
+				$input  = preg_replace( "/$_regex/si", $_replace, $input );
+			}
 		}
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
-		return strip_tags( $input );
+		return $args['strip'] ? strip_tags( $input ) : $input;
 	}
 
 	/**
@@ -1798,6 +1822,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Now finds smaller images when they're over 4K.
+	 * @since 4.0.5 Now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
 	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
 	 *
 	 * @param array $details The image details, either associative (see $defaults) or sequential.
@@ -1829,6 +1854,22 @@ class Sanitize extends Admin_Pages {
 		$url = $this->s_url_relative_to_current_scheme( $url );
 
 		if ( ! $url ) return $defaults;
+
+		/**
+		 * Skip APNG, BMP, ICO, TIFF, and SVG.
+		 *
+		 * @link <https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/markup>
+		 * @link <https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types>
+		 * jp(e)g, png, webp, and gif are supported. Assume all non-matches to fall in those categories,
+		 * since we don't perform a live MIME-test.
+		 *
+		 * Tested with Facebook; they ignore them too. There's no documentation available.
+		 */
+		if ( in_array(
+			strtolower( strtok( pathinfo( $url, PATHINFO_EXTENSION ), '?' ) ),
+			[ 'apng', 'bmp', 'ico', 'cur', 'svg', 'tif', 'tiff' ],
+			true
+		) ) return $defaults;
 
 		$width  = (int) $width;
 		$height = (int) $height;

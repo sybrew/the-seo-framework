@@ -139,7 +139,7 @@ $robots_settings = [
 					<?php
 					esc_html_e( 'Remove the blog name?', 'autodescription' );
 					echo ' ';
-					$this->make_info( sprintf( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) ) );
+					$this->make_info( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) );
 					?>
 				</label>
 			</td>

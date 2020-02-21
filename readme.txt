@@ -235,18 +235,20 @@ We accidentally bombarded our website via our private [shortlink service](https:
 TODO this is too advanced, put it on the detailed log, not on w.org:
 With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was incoherent](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known Core-reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
 
-In this update, we [removed support for the "Connected Social Pages" feature](https://github.com/sybrew/the-seo-framework/issues/498). They have never proven to work, and they've been deprecated by Google. You won't be able to fill these fields in on new websites.
+In this update, we [removed support for the "Connected Social Pages" feature](https://github.com/sybrew/the-seo-framework/issues/498). They have never proven to work, and they've been deprecated by Google. You won't be able to fill these fields in on new websites. We also removed the transient caching for JSON-LD scripts, as it wasn't helping anyone.
+
+On the other hand, we added new feed, TODO Discord sharing (oEmbed, theme color), and advanced query protection options. Support for EDD and Polylang has been expanded, and we reintroduced the hyphen option for titles.
 
 A few other quality-of-life changes have been made, as well. Among adding new filters, streamlining the query handler, and fixing known corner-case bugs.
 
 TODO:
-1. Allow users to select social image resolution (or predefined size)
-2. Allow users to select feed indexing options (for Google Podcasts support)
+(dropped) ~~1. Allow users to select social image resolution (or predefined size)~~
+<!-- (DONE) 2. Allow users to select feed indexing options (for Google Podcasts support) -->
 3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
 <!-- (Done) 4. Add sitemap purger for polylang? Like we have for WPML?
 	* Not possible: Also add these endpoints to the robots.txt? -> difficult? -->
-5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
-	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] );
+<!-- (DONE) 5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
+	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] ); -->
 <!-- 6. (DONE) WordPress changed how do_robots() works in 5.3... where they no longer check for public. -->
 7. Convert is_blog_public()'s option call to a weak check?
 <!-- (Done) 8. See TODO at robots_txt(). -->
@@ -259,8 +261,7 @@ TODO:
 	- Override does work (only noindex is verified) -->
 <!-- (DONE) 14. Reintroduce the title additions example on the SEO Settings screen...
 	* The homepage example still works. -->
-15. Consider filtering svg images...
-	* TODO at least allow filtering of the image results... (we now only have a filter for the generator arguments)
+<!-- (DONE) 15. Consider filtering svg images... -->
 <!-- (DONE) 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this. -->
 <!-- (DONE) 17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example). -->
 18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
@@ -271,6 +272,7 @@ TODO:
 <!-- (Done) 20. Allow filtering of the robots.txt output.
 	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
 20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns)
+<!-- (DONE) 21. Allow filtering of the image results... (we now only have a filter for the generator arguments) -->
 
 TODO https://github.com/sybrew/the-seo-framework/issues/420
 	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
@@ -320,6 +322,11 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 		* N.B. Advanced Custom Fields overrides the metabox handler styling globally. So, that's a thing.
 	* Thanks to cleaning up leftover IE11 support, the Post SEO Settings header-navigation items can now have their text collapse vertically, as was initially intended.
 		* The collapsing now happens 4px before the text touches the icon (instead of 0px). Much neater.
+	* Before fetching images from the content, various tags are stripped. This prevents sharing tracking images from donation forms, for example.
+	* `.apng`, `.bmp`, `.ico`, `.cur`, `.svg`, `.tif`, and `.tiff` images are no longer taken from the page content for social sharing.
+	* Now, at most 5 images are taken from the content for social sharing.
+	* Sanitizing content for description generation is now more accurate and 10 to 1040 times faster. Yip yip yip.
+		* But parsing the images more accurately is slower. So that evened it out...
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
@@ -370,6 +377,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `cache_meta_schema`, this used to enable transient caching for Schema.org output.
 * **Filter notes:**
 	* **Added:**
+		* `the_seo_framework_image_details`
 		* `the_seo_framework_robots_txt`
 		* `the_seo_framework_enable_noindex_comment_pagination`
 		* `the_seo_framework_use_archive_prefix`
@@ -416,6 +424,13 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 				* `get_hierarchical_taxonomies_as()`
 				* `get_robots_meta_by_query()`
 				* `is_post_type_robots_set()`
+			* `strip_tags_cs()`:
+				1. Added the `strip` argument index to the second parameter for clearing leftover tags.
+				1. Now also clears `iframe` tags by default.
+				1. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
+				1. Now performs a separate query for void elements; to prevent regex recursion.
+			* `get_image_details()` the output is now filterable.
+			* `s_image_details()`, now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
 		* **Removed:**
 			* **Tip:** When you call a removed method in `the_seo_framework()` object, it'll return `null`.
 			* `get_ld_json_transient_name()`
@@ -425,6 +440,10 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 				* `is_wc_shop()`, use `is_shop()` instead.
 				* `is_wc_product()`, use `is_product()` instead.
 				* `is_wc_product_admin()`, use `is_product_admin()` instead.
+	* For object `\The_SEO_Framework\Builders\Images`:
+		* `get_content_image_details()`:
+			1. Now strips tags before looking for images.
+			1. Now only yields at most 5 images.
 * **Other:**
 	* Cleaned up code, like removing more legacy browser syntax.
 

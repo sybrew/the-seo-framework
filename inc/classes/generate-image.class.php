@@ -58,6 +58,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns image details.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 The output is now filterable.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.
@@ -87,7 +88,31 @@ class Generate_Image extends Generate_Url {
 			);
 		}
 
-		return $clean ? $this->s_image_details( $details ) : $details;
+		/**
+		 * @since 4.0.5
+		 * @param array      $details The image details array, sequential: int => {
+		 *    string url:    The image URL,
+		 *    int    id:     The image ID,
+		 *    int    width:  The image width in pixels,
+		 *    int    height: The image height in pixels,
+		 *    string alt:    The image alt tag,
+		 * }
+		 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+		 *                            Is null when query is autodetermined.
+		 * @param bool       $single  Whether to fetch one image, or multiple.
+		 * @param string     $context The filter context. Default 'social'.
+		 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_image_details',
+			[
+				$clean ? $this->s_image_details( $details ) : $details,
+				$args,
+				$single,
+				$context,
+				$clean,
+			]
+		);
 	}
 
 	/**
