@@ -1769,7 +1769,7 @@ class Sanitize extends Admin_Pages {
 			'space' =>
 				[ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
 			'clear' =>
-				[ 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video', 'iframe' ],
+				[ 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
 			'strip' => true,
 		];
 

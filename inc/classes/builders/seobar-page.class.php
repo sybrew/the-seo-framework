@@ -126,6 +126,7 @@ final class SeoBar_Page extends SeoBar {
 	 * Runs title tests.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 Added syntax test.
 	 *
 	 * @return array $item : {
 	 *    string  $symbol : The displayed symbol that identifies your bar.
@@ -162,11 +163,13 @@ final class SeoBar_Page extends SeoBar {
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],
 					'duplicated' => \__( 'The blog name is found multiple times.', 'autodescription' ),
+					'syntax'     => \__( "Markup syntax was found that won't be transformed. Consider replacing it with static input.", 'autodescription' ),
 				],
 				'reason'   => [
 					'incomplete' => \__( 'Incomplete.', 'autodescription' ),
 					'duplicated' => \__( 'The branding is duplicated.', 'autodescription' ),
 					'notbranded' => \__( 'Not branded.', 'autodescription' ),
+					'syntax'     => \__( 'Found markup syntax.', 'autodescription' ),
 				],
 				'defaults' => [
 					'generated' => [
@@ -209,6 +212,15 @@ final class SeoBar_Page extends SeoBar {
 				} else {
 					$item['assess']['homepage'] = \__( 'The title inputted at the Edit Page screen is used.', 'autodescription' );
 				}
+			}
+
+			if ( static::$tsf->has_yoast_syntax( $title_part ) ) {
+				$item['status']           = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+				$item['reason']           = $cache['reason']['syntax'];
+				$item['assess']['syntax'] = $cache['assess']['syntax'];
+
+				// Further assessments must be made later. Halt assertion here to prevent confusion.
+				return $item;
 			}
 		} else {
 			$item = $cache['defaults']['generated'];
@@ -334,9 +346,10 @@ final class SeoBar_Page extends SeoBar {
 	}
 
 	/**
-	 * Runs title tests.
+	 * Runs description tests.
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.5 Added syntax test.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -363,11 +376,13 @@ final class SeoBar_Page extends SeoBar {
 					'excerpt'   => \__( "It's built using the excerpt field.", 'autodescription' ),
 					/* translators: %s = list of duplicated words */
 					'dupes'     => \__( 'Found duplicated words: %s', 'autodescription' ),
+					'syntax'    => \__( "Markup syntax was found that won't be transformed. Consider replacing it with static input.", 'autodescription' ),
 				],
 				'reason'   => [
 					'empty'         => \__( 'Empty.', 'autodescription' ),
 					'founddupe'     => \__( 'Found duplicated words.', 'autodescription' ),
 					'foundmanydupe' => \__( 'Found too many duplicated words.', 'autodescription' ),
+					'syntax'        => \__( 'Found markup syntax.', 'autodescription' ),
 				],
 				'defaults' => [
 					'generated'   => [
@@ -419,6 +434,15 @@ final class SeoBar_Page extends SeoBar {
 				} else {
 					$item['assess']['homepage'] = \__( 'The description inputted at the Edit Page screen is used.', 'autodescription' );
 				}
+			}
+
+			if ( static::$tsf->has_yoast_syntax( $desc ) ) {
+				$item['status']           = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+				$item['reason']           = $cache['reason']['syntax'];
+				$item['assess']['syntax'] = $cache['assess']['syntax'];
+
+				// Further assessments must be made later. Halt assertion here to prevent confusion.
+				return $item;
 			}
 		} elseif ( ! static::$tsf->is_auto_description_enabled( $desc_args ) ) {
 			$item = $cache['defaults']['emptynoauto'];
@@ -529,7 +553,7 @@ final class SeoBar_Page extends SeoBar {
 	}
 
 	/**
-	 * Runs description tests.
+	 * Runs indexing tests.
 	 *
 	 * @since 4.0.0
 	 * @see test_title() for return value.

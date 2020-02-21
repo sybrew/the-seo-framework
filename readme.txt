@@ -274,34 +274,6 @@ TODO:
 20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns)
 <!-- (DONE) 21. Allow filtering of the image results... (we now only have a filter for the generator arguments) -->
 
-TODO https://github.com/sybrew/the-seo-framework/issues/420
-	We should look for the symbols that initiate the transformation, rather than looping over each possible tag...
-
-	```php
-	if ( false !== strpos( $title, '%%' ) ) { foreach(...); }
-	// vs
-	if ( preg_match( '/%%(title|date|parent_title|etc)%%/', $title, $matches ) ) { foreach( $matches as ... ); }
-	```
-
-	PROBABLY, in custom field (front-end!? rendering):
-
-	```php
-	if ( false !== strpos( $title, '%%' ) ) { $this->fix_yoast_tag( $title ); }
-	```
-
-	...
-	Can we automate this, so the next time the user saves, the title will be fixed??
-	That'd also automatically resolve the "verbose title" settings, which will be amazing.
-
-	```php
-	if (  preg_match( '/%%\W+%%/', $title, $matches ) ) {
-		// "A generator symbol was found in the title/description. This won't be transformed. Consider replacing it with static input."
-		// Red warning.
-		// Note that some users have implemented custom generators. Will we neglect them? Use blue warning instead?
-	}
-	```
-
-
 **For everyone:**
 
 * **Added:**
@@ -315,6 +287,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
 		* Your titles and descriptions will now have the hyphen preserved as entered, making the pixel counter more accurate.
 		* However, when more than one sequential hyphen is enter, it will still be texturized by WordPress.
+	* Title and description related SEO Bar tests for unsupported transformative syntax. Mainly detecting syntax from Yoast SEO and SEOPress; making your migration to the better plugin more managable.
+		* The test runs after your filters do. So, if you've added transformative syntax filters to the right hook, you shouldn't receive any SEO Bar related errors.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
@@ -395,6 +369,7 @@ TODO https://github.com/sybrew/the-seo-framework/issues/420
 			* `is_product()`
 			* `is_product_admin()`
 			* `s_hyphen()`
+			* `has_yoast_syntax()`
 		* **Changed:**
 			* `s_title_raw()` now normalizes hyphen entities.
 			* `s_description_raw()` now normalizes hyphen entities.

@@ -1214,4 +1214,32 @@ class Detect extends Render {
 
 		return $cache = ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' );
 	}
+
+	/**
+	 * Determines if the input text has transformative Yoast SEO syntax.
+	 *
+	 * @since 4.0.5
+	 * @link <https://yoast.com/help/list-available-snippet-variables-yoast-seo/>
+	 *
+	 * @param string $text The text to evaluate.
+	 * @return bool
+	 */
+	public function has_yoast_syntax( $text ) {
+
+		if ( false === strpos( $text, '%%' ) ) return false;
+
+		$tags_simple = [ 'date', 'title', 'parent_title', 'archive_title', 'sitename', 'sitedesc', 'excerpt', 'excerpt_only', 'tag', 'category', 'primary_category', 'category_description', 'tag_description', 'term_description', 'term_title', 'searchphrase', 'sep', 'pt_single', 'pt_plural', 'modified', 'id', 'name', 'user_description', 'page', 'pagetotal', 'pagenumber', 'caption', 'focuskw', 'term404', 'ct_product_cat', 'ct_product_tag', 'wc_shortdesc', 'wc_sku', 'wc_brand', 'wc_price' ];
+
+		$_regex = sprintf( '%%%s%%', implode( '|', $tags_simple ) );
+
+		if ( preg_match( "/$_regex/i", $text ) ) return true;
+
+		$tags_wildcard_end = [ 'cs_', 'ct_desc_', 'ct_pa_' ];
+
+		$_regex = sprintf( '%%(%s)[^\s]*?%%', implode( '|', $tags_wildcard_end ) );
+
+		if ( preg_match( "/$_regex/", $text ) ) return true;
+
+		return false;
+	}
 }
