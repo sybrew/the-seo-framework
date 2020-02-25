@@ -473,6 +473,7 @@ class Admin_Init extends Init {
 		if ( isset( $_POST['val'] ) ) {
 			$value = (int) $_POST['val'];
 		} else {
+			// TODO use get_default_user_data() value instead.
 			$value = $this->get_user_option( 0, 'counter_type', 3 ) + 1;
 		}
 		$value = \absint( $value );

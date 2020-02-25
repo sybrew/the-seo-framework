@@ -38,6 +38,8 @@ class User_Data extends Term_Data {
 	 * Returns default user meta.
 	 *
 	 * @since 3.0.0
+	 * @TODO add filter as with get_term_meta_defaults() and get_post_meta_defaults()
+	 *       (also define unfiltered values via a different function)
 	 *
 	 * @return array The default user meta index and values.
 	 */
@@ -99,6 +101,7 @@ class User_Data extends Term_Data {
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Always returns array, even if no value is assigned.
+	 * @TODO update to return default values as with `get_post_meta` and `get_term_meta`
 	 * @staticvar array $usermeta_cache
 	 *
 	 * @param int    $user_id   The user ID.

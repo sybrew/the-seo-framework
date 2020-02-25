@@ -250,7 +250,7 @@ TODO:
 <!-- (DONE) 5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
 	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] ); -->
 <!-- 6. (DONE) WordPress changed how do_robots() works in 5.3... where they no longer check for public. -->
-7. Convert is_blog_public()'s option call to a weak check?
+<!-- (DONE) 7. Convert is_blog_public()'s option call to a weak check? -->
 <!-- (Done) 8. See TODO at robots_txt(). -->
 <!-- 9. (DONE) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
 	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful. -->
@@ -264,11 +264,11 @@ TODO:
 <!-- (DONE) 15. Consider filtering svg images... -->
 <!-- (DONE) 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this. -->
 <!-- (DONE) 17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example). -->
-18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
+<!-- (DONE) 18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
 	* https://core.trac.wordpress.org/ticket/43949
 	* Inform Kris of change: https://wordpress.org/support/topic/noindex-a-page-via-php/
-	* Note that we have (had) LEGACY filters in place. We need to come up with new names.
-19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.
+	* Note that we have (had) LEGACY filters in place. We need to come up with new names. -->
+(dropped. Not possible due to caching) ~~19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.~~
 <!-- (Done) 20. Allow filtering of the robots.txt output.
 	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
 <!-- (DONE) 20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns) -->
@@ -367,6 +367,8 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 		* `the_seo_framework_set_noindex_header`
 		* `the_seo_framework_baidusite_output`
 		* `the_seo_framework_list_table_data`
+		* `the_seo_framework_term_meta`, this replaces the old, unstable, and since deprecated `the_seo_framework_current_term_meta` filter.
+		* `the_seo_framework_post_meta`
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_before_bulk_edit`
@@ -419,8 +421,9 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 				1. Now also clears `iframe` tags by default.
 				1. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
 				1. Now performs a separate query for void elements; to prevent regex recursion.
-			* `get_image_details()` the output is now filterable.
-			* `s_image_details()`, now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
+			* `get_image_details()`, its output is now filterable.
+			* `s_image_details()` now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
+			* `is_blog_public()` can now test for non-sanitized 'blog_public' option states. (probably a fault from WP&lt;3.0)
 		* **Removed:**
 			* **Tip:** When you call a removed method in `the_seo_framework()` object, it'll return `null`.
 			* `get_ld_json_transient_name()`

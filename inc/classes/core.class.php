@@ -347,21 +347,14 @@ class Core {
 	 * Checks if blog is public through WordPress core settings.
 	 *
 	 * @since 2.6.0
+	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool True is blog is public.
 	 */
 	public function is_blog_public() {
-
 		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		if ( '1' === \get_option( 'blog_public' ) )
-			return $cache = true;
-
-		return $cache = false;
+		return isset( $cache ) ? $cache : $cache = (bool) \get_option( 'blog_public' );
 	}
 
 	/**

@@ -122,7 +122,22 @@ class Post_Data extends Detect {
 			$meta[ $key ] = $value[0];
 		}
 
-		return $cache[ $post_id ] = array_merge( $defaults, $meta );
+		/**
+		 * @since 4.0.5
+		 * @note Do not delete/unset/add indexes! It'll cause errors.
+		 * @param array $meta    The current post meta.
+		 * @param int   $post_id The post ID.
+		 */
+		$meta = \apply_filters_ref_array(
+			'the_seo_framework_post_meta',
+			[
+				array_merge( $defaults, $meta ),
+				$post->ID,
+			]
+		);
+
+		// Cache using the input ID, otherwise invalid queries can bypass the cache.
+		return $cache[ $post_id ] = $meta;
 	}
 
 	/**

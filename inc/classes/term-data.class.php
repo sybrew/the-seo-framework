@@ -139,7 +139,7 @@ class Term_Data extends Post_Data {
 		static $has_deprecated_filter = null;
 		if ( null === $has_deprecated_filter && \has_filter( 'the_seo_framework_current_term_meta' ) ) {
 			$has_deprecated_filter = true;
-			$this->_deprecated_filter( 'the_seo_framework_current_term_meta', '4.0.0', 'get_term_metadata' );
+			$this->_deprecated_filter( 'the_seo_framework_current_term_meta', '4.0.0', 'the_seo_framework_term_meta' );
 		}
 
 		if ( $has_deprecated_filter && $meta ) {
@@ -166,7 +166,21 @@ class Term_Data extends Post_Data {
 			);
 		}
 
-		return $cache[ $term_id ] = array_merge( $defaults, $meta );
+		/**
+		 * @since 4.0.5
+		 * @note Do not delete/unset/add indexes! It'll cause errors.
+		 * @param array $meta    The current term meta.
+		 * @param int   $term_id The term ID.
+		 */
+		$meta = \apply_filters_ref_array(
+			'the_seo_framework_term_meta',
+			[
+				array_merge( $defaults, $meta ),
+				$term_id,
+			]
+		);
+
+		return $cache[ $term_id ] = $meta;
 	}
 
 	/**
