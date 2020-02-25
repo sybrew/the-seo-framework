@@ -36,6 +36,20 @@ $robots_settings = [
 
 ?>
 <div class=tsf-quick-edit-columns>
+	<?php
+	/**
+	 * @since 4.0.5
+	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
+	 * @param string $taxonomy  The current taxonomy type (if any).
+	 */
+	\do_action_ref_array(
+		'the_seo_framework_before_quick_edit',
+		[
+			$post_type,
+			$taxonomy,
+		]
+	);
+	?>
 	<fieldset class=inline-edit-col-left>
 		<legend class=inline-edit-legend><?php esc_html_e( 'Visibility SEO Settings', 'autodescription' ); ?></legend>
 		<div class=inline-edit-col>
@@ -78,4 +92,18 @@ $robots_settings = [
 			</div>
 		</div>
 	</fieldset>
+	<?php
+	/**
+	 * @since 4.0.5
+	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
+	 * @param string $post_type The current taxonomy type (if any).
+	 */
+	\do_action_ref_array(
+		'the_seo_framework_after_quick_edit',
+		[
+			$post_type,
+			$taxonomy,
+		]
+	);
+	?>
 </div>

@@ -271,7 +271,7 @@ TODO:
 19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.
 <!-- (Done) 20. Allow filtering of the robots.txt output.
 	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
-20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns)
+<!-- (DONE) 20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns) -->
 <!-- (DONE) 21. Allow filtering of the image results... (we now only have a filter for the generator arguments) -->
 
 TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/the-seo-framework/issues/469
@@ -342,6 +342,8 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 **For developers:**
 
 * **General changes:**
+	* It is now easier to add and customize columns for quick-and bulk edit.
+	* TODO You can now override the post and term metadata dynamically with filters.
 	* Added the `tsf-is-block-editor` class to the postbox class, specifying we're dealing with Gutenberg/Block-Editor.
 * **Option notes:**
 	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
@@ -364,6 +366,13 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 		* `the_seo_framework_is_product_admin`
 		* `the_seo_framework_set_noindex_header`
 		* `the_seo_framework_baidusite_output`
+		* `the_seo_framework_list_table_data`
+* **Action notes:**
+	* **Added:**
+		* `the_seo_framework_before_bulk_edit`
+		* `the_seo_framework_after_bulk_edit`
+		* `the_seo_framework_before_quick_edit`
+		* `the_seo_framework_after_quick_edit`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -422,9 +431,15 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 				* `is_wc_product()`, use `is_product()` instead.
 				* `is_wc_product_admin()`, use `is_product_admin()` instead.
 	* For object `\The_SEO_Framework\Builders\Images`:
-		* `get_content_image_details()`:
-			1. Now strips tags before looking for images.
-			1. Now only yields at most 5 images.
+		* **Changed:**
+			* `get_content_image_details()`:
+				1. Now strips tags before looking for images.
+				1. Now only yields at most 5 images.
+	* For object `\The_SEO_Framework\Bridges\ListTable`:
+		* **Added:**
+			* `get_ajax_dispatch_updated_event()`, add (term) or echo (post) this at the end of your AJAX column content to allow binding to the `document.addEventListener( 'tsfLeUpdated', cb );` event in JS.
+* **JS notes:**
+	* Action `tsfLeUpdated` is now dispatched on list edit events, even when no SEO Bar is showing.
 * **Other:**
 	* Cleaned up code, like removing more legacy browser syntax.
 

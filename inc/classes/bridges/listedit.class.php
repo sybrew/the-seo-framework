@@ -123,7 +123,7 @@ final class ListEdit extends ListTable {
 		if ( $taxonomy ) {
 			// Not yet.
 		} else {
-			\the_seo_framework()->get_view( 'list/bulk-post' );
+			\the_seo_framework()->get_view( 'list/bulk-post', get_defined_vars() );
 		}
 	}
 
@@ -142,9 +142,9 @@ final class ListEdit extends ListTable {
 		if ( $this->column_name !== $column_name ) return;
 
 		if ( $taxonomy ) {
-			\the_seo_framework()->get_view( 'list/quick-term' );
+			\the_seo_framework()->get_view( 'list/quick-term', get_defined_vars() );
 		} else {
-			\the_seo_framework()->get_view( 'list/quick-post' );
+			\the_seo_framework()->get_view( 'list/quick-post', get_defined_vars() );
 		}
 	}
 
@@ -180,21 +180,40 @@ final class ListEdit extends ListTable {
 				'value' => $meta['_genesis_canonical_uri'],
 			],
 			'noindex'   => [
-				'default' => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
-				'value'   => $meta['_genesis_noindex'],
+				'value'    => $meta['_genesis_noindex'],
+				'isSelect' => true,
+				'default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
 			],
 			'nofollow'  => [
-				'default' => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
-				'value'   => $meta['_genesis_nofollow'],
+				'value'    => $meta['_genesis_nofollow'],
+				'isSelect' => true,
+				'default'  => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
 			],
 			'noarchive' => [
-				'default' => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
-				'value'   => $meta['_genesis_noarchive'],
+				'value'    => $meta['_genesis_noarchive'],
+				'isSelect' => true,
+				'default'  => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
 			],
 			'redirect'  => [
 				'value' => $meta['redirect'],
 			],
 		];
+
+		/**
+		 * Tip: Prefix the indexes with your (plugin) name to prevent collisions.
+		 * The index corresponds to field with the ID `autodescription-quick[%s]`, where %s is the index.
+		 *
+		 * @since 4.0.5
+		 * @param array $data  The current data : {
+		 *    string Index => @param array : {
+		 *       @param mixed  $value    The current value.
+		 *       @param bool   $isSelect Optional. Whether the field is a select field.
+		 *       @param string $default  Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *    }
+		 * }
+		 * @param array $query The query data. Contains 'id' and 'taxonomy'.
+		 */
+		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $query ] );
 
 		printf(
 			'<span class=hidden id=%s data-le="%s"></span>',
@@ -202,6 +221,9 @@ final class ListEdit extends ListTable {
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- esc_attr is too aggressive.
 			htmlspecialchars( json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT ), ENT_QUOTES, 'UTF-8' )
 		);
+
+		if ( $this->doing_ajax )
+			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore, WordPress.Security.EscapeOutput
 	}
 
 	/**
@@ -226,11 +248,13 @@ final class ListEdit extends ListTable {
 
 		$tsf = \the_seo_framework();
 
+		$query = [
+			'id'       => $term_id,
+			'taxonomy' => $this->taxonomy,
+		];
+
 		$r_defaults = $tsf->robots_meta(
-			[
-				'id'       => $term_id,
-				'taxonomy' => $this->taxonomy,
-			],
+			$query,
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
 		);
 
@@ -242,27 +266,49 @@ final class ListEdit extends ListTable {
 				'value' => $meta['canonical'],
 			],
 			'noindex'   => [
-				'default' => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
-				'value'   => $meta['noindex'],
+				'value'    => $meta['noindex'],
+				'isSelect' => true,
+				'default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
 			],
 			'nofollow'  => [
-				'default' => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
-				'value'   => $meta['nofollow'],
+				'value'    => $meta['nofollow'],
+				'isSelect' => true,
+				'default'  => empty( $r_defaults['nofollow'] ) ? 'follow' : 'nofollow',
 			],
 			'noarchive' => [
-				'default' => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
-				'value'   => $meta['noarchive'],
+				'value'    => $meta['noarchive'],
+				'isSelect' => true,
+				'default'  => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
 			],
 			'redirect'  => [
 				'value' => $meta['redirect'],
 			],
 		];
 
+		/**
+		 * Tip: Prefix the indexes with your (plugin) name to prevent collisions.
+		 * The index corresponds to field with the ID `autodescription-quick[%s]`, where %s is the index.
+		 *
+		 * @since 4.0.5
+		 * @param array $data  The current data : {
+		 *    string Index => @param array : {
+		 *       @param mixed  $value    The current value.
+		 *       @param bool   $isSelect Optional. Whether the field is a select field.
+		 *       @param string $default  Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *    }
+		 * }
+		 * @param array $query The query data. Contains 'id' and 'taxonomy'.
+		 */
+		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $query ] );
+
 		$container = sprintf(
 			'<span class=hidden id=%s data-le="%s"></span>',
 			sprintf( 'tsfLeData[%s]', (int) $term_id ),
 			htmlspecialchars( json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT ), ENT_QUOTES, 'UTF-8' )
 		);
+
+		if ( $this->doing_ajax )
+			$container .= $this->get_ajax_dispatch_updated_event();
 
 		return $string . $container;
 	}

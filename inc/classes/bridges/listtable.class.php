@@ -247,6 +247,23 @@ abstract class ListTable {
 	}
 
 	/**
+	 * Returns a JS script that triggers list updates.
+	 * This is a necessity as WordPress doesn't trigger actions on update.
+	 *
+	 * TODO bind to WordPress' function instead? Didn't we already do that?!
+	 * See: `tsfLe._hijackListeners()`; Although, that doesn't cover "adding" new items.
+	 *
+	 * @since 4.0.5
+	 * @NOTE: Do not bind to `tsfLeDispatchUpdate`, it's a private action.
+	 *        Bind to `tsfLeUpdated` instead, which is debounced and should only run once.
+	 *
+	 * @return string The triggering script.
+	 */
+	protected function get_ajax_dispatch_updated_event() {
+		return "<script>'use strict';(()=>document.dispatchEvent(new Event('tsfLeDispatchUpdate')))();</script>";
+	}
+
+	/**
 	 * Add column on edit(-tags).php
 	 *
 	 * @since 4.0.0
