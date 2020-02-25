@@ -929,6 +929,34 @@ class Render extends Admin_Init {
 	}
 
 	/**
+	 * Renders Baidu Site Verification code meta tag.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @return string The Baidu Site Verification code meta tag.
+	 */
+	public function baidu_site_output() {
+
+		/**
+		 * @since 4.0.5
+		 * @param string $code The Baidu verification code.
+		 * @param int    $id   The current post or term ID.
+		 */
+		$code = (string) \apply_filters_ref_array(
+			'the_seo_framework_baidusite_output',
+			[
+				$this->get_option( 'baidu_verification' ),
+				$this->get_the_real_ID(),
+			]
+		);
+
+		if ( $code )
+			return '<meta name="baidu-site-verification" content="' . \esc_attr( $code ) . '" />' . PHP_EOL;
+
+		return '';
+	}
+
+	/**
 	 * Renders Pinterest Site Verification code meta tag.
 	 *
 	 * @since 2.5.2

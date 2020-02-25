@@ -373,6 +373,7 @@ class Sanitize extends Admin_Pages {
 				'google_verification',
 				'bing_verification',
 				'yandex_verification',
+				'baidu_verification',
 				'pint_verification',
 			]
 		);

@@ -420,11 +420,13 @@ class Init extends Query {
 					. $this->google_site_output()
 					. $this->bing_site_output()
 					. $this->yandex_site_output()
+					. $this->baidu_site_output()
 					. $this->pint_site_output();
 		elseif ( $this->is_404() ) :
 			$output = $this->google_site_output()
 					. $this->bing_site_output()
 					. $this->yandex_site_output()
+					. $this->baidu_site_output()
 					. $this->pint_site_output();
 		elseif ( $this->is_query_exploited() ) :
 			// aqp = advanced query protection
@@ -456,6 +458,7 @@ class Init extends Query {
 					. $this->google_site_output()
 					. $this->bing_site_output()
 					. $this->yandex_site_output()
+					. $this->baidu_site_output()
 					. $this->pint_site_output();
 		endif;
 

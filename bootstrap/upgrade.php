@@ -595,7 +595,7 @@ function _do_upgrade_3300() {
 
 /**
  * Registers the advanced_query_protection option. 0 for existing sites. 1 for new sites.
- * Registers the index_the_feed option for existing sites. New sites will have it registered already.
+ * Registers the `index_the_feed` and `baidu_verification` options for existing sites. New sites will have it registered already.
  *
  * @since 4.0.5
  */
@@ -604,6 +604,7 @@ function _do_upgrade_4050() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4050' ) {
 		\the_seo_framework()->update_option( 'advanced_query_protection', 0 );
 		\the_seo_framework()->update_option( 'index_the_feed', 0 );
+		\the_seo_framework()->update_option( 'baidu_verification', '' );
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '4050' );

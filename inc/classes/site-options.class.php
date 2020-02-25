@@ -210,6 +210,7 @@ class Site_Options extends Sanitize {
 				'google_verification' => '', // Google Verification Code
 				'bing_verification'   => '', // Bing Verification Code
 				'yandex_verification' => '', // Yandex Verification Code
+				'baidu_verification'  => '', // Baidu Verification Code
 				'pint_verification'   => '', // Pinterest Verification Code
 
 				// Knowledge general. https://developers.google.com/structured-data/customize/contact-points - This is extremely extended and valuable. Expect a premium version.

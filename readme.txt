@@ -244,7 +244,7 @@ A few other quality-of-life changes have been made, as well. Among adding new fi
 TODO:
 (dropped) ~~1. Allow users to select social image resolution (or predefined size)~~
 <!-- (DONE) 2. Allow users to select feed indexing options (for Google Podcasts support) -->
-3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd)
+<!-- (DONE) 3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd) -->
 <!-- (Done) 4. Add sitemap purger for polylang? Like we have for WPML?
 	* Not possible: Also add these endpoints to the robots.txt? -> difficult? -->
 <!-- (DONE) 5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
@@ -274,6 +274,8 @@ TODO:
 20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns)
 <!-- (DONE) 21. Allow filtering of the image results... (we now only have a filter for the generator arguments) -->
 
+TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/the-seo-framework/issues/469
+
 **For everyone:**
 
 * **Added:**
@@ -287,8 +289,9 @@ TODO:
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
 		* Your titles and descriptions will now have the hyphen preserved as entered, making the pixel counter more accurate.
 		* However, when more than one sequential hyphen is enter, it will still be texturized by WordPress.
-	* Title and description related SEO Bar tests for unsupported transformative syntax. Mainly detecting syntax from Yoast SEO and SEOPress; making your migration to the better plugin more managable.
+	* Title and description related SEO Bar tests for unsupported transformative syntax. Mainly detecting syntax from Yoast SEO and SEOPress, making your migration to the better plugin more manageable.
 		* The test runs after your filters do. So, if you've added transformative syntax filters to the right hook, you shouldn't receive any SEO Bar related errors.
+	* You can now register your Baidu webmasters verification code.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
@@ -345,6 +348,7 @@ TODO:
 		* **Added:**
 			* `advanced_query_protection`, either `1` or `0`.
 			* `index_the_feed`, either `1` or `0`.
+			* `baidu_verification`, string.
 		* **Changed:**
 			* `title_separator` default value is changed from `pipe` to `hyphen`.
 		* **Removed:**
@@ -359,6 +363,7 @@ TODO:
 		* `the_seo_framework_is_product`
 		* `the_seo_framework_is_product_admin`
 		* `the_seo_framework_set_noindex_header`
+		* `the_seo_framework_baidusite_output`
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -370,6 +375,7 @@ TODO:
 			* `is_product_admin()`
 			* `s_hyphen()`
 			* `has_yoast_syntax()`
+			* `baidu_site_output()`
 		* **Changed:**
 			* `s_title_raw()` now normalizes hyphen entities.
 			* `s_description_raw()` now normalizes hyphen entities.

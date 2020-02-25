@@ -20,6 +20,60 @@ switch ( $instance ) :
 		$pint_site_url   = 'https://analytics.pinterest.com/';
 		$yandex_site_url = 'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url );
 
+		$settings = [
+			'google'   => [
+				'setting'     => 'google_verification',
+				'label'       => __( 'Google Search Console Verification Code', 'autodescription' ),
+				'info'        => $this->make_info(
+					__( 'Get the Google verification code.', 'autodescription' ),
+					'https://www.google.com/webmasters/verification/verification?siteUrl=' . rawurlencode( $site_url ) . '&tid=alternate&vtype=vmeta',
+					false
+				),
+				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
+			],
+			'bing'     => [
+				'setting'     => 'bing_verification',
+				'label'       => __( 'Bing Webmaster Verification Code', 'autodescription' ),
+				'info'        => $this->make_info(
+					__( 'Get the Bing verification code.', 'autodescription' ),
+					'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url ),
+					false
+				),
+				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
+			],
+			'yandex'   => [
+				'setting'     => 'yandex_verification',
+				'label'       => __( 'Yandex Webmaster Verification Code', 'autodescription' ),
+				'info'        => $this->make_info(
+					__( 'Get the Yandex verification code.', 'autodescription' ),
+					'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url ),
+					false
+				),
+				'placeholder' => '12345abc678901d2',
+			],
+			'baidu'    => [
+				'setting'     => 'baidu_verification',
+				/* translators: literal translation from '百度搜索资源平台'-Code */
+				'label'       => __( 'Baidu Search Resource Platform Code', 'autodescription' ),
+				'info'        => $this->make_info(
+					__( 'Get the Baidu verification code.', 'autodescription' ),
+					'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
+					false
+				),
+				'placeholder' => 'a12bcDEFGh',
+			],
+			'pinterest' => [
+				'setting'     => 'pint_verification',
+				'label'       => __( 'Pinterest Analytics Verification Code', 'autodescription' ),
+				'info'        => $this->make_info(
+					__( 'Get the Pinterest verification code.', 'autodescription' ),
+					'https://analytics.pinterest.com/',
+					false
+				),
+				'placeholder' => '123456a7b8901de2fa34bcdef5a67b98',
+			],
+		];
+
 		?>
 		<h4><?php esc_html_e( 'Webmaster Integration Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -28,67 +82,27 @@ switch ( $instance ) :
 
 		?>
 		<hr>
-
-		<p>
-			<label for="<?php $this->field_id( 'google_verification' ); ?>">
-				<strong><?php esc_html_e( 'Google Search Console Verification Code', 'autodescription' ); ?></strong>
-			</label>
-			<?php
-			$this->make_info(
-				__( 'Get the Google verification code.', 'autodescription' ),
-				$google_site_url
-			);
-			?>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'google_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'google_verification' ); ?>" placeholder="ABC1d2eFg34H5iJ6klmNOp7qRstUvWXyZaBc8dEfG9" value="<?php echo esc_attr( $this->get_option( 'google_verification' ) ); ?>" />
-		</p>
-
-		<p>
-			<label for="<?php $this->field_id( 'bing_verification' ); ?>">
-				<strong><?php esc_html_e( 'Bing Webmaster Verification Code', 'autodescription' ); ?></strong>
-			</label>
-			<?php
-			$this->make_info(
-				__( 'Get the Bing verification code.', 'autodescription' ),
-				$bing_site_url
-			);
-			?>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'bing_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'bing_verification' ); ?>" placeholder="123A456B78901C2D3456E7890F1A234D" value="<?php echo esc_attr( $this->get_option( 'bing_verification' ) ); ?>" />
-		</p>
-
-		<p>
-			<label for="<?php $this->field_id( 'yandex_verification' ); ?>">
-				<strong><?php esc_html_e( 'Yandex Webmaster Verification Code', 'autodescription' ); ?></strong>
-			</label>
-			<?php
-			$this->make_info(
-				__( 'Get the Yandex verification code.', 'autodescription' ),
-				$yandex_site_url
-			);
-			?>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'yandex_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'yandex_verification' ); ?>" placeholder="12345abc678901d2" value="<?php echo esc_attr( $this->get_option( 'yandex_verification' ) ); ?>" />
-		</p>
-
-		<p>
-			<label for="<?php $this->field_id( 'pint_verification' ); ?>">
-				<strong><?php esc_html_e( 'Pinterest Analytics Verification Code', 'autodescription' ); ?></strong>
-			</label>
-			<?php
-			$this->make_info(
-				__( 'Get the Pinterest verification code.', 'autodescription' ),
-				$pint_site_url
-			);
-			?>
-		</p>
-		<p>
-			<input type="text" name="<?php $this->field_name( 'pint_verification' ); ?>" class="large-text ltr" id="<?php $this->field_id( 'pint_verification' ); ?>" placeholder="123456a7b8901de2fa34bcdef5a67b98" value="<?php echo esc_attr( $this->get_option( 'pint_verification' ) ); ?>" />
-		</p>
 		<?php
+		foreach ( $settings as $key => $setting ) :
+			vprintf(
+				'<p><label for=%s><strong>%s</strong> %s</p>',
+				[
+					esc_attr( $this->get_field_id( $setting['setting'] ) ),
+					esc_html( $setting['label'] ),
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
+					$setting['info'],
+				]
+			);
+			vprintf(
+				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s" /></p>',
+				[
+					esc_attr( $this->get_field_name( $setting['setting'] ) ),
+					esc_attr( $this->get_field_id( $setting['setting'] ) ),
+					esc_attr( $setting['placeholder'] ),
+					esc_attr( $this->get_option( $setting['setting'] ) ),
+				]
+			);
+		endforeach;
 		break;
 
 	default:

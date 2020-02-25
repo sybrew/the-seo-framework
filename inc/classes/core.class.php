@@ -213,15 +213,17 @@ class Core {
 	 */
 	public function _add_plugin_action_links( $links = [] ) {
 
-		if ( $this->load_options )
+		if ( $this->load_options ) {
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
 				\esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ),
 				\esc_html__( 'Settings', 'autodescription' )
 			);
+		}
 
 		$tsf_links['about'] = sprintf(
-			'<a href="https://theseoframework.com/about-us/" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
+			'https://theseoframework.com/about-us/',
 			\esc_html_x( 'About', 'About us', 'autodescription' )
 		);
 		$tsf_links['tsfem'] = sprintf(
