@@ -658,9 +658,11 @@ class Admin_Pages extends Profile {
 	 * Returns a chechbox wrapper.
 	 *
 	 * @since 3.1.0
+	 * @since 4.0.5 You can now supply an extra class for the checkbox.
 	 *
 	 * @param array $args : {
 	 *    string $id          The option name, used as field ID.
+	 *    string $class       The checkbox class.
 	 *    string $index       The option index, used when the option is an array.
 	 *    string $label       The checkbox label description, placed inline of the checkbox.
 	 *    string $description The checkbox additional description, placed underneat.
@@ -676,6 +678,7 @@ class Admin_Pages extends Profile {
 		$args = array_merge(
 			[
 				'id'          => '',
+				'class'       => '',
 				'index'       => '',
 				'label'       => '',
 				'description' => '',
@@ -705,17 +708,22 @@ class Admin_Pages extends Profile {
 			$value = isset( $value[ $index ] ) ? $value[ $index ] : '';
 		}
 
-		$cb_class = '';
+		$cb_classes = [];
+
+		if ( $args['class'] ) {
+			$cb_classes[] = $args['class'];
+		}
+
 		if ( $args['disabled'] ) {
-			$cb_class = 'tsf-disabled';
+			$cb_classes[] = 'tsf-disabled';
 		} elseif ( ! $args['index'] ) {
 			// Can't fetch conditionals in index.
-			$cb_class = $this->get_is_conditional_checked( $args['id'], false );
+			$cb_classes[] = $this->get_is_conditional_checked( $args['id'], false );
 		} else {
 			if ( $args['default'] ) {
-				$cb_class = 'tsf-default-selected';
+				$cb_classes[] = 'tsf-default-selected';
 			} elseif ( $args['warned'] ) {
-				$cb_class = 'tsf-warning-selected';
+				$cb_classes[] = 'tsf-warning-selected';
 			}
 		}
 
@@ -729,7 +737,7 @@ class Admin_Pages extends Profile {
 					vsprintf(
 						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s /> %s',
 						[
-							$cb_class,
+							esc_attr( implode( ' ', $cb_classes ) ),
 							$field_name,
 							$field_id,
 							\checked( $value, true, false ),

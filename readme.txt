@@ -275,6 +275,10 @@ TODO:
 <!-- (DONE) 21. Allow filtering of the image results... (we now only have a filter for the generator arguments) -->
 
 TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/the-seo-framework/issues/469
+TODO the visibility settings no longer have discerning borders. Add a css sub group to add them back?
+TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect well on us.
+	- The top-spacing should still be fixed (and it the bottom-spacing is not even with the top now), and we might want to revert gutenberg-specific changes?
+	- The sidebar box width is still broken, I thought they had fixed that? https://github.com/WordPress/gutenberg/issues/20206
 
 **For everyone:**
 
@@ -304,6 +308,8 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 	* Now, at most 5 images are taken from the content for social sharing.
 	* Sanitizing content for description generation is now more accurate and 10 to 1040 times faster. Yip yip yip.
 		* But parsing the images more accurately is slower. So that evened it out...
+	* Added a warning to the General Post Types settings, since the meaning of these settings wasn't clear enough.
+	* Added a notification to the robots Post Type directive settings when a post type is disabled. The corresponding checkbox is also disabled, to strengthen the significance of the conflict.
 * **Changed:**
 	* The default sitemap colors are no longer dark/green, but WordPress colored (darker/blue), instead.
 	* The "maximum image preview size" copyright directive bug has been fixed by Google. Therefore, the restrictions and warnings have been lifted.
@@ -343,8 +349,9 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 
 * **General changes:**
 	* It is now easier to add and customize columns for quick-and bulk edit.
-	* TODO You can now override the post and term metadata dynamically with filters.
+	* You can now override the post and term metadata dynamically with filters.
 	* Added the `tsf-is-block-editor` class to the postbox class, specifying we're dealing with Gutenberg/Block-Editor.
+	* The `wp-util` script is now requested when required, instead of us expecting it to be loaded.
 * **Option notes:**
 	* Under `THE_SEO_FRAMEWORK_SITE_OPTIONS`:
 		* **Added:**
@@ -424,6 +431,7 @@ TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/th
 			* `get_image_details()`, its output is now filterable.
 			* `s_image_details()` now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
 			* `is_blog_public()` can now test for non-sanitized 'blog_public' option states. (probably a fault from WP&lt;3.0)
+			* `make_checkbox_array()` you can now supply an extra class for the checkbox.
 		* **Removed:**
 			* **Tip:** When you call a removed method in `the_seo_framework()` object, it'll return `null`.
 			* `get_ld_json_transient_name()`

@@ -506,7 +506,7 @@ class Admin_Init extends Init {
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$this->_check_tsf_ajax_referer( 'edit_posts' );
 
-		// CLear output buffer.
+		// Clear output buffer.
 		$this->clean_response_header();
 
 		$post_id = \absint( $_POST['post_id'] );
@@ -601,6 +601,8 @@ class Admin_Init extends Init {
 			'data'      => $data,
 			'processed' => $get,
 		] );
+
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -621,7 +623,6 @@ class Admin_Init extends Init {
 	 */
 	public function _wp_ajax_crop_image() {
 
-		// This checks the nonce, re:to all 'WordPress.Security.NonceVerification' below
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
 		$this->_check_tsf_ajax_referer( 'upload_files' );
 

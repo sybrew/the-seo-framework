@@ -404,7 +404,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-settings',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf', 'tsf-tt', 'wp-color-picker' ],
+				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf', 'tsf-tt', 'wp-color-picker', 'wp-util' ],
 				'autoload' => true,
 				'name'     => 'settings',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -424,6 +424,9 @@ final class Scripts {
 							'isFrontProtected' => $front_id && $tsf->is_password_protected( $front_id ),
 						],
 					],
+				],
+				'tmpl'     => [
+					'file' => $tsf->get_view_location( 'templates/settings/settings' ),
 				],
 			],
 			[
@@ -923,13 +926,13 @@ final class Scripts {
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',
 			];
-			$deps = [ 'jquery', 'tsf', 'tsf-post', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react' ];
+			$deps = [ 'jquery', 'tsf', 'tsf-post', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react', 'wp-util' ];
 		} else {
 			$vars = [
 				'id'   => 'tsf-pt',
 				'name' => 'pt',
 			];
-			$deps = [ 'jquery', 'tsf', 'tsf-post', 'tsf-tt' ];
+			$deps = [ 'jquery', 'tsf', 'tsf-post', 'tsf-tt', 'wp-util' ];
 		}
 
 		return [

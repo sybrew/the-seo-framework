@@ -427,6 +427,7 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Disable SEO', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Select post types which should not receive any SEO optimization whatsoever. This will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types.', 'autodescription' ) );
+		$this->attention_description( __( 'Disabling SEO allows search engines to crawl the post type without restrictions or direction.', 'autodescription' ) );
 		$this->description( __( 'These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 		$this->description( __( 'Default post types can not be disabled.', 'autodescription' ) );
 
@@ -445,6 +446,7 @@ switch ( $instance ) :
 
 			$boxes[] = $this->make_checkbox_array( [
 				'id'       => 'disabled_post_types',
+				'class'    => 'tsf-disabled-post-types',
 				'index'    => $post_type,
 				'label'    => $_label,
 				'escape'   => false,
