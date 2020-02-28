@@ -60,7 +60,7 @@ switch ( $instance ) :
 					'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
 					false
 				),
-				'placeholder' => 'a12bcDEFGh',
+				'placeholder' => 'a12bcDEFGa',
 			],
 			'pinterest' => [
 				'setting'     => 'pint_verification',
@@ -70,7 +70,7 @@ switch ( $instance ) :
 					'https://analytics.pinterest.com/',
 					false
 				),
-				'placeholder' => '123456a7b8901de2fa34bcdef5a67b98',
+				'placeholder' => '123456a7b8901de2fa34bcdef5a67b90',
 			],
 		];
 

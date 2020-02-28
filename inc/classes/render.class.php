@@ -577,6 +577,25 @@ class Render extends Admin_Init {
 	}
 
 	/**
+	 * Renders Theme Color meta tag.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @return string The Theme Color meta tag.
+	 */
+	public function theme_color() {
+
+		$theme_color = $this->get_option( 'theme_color' );
+
+		$output = '';
+
+		if ( $theme_color )
+			$output = '<meta name="theme-color" content="' . \esc_attr( $theme_color ) . '" />' . "\r\n";
+
+		return $output;
+	}
+
+	/**
 	 * Renders Facebook Author meta tag.
 	 *
 	 * @since 2.2.2

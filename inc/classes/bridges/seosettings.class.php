@@ -572,6 +572,17 @@ final class SeoSettings {
 	}
 
 	/**
+	 * Social Metabox oEmbed Tab output.
+	 *
+	 * @since 4.0.5
+	 * @access private
+	 * @see static::social_metabox() Callback for Social Settings box.
+	 */
+	public static function _social_metabox_oembed_tab() {
+		\the_seo_framework()->get_view( 'admin/metaboxes/social-metabox', [], 'oembed' );
+	}
+
+	/**
 	 * Social Metabox PostDates Tab output.
 	 *
 	 * @since 4.0.0

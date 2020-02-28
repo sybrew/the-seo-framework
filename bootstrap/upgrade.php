@@ -177,9 +177,9 @@ function _do_upgrade() {
 		$version = '3300';
 	}
 
-	if ( $version < '4050' ) {
-		_do_upgrade_4050();
-		$version = '4050';
+	if ( $version < '4051' ) {
+		_do_upgrade_4051();
+		$version = '4051';
 	}
 
 	/**
@@ -599,13 +599,18 @@ function _do_upgrade_3300() {
  *
  * @since 4.0.5
  */
-function _do_upgrade_4050() {
+function _do_upgrade_4051() {
 
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4050' ) {
-		\the_seo_framework()->update_option( 'advanced_query_protection', 0 );
-		\the_seo_framework()->update_option( 'index_the_feed', 0 );
-		\the_seo_framework()->update_option( 'baidu_verification', '' );
+	$tsf = \the_seo_framework();
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
+		$tsf->update_option( 'advanced_query_protection', 0 );
+		$tsf->update_option( 'index_the_feed', 0 );
+		$tsf->update_option( 'baidu_verification', '' );
+		$tsf->update_option( 'oembed_scripts', 1 );
+		$tsf->update_option( 'oembed_remove_author', 0 );
+		$tsf->update_option( 'theme_color', '' );
 	}
 
-	\update_option( 'the_seo_framework_upgraded_db_version', '4050' );
+	\update_option( 'the_seo_framework_upgraded_db_version', '4051' );
 }

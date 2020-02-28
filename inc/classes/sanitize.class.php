@@ -291,9 +291,12 @@ class Sanitize extends Admin_Pages {
 				'prev_next_archives',
 				'prev_next_frontpage',
 
+				'oembed_remove_author',
+
 				'og_tags',
 				'facebook_tags',
 				'twitter_tags',
+				'oembed_scripts',
 
 				'multi_og_image',
 
@@ -444,6 +447,7 @@ class Sanitize extends Admin_Pages {
 			[
 				'sitemap_color_main',
 				'sitemap_color_accent',
+				'theme_color',
 			]
 		);
 

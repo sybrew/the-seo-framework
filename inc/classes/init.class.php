@@ -298,6 +298,18 @@ class Init extends Query {
 			// Future, maybe. See <https://github.com/Automattic/jetpack/issues/13146#issuecomment-516841698>
 			// \add_filter( 'jetpack_enable_twitter_cards', '__return_false' );
 		}
+
+		if ( ! $this->get_option( 'oembed_scripts' ) ) {
+			// Only hide the scripts, don't permeably purge them. That should be enough.
+			\remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+		}
+		// We only allow changing the author embed for now. Therefore, this check is here.
+		// Also run this independently of `oembed_scripts`, to alleviate confusion.
+		if ( $this->get_option( 'oembed_remove_author' ) ) {
+			// WordPress also filters this at priority '10', but it's registered before this runs.
+			// Careful, WordPress can switch blogs when this filter runs...!
+			\add_filter( 'oembed_response_data', [ $this, '_alter_oembed_response_data' ], 10, 4 );
+		}
 	}
 
 	/**
@@ -414,6 +426,7 @@ class Init extends Query {
 					. $this->og_title()
 					. $this->og_url()
 					. $this->og_sitename()
+					. $this->theme_color()
 					. $this->shortlink()
 					. $this->canonical()
 					. $this->paged_urls()
@@ -423,7 +436,8 @@ class Init extends Query {
 					. $this->baidu_site_output()
 					. $this->pint_site_output();
 		elseif ( $this->is_404() ) :
-			$output = $this->google_site_output()
+			$output = $this->theme_color()
+					. $this->google_site_output()
 					. $this->bing_site_output()
 					. $this->yandex_site_output()
 					. $this->baidu_site_output()
@@ -451,6 +465,7 @@ class Init extends Query {
 					. $this->twitter_title()
 					. $this->twitter_description()
 					. $this->twitter_image()
+					. $this->theme_color()
 					. $this->shortlink()
 					. $this->canonical()
 					. $this->paged_urls()
@@ -910,5 +925,30 @@ class Init extends Query {
 			$blocked = $this->is_post_type_disabled( $wp_query->query_vars->post_type );
 
 		return $blocked;
+	}
+
+	/**
+	 * Alters the oEmbed response data.
+	 *
+	 * @WARNING: WordPress can switch blogs as this filter runs. So, check all options again, without cache!
+	 *           This should only happen at `/oembed/1.0/proxy`.
+	 * @TODO consider adding the (optional(ly)) thumbnail_url data?
+	 * @since 4.0.5
+	 * @access private
+	 *
+	 * @param array   $data   The response data.
+	 * @param WP_Post $post   The post object.
+	 * @param int     $width  The requested width.
+	 * @param int     $height The calculated height.
+	 * @return array Possibly altered $data.
+	 */
+	public function _alter_oembed_response_data( $data = [], $post = null, $width = 0, $height = 0 ) {
+
+		// Don't use cache. See @WARNING in doc comment.
+		if ( $this->get_option( 'oembed_remove_author', false ) ) {
+			unset( $data['author_url'], $data['author_name'] );
+		}
+
+		return $data;
 	}
 }

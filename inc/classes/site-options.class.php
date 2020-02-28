@@ -194,17 +194,24 @@ class Site_Options extends Sanitize {
 				'twitter_site'    => '', // Twitter business @username
 				'twitter_creator' => '', // Twitter user @username
 
+				// oEmbed.
+				'oembed_remove_author' => 0, // Remove author from oEmbeds
+
 				// Social on/off.
 				'og_tags'         => 1, // Output of Open Graph meta tags
 				'facebook_tags'   => 1, // Output the Facebook meta tags
 				'twitter_tags'    => 1, // Output the Twitter meta tags
+				'oembed_scripts'  => 1, // Enable WordPress's oEmbed scripts
 
 				// Social image settings.
-				'multi_og_image'  => 1,
+				'multi_og_image' => 1, // Allow multiple images to be generated
+
+				// Theme color settings
+				'theme_color' => '', // Theme color metatag, default none
 
 				// Social FallBack images (fb = fallback)
-				'social_image_fb_url'   => '', // Fallback image URL
-				'social_image_fb_id'    => 0, // Fallback image ID
+				'social_image_fb_url' => '', // Fallback image URL
+				'social_image_fb_id'  => 0,  // Fallback image ID
 
 				// Webmasters.
 				'google_verification' => '', // Google Verification Code

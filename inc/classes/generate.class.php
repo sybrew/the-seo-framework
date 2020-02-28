@@ -80,7 +80,8 @@ class Generate extends User_Data {
 	 *                2. Now strictly parses the validity of robots directives via a boolean check.
 	 * @since 4.0.3 : 1. Changed `max_snippet_length` to `max_snippet`
 	 *                2. Changed the copyright directive's spacer from `=` to `:`.
-	 * @since 4.0.5 : The copyright directive bug has been fixed. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
+	 * @since 4.0.5 : 1. The copyright directive bug has been fixed. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
+	 *                2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -100,7 +101,8 @@ class Generate extends User_Data {
 			$_meta = $this->get_robots_meta_by_query( $ignore );
 
 			if ( $this->is_query_exploited() ) {
-				$_meta['noindex'] = true;
+				$_meta['noindex']  = true;
+				$_meta['nofollow'] = true;
 			}
 		} else {
 			$this->fix_generation_args( $args );

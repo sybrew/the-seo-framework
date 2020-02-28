@@ -31,6 +31,11 @@ switch ( $instance ) :
 				'callback' => SeoSettings::class . '::_social_metabox_twitter_tab',
 				'dashicon' => 'twitter',
 			],
+			'oembed' => [
+				'name'     => 'oEmbed',
+				'callback' => SeoSettings::class . '::_social_metabox_oembed_tab',
+				'dashicon' => 'share-alt2',
+			],
 			'postdates' => [
 				'name'     => __( 'Post Dates', 'autodescription' ),
 				'callback' => SeoSettings::class . '::_social_metabox_postdates_tab',
@@ -70,7 +75,6 @@ switch ( $instance ) :
 			),
 			true
 		);
-
 		if ( $this->detect_og_plugin() )
 			$this->attention_description( __( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
@@ -95,10 +99,19 @@ switch ( $instance ) :
 			),
 			true
 		);
-
 		if ( $this->detect_twitter_card_plugin() )
 			$this->attention_description( __( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
+		//* Echo oEmbed scripts checkboxes.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'oembed_scripts',
+				__( 'Output oEmbed scripts?', 'autodescription' ),
+				__( 'WordPress, Discord, Drupal, Squarespace, and many other clients can make use of these scripts.', 'autodescription' ),
+				true
+			),
+			true
+		);
 		?>
 		<hr>
 
@@ -135,6 +148,20 @@ switch ( $instance ) :
 		</p>
 		<hr>
 
+		<h4><?php esc_html_e( 'Theme Color Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Discord styles embeds with the theme color. The theme color can also affect the tab-color in some browsers.', 'autodescription' ) );
+		?>
+		<p>
+			<label for="<?php $this->field_id( 'theme_color' ); ?>">
+				<strong><?php esc_html_e( 'Theme color', 'autodescription' ); ?></strong>
+			</label>
+		</p>
+		<p>
+			<input type="text" name="<?php $this->field_name( 'theme_color' ); ?>" class="tsf-color-picker" id="<?php $this->field_id( 'theme_color' ); ?>" value="<?php echo esc_attr( $this->get_option( 'theme_color' ) ); ?>" data-tsf-default-color="" />
+		</p>
+		<hr>
+
 		<h4><?php esc_html_e( 'Site Shortlink Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'The shortlink tag can be manually used for microblogging services like Twitter, but it has no SEO value whatsoever.', 'autodescription' ) );
@@ -161,7 +188,7 @@ switch ( $instance ) :
 		$fb_appid_placeholder = '123456789012345';
 
 		?>
-		<h4><?php esc_html_e( 'Default Facebook Integration Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Facebook Integration Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options.', 'autodescription' ) );
 		$this->description( __( 'When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared.', 'autodescription' ) );
@@ -229,7 +256,7 @@ switch ( $instance ) :
 		$twitter_card = $this->get_twitter_card_types();
 
 		?>
-		<h4><?php esc_html_e( 'Default Twitter Integration Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Twitter Integration Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Twitter post sharing works mostly through Twitter Cards, and may fall back to use Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options.', 'autodescription' ) );
 
@@ -311,6 +338,26 @@ switch ( $instance ) :
 		<?php
 		break;
 
+	case 'the_seo_framework_social_metabox_oembed':
+		?>
+		<h4><?php esc_html_e( 'oEmbed Settings', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Some social sharing services, like WordPress and Discord, obtain the linked page information via oEmbed.', 'autodescription' ) );
+		?>
+		<hr>
+		<?php
+
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'oembed_remove_author',
+				__( 'Remove author name?', 'autodescription' ),
+				__( 'Discord shows the page author name above the sharing embed. Check this options if you find this undesirable.', 'autodescription' ),
+				true
+			),
+			true
+		);
+
+		break;
 	case 'the_seo_framework_social_metabox_postdates':
 		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
 

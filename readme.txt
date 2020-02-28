@@ -237,42 +237,9 @@ With that, we found various query endpoints in WordPress which can be malformed 
 
 In this update, we [removed support for the "Connected Social Pages" feature](https://github.com/sybrew/the-seo-framework/issues/498). They have never proven to work, and they've been deprecated by Google. You won't be able to fill these fields in on new websites. We also removed the transient caching for JSON-LD scripts, as it wasn't helping anyone.
 
-On the other hand, we added new feed, TODO Discord sharing (oEmbed, theme color), and advanced query protection options. Support for EDD and Polylang has been expanded, and we reintroduced the hyphen option for titles.
+On the other hand, we added new feed, Discord sharing (oEmbed, theme color), and advanced query protection options. Support for EDD and Polylang has been expanded, and we reintroduced the hyphen option for titles.
 
-A few other quality-of-life changes have been made, as well. Among adding new filters, streamlining the query handler, and fixing known corner-case bugs.
-
-TODO:
-(dropped) ~~1. Allow users to select social image resolution (or predefined size)~~
-<!-- (DONE) 2. Allow users to select feed indexing options (for Google Podcasts support) -->
-<!-- (DONE) 3. Add baidu webmasters option. (https://ziyuan.baidu.com/login/index?u=/site/siteadd) -->
-<!-- (Done) 4. Add sitemap purger for polylang? Like we have for WPML?
-	* Not possible: Also add these endpoints to the robots.txt? -> difficult? -->
-<!-- (DONE) 5. Maybe: Exclude pixel.gif sniffing from the content... (e.g. from paypal form, via form/script exclusion tags as used for the description generator).
-	* Make sub function from strip_tags_cs() -> strip_html_tags( ( $strip = $args ) = [] ); -->
-<!-- 6. (DONE) WordPress changed how do_robots() works in 5.3... where they no longer check for public. -->
-<!-- (DONE) 7. Convert is_blog_public()'s option call to a weak check? -->
-<!-- (Done) 8. See TODO at robots_txt(). -->
-<!-- 9. (DONE) https://theseoframework.com/page/2/?p=%24 <- this URL causes TSF to fail... block it.
-	* This is because the ?p= tag should contain a number... it's an exploit/glitch in WordPress, that isn't really harmful. -->
-<!-- 10. (DONE) Reassess `max-image-preview:none` bug. -->
-11. Allow manipulating the oembeds (Discord...) -- i.e. stripping the author name from the embed.
-12. Add theme color option to social sharing (for Discord)?
-<!-- 13. (DONE) Blog page default robots & SEO Bar doesn't reflect the "posts" global robots settings.
-	- Override does work (only noindex is verified) -->
-<!-- (DONE) 14. Reintroduce the title additions example on the SEO Settings screen...
-	* The homepage example still works. -->
-<!-- (DONE) 15. Consider filtering svg images... -->
-<!-- (DONE) 16. Add filter to `use_generated_archive_prefix()` (forward term?). Note: SEO Bar can't cache this. -->
-<!-- (DONE) 17. Change LinkedIn's example USER link to an example BUSINESS link (/company/example/, instead of /in/example). -->
-<!-- (DONE) 18. HIGH PRIORITY: Add filter for retrieved post, user, and term meta. WordPress' methods are all via short-circuits, which is not great.
-	* https://core.trac.wordpress.org/ticket/43949
-	* Inform Kris of change: https://wordpress.org/support/topic/noindex-a-page-via-php/
-	* Note that we have (had) LEGACY filters in place. We need to come up with new names. -->
-(dropped. Not possible due to caching) ~~19. MEDIUM PRIORITY: Add hooks in the sitemap which relays all IDs found, before looping over them.~~
-<!-- (Done) 20. Allow filtering of the robots.txt output.
-	* Also override the WP robots blocking state? Introduced in WP 5.3, it no longer relies on the robots.txt file for site-wide blocking, and uses meta tags instead. -->
-<!-- (DONE) 20. Add hook to output SEO settings for bulk/quick edit? (we reserved a row for this, might as well utilize it with columns) -->
-<!-- (DONE) 21. Allow filtering of the image results... (we now only have a filter for the generator arguments) -->
+A few other quality-of-life changes have been made, as well. Among adding a dozen new filters, streamlining the query handler, and fixing known corner-case issues and bugs.
 
 TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/the-seo-framework/issues/469
 TODO the visibility settings no longer have discerning borders. Add a css sub group to add them back?
@@ -280,14 +247,30 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 	- The top-spacing should still be fixed (and it the bottom-spacing is not even with the top now), and we might want to revert gutenberg-specific changes?
 	- The sidebar box width is still broken, I thought they had fixed that? https://github.com/WordPress/gutenberg/issues/20206
 
+TODO test oEmbed alterations in our Multisite network (call other post with/without within network, should be 4 tests: with/without, with/with, without/with, without/without).
+	* Mind the 1 hr transient cache for proxies (based on unique REST args via get_proxy_item()).
+
 **For everyone:**
 
 * **Added:**
 	* Advanced query protection.
-		* This protection helps mitigate against a new form of WordPress query exploitation we discovered. This can be invoked either intentionally or accidentally, causing Google to index thousands of pages that shouldn't exist.
+		* This protection helps mitigate against a new form of WordPress query exploitation we discovered. This can be invoked either intentionally or accidentally, causing Google to crawl and index thousands of pages that shouldn't exist.
 		* The option for this is enabled automatically for sites that install The SEO Framework for the first time. Otherwise, you'll have to tick a box under the Robots settings.
-		* When invoked, the meta tag `<meta name="tsf:aqp" value="1" />` will be outputted to indicate it's in effect, after the `noindex` attribute for robots. This tag will help us spot false positives.
-	* Feed indexing options (found under Feed Settings). This is useful for sites publishing podcasts.
+		* When invoked, the meta tag `<meta name="tsf:aqp" value="1" />` will be outputted to indicate it's in effect, after the `noindex,nofollow` attribute is set for robots. This tag will help us spot false positives.
+		* Found under "Robots Meta Settings > General".
+	* You can now choose to enable or disable oEmbed.
+		* This won't remove the generation of the script endpoints, you can still call them. The pages simply won't point to them anymore, which is enough.
+		* If you want to completely disable oEmbed, use the [Disable Embeds plugin](https://wordpress.org/plugins/disable-embeds/).
+		* Found under "Social Meta Settings > General".
+	* You can now specify the theme color.
+		* Found under "Social Meta Settings  > General".
+	* You can now remove the author name (and author URL) from embeds. This removal is prominently desirable for Discord, but it also affects other sharing services.
+		* Found under "Social Meta Settings > oEmbed".
+		* TODO, experiences core bug: https://core.trac.wordpress.org/ticket/49543
+	* You can specify feed indexing options. This is useful for sites publishing podcasts.
+		* Found under "Feed Settings".
+	* You can now register your Baidu Search Resource Platform Code (webmasters verification code).
+		* Found under "Webmaster Meta Settings".
 	* With Polylang, now all sitemaps are flushed whenever you publish or update a post or page.
 	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads" attribute for `og:type`.
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
@@ -295,7 +278,6 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 		* However, when more than one sequential hyphen is enter, it will still be texturized by WordPress.
 	* Title and description related SEO Bar tests for unsupported transformative syntax. Mainly detecting syntax from Yoast SEO and SEOPress, making your migration to the better plugin more manageable.
 		* The test runs after your filters do. So, if you've added transformative syntax filters to the right hook, you shouldn't receive any SEO Bar related errors.
-	* You can now register your Baidu webmasters verification code.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
@@ -332,6 +314,7 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 	* Empty singular-archives (blog, shop) are no longer marked for `noindex` automatically.
 		* We'd rather have this marked as `noindex`, but the SEO Bar, Sitemap, and other APIs are not consistent with this data.
 		* We advise you to mark empty blog pages with `noindex`, or otherwise redirect them.
+			* TODO add SEO Bar (red) test? Annoying.
 	* The "remove blog name" option now has its state reflected in the example output again.
 	* Also thanks to cleaning up leftover IE11 support, the Post SEO Settings can now fill the metabox on tablet-sized screens.
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
@@ -358,6 +341,9 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 			* `advanced_query_protection`, either `1` or `0`.
 			* `index_the_feed`, either `1` or `0`.
 			* `baidu_verification`, string.
+			* `theme_color`, string, color hex.
+			* `oembed_scripts`, either `1` or `0`.
+			* `oembed_remove_author`, either `1` or `0`.
 		* **Changed:**
 			* `title_separator` default value is changed from `pipe` to `hyphen`.
 		* **Removed:**
@@ -386,6 +372,7 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 	* For object `the_seo_framework()`:
 		* **Added:**
 			* `is_query_exploited()`
+			* `theme_color()`
 			* `get_html_output()`
 			* `get_post_type_real_ID()`
 			* `is_shop()`
@@ -407,6 +394,9 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 			* `use_generated_archive_prefix()`:
 				1. Added first parameter `$term`.
 				1. Added filter `the_seo_framework_use_archive_prefix`.
+			* `robots_meta()`:
+				1. Removed copyright directive bug workaround.
+				2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
 			* `get_robots_meta_by_query()` now bypasses singular-archives for no-posts-query-`noindex` tests.
 			* `is_singular_archive()`:
 				1. The output is now filterable.
