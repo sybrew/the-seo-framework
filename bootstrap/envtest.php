@@ -41,6 +41,7 @@ the_seo_framework_pre_boot_test();
  * Tests plugin upgrade.
  *
  * @since 3.1.0
+ * @since 4.0.5 No longer assumes the main blog (WP Multisite) has been tested, although that's very likely when updated via the interface.
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
@@ -60,7 +61,7 @@ function the_seo_framework_pre_boot_test() {
 
 		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
-			if ( get_blog_option( $nw->site_id, 'the_seo_framework_tested_upgrade_version' ) ) {
+			if ( get_blog_option( $nw->site_id, 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION ) {
 				update_option( 'the_seo_framework_tested_upgrade_version', THE_SEO_FRAMEWORK_DB_VERSION );
 				return;
 			}

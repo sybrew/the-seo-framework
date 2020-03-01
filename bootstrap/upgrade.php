@@ -107,15 +107,15 @@ function _do_upgrade() {
 
 	// Check if upgrade is locked. Otherwise, lock it.
 	if ( \get_transient( 'tsf_upgrade_lock' ) ) return;
-	\set_transient( 'tsf_upgrade_lock', true, 300 );
+
+	$timeout = 5 * MINUTE_IN_SECONDS;
+	\set_transient( 'tsf_upgrade_lock', true, $timeout );
 
 	// Register this AFTER the transient is set. Otherwise, it may clear the transient in another thread.
 	register_shutdown_function( __NAMESPACE__ . '\\_release_upgrade_lock' );
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
-
-	// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may be disabled.
-	@set_time_limit( 300 );
+	set_time_limit( $timeout );
 
 	/**
 	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.

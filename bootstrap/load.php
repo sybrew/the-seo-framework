@@ -78,10 +78,10 @@ function _init_tsf() {
 	/**
 	 * @package The_SEO_Framework
 	 */
-	if ( \The_SEO_Framework\_can_load() ) {
+	if ( _can_load() ) {
 		if ( \is_admin() ) {
 			//! TODO: admin-only loader?
-			$tsf         = new \The_SEO_Framework\Load();
+			$tsf         = new Load();
 			$tsf->loaded = true;
 
 			$tsf->_load_early_compat_files();
@@ -92,7 +92,7 @@ function _init_tsf() {
 			 */
 			\do_action( 'the_seo_framework_admin_loaded' );
 		} else {
-			$tsf         = new \The_SEO_Framework\Load();
+			$tsf         = new Load();
 			$tsf->loaded = true;
 
 			$tsf->_load_early_compat_files();
@@ -104,7 +104,7 @@ function _init_tsf() {
 		 */
 		\do_action( 'the_seo_framework_loaded' );
 	} else {
-		$tsf         = new \The_SEO_Framework\Silencer();
+		$tsf         = new Silencer();
 		$tsf->loaded = false;
 	}
 

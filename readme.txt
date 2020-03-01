@@ -317,9 +317,11 @@ TODO test oEmbed alterations in our Multisite network (call other post with/with
 			* TODO add SEO Bar (red) test? Annoying.
 	* The "remove blog name" option now has its state reflected in the example output again.
 	* Also thanks to cleaning up leftover IE11 support, the Post SEO Settings can now fill the metabox on tablet-sized screens.
+	* Feed content and `og:image:alt` can no longer have its last HTML entitity transformed incorrectly.
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
 		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
+	* On WordPress Multisite, when a sub-sites is first accessed after an upgrade via FTP, they should now run the proper environmental testing procedure.
 
 **For translators:**
 
@@ -368,6 +370,8 @@ TODO test oEmbed alterations in our Multisite network (call other post with/with
 		* `the_seo_framework_after_bulk_edit`
 		* `the_seo_framework_before_quick_edit`
 		* `the_seo_framework_after_quick_edit`
+* **Function notes:**
+	* `the_seo_framework_pre_boot_test()` (private) no longer assumes the main blog (WP Multisite) has been tested, although that's very likely when updated via the interface.
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**
@@ -422,6 +426,7 @@ TODO test oEmbed alterations in our Multisite network (call other post with/with
 			* `s_image_details()` now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
 			* `is_blog_public()` can now test for non-sanitized 'blog_public' option states. (probably a fault from WP&lt;3.0)
 			* `make_checkbox_array()` you can now supply an extra class for the checkbox.
+			* `trim_excerpt()` now decodes the excerpt input, improving accuracy, and so that HTML entities at the end won't be transformed into gibberish.
 		* **Removed:**
 			* **Tip:** When you call a removed method in `the_seo_framework()` object, it'll return `null`.
 			* `get_ld_json_transient_name()`
