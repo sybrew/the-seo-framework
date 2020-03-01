@@ -247,6 +247,7 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 	- The top-spacing should still be fixed (and it the bottom-spacing is not even with the top now), and we might want to revert gutenberg-specific changes?
 	- The sidebar box width is still broken, I thought they had fixed that? https://github.com/WordPress/gutenberg/issues/20206
 
+
 TODO test oEmbed alterations in our Multisite network (call other post with/without within network, should be 4 tests: with/without, with/with, without/with, without/without).
 	* Mind the 1 hr transient cache for proxies (based on unique REST args via get_proxy_item()).
 
@@ -322,6 +323,9 @@ TODO test oEmbed alterations in our Multisite network (call other post with/with
 		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
 	* On WordPress Multisite, when a sub-sites is first accessed after an upgrade via FTP, they should now run the proper environmental testing procedure.
+* **Patched:**
+	* Added a workaround to [WP Core Trac ticket 49543](https://core.trac.wordpress.org/ticket/49543), where our new theme-color setting's clear button was misaligned.
+		* According to the ticket, this can be removed once WP v5.5 launches.
 
 **For translators:**
 

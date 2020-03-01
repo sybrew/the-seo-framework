@@ -178,7 +178,7 @@ final class SeoBar_Term extends SeoBar {
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],
 					'duplicated' => \__( 'The blog name is found multiple times.', 'autodescription' ),
-					'syntax'     => \__( "Markup syntax was found that won't be transformed. Consider replacing it with static input.", 'autodescription' ),
+					'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider replacing it with static input.", 'autodescription' ),
 				],
 				'reason'   => [
 					'incomplete' => \__( 'Incomplete.', 'autodescription' ),
@@ -364,7 +364,7 @@ final class SeoBar_Term extends SeoBar {
 					'empty'  => \__( 'No description could be generated.', 'autodescription' ),
 					/* translators: %s = list of duplicated words */
 					'dupes'  => \__( 'Found duplicated words: %s', 'autodescription' ),
-					'syntax' => \__( "Markup syntax was found that won't be transformed. Consider replacing it with static input.", 'autodescription' ),
+					'syntax' => \__( "Markup syntax was found that isn't transformed. Consider replacing it with static input.", 'autodescription' ),
 				],
 				'reason'   => [
 					'empty'         => \__( 'Empty.', 'autodescription' ),
