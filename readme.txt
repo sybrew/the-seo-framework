@@ -101,7 +101,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * It discourages 404 pages and empty categories from being indexed, even when they don't send a 404 response.
 * It automatically notifies Google and the Bing network on website updates when sitemaps are enabled.
 * It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them, they only won't show them in their search results.
-* It directs search engines from the comment pages back to the post holding those comments.
+* It directs search engines from the comment pages back to the post storing those comments.
 
 = Compatibility =
 
@@ -116,8 +116,9 @@ The SEO Framework works on many things without notifying you, because the best s
 * Better screen-reader accessibility via ARIA labels and title attributes.
 * Full keyboard navigation.
 * WordPress Multisite setups, this plugin is in fact built upon one.
-* Detection of robots.txt and sitemap.xml files.
+* Detection and output of robots.txt and sitemap.xml files.
 * Output of structured data via Schema.org JSON-LD scripts.
+* Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO tools to help you switch graciously.
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
 * Ecommerce plugins, like WooCommerce and EDD.
@@ -241,15 +242,12 @@ On the other hand, we added new feed, Discord sharing (oEmbed, theme color), and
 
 A few other quality-of-life changes have been made, as well. Among adding a dozen new filters, streamlining the query handler, and fixing known corner-case issues and bugs.
 
-TODO, retest this issue (since we moved WC compat): https://github.com/sybrew/the-seo-framework/issues/469
-TODO the visibility settings no longer have discerning borders. Add a css sub group to add them back?
+TODO this is redundant information...
+We might send another update when WordPress 5.4 lands. Although TSF is 100% compatible with it, there are a few UI glitches in the 5.4 beta we're still uncertain about them shipping.
+
 TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect well on us.
 	- The top-spacing should still be fixed (and it the bottom-spacing is not even with the top now), and we might want to revert gutenberg-specific changes?
-	- The sidebar box width is still broken, I thought they had fixed that? https://github.com/WordPress/gutenberg/issues/20206
-
-
-TODO test oEmbed alterations in our Multisite network (call other post with/without within network, should be 4 tests: with/without, with/with, without/with, without/without).
-	* Mind the 1 hr transient cache for proxies (based on unique REST args via get_proxy_item()).
+	- The sidebar box width is still broken, I thought they had fixed that? https://github.com/WordPress/gutenberg/issues/20206 / https://core.trac.wordpress.org/ticket/46964
 
 **For everyone:**
 
@@ -267,7 +265,6 @@ TODO test oEmbed alterations in our Multisite network (call other post with/with
 		* Found under "Social Meta Settings  > General".
 	* You can now remove the author name (and author URL) from embeds. This removal is prominently desirable for Discord, but it also affects other sharing services.
 		* Found under "Social Meta Settings > oEmbed".
-		* TODO, experiences core bug: https://core.trac.wordpress.org/ticket/49543
 	* You can specify feed indexing options. This is useful for sites publishing podcasts.
 		* Found under "Feed Settings".
 	* You can now register your Baidu Search Resource Platform Code (webmasters verification code).
@@ -315,12 +312,11 @@ TODO test oEmbed alterations in our Multisite network (call other post with/with
 	* Empty singular-archives (blog, shop) are no longer marked for `noindex` automatically.
 		* We'd rather have this marked as `noindex`, but the SEO Bar, Sitemap, and other APIs are not consistent with this data.
 		* We advise you to mark empty blog pages with `noindex`, or otherwise redirect them.
-			* TODO add SEO Bar (red) test? Annoying.
 	* The "remove blog name" option now has its state reflected in the example output again.
 	* Also thanks to cleaning up leftover IE11 support, the Post SEO Settings can now fill the metabox on tablet-sized screens.
 	* Feed content and `og:image:alt` can no longer have its last HTML entitity transformed incorrectly.
 	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
-		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206
+		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206, https://core.trac.wordpress.org/ticket/46964
 		* N.B. The postbox-handler dropdown icons also shift when collapsing.
 	* On WordPress Multisite, when a sub-sites is first accessed after an upgrade via FTP, they should now run the proper environmental testing procedure.
 * **Patched:**

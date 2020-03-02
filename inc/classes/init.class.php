@@ -300,16 +300,21 @@ class Init extends Query {
 		}
 
 		if ( ! $this->get_option( 'oembed_scripts' ) ) {
-			// Only hide the scripts, don't permeably purge them. That should be enough.
+			/**
+			 * Only hide the scripts, don't permeably purge them. That should be enough.
+			 *
+			 * This will still allow embedding within WordPress Multisite via WP-REST's proxy, since WP won't look for a script.
+			 * We'd need to empty 'oembed_response_data' in that case... However, thanks to a bug in WP, this 'works' anyway.
+			 * The bug: WP_oEmbed_Controller::get_proxy_item_permissions_check() always returns \WP_Error.
+			 */
 			\remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 		}
-		// We only allow changing the author embed for now. Therefore, this check is here.
-		// Also run this independently of `oembed_scripts`, to alleviate confusion.
-		if ( $this->get_option( 'oembed_remove_author' ) ) {
-			// WordPress also filters this at priority '10', but it's registered before this runs.
-			// Careful, WordPress can switch blogs when this filter runs...!
-			\add_filter( 'oembed_response_data', [ $this, '_alter_oembed_response_data' ], 10, 4 );
-		}
+		/**
+		 * WordPress also filters this at priority '10', but it's registered before this runs.
+		 * Careful, WordPress can switch blogs when this filter runs. So, run this always,
+		 * and assess options (uncached!) therein.
+		 */
+		\add_filter( 'oembed_response_data', [ $this, '_alter_oembed_response_data' ], 10, 4 );
 	}
 
 	/**
