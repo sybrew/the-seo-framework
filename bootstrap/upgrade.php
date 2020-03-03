@@ -263,7 +263,7 @@ function _do_upgrade_notice() {
 		);
 	} else {
 		$tsf->do_dismissible_notice(
-			\esc_html__( 'Thank you for installing The SEO Framework! Your website is now optimized for SEO, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
+			\esc_html__( 'Thank you for installing The SEO Framework! Your website is now optimized for search and social sharing, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
 			'updated',
 			false,
 			false

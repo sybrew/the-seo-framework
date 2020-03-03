@@ -1,5 +1,6 @@
 #tsf-inpost-box .inside {
 	margin: 0;
+	padding: 14px;
 }
 
 #tsf-inpost-box:not(.tsf-is-block-editor) .inside,
@@ -49,16 +50,6 @@
 .tsf-flex-setting-input .tsf-flex-setting:last-of-type {
 	border-bottom: 1px solid #e2e4e7;
 }
-
-/* Novel idea, I doubt it's faster than what's above.
-.tsf-flex-setting-input .tsf-flex-setting {
-	border: 1px solid #e2e4e7;
-}
-
-.tsf-flex-setting-input .tsf-flex-setting:nth-child(n+2):nth-last-child(n+2) {
-	border-top: 0;
-	border-bottom: 0;
-} */
 
 #tsf-inpost-box .inside select {
 	width: 100%;

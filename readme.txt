@@ -20,7 +20,7 @@ To top it off, this is the fastest full-featured SEO plugin, and it blends right
 
 It's easy to get started. Activate this plugin, and your site's already protected against prominent SEO attacks. The SEO Framework will also prefill all critical meta tags for you. A real time-saver. Ingenious.
 
-[Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
+[Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
 = We poured over 16,000 hours into this plugin. Here are the results: =
 
@@ -121,7 +121,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO tools to help you switch graciously.
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
-* Ecommerce plugins, like WooCommerce and EDD.
+* E-commerce plugins, like WooCommerce and EDD.
 
 = Copyright legislation notice =
 
@@ -230,36 +230,27 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.5 =
 
-TODO this is too advanced, put it on the detailed log, not on w.org:
-We accidentally bombarded our website via our private [shortlink service](https://tsf.fyi/links.php), where Google was trying to act smart by following non-anchored example links that didn't exist. When this happens on a large scale, your website can potentially drop in rankings.
+We found various query endpoints in WordPress, which can be malformed to return broken pages that can be used against you. In this update, we added advanced query protection, which you can enable via the robots meta settings.
 
-TODO this is too advanced, put it on the detailed log, not on w.org:
-With that, we found various query endpoints in WordPress which can be malformed to return broken pages. Previously we thought only [pagination was incoherent](https://core.trac.wordpress.org/ticket/37505)--we were wrong. In this update, we mitigated all known Core-reserved and malformable endpoints in WordPress by telling search engines not to index them when abused.
+The ["Connected Social Pages" input fields will now disappear](https://github.com/sybrew/the-seo-framework/issues/498) when you empty them. They have never proven to work, and Google has deprecated them. We also removed the transient caching for JSON-LD scripts, as it wasn't helping anyone.
 
-In this update, we [removed support for the "Connected Social Pages" feature](https://github.com/sybrew/the-seo-framework/issues/498). They have never proven to work, and they've been deprecated by Google. You won't be able to fill these fields in on new websites. We also removed the transient caching for JSON-LD scripts, as it wasn't helping anyone.
+On the other hand, we added a new feed indexing option, Discord sharing options (oEmbed, theme color), and the aforementioned advanced query protection option. Support for EDD and Polylang has been expanded, and we reintroduced the hyphen option for titles (which is the new default).
 
-On the other hand, we added new feed, Discord sharing (oEmbed, theme color), and advanced query protection options. Support for EDD and Polylang has been expanded, and we reintroduced the hyphen option for titles.
+In this update, we also bring a few other quality-of-life changes, as well. Among, we added a dozen new filters, streamlined the query handler, and fixed known corner-case issues and bugs.
 
-A few other quality-of-life changes have been made, as well. Among adding a dozen new filters, streamlining the query handler, and fixing known corner-case issues and bugs.
-
-TODO this is redundant information...
-We might send another update when WordPress 5.4 lands. Although TSF is 100% compatible with it, there are a few UI glitches in the 5.4 beta we're still uncertain about them shipping.
-
-TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect well on us.
-	- The top-spacing should still be fixed (and it the bottom-spacing is not even with the top now), and we might want to revert gutenberg-specific changes?
-	- The sidebar box width is still broken, I thought they had fixed that? https://github.com/WordPress/gutenberg/issues/20206 / https://core.trac.wordpress.org/ticket/46964
+**Detailed log:**
 
 **For everyone:**
 
 * **Added:**
 	* Advanced query protection.
 		* This protection helps mitigate against a new form of WordPress query exploitation we discovered. This can be invoked either intentionally or accidentally, causing Google to crawl and index thousands of pages that shouldn't exist.
-		* The option for this is enabled automatically for sites that install The SEO Framework for the first time. Otherwise, you'll have to tick a box under the Robots settings.
+		* The option for this is enabled automatically for sites that install The SEO Framework for the first time. Otherwise, you'll have to tick a box.
 		* When invoked, the meta tag `<meta name="tsf:aqp" value="1" />` will be outputted to indicate it's in effect, after the `noindex,nofollow` attribute is set for robots. This tag will help us spot false positives.
 		* Found under "Robots Meta Settings > General".
 	* You can now choose to enable or disable oEmbed.
 		* This won't remove the generation of the script endpoints, you can still call them. The pages simply won't point to them anymore, which is enough.
-		* If you want to completely disable oEmbed, use the [Disable Embeds plugin](https://wordpress.org/plugins/disable-embeds/).
+		* If you want to disable oEmbed entirely, use the [Disable Embeds plugin](https://wordpress.org/plugins/disable-embeds/).
 		* Found under "Social Meta Settings > General".
 	* You can now specify the theme color.
 		* Found under "Social Meta Settings  > General".
@@ -273,14 +264,14 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 	* Open Graph support for Easy Digital Downloads (EDD v2.9+) "downloads" attribute for `og:type`.
 	* We reintroduced the hyphen, it is now safe from incorrect texturization!
 		* Your titles and descriptions will now have the hyphen preserved as entered, making the pixel counter more accurate.
-		* However, when more than one sequential hyphen is enter, it will still be texturized by WordPress.
+		* However, when more than one sequential hyphen is entered, it will still be texturized by WordPress.
 	* Title and description related SEO Bar tests for unsupported transformative syntax. Mainly detecting syntax from Yoast SEO and SEOPress, making your migration to the better plugin more manageable.
 		* The test runs after your filters do. So, if you've added transformative syntax filters to the right hook, you shouldn't receive any SEO Bar related errors.
 * **Improved:**
 	* Subdirectory issue tests for the robots.txt output is no longer cached and is now more accurate.
 	* Implemented WordPress 5.4/Gutenberg 9.4 styling guidelines for the post-SEO box editor.
 		* Also improved the painting performance by removing a redundant flexbox wrap.
-		* N.B. Advanced Custom Fields overrides the metabox handler styling globally. So, that's a thing.
+		* N.B. Advanced Custom Fields overrides the meta box handler styling globally. So, that's a thing.
 	* Thanks to cleaning up leftover IE11 support, the Post SEO Settings header-navigation items can now have their text collapse vertically, as was initially intended.
 		* The collapsing now happens 4px before the text touches the icon (instead of 0px). Much neater.
 	* Before fetching images from the content, various tags are stripped. This prevents sharing tracking images from donation forms, for example.
@@ -304,7 +295,7 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 	* We're maintaining the UTC timestamp workaround brought in [version 4.0.4](https://theseoframework.com/changelog/4-0-4/), because it works as intended all around.
 * **Fixed:**
 	* The author title is now displayed on author archives without posts. Note that your theme may still not display the name.
-	* The correct "Untitled" title is now used in the "No title found"-SEO Bar warning.
+	* On non-English websites, the correct "Untitled" title is now used in the "No title found"-SEO Bar warning (when no prior translation was supplied).
 	* Global robots settings for post types no longer affect their respective singular-archives (blog, shop).
 		* For example, global `noindex` for `post` no longer sets `noindex` for the blog page erroneously.
 		* Another example: Global `noindex` for `product` no longer sets it for the shop page erroneously.
@@ -313,15 +304,16 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 		* We'd rather have this marked as `noindex`, but the SEO Bar, Sitemap, and other APIs are not consistent with this data.
 		* We advise you to mark empty blog pages with `noindex`, or otherwise redirect them.
 	* The "remove blog name" option now has its state reflected in the example output again.
-	* Also thanks to cleaning up leftover IE11 support, the Post SEO Settings can now fill the metabox on tablet-sized screens.
-	* Feed content and `og:image:alt` can no longer have its last HTML entitity transformed incorrectly.
-	* TODO The postbox now works as intended in the sidebar using Gutenberg 9.4/Block-editor WordPress 5.4.
-		* Regression in Gutenberg: https://github.com/WordPress/gutenberg/issues/20206, https://core.trac.wordpress.org/ticket/46964
-		* N.B. The postbox-handler dropdown icons also shift when collapsing.
+	* Also thanks to cleaning up leftover IE11 support, the Post SEO Settings can now fill the meta box on tablet-sized screens.
+	* Feed content and `og:image:alt` can no longer have its last HTML entity transformed incorrectly.
 	* On WordPress Multisite, when a sub-sites is first accessed after an upgrade via FTP, they should now run the proper environmental testing procedure.
 * **Patched:**
 	* Added a workaround to [WP Core Trac ticket 49543](https://core.trac.wordpress.org/ticket/49543), where our new theme-color setting's clear button was misaligned.
 		* According to the ticket, this can be removed once WP v5.5 launches.
+* **Temporary:**
+	* For the block editor, we added extra padding around the SEO settings. Although this looks as intended on WordPress 5.0 through 5.4-beta, it might turn out to be undesired when WordPress 5.4 or 5.4.1 lands. It surely doesn't look as we planned it to when using Gutenberg 7.6.0--and we still don't know why that plugin isn't marked as a beta-tester plugin. Tracking changes is impossible due to the discrepancy (and lack) of reporting standards between Gutenberg and WP Block Editor. Digression aside, the layout functions as intended (look ≠ function), and we're awaiting non-transitory improvements to the block-editor from which we can benefit.
+* **Not fixed:**
+	* For the block editor using WordPress 5.4-beta or Gutenberg 7.6.0, the sidebar layout is overflowing (see [Gutenberg issue 20206](https://github.com/WordPress/gutenberg/issues/20206) and [Core ticket 46964](https://core.trac.wordpress.org/ticket/46964)), and that is not for us to fix. Our proposed fix ([that'd be 1 line](https://github.com/WordPress/gutenberg/issues/20206#issuecomment-586654926)), wasn't considered. A proper resolution might not land early enough for it to go unnoticed to our users.
 
 **For translators:**
 
@@ -432,7 +424,7 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 			* `get_ld_json_transient_name()`
 			* `delete_ld_json_transient()`
 		* **Deprecated:**
-			* Soft deprecation; no warnings are shown. This will change in a major update. Reason: Expanding ecommerce tool support.
+			* Soft deprecation; no warnings are shown. This will change in an upcoming major update. Reason: Expanding e-commerce tool support.
 				* `is_wc_shop()`, use `is_shop()` instead.
 				* `is_wc_product()`, use `is_product()` instead.
 				* `is_wc_product_admin()`, use `is_product_admin()` instead.
@@ -445,7 +437,7 @@ TODO Gutenberg 7.6 makes the meta box container horrendously. Doesn't reflect we
 		* **Added:**
 			* `get_ajax_dispatch_updated_event()`, add (term) or echo (post) this at the end of your AJAX column content to allow binding to the `document.addEventListener( 'tsfLeUpdated', cb );` event in JS.
 * **JS notes:**
-	* Action `tsfLeUpdated` is now dispatched on list edit events, even when no SEO Bar is showing.
+	* Action `tsfLeUpdated` is now dispatched on our list edit events, even when no SEO Bar is showing. When expanding on our list edit API, use the new `get_ajax_dispatch_updated_event()` method to ensure consistency.
 * **Other:**
 	* Cleaned up code, like removing more legacy browser syntax.
 
@@ -482,10 +474,6 @@ Our users reported some admin scripting issues when updating from v3.2.4 to v4.0
 = 4.0.0 - Multiplex =
 
 *It is our choices, Harry, that show what we truly are, far more than our abilities. - [J.K. Rowling](https://www.jkrowling.com/book/harry-potter-chamber-secrets/)*
-
-**Release date**
-
-* September 9th, 2019
 
 **Foreword**
 

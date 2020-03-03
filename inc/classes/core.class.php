@@ -258,6 +258,13 @@ class Core {
 		return array_merge(
 			$plugin_meta,
 			[
+				'support' => vsprintf(
+					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
+					[
+						'https://tsf.fyi/support',
+						\esc_html__( 'Get support', 'autodescription' ),
+					]
+				),
 				'docs' => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
@@ -276,7 +283,7 @@ class Core {
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
 						'https://tsf.fyi/extension-manager',
-						$_get_em ? \esc_html_x( 'Get the Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ) : 'Extension Manager',
+						$_get_em ? \esc_html_x( 'Get Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ) : 'Extension Manager',
 					]
 				),
 			]
