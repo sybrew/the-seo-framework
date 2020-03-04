@@ -38,26 +38,40 @@ function _wpforo_fix_page() {
 			\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
 
 		if ( $override['meta'] ) {
-			\add_filter(
-				'get_canonical_url',
-				function( $canonical_url, $post ) {
-					return function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
-				},
-				10,
-				2
-			);
+			\add_filter( 'get_canonical_url', __NAMESPACE__ . '\\_wpforo_filter_canonical_url', 10, 2 );
 
-			//* Remove wpforo SEO meta output.
+			// Remove TSF's SEO meta output.
 			\remove_action( 'wp_head', 'wpforo_add_meta_tags', 1 );
 		} else {
-			\add_action(
-				'the_seo_framework_after_init',
-				function() {
-					\remove_action( 'wp_head', [ \the_seo_framework(), 'html_output' ], 1 );
-				}
-			);
+			\add_action( 'the_seo_framework_after_init', __NAMESPACE__ . '\\_wpforo_disable_html_output', 1 );
 		}
 	}
+}
+
+/**
+ * Disables The SEO Framework's meta tag output on wpForo pages.
+ *
+ * @since 3.1.2 Introduced as Lambda.
+ * @since 4.0.5 Introduced as function.
+ * @access private
+ */
+function _wpforo_disable_html_output() {
+	\remove_action( 'wp_head', [ \the_seo_framework(), 'html_output' ], 1 );
+}
+
+/**
+ * Filters the canonical/request URL for wpForo.
+ *
+ * @since 2.9.2 Introduced as Lambda.
+ * @since 4.0.5 Introduced as function.
+ * @access private
+ *
+ * @param string   $canonical_url The post's canonical URL.
+ * @param \WP_Post $post          Post object.
+ * @return string
+ */
+function _wpforo_filter_canonical_url( $canonical_url, $post ) {
+	return function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
 }
 
 /**

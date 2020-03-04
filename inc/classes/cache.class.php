@@ -545,7 +545,7 @@ class Cache extends Site_Options {
 
 					//* Temporarily disable caches to prevent database spam.
 					$this->the_seo_framework_use_transients = false;
-					$this->use_object_cache = false;
+					$this->use_object_cache                 = false;
 
 					$the_id = 'unix_' . $unix;
 				}
@@ -647,34 +647,24 @@ class Cache extends Site_Options {
 		switch ( $type ) :
 			case 'author':
 				return $this->add_cache_key_suffix( 'author_' . $page_id );
-				break;
 			case 'frontpage':
 				return $this->add_cache_key_suffix( $this->generate_front_page_cache_key() );
-				break;
 			case 'page':
 				return $this->add_cache_key_suffix( 'page_' . $page_id );
-				break;
 			case 'post':
 				return $this->add_cache_key_suffix( 'post_' . $page_id );
-				break;
 			case 'attachment':
 				return $this->add_cache_key_suffix( 'attach_' . $page_id );
-				break;
 			case 'singular':
 				return $this->add_cache_key_suffix( 'singular_' . $page_id );
-				break;
 			case 'term':
 				return $this->add_cache_key_suffix( $this->generate_taxonomical_cache_key( $page_id, $taxonomy ) );
-				break;
 			case 'ping':
 				return $this->add_cache_key_suffix( 'tsf_throttle_ping' );
 			default:
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
 				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
-				break;
 		endswitch;
-
-		return false;
 	}
 
 	/**

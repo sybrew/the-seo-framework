@@ -37,22 +37,56 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  */
 final class Silencer {
 
+	/**
+	 * Tells if this plugin is loaded.
+	 *
+	 * @NOTE: Only `\The_SEO_Framework\_init_tsf()` should adjust this.
+	 *
+	 * @since 3.1.0
+	 * @access protected
+	 *         Don't alter this variable!!!
+	 * @var boolean $loaded
+	 */
 	public $loaded = false;
 
+	/**
+	 * @since 3.1.0
+	 */
 	public function __construct() {}
 
+	/**
+	 * @since 3.1.0
+	 * @param string $name The property name.
+	 * @return null
+	 */
 	public function __get( $name ) {
 		return null;
 	}
 
+	/**
+	 * @since 3.1.0
+	 * @param string $name  The property name.
+	 * @param mixed  $value The property value to set.
+	 * @return mixed
+	 */
 	public function __set( $name, $value ) {
 		return $value;
 	}
 
+	/**
+	 * @since 3.1.0
+	 * @param string $name The property name.
+	 * @return false
+	 */
 	public function __isset( $name ) {
 		return false;
 	}
 
+	/**
+	 * @since 3.1.0
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
+	 */
 	public function __call( $name, $arguments ) {
 		return null;
 	}

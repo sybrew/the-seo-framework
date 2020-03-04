@@ -228,7 +228,7 @@ class Query extends Core {
 	 */
 	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
-		$id =  $this->is_feed() ? \get_the_ID() : 0;
+		$id = $this->is_feed() ? \get_the_ID() : 0;
 
 		/**
 		 * @since 2.5.0

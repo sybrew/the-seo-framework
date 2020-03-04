@@ -58,7 +58,7 @@ We handpicked our color scheme so that people with any medically recognized colo
 The SEO Framework steers you from making significant and common SEO mistakes. It leaves little room for you to mess up because the plugin already does everything SEO for you. For example, it automatically prevents duplicated content mistakes by enforcing strict canonical rules.
 
 * **It follows best-practices and beyond.**
-The biggest problems with WordPress plugins are security and compatibility. As part-time security researchers, we focus on making this plugin impenetrable. The SEO Framework also uses WordPress' API whenever possible, making this plugin integrate neatly with every other plugin written with that in mind.
+The biggest problems with WordPress plugins are security and compatibility. As part-time security researchers, we focus on making this plugin impenetrable. The SEO Framework also uses WordPress's API whenever possible, making this plugin integrate neatly with every other plugin written with that in mind.
 
 * **It has developers at heart.**
 We encourage other developers to enhance and add functionality to this plugin. We've done so ourselves, already, with our [extensions](https://theseoframework.com/extensions/). Check out [our API](https://theseoframework.com/?p=82), and feel free to [contribute](https://tsf.fyi/contributing)!

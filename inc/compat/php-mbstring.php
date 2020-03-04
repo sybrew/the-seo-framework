@@ -6,6 +6,8 @@
  * @ignore this file isn't loaded.
  */
 
+// phpcs:disable -- This file isn't loaded.
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**

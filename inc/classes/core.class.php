@@ -265,21 +265,21 @@ class Core {
 						\esc_html__( 'Get support', 'autodescription' ),
 					]
 				),
-				'docs' => vsprintf(
+				'docs'    => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
 						'https://tsf.fyi/docs',
 						\esc_html__( 'View documentation', 'autodescription' ),
 					]
 				),
-				'API'  => vsprintf(
+				'API'     => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
 						'https://tsf.fyi/docs/api',
 						\esc_html__( 'View API docs', 'autodescription' ),
 					]
 				),
-				'EM'   => vsprintf(
+				'EM'      => vsprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
 					[
 						'https://tsf.fyi/extension-manager',
@@ -360,7 +360,9 @@ class Core {
 	 * @return bool True is blog is public.
 	 */
 	public function is_blog_public() {
+
 		static $cache = null;
+
 		return isset( $cache ) ? $cache : $cache = (bool) \get_option( 'blog_public' );
 	}
 
@@ -499,20 +501,19 @@ class Core {
 
 		static $old_tz = null;
 
-		// phpcs:ignore, WordPress.WP.TimezoneChange
 		$old_tz = $old_tz ?: date_default_timezone_get() ?: 'UTC';
 
 		if ( $reset ) {
 			$_revert_tz = $old_tz;
 			$old_tz     = null;
-			// phpcs:ignore, WordPress.WP.TimezoneChange
+			// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 			return date_default_timezone_set( $_revert_tz );
 		}
 
 		if ( empty( $tzstring ) )
 			$tzstring = $this->get_timezone_string( true ) ?: $old_tz;
 
-		// phpcs:ignore, WordPress.WP.TimezoneChange
+		// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		return date_default_timezone_set( $tzstring );
 	}
 

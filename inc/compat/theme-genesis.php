@@ -23,7 +23,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
 function _disable_genesis_seo( $plugins ) {
 
 	$plugins = [
-		'classes' => [
+		'classes'   => [
 			'\\The_SEO_Framework\\Load',
 		],
 		'functions' => [
