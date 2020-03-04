@@ -35,7 +35,7 @@ switch ( $instance ) :
 			],
 			'nofollow'  => [
 				'value' => 'nofollow',
-				'desc'  => __( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your own links.', 'autodescription' ),
+				'desc'  => __( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your internal links.', 'autodescription' ),
 			],
 			'noarchive' => [
 				'value' => 'noarchive',

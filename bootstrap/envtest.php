@@ -110,7 +110,7 @@ function the_seo_framework_pre_boot_test() {
 	switch ( $test ) :
 		case 1:
 			//* PHP requirements not met, always count up to encourage best standards.
-			$requirement = 'PHP 5.5.0 or later';
+			$requirement = 'PHP 5.6.0 or later';
 			$issue       = 'PHP version';
 			$version     = PHP_VERSION;
 			$subtitle    = 'Server Requirements';

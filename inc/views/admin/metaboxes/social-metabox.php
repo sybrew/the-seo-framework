@@ -342,7 +342,7 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'oEmbed Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Some social sharing services, like WordPress and Discord, obtain the linked page information via oEmbed.', 'autodescription' ) );
+		$this->description( __( 'Some social sharing services and clients, like WordPress and Discord, obtain the linked page information via oEmbed.', 'autodescription' ) );
 		?>
 		<hr>
 		<?php
