@@ -440,6 +440,7 @@ In this update, we also bring a few other quality-of-life changes, as well. Amon
 	* Action `tsfLeUpdated` is now dispatched on our list edit events, even when no SEO Bar is showing. When expanding on our list edit API, use the new `get_ajax_dispatch_updated_event()` method to ensure consistency.
 * **Other:**
 	* Cleaned up code, like removing more legacy browser syntax.
+	* Extended copyright year to 2020.
 
 = 4.0.4 =
 
