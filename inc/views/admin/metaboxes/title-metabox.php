@@ -99,8 +99,8 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( 'A title is generated for every page.', 'autodescription' );
-		$this->description( 'Some titles may have HTML tags inserted by the author for styling.', 'autodescription' );
+		$this->description( __( 'A title is generated for every page.', 'autodescription' ) );
+		$this->description( __( 'Some titles may have HTML tags inserted by the author for styling.', 'autodescription' ) );
 
 		$info = $this->make_info(
 			sprintf(

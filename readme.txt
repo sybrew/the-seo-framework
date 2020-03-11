@@ -228,6 +228,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.x.x =
+
+TODO add robots options to deindex taxonomies (like post types). Also allow disabling SEO for those, and rename the "post types" tabs to "Disable SEO" or "SEO Support"... We already have the functions ready, just not the options.
+
+**For translators:**
+	* As always, we've added and removed some strings.
+	* Introduced some previously untranslatable strings.
+		* Thank you for highlighting these, [Sébastien](https://twitter.com/bonakor)!
+
 = 4.0.5 =
 
 In WordPress, we found various query endpoints that can be malformed to create broken pages. Backlinks to these pages can harm your site's ranking. In this update, we added advanced query protection, which you can enable via the robots meta settings.

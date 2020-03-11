@@ -154,7 +154,7 @@ switch ( $instance ) :
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'theme_color' ); ?>">
-				<strong><?php esc_html_e( 'Theme color', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Theme Color', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
@@ -283,9 +283,8 @@ switch ( $instance ) :
 							echo $this->code_wrap( $name ); // phpcs:ignore, WordPress.Security.EscapeOutput
 							echo ' ';
 							$this->make_info(
-								esc_html( 'Learn more about this card.' ),
-								esc_url( 'https://dev.twitter.com/cards/types/' . $name ),
-								true
+								__( 'Learn more about this card.', 'autodescription' ),
+								'https://dev.twitter.com/cards/types/' . $name
 							);
 							?>
 						</span>
@@ -299,8 +298,10 @@ switch ( $instance ) :
 
 		<hr>
 
+		<h4><?php esc_html_e( 'Card and Content Attribution', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'When the following options are filled in, Twitter might link your Twitter Site or Author Profile when your post or page is shared.', 'autodescription' ) );
+		$this->description( __( 'Twitter claims users will be able to follow and view the profiles of attributed accounts directly from the card when these fields are filled in.', 'autodescription' ) );
+		$this->description( __( 'However, for now, these fields seem to have no discernible effect.', 'autodescription' ) );
 		?>
 
 		<p>
@@ -351,7 +352,7 @@ switch ( $instance ) :
 			$this->make_checkbox(
 				'oembed_remove_author',
 				__( 'Remove author name?', 'autodescription' ),
-				__( 'Discord shows the page author name above the sharing embed. Check this options if you find this undesirable.', 'autodescription' ),
+				__( "Discord shows the page author's name above the sharing embed. Check this option if you find this undesirable.", 'autodescription' ),
 				true
 			),
 			true
