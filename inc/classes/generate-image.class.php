@@ -310,7 +310,7 @@ class Generate_Image extends Generate_Url {
 	 *    boolean multi:    Whether multiple images may be returned,
 	 *    array   cbs:      An array of image generation callbacks, in order of most important to least.
 	 *                      When 'multi' (or $single input) parameter is "false", it will use the first found.
-	 *    array   fallback: An array of image generaiton callbacks, in order of most important to least,
+	 *    array   fallback: An array of image generation callbacks, in order of most important to least,
 	 *                      Only one image is obtained from the fallback, and only if the regular cbs don't
 	 *                      return any image.
 	 * }

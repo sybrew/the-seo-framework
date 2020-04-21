@@ -250,11 +250,8 @@ final class Scripts {
 	public static function forward_known_script( $id, $type ) {
 		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) {
 			foreach ( static::$scripts as $s ) {
-				if ( $s['id'] === $id ) {
-					if ( $s['type'] === $type ) {
-						static::forward_script( $s );
-					}
-				}
+				if ( $s['id'] === $id && $s['type'] === $type )
+					static::forward_script( $s );
 			}
 		}
 	}

@@ -230,9 +230,23 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.x.x =
 
+In this update, we addressed a few issues our amazing users helped investigate. That's all.
+
+Oh, before we forget, <!--promotional message here-->.
+
 TODO add robots options to deindex taxonomies (like post types). Also allow disabling SEO for those, and rename the "post types" tabs to "Disable SEO" or "SEO Support"... We already have the functions ready, just not the options.
+TODO `somethingprivate: | Blog name` -> `Private: something | Blog name`? Is this a translator error? Test English, French, and Czech.
+
+TODO reset font variant in debugger output.
+
+**For everyone:**
+
+* **Fixed:**
+	* When WooCommerce is active, TSF no longer asserts archive queries as shop pages accidentally.
+		* This issue might also occur when the blog page has the same ID as an archive, but this is less likely, since WordPress maintains a unique-ID system (with fail-secure).
 
 **For translators:**
+* **Changed:**
 	* As always, we've added and removed some strings.
 	* Introduced some previously untranslatable strings.
 		* Thank you for highlighting these, [Sébastien](https://twitter.com/bonakor)!

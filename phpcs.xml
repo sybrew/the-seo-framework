@@ -40,9 +40,9 @@
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
 
 		<!-- Asinine standard is radical. https://make.wordpress.org/core/2019/07/12/php-coding-standards-changes/ -->
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
 		<!-- WordPress doesn't like performance for some reason. -->
-		<exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+		<exclude name="WordPress.PHP.DisallowShortTernary"/>
 
 		<!-- This is already against the rules. However, methods and namespaced functions are allowed to have this; "it's publicly private" -->
 		<exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>

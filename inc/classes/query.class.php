@@ -369,6 +369,7 @@ class Query extends Core {
 	 * @since 4.0.5 1. The output is now filterable.
 	 *              2. Added caching.
 	 *              3. Now has a first parameter `$post`.
+	 * @since 4.0.6 Added a short-circuit on current-requests for `is_singular()`.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool
@@ -379,6 +380,7 @@ class Query extends Core {
 			$post = \get_post( $post );
 			$id   = $post ? $post->ID : 0;
 		} else {
+			if ( ! \is_singular() ) return false;
 			$id = $this->get_the_real_ID();
 		}
 

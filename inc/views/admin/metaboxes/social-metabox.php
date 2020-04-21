@@ -300,6 +300,7 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Card and Content Attribution', 'autodescription' ); ?></h4>
 		<?php
+		/* source: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started#attribution */
 		$this->description( __( 'Twitter claims users will be able to follow and view the profiles of attributed accounts directly from the card when these fields are filled in.', 'autodescription' ) );
 		$this->description( __( 'However, for now, these fields seem to have no discernible effect.', 'autodescription' ) );
 		?>

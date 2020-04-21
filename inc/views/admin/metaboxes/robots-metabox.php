@@ -16,15 +16,18 @@ $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $insta
 switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_main':
 		//* Robots types
+		// TODO This IS plural. https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
 		$types = [
 			'category' => __( 'Category archives', 'autodescription' ),
 			'tag'      => __( 'Tag archives', 'autodescription' ),
 			'author'   => __( 'Author pages', 'autodescription' ),
 			'date'     => __( 'Date archives', 'autodescription' ),
 			'search'   => __( 'Search pages', 'autodescription' ),
+			// TODO This IS NOT plural. https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
 			'site'     => _x( 'the entire site', '...for the entire site', 'autodescription' ),
 		];
 
+		// TODO This IS plural. https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
 		$post_types = $this->get_rewritable_post_types();
 
 		//* Robots i18n
@@ -229,7 +232,7 @@ switch ( $instance ) :
 			$_video_snippet_types['number'][ $_n ] = sprintf( _n( '%d second', '%d seconds', $_n, 'autodescription' ), $_n );
 		}
 		$video_preview_options = '';
-		$_current             = $this->get_option( 'max_video_preview' );
+		$_current              = $this->get_option( 'max_video_preview' );
 		foreach ( $_video_snippet_types as $_type => $_values ) {
 			$_label = 'default' === $_type
 					? __( 'Standard directive', 'autodescription' )
