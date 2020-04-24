@@ -512,6 +512,12 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_post_meta_item( '_genesis_title' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$title = $this->get_term_meta_item( 'doctitle' ) ?: '';
+		} elseif ( \is_post_type_archive() ) {
+			/**
+			 * @since 4.0.6
+			 * @param string $title The post type archive title.
+			 */
+			$title = (string) \apply_filters( 'the_seo_framework_pta_title', '' );
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 

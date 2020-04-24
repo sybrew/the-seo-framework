@@ -143,6 +143,7 @@ class Detect extends Render {
 	 * @since 1.3.0
 	 * @since 2.8.0 : 1. Can now check for globals.
 	 *                2. Switched detection order from FAST to SLOW.
+	 * @since 4.0.6 Can no longer autoload classes.
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
 	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
@@ -178,7 +179,7 @@ class Detect extends Render {
 		//* Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
-				if ( class_exists( $name ) ) {
+				if ( class_exists( $name, false ) ) {
 					return true;
 				}
 			}
@@ -239,16 +240,29 @@ class Detect extends Render {
 	 * All parameters must match and return true.
 	 *
 	 * @since 2.5.2
+	 * @since 4.0.6 : 1. Can now check for globals.
+	 *                2. Switched detection order from FAST to SLOW.
+	 *                3. Can no longer autoload classes.
+	 * This method is only used by can_i_use(), and is only effective in the Ultimate Member compat file...
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
 	 * @return bool True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin_multi( array $plugins ) {
 
-		//* Check for classes
-		if ( isset( $plugins['classes'] ) ) {
-			foreach ( $plugins['classes'] as $name ) {
-				if ( ! class_exists( $name ) ) {
+		//* Check for globals
+		if ( isset( $plugins['globals'] ) ) {
+			foreach ( $plugins['globals'] as $name ) {
+				if ( ! isset( $GLOBALS[ $name ] ) ) {
+					return false;
+				}
+			}
+		}
+
+		//* Check for constants
+		if ( isset( $plugins['constants'] ) ) {
+			foreach ( $plugins['constants'] as $name ) {
+				if ( ! defined( $name ) ) {
 					return false;
 				}
 			}
@@ -263,10 +277,10 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for constants
-		if ( isset( $plugins['constants'] ) ) {
-			foreach ( $plugins['constants'] as $name ) {
-				if ( ! defined( $name ) ) {
+		//* Check for classes
+		if ( isset( $plugins['classes'] ) ) {
+			foreach ( $plugins['classes'] as $name ) {
+				if ( ! class_exists( $name, false ) ) {
 					return false;
 				}
 			}
@@ -532,8 +546,8 @@ class Detect extends Render {
 	 * - Beaver Builder by Fastline Media
 	 *
 	 * @since 4.0.0
+	 * @since 4.0.6 The output is now filterable.
 	 * @staticvar bool $detected
-	 * @TODO add filter?
 	 *
 	 * @return bool
 	 */
@@ -541,15 +555,26 @@ class Detect extends Render {
 
 		static $detected = null;
 
-		return isset( $detected ) ? $detected : $detected = $this->detect_plugin( [
-			'constants' => [
-				'ELEMENTOR_VERSION',
-				'ET_BUILDER_VERSION',
-				'WPB_VC_VERSION',
-				'SITEORIGIN_PANELS_VERSION',
-				'FL_BUILDER_VERSION',
-			],
-		] );
+		if ( isset( $detected ) ) return $detected;
+
+		/**
+		 * @since 4.0.6
+		 * @param bool $detected Whether an active page builder is detected.
+		 * @NOTE not to be confused with `the_seo_framework_detect_page_builder`, which tests
+		 *       the page builder status for each post individually.
+		 */
+		return $detected = (bool) \apply_filters(
+			'the_seo_framework_page_builder_active',
+			$this->detect_plugin( [
+				'constants' => [
+					'ELEMENTOR_VERSION',
+					'ET_BUILDER_VERSION',
+					'WPB_VC_VERSION',
+					'SITEORIGIN_PANELS_VERSION',
+					'FL_BUILDER_VERSION',
+				],
+			] )
+		);
 	}
 
 	/**

@@ -106,6 +106,7 @@ function _do_upgrade() {
 	}
 
 	// Check if upgrade is locked. Otherwise, lock it.
+	// TODO send out an admin notice, that informs the user the upgrader is running in the background for X seconds?
 	if ( \get_transient( 'tsf_upgrade_lock' ) ) return;
 
 	$timeout = 5 * MINUTE_IN_SECONDS;
@@ -240,6 +241,9 @@ function _prepare_upgrade_notice() {
  * Outputs "your site has been upgraded" notification to applicable plugin users on upgrade.
  *
  * @since 3.0.6
+ * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
+ *       Users that remove query strings (thanks to YSlow) are to blame, though.
+ * @link <https://wordpress.org/support/topic/4-0-admin-interface-not-loading-correctly/>
  */
 function _do_upgrade_notice() {
 

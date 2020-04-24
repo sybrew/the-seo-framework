@@ -162,7 +162,7 @@ class Post_Data extends Detect {
 		 * @param \WP_Post $post    Post object.
 		 */
 		return (array) \apply_filters_ref_array(
-			'the_seo_framework_inpost_seo_save_defaults', // TODO rename to the_seo_framework_post_meta_defaults
+			'the_seo_framework_inpost_seo_save_defaults', // TODO rename to the_seo_framework_post_meta_defaults. 4.1.0?
 			[
 				$this->get_unfiltered_post_meta_defaults(),
 				$post_id,
@@ -576,9 +576,7 @@ class Post_Data extends Detect {
 	 * Fetches Post content.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 1. No longer applies WordPress' default filters.
-	 *              2. No longer used internally.
-	 * @todo deprecate, unused.
+	 * @since 3.1.0 No longer applies WordPress' default filters.
 	 *
 	 * @param int $id The post ID.
 	 * @return string The post content.

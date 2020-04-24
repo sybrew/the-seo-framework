@@ -235,21 +235,53 @@ In this update, we addressed a few issues our amazing users helped investigate. 
 Oh, before we forget, <!--promotional message here-->.
 
 TODO add robots options to deindex taxonomies (like post types). Also allow disabling SEO for those, and rename the "post types" tabs to "Disable SEO" or "SEO Support"... We already have the functions ready, just not the options.
+See `get_robots_post_type_option_id()`, `s_one_zero()`, and seobar-term.class.php `prime_cache()`. We'll need to migrate those options...
+...and provide backward-compat support. See `_do_upgrade_3103()`, plus the 3.1.x update's fallback option saving (`_set_backward_compatibility()`)
+This fill fix: https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
+This will augment: https://github.com/sybrew/the-seo-framework/issues/20
+For the options: Apply X for TaxonomyName - `taxonomyslug`--note that we must consider pluralities--make it all plural, and separate the singular "for the whole site" part?.
+-> Use `get_tax_type_label()`, note that `name` isn't always plural? Check this.
+
 TODO `somethingprivate: | Blog name` -> `Private: something | Blog name`? Is this a translator error? Test English, French, and Czech.
 
-TODO reset font variant in debugger output.
-
 **For everyone:**
-
 * **Fixed:**
 	* When WooCommerce is active, TSF no longer asserts archive queries as shop pages accidentally.
 		* This issue might also occur when the blog page has the same ID as an archive, but this is less likely, since WordPress maintains a unique-ID system (with fail-secure).
+	* The object cache keys for search queries are now based on a partial md5 output, rather than the first 10 characters of the search query, reducing chance of collision greatly by introducing numeric translations and considering the whole query.
+	* The object cache keys for terms no longer use multibyte encoding, speeding up the key generation. This key now also allows a few more characters, reducing chance of collision slightly.
+* **Changed:**
+	* We exchanged the "About us" link for a "Pricing" link on the plugin activation page. Obviously, it's much more applicable to our business.
 
 **For translators:**
 * **Changed:**
 	* As always, we've added and removed some strings.
 	* Introduced some previously untranslatable strings.
 		* Thank you for highlighting these, [Sébastien](https://twitter.com/bonakor)!
+
+**For developers:**
+* **Added:**
+	* The sitemap debugger now shows the cache key generated, and whether that's being used.
+* **Fixed:**
+	* The debugger's font variant and feature settings are now normalized.
+* **Other:**
+	* Cleaned up code, crossed off todo-lists.
+* **Method notes:**
+	* For class object `the_seo_framework()`:
+		* **Changed:**
+			* `detect_plugin_multi()`
+				1. Can now check for globals.
+				1. Switched detection order from FAST to SLOW.
+				1. Can no longer autoload classes.
+			* `detect_plugin()` can no longer autoload classes.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_page_builder_active`, tests whether a page builder (plugin/theme) is active.
+			* Not to be confused with `the_seo_framework_detect_page_builder`, which tests the page builder status for each post individually.
+		* `the_seo_framework_pta_title`, allows you to set a custom title for post type archives.
+		* `the_seo_framework_pta_description`, allows you to set a custom description for post type archives.
+		* `the_seo_framework_pta_description_excerpt`, allows you to set a custom description excerpt for description generation on post type archives.
+		* `the_seo_framework_fallback_archive_description_excerpt`, allows you to set a custom fallback description excerpt for description generation on archives.
 
 = 4.0.5 =
 

@@ -15,9 +15,12 @@ $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $insta
 
 switch ( $instance ) :
 	case 'the_seo_framework_robots_metabox_main':
+		// Tackle the plurality issue with https://github.com/sybrew/the-seo-framework/issues/20 ?
+		// Or should we tacking it when we add _all_ term type specifics (like SEO exclusion) support?
+
 		//* Robots types
-		// TODO This IS plural. https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
 		$types = [
+			// TODO These ARE plural. https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
 			'category' => __( 'Category archives', 'autodescription' ),
 			'tag'      => __( 'Tag archives', 'autodescription' ),
 			'author'   => __( 'Author pages', 'autodescription' ),

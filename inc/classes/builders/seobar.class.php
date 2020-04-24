@@ -36,7 +36,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @access private
  *      Use \The_SEO_Framework\Interpreters\SeoBar::generate_bar() instead.
  * @internal
- * @abstract: Implements test_{$*}, see property $tests and method `_run_test()` for what * may be.
+ * @abstract Implements test_{$*}, see property $tests and method `_run_test()` for what * may be.
  * @see \The_SEO_Framework\Interpreters\SeoBar
  */
 abstract class SeoBar {

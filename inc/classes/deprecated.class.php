@@ -153,7 +153,7 @@ final class Deprecated {
 	public function get_seo_bar( $column, $post_id, $tax_id ) {
 
 		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->post_status()', '4.0.0', 'the_seo_framework()->get_generated_seo_bar()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_seo_bar()', '4.0.0', 'the_seo_framework()->get_generated_seo_bar()' );
 
 		$type = \get_post_type( $post_id );
 
@@ -553,8 +553,7 @@ final class Deprecated {
 	 * Returns image URL suitable for Schema items.
 	 *
 	 * These are images that are strictly assigned to the Post or Page, fallbacks are omitted.
-	 * Themes should compliment these. If not, then Open Graph should at least
-	 * compliment these.
+	 * Themes should complement these. If not, then Open Graph should at least complement these.
 	 * If that's not even true, then I don't know what happens. But then you're
 	 * in a grey area... @TODO make images optional for Schema?
 	 *

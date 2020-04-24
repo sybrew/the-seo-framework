@@ -390,6 +390,12 @@ class Generate_Description extends Generate {
 			$desc = $this->get_post_meta_item( '_genesis_description' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'description' ) ?: '';
+		} elseif ( \is_post_type_archive() ) {
+			/**
+			 * @since 4.0.6
+			 * @param string $desc The post type archive description.
+			 */
+			$desc = (string) \apply_filters( 'the_seo_framework_pta_description', '' );
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
@@ -624,10 +630,10 @@ class Generate_Description extends Generate {
 			return '';
 
 		if ( is_null( $term ) ) {
-			$_query = true;
-			$term   = \get_queried_object();
+			$in_the_loop = true;
+			$term        = \get_queried_object();
 		} else {
-			$_query = false;
+			$in_the_loop = false;
 		}
 
 		/**
@@ -642,9 +648,7 @@ class Generate_Description extends Generate {
 
 		$excerpt = '';
 
-		if ( ! $_query ) {
-			$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
-		} else {
+		if ( $in_the_loop ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
@@ -652,11 +656,23 @@ class Generate_Description extends Generate {
 			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} elseif ( \is_post_type_archive() ) {
-				// TODO
-				$excerpt = '';
+				/**
+				 * @TODO can we even obtain anything useful ourselves?
+				 *
+				 * @since 4.0.6
+				 * @param string $excerpt The archive description excerpt.
+				 * @param mixed  $term    The queried object.
+				 */
+				$excerpt = (string) \apply_filters( 'the_seo_framework_pta_description_excerpt', '', $term );
 			} else {
-				$excerpt = '';
+				/**
+				 * @since 4.0.6
+				 * @param string $excerpt The fallback archive description excerpt.
+				 */
+				$excerpt = (string) \apply_filters( 'the_seo_framework_fallback_archive_description_excerpt', '' );
 			}
+		} else {
+			$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
 		}
 
 		return $excerpt;

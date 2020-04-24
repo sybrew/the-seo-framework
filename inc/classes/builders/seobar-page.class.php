@@ -199,7 +199,7 @@ final class SeoBar_Page extends SeoBar {
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
-		// This way, we can implement AJAX SEO bar items...
+		// This way, we can implement real-time live-edit AJAX SEO bar items...
 		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $title_args, false );
 
 		if ( strlen( $title_part ) ) {
@@ -421,7 +421,7 @@ final class SeoBar_Page extends SeoBar {
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
-		// This way, we can implement AJAX SEO bar items...
+		// This way, we can implement real-time live-edit AJAX SEO bar items...
 		$desc = static::$tsf->get_description_from_custom_field( $desc_args, false );
 
 		if ( strlen( $desc ) ) {

@@ -600,9 +600,8 @@ class Cache extends Site_Options {
 					break;
 			endswitch;
 		} elseif ( $this->is_search() ) {
-			//* Remove spaces. Limit to 10 chars.
-			// TODO use metahpone?
-			$query = \esc_sql( substr( str_replace( ' ', '', \get_search_query( true ) ), 0, 10 ) );
+			//* Remove spaces, jumble with md5, Limit to 12 chars.
+			$query = \esc_sql( substr( md5( str_replace( ' ', '', \get_search_query( true ) ) ), 0, 12 ) );
 
 			//* Temporarily disable caches to prevent database spam.
 			$this->the_seo_framework_use_transients = false;
@@ -708,6 +707,7 @@ class Cache extends Site_Options {
 	 * Generates Cache key for taxonomical archives.
 	 *
 	 * @since 2.6.0
+	 * @since 4.0.6 No longer uses mb encoding functions, speeding up this method.
 	 *
 	 * @param int    $page_id  The taxonomy or page ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -721,8 +721,8 @@ class Cache extends Site_Options {
 			$taxonomy_name = explode( '_', $taxonomy );
 			if ( is_array( $taxonomy_name ) ) {
 				foreach ( $taxonomy_name as $name ) {
-					if ( mb_strlen( $name ) >= 3 ) {
-						$the_id .= mb_substr( $name, 0, 3 ) . '_';
+					if ( strlen( $name ) >= 3 ) {
+						$the_id .= substr( $name, 0, 3 ) . '_';
 					} else {
 						$the_id = $name . '_';
 					}
@@ -731,14 +731,14 @@ class Cache extends Site_Options {
 		}
 
 		if ( ! $the_id ) {
-			if ( mb_strlen( $taxonomy ) >= 5 ) {
-				$the_id = mb_substr( $taxonomy, 0, 5 );
+			if ( strlen( $taxonomy ) >= 6 ) {
+				$the_id = substr( $taxonomy, 0, 6 );
 			} else {
-				$the_id = \esc_sql( $taxonomy );
+				$the_id = $taxonomy;
 			}
 		}
 
-		$the_id = strtolower( $the_id );
+		$the_id = strtolower( \esc_sql( $the_id ) );
 
 		//* Put it all together.
 		return rtrim( $the_id, '_' ) . '_' . $page_id;

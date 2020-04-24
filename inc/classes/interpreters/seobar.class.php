@@ -29,7 +29,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * TODO @see \the_seo_framework()->get_new_seo_bar( $args ) for easy access. (name tbd)
+ * @see \the_seo_framework()->get_generated_seo_bar( $args ) for easy access.
  *
  * @access public
  *         Note that you can't instance this class. Only static methods and properties are accessible.

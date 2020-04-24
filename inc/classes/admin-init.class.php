@@ -365,7 +365,7 @@ class Admin_Init extends Init {
 	 * for alerts, etc.
 	 *
 	 * @since 2.2.2
-	 * @since 2.9.2 : Added user-friendly exception handling.
+	 * @since 2.9.2 Added user-friendly exception handling.
 	 * @since 2.9.3 : 1. Query arguments work again (regression 2.9.2).
 	 *                2. Now only accepts http and https protocols.
 	 *
@@ -379,7 +379,9 @@ class Admin_Init extends Init {
 		if ( empty( $page ) )
 			return;
 
-		$url = html_entity_decode( \menu_page_url( $page, false ) ); // This can be empty... TODO test?
+		// This can be empty... so $target will be empty. TODO test for $success and bail?
+		// Might cause security issues... we _must_ exit, always? Show warning?
+		$url = html_entity_decode( \menu_page_url( $page, false ) );
 
 		foreach ( $query_args as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )
@@ -397,7 +399,7 @@ class Admin_Init extends Init {
 		 * 1. Change 302 to 500 if you wish to test headers.
 		 * 2. Also force handle_admin_redirect_error() to run.
 		 */
-		\wp_safe_redirect( $target, 302 );
+		$success = \wp_safe_redirect( $target, 302 ); // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 		//* White screen of death for non-debugging users. Let's make it friendlier.
 		if ( $headers_sent ) {

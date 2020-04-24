@@ -221,15 +221,15 @@ class Core {
 			);
 		}
 
-		$tsf_links['about'] = sprintf(
-			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
-			'https://theseoframework.com/about-us/',
-			\esc_html_x( 'About', 'About us', 'autodescription' )
-		);
 		$tsf_links['tsfem'] = sprintf(
 			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
 			'https://theseoframework.com/extensions/',
 			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+		);
+		$tsf_links['pricing'] = sprintf(
+			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
+			'https://theseoframework.com/pricing/',
+			\esc_html_x( 'Pricing', 'Plugin pricing', 'autodescription' )
 		);
 
 		return array_merge( $tsf_links, $links );
@@ -880,9 +880,11 @@ class Core {
 				case 'h3':
 				case 'h2':
 				case 'h1':
-					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
 					//* Considers word non-boundary. @TODO consider removing this?
-					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
+					$expression = sprintf(
+						'/(?:\={%1$d})\B([^\={\%1$s}]+)\B(?:\={%1$d})/',
+						filter_var( $type, FILTER_SANITIZE_NUMBER_INT )
+					);
 
 					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
 

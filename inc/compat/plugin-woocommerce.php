@@ -8,8 +8,6 @@ namespace The_SEO_Framework;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
-// @TODO Move everything WC related over to here.
-
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 /**
  * Initializes WooCommerce compatibility.

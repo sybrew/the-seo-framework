@@ -233,7 +233,6 @@ final class Debug {
 	 * @since 2.8.0 1. Now escapes all parameters.
 	 *              2. Removed check for gettext.
 	 * @access private
-	 * @todo Escape translation string.
 	 *
 	 * @param string $p_or_m The Property or Method.
 	 * @param string $message A message explaining what has been done incorrectly.
