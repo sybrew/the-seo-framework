@@ -794,11 +794,10 @@ class Core {
 	 */
 	public function convert_markdown( $text, $convert = [], $args = [] ) {
 
-		preprocess : {
-			$text = str_replace( "\r\n", "\n", $text );
-			$text = str_replace( "\t", ' ', $text );
-			$text = trim( $text );
-		}
+		// preprocess
+		$text = str_replace( "\r\n", "\n", $text );
+		$text = str_replace( "\t", ' ', $text );
+		$text = trim( $text );
 
 		// You need 3 chars to make a markdown: *m*
 		if ( strlen( $text ) < 3 )

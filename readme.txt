@@ -4,7 +4,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 4.9.0
 Tested up to: 5.4
 Requires PHP: 5.6.0
-Stable tag: 4.0.5
+Stable tag: 4.0.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -76,10 +76,11 @@ The SEO Framework sends us no information and does not create cookies. Learn mor
 
 For additional functionality, check out our free companion plugin [Extension Manager](https://theseoframework.com/?p=2760). It provides numerous free and paid extensions, such as:
 
-* [Local](https://theseoframework.com/?p=2306) lets you set up **important local business information** for search engines to consume.
-* [Focus](https://theseoframework.com/?p=2305) guides you through the process of writing targeted content that ranks with **focus keywords**, and for Premium users also their inflections and synonyms.
+* [Focus](https://theseoframework.com/?p=2305) guides you through the process of writing targeted content that ranks with **focus keywords and synonyms**.
 * [Articles](https://theseoframework.com/?p=2303) **enhances your published posts** by automatically adding important Structured Data.
 * [Honeypot](https://theseoframework.com/?p=2300) **catches comment spammers** through four lightweight yet powerful ways.
+* [Cord](https://theseoframework.com/?p=3404) helps you connect your website to **Google Analytics and Facebook Pixel**.
+* [Local](https://theseoframework.com/?p=2306) lets you set up **important local business information** for search engines to consume.
 * [AMP](https://theseoframework.com/?p=2304) **binds The SEO Framework to the AMP plugin** for AMP supported articles and pages.
 * [Monitor](https://theseoframework.com/?p=2302) **keeps track of your website's SEO** optimizations and statistics.
 * [Incognito](https://theseoframework.com/?p=2301) **hides all development-comments** from The SEO Framework.
@@ -228,30 +229,23 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.x.x =
+= 4.0.6 =
 
-In this update, we addressed a few issues our amazing users helped investigate. That's all.
+In this update, we addressed a few issues our amazing users helped investigate. We increased the entropy for generating object caching keys, addressed some translation and RTL errors, fixed a bug with WooCommerce and term-ID collisions, and added [a few new filters](https://theseoframework.com/?p=TODO).
 
-Oh, before we forget, <!--promotional message here-->.
-
-TODO add robots options to deindex taxonomies (like post types). Also allow disabling SEO for those, and rename the "post types" tabs to "Disable SEO" or "SEO Support"... We already have the functions ready, just not the options.
-See `get_robots_post_type_option_id()`, `s_one_zero()`, and seobar-term.class.php `prime_cache()`. We'll need to migrate those options...
-...and provide backward-compat support. See `_do_upgrade_3103()`, plus the 3.1.x update's fallback option saving (`_set_backward_compatibility()`)
-This fill fix: https://github.com/sybrew/the-seo-framework/issues/508#issuecomment-597654089
-This will augment: https://github.com/sybrew/the-seo-framework/issues/20
-For the options: Apply X for TaxonomyName - `taxonomyslug`--note that we must consider pluralities--make it all plural, and separate the singular "for the whole site" part?.
--> Use `get_tax_type_label()`, note that `name` isn't always plural? Check this.
-
-TODO `somethingprivate: | Blog name` -> `Private: something | Blog name`? Is this a translator error? Test English, French, and Czech.
+Oh, before we forget, did you know we have a new pricing page?
 
 **For everyone:**
+* **Changed:**
+	* We exchanged the "About us" link for a "Pricing" link on the plugin activation page. Obviously, it's much more applicable to our business.
 * **Fixed:**
 	* When WooCommerce is active, TSF no longer asserts archive queries as shop pages accidentally.
 		* This issue might also occur when the blog page has the same ID as an archive, but this is less likely, since WordPress maintains a unique-ID system (with fail-secure).
 	* The object cache keys for search queries are now based on a partial md5 output, rather than the first 10 characters of the search query, reducing chance of collision greatly by introducing numeric translations and considering the whole query.
 	* The object cache keys for terms no longer use multibyte encoding, speeding up the key generation. This key now also allows a few more characters, reducing chance of collision slightly.
-* **Changed:**
-	* We exchanged the "About us" link for a "Pricing" link on the plugin activation page. Obviously, it's much more applicable to our business.
+	* The prefixes for titles no longer append to the title reference-title (instead of prepending), causing the counters and placeholder to be slightly off when the post is marked private or protected with a password.
+	* On RTL, the prefix handler for titles now considers the text direction for adding spaces.
+	* On RTL, the homepage title floating input and placeholder are now responding to the Additions location correctly.
 
 **For translators:**
 * **Changed:**
@@ -265,7 +259,7 @@ TODO `somethingprivate: | Blog name` -> `Private: something | Blog name`? Is thi
 * **Fixed:**
 	* The debugger's font variant and feature settings are now normalized.
 * **Other:**
-	* Cleaned up code, crossed off todo-lists.
+	* Cleaned up code, crossed off todo-items.
 * **Method notes:**
 	* For class object `the_seo_framework()`:
 		* **Changed:**
