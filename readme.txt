@@ -231,11 +231,27 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.6 =
 
-In this update, we addressed a few issues our amazing users helped investigate. We increased the entropy for generating object caching keys, addressed some translation and RTL errors, fixed a bug with WooCommerce and term-ID collisions, and added [a few new filters](https://theseoframework.com/?p=TODO).
+In this update, we addressed a few issues our amazing users helped investigate.
+
+We also increased the entropy for generating object caching keys, addressed some translation and RTL errors, implemented better bbPress title support, fixed a bug with WooCommerce and term-ID collisions, and added [a few new filters](https://theseoframework.com/?p=TODO).
 
 Oh, before we forget, did you know we have a new pricing page?
 
+--- TODO on release page:
+
+Can't stand the reintroduced title prefixes from bbPress? Add this filter to your site (where to place filter?).
+You can customize the filter so it can consider the bbPress query. For that, please refer to bbPress's support (hint: Look at function `bbp_title()`).
+```php
+add_filter( 'bbp_before_title_parse_args', function( $new_title ) {
+	$new_title['format'] = '%s';
+	return $new_title;
+} );
+```
+
 **For everyone:**
+* **Added:**
+	* We implemented bbPress's title handler. These titles are fallbacks, only.
+		* Note: Custom titles entered via The SEO Framework's "Meta Title" entry will overwrite it for the current query, and any generation for sub-pages will therefore also be overwritten.
 * **Changed:**
 	* We exchanged the "About us" link for a "Pricing" link on the plugin activation page. Obviously, it's much more applicable to our business.
 * **Fixed:**
