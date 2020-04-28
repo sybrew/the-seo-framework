@@ -231,67 +231,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.0.6 =
 
-In this update, we addressed a few issues our amazing users helped investigate.
+In this update, we addressed a few issues our amazing users helped investigate. With that, we implemented better bbPress title support, and fixed a bug regarding WooCommerce and term-ID collisions.
 
-We also increased the entropy for generating object caching keys, addressed some translation and RTL errors, implemented better bbPress title support, fixed a bug with WooCommerce and term-ID collisions, and added [a few new filters](https://theseoframework.com/?p=TODO).
-
-Oh, before we forget, did you know we have a new pricing page?
-
---- TODO on release page:
-
-Can't stand the reintroduced title prefixes from bbPress? Add this filter to your site (where to place filter?).
-You can customize the filter so it can consider the bbPress query. For that, please refer to bbPress's support (hint: Look at function `bbp_title()`).
-```php
-add_filter( 'bbp_before_title_parse_args', function( $new_title ) {
-	$new_title['format'] = '%s';
-	return $new_title;
-} );
-```
-
-**For everyone:**
-* **Added:**
-	* We implemented bbPress's title handler. These titles are fallbacks, only.
-		* Note: Custom titles entered via The SEO Framework's "Meta Title" entry will overwrite it for the current query, and any generation for sub-pages will therefore also be overwritten.
-* **Changed:**
-	* We exchanged the "About us" link for a "Pricing" link on the plugin activation page. Obviously, it's much more applicable to our business.
-* **Fixed:**
-	* When WooCommerce is active, TSF no longer asserts archive queries as shop pages accidentally.
-		* This issue might also occur when the blog page has the same ID as an archive, but this is less likely, since WordPress maintains a unique-ID system (with fail-secure).
-	* The object cache keys for search queries are now based on a partial md5 output, rather than the first 10 characters of the search query, reducing chance of collision greatly by introducing numeric translations and considering the whole query.
-	* The object cache keys for terms no longer use multibyte encoding, speeding up the key generation. This key now also allows a few more characters, reducing chance of collision slightly.
-	* The prefixes for titles no longer append to the title reference-title (instead of prepending), causing the counters and placeholder to be slightly off when the post is marked private or protected with a password.
-	* On RTL, the prefix handler for titles now considers the text direction for adding spaces.
-	* On RTL, the homepage title floating input and placeholder are now responding to the Additions location correctly.
-
-**For translators:**
-* **Changed:**
-	* As always, we've added and removed some strings.
-	* Introduced some previously untranslatable strings.
-		* Thank you for highlighting these, [Sébastien](https://twitter.com/bonakor)!
-
-**For developers:**
-* **Added:**
-	* The sitemap debugger now shows the cache key generated, and whether that's being used.
-* **Fixed:**
-	* The debugger's font variant and feature settings are now normalized.
-* **Other:**
-	* Cleaned up code, crossed off todo-items.
-* **Method notes:**
-	* For class object `the_seo_framework()`:
-		* **Changed:**
-			* `detect_plugin_multi()`
-				1. Can now check for globals.
-				1. Switched detection order from FAST to SLOW.
-				1. Can no longer autoload classes.
-			* `detect_plugin()` can no longer autoload classes.
-* **Filter notes:**
-	* **Added:**
-		* `the_seo_framework_page_builder_active`, tests whether a page builder (plugin/theme) is active.
-			* Not to be confused with `the_seo_framework_detect_page_builder`, which tests the page builder status for each post individually.
-		* `the_seo_framework_pta_title`, allows you to set a custom title for post type archives.
-		* `the_seo_framework_pta_description`, allows you to set a custom description for post type archives.
-		* `the_seo_framework_pta_description_excerpt`, allows you to set a custom description excerpt for description generation on post type archives.
-		* `the_seo_framework_fallback_archive_description_excerpt`, allows you to set a custom fallback description excerpt for description generation on archives.
+We also increased the entropy for generating object caching keys, addressed some translation and RTL errors, and added [a few new filters](https://theseoframework.com/?p=3537).
 
 = 4.0.5 =
 

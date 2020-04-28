@@ -1,46 +1,63 @@
-# Copyright (C) 2020 The SEO Framework
-# This file is distributed under the same license as the The SEO Framework package.
+# Copyright (C) 2020 The SEO Framework Team
+# This file is distributed under the same license as the The SEO Framework plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 4.0.5\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
-"POT-Creation-Date: 2020-03-04 04:17:22+00:00\n"
+"Project-Id-Version: The SEO Framework 4.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/trunk\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2020-04-28T14:51:39+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: autodescription\n"
+
+#. Plugin Name of the plugin
+msgid "The SEO Framework"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://theseoframework.com/"
+msgstr ""
+
+#. Description of the plugin
+msgid "An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website."
+msgstr ""
+
+#. Author of the plugin
+msgid "The SEO Framework Team"
+msgstr ""
 
 #. translators: %s = Version number, surrounded in markdown-backticks.
-
-#: bootstrap/upgrade.php:255
+#: bootstrap/upgrade.php:259
 msgid "Thank you for updating The SEO Framework! Your website has been upgraded successfully to use The SEO Framework at database version `%s`."
 msgstr ""
 
-#: bootstrap/upgrade.php:266
+#: bootstrap/upgrade.php:270
 msgid "Thank you for installing The SEO Framework! Your website is now optimized for search and social sharing, automatically. We hope you enjoy our free plugin. Good luck with your site!"
 msgstr ""
 
 #. translators: %s = Link, markdown.
-
-#: bootstrap/upgrade.php:275
+#: bootstrap/upgrade.php:279
 msgid "The SEO Framework only identifies itself rarely during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s)."
 msgstr ""
 
-#: bootstrap/upgrade.php:421
+#: bootstrap/upgrade.php:425
 msgid "Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable."
 msgstr ""
 
-#: bootstrap/upgrade.php:451
+#: bootstrap/upgrade.php:455
 msgid "The previous sitemap timestamp settings have been converted into new global timestamp settings."
 msgstr ""
 
-#: bootstrap/upgrade.php:574
+#: bootstrap/upgrade.php:578
 msgid "A cronjob is now used to ping search engines, and it alerts them to changes in your sitemap."
 msgstr ""
 
-#: bootstrap/upgrade.php:589
+#: bootstrap/upgrade.php:593
 msgid "The positions in the \"Meta Title Additions Location\" setting for the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again."
 msgstr ""
 
@@ -127,13 +144,8 @@ msgid "Good."
 msgstr ""
 
 #. translators: %s = Redirect URL markdown
-
-#: inc/classes/admin-init.class.php:435
+#: inc/classes/admin-init.class.php:437
 msgid "There has been an error redirecting. Refresh the page or follow [this link](%s)."
-msgstr ""
-
-#: inc/classes/admin-init.class.php:640 inc/classes/admin-init.class.php:701
-msgid "Image could not be processed."
 msgstr ""
 
 #: inc/classes/admin-pages.class.php:62
@@ -189,7 +201,6 @@ msgid "Click to change the counter type"
 msgstr ""
 
 #. translators: %s = number
-
 #: inc/classes/admin-pages.class.php:1158
 msgid "Characters Used: %s"
 msgstr ""
@@ -204,7 +215,6 @@ msgid "The SEO Settings may take precedence over these settings."
 msgstr ""
 
 #. translators: %s = Post Type label
-
 #: inc/classes/bridges/postsettings.class.php:86
 msgid "%s SEO Settings"
 msgstr ""
@@ -217,25 +227,11 @@ msgstr ""
 msgid "Are you sure you want to reset all SEO settings to their defaults?"
 msgstr ""
 
-#: inc/classes/bridges/scripts.class.php:418
-#: inc/classes/bridges/scripts.class.php:487
-#: inc/classes/generate-title.class.php:1179
-msgid "Private: %s"
-msgstr ""
-
-#: inc/classes/bridges/scripts.class.php:420
-#: inc/classes/bridges/scripts.class.php:489
-#: inc/classes/generate-title.class.php:1164
-msgid "Protected: %s"
-msgstr ""
-
-#. translators: Taxonomy term archive title. 1: Taxonomy singular name, 2:
-#. Current taxonomy term
+#. translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term
 #. translators: 1 = 'Assessment(s)', 2 = A list of assessments.
-
 #: inc/classes/bridges/scripts.class.php:541
-#: inc/classes/generate-title.class.php:769
-#: inc/classes/generate-title.class.php:836
+#: inc/classes/generate-title.class.php:775
+#: inc/classes/generate-title.class.php:842
 #: inc/classes/interpreters/seobar.class.php:342
 msgid "%1$s: %2$s"
 msgstr ""
@@ -280,25 +276,21 @@ msgid "Select Logo"
 msgstr ""
 
 #. translators: %s = term name
-
 #: inc/classes/bridges/scripts.class.php:897
 msgid "Select Primary %s"
 msgstr ""
 
 #. translators: %s = term name
-
 #: inc/classes/bridges/scripts.class.php:902
 msgid "Make primary %s"
 msgstr ""
 
 #. translators: %s = term name
-
 #: inc/classes/bridges/scripts.class.php:904
 msgid "Primary %s"
 msgstr ""
 
 #. translators: Pixel counter. 1: number (value), 2: number (guideline)
-
 #: inc/classes/bridges/scripts.class.php:999
 msgid "%1$d out of %2$d pixels are used."
 msgstr ""
@@ -346,9 +338,7 @@ msgstr ""
 msgid "Feed Settings"
 msgstr ""
 
-#. translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain
-#. of salt"
-
+#. translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt"
 #: inc/classes/builders/seobar-page.class.php:149
 #: inc/classes/builders/seobar-page.class.php:364
 #: inc/classes/builders/seobar-term.class.php:164
@@ -369,7 +359,6 @@ msgid "No title could be fetched."
 msgstr ""
 
 #. translators: %s = "Untitled"
-
 #: inc/classes/builders/seobar-page.class.php:156
 #: inc/classes/builders/seobar-term.class.php:171
 msgid "No title could be fetched, \"%s\" is used instead."
@@ -501,7 +490,6 @@ msgid "It's built using the excerpt field."
 msgstr ""
 
 #. translators: %s = list of duplicated words
-
 #: inc/classes/builders/seobar-page.class.php:378
 #: inc/classes/builders/seobar-term.class.php:366
 msgid "Found duplicated words: %s"
@@ -567,7 +555,6 @@ msgid "The description inputted at the Edit Page screen is used."
 msgstr ""
 
 #. translators: 1: Word found, 2: Occurrences
-
 #: inc/classes/builders/seobar-page.class.php:493
 #: inc/classes/builders/seobar-term.class.php:463
 msgid "&#8220;%1$s&#8221; is used %2$d times."
@@ -651,10 +638,12 @@ msgstr ""
 #: inc/classes/builders/seobar-page.class.php:605
 #: inc/classes/builders/seobar-term.class.php:560
 #: inc/classes/builders/seobar-term.class.php:569
-#: inc/views/admin/metaboxes/robots-metabox.php:54
+#: inc/views/admin/metaboxes/robots-metabox.php:60
 #: inc/views/edit/seo-settings-singular.php:196
-#: inc/views/edit/seo-settings-tt.php:60 inc/views/list/bulk-post.php:19
-#: inc/views/list/quick-post.php:19 inc/views/list/quick-term.php:19
+#: inc/views/edit/seo-settings-tt.php:60
+#: inc/views/list/bulk-post.php:19
+#: inc/views/list/quick-post.php:19
+#: inc/views/list/quick-term.php:19
 msgid "Indexing"
 msgstr ""
 
@@ -723,7 +712,7 @@ msgstr ""
 #: inc/classes/builders/seobar-page.class.php:759
 #: inc/classes/builders/seobar-term.class.php:709
 #: inc/classes/builders/seobar-term.class.php:718
-#: inc/views/admin/metaboxes/robots-metabox.php:60
+#: inc/views/admin/metaboxes/robots-metabox.php:66
 #: inc/views/list/quick-term.php:26
 msgid "Following"
 msgstr ""
@@ -781,10 +770,12 @@ msgstr ""
 #: inc/classes/builders/seobar-page.class.php:890
 #: inc/classes/builders/seobar-term.class.php:829
 #: inc/classes/builders/seobar-term.class.php:838
-#: inc/views/admin/metaboxes/robots-metabox.php:66
+#: inc/views/admin/metaboxes/robots-metabox.php:72
 #: inc/views/edit/seo-settings-singular.php:212
-#: inc/views/edit/seo-settings-tt.php:86 inc/views/list/bulk-post.php:33
-#: inc/views/list/quick-post.php:33 inc/views/list/quick-term.php:33
+#: inc/views/edit/seo-settings-tt.php:86
+#: inc/views/list/bulk-post.php:33
+#: inc/views/list/quick-post.php:33
+#: inc/views/list/quick-term.php:33
 msgid "Archiving"
 msgstr ""
 
@@ -974,7 +965,6 @@ msgid "Term redirects visitors."
 msgstr ""
 
 #. translators: %s = timestamp
-
 #: inc/classes/builders/sitemap-base.class.php:73
 msgid "Sitemap is generated on %s"
 msgstr ""
@@ -984,13 +974,13 @@ msgid "Settings"
 msgstr ""
 
 #: inc/classes/core.class.php:227
-msgctxt "About us"
-msgid "About"
+msgctxt "Plugin extensions"
+msgid "Extensions"
 msgstr ""
 
 #: inc/classes/core.class.php:232
-msgctxt "Plugin extensions"
-msgid "Extensions"
+msgctxt "Plugin pricing"
+msgid "Pricing"
 msgstr ""
 
 #: inc/classes/core.class.php:265
@@ -1010,33 +1000,27 @@ msgctxt "Extension Manager is a product name; do not translate it."
 msgid "Get Extension Manager"
 msgstr ""
 
-#. translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version
-#. notification, 4: Replacement function
-
+#. translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function
 #: inc/classes/debug.class.php:150
 msgid "%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead."
 msgstr ""
 
-#: inc/classes/debug.class.php:152 inc/classes/debug.class.php:163
+#: inc/classes/debug.class.php:152
+#: inc/classes/debug.class.php:163
 msgid "deprecated"
 msgstr ""
 
-#. translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version
-#. notification
-
+#. translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification
 #: inc/classes/debug.class.php:161
 msgid "%1$s is %2$s since version %3$s of The SEO Framework with no alternative available."
 msgstr ""
 
 #. translators: %s = Version number
-
 #: inc/classes/debug.class.php:212
 msgid "(This message was added in version %s of The SEO Framework.)"
 msgstr ""
 
-#. translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin
-#. Version notification
-
+#. translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification
 #: inc/classes/debug.class.php:216
 msgid "%1$s was called %2$s. %3$s %4$s"
 msgstr ""
@@ -1046,8 +1030,7 @@ msgid "incorrectly"
 msgstr ""
 
 #. translators: 1: Method or Property name, 2: Message
-
-#: inc/classes/debug.class.php:267
+#: inc/classes/debug.class.php:266
 msgid "%1$s is not accessible. %2$s"
 msgstr ""
 
@@ -1057,159 +1040,30 @@ msgid "Source"
 msgstr ""
 
 #. translators: %s = Blog page title. Front-end output.
-
-#: inc/classes/generate-description.class.php:705
+#: inc/classes/generate-description.class.php:721
 msgid "Latest posts: %s"
 msgstr ""
 
-#: inc/classes/generate-description.class.php:714
+#: inc/classes/generate-description.class.php:730
 msgctxt "Placement. e.g. Post Title \"on\" Blog Name"
 msgid "on"
 msgstr ""
 
 #. translators: 1: Title, 2: on, 3: Blogname
 #. translators: 1: Option label, 2: [?] option info note, 3: Optional warning
-
-#: inc/classes/generate-description.class.php:718
+#: inc/classes/generate-description.class.php:734
 #: inc/views/admin/metaboxes/homepage-metabox.php:434
 #: inc/views/admin/metaboxes/homepage-metabox.php:450
 #: inc/views/admin/metaboxes/homepage-metabox.php:466
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
-#. translators: Category archive title. 1: Category name
-
-#: inc/classes/generate-title.class.php:758
-#: inc/classes/generate-title.class.php:783
-msgid "Category: %s"
-msgstr ""
-
-#. translators: Tag archive title. 1: Tag name
-
-#: inc/classes/generate-title.class.php:762
-#: inc/classes/generate-title.class.php:787
-msgid "Tag: %s"
-msgstr ""
-
-#. translators: Author archive title. 1: Author name
-
-#: inc/classes/generate-title.class.php:775
-#: inc/classes/generate-title.class.php:791
-msgid "Author: %s"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:777
-#: inc/classes/generate-title.class.php:839
-msgid "Archives"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:794
-msgctxt "yearly archives date format"
-msgid "Y"
-msgstr ""
-
-#. translators: Yearly archive title. 1: Year
-
-#: inc/classes/generate-title.class.php:796
-msgid "Year: %s"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:798
-msgctxt "monthly archives date format"
-msgid "F Y"
-msgstr ""
-
-#. translators: Monthly archive title. 1: Month name and year
-
-#: inc/classes/generate-title.class.php:800
-msgid "Month: %s"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:802
-msgctxt "daily archives date format"
-msgid "F j, Y"
-msgstr ""
-
-#. translators: Daily archive title. 1: Date
-
-#: inc/classes/generate-title.class.php:804
-msgid "Day: %s"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:808
-msgctxt "post format archive title"
-msgid "Asides"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:810
-msgctxt "post format archive title"
-msgid "Galleries"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:812
-msgctxt "post format archive title"
-msgid "Images"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:814
-msgctxt "post format archive title"
-msgid "Videos"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:816
-msgctxt "post format archive title"
-msgid "Quotes"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:818
-msgctxt "post format archive title"
-msgid "Links"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:820
-msgctxt "post format archive title"
-msgid "Statuses"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:822
-msgctxt "post format archive title"
-msgid "Audio"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:824
-msgctxt "post format archive title"
-msgid "Chats"
-msgstr ""
-
-#. translators: Post type archive title. 1: Post type name
-
-#: inc/classes/generate-title.class.php:829
-msgid "Archives: %s"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:986
-msgid "Untitled"
-msgstr ""
-
-#. translators: %s: search phrase
-
-#: inc/classes/generate-title.class.php:998
-msgid "Search Results for &#8220;%s&#8221;"
-msgstr ""
-
-#: inc/classes/generate-title.class.php:1113
-msgid "Page %s"
-msgstr ""
-
 #. translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments
-
 #: inc/classes/interpreters/seobar.class.php:292
 msgid "%1$s: %2$s %3$s"
 msgstr ""
 
-#. translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment
-#. explanation
-
+#. translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation
 #: inc/classes/interpreters/seobar.class.php:340
 msgid "%1$d: %2$s"
 msgstr ""
@@ -1314,7 +1168,6 @@ msgid "If this site publishes podcasts, enable this option. Otherwise, leave it 
 msgstr ""
 
 #. translators: %s = Reading Settings URL. Links are in Markdown!
-
 #: inc/views/admin/metaboxes/feed-metabox.php:48
 msgid "Note: The feed is already converted into an excerpt through the [Reading Settings](%s)."
 msgstr ""
@@ -1511,7 +1364,6 @@ msgid "Preferred canonical URL scheme:"
 msgstr ""
 
 #. translators: %s = HTTP or HTTPS
-
 #: inc/views/admin/metaboxes/general-metabox.php:302
 msgid "Detect automatically (%s)"
 msgstr ""
@@ -1529,19 +1381,16 @@ msgid "It's recommended to turn these options on for better SEO consistency and 
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/general-metabox.php:325
 msgid "Add `rel` link tags to posts and pages?"
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/general-metabox.php:336
 msgid "Add `rel` link tags to archives?"
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/general-metabox.php:347
 msgid "Add `rel` link tags to the homepage?"
 msgstr ""
@@ -1571,7 +1420,7 @@ msgid "This outputs the complete date including hours, minutes, and timezone."
 msgstr ""
 
 #: inc/views/admin/metaboxes/general-metabox.php:420
-#: inc/views/admin/metaboxes/robots-metabox.php:319
+#: inc/views/admin/metaboxes/robots-metabox.php:325
 msgid "Post Type Settings"
 msgstr ""
 
@@ -1592,7 +1441,7 @@ msgid "Disabling SEO allows search engines to crawl the post type without restri
 msgstr ""
 
 #: inc/views/admin/metaboxes/general-metabox.php:431
-#: inc/views/admin/metaboxes/robots-metabox.php:321
+#: inc/views/admin/metaboxes/robots-metabox.php:327
 msgid "These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect."
 msgstr ""
 
@@ -1605,7 +1454,7 @@ msgid "These settings will take precedence over the settings set within the home
 msgstr ""
 
 #: inc/views/admin/metaboxes/homepage-metabox.php:32
-#: inc/views/admin/metaboxes/robots-metabox.php:48
+#: inc/views/admin/metaboxes/robots-metabox.php:54
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:20
 #: inc/views/admin/metaboxes/social-metabox.php:20
 #: inc/views/admin/metaboxes/title-metabox.php:57
@@ -1650,7 +1499,6 @@ msgid "Note: The title placeholder is fetched from the Page SEO Settings on the 
 msgstr ""
 
 #. translators: %s = Homepage URL markdown
-
 #: inc/views/admin/metaboxes/homepage-metabox.php:127
 #: inc/views/admin/metaboxes/homepage-metabox.php:177
 msgid "A plugin has been detected that suggests to maintain this option on the [homepage](%s)."
@@ -1745,7 +1593,6 @@ msgid "Overwritten by page settings"
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/homepage-metabox.php:437
 msgid "Apply `noindex` to the homepage?"
 msgstr ""
@@ -1755,7 +1602,6 @@ msgid "This tells search engines not to show this page in their search results."
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/homepage-metabox.php:453
 msgid "Apply `nofollow` to the homepage?"
 msgstr ""
@@ -1765,7 +1611,6 @@ msgid "This tells search engines not to follow links on this page."
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/homepage-metabox.php:469
 msgid "Apply `noarchive` to the homepage?"
 msgstr ""
@@ -1780,7 +1625,6 @@ msgid "Warning: No public site should ever apply \"noindex\" or \"nofollow\" to 
 msgstr ""
 
 #. translators: %s = Homepage URL markdown
-
 #: inc/views/admin/metaboxes/homepage-metabox.php:511
 msgid "Note: These options may be overwritten by the [page settings](%s)."
 msgstr ""
@@ -1794,187 +1638,181 @@ msgid "If your homepage is paginated and outputs content that's also found elsew
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/homepage-metabox.php:533
 msgid "Apply `noindex` to every second or later page on the homepage?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:20
+#: inc/views/admin/metaboxes/robots-metabox.php:24
 msgid "Category archives"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:21
+#: inc/views/admin/metaboxes/robots-metabox.php:25
 msgid "Tag archives"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:22
+#: inc/views/admin/metaboxes/robots-metabox.php:26
 msgid "Author pages"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:23
+#: inc/views/admin/metaboxes/robots-metabox.php:27
 msgid "Date archives"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:24
+#: inc/views/admin/metaboxes/robots-metabox.php:28
 msgid "Search pages"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:25
+#: inc/views/admin/metaboxes/robots-metabox.php:30
 msgctxt "...for the entire site"
 msgid "the entire site"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:34
+#: inc/views/admin/metaboxes/robots-metabox.php:40
 msgid "These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will urge to be removed from search engine results pages."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:38
+#: inc/views/admin/metaboxes/robots-metabox.php:44
 msgid "These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your internal links."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:42
+#: inc/views/admin/metaboxes/robots-metabox.php:48
 msgid "These options most likely prevent caching of the selected archives and pages. If you enable this, bots are urged not create a cached copy of the selected archives or pages."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:87
+#: inc/views/admin/metaboxes/robots-metabox.php:93
 msgid "Advanced Query Protection"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:89
+#: inc/views/admin/metaboxes/robots-metabox.php:95
 msgid "Some URL queries can cause WordPress to show faux archives. When search engines spot these, they will crawl and index them, which may cause a drop in ranking. Advanced query protection will prevent robots from indexing these archives."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:94
+#: inc/views/admin/metaboxes/robots-metabox.php:100
 msgid "Enable advanced query protection?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:103
+#: inc/views/admin/metaboxes/robots-metabox.php:109
 msgid "Paginated Archive Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:105
+#: inc/views/admin/metaboxes/robots-metabox.php:111
 msgid "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages."
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
-#: inc/views/admin/metaboxes/robots-metabox.php:112
+#: inc/views/admin/metaboxes/robots-metabox.php:118
 msgid "Apply `noindex` to every second or later archive page?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:123
+#: inc/views/admin/metaboxes/robots-metabox.php:129
 msgid "Copyright Directive Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:125
+#: inc/views/admin/metaboxes/robots-metabox.php:131
 msgid "Some search engines allow you to control copyright directives on the content they aggregate. It's best to allow some content to be taken by these aggregators, as that can improve contextualized exposure via snippets and previews. When left unspecified, regional regulations may apply. It is up to the aggregator to honor these requests."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:130
+#: inc/views/admin/metaboxes/robots-metabox.php:136
 msgid "Specify aggregator copyright compliance directives?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:138
+#: inc/views/admin/metaboxes/robots-metabox.php:144
 msgid "Unlimited"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:139
+#: inc/views/admin/metaboxes/robots-metabox.php:145
 msgctxt "quanity: zero"
 msgid "None, disallow snippet"
 msgstr ""
 
 #. translators: %d = number
-
-#: inc/views/admin/metaboxes/robots-metabox.php:143
+#: inc/views/admin/metaboxes/robots-metabox.php:149
 msgid "%d character"
 msgid_plural "%d characters"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:149
-#: inc/views/admin/metaboxes/robots-metabox.php:235
+#: inc/views/admin/metaboxes/robots-metabox.php:155
+#: inc/views/admin/metaboxes/robots-metabox.php:241
 msgid "Standard directive"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:150
-#: inc/views/admin/metaboxes/robots-metabox.php:236
+#: inc/views/admin/metaboxes/robots-metabox.php:156
+#: inc/views/admin/metaboxes/robots-metabox.php:242
 msgid "Granular directive"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:173
+#: inc/views/admin/metaboxes/robots-metabox.php:179
 msgid "Maximum text snippet length"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:177
+#: inc/views/admin/metaboxes/robots-metabox.php:183
 msgid "This may limit the text snippet length for all pages on this site."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:181
+#: inc/views/admin/metaboxes/robots-metabox.php:187
 msgid "This directive also imposes a limit on meta descriptions and structured data, which unintentionally restricts the amount of information you can share. Therefore, it's best to use at least a 320 character limit."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:190
+#: inc/views/admin/metaboxes/robots-metabox.php:196
 msgctxt "quanity: zero"
 msgid "None, disallow preview"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:191
+#: inc/views/admin/metaboxes/robots-metabox.php:197
 msgid "Thumbnail or standard size"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:192
+#: inc/views/admin/metaboxes/robots-metabox.php:198
 msgid "Large or full size"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:210
+#: inc/views/admin/metaboxes/robots-metabox.php:216
 msgid "Maximum image preview size"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:214
+#: inc/views/admin/metaboxes/robots-metabox.php:220
 msgid "This may limit the image preview size for all images from this site."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:224
+#: inc/views/admin/metaboxes/robots-metabox.php:230
 msgid "Full video preview"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:225
+#: inc/views/admin/metaboxes/robots-metabox.php:231
 msgctxt "quanity: zero"
 msgid "None, still image only"
 msgstr ""
 
 #. translators: %d = number
-
-#: inc/views/admin/metaboxes/robots-metabox.php:229
+#: inc/views/admin/metaboxes/robots-metabox.php:235
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:258
+#: inc/views/admin/metaboxes/robots-metabox.php:264
 msgid "Maximum video preview length"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:262
+#: inc/views/admin/metaboxes/robots-metabox.php:268
 msgid "This may limit the video preview length for all videos on this site."
 msgstr ""
 
-#. translators: 1 = noindex/nofollow/noarchive, 2 = Post, Post type, Category
-#. archives, the entire site, etc.
-
-#: inc/views/admin/metaboxes/robots-metabox.php:277
+#. translators: 1 = noindex/nofollow/noarchive, 2 = Post, Post type, Category archives, the entire site, etc.
+#: inc/views/admin/metaboxes/robots-metabox.php:283
 msgid "Apply %1$s to %2$s?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:282
+#: inc/views/admin/metaboxes/robots-metabox.php:288
 msgid "Robots Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:307
+#: inc/views/admin/metaboxes/robots-metabox.php:313
 msgid "Warning: No public site should ever enable this option."
 msgstr ""
 
-#: inc/views/admin/metaboxes/robots-metabox.php:326
+#: inc/views/admin/metaboxes/robots-metabox.php:332
 msgid "Warning: No site should enable these options for Posts and Pages."
 msgstr ""
 
@@ -2163,7 +2001,6 @@ msgid "These settings do not affect sharing behavior with the social networks."
 msgstr ""
 
 #. translators: %s = Learn more URL. Markdown!
-
 #: inc/views/admin/metaboxes/schema-metabox.php:289
 msgid "These settings are marked for removal. When you clear a field, it will be hidden forever. [Learn more](%s)."
 msgstr ""
@@ -2245,9 +2082,7 @@ msgstr ""
 msgid "Note: You're using the plain permalink structure; so, no robots.txt file can be generated."
 msgstr ""
 
-#. translators: 1 = Link to settings, Markdown. 2 = example input, also
-#. markdown! Preserve the Markdown as-is!
-
+#. translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is!
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:158
 msgid "Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`."
 msgstr ""
@@ -2285,7 +2120,6 @@ msgid "The modified time suggests to search engines where to look for content ch
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:216
 msgid "Add `<lastmod>` to the sitemap?"
 msgstr ""
@@ -2299,7 +2133,6 @@ msgid "The priority index suggests to search engines which pages are deemed more
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:238
 msgid "Add `<priority>` to the sitemap?"
 msgstr ""
@@ -2329,7 +2162,6 @@ msgid "Notify Search Engines"
 msgstr ""
 
 #. translators: %s = Google
-
 #: inc/views/admin/metaboxes/sitemaps-metabox.php:285
 msgid "Notify %s about sitemap changes?"
 msgstr ""
@@ -2459,7 +2291,7 @@ msgid "Discord styles embeds with the theme color. The theme color can also affe
 msgstr ""
 
 #: inc/views/admin/metaboxes/social-metabox.php:157
-msgid "Theme color"
+msgid "Theme Color"
 msgstr ""
 
 #: inc/views/admin/metaboxes/social-metabox.php:165
@@ -2516,7 +2348,7 @@ msgid "Your Facebook profile."
 msgstr ""
 
 #: inc/views/admin/metaboxes/social-metabox.php:242
-#: inc/views/admin/metaboxes/social-metabox.php:334
+#: inc/views/admin/metaboxes/social-metabox.php:336
 msgid "Authors can override this option on their profile page."
 msgstr ""
 
@@ -2541,60 +2373,70 @@ msgstr ""
 msgid "The Twitter Card type may have the image highlighted, either small at the side or large above."
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:303
-msgid "When the following options are filled in, Twitter might link your Twitter Site or Author Profile when your post or page is shared."
+#: inc/views/admin/metaboxes/social-metabox.php:286
+msgid "Learn more about this card."
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:308
+#: inc/views/admin/metaboxes/social-metabox.php:301
+msgid "Card and Content Attribution"
+msgstr ""
+
+#: inc/views/admin/metaboxes/social-metabox.php:304
+msgid "Twitter claims users will be able to follow and view the profiles of attributed accounts directly from the card when these fields are filled in."
+msgstr ""
+
+#: inc/views/admin/metaboxes/social-metabox.php:305
+msgid "However, for now, these fields seem to have no discernible effect."
+msgstr ""
+
+#: inc/views/admin/metaboxes/social-metabox.php:310
 msgid "Website Twitter Profile"
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:312
-#: inc/views/admin/metaboxes/social-metabox.php:328
+#: inc/views/admin/metaboxes/social-metabox.php:314
+#: inc/views/admin/metaboxes/social-metabox.php:330
 msgid "Find your @username."
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:324
+#: inc/views/admin/metaboxes/social-metabox.php:326
 msgid "Twitter Author Fallback Profile"
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:343
+#: inc/views/admin/metaboxes/social-metabox.php:345
 msgid "oEmbed Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:345
+#: inc/views/admin/metaboxes/social-metabox.php:347
 msgid "Some social sharing services and clients, like WordPress and Discord, obtain the linked page information via oEmbed."
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:353
+#: inc/views/admin/metaboxes/social-metabox.php:355
 msgid "Remove author name?"
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:354
-msgid "Discord shows the page author name above the sharing embed. Check this options if you find this undesirable."
+#: inc/views/admin/metaboxes/social-metabox.php:356
+msgid "Discord shows the page author's name above the sharing embed. Check this option if you find this undesirable."
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:362
+#: inc/views/admin/metaboxes/social-metabox.php:364
 msgid "Posts"
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:365
+#: inc/views/admin/metaboxes/social-metabox.php:367
 msgid "Post Date Settings"
 msgstr ""
 
-#: inc/views/admin/metaboxes/social-metabox.php:367
+#: inc/views/admin/metaboxes/social-metabox.php:369
 msgid "Some social sites output the shared post's publishing and modified data in the sharing snippet."
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
-#: inc/views/admin/metaboxes/social-metabox.php:378
+#: inc/views/admin/metaboxes/social-metabox.php:380
 msgid "Add `article:published_time` to posts?"
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-
-#: inc/views/admin/metaboxes/social-metabox.php:388
+#: inc/views/admin/metaboxes/social-metabox.php:390
 msgid "Add `article:modified_time` to posts?"
 msgstr ""
 
@@ -2619,8 +2461,15 @@ msgstr ""
 msgid "Prefixes"
 msgstr ""
 
-#. translators: %s = HTML tag example
+#: inc/views/admin/metaboxes/title-metabox.php:102
+msgid "A title is generated for every page."
+msgstr ""
 
+#: inc/views/admin/metaboxes/title-metabox.php:103
+msgid "Some titles may have HTML tags inserted by the author for styling."
+msgstr ""
+
+#. translators: %s = HTML tag example
 #: inc/views/admin/metaboxes/title-metabox.php:108
 msgid "This strips HTML tags, like %s, from the title."
 msgstr ""
@@ -2663,10 +2512,6 @@ msgstr ""
 
 #: inc/views/admin/metaboxes/title-metabox.php:200
 msgid "Note: Only use this option if you are aware of its SEO effects."
-msgstr ""
-
-#: inc/views/admin/metaboxes/title-metabox.php:207
-msgid "Category"
 msgstr ""
 
 #: inc/views/admin/metaboxes/title-metabox.php:226
@@ -2722,7 +2567,6 @@ msgid "Get the Yandex verification code."
 msgstr ""
 
 #. translators: literal translation from '百度搜索资源平台'-Code
-
 #: inc/views/admin/metaboxes/webmaster-metabox.php:57
 msgid "Baidu Search Resource Platform Code"
 msgstr ""
@@ -2786,13 +2630,15 @@ msgid "Use this when you want to rearrange the title parts manually."
 msgstr ""
 
 #: inc/views/edit/seo-settings-singular.php:204
-#: inc/views/edit/seo-settings-tt.php:73 inc/views/list/bulk-post.php:26
+#: inc/views/edit/seo-settings-tt.php:73
+#: inc/views/list/bulk-post.php:26
 #: inc/views/list/quick-post.php:26
 msgid "Link following"
 msgstr ""
 
 #: inc/views/edit/seo-settings-singular.php:222
-#: inc/views/edit/seo-settings-tt.php:279 inc/views/list/quick-post.php:57
+#: inc/views/edit/seo-settings-tt.php:279
+#: inc/views/list/quick-post.php:57
 #: inc/views/list/quick-term.php:57
 msgid "Canonical URL"
 msgstr ""
@@ -2811,9 +2657,9 @@ msgid "Note: A non-default selection will overwrite the global homepage settings
 msgstr ""
 
 #. translators: %s = default option value
-
 #: inc/views/edit/seo-settings-singular.php:289
-#: inc/views/edit/seo-settings-tt.php:316 inc/views/list/quick-post.php:74
+#: inc/views/edit/seo-settings-tt.php:316
+#: inc/views/list/quick-post.php:74
 #: inc/views/list/quick-term.php:74
 msgid "Default (%s)"
 msgstr ""
@@ -2831,7 +2677,8 @@ msgid "Exclude this page from all archive queries on this site."
 msgstr ""
 
 #: inc/views/edit/seo-settings-singular.php:347
-#: inc/views/edit/seo-settings-tt.php:332 inc/views/list/quick-post.php:87
+#: inc/views/edit/seo-settings-tt.php:332
+#: inc/views/list/quick-post.php:87
 #: inc/views/list/quick-term.php:87
 msgid "301 Redirect URL"
 msgstr ""
@@ -2861,17 +2708,15 @@ msgstr ""
 msgid "Social SEO Settings"
 msgstr ""
 
-#: inc/views/edit/seo-settings-tt.php:272 inc/views/list/bulk-post.php:54
-#: inc/views/list/quick-post.php:54 inc/views/list/quick-term.php:54
+#: inc/views/edit/seo-settings-tt.php:272
+#: inc/views/list/bulk-post.php:54
+#: inc/views/list/quick-post.php:54
+#: inc/views/list/quick-term.php:54
 msgid "Visibility SEO Settings"
 msgstr ""
 
 #: inc/views/edit/seo-settings-tt.php:300
 msgid "These directives may urge robots not to display, follow links on, or create a cached copy of this term."
-msgstr ""
-
-#: inc/views/list/bulk-post.php:67
-msgid "&mdash; No Change &mdash;"
 msgstr ""
 
 #: inc/views/list/bulk-post.php:68
@@ -2900,13 +2745,11 @@ msgid "XML Sitemap"
 msgstr ""
 
 #. translators: URLs are in Markdown. Don't forget to localize the URLs.
-
 #: inc/views/sitemap/xsl-stylesheet.php:244
 msgid "This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/)."
 msgstr ""
 
 #. translators: URLs are in Markdown. Don't localize this URL.
-
 #: inc/views/sitemap/xsl-stylesheet.php:264
 msgid "You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/)."
 msgstr ""
@@ -2924,36 +2767,15 @@ msgid "Priority"
 msgstr ""
 
 #. translators: URLs are in Markdown.
-
 #: inc/views/sitemap/xsl-stylesheet.php:366
 msgid "Generated by [The SEO Framework](https://theseoframework.com/)"
 msgstr ""
 
 #. translators: %s = term name
-
 #: inc/views/templates/inpost/primary-term-selector.php:28
 msgid "The buttons below are for primary %s selection."
 msgstr ""
 
 #: inc/views/templates/settings/settings.php:14
 msgid "This post type is disabled, so this option won't work."
-msgstr ""
-#. Plugin Name of the plugin/theme
-msgid "The SEO Framework"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "https://theseoframework.com/"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid "An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "The SEO Framework Team"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://theseoframework.com/"
 msgstr ""
