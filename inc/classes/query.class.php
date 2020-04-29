@@ -380,8 +380,7 @@ class Query extends Core {
 			$post = \get_post( $post );
 			$id   = $post ? $post->ID : 0;
 		} else {
-			if ( ! \is_singular() ) return false;
-			$id = $this->get_the_real_ID();
+			$id = null;
 		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
@@ -390,13 +389,14 @@ class Query extends Core {
 
 		/**
 		 * @since 4.0.5
-		 * @param bool $is_singular_archive Whether the post ID is a singular archive.
-		 * @param int  $id                  The current or supplied post ID.
+		 * @since 4.0.7 The $id can now be null, when no post is given.
+		 * @param bool     $is_singular_archive Whether the post ID is a singular archive.
+		 * @param int|null $id                  The supplied post ID. Null when in the loop.
 		 */
 		$is_singular_archive = \apply_filters_ref_array(
 			'the_seo_framework_is_singular_archive',
 			[
-				$this->is_blog_page_by_id( $id ),
+				isset( $id ) ? $this->is_blog_page_by_id( $id ) : $this->is_blog_page(),
 				$id,
 			]
 		);
@@ -530,6 +530,8 @@ class Query extends Core {
 	 * Detect the non-home blog page by query (ID).
 	 *
 	 * @since 2.3.4
+	 * @todo deprecate
+	 * @see is_wc_shop() -- that's the correct implementation. However, we're dealing with erratic queries here (ET & legacy WP)
 	 *
 	 * @param int $id the Page ID.
 	 * @return bool true if is blog page. Always false if blog page is homepage.
@@ -571,6 +573,8 @@ class Query extends Core {
 	 * Checks blog page by sole ID.
 	 *
 	 * @since 4.0.0
+	 * @todo deprecate
+	 * @see is_wc_shop() -- that's the correct implementation.
 	 *
 	 * @param int $id The ID to check
 	 * @return bool

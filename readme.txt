@@ -4,7 +4,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 4.9.0
 Tested up to: 5.4
 Requires PHP: 5.6.0
-Stable tag: 4.0.6
+Stable tag: 4.0.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -228,6 +228,10 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.0.7 =
+
+This follow-up update to 4.0.6 addresses an issue where the WooCommerce shop page was seen as an actual archive mistakenly. For that page, this issue caused your post-edit input, among other SEO data, to no longer be honored.
 
 = 4.0.6 =
 

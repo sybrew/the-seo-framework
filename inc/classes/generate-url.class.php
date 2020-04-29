@@ -220,6 +220,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
+	 * @TODO Remove the $id passthrough requirement? Methods lower than this pass it to the query handler...
 	 * @see $this->get_canonical_url()
 	 *
 	 * @return string The canonical URL.

@@ -65,8 +65,8 @@ function _set_real_id_wc_shop( $id ) {
  * @since 4.0.5
  * @access private
  *
- * @param bool $is_singular_archive Whether the post ID is a singular archive.
- * @param int  $id                  The current or supplied post ID.
+ * @param bool     $is_singular_archive Whether the post ID is a singular archive.
+ * @param int|null $id                  The supplied post ID. Null when in the loop.
  * @return bool
  */
 function _set_shop_singular_archive( $is_singular_archive, $id ) {
