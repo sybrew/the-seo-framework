@@ -726,7 +726,6 @@ class Generate_Description extends Generate {
 		if ( empty( $title ) )
 			return '';
 
-		$title    = $title;
 		$on       = \_x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
 		$blogname = $this->get_blogname();
 

@@ -1557,12 +1557,9 @@ class Query extends Core {
 		}
 
 		if ( isset( $value_to_set ) ) {
-			if ( isset( $cache[ $method ][ $hash ] ) ) {
-				$cache[ $method ][ $hash ] = $value_to_set;
-				return false;
-			}
+			$fresh_set                 = ! isset( $cache[ $method ][ $hash ] );
 			$cache[ $method ][ $hash ] = $value_to_set;
-			return true;
+			return $fresh_set;
 		} else {
 			if ( isset( $cache[ $method ][ $hash ] ) )
 				return $cache[ $method ][ $hash ];

@@ -367,24 +367,24 @@ class Render extends Admin_Init {
 	 */
 	public function og_url() {
 
-		if ( $this->use_og_tags() ) {
+		if ( ! $this->use_og_tags() ) return '';
 
-			/**
-			 * @since 2.9.3
-			 * @param string $url The canonical/Open Graph URL. Must be escaped.
-			 * @param int    $id  The current page or term ID.
-			 */
-			$url = (string) \apply_filters_ref_array(
-				'the_seo_framework_ogurl_output',
-				[
-					$this->get_current_canonical_url(),
-					$this->get_the_real_ID(),
-				]
-			);
+		/**
+		 * @since 2.9.3
+		 * @param string $url The canonical/Open Graph URL. Must be escaped.
+		 * @param int    $id  The current page or term ID.
+		 */
+		$url = (string) \apply_filters_ref_array(
+			'the_seo_framework_ogurl_output',
+			[
+				$this->get_current_canonical_url(),
+				$this->get_the_real_ID(),
+			]
+		);
 
-			if ( $url )
-				return '<meta property="og:url" content="' . $url . '" />' . "\r\n";
-		}
+		// TODO add esc_attr()? The URL is already safe for attribute usage... I'm not sure if that'll potentially break the URL.
+		if ( $url )
+			return '<meta property="og:url" content="' . $url . '" />' . "\r\n";
 
 		return '';
 	}
@@ -398,8 +398,7 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_card() {
 
-		if ( ! $this->use_twitter_tags() )
-			return '';
+		if ( ! $this->use_twitter_tags() ) return '';
 
 		$card = $this->get_current_twitter_card_type();
 
@@ -418,8 +417,7 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_site() {
 
-		if ( ! $this->use_twitter_tags() )
-			return '';
+		if ( ! $this->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -453,8 +451,7 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_creator() {
 
-		if ( ! $this->use_twitter_tags() )
-			return '';
+		if ( ! $this->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -487,8 +484,7 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_title() {
 
-		if ( ! $this->use_twitter_tags() )
-			return '';
+		if ( ! $this->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -521,8 +517,7 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_description() {
 
-		if ( ! $this->use_twitter_tags() )
-			return '';
+		if ( ! $this->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -585,9 +580,9 @@ class Render extends Admin_Init {
 	 */
 	public function theme_color() {
 
-		$theme_color = $this->get_option( 'theme_color' );
-
 		$output = '';
+
+		$theme_color = $this->get_option( 'theme_color' );
 
 		if ( $theme_color )
 			$output = '<meta name="theme-color" content="' . \esc_attr( $theme_color ) . '" />' . "\r\n";
@@ -606,11 +601,8 @@ class Render extends Admin_Init {
 	 */
 	public function facebook_author() {
 
-		if ( ! $this->use_facebook_tags() )
-			return '';
-
-		if ( 'article' !== $this->get_og_type() )
-			return '';
+		if ( ! $this->use_facebook_tags() ) return '';
+		if ( 'article' !== $this->get_og_type() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -642,11 +634,8 @@ class Render extends Admin_Init {
 	 */
 	public function facebook_publisher() {
 
-		if ( ! $this->use_facebook_tags() )
-			return '';
-
-		if ( 'article' !== $this->get_og_type() )
-			return '';
+		if ( ! $this->use_facebook_tags() ) return '';
+		if ( 'article' !== $this->get_og_type() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -677,8 +666,7 @@ class Render extends Admin_Init {
 	 */
 	public function facebook_app_id() {
 
-		if ( ! $this->use_facebook_tags() )
-			return '';
+		if ( ! $this->use_facebook_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -713,8 +701,7 @@ class Render extends Admin_Init {
 	 */
 	public function article_published_time() {
 
-		if ( ! $this->output_published_time() )
-			return '';
+		if ( ! $this->output_published_time() ) return '';
 
 		$id   = $this->get_the_real_ID();
 		$post = \get_post( $id );
@@ -758,8 +745,7 @@ class Render extends Admin_Init {
 	 */
 	public function article_modified_time() {
 
-		if ( ! $this->output_modified_time() )
-			return '';
+		if ( ! $this->output_modified_time() ) return '';
 
 		$id = $this->get_the_real_ID();
 
@@ -831,6 +817,7 @@ class Render extends Admin_Init {
 			}
 		}
 
+		// TODO add esc_attr()? The URL is already safe for attribute usage... I'm not sure if that'll potentially break the URL.
 		if ( $url )
 			return '<link rel="canonical" href="' . $url . '" />' . PHP_EOL;
 
@@ -847,6 +834,7 @@ class Render extends Admin_Init {
 	 * @return string The LD+json Schema.org scripts.
 	 */
 	public function ld_json() {
+
 		/**
 		 * @since 2.6.0
 		 * @param string $json The JSON output. Must be escaped.
@@ -1015,8 +1003,7 @@ class Render extends Admin_Init {
 	public function robots() {
 
 		//* Don't do anything if the blog isn't set to public.
-		if ( false === $this->is_blog_public() )
-			return '';
+		if ( false === $this->is_blog_public() ) return '';
 
 		$meta = $this->get_robots_meta();
 

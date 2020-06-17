@@ -603,6 +603,8 @@ class Init extends Query {
 	 *                4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
 	 * @uses robots_txt filter located at WP core
 	 * @access private
+	 * @TODO extrapolate the contents without a warning to get_robots_txt(). Forward filter to it.
+	 *       See Monitor extension.
 	 *
 	 * @param string $robots_txt The current robots_txt output. Not used.
 	 * @param string $public The blog_public option value. Not used.

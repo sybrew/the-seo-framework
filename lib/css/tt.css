@@ -71,7 +71,7 @@ a.tsf-tooltip-item {
 
 /* fix transparent images */
 .tsf-tooltip-text img {
-    background: #fff;
+	background: #fff;
 }
 
 .tsf-tooltip-text ol,

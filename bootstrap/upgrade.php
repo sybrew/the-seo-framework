@@ -107,6 +107,7 @@ function _do_upgrade() {
 
 	// Check if upgrade is locked. Otherwise, lock it.
 	// TODO send out an admin notice, that informs the user the upgrader is running in the background for X seconds?
+	// FIXME this prevents race conditions, but it can also be affected by a race condition... The solution would be cron?
 	if ( \get_transient( 'tsf_upgrade_lock' ) ) return;
 
 	$timeout = 5 * MINUTE_IN_SECONDS;

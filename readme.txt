@@ -229,6 +229,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+* TODO Polylang subdirectory URLs have their sitemap pointing to a query argument... https://kb.theseoframework.com/kb/translation-plugin-compatibility/#polylang-caveat-1
+* TODO trim_exerpt() trims very short descriptions, such as "Latest posts: %s on Blog Name" to "Latest posts:". Should we add a dot after the string at get_description_additions()?
+* TODO The sitemap should include non-rewriteable, but public, post types. `rewrite=>false` only prevents pretty URLs from being generated, but the URLs are still accessible via their ugly variant.
+	* We excluded them in the past because many devs don't know the difference between rewrite and public. I'm not sure if we should follow through or forego this. With WP sitemaps coming (and including nonrewriteable posts), it'll be a common issue, so we can be complacent about that.
+
 = 4.0.7 =
 
 This follow-up update to 4.0.6 addresses an issue where the WooCommerce shop page was seen as an actual archive mistakenly. For that page, this issue caused your post-edit input, among other SEO data, to no longer be honored.

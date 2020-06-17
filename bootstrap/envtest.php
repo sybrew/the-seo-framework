@@ -6,6 +6,13 @@
  *       Which is PHP 5.2.
  * When we only support WordPress 5.2+, it'll be PHP 5.6.
  * When we only support WordPress 5.4?+, it'll be PHP 7.1.
+ *
+ * This file can be removed when we only support WordPress 5.2 or later. However, their
+ * onboarding message isn't as useful, informative, or even as friendly.
+ *
+ * To use that, we need to add these plugin headers in the plugin's main PHP file:
+ * Requires PHP: 5.6.5
+ * Requires at least: 4.9
  */
 
 defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;

@@ -1406,6 +1406,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( strpos( $link, 'profile.php' ) ) {
 			//= Gets query parameters.
+			// FIXME why don't we use parse_url( $link, PHP_URL_QUERY );?
 			$q = strtok( substr( $link, strpos( $link, '?' ) ), '?' );
 			parse_str( $q, $r );
 			if ( isset( $r['id'] ) ) {
@@ -1883,6 +1884,7 @@ class Sanitize extends Admin_Pages {
 			$width = $height = 0;
 
 		if ( $width > 4096 || $height > 4096 ) {
+			// FIXME Why do we assume there's an $id available here?
 			$new_image = $this->get_largest_acceptable_image_src( $id, 4096 );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 

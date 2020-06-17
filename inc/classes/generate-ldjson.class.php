@@ -208,7 +208,7 @@ class Generate_Ldjson extends Generate_Image {
 		];
 
 		//= Building
-		$key = 'WebSite';
+		$key = 'website';
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );
 
@@ -281,7 +281,7 @@ class Generate_Ldjson extends Generate_Image {
 			];
 		}
 
-		$key = 'Links';
+		$key = 'links';
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );
 
@@ -767,7 +767,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		static $it = 0;
 
-		$key = 'Breadcrumbs_' . $it;
+		$key = 'breadcrumbs_' . $it;
 
 		$data = [
 			'@context'        => 'https://schema.org',
