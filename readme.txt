@@ -252,7 +252,7 @@ TODO make non-rewritable post types includable, but exclude them for users that 
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
 * **Fixed:**
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
-	* Setting tabs' contents can no longer stagger when you hold an arrow key switching tabs.
+	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
 
 ## For developers
