@@ -36,10 +36,10 @@ switch ( $instance ) :
 				'callback' => SeoSettings::class . '::_general_metabox_timestamps_tab',
 				'dashicon' => 'clock',
 			],
-			'posttypes'   => [
-				'name'     => __( 'Post Types', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_general_metabox_posttypes_tab',
-				'dashicon' => 'index-card',
+			'exclusions'  => [
+				'name'     => __( 'Exclusions', 'autodescription' ),
+				'callback' => SeoSettings::class . '::_general_metabox_exclusions_tab',
+				'dashicon' => 'editor-unlink',
 			],
 		];
 
@@ -415,32 +415,32 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_general_metabox_posttypes':
+	case 'the_seo_framework_general_metabox_exclusions':
 		?>
-		<h4><?php esc_html_e( 'Post Type Settings', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Exclusion Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Post types are special content types. These options should not need changing when post types are registered correctly.', 'autodescription' ) );
+		$this->description( __( 'When checked, these options will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types and taxonomies. This will allow search engines to crawl the post type and taxonomies without advanced restrictions or directions.', 'autodescription' ) );
+		$this->attention_description( __( 'These options should not need changing when post types and taxonomies are registered correctly.', 'autodescription' ) );
+		$this->description( __( 'Default post types and taxonomies can not be disabled.', 'autodescription' ) );
 		?>
 
 		<hr>
 
-		<h4><?php esc_html_e( 'Disable SEO', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Post Type Exclusions', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Select post types which should not receive any SEO optimization whatsoever. This will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types.', 'autodescription' ) );
-		$this->attention_description( __( 'Disabling SEO allows search engines to crawl the post type without restrictions or direction.', 'autodescription' ) );
+		$this->description( __( 'Select post types which should be excluded.', 'autodescription' ) );
 		$this->description( __( 'These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
-		$this->description( __( 'Default post types can not be disabled.', 'autodescription' ) );
 
 		$forced_pt = $this->get_forced_supported_post_types();
 		$boxes     = [];
 
 		foreach ( $this->get_rewritable_post_types() as $post_type ) {
-			$pto = get_post_type_object( $post_type );
-			if ( ! isset( $pto->labels->name ) ) continue;
+			$_label = $this->get_post_type_label( $post_type, false );
+			if ( ! strlen( $_label ) ) continue;
 
 			$_label = sprintf(
 				'%s &ndash; <code>%s</code>',
-				esc_html( $pto->labels->name ),
+				esc_html( $_label ),
 				esc_html( $post_type )
 			);
 
@@ -451,6 +451,42 @@ switch ( $instance ) :
 				'label'    => $_label,
 				'escape'   => false,
 				'disabled' => in_array( $post_type, $forced_pt, true ),
+			] );
+		}
+
+		$this->wrap_fields( $boxes, true );
+
+		?>
+		<hr>
+
+		<h4><?php esc_html_e( 'Taxonomy Exclusions', 'autodescription' ); ?></h4>
+		<?php
+		$this->description( __( 'Select taxonomies which should be excluded.', 'autodescription' ) );
+		$this->description( __( 'When taxonomies have all their bound post types excluded, they will inherit their exclusion status.', 'autodescription' ) );
+
+		$forced_tax = $this->get_forced_supported_taxonomies();
+		$boxes      = [];
+
+		foreach ( $this->get_public_taxonomies() as $taxonomy ) {
+			$_label = $this->get_tax_type_label( $taxonomy, false );
+			if ( ! strlen( $_label ) ) continue;
+
+			$_label = sprintf(
+				'%s &ndash; <code>%s</code>',
+				esc_html( $_label ),
+				esc_html( $taxonomy )
+			);
+
+			$boxes[] = $this->make_checkbox_array( [
+				'id'       => 'disabled_taxonomies',
+				'class'    => 'tsf-disabled-taxonomies',
+				'index'    => $taxonomy,
+				'label'    => $_label,
+				'escape'   => false,
+				'disabled' => in_array( $taxonomy, $forced_tax, true ),
+				'data'     => [
+					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
+				],
 			] );
 		}
 

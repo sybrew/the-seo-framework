@@ -213,7 +213,7 @@ If you don't want a page in the sitemap, consider enabling the `noindex` option 
 If the link shouldn't be in the sitemap because it's meant for structural reasons, then inform the plugin or theme author that created them.
 You should tell the author to check out the "`public` and `rewrite` post type arguments." The plugin or theme author should know what that means.
 
-In the meantime, you can disable SEO for the unwanted entries via the "General SEO Settings," under "Post Types."
+In the meantime, you can disable SEO for the unwanted entries via the "General SEO Settings," under "Exclusions."
 
 = What do the application/ld+json scripts do? =
 
@@ -229,99 +229,68 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.1.0 =
+
 * TODO Polylang subdirectory URLs have their sitemap pointing to a query argument... https://kb.theseoframework.com/kb/translation-plugin-compatibility/#polylang-caveat-1
 * TODO trim_exerpt() trims very short descriptions, such as "Latest posts: %s on Blog Name" to "Latest posts:". Should we add a dot after the string at get_description_additions()?
 * TODO The sitemap should include non-rewriteable, but public, post types. `rewrite=>false` only prevents pretty URLs from being generated, but the URLs are still accessible via their ugly variant.
-	* We excluded them in the past because many devs don't know the difference between rewrite and public. I'm not sure if we should follow through or forego this. With WP sitemaps coming (and including nonrewriteable posts), it'll be a common issue, so we can be complacent about that.
+	* We excluded them in the past because many devs don't know the difference between rewrite and public. I'm not sure if we should follow through or forego this. With WP sitemaps coming (and including nonrewriteable posts), it'll be a common issue, so we can be complacent about that and revert the rewrite exemption rule.
 
-= 4.0.7 =
+TODO set db version to 4100.
+TODO make non-rewritable post types includable, but exclude them for users that upgrade?
 
-This follow-up update to 4.0.6 addresses an issue where the WooCommerce shop page was seen as an actual archive mistakenly. For that page, this issue caused your post-edit input, among other SEO data, to no longer be honored.
+## For everyone
+* **Added:**
+	* You can now exclude taxonomies from receiving SEO optimization (yes, SEO optimization).
+	* TODO You can now set robots settings for all taxonomies, and much less confusingly so.
+	* TODO The new WordPress core sitemaps are now disabled when you enable sitemaps via TSF.
+		* Or disabled per se when TSF is active? Allow users to revert this via (the same) filter?
+	* TODO you can now set SEO exclusions using endpoints?
+		* This can be difficult to determine with the SEO Bar. Alternatively, we set exclusions based on registered EP?
+* **Changed:**
+	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
+	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
+* **Fixed:**
+	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
+	* Setting tabs' contents can no longer stagger when you hold an arrow key switching tabs.
+	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
 
-= 4.0.6 =
-
-In this update, we addressed a few issues our amazing users helped investigate. With that, we implemented better bbPress title support, and fixed a bug regarding WooCommerce and term-ID collisions.
-
-We also increased the entropy for generating object caching keys, addressed some translation and RTL errors, and added [a few new filters](https://theseoframework.com/?p=3537).
-
-= 4.0.5 =
-
-In WordPress, we found various query endpoints that can be malformed to create broken pages. Backlinks to these pages can harm your site's ranking. In this update, we added advanced query protection, which you can enable via the robots meta settings.
-
-The ["Connected Social Pages" input fields will now disappear](https://github.com/sybrew/the-seo-framework/issues/498) when you empty them. They have never proven to work, and Google has deprecated them. We also removed the transient caching for JSON-LD scripts, as it wasn't helping anyone.
-
-On the other hand, we added a new feed indexing option, Discord sharing options (oEmbed, theme color), and the aforementioned advanced query protection option. Support for EDD and Polylang has been expanded, and we reintroduced the hyphen option for titles (which is the new default).
-
-In this update, we also bring a few other quality-of-life changes, as well. We added a dozen new filters, touched up the interface, streamlined the query handler, and [fixed known corner-case issues and bugs](https://theseoframework.com/?p=3505).
-
-= 4.0.4 =
-
-WordPress 5.3 has a [bug](https://core.trac.wordpress.org/ticket/48623) where the timezone set in PHP is taken into account when creating permalinks. Since this bug can cause canonical URLs with dates to point to a nonexistent page, we're sending out this patch where TSF sets the timezone to flat UTC for its front-end generation.
-
-The proper fix in WordPress 5.3.1 is due in about three weeks from now, after which we'll consider reverting [these changes](https://theseoframework.com/?p=3390#detailed).
-
-= 4.0.3 =
-
-Google Search has a new bug in their parser, which causes pages to be deindexed unintentionally when a specific combination of robots-settings are used. To work around this bug, we changed how the recently introduced copyright directive settings work.
-
-For more information, see our KB entry on why the [Maximum Image Preview Size setting may now be ignored](https://kb.theseoframework.com/?p=82).
-
-We also fixed three bugs and added [minor improvements](https://theseoframework.com/?p=3379#detailed).
-
-= 4.0.2 =
-
-France recently amended its [copyright laws](https://www.legifrance.gouv.fr/eli/loi/2019/7/24/MICX1902858L/jo/texte). In short, in France, it's now forbidden for content aggregators to display excerpts and previews of your content when no consent is given.
-
-To accommodate those laws, [Google will soon look for new directives](https://france.googleblog.com/2019/09/comment-nous-respectons-le-droit-dauteur.html), and we added new site-wide options to output those. These new options are disabled (unspecified) by default when you update The SEO Framework, but they are enabled (some access) by default when you install The SEO Framework on a new site. Please see [this issue](https://github.com/sybrew/the-seo-framework/issues/480) for our take on this.
-
-In this update, we also fixed a few bugs and added [various improvements](https://theseoframework.com/?p=3344#detailed).
-
-= 4.0.1 =
-
-Thank you for trusting us by upgrading to TSF 4.0.0 earlier! We've received many warm and welcoming responses, and we're very grateful.
-
-Even though we churned 40% of the code, we only confirmed two bugs in that update. This minor update [addresses those bugs](https://theseoframework.com/?p=3308).
-
-Our users reported some admin scripting issues when updating from v3.2.4 to v4.0. These issues are out of our reach, and we provided several solutions [in this post](https://wordpress.org/support/topic/4-0-admin-interface-not-loading-correctly/).
-
-= 4.0.0 - Multiplex =
-
-*It is our choices, Harry, that show what we truly are, far more than our abilities. - [J.K. Rowling](https://www.jkrowling.com/book/harry-potter-chamber-secrets/)*
-
-**Foreword**
-
-We wrote a [foreword on 4.0](https://theseoframework.com/about/an-introduction-to-a-thousand-changes/). It's a story on our efforts making this update, and why we're exhilarated bringing you this update... finally.
-
-**Release highlights**
-
-* We completely refactored the plugin without losing features. This is the fastest full-featured SEO plugin for WordPress... by far.
-* You can now use quick & bulk editing options. They blend perfectly into the interface of WordPress.
-* Now, there are more term options, including redirects and canonical URLs.
-* Want to enable indexing for just one page? Now you can, with qubit robots options.
-* The SEO Bar is completely rewritten. It now lists the issues found so you can easily see what requires attention.
-* The sitemap is also new. It lists your pages more intelligently, making it easier for search engines to find your latest updates.
-* There's a new and improved API for all the JavaScript, SEO Bar, sitemaps, tooltips, term-and post meta, and more!
-* The character and pixel guidelines can now change depending on your site language.
-* Full keyboard navigation support is now possible for tooltips. The tooltips now also adjust their size intelligently, so they won't ever fall out of your browser window.
-* ...and more than 1000 other noteworthy changes, found in the [detailed log](https://theseoframework.com/?p=3268#detailed).
-
-**Environment upgrade notes**
-
-* PHP 5.4 and PHP 5.5 support has been dropped. Here's why:
-	* PHP 5.5 hasn't received updates for [over 3 years](https://www.php.net/eol.php) and using it brings a significant security risk to your website.
-	* Using PHP 5.6 lowers our time spent on maintenance, and it increases our productivity; so, we can focus on faster, better, and more useful solutions.
-	* WordPress no longer supports PHP versions lower than 5.6 since WordPress 5.2. They, too, finally realize we need to move on.
-	* Learn more about [Upgrading PHP](https://wordpress.org/support/update-php/).
-* WordPress 4.6 through 4.8 support has been dropped. Here's why:
-	* [More than 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 4.9 or later.
-	* The API changes between WordPress versions are massive. We can't support older versions reliably.
-	* Although we wanted to move to WordPress 5.0 or later, many users have opted out because of conflicting interests--to put it lightly. Keep your site updated, and use the [Classic Editor plugin](https://wordpress.org/plugins/classic-editor/) if you really can't stand the block editor.
-
-_If, for any reason, you still wish to use PHP 5.4/5.5 and/or WordPress 4.6/4.7/4.8, [The SEO Framework 3.2.4](https://downloads.wordpress.org/plugin/autodescription.3.2.4.zip) still supports them._
+## For developers
+* **Option notes:**
+	* For PHP constant `THE_SEO_FRAMEWORK_SITE_OPTIONS` (equals db index `autodescription-site-settings`):
+		* `disabled_taxonomies`, array.
+		* TODO `post_type_archive_settings` ? Add that to a different option holder (autoload='no') for performance?
+			* Basically, we want a new metabox where users can fill these in like any other archive. It's difficult, though, since it needs to listen to post type settings found on the same page...
+				* We can mitigate that issue from JS+PHP to PHP only by creating a submenu. It also eases saving to a different option.
+			* We also want a dropdown field (top right LTR? top left RTL?) where users can select the PTA to edit.
+* **Method notes:**
+	* For object `the_seo_framework()`:
+		* **Added:**
+			* `get_public_taxonomies()`
+			* `get_forced_supported_taxonomies()`
+			* `s_disabled_taxonomies()`
+			* `s_taxonomies()`
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_forced_supported_taxonomies`, used to adjust an array of forced supported taxonomies, so no settings can be adjusted for them.
+		* `the_seo_framework_taxonomy_disabled`, used to overwrite taxonomy disabled state.
+	* **Changed:**
+		* `the_seo_framework_general_settings_tabs`'s `posttypes` entry has been renamed to `exclusions`.
+* **JS notes:**
+	* **Event notes:**
+		* **Added:**
+			* `window.tsf-post-type-support-changed`, used to test for post type change states.
+			* `window.tsf-taxonomy-support-changed`, used to test for taxonomy change states. Be warned, it's tricky.
+		* **Changed:**
+			* `window.tsf-tooltip-reset` now debounces by 25ms, so now you can call it in a loop without worrying about impacting performance.
+	* **Template notes:**
+		* **Added:**
+			* `wp.template( 'tsf-disabled-taxonomy-help' )` is now available on the settings page.
+			* `wp.template( 'tsf-disabled-taxonomy-from-pt-help' )` is now available on the settings page.
 
 **Share your love!**
 
-We hope you'll love this update as much as we do. Please consider sharing it with the world, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0)! We read every one of them. Thanks!
+We hope you'll love this update as much as we do. Please consider sharing it with the world, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0)! We read every one of them. Thank you!
 
 **Detailed log**
 

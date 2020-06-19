@@ -95,8 +95,9 @@ class Site_Options extends Sanitize {
 				// General. Timestamps.
 				'timestamps_format'   => '1', // Timestamp format, numeric string
 
-				// General. Post Types.
+				// General. Exclusions.
 				'disabled_post_types' => [], // Post Type support.
+				'disabled_taxonomies' => [], // Taxonomy support.
 
 				// Title.
 				'title_separator'     => 'hyphen',  // Title separator, dropdown

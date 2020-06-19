@@ -635,6 +635,8 @@ class Admin_Pages extends Profile {
 	 * @since 2.7.0 Added escape parameter. Defaults to true.
 	 * @since 3.0.3 Added $disabled parameter. Defaults to false.
 	 * @see $this->make_checkbox_array()
+	 * @todo deprecate, use make_checkbox_array() instead? (fix 49 non-descriptive instances...? Should we deprecate?)
+	 * @todo move to this system to generator instead. See https://github.com/sybrew/the-seo-framework/projects/7
 	 *
 	 * @param string $field_id    The option ID. Must be within the Autodescription settings.
 	 * @param string $label       The checkbox description label.
@@ -659,6 +661,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.5 You can now supply an extra class for the checkbox.
+	 * @since 4.1.0 You can now supply a data field via `$args`.
 	 *
 	 * @param array $args : {
 	 *    string $id          The option name, used as field ID.
@@ -666,6 +669,7 @@ class Admin_Pages extends Profile {
 	 *    string $index       The option index, used when the option is an array.
 	 *    string $label       The checkbox label description, placed inline of the checkbox.
 	 *    string $description The checkbox additional description, placed underneat.
+	 *    array  $data        The checkbox field data. Sub-items are expected to be escaped if they're not an array.
 	 *    bool   $escape      Whether to enable escaping of the $label and $description.
 	 *    bool   $disabled    Whether to disable the checkbox field.
 	 *    bool   $default     Whether to display-as-default. This is autodetermined when no $index is set.
@@ -682,6 +686,7 @@ class Admin_Pages extends Profile {
 				'index'       => '',
 				'label'       => '',
 				'description' => '',
+				'data'        => [],
 				'escape'      => true,
 				'disabled'    => false,
 				'default'     => false,
@@ -735,13 +740,14 @@ class Admin_Pages extends Profile {
 					$field_id,
 					( $args['disabled'] ? 'class="tsf-disabled"' : '' ),
 					vsprintf(
-						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s /> %s',
+						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s %s /> %s',
 						[
 							esc_attr( implode( ' ', $cb_classes ) ),
 							$field_name,
 							$field_id,
 							\checked( $value, true, false ),
 							( $args['disabled'] ? 'disabled' : '' ),
+							$args['data'] ? $this->make_data_attributes( $args['data'] ) : '',
 							$args['label'],
 						]
 					),

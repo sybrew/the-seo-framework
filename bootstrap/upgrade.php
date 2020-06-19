@@ -184,6 +184,10 @@ function _do_upgrade() {
 		$version = '4051';
 	}
 
+	if ( $version < '4100' ) {
+		_do_upgrade_4100();
+		$version = '4100';
+	}
 	/**
 	 * @since 2.7.0
 	 */
@@ -618,4 +622,20 @@ function _do_upgrade_4051() {
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '4051' );
+}
+
+/**
+ * Registers the `disabled_taxonomies` option. array.
+ *
+ * @since 4.0.5
+ */
+function _do_upgrade_4100() {
+
+	$tsf = \the_seo_framework();
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4100' ) {
+		$tsf->update_option( 'disabled_taxonomies', [] );
+	}
+
+	\update_option( 'the_seo_framework_upgraded_db_version', '4100' );
 }

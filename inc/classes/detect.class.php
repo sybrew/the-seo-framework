@@ -1079,6 +1079,54 @@ class Detect extends Render {
 		);
 	}
 
+	/**
+	 * Gets all taxonomies that could possibly support SEO; with or without rewrite support.
+	 *
+	 * @since 4.1.0
+	 * @staticvar $cache
+	 *
+	 * @return array The taxonomies that are public.
+	 */
+	protected function get_public_taxonomies() {
+
+		static $cache = null;
+
+		return isset( $cache ) ? $cache : $cache = array_unique(
+			array_merge(
+				$this->get_forced_supported_taxonomies(),
+				//? array_values() because get_post_types() gives a sequential array.
+				array_values( (array) \get_taxonomies( [
+					'public'   => true,
+					'_builtin' => false,
+				] ) )
+			)
+		);
+	}
+
+	/**
+	 * Returns a list of supported taxonomies; with or without rewrite support.
+	 *
+	 * @since 4.1.0
+	 * @staticvar $cache
+	 *
+	 * @return array Forced supported taxonomies
+	 */
+	protected function get_forced_supported_taxonomies() {
+
+		static $cache = null;
+		/**
+		 * @since 4.1.0
+		 * @param array $forced Forced supported post types
+		 */
+		return isset( $cache ) ? $cache : $cache = (array) \apply_filters(
+			'the_seo_framework_forced_supported_taxonomies',
+			array_values( \get_taxonomies( [
+				'public'   => true,
+				'_builtin' => true,
+			] ) )
+		);
+	}
+
 
 	/**
 	 * Determines if the post type is disabled from SEO all optimization.
@@ -1109,30 +1157,50 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Checks if at least one taxonomy objects post type supports The SEO Framework.
+	 * Checks if the taxonomy isn't disabled, and that at least one taxonomy
+	 * objects post type supports The SEO Framework.
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 1. Now returns true if at least one post type for the taxonomy is supported.
 	 *              2. Now uses `is_post_type_supported()` instead of `is_post_type_disabled()`.
+	 * @since 4.1.0 1. Now also checks for the option `disabled_taxonomies`.
+	 *              2. Now applies filters `the_seo_framework_taxonomy_disabled`.
 	 *
 	 * @param string $taxonomy The taxonomy name.
 	 * @return bool True if at least one post type in taxonomy is supported.
 	 */
 	public function is_taxonomy_disabled( $taxonomy = '' ) {
 
-		foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
-			if ( $this->is_post_type_supported( $type ) ) {
-				return false;
+		$disabled = false;
+
+		if ( isset( $this->get_option( 'disabled_taxonomies' )[ $taxonomy ] ) ) {
+			$disabled = true;
+		} else {
+			foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
+				// Set here, because the taxonomy might not have post types at all.
+				$disabled = true;
+				if ( $this->is_post_type_supported( $type ) ) {
+					$disabled = false;
+					break;
+				}
 			}
 		}
 
-		return true;
+		/**
+		 * @since 4.1.0
+		 * @param bool   $disabled
+		 * @param string $taxonomy
+		 */
+		return \apply_filters( 'the_seo_framework_taxonomy_disabled', $disabled, $taxonomy );
 	}
 
 	/**
 	 * Checks whether the taxonomy is public and rewritable.
 	 *
 	 * @since 3.1.0
+	 * @TODO we check for "rewrite" because many plugin authors do not understand that rule, and this that exempts
+	 * the post type from being visible to the public. This is false, and we should amend this once authors understand
+	 * when WordPress 5.5 lands (with their new sitemaps).
 	 *
 	 * @param string $taxonomy The taxonomy name.
 	 * @return bool

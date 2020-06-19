@@ -16,4 +16,24 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 		?>
 	</span>
 </script>
+
+<script type="text/html" id="tmpl-tsf-disabled-taxonomy-help">
+	<span class="tsf-taxonomy-warning">
+		<?php
+		the_seo_framework()->make_info(
+			\esc_html__( "This taxonomy is disabled, so this option won't work.", 'autodescription' )
+		);
+		?>
+	</span>
+</script>
+
+<script type="text/html" id="tmpl-tsf-disabled-taxonomy-from-pt-help">
+	<span class="tsf-taxonomy-from-pt-warning">
+		<?php
+		the_seo_framework()->make_info(
+			\esc_html__( "This taxonomy's post types are also disabled, so this option won't have any effect.", 'autodescription' )
+		);
+		?>
+	</span>
+</script>
 <?php

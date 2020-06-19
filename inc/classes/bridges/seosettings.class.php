@@ -305,14 +305,14 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Outputs General Settings meta box post types tab.
+	 * Outputs General Settings meta box exclusions tab.
 	 *
-	 * @since 4.0.0
+	 * @since 4.1.0
 	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
-	public static function _general_metabox_posttypes_tab() {
-		\the_seo_framework()->get_view( 'admin/metaboxes/general-metabox', [], 'posttypes' );
+	public static function _general_metabox_exclusions_tab() {
+		\the_seo_framework()->get_view( 'admin/metaboxes/general-metabox', [], 'exclusions' );
 	}
 
 	/**

@@ -354,6 +354,15 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
+			's_disabled_taxonomies',
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[
+				'disabled_taxonomies',
+			]
+		);
+
+		// TODO also add taxonomies
+		$this->add_option_filter(
 			's_post_types',
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
@@ -645,7 +654,9 @@ class Sanitize extends Admin_Pages {
 				's_alter_query_type'    => [ $this, 's_alter_query_type' ],
 				's_one_zero'            => [ $this, 's_one_zero' ],
 				's_disabled_post_types' => [ $this, 's_disabled_post_types' ],
+				's_disabled_taxonomies' => [ $this, 's_disabled_taxonomies' ],
 				's_post_types'          => [ $this, 's_post_types' ],
+				's_taxonomies'          => [ $this, 's_taxonomies' ],
 				's_numeric_string'      => [ $this, 's_numeric_string' ],
 				's_no_html'             => [ $this, 's_no_html' ],
 				's_no_html_space'       => [ $this, 's_no_html_space' ],
@@ -1179,6 +1190,46 @@ class Sanitize extends Admin_Pages {
 	 * @return array
 	 */
 	public function s_post_types( $new_values ) {
+
+		if ( ! is_array( $new_values ) ) return [];
+
+		foreach ( $new_values as $index => $value ) {
+			$new_values[ $index ] = $this->s_one_zero( $value );
+		}
+
+		return $new_values;
+	}
+
+	/**
+	 * Sanitizes disabled taxonomy entries.
+	 *
+	 * Filters out default taxonomies.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param mixed $new_values Should ideally be an array with taxonomy name indexes, and 1 or 0 passed in.
+	 * @return array
+	 */
+	public function s_disabled_taxonomies( $new_values ) {
+
+		if ( ! is_array( $new_values ) ) return [];
+
+		foreach ( $this->get_forced_supported_taxonomies() as $forced ) {
+			unset( $new_values[ $forced ] );
+		}
+
+		return $this->s_taxonomies( $new_values );
+	}
+
+	/**
+	 * Sanitizes generic taxonomy entries.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param mixed $new_values Should ideally be an array with taxonomy name indexes, and 1 or 0 passed in.
+	 * @return array
+	 */
+	public function s_taxonomies( $new_values ) {
 
 		if ( ! is_array( $new_values ) ) return [];
 
