@@ -239,6 +239,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 TODO set db version to 4100.
 TODO make non-rewritable post types includable, but exclude them for users that upgrade?
 
+TODO reconsider pagebuilder support for content. Not all page builders rely on shortcodes.
+	* Candidates: Elementor & Beaver Builder.
+
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO optimization (yes, SEO optimization).
@@ -247,6 +250,12 @@ TODO make non-rewritable post types includable, but exclude them for users that 
 		* Or disabled per se when TSF is active? Allow users to revert this via (the same) filter?
 	* TODO you can now set SEO exclusions using endpoints?
 		* This can be difficult to determine with the SEO Bar. Alternatively, we set exclusions based on registered EP?
+* **Improved:**
+	* The description generator has gone through another generational leap:
+		* It is now able to discern between punctuation types for stripping leading characters. For example, an opening bracket will no longer be stripped from the start of a sentence, but closing brackets will.
+		* It now texturizes the input to see how sentences are build in any language by discerning connector and closing punctuations next to word boundaries. For example, when a closing quote is found between two words (e.g. "we're"), it'll connect those two words as one, instead of believing the apostrophe is a closing punctuation type.
+		* It is now able to discern sentence structures that use colons, and treats them as connecting.
+		* It will now strip trailing colons.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.

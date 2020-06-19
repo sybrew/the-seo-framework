@@ -785,6 +785,8 @@ class Generate_Description extends Generate {
 		if ( ! empty( $post->post_excerpt ) ) {
 			$excerpt = $post->post_excerpt;
 		} elseif ( isset( $post->post_content ) ) {
+			// We should actually get the parsed content here... but that can be heavy on the server.
+			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
 			$excerpt = $this->uses_page_builder( $post->ID ) ? '' : $post->post_content;
 
 			if ( $excerpt ) {
@@ -801,6 +803,8 @@ class Generate_Description extends Generate {
 	/**
 	 * Trims the excerpt by word and determines sentence stops.
 	 *
+	 * Warning: Returns with entities encoded.
+	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 : 1. Now uses smarter trimming.
 	 *                2. Deprecated 2nd parameter.
@@ -814,25 +818,30 @@ class Generate_Description extends Generate {
 	 *                the end won't be transformed into gibberish.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
-	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`, while they don't untexturized.
-	 * This is perfect. Please have the cortesy to credit us when taking it.
+	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
+	 * This is perfect. Please have the cortesy to credit us when taking it. :)
 	 *
 	 * @param string $excerpt         The untrimmed excerpt.
 	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
-	 * @return string The trimmed excerpt.
+	 * @return string The trimmed excerpt with decoded entities.
 	 */
 	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0 ) {
 
+		// Decode to get a more accurate character length in Unicode.
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 
-		//* Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
-		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\"]|\p{Z}|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
+		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
+		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pf}\p{Z}]|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
 		$excerpt = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
 
 		$excerpt = trim( $excerpt );
 
 		if ( ! $excerpt ) return '';
+
+		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
+		$excerpt = \wptexturize( $excerpt );
+		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 
 		/**
 		 * Note to self: Leading spaces will cause this regex to fail. So, trimming prior is advised.
@@ -847,23 +856,23 @@ class Generate_Description extends Generate {
 		 * Critically optimized, so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {
-		 *    0 : Full excerpt excluding leading punctuation. May be empty when no leading punctuation is found.
-		 *    1 : Sentence before first punctuation.
+		 *    0 : Full excerpt excluding leading punctuation or symbols. May be empty when no leading punctuation is found.
+		 *    1 : Sentence before first punctuation, excluding opening punctuation.
 		 *    2 : First trailing punctuation, plus everything trailing until end of sentence. (equals [3][4][5][6])
 		 *    3 : If more than one punctuation is found, this is everything leading [1] until the final punctuation.
-		 *    4 : Final punctuation found, excluding quote tags; trailing [3].
+		 *    4 : Final punctuation found, trailing [3].
 		 *    5 : All extraneous words trailing [4].
 		 *    6 : Every 4th and later word trailing [4].
 		 * }
 		 */
 		preg_match(
-			'/(?:^\p{P}*)([\P{Po}\'\"]+\p{Z}*\w*)(*COMMIT)(\p{Po}$|(.+)?([^\P{Po}\'\"])((?:\p{Z}*(?:\w+\p{Z}*){1,3})(.+)?)?)/su',
+			'/(?:^[\p{Pc}\p{Pd}\p{Pe}\p{Pf}\p{Po}\p{S}]*)([\P{Po}]+\p{Z}*\w*)(*COMMIT)(\p{Po}$|(.+)?((?:[^\P{Po}:]|[\p{Pc}\p{Pf}]\B)+)((?:\p{Z}*(?:\w+\p{Z}*){1,3})(.+)?)?)/su',
 			$excerpt,
 			$matches
 		);
 
 		if ( isset( $matches[6] ) ) {
-			// Accept everything.
+			// More than 3 words are following. Accept everything except leading punctuation.
 			$excerpt = $matches[1] . $matches[2];
 		} elseif ( isset( $matches[5] ) ) {
 			// Last sentence is too short to make sense of. Trim it.
@@ -887,9 +896,10 @@ class Generate_Description extends Generate {
 		//* Remove trailing commas and spaces.
 		$excerpt = rtrim( $excerpt, ' ,' );
 
-		if ( ';' === substr( $excerpt, -1 ) ) {
+		// This applies to roman languages only--the else-part works with any language.
+		if ( in_array( substr( $excerpt, -1 ), [ ':', ';' ], true ) ) {
 			//* Replace connector punctuation with a dot.
-			$excerpt = rtrim( $excerpt, ' \\/,.?!;' );
+			$excerpt = rtrim( $excerpt, ' \\/,.?!;:' );
 
 			if ( $excerpt )
 				$excerpt .= '.';
