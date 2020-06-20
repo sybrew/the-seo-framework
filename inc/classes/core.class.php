@@ -294,8 +294,9 @@ class Core {
 	 * Returns an array of hierarchical post types.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
 	 *
-	 * @return array The public hierarchical post types with rewrite.
+	 * @return array The public hierarchical post types.
 	 */
 	public function get_hierarchical_post_types() {
 		static $types;
@@ -303,7 +304,6 @@ class Core {
 			[
 				'hierarchical' => true,
 				'public'       => true,
-				'rewrite'      => true,
 			],
 			'names'
 		);
@@ -313,8 +313,9 @@ class Core {
 	 * Returns an array of nonhierarchical post types.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
 	 *
-	 * @return array The public nonhierarchical post types with rewrite.
+	 * @return array The public nonhierarchical post types.
 	 */
 	public function get_nonhierarchical_post_types() {
 		static $types;
@@ -322,7 +323,6 @@ class Core {
 			[
 				'hierarchical' => false,
 				'public'       => true,
-				'rewrite'      => true,
 			],
 			'names'
 		);
@@ -482,8 +482,8 @@ class Core {
 	 *
 	 * NOTE: Always call reset_timezone() ASAP. Don't let changes linger, as they can be destructive.
 	 *
-	 * This exists because WordPress' current_time() adds discrepancies between UTC and GMT.
-	 * This is also far more accurate than WordPress' tiny time table.
+	 * This exists because WordPress's current_time() adds discrepancies between UTC and GMT.
+	 * This is also far more accurate than WordPress's tiny time table.
 	 *
 	 * @TODO Note that WordPress 5.3 no longer requires this, and that we should rely on wp_date() instead.
 	 *       So, we should remove this dependency ASAP.

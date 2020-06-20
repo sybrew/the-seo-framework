@@ -250,7 +250,7 @@ abstract class ListTable {
 	 * Returns a JS script that triggers list updates.
 	 * This is a necessity as WordPress doesn't trigger actions on update.
 	 *
-	 * TODO bind to WordPress' function instead? Didn't we already do that?!
+	 * TODO bind to WordPress's function instead? Didn't we already do that?!
 	 * See: `tsfLe._hijackListeners()`; Although, that doesn't cover "adding" new items.
 	 *
 	 * @since 4.0.5

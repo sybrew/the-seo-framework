@@ -106,7 +106,7 @@ class Sanitize extends Admin_Pages {
 		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
 		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
 		//* TEMP: Set backward compatibility.
-		// \add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 13 );
+		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 13 );
 	}
 
 	/**
@@ -136,6 +136,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Emptied and is no longer enqueued.
+	 * @since 4.1.0 Added taxonomical robots options backward compat.
 	 * @access private
 	 * @staticvar bool $running Prevents on-update loops.
 	 */
@@ -143,6 +144,19 @@ class Sanitize extends Admin_Pages {
 		static $running = false;
 		if ( $running ) return;
 		$running = true;
+
+		db_4100:
+		//= Category and Tag robots backward compat.
+		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
+			$_options = $this->get_option( $this->get_robots_taxonomy_option_id( $r ), false );
+
+			$_category_option = ! empty( $_options['category'] ) ? $_options['category'] : 0;
+			$_tag_option      = ! empty( $_options['post_tag'] ) ? $_options['post_tag'] : 0;
+
+			$this->update_option( "category_$r", $_category_option );
+			$this->update_option( "tag_$r", $_tag_option );
+		endforeach;
+
 		end:;
 		$running = false;
 	}
@@ -369,6 +383,16 @@ class Sanitize extends Admin_Pages {
 				$this->get_robots_post_type_option_id( 'noindex' ),
 				$this->get_robots_post_type_option_id( 'nofollow' ),
 				$this->get_robots_post_type_option_id( 'noarchive' ),
+			]
+		);
+
+		$this->add_option_filter(
+			's_taxonomies',
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[
+				$this->get_robots_taxonomy_option_id( 'noindex' ),
+				$this->get_robots_taxonomy_option_id( 'nofollow' ),
+				$this->get_robots_taxonomy_option_id( 'noarchive' ),
 			]
 		);
 
@@ -1184,6 +1208,8 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Sanitizes generic post type entries.
 	 *
+	 * Ideally, we want to check if the post type exists; however, some might be registered too late.
+	 *
 	 * @since 3.1.0
 	 *
 	 * @param mixed $new_values Should ideally be an array with post type name indexes, and 1 or 0 passed in.
@@ -1223,6 +1249,8 @@ class Sanitize extends Admin_Pages {
 
 	/**
 	 * Sanitizes generic taxonomy entries.
+	 *
+	 * Ideally, we want to check if the taxonomy exists; however, some might be registered too late.
 	 *
 	 * @since 4.1.0
 	 *

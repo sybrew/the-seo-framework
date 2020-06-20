@@ -286,7 +286,6 @@ class Query extends Core {
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
-
 		static $cache;
 
 		if ( isset( $cache ) ) return $cache;
@@ -617,7 +616,7 @@ class Query extends Core {
 	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress' built-in category.
+	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress's built-in category.
 	 * @since 4.0.0 Removed caching.
 	 *
 	 * @return bool Post Type is category
@@ -1052,7 +1051,7 @@ class Query extends Core {
 	 * Determines if the page is a tag within the admin screen.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress' built-in tag.
+	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress's built-in tag.
 	 * @since 4.0.0 Removed caching.
 	 *
 	 * @return bool Post Type is tag.

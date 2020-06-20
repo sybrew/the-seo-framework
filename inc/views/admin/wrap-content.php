@@ -48,8 +48,8 @@ foreach ( $tabs as $tab => $value ) :
 		$callback = isset( $value['callback'] ) ? $value['callback'] : '';
 
 		if ( $callback ) {
-			$params = isset( $value['args'] ) ? $value['args'] : '';
-			call_user_func_array( $callback, (array) $params );
+			$params = isset( $value['args'] ) ? [ $value['args'] ] : [];
+			call_user_func_array( $callback, $params );
 		}
 		?>
 	</div>

@@ -425,7 +425,7 @@ class Admin_Init extends Init {
 		$headers_list = headers_list();
 		$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
-		//* Test if WordPress' redirect header is sent. Bail if true.
+		//* Test if WordPress's redirect header is sent. Bail if true.
 		if ( in_array( $location, $headers_list, true ) )
 			return;
 

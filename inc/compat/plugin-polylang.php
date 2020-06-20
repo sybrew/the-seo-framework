@@ -40,7 +40,7 @@ function pll__( $string ) {
 \add_filter( 'pll_home_url_white_list', __NAMESPACE__ . '\\_allowlist_tsf_urls' );
 \add_filter( 'pll_home_url_black_list', __NAMESPACE__ . '\\_blocklist_tsf_sitemap_styles' );
 /**
- * Accompany the most broken and asinine idea in WordPress' history.
+ * Accompany the most broken and asinine idea in WordPress's history.
  * Adds The SEO Framework's files to their allowlist of autoincompatible doom.
  *
  * @since 3.2.4
@@ -55,7 +55,7 @@ function _allowlist_tsf_urls( $allowlist ) {
 }
 
 /**
- * Accompany the most broken and asinine idea in WordPress' history.
+ * Accompany the most broken and asinine idea in WordPress's history.
  * ...and stop messing with the rewrite system while doing so.
  * Also, you should add support for class methods. Stop living in the PHP 4 era.
  *

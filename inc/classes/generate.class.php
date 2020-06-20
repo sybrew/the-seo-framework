@@ -168,13 +168,14 @@ class Generate extends User_Data {
 	 *                 mitigating issues with singular-archives pages (blog, shop, etc.).
 	 *              2. Now disregards empty blog pages for automatic `noindex`; although this protection is necessary,
 	 *                 it can not be reflected in the SEO Bar.
+	 * @since 4.1.0 Now uses the new taxonomy robots settings.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @param int <bit> $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
 	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    3 = 0b11: Ignore protection and post/term setting.
+	 *    2 = 0b10: Ignore post/term meta settings. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+	 *    3 = 0b11: Ignore protection and post/term meta setting.
 	 * }
 	 * @return array|null robots : {
 	 *    bool              'noindex'
@@ -246,16 +247,7 @@ class Generate extends User_Data {
 			}
 
 			if ( $this->is_archive() ) {
-				//* If on custom Taxonomy page, but not a category or tag, then should've received specific term SEO settings.
-				if ( $this->is_category() ) {
-					$noindex   = $noindex || $this->get_option( 'category_noindex' );
-					$nofollow  = $nofollow || $this->get_option( 'category_nofollow' );
-					$noarchive = $noarchive || $this->get_option( 'category_noarchive' );
-				} elseif ( $this->is_tag() ) {
-					$noindex   = $noindex || $this->get_option( 'tag_noindex' );
-					$nofollow  = $nofollow || $this->get_option( 'tag_nofollow' );
-					$noarchive = $noarchive || $this->get_option( 'tag_noarchive' );
-				} elseif ( $this->is_author() ) {
+				if ( $this->is_author() ) {
 					$noindex   = $noindex || $this->get_option( 'author_noindex' );
 					$nofollow  = $nofollow || $this->get_option( 'author_nofollow' );
 					$noarchive = $noarchive || $this->get_option( 'author_noarchive' );
@@ -283,6 +275,11 @@ class Generate extends User_Data {
 			// Only enable if all post types have the value ticked.
 			foreach ( $_post_type_meta as $_type => $_values ) {
 				$$_type = $$_type || ! in_array( false, $_values, true );
+			}
+
+			$taxonomy = $this->get_current_taxonomy();
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+				$$r = $$r || $this->is_taxonomy_robots_set( $r, $taxonomy );
 			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
@@ -355,13 +352,14 @@ class Generate extends User_Data {
 	 * @since 4.0.0
 	 * @since 4.0.2 Added new copyright directive tags.
 	 * @since 4.0.3 Changed `max_snippet_length` to `max_snippet`
+	 * @since 4.1.0 Now uses the new taxonomy robots settings.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
 	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    3 = 0b11: Ignore protection and post/term setting.
+	 *    2 = 0b10: Ignore post/term meta setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+	 *    3 = 0b11: Ignore protection and post/term meta setting.
 	 * }
 	 * @return array|null robots : {
 	 *    bool              'noindex'
@@ -386,22 +384,11 @@ class Generate extends User_Data {
 			$max_video_preview = $this->get_option( 'max_video_preview' );
 		}
 
-		if ( $args['taxonomy'] ) {
-			if ( 'category' === $args['taxonomy'] ) {
-				$noindex   = $noindex || $this->get_option( 'category_noindex' );
-				$nofollow  = $nofollow || $this->get_option( 'category_nofollow' );
-				$noarchive = $noarchive || $this->get_option( 'category_noarchive' );
-			} elseif ( 'post_tag' === $args['taxonomy'] ) {
-				$noindex   = $noindex || $this->get_option( 'tag_noindex' );
-				$nofollow  = $nofollow || $this->get_option( 'tag_nofollow' );
-				$noarchive = $noarchive || $this->get_option( 'tag_noarchive' );
-			}
-		} else {
-			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
-				$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
-				$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
-			}
+		// Put outside the loop, id=0 may be used here for home-as-blog.
+		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
+			$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
+			$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
+			$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
 		}
 
 		if ( $args['taxonomy'] ) {
@@ -423,6 +410,10 @@ class Generate extends User_Data {
 			// Only enable if all post types have the value ticked.
 			foreach ( $_post_type_meta as $_type => $_values ) {
 				$$_type = $$_type || ! in_array( false, $_values, true );
+			}
+
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+				$$r = $$r || $this->is_taxonomy_robots_set( $r, $args['taxonomy'] );
 			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
@@ -567,6 +558,23 @@ class Generate extends User_Data {
 		return isset(
 			$this->get_option( $this->get_robots_post_type_option_id( $type ) )[
 				$post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type()
+			]
+		);
+	}
+
+	/**
+	 * Determines if the taxonomy has a robots value set.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.
+	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
+	 */
+	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
+		return isset(
+			$this->get_option( $this->get_robots_taxonomy_option_id( $type ) )[
+				$taxonomy ?: $this->get_current_taxonomy()
 			]
 		);
 	}

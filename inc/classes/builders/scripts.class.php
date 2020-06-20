@@ -294,7 +294,7 @@ final class Scripts {
 	}
 
 	/**
-	 * Forwards known scripts to WordPress' script handler. Also prepares l10n and templates.
+	 * Forwards known scripts to WordPress's script handler. Also prepares l10n and templates.
 	 *
 	 * @since 3.2.2
 	 * @uses static::$scripts
@@ -325,7 +325,7 @@ final class Scripts {
 	}
 
 	/**
-	 * Enqueues scripts in WordPress' script handler. Also prepares l10n and templates.
+	 * Enqueues scripts in WordPress's script handler. Also prepares l10n and templates.
 	 *
 	 * @since 3.2.2
 	 * @see $this->forward_known_scripts();

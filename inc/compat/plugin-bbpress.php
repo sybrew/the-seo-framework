@@ -265,7 +265,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
 /**
  * Fixes bbPress excerpts.
  *
- * Now, bbPress has a hard time maintaining WordPress' query after the original query.
+ * Now, bbPress has a hard time maintaining WordPress's query after the original query.
  * This should be fixed with bbPress 3.0.
  * This function fixes the Excerpt part.
  *
@@ -301,7 +301,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
 /**
  * Fixes bbPress custom Description for social meta.
  *
- * Now, bbPress has a hard time maintaining WordPress' query after the original query.
+ * Now, bbPress has a hard time maintaining WordPress's query after the original query.
  * This should be fixed with bbPress 3.0.
  * This function fixes the Custom Description part.
  *
@@ -334,7 +334,7 @@ function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
 /**
  * Fixes bbPress exclusion of first reply.
  *
- * Now, bbPress has a hard time maintaining WordPress' query after the original query.
+ * Now, bbPress has a hard time maintaining WordPress's query after the original query.
  * This should be fixed with bbPress 3.0.
  * This function fixes the query alteration part.
  *

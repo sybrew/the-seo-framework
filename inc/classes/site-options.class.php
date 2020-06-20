@@ -120,6 +120,7 @@ class Site_Options extends Sanitize {
 				$this->get_robots_post_type_option_id( 'noindex' ) => [
 					'attachment' => 1,
 				], // Post Type support.
+				$this->get_robots_taxonomy_option_id( 'noindex' ) => [], // Taxonomy support.
 
 				// Robots follow.
 				'category_nofollow'   => 0, // Category Archive robots nofollow
@@ -130,6 +131,7 @@ class Site_Options extends Sanitize {
 				'site_nofollow'       => 0, // Site Page robots nofollow
 
 				$this->get_robots_post_type_option_id( 'nofollow' ) => [], // Post Type support.
+				$this->get_robots_taxonomy_option_id( 'nofollow' ) => [], // Taxonomy support.
 
 				// Robots archive.
 				'category_noarchive'   => 0, // Category Archive robots noarchive
@@ -140,6 +142,7 @@ class Site_Options extends Sanitize {
 				'site_noarchive'       => 0, // Site Page robots noarchive
 
 				$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
+				$this->get_robots_taxonomy_option_id( 'noarchive' ) => [], // Taxonomy support.
 
 				// Robots query protection
 				'advanced_query_protection' => 1,
@@ -281,6 +284,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.6.0
 	 * @since 2.9.0 Removed all non-warned settings.
 	 * @since 3.1.0 Now applies the "the_seo_framework_warned_site_options" filter.
+	 * @since 4.1.0 Added robots' post type setting warnings.
 	 *
 	 * @return array $options.
 	 */
@@ -305,6 +309,14 @@ class Site_Options extends Sanitize {
 				'site_nofollow'       => 1, // Site Page robots nofollow
 				'homepage_noindex'    => 1, // Homepage robots noindex
 				'homepage_nofollow'   => 1, // Homepage robots noarchive
+				$this->get_robots_post_type_option_id( 'noindex' ) => [
+					'post' => 1,
+					'page' => 1,
+				],
+				$this->get_robots_post_type_option_id( 'nofollow' ) => [
+					'post' => 1,
+					'page' => 1,
+				],
 			]
 		);
 	}
@@ -333,7 +345,7 @@ class Site_Options extends Sanitize {
 	 * @staticvar array $cache The option cache.
 	 *
 	 * @param string $setting The setting key.
-	 * @param bool   $use_current Whether to use WordPress' version and update the cache
+	 * @param bool   $use_current Whether to use WordPress's version and update the cache
 	 *                            or use the locally cached version.
 	 * @return array Options.
 	 */
@@ -645,6 +657,18 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_robots_post_type_option_id( $type ) {
 		return $this->s_field_id( $type . '_post_types' );
+	}
+
+	/**
+	 * Returns the option value for Taxonomy robots settings.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @return string
+	 */
+	public function get_robots_taxonomy_option_id( $type ) {
+		return $this->s_field_id( $type . '_taxonomy' );
 	}
 
 	/**

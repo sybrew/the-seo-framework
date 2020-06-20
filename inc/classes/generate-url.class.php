@@ -414,7 +414,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 : 1. Deprecated first parameter as integer. Use strings or null.
-	 *                2. Now forwards post type object calling to WordPress' function.
+	 *                2. Now forwards post type object calling to WordPress's function.
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                               Leave null to use query, and allow pagination.

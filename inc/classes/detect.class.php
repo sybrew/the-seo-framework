@@ -945,7 +945,7 @@ class Detect extends Render {
 			[
 				$post_type
 					&& ! $this->is_post_type_disabled( $post_type )
-					&& in_array( $post_type, $this->get_rewritable_post_types(), true ),
+					&& in_array( $post_type, $this->get_public_post_types(), true ),
 				$post_type,
 			]
 		);
@@ -1026,20 +1026,19 @@ class Detect extends Render {
 		if ( $cache ) return $cache;
 
 		return $cache = array_values(
-			array_filter( $this->get_rewritable_post_types(), [ $this, 'is_post_type_supported' ] )
+			array_filter( $this->get_public_post_types(), [ $this, 'is_post_type_supported' ] )
 		);
 	}
 
 	/**
 	 * Gets all post types that could possibly support SEO.
 	 *
-	 * @since 3.1.0
-	 * @since 3.2.1 Added cache.
+	 * @since 4.1.0
 	 * @staticvar $cache
 	 *
-	 * @return array The post types with rewrite capabilities.
+	 * @return array All public post types.
 	 */
-	protected function get_rewritable_post_types() {
+	protected function get_public_post_types() {
 
 		static $cache = null;
 
@@ -1048,8 +1047,7 @@ class Detect extends Render {
 				$this->get_forced_supported_post_types(),
 				//? array_values() because get_post_types() gives a sequential array.
 				array_values( (array) \get_post_types( [
-					'public'  => true,
-					'rewrite' => true,
+					'public' => true,
 				] ) )
 			)
 		);
@@ -1061,7 +1059,7 @@ class Detect extends Render {
 	 * @since 3.1.0
 	 * @staticvar $cache
 	 *
-	 * @return array Forced supported post types
+	 * @return array Forced supported post types.
 	 */
 	protected function get_forced_supported_post_types() {
 
@@ -1198,9 +1196,7 @@ class Detect extends Render {
 	 * Checks whether the taxonomy is public and rewritable.
 	 *
 	 * @since 3.1.0
-	 * @TODO we check for "rewrite" because many plugin authors do not understand that rule, and this that exempts
-	 * the post type from being visible to the public. This is false, and we should amend this once authors understand
-	 * when WordPress 5.5 lands (with their new sitemaps).
+	 * @since 4.1.0 Now returns true on all public taxonomies; not just public taxonomies with rewrite capabilities.
 	 *
 	 * @param string $taxonomy The taxonomy name.
 	 * @return bool
@@ -1214,8 +1210,7 @@ class Detect extends Render {
 
 		if ( false === $tax ) return false;
 
-		return ! empty( $tax->public )
-			&& ( ! empty( $tax->_builtin ) || ! empty( $tax->rewrite ) );
+		return ! empty( $tax->public );
 	}
 
 	/**

@@ -231,20 +231,18 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.0 =
 
-* TODO Polylang subdirectory URLs have their sitemap pointing to a query argument... https://kb.theseoframework.com/kb/translation-plugin-compatibility/#polylang-caveat-1
-* TODO trim_exerpt() trims very short descriptions, such as "Latest posts: %s on Blog Name" to "Latest posts:". Should we add a dot after the string at get_description_additions()?
-* TODO The sitemap should include non-rewriteable, but public, post types. `rewrite=>false` only prevents pretty URLs from being generated, but the URLs are still accessible via their ugly variant.
-	* We excluded them in the past because many devs don't know the difference between rewrite and public. I'm not sure if we should follow through or forego this. With WP sitemaps coming (and including nonrewriteable posts), it'll be a common issue, so we can be complacent about that and revert the rewrite exemption rule.
+TODO make the exclusion options propagate to the taxonomy settings, too.
+	* And remove the "duplicated" warning from the robots when found. This is tricky?
 
-TODO set db version to 4100.
-TODO make non-rewritable post types includable, but exclude them for users that upgrade?
-
+TODO Polylang subdirectory URLs have their sitemap pointing to a query argument... https://kb.theseoframework.com/kb/translation-plugin-compatibility/#polylang-caveat-1
 TODO reconsider pagebuilder support for content. Not all page builders rely on shortcodes.
 	* Candidates: Elementor & Beaver Builder.
+TODO add grey SEO Bar color (mind the color vision deficiency support...)
 
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO optimization (yes, SEO optimization).
+	* You can now set robots types for each registered taxonomy on your site, instead of just default categories and tags.
 	* TODO You can now set robots settings for all taxonomies, and much less confusingly so.
 	* TODO The new WordPress core sitemaps are now disabled when you enable sitemaps via TSF.
 		* Or disabled per se when TSF is active? Allow users to revert this via (the same) filter?
@@ -259,12 +257,28 @@ TODO reconsider pagebuilder support for content. Not all page builders rely on s
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
+	* We added support for post types and taxonomies that do not have rewrite capabilities.
+		* We excluded them in the past because many devs don't know the difference between rewrite and public (looking at you too, Automattic). This caused a rich profusion of issues (i.e. users wasting our time with 3rd party support). With WP sitemaps coming (and including non-rewriteable post types and taxonomies), it'll be a common issue, so we can now be complacent about that and revert our rewrite exemption rule. Moreover, we now allow full control over post type and taxonomy support. So, we'll henceforth support all rewritable post types and taxonomies by default.
 * **Fixed:**
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
+* **Other:**
+	* TODO We disable support for WordPress Core sitemaps that land with WP v5.5. We don't believe this addition is beneficial for TSF users, but we'll explore its integration and are open to suggestions.
+		* This applies to all users, whether they enable support for TSF's sitemaps or not.
+		* If you want to enable support for it, you need to TODO add this TODO filter to your site.
+
+## For translators
+* **Added:**
+	* New sentences have been added.
+* **Updated:**
+	* TODO POT translation file.
+	* As always, various sentences have been updated for clarity.
+* **Improved:**
+	* Removed passive voice from some sentences.
 
 ## For developers
+* **Database note:** This plugin now uses TSF database version `4100`.
 * **Option notes:**
 	* For PHP constant `THE_SEO_FRAMEWORK_SITE_OPTIONS` (equals db index `autodescription-site-settings`):
 		* `disabled_taxonomies`, array.
@@ -279,6 +293,11 @@ TODO reconsider pagebuilder support for content. Not all page builders rely on s
 			* `get_forced_supported_taxonomies()`
 			* `s_disabled_taxonomies()`
 			* `s_taxonomies()`
+			* `get_robots_taxonomy_option_id()`
+		* **Changed:**
+			* `is_taxonomy_public()` now also returns public taxonomies without rewrite capabilities.
+			* `get_hierarchical_post_types()` now also returns post types without rewrite capabilities.
+			* `get_nonhierarchical_post_types()` now also returns post types without rewrite capabilities.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_forced_supported_taxonomies`, used to adjust an array of forced supported taxonomies, so no settings can be adjusted for them.

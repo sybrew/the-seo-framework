@@ -429,12 +429,12 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Post Type Exclusions', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'Select post types which should be excluded.', 'autodescription' ) );
-		$this->description( __( 'These settings are applied to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
+		$this->description( __( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 
 		$forced_pt = $this->get_forced_supported_post_types();
 		$boxes     = [];
 
-		foreach ( $this->get_rewritable_post_types() as $post_type ) {
+		foreach ( $this->get_public_post_types() as $post_type ) {
 			$_label = $this->get_post_type_label( $post_type, false );
 			if ( ! strlen( $_label ) ) continue;
 

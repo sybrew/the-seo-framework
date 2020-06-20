@@ -52,7 +52,7 @@ class Post_Data extends Detect {
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
 	 * this is done for performance reasons, so we can cache here, instead of relying on
-	 * WordPress' cache, where they cast many filters and redundantly sanitize the object.
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
@@ -75,7 +75,7 @@ class Post_Data extends Detect {
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
 	 * this is done for performance reasons, so we can cache here, instead of relying on
-	 * WordPress' cache, where they cast many filters and redundantly sanitize the object.
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
@@ -145,7 +145,7 @@ class Post_Data extends Detect {
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
 	 * this is done for performance reasons, so we can cache here, instead of relying on
-	 * WordPress' cache, where they cast many filters and redundantly sanitize the object.
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * When we'll be moving to PHP 7 and later, we'll enforce type hinting.
 	 *
@@ -576,7 +576,7 @@ class Post_Data extends Detect {
 	 * Fetches Post content.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer applies WordPress' default filters.
+	 * @since 3.1.0 No longer applies WordPress's default filters.
 	 *
 	 * @param int $id The post ID.
 	 * @return string The post content.

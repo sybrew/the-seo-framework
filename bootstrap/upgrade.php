@@ -123,7 +123,7 @@ function _do_upgrade() {
 	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.
 	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
 	 *
-	 * @see WordPress' `.../update-core.php`
+	 * @see WordPress's `.../update-core.php`
 	 * @since 3.1.4
 	 */
 	\wp_cache_flush();
@@ -225,7 +225,7 @@ function _upgrade_to_current() {
 	 * Clear the cache to prevent a get_option() from retrieving a stale database version to the cache.
 	 * Not all caching plugins recognize 'flush', so delete the options cache too, just to be safe.
 	 *
-	 * @see WordPress' `.../update-core.php`
+	 * @see WordPress's `.../update-core.php`
 	 * @since 3.1.4
 	 */
 	\wp_cache_flush();
@@ -557,9 +557,9 @@ function _do_upgrade_3103() {
  */
 function _do_upgrade_3300() {
 
-	$tsf = \the_seo_framework();
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
+		$tsf = \the_seo_framework();
+
 		// Remove old rewrite rules.
 		unset(
 			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'],
@@ -610,9 +610,9 @@ function _do_upgrade_3300() {
  */
 function _do_upgrade_4051() {
 
-	$tsf = \the_seo_framework();
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
+		$tsf = \the_seo_framework();
+
 		$tsf->update_option( 'advanced_query_protection', 0 );
 		$tsf->update_option( 'index_the_feed', 0 );
 		$tsf->update_option( 'baidu_verification', '' );
@@ -626,15 +626,32 @@ function _do_upgrade_4051() {
 
 /**
  * Registers the `disabled_taxonomies` option. array.
+ * Registers and migrates the robots taxonomy options.
  *
- * @since 4.0.5
+ * @since 4.1.0
  */
 function _do_upgrade_4100() {
 
-	$tsf = \the_seo_framework();
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4100' ) {
+		$tsf = \the_seo_framework();
+
 		$tsf->update_option( 'disabled_taxonomies', [] );
+
+		$defaults = _upgrade_default_site_options();
+		// Transport category_noindex/nofollow/noarchive and tag_noindex/nofollow/noarchive settings.
+		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+			$_option = $tsf->get_robots_taxonomy_option_id( $r );
+			if ( isset( $defaults[ $_option ] ) ) {
+				// Get current default options.
+				$_value = (array) ( $tsf->get_option( $_option, false ) ?: $defaults[ $_option ] );
+
+				// Override those options with settings from before.
+				$_value['category'] = (int) (bool) $tsf->get_option( "category_$r", false );
+				$_value['post_tag'] = (int) (bool) $tsf->get_option( "tag_$r", false );
+
+				$tsf->update_option( $_option, $_value );
+			}
+		}
 	}
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '4100' );

@@ -42,7 +42,7 @@ class Sitemap_Base extends Sitemap {
 	 * @since 2.9.3 No longer crashes on WordPress sites below WP 4.6.
 	 * @since 3.0.4 No longer outputs empty URL entries.
 	 * @since 3.1.0 1. Removed the WP<4.6 function_exists check.
-	 *              2. Now uses WordPress' built-in memory raiser function, with "context" sitemap.
+	 *              2. Now uses WordPress's built-in memory raiser function, with "context" sitemap.
 	 * @since 4.0.0 1. Now assesses all public post types, in favor of qubit options.
 	 *              2. Improved performance by a factor of two+.
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".

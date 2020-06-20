@@ -74,15 +74,10 @@ final class SeoBar_Term extends SeoBar {
 						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'nofollow' ) ),
 						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'noarchive' ) ),
 					],
-					'postcat'      => [
-						'noindex'   => static::$tsf->get_option( 'category_noindex' ),
-						'nofollow'  => static::$tsf->get_option( 'category_nofollow' ),
-						'noarchive' => static::$tsf->get_option( 'category_noarchive' ),
-					],
-					'posttag'      => [
-						'noindex'   => static::$tsf->get_option( 'tag_noindex' ),
-						'nofollow'  => static::$tsf->get_option( 'tag_nofollow' ),
-						'noarchive' => static::$tsf->get_option( 'tag_noarchive' ),
+					'taxonomy'     => [
+						'noindex'   => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'noindex' ) ),
+						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'nofollow' ) ),
+						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'noarchive' ) ),
 					],
 				]
 			);
@@ -526,6 +521,7 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs indexing tests.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now asserts all taxonomy robots settings.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -541,8 +537,7 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic'     => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'          => \__( 'Indexing is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes'     => \__( 'Indexing is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'postcats'      => \__( 'Indexing is discouraged for all post categories at the SEO Settings screen.', 'autodescription' ),
-					'posttags'      => \__( 'Indexing is discouraged for all post tags at the SEO Settings screen.', 'autodescription' ),
+					'taxonomy'      => \__( 'Indexing is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
 					'override'      => \__( 'The term SEO meta input overrides the indexing state.', 'autodescription' ),
 					'empty'         => \__( 'No posts are attached to this term, so indexing is disabled.', 'autodescription' ),
 					'emptyoverride' => \__( 'No posts are attached to this term, so indexing should be disabled.', 'autodescription' ),
@@ -615,19 +610,16 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( $robots_global['postcat']['noindex'] && 'category' === static::$query['taxonomy'] ) {
+		if ( isset( $robots_global['taxonomy']['noindex'][ static::$query['taxonomy'] ] ) ) {
 			// Status is already set.
-			$item['assess']['postcats'] = $cache['assess']['postcats'];
-		} elseif ( $robots_global['posttag']['noindex'] && 'post_tag' === static::$query['taxonomy'] ) {
-			// Status is already set.
-			$item['assess']['posttags'] = $cache['assess']['posttags'];
+			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an overide.
-			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['postcats'], $item['assess']['posttags'] );
+			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
 
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
@@ -680,6 +672,7 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs following tests.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now asserts all taxonomy robots settings.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -695,6 +688,7 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes' => \__( 'Link following is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
+					'taxonomy'  => \__( 'Link following is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
 					'postcats'  => \__( 'Link following is discouraged for all post categories at the SEO Settings screen.', 'autodescription' ),
 					'posttags'  => \__( 'Link following is discouraged for all post tags at the SEO Settings screen.', 'autodescription' ),
 					'override'  => \__( 'The term SEO meta input overrides the link following state.', 'autodescription' ),
@@ -764,19 +758,16 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( $robots_global['postcat']['nofollow'] && 'category' === static::$query['taxonomy'] ) {
+		if ( isset( $robots_global['taxonomy']['nofollow'][ static::$query['taxonomy'] ] ) ) {
 			// Status is already set.
-			$item['assess']['postcats'] = $cache['assess']['postcats'];
-		} elseif ( $robots_global['posttag']['nofollow'] && 'post_tag' === static::$query['taxonomy'] ) {
-			// Status is already set.
-			$item['assess']['posttags'] = $cache['assess']['posttags'];
+			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an overide.
-			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['postcats'], $item['assess']['posttags'] );
+			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
 
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
@@ -800,6 +791,7 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs archiving tests.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now asserts all taxonomy robots settings.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
@@ -815,8 +807,7 @@ final class SeoBar_Term extends SeoBar {
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Archiving is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes' => \__( 'Archiving is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'postcats'  => \__( 'Archiving is discouraged for all post categories at the SEO Settings screen.', 'autodescription' ),
-					'posttags'  => \__( 'Archiving is discouraged for all post tags at the SEO Settings screen.', 'autodescription' ),
+					'taxonomy'  => \__( 'Archiving is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
 					'override'  => \__( 'The term SEO meta input overrides the archiving state.', 'autodescription' ),
 					'noindex'   => \__( 'The term may not be indexed, this may also discourage archiving.', 'autodescription' ),
 				],
@@ -884,19 +875,16 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( $robots_global['postcat']['noarchive'] && 'category' === static::$query['taxonomy'] ) {
+		if ( isset( $robots_global['taxonomy']['noarchive'][ static::$query['taxonomy'] ] ) ) {
 			// Status is already set.
-			$item['assess']['postcats'] = $cache['assess']['postcats'];
-		} elseif ( $robots_global['posttag']['noarchive'] && 'post_tag' === static::$query['taxonomy'] ) {
-			// Status is already set.
-			$item['assess']['posttags'] = $cache['assess']['posttags'];
+			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an overide.
-			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['postcats'], $item['assess']['posttags'] );
+			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
 
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
