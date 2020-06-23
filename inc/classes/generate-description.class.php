@@ -803,7 +803,7 @@ class Generate_Description extends Generate {
 	/**
 	 * Trims the excerpt by word and determines sentence stops.
 	 *
-	 * Warning: Returns with entities encoded.
+	 * Warning: Returns with entities encoded. The output is not safe for printing.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 : 1. Now uses smarter trimming.
@@ -814,17 +814,27 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 : 1. Now stops parsing earlier on failure.
 	 *                2. Now performs faster queries.
 	 *                3. Now maintains last sentence with closing punctuations.
-	 * @since 4.0.5 : Now decodes the excerpt input, improving accuracy, and so that HTML entities at
-	 *                the end won't be transformed into gibberish.
+	 * @since 4.0.5 : 1. Now decodes the excerpt input, improving accuracy, and so that HTML entities at
+	 *                   the end won't be transformed into gibberish.
+	 * @since 4.1.0 : 1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
+	 *                2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11 ).
+	 *                   Mind you, this method probably boots PCRE and wptexturize; so, it'll be slower than what we noted--it's
+	 *                   overhead that otherwise WP, the theme, or other plugin would cause anyway. So, deduct that.
+	 *                3. Now recognizes connector and final punctuations for preliminary sentence bounding.
+	 *                4. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes,
+	 *                   and marks used in some latin languages like ¡¿.
+	 *                5. Is now able to always strip leading punctuation.
+	 *                6. It will now strip leading colon characters.
+	 *                7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
 	 * This is perfect. Please have the cortesy to credit us when taking it. :)
 	 *
-	 * @param string $excerpt         The untrimmed excerpt.
+	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
 	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
-	 * @return string The trimmed excerpt with decoded entities.
+	 * @return string The trimmed excerpt with decoded entities. Needs escaping prior printing.
 	 */
 	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0 ) {
 
@@ -832,7 +842,7 @@ class Generate_Description extends Generate {
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 
 		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
-		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pf}\p{Z}]|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
+		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
 		$excerpt = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
 
 		$excerpt = trim( $excerpt );
@@ -842,72 +852,55 @@ class Generate_Description extends Generate {
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
 		$excerpt = \wptexturize( $excerpt );
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
-
 		/**
-		 * Note to self: Leading spaces will cause this regex to fail. So, trimming prior is advised.
-		 *
-		 * 1. Tests for punctuation at the start.
-		 * 2. Tests for any punctuation leading, if not found: fail and commit.
-		 * 3. Tests if first leading punctuation has nothing leading.
-		 * 4. If not, grab everything, find the last punctiation.
-		 * 5. Test if the last punctiation has nothing leading.
-		 * 6. If something's leading, grab the first 3 words and follow words separately.
-		 *
 		 * Critically optimized, so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {
-		 *    0 : Full excerpt excluding leading punctuation or symbols. May be empty when no leading punctuation is found.
-		 *    1 : Sentence before first punctuation, excluding opening punctuation.
-		 *    2 : First trailing punctuation, plus everything trailing until end of sentence. (equals [3][4][5][6])
-		 *    3 : If more than one punctuation is found, this is everything leading [1] until the final punctuation.
-		 *    4 : Final punctuation found, trailing [3].
-		 *    5 : All extraneous words trailing [4].
-		 *    6 : Every 4th and later word trailing [4].
+		 *    0 : Full excerpt.
+		 *    1 : Sentence after leading punctuation (if any), including opening punctuation, marks, and ¡¿, before first punctuation (if any).
+		 *    2 : First one character following [1], always some form of punctuation. Won't be set if [3] is set.
+		 *    3 : Following [1] until last punctuation that isn't some sort of connecting punctiation that's leading a word-boundary.
+		 *    4 : First three words leading [3]. Connecting punctuations that splits words are included as non-countable.
+		 *    5 : All extraneous characters leading [5].
 		 * }
 		 */
 		preg_match(
-			'/(?:^[\p{Pc}\p{Pd}\p{Pe}\p{Pf}\p{Po}\p{S}]*)([\P{Po}]+\p{Z}*\w*)(*COMMIT)(\p{Po}$|(.+)?((?:[^\P{Po}:]|[\p{Pc}\p{Pf}]\B)+)((?:\p{Z}*(?:\w+\p{Z}*){1,3})(.+)?)?)/su',
+			'/(?:^[\p{P}\p{Z}]*?)([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]$(*ACCEPT))|(?>(?(?=.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]$)(.*[\p{Pe}\p{Pf}]$|.*[^\P{Po}\p{M}\xBF\xA1:])|.*$(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$excerpt,
 			$matches
 		);
 
-		if ( isset( $matches[6] ) ) {
-			// More than 3 words are following. Accept everything except leading punctuation.
-			$excerpt = $matches[1] . $matches[2];
-		} elseif ( isset( $matches[5] ) ) {
-			// Last sentence is too short to make sense of. Trim it.
-			if ( isset( $matches[3] ) ) {
-				// More than one punctuation is found. Concatenate.
-				$excerpt = $matches[1] . $matches[3] . $matches[4];
+		if ( isset( $matches[5] ) ) {
+			if ( isset( $matches[4] ) ) {
+				$excerpt = $matches[1] . $matches[3] . $matches[4] . $matches[5];
 			} else {
-				// Only one complete sentence is found. Concatenate last punctuation.
-				$excerpt = $matches[1] . $matches[4];
+				$excerpt = $matches[1] . $matches[3] . $matches[5];
 			}
-		} elseif ( isset( $matches[2] ) ) { // [3] and [4] may also be set, containing series of punctuation.
-			// Only one complete sentence is found. Series of punctuation, if any, is added in [2].
+		} elseif ( isset( $matches[3] ) ) {
+			$excerpt = $matches[1] . $matches[3];
+		} elseif ( isset( $matches[2] ) ) {
 			$excerpt = $matches[1] . $matches[2];
+		} elseif ( isset( $matches[1] ) ) {
+			$excerpt = $matches[1];
 		}
-		// elseif ( isset( $matches[1] ) ) {
-			// Unfortunately, impossible. `(*COMMIT)` destroys this. $excerpt remains unchanged.
-			// Leading punctuation may still be present.
-			// $excerpt = $matches[1];
-		// }
 
-		//* Remove trailing commas and spaces.
-		$excerpt = rtrim( $excerpt, ' ,' );
-
-		// This applies to roman languages only--the else-part works with any language.
-		if ( in_array( substr( $excerpt, -1 ), [ ':', ';' ], true ) ) {
-			//* Replace connector punctuation with a dot.
-			$excerpt = rtrim( $excerpt, ' \\/,.?!;:' );
-
-			if ( $excerpt )
-				$excerpt .= '.';
-		} elseif ( $excerpt ) {
-			//* Finds sentence-closing punctuations.
-			preg_match( '/\p{Po}$/su', $excerpt, $matches );
-			if ( empty( $matches ) ) // no punctuation found
-				$excerpt .= '...';
+		/**
+		 * @param array $matches: {
+		 *    1 : Full match until leading punctuation.
+		 *    2 : Leading and spaces punctuation (if any).
+		 *    3 : Non-closing leading punctuation and spaces (if any).
+		 * }
+		 */
+		preg_match(
+			'/(.+[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:;,\p{Z}\p{Po}])+?(\p{Z}*?[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:;,\p{Z}]+)?([\p{Pc}\p{Pd}\p{M}\xBF\xA1:;,\p{Z}]+)?/su',
+			$excerpt,
+			$matches
+		);
+		if ( isset( $matches[2] ) ) {
+			$excerpt = $matches[1] . $matches[2];
+		} else {
+			// Ignore useless [3], there's no [2], [1] is open-ended; so, add hellip.
+			$excerpt = $matches[1] . '...'; // This should be texturized later to &hellip;.
 		}
 
 		return trim( $excerpt );

@@ -239,6 +239,9 @@ TODO reconsider pagebuilder support for content. Not all page builders rely on s
 	* Candidates: Elementor & Beaver Builder.
 TODO add grey SEO Bar color (mind the color vision deficiency support...)
 
+TODO consider disabling post types and taxonomies without rewrite support for user that upgrade from >4.0~<4.1?
+	* This saves me rather then them--I expect an influx of support requests regarding this. For them, then, nothing will change, and that might be favorable.
+
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO optimization (yes, SEO optimization).
@@ -252,8 +255,11 @@ TODO add grey SEO Bar color (mind the color vision deficiency support...)
 	* The description generator has gone through another generational leap:
 		* It is now able to discern between punctuation types for stripping leading characters. For example, an opening bracket will no longer be stripped from the start of a sentence, but closing brackets will.
 		* It now texturizes the input to see how sentences are build in any language by discerning connector and closing punctuations next to word boundaries. For example, when a closing quote is found between two words (e.g. "we're"), it'll connect those two words as one, instead of believing the apostrophe is a closing punctuation type.
-		* It is now able to discern sentence structures that use colons, and treats them as connecting.
-		* It will now strip trailing colons.
+		* It is now able to discern sentence structures that use colons, dashes, or other punctuation, and treats them as connecting.
+		* It is now able to discern latin way or annotating questions or exclamations (¿¡qué!?), and will keep their leading punctuation intact.
+		* It will now strip trailing colons, dashes, and othe
+		* It will now stop counting trailing words when a connector, dash, mark, or ¡¿ are found.
+		* It can now strip leading punctuation, even when no final punctuation is found.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
@@ -298,6 +304,14 @@ TODO add grey SEO Bar color (mind the color vision deficiency support...)
 			* `is_taxonomy_public()` now also returns public taxonomies without rewrite capabilities.
 			* `get_hierarchical_post_types()` now also returns post types without rewrite capabilities.
 			* `get_nonhierarchical_post_types()` now also returns post types without rewrite capabilities.
+			* `trim_excerpt()`:
+				1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
+				1. Now performs even faster queries, in most situations. (~0.2ms total (bad case) @ PHP 7.3/PCRE 11 ).
+				1. Now recognizes connector and final punctuations for preliminary sentence bounding.
+				1. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes, and marks used in some latin languages like ¡¿.
+				1. Is now able to always strip leading punctuation.
+				1. It will now strip leading colon characters.
+				1. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_forced_supported_taxonomies`, used to adjust an array of forced supported taxonomies, so no settings can be adjusted for them.

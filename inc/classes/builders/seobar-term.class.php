@@ -689,8 +689,6 @@ final class SeoBar_Term extends SeoBar {
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
 					'posttypes' => \__( 'Link following is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
 					'taxonomy'  => \__( 'Link following is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
-					'postcats'  => \__( 'Link following is discouraged for all post categories at the SEO Settings screen.', 'autodescription' ),
-					'posttags'  => \__( 'Link following is discouraged for all post tags at the SEO Settings screen.', 'autodescription' ),
 					'override'  => \__( 'The term SEO meta input overrides the link following state.', 'autodescription' ),
 					'noindex'   => \__( 'The term may not be indexed, this may also discourage link following.', 'autodescription' ),
 				],
