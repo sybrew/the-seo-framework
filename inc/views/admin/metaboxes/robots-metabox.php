@@ -373,6 +373,9 @@ switch ( $instance ) :
 				'disabled' => false,
 				'default'  => ! empty( $default_options[ $tax_option_id ][ $taxonomy ] ),
 				'warned'   => ! empty( $warned_options[ $tax_option_id ][ $taxonomy ] ),
+				'data'     => [
+					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
+				],
 			] );
 		}
 

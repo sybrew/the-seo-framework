@@ -416,6 +416,9 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_general_metabox_exclusions':
+		$default_options = $this->get_default_site_options();
+		$warned_options  = $this->get_warned_site_options();
+
 		?>
 		<h4><?php esc_html_e( 'Exclusion Settings', 'autodescription' ); ?></h4>
 		<?php
@@ -434,6 +437,8 @@ switch ( $instance ) :
 		$forced_pt = $this->get_forced_supported_post_types();
 		$boxes     = [];
 
+		$pt_option_id = 'disabled_post_types';
+
 		foreach ( $this->get_public_post_types() as $post_type ) {
 			$_label = $this->get_post_type_label( $post_type, false );
 			if ( ! strlen( $_label ) ) continue;
@@ -445,12 +450,14 @@ switch ( $instance ) :
 			);
 
 			$boxes[] = $this->make_checkbox_array( [
-				'id'       => 'disabled_post_types',
+				'id'       => $pt_option_id,
 				'class'    => 'tsf-disabled-post-types',
 				'index'    => $post_type,
 				'label'    => $_label,
 				'escape'   => false,
 				'disabled' => in_array( $post_type, $forced_pt, true ),
+				'default'  => ! empty( $default_options[ $pt_option_id ][ $post_type ] ),
+				'warned'   => ! empty( $warned_options[ $pt_option_id ][ $post_type ] ),
 			] );
 		}
 
@@ -466,6 +473,8 @@ switch ( $instance ) :
 
 		$forced_tax = $this->get_forced_supported_taxonomies();
 		$boxes      = [];
+
+		$tax_option_id = 'disabled_taxonomies';
 
 		foreach ( $this->get_public_taxonomies() as $taxonomy ) {
 			$_label = $this->get_tax_type_label( $taxonomy, false );
@@ -484,6 +493,8 @@ switch ( $instance ) :
 				'label'    => $_label,
 				'escape'   => false,
 				'disabled' => in_array( $taxonomy, $forced_tax, true ),
+				'default'  => ! empty( $default_options[ $tax_option_id ][ $taxonomy ] ),
+				'warned'   => ! empty( $warned_options[ $tax_option_id ][ $taxonomy ] ),
 				'data'     => [
 					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
 				],

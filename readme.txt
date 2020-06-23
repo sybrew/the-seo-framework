@@ -265,6 +265,7 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
 		* We excluded them in the past because many devs don't know the difference between rewrite and public (looking at you too, Automattic). This caused a rich profusion of issues (i.e. users wasting our time with 3rd party support). With WP sitemaps coming (and including non-rewriteable post types and taxonomies), it'll be a common issue, so we can now be complacent about that and revert our rewrite exemption rule. Moreover, we now allow full control over post type and taxonomy support. So, we'll henceforth support all rewritable post types and taxonomies by default.
+	* The Formats taxonomy (`post_format`) now has `noindex` applied for all new sites. Sites that upgrade the plugin to this version won't have this taxonomy deindexed automatically.
 * **Fixed:**
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
@@ -284,14 +285,30 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 	* Removed passive voice from some sentences.
 
 ## For developers
-* **Database note:** This plugin now uses TSF database version `4100`.
+* **Database note:** This plugin now uses TSF database version `4101`.
 * **Option notes:**
 	* For PHP constant `THE_SEO_FRAMEWORK_SITE_OPTIONS` (equals db index `autodescription-site-settings`):
-		* `disabled_taxonomies`, array.
-		* TODO `post_type_archive_settings` ? Add that to a different option holder (autoload='no') for performance?
-			* Basically, we want a new metabox where users can fill these in like any other archive. It's difficult, though, since it needs to listen to post type settings found on the same page...
-				* We can mitigate that issue from JS+PHP to PHP only by creating a submenu. It also eases saving to a different option.
-			* We also want a dropdown field (top right LTR? top left RTL?) where users can select the PTA to edit.
+		* **Added:**
+			* `disabled_taxonomies`, array.
+			* `noindex_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'noindex' ) );`.
+			* `nofollow_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'nofollow' ) );`.
+			* `noarchive_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'noarchive' ) );`.
+			* TODO `post_type_archive_settings` ? Add that to a different option holder (autoload='no') for performance?
+				* Basically, we want a new metabox where users can fill these in like any other archive. It's difficult, though, since it needs to listen to post type settings found on the same page...
+					* We can mitigate that issue from JS+PHP to PHP only by creating a submenu. It also eases saving to a different option.
+				* We also want a dropdown field (top right LTR? top left RTL?) where users can select the PTA to edit.
+		* **Removed:**
+			* Note: Downgrade compatibility will be maintained for the next year, or two major updates; whichever comes first. This means that these options are updated by the plugin according to the replacement value, but shouldn't be used or written to elsewhere.
+			* `category_noindex`, now is `$options['noindex_taxonomies']['category']`.
+			* `category_nofollow`, now is `$options['nofollow_taxonomies']['category']`.
+			* `category_noarchive`, now is `$options['noarchive_taxonomies']['category']`.
+			* `tag_noindex`, now is `$options['noindex_taxonomies']['post_tag']`.
+			* `tag_nofollow`, now is `$options['nofollow_taxonomies']['post_tag']`.
+			* `tag_noarchive`, now is `$options['noarchive_taxonomies']['post_tag']`.
+		* **Other:**
+			* `$options['noindex_taxonomies']['post_format']` is now enabled for all new users by default.
+		* **Fixed:**
+			* `disabled_post_types` should now have its warned and default state reflected in the admin UI when you filter those in.
 * **Method notes:**
 	* For object `the_seo_framework()`:
 		* **Added:**

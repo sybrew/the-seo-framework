@@ -765,6 +765,7 @@ class Admin_Pages extends Profile {
 	 * Does not support "multiple" field selections.
 	 *
 	 * @since 4.0.0
+	 * @TODO allow arrays as index, so we can support multidimensional options easily? @see is_conditional_checked
 	 *
 	 * @param array $args : {
 	 *    string     $id       The select field ID.
@@ -960,7 +961,7 @@ class Admin_Pages extends Profile {
 	 * Returns the HTML class wrap for warning/default Checkbox options.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Added the $wrap parameter
+	 * @since 3.1.0 Added the $wrap parameter.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
@@ -974,6 +975,7 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 2.3.4
 	 * @since 3.1.0 Deprecated second parameter.
+	 * @TODO allow array as $key, so we can support multidimensional options?
 	 *
 	 * @param string $key        The option name which returns boolean.
 	 * @param string $deprecated Deprecated. Used to be the settings field.

@@ -110,8 +110,6 @@ class Site_Options extends Sanitize {
 				'auto_description'      => 1, // Enables auto description.
 
 				// Robots index.
-				'category_noindex'   => 0, // Category Archive robots noindex
-				'tag_noindex'        => 0, // Tag Archive robots noindex
 				'author_noindex'     => 0, // Author Archive robots noindex
 				'date_noindex'       => 1, // Date Archive robots noindex
 				'search_noindex'     => 1, // Search Page robots noindex
@@ -120,11 +118,11 @@ class Site_Options extends Sanitize {
 				$this->get_robots_post_type_option_id( 'noindex' ) => [
 					'attachment' => 1,
 				], // Post Type support.
-				$this->get_robots_taxonomy_option_id( 'noindex' ) => [], // Taxonomy support.
+				$this->get_robots_taxonomy_option_id( 'noindex' ) => [
+					'post_format' => 1,
+				], // Taxonomy support.
 
 				// Robots follow.
-				'category_nofollow'   => 0, // Category Archive robots nofollow
-				'tag_nofollow'        => 0, // Tag Archive robots nofollow
 				'author_nofollow'     => 0, // Author Archive robots nofollow
 				'date_nofollow'       => 0, // Date Archive robots nofollow
 				'search_nofollow'     => 0, // Search Page robots nofollow
@@ -134,8 +132,6 @@ class Site_Options extends Sanitize {
 				$this->get_robots_taxonomy_option_id( 'nofollow' ) => [], // Taxonomy support.
 
 				// Robots archive.
-				'category_noarchive'   => 0, // Category Archive robots noarchive
-				'tag_noarchive'        => 0, // Tag Archive robots noarchive
 				'author_noarchive'     => 0, // Author Archive robots noarchive
 				'date_noarchive'       => 0, // Date Archive robots noarchive
 				'search_noarchive'     => 0, // Search Page robots noarchive
@@ -668,7 +664,7 @@ class Site_Options extends Sanitize {
 	 * @return string
 	 */
 	public function get_robots_taxonomy_option_id( $type ) {
-		return $this->s_field_id( $type . '_taxonomy' );
+		return $this->s_field_id( $type . '_taxonomies' );
 	}
 
 	/**

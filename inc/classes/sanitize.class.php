@@ -145,7 +145,7 @@ class Sanitize extends Admin_Pages {
 		if ( $running ) return;
 		$running = true;
 
-		db_4100:
+		db_4101:
 		//= Category and Tag robots backward compat.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
 			$_options = $this->get_option( $this->get_robots_taxonomy_option_id( $r ), false );
@@ -153,8 +153,8 @@ class Sanitize extends Admin_Pages {
 			$_category_option = ! empty( $_options['category'] ) ? $_options['category'] : 0;
 			$_tag_option      = ! empty( $_options['post_tag'] ) ? $_options['post_tag'] : 0;
 
-			$this->update_option( "category_$r", $_category_option );
-			$this->update_option( "tag_$r", $_tag_option );
+			$this->update_option( "category_$r", $this->s_one_zero( $_category_option ) );
+			$this->update_option( "tag_$r", $this->s_one_zero( $_tag_option ) );
 		endforeach;
 
 		end:;
@@ -265,22 +265,16 @@ class Sanitize extends Admin_Pages {
 
 				'auto_description',
 
-				'category_noindex',
-				'tag_noindex',
 				'author_noindex',
 				'date_noindex',
 				'search_noindex',
 				'site_noindex',
 
-				'category_nofollow',
-				'tag_nofollow',
 				'author_nofollow',
 				'date_nofollow',
 				'search_nofollow',
 				'site_nofollow',
 
-				'category_noarchive',
-				'tag_noarchive',
 				'author_noarchive',
 				'date_noarchive',
 				'search_noarchive',
