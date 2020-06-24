@@ -240,7 +240,7 @@ TODO reconsider pagebuilder support for content. Not all page builders rely on s
 TODO add grey SEO Bar color (mind the color vision deficiency support...)
 
 TODO consider disabling post types and taxonomies without rewrite support for user that upgrade from >4.0~<4.1?
-	* This saves me rather then them--I expect an influx of support requests regarding this. For them, then, nothing will change, and that might be favorable.
+	* This saves me rather than them--I expect an influx of support requests regarding this. For them, then, nothing will change, and that might be favorable.
 
 ## For everyone
 * **Added:**
@@ -251,6 +251,11 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 		* Or disabled per se when TSF is active? Allow users to revert this via (the same) filter?
 	* TODO you can now set SEO exclusions using endpoints?
 		* This can be difficult to determine with the SEO Bar. Alternatively, we set exclusions based on registered EP?
+	* WordPress Core sitemaps that land with WP v5.5 are now supported. We don't believe this Core addition is beneficial for TSF users, but we'll explore its integration and are open to suggestions. We do welcome it, since it exposes many faults in other plugins and even in WordPress itself, which we had to fight off tirelessly in support.
+		* When you enable TSF's "optimized" sitemaps, the Core sitemaps are disabled.
+		* When you disable TSF's sitemaps, akin to using other sitemap plugins, you might get sitemaps that present errors in Google Search Console, because non-indexable posts are included therein too.
+		* When you disable TSF's sitemaps, the WordPress Core sitemap link may be added back to the virtual robots.txt output.
+	* You can now specify a custom logo for the sitemap header title--instead of being stuck using the one from Customizer.
 * **Improved:**
 	* The description generator has gone through another generational leap:
 		* It is now able to discern between punctuation types for stripping leading characters. For example, an opening bracket will no longer be stripped from the start of a sentence, but closing brackets will.
@@ -260,6 +265,7 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 		* It will now strip trailing colons, dashes, and othe
 		* It will now stop counting trailing words when a connector, dash, mark, or ¡¿ are found.
 		* It can now strip leading punctuation, even when no final punctuation is found.
+	* The sitemap stylesheet now outputs specific table header and body tags for improved accessibility.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
@@ -270,10 +276,6 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
-* **Other:**
-	* TODO We disable support for WordPress Core sitemaps that land with WP v5.5. We don't believe this addition is beneficial for TSF users, but we'll explore its integration and are open to suggestions.
-		* This applies to all users, whether they enable support for TSF's sitemaps or not.
-		* If you want to enable support for it, you need to TODO add this TODO filter to your site.
 
 ## For translators
 * **Added:**
@@ -285,7 +287,7 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 	* Removed passive voice from some sentences.
 
 ## For developers
-* **Database note:** This plugin now uses TSF database version `4101`.
+* **Database note:** This plugin now uses TSF database version `4102`.
 * **Option notes:**
 	* For PHP constant `THE_SEO_FRAMEWORK_SITE_OPTIONS` (equals db index `autodescription-site-settings`):
 		* **Added:**
@@ -293,6 +295,8 @@ TODO consider disabling post types and taxonomies without rewrite support for us
 			* `noindex_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'noindex' ) );`.
 			* `nofollow_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'nofollow' ) );`.
 			* `noarchive_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'noarchive' ) );`.
+			* `sitemap_logo_url`, string.
+			* `sitemap_logo_id`, int.
 			* TODO `post_type_archive_settings` ? Add that to a different option holder (autoload='no') for performance?
 				* Basically, we want a new metabox where users can fill these in like any other archive. It's difficult, though, since it needs to listen to post type settings found on the same page...
 					* We can mitigate that issue from JS+PHP to PHP only by creating a submenu. It also eases saving to a different option.

@@ -153,7 +153,7 @@ function _print_xsl_styles( $tsf ) {
 		text-align: left;
 		border-bottom: 1px solid <xsl:value-of select="$colorAccent" />;
 	}
-	tr:nth-of-type(2n+3) {
+	tr:nth-of-type(2n) {
 		background-color: #eaeaea;
 	}
 	#footer {
@@ -197,9 +197,15 @@ function _print_xsl_description( $tsf ) {
 	$logo = '';
 	if ( $tsf->get_option( 'sitemap_logo' ) ) {
 
-		$id = \get_theme_mod( 'custom_logo' ) ?: 0;
-
+		$id   = $tsf->get_option( 'sitemap_logo_id' ) ?: 0;
 		$_src = $id ? \wp_get_attachment_image_src( $id, [ 29, 29 ] ) : [];
+
+		// Fallback to theme mod.
+		if ( ! $_src ) {
+			$id   = \get_theme_mod( 'custom_logo' ) ?: 0;
+			$_src = $id ? \wp_get_attachment_image_src( $id, [ 29, 29 ] ) : [];
+		}
+
 		/**
 		 * @since 2.8.0
 		 * @param array $_src An empty array, or the logo details: {
@@ -325,11 +331,14 @@ function _print_xsl_content( $tsf ) {
 	// phpcs:disable, WordPress.Security.EscapeOutput, output is escaped.
 	echo <<<CONTENT
 <table>
-	<tr>
-		{$url['th']}
-		{$last_updated['th']}
-		{$priority['th']}
-	</tr>
+	<thead>
+		<tr>
+			{$url['th']}
+			{$last_updated['th']}
+			{$priority['th']}
+		</tr>
+	</thead>
+	<tbody>
 	<xsl:for-each select="sitemap:urlset/sitemap:url">
 		$vars
 		<tr>
@@ -338,6 +347,7 @@ function _print_xsl_content( $tsf ) {
 			{$priority['td']}
 		</tr>
 	</xsl:for-each>
+	</tbody>
 </table>
 CONTENT;
 	// phpcs:enable, WordPress.Security.EscapeOutput

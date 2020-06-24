@@ -492,7 +492,7 @@ switch ( $instance ) :
 				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_post_meta_item( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped. (phpcs is broken here?)
 					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
 					?>
 				</div>

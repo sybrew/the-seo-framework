@@ -184,7 +184,7 @@ switch ( $instance ) :
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo $this->get_logo_uploader_form( 'knowledge_logo' );
 			?>
 		</p>

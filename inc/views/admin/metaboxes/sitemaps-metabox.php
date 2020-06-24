@@ -64,7 +64,7 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. This helps search engines find new and updated content more quickly.', 'autodescription' ) );
 
-		$this->description( __( 'The sitemap does not contribute to ranking, only indexing. Therefore, it is perfectly fine not having every indexable page in the sitemap.', 'autodescription' ) );
+		$this->description( __( 'The sitemap does not contribute to ranking; it only speeds up indexing. Therefore, it is perfectly fine not having every indexable page in the sitemap.', 'autodescription' ) );
 
 		if ( $has_sitemap_plugin ) :
 			echo '<hr>';
@@ -83,9 +83,14 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_output',
-				__( 'Output sitemap?', 'autodescription' ),
+				esc_html__( 'Output optimized sitemap?', 'autodescription' )
+					. ' ' . $this->make_info(
+						__( 'This sitemap considers the indexing state of all your posts and pages.', 'autodescription' ),
+						'',
+						false
+					),
 				'',
-				true
+				false
 			),
 			true
 		);
@@ -181,7 +186,7 @@ switch ( $instance ) :
 				$this->make_checkbox(
 					'sitemaps_robots',
 					esc_html__( 'Add sitemap location to robots.txt?', 'autodescription' ),
-					esc_html__( 'This only works when the sitemap is active.', 'autodescription' ),
+					'',
 					false
 				),
 				true
@@ -294,18 +299,18 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Sitemap Styling Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'You can style the sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
-		$this->description( __( 'Note: Changes may not appear to have effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
+		$this->description( __( 'You can style the optimized sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
+		$this->description( __( 'Note: Changes may not appear to have an effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
 		?>
 		<hr>
 
-		<h4><?php esc_html_e( 'Enable styling', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Enable Styling', 'autodescription' ); ?></h4>
 		<?php
 
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemap_styles',
-				esc_html__( 'Style Sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans.', 'autodescription' ), '', false ),
+				esc_html__( 'Style sitemap?', 'autodescription' ) . ' ' . $this->make_info( __( 'This makes the sitemap more readable for humans.', 'autodescription' ), '', false ),
 				'',
 				false
 			),
@@ -314,19 +319,7 @@ switch ( $instance ) :
 
 		?>
 		<hr>
-
-		<h4><?php esc_html_e( 'Style configuration', 'autodescription' ); ?></h4>
 		<?php
-
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'sitemap_logo',
-				esc_html__( 'Add site logo?', 'autodescription' ) . ' ' . $this->make_info( __( 'The logo is set in Customizer.', 'autodescription' ), '', false ),
-				'',
-				false
-			),
-			true
-		);
 
 		$current_colors = $this->get_sitemap_colors();
 		$default_colors = $this->get_sitemap_colors( true );
@@ -334,7 +327,7 @@ switch ( $instance ) :
 		?>
 		<p>
 			<label for="<?php $this->field_id( 'sitemap_color_main' ); ?>">
-				<strong><?php esc_html_e( 'Sitemap header background color', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Sitemap Header Background Color', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
@@ -343,11 +336,49 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php $this->field_id( 'sitemap_color_accent' ); ?>">
-				<strong><?php esc_html_e( 'Sitemap title and lines color', 'autodescription' ); ?></strong>
+				<strong><?php esc_html_e( 'Sitemap Title and Lines Color', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'sitemap_color_accent' ); ?>" class="tsf-color-picker" id="<?php $this->field_id( 'sitemap_color_accent' ); ?>" placeholder="<?php echo esc_attr( $default_colors['accent'] ); ?>" value="<?php echo esc_attr( $current_colors['accent'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['accent'] ); ?>" />
+		</p>
+
+		<hr>
+
+		<h4><?php esc_html_e( 'Header Title Logo', 'autodescription' ); ?></h4>
+		<?php
+
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'sitemap_logo',
+				__( 'Show logo next to sitemap title?', 'autodescription' ),
+				'',
+				true
+			),
+			true
+		);
+
+		$ph_id  = \get_theme_mod( 'custom_logo' ) ?: 0;
+		$ph_src = $ph_id ? \wp_get_attachment_image_src( $ph_id, [ 29, 29 ] ) : [];
+
+		$logo_placeholder = ! empty( $ph_src[0] ) ? $ph_src[0] : '';
+		?>
+
+		<p>
+			<label for="sitemap_logo-url">
+				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
+			</label>
+		</p>
+		<p>
+			<span class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
+			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php $this->field_name( 'sitemap_logo_url' ); ?>" id="sitemap_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'sitemap_logo_url' ) ); ?>" />
+			<input type="hidden" name="<?php $this->field_name( 'sitemap_logo_id' ); ?>" id="sitemap_logo-id" value="<?php echo absint( $this->get_option( 'sitemap_logo_id' ) ); ?>" />
+		</p>
+		<p class="hide-if-no-tsf-js">
+			<?php
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+			echo $this->get_logo_uploader_form( 'sitemap_logo' );
+			?>
 		</p>
 		<?php
 		break;

@@ -184,9 +184,9 @@ function _do_upgrade() {
 		$version = '4051';
 	}
 
-	if ( $version < '4101' ) {
-		_do_upgrade_4101();
-		$version = '4101';
+	if ( $version < '4102' ) {
+		_do_upgrade_4102();
+		$version = '4102';
 	}
 	/**
 	 * @since 2.7.0
@@ -625,17 +625,21 @@ function _do_upgrade_4051() {
 }
 
 /**
- * Registers the `disabled_taxonomies` option. array.
+ * Registers the `disabled_taxonomies` option, array.
  * Registers and migrates the robots taxonomy options.
+ * Registers the `sitemap_logo_url` option, string.
+ * Registers the `sitemap_logo_id` option, int.
  *
  * @since 4.1.0
  */
-function _do_upgrade_4101() {
+function _do_upgrade_4102() {
 
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4101' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4102' ) {
 		$tsf = \the_seo_framework();
 
 		$tsf->update_option( 'disabled_taxonomies', [] );
+		$tsf->update_option( 'sitemap_logo_url', '' );
+		$tsf->update_option( 'sitemap_logo_id', 0 );
 
 		$defaults = _upgrade_default_site_options();
 		// Transport category_noindex/nofollow/noarchive and tag_noindex/nofollow/noarchive settings.
@@ -654,5 +658,5 @@ function _do_upgrade_4101() {
 		}
 	}
 
-	\update_option( 'the_seo_framework_upgraded_db_version', '4101' );
+	\update_option( 'the_seo_framework_upgraded_db_version', '4102' );
 }

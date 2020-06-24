@@ -142,7 +142,7 @@ switch ( $instance ) :
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
-			// phpcs:ignore, WordPress.Security.EscapeOutput
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo $this->get_social_image_uploader_form( 'tsf_fb_socialimage' );
 			?>
 		</p>

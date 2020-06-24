@@ -220,8 +220,11 @@ class Init extends Query {
 		\remove_action( 'wp_head', 'wp_generator' );
 
 		//* Prepares sitemap or stylesheet output.
-		if ( $this->can_run_sitemap() )
+		if ( $this->can_run_sitemap() ) {
+			// We can use `set_404` when we support WP 5.5+...
 			\add_action( 'template_redirect', [ $this, '_init_sitemap' ], 1 );
+			\add_filter( 'wp_sitemaps_enabled', '__return_false' );
+		}
 
 		//* Initialize 301 redirects.
 		\add_action( 'template_redirect', [ $this, '_init_custom_field_redirect' ] );
@@ -601,13 +604,14 @@ class Init extends Query {
 	 *                2. Improved invalid location test.
 	 *                3. No longer shortcircuits on non-public sites.
 	 *                4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
+	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
 	 * @uses robots_txt filter located at WP core
 	 * @access private
 	 * @TODO extrapolate the contents without a warning to get_robots_txt(). Forward filter to it.
 	 *       See Monitor extension.
 	 *
 	 * @param string $robots_txt The current robots_txt output. Not used.
-	 * @param string $public The blog_public option value. Not used.
+	 * @param string $public The blog_public option value.
 	 * @return string Robots.txt output.
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
@@ -660,6 +664,14 @@ class Init extends Query {
 					}
 				}
 				$output .= "\r\n";
+			} elseif ( $this->get_option( 'sitemaps_robots' ) && ! $this->detect_sitemap_plugin() ) {
+				if ( function_exists( '\\wp_sitemaps_get_server' ) ) {
+					$wp_sitemaps_server = \wp_sitemaps_get_server();
+					if ( $wp_sitemaps_server && method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
+						// This method augments the output--it doesn't overwrite it.
+						$output = \wp_sitemaps_get_server()->add_robots( $output, $public );
+					}
+				}
 			}
 
 			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
