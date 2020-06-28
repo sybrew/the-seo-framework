@@ -37,10 +37,11 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 final class SeoBar {
 	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
-	const STATE_UNKNOWN = 0b0001;
-	const STATE_BAD     = 0b0010;
-	const STATE_OKAY    = 0b0100;
-	const STATE_GOOD    = 0b1000;
+	const STATE_UNDEFINED = 0b0000;
+	const STATE_UNKNOWN   = 0b0001;
+	const STATE_BAD       = 0b0010;
+	const STATE_OKAY      = 0b0100;
+	const STATE_GOOD      = 0b1000;
 
 	/**
 	 * @since 4.0.0
@@ -368,6 +369,8 @@ final class SeoBar {
 	 *      This would meant hat we use the & logical operator, instead.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 1. Added 'undefined' support.
+	 *              2. Now defaults to 'undefined'.
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The HTML class-suffix.
@@ -387,9 +390,13 @@ final class SeoBar {
 				$status = 'bad';
 				break;
 
-			default:
 			case static::STATE_UNKNOWN:
 				$status = 'unknown';
+				break;
+
+			default:
+			case static::STATE_UNDEFINED:
+				$status = 'undefined';
 				break;
 		endswitch;
 
@@ -400,6 +407,8 @@ final class SeoBar {
 	 * Enumerates the assessments in a plaintext format.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 1. Added 'undefined' support.
+	 *              2. Now defaults to 'undefined'.
 	 * @staticvar bool $use_symbols
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
@@ -422,9 +431,13 @@ final class SeoBar {
 					$symbol = '!!';
 					break;
 
-				default:
 				case static::STATE_UNKNOWN:
 					$symbol = '??';
+					break;
+
+				default:
+				case static::STATE_UNDEFINED:
+					$symbol = '--';
 					break;
 			endswitch;
 

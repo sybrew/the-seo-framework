@@ -215,13 +215,8 @@ body.no-js .tsf-seo-bar-item {
 	background-color: #007bd2;
 }
 
-/* # End tooltips */
-
-/* Mobile support */
-/* Needs more refining.... e.g. iPhone 6 = good, iPhone 6+ = offscreen */
-.tsf-seo-bar-wrap.column-tsf-seo-bar-temp {
-	overflow: initial !important;
-	min-width: 160px;
+.tsf-seo-bar-undefined {
+	background-color: #767676;
 }
 
 /* Taxonomies overflow fix */

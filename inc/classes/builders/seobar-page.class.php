@@ -163,7 +163,7 @@ final class SeoBar_Page extends SeoBar {
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],
 					'duplicated' => \__( 'The blog name is found multiple times.', 'autodescription' ),
-					'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider replacing it with static input.", 'autodescription' ),
+					'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom title.", 'autodescription' ),
 				],
 				'reason'   => [
 					'incomplete' => \__( 'Incomplete.', 'autodescription' ),
@@ -376,7 +376,7 @@ final class SeoBar_Page extends SeoBar {
 					'excerpt'   => \__( "It's built using the excerpt field.", 'autodescription' ),
 					/* translators: %s = list of duplicated words */
 					'dupes'     => \__( 'Found duplicated words: %s', 'autodescription' ),
-					'syntax'    => \__( "Markup syntax was found that isn't transformed. Consider replacing it with static input.", 'autodescription' ),
+					'syntax'    => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
 				],
 				'reason'   => [
 					'empty'         => \__( 'Empty.', 'autodescription' ),
@@ -455,7 +455,6 @@ final class SeoBar_Page extends SeoBar {
 			$desc = static::$tsf->get_generated_description( $desc_args, false );
 
 			if ( ! strlen( $desc ) ) {
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['empty'];
 
 				// This is now inaccurate, purge it.
@@ -463,10 +462,13 @@ final class SeoBar_Page extends SeoBar {
 				unset( $item['assess']['base'] );
 
 				if ( static::$tsf->uses_non_html_page_builder( static::$query['id'] ) ) {
+					$item['status']          = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
 					$item['assess']['empty'] = $cache['assess']['builder'];
 				} elseif ( static::$tsf->is_protected( static::$query['id'] ) ) {
+					$item['status']          = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
 					$item['assess']['empty'] = $cache['assess']['protected'];
 				} else {
+					$item['status']          = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNDEFINED;
 					$item['assess']['empty'] = $cache['assess']['empty'];
 				}
 

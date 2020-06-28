@@ -194,7 +194,7 @@ Learn more [about contributing](https://tsf.fyi/contributing).
 
 = What do the colors tell me? =
 
-We use different colors to convey messages. Red is an error that you must resolve. Yellow is a non-critical warning that you may want to address. Green is good. Blue is informational and situational.
+We use different colors to convey messages. Red is an error that you must resolve. Yellow is a non-critical warning that you may want to address. Green is good. Blue is informational and situational. Grey is undefined or unprocessable.
 
 = The sitemap doesn't contain categories, images, et al. =
 
@@ -238,10 +238,13 @@ You can now disable taxonomies and control their robots output globally.
 The Core Sitemaps feature coming to (TODO or brought with, when we're late) WordPress 5.5 is now supported. When you disable TSF's sitemaps, Core Sitemaps will now be displayed instead. We recommend sticking with TSF's sitemaps, since they are less heavy on your server, are more quickly processed by search engines, and honor the indexing state of each post included.
 
 TODO Polylang subdirectory URLs have their sitemap pointing to a query argument... https://kb.theseoframework.com/kb/translation-plugin-compatibility/#polylang-caveat-1
-TODO add (light) grey SEO Bar color (mind the color vision deficiency support and contrast...)
 
 TODO consider disabling post types and taxonomies without rewrite support for user that upgrade from >4.0~<4.1?
 	* This saves me rather than them--I expect an influx of support requests regarding this. For them, then, nothing will change, and that might be favorable.
+
+TODO we keep getting "unbranded" titles inquiries. This term is coined by Google, but should we rename or expound on that issue?
+	* "This means that the Site Title couldn't be found."
+TODO Speaking of which, should we allow setting a custom Site Title? Or should we keep blaming themes for not doing it right. Brands overwrite the theme output anyway, since they have custom logos.
 
 TODO consider applying noindex by default to faulty post types?
 	`elementor_library` // Elementor, post type
@@ -263,6 +266,9 @@ TODO consider applying noindex by default to faulty post types?
 		* Elementor
 		* Beaver Builder
 		* Page Builder by SiteOrigin
+	* You may now spot the new "undefined" gray-colored SEO Bar entries. This type is typically used when no processable data can be found by the parser.
+		* As before, it's distinguishable from the other types with any color vision deficiency; even with the extremely rare (0.003% of population) achromatopsia.
+		* May you prefer, you can also enable symbols for warnings--this type will convey `--` (two hyphens).
 * **Improved:**
 	* The description generator has gone through another generational leap:
 		* It is now able to discern between punctuation types for stripping leading characters. For example, an opening bracket will no longer be stripped from the start of a sentence, but closing brackets will.
@@ -342,6 +348,9 @@ TODO consider applying noindex by default to faulty post types?
 				1. Is now able to always strip leading punctuation.
 				1. It will now strip leading colon characters.
 				1. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
+* **Object notes:**
+	* For object `\The_SEO_Framework\Interpreters\SeoBar`:
+		* **Added:** constant `STATE_UNDEFINED`; equals `0b0000` (bitwise naught); creates the gray undefined SEO Bar entry.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_forced_supported_taxonomies`, used to adjust an array of forced supported taxonomies, so no settings can be adjusted for them.
