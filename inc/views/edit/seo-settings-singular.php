@@ -258,7 +258,7 @@ switch ( $instance ) :
 						);
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description">%s</span></div>',
-							esc_html__( 'Note: A non-default selection will overwrite the global homepage settings.', 'autodescription' )
+							esc_html__( 'Note: A non-default selection here will overwrite the global homepage SEO settings.', 'autodescription' )
 						);
 					}
 					?>

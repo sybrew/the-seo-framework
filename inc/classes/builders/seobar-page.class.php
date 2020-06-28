@@ -371,7 +371,7 @@ final class SeoBar_Page extends SeoBar {
 				],
 				'assess'   => [
 					'empty'     => \__( 'There is no usable content, so no description could be generated.', 'autodescription' ),
-					'builder'   => \__( 'A foreign page builder is used, so no description is generated.', 'autodescription' ),
+					'builder'   => \__( 'A page builder is used that renders content dynamically, so no description can be generated for performance and privacy reasons. Consider providing a custom description.', 'autodescription' ),
 					'protected' => \__( 'The page is protected, so no description is generated.', 'autodescription' ),
 					'excerpt'   => \__( "It's built using the excerpt field.", 'autodescription' ),
 					/* translators: %s = list of duplicated words */
@@ -462,7 +462,7 @@ final class SeoBar_Page extends SeoBar {
 				// TODO consider alternative? "It TRIED to build it from...."?
 				unset( $item['assess']['base'] );
 
-				if ( static::$tsf->uses_page_builder( static::$query['id'] ) ) {
+				if ( static::$tsf->uses_non_html_page_builder( static::$query['id'] ) ) {
 					$item['assess']['empty'] = $cache['assess']['builder'];
 				} elseif ( static::$tsf->is_protected( static::$query['id'] ) ) {
 					$item['assess']['empty'] = $cache['assess']['protected'];

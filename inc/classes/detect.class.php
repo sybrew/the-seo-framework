@@ -548,6 +548,8 @@ class Detect extends Render {
 	 * @since 4.0.0
 	 * @since 4.0.6 The output is now filterable.
 	 * @staticvar bool $detected
+	 * @TODO deprecate?
+	 * @ignore unused.
 	 *
 	 * @return bool
 	 */
@@ -572,6 +574,40 @@ class Detect extends Render {
 					'WPB_VC_VERSION',
 					'SITEORIGIN_PANELS_VERSION',
 					'FL_BUILDER_VERSION',
+				],
+			] )
+		);
+	}
+
+	/**
+	 * Detects presence of a page builder that renders content dynamically.
+	 *
+	 * Detects the following builders:
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 *
+	 * @since 4.1.0
+	 *
+	 * @return bool
+	 */
+	public function detect_non_html_page_builder() {
+
+		static $detected = null;
+
+		if ( isset( $detected ) ) return $detected;
+
+		/**
+		 * @since 4.1.0
+		 * @param bool $detected Whether an active page builder that renders content dynamically is detected.
+		 * @NOTE not to be confused with `the_seo_framework_detect_non_html_page_builder`, which tests
+		 *       the page builder status for each post individually.
+		 */
+		return $detected = (bool) \apply_filters(
+			'the_seo_framework_shortcode_based_page_builder_active',
+			$this->detect_plugin( [
+				'constants' => [
+					'ET_BUILDER_VERSION',
+					'WPB_VC_VERSION',
 				],
 			] )
 		);

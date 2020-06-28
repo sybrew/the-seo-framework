@@ -787,7 +787,7 @@ class Generate_Description extends Generate {
 		} elseif ( isset( $post->post_content ) ) {
 			// We should actually get the parsed content here... but that can be heavy on the server.
 			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
-			$excerpt = $this->uses_page_builder( $post->ID ) ? '' : $post->post_content;
+			$excerpt = $this->uses_non_html_page_builder( $post->ID ) ? '' : $post->post_content;
 
 			if ( $excerpt ) {
 				$excerpt = $this->strip_newline_urls( $excerpt );

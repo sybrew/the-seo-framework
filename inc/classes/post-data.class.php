@@ -600,9 +600,11 @@ class Post_Data extends Detect {
 	 * @since 2.6.6
 	 * @since 3.1.0 Added Elementor detection
 	 * @since 4.0.0 Now detects page builders before looping over the meta.
+	 * @TODO deprecate?
+	 * @ignore unused.
 	 *
 	 * @param int $post_id The post ID to check.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function uses_page_builder( $post_id ) {
 
@@ -641,6 +643,51 @@ class Post_Data extends Detect {
 			return true;
 		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) ) :
 			//* Beaver Builder by Fastline Media...
+			return true;
+		endif;
+
+		return false;
+	}
+
+	/**
+	 * Determines whether the post has a page builder that renders content dynamically attached to it.
+	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
+	 *
+	 * Detects the following builders:
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param int $post_id The post ID to check.
+	 * @return bool
+	 */
+	public function uses_non_html_page_builder( $post_id ) {
+
+		$meta = \get_post_meta( $post_id );
+
+		/**
+		 * @since 4.1.0
+		 * @param boolean|null $detected Whether a builder should be detected.
+		 * @param int          $post_id The current Post ID.
+		 * @param array        $meta The current post meta.
+		 */
+		$detected = \apply_filters( 'the_seo_framework_detect_non_html_page_builder', null, $post_id, $meta );
+
+		if ( is_bool( $detected ) )
+			return $detected;
+
+		if ( ! $this->detect_non_html_page_builder() )
+			return false;
+
+		if ( empty( $meta ) )
+			return false;
+
+		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) ) :
+			//* Divi Builder by Elegant Themes
+			return true;
+		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) ) :
+			//* Visual Composer by WPBakery
 			return true;
 		endif;
 

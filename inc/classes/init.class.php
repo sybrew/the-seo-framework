@@ -221,7 +221,7 @@ class Init extends Query {
 
 		//* Prepares sitemap or stylesheet output.
 		if ( $this->can_run_sitemap() ) {
-			// We can use `set_404` when we support WP 5.5+...
+			// We can use action `set_404` when we support WP 5.5+...?
 			\add_action( 'template_redirect', [ $this, '_init_sitemap' ], 1 );
 			\add_filter( 'wp_sitemaps_enabled', '__return_false' );
 		}

@@ -423,7 +423,13 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Exclusion Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'When checked, these options will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types and taxonomies. This will allow search engines to crawl the post type and taxonomies without advanced restrictions or directions.', 'autodescription' ) );
-		$this->attention_description( __( 'These options should not need changing when post types and taxonomies are registered correctly.', 'autodescription' ) );
+		$this->attention_description_noesc(
+			$this->convert_markdown(
+				/* translators: backticks are code wraps. Markdown! */
+				esc_html__( "These options should not need changing when post types and taxonomies are registered correctly. When they aren't, consider applying `noindex` to purge them from search engines, instead.", 'autodescription' ),
+				[ 'code' ]
+			)
+		);
 		$this->description( __( 'Default post types and taxonomies can not be disabled.', 'autodescription' ) );
 		?>
 
