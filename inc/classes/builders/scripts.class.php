@@ -581,7 +581,7 @@ final class Scripts {
 	}
 
 	/**
-	 * Outputs tab view, whilst trying to prevent 3rd party interference on views.
+	 * Outputs tab view, whilst trying to prevent third-party interference on views.
 	 *
 	 * There's a secret key generated on each tab load. This key can be accessed
 	 * in the view through `$_secret`, and be sent back to this class.

@@ -145,7 +145,7 @@ class Sanitize extends Admin_Pages {
 		if ( $running ) return;
 		$running = true;
 
-		db_4102:
+		db_4103:
 		//= Category and Tag robots backward compat.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
 			$_options = $this->get_option( $this->get_robots_taxonomy_option_id( $r ), false );
@@ -305,6 +305,8 @@ class Sanitize extends Admin_Pages {
 				'facebook_tags',
 				'twitter_tags',
 				'oembed_scripts',
+
+				'social_title_rem_additions',
 
 				'multi_og_image',
 

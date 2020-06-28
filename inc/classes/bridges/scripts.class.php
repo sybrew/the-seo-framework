@@ -692,6 +692,7 @@ final class Scripts {
 				'data' => [
 					'states' => [
 						'useTagline'        => $tsf->use_title_branding( $_query ),
+						'useSocialTagline'  => $tsf->use_title_branding( $_query, true ),
 						'titleSeparator'    => static::decode_entities( $tsf->s_title_raw( $tsf->get_title_separator() ) ),
 						'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 						'additionValue'     => static::decode_entities( $tsf->s_title_raw( $addition ) ),

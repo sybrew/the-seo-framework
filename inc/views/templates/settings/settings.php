@@ -36,4 +36,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 		?>
 	</span>
 </script>
+
+<script type="text/html" id="tmpl-tsf-disabled-title-additions-help">
+	<span class="tsf-title-additions-warning">
+		<?php
+		the_seo_framework()->make_info(
+			\esc_html__( 'All titles have their blog name removed, so this option only affects the homepage.', 'autodescription' )
+		);
+		?>
+	</span>
+</script>
 <?php

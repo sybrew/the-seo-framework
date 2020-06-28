@@ -1129,6 +1129,7 @@ class Admin_Pages extends Profile {
 	 */
 	public function output_js_title_elements() {
 		echo '<span id=tsf-title-reference style=display:none></span>';
+		echo '<span id=tsf-title-noadditions-reference style=display:none></span>';
 		echo '<span id=tsf-title-offset class=hide-if-no-tsf-js></span>';
 		echo '<span id=tsf-title-placeholder class=hide-if-no-tsf-js></span>';
 		echo '<span id=tsf-title-placeholder-prefix class=hide-if-no-tsf-js></span>';

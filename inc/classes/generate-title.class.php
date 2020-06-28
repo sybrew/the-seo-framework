@@ -42,19 +42,21 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 No longer double-escapes the custom field title.
+	 * @since 4.1.0 Added the third $social parameter.
 	 * @uses $this->get_custom_field_title()
 	 * @uses $this->get_generated_title()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $social Whether the title is meant for social display.
 	 * @return string The real title output.
 	 */
-	public function get_title( $args = null, $escape = true ) {
+	public function get_title( $args = null, $escape = true, $social = false ) {
 
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
-		$title = $this->get_custom_field_title( $args, false )
-			  ?: $this->get_generated_title( $args, false );
+		$title = $this->get_custom_field_title( $args, false, $social )
+			  ?: $this->get_generated_title( $args, false, $social );
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_title( $title ) : $title;
@@ -65,13 +67,15 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Moved the filter to a separated method.
+	 * @since 4.1.0 Added the third $social parameter.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $social Whether the title is meant for social display.
 	 * @return string The custom field title.
 	 */
-	public function get_custom_field_title( $args = null, $escape = true ) {
+	public function get_custom_field_title( $args = null, $escape = true, $social = false ) {
 
 		$title = $this->get_filtered_raw_custom_field_title( $args );
 
@@ -82,7 +86,7 @@ class Generate_Title extends Generate_Description {
 			if ( $this->use_title_pagination( $args ) )
 				$this->merge_title_pagination( $title );
 
-			if ( $this->use_title_branding( $args ) )
+			if ( $this->use_title_branding( $args, $social ) )
 				$this->merge_title_branding( $title, $args );
 		}
 
@@ -96,15 +100,17 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.2.4 1. Added check for title protection.
 	 *              2. Moved check for title pagination.
 	 * @since 4.0.0 Moved the filter to a separated method.
+	 * @since 4.1.0 Added the third $social parameter.
 	 * @uses $this->s_title_raw() : This is the same method used to prepare custom title on save.
 	 * @uses $this->get_filtered_raw_generated_title()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $social Whether the title is meant for social display.
 	 * @return string The generated title output.
 	 */
-	public function get_generated_title( $args = null, $escape = true ) {
+	public function get_generated_title( $args = null, $escape = true, $social = false ) {
 
 		$title = $this->get_filtered_raw_generated_title( $args );
 
@@ -114,7 +120,7 @@ class Generate_Title extends Generate_Description {
 		if ( $this->use_title_pagination( $args ) )
 			$this->merge_title_pagination( $title );
 
-		if ( $this->use_title_branding( $args ) )
+		if ( $this->use_title_branding( $args, $social ) )
 			$this->merge_title_branding( $title, $args );
 
 		$title = $this->s_title_raw( $title );
@@ -315,6 +321,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.0.4
 	 * @since 3.1.0 The first parameter now expects an array.
+	 * @since 4.1.0 Now appends the "social" argument when getting the title.
 	 * @uses $this->get_title()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -323,7 +330,7 @@ class Generate_Title extends Generate_Description {
 	 * @return string The generated Twitter Title.
 	 */
 	public function get_generated_twitter_title( $args = null, $escape = true ) {
-		return $this->get_title( $args, $escape );
+		return $this->get_title( $args, $escape, true );
 	}
 
 	/**
@@ -448,6 +455,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.0.4
 	 * @since 3.1.0 The first parameter now expects an array.
+	 * @since 4.1.0 Now appends the "social" argument when getting the title.
 	 * @uses $this->get_title()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
@@ -456,7 +464,7 @@ class Generate_Title extends Generate_Description {
 	 * @return string The generated Open Graph Title.
 	 */
 	public function get_generated_open_graph_title( $args = null, $escape = true ) {
-		return $this->get_title( $args, $escape );
+		return $this->get_title( $args, $escape, true );
 	}
 
 	/**
@@ -1294,30 +1302,43 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.2 : 1. Added filter.
 	 *                2. Added strict taxonomical check.
 	 * @since 3.2.2 Now differentiates from query and parameter input.
+	 * @since 4.1.0 Added the second $social parameter.
 	 * @see $this->merge_title_branding()
 	 * @uses $this->use_title_branding_from_query()
 	 * @uses $this->use_title_branding_from_args()
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
-	 *                         Leave null to autodetermine query.
+	 * @param array|null $args  The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $social Whether the title is meant for social display.
 	 * @return bool True when additions are allowed.
 	 */
-	public function use_title_branding( $args = null ) {
+	public function use_title_branding( $args = null, $social = false ) {
 
-		if ( null === $args ) {
-			$use = $this->use_title_branding_from_query();
-		} else {
-			$this->fix_generation_args( $args );
-			$use = $this->use_title_branding_from_args( $args );
+		$use = true;
+
+		if ( $social ) {
+			$use = ! $this->get_option( 'social_title_rem_additions' );
+		}
+
+		// When social titles tend to use it, evaluate again from general title settings.
+		if ( $use ) {
+			if ( null === $args ) {
+				$use = $this->use_title_branding_from_query();
+			} else {
+				$this->fix_generation_args( $args );
+				$use = $this->use_title_branding_from_args( $args );
+			}
 		}
 
 		/**
 		 * @since 3.1.2
-		 * @param string     $use  Whether to use branding.
-		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
-		 *                         Is null when query is autodetermined.
+		 * @since 4.1.0 Added the third $social parameter.
+		 * @param string     $use    Whether to use branding.
+		 * @param array|null $args   The query arguments. Contains 'id' and 'taxonomy'.
+		 *                           Is null when query is autodetermined.
+		 * @param bool       $social Whether the title is meant for social display.
 		 */
-		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args ] );
+		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args, $social ] );
 	}
 
 	/**

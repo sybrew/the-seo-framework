@@ -140,7 +140,7 @@ class Site_Options extends Sanitize {
 				$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
 				$this->get_robots_taxonomy_option_id( 'noarchive' ) => [], // Taxonomy support.
 
-				// Robots query protection
+				// Robots query protection.
 				'advanced_query_protection' => 1,
 
 				// Robots pagination index.
@@ -165,7 +165,7 @@ class Site_Options extends Sanitize {
 				'homepage_title_tagline' => '', // Homepage Tagline string
 				'home_title_location'    => $h_titleloc, // Title separation location
 
-				// Homepage Social
+				// Homepage Social.
 				'homepage_og_title'            => '',
 				'homepage_og_description'      => '',
 				'homepage_twitter_title'       => '',
@@ -174,7 +174,7 @@ class Site_Options extends Sanitize {
 				'homepage_social_image_url' => '',
 				'homepage_social_image_id'  => 0,
 
-				// Relationships
+				// Relationships.
 				'shortlink_tag'       => 0, // Adds shortlink tag
 				'prev_next_posts'     => 1, // Adds next/prev tags
 				'prev_next_archives'  => 1, // Adds next/prev tags
@@ -203,10 +203,13 @@ class Site_Options extends Sanitize {
 				'twitter_tags'    => 1, // Output the Twitter meta tags
 				'oembed_scripts'  => 1, // Enable WordPress's oEmbed scripts
 
+				// Social title settings.
+				'social_title_rem_additions' => 1, // Remove social title additions
+
 				// Social image settings.
 				'multi_og_image' => 1, // Allow multiple images to be generated
 
-				// Theme color settings
+				// Theme color settings.
 				'theme_color' => '', // Theme color metatag, default none
 
 				// Social FallBack images (fb = fallback)
@@ -228,11 +231,11 @@ class Site_Options extends Sanitize {
 				'knowledge_logo' => 1,  // Use Knowledge Logo from anywhere.
 				'knowledge_name' => '', // Person or Organization name
 
-				// Knowledge Logo image
+				// Knowledge Logo image.
 				'knowledge_logo_url'   => '',
 				'knowledge_logo_id'    => 0,
 
-				// Knowledge sameas locations
+				// Knowledge sameas locations.
 				'knowledge_facebook'   => '', // Facebook Account
 				'knowledge_twitter'    => '', // Twitter Account
 				'knowledge_gplus'      => '', // Google Plus Account
@@ -268,7 +271,7 @@ class Site_Options extends Sanitize {
 				'source_the_feed'  => 1, // Add backlink at the end of the feed
 				'index_the_feed'   => 0, // Add backlink at the end of the feed
 
-				// Schema
+				// Schema.
 				'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox
 				'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs
 			]
