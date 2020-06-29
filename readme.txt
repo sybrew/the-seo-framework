@@ -237,19 +237,6 @@ You can now disable taxonomies and control their robots output globally.
 
 The Core Sitemaps feature coming to (TODO or brought with, when we're late) WordPress 5.5 is now supported. When you disable TSF's sitemaps, Core Sitemaps will now be displayed instead. We recommend sticking with TSF's sitemaps, since they are less heavy on your server, are more quickly processed by search engines, and honor the indexing state of each post included.
 
-TODO Polylang subdirectory URLs have their sitemap pointing to a query argument... https://kb.theseoframework.com/kb/translation-plugin-compatibility/#polylang-caveat-1
-
-TODO consider disabling post types and taxonomies without rewrite support for user that upgrade from >4.0~<4.1?
-	* This saves me rather than them--I expect an influx of support requests regarding this. For them, then, nothing will change, and that might be favorable.
-
-TODO we keep getting "unbranded" titles inquiries. This term is coined by Google, but should we rename or expound on that issue?
-	* "This means that the Site Title couldn't be found."
-TODO Speaking of which, should we allow setting a custom Site Title? Or should we keep blaming themes for not doing it right. Brands overwrite the theme output anyway, since they have custom logos.
-
-TODO consider applying noindex by default to faulty post types?
-	`elementor_library` // Elementor, post type
-	`product_shipping_class` // WooCommerce, taxonomy
-
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO from TSF.
@@ -284,6 +271,7 @@ TODO consider applying noindex by default to faulty post types?
 	* The sitemap stylesheet now outputs specific table header and body tags for improved accessibility.
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
 		* This prevents the settings-tabs from collapsing for some languages.
+	* Some sentences have been changed where some users struggled with before. For example, the SEO Bar now conveys what "title branding" means.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -297,6 +285,9 @@ TODO consider applying noindex by default to faulty post types?
 ## For translators
 * **Added:**
 	* New sentences have been added.
+* **Changed:**
+	* TODO We're now calling "blog name" "site title" throughout the plugin.
+		* WordPress shows the "Site Title" at "General Settings", but stores it in the database as "blogname". We can't expect the user to be aware of this.
 * **Updated:**
 	* TODO POT translation file.
 	* As always, various sentences have been updated for clarity.
@@ -353,6 +344,11 @@ TODO consider applying noindex by default to faulty post types?
 				1. Is now able to always strip leading punctuation.
 				1. It will now strip leading colon characters.
 				1. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
+			* `get_title()` now has a third `$social` parameter.
+			* `get_custom_field_title()` now has a third `$social` parameter.
+			* `get_generated_title()` now has a third `$social` parameter.
+			* `get_generated_open_graph_title()` now has a third `$social` parameter.
+			* `use_title_branding()` now has a second `$social` parameter.
 * **Object notes:**
 	* For object `\The_SEO_Framework\Interpreters\SeoBar`:
 		* **Added:** constant `STATE_UNDEFINED`; equals `0b0000` (bitwise naught); creates the gray undefined SEO Bar entry.
@@ -362,9 +358,14 @@ TODO consider applying noindex by default to faulty post types?
 		* `the_seo_framework_taxonomy_disabled`, used to overwrite taxonomy disabled state.
 		* `the_seo_framework_shortcode_based_page_builder_active`, used to relay an active (conflicting) page builder that renders content dynamically is active.
 		* `the_seo_framework_detect_non_html_page_builder`, used to relay an active (conflicting) page builder is used for the current page.
+		* `the_seo_framework_sitemap_items`, used to filter all valid post IDs for the sitemap.
 	* **Changed:**
 		* `the_seo_framework_general_settings_tabs`'s `posttypes` entry has been renamed to `exclusions`.
+		* `the_seo_framework_use_title_branding` now has a third parameter, `$social`.
 * **JS notes:**
+	* **Method notes:**
+		* `tsfSocial.initTitleInputs` now expects `refNa` to be registered in its first parameter object.
+		* `tsfTitleL10n.useSocialTagline` is now available. Dynamically readable via `tsfTitle.getState( 'useSocialTagline' )`.
 	* **Event notes:**
 		* **Added:**
 			* `window.tsf-post-type-support-changed`, used to test for post type change states.
@@ -375,6 +376,7 @@ TODO consider applying noindex by default to faulty post types?
 		* **Added:**
 			* `wp.template( 'tsf-disabled-taxonomy-help' )` is now available on the settings page.
 			* `wp.template( 'tsf-disabled-taxonomy-from-pt-help' )` is now available on the settings page.
+			* `wp.template( 'tsf-disabled-title-additions-help' )` is now available on the settings page.
 
 **Share your love!**
 

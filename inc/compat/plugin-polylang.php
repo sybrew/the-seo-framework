@@ -76,6 +76,7 @@ function _blocklist_tsf_sitemap_styles( $blocklist ) {
 \add_filter( 'the_seo_framework_sitemap_path_prefix', __NAMESPACE__ . '\\_fix_sitemap_prefix', 9 );
 /**
  * Fixes the sitemap prefix, because setting the home URL globally requires only one filter.
+ * This will mess up translating with query-vars, though... FIXME?
  *
  * @since 4.0.0
  * @param string $prefix The path prefix. Ideally appended with a slash.

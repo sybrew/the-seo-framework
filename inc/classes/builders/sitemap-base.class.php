@@ -116,7 +116,7 @@ class Sitemap_Base extends Sitemap {
 			 * @since 4.0.0
 			 * @param array $args The query arguments.
 			 */
-			$_args = \apply_filters(
+			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_hpt_query_args',
 				[
 					'posts_per_page'   => $_hierarchical_posts_limit + count( $_exclude_ids ),
@@ -148,7 +148,7 @@ class Sitemap_Base extends Sitemap {
 			 * @since 4.0.0
 			 * @param array $args The query arguments.
 			 */
-			$_args = \apply_filters(
+			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_nhpt_query_args',
 				[
 					'posts_per_page'   => $this->get_sitemap_post_limit( false ),
@@ -169,13 +169,27 @@ class Sitemap_Base extends Sitemap {
 			$non_hierarchical_post_ids = $wp_query->get_posts();
 		}
 
-		// Destroy class.
+		// Destroy query instance.
 		$wp_query = null;
 
-		$_items      = array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids );
+		/**
+		 * @since 4.1.0
+		 * @param int[] $_items                    The post IDs that will be parsed in the sitemap.
+		 *                                         When it totals for more than 49998 items, they'll be spliced.
+		 * @param int[] $hierarchical_post_ids     The post IDs from hierarchical post types.
+		 * @param int[] $non_hierarchical_post_ids The post IDs from non-hierarchical post types.
+		 */
+		$_items      = (array) \apply_filters_ref_array(
+			'the_seo_framework_sitemap_items',
+			[
+				array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids ),
+				$hierarchical_post_ids,
+				$non_hierarchical_post_ids,
+			]
+		);
 		$total_items = count( $_items );
 
-		// 49998 = 50000-2, max sitemap items.
+		// 49998 = 50000-2 (home+blog), max sitemap items.
 		if ( $total_items > 49998 ) array_splice( $_items, 49998 );
 
 		foreach ( $this->generate_url_item_values(
@@ -394,6 +408,8 @@ class Sitemap_Base extends Sitemap {
 
 		$timestamp_format = $timestamp_format ?: static::$tsf->get_timestamp_format();
 
+		// sprintf is heavy. Should we parse this as an array, and mark them up later, instead?
+		// @link https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/2.4.0/extensions/essentials/articles/trunk/inc/classes/sitemapbuilder.class.php#L268-L292
 		return sprintf(
 			"\t<url>\n%s\t</url>\n",
 			vsprintf(
