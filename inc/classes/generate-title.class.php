@@ -1418,7 +1418,7 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
-	 * @since 3.0.4 Now checks for custom tagline or blog name existence.
+	 * @since 3.0.4 Now checks for `$this->get_home_page_tagline()`.
 	 *
 	 * @return bool
 	 */

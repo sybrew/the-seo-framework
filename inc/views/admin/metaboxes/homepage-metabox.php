@@ -13,7 +13,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
 
-$home_id  = $this->get_the_front_page_ID();
+$home_id = $this->get_the_front_page_ID();
 
 $_generator_args = [
 	'id'       => $home_id,
@@ -128,7 +128,7 @@ switch ( $instance ) :
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ]
+					[ 'a_internal' => false ] // opens in new tab.
 				)
 			);
 		}
@@ -178,7 +178,7 @@ switch ( $instance ) :
 						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ]
+					[ 'a_internal' => false ] // opens in new tab.
 				)
 			);
 		}

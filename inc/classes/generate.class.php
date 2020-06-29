@@ -601,7 +601,7 @@ class Generate extends User_Data {
 	}
 
 	/**
-	 * Fetches blogname.
+	 * Fetches blogname (site title).
 	 *
 	 * @since 2.5.2
 	 * @staticvar string $blogname

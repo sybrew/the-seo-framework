@@ -158,11 +158,11 @@ final class SeoBar_Page extends SeoBar {
 					),
 					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
-						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),
+						'not'       => \__( "It's not branded. Search engines may ignore your title. Consider adding back the site title.", 'autodescription' ),
 						'manual'    => \__( "It's manually branded.", 'autodescription' ),
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],
-					'duplicated' => \__( 'The blog name is found multiple times.', 'autodescription' ),
+					'duplicated' => \__( 'The site title is found multiple times.', 'autodescription' ),
 					'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom title.", 'autodescription' ),
 				],
 				'reason'   => [
@@ -227,7 +227,7 @@ final class SeoBar_Page extends SeoBar {
 
 			if ( $this->query_cache['states']['ishome'] ) {
 				// Don't use cache here, only one page can have this state.
-				$item['assess']['base'] = \__( 'The title is built from the blog name.', 'autodescription' );
+				$item['assess']['base'] = \__( "It's built using the site title.", 'autodescription' );
 			}
 
 			$title_part = static::$tsf->get_filtered_raw_generated_title( $title_args, false );
@@ -265,15 +265,16 @@ final class SeoBar_Page extends SeoBar {
 
 			// Absence assertion is done after this.
 			if ( $title === $_title_before ) {
+				// Title didn't change, so no automatic branding was added.
 				$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 			} else {
-				// This is true unless it's the home page and the user passed the blog name exactly.
+				// This is true unless it's the home page and the user passed the site title exactly.
 				$item['assess']['branding'] = $cache['assess']['branding']['automatic'];
 			}
 		} else {
 			// Absence assertion is done after this.
 			if ( $this->query_cache['states']['ishome'] ) {
-				// This is true unless it's the home page and the user passed the blog name exactly.
+				// This is true unless it's the home page and the user passed the site title exactly.
 				$item['assess']['branding'] = $cache['assess']['branding']['automatic'];
 			} else {
 				$item['assess']['branding'] = $cache['assess']['branding']['manual'];

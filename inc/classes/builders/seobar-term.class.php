@@ -168,11 +168,11 @@ final class SeoBar_Term extends SeoBar {
 					),
 					'prefixed'   => \__( 'A term label prefix is automatically added which increases the length.', 'autodescription' ),
 					'branding'   => [
-						'not'       => \__( "It's not branded. Search engines may ignore your title.", 'autodescription' ),
+						'not'       => \__( "It's not branded. Search engines may ignore your title. Consider adding back the site title.", 'autodescription' ),
 						'manual'    => \__( "It's manually branded.", 'autodescription' ),
 						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
 					],
-					'duplicated' => \__( 'The blog name is found multiple times.', 'autodescription' ),
+					'duplicated' => \__( 'The site title is found multiple times.', 'autodescription' ),
 					'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom title.", 'autodescription' ),
 				],
 				'reason'   => [
@@ -258,6 +258,7 @@ final class SeoBar_Term extends SeoBar {
 
 			// Absence assertion is done after this.
 			if ( $title === $_title_before ) {
+				// Title didn't change, so no automatic branding was added.
 				$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 			} else {
 				$item['assess']['branding'] = $cache['assess']['branding']['automatic'];

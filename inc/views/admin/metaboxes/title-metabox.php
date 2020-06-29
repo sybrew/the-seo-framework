@@ -133,7 +133,7 @@ switch ( $instance ) :
 		?>
 		<fieldset>
 			<legend>
-				<h4><?php esc_html_e( 'Blog Name Location', 'autodescription' ); ?></h4>
+				<h4><?php esc_html_e( 'Site Title Location', 'autodescription' ); ?></h4>
 			</legend>
 			<p id="tsf-title-location" class="tsf-fields">
 				<span class="tsf-toblock">
@@ -176,7 +176,7 @@ switch ( $instance ) :
 
 		<hr>
 
-		<h4><?php esc_html_e( 'Blog Name', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Site Title', 'autodescription' ); ?></h4>
 		<div id="tsf-title-additions-toggle">
 			<?php
 			$info = $this->make_info(
@@ -188,7 +188,7 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'title_rem_additions',
-					esc_html__( 'Remove blog name from the title?', 'autodescription' ) . ' ' . $info,
+					esc_html__( 'Remove site title from the title?', 'autodescription' ) . ' ' . $info,
 					'',
 					false
 				),

@@ -698,7 +698,7 @@ class Generate_Description extends Generate {
 	}
 
 	/**
-	 * Returns additions for "Title on Blog name".
+	 * Returns additions for "Title on Site Title".
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.0 : 1. Now no longer listens to options.
@@ -726,10 +726,10 @@ class Generate_Description extends Generate {
 		if ( empty( $title ) )
 			return '';
 
-		$on       = \_x( 'on', 'Placement. e.g. Post Title "on" Blog Name', 'autodescription' );
+		$on       = \_x( 'on', 'Placement. e.g. Post Title "on" Site Title', 'autodescription' );
 		$blogname = $this->get_blogname();
 
-		/* translators: 1: Title, 2: on, 3: Blogname */
+		/* translators: 1: Title, 2: on, 3: Site Title */
 		return trim( sprintf( \__( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
 	}
 

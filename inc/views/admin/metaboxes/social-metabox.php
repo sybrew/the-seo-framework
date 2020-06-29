@@ -117,10 +117,10 @@ switch ( $instance ) :
 
 		<h4><?php esc_html_e( 'Social Title Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Most social sites and third-party services automatically include the website URL inside their embeds. When the blog name is described well in the site URL, including it in the social title will be redundant.', 'autodescription' ) );
+		$this->description( __( 'Most social sites and third-party services automatically include the website URL inside their embeds. When the site title is described well in the site URL, including it in the social title will be redundant.', 'autodescription' ) );
 
 		$info = $this->make_info(
-			__( 'When you provide a custom Open Graph or Twitter title, the blog name will be omitted automatically.', 'autodescription' ),
+			__( 'When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically.', 'autodescription' ),
 			'',
 			false
 		);
@@ -128,7 +128,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'social_title_rem_additions',
-				esc_html__( 'Remove blog name from generated social titles?', 'autodescription' ) . ' ' . $info,
+				esc_html__( 'Remove site title from generated social titles?', 'autodescription' ) . ' ' . $info,
 				'',
 				false
 			),

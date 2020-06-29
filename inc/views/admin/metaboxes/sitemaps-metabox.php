@@ -351,7 +351,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemap_logo',
-				__( 'Show logo next to sitemap title?', 'autodescription' ),
+				__( 'Show logo next to sitemap header title?', 'autodescription' ),
 				'',
 				true
 			),

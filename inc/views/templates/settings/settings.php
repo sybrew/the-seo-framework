@@ -41,7 +41,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 	<span class="tsf-title-additions-warning">
 		<?php
 		the_seo_framework()->make_info(
-			\esc_html__( 'All titles have their blog name removed, so this option only affects the homepage.', 'autodescription' )
+			\esc_html__( 'The site title is already removed from meta titles, so this option only affects the homepage.', 'autodescription' )
 		);
 		?>
 	</span>

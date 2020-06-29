@@ -137,7 +137,7 @@ $robots_settings = [
 				<label for="autodescription-meta[title_no_blog_name]" class="tsf-term-checkbox-wrap">
 					<input type="checkbox" name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value="1" <?php checked( $this->get_term_meta_item( 'title_no_blog_name', $term_id ) ); ?> />
 					<?php
-					esc_html_e( 'Remove the blog name?', 'autodescription' );
+					esc_html_e( 'Remove the site title?', 'autodescription' );
 					echo ' ';
 					$this->make_info( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) );
 					?>
