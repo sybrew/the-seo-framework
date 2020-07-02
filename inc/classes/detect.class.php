@@ -739,34 +739,6 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Detect if the current screen type is a page or taxonomy.
-	 *
-	 * @since 2.3.1
-	 * @TODO unused... deprecate me.
-	 * @staticvar array $is_page
-	 *
-	 * @param string $type the Screen type
-	 * @return bool true if post type is a page or post
-	 */
-	public function is_post_type_page( $type ) {
-
-		static $is_page = [];
-
-		if ( isset( $is_page[ $type ] ) )
-			return $is_page[ $type ];
-
-		$post_page = (array) \get_post_types( [ 'public' => true ] );
-
-		foreach ( $post_page as $screen ) {
-			if ( $type === $screen ) {
-				return $is_page[ $type ] = true;
-			}
-		}
-
-		return $is_page[ $type ] = false;
-	}
-
-	/**
 	 * Determines whether the main query supports custom SEO.
 	 *
 	 * @since 4.0.0
@@ -1013,7 +985,7 @@ class Detect extends Render {
 			[
 				$taxonomy
 					&& ! $this->is_taxonomy_disabled( $taxonomy )
-					&& $this->is_taxonomy_public( $taxonomy ),
+					&& in_array( $taxonomy, $this->get_public_taxonomies(), true ),
 				$taxonomy,
 			]
 		);
@@ -1078,19 +1050,22 @@ class Detect extends Render {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = array_unique(
-			array_merge(
-				$this->get_forced_supported_post_types(),
-				//? array_values() because get_post_types() gives a sequential array.
-				array_values( (array) \get_post_types( [
-					'public' => true,
-				] ) )
-			)
+		return isset( $cache ) ? $cache : $cache = array_filter(
+			array_unique(
+				array_merge(
+					$this->get_forced_supported_post_types(),
+					//? array_values() because get_post_types() gives a sequential array.
+					array_values( (array) \get_post_types( [
+						'public' => true,
+					] ) )
+				)
+			),
+			'\\is_post_type_viewable'
 		);
 	}
 
 	/**
-	 * Returns a list of supported post types.
+	 * Returns a list of builtin public post types.
 	 *
 	 * @since 3.1.0
 	 * @staticvar $cache
@@ -1114,7 +1089,7 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Gets all taxonomies that could possibly support SEO; with or without rewrite support.
+	 * Gets all taxonomies that could possibly support SEO.
 	 *
 	 * @since 4.1.0
 	 * @staticvar $cache
@@ -1125,20 +1100,23 @@ class Detect extends Render {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = array_unique(
-			array_merge(
-				$this->get_forced_supported_taxonomies(),
-				//? array_values() because get_post_types() gives a sequential array.
-				array_values( (array) \get_taxonomies( [
-					'public'   => true,
-					'_builtin' => false,
-				] ) )
-			)
+		return isset( $cache ) ? $cache : $cache = array_filter(
+			array_unique(
+				array_merge(
+					$this->get_forced_supported_taxonomies(),
+					//? array_values() because get_post_types() gives a sequential array.
+					array_values( (array) \get_taxonomies( [
+						'public'   => true,
+						'_builtin' => false,
+					] ) )
+				)
+			),
+			'\\is_taxonomy_viewable'
 		);
 	}
 
 	/**
-	 * Returns a list of supported taxonomies; with or without rewrite support.
+	 * Returns a list of builtin public taxonomies.
 	 *
 	 * @since 4.1.0
 	 * @staticvar $cache
@@ -1226,27 +1204,6 @@ class Detect extends Render {
 		 * @param string $taxonomy
 		 */
 		return \apply_filters( 'the_seo_framework_taxonomy_disabled', $disabled, $taxonomy );
-	}
-
-	/**
-	 * Checks whether the taxonomy is public and rewritable.
-	 *
-	 * @since 3.1.0
-	 * @since 4.1.0 Now returns true on all public taxonomies; not just public taxonomies with rewrite capabilities.
-	 *
-	 * @param string $taxonomy The taxonomy name.
-	 * @return bool
-	 */
-	public function is_taxonomy_public( $taxonomy = '' ) {
-
-		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
-		if ( ! $taxonomy ) return false;
-
-		$tax = \get_taxonomy( $taxonomy );
-
-		if ( false === $tax ) return false;
-
-		return ! empty( $tax->public );
 	}
 
 	/**

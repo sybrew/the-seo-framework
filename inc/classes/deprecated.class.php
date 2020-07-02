@@ -857,4 +857,104 @@ final class Deprecated {
 		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->can_use_logo()', '4.0.0' );
 		return \the_seo_framework()->detect_theme_support( 'custom-logo' );
 	}
+
+	/**
+	 * Detect if the current screen type is a page or taxonomy.
+	 *
+	 * @since 2.3.1
+	 * @since 4.1.0 Deprecated.
+	 * @deprecated
+	 * @staticvar array $is_page
+	 *
+	 * @param string $type the Screen type
+	 * @return bool true if post type is a page or post
+	 */
+	public function is_post_type_page( $type ) {
+
+		static $is_page = [];
+
+		if ( isset( $is_page[ $type ] ) )
+			return $is_page[ $type ];
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->is_post_type_page()', '4.1.0' );
+
+		$post_page = (array) \get_post_types( [ 'public' => true ] );
+
+		foreach ( $post_page as $screen ) {
+			if ( $type === $screen ) {
+				return $is_page[ $type ] = true;
+			}
+		}
+
+		return $is_page[ $type ] = false;
+	}
+
+	/**
+	 * Checks whether the taxonomy is public and rewritable.
+	 *
+	 * @since 3.1.0
+	 * @since 4.1.0 1: Now returns true on all public taxonomies; not just public taxonomies with rewrite capabilities.
+	 *              2: Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $taxonomy The taxonomy name.
+	 * @return bool
+	 */
+	public function is_taxonomy_public( $taxonomy = '' ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->is_taxonomy_public()', '4.1.0', 'the_seo_framework()->is_taxonomy_supported()' );
+
+		$taxonomy = $taxonomy ?: $tsf->get_current_taxonomy();
+		if ( ! $taxonomy ) return false;
+
+		$tax = \get_taxonomy( $taxonomy );
+
+		if ( false === $tax ) return false;
+
+		return ! empty( $tax->public );
+	}
+
+	/**
+	 * Return option from the options table and cache result.
+	 *
+	 * Values pulled from the database are cached on each request, so a second request for the same value won't cause a
+	 * second DB interaction.
+	 *
+	 * @since 2.0.0
+	 * @since 2.8.2 No longer decodes entities on request.
+	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
+	 * @since 4.1.0 Deprecated.
+	 * @staticvar array $cache
+	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 * @deprecated
+	 *
+	 * @param string  $key        Option name.
+	 * @param string  $setting    Optional. Settings field name. Eventually defaults to null if not passed as an argument.
+	 * @param boolean $use_cache  Optional. Whether to use the cache value or not.
+	 * @return mixed The value of this $key in the database. Empty string on failure.
+	 */
+	public function the_seo_framework_get_option( $key, $setting = null, $use_cache = true ) {
+
+		if ( ! $setting ) return '';
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->the_seo_framework_get_option()', '4.1.0', 'the_seo_framework()->get_option()' );
+
+		if ( ! $use_cache ) {
+			$options = $tsf->get_all_options( $setting, true );
+			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
+		}
+
+		static $cache = [];
+
+		if ( ! isset( $cache[ $setting ] ) )
+			$cache[ $setting ] = \stripslashes_deep( $tsf->get_all_options( $setting ) );
+
+		return isset( $cache[ $setting ][ $key ] ) ? $cache[ $setting ][ $key ] : '';
+	}
 }

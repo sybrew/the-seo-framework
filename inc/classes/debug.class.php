@@ -644,7 +644,6 @@ final class Debug {
 		$admin_post_type        = $tsf->get_admin_post_type();
 		$current_taxonomy       = $tsf->get_current_taxonomy();
 		$is_taxonomy_disabled   = $tsf->is_taxonomy_disabled();
-		$is_taxonomy_public     = $tsf->is_taxonomy_public();
 		$is_post_type_archive   = \is_post_type_archive();
 		$is_protected           = $tsf->is_protected( $page_id );
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.

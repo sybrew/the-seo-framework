@@ -45,9 +45,12 @@ final class Ping {
 	 * Prepares a CRON-based ping within 30 seconds of calling this.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now returns whether the cron engagement was successful.
+	 *
+	 * @return bool True on success, false on failure.
 	 */
 	public static function engage_pinging_cron() {
-		\wp_schedule_single_event( time() + 30, 'tsf_sitemap_cron_hook' );
+		return \wp_schedule_single_event( time() + 30, 'tsf_sitemap_cron_hook' );
 	}
 
 	/**

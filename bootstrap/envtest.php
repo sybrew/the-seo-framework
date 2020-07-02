@@ -79,7 +79,7 @@ function the_seo_framework_pre_boot_test() {
 
 	$requirements = array(
 		'php' => 50600,
-		'wp'  => '4.9-dev',
+		'wp'  => '5.1-dev',
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
@@ -125,7 +125,7 @@ function the_seo_framework_pre_boot_test() {
 
 		case 2:
 			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.9 or later';
+			$requirement = 'WordPress 5.1 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';

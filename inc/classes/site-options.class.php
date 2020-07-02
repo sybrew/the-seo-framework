@@ -328,8 +328,6 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
-	 *
-	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string  $key       Option name.

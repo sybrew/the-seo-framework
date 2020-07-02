@@ -1,7 +1,7 @@
 === The SEO Framework ===
 Contributors: Cybr
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
-Requires at least: 4.9.0
+Requires at least: 5.1.0
 Tested up to: 5.4
 Requires PHP: 5.6.0
 Stable tag: 4.0.7
@@ -241,6 +241,8 @@ TODO update _suggest_extension_manager()
 TODO should we allow "0" to be valid input for titles and descriptions?
 	* And if not, should we rectify this by ignoring the input in JS (counters)?
 
+WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
+
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO from TSF.
@@ -288,6 +290,7 @@ TODO should we allow "0" to be valid input for titles and descriptions?
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
+	* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
@@ -369,14 +372,21 @@ TODO should we allow "0" to be valid input for titles and descriptions?
 			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
 			* `the_content_feed()`, with no alternative available.
 			* `get_site_option()`, with no alternative available. Was never used.
+		* **Deprecated:**
+			* `is_post_type_page()`, with no alternative available.
+			* `is_taxonomy_public()`, use `the_seo_framework()->is_taxonomy_supported()` instead.
 			* `the_seo_framework_get_option()`. Use `the_seo_framework()->get_option()` instead. Was never advertised to be used.
-* **Object notes:**
-	* For object `\The_SEO_Framework\Interpreters\SeoBar`:
-		* **Added:** constant `STATE_UNDEFINED`; equals `0b0000` (bitwise naught); creates the gray undefined SEO Bar entry.
 	* For object `\The_SEO_Framework\Bridges\Feed` (new!):
 		* **Added:**
 			* (static) `get_instance()`
 			* (static) `prepare()`
+	* For object `\The_SEO_Framework\Bridges\Ping`:
+		* **Changed:**
+			* `engage_pinging_cron()` now returns whether its engagement was successful.
+* **Object notes:**
+	* For object `\The_SEO_Framework\Interpreters\SeoBar`:
+		* **Added:** constant `STATE_UNDEFINED`; equals `0b0000` (bitwise naught); creates the gray undefined SEO Bar entry.
+	* Object `\The_SEO_Framework\Bridges\Feed` is new.
 	* For object `the_seo_framework()`:
 		* **Changed:**
 			* It no longer loads `\The_SEO_Framework\Feed` class.
