@@ -326,6 +326,8 @@ class Site_Options extends Sanitize {
 	 * Return SEO options from the SEO options database.
 	 *
 	 * @since 2.2.2
+	 * @since 2.8.2 No longer decodes entities on request.
+	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
 	 *
 	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
@@ -335,7 +337,18 @@ class Site_Options extends Sanitize {
 	 * @return mixed The value of this $key in the database.
 	 */
 	public function get_option( $key, $use_cache = true ) {
-		return $this->the_seo_framework_get_option( $key, THE_SEO_FRAMEWORK_SITE_OPTIONS, $use_cache );
+
+		if ( ! $use_cache ) {
+			$options = $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS, true );
+			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
+		}
+
+		static $cache = [];
+
+		if ( ! isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
+			$cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
+
+		return isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] ) ? $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] : '';
 	}
 
 	/**
@@ -372,57 +385,6 @@ class Site_Options extends Sanitize {
 				$setting,
 			]
 		);
-	}
-
-	/**
-	 * Return option from the options table and cache result.
-	 *
-	 * Values pulled from the database are cached on each request, so a second request for the same value won't cause a
-	 * second DB interaction.
-	 *
-	 * @since 2.0.0
-	 * @since 2.8.2 No longer decodes entities on request.
-	 * @since 3.1.0 Now uses the filterable call when caching is disbaled.
-	 * @staticvar array $cache
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
-	 *
-	 * @param string  $key        Option name.
-	 * @param string  $setting    Optional. Settings field name. Eventually defaults to null if not passed as an argument.
-	 * @param boolean $use_cache  Optional. Whether to use the cache value or not.
-	 * @return mixed The value of this $key in the database. Empty string on failure.
-	 */
-	public function the_seo_framework_get_option( $key, $setting = null, $use_cache = true ) {
-
-		if ( ! $setting ) return '';
-
-		if ( ! $use_cache ) {
-			$options = $this->get_all_options( $setting, true );
-			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
-		}
-
-		static $cache = [];
-
-		if ( ! isset( $cache[ $setting ] ) )
-			$cache[ $setting ] = \stripslashes_deep( $this->get_all_options( $setting ) );
-
-		return isset( $cache[ $setting ][ $key ] ) ? $cache[ $setting ][ $key ] : '';
-	}
-
-	/**
-	 * Return SEO options from the SEO options database.
-	 *
-	 * @since 2.2.2
-	 * @uses $this->the_seo_framework_get_option() Return option from the options table and cache result.
-	 * @uses THE_SEO_FRAMEWORK_NETWORK_OPTIONS
-	 *
-	 * @todo deprecate, unused.
-	 *
-	 * @param string  $key       Required. The option name.
-	 * @param boolean $use_cache Optional. Whether to use the cache value or not.
-	 * @return mixed The value of this $key in the database.
-	 */
-	public function get_site_option( $key, $use_cache = true ) {
-		return $this->the_seo_framework_get_option( $key, THE_SEO_FRAMEWORK_NETWORK_OPTIONS, $use_cache );
 	}
 
 	/**

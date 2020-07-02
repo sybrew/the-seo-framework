@@ -241,12 +241,12 @@ class Init extends Query {
 		if ( $this->get_option( 'alter_search_query' ) )
 			$this->init_alter_search_query();
 
-		//* Alter the content feed.
-		\add_filter( 'the_content_feed', [ $this, 'the_content_feed' ], 10, 2 );
-
-		//* Only add the feed link to the excerpt if we're only building excerpts.
-		if ( $this->rss_uses_excerpt() )
-			\add_filter( 'the_excerpt_rss', [ $this, 'the_content_feed' ], 10, 1 );
+		// Modify the feed.
+		if ( $this->get_option( 'excerpt_the_feed' ) || $this->get_option( 'source_the_feed' ) ) {
+			// We could use actions 'do_feed_{$feed}', but I don't trust its variability.
+			// We could use action 'rss_tag_pre', but I don't trust its availability.
+			\add_action( 'template_redirect', [ $this, '_init_feed' ], 1 );
+		}
 
 		/**
 		 * @since 2.9.4
@@ -586,6 +586,16 @@ class Init extends Query {
 	 */
 	public function _init_sitemap() {
 		Bridges\Sitemap::get_instance()->_init();
+	}
+
+	/**
+	 * Prepares feed modifications.
+	 *
+	 * @since 4.1.0
+	 * @access private
+	 */
+	public function _init_feed() {
+		\is_feed() and Bridges\Feed::get_instance()->_init();
 	}
 
 	/**

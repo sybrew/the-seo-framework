@@ -1050,13 +1050,13 @@ class Generate_Title extends Generate_Description {
 			$data = $this->get_title_branding_from_args( $args );
 		}
 
-		$title       = trim( $title );
-		$addition    = trim( $data['addition'] );
-		$seplocation = $data['seplocation'];
-		$sep         = $this->get_title_separator();
+		$title    = trim( $title );
+		$addition = trim( $data['addition'] );
 
 		if ( $addition && $title ) {
-			if ( 'left' === $seplocation ) {
+			$sep = $this->get_title_separator();
+
+			if ( 'left' === $data['seplocation'] ) {
 				$title = "$addition $sep $title";
 			} else {
 				$title = "$title $sep $addition";
@@ -1261,7 +1261,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$use = $this->is_singular();
 		} else {
-			$this->fix_generation_args( $args );
+			$this->fix_generation_args( $args ); // redundant since we only check for a non-autofillable value...
 			$use = $args && ! $args['taxonomy'];
 		}
 

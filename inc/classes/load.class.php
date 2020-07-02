@@ -33,8 +33,9 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  *
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
+ * @since 4.1.0 Now extends `Cache` instead of `Feed`.
  */
-final class Load extends Feed {
+final class Load extends Cache {
 
 	/**
 	 * @since 2.4.3

@@ -796,7 +796,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int|null $post_id The post ID.
+	 * @param int|null $post_id  The post ID.
 	 * @param string   $taxonomy The taxonomy name.
 	 * @return \WP_Term|false The primary term. False if not set.
 	 */
@@ -827,7 +827,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int|null $post_id The post ID.
+	 * @param int|null $post_id  The post ID.
 	 * @param string   $taxonomy The taxonomy name.
 	 * @return int     The primary term ID. 0 if not set.
 	 */

@@ -1097,7 +1097,7 @@ class Generate_Url extends Generate_Title {
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 2.9.4
-	 * @since 4.0.0 Improved performance.
+	 * @since 4.1.0 Improved performance by testing an early match.
 	 *
 	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.
@@ -1114,6 +1114,10 @@ class Generate_Url extends Generate_Title {
 			//= Simply convert to HTTPS/HTTP based on is_ssl()
 			$home_domain = $this->set_url_scheme( $home_domain );
 		}
+
+		// Test for likely match early, before transforming.
+		if ( 0 === stripos( $url, $home_domain ) )
+			return true;
 
 		$url = \esc_url_raw( $url, [ 'https', 'http' ] );
 		//= Simply convert to HTTPS/HTTP based on is_ssl()

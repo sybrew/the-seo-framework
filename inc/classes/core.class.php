@@ -694,7 +694,7 @@ class Core {
 
 		$hex = str_split( $hex, 2 );
 
-		//* Convert to numerical values.
+		//* Convert to usable numerics.
 		$r = hexdec( $hex[0] );
 		$g = hexdec( $hex[1] );
 		$b = hexdec( $hex[2] );

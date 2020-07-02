@@ -237,6 +237,10 @@ You can now disable taxonomies and control their robots output globally.
 
 The Core Sitemaps feature coming to (TODO or brought with, when we're late) WordPress 5.5 is now supported. When you disable TSF's sitemaps, Core Sitemaps will now be displayed instead. We recommend sticking with TSF's sitemaps, since they are less heavy on your server, are more quickly processed by search engines, and honor the indexing state of each post included.
 
+TODO update _suggest_extension_manager()
+TODO should we allow "0" to be valid input for titles and descriptions?
+	* And if not, should we rectify this by ignoring the input in JS (counters)?
+
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO from TSF.
@@ -277,10 +281,17 @@ The Core Sitemaps feature coming to (TODO or brought with, when we're late) Word
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
 		* We excluded them in the past because many devs don't know the difference between rewrite and public (looking at you too, Automattic). This caused a rich profusion of issues (i.e. users wasting our time with third-party support). With WP sitemaps coming (and including non-rewriteable post types and taxonomies), it'll be a common issue, so we can now be complacent about that and revert our rewrite exemption rule. Moreover, we now allow full control over post type and taxonomy support. So, we'll henceforth support all rewritable post types and taxonomies by default.
 	* The Formats taxonomy (`post_format`) now has `noindex` applied for all new sites. Sites that upgrade the plugin to this version won't have this taxonomy deindexed automatically.
+* **Removed:**
+	* The first `<h2>` content is no longer added back in the excerpt of feeds. This didn't work anyway when using Gutenberg. And the code we wanted to implement to fix that (`/<h2.*?>(.*?)<\/h2>[^>]*?>(?=$content)/`) could take half a second per excerpt to resolve (yes, that's slow.).
+		* This also fixes a bug, where when the first `<h2>` entry of your post contains content exactly matching in the feed's "transformed-to-excerpt"-content, it will no longer be removed from that excerpt.
 * **Fixed:**
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
+* **Other:**
+	* We improved plugin loading time by removing (another) class from the stack.
+	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
+		* We cannot make TSF any faster without sacrificing security or removing features.
 
 ## For translators
 * **Added:**
@@ -296,7 +307,12 @@ The Core Sitemaps feature coming to (TODO or brought with, when we're late) Word
 
 ## For developers
 * **Database note:** This plugin now uses TSF database version `4103`.
+* **Constant notes:**
+	* **Removed:**
+		* `THE_SEO_FRAMEWORK_NETWORK_OPTIONS`, was unused.
 * **Option notes:**
+	* For PHP constant `THE_SEO_FRAMEWORK_NETWORK_OPTIONS` (equals db index `autodescription-network-settings`):
+		* **Removed.** That's it.
 	* For PHP constant `THE_SEO_FRAMEWORK_SITE_OPTIONS` (equals db index `autodescription-site-settings`):
 		* **Added:**
 			* `disabled_taxonomies`, array.
@@ -349,9 +365,22 @@ The Core Sitemaps feature coming to (TODO or brought with, when we're late) Word
 			* `get_generated_title()` now has a third `$social` parameter.
 			* `get_generated_open_graph_title()` now has a third `$social` parameter.
 			* `use_title_branding()` now has a second `$social` parameter.
+		* **Removed:**
+			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
+			* `the_content_feed()`, with no alternative available.
+			* `get_site_option()`, with no alternative available. Was never used.
+			* `the_seo_framework_get_option()`. Use `the_seo_framework()->get_option()` instead. Was never advertised to be used.
 * **Object notes:**
 	* For object `\The_SEO_Framework\Interpreters\SeoBar`:
 		* **Added:** constant `STATE_UNDEFINED`; equals `0b0000` (bitwise naught); creates the gray undefined SEO Bar entry.
+	* For object `\The_SEO_Framework\Bridges\Feed` (new!):
+		* **Added:**
+			* (static) `get_instance()`
+			* (static) `prepare()`
+	* For object `the_seo_framework()`:
+		* **Changed:**
+			* It no longer loads `\The_SEO_Framework\Feed` class.
+				* This class has been removed.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_forced_supported_taxonomies`, used to adjust an array of forced supported taxonomies, so no settings can be adjusted for them.
@@ -362,6 +391,8 @@ The Core Sitemaps feature coming to (TODO or brought with, when we're late) Word
 	* **Changed:**
 		* `the_seo_framework_general_settings_tabs`'s `posttypes` entry has been renamed to `exclusions`.
 		* `the_seo_framework_use_title_branding` now has a third parameter, `$social`.
+	* **Removed:**
+		* `the_seo_framework_network_settings`, was unused.
 * **JS notes:**
 	* **Method notes:**
 		* `tsfSocial.initTitleInputs` now expects `refNa` to be registered in its first parameter object.

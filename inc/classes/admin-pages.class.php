@@ -796,26 +796,22 @@ class Admin_Pages extends Profile {
 
 		$args = array_merge( $defaults, $args );
 
-		// The walk below destroys the option array. As such, we assigned a new value.
+		// The walk below destroys the option array. Assign it to a new var to prevent confusion later.
 		$html_options = $args['options'];
-
-		array_walk(
-			$html_options,
-			/**
-			 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
-			 * @param mixed  $value
-			 * @param mixed  $default
-			 */
-			function( &$name, $value, $default ) {
-				$name = sprintf(
-					'<option value="%s"%s>%s</option>',
-					\esc_attr( $value ),
-					(string) $value === (string) $default ? ' selected' : '',
-					\esc_html( $name )
-				);
-			},
-			$args['default']
-		);
+		/**
+		 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
+		 * @param mixed  $value
+		 * @param mixed  $default
+		 */
+		$create_option = function( &$name, $value, $default ) {
+			$name = sprintf(
+				'<option value="%s"%s>%s</option>',
+				\esc_attr( $value ),
+				(string) $value === (string) $default ? ' selected' : '',
+				\esc_html( $name )
+			);
+		};
+		array_walk( $html_options, $create_option, $args['default'] );
 
 		return vsprintf(
 			sprintf( '<div class="%s">%s</div>',
