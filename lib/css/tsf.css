@@ -107,7 +107,7 @@ a.tsf-dismiss:hover {
 	user-select: none;
 }
 
-#tsf-title-wrap {
+.tsf-title-wrap {
 	position: relative;
 	display: block;
 	padding: 0;
@@ -116,7 +116,7 @@ a.tsf-dismiss:hover {
 	overflow: hidden;
 }
 
-#tsf-title-offset {
+.tsf-title-offset {
 	visibility: hidden;
 	height: 0;
 	display: inline-block;
@@ -126,13 +126,13 @@ a.tsf-dismiss:hover {
 	white-space: pre;
 }
 
-body.rtl #sf-title-offset {
+body.rtl .sf-title-offset {
 	left: initial;
 	right: 0;
 }
 
-#tsf-title-placeholder,
-#tsf-title-placeholder-prefix {
+.tsf-title-placeholder-additions,
+.tsf-title-placeholder-prefix {
 	position: absolute;
 	color: #777;
 	-webkit-user-select: none;
@@ -148,13 +148,13 @@ body.rtl #sf-title-offset {
 	will-change: left, right;
 }
 
-body.rtl #tsf-title-placeholder,
-body.rtl #tsf-title-placeholder-prefix {
+body.rtl .tsf-title-placeholder-additions,
+body.rtl .tsf-title-placeholder-prefix {
 	left: initial;
 	right: 0;
 }
 
-#tsf-title-placeholder {
+.tsf-title-placeholder-additions {
 	display: none;
 }
 

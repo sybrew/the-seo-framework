@@ -117,9 +117,38 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<div id="tsf-title-wrap">
+				<div class=tsf-title-wrap>
 					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
-					<?php $this->output_js_title_elements(); ?>
+					<?php
+					if ( $this->is_static_frontpage( $post_id ) ) {
+						$ref_locked    = (bool) $this->get_option( 'homepage_title' );
+						$default_title = $this->get_option( 'homepage_title' ) ?: $this->get_filtered_raw_generated_title( $_generator_args );
+						$additions     = $this->get_home_page_tagline();
+						$seplocation   = $this->get_home_title_seplocation();
+					} else {
+						$ref_locked    = false;
+						$default_title = $this->get_filtered_raw_generated_title( $_generator_args );
+						$additions     = $this->get_blogname();
+						$seplocation   = $this->get_title_seplocation();
+					}
+
+					$this->output_js_title_elements(); // legacy
+					$this->output_js_title_data(
+						'autodescription_title',
+						[
+							'state' => [
+								'refTitleLocked'    => $ref_locked,
+								'defaultTitle'      => $this->s_title_raw( $default_title ),
+								'placeholder'       => $this->s_title_raw( $title_placeholder ),
+								'useTagline'        => $this->use_title_branding( $_generator_args ),
+								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
+								'additionValue'     => $this->s_title_raw( $additions ),
+								'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
+								'hasLegacy'         => true,
+							],
+						]
+					);
+					?>
 				</div>
 
 				<div class="tsf-checkbox-wrapper">
@@ -133,7 +162,7 @@ switch ( $instance ) :
 							<?php
 							esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
-							$this->make_info( __( 'This option must be managed on the SEO Settings page for the homepage.', 'autodescription' ) );
+							$this->make_info( __( 'For the homepage, this option must be managed on the SEO Settings page', 'autodescription' ) );
 						else :
 							?>
 							<input type="checkbox" name="autodescription[_tsf_title_no_blogname]" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
@@ -172,7 +201,19 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_description', $post_id ) ); ?></textarea>
-				<?php $this->output_js_description_elements(); ?>
+				<?php
+				$this->output_js_description_elements(); // legacy
+				$this->output_js_description_data(
+					'autodescription_description',
+					[
+						'state' => [
+							'defaultDescription'   => $description_placeholder,
+							'refDescriptionLocked' => $this->is_static_frontpage( $post_id ) && $this->get_option( 'homepage_description' ),
+							'hasLegacy'            => true,
+						],
+					]
+				);
+				?>
 			</div>
 		</div>
 		<?php

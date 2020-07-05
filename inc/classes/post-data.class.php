@@ -373,6 +373,7 @@ class Post_Data extends Detect {
 	 * Overwrites a part of the post meta on quick-edit.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Allowed title and description parsing.
 	 *
 	 * @param int      $post_id The post ID. Unused.
 	 * @param \WP_Post $post    The post object.
@@ -393,6 +394,11 @@ class Post_Data extends Detect {
 
 		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) :
 			switch ( $key ) :
+				case 'doctitle':
+					$new_data['_genesis_title'] = $value;
+					break;
+
+				case 'description':
 				case 'noindex':
 				case 'nofollow':
 				case 'noarchive':

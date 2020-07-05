@@ -130,9 +130,26 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<div id="tsf-title-wrap">
+				<div class=tsf-title-wrap>
 					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $title ); ?>" size="40" autocomplete=off />
-					<?php $this->output_js_title_elements(); ?>
+					<?php
+					$this->output_js_title_elements(); // legacy
+					$this->output_js_title_data(
+						'autodescription-meta[doctitle]',
+						[
+							'state' => [
+								'refTitleLocked'    => false,
+								'defaultTitle'      => $this->get_filtered_raw_generated_title( $_generator_args ),
+								'placeholder'       => $this->get_generated_title( $_generator_args ),
+								'useTagline'        => $this->use_title_branding( $_generator_args ),
+								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
+								'additionValue'     => $this->s_title_raw( $this->get_blogname() ),
+								'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
+								'hasLegacy'         => true,
+							],
+						]
+					);
+					?>
 				</div>
 				<label for="autodescription-meta[title_no_blog_name]" class="tsf-term-checkbox-wrap">
 					<input type="checkbox" name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value="1" <?php checked( $this->get_term_meta_item( 'title_no_blog_name', $term_id ) ); ?> />
@@ -167,7 +184,16 @@ $robots_settings = [
 			<td>
 				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $description ); ?></textarea>
 				<?php
-				$this->output_js_description_elements();
+				$this->output_js_description_elements(); // legacy
+				$this->output_js_description_data(
+					'autodescription-meta[description]',
+					[
+						'state' => [
+							'defaultDescription' => $description_placeholder,
+							'hasLegacy'          => true,
+						],
+					]
+				);
 				?>
 			</td>
 		</tr>

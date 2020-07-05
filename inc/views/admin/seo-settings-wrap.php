@@ -44,7 +44,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 <?php
 //= Add postbox listeners
 ?>
-<script type="text/javascript">
+<script>
 	//<![CDATA[
 	jQuery(document).ready( function($) {
 		// close postboxes that should be closed

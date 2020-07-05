@@ -133,6 +133,11 @@ final class Scripts {
 				$_scripts[] = static::get_counter_scripts();
 		} elseif ( $tsf->is_wp_lists_edit() ) {
 			$_scripts[] = static::get_list_edit_scripts();
+			$_scripts[] = static::get_title_scripts();
+			$_scripts[] = static::get_description_scripts();
+
+			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+				$_scripts[] = static::get_counter_scripts();
 		} elseif ( $tsf->is_seo_settings_page() ) {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();
@@ -356,6 +361,7 @@ final class Scripts {
 	 * Returns LE (List Edit) scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now depends on title, description, and tt scripts.
 	 *
 	 * @return array The script params.
 	 */
@@ -364,7 +370,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'css',
-				'deps'     => [ 'tsf' ],
+				'deps'     => [ 'tsf-tt', 'tsf' ],
 				'autoload' => true,
 				'hasrtl'   => false,
 				'name'     => 'le',
@@ -374,7 +380,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf' ],
+				'deps'     => [ 'jquery', 'tsf-title', 'tsf-description', 'tsf-tt', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -414,10 +420,6 @@ final class Scripts {
 					'data' => [
 						'i18n'   => [
 							'confirmReset'   => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-							'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
-							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-							'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
 						],
 						'states' => [
 							'isFrontPrivate'   => $front_id && $tsf->is_private( $front_id ),
@@ -482,16 +484,10 @@ final class Scripts {
 							'isGutenbergPage' => $tsf->is_gutenberg_page(),
 							'id'              => (int) $id,
 						],
-						'i18n'   => [
-							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-							'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
-							// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-							'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
-						],
 						'params' => [
 							'isFront'                 => $is_static_frontpage,
-							'refTitleLocked'          => $is_static_frontpage && $tsf->get_option( 'homepage_title' ),
-							'refDescriptionLocked'    => $is_static_frontpage && $tsf->get_option( 'homepage_description' ),
+							// 'refTitleLocked'          => $is_static_frontpage && $tsf->get_option( 'homepage_title' ),
+							// 'refDescriptionLocked'    => $is_static_frontpage && $tsf->get_option( 'homepage_description' ),
 							'stripTitleTags'          => (bool) $tsf->get_option( 'title_strip_tags' ),
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,
@@ -655,30 +651,6 @@ final class Scripts {
 
 		$tsf = \the_seo_framework();
 
-		$_query = [
-			'id'       => $tsf->is_seo_settings_page() ? $tsf->get_the_front_page_ID() : $tsf->get_the_real_ID(),
-			'taxonomy' => $tsf->get_current_taxonomy(),
-		];
-
-		if ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
-			$addition    = $tsf->get_home_page_tagline();
-			$seplocation = $tsf->get_home_title_seplocation();
-		} else {
-			$addition    = $tsf->get_blogname();
-			$seplocation = $tsf->get_title_seplocation();
-		}
-
-		// NOTE: The custom fields can't be filtered...
-		if ( $tsf->is_seo_settings_page() && $tsf->has_page_on_front() ) {
-			$_default_title = $tsf->get_post_meta_item( '_genesis_title', $_query['id'] ) ?: '';
-		} elseif ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
-			$_default_title = $tsf->get_option( 'homepage_title' ) ?: '';
-		} else {
-			$_default_title = '';
-		}
-
-		$_default_title = $_default_title ?: $tsf->get_filtered_raw_generated_title( $_query );
-
 		return [
 			'id'       => 'tsf-title',
 			'type'     => 'js',
@@ -691,16 +663,15 @@ final class Scripts {
 				'name' => 'tsfTitleL10n',
 				'data' => [
 					'states' => [
-						'useTagline'        => $tsf->use_title_branding( $_query ),
-						'useSocialTagline'  => $tsf->use_title_branding( $_query, true ),
-						'titleSeparator'    => static::decode_entities( $tsf->s_title_raw( $tsf->get_title_separator() ) ),
-						'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
-						'additionValue'     => static::decode_entities( $tsf->s_title_raw( $addition ) ),
-						'defaultTitle'      => static::decode_entities( $tsf->s_title_raw( $_default_title ) ),
-						'prefixPlacement'   => \is_rtl() ? 'after' : 'before',
+						'titleSeparator'  => static::decode_entities( $tsf->s_title_raw( $tsf->get_title_separator() ) ),
+						'prefixPlacement' => \is_rtl() ? 'after' : 'before',
 					],
 					'params' => [
 						'untitledTitle' => static::decode_entities( $tsf->s_title_raw( $tsf->get_static_untitled_title() ) ),
+						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+						'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
+						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+						'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
 					],
 				],
 			],
@@ -711,29 +682,11 @@ final class Scripts {
 	 * Returns Description scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 No longer outputs l10n (data).
 	 *
 	 * @return array The script params.
 	 */
 	public static function get_description_scripts() {
-
-		$tsf = \the_seo_framework();
-
-		$_query = [
-			'id'       => $tsf->is_seo_settings_page() ? $tsf->get_the_front_page_ID() : $tsf->get_the_real_ID(),
-			'taxonomy' => $tsf->get_current_taxonomy(),
-		];
-
-		$_default_description = '';
-
-		// NOTE: The custom fields can't be filtered...
-		if ( $tsf->is_seo_settings_page() && $tsf->has_page_on_front() ) {
-			$_default_description = $tsf->get_post_meta_item( '_genesis_description', $_query['id'] ) ?: '';
-		} elseif ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
-			$_default_description = $tsf->get_option( 'homepage_description' ) ?: '';
-		}
-
-		$_default_description = $_default_description ?: $tsf->get_generated_description( $_query, false );
-
 		return [
 			'id'       => 'tsf-description',
 			'type'     => 'js',
@@ -742,14 +695,6 @@ final class Scripts {
 			'name'     => 'description',
 			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 			'ver'      => THE_SEO_FRAMEWORK_VERSION,
-			'l10n'     => [
-				'name' => 'tsfDescriptionL10n',
-				'data' => [
-					'states' => [
-						'defaultDescription' => static::decode_entities( $tsf->s_description( $_default_description ) ),
-					],
-				],
-			],
 		];
 	}
 
@@ -801,9 +746,11 @@ final class Scripts {
 					'ogDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_open_graph_description', $_query['id'] ),
 				];
 
+				$_homepage_desc_placeholder = $tsf->get_post_meta_item( '_genesis_description', $_query['id'] );
+
 				$settings_placeholders = [
-					'ogDesc' => $tsf->get_post_meta_item( '_genesis_description', $_query['id'] ),
-					'twDesc' => $tsf->get_post_meta_item( '_genesis_description', $_query['id'] ),
+					'ogDesc' => $_homepage_desc_placeholder,
+					'twDesc' => $_homepage_desc_placeholder,
 				];
 			} elseif ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
 				$home_locks = [
@@ -813,9 +760,11 @@ final class Scripts {
 					'twDescriptionLock' => (bool) $tsf->get_option( 'homepage_twitter_description' ),
 				];
 
+				$_homepage_desc_placeholder = $tsf->get_option( 'homepage_description' );
+
 				$settings_placeholders = [
-					'ogDesc' => $tsf->get_option( 'homepage_description' ),
-					'twDesc' => $tsf->get_option( 'homepage_description' ),
+					'ogDesc' => $_homepage_desc_placeholder,
+					'twDesc' => $_homepage_desc_placeholder,
 				];
 			}
 		}

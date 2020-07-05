@@ -97,15 +97,34 @@ switch ( $instance ) :
 					);
 				?>
 			</label>
-			<?php
-			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
-			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
-			?>
 		</p>
-		<p id="tsf-title-wrap">
+		<?php
+		//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
+		$this->output_character_counter_wrap( $this->get_field_id( 'homepage_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+		$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
+		?>
+		<p class=tsf-title-wrap>
 			<input type="text" name="<?php $this->field_name( 'homepage_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_title' ); ?>" placeholder="<?php echo esc_attr( $home_title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
-			<?php $this->output_js_title_elements(); ?>
+			<?php
+			$this->output_js_title_elements(); // legacy
+			$this->output_js_title_data(
+				$this->get_field_id( 'homepage_title' ),
+				[
+					'state' => [
+						'refTitleLocked'    => false,
+						'defaultTitle'      =>
+							( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
+							?: $this->get_filtered_raw_generated_title( $_generator_args ),
+						'placeholder'       => $home_title_placeholder,
+						'useTagline'        => $this->use_title_branding( $_generator_args ),
+						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
+						'additionValue'     => $this->get_home_page_tagline(),
+						'additionPlacement' => 'left' === $this->get_home_title_seplocation() ? 'before' : 'after',
+						'hasLegacy'         => true,
+					],
+				]
+			);
+			?>
 		</p>
 		<?php
 		$this->description( __( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
@@ -146,15 +165,26 @@ switch ( $instance ) :
 					);
 				?>
 			</label>
-			<?php
-			//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
-			$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
-			?>
 		</p>
+		<?php
+		//* Output these unconditionally, with inline CSS attached to allow reacting on settings.
+		$this->output_character_counter_wrap( $this->get_field_id( 'homepage_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+		$this->output_pixel_counter_wrap( $this->get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
+		?>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $description_placeholder ); ?>"><?php echo esc_attr( $this->get_option( 'homepage_description' ) ); ?></textarea>
-			<?php $this->output_js_description_elements(); ?>
+			<?php
+			$this->output_js_description_elements(); // legacy
+			$this->output_js_description_data(
+				$this->get_field_id( 'homepage_description' ),
+				[
+					'state' => [
+						'defaultDescription' => $description_placeholder,
+						'hasLegacy'          => true,
+					],
+				]
+			);
+			?>
 		</p>
 		<?php
 
@@ -275,11 +305,11 @@ switch ( $instance ) :
 					?>
 				</strong>
 			</label>
-			<?php
-			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
-			?>
 		</p>
+		<?php
+		//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+		$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+		?>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $social_placeholders['title']['og'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
 		</p>
@@ -299,14 +329,13 @@ switch ( $instance ) :
 					?>
 				</strong>
 			</label>
-			<?php
-			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
-			?>
 		</p>
+		<?php
+		//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+		$this->output_character_counter_wrap( $this->get_field_id( 'homepage_og_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+		?>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $social_placeholders['description']['og'] ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
-			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_desc ) {
@@ -325,11 +354,11 @@ switch ( $instance ) :
 					?>
 				</strong>
 			</label>
-			<?php
-			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
-			?>
 		</p>
+		<?php
+		//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+		$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_title' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+		?>
 		<p>
 			<input type="text" name="<?php $this->field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $social_placeholders['title']['twitter'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
 		</p>
@@ -349,14 +378,13 @@ switch ( $instance ) :
 					?>
 				</strong>
 			</label>
-			<?php
-			//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
-			$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
-			?>
 		</p>
+		<?php
+		//* Output this unconditionally, with inline CSS attached to allow reacting on settings.
+		$this->output_character_counter_wrap( $this->get_field_id( 'homepage_twitter_description' ), '', (bool) $this->get_option( 'display_character_counter' ) );
+		?>
 		<p>
 			<textarea name="<?php $this->field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php $this->field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
-			<?php $this->output_js_description_elements(); ?>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {

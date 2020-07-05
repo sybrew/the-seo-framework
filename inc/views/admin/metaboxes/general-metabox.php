@@ -380,8 +380,8 @@ switch ( $instance ) :
 		<fieldset>
 			<legend>
 				<h4><?php esc_html_e( 'Timestamp Format Settings', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'This setting determines how specific the timestamp is.', 'autodescription' ) ); ?>
 			</legend>
+			<?php $this->description( __( 'This setting determines how specific the timestamp is.', 'autodescription' ) ); ?>
 
 			<p id="sitemaps-timestamp-format" class="tsf-fields">
 				<span class="tsf-toblock">

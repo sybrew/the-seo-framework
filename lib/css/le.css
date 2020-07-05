@@ -19,12 +19,48 @@ body.rtl .tsf-inline-input {
 	margin-right: 8em;
 }
 
+.tsf-le-wide-complex-column input,
+.tsf-le-wide-complex-column textarea,
 .tsf-inline-input input {
 	width: 100%;
+}
+
+.tsf-le-wide-complex-column {
+	display: block;
+	width: 100%;
+	margin-bottom: 1em;
+	box-sizing: border-box;
+}
+
+.inline-edit-row .tsf-quick-edit-columns fieldset .tsf-le-wide-complex-column label span.title {
+	font-weight: 600;
+	float: none;
+	width: 100%;
+	line-height: initial;
+}
+
+.tsf-pad-input input,
+.tsf-pad-input textarea {
+	margin-top: 1em;
+	margin-right: 0;
+	margin-left: 0;
+}
+
+/* WordPress doesn't have an API. At least, not for us. */
+#wpbody-content .inline-edit-row .tsf-inline-edit-col-wide {
+	width: 40%;
+}
+#wpbody-content .inline-edit-row .tsf-inline-edit-col-normal {
+	width: 20%;
 }
 
 @media screen and (max-width: 782px) {
 	.tsf-inline-input {
 		margin-left: 0;
+	}
+
+	#wpbody-content .inline-edit-row .tsf-inline-edit-col-wide,
+	#wpbody-content .inline-edit-row .tsf-inline-edit-col-normal {
+		width: 100%;
 	}
 }

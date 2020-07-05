@@ -625,7 +625,7 @@ class Admin_Pages extends Profile {
 			}
 		}
 
-		return ' ' . implode( ' ', $ret );
+		return $ret ? ' ' . implode( ' ', $ret ) : '';
 	}
 
 	/**
@@ -1121,23 +1121,78 @@ class Admin_Pages extends Profile {
 	/**
 	 * Outputs floating and reference title HTML elements for JavaScript.
 	 *
+	 * Do not use. Legacy item output for backward compatibility.
+	 *
 	 * @since 3.0.4
+	 * @since 4.1.0 Now only outputs the legacy reference and noadditions reference.
+	 * @ignore
+	 * @todo deprecate
 	 */
 	public function output_js_title_elements() {
-		echo '<span id=tsf-title-reference style=display:none></span>';
-		echo '<span id=tsf-title-noadditions-reference style=display:none></span>';
-		echo '<span id=tsf-title-offset class=hide-if-no-tsf-js></span>';
-		echo '<span id=tsf-title-placeholder class=hide-if-no-tsf-js></span>';
-		echo '<span id=tsf-title-placeholder-prefix class=hide-if-no-tsf-js></span>';
+		echo '<span data-ignore-me=legacy id=tsf-title-reference class="tsf-title-reference hidden" data-do-not-use=legacy></span>';
+	}
+
+	/**
+	 * Outputs reference description HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $id The input ID.
+	 * @param array  $data The input data.
+	 */
+	public function output_js_title_data( $id, array $data ) {
+		printf(
+			implode(
+				'',
+				[
+					'<span id="tsf-title-reference_%1$s" class="tsf-title-reference hidden" data-for="%1$s"></span>',
+					'<span id="tsf-title-noadditions-reference_%1$s" class="tsf-title-noadditions-reference hidden" data-for="%1$s"></span>',
+					'<span id="tsf-title-offset_%1$s" class="tsf-title-offset hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-placeholder-additions_%1$s" class="tsf-title-placeholder-additions hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-placeholder-prefix_%1$s" class="tsf-title-placeholder-prefix hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-data_%1$s" class=hidden data-for="%1$s" %2$s></span>',
+				]
+			),
+			\esc_attr( $id ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			$this->make_data_attributes( $data )
+		);
 	}
 
 	/**
 	 * Outputs reference description HTML elements for JavaScript.
 	 *
+	 * Do not use. Legacy item output for backward compatibility.
+	 *
 	 * @since 3.0.4
+	 * @ignore
+	 * @todo deprecate
 	 */
 	public function output_js_description_elements() {
-		echo '<span id="tsf-description-reference" style="display:none"></span>';
+		echo '<span data-ignore-me=legacy id=tsf-description-reference class="tsf-description-reference hidden" data-do-not-use=legacy></span>';
+	}
+
+	/**
+	 * Outputs reference description HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $id   The description input ID.
+	 * @param array  $data The input data.
+	 */
+	public function output_js_description_data( $id, array $data ) {
+		printf(
+			implode(
+				'',
+				[
+					'<span id="tsf-description-reference_%1$s" class=hidden data-for="%1$s" ></span>',
+					'<span id="tsf-description-data_%1$s" class=hidden data-for="%1$s" %2$s ></span>',
+				]
+			),
+			\esc_attr( $id ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			$this->make_data_attributes( $data )
+		);
 	}
 
 	/**
@@ -1154,9 +1209,9 @@ class Admin_Pages extends Profile {
 	 */
 	public function output_character_counter_wrap( $for, $depr = '', $display = true ) {
 		vprintf(
-			'<div class="tsf-counter-wrap hide-if-no-tsf-js" %s><span class="description tsf-counter" title="%s">%s</span><span class="tsf-ajax"></span></div>',
+			'<div class="tsf-counter-wrap hide-if-no-tsf-js" %s><span class=tsf-counter title="%s">%s</span><span class=tsf-ajax></span></div>',
 			[
-				( $display ? '' : 'style="display:none;"' ),
+				( $display ? '' : 'style=display:none;' ),
 				\esc_attr__( 'Click to change the counter type', 'autodescription' ),
 				sprintf(
 					/* translators: %s = number */

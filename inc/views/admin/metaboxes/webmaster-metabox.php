@@ -85,7 +85,7 @@ switch ( $instance ) :
 		<?php
 		foreach ( $settings as $key => $setting ) :
 			vprintf(
-				'<p><label for=%s><strong>%s</strong> %s</p>',
+				'<p><label for=%s><strong>%s</strong> %s</label></p>',
 				[
 					esc_attr( $this->get_field_id( $setting['setting'] ) ),
 					esc_html( $setting['label'] ),

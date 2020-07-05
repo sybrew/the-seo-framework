@@ -237,11 +237,28 @@ You can now disable taxonomies and control their robots output globally.
 
 The Core Sitemaps feature coming to (TODO or brought with, when we're late) WordPress 5.5 is now supported. When you disable TSF's sitemaps, Core Sitemaps will now be displayed instead. We recommend sticking with TSF's sitemaps, since they are less heavy on your server, are more quickly processed by search engines, and honor the indexing state of each post included.
 
+WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
+In this update, we're embracing WP 5.5's updated layout. Although minor, you may notice some differences from before.
+
+We overhauled the title and description JS implementations. We can safely assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. TODO (this update? Test it by outputting an array of elements?) In the next (major?) update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
+	* NOTE: Legacy support is done via a first-called introspection approach, which means that the first registered input is expected to be a legacy input. This will become unreliable in the next major update where inputs may be registered in any order, and we may have to remove the legacy API by then. We urge you to move away from the legacy API before then.
+	* TODO the default states will no longer be propagated when the script is generated--instead, they're generated when the input element is, and put into the input's data field (or, for quick-edit, in their respective list fields).
+	* NOTE: The title and description references still exist (Focus uses them), but they'll be a clone of the internals.
+
 TODO update _suggest_extension_manager()
 TODO should we allow "0" to be valid input for titles and descriptions?
 	* And if not, should we rectify this by ignoring the input in JS (counters)?
-
-WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
+		* Warning: WP allows "0" to be set. So, we should definitely not ignore this input.
+TODO Empty the description placeholder on private/protected state?
+	"Set private/protected listeners, that will empty the generated description?"
+	See:
+		const protectedPrefix = tsf.escapeString( tsfTitle.l10n.i18n.protectedTitle );
+		const privatePrefix   = tsf.escapeString( tsfTitle.l10n.i18n.privateTitle );
+TODO change all occurrences of 'useTagline' to 'addAdditions', since that's much less confusing and archaic to our legacy.
+	* Also apply this to get_home_page_tagline() and deprecate its former callable.
+TODO Update the title placeholder for quick-edit based on the post/term title.
+TODO Show protection state in the quick-edit robots?
+TODO Convert states to Map?
 
 ## For everyone
 * **Added:**
@@ -278,6 +295,7 @@ WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
 		* This prevents the settings-tabs from collapsing for some languages.
 	* Some sentences have been changed where some users struggled with before. For example, the SEO Bar now conveys what "title branding" means.
+	* We optimized the administrative browser scripts for performance.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -291,6 +309,11 @@ WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
 	* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
+	* When clicking on the character counter subsequently, the AJAX loader will now reappear correctly.
+	* TODO When you change the visibility state of a page, the protection is now relayed in the default robots' meta setting.
+		* This protection should now also affect the list-edit default entry. (remove IGNORE_PROTECTION & add tests)
+			`* @since 4.1.0 Now allows protection for the robots meta.`
+	* Addressed an issue where when you double-clicked on the title prefix on an RTL-based site that causes selection of the title to fail.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
@@ -418,6 +441,8 @@ WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
 			* `wp.template( 'tsf-disabled-taxonomy-help' )` is now available on the settings page.
 			* `wp.template( 'tsf-disabled-taxonomy-from-pt-help' )` is now available on the settings page.
 			* `wp.template( 'tsf-disabled-title-additions-help' )` is now available on the settings page.
+* **Fixed:**
+	* Closed some unclosed HTML elements.
 
 **Share your love!**
 

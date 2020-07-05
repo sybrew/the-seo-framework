@@ -164,8 +164,10 @@ switch ( $instance ) :
 		<fieldset>
 			<legend>
 				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
-				<?php $this->description( __( 'If the title consists of multiple parts, then the separator will go in-between them.', 'autodescription' ) ); ?>
 			</legend>
+			<?php
+			$this->description( __( 'If the title consists of multiple parts, then the separator will go in-between them.', 'autodescription' ) );
+			?>
 			<p id="tsf-title-separator" class="tsf-fields">
 			<?php foreach ( $title_separator as $name => $html ) : ?>
 				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" data-entity="<?php echo esc_attr( $html ); ?>" <?php checked( $default_title_separator, $name ); ?> />
