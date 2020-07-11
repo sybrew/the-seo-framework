@@ -571,7 +571,7 @@ class Post_Data extends Detect {
 			'order'            => 'DESC',
 			'post_status'      => [ 'publish', 'future', 'pending' ],
 			'fields'           => 'ids',
-			'cache_results'    => false, // When we set this to true, this will speed up subsequent rendering. But only if https://core.trac.wordpress.org/ticket/50567 is addressed. Otherwise, it's detrimental. Requires testing.
+			'cache_results'    => false,
 			'suppress_filters' => true,
 			'no_found_rows'    => true,
 		] );

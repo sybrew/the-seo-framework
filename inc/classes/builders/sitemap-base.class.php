@@ -126,7 +126,7 @@ class Sitemap_Base extends Sitemap {
 					'post_status'      => 'publish',
 					'has_password'     => false,
 					'fields'           => 'ids',
-					'cache_results'    => false, // When we set this to true, this will speed up subsequent rendering. But only if https://core.trac.wordpress.org/ticket/50567 is addressed. Otherwise, it's detrimental. Requires testing.
+					'cache_results'    => false,
 					'suppress_filters' => false,
 					'no_found_rows'    => true,
 				]
@@ -158,7 +158,7 @@ class Sitemap_Base extends Sitemap {
 					'post_status'      => 'publish',
 					'has_password'     => false,
 					'fields'           => 'ids',
-					'cache_results'    => false, // When we set this to true, this will speed up subsequent rendering. But only if https://core.trac.wordpress.org/ticket/50567 is addressed. Otherwise, it's detrimental. Requires testing.
+					'cache_results'    => false,
 					'suppress_filters' => false,
 					'no_found_rows'    => true,
 				]

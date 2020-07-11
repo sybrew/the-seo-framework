@@ -249,14 +249,8 @@ TODO update _suggest_extension_manager()
 TODO change all occurrences of 'useTagline' to 'addAdditions', since that's much less confusing and archaic to our legacy.
 	* Also apply this to get_home_page_tagline() and deprecate its former callable.
 TODO Update the title placeholder for quick-edit based on the post/term title.
-TODO Show protection state in the quick-edit robots?
-TODO Convert states to Map?
-TODO evaluate performance of multiple title/description triggers in JS.
 TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
-TODO the image preview icon is present when the page loads, and then slowly hides (causing page setup lag).
-TODO For the sitemap, can we get post metadata + the posts in one call and cache that via a WP caching loop? That'd save a whole lot on expensive DB queries.
-	* Doesn't this already happen via update_meta_cache()? (_prime_post_caches/update_post_caches)
 
 ## For everyone
 * **Added:**
@@ -300,6 +294,8 @@ TODO For the sitemap, can we get post metadata + the posts in one call and cache
 	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our strings with jQuery.
 	* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
 	* We mitigated autorectifying query-checks by specifying more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap.
+	* The (social/logo) image preview icon no longer animates on-load, improving performance.
+	* The (social/logo) image select/change button now updates its text on manual input accordingly.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -314,9 +310,6 @@ TODO For the sitemap, can we get post metadata + the posts in one call and cache
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
 	* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
 	* When clicking on the character counter subsequently, the AJAX loader will now reappear correctly.
-	* TODO When you change the visibility state of a page, the protection is now relayed in the default robots' meta setting.
-		* This protection should now also affect the list-edit default entry. (remove IGNORE_PROTECTION & add tests)
-			`* @since 4.1.0 Now allows protection for the robots meta.`
 	* Addressed an issue where when you double-clicked on the title prefix on an RTL-based site that causes selection of the title to fail.
 	* The title input fields no longer trim the visual outline on input-focus when using WP 5.3 or later.
 	* You can now set a lone `0` as the (meta, Open Graph, Twitter) post title and description.
