@@ -254,7 +254,6 @@ TODO Empty the description placeholder on private/protected state?
 	See:
 		const protectedPrefix = tsf.escapeString( tsfTitle.l10n.i18n.protectedTitle );
 		const privatePrefix   = tsf.escapeString( tsfTitle.l10n.i18n.privateTitle );
-TODO Fix prefixes on quick-edit.
 TODO change all occurrences of 'useTagline' to 'addAdditions', since that's much less confusing and archaic to our legacy.
 	* Also apply this to get_home_page_tagline() and deprecate its former callable.
 TODO Update the title placeholder for quick-edit based on the post/term title.
