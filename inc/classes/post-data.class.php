@@ -272,10 +272,11 @@ class Post_Data extends Detect {
 			]
 		);
 
-		//* Cycle through $data, insert value or delete field
+		// Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
-			//* Save $value, or delete if the $value is empty.
-			if ( $value ) {
+			// Save $value, or delete if the $value is empty.
+			// We can safely assume no one-zero/qubit options pass through here thanks to sanitization earlier--alleviating database weight.
+			if ( $value || ( is_string( $value ) && strlen( $value ) ) ) {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
 				// This is fine for as long as we merge the getter values with the defaults.

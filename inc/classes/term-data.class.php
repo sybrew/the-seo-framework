@@ -403,6 +403,7 @@ class Term_Data extends Post_Data {
 			]
 		);
 
+		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
 		\update_term_meta( $term->term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 	}
 
@@ -441,6 +442,7 @@ class Term_Data extends Post_Data {
 			}
 		}
 
+		// Only delete when no values are left, because someone else might've filtered it.
 		if ( empty( $data ) ) {
 			\delete_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS );
 		} else {

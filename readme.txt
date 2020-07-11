@@ -246,14 +246,6 @@ We overhauled the title and description JS implementations. We can safely assume
 	* NOTE: The title and description references still exist (Focus uses them), but they'll be a clone of the internals.
 
 TODO update _suggest_extension_manager()
-TODO should we allow "0" to be valid input for titles and descriptions?
-	* And if not, should we rectify this by ignoring the input in JS (counters)?
-		* Warning: WP allows "0" to be set. So, we should definitely not ignore this input.
-TODO Empty the description placeholder on private/protected state?
-	"Set private/protected listeners, that will empty the generated description?"
-	See:
-		const protectedPrefix = tsf.escapeString( tsfTitle.l10n.i18n.protectedTitle );
-		const privatePrefix   = tsf.escapeString( tsfTitle.l10n.i18n.privateTitle );
 TODO change all occurrences of 'useTagline' to 'addAdditions', since that's much less confusing and archaic to our legacy.
 	* Also apply this to get_home_page_tagline() and deprecate its former callable.
 TODO Update the title placeholder for quick-edit based on the post/term title.
@@ -327,6 +319,8 @@ TODO For the sitemap, can we get post metadata + the posts in one call and cache
 			`* @since 4.1.0 Now allows protection for the robots meta.`
 	* Addressed an issue where when you double-clicked on the title prefix on an RTL-based site that causes selection of the title to fail.
 	* The title input fields no longer trim the visual outline on input-focus when using WP 5.3 or later.
+	* You can now set a lone `0` as the (meta, Open Graph, Twitter) post title and description.
+		* This was already possible for terms.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
