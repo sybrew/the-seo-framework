@@ -570,7 +570,7 @@ class Post_Data extends Detect {
 			'order'            => 'DESC',
 			'post_status'      => [ 'publish', 'future', 'pending' ],
 			'fields'           => 'ids',
-			'cache_results'    => false,
+			'cache_results'    => false, // When we set this to true, this will speed up subsequent rendering. But only if https://core.trac.wordpress.org/ticket/50567 is addressed. Otherwise, it's detrimental. Requires testing.
 			'suppress_filters' => true,
 			'no_found_rows'    => true,
 		] );
@@ -713,7 +713,7 @@ class Post_Data extends Detect {
 	 * @return bool True if protected or private, false otherwise.
 	 */
 	public function is_protected( $post = null ) {
-		$post = \get_post( $post ); // This is here so we don't create another instance.
+		$post = \get_post( $post ); // This is here so we don't have to create another instance in the methods called.
 		return $this->is_password_protected( $post ) || $this->is_private( $post );
 	}
 

@@ -165,7 +165,10 @@ final class ListEdit extends ListTable {
 
 		$tsf = \the_seo_framework();
 
-		$query = [ 'id' => $post_id ];
+		$query = [
+			'id'       => $post_id,
+			'taxonomy' => '',
+		];
 
 		$r_defaults = $tsf->robots_meta(
 			$query,
@@ -210,6 +213,7 @@ final class ListEdit extends ListTable {
 		 * The index corresponds to field with the ID `autodescription-quick[%s]`, where %s is the index.
 		 *
 		 * @since 4.0.5
+		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
 		 * @param array $data  The current data : {
 		 *    string Index => @param array : {
 		 *       @param mixed  $value    The current value.
@@ -353,6 +357,7 @@ final class ListEdit extends ListTable {
 		 * The index corresponds to field with the ID `autodescription-quick[%s]`, where %s is the index.
 		 *
 		 * @since 4.0.5
+		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
 		 * @param array $data  The current data : {
 		 *    string Index => @param array : {
 		 *       @param mixed  $value    The current value.

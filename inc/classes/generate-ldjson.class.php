@@ -388,14 +388,18 @@ class Generate_Ldjson extends Generate_Image {
 
 		$position = 1; // 0 is the homepage.
 		foreach ( $parents as $parent_id ) {
-
 			++$position;
 
+			$_generator_args = [
+				'id'       => $parent_id,
+				'taxonomy' => '',
+			];
+
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$parent_name = $this->get_filtered_raw_custom_field_title( [ 'id' => $parent_id ] )
-							?: $this->get_filtered_raw_generated_title( [ 'id' => $parent_id ] );
+				$parent_name = $this->get_filtered_raw_custom_field_title( $_generator_args )
+							?: $this->get_filtered_raw_generated_title( $_generator_args );
 			} else {
-				$parent_name = $this->get_filtered_raw_generated_title( [ 'id' => $parent_id ] );
+				$parent_name = $this->get_filtered_raw_generated_title( $_generator_args );
 			}
 
 			$crumb = [
@@ -405,7 +409,7 @@ class Generate_Ldjson extends Generate_Image {
 					'@id'  => $this->get_schema_url_id(
 						'breadcrumb',
 						'create',
-						[ 'id' => $parent_id ]
+						$_generator_args
 					),
 					'name' => $this->escape_title( $parent_name ),
 				],
@@ -683,12 +687,15 @@ class Generate_Ldjson extends Generate_Image {
 		if ( isset( $crumb ) )
 			return $crumb;
 
-		$front_id = $this->get_the_front_page_ID();
+		$_generator_args = [
+			'id'       => $this->get_the_front_page_ID(),
+			'taxonomy' => '',
+		];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$title = $this->get_filtered_raw_custom_field_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
+			$title = $this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_blogname();
 		} else {
-			$title = $this->get_filtered_raw_generated_title( [ 'id' => $front_id ] ) ?: $this->get_blogname();
+			$title = $this->get_filtered_raw_generated_title( $_generator_args ) ?: $this->get_blogname();
 		}
 
 		$crumb = [
@@ -725,11 +732,15 @@ class Generate_Ldjson extends Generate_Image {
 			return $crumb;
 		}
 
-		$post_id = $this->get_the_real_ID();
+		$post_id         = $this->get_the_real_ID();
+		$_generator_args = [
+			'id'       => $post_id,
+			'taxonomy' => '',
+		];
 
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$name = $this->get_filtered_raw_custom_field_title( [ 'id' => $post_id ] )
+			$name = $this->get_filtered_raw_custom_field_title( $_generator_args )
 				 ?: $this->get_generated_single_post_title( $post_id )
 				 ?: $this->get_static_untitled_title();
 		} else {

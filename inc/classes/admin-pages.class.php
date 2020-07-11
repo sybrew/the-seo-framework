@@ -590,6 +590,7 @@ class Admin_Pages extends Profile {
 	 * Makes either simple or JSON-encoded data-* attributes for HTML elements.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 No longer adds an extra space in front of the return value when no data is generated.
 	 * @internal
 	 *
 	 * @param array $data : {
@@ -1202,6 +1203,7 @@ class Admin_Pages extends Profile {
 	 * @since 3.1.0 : 1. Added an "what if you click" onhover-title.
 	 *                2. Removed second parameter's usage. For passing the expected string.
 	 *                3. The whole output is now hidden from no-js.
+	 * @since 4.1.0 No longer marks up the counter with the `description` HTML class.
 	 *
 	 * @param string $for     The input ID it's for.
 	 * @param string $depr    The initial value for no-JS. Deprecated.
@@ -1217,8 +1219,8 @@ class Admin_Pages extends Profile {
 					/* translators: %s = number */
 					\esc_html__( 'Characters Used: %s', 'autodescription' ),
 					sprintf(
-						'<span id="%s_chars">%s</span>',
-						\esc_attr( $for ),
+						'<span id="%s">%s</span>',
+						\esc_attr( "{$for}_chars" ),
 						0
 					)
 				),
@@ -1241,13 +1243,13 @@ class Admin_Pages extends Profile {
 			[
 				( $display ? '' : 'style="display:none;"' ),
 				sprintf(
-					'<div id="%s_pixels" class="tsf-tooltip-wrap">%s</div>',
-					\esc_attr( $for ),
+					'<div id="%s" class="tsf-tooltip-wrap">%s</div>',
+					\esc_attr( "{$for}_pixels" ),
 					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc="" tabindex=0><span class="tsf-pixel-counter-fluid"></span></span>'
 				),
 				sprintf(
-					'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow tsf-%s-pixel-counter-shadow"></span></div>',
-					\esc_attr( $type )
+					'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow %s"></span></div>',
+					\esc_attr( "tsf-{$type}-pixel-counter-shadow" )
 				),
 			]
 		);

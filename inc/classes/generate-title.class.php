@@ -579,7 +579,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_raw_generated_title( $args = null ) {
 
-		$this->remove_default_title_filters();
+		$this->remove_default_title_filters( false, $args );
 
 		if ( null === $args ) {
 			$title = $this->generate_title_from_query();
@@ -597,47 +597,61 @@ class Generate_Title extends Generate_Description {
 	 * Removes default title filters, for consistent output and sanitation.
 	 *
 	 * @since 3.1.0
+	 * @since 4.1.0 Added a second parameter, $args, to help soften the burden of this method.
 	 * @internal Only to be used within $this->get_raw_generated_title()
 	 * @staticvar array $filtered An array containing removed filters.
-	 * Peformance test: 0.000005s per remove+reset on PHP 7.2, single core VPN.
+	 * Peformance test: 0.000003s per remove+reset on PHP 7.3, single core VPN.
 	 *
-	 * @param bool $reset Whether to reset the removed filters
+	 * @param bool       $reset Whether to reset the removed filters.
+	 * @param array|null $args  The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                          Leave null to autodetermine query.
 	 */
-	protected function remove_default_title_filters( $reset = false ) {
+	protected function remove_default_title_filters( $reset = false, $args = null ) {
 
 		static $filtered = [];
 
 		if ( $reset ) {
-			foreach ( $filtered as $filter => $priorities ) {
+			foreach ( $filtered as $tag => $priorities ) {
 				foreach ( $priorities as $priority => $functions ) {
 					foreach ( $functions as $function ) {
-						\add_filter( $filter, $function, $priority );
+						\add_filter( $tag, $function, $priority );
 					}
 				}
 			}
 			// Reset filters.
 			$filtered = [];
 		} else {
-			$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
+			if ( null === $args ) {
+				$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
+			} else {
+				$this->fix_generation_args( $args );
+				if ( 'category' === $args['taxonomy'] ) {
+					$filters = [ 'single_cat_title' ];
+				} elseif ( 'post_tag' === $args['taxonomy'] ) {
+					$filters = [ 'single_tag_title' ];
+				} else {
+					$filters = [ 'single_post_title' ];
+				}
+			}
+
 			/**
 			 * Texturization happens when outputting and saving the title; however,
 			 * we want the raw title, so we won't find unexplainable issues later.
 			 */
 			$functions = [ 'wptexturize' ];
 
-			// TODO: Is this the right location for this option check?
 			if ( ! $this->get_option( 'title_strip_tags' ) ) {
 				$functions[] = 'strip_tags';
 			}
 
-			foreach ( $filters as $filter ) {
+			foreach ( $filters as $tag ) {
 				foreach ( $functions as $function ) {
 					$it = 10;
 					$i  = 0;
 					// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-					while ( $priority = \has_filter( $filter, $function ) ) {
-						$filtered[ $filter ][ $priority ][] = $function;
-						\remove_filter( $filter, $function, $priority );
+					while ( $priority = \has_filter( $tag, $function ) ) {
+						$filtered[ $tag ][ $priority ][] = $function;
+						\remove_filter( $tag, $function, $priority );
 						// Some noob might've destroyed \WP_Hook. Safeguard.
 						if ( ++$i > $it ) break 1;
 					}
@@ -879,7 +893,7 @@ class Generate_Title extends Generate_Description {
 	public function get_generated_single_post_title( $id = 0 ) {
 
 		//? Home queries can be tricky. Use get_the_real_ID to be certain.
-		$_post = \get_post( $id ?: $this->get_the_real_ID(), OBJECT );
+		$_post = \get_post( $id ?: $this->get_the_real_ID() );
 		$title = '';
 
 		if ( isset( $_post->post_title ) ) {
@@ -1160,7 +1174,7 @@ class Generate_Title extends Generate_Description {
 
 		if ( $tax ) return;
 
-		$post = $id ? \get_post( $id, OBJECT ) : null;
+		$post = $id ? \get_post( $id ) : null;
 
 		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
 			/**

@@ -361,7 +361,7 @@ final class Scripts {
 	 * Returns LE (List Edit) scripts params.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 Now depends on title, description, and tt scripts.
+	 * @since 4.1.0 Now depends on title and description scripts.
 	 *
 	 * @return array The script params.
 	 */
@@ -370,7 +370,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'css',
-				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'tsf' ],
 				'autoload' => true,
 				'hasrtl'   => false,
 				'name'     => 'le',
@@ -380,7 +380,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-title', 'tsf-description', 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'jquery', 'tsf-title', 'tsf-description', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -486,8 +486,6 @@ final class Scripts {
 						],
 						'params' => [
 							'isFront'                 => $is_static_frontpage,
-							// 'refTitleLocked'          => $is_static_frontpage && $tsf->get_option( 'homepage_title' ),
-							// 'refDescriptionLocked'    => $is_static_frontpage && $tsf->get_option( 'homepage_description' ),
 							'stripTitleTags'          => (bool) $tsf->get_option( 'title_strip_tags' ),
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,

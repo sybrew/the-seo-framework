@@ -270,7 +270,7 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'title_rem_prefixes',
-					esc_html__( 'Remove term type prefixes from title?', 'autodescription' ) . ' ' . $info,
+					esc_html__( 'Remove term type prefixes from generated archive titles?', 'autodescription' ) . ' ' . $info,
 					'',
 					false
 				),

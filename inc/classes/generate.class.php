@@ -38,19 +38,26 @@ class Generate extends User_Data {
 	 * Fixes generation arguments, to prevent ID conflicts with taxonomies.
 	 *
 	 * @since 3.1.0
+	 * @since 4.1.0 1: Improved performance by testing for null first.
+	 *              2: Improved performance by testing argument keys prior array merge.
 	 * @internal
 	 *
 	 * @param array|int|null $args The arguments, passed by reference.
 	 */
 	protected function fix_generation_args( &$args ) {
+
+		if ( null === $args ) return;
+
 		if ( is_array( $args ) ) {
-			$args = array_merge(
-				[
-					'id'       => 0,
-					'taxonomy' => '',
-				],
-				$args
-			);
+			if ( ! isset( $args['id'], $args['taxonomy'] ) ) {
+				$args = array_merge(
+					[
+						'id'       => 0,
+						'taxonomy' => '',
+					],
+					$args
+				);
+			}
 		} elseif ( is_numeric( $args ) ) {
 			$args = [
 				'id'       => (int) $args,
@@ -82,7 +89,6 @@ class Generate extends User_Data {
 	 *                2. Changed the copyright directive's spacer from `=` to `:`.
 	 * @since 4.0.5 : 1. Removed copyright directive bug workaround. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
 	 *                2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
-	 * @global \WP_Query $wp_query
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -556,9 +562,9 @@ class Generate extends User_Data {
 	 */
 	public function is_post_type_robots_set( $type, $post_type = '' ) {
 		return isset(
-			$this->get_option( $this->get_robots_post_type_option_id( $type ) )[
-				$post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type()
-			]
+			$this->get_option(
+				$this->get_robots_post_type_option_id( $type )
+			)[ $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type() ]
 		);
 	}
 
@@ -573,9 +579,9 @@ class Generate extends User_Data {
 	 */
 	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
 		return isset(
-			$this->get_option( $this->get_robots_taxonomy_option_id( $type ) )[
-				$taxonomy ?: $this->get_current_taxonomy()
-			]
+			$this->get_option(
+				$this->get_robots_taxonomy_option_id( $type )
+			)[ $taxonomy ?: $this->get_current_taxonomy() ]
 		);
 	}
 

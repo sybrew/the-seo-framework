@@ -132,7 +132,13 @@ abstract class Sitemap {
 
 		// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
 		return ! isset( $excluded[ $post_id ] )
-			&& ! static::$tsf->is_robots_meta_noindex_set_by_args( [ 'id' => $post_id ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
+			&& ! static::$tsf->is_robots_meta_noindex_set_by_args(
+				[
+					'id'       => $post_id,
+					'taxonomy' => '',
+				],
+				\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
+			);
 	}
 
 	/**

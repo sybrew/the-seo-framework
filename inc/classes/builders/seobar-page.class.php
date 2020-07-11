@@ -103,7 +103,8 @@ final class SeoBar_Page extends SeoBar {
 						'noarchive' => false,
 					],
 					static::$tsf->robots_meta( [
-						'id' => static::$query['id'],
+						'id'       => static::$query['id'],
+						'taxonomy' => '',
 					] )
 				),
 			],
@@ -195,7 +196,8 @@ final class SeoBar_Page extends SeoBar {
 		);
 
 		$title_args = [
-			'id' => static::$query['id'],
+			'id'       => static::$query['id'],
+			'taxonomy' => '',
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
@@ -418,7 +420,8 @@ final class SeoBar_Page extends SeoBar {
 		);
 
 		$desc_args = [
-			'id' => static::$query['id'],
+			'id'       => static::$query['id'],
+			'taxonomy' => '',
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?

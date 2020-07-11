@@ -109,7 +109,8 @@ class Generate_Url extends Generate_Title {
 	public function get_homepage_permalink() {
 		static $cache;
 		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( [
-			'id' => $this->get_the_front_page_ID(),
+			'id'       => $this->get_the_front_page_ID(),
+			'taxonomy' => '',
 		] );
 	}
 

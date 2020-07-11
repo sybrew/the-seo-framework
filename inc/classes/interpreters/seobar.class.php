@@ -257,6 +257,11 @@ final class SeoBar {
 	 *
 	 * @since 4.0.0
 	 * @generator
+	 * FIXME? The data herein is obtained via `builders/seobar-{type}.php`. If they escape their cache before we do here, it'd be much quicker.
+	 *        Provided, however, that there are fewer items cached (130~137) than SEOBar blocks outputted (240 on most sites).
+	 *        Moreover, all data provided comes from trusted sources. Nevertheless, we should escape as late as possible.
+	 *        WordPress still hangs on tight to their PHP5.2 roots, where HTML4+ escaping wasn't supported well. Updating that requires
+	 *        a whole lot of time, and paves way for potential security issues due to oversight. But, that'd speed up escaping for everyone.
 	 *
 	 * @param array $items The SEO Bar items.
 	 * @yield The SEO Bar HTML item.
@@ -269,7 +274,7 @@ final class SeoBar {
 					$this->interpret_status_to_class_suffix( $item ),
 					\esc_attr( $this->build_item_description( $item, 'aria' ) ),
 					\esc_attr( $this->build_item_description( $item, 'html' ) ),
-					$this->interpret_status_to_symbol( $item ),
+					\esc_html( $this->interpret_status_to_symbol( $item ) ),
 				]
 			);
 	}
@@ -278,6 +283,7 @@ final class SeoBar {
 	 * Builds the SEO Bar item description, in either HTML or plaintext.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Removed accidental duplicated call to enumerate_assessment_list()
 	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array  $item See `$this->register_seo_bar_item()`
@@ -295,8 +301,6 @@ final class SeoBar {
 		}
 
 		if ( 'aria' === $type ) {
-			$assess = $this->enumerate_assessment_list( $item );
-
 			return sprintf(
 				$gettext['aria'],
 				$item['title'],
@@ -444,6 +448,6 @@ final class SeoBar {
 			return $symbol;
 		}
 
-		return \esc_html( $item['symbol'] );
+		return $item['symbol'];
 	}
 }

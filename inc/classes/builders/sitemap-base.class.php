@@ -126,7 +126,7 @@ class Sitemap_Base extends Sitemap {
 					'post_status'      => 'publish',
 					'has_password'     => false,
 					'fields'           => 'ids',
-					'cache_results'    => false,
+					'cache_results'    => false, // When we set this to true, this will speed up subsequent rendering. But only if https://core.trac.wordpress.org/ticket/50567 is addressed. Otherwise, it's detrimental. Requires testing.
 					'suppress_filters' => false,
 					'no_found_rows'    => true,
 				]
@@ -158,7 +158,7 @@ class Sitemap_Base extends Sitemap {
 					'post_status'      => 'publish',
 					'has_password'     => false,
 					'fields'           => 'ids',
-					'cache_results'    => false,
+					'cache_results'    => false, // When we set this to true, this will speed up subsequent rendering. But only if https://core.trac.wordpress.org/ticket/50567 is addressed. Otherwise, it's detrimental. Requires testing.
 					'suppress_filters' => false,
 					'no_found_rows'    => true,
 				]
@@ -259,7 +259,12 @@ class Sitemap_Base extends Sitemap {
 
 				// Reset.
 				$_values        = [];
-				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $front_page_id ] );
+				$_values['loc'] = static::$tsf->create_canonical_url(
+					[
+						'id'       => $front_page_id,
+						'taxonomy' => '',
+					]
+				);
 
 				if ( $args['show_modified'] ) {
 					$post               = \get_post( $front_page_id );
@@ -276,7 +281,12 @@ class Sitemap_Base extends Sitemap {
 			if ( $posts_page_id && $this->is_post_included_in_sitemap( $posts_page_id ) ) {
 				// Reset.
 				$_values        = [];
-				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $posts_page_id ] );
+				$_values['loc'] = static::$tsf->create_canonical_url(
+					[
+						'id'       => $posts_page_id,
+						'taxonomy' => '',
+					]
+				);
 
 				if ( $args['show_modified'] ) {
 					$latests_posts = \wp_get_recent_posts(
@@ -368,7 +378,12 @@ class Sitemap_Base extends Sitemap {
 		foreach ( $post_ids as $post_id ) {
 			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
 				$_values        = [];
-				$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $post_id ] );
+				$_values['loc'] = static::$tsf->create_canonical_url(
+					[
+						'id'       => $post_id,
+						'taxonomy' => '',
+					]
+				);
 
 				if ( $args['show_modified'] ) {
 					$post = \get_post( $post_id );

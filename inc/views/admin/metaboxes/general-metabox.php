@@ -102,7 +102,7 @@ switch ( $instance ) :
 
 		$pixel_info = $this->make_info(
 			__( 'The pixel counter computes whether the input will fit on search engine result pages.', 'autodescription' ),
-			'',
+			'https://kb.theseoframework.com/?p=48',
 			false
 		);
 
@@ -245,7 +245,8 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Transient Cache Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'To improve performance, generated output can be stored in the database as transient cache.', 'autodescription' ) );
-		$this->description( __( 'If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options.', 'autodescription' ) );
+		// No longer relevant...
+		// $this->description( __( 'If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options.', 'autodescription' ) );
 
 		$this->wrap_fields(
 			$this->make_checkbox(
@@ -268,9 +269,8 @@ switch ( $instance ) :
 			$this->wrap_fields(
 				$this->make_checkbox(
 					'cache_object',
-					esc_html__( 'Enable object cache?', 'autodescription' )
-					. ' ' . $this->make_info( __( 'Object cache generally works faster than transient cache.', 'autodescription' ), '', false ),
-					esc_html__( 'An object cache handler has been detected. If you enable this option, you may wish to disable the Schema.org transient caching.', 'autodescription' ),
+					esc_html__( 'Enable object cache?', 'autodescription' ),
+					esc_html__( 'An object cache handler has been detected.', 'autodescription' ),
 					false
 				),
 				true

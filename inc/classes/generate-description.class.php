@@ -592,7 +592,10 @@ class Generate_Description extends Generate {
 	 * @return string
 	 */
 	protected function get_blog_page_description_excerpt() {
-		return $this->get_description_additions( [ 'id' => (int) \get_option( 'page_for_posts' ) ] );
+		return $this->get_description_additions( [
+			'id'       => (int) \get_option( 'page_for_posts' ),
+			'taxonomy' => '',
+		] );
 	}
 
 	/**
@@ -607,10 +610,13 @@ class Generate_Description extends Generate {
 		$id = $this->get_the_front_page_ID();
 
 		$excerpt = '';
-		if ( $this->is_static_frontpage( $id ) ) {
+		if ( $id ) {
 			$excerpt = $this->get_singular_description_excerpt( $id );
 		}
-		$excerpt = $excerpt ?: $this->get_description_additions( [ 'id' => $id ] );
+		$excerpt = $excerpt ?: $this->get_description_additions( [
+			'id'       => $id,
+			'taxonomy' => '',
+		] );
 
 		return $excerpt;
 	}
@@ -667,9 +673,11 @@ class Generate_Description extends Generate {
 			} else {
 				/**
 				 * @since 4.0.6
+				 * @since 4.1.0 Added the $term object parameter.
 				 * @param string $excerpt The fallback archive description excerpt.
+				 * @param \WP_Term $term    The Term object.
 				 */
-				$excerpt = (string) \apply_filters( 'the_seo_framework_fallback_archive_description_excerpt', '' );
+				$excerpt = (string) \apply_filters( 'the_seo_framework_fallback_archive_description_excerpt', '', $term );
 			}
 		} else {
 			$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
