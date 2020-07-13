@@ -242,10 +242,7 @@ In this update, we're embracing WP 5.5's updated layout. Although minor, you may
 We improved touch-screen support.
 We improved tooltip performance, greatly. Your CPU core won't spike out to 100% anymore when you're moving your mouse over a tooltip (it's now about 10% at 4.6GHz). Nor will the tooltip be created twice when you click.
 
-We overhauled the title and description JS implementations. We can safely assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. TODO (this update? Test it by outputting an array of elements?) In the next (major?) update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
-	* NOTE: Legacy support is done via a first-called introspection approach, which means that the first registered input is expected to be a legacy input. This will become unreliable in the next major update where inputs may be registered in any order, and we may have to remove the legacy API by then. We urge you to move away from the legacy API before then.
-	* TODO the default states will no longer be propagated when the script is generated--instead, they're generated when the input element is, and put into the input's data field (or, for quick-edit, in their respective list fields).
-	* NOTE: The title and description references still exist (Focus uses them), but they'll be a clone of the internals.
+We overhauled the title and description JS implementations, but we maintained backward compatibility via a legacy-binder, even though we assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. In a future major update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
 
 TODO retest upgrade (and TSFEM suggestion check).
 TODO update _suggest_extension_manager()
@@ -302,7 +299,7 @@ TODO fix indent when ms-close button is present--or hide that button
 			* At 4.6GHz on Ryzen Zen 2, we went down to about 4~10% single-CPU-core usage, from 100%, at 60 and 144hz, respectively.
 	* The (social/logo) image preview icon no longer animates on-load, improving performance.
 	* The (social/logo) image select/change button now updates its text on manual input accordingly.
-	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label or following the link. A second tap will propagate as a regular click.
+	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label, activating a button, or following the link. A second tap will propagate as a regular click.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
