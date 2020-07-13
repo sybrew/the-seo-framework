@@ -1089,7 +1089,7 @@ class Generate_Title extends Generate_Description {
 	protected function get_title_branding_from_query() {
 
 		if ( $this->is_real_front_page() ) {
-			$addition    = $this->get_home_page_tagline();
+			$addition    = $this->get_home_title_additions();
 			$seplocation = $this->get_home_title_seplocation();
 		} else {
 			$addition    = $this->get_blogname();
@@ -1111,7 +1111,7 @@ class Generate_Title extends Generate_Description {
 	protected function get_title_branding_from_args( array $args ) {
 
 		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
-			$addition    = $this->get_home_page_tagline();
+			$addition    = $this->get_home_title_additions();
 			$seplocation = $this->get_home_title_seplocation();
 		} else {
 			$addition    = $this->get_blogname();
@@ -1432,12 +1432,12 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
-	 * @since 3.0.4 Now checks for `$this->get_home_page_tagline()`.
+	 * @since 3.0.4 Now checks for `$this->get_home_title_additions()`.
 	 *
 	 * @return bool
 	 */
 	public function use_home_page_title_tagline() {
-		return $this->get_option( 'homepage_tagline' ) && $this->get_home_page_tagline();
+		return $this->get_option( 'homepage_tagline' ) && $this->get_home_title_additions();
 	}
 
 	/**
@@ -1465,18 +1465,17 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Returns the homepage tagline from option or bloginfo, when set.
+	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
 	 *
-	 * @since 3.0.4
-	 * @since 4.0.0 Added caching.
+	 * @since 4.1.0
 	 * @staticvar string $cache
-	 * @uses $this->get_blogdescription(), this method already trims.
+	 * @uses $this->get_blogdescription(), that method already trims.
 	 *
 	 * @return string The trimmed tagline.
 	 */
-	public function get_home_page_tagline() {
+	public function get_home_title_additions() {
 		static $cache;
-		return $cache ?: $cache = $this->s_title_raw(
+		return isset( $cache ) ? $cache : $cache = $this->s_title_raw(
 			trim( $this->get_option( 'homepage_title_tagline' ) )
 			?: $this->get_blogdescription()
 			?: ''

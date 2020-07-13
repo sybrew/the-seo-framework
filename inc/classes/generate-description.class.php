@@ -728,7 +728,7 @@ class Generate_Description extends Generate {
 			/* translators: %s = Blog page title. Front-end output. */
 			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
 		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-			$title = $this->get_home_page_tagline();
+			$title = $this->get_home_title_additions();
 		}
 
 		if ( empty( $title ) )

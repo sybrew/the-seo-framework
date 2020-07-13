@@ -957,4 +957,25 @@ final class Deprecated {
 
 		return isset( $cache[ $setting ][ $key ] ) ? $cache[ $setting ][ $key ] : '';
 	}
+
+	/**
+	 * Returns the homepage tagline from option or bloginfo, when set.
+	 *
+	 * @since 3.0.4
+	 * @since 4.0.0 Added caching.
+	 * @since 4.1.0 Deprecated.
+	 * @staticvar string $cache
+	 * @uses $this->get_blogdescription(), this method already trims.
+	 * @deprecated
+	 *
+	 * @return string The trimmed tagline.
+	 */
+	public function get_home_page_tagline() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->get_home_page_tagline()', '4.1.0', 'the_seo_framework()->get_home_title_additions()' );
+
+		return $tsf->get_home_title_additions();
+	}
 }

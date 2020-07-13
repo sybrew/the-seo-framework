@@ -123,7 +123,7 @@ switch ( $instance ) :
 					if ( $this->is_static_frontpage( $post_id ) ) {
 						$ref_locked    = (bool) $this->get_option( 'homepage_title' );
 						$default_title = $this->get_option( 'homepage_title' ) ?: $this->get_filtered_raw_generated_title( $_generator_args );
-						$additions     = $this->get_home_page_tagline();
+						$additions     = $this->get_home_title_additions();
 						$seplocation   = $this->get_home_title_seplocation();
 					} else {
 						$ref_locked    = false;
@@ -140,7 +140,7 @@ switch ( $instance ) :
 								'refTitleLocked'    => $ref_locked,
 								'defaultTitle'      => $this->s_title_raw( $default_title ),
 								'placeholder'       => $this->s_title_raw( $title_placeholder ),
-								'useTagline'        => $this->use_title_branding( $_generator_args ),
+								'addAdditions'      => $this->use_title_branding( $_generator_args ),
 								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
 								'additionValue'     => $this->s_title_raw( $additions ),
 								'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
@@ -162,7 +162,7 @@ switch ( $instance ) :
 							<?php
 							esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
-							$this->make_info( __( 'For the homepage, this option must be managed on the SEO Settings page', 'autodescription' ) );
+							$this->make_info( __( 'For the homepage, this option must be managed on the SEO Settings page.', 'autodescription' ) );
 						else :
 							?>
 							<input type="checkbox" name="autodescription[_tsf_title_no_blogname]" id="autodescription_title_no_blogname" value="1" <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />

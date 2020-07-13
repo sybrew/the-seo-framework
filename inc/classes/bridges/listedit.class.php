@@ -239,7 +239,7 @@ final class ListEdit extends ListTable {
 								 ? $tsf->get_custom_field_title( $query )
 								 : $tsf->get_generated_title( $query );
 			$default_title       = $tsf->get_option( 'homepage_title' ) ?: $tsf->get_filtered_raw_generated_title( $query );
-			$addition            = $tsf->get_home_page_tagline();
+			$addition            = $tsf->get_home_title_additions();
 			$seplocation         = $tsf->get_home_title_seplocation();
 			$is_title_ref_locked = (bool) $tsf->get_option( 'homepage_title' );
 			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
@@ -260,7 +260,7 @@ final class ListEdit extends ListTable {
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => $default_title,
 			'placeholder'       => $title_placeholder,
-			'useTagline'        => $tsf->use_title_branding( $query ),
+			'addAdditions'        => $tsf->use_title_branding( $query ),
 			'additionValue'     => $tsf->s_title_raw( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
@@ -383,7 +383,7 @@ final class ListEdit extends ListTable {
 			'refTitleLocked'    => false,
 			'defaultTitle'      => $tsf->get_filtered_raw_generated_title( $query ),
 			'placeholder'       => $tsf->get_generated_title( $query ),
-			'useTagline'        => $tsf->use_title_branding( $query ),
+			'addAdditions'        => $tsf->use_title_branding( $query ),
 			'additionValue'     => $tsf->s_title_raw( $tsf->get_blogname() ),
 			'additionPlacement' => 'left' === $tsf->get_title_seplocation() ? 'before' : 'after',
 		];

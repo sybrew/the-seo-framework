@@ -220,7 +220,7 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
  */
 
 /**
- * TEMP
+ * TEMP (Fixed in WP 5.5)
  * @see https://core.trac.wordpress.org/ticket/49543
  */
 
@@ -248,5 +248,5 @@ body.rtl .wp-picker-input-wrap .button.wp-picker-clear {
 }
 
 /**
- * End TEMP.
+ * End TEMP (Fixed in WP 5.5).
  */

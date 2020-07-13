@@ -212,6 +212,11 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	flex: 0 1 auto;
 }
 
+#tsf-inpost-box .hndle {
+	justify-content: unset;
+	white-space: pre-wrap;
+}
+
 #tsf-inpost-box .hndle .tsf-tooltip-wrap a {
 	font-size: 14px;
 	line-height: 1em;

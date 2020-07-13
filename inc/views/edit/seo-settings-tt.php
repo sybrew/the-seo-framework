@@ -141,7 +141,7 @@ $robots_settings = [
 								'refTitleLocked'    => false,
 								'defaultTitle'      => $this->get_filtered_raw_generated_title( $_generator_args ),
 								'placeholder'       => $this->get_generated_title( $_generator_args ),
-								'useTagline'        => $this->use_title_branding( $_generator_args ),
+								'addAdditions'      => $this->use_title_branding( $_generator_args ),
 								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
 								'additionValue'     => $this->s_title_raw( $this->get_blogname() ),
 								'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',

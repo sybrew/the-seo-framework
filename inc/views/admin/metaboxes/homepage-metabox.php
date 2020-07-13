@@ -116,9 +116,9 @@ switch ( $instance ) :
 							( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
 							?: $this->get_filtered_raw_generated_title( $_generator_args ),
 						'placeholder'       => $home_title_placeholder,
-						'useTagline'        => $this->use_title_branding( $_generator_args ),
+						'addAdditions'      => $this->use_title_branding( $_generator_args ),
 						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-						'additionValue'     => $this->get_home_page_tagline(),
+						'additionValue'     => $this->get_home_title_additions(),
 						'additionPlacement' => 'left' === $this->get_home_title_seplocation() ? 'before' : 'after',
 						'hasLegacy'         => true,
 					],
@@ -221,8 +221,8 @@ switch ( $instance ) :
 		$_example_title = $this->escape_title(
 			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
 		);
-		// FIXME? When no blog description or tagline is set... this will be empty and ugly on no-JS.
-		$_example_blogname  = $this->escape_title( $this->get_home_page_tagline() ?: $this->get_static_untitled_title() );
+		// FIXME? When no blog description or tagline is set... this will be empty and be ugly on no-JS.
+		$_example_blogname  = $this->escape_title( $this->get_home_title_additions() ?: $this->get_static_untitled_title() );
 		$_example_separator = esc_html( $this->get_separator( 'title' ) );
 
 		// TODO very readable.

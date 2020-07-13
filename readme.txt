@@ -239,15 +239,16 @@ The Core Sitemaps feature coming to (TODO or brought with, when we're late) Word
 
 WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
 In this update, we're embracing WP 5.5's updated layout. Although minor, you may notice some differences from before.
+We improved touch-screen support.
+We improved tooltip performance, greatly. Your CPU core won't spike out to 100% anymore when you're moving your mouse over a tooltip (it's now about 10% at 4.6GHz). Nor will the tooltip be created twice when you click.
 
 We overhauled the title and description JS implementations. We can safely assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. TODO (this update? Test it by outputting an array of elements?) In the next (major?) update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
 	* NOTE: Legacy support is done via a first-called introspection approach, which means that the first registered input is expected to be a legacy input. This will become unreliable in the next major update where inputs may be registered in any order, and we may have to remove the legacy API by then. We urge you to move away from the legacy API before then.
 	* TODO the default states will no longer be propagated when the script is generated--instead, they're generated when the input element is, and put into the input's data field (or, for quick-edit, in their respective list fields).
 	* NOTE: The title and description references still exist (Focus uses them), but they'll be a clone of the internals.
 
+TODO retest upgrade (and TSFEM suggestion check).
 TODO update _suggest_extension_manager()
-TODO change all occurrences of 'useTagline' to 'addAdditions', since that's much less confusing and archaic to our legacy.
-	* Also apply this to get_home_page_tagline() and deprecate its former callable.
 TODO Update the title placeholder for quick-edit based on the post/term title.
 TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
@@ -294,8 +295,14 @@ TODO fix indent when ms-close button is present--or hide that button
 	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our strings with jQuery.
 	* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
 	* We mitigated autorectifying query-checks by specifying more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap.
+	* We optimized the tooltip handler for performance:
+		* It no longer renders the tooltip twice on tap/click.
+		* It caches the tooltip elements, so it no longer has to perform expensive lookups on movement or change.
+		* It now makes waits for the browser animation renderer's invocation on mouse-movement, so it no longer performs expensive calculations as fast as your computer's processor can handle it; instead, it only processes at the speed of your monitor's refresh rate (which is about 60~250 times per second, not 1500 times).
+			* At 4.6GHz on Ryzen Zen 2, we went down to about 4~10% single-CPU-core usage, from 100%, at 60 and 144hz, respectively.
 	* The (social/logo) image preview icon no longer animates on-load, improving performance.
 	* The (social/logo) image select/change button now updates its text on manual input accordingly.
+	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label or following the link. A second tap will propagate as a regular click.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -314,6 +321,7 @@ TODO fix indent when ms-close button is present--or hide that button
 	* The title input fields no longer trim the visual outline on input-focus when using WP 5.3 or later.
 	* You can now set a lone `0` as the (meta, Open Graph, Twitter) post title and description.
 		* This was already possible for terms.
+	* The Homepage SEO Settings question mark is now alligned correctly when using WP 5.5 or later.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
@@ -376,6 +384,7 @@ TODO fix indent when ms-close button is present--or hide that button
 			* `uses_non_html_page_builder()`
 			* `output_js_title_data()`
 			* `output_js_description_data()`
+			* `get_home_title_additions()`
 		* **Changed:**
 			* `is_taxonomy_public()` now also returns public taxonomies without rewrite capabilities.
 			* `get_hierarchical_post_types()` now also returns post types without rewrite capabilities.
@@ -404,6 +413,7 @@ TODO fix indent when ms-close button is present--or hide that button
 			* `is_post_type_page()`, with no alternative available.
 			* `is_taxonomy_public()`, use `the_seo_framework()->is_taxonomy_supported()` instead.
 			* `the_seo_framework_get_option()`. Use `the_seo_framework()->get_option()` instead. Was never advertised to be used.
+			* `get_home_page_tagline()`, use the aptly named `get_home_title_additions()` instead.
 	* For object `\The_SEO_Framework\Bridges\Feed` (new!):
 		* **Added:**
 			* (static) `get_instance()`
@@ -483,6 +493,8 @@ TODO fix indent when ms-close button is present--or hide that button
 				* `states.additionValue`
 				* `states.defaultTitle`
 			* `tsfDescriptionL10n` (`=== window.tsfDescription.l10n`) is no longer available.
+		* **Deprecated:**
+			* `tsfTitle.states.useTagline`, use `tsfTitle.states.addAdditions` instead. Applies to `tsfTitle.getStateFor()` and `tsfTitle.updateStateFor()`.
 	* **Template notes:**
 		* **Added:**
 			* `wp.template( 'tsf-disabled-taxonomy-help' )` is now available on the settings page.
@@ -498,7 +510,7 @@ We hope you'll love this update as much as we do. Please consider sharing it wit
 
 **Detailed log**
 
-Let's go the extra mile; or [1,609.347 meters](https://theseoframework.com/?p=3268#detailed).
+Let's go the extra mile; or [1,609.347 meters](https://theseoframework.com/?p= TODO #detailed).
 
 = Full changelog =
 
