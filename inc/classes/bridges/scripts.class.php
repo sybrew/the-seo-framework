@@ -397,6 +397,7 @@ final class Scripts {
 	 * Returns the SEO Settings page script params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Updated l10n.data.
 	 *
 	 * @return array The script params.
 	 */
@@ -448,6 +449,7 @@ final class Scripts {
 	 * Returns Post edit scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Updated l10n.data.
 	 *
 	 * @return array The script params.
 	 */
@@ -486,7 +488,6 @@ final class Scripts {
 						],
 						'params' => [
 							'isFront'                 => $is_static_frontpage,
-							'stripTitleTags'          => (bool) $tsf->get_option( 'title_strip_tags' ),
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,
 						],
@@ -518,21 +519,20 @@ final class Scripts {
 	 * Returns Term scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Updated l10n.data.
 	 *
 	 * @return array The script params.
 	 */
 	public static function get_term_edit_scripts() {
 
-		$tsf = \the_seo_framework();
-
+		$tsf      = \the_seo_framework();
 		$taxonomy = $tsf->get_current_taxonomy();
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
-		$prefixes_forced_disabled  = (bool) $tsf->get_option( 'title_rem_prefixes' );
 
-		$_prefix = $tsf->get_tax_type_label( $taxonomy );
-		/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-		$term_prefix = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $_prefix, '' );
+		$term_prefix = $tsf->use_generated_archive_prefix( \get_taxonomy( $taxonomy ) )
+			? $tsf->prepend_tax_label_prefix( '', $taxonomy )
+			: '';
 
 		return [
 			[
@@ -547,9 +547,7 @@ final class Scripts {
 					'name' => 'tsfTermL10n',
 					'data' => [
 						'params' => [
-							'stripTitleTags'          => (bool) $tsf->get_option( 'title_strip_tags' ),
 							'additionsForcedDisabled' => $additions_forced_disabled,
-							'prefixesForcedDisabled'  => $prefixes_forced_disabled,
 							'termPrefix'              => static::decode_entities( $term_prefix ),
 						],
 					],
@@ -642,6 +640,7 @@ final class Scripts {
 	 * Returns Title scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Updated l10n.data.
 	 *
 	 * @return array The script params.
 	 */
@@ -665,7 +664,10 @@ final class Scripts {
 						'prefixPlacement' => \is_rtl() ? 'after' : 'before',
 					],
 					'params' => [
-						'untitledTitle' => static::decode_entities( $tsf->s_title_raw( $tsf->get_static_untitled_title() ) ),
+						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( $tsf->get_static_untitled_title() ) ),
+						'stripTitleTags' => (bool) $tsf->get_option( 'title_strip_tags' ),
+					],
+					'i18n' => [
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 						'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.

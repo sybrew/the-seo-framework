@@ -109,13 +109,13 @@ The SEO Framework works on many things without notifying you, because the best s
 **The SEO Framework supports:**
 
 * PHP 5.6 and higher.
-* WordPress 4.9 and higher.
+* WordPress 5.1 and higher.
 * Internationalization through WordPress.org.
 * UTF-8 character recognition and rendering, including Emoji and CJK.
 * Right to Left (RTL) languages, through its interface and generation.
-* Extended color-vision deficiency accessibility.
-* Better screen-reader accessibility via ARIA labels and title attributes.
+* Full color-vision deficiency accessibility thanks to a carefully picked color scheme.
 * Full keyboard navigation.
+* Full screen-reader accessibility via focus fields, ARIA labels, and title attributes.
 * WordPress Multisite setups, this plugin is in fact built upon one.
 * Detection and output of robots.txt and sitemap.xml files.
 * Output of structured data via Schema.org JSON-LD scripts.
@@ -123,6 +123,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * Detection of various other SEO tools to help you switch graciously.
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
 * E-commerce plugins, like WooCommerce and EDD.
+* Editing posts and terms via WordPress's native bulk-and-quick-edit interface.
 
 = Copyright legislation notice =
 
@@ -382,6 +383,7 @@ TODO fix indent when ms-close button is present--or hide that button
 			* `output_js_title_data()`
 			* `output_js_description_data()`
 			* `get_home_title_additions()`
+			* `prepend_tax_label_prefix()`
 		* **Changed:**
 			* `is_taxonomy_public()` now also returns public taxonomies without rewrite capabilities.
 			* `get_hierarchical_post_types()` now also returns post types without rewrite capabilities.
@@ -475,8 +477,9 @@ TODO fix indent when ms-close button is present--or hide that button
 			* `tsfTitle.privatePrefix`
 			* `tsfTitle.protectedPrefix`
 			* `tsfTitleL10n` (`=== window.tsfTitle.l10n`) now has the following indexes available:
-				* `params.privateTitle`
-				* `params.protectedTitle`
+				* `i18n.privateTitle`
+				* `i18n.protectedTitle`
+				* `params.stripTitleTags`
 		* **Removed:**
 			* `tsfSettingsL10n` (`=== window.tsfSettings.l10n`) no longer has the following indexes available:
 				* `i18n.privateTitle`
@@ -490,6 +493,11 @@ TODO fix indent when ms-close button is present--or hide that button
 				* `states.additionValue`
 				* `states.defaultTitle`
 			* `tsfDescriptionL10n` (`=== window.tsfDescription.l10n`) is no longer available.
+			* `tsfPostL10n` (`=== window.tsfPost.l10n`) no longer has the following indexes available:
+				* `params.stripTitleTags`
+			* `tsfTermL10n` (`=== window.tsfTerm.l10n`) no longer has the following indexes available:
+				* `params.stripTitleTags`
+				* `params.prefixesForcedDisabled`
 		* **Deprecated:**
 			* `tsfTitle.states.useTagline`, use `tsfTitle.states.addAdditions` instead. Applies to `tsfTitle.getStateFor()` and `tsfTitle.updateStateFor()`.
 	* **Template notes:**

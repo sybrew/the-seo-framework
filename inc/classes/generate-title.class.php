@@ -789,13 +789,8 @@ class Generate_Title extends Generate_Description {
 					/* translators: Tag archive title. 1: Tag name */
 					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
 				} else {
-					$title   = $this->get_generated_single_term_title( $term );
-					$_prefix = $use_prefix ? $this->get_tax_type_label( $_tax ) : '';
-
-					if ( $_prefix ) {
-						/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-						$title = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $_prefix, $title );
-					}
+					$title = $this->get_generated_single_term_title( $term );
+					$title = $use_prefix ? $this->prepend_tax_label_prefix( $title, $_tax ) : $title;
 				}
 			} elseif ( $term instanceof \WP_User && isset( $term->display_name ) ) {
 				$title = $term->display_name;
@@ -856,13 +851,8 @@ class Generate_Title extends Generate_Description {
 				/* translators: Post type archive title. 1: Post type name */
 				$title = $use_prefix ? sprintf( \__( 'Archives: %s', 'default' ), $title ) : $title;
 			} elseif ( $this->is_tax() ) {
-				$title   = $this->get_generated_single_term_title( $term );
-				$_prefix = $use_prefix ? $this->get_tax_type_label( $_tax ) : '';
-
-				if ( $_prefix ) {
-					/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-					$title = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $_prefix, $title );
-				}
+				$title = $this->get_generated_single_term_title( $term );
+				$title = $use_prefix ? $this->prepend_tax_label_prefix( $title, $_tax ) : $title;
 			} else {
 				$title = \__( 'Archives', 'default' );
 			}
@@ -1256,6 +1246,27 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_home_title_seplocation() {
 		return $this->get_title_seplocation( true );
+	}
+
+	/**
+	 * Prepends the taxonomy label to the title.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $title    The title to prepend taxonomy label to.
+	 * @param string $taxonomy The taxonomy to get label from.
+	 * @return string The title with possibly prepended tax-label.
+	 */
+	public function prepend_tax_label_prefix( $title, $taxonomy ) {
+
+		$prefix = $this->get_tax_type_label( $taxonomy ) ?: '';
+
+		if ( $prefix ) {
+			/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
+			$title = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $prefix, $title );
+		}
+
+		return $title;
 	}
 
 	/**
