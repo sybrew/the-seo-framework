@@ -895,7 +895,7 @@ class Generate_Description extends Generate {
 		/**
 		 * @param array $matches: {
 		 *    1 : Full match until leading punctuation.
-		 *    2 : Leading and spaces punctuation (if any).
+		 *    2 : Spaces before (if any) and including closing leading punctuation (if any).
 		 *    3 : Non-closing leading punctuation and spaces (if any).
 		 * }
 		 */
@@ -904,7 +904,8 @@ class Generate_Description extends Generate {
 			$excerpt,
 			$matches
 		);
-		if ( isset( $matches[2] ) ) {
+		// Why can $matches[2] still be populated? Does it populate empty results upward to last, always???
+		if ( isset( $matches[2] ) && strlen( $matches[2] ) ) {
 			$excerpt = $matches[1] . $matches[2];
 		} else {
 			// Ignore useless [3], there's no [2], [1] is open-ended; so, add hellip.

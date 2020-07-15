@@ -957,6 +957,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2 : 1. Added $allow_shortcodes parameter.
 	 *                2. Added $escape parameter.
 	 * @since 3.2.4 Now selectively clears tags.
+	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -971,9 +972,9 @@ class Sanitize extends Admin_Pages {
 
 		$strip_args = [
 			'space' =>
-				[ 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'figcaption', 'figure', 'footer', 'li', 'main', 'ol', 'p', 'section', 'tfoot', 'ul' ],
+				[ 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'li', 'main', 'ol', 'p', 'section', 'ul' ],
 			'clear' =>
-				[ 'address', 'bdo', 'br', 'button', 'canvas', 'code', 'fieldset', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'var', 'video' ],
+				[ 'address', 'bdo', 'br', 'button', 'canvas', 'code', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'tfoot', 'var', 'video' ],
 		];
 
 		/**
@@ -1829,6 +1830,7 @@ class Sanitize extends Admin_Pages {
 	 *              2. Now also clears `iframe` tags by default.
 	 *              3. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
 	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
+	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 	 * @link https://www.w3schools.com/html/html_blocks.asp
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 	 *
@@ -1841,6 +1843,7 @@ class Sanitize extends Admin_Pages {
 	 *                                                       If not set or null, skip check.
 	 *                                                       If empty array, skips stripping; otherwise, use input.
 	 *                         'strip'   : @param bool       If set, strip_tags() is performed before returning the output.
+	 *                                                       Recommended always true, since Regex doesn't understand XML.
 	 *                      }
 	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization/quoting.
 	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`. (togglable via `$args['strip']`)
@@ -1884,17 +1887,16 @@ class Sanitize extends Admin_Pages {
 			// fill = Normal, template, raw text, escapable text, foreign.
 			$fill_query = array_diff( $args[ $type ], $void );
 
-			$_replace = 'space' === $type ? ' $2 ' : ' ';
-
 			$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $args[ $type ] ) );
 
 			if ( $void_query ) {
 				$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $void_query ) );
-				$input  = preg_replace( "/$_regex/si", $_replace, $input );
+				$input  = preg_replace( "/$_regex/si", '', $input );
 			}
 			if ( $fill_query ) {
-				$_regex = sprintf( '<(%s)\b[^>]*?>(.*?<\/\1>)?', implode( '|', $fill_query ) );
-				$input  = preg_replace( "/$_regex/si", $_replace, $input );
+				$_regex   = sprintf( '<(%s)\b[^>]*>([^<]*)(<\/\1>)?|(<\/?(?1)>)', implode( '|', $fill_query ) );
+				$_replace = 'space' === $type ? ' $2 ' : ' ';
+				$input    = preg_replace( "/$_regex/si", $_replace, $input );
 			}
 		}
 

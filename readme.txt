@@ -247,9 +247,11 @@ We overhauled the title and description JS implementations, but we maintained ba
 
 TODO retest upgrade (and TSFEM suggestion check).
 TODO update _suggest_extension_manager()
-TODO Update the title placeholder for quick-edit based on the post/term title.
 TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
+		* This feature is removed in Chromium Edge...
+
+TODO description entities aren't transformed in preview (quick nor post.php--GB update cb is transformed correctly, however).
 
 ## For everyone
 * **Added:**
@@ -301,6 +303,7 @@ TODO fix indent when ms-close button is present--or hide that button
 	* The (social/logo) image preview icon no longer animates on-load, improving performance.
 	* The (social/logo) image select/change button now updates its text on manual input accordingly.
 	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label, activating a button, or following the link. A second tap will propagate as a regular click.
+	* The description generator can now intelligently strip nested HTML elements.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -404,6 +407,8 @@ TODO fix indent when ms-close button is present--or hide that button
 			* `output_js_title_elements` now only outputs a legacy reference and is marked for deprecation.
 			* `output_js_description_elements` now only outputs a legacy reference and is marked for deprecation.
 			* `output_character_counter_wrap` no longer marks up the counter with the `description` HTML class.
+			* `s_excerpt` moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`, meaning that it'll clear those elements, instead of adding spaces around them.
+			* `strip_tags_cs` now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 		* **Removed:**
 			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
 			* `the_content_feed()`, with no alternative available.
