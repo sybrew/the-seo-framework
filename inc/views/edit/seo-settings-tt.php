@@ -40,9 +40,6 @@ $show_tw = (bool) $this->get_option( 'twitter_tags' );
 
 $social_placeholders = $this->_get_social_placeholders( $_generator_args );
 
-$title_placeholder       = $this->get_generated_title( $_generator_args );
-$description_placeholder = $this->get_generated_description( $_generator_args );
-
 //! Social image placeholder.
 $image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
 $image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
@@ -131,7 +128,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $title ); ?>" size="40" autocomplete=off />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -140,7 +137,6 @@ $robots_settings = [
 							'state' => [
 								'refTitleLocked'    => false,
 								'defaultTitle'      => $this->get_filtered_raw_generated_title( $_generator_args ),
-								'placeholder'       => $this->get_generated_title( $_generator_args ),
 								'addAdditions'      => $this->use_title_branding( $_generator_args ),
 								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
 								'additionValue'     => $this->s_title_raw( $this->get_blogname() ),
@@ -182,14 +178,14 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" placeholder="<?php echo esc_attr( $description_placeholder ); ?>" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $description ); ?></textarea>
+				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $description ); ?></textarea>
 				<?php
 				$this->output_js_description_elements(); // legacy
 				$this->output_js_description_data(
 					'autodescription-meta[description]',
 					[
 						'state' => [
-							'defaultDescription' => $description_placeholder,
+							'defaultDescription' => $this->get_generated_description( $_generator_args ),
 							'hasLegacy'          => true,
 						],
 					]

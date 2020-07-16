@@ -1217,7 +1217,7 @@ class Admin_Pages extends Profile {
 				\esc_attr__( 'Click to change the counter type', 'autodescription' ),
 				sprintf(
 					/* translators: %s = number */
-					\esc_html__( 'Characters Used: %s', 'autodescription' ),
+					\esc_html__( 'Characters: %s', 'autodescription' ),
 					sprintf(
 						'<span id="%s">%s</span>',
 						\esc_attr( "{$for}_chars" ),
@@ -1260,7 +1260,10 @@ class Admin_Pages extends Profile {
 	 * This is intricated, voluminous, and convoluted; but, there's no other way :(
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now consistently applies escaping and transformation of the titles and descriptions.
+	 *              This was not a security issue, since we always escape properly at output for sanity.
 	 * @access private
+	 * @todo deprecate--let JS handle this.
 	 *
 	 * @param array  $args An array of 'id' and 'taxonomy' values.
 	 * @param string $for  The screen it's for. Accepts 'edit' and 'settings'.
@@ -1268,7 +1271,7 @@ class Admin_Pages extends Profile {
 	 */
 	public function _get_social_placeholders( array $args, $for = 'edit' ) {
 
-		$desc_from_custom_field = $this->get_description_from_custom_field( $args );
+		$desc_from_custom_field = $this->get_description_from_custom_field( $args, false );
 
 		if ( 'settings' === $for ) {
 			$pm_edit_og_title = $args['id'] ? $this->get_post_meta_item( '_open_graph_title', $args['id'] ) : '';
@@ -1282,21 +1285,21 @@ class Admin_Pages extends Profile {
 
 			//! OG title generator falls back to meta input. The description does not.
 			$og_tit_placeholder  = $pm_edit_og_title
-								?: $this->get_generated_open_graph_title( $args );
+								?: $this->get_generated_open_graph_title( $args, false );
 			$og_desc_placeholder = $pm_edit_og_desc
 								?: $desc_from_custom_field
-								?: $this->get_generated_open_graph_description( $args );
+								?: $this->get_generated_open_graph_description( $args, false );
 
 			//! TW title generator falls back to meta input. The description does not.
 			$tw_tit_placeholder  = $pm_edit_tw_title
 								?: $home_og_title
 								?: $pm_edit_og_title
-								?: $this->get_generated_twitter_title( $args );
+								?: $this->get_generated_twitter_title( $args, false );
 			$tw_desc_placeholder = $pm_edit_tw_desc
 								?: $home_og_desc
 								?: $pm_edit_og_desc
 								?: $desc_from_custom_field
-								?: $this->get_generated_twitter_description( $args );
+								?: $this->get_generated_twitter_description( $args, false );
 		} elseif ( 'edit' === $for ) {
 			if ( ! $args['taxonomy'] ) {
 				if ( $this->is_static_frontpage( $args['id'] ) ) {
@@ -1314,54 +1317,54 @@ class Admin_Pages extends Profile {
 
 					//! OG title generator falls back to meta input. The description does not.
 					$og_tit_placeholder  = $home_og_title
-										?: $this->get_generated_open_graph_title( $args );
+										?: $this->get_generated_open_graph_title( $args, false );
 					$og_desc_placeholder = $home_og_desc
 										?: $home_desc
 										?: $desc_from_custom_field
-										?: $this->get_generated_open_graph_description( $args );
+										?: $this->get_generated_open_graph_description( $args, false );
 
 					//! TW title generator falls back to meta input. The description does not.
 					$tw_tit_placeholder  = $home_tw_title
 										?: $home_og_title
 										?: $custom_og_title
-										?: $this->get_generated_twitter_title( $args );
+										?: $this->get_generated_twitter_title( $args, false );
 					$tw_desc_placeholder = $home_tw_desc
 										?: $home_og_desc
 										?: $custom_og_desc
 										?: $home_desc
 										?: $desc_from_custom_field
-										?: $this->get_generated_twitter_description( $args );
+										?: $this->get_generated_twitter_description( $args, false );
 				} else {
 					// Gets custom fields.
 					$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 					$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $args['id'] );
 
 					//! OG title generator falls back to meta input. The description does not.
-					$og_tit_placeholder  = $this->get_generated_open_graph_title( $args );
+					$og_tit_placeholder  = $this->get_generated_open_graph_title( $args, false );
 					$og_desc_placeholder = $desc_from_custom_field
-										?: $this->get_generated_open_graph_description( $args );
+										?: $this->get_generated_open_graph_description( $args, false );
 
 					//! TW title generator falls back to meta input. The description does not.
 					$tw_tit_placeholder  = $custom_og_title
-										?: $this->get_generated_twitter_title( $args );
+										?: $this->get_generated_twitter_title( $args, false );
 					$tw_desc_placeholder = $custom_og_desc
 										?: $desc_from_custom_field
-										?: $this->get_generated_twitter_description( $args );
+										?: $this->get_generated_twitter_description( $args, false );
 				}
 			} else {
 				$meta = $this->get_term_meta( $args['id'] );
 
 				//! OG title generator falls back to meta input. The description does not.
-				$og_tit_placeholder  = $this->get_generated_open_graph_title( $args );
+				$og_tit_placeholder  = $this->get_generated_open_graph_title( $args, false );
 				$og_desc_placeholder = $desc_from_custom_field
-									?: $this->get_generated_open_graph_description( $args );
+									?: $this->get_generated_open_graph_description( $args, false );
 
 				//! TW title generator falls back to meta input. The description does not.
 				$tw_tit_placeholder  = $meta['og_title']
 									?: $og_tit_placeholder;
 				$tw_desc_placeholder = $meta['og_description']
 									?: $desc_from_custom_field
-									?: $this->get_generated_twitter_description( $args );
+									?: $this->get_generated_twitter_description( $args, false );
 			}
 		} else {
 			$og_tit_placeholder  = '';
@@ -1372,12 +1375,12 @@ class Admin_Pages extends Profile {
 
 		return [
 			'title'       => [
-				'og'      => $og_tit_placeholder,
-				'twitter' => $tw_tit_placeholder,
+				'og'      => $this->escape_title( $og_tit_placeholder ?: '' ),
+				'twitter' => $this->escape_title( $tw_tit_placeholder ?: '' ),
 			],
 			'description' => [
-				'og'      => $og_desc_placeholder,
-				'twitter' => $tw_desc_placeholder,
+				'og'      => $this->escape_description( $og_desc_placeholder ?: '' ),
+				'twitter' => $this->escape_description( $tw_desc_placeholder ?: '' ),
 			],
 		];
 	}

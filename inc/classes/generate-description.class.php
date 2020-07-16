@@ -395,7 +395,7 @@ class Generate_Description extends Generate {
 			 * @since 4.0.6
 			 * @param string $desc The post type archive description.
 			 */
-			$desc = (string) \apply_filters( 'the_seo_framework_pta_description', '' );
+			$desc = (string) \apply_filters( 'the_seo_framework_pta_description', '' ) ?: '';
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
@@ -834,6 +834,8 @@ class Generate_Description extends Generate {
 	 *                5. Is now able to always strip leading punctuation.
 	 *                6. It will now strip leading colon characters.
 	 *                7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
+	 *                8. Now returns encoded entities once more. So that the return value can be treated the same as anything else
+	 *                   revolving around descriptions--preventing double transcoding like `&amp;amp; > &amp; > &` instead of `&amp;`.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
@@ -842,7 +844,7 @@ class Generate_Description extends Generate {
 	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
 	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
-	 * @return string The trimmed excerpt with decoded entities. Needs escaping prior printing.
+	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.
 	 */
 	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0 ) {
 
@@ -858,6 +860,7 @@ class Generate_Description extends Generate {
 		if ( ! $excerpt ) return '';
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
+		$excerpt = htmlentities( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 		$excerpt = \wptexturize( $excerpt );
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 		/**
@@ -912,7 +915,7 @@ class Generate_Description extends Generate {
 			$excerpt = $matches[1] . '...'; // This should be texturized later to &hellip;.
 		}
 
-		return trim( $excerpt );
+		return trim( htmlentities( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ) );
 	}
 
 	/**

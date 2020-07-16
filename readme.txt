@@ -251,7 +251,10 @@ TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
 
-TODO description entities aren't transformed in preview (quick nor post.php--GB update cb is transformed correctly, however).
+TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--the icons need to be triggered when this happens.
+	TODO use observer, so it'll be intercompatible?
+
+TODO StateFor -> StateOf. Before it's too late.
 
 ## For everyone
 * **Added:**
@@ -304,6 +307,8 @@ TODO description entities aren't transformed in preview (quick nor post.php--GB 
 	* The (social/logo) image select/change button now updates its text on manual input accordingly.
 	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label, activating a button, or following the link. A second tap will propagate as a regular click.
 	* The description generator can now intelligently strip nested HTML elements.
+	* We normalized entity escaping for titles and descriptions, so you should now always see their output as intended on the edit-screens.
+	* When (single/double/triple) clicking on a title's prefix or additions hover element, the focus ring of the title input no longer flickers. Instead, it remains solidly focussed.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -312,6 +317,9 @@ TODO description entities aren't transformed in preview (quick nor post.php--GB 
 * **Removed:**
 	* The first `<h2>` content is no longer added back in the excerpt of feeds. This didn't work anyway when using Gutenberg. And the code we wanted to implement to fix that (`/<h2.*?>(.*?)<\/h2>[^>]*?>(?=$content)/`) could take half a second per excerpt to resolve (yes, that's slow.).
 		* This also fixes a bug, where when the first `<h2>` entry of your post contains content exactly matching in the feed's "transformed-to-excerpt"-content, it will no longer be removed from that excerpt.
+	* Placeholders on various inputs are no longer prefilled. Your browser can fill these in via our JavaScript scripts (when enabled, which is highly likely).
+		* This reduces the load on your server, and removes the need for us to duplicate our work visualizing how the front-end would generate certain areas.
+		* We upheld this for so long because WordPress used to be controllable via text-only browsers. Now, since the advent of the Block-Editor, and with accessible dynamic browsers, this is no longer necessary.
 * **Fixed:**
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
@@ -320,8 +328,12 @@ TODO description entities aren't transformed in preview (quick nor post.php--GB 
 	* When clicking on the character counter subsequently, the AJAX loader will now reappear correctly.
 	* Addressed an issue where when you double-clicked on the title prefix on an RTL-based site that causes selection of the title to fail.
 	* The title input fields no longer trim the visual outline on input-focus when using WP 5.3 or later.
-	* You can now set a lone `0` as the (meta, Open Graph, Twitter) post title and description.
+	* You can now store a lone `0` as the (meta, Open Graph, Twitter) post title and description.
 		* This was already possible for terms.
+		* Don't count on it being useful, or supported throughout the system--you'll find it being transformed to "Untitled" on some parts. You'll also see false-negative reports when using a lone `0` as input.
+			* This is an intermediate step towards perfect consistency.
+			* We've considered making it seamless, but since this is a bad title/description, it's not worth the tradeoff for smelly, unmaintainable code.
+			* See PHPdoc @ `the_seo_framework()->set_and_strlen()`.
 	* The Homepage SEO Settings question mark is now alligned correctly when using WP 5.5 or later.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
@@ -399,6 +411,7 @@ TODO description entities aren't transformed in preview (quick nor post.php--GB 
 				1. Is now able to always strip leading punctuation.
 				1. It will now strip leading colon characters.
 				1. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
+				1. Now returns encoded entities once more. So that the return value can be treated the same as anything else revolving around descriptions--preventing double transcoding like `&amp;amp;amp; > &amp;amp; > &amp;` instead of `&amp;amp;`.
 			* `get_title()` now has a third `$social` parameter.
 			* `get_custom_field_title()` now has a third `$social` parameter.
 			* `get_generated_title()` now has a third `$social` parameter.

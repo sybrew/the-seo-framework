@@ -2019,4 +2019,34 @@ class Sanitize extends Admin_Pages {
 			)
 		);
 	}
+
+	/**
+	 * Sets string value and returns boolean if it has any content.
+	 *
+	 * Best used in an or loop.
+	 * e.g.         set_and_strlen( $title, 'one' ) || set_and_strlen( $title, 'two' );
+	 * or (slower): set_and_strlen( $title, [ 'one', 'two', ...[value] ] );
+	 *
+	 * @since 4.1.0
+	 * @ignore unused. untested. Creates super-smelly code, but fixes bugs revolving around input '0' or ' '.
+	 *         We'd prefer a native PHP "string has length" comparison operator.
+	 *         I don't believe any language has this. Then again, many languages don't see '0' as false.
+	 *
+	 * @param variable        $var   The variable to set. Passed by reference.
+	 * @param string|string[] $value The value to set, or array of values.
+	 * @return bool True if content has any length.
+	 */
+	protected function set_and_strlen( &$var, $value = '' ) {
+
+		if ( is_array( $value ) ) {
+			foreach ( $value as $v ) {
+				if ( $this->set_and_strlen( $var, $v ) )
+					return true;
+			}
+		}
+
+		$var = trim( $value );
+
+		return is_string( $var ) && strlen( $var );
+	}
 }

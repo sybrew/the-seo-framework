@@ -525,7 +525,7 @@ class Generate_Title extends Generate_Description {
 			 * @since 4.0.6
 			 * @param string $title The post type archive title.
 			 */
-			$title = (string) \apply_filters( 'the_seo_framework_pta_title', '' );
+			$title = (string) \apply_filters( 'the_seo_framework_pta_title', '' ) ?: '';
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 

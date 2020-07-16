@@ -580,7 +580,7 @@ class Admin_Init extends Init {
 							break;
 					}
 
-					$data[ $g ] = Bridges\Scripts::decode_entities( $this->s_description( $data[ $g ] ) );
+					$data[ $g ] = $this->s_description( $data[ $g ] );
 					break;
 
 				case 'imageurl':

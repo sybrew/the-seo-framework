@@ -179,7 +179,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built using the page title.", 'autodescription' ),
+							'base' => \__( "It's built from the page title.", 'autodescription' ),
 						],
 					],
 					'custom'    => [
@@ -376,7 +376,7 @@ final class SeoBar_Page extends SeoBar {
 					'empty'     => \__( 'There is no usable content, so no description could be generated.', 'autodescription' ),
 					'builder'   => \__( 'A page builder is used that renders content dynamically, so no description can be generated for performance and privacy reasons. Consider providing a custom description.', 'autodescription' ),
 					'protected' => \__( 'The page is protected, so no description is generated.', 'autodescription' ),
-					'excerpt'   => \__( "It's built using the excerpt field.", 'autodescription' ),
+					'excerpt'   => \__( "It's built from the page excerpt field.", 'autodescription' ),
 					/* translators: %s = list of duplicated words */
 					'dupes'     => \__( 'Found duplicated words: %s', 'autodescription' ),
 					'syntax'    => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
@@ -394,7 +394,7 @@ final class SeoBar_Page extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built using the page content.", 'autodescription' ),
+							'base' => \__( "It's built from the page content.", 'autodescription' ),
 						],
 					],
 					'emptynoauto' => [
@@ -410,9 +410,9 @@ final class SeoBar_Page extends SeoBar {
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from page SEO meta input.', 'autodescription' ),
+						'reason' => \__( 'Obtained from the page SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from page SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from the page SEO meta input.", 'autodescription' ),
 						],
 					],
 				],

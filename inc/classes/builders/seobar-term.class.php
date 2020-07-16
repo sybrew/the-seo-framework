@@ -188,7 +188,7 @@ final class SeoBar_Term extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built using the page title.", 'autodescription' ),
+							'base' => \__( "It's built from the term name.", 'autodescription' ),
 						],
 					],
 					'custom'    => [
@@ -375,7 +375,7 @@ final class SeoBar_Term extends SeoBar {
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built using the term description field.", 'autodescription' ),
+							'base' => \__( "It's built from the term description field.", 'autodescription' ),
 						],
 					],
 					'emptynoauto' => [
@@ -391,9 +391,9 @@ final class SeoBar_Term extends SeoBar {
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
 						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from term SEO meta input.', 'autodescription' ),
+						'reason' => \__( 'Obtained from the term SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from term SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from the term SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
