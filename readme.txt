@@ -254,8 +254,6 @@ TODO fix indent when ms-close button is present--or hide that button
 TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--the icons need to be triggered when this happens.
 	TODO use observer, so it'll be intercompatible?
 
-TODO StateFor -> StateOf. Before it's too late.
-
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO from TSF.
@@ -466,12 +464,12 @@ TODO StateFor -> StateOf. Before it's too late.
 	* **Method notes:**
 		* **Added:**
 			* `tsfDescription.getInputElement()`
-			* `tsfDescription.getStateFor()`
-			* `tsfDescription.updateStateFor()`
+			* `tsfDescription.getStateOf()`
+			* `tsfDescription.updateStateOf()`
 			* `tsfDescription.updateStateAll()`
 			* `tsfTitle.getInputElement()`
-			* `tsfTitle.getStateFor()`
-			* `tsfTitle.updateStateFor()`
+			* `tsfTitle.getStateOf()`
+			* `tsfTitle.updateStateOf()`
 			* `tsfTitle.updateStateAll()`
 		* **Changed:**
 			* `tsfDescription` and `tsfTitle` now handle legacy input elements (discoverable via `HTMLElement.dataset.hasLegacy`) for the unforeseeable future.
@@ -479,10 +477,10 @@ TODO StateFor -> StateOf. Before it's too late.
 					* See `the_seo_framework()` methods `output_js_title_data()` and `output_description_title_data()`.
 			* `tsfSocial.initTitleInputs` now expects `refNa` to be registered in its first parameter object.
 		* **Deprecated:**
-			* `tsfDescription.getState()`, use `tsfDescription.getStateFor()` instead.
-			* `tsfDescription.updateState()`, use `tsfDescription.updateStateFor()` instead.
-			* `tsfTitle.getState()`, use `tsfTitle.getStateFor()` instead.
-			* `tsfTitle.updateState()`, use `tsfTitle.updateStateFor()` instead.
+			* `tsfDescription.getState()`, use `tsfDescription.getStateOf()` instead.
+			* `tsfDescription.updateState()`, use `tsfDescription.updateStateOf()` instead.
+			* `tsfTitle.getState()`, use `tsfTitle.getStateOf()` instead.
+			* `tsfTitle.updateState()`, use `tsfTitle.updateStateOf()` instead.
 	* **Event notes:**
 		* **Added:**
 			* `window.tsf-post-type-support-changed`, used to test for post type change states.
@@ -517,7 +515,7 @@ TODO StateFor -> StateOf. Before it's too late.
 				* `params.stripTitleTags`
 				* `params.prefixesForcedDisabled`
 		* **Deprecated:**
-			* `tsfTitle.states.useTagline`, use `tsfTitle.states.addAdditions` instead. Applies to `tsfTitle.getStateFor()` and `tsfTitle.updateStateFor()`.
+			* `tsfTitle.states.useTagline`, use `tsfTitle.states.addAdditions` instead. Applies to `tsfTitle.getStateOf()` and `tsfTitle.updateStateOf()`.
 	* **Template notes:**
 		* **Added:**
 			* `wp.template( 'tsf-disabled-taxonomy-help' )` is now available on the settings page.
