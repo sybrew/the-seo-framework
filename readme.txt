@@ -301,12 +301,15 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 		* It caches the tooltip elements, so it no longer has to perform expensive lookups on movement or change.
 		* It now makes waits for the browser animation renderer's invocation on mouse-movement, so it no longer performs expensive calculations as fast as your computer's processor can handle it; instead, it only processes at the speed of your monitor's refresh rate (which is about 60~250 times per second, not 1500 times).
 			* At 4.6GHz on Ryzen Zen 2, we went down to about 4~10% single-CPU-core usage, from 100%, at 60 and 144hz, respectively.
+	* We optimized the Block editor's loading time by removing superfluous REST requests that'd fetch terms for components that did not support it.
 	* The (social/logo) image preview icon no longer animates on-load, improving performance.
 	* The (social/logo) image select/change button now updates its text on manual input accordingly.
 	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label, activating a button, or following the link. A second tap will propagate as a regular click.
 	* The description generator can now intelligently strip nested HTML elements.
 	* We normalized entity escaping for titles and descriptions, so you should now always see their output as intended on the edit-screens.
 	* When (single/double/triple) clicking on a title's prefix or additions hover element, the focus ring of the title input no longer flickers. Instead, it remains solidly focussed.
+	* You can no longer select the primary term for taxonomies that aren't supported (not publicly viewable or otherwise disabled via the TSF interface).
+	* The primary term selector now loads in graciously and no longer bounces the interface on reload; these improvements are especially noticable with slower server connections.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -333,6 +336,8 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 			* We've considered making it seamless, but since this is a bad title/description, it's not worth the tradeoff for smelly, unmaintainable code.
 			* See PHPdoc @ `the_seo_framework()->set_and_strlen()`.
 	* The Homepage SEO Settings question mark is now alligned correctly when using WP 5.5 or later.
+	* On the Block editor, if you had more than 2 categories selected and have then deselected all categories, and then register a new category (and keep it selected), and then select another category, the newest category will now have its name correctly populated in the primary term selector. Yup.
+	* On the Block editor, term names are no longer double-escaped inside the primary term selector.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
@@ -420,6 +425,7 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 			* `output_character_counter_wrap` no longer marks up the counter with the `description` HTML class.
 			* `s_excerpt` moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`, meaning that it'll clear those elements, instead of adding spaces around them.
 			* `strip_tags_cs` now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
+			* `get_hierarchical_taxonomies_as()` now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
 		* **Removed:**
 			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
 			* `the_content_feed()`, with no alternative available.
@@ -524,6 +530,9 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 * **Fixed:**
 	* Closed some unclosed HTML elements.
 	* Moved some illegal HTML element placements, so they're now legal.
+	* The Block editor's primary term selector no longer binds to unsupported taxonomies.
+		* This was graciously handled before, since PHP never forwarded data of unsupported taxonomies.
+		* This also saves a HTTP request per unsupported taxonomy, where we would otherwise get its listed terms.
 
 **Share your love!**
 

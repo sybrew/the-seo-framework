@@ -474,6 +474,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`.
+	 * @since 4.1.0 Now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
 	 *
 	 * @param string $get       Whether to get the names or objects.
 	 * @param string $post_type The post type. Will default to current post type.
@@ -490,7 +491,7 @@ class Term_Data extends Post_Data {
 		$taxonomies = array_filter(
 			$taxonomies,
 			function( $t ) {
-				return $t->hierarchical;
+				return ! empty( $t->hierarchical );
 			}
 		);
 

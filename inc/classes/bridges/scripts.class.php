@@ -804,6 +804,7 @@ final class Scripts {
 	 * Returns Primary Term Selection scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now filters out unsupported taxonomies.
 	 *
 	 * @return array The script params.
 	 */
@@ -820,6 +821,8 @@ final class Scripts {
 		$gutenberg = $tsf->is_gutenberg_page();
 
 		foreach ( $_taxonomies as $_t ) {
+			if ( ! $tsf->is_taxonomy_supported( $_t->name ) ) continue;
+
 			$singular_name = $tsf->get_tax_type_label( $_t->name );
 
 			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name ) ?: 0;
