@@ -130,6 +130,34 @@ define( 'THE_SEO_FRAMEWORK_DIR_PATH_FUNCT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' .
 define( 'THE_SEO_FRAMEWORK_DIR_PATH_COMPAT', THE_SEO_FRAMEWORK_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'compat' . DIRECTORY_SEPARATOR );
 
 /**
+ * The user capability required to access the extension overview page.
+ *
+ * == WARNING ==
+ * When this constant is used incorrectly, you can expose your site to
+ * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * for example, in a WPMU environment. However, proceed with caution.
+ *
+ * @since 4.1.0
+ * @param string
+ */
+defined( 'THE_SEO_FRAMEWORK_SETTINGS_CAP' )
+	or define( 'THE_SEO_FRAMEWORK_SETTINGS_CAP', 'manage_options' );
+
+/**
+ * The user capability required to access the extension overview page.
+ *
+ * == WARNING ==
+ * When this constant is used incorrectly, you can expose your site to
+ * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * for example, in a WPMU environment. However, proceed with caution.
+ *
+ * @since 4.1.0
+ * @param string
+ */
+defined( 'THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP' )
+	or define( 'THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP', 'edit_posts' );
+
+/**
  * Robots setting, ignore protection.
  *
  * @since 4.0.0

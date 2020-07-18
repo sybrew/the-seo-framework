@@ -246,10 +246,10 @@ We improved tooltip performance, greatly. Your CPU core won't spike out to 100% 
 We overhauled the title and description JS implementations, but we maintained backward compatibility via a legacy-binder, even though we assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. In a future major update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
 
 TODO retest upgrade (and TSFEM suggestion check).
-TODO update _suggest_extension_manager()
 TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
+TODO generate_dismissible_sticky_notice -> _suggest_extension_manager()
 
 ## For everyone
 * **Added:**
@@ -292,7 +292,7 @@ TODO fix indent when ms-close button is present--or hide that button
 	* Some sentences have been changed where some users struggled with before. For example, the SEO Bar now conveys what "title branding" means.
 	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our strings with jQuery.
 	* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
-	* We mitigated autorectifying query-checks by specifying more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap.
+	* We mitigated autorectifying query-checks by preemptively forwarding more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap.
 	* We optimized the tooltip handler for performance:
 		* It no longer renders the tooltip twice on tap/click.
 		* It caches the tooltip elements, so it no longer has to perform expensive lookups on movement or change.
@@ -313,6 +313,7 @@ TODO fix indent when ms-close button is present--or hide that button
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
 		* We excluded them in the past because many devs don't know the difference between rewrite and public (looking at you too, Automattic). This caused a rich profusion of issues (i.e. users wasting our time with third-party support). With WP sitemaps coming (and including non-rewriteable post types and taxonomies), it'll be a common issue, so we can now be complacent about that and revert our rewrite exemption rule. Moreover, we now allow full control over post type and taxonomy support. So, we'll henceforth support all rewritable post types and taxonomies by default.
 	* The Formats taxonomy (`post_format`) now has `noindex` applied for all new sites. Sites that upgrade the plugin to this version won't have this taxonomy deindexed automatically.
+	* Users with the capability `edit_posts` (Contributor) can now set Facebook and Twitter metadata, instead of users with capability `publish_posts` (Author) only; since contributors can be assigned as authors of posts, as well.
 * **Removed:**
 	* The first `<h2>` content is no longer added back in the excerpt of feeds. This didn't work anyway when using Gutenberg. And the code we wanted to implement to fix that (`/<h2.*?>(.*?)<\/h2>[^>]*?>(?=$content)/`) could take half a second per excerpt to resolve (yes, that's slow.).
 		* This also fixes a bug, where when the first `<h2>` entry of your post contains content exactly matching in the feed's "transformed-to-excerpt"-content, it will no longer be removed from that excerpt.
@@ -359,6 +360,10 @@ TODO fix indent when ms-close button is present--or hide that button
 ## For developers
 * **Database note:** This plugin now uses TSF database version `4103`.
 * **Constant notes:**
+	* **Added:**
+		* `THE_SEO_FRAMEWORK_SETTINGS_CAP`, user-definable.
+			* Use this instead of filter `the_seo_framework_settings_capability`; the filter is marked for deprecation.
+		* `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`, user-definable.
 	* **Removed:**
 		* `THE_SEO_FRAMEWORK_NETWORK_OPTIONS`, was unused.
 * **Option notes:**
@@ -536,7 +541,7 @@ TODO fix indent when ms-close button is present--or hide that button
 		* This was graciously handled before, since PHP never forwarded data of unsupported taxonomies.
 		* This also saves a HTTP request per unsupported taxonomy, where we would otherwise get its listed terms.
 
-**Share your love!**
+**Leave a review!**
 
 We hope you'll love this update as much as we do. Please consider sharing it with the world, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0)! We read every one of them. Thank you!
 

@@ -393,15 +393,18 @@ class Core {
 	 * Returns the minimum role required to adjust settings.
 	 *
 	 * @since 3.0.0
+	 * @since 4.1.0 Now uses the constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` as a default return value.
+	 * @todo deprecate, use constant instead.
 	 *
 	 * @return string The minimum required capability for SEO Settings.
 	 */
 	public function get_settings_capability() {
 		/**
 		 * @since 2.6.0
+		 * @todo deprecate, use constant instead.
 		 * @param string $capability The user capability required to adjust settings.
 		 */
-		return (string) \apply_filters( 'the_seo_framework_settings_capability', 'manage_options' );
+		return (string) \apply_filters( 'the_seo_framework_settings_capability', THE_SEO_FRAMEWORK_SETTINGS_CAP );
 	}
 
 	/**

@@ -268,7 +268,9 @@ final class Scripts {
 							/**
 							 * Use $tsf->get_settings_capability() ?... might conflict with other nonces.
 							 */
+							// unused.
 							'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
+							// unused.
 							'upload_files'   => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
 							'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 						],
