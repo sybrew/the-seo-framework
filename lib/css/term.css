@@ -25,10 +25,10 @@
 }
 
 .tsf-term-checkbox-wrap {
-	display: block;
+	display: inline-block;
 	margin-top: 14px;
 	margin-left: 2px;
-	width: 95%; /* calc -2px... meh */
+	max-width: calc( 95% - 2px );
 }
 
 body.rtl .tsf-term-checkbox-wrap {

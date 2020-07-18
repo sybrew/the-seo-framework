@@ -251,9 +251,6 @@ TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
 
-TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--the icons need to be triggered when this happens.
-	TODO use observer, so it'll be intercompatible?
-
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO from TSF.
@@ -301,7 +298,7 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 		* It caches the tooltip elements, so it no longer has to perform expensive lookups on movement or change.
 		* It now makes waits for the browser animation renderer's invocation on mouse-movement, so it no longer performs expensive calculations as fast as your computer's processor can handle it; instead, it only processes at the speed of your monitor's refresh rate (which is about 60~250 times per second, not 1500 times).
 			* At 4.6GHz on Ryzen Zen 2, we went down to about 4~10% single-CPU-core usage, from 100%, at 60 and 144hz, respectively.
-	* We optimized the Block editor's loading time by removing superfluous REST requests that'd fetch terms for components that did not support it.
+	* We optimized the Block editor's loading time by removing superfluous REST requests that'd fetch terms for components that didn't support the caller's intention.
 	* The (social/logo) image preview icon no longer animates on-load, improving performance.
 	* The (social/logo) image select/change button now updates its text on manual input accordingly.
 	* You can now tap a tooltip-handler inside a label or link without accidentally activating the label, activating a button, or following the link. A second tap will propagate as a regular click.
@@ -310,6 +307,7 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 	* When (single/double/triple) clicking on a title's prefix or additions hover element, the focus ring of the title input no longer flickers. Instead, it remains solidly focussed.
 	* You can no longer select the primary term for taxonomies that aren't supported (not publicly viewable or otherwise disabled via the TSF interface).
 	* The primary term selector now loads in graciously and no longer bounces the interface on reload; these improvements are especially noticable with slower server connections.
+	* The "Remove the site name?" toggle no longer stretches its label on term edit, preventing accidental clicks.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -338,6 +336,9 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 	* The Homepage SEO Settings question mark is now alligned correctly when using WP 5.5 or later.
 	* On the Block editor, if you had more than 2 categories selected and have then deselected all categories, and then register a new category (and keep it selected), and then select another category, the newest category will now have its name correctly populated in the primary term selector. Yup.
 	* On the Block editor, term names are no longer double-escaped inside the primary term selector.
+	* When using WP 5.5 or later, if you hit the new post-meta-box order buttons, the labels will now also automatically try to refit themselves (by hiding the text when necessary).
+		* We made sure that any future change will automatically be supported, thanks to the use of resize observers.
+	* The content of a tab no longer bounces when you quickly toggle from one to the other.
 * **Other:**
 	* We improved plugin loading time by removing (another) class from the stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
@@ -493,6 +494,7 @@ TODO some sites using WP 5.5 are allowed to slide the postbox in the sidebar--th
 			* `window.tsf-taxonomy-support-changed`, used to test for taxonomy change states. Be warned, it's tricky.
 		* **Changed:**
 			* `window.tsf-tooltip-reset` now debounces by 25ms, so now you can call it in a loop without worrying about impacting performance.
+			* `window.tsf-flex-resize` may now contain `event.detail.target` data--depicting which flex wrapper is triggered--it should, for now, just be the original one.
 	* **Object notes:**
 		* **Added:**
 			* `tsfTitle.untitledTitle`

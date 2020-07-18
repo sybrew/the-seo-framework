@@ -908,6 +908,8 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 * @see WP Core single_term_title()
+	 * TODO Term names may not be empty. But, if you insert illegal characters when updating/creating a term (e.g. `<tag>`)
+	 *      the term name will be empty. When prefixes are added to the term (e.g. `Category:`), only that will be shown.
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
@@ -954,6 +956,9 @@ class Generate_Title extends Generate_Description {
 			}
 		}
 
+		// Store the prefix sprintf at get_generated_archive_title() instead and set this on title capture failure?
+		// We're working around a bug in WordPress here. This should be fixed inside WordPress! Forgo.
+		// return strlen( $term_name ) ? $term_name : $this->get_static_untitled_title();
 		return $term_name;
 	}
 
