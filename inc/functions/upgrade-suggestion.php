@@ -41,14 +41,15 @@ _prepare();
  *    0. The upgrade happens when an applicable user is on the admin pages. (always true w/ default actions)
  *    1. The constant 'TSF_DISABLE_SUGGESTIONS' is not defined or false.
  *    2. The current dashboard is the main site's.
- *    3. The applicable user can install plugins.
- *    4. TSFEM isn't already installed.
- *    5. PHP and WP requirements of TSFEM are met.
+ *    3. TSFEM isn't already installed.
+ *    4. PHP and WP requirements of TSFEM are met.
  *
  * This notice is automatically dismissed, and it can be ignored without reappearing.
  *
  * @since 3.0.6
- * @since 4.1.0 Now tests TSFEM 2.4.0 requirements.
+ * @since 4.1.0 1. Now tests TSFEM 2.4.0 requirements.
+ *              2. Removed the user capability requirement, and forwarded that to `_suggest_extension_manager()`.
+ *              3. Can now run on the front-end without crashing.
  * @access private
  */
 function _prepare() {
@@ -57,11 +58,13 @@ function _prepare() {
 	if ( defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS ) return;
 	//? 2
 	if ( ! \is_main_site() ) return;
-	//? 3
-	if ( ! \current_user_can( 'install_plugins' ) ) return;
-	//? 4a
+	//? 3a
 	if ( defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;
-	//? 4b
+
+	if ( ! function_exists( '\\get_plugins' ) )
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+	//? 3b
 	if ( ! empty( \get_plugins()['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] ) ) return;
 
 	/** @source https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/08db1ab7410874c47d8f05b15479ce923857c35e/bootstrap/envtest.php#L68-L77 */
@@ -77,45 +80,50 @@ function _prepare() {
 	or $test = true;
 	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 
-	//? 5
+	//? 4
 	if ( true !== $test ) return;
 
-	_load_tsfem_suggestion();
+	_suggest_extension_manager();
 }
 
 /**
- * Loads the TSFEM suggestion.
- *
- * @since 3.2.4
- * @access private
- */
-function _load_tsfem_suggestion() {
-	\add_action( 'admin_notices', __NAMESPACE__ . '\\_suggest_extension_manager' );
-}
-
-/**
- * Outputs "look at TSFEM" notification to applicable plugin users on upgrade.
+ * Registers "look at TSFEM" notification to applicable plugin users on upgrade.
  *
  * @since 3.0.6
+ * @since 4.1.0 Is now a persistent notice, that outputs at most 3 times, on any admin page, only for users that can install plugins.
  * @access private
  */
 function _suggest_extension_manager() {
 
 	$tsf = \the_seo_framework();
 
-	$tsf->do_dismissible_notice(
+	$tsf->register_dismissible_persistent_notice(
 		$tsf->convert_markdown(
-			sprintf(
-				'**A word from Sybre, the developer of The SEO Framework:** We spent 3000 hours on version 4.0 of The SEO Framework, optimizing every aspect of the plugin, resulting in [1000 changes](%s), making this the highest performing SEO plugin! We humbly believe it shows we put you and your website first. There are still no ads or constant annoyances in your dashboard. As a result, many of our users don\'t know about [The SEO Framework &mdash; Extension Manager](%s). The extensions give extra SEO functionality, like **structured data for publishers**, **focus subject analysis**, and **spam protection**. All programmed with same meticulous standards. Many of the extensions are **free**, and the paid ones help to finance all our work. Consider [giving them a try](%s). Thank you.',
-				'https://theseoframework.com/about/an-introduction-to-a-thousand-changes/',
-				'https://theseoframework.com/extension-manager/',
-				'https://theseoframework.com/extensions/'
+			vsprintf(
+				'<p>*Placeholder*</p>
+				<p>[Extension Manager plugin](%s) | [Included extensions](%s) | [Pricing](%s)</p>',
+				[
+					'https://theseoframework.com/extension-manager/',
+					'https://theseoframework.com/extensions/',
+					'https://theseoframework.com/pricing/',
+				]
 			),
-			[ 'a', 'strong' ],
+			[ 'a', 'em', 'strong' ],
 			[ 'a_internal' => false ]
 		),
-		'info',
-		false,
-		false
+		'suggest-extension-manager',
+		[
+			'type'   => 'info',
+			'icon'   => false,
+			'escape' => false,
+		],
+		[
+			'screens'      => [],
+			'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
+			'capability'   => 'install_plugins',
+			'user'         => 0,
+			'count'        => 3,
+			'timeout'      => DAY_IN_SECONDS * 7,
+		]
 	);
 }

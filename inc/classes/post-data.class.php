@@ -362,7 +362,7 @@ class Post_Data extends Detect {
 		//* Check that the user is allowed to edit the post
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 		if ( ! isset( $_POST[ $nonce_name ] ) ) return;
-		if ( ! \wp_verify_nonce( \stripslashes_from_strings_only( $_POST[ $nonce_name ] ), $nonce_action ) ) return;
+		if ( ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) ) return;
 
 		$data = (array) $_POST['autodescription'];
 
@@ -541,7 +541,7 @@ class Post_Data extends Detect {
 
 		foreach ( $values as $t => $v ) {
 			if ( ! isset( $_POST[ $v['name'] ] ) ) continue;
-			if ( \wp_verify_nonce( \stripslashes_from_strings_only( $_POST[ $v['name'] ] ), $v['action'] ) ) {
+			if ( \wp_verify_nonce( $_POST[ $v['name'] ], $v['action'] ) ) {
 				$this->update_primary_term_id( $post->ID, $t, $v['value'] );
 			}
 		}

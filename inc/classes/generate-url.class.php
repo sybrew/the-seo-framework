@@ -984,19 +984,6 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
-	 * Cached WordPress permalink structure settings.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Removed caching.
-	 * @todo deprecate, use property `the_seo_framework()->pretty_permalinks` instead.
-	 *
-	 * @return string permalink structure.
-	 */
-	public function permalink_structure() {
-		return \get_option( 'permalink_structure' );
-	}
-
-	/**
 	 * Add $paged if Paginated and allowed through arguments.
 	 *
 	 * @since 2.6.0

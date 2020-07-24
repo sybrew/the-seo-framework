@@ -245,11 +245,14 @@ We improved tooltip performance, greatly. Your CPU core won't spike out to 100% 
 
 We overhauled the title and description JS implementations, but we maintained backward compatibility via a legacy-binder, even though we assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. In a future major update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
 
-TODO retest upgrade (and TSFEM suggestion check).
+We added a notice that registers itself after plugin-upgrade. This notice will only be shown to users that can install plugins--and it'll be displayed only three times non-obtrusively, within 7 days, and can be manually dismissed. It won't be outputted on pages where you need to actively engage with content, such as the block-editor or theme-editor. We're testing the waters here; we hope this won't harm your workflow. If you find this annoying, let us know! To remove future notices of this type, add this line to your `wp-config.php` file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
+
+TODO retest install.
 TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
-TODO generate_dismissible_sticky_notice -> _suggest_extension_manager()
+
+TODO add inline notice moving script, so it won't cause a layout shift? WordPress should've done that 12 years ago...
 
 ## For everyone
 * **Added:**
@@ -277,6 +280,14 @@ TODO generate_dismissible_sticky_notice -> _suggest_extension_manager()
 		* You'll find that counters and other descriptive parts are now visible.
 		* Please be mindful that this feature affects performance negatively--but this is primarily caused by a bug in WordPress.
 			* See https://core.trac.wordpress.org/ticket/50567.
+	* You may now see notices (re)appear that you can manually dismiss. This makes sure you won't miss them, for you might've invoked a notice without loading the admin area directly afterward.
+		* The notices are outputted conditionally, and may:
+			1. Appear only for some users with certain administrative capabilities, like installing plugins.
+			1. Appear only on some pages.
+			1. Not appear on some pages, to prevent obstructing your workflow.
+			1. Appear only a few times.
+			1. Appear only within a certain timeframe--e.g. for one day within invocation.
+			1. Listen to your dismissal request--taking a single button press, either via AJAX or a HTML form.
 * **Improved:**
 	* The description generator has gone through another generational leap:
 		* It is now able to discern between punctuation types for stripping leading characters. For example, an opening bracket will no longer be stripped from the start of a sentence, but closing brackets will.
@@ -308,6 +319,8 @@ TODO generate_dismissible_sticky_notice -> _suggest_extension_manager()
 	* You can no longer select the primary term for taxonomies that aren't supported (not publicly viewable or otherwise disabled via the TSF interface).
 	* The primary term selector now loads in graciously and no longer bounces the interface on reload; these improvements are especially noticable with slower server connections.
 	* The "Remove the site name?" toggle no longer stretches its label on term edit, preventing accidental clicks.
+	* When you select or remove an image via the image editor, the input URL field no longer animates--we found this to be annoying, especially since we added other image input field cues (like the on-hover preview card) since its inception.
+	* When you remove an image set via the image editor, the removal button now fades out twice as quickly, so it is more in line with the rest of the interface's animation timing.
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
@@ -436,11 +449,15 @@ TODO generate_dismissible_sticky_notice -> _suggest_extension_manager()
 			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
 			* `the_content_feed()`, with no alternative available.
 			* `get_site_option()`, with no alternative available. Was never used.
+			* `do_dismissible_sticky_notice()`, with no alternative available. Was never used.
+			* `generate_dismissible_sticky_notice()`. Was never used. Use `register_dismissible_persistent_notice()` instead.
+			* `notices`, was marked private.
 		* **Deprecated:**
 			* `is_post_type_page()`, with no alternative available.
 			* `is_taxonomy_public()`, use `the_seo_framework()->is_taxonomy_supported()` instead.
 			* `the_seo_framework_get_option()`. Use `the_seo_framework()->get_option()` instead. Was never advertised to be used.
 			* `get_home_page_tagline()`, use the aptly named `get_home_title_additions()` instead.
+			* `permalink_structure()`, use `get_option( 'permalink_structure' );` instead.
 	* For object `\The_SEO_Framework\Bridges\Feed` (new!):
 		* **Added:**
 			* (static) `get_instance()`

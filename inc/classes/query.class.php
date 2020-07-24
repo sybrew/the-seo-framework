@@ -537,6 +537,7 @@ class Query extends Core {
 	 */
 	public function is_blog_page( $id = 0 ) {
 
+		// When the blog page is the front page, treat it as front instead of blog.
 		if ( ! $this->has_page_on_front() )
 			return false;
 
@@ -879,7 +880,7 @@ class Query extends Core {
 		&& \is_singular()
 		&& \current_user_can( 'edit_post', \get_the_ID() )
 		&& isset( $_GET['preview_id'], $_GET['preview_nonce'] )
-		&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] )
+		&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] ) // WP doesn't check for unslash either; who would've guessed.
 		) {
 			$is_preview = true;
 		}

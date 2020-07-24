@@ -868,7 +868,7 @@ class Generate_Description extends Generate {
 		 *
 		 * @param array $matches : {
 		 *    0 : Full excerpt.
-		 *    1 : Sentence after leading punctuation (if any), including opening punctuation, marks, and ¡¿, before first punctuation (if any).
+		 *    1 : Sentence after leading punctuation (if any), but including opening punctuation, marks, and ¡¿, before first punctuation (if any).
 		 *    2 : First one character following [1], always some form of punctuation. Won't be set if [3] is set.
 		 *    3 : Following [1] until last punctuation that isn't some sort of connecting punctiation that's leading a word-boundary.
 		 *    4 : First three words leading [3]. Connecting punctuations that splits words are included as non-countable.

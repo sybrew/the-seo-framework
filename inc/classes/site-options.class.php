@@ -469,6 +469,7 @@ class Site_Options extends Sanitize {
 	 */
 	protected function check_options_reset() {
 
+		// Check if we're already dealing with the settings. Buggy cache might interfere, otherwise.
 		if ( ! $this->is_seo_settings_page( false ) || ! $this->can_access_settings() )
 			return;
 

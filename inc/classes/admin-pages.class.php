@@ -223,12 +223,10 @@ class Admin_Pages extends Profile {
 	/**
 	 * Initializes and outputs various notices.
 	 *
-	 * @since 2.2.2
-	 * @since 3.1.0 1. Added seo plugin check.
-	 *              2. Now marked private.
+	 * @since 4.1.0
 	 * @access private
 	 */
-	public function notices() {
+	public function _output_notices() {
 
 		if ( $this->get_static_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
 			$this->detect_seo_plugins()
@@ -238,6 +236,8 @@ class Admin_Pages extends Profile {
 				);
 			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
 		}
+
+		$this->output_dismissible_persistent_notices();
 	}
 
 	/**
@@ -354,39 +354,42 @@ class Admin_Pages extends Profile {
 	 * @since 4.0.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
 	 * @since 4.0.3 1. Keyboard navigation is now supported on the dismiss icon.
 	 *              2. The info notice type is now supported.
+	 * @since 4.1.0 Now semantically wraps the content with HTML.
+	 * @TODO deprecate--use the more reliable and secure persistent notices registry instead.
+	 * @see register_dismissible_persistent_notice()
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 *                        When the message contains HTML, it must start with a <p> tag,
+	 *                        or it will be added for you--regardless of proper semantics.
 	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
-	 * @param bool   $a11y Whether to add an accessibility icon.
+	 * @param bool   $icon Whether to add an accessibility icon.
 	 * @param bool   $escape Whether to escape the whole output.
 	 * @return string The dismissible error notice.
 	 */
-	public function generate_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+	public function generate_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true ) {
 
-		if ( empty( $message ) ) return '';
+		// Don't check for strlen. '0' is a useless message, anyway.
+		if ( ! $message ) return '';
 
-		//* Make sure the scripts are loaded.
+		// Make sure the scripts are loaded.
 		$this->init_admin_scripts();
+		Builders\Scripts::enqueue();
 
-		\The_SEO_Framework\Builders\Scripts::enqueue();
-
-		if ( 'warning' === $type )
-			$type = 'notice-warning';
-
-		if ( 'info' === $type )
-			$type = 'notice-info';
-
-		$a11y = $a11y ? 'tsf-show-icon' : '';
+		if ( in_array( $type, [ 'warning', 'info' ], true ) )
+			$type = "notice-$type";
 
 		return vsprintf(
-			'<div class="notice %s tsf-notice %s"><p>%s</p>%s</div>',
+			'<div class="notice %s tsf-notice %s">%s%s</div>',
 			[
 				\esc_attr( $type ),
-				( $a11y ? 'tsf-show-icon' : '' ),
-				( $escape ? \esc_html( $message ) : $message ),
+				( $icon ? 'tsf-show-icon' : '' ),
+				sprintf(
+					( ! $escape && 0 === strpos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
+					( $escape ? \esc_html( $message ) : $message )
+				),
 				sprintf(
 					'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s"></a>',
-					\esc_attr__( 'Dismiss this notice', 'autodescription' )
+					\esc_attr__( 'Dismiss this notice', 'default' )
 				),
 			]
 		);
@@ -396,63 +399,69 @@ class Admin_Pages extends Profile {
 	 * Echos generated dismissible notice.
 	 *
 	 * @since 2.7.0
+	 * @TODO deprecate--use the more reliable and secure persistent notices registry instead.
+	 * @see register_dismissible_persistent_notice()
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 * @param string $type    The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
-	 * @param bool   $a11y    Whether to add an accessibility icon.
+	 * @param bool   $icon    Whether to add an accessibility icon.
 	 * @param bool   $escape  Whether to escape the whole output.
 	 */
-	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+	public function do_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true ) {
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- use $escape
-		echo $this->generate_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
+		echo $this->generate_dismissible_notice( $message, $type, $icon, $escape );
 	}
 
 	/**
-	 * Generates dismissible notice that stick until the user dismisses it.
-	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 * Echos dismissible persistent notice to screen.
 	 *
-	 * @since 2.9.3
-	 * @see $this->do_dismissible_sticky_notice()
-	 * @uses THE_SEO_FRAMEWORK_UPDATES_CACHE
-	 * @todo make this do something.
-	 * @ignore
-	 * NOTE: This method is a placeholder.
+	 * @since 4.1.0
 	 *
-	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
-	 * @param array  $args : {
+	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
+	 * @param string $key        The unique notice key used to dismiss notices.
+	 * @param array  $args       : {
 	 *    'type'   => string Optional. The notification type. Default 'updated'.
-	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
+	 *    'icon'   => bool   Optional. Whether to enable accessibility. Default true.
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
-	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
-	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
 	 * }
-	 * @return string The dismissible error notice.
 	 */
-	public function generate_dismissible_sticky_notice( $message, $key, $args = [] ) { // phpcs:ignore -- unused.
-		return '';
+	protected function output_dismissible_persistent_notice( $message, $key, array $args ) {
+		$this->get_view( 'notice/persistent', get_defined_vars() );
 	}
 
 	/**
-	 * Echos generated dismissible sticky notice.
+	 * Outputs registered dismissible persistent notice.
 	 *
-	 * @since 2.9.3
-	 * @uses $this->generate_dismissible_sticky_notice()
-	 * @ignore
-	 *
-	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $key     The notice key. Must be unique and tied to the stored updates cache option.
-	 * @param array  $args : {
-	 *    'type'   => string Optional. The notification type. Default 'updated'.
-	 *    'a11y'   => bool   Optional. Whether to enable accessibility. Default true.
-	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
-	 *    'color'  => string Optional. If filled in, it will output the selected color. Default ''.
-	 *    'icon'   => string Optional. If filled in, it will output the selected icon. Default ''.
-	 * }
+	 * @since 4.1.0
+	 * @uses $this->output_dismissible_persistent_notice()
+	 * @uses $this->count_down_persistent_notice()
+	 * @global string $page_hook
 	 */
-	public function do_dismissible_sticky_notice( $message, $key, $args = [] ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- use $args['escape']
-		echo $this->generate_dismissible_sticky_notice( $message, $key, $args );
+	protected function output_dismissible_persistent_notices() {
+
+		$notices        = $this->get_static_cache( 'persistent_notices', [] );
+		$current_screen = \get_current_screen();
+		$base           = isset( $current_screen->base ) ? $current_screen->base : '';
+
+		// Ideally, we don't want to output more than one on no-js. Alas, we can't anticipate the importance and order of the notices.
+		foreach ( $notices as $key => $notice ) {
+			$cond = $notice['conditions'];
+
+			if ( ! \current_user_can( $cond['capability'] ) ) continue;
+			if ( $cond['user'] && $cond['user'] !== $this->get_user_id() ) continue;
+			if ( $cond['screens'] && ! in_array( $base, $cond['screens'], true ) ) continue;
+			if ( $cond['excl_screens'] && in_array( $base, $cond['excl_screens'], true ) ) continue;
+
+			if ( $cond['timeout'] > -1 && $cond['timeout'] < time() ) {
+				$this->clear_persistent_notice( $key );
+				continue;
+			}
+
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- use $notice['args']['escape']
+			$this->output_dismissible_persistent_notice( $notice['message'], $key, $notice['args'] );
+
+			$this->count_down_persistent_notice( $key, $cond['count'] );
+		}
 	}
 
 	/**

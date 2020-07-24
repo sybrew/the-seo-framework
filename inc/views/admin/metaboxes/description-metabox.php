@@ -30,12 +30,18 @@ switch ( $instance ) :
 			__( 'Open Graph and Twitter Cards require descriptions. Therefore, it is best to leave this option enabled.', 'autodescription' )
 		);
 
+		$info = $this->make_info(
+			__( 'Learn how this feature works.', 'autodescription' ),
+			'https://kb.theseoframework.com/?p=65',
+			false
+		);
+
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'auto_description',
-				__( 'Automatically generate descriptions?', 'autodescription' ),
+				esc_html__( 'Automatically generate descriptions?', 'autodescription' ) . ' ' . $info,
 				'',
-				true
+				false
 			),
 			true
 		);

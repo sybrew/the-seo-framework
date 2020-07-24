@@ -264,7 +264,7 @@ switch ( $instance ) :
 			<?php
 			$info = $this->make_info(
 				__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),
-				'https://support.google.com/webmasters/answer/35624#page-titles',
+				'https://kb.theseoframework.com/?p=34',
 				false
 			);
 			$this->wrap_fields(

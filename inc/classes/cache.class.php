@@ -35,18 +35,6 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 class Cache extends Site_Options {
 
 	/**
-	 * Determines whether object cache is being used.
-	 *
-	 * @since 2.8.0
-	 * @see $this->use_object_cache
-	 *
-	 * @return bool
-	 */
-	protected function use_object_cache() {
-		return \wp_using_ext_object_cache() && $this->get_option( 'cache_object' );
-	}
-
-	/**
 	 * Initializes admin caching actions.
 	 *
 	 * @since 2.8.0

@@ -256,7 +256,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-tt' ],
+				'deps'     => [ 'jquery', 'tsf-tt', 'wp-util' ],
 				'autoload' => true,
 				'name'     => 'tsf',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',

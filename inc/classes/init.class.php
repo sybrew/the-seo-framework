@@ -170,8 +170,14 @@ class Init extends Query {
 			//* Add menu links and register $this->seo_settings_page_hook
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
 
-			//* Set up notices
-			\add_action( 'admin_notices', [ $this, 'notices' ] );
+			//* Set up notices.
+			\add_action( 'admin_notices', [ $this, '_output_notices' ] );
+
+			//* Fallback HTML-only notice dismissal.
+			\add_action( 'admin_init', [ $this, '_dismiss_notice' ] );
+
+			//* Admin AJAX for notice dismissal.
+			\add_action( 'wp_ajax_tsf-dismiss-notice', [ $this, '_wp_ajax_dismiss_notice' ] );
 
 			//* Admin AJAX for counter options.
 			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, '_wp_ajax_update_counter_type' ] );

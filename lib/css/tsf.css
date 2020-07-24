@@ -63,7 +63,7 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 	content: "\f147";
 }
 
-a.tsf-dismiss {
+.tsf-dismiss {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -76,13 +76,25 @@ a.tsf-dismiss {
 	text-decoration: none;
 }
 
-body.rtl a.tsf-dismiss {
+body.rtl .tsf-dismiss {
 	right: initial;
 	left: 0;
 }
 
-a.tsf-dismiss:before {
+.tsf-dismiss:hover {
+	color: #c00;
+}
+
+.tsf-dismiss:focus {
+	outline: none;
+	box-shadow:
+		0 0 0 1px #5b9dd9,
+		0 0 2px 1px rgba(30, 140, 190, 0.8);
+}
+
+.tsf-dismiss:before {
 	background: 0 0;
+	color: currentColor;
 	content: "\f153";
 	display: block;
 	font: 400 16px/20px dashicons;
@@ -92,10 +104,6 @@ a.tsf-dismiss:before {
 	width: 20px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-a.tsf-dismiss:hover {
-	color: #c00;
 }
 
 .tsf-seo-bar-item {

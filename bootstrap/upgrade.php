@@ -37,6 +37,13 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @since 3.2.4 Applied namspacing to this file. All method names have changed.
  */
 
+
+\add_action( 'init', __NAMESPACE__ . '\\_do_upgrade', 20 );
+\add_action( 'admin_notices', __NAMESPACE__ . '\\_output_upgrade_notices' );
+\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_upgrade_to_current' );
+\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99 );
+\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100 );
+
 /**
  * Returns the default site options.
  *
@@ -64,14 +71,12 @@ function _previous_db_version() {
 	return isset( $cache ) ? $cache : $cache = \get_option( 'the_seo_framework_upgraded_db_version', '0' );
 }
 
-\add_action( 'init', __NAMESPACE__ . '\\_do_upgrade', 20 );
 /**
  * Upgrade The SEO Framework to the latest version.
  *
  * Does an iteration of upgrades in order of upgrade appearance.
  * Each called function will upgrade the version by its iteration.
  *
- * @thanks StudioPress for some code.
  * @since 2.7.0
  * @since 2.9.4 No longer tests WP version. This file won't be loaded anyway if rendered incompatible.
  * @since 3.0.0 Fewer option calls are now made when version is higher than former checks.
@@ -96,7 +101,6 @@ function _do_upgrade() {
 	$tsf = \the_seo_framework();
 
 	if ( ! $tsf->loaded ) return;
-
 	if ( \wp_doing_ajax() ) return;
 
 	if ( $tsf->is_seo_settings_page( false ) ) {
@@ -107,7 +111,6 @@ function _do_upgrade() {
 
 	// Check if upgrade is locked. Otherwise, lock it.
 	// TODO send out an admin notice, that informs the user the upgrader is running in the background for X seconds?
-	// FIXME this prevents race conditions, but it can also be affected by a race condition... The solution would be cron?
 	if ( \get_transient( 'tsf_upgrade_lock' ) ) return;
 
 	$timeout = 5 * MINUTE_IN_SECONDS;
@@ -188,8 +191,10 @@ function _do_upgrade() {
 		_do_upgrade_4103();
 		$version = '4103';
 	}
+
 	/**
 	 * @since 2.7.0
+	 * @internal
 	 */
 	\do_action( 'the_seo_framework_upgraded' );
 }
@@ -206,7 +211,6 @@ function _release_upgrade_lock() {
 	\delete_transient( 'tsf_upgrade_lock' );
 }
 
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_upgrade_to_current' );
 /**
  * Upgrades the Database version to the latest version.
  *
@@ -232,32 +236,23 @@ function _upgrade_to_current() {
 	\wp_cache_delete( 'alloptions', 'options' );
 }
 
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99 );
 /**
  * Prepares a notice when the upgrade is completed.
  *
  * @since 4.0.0
+ * @since 4.1.0 Moved user capability check here.
+ * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
+ *       Users that remove query strings (thanks to YSlow) are to blame, though.
+ *       The authors of the plugin that allowed this to happen are even more to blame.
+ * @link <https://wordpress.org/support/topic/4-0-admin-interface-not-loading-correctly/>
  */
 function _prepare_upgrade_notice() {
 	\add_action( 'admin_notices', __NAMESPACE__ . '\\_do_upgrade_notice' );
-}
-
-/**
- * Outputs "your site has been upgraded" notification to applicable plugin users on upgrade.
- *
- * @since 3.0.6
- * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
- *       Users that remove query strings (thanks to YSlow) are to blame, though.
- * @link <https://wordpress.org/support/topic/4-0-admin-interface-not-loading-correctly/>
- */
-function _do_upgrade_notice() {
-
-	if ( ! \current_user_can( 'update_plugins' ) ) return;
 
 	$tsf = \the_seo_framework();
 
-	if ( _previous_db_version() ) {
-		$tsf->do_dismissible_notice(
+	if ( _previous_db_version() ) { // user upgraded.
+		$tsf->register_dismissible_persistent_notice(
 			$tsf->convert_markdown(
 				sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
@@ -266,11 +261,39 @@ function _do_upgrade_notice() {
 				),
 				[ 'code' ]
 			),
-			'updated',
-			true,
-			false
+			'thank-you-updated',
+			[
+				'type'   => 'updated',
+				'icon'   => true,
+				'escape' => false,
+			],
+			[
+				'screens'      => [],
+				'excl_screens' => [ 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes' ],
+				'capability'   => 'update_plugins',
+				'user'         => 0,
+				'count'        => 1,
+				'timeout'      => DAY_IN_SECONDS,
+			]
 		);
-	} else {
+	}
+}
+
+/**
+ * Outputs "your site has been upgraded" notification to applicable plugin users on upgrade.
+ *
+ * @since 3.0.6
+ * @since 4.1.0 Moved upgrade notice to persistent.
+ */
+function _do_upgrade_notice() {
+
+	// Can this even run twice?
+	if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
+	if ( ! \current_user_can( 'update_plugins' ) ) return;
+
+	if ( ! _previous_db_version() ) {
+		$tsf = \the_seo_framework();
+
 		$tsf->do_dismissible_notice(
 			\esc_html__( 'Thank you for installing The SEO Framework! Your website is now optimized for search and social sharing, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
 			'updated',
@@ -294,31 +317,22 @@ function _do_upgrade_notice() {
 	}
 }
 
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100 );
 /**
  * Enqueues and outputs an Extension Manager suggestion.
  *
  * @since 3.1.0
  * @since 3.2.2 No longer suggests when the user is new.
  * @since 3.2.4 Moved upgrade suggestion call to applicable file.
+ * @since 4.1.0 Now also includes the file on the front-end, so it can register the notice.
  * @staticvar bool $run
  *
  * @return void Early when already enqueued
  */
 function _prepare_upgrade_suggestion() {
-	if ( ! \is_admin() ) return;
+	// Don't show if the user didn't upgrade.
 	if ( ! _previous_db_version() ) return;
 
-	\add_action( 'admin_init', __NAMESPACE__ . '\\_include_upgrade_suggestion', 20 );
-}
-
-/**
- * Loads plugin suggestion file
- *
- * @since 4.0.0
- */
-function _include_upgrade_suggestion() {
-
+	// Can this even run twice?
 	if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
 
 	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
@@ -344,7 +358,6 @@ function _add_upgrade_notice( $notice = '', $get = false ) {
 	$cache[] = $notice;
 }
 
-\add_action( 'admin_notices', __NAMESPACE__ . '\\_output_upgrade_notices' );
 /**
  * Outputs available upgrade notices.
  *

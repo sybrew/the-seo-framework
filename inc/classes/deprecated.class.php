@@ -978,4 +978,23 @@ final class Deprecated {
 
 		return $tsf->get_home_title_additions();
 	}
+
+	/**
+	 * Cached WordPress permalink structure settings.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Removed caching.
+	 * @since 4.1.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string permalink structure.
+	 */
+	public function permalink_structure() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->permalink_structure()', '4.1.0', "get_option( 'permalink_structure' )" );
+
+		return \get_option( 'permalink_structure' );
+	}
 }
