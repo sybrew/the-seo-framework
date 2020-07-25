@@ -451,6 +451,33 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
+	 * Fetch latest public category ID.
+	 *
+	 * @since 4.1.0
+	 * @staticvar int $cat_id
+	 *
+	 * @return int Latest Category ID.
+	 */
+	public function get_latest_category_id() {
+
+		static $cat_id = null;
+
+		if ( null !== $cat_id )
+			return $cat_id;
+
+		$cats = \get_terms( [
+			'taxonomy'   => 'category',
+			'fields'     => 'ids',
+			'hide_empty' => false,
+			'orderby'    => 'term_id',
+			'order'      => 'DESC',
+			'number'     => 1,
+		] );
+
+		return $cat_id = reset( $cats );
+	}
+
+	/**
 	 * Returns the taxonomy type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0

@@ -15,27 +15,32 @@ $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instan
 
 switch ( $instance ) :
 	case 'the_seo_framework_title_metabox_main':
-		$latest_post_id = $this->get_latest_post_id();
-		$title          = '';
-
-		if ( $latest_post_id ) {
-			$title = $this->hellip_if_over( $this->get_filtered_raw_generated_title( [ 'id' => $latest_post_id ] ), 60 );
-		}
-
-		$title = $this->s_title( $title ?: __( 'Example Post Title', 'autodescription' ) );
-
 		$blogname = $this->get_blogname();
 		$sep      = esc_html( $this->get_separator( 'title' ) );
-
-		$additions_left  = '<span class="tsf-title-additions-js">' . $blogname . '<span class="tsf-sep-js">' . " $sep " . '</span></span>';
-		$additions_right = '<span class="tsf-title-additions-js"><span class="tsf-sep-js">' . " $sep " . '</span>' . $blogname . '</span>';
-
-		$example_left  = '<em>' . $additions_left . $title . '</em>';
-		$example_right = '<em>' . $title . $additions_right . '</em>';
-
-		//* There's no need for "hide-if-no-tsf-js" here.
-		//* Check left first, as right is default (and thus fallback).
 		$showleft = 'left' === $this->get_option( 'title_location' );
+
+		$additions_left  = '<span class=tsf-title-additions-js>' . $blogname . '<span class=tsf-sep-js>' . " $sep " . '</span></span>';
+		$additions_right = '<span class=tsf-title-additions-js><span class=tsf-sep-js>' . " $sep " . '</span>' . $blogname . '</span>';
+
+		$latest_post_id = $this->get_latest_post_id();
+		$latest_cat_id  = $this->get_latest_category_id();
+
+		$post_name  = strip_tags( get_the_title( $latest_post_id ) ?: __( 'Example Post', 'autodescription' ) );
+		$post_title = $this->s_title( $this->hellip_if_over( $post_name, 60 ) );
+
+		$cat_name   = strip_tags( get_cat_name( $latest_cat_id ) ?: __( 'Example Category', 'autodescription' ) );
+		$cat_prefix = $this->s_title( $this->get_tax_type_label( 'category', true ) ?: __( 'Category', 'default' ) );
+		$tax_title  = sprintf(
+			'<span class=tsf-title-prefix-example style=display:%s>%s: </span> %s', // TODO RTL?
+			$this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline',
+			$cat_prefix,
+			$this->s_title( $this->hellip_if_over( $cat_name, 60 - strlen( $cat_prefix ) ) )
+		);
+
+		$example_post_left  = '<em>' . $additions_left . $post_name . '</em>';
+		$example_post_right = '<em>' . $post_name . $additions_right . '</em>';
+		$example_tax_left   = '<em>' . $additions_left . $tax_title . '</em>';
+		$example_tax_right  = '<em>' . $tax_title . $additions_right . '</em>';
 
 		?>
 		<h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4>
@@ -43,10 +48,36 @@ switch ( $instance ) :
 		$this->description( __( 'The page title is prominently shown within the browser tab as well as within the search engine results pages.', 'autodescription' ) );
 
 		?>
-		<h4><?php esc_html_e( 'Example Automated Title Output', 'autodescription' ); ?></h4>
+		<h4><?php esc_html_e( 'Example Page Title Output', 'autodescription' ); ?></h4>
 		<p>
-			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>"><?php echo $this->code_wrap_noesc( $example_left ); ?></span>
-			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>"><?php echo $this->code_wrap_noesc( $example_right ); ?></span>
+			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>">
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+				echo $this->code_wrap_noesc( $example_post_left );
+				?>
+			</span>
+			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>">
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+				echo $this->code_wrap_noesc( $example_post_right );
+				?>
+			</span>
+		</p>
+
+		<h4><?php esc_html_e( 'Example Archive Title Output', 'autodescription' ); ?></h4>
+		<p>
+			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>">
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+				echo $this->code_wrap_noesc( $example_tax_left );
+				?>
+			</span>
+			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>">
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+				echo $this->code_wrap_noesc( $example_tax_right );
+				?>
+			</span>
 		</p>
 
 		<hr>
@@ -64,8 +95,8 @@ switch ( $instance ) :
 				'dashicon' => 'plus',
 				'args'     => [
 					'examples' => [
-						'left'  => $example_left,
-						'right' => $example_right,
+						'left'  => $example_post_left,
+						'right' => $example_post_right,
 					],
 				],
 			],
@@ -74,11 +105,7 @@ switch ( $instance ) :
 				'callback' => SeoSettings::class . '::_title_metabox_prefixes_tab',
 				'dashicon' => 'plus-alt',
 				'args'     => [
-					'additions' => [
-						'left'  => $additions_left,
-						'right' => $additions_right,
-					],
-					'showleft'  => $showleft,
+					'showleft' => $showleft,
 				],
 			],
 		];
@@ -96,7 +123,39 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_title_metabox_general':
+		$title_separator         = $this->get_separator_list();
+		$default_title_separator = $this->get_option( 'title_separator' );
+
 		?>
+		<fieldset>
+			<legend>
+				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
+			</legend>
+			<?php
+			$this->description( __( 'If the title consists of multiple parts, then the separator will go in-between them.', 'autodescription' ) );
+			?>
+			<p id="tsf-title-separator" class="tsf-fields">
+			<?php
+			foreach ( $title_separator as $name => $html ) {
+				vprintf(
+					'<input type=radio name="%1$s" id="%2$s" value="%3$s" %4$s %5$s /><label for="%2$s">%6$s</label>',
+					[
+						esc_attr( $this->get_field_name( 'title_separator' ) ),
+						esc_attr( $this->get_field_id( 'title_separator_' . $name ) ),
+						esc_attr( $name ),
+						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- make_data_attributes() escapes.
+						$this->make_data_attributes( [ 'entity' => esc_html( $html ) ] ), // This will double escape, but we found no issues.
+						checked( $default_title_separator, $name, false ),
+						esc_html( $html ),
+					]
+				);
+			}
+			?>
+			</p>
+		</fieldset>
+
+		<hr>
+
 		<h4><?php esc_html_e( 'Automated Title Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'A title is generated for every page.', 'autodescription' ) );
@@ -128,7 +187,7 @@ switch ( $instance ) :
 		$example_left  = $examples['left'];
 		$example_right = $examples['right'];
 
-		$homepage_has_option = __( 'The homepage has a specific option.', 'autodescription' );
+		$homepage_has_option = __( 'This option does not affect the homepage; it uses a different one.', 'autodescription' );
 
 		?>
 		<fieldset>
@@ -155,34 +214,12 @@ switch ( $instance ) :
 		</fieldset>
 
 		<hr>
-		<?php
-		$title_separator         = $this->get_separator_list();
-		$default_title_separator = $this->get_option( 'title_separator' );
-
-		// FIXME: What a mess...
-		?>
-		<fieldset>
-			<legend>
-				<h4><?php esc_html_e( 'Title Separator', 'autodescription' ); ?></h4>
-			</legend>
-			<?php
-			$this->description( __( 'If the title consists of multiple parts, then the separator will go in-between them.', 'autodescription' ) );
-			?>
-			<p id="tsf-title-separator" class="tsf-fields">
-			<?php foreach ( $title_separator as $name => $html ) : ?>
-				<input type="radio" name="<?php $this->field_name( 'title_separator' ); ?>" id="<?php $this->field_id( 'title_separator_' . $name ); ?>" value="<?php echo esc_attr( $name ); ?>" data-entity="<?php echo esc_attr( $html ); ?>" <?php checked( $default_title_separator, $name ); ?> />
-				<label for="<?php $this->field_id( 'title_separator_' . $name ); ?>"><?php echo esc_html( $html ); ?></label>
-			<?php endforeach; ?>
-			</p>
-		</fieldset>
-
-		<hr>
 
 		<h4><?php esc_html_e( 'Site Title', 'autodescription' ); ?></h4>
 		<div id="tsf-title-additions-toggle">
 			<?php
 			$info = $this->make_info(
-				__( 'This might decouple your posts and pages from the rest of the website.', 'autodescription' ),
+				__( 'Always brand your titles. Search engines may ignore your titles with this feature enabled.', 'autodescription' ),
 				'https://support.google.com/webmasters/answer/35624#page-titles',
 				false
 			);
@@ -205,58 +242,12 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_title_metabox_prefixes':
-		//* Get translated category label, if it exists. Otherwise, fallback to translation.
-		$label = $this->get_tax_type_label( 'category', true ) ?: __( 'Category', 'default' );
-
-		$cats = get_terms( [
-			'taxonomy'   => 'category',
-			'fields'     => 'ids',
-			'hide_empty' => false,
-			'order'      => 'ASC',
-			'number'     => 1,
-		] );
-		if ( is_array( $cats ) && ! empty( $cats ) ) {
-			//* Category should exist.
-			$cat = reset( $cats );
-		} else {
-			//* Default fallback category.
-			$cat = 1;
-		}
-
-		//* If cat is found, it will return its name. Otherwise it's an empty string.
-		$cat_name = get_cat_name( $cat );
-		$cat_name = $cat_name ?: __( 'Example Category', 'autodescription' );
-
-		$title = sprintf(
-			'<span class="tsf-title-prefix-example" style=display:%s>%s: </span> %s',
-			$this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline',
-			esc_html( $label ),
-			esc_html( $cat_name )
-		);
-
-		$example_left  = '<em>' . $additions['left'] . $title . '</em>';
-		$example_right = '<em>' . $title . $additions['right'] . '</em>';
-
 		?>
 		<h4><?php esc_html_e( 'Title Prefix Options', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'For archives, a descriptive prefix may be added to generated titles.', 'autodescription' ) );
 
 		?>
-		<h4><?php esc_html_e( 'Example Automated Archive Title Output', 'autodescription' ); ?></h4>
-		<p>
-			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>">
-				<?php
-				echo $this->code_wrap_noesc( $example_left );
-				?>
-			</span>
-			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>">
-				<?php
-				echo $this->code_wrap_noesc( $example_right );
-				?>
-			</span>
-		</p>
-
 		<hr>
 
 		<h4><?php esc_html_e( 'Archive Title Prefixes', 'autodescription' ); ?></h4>
