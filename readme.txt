@@ -252,8 +252,6 @@ TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
 
-TODO add inline notice moving script, so it won't cause a layout shift? WordPress should've done that 12 years ago...
-
 ## For everyone
 * **Added:**
 	* You can now exclude taxonomies from receiving SEO from TSF.
@@ -353,10 +351,11 @@ TODO add inline notice moving script, so it won't cause a layout shift? WordPres
 	* When using WP 5.5 or later, if you hit the new post-meta-box order buttons, the labels will now also automatically try to refit themselves (by hiding the text when necessary).
 		* We made sure that any future change will automatically be supported, thanks to the use of resize observers.
 	* The content of a tab no longer bounces when you quickly toggle from one to the other.
+	* Concurrent upgrades can no longer happen, which, although rare thanks to earlier mitigations, might've caused upgrading your options twice.
 * **Other:**
-	* We improved plugin loading time by removing (another) class from the stack.
+	* We improved plugin loading time by removing a (another) redundant class from the default loading stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
-		* We cannot make TSF any faster without sacrificing security or removing features.
+		* We couldn't find a reasonable way to make TSF any faster without sacrificing security or removing features. So, this is as fast as we can get... for now.
 
 ## For translators
 * **Added:**
@@ -391,10 +390,6 @@ TODO add inline notice moving script, so it won't cause a layout shift? WordPres
 			* `sitemap_logo_url`, string.
 			* `sitemap_logo_id`, int.
 			* `social_title_rem_additions`, int, 1 or 0.
-			* TODO `post_type_archive_settings` ? Add that to a different option holder (autoload='no') for performance?
-				* Basically, we want a new metabox where users can fill these in like any other archive. It's difficult, though, since it needs to listen to post type settings found on the same page...
-					* We can mitigate that issue from JS+PHP to PHP only by creating a submenu. It also eases saving to a different option.
-				* We also want a dropdown field (top right LTR? top left RTL?) where users can select the PTA to edit.
 		* **Removed:**
 			* Note: Downgrade compatibility will be maintained for the next year, or two major updates; whichever comes first. This means that these options are updated by the plugin according to the latest inputted values, but shouldn't be used or written to elsewhere.
 			* `category_noindex`, now is `$options['noindex_taxonomies']['category']`.

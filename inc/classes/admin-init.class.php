@@ -475,6 +475,9 @@ class Admin_Init extends Init {
 		// We made this mistake ourselves. Let's test against it. Can't wait for PHP 7.1+ support.
 		if ( ! is_scalar( $key ) || ! strlen( $key ) ) return;
 
+		// Sanitize the key so that HTML, JS, and PHP can communicate easily via it.
+		$key = \sanitize_key( $key );
+
 		$args = array_merge(
 			[
 				'type'   => 'updated',

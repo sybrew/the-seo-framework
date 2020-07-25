@@ -34,26 +34,34 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @access private
  */
 
-_prepare();
+_prepare( $previous_version, $current_version );
 /**
  * Prepares a suggestion notification to ALL applicable plugin users on upgrade;
  * For TSFEM, it's shown when:
- *    0. The upgrade happens when an applicable user is on the admin pages. (always true w/ default actions)
+ *    0. The upgrade actually happened.
  *    1. The constant 'TSF_DISABLE_SUGGESTIONS' is not defined or false.
  *    2. The current dashboard is the main site's.
  *    3. TSFEM isn't already installed.
  *    4. PHP and WP requirements of TSFEM are met.
  *
- * This notice is automatically dismissed, and it can be ignored without reappearing.
+ * The notice is automatically dismissed after X views, and it can be ignored without reappearing.
  *
  * @since 3.0.6
  * @since 4.1.0 1. Now tests TSFEM 2.4.0 requirements.
  *              2. Removed the user capability requirement, and forwarded that to `_suggest_extension_manager()`.
  *              3. Can now run on the front-end without crashing.
+ *              4. Added the first two parameters, $previous_version and $current_version.
+ *              5. Now tests if the upgrade actually happened, before invoking the suggestion.
  * @access private
+ *
+ * @param string $previous_version The previous version the site upgraded from, if any.
+ * @param string $current_version  The current version of the site.
  */
-function _prepare() {
+function _prepare( $previous_version, $current_version ) {
 
+	//? 0
+	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
+	if ( $previous_version == $current_version ) return;
 	//? 1
 	if ( defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS ) return;
 	//? 2
@@ -83,7 +91,7 @@ function _prepare() {
 	//? 4
 	if ( true !== $test ) return;
 
-	_suggest_extension_manager();
+	_suggest_extension_manager( $previous_version, $current_version );
 }
 
 /**
@@ -92,38 +100,45 @@ function _prepare() {
  * @since 3.0.6
  * @since 4.1.0 Is now a persistent notice, that outputs at most 3 times, on any admin page, only for users that can install plugins.
  * @access private
+ *
+ * @param string $previous_version The previous version the site upgraded from, if any.
+ * @param string $current_version  The current version of the site.
  */
-function _suggest_extension_manager() {
+function _suggest_extension_manager( $previous_version, $current_version ) {
 
 	$tsf = \the_seo_framework();
 
-	$tsf->register_dismissible_persistent_notice(
-		$tsf->convert_markdown(
-			vsprintf(
-				'<p>*Placeholder*</p>
-				<p>[Extension Manager plugin](%s) | [Included extensions](%s) | [Pricing](%s)</p>',
-				[
-					'https://theseoframework.com/extension-manager/',
-					'https://theseoframework.com/extensions/',
-					'https://theseoframework.com/pricing/',
-				]
+	$suggest_key = 'suggest-extension-manager';
+
+	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- Might be an integer.
+	if ( $previous_version < '4103' )
+		$tsf->register_dismissible_persistent_notice(
+			$tsf->convert_markdown(
+				vsprintf(
+					'<p>*Placeholder*</p>
+					<p>[Extension Manager plugin](%s) | [Included extensions](%s) | [Pricing](%s)</p>',
+					[
+						'https://theseoframework.com/extension-manager/',
+						'https://theseoframework.com/extensions/',
+						'https://theseoframework.com/pricing/',
+					]
+				),
+				[ 'a', 'em', 'strong' ],
+				[ 'a_internal' => false ]
 			),
-			[ 'a', 'em', 'strong' ],
-			[ 'a_internal' => false ]
-		),
-		'suggest-extension-manager',
-		[
-			'type'   => 'info',
-			'icon'   => false,
-			'escape' => false,
-		],
-		[
-			'screens'      => [],
-			'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
-			'capability'   => 'install_plugins',
-			'user'         => 0,
-			'count'        => 3,
-			'timeout'      => DAY_IN_SECONDS * 7,
-		]
-	);
+			$suggest_key,
+			[
+				'type'   => 'info',
+				'icon'   => false,
+				'escape' => false,
+			],
+			[
+				'screens'      => [],
+				'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
+				'capability'   => 'install_plugins',
+				'user'         => 0,
+				'count'        => 3,
+				'timeout'      => DAY_IN_SECONDS * 7,
+			]
+		);
 }
