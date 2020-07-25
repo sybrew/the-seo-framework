@@ -25,9 +25,11 @@ switch ( $instance ) :
 		$latest_post_id = $this->get_latest_post_id();
 		$latest_cat_id  = $this->get_latest_category_id();
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
 		$post_name  = strip_tags( get_the_title( $latest_post_id ) ?: __( 'Example Post', 'autodescription' ) );
 		$post_title = $this->s_title( $this->hellip_if_over( $post_name, 60 ) );
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
 		$cat_name   = strip_tags( get_cat_name( $latest_cat_id ) ?: __( 'Example Category', 'autodescription' ) );
 		$cat_prefix = $this->s_title( $this->get_tax_type_label( 'category', true ) ?: __( 'Category', 'default' ) );
 		$tax_title  = sprintf(
@@ -199,14 +201,20 @@ switch ( $instance ) :
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_option( 'title_location' ), 'left' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
-						<?php echo $this->code_wrap_noesc( $example_left ); ?>
+						<?php
+						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+						echo $this->code_wrap_noesc( $example_left );
+						?>
 					</label>
 				</span>
 				<span class="tsf-toblock">
 					<input type="radio" name="<?php $this->field_name( 'title_location' ); ?>" id="<?php $this->field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_option( 'title_location' ), 'right' ); ?> />
 					<label for="<?php $this->field_id( 'title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
-						<?php echo $this->code_wrap_noesc( $example_right ); ?>
+						<?php
+						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+						echo $this->code_wrap_noesc( $example_right );
+						?>
 					</label>
 				</span>
 			</p>

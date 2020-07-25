@@ -472,10 +472,7 @@ function _add_upgrade_notice( $notice = '', $get = false ) {
  * @uses _add_upgrade_notice()
  */
 function _output_upgrade_notices() {
-
-	$notices = _add_upgrade_notice( '', true );
-
-	foreach ( $notices as $notice ) {
+	foreach ( _add_upgrade_notice( '', true ) as $notice ) {
 		//* @TODO rtl?
 		\the_seo_framework()->do_dismissible_notice( 'SEO: ' . $notice, 'info' );
 	}
