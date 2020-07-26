@@ -301,7 +301,7 @@ switch ( $instance ) :
 		/* translators: SINGULAR. 1 = noindex/nofollow/noarchive, 2 = The entire site */
 		$apply_x_to_y_i18n_singular = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
 		/* translators: PLURAL. 1 = noindex/nofollow/noarchive, 2 = Archives, Posts, Pages, etc. */
-		$apply_x_to_y_i18n_plural   = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
+		$apply_x_to_y_i18n_plural = esc_html__( 'Apply %1$s to %2$s?', 'autodescription' );
 
 		$ro_name_wrapped = $this->code_wrap( $ro_value );
 

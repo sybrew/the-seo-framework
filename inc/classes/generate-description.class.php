@@ -864,6 +864,8 @@ class Generate_Description extends Generate {
 		$excerpt = \wptexturize( $excerpt );
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 		/**
+		 * Optimize it here: https://regex101.com/r/u0DIgx/5/tests
+		 *
 		 * Critically optimized, so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {
@@ -876,7 +878,7 @@ class Generate_Description extends Generate {
 		 * }
 		 */
 		preg_match(
-			'/(?:^[\p{P}\p{Z}]*?)([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]$(*ACCEPT))|(?>(?(?=.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]$)(.*[\p{Pe}\p{Pf}]$|.*[^\P{Po}\p{M}\xBF\xA1:])|.*$(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
+			'/(?:^[\p{P}\p{Z}]*?)([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]$(*ACCEPT))|((?(?=.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]$)(?:.*[\p{Pe}\p{Pf}]$|.*[^\P{Po}\p{M}\xBF\xA1:])|.*$(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$excerpt,
 			$matches
 		);
@@ -907,7 +909,7 @@ class Generate_Description extends Generate {
 			$excerpt,
 			$matches
 		);
-		// Why can $matches[2] still be populated? Does it populate empty results upward to last, always???
+		// Why can $matches[2] still be populated with 3 set? Does it populate empty results upward to last, always???
 		if ( isset( $matches[2] ) && strlen( $matches[2] ) ) {
 			$excerpt = $matches[1] . $matches[2];
 		} else {

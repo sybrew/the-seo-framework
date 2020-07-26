@@ -114,7 +114,6 @@ class Site_Options extends Sanitize {
 				'date_noindex'       => 1, // Date Archive robots noindex
 				'search_noindex'     => 1, // Search Page robots noindex
 				'site_noindex'       => 0, // Site Page robots noindex
-
 				$this->get_robots_post_type_option_id( 'noindex' ) => [
 					'attachment' => 1,
 				], // Post Type support.
@@ -127,7 +126,6 @@ class Site_Options extends Sanitize {
 				'date_nofollow'       => 0, // Date Archive robots nofollow
 				'search_nofollow'     => 0, // Search Page robots nofollow
 				'site_nofollow'       => 0, // Site Page robots nofollow
-
 				$this->get_robots_post_type_option_id( 'nofollow' ) => [], // Post Type support.
 				$this->get_robots_taxonomy_option_id( 'nofollow' ) => [], // Taxonomy support.
 
@@ -136,7 +134,6 @@ class Site_Options extends Sanitize {
 				'date_noarchive'       => 0, // Date Archive robots noarchive
 				'search_noarchive'     => 0, // Search Page robots noarchive
 				'site_noarchive'       => 0, // Site Page robots noarchive
-
 				$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
 				$this->get_robots_taxonomy_option_id( 'noarchive' ) => [], // Taxonomy support.
 

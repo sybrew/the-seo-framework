@@ -171,7 +171,7 @@ Optionally, also install our free [Extension Manager](https://theseoframework.co
 
 = Is The SEO Framework free? =
 
-Absolutely! It will stay free as well, without ads or nags!
+Absolutely! It will stay free as well, without ads, tracking, or nags!
 This plugin is all-inclusive. It's 100% freeware; not crippleware.
 
 = Is there a premium version? =
@@ -232,25 +232,24 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.0 =
 
-In this update, we expand our support for post types and taxonomies. Henceforth, post types without rewrite support are now automatically supported. Because these are often misconfigured post types, we recommend applying `noindex` to them.
+In this update, we bring you quick-edit support for meta titles and descriptions. We also bring you new taxonomy settings. You can now quickly deindex custom taxonomies, or exclude SEO for them entirely.
 
-You can now disable taxonomies and control their robots output globally.
+By popular demand, the description generator can now take content from various well-known page builders that aren't based on shortcodes, like Elementor, Beaver Builder, and Siteorigin's. You'll also find that the description generator is now far more intelligent, where it can now recognize contractions, and other complex punctuation and marks (¡¿Que?! Y’all’didn’t’ve!? 「やった！」).
 
-The Core Sitemaps feature coming to (TODO or brought with, when we're late) WordPress 5.5 is now supported. When you disable TSF's sitemaps, Core Sitemaps will now be displayed instead. We recommend sticking with TSF's sitemaps, since they are less heavy on your server, are more quickly processed by search engines, and honor the indexing state of each post included.
+WordPress 5.5 brings various administrative changes for which we added support; while doing so, we improved the performance and logic of various scripts greatly. For example, the tooltip-arrow's movement now binds to your monitor's refresh rate, instead of your CPU's. Moreover, among many QOL improvements, tapping a tooltip no longer accidentally activates encapsulating labels, only necessary REST-requests are made for primary-term support, animations execute more naturally, and you won't find any more race conditions navigating settings-tabs.
 
-WP 5.1 is now required since we require function `is_taxonomy_viewable()`.
-In this update, we're embracing WP 5.5's updated layout. Although minor, you may notice some differences from before.
-We improved touch-screen support.
-We improved tooltip performance, greatly. Your CPU core won't spike out to 100% anymore when you're moving your mouse over a tooltip (it's now about 10% at 4.6GHz). Nor will the tooltip be created twice when you click.
+We also added support for WordPress 5.5's new Core Sitemaps: they will work when you disable TSF's, but they won't listen to TSF's post-indexing settings... yet.
 
-We overhauled the title and description JS implementations, but we maintained backward compatibility via a legacy-binder, even though we assume no one used this API since their inception in September 2019, because they're for-purpose scripts. This overhaul allows us to manipulate multiple title and description elements and their counters on a single page while being lightweight on your browser. In a future major update, we'll do the same for the social JS implementation, so we can finally implement the long-overdue post-type-archive settings.
+Over 200 other QOL improvements were made. We added the gray SEO Bar color, sitemap logo branding, social meta title unbranding, fast nested HTML stripping for generators, improved authorial information support, and more!
 
-We added a notice that registers itself after plugin-upgrade. This notice will only be shown to users that can install plugins--and it'll be displayed only three times non-obtrusively, within 7 days, and can be manually dismissed. It won't be outputted on pages where you need to actively engage with content, such as the block-editor or theme-editor. We're testing the waters here; we hope this won't harm your workflow. If you find this annoying, let us know! To remove future notices of this type, add this line to your `wp-config.php` file: `define( 'TSF_DISABLE_SUGGESTIONS', true );`
+Lastly, since plugin auto-updates are coming soon to WordPress, we can no longer expect you to invoke an update manually. So, we incorporated persistent notices that can inform you about important changes at a later time. These notices are conditional (user capability, admin screen types, etc.), and expire automatically (after X views, or after X seconds). You can dismiss them via the X-button at the top. Although we believe we were sensible about this implementation, we still hope they're not too annoying!
 
 TODO retest install.
 TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
+
+TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_array_one_zero? -> array_map( 's_one_zero' )?
 
 ## For everyone
 * **Added:**
@@ -298,7 +297,7 @@ TODO fix indent when ms-close button is present--or hide that button
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
 		* This prevents the settings-tabs from collapsing for some languages.
 	* Some sentences have been changed where some users struggled with before. For example, the SEO Bar now conveys what "title branding" means.
-	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our strings with jQuery.
+	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our bridles with jQuery.
 	* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
 	* We mitigated autorectifying query-checks by preemptively forwarding more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap.
 	* We optimized the tooltip handler for performance:
@@ -319,6 +318,7 @@ TODO fix indent when ms-close button is present--or hide that button
 	* When you select or remove an image via the image editor, the input URL field no longer animates--we found this to be annoying, especially since we added other image input field cues (like the on-hover preview card) since its inception.
 	* When you remove an image set via the image editor, the removal button now fades out twice as quickly, so it is more in line with the rest of the interface's animation timing.
 	* We touched up the title settings' layout so it's easier to understand the repercussion of changes.
+	* Image previews now have a checkerboard background, so you can easily differentiate a transparent image, like a pro!
 * **Changed:**
 	* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
 	* We added support for post types and taxonomies that do not have rewrite capabilities.
