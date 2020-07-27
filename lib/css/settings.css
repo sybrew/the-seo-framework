@@ -43,29 +43,28 @@ body.rtl .tsf-bottom-buttons {
 	margin-left: 10px;
 }
 
-#tsf-title-separator,
-#tsf-description-separator {
+#tsf-title-separator {
 	display: table;
 	width: 100%;
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
-#tsf-description-separator {
-	margin-bottom: 0;
-}
-
-#tsf-title-separator input,
-#tsf-description-separator input {
-	display: none;
-	float: left;
+#tsf-title-separator input {
+	position: absolute;
 	width: 0;
-	min-width: 0;
+	height: 0;
 	opacity: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	z-index: -1;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
-#tsf-title-separator label,
-#tsf-description-separator label {
+#tsf-title-separator label {
 	display: inline-block;
 	width: auto;
 	min-width: 28px;
@@ -82,18 +81,18 @@ body.rtl .tsf-bottom-buttons {
 	font-size: 16px;
 }
 
-#tsf-title-separator input:hover + label,
-#tsf-title-separator label:hover,
-#tsf-description-separator input:hover + label,
-#tsf-description-separator label:hover {
+#tsf-title-separator label:hover {
 	box-shadow: 1px 1px 1px #aaa inset;
 	background-color: #fff;
 }
 
-#tsf-title-separator input:checked + label,
-#tsf-description-separator input:checked + label {
+#tsf-title-separator input:checked + label {
 	box-shadow: 1px 1px 1px #333 inset;
 	background-color: #fff;
+}
+
+#tsf-title-separator input:focus + label:not(.tsf-no-focus-ring) {
+	box-shadow: 0px 0px 1px 1px #333 inset;
 }
 
 #tsf-title-location,

@@ -839,7 +839,7 @@ class Generate_Description extends Generate {
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
-	 * This is perfect. Please have the cortesy to credit us when taking it. :)
+	 * This is perfect. Please have the courtesy to credit us when taking it. :)
 	 *
 	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
 	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.

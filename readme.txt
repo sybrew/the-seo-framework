@@ -249,7 +249,23 @@ TODO fix indent when ms-close button is present--or hide that button
 	* Also, when pressed, TSF doesn't know it's emptied...
 		* This feature is removed in Chromium Edge...
 
-TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_array_one_zero? -> array_map( 's_one_zero' )?
+TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_array_one_zero? -> s_map_one_zero -> array_map( 's_one_zero' )?
+TODO add canonical URL preview to quick-edit? Redundant? -> We must then also update it... and from where can we even get that info reliably (yes, slug === canonical URL, still... we must consider filters)?
+
+TODO I hate the "improved" transition between tabs. It exposes that content is hidden--can we smooth out the box's height, instead?
+	i.e. lock height as "min-height" -> load new -> remove "min height".
+
+TODO categorize changelog
+	* Up to 30% faster browser rendering times on the admin screens
+		* item
+		* item
+	* Up to 25% faster front-end loading
+		* item
+		* item
+	* Up to 12% faster admin area loading
+		* item
+		* item
+	* Improved... etc.
 
 ## For everyone
 * **Added:**
@@ -297,7 +313,8 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 	* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
 		* This prevents the settings-tabs from collapsing for some languages.
 	* Some sentences have been changed where some users struggled with before. For example, the SEO Bar now conveys what "title branding" means.
-	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our bridles with jQuery.
+	* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our bridles with jQuery for element callers, event loaders, and property adjustments.
+	* We reduced CPU overhead during the load time of an administrative screen, by removing jQuery's heavy function loader dependency, and using native JS instead.
 	* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
 	* We mitigated autorectifying query-checks by preemptively forwarding more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap.
 	* We optimized the tooltip handler for performance:
@@ -352,6 +369,8 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 		* We made sure that any future change will automatically be supported, thanks to the use of resize observers.
 	* The content of a tab no longer bounces when you quickly toggle from one to the other.
 	* Concurrent upgrades can no longer happen, which, although rare thanks to earlier mitigations, might've caused upgrading your options twice.
+	* You can now use keyboard navigation to select a title separator.
+	* jQuery 3.5.1 is now supported--we faced issues with the load sequence using Firefox and Edge.
 * **Other:**
 	* We improved plugin loading time by removing a (another) redundant class from the default loading stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.

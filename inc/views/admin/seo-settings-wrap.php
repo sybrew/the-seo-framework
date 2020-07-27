@@ -23,6 +23,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 			</p>
 		</div>
 
+		<hr class="wp-header-end">
+
 		<div class="tsf-notice-wrap">
 			<?php
 			do_action( 'the_seo_framework_setting_notices' );
