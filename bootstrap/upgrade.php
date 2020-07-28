@@ -745,7 +745,7 @@ function _do_upgrade_4051() {
  * Registers the `sitemap_logo_url` option, string.
  * Registers the `sitemap_logo_id` option, int.
  * Registers the `social_title_rem_additions` option, int. 0 for current users, 1 for new.
- * Registers and migrates the robots taxonomy options.
+ * Registers and migrates the robots taxonomy options. Sets defaults (['noindex']['post_format'] = 1).
  *
  * @since 4.1.0
  */
@@ -764,7 +764,7 @@ function _do_upgrade_4103() {
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 			$_option = $tsf->get_robots_taxonomy_option_id( $r );
 			if ( isset( $defaults[ $_option ] ) ) {
-				// Get current default options.
+				// Set current to default options.
 				$_value = (array) ( $tsf->get_option( $_option, false ) ?: $defaults[ $_option ] );
 
 				// Override those options with settings from before.

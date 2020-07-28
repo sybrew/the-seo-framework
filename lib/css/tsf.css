@@ -391,6 +391,13 @@ body.rtl .tsf-remove-image-button.button {
 	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
+/* Doesn't fire appropriate events, also seems deprecated. Hide it. */
+#tsf-inpost-box input[type="text"]::-ms-clear,
+.tsf-metaboxes input[type="text"]::-ms-clear,
+.tsf-quick-edit-columns input[type="text"]::-ms-clear {
+	display: none;
+}
+
 #tsf-inpost-box input[type="text"]::-moz-placeholder,
 #tsf-inpost-box textarea::-moz-placeholder,
 .tsf-metaboxes input[type="text"]::-moz-placeholder,

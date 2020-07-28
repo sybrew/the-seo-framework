@@ -468,7 +468,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->_deprecated_function( 'the_seo_framework()->fetch_the_term()', '4.0.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->fetch_the_term()', '4.0.0', 'WP Core\'s get_term_by()' );
 
 		static $term = [];
 
