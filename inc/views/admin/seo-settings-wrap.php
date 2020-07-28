@@ -6,6 +6,26 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
+$_ays_reset = esc_js( __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ) );
+
+$_save_button  = get_submit_button(
+	__( 'Save Settings', 'autodescription' ),
+	'primary',
+	'submit',
+	false,
+	[ 'id' => '' ] // we ouput this twice, don't set ID.
+);
+$_reset_button = get_submit_button(
+	__( 'Reset Settings', 'autodescription' ),
+	'secondary',
+	$this->get_field_name( 'tsf-settings-reset' ),
+	false,
+	[
+		'id'      => '', // we ouput this twice, don't set ID.
+		'onclick' => "return confirm(`{$_ays_reset}`)", // this passes through esc_attr() unscathed.
+	]
+);
+
 ?>
 <div class="wrap tsf-metaboxes">
 	<form method="post" action="options.php">
@@ -17,8 +37,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<p class="tsf-top-buttons">
 				<?php
-				submit_button( __( 'Save Settings', 'autodescription' ), 'primary', 'submit', false, [ 'id' => '' ] );
-				submit_button( __( 'Reset Settings', 'autodescription' ), 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, [ 'id' => '' ] );
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+				echo $_save_button, $_reset_button;
 				?>
 			</p>
 		</div>
@@ -37,23 +57,20 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 
 		<div class="tsf-bottom-buttons">
 			<?php
-			submit_button( __( 'Save Settings', 'autodescription' ), 'primary', 'submit', false, [ 'id' => '' ] );
-			submit_button( __( 'Reset Settings', 'autodescription' ), 'secondary tsf-js-confirm-reset', $this->get_field_name( 'tsf-settings-reset' ), false, [ 'id' => '' ] );
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+			echo $_save_button, $_reset_button;
 			?>
 		</div>
 	</form>
 </div>
-<?php
-//= Add postbox listeners
-?>
 <script>
 	//<![CDATA[
-	jQuery(document).ready( function($) {
+	jQuery( document ).ready( function( $ ) {
 		// close postboxes that should be closed
-		$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+		$( '.if-js-closed' ).removeClass( 'if-js-closed' ).addClass( 'closed' );
 		// postboxes setup
-		postboxes.add_postbox_toggles('<?php echo \esc_js( $this->seo_settings_page_hook ); ?>');
-	});
+		postboxes.add_postbox_toggles('<?php echo esc_js( $this->seo_settings_page_hook ); ?>');
+	} );
 	//]]>
 </script>
 <?php

@@ -421,9 +421,6 @@ final class Scripts {
 				'l10n'     => [
 					'name' => 'tsfSettingsL10n',
 					'data' => [
-						'i18n'   => [
-							'confirmReset'   => \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ),
-						],
 						'states' => [
 							'isFrontPrivate'   => $front_id && $tsf->is_private( $front_id ),
 							'isFrontProtected' => $front_id && $tsf->is_password_protected( $front_id ),

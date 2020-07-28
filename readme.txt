@@ -351,7 +351,9 @@ TODO categorize changelog
 * **Fixed:**
 	* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
 	* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
+	* Settings and post-edit tabs' containers now have their height locked before switching tabs' content, preventing unnecessary double layout shifting.
 	* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
+	* Prevented unnecessary layout shift on the settings page of notifications from other sources (plugins, themes, core).
 	* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
 	* When clicking on the character counter subsequently, the AJAX loader will now reappear correctly.
 	* Addressed an issue where when you double-clicked on the title prefix on an RTL-based site that causes selection of the title to fail.
@@ -367,10 +369,10 @@ TODO categorize changelog
 	* On the Block editor, term names are no longer double-escaped inside the primary term selector.
 	* When using WP 5.5 or later, if you hit the new post-meta-box order buttons, the labels will now also automatically try to refit themselves (by hiding the text when necessary).
 		* We made sure that any future change will automatically be supported, thanks to the use of resize observers.
-	* The content of a tab no longer bounces when you quickly toggle from one to the other.
 	* Concurrent upgrades can no longer happen, which, although rare thanks to earlier mitigations, might've caused upgrading your options twice.
 	* You can now use keyboard navigation to select a title separator.
 	* jQuery 3.5.1 is now supported--we faced issues with the load sequence using Firefox and Edge.
+	* You can no longer reset the global SEO settings without confirming it by clicking the button before all browser assets are loaded.
 * **Other:**
 	* We improved plugin loading time by removing a (another) redundant class from the default loading stack.
 	* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
@@ -543,8 +545,10 @@ TODO categorize changelog
 				* `params.stripTitleTags`
 		* **Removed:**
 			* `tsfSettingsL10n` (`=== window.tsfSettings.l10n`) no longer has the following indexes available:
-				* `i18n.privateTitle`
-				* `i18n.protectedTitle`
+				* `i18n`, which had:
+					* `confirmReset`
+					* `privateTitle`
+					* `protectedTitle`
 				* `params.refTitleLocked`
 				* `params.refDescriptionLocked`
 			* `tsfTitleL10n` (`=== window.tsfTitle.l10n`) no longer has the following indexes available:
