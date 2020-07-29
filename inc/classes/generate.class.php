@@ -608,9 +608,9 @@ class Generate extends User_Data {
 
 	/**
 	 * Fetches blogname (site title).
+	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
-	 * @staticvar string $blogname
 	 *
 	 * @return string $blogname The escaped and sanitized blogname.
 	 */
@@ -623,10 +623,10 @@ class Generate extends User_Data {
 
 	/**
 	 * Fetch blog description.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
 	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
-	 * @staticvar string $description
 	 *
 	 * @return string $blogname The escaped and sanitized blog description.
 	 */
@@ -712,9 +712,9 @@ class Generate extends User_Data {
 
 	/**
 	 * Returns Open Graph type value.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.8.0
-	 * @staticvar string $type
 	 *
 	 * @return string
 	 */
@@ -795,11 +795,11 @@ class Generate extends User_Data {
 
 	/**
 	 * Determines which Twitter cards can be used.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
 	 * @since 4.0.0 1. Now only asserts the social titles as required.
 	 *              2. Now always returns an array, instead of a boolean (false) on failure.
-	 * @staticvar bool|array $cache
 	 *
 	 * @return array False when it shouldn't be used. Array of available cards otherwise.
 	 */

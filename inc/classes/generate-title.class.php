@@ -595,12 +595,12 @@ class Generate_Title extends Generate_Description {
 
 	/**
 	 * Removes default title filters, for consistent output and sanitation.
+	 * Memoizes the filters removed, so it can add them back on reset.
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.0 Added a second parameter, $args, to help soften the burden of this method.
 	 * @internal Only to be used within $this->get_raw_generated_title()
-	 * @staticvar array $filtered An array containing removed filters.
-	 * Peformance test: 0.000003s per remove+reset on PHP 7.3, single core VPN.
+	 * Peformance test: 0.000003s per remove+reset on PHP 7.3, single core VPN. This is the heaviest method of the plugin.
 	 *
 	 * @param bool       $reset Whether to reset the removed filters.
 	 * @param array|null $args  The query arguments. Accepts 'id' and 'taxonomy'.
@@ -1206,9 +1206,9 @@ class Generate_Title extends Generate_Description {
 
 	/**
 	 * Gets Title Separator.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @staticvar string $sep
 	 *
 	 * @return string The Separator, unescaped.
 	 */
@@ -1482,9 +1482,9 @@ class Generate_Title extends Generate_Description {
 
 	/**
 	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
-	 * @staticvar string $cache
 	 * @uses $this->get_blogdescription(), that method already trims.
 	 *
 	 * @return string The trimmed tagline.

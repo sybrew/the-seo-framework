@@ -44,9 +44,9 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Returns the default site options.
+ * Memoizes the return value.
  *
  * @since 3.1.0
- * @staticvar array $cache
  *
  * @return array The default site options.
  */
@@ -58,9 +58,9 @@ function _upgrade_default_site_options() {
 _previous_db_version(); // sets cache.
 /**
  * Returns the version set before upgrading began.
+ * Memoizes the return value.
  *
  * @since 3.0.0
- * @staticvar string $cache
  *
  * @return string The prior-to-upgrade TSF db version.
  */
@@ -428,7 +428,6 @@ function _do_install_notice() {
  * @since 3.2.2 No longer suggests when the user is new.
  * @since 3.2.4 Moved upgrade suggestion call to applicable file.
  * @since 4.1.0 Now also includes the file on the front-end, so it can register the notice.
- * @staticvar bool $run
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
  * @param string $current_version The current version of the site.
@@ -445,10 +444,9 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) {
 }
 
 /**
- * Lists and returns upgrade notices to be outputted in admin.
+ * Memoize and returns upgrade notices to be outputted in admin.
  *
  * @since 2.9.0
- * @staticvar array $cache The cached notice strings.
  *
  * @param string $notice The upgrade notice.
  * @param bool   $get    Whether to return the upgrade notices.
@@ -456,6 +454,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) {
  */
 function _add_upgrade_notice( $notice = '', $get = false ) {
 
+	// Memoize the strings for a later $get
 	static $cache = [];
 
 	if ( $get )

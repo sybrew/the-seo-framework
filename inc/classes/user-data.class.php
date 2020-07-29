@@ -53,11 +53,11 @@ class User_Data extends Term_Data {
 
 	/**
 	 * Returns the current post author ID.
+	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
 	 * @since 3.2.2 : 1. Now no longer returns the latest post author ID on home-as-blog pages.
 	 *                2. Now always returns an integer.
-	 * @staticvar $cache
 	 *
 	 * @return int Post author ID on success, 0 on failure.
 	 */
@@ -98,15 +98,15 @@ class User_Data extends Term_Data {
 
 	/**
 	 * Fetches The SEO Framework usermeta.
+	 * Memoizes the return value, can be bypassed.
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Always returns array, even if no value is assigned.
 	 * @TODO update to return default values as with `get_post_meta` and `get_term_meta`
-	 * @staticvar array $usermeta_cache
 	 *
 	 * @param int    $user_id   The user ID.
 	 * @param string $key       The user metadata key. Leave empty to fetch all data.
-	 * @param bool   $use_cache Whether to store and use options from cache.
+	 * @param bool   $use_cache Whether to store and use options from cache, or bypass it.
 	 * @return array The user SEO meta data.
 	 */
 	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
@@ -155,7 +155,7 @@ class User_Data extends Term_Data {
 
 	/**
 	 * Fetches user SEO user meta data by name.
-	 * Caches all meta data per $user_id.
+	 * Memoizes all meta data per $user_id.
 	 *
 	 * If no $user_id is supplied, it will fetch the current logged in user ID.
 	 *
@@ -163,8 +163,6 @@ class User_Data extends Term_Data {
 	 * @since 3.0.0 1. Default is no longer cached.
 	 *              2. Now always fallbacks to $default.
 	 *              3. Added not-found cache.
-	 * @staticvar array $options_cache
-	 * @staticvar array $notfound_cache
 	 *
 	 * @param int    $user_id The user ID. When empty, it will try to fetch the current user.
 	 * @param string $option  The option name.

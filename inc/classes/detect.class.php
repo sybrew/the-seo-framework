@@ -36,9 +36,9 @@ class Detect extends Render {
 
 	/**
 	 * Returns list of active plugins.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.1
-	 * @staticvar array $active_plugins
 	 * @credits Jetpack for most code.
 	 *
 	 * @return array List of active plugins.
@@ -191,10 +191,10 @@ class Detect extends Render {
 
 	/**
 	 * Detect if you can use the given constants, functions and classes.
-	 * All must be available to return true.
+	 * All inputs must be available for this method to return true.
+	 * Memoizes the return value for the input argument--sorts the array deeply to ensure a match.
 	 *
 	 * @since 2.5.2
-	 * @staticvar array $cache
 	 * @uses $this->detect_plugin_multi()
 	 *
 	 * @param array $plugins   Array of array for globals, constants, classes
@@ -244,6 +244,7 @@ class Detect extends Render {
 	 *                2. Switched detection order from FAST to SLOW.
 	 *                3. Can no longer autoload classes.
 	 * This method is only used by can_i_use(), and is only effective in the Ultimate Member compat file...
+	 * @TODO deprecate?
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
 	 * @return bool True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
@@ -326,6 +327,7 @@ class Detect extends Render {
 
 	/**
 	 * Determines if other SEO plugins are active.
+	 * Memoizes the return value.
 	 *
 	 * @since 1.3.0
 	 * @since 2.6.0 Uses new style detection.
@@ -372,6 +374,7 @@ class Detect extends Render {
 
 	/**
 	 * Determines if other Open Graph or SEO plugins are active.
+	 * Memoizes the return value.
 	 *
 	 * @since 1.3.0
 	 * @since 2.8.0 No longer checks for old style filter.
@@ -422,10 +425,10 @@ class Detect extends Render {
 
 	/**
 	 * Determines if other Twitter Card plugins are active.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
-	 * @staticvar bool $detected
 	 *
 	 * @return bool Twitter Card plugin detected.
 	 */
@@ -488,10 +491,10 @@ class Detect extends Render {
 
 	/**
 	 * Determines if other Sitemap plugins are active.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.1.0
 	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
-	 * @staticvar bool $detected
 	 *
 	 * @return bool
 	 */
@@ -537,6 +540,7 @@ class Detect extends Render {
 
 	/**
 	 * Detects presence of a page builder.
+	 * Memoizes the return value.
 	 *
 	 * Detects the following builders:
 	 * - Elementor by Elementor LTD
@@ -547,7 +551,6 @@ class Detect extends Render {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.6 The output is now filterable.
-	 * @staticvar bool $detected
 	 * @TODO deprecate?
 	 * @ignore unused.
 	 *
@@ -641,10 +644,10 @@ class Detect extends Render {
 
 	/**
 	 * Detects presence of robots.txt in root folder.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
 	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
-	 * @staticvar $has_robots
 	 *
 	 * @return bool Whether the robots.txt file exists.
 	 */
@@ -656,7 +659,8 @@ class Detect extends Render {
 			return $has_robots;
 
 		// Ensure get_home_path() is declared.
-		require_once ABSPATH . 'wp-admin/includes/file.php';
+		if ( ! function_exists( '\\get_home_path' ) )
+			require_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'robots.txt';
 
@@ -665,10 +669,10 @@ class Detect extends Render {
 
 	/**
 	 * Detects presence of sitemap.xml in root folder.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
 	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
-	 * @staticvar bool $has_map
 	 *
 	 * @return bool Whether the sitemap.xml file exists.
 	 */
@@ -680,7 +684,8 @@ class Detect extends Render {
 			return $has_map;
 
 		// Ensure get_home_path() is declared.
-		require_once ABSPATH . 'wp-admin/includes/file.php';
+		if ( ! function_exists( '\\get_home_path' ) )
+			require_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'sitemap.xml';
 
@@ -798,6 +803,7 @@ class Detect extends Render {
 
 	/**
 	 * Determines when paged/page is exploited.
+	 * Memoizes the return value.
 	 *
 	 * Google is acting "smart" nowadays, and follows everything that remotely resembles a link. Therefore, unintentional
 	 * queries can occur in WordPress. WordPress deals with this well, alas, the query parser (WP_Query::parse_query)
@@ -825,7 +831,6 @@ class Detect extends Render {
 	 *
 	 * @since 4.0.5
 	 * @global \WP_Query $wp_query
-	 * @staticvar bool $exploited Cached whether the query is exploited.
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
 	 *              Defaults to false when `advanced_query_protection` option is disabled.
@@ -993,11 +998,11 @@ class Detect extends Render {
 
 	/**
 	 * Checks (current) Post Type for having taxonomical archives.
+	 * Memoizes the return value for the input argument.
 	 *
 	 * @since 2.9.3
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @staticvar array $cache
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @param string $post_type Optional. The post type to check.
@@ -1040,9 +1045,9 @@ class Detect extends Render {
 
 	/**
 	 * Gets all post types that could possibly support SEO.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
-	 * @staticvar $cache
 	 *
 	 * @return array All public post types.
 	 */
@@ -1066,9 +1071,9 @@ class Detect extends Render {
 
 	/**
 	 * Returns a list of builtin public post types.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.1.0
-	 * @staticvar $cache
 	 *
 	 * @return array Forced supported post types.
 	 */
@@ -1090,9 +1095,9 @@ class Detect extends Render {
 
 	/**
 	 * Gets all taxonomies that could possibly support SEO.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
-	 * @staticvar $cache
 	 *
 	 * @return array The taxonomies that are public.
 	 */
@@ -1117,9 +1122,9 @@ class Detect extends Render {
 
 	/**
 	 * Returns a list of builtin public taxonomies.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
-	 * @staticvar $cache
 	 *
 	 * @return array Forced supported taxonomies
 	 */
@@ -1278,9 +1283,9 @@ class Detect extends Render {
 
 	/**
 	 * Determines if the current installation is on a subdirectory.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
-	 * @staticvar $bool $cache
 	 *
 	 * @return bool
 	 */

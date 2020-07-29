@@ -159,6 +159,8 @@ class Admin_Init extends Init {
 	 * Returns the title and description input guideline table, for
 	 * (Google) search, Open Graph, and Twitter.
 	 *
+	 * Memoizes the output, so the return filter will run only once.
+	 *
 	 * NB: Some scripts have wide characters. These are recognized by Google, and have been adjusted for in the chactacter
 	 * guidelines. German is a special Case, where we account for the Capitalization of Nouns.
 	 *
@@ -168,7 +170,6 @@ class Admin_Init extends Init {
 	 * @since 3.1.0
 	 * @since 4.0.0 1. Now gives different values for various WordPress locales.
 	 *              2. Added $locale input parameter.
-	 * @staticvar array $guidelines
 	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
 	 *       want users to set their preferred search engine. Now, these engines
 	 *       are barely any different.

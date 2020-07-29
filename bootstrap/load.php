@@ -53,23 +53,21 @@ _load_trait( 'core/overload' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf', 5 );
 /**
- * Load The_SEO_Framework_Load class
+ * Loads and memoizes `\The_SEO_Framework\Load` class.
  *
- * @action plugins_loaded
- * @priority 5 Use anything above 5, or any action later than plugins_loaded and
- * you can access the class and functions.
+ * Runs at action `plugins_loaded`, priority `5`. So, use anything above 5, or any
+ * action later than plugins_loaded and you can access the class and functions.
  *
  * @since 3.1.0
  * @access private
  * @see function the_seo_framework().
- * @staticvar object $tsf
  * @factory
  *
  * @return object|null The SEO Framework Facade class object. Null on failure.
  */
 function _init_tsf() {
 
-	//* Cache the class. Do not run constructors more than once.
+	// Memoize the class. Do not run constructors more than once.
 	static $tsf = null;
 
 	if ( $tsf )
@@ -128,7 +126,6 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  *                3. No longer loads interfaces automatically.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
- * @staticvar bool $_timenow Whether to time this request. Used to prevent stacking timers during class extending.
  *
  * @NOTE 'The_SEO_Framework\' is a reserved namespace. Using it outside of this
  *       plugin's scope could result in an error.
@@ -141,6 +138,7 @@ function _autoload_classes( $class ) {
 	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) ) return;
 
 	static $_timenow = true;
+	// Lock $_timenow to prevent stacking timers during class extending. This is released when the class stack loaded.
 	if ( $_timenow ) {
 		$_bootstrap_timer = microtime( true );
 		$_timenow         = false;

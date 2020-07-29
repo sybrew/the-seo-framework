@@ -406,7 +406,6 @@ class Sitemap_Base extends Sitemap {
 	 * Builds and returns a sitemap URL item.
 	 *
 	 * @since 4.0.0
-	 * @staticvar string $timestamp_format
 	 *
 	 * @param array $args : {
 	 *   string               $loc      : The item's URI.

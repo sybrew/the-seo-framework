@@ -80,12 +80,12 @@ final class Sitemap {
 
 	/**
 	 * The constructor. Can't be instantiated externally from this file.
+	 * Kills PHP on subsequent duplicated request. Enforces singleton.
 	 *
 	 * This probably autoloads at action "template_redirect", priority "1".
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 * @staticvar int $count Enforces singleton.
 	 * @internal
 	 */
 	public function __construct() {

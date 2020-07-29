@@ -516,7 +516,6 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.0.4
 	 * @uses $this->generate_description()
-	 * @staticvar array $cache
 	 *
 	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
 	 *                           Accepts int values for backward compatibility.

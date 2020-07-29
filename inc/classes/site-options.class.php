@@ -348,21 +348,21 @@ class Site_Options extends Sanitize {
 
 	/**
 	 * Return current option array.
+	 * Memoizes the return value, can be bypassed and reset with second parameter.
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.2 Added $use_current parameter.
-	 * @staticvar array $cache The option cache.
 	 *
 	 * @param string $setting The setting key.
-	 * @param bool   $use_current Whether to use WordPress's version and update the cache
-	 *                            or use the locally cached version.
+	 * @param bool   $reset   Whether to use WordPress's version and update the cache
+	 *                        or use the locally cached version.
 	 * @return array Options.
 	 */
-	public function get_all_options( $setting = null, $use_current = false ) {
+	public function get_all_options( $setting = null, $reset = false ) {
 
 		static $cache = [];
 
-		if ( ! $use_current && isset( $cache[ $setting ] ) )
+		if ( ! $reset && isset( $cache[ $setting ] ) )
 			return $cache[ $setting ];
 
 		if ( ! $setting )
@@ -540,12 +540,11 @@ class Site_Options extends Sanitize {
 	 *                2. Is now influenced by filters.
 	 *                3. Now also strips slashes when using cache.
 	 *                4. The second parameter is deprecated.
-	 * @staticvar array $defaults_cache
 	 * @uses $this->get_default_site_options()
 	 *
 	 * @param string $key       Required. The option name.
 	 * @param string $depr      Deprecated. Leave empty.
-	 * @param bool   $use_cache Optional. Whether to use the options cache or not.
+	 * @param bool   $use_cache Optional. Whether to use the options cache or bypass it.
 	 * @return mixed default option
 	 *         null If option doesn't exist.
 	 */
@@ -575,13 +574,12 @@ class Site_Options extends Sanitize {
 	 *
 	 * @since 2.3.4
 	 * @since 3.1.0 : Now returns 0 if the option doesn't exist, instead of -1.
-	 * @staticvar array $warned_cache
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 * @uses $this->get_warned_site_options()
 	 *
 	 * @param string $key       Required. The option name.
 	 * @param string $depr      Deprecated. Leave empty.
-	 * @param bool   $use_cache Optional. Whether to use the options cache or not.
+	 * @param bool   $use_cache Optional. Whether to use the options cache or bypass it.
 	 * @return int 0|1 Whether the option is flagged as dangerous for SEO.
 	 */
 	public function get_warned_settings( $key, $depr = '', $use_cache = true ) {

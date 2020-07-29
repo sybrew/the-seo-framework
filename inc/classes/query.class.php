@@ -45,6 +45,7 @@ class Query extends Core {
 
 	/**
 	 * Checks whether $wp_query or $current_screen is set.
+	 * Memoizes the return value once we're sure it won't change.
 	 *
 	 * @since 2.6.1
 	 * @since 2.9.0 Added doing it wrong notice.
@@ -52,7 +53,6 @@ class Query extends Core {
 	 *              2. Now asks for and passes $method.
 	 *              3. Now returns false on WP CLI.
 	 * @since 3.2.2 No longer spits out errors on production websites.
-	 * @staticvar bool $cache Always true once set.
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
 	 *
@@ -154,10 +154,10 @@ class Query extends Core {
 
 	/**
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.5.0
 	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
-	 * @staticvar int $id the ID.
 	 *
 	 * @param bool $use_cache Whether to use the cache or not.
 	 * @return int|false The ID.
@@ -276,16 +276,17 @@ class Query extends Core {
 
 	/**
 	 * Returns the current taxonomy, if any.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 1. Now works in the admin.
 	 *              2. Added caching
 	 * @global \WP_Screen $current_screen
-	 * @staticvar string $cache
 	 *
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
+
 		static $cache;
 
 		if ( isset( $cache ) ) return $cache;
@@ -1246,9 +1247,9 @@ class Query extends Core {
 
 	/**
 	 * Determines if SSL is used.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.8.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool True if SSL, false otherwise.
 	 */
@@ -1487,10 +1488,10 @@ class Query extends Core {
 
 	/**
 	 * Determines whether we're on The SEO Framework's sitemap or not.
+	 * Memoizes the return value once set.
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.0 Now uses static variables instead of class properties.
-	 * @staticvar bool $doing_sitemap
 	 *
 	 * @param bool $set Whether to set "doing sitemap".
 	 * @return bool
@@ -1519,8 +1520,6 @@ class Query extends Core {
 	 * Handles object cache for the query class.
 	 *
 	 * @since 2.7.0
-	 * @staticvar null|bool $can_cache_query True when this function can run.
-	 * @staticvar mixed     $cache           The cached query values.
 	 * @see $this->set_query_cache(); to set query cache.
 	 *
 	 * @param string $method       The method that wants to cache, used as the key to set or get.

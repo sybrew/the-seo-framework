@@ -71,12 +71,12 @@ final class Scripts {
 
 	/**
 	 * The constructor. Can't be instantiated externally from this file.
+	 * Kills PHP on subsequent duplicated request. Enforces singleton.
 	 *
 	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 * @staticvar int $count Enforces singleton.
 	 * @internal
 	 */
 	public function __construct() {
@@ -666,7 +666,7 @@ final class Scripts {
 						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( $tsf->get_static_untitled_title() ) ),
 						'stripTitleTags' => (bool) $tsf->get_option( 'title_strip_tags' ),
 					],
-					'i18n' => [
+					'i18n'   => [
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 						'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.

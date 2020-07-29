@@ -213,6 +213,8 @@ class Core {
 	 */
 	public function _add_plugin_action_links( $links = [] ) {
 
+		$tsf_links = [];
+
 		if ( $this->load_options ) {
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
@@ -221,7 +223,7 @@ class Core {
 			);
 		}
 
-		$tsf_links['tsfem'] = sprintf(
+		$tsf_links['tsfem']   = sprintf(
 			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
 			'https://theseoframework.com/extensions/',
 			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
@@ -330,32 +332,29 @@ class Core {
 
 	/**
 	 * Whether to allow external redirect through the 301 redirect option.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $allowed
 	 *
 	 * @return bool Whether external redirect is allowed.
 	 */
 	public function allow_external_redirect() {
 
-		static $allowed = null;
-
-		if ( isset( $allowed ) )
-			return $allowed;
+		static $cache = null;
 
 		/**
 		 * @since 2.1.0
 		 * @param bool $allowed Whether external redirect is allowed.
 		 */
-		return $allowed = (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true );
+		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true );
 	}
 
 	/**
 	 * Checks if blog is public through WordPress core settings.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool True is blog is public.
 	 */
@@ -604,9 +603,8 @@ class Core {
 	 *              This does mean that the functionality is crippled when the PHP
 	 *              installation isn't unicode compatible; this is unlikely.
 	 * @since 4.0.0 1. Now expects PCRE UTF-8 encoding support.
-	 *              2. Moved filter outside of this function.
+	 *              2. Moved input-parameter alterting filters outside of this function.
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
-	 * @staticvar bool   $use_mb Determines whether we can use mb_* functions.
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int    $dupe_count Minimum amount of words to encounter in the string.
@@ -626,8 +624,9 @@ class Core {
 
 		static $use_mb;
 
-		isset( $use_mb ) or $use_mb = extension_loaded( 'mbstring' );
+		isset( $use_mb ) or ( $use_mb = extension_loaded( 'mbstring' ) );
 
+		// TODO does this test well for "we're"? We haven't had any reports, though.
 		$word_list = preg_split(
 			'/[^\p{L}\p{M}\p{N}\p{Pc}\p{Cc}]+/mu',
 			$use_mb ? mb_strtolower( $string ) : strtolower( $string ),

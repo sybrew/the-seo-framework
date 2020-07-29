@@ -37,6 +37,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Checks the SEO Settings page nonce. Returns false if nonce can't be found.
 	 * Performs wp_die() when nonce verification fails.
+	 * Memoizes the return value.
 	 *
 	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
 	 *
@@ -44,7 +45,6 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.1.0 Removed settings field existence check.
 	 * @since 4.0.0 Added redundant user capability check.
 	 * @securitycheck 3.0.0 OK.
-	 * @staticvar bool $verified.
 	 *
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
@@ -138,10 +138,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0 Emptied and is no longer enqueued.
 	 * @since 4.1.0 Added taxonomical robots options backward compat.
 	 * @access private
-	 * @staticvar bool $running Prevents on-update loops.
 	 */
 	public function _set_backward_compatibility() {
+
 		static $running = false;
+		// Prevent on-update infinite loop. Releases lock when method finishes.
 		if ( $running ) return;
 		$running = true;
 
@@ -519,7 +520,6 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.7.0 Uses external caching function.
 	 * @since 2.8.0 Renamed.
 	 * @since 4.0.0 Now caches its $option registration.
-	 * @staticvar array $cache
 	 *
 	 * @param string       $filter Sanitization filter type
 	 * @param string       $option The option key.
@@ -532,6 +532,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->set_option_filter( $filter, $option, $suboption );
 
+		// Memoize whether a filter has been set for the option already. Should only run once internally.
 		if ( ! isset( $cache[ $option ] ) ) {
 			\add_filter( 'sanitize_option_' . $option, [ $this, 'sanitize' ], 10, 2 );
 			$cache[ $option ] = true;
@@ -542,13 +543,14 @@ class Sanitize extends Admin_Pages {
 
 	/**
 	 * Sets sanitation filters cache.
+	 * Memoizes the filters set so we can get them later.
 	 *
 	 * Associates a sanitization filter to each option (or sub options if they
 	 * exist) before adding a reference to run the option through that
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.7.0
-	 * @staticvar $options The options filter cache.
+	 * @see $this->get_option_filters()
 	 *
 	 * @param string       $filter    Sanitization filter type
 	 * @param string       $option    Option key

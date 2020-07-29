@@ -671,13 +671,13 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Generates homepage LD+JSON breadcrumb.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.9.3
 	 * @since 3.2.2 : 1. The title now works for the homepage as blog.
 	 *                2. The image has been disabled for the homepage as blog.
 	 *                   i. I couldn't fix it without evading the API, which is bad.
 	 * @since 4.0.0 Removed the image input requirement.
-	 * @staticvar array $crumb
 	 *
 	 * @return array The HomePage crumb entry.
 	 */
@@ -712,11 +712,11 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Generates current Page/Post LD+JSON breadcrumb.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.9.3
 	 * @since 3.0.0 Removed @id output to allow for more same-page schema items.
 	 * @since 4.0.0 Removed the image input requirement.
-	 * @staticvar array $crumb
 	 *
 	 * @param int $position The previous crumb position.
 	 * @return array The Current Page/Post crumb entry.
@@ -763,10 +763,10 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Creates LD+JSON Breadcrumb script from items.
+	 * Memoizes the iterations of this method, to create a key for the builder.
 	 *
 	 * @since 2.9.0
-	 * @since 2.9.3 : Rewritten to conform to the new generator.
-	 * @staticvar int $it The iteration count for script generation cache busting.
+	 * @since 2.9.3 Rewritten to conform to the new generator.
 	 *
 	 * @param array $items The LD+JSON breadcrumb items.
 	 * @return string The LD+JSON Breadcrumb script.
@@ -832,9 +832,9 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Determines whether to use the SEO title or only the fallback page title.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -851,9 +851,9 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Determines if breadcrumbs scripts are enabled.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -876,9 +876,9 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Determines if searchbox script is enabled.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -901,9 +901,9 @@ class Generate_Ldjson extends Generate_Image {
 
 	/**
 	 * Determines if Knowledge Graph Script is enabled.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.5
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */

@@ -72,6 +72,7 @@ class Post_Data extends Detect {
 
 	/**
 	 * Returns all registered custom SEO fields for a post.
+	 * Memoizes the return value.
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
 	 * this is done for performance reasons, so we can cache here, instead of relying on
@@ -81,7 +82,6 @@ class Post_Data extends Detect {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Now tests for valid post ID in the post object.
-	 * @staticvar array $cache
 	 *
 	 * @param int  $post_id   The post ID.
 	 * @param bool $use_cache Whether to use caching.
@@ -433,7 +433,6 @@ class Post_Data extends Detect {
 	 * Overwrites a park of the post meta on bulk-edit.
 	 *
 	 * @since 4.0.0
-	 * @staticvar bool $verified_referer Will hold true after the first update passes.
 	 *
 	 * @param int      $post_id The post ID. Unused.
 	 * @param \WP_Post $post    The post object.
@@ -450,6 +449,7 @@ class Post_Data extends Detect {
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 
 		static $verified_referer = false;
+		// Memoize the referer check--if it passes (and doesn't exit/die PHP), we're good to execute subsequently.
 		if ( ! $verified_referer ) {
 			\check_admin_referer( 'bulk-posts' );
 			$verified_referer = true;
@@ -549,11 +549,11 @@ class Post_Data extends Detect {
 
 	/**
 	 * Fetch latest public post ID.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.4.3
 	 * @since 2.9.3 : 1. Removed object caching.
 	 *              : 2. It now uses WP_Query, instead of wpdb.
-	 * @staticvar int $post_id
 	 *
 	 * @return int Latest Post ID.
 	 */

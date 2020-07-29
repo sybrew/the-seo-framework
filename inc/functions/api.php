@@ -81,10 +81,10 @@ namespace {
 namespace The_SEO_Framework {
 	/**
 	 * Determines whether this plugin should load.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.8.0
 	 * @access private
-	 * @staticvar bool $load
 	 * @action plugins_loaded
 	 *
 	 * @return bool Whether to allow loading of plugin.
@@ -104,12 +104,11 @@ namespace The_SEO_Framework {
 	}
 
 	/**
-	 * Requires trait files once.
+	 * Requires trait files, only once per request.
 	 *
 	 * @since 3.1.0
 	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
 	 * @access private
-	 * @staticvar array $loaded
 	 *
 	 * @param string $file Where the trait is for. Must be lowercase.
 	 * @return bool True if loaded, false otherwise.
@@ -131,7 +130,6 @@ namespace The_SEO_Framework {
 	 *
 	 * @since 3.1.0
 	 * @access private
-	 * @staticvar array $cache
 	 *
 	 * @param string $caller The method or function that calls this.
 	 * @return bool True if already called, false otherwise.
@@ -144,11 +142,10 @@ namespace The_SEO_Framework {
 	}
 
 	/**
-	 * Adds and returns-to the bootstrap timer.
+	 * Adds and returns-to the memoized bootstrap timer.
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 * @staticvar $time The estimated total time for bootstrapping.
 	 *
 	 * @param int $add The time to add.
 	 * @return int The accumulated time, roughly.

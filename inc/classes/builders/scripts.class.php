@@ -110,12 +110,12 @@ final class Scripts {
 
 	/**
 	 * The constructor. Can't be instantiated externally from this file.
+	 * Kills PHP on subsequent duplicated request. Enforces singleton.
 	 *
 	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
 	 *
 	 * @since 3.1.0
 	 * @access private
-	 * @staticvar int $count Enforces singleton.
 	 * @internal
 	 */
 	public function __construct() {
@@ -400,10 +400,9 @@ final class Scripts {
 
 	/**
 	 * Generates file URL.
+	 * Memoizes use of RTL and minification.
 	 *
 	 * @since 3.1.0
-	 * @staticvar string $min
-	 * @staticvar string $rtl
 	 *
 	 * @param array $script The script arguments.
 	 * @param array $type Either 'js' or 'css'.
@@ -471,8 +470,6 @@ final class Scripts {
 	 * Converts color CSS.
 	 *
 	 * @since 3.1.0
-	 * @staticvar array $c_ck Color keys.
-	 * @staticvar array $c_cv Color values.
 	 *
 	 * @param array $css The CSS to convert.
 	 * @return array $css
@@ -480,7 +477,7 @@ final class Scripts {
 	private function convert_color_css( array $css ) {
 
 		static $c_ck, $c_cv;
-
+		// Memoize the conversion types.
 		if ( ! isset( $c_ck, $c_cv ) ) {
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];

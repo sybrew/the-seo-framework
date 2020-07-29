@@ -67,9 +67,9 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Caches and returns the current URL.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
-	 * @staticvar string $cache
 	 *
 	 * @return string The current URL.
 	 */
@@ -83,10 +83,10 @@ class Generate_Url extends Generate_Title {
 	 * This link excludes any pagination. Great for structured data.
 	 *
 	 * Does not work for unregistered pages, like search, 404, date, author, and CPTA.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now properly generates taxonomical URLs.
-	 * @staticvar string $cache
 	 *
 	 * @return string The current permalink.
 	 */
@@ -100,9 +100,9 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Caches and returns the homepage URL.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
-	 * @staticvar string $cache
 	 *
 	 * @return string The home URL.
 	 */
@@ -555,11 +555,11 @@ class Generate_Url extends Generate_Title {
 
 	/**
 	 * Returns preferred $url scheme.
-	 * Can automatically be detected.
+	 * Which can automatically be detected when not set, based on the site URL setting.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
-	 * @staticvar string $scheme
 	 *
 	 * @return string The preferred URl scheme.
 	 */
@@ -601,6 +601,9 @@ class Generate_Url extends Generate_Title {
 	 * NOTE: Some (insecure, e.g. SP) implementations for the `WP_HOME` constant, where
 	 * the scheme is interpreted from the request, may cause this to be unreliable.
 	 * We're going to ignore those edge-cases; they're doing it wrong.
+	 *
+	 * However, should we output a notification? Or let them suffer until they use Monitor to find the issue for them?
+	 * Yea, Monitor's great for that. Gibe moni plos.
 	 *
 	 * @since 4.0.0
 	 *
@@ -898,7 +901,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.1.0
 	 * @since 3.2.4 1. Now correctly removes the pagination base from singular URLs.
 	 *              2. Now returns no URLs when a custom canonical URL is set.
-	 * @staticvar array $cache
+	 * @since 4.1.0 Removed memoization.
 	 *
 	 * @return array Escaped site Pagination URLs: {
 	 *    string 'prev'
@@ -906,9 +909,6 @@ class Generate_Url extends Generate_Title {
 	 * }
 	 */
 	public function get_paged_urls() {
-
-		static $cache;
-		if ( isset( $cache ) ) return $cache;
 
 		$prev = $next = '';
 		$_run = false;
@@ -952,17 +952,17 @@ class Generate_Url extends Generate_Title {
 
 		end:;
 
-		return $cache = compact( 'next', 'prev' );
+		return compact( 'next', 'prev' );
 	}
 
 	/**
 	 * Fetches home URL host. Like "wordpress.org".
 	 * If this fails, you're going to have a bad time.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.7.0
 	 * @since 2.9.2 : Now considers port too.
 	 *              : Now uses get_home_url(), rather than get_option('home').
-	 * @staticvar string $cache
 	 *
 	 * @return string The home URL host.
 	 */

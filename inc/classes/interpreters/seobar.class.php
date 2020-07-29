@@ -167,15 +167,17 @@ final class SeoBar {
 	 *
 	 * @since 4.0.0
 	 * @collector
-	 * @staticvar $_void The void. If an item doesn't exist, it's put in here,
-	 *                   only to be obliterated, annihilated, extirpated, eradicated, etc.
-	 *                   Also, you may be able to spawn an Ender Dragon if you pass four End Crystals.
 	 *
 	 * @param string $key The item key.
 	 * @return array Single SEO Bar item. Passed by reference.
 	 */
 	public static function &edit_seo_bar_item( $key ) {
 
+		/**
+		 * The void. If an item key doesn't exist, all values are put in here,
+		 * only to be obliterated, annihilated, extirpated, eradicated, etc., when called later.
+		 * Also, you may be able to spawn an Ender Dragon if you pass four End Crystals.
+		 */
 		static $_void = [];
 
 		if ( isset( static::$items[ $key ] ) ) :
@@ -284,7 +286,6 @@ final class SeoBar {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Removed accidental duplicated call to enumerate_assessment_list()
-	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array  $item See `$this->register_seo_bar_item()`
 	 * @param string $type The description type. Accepts 'html' or 'aria'.
@@ -327,7 +328,6 @@ final class SeoBar {
 	 * Enumerates the assessments in a plaintext format.
 	 *
 	 * @since 4.0.0
-	 * @staticvar array $gettext Cached gettext calls.
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The SEO Bar item assessment, in plaintext.
@@ -338,7 +338,6 @@ final class SeoBar {
 		$assessments = [];
 
 		static $gettext = null;
-
 		if ( null === $gettext ) {
 			$gettext = [
 				/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
@@ -413,7 +412,6 @@ final class SeoBar {
 	 * @since 4.0.0
 	 * @since 4.1.0 1. Added 'undefined' support.
 	 *              2. Now defaults to 'undefined'.
-	 * @staticvar bool $use_symbols
 	 *
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The SEO Bar item assessment, in plaintext.
@@ -421,9 +419,9 @@ final class SeoBar {
 	private function interpret_status_to_symbol( array $item ) {
 
 		static $use_symbols = null;
-
-		if ( null === $use_symbols )
+		if ( null === $use_symbols ) {
 			$use_symbols = (bool) \the_seo_framework()->get_option( 'seo_bar_symbols' );
+		}
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) :

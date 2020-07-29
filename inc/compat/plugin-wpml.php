@@ -22,10 +22,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  *
  * @since 2.8.0
  * @access private
- *
- * @param \WP_Screen $current_screen The current screen object.
  */
-function _wpml_do_current_screen_action( $current_screen = '' ) {
+function _wpml_do_current_screen_action() {
 
 	if ( \the_seo_framework()->is_seo_settings_page() ) {
 		\add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_remove_all_languages' );
@@ -51,11 +49,11 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
 \add_action( 'the_seo_framework_delete_cache_sitemap', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10, 4 );
 /**
  * Deletes all sitemap transients, instead of just one.
+ * Can only clear once per request.
  *
  * @since 3.1.0
  * @global \wpdb $wpdb
  * @access private
- * @staticvar bool $cleared
  *
  * @param string $type    The flush type. Comes in handy when you use a catch-all function.
  * @param int    $id      The post, page or TT ID. Defaults to the_seo_framework()->get_the_real_ID().

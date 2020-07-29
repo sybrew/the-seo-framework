@@ -37,9 +37,9 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Returns the image details from cache.
 	 * Only to be used within the loop, uses default parameters, inlucing the 'social' context.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.0.0
-	 * @staticvar array $cache
 	 *
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,

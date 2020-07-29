@@ -104,7 +104,6 @@ class Render extends Admin_Init {
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
 	 * @since 4.0.0 Now uses the new image generator.
-	 * @staticvar string $cache
 	 *
 	 * @return string The image URL.
 	 */
@@ -122,10 +121,10 @@ class Render extends Admin_Init {
 
 	/**
 	 * Returns the current Twitter card type.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.8.2
 	 * @since 3.1.0 Filter has been moved to generate_twitter_card_type()
-	 * @staticvar string $cache
 	 *
 	 * @return string The cached Twitter card.
 	 */
@@ -1015,9 +1014,9 @@ class Render extends Admin_Init {
 
 	/**
 	 * Returns the robots meta array.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.2.4
-	 * @staticvar array|null $cache
 	 *
 	 * @return array
 	 */
@@ -1120,10 +1119,10 @@ class Render extends Admin_Init {
 
 	/**
 	 * Returns the plugin hidden HTML indicators.
+	 * Memoizes the filter outputs.
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.0 Added boot timers.
-	 * @staticvar array $cache
 	 *
 	 * @param string $where  Determines the position of the indicator.
 	 *                       Accepts 'before' for before, anything else for after.
@@ -1214,13 +1213,13 @@ class Render extends Admin_Init {
 
 	/**
 	 * Determines whether we can use Open Graph tags on the front-end.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
 	 * @since 3.1.4 : 1. Added filter.
 	 *                2. Reintroduced cache because of filter.
 	 * @TODO add facebook validation.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -1238,12 +1237,12 @@ class Render extends Admin_Init {
 
 	/**
 	 * Determines whether we can use Facebook tags on the front-end.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
 	 * @since 3.1.4 : 1. Added filter.
 	 *                2. Reintroduced cache because of filter.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -1261,11 +1260,11 @@ class Render extends Admin_Init {
 
 	/**
 	 * Determines whether we can use Twitter tags on the front-end.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.2 Now also considers Twitter card type output.
 	 * @since 3.1.4 Added filter.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */

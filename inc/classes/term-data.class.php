@@ -77,10 +77,10 @@ class Term_Data extends Post_Data {
 
 	/**
 	 * Returns and caches term meta for the current query.
+	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.1 Now uses the filterable `get_the_real_ID()`
-	 * @staticvar array $cache
 	 *
 	 * @return array The current term meta.
 	 */
@@ -102,6 +102,8 @@ class Term_Data extends Post_Data {
 
 	/**
 	 * Returns term meta data from ID.
+	 * Memoizes the return value for the current request.
+	 *
 	 * Returns Genesis 2.3.0+ data if no term meta data is set via compat module.
 	 *
 	 * @since 2.7.0
@@ -110,7 +112,6 @@ class Term_Data extends Post_Data {
 	 * @since 3.1.0 Deprecated filter.
 	 * @since 4.0.0 1. Removed deprecated filter.
 	 *              2. Now fills in defaults.
-	 * @staticvar array $cache
 	 *
 	 * @param int  $term_id The Term ID.
 	 * @param bool $use_cache Whether to use caching.
@@ -452,9 +453,9 @@ class Term_Data extends Post_Data {
 
 	/**
 	 * Fetch latest public category ID.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
-	 * @staticvar int $cat_id
 	 *
 	 * @return int Latest Category ID.
 	 */

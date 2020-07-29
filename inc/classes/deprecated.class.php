@@ -140,10 +140,10 @@ final class Deprecated {
 
 	/**
 	 * Returns the SEO Bar.
+	 * Memoizes the return value.
 	 *
 	 * @since 3.0.4
 	 * @since 4.0.0 Deprecated
-	 * @staticvar string $type
 	 * @deprecated
 	 *
 	 * @param string $column the current column : If it's a taxonomy, this is empty
@@ -170,11 +170,9 @@ final class Deprecated {
 	}
 
 	/**
-	 * Renders post status. Caches the output.
+	 * Renders post status. Memoizes the output.
 	 *
 	 * @since 2.1.9
-	 * @staticvar string $post_i18n The post type slug.
-	 * @staticvar bool $is_term If we're dealing with TT pages.
 	 * @since 2.8.0 Third parameter `$echo` has been put into effect.
 	 * @since 4.0.0 Deprecated.
 	 * @deprecated
@@ -250,13 +248,12 @@ final class Deprecated {
 	}
 
 	/**
-	 * Whether to lowercase the noun or keep it UCfirst.
+	 * Whether to lowercase the noun or keep it UCfirst. Memoizes the input noun's output.
 	 * Depending if language is German.
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Deprecated
 	 * @deprecated
-	 * @staticvar array $lowercase Contains nouns.
 	 *
 	 * @param string $noun The noun to lowercase.
 	 * @return string The maybe lowercase noun.
@@ -506,6 +503,7 @@ final class Deprecated {
 
 	/**
 	 * Return custom field post meta data.
+	 * Memoizes the return value.
 	 *
 	 * Return only the first value of custom field. Return false if field is
 	 * blank or not set.
@@ -513,7 +511,6 @@ final class Deprecated {
 	 * @since 2.0.0
 	 * @since 4.0.0 Deprecated
 	 * @deprecated
-	 * @staticvar array $field_cache
 	 *
 	 * @param string $field     Custom field key.
 	 * @param int    $post_id   The post ID.
@@ -860,11 +857,11 @@ final class Deprecated {
 
 	/**
 	 * Detect if the current screen type is a page or taxonomy.
+	 * Memoizes the return value.
 	 *
 	 * @since 2.3.1
 	 * @since 4.1.0 Deprecated.
 	 * @deprecated
-	 * @staticvar array $is_page
 	 *
 	 * @param string $type the Screen type
 	 * @return bool true if post type is a page or post
@@ -920,6 +917,7 @@ final class Deprecated {
 
 	/**
 	 * Return option from the options table and cache result.
+	 * Memoizes the return value.
 	 *
 	 * Values pulled from the database are cached on each request, so a second request for the same value won't cause a
 	 * second DB interaction.
@@ -928,7 +926,6 @@ final class Deprecated {
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
 	 * @since 4.1.0 Deprecated.
-	 * @staticvar array $cache
 	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
 	 * @deprecated
 	 *
@@ -964,7 +961,6 @@ final class Deprecated {
 	 * @since 3.0.4
 	 * @since 4.0.0 Added caching.
 	 * @since 4.1.0 Deprecated.
-	 * @staticvar string $cache
 	 * @uses $this->get_blogdescription(), this method already trims.
 	 * @deprecated
 	 *

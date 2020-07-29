@@ -470,6 +470,7 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 			* `s_excerpt` moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`, meaning that it'll clear those elements, instead of adding spaces around them.
 			* `strip_tags_cs` now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 			* `get_hierarchical_taxonomies_as()` now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
+			* `get_paged_urls()` no longer memoizes its return value.
 		* **Removed:**
 			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
 			* `the_content_feed()`, with no alternative available.

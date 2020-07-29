@@ -192,11 +192,10 @@ final class Load extends Cache {
 	}
 
 	/**
-	 * Includes compatibility files.
+	 * Includes compatibility files, only once per request.
 	 *
 	 * @since 2.8.0
 	 * @access private
-	 * @staticvar array $included Maintains cache of whether files have been loaded.
 	 *
 	 * @param string $what The vendor/plugin/theme name for the compatibilty.
 	 * @param string $type The compatibility type. Be it 'plugin' or 'theme'.
