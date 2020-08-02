@@ -471,6 +471,7 @@ class Generate extends User_Data {
 	 * Note that the home-as-blog page can be used for this method.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.0 Now uses the new taxonomy robots settings.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -487,19 +488,13 @@ class Generate extends User_Data {
 
 		$noindex = (bool) $this->get_option( 'site_noindex' );
 
-		if ( $args['taxonomy'] ) {
-			if ( 'category' === $args['taxonomy'] ) {
-				$noindex = $noindex || $this->get_option( 'category_noindex' );
-			} elseif ( 'post_tag' === $args['taxonomy'] ) {
-				$noindex = $noindex || $this->get_option( 'tag_noindex' );
-			}
-		} else {
-			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$noindex = $noindex || $this->get_option( 'homepage_noindex' );
-			}
+		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
+			$noindex = $noindex || $this->get_option( 'homepage_noindex' );
 		}
 
 		if ( $args['taxonomy'] ) {
+			// This block is not used internally...
+
 			$term = \get_term( $args['id'], $args['taxonomy'] );
 			/**
 			 * Check if archive is empty: set noindex for those.
@@ -517,6 +512,8 @@ class Generate extends User_Data {
 			foreach ( $_post_type_meta as $_type => $_values ) {
 				$$_type = $$_type || ! in_array( false, $_values, true );
 			}
+
+			$noindex = $noindex || $this->is_taxonomy_robots_set( 'noindex', $args['taxonomy'] );
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$term_meta = $this->get_term_meta( $args['id'] );

@@ -777,3 +777,5 @@ function _do_upgrade_4103() {
 
 	\update_option( 'the_seo_framework_upgraded_db_version', '4103' );
 }
+
+// category_$r and tag_$r must be deleted at 4.2 or 5.0 (whichever comes);

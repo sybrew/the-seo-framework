@@ -296,12 +296,12 @@ class Init extends Query {
 			}
 		}
 
-		if ( $this->get_option( 'og_tags' ) ) {
+		if ( $this->get_option( 'og_tags' ) ) { // independent from filter at use_og_tags--let that be deciding later.
 			//* Disable Jetpack's Open Graph tags. But Sybre, compat files? Yes.
 			\add_filter( 'jetpack_enable_open_graph', '__return_false' );
 		}
 
-		if ( $this->get_option( 'twitter_tags' ) ) {
+		if ( $this->get_option( 'twitter_tags' ) ) { // independent from filter at use_twitter_tags--let that be deciding later.
 			//* Disable Jetpack's Twitter Card tags. But Sybre, compat files? Maybe.
 			\add_filter( 'jetpack_disable_twitter_cards', '__return_true' );
 			// Future, maybe. See <https://github.com/Automattic/jetpack/issues/13146#issuecomment-516841698>

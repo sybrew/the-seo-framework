@@ -479,6 +479,11 @@ class Generate_Description extends Generate {
 		 */
 		$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, 0, $args );
 
+		// TODO Should we enforce a minimum description length, where this result is ignored?
+		// e.g. use the input guidelines 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
+		// This page has a generated description that's far too short: https://theseoframework.com/em-changelog/1-0-0-amplified-seo/.
+		// A direct directory-'site:' query will accept the description outputted--anything else will ignore it...
+		// We should then create a new method which processes this with a parameter for the minimum length, so we can optimize it for performance.
 		$excerpt = $this->trim_excerpt(
 			$excerpt,
 			0,
@@ -863,7 +868,7 @@ class Generate_Description extends Generate {
 		$excerpt = \wptexturize( $excerpt );
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
 		/**
-		 * Optimize it here: https://regex101.com/r/u0DIgx/5/tests
+		 * Play with it here: https://regex101.com/r/u0DIgx/5/tests
 		 *
 		 * Critically optimized, so the $matches don't make much sense. Bear with me:
 		 *
@@ -873,7 +878,7 @@ class Generate_Description extends Generate {
 		 *    2 : First one character following [1], always some form of punctuation. Won't be set if [3] is set.
 		 *    3 : Following [1] until last punctuation that isn't some sort of connecting punctiation that's leading a word-boundary.
 		 *    4 : First three words leading [3]. Connecting punctuations that splits words are included as non-countable.
-		 *    5 : All extraneous characters leading [5].
+		 *    5 : All extraneous characters leading [3] and/or [4]. If this isn't set, forgo including 4--it won't be meaningful.
 		 * }
 		 */
 		preg_match(
@@ -883,11 +888,8 @@ class Generate_Description extends Generate {
 		);
 
 		if ( isset( $matches[5] ) ) {
-			if ( isset( $matches[4] ) ) {
-				$excerpt = $matches[1] . $matches[3] . $matches[4] . $matches[5];
-			} else {
-				$excerpt = $matches[1] . $matches[3] . $matches[5];
-			}
+			$excerpt = $matches[1] . $matches[3] . $matches[4] . $matches[5];
+			// Skip 4. It's useless content without 5.
 		} elseif ( isset( $matches[3] ) ) {
 			$excerpt = $matches[1] . $matches[3];
 		} elseif ( isset( $matches[2] ) ) {
@@ -911,9 +913,12 @@ class Generate_Description extends Generate {
 		// Why can $matches[2] still be populated with 3 set? Does it populate empty results upward to last, always???
 		if ( isset( $matches[2] ) && strlen( $matches[2] ) ) {
 			$excerpt = $matches[1] . $matches[2];
-		} else {
+		} elseif ( isset( $matches[1] ) && strlen( $matches[1] ) ) {
 			// Ignore useless [3], there's no [2], [1] is open-ended; so, add hellip.
 			$excerpt = $matches[1] . '...'; // This should be texturized later to &hellip;.
+		} else {
+			// If there's no matches[1], only some form of non-closing-leading punctuation was left in $excerpt. Empty it.
+			$excerpt = '';
 		}
 
 		return trim( htmlentities( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ) );

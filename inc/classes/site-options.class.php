@@ -419,7 +419,7 @@ class Site_Options extends Sanitize {
 
 		//* Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
 		if ( 'options.php' === $GLOBALS['pagenow'] )
-			$this->handle_update_post();
+			$this->process_settings_submission();
 	}
 
 	/**

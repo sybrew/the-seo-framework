@@ -22,7 +22,7 @@ It's easy to get started. Activate this plugin, and your site's already protecte
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 16,000 hours into this plugin. Here are the results: =
+= We poured over 18,000 hours into this plugin. Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -95,7 +95,7 @@ The SEO Framework is a uniquely white label plugin that blends seamlessly into y
 
 = Behind the screens =
 
-The SEO Framework works on many things without notifying you, because the best software should save you precious time. Here are a few things it does behind the screens.
+The SEO Framework works on many things without notifying you, because the best software is fast, nimble, responsive, and should save you precious time. Here are a few things it does behind the screens.
 
 * It prevents canonical errors for categories, pages, subdomains, and WordPress Multisite domain mapping.
 * It stops SEO attacks that are caused by pagination exploits in WordPress by telling the search engine to look at the existing last page instead.
@@ -111,23 +111,23 @@ The SEO Framework works on many things without notifying you, because the best s
 * PHP 5.6 and higher.
 * WordPress 5.1 and higher.
 * Internationalization through WordPress.org.
-* UTF-8 character recognition and rendering, including Emoji and CJK.
-* Right to Left (RTL) languages, through its interface and generation.
-* Full color-vision deficiency accessibility thanks to a carefully picked color scheme.
-* Full keyboard navigation.
-* Full screen-reader accessibility via focus fields, ARIA labels, and title attributes.
+* UTF-8 character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
+* Right to Left (RTL) languages (Arabic, Hebrew, Farsi, et al.), through its interface and metatag generation.
+* Complete color-vision deficiency accessibility thanks to a carefully picked color scheme.
+* Full keyboard navigation, so that you can inspect tooltips quickly without ever having to reach for your mouse.
+* Full screen-reader accessibility via field anchors, ARIA labels, and title attributes.
 * WordPress Multisite setups, this plugin is in fact built upon one.
 * Detection and output of robots.txt and sitemap.xml files.
 * Output of structured data via Schema.org JSON-LD scripts.
 * Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO tools to help you switch graciously.
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
-* E-commerce plugins, like WooCommerce and EDD.
-* Editing posts and terms via WordPress's native bulk-and-quick-edit interface.
+* E-commerce plugins, like WooCommerce and Easy Digital Downloads.
+* Editing posts and terms via WordPress's native bulk-and-quick-edit interfaces.
 
 = Copyright legislation notice =
 
-In a few words: The SEO Framework allows search engines to do what they've been doing for the past 20 years.
+In a few words: The SEO Framework allows search engines to do what they've been doing for the past 20 years via its preconfigured copyright settings.
 
 When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain and use information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
 
@@ -138,7 +138,7 @@ If you wish to learn more, please refer to the website of the [EU commission on 
 = This plugin requires: =
 
 * PHP 5.6 or higher.
-* WordPress 4.9 or higher.
+* WordPress 5.1 or higher.
 * Any modern browser for administration.
 
 = Installation instructions: =
@@ -171,14 +171,20 @@ Optionally, also install our free [Extension Manager](https://theseoframework.co
 
 = Is The SEO Framework free? =
 
-Absolutely! It will stay free as well, without ads, tracking, or nags!
-This plugin is all-inclusive. It's 100% freeware; not crippleware.
+Absolutely! It will stay free as well, without ads, tracking, bloat, or nags!
+This plugin is slim yet all-inclusive. It's 100% freeware; not crippleware.
 
 = Is there a premium version? =
 
 No. We treat this plugin as a premium plugin already.
 
 However, we do offer many free and paid extensions that help support this free plugin. We provide these via our free [Extension Manager plugin](https://theseoframework.com/?p=2760).
+
+= Why is there no analytics, tracking, or 404 monitoring? =
+
+SEO experts that use advanced tools such as Ahrefs, SEMrush, Screaming Frog, and Google Analytics, love using The SEO Framework because it doesn't try do their job haphazardly (like most other SEO plugins do).
+
+To analyze your website correctly, it must be done from the outside. If we load these features on your site, bad robots will cause thousands of false positives that fill up your database with useless information that doesn't apply to search engines at all. We refrain from this, because it won't ever help you anyway.
 
 = I have a feature request, a question, or found a bug. =
 
@@ -195,7 +201,7 @@ Learn more [about contributing](https://tsf.fyi/contributing).
 
 = What do the colors tell me? =
 
-We use different colors to convey messages. Red is an error that you must resolve. Yellow is a non-critical warning that you may want to address. Green is good. Blue is informational and situational. Grey is undefined or unprocessable.
+We use different colors to convey messages. Red is an error that you must resolve. Yellow is a non-critical warning that you may want to address. Green is good. Blue is informational and situational. Gray is undefined or unprocessable.
 
 = The sitemap doesn't contain categories, images, et al. =
 
@@ -244,7 +250,7 @@ We also added support for WordPress 5.5's new Core Sitemaps: they will work when
 
 Over 200 other QOL improvements were made. We added the gray SEO Bar color, sitemap logo branding, social meta title unbranding, fast nested HTML stripping for generators, improved authorial information support, and more!
 
-Lastly, since plugin auto-updates are coming soon to WordPress, we can no longer expect you to invoke an update manually. So, we incorporated persistent notices that can inform you about important changes at a later time. These notices are conditional (user capability, admin screen types, etc.), and expire automatically (after X views, or after X seconds). You can dismiss them via the X-button at the top. Although we believe we were sensible about this implementation, we still hope they're not too annoying!
+Lastly, since plugin auto-updates are coming to WordPress 5.5, we can no longer expect you to invoke an update manually. So, we incorporated persistent notices that can inform you about important changes at a later time. These notices are conditional (user capability, admin screen types, etc.), and expire automatically (after X views, or after X seconds). You can dismiss them via the X-button at the top. Although we believe we were sensible about this implementation, we still hope they're not too annoying!
 
 TODO retest install.
 
@@ -332,12 +338,12 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 			* We reduced CPU overhead during the load time of an administrative screen, by removing jQuery's heavy function loader dependency, and using native JS instead.
 			* We optimized the Block editor's loading time by removing superfluous REST requests that'd fetch terms for components that didn't support the caller's intention.
 			* The (social/logo) image preview icon no longer animates on-load.
-		* **Up to 12% faster server response times on the admin-area, and 25% faster on the front-end:**
+		* **Up to 13% faster server response times on the admin-area, and 26% faster on the front-end:**
 			* We mitigated autorectifying query-checks by preemptively forwarding more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap and administrative areas.
 			* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
 			* We improved plugin loading time by removing a (another) redundant class from the default loading stack.
-			* We also scrutinized the code (again), where we found a few minor points of improvement left after the overhault of v4.0.
-				* We couldn't find a reasonable way to make TSF any faster without sacrificing security or removing features. So, this is as fast as we can get... for now.
+			* We also scrutinized the code (again), where we found a few minor points for improvement left after the overhault of v4.0.
+				* We couldn't find a reasonable way to make TSF any faster without sacrificing security or removing features. So, this is as fast as we can make it... for now.
 * **Changed:**
 	* **Post type and taxonomy support:**
 		* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
@@ -471,6 +477,10 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 			* `strip_tags_cs` now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 			* `get_hierarchical_taxonomies_as()` now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
 			* `get_paged_urls()` no longer memoizes its return value.
+			* `s_singleline()`:
+				1. Made this method about 25~92% faster (more replacements = more faster). 73% slower on empty strings (negligible).
+				1. Now also strips form-feed and vertical whitespace characters--might they appear in the wild.
+			* `s_knowledge_type()` can no longer fall back to its previous value--instead, it will fall back to a generic value.
 		* **Removed:**
 			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
 			* `the_content_feed()`, with no alternative available.
@@ -478,6 +488,8 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 			* `do_dismissible_sticky_notice()`, with no alternative available. Was never used.
 			* `generate_dismissible_sticky_notice()`. Was never used. Use `register_dismissible_persistent_notice()` instead.
 			* `notices`, was marked private.
+			* `handle_update_post`, relied on security only valid within the plugin. It still exists, but can no longer be accessed directly via the API.
+			* `verify_seo_settings_nonce`, relied on security only valid within the plugin. It still exists, but can no longer be accessed directly via the API.
 		* **Deprecated:**
 			* `is_post_type_page()`, with no alternative available.
 			* `is_taxonomy_public()`, use `the_seo_framework()->is_taxonomy_supported()` instead.
