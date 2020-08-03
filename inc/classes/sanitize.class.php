@@ -1100,7 +1100,7 @@ class Sanitize extends Admin_Pages {
 	public function s_knowledge_type( $new_value ) {
 
 		if ( in_array( $new_value, [ 'person', 'organization' ], true ) )
-			return (string) $new_value;
+			return $new_value;
 
 		return 'organization';
 	}
@@ -1118,8 +1118,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_left_right( $new_value ) {
 
-		if ( 'left' === $new_value || 'right' === $new_value )
-			return (string) $new_value;
+		if ( in_array( $new_value, [ 'left', 'right' ], true ) )
+			return $new_value;
 
 		$previous = $this->get_option( 'title_location' );
 
@@ -1143,8 +1143,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_left_right_home( $new_value ) {
 
-		if ( 'left' === $new_value || 'right' === $new_value )
-			return (string) $new_value;
+		if ( in_array( $new_value, [ 'left', 'right' ], true ) )
+			return $new_value;
 
 		$previous = $this->get_option( 'home_title_location' );
 

@@ -14,7 +14,7 @@ Purely professional, feature-complete, and the ad-free WordPress SEO plugin. Sec
 
 **The only feature-complete SEO plugin that follows the white-hat guidelines and rules imposed by WordPress and search engines.**
 
-Start using proven methods to optimize your website for SEO. Simple, dedicated, extensible, unrestricted, ad-free, and no strings attached.
+Start using proven methods to optimize your website for SEO. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
 
 To top it off, this is the fastest full-featured SEO plugin, and it blends right into your WordPress website, without leaving you in the dark.
 
@@ -22,7 +22,7 @@ It's easy to get started. Activate this plugin, and your site's already protecte
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 18,000 hours into this plugin. Here are the results: =
+= We poured over 18 000 hours into this plugin. Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -111,7 +111,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * PHP 5.6 and higher.
 * WordPress 5.1 and higher.
 * Internationalization through WordPress.org.
-* UTF-8 character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
+* Unicode (UTF-8) character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
 * Right to Left (RTL) languages (Arabic, Hebrew, Farsi, et al.), through its interface and metatag generation.
 * Complete color-vision deficiency accessibility thanks to a carefully picked color scheme.
 * Full keyboard navigation, so that you can inspect tooltips quickly without ever having to reach for your mouse.
@@ -236,25 +236,83 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.1.0 =
+= 4.1.0 - Grace =
 
-TODO make this in the style of 4.0.0, where we iterate over the changes briefly? It's far easier to consume.
+**Release highlights**
 
-In this update, we bring you quick-edit support for meta titles and descriptions. We also bring you new taxonomy settings. You can now quickly deindex custom taxonomies, or exclude SEO for them entirely.
+* This update brings you up to 96% faster browser interaction, up to 30% faster browser rendering times, and up to 26% faster server response times.
+* You can now use quick-edit to adjust meta titles and descriptions of all your posts and terms.
+* New custom taxonomy settings are added, so you can quickly deindex custom taxonomies, or exclude SEO for them entirely.
+* Well-known page builders that aren't built upon shortcodes, like Elementor, Beaver Builder, and Siteorigin's, now support meta description generation.
+* The description generator is now far more intelligent--it can now recognize contractions, and other complex punctuations and marks (¡¿Que?! Y’all’didn’t’ve!? 「やった！」).
+* WordPress 5.5 support is now integrated deeply. To get there, we had to implement new query listeners, browser observers, and persistent notices (more on this below).
 
-By popular demand, the description generator can now take content from various well-known page builders that aren't based on shortcodes, like Elementor, Beaver Builder, and Siteorigin's. You'll also find that the description generator is now far more intelligent, where it can now recognize contractions, and other complex punctuation and marks (¡¿Que?! Y’all’didn’t’ve!? 「やった！」).
+**Graciously graceful**
 
-WordPress 5.5 brings various administrative changes for which we added support; while doing so, we improved the performance and logic of various scripts greatly. For example, the tooltip-arrow's movement now binds to your monitor's refresh rate, instead of your CPU's. Moreover, among many QOL improvements, tapping a tooltip no longer accidentally activates encapsulating labels, only necessary REST-requests are made for primary-term support, animations execute more naturally, and you won't find any more race conditions navigating settings-tabs.
+This update's name is Grace, and for a good reason: the plugin listens to your inputs respectfully, and does everything as you incline, as you would expect.
+Its response-and rendering times have substantially been reduced; everything's much smoother and swifter since 5 years ago--back when it had fewer than 1 000 users.
 
-We also added support for WordPress 5.5's new Core Sitemaps: they will work when you disable TSF's, but they won't listen to TSF's post-indexing settings... yet.
+At first glance, you probably won't notice anything new after updating to 4.1. But, when you look closer, among 200 QOL improvements, you'll find improvements such as:
 
-Over 200 other QOL improvements were made. We added the gray SEO Bar color, sitemap logo branding, social meta title unbranding, fast nested HTML stripping for generators, improved authorial information support, and more!
+* Tapping a tooltip no longer accidentally activates related inputs.
+* Only necessary REST-requests are made for primary-term support.
+* Browser animations execute more naturally, like removing a notification.
+* Switching a settings-tab can no longer cause staggered tab-content.
+* The description generator now detects deeply nested HTML, improving accuracy of intent.
 
-Lastly, since plugin auto-updates are coming to WordPress 5.5, we can no longer expect you to invoke an update manually. So, we incorporated persistent notices that can inform you about important changes at a later time. These notices are conditional (user capability, admin screen types, etc.), and expire automatically (after X views, or after X seconds). You can dismiss them via the X-button at the top. Although we believe we were sensible about this implementation, we still hope they're not too annoying!
+You'll also find many obscure new features, such as:
+
+* A new accessible SEO Bar color has been added: Gray. It exclaims there was nothing to process.
+* Fancy a custom sitemap stylesheet logo? Now you can upload one.
+* You can now remove branding from social meta titles.
+* Persistent notices may now show up, gracefully (again, more on this below).
+
+There are more than 200 other noteworthy changes, found in the [detailed log](https://theseoframework.com/?p= TODO #detailed).
+
+**Persistent notices**
+
+Some notices from TSF are now stored in your database, so they can be shown to you at a later time, and sometimes even more than once. We call these "persistent notices".
+
+Persistent notices are awfully annoying. We know that. However, since plugin auto-updates are part of WordPress 5.5, we can no longer expect you to invoke an update manually.
+
+These notices are used when we expect them to go unnoticed--they are conditional, and may only show up when all of the conditions are met:
+
+* You have sufficient administrative capabilities, or have a matching user ID. For example, you must be able to install plugins.
+* You are (or aren't) on a specific administrative page. For example, we won't show some notices on the block-editor.
+* The time limit hasn't expired. For example, the update-notice won't show up after 7 days from updating.
+* The view count hasn't been reached, regardless of who has seen it. For example, we only show some notices 3 times.
+* You haven't dismissed it. There's an X-button at the top-right.
+
+If you find a notice reappearing indefinitely, you might have a stubborn caching plugin enabled. So, clear your site's cache.
+
+**Core Sitemaps support**
+
+WordPress 5.5 brings new sitemaps. We added support for them, but we didn't integrate with them. To explain briefly:
+
+* Support: When you enable TSF's sitemap, Core Sitemaps are disabled. When you disable TSF's sitemap, Core Sitemaps will become accessible again.
+* Integrate: Core Sitemaps does not listen to the indexing state enforced by TSF. This will cause issues with search engines.
+
+Regardless, we don't believe the Core Sitemaps are benficial for most WordPress sites. We stubbornly kept our sitemap simple; it's not only easier for us to maintain, but also faster for search engines to process. Your pages are crawled more quickly using The SEO Framework's sitemap, no matter the size of your website.
+
+Nevertheless, TSF will integrate with Core Sitemaps in a future update. However, since we has less than two months to anticipate their integration, we couldn't make this happen now.
+
+**Environment upgrade notes**
+
+* WordPress 4.9 and 5.0 are no longer supported. Here's why:
+	* [Almost 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.1 or later.
+	* Newer version of WordPress are faster, more reliable, and easier to work with; for both you and us.
+	* Supporting future versions takes away time that's used to maintain support of past versions.
 
 TODO retest install.
+TODO POT file.
 
-TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_array_one_zero? -> s_map_one_zero -> array_map( 's_one_zero' )?
+TODO add new "force refresh" notification (to forums? Here? In admin notification?)
+Windows: CTRL + F5
+Mac: Command + R
+Linux: F5
+In some rare instances, the ISP may cache the files for the user--provided no encryption is used on the site.
+-> We should test for queryless scripts, and store an option if they have a query (via AJAX), or ask for forced refresh (based on user agent) otherwise. When the user performs a forced refresh, we can check for onbeforeunload and save that option. We are in a pickle, however, as some users just clear cache manually via the browser settings--so that won't be removed. We could, however, check for the age of said script (and test its (expected) version hash). All this adds needless processing overhead, thanks to a select few mentally impeded developers allowing this to happen in the first place.
+Alternativly, we can mitigate the issue by adding another query argument to our files. Called "?midb=4.1.0" (mentally impeded developer buster).
 
 ## For everyone
 * **Added:**
@@ -315,7 +373,7 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 				* It now texturizes the input to see how sentences are build in any language by discerning connector and closing punctuations next to word boundaries. For example, when a closing quote is found between two words (e.g. "we're"), it'll compound those two words as one, instead of believing the apostrophe is a closing punctuation type.
 				* It is now able to discern sentence structures that use colons, dashes, or other punctuation, and treats them as connecting.
 				* It is now able to discern latin way or annotating questions or exclamations (¿¡qué!?), and will keep their leading punctuation intact.
-				* It will now strip trailing colons, dashes, and othe
+				* It will now strip trailing colons, dashes, and other Unicode connector punctuation.
 				* It will now stop counting trailing words when a connector, dash, mark, or ¡¿ are found.
 				* It can now strip leading punctuation, even when no final punctuation is found.
 	* **Layout:**
@@ -331,7 +389,8 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 			* We optimized the tooltip handler for performance:
 				* It no longer renders the tooltip twice on tap/click.
 				* It caches the tooltip elements, so it no longer has to perform expensive lookups on movement or change.
-				* It now makes waits for the browser animation renderer's invocation on mouse-movement, so it no longer performs expensive calculations as fast as your computer's processor can handle it; instead, it only processes at the speed of your monitor's refresh rate (which is about 60~250 times per second, not 1500 times).
+				* It now only looks for active tooltip elements to remove on tap, instead of looping over all registered tooltip holders when using a touch device.
+				* Its arrow's movement now binds to your monitor's frequency, instead of your CPU's. It can do this by waiting for the browser animation renderer's invocation, so it no longer performs expensive calculations as fast as your computer's processor can handle it; instead, it only processes at the speed of your monitor's refresh rate (which is about 60~240 times per second, not 1500 times).
 					* At 4.6GHz on AMD's Ryzen Zen 2, we went down to about 4~10% single-CPU-core usage, from 100%, at 60 and 144hz, respectively. Perfectly linear. Perfect code.
 			* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our bridles with jQuery for element callers, event loaders, and property adjustments.
 		* **Up to 30% quicker browser rendering times (admin-area):**
@@ -388,6 +447,7 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 			* We made sure that any future change will automatically be supported, thanks to the use of resize observers. There's an edge-case for Edge, which still relies on our archaic implementation, however.
 		* You can now use keyboard navigation to select a title separator.
 		* jQuery 3.5.1 is now supported--we faced issues with the load sequence using Firefox and Edge.
+		* Tooltips no longer stick around after you click them using a movable pointer (non-Touch), resolving egregiously annoying behavior on labels and links that have tooltip support.
 	* **Post type and taxonomy support:**
 		* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
 		* You can no longer select the primary term for taxonomies that aren't supported (not publicly viewable or otherwise disabled via the TSF interface).
@@ -598,9 +658,9 @@ TODO rename s_taxonomies()/s_post_types() to s_associative_array_one_zero/s_arra
 		* This was graciously handled before, since PHP never forwarded data of unsupported taxonomies.
 		* This also saves a HTTP request per unsupported taxonomy, where we would otherwise get its listed terms.
 
-**Leave a review!**
+**Give back to us**
 
-We hope you'll love this update as much as we do. Please consider sharing it with the world, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0)! We read every one of them. Thank you!
+We hope you'll love this update as much as we do. Please consider supporting us, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), TODO (get a license, write about TSF elsewhere, yadayada). Thank you!
 
 **Detailed log**
 
