@@ -1974,6 +1974,8 @@ class Sanitize extends Admin_Pages {
 		 * since we don't perform a live MIME-test.
 		 *
 		 * Tested with Facebook; they ignore them too. There's no documentation available.
+		 * TODO Should we even test for this here, or at the image generators' type?
+		 * It seems, however, that all services we want to communicate with ignore these types, anyway.
 		 */
 		if ( in_array(
 			strtolower( strtok( pathinfo( $url, PATHINFO_EXTENSION ), '?' ) ),
@@ -1981,14 +1983,14 @@ class Sanitize extends Admin_Pages {
 			true
 		) ) return $defaults;
 
-		$width  = (int) $width;
-		$height = (int) $height;
+		$width  = \absint( $width );
+		$height = \absint( $height );
 
 		if ( ! $width || ! $height )
 			$width = $height = 0;
 
 		if ( $width > 4096 || $height > 4096 ) {
-			// FIXME Why do we assume there's an $id available here?
+			// FIXME Why do we assume there's an $id available here, because we only know $width/$height when there's an $id?
 			$new_image = $this->get_largest_acceptable_image_src( $id, 4096 );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 
@@ -2066,10 +2068,9 @@ class Sanitize extends Admin_Pages {
 				if ( $this->set_and_strlen( $var, $v ) )
 					return true;
 			}
+			return false;
 		}
 
-		$var = trim( $value );
-
-		return is_string( $var ) && strlen( $var );
+		return is_string( $var ) && strlen( trim( $var ) );
 	}
 }

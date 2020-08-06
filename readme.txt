@@ -182,7 +182,7 @@ However, we do offer many free and paid extensions that help support this free p
 
 = Why is there no analytics, tracking, or 404 monitoring? =
 
-SEO experts that use advanced tools such as Ahrefs, SEMrush, Screaming Frog, and Google Analytics, love using The SEO Framework because it doesn't try do their job haphazardly (like most other SEO plugins do).
+SEO experts that use advanced tools such as Ahrefs, SEMrush, Screaming Frog, and Google Analytics, prefer using The SEO Framework because it doesn't try do their job haphazardly.
 
 To analyze your website correctly, it must be done from the outside. If we load these features on your site, bad robots will cause thousands of false positives that fill up your database with useless information that doesn't apply to search engines at all. We refrain from this, because it won't ever help you anyway.
 
@@ -448,6 +448,9 @@ Alternativly, we can mitigate the issue by adding another query argument to our 
 		* You can now use keyboard navigation to select a title separator.
 		* jQuery 3.5.1 is now supported--we faced issues with the load sequence using Firefox and Edge.
 		* Tooltips no longer stick around after you click them using a movable pointer (non-Touch), resolving egregiously annoying behavior on labels and links that have tooltip support.
+		* Closing a TSF-powered postbox with invalid input will no longer cause it to get stuck closed. Instead, you should now see a validation message appear.
+		* When you try to hide a TSF-powered postbox with invalid input, it will now reappear with a validation message since you otherwise can't submit the page's form.
+			* This only works when using the Classic Editor, and on the SEO Settings page. We couldn't reedify this fix in Gutenberg--but, that page isn't affected by the form-passing issue.
 	* **Post type and taxonomy support:**
 		* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
 		* You can no longer select the primary term for taxonomies that aren't supported (not publicly viewable or otherwise disabled via the TSF interface).
@@ -658,13 +661,13 @@ Alternativly, we can mitigate the issue by adding another query argument to our 
 		* This was graciously handled before, since PHP never forwarded data of unsupported taxonomies.
 		* This also saves a HTTP request per unsupported taxonomy, where we would otherwise get its listed terms.
 
-**Give back to us**
+**Support the development**
 
-We hope you'll love this update as much as we do. Please consider supporting us, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), TODO (get a license, write about TSF elsewhere, yadayada). Thank you!
+We hope you'll love this update as much as we do. Please consider supporting us, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or convince your friends and colleagues TSF is amazing!
 
 **Detailed log**
 
-Let's go the extra mile; or [1,609.347 meters](https://theseoframework.com/?p= TODO #detailed).
+Fast and steady [wins the race](https://theseoframework.com/?p= TODO #detailed).
 
 = Full changelog =
 

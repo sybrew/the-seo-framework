@@ -227,7 +227,7 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_links() {
 
-		if ( false === $this->enable_ld_json_knowledge() )
+		if ( ! $this->enable_ld_json_knowledge() )
 			return '';
 
 		$knowledge_type = $this->get_option( 'knowledge_type' );

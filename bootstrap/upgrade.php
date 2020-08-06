@@ -399,21 +399,20 @@ function _do_install_notice() {
 
 	$tsf = \the_seo_framework();
 
+	// Make this persistent (2x count, 1 minute timeout)?
 	$tsf->do_dismissible_notice(
-		\esc_html__( 'Thank you for installing The SEO Framework! Your website is now optimized for search and social sharing, automatically. We hope you enjoy our free plugin. Good luck with your site!', 'autodescription' ),
-		'updated',
-		false,
-		false
-	);
-	$tsf->do_dismissible_notice(
-		$tsf->convert_markdown(
-			sprintf(
-				/* translators: %s = Link, markdown. */
-				\esc_html__( "The SEO Framework only identifies itself rarely during plugin upgrades. We'd like to use this opportunity to highlight our [plugin setup guide](%s).", 'autodescription' ),
-				'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
-			),
-			[ 'a' ],
-			[ 'a_internal' => false ]
+		sprintf(
+			'<p>%s</p><p>%s</p>',
+			\esc_html__( 'The SEO Framework automatically optimizes your website for search engines and social media.', 'autodescription' ),
+			$tsf->convert_markdown(
+				sprintf(
+					/* translators: %s = Link, markdown. */
+					\esc_html__( "To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).", 'autodescription' ),
+					'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
+				),
+				[ 'a' ],
+				[ 'a_internal' => false ]
+			)
 		),
 		'info',
 		false,
