@@ -2,7 +2,7 @@
 Contributors: Cybr
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
 Requires at least: 5.1.0
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.6.0
 Stable tag: 4.1.0
 License: GPLv3
