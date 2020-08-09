@@ -90,6 +90,7 @@ class Admin_Init extends Init {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Now discerns autoloading between taxonomies and singular types.
+	 * @since 4.1.0 Now invokes autoloading when persistent scripts are enqueued (regardless of validity).
 	 * @access private
 	 *
 	 * @param string|null $hook The current page hook.
@@ -133,6 +134,9 @@ class Admin_Init extends Init {
 			}
 
 			if ( in_array( $hook, $enqueue_hooks, true ) )
+				$autoenqueue = true;
+
+			if ( $this->get_static_cache( 'persistent_notices', [] ) )
 				$autoenqueue = true;
 		}
 

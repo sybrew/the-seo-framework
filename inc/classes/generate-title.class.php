@@ -1268,7 +1268,7 @@ class Generate_Title extends Generate_Description {
 
 		if ( $prefix ) {
 			/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-			$title = sprintf( \__( '%1$s: %2$s', 'autodescription' ), $prefix, $title );
+			$title = sprintf( \_x( '%1$s: %2$s', 'tax prefix: title', 'autodescription' ), $prefix, $title );
 		}
 
 		return $title;
@@ -1277,9 +1277,8 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Determines whether to add or remove title protection prefixes.
 	 *
-	 * NOTE: This does not guarantee that protection is to be added.
-	 *
 	 * @since 3.2.4
+	 * NOTE: This does not guarantee that protection is to be added. Only that it will be considered. Bad method name.
 	 * @see $this->merge_title_protection()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
@@ -1291,7 +1290,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$use = $this->is_singular();
 		} else {
-			$this->fix_generation_args( $args ); // redundant since we only check for a non-autofillable value...
+			$this->fix_generation_args( $args ); // redundant since we only check for a non-autofillable value... use empty( $args['tax..] ) instead?
 			$use = $args && ! $args['taxonomy'];
 		}
 
@@ -1302,7 +1301,7 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add or remove title pagination additions.
 	 *
 	 * @since 3.2.4
-	 * NOTE: This does not guarantee that pagination is to be added.
+	 * NOTE: This does not guarantee that pagination is to be added. Only that it will be considered. Bad method name.
 	 * @see $this->merge_title_pagination()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.

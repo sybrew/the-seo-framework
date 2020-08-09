@@ -4,7 +4,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.1.0
 Tested up to: 5.4
 Requires PHP: 5.6.0
-Stable tag: 4.0.7
+Stable tag: 4.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,7 +18,7 @@ Start using proven methods to optimize your website for SEO. Clean, dedicated, e
 
 To top it off, this is the fastest full-featured SEO plugin, and it blends right into your WordPress website, without leaving you in the dark.
 
-It's easy to get started. Activate this plugin, and your site's already protected against prominent SEO attacks. The SEO Framework will also prefill all critical meta tags for you. A real time-saver. Ingenious.
+It's easy to get started. Activate this plugin, and your site's instantly protected against prominent SEO attacks. The SEO Framework will also prefill all critical meta tags for you. A real time-saver. Ingenious.
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
@@ -101,7 +101,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * It stops SEO attacks that are caused by pagination exploits in WordPress by telling the search engine to look at the existing last page instead.
 * It discourages 404 pages and empty categories from being indexed, even when they don't send a 404 response.
 * It automatically notifies Google and the Bing network on website updates when sitemaps are enabled.
-* It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them, they only won't show them in their search results.
+* It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them; only, they won't show them in their search results.
 * It directs search engines from the comment pages back to the post storing those comments.
 
 = Compatibility =
@@ -129,9 +129,9 @@ The SEO Framework works on many things without notifying you, because the best s
 
 In a few words: The SEO Framework allows search engines to do what they've been doing for the past 20 years via its preconfigured copyright settings.
 
-When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among which are Google, Bing, and Yandex, to obtain and use information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to the region and language of your website, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
+When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among Google, Bing, and Yandex, to obtain and use information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to your website's region and language, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
 
-If you wish to learn more, please refer to the website of the [EU commission on copyright](https://ec.europa.eu/digital-single-market/en/modernisation-eu-copyright-rules). These rulings may propagate its effects through regions outside the EU.
+If you wish to learn more, please refer to the [EU commission on copyright](https://ec.europa.eu/digital-single-market/en/modernisation-eu-copyright-rules). These rulings may propagate its effects through regions outside the EU.
 
 == Installation ==
 
@@ -143,7 +143,7 @@ If you wish to learn more, please refer to the website of the [EU commission on 
 
 = Installation instructions: =
 
-1. Install **The SEO Framework** either via your WordPress dashboard using search or by uploading the files to your server.
+1. Install **The SEO Framework** either via your WordPress dashboard using plugin search or by uploading the files to your server.
 1. Either network-activate this plugin or activate it on a single site.
 1. That's it! The plugin now optimizes your website for SEO. It also protects your website against SEO attacks.
 
@@ -172,7 +172,7 @@ Optionally, also install our free [Extension Manager](https://theseoframework.co
 = Is The SEO Framework free? =
 
 Absolutely! It will stay free as well, without ads, tracking, bloat, or nags!
-This plugin is slim yet all-inclusive. It's 100% freeware; not crippleware.
+This plugin is slim yet all-inclusive. It's 100% freeware, not crippleware.
 
 = Is there a premium version? =
 
@@ -182,9 +182,9 @@ However, we do offer many free and paid extensions that help support this free p
 
 = Why is there no analytics, tracking, or 404 monitoring? =
 
-SEO experts that use advanced tools such as Ahrefs, SEMrush, Screaming Frog, and Google Analytics, prefer using The SEO Framework because it doesn't try do their job haphazardly.
+SEO experts that use advanced tools such as Ahrefs, SEMrush, Screaming Frog, and Google Analytics prefer using The SEO Framework because it doesn't try to do their job haphazardly.
 
-To analyze your website correctly, it must be done from the outside. If we load these features on your site, bad robots will cause thousands of false positives that fill up your database with useless information that doesn't apply to search engines at all. We refrain from this, because it won't ever help you anyway.
+To correctly analyze your website, it must be done from the outside. If we load these features on your site, bad robots will cause thousands of false positives that fill your database with useless information that doesn't apply to search engines. We refrain from this because it won't ever help you anyway.
 
 = I have a feature request, a question, or found a bug. =
 
@@ -215,16 +215,16 @@ Check out our [Extension Manager](https://theseoframework.com/?p=2760). It bring
 
 The SEO Framework takes all publicly queryable posts, pages, and CPT and puts them in the sitemap.
 
-If you don't want a page in the sitemap, consider enabling the `noindex` option for it. This will also remove the page from search engine result pages.
+If you don't want a page in the sitemap, consider enabling the `noindex` option for it. This option will also remove the page from search engine result pages.
 
 If the link shouldn't be in the sitemap because it's meant for structural reasons, then inform the plugin or theme author that created them.
 You should tell the author to check out the "`public` and `rewrite` post type arguments." The plugin or theme author should know what that means.
 
-In the meantime, you can disable SEO for the unwanted entries via the "General SEO Settings," under "Exclusions."
+In the meantime, you can disable SEO for the unwanted entries via the "General SEO Settings" under "Exclusions."
 
 = What do the application/ld+json scripts do? =
 
-The JSON-LD scripts are search engine helpers which tell search engines how to connect and index the site. We do this via the Schema.org standard.
+The JSON-LD scripts are search engine helpers that tell search engines how to connect and index the site. We do this via the Schema.org standard.
 
 They can tell the search engine if your site contains an internal search engine, which social sites you're connected to, and what page structure you're using. This is also referred to as **structured data**.
 
@@ -238,27 +238,29 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.0 - Grace =
 
+*Happiness can be found, even in the darkest of times, if one only remembers to turn on the light. - [J.K. Rowling &amp; Steve Kloves](https://www.warnerbros.com/movies/harry-potter-and-prisoner-azkaban)*
+
 **Release highlights**
 
 * This update brings you up to 96% faster browser interaction, up to 30% faster browser rendering times, and up to 26% faster server response times.
 * You can now use quick-edit to adjust meta titles and descriptions of all your posts and terms.
 * New custom taxonomy settings are added, so you can quickly deindex custom taxonomies, or exclude SEO for them entirely.
 * Well-known page builders that aren't built upon shortcodes, like Elementor, Beaver Builder, and Siteorigin's, now support meta description generation.
-* The description generator is now far more intelligent--it can now recognize contractions, and other complex punctuations and marks (¡¿Que?! Y’all’didn’t’ve!? 「やった！」).
-* WordPress 5.5 support is now integrated deeply. To get there, we had to implement new query listeners, browser observers, and persistent notices (more on this below).
+* The description generator is now far more intelligent--it can now recognize contractions, and other complex punctuations and marks (¡¿Que?! Y'all'dn't've!? 「やった！」).
+* WordPress 5.5 support is now integrated deeply. To get there, we had to implement new query listeners, browser observers, and persistent notices.
 
 **Graciously graceful**
 
-This update's name is Grace, and for a good reason: the plugin listens to your inputs respectfully, and does everything as you incline, as you would expect.
-Its response-and rendering times have substantially been reduced; everything's much smoother and swifter since 5 years ago--back when it had fewer than 1 000 users.
+This update's name is Grace, and for a good reason: the plugin listens to your inputs respectfully and does everything as you incline, as you would expect.
+The SEO Framework's response-and rendering times have substantially been reduced; everything's much smoother and swifter since 5 years ago--back when it had fewer than 1 000 users.
 
-At first glance, you probably won't notice anything new after updating to 4.1. But, when you look closer, among 200 QOL improvements, you'll find improvements such as:
+At first glance, you probably won't notice anything new after updating to 4.1. But, when you look closer, among 350 QOL improvements, you'll find improvements such as:
 
 * Tapping a tooltip no longer accidentally activates related inputs.
 * Only necessary REST-requests are made for primary-term support.
 * Browser animations execute more naturally, like removing a notification.
 * Switching a settings-tab can no longer cause staggered tab-content.
-* The description generator now detects deeply nested HTML, improving accuracy of intent.
+* The description generator now detects deeply nested HTML, improving the accuracy of intent.
 
 You'll also find many obscure new features, such as:
 
@@ -267,17 +269,17 @@ You'll also find many obscure new features, such as:
 * You can now remove branding from social meta titles.
 * Persistent notices may now show up, gracefully (again, more on this below).
 
-There are more than 200 other noteworthy changes, found in the [detailed log](https://theseoframework.com/?p= TODO #detailed).
+You can find more than 340 other noteworthy changes in the [detailed log](https://theseoframework.com/?p=3598#detailed).
 
 **Persistent notices**
 
-Some notices from TSF are now stored in your database, so they can be shown to you at a later time, and sometimes even more than once. We call these "persistent notices".
+TSF now stores some notices in your database, so they can be shown to you later, and sometimes even more than once. We call these "persistent notices".
 
 Persistent notices are awfully annoying. We know that. However, since plugin auto-updates are part of WordPress 5.5, we can no longer expect you to invoke an update manually.
 
-These notices are used when we expect them to go unnoticed--they are conditional, and may only show up when all of the conditions are met:
+These notices are used when we expect them to go unnoticed otherwise--they are conditional, and may only show up when **all** of these conditions are met:
 
-* You have sufficient administrative capabilities, or have a matching user ID. For example, you must be able to install plugins.
+* You have sufficient administrative capabilities or a matching user ID. For example, you must be able to install plugins.
 * You are (or aren't) on a specific administrative page. For example, we won't show some notices on the block-editor.
 * The time limit hasn't expired. For example, the update-notice won't show up after 7 days from updating.
 * The view count hasn't been reached, regardless of who has seen it. For example, we only show some notices 3 times.
@@ -292,382 +294,25 @@ WordPress 5.5 brings new sitemaps. We added support for them, but we didn't inte
 * Support: When you enable TSF's sitemap, Core Sitemaps are disabled. When you disable TSF's sitemap, Core Sitemaps will become accessible again.
 * Integrate: Core Sitemaps does not listen to the indexing state enforced by TSF. This will cause issues with search engines.
 
-Regardless, we don't believe the Core Sitemaps are benficial for most WordPress sites. We stubbornly kept our sitemap simple; it's not only easier for us to maintain, but also faster for search engines to process. Your pages are crawled more quickly using The SEO Framework's sitemap, no matter the size of your website.
+Regardless, we don't believe the Core Sitemaps are beneficial for most WordPress sites. We stubbornly kept our sitemap simple; it's easier for us to maintain and faster search engines to process. Search engines crawl your pages more quickly using TSF's sitemap, no matter your website's size.
 
-Nevertheless, TSF will integrate with Core Sitemaps in a future update. However, since we has less than two months to anticipate their integration, we couldn't make this happen now.
+Nevertheless, TSF will integrate with Core Sitemaps in a future update. However, since we had fewer than two months to anticipate their integration, we couldn't make this happen now.
 
 **Environment upgrade notes**
 
-* WordPress 4.9 and 5.0 are no longer supported. Here's why:
-	* [Almost 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.1 or later.
-	* Newer version of WordPress are faster, more reliable, and easier to work with; for both you and us.
-	* Supporting future versions takes away time that's used to maintain support of past versions.
+WordPress 4.9 and 5.0 are no longer supported. Here's why:
 
-TODO retest install.
-TODO POT file.
-
-TODO add new "force refresh" notification (to forums? Here? In admin notification?)
-Windows: CTRL + F5
-Mac: Command + R
-Linux: F5
-In some rare instances, the ISP may cache the files for the user--provided no encryption is used on the site.
--> We should test for queryless scripts, and store an option if they have a query (via AJAX), or ask for forced refresh (based on user agent) otherwise. When the user performs a forced refresh, we can check for onbeforeunload and save that option. We are in a pickle, however, as some users just clear cache manually via the browser settings--so that won't be removed. We could, however, check for the age of said script (and test its (expected) version hash). All this adds needless processing overhead, thanks to a select few mentally impeded developers allowing this to happen in the first place.
-Alternativly, we can mitigate the issue by adding another query argument to our files. Called "?midb=4.1.0" (mentally impeded developer buster).
-
-## For everyone
-* **Added:**
-	* **New taxonomy settings:**
-		* You can now exclude SEO support for any registered taxonomy.
-			* They are superseded by post type exclusions, however.
-		* You can now set `noindex`, `nofollow`, `noarchive` types for any registered taxonomy, instead of just default categories and tags.
-			* They are superseded by post type robots, however.
-	* **More sitemap features:**
-		* You can now specify a custom logo for the sitemap header title--instead of being stuck using the one from Customizer.
-		* WordPress Core sitemaps land in WP 5.5, and they're now supported.
-			* We don't believe this Core addition is beneficial for TSF users, but we'll explore its integration and are open to suggestions. We do welcome it, since it exposes many faults in other plugins and even in WordPress itself, which we had to fight off tirelessly in support. Until we fully integrate support for the Core sitemaps, this will happen:
-				* When you enable TSF's "optimized" sitemaps, the Core sitemaps are disabled.
-				* When you disable TSF's sitemaps, akin to using other sitemap plugins, you might get sitemaps that present errors in Google Search Console, because non-indexable posts are included therein too.
-				* When you disable TSF's sitemaps, the WordPress Core sitemap link may be added back to the virtual robots.txt output.
-	* **A new accessible SEO Bar color:**
-		* You may now spot the new "undefined" gray-colored SEO Bar entries.
-			* This type is typically used when no processable data can be found by the parser.
-			* As before, it's distinguishable from the other types with any color vision deficiency; even with the extremely rare (0.003% of population) achromatopsia.
-			* May you prefer, when you enable symbols for warnings--this type will convey `--` (two hyphens).
-	* **The smartest description generator, ever:**
-		* Thanks to the intelligent content parsing brought in TSF v3.2.4--which has been vastly improved since--content generated by these page builders can now be used reliably for description generation:
-			* Elementor.
-			* Beaver Builder.
-			* Page Builder by SiteOrigin.
-	* **New social title features:**
-		* You can now choose to remove the site title from autogenerated social titles (Open Graph, Twitter).
-			* This option will be enabled by default for new users, but disabled for current users.
-			* When this option is disabled, it will continue with its standard evaluation.
-	* **New quick-edit features:**
-		* You can now set a custom meta title and description for each post and term via WordPress's quick-edit interface.
-			* You'll find that counters and other descriptive parts are now visible.
-			* Please be mindful that this feature affects performance negatively--but this is primarily caused by a bug in WordPress.
-				* See https://core.trac.wordpress.org/ticket/50567.
-	* **New persistent notices:**
-		* You may now see notices (re)appear that you can manually dismiss. This makes sure you won't miss them, for you might've invoked a notice without loading the admin area directly afterward.
-			* The notices are outputted conditionally, and may:
-				1. Appear only for some users with certain administrative capabilities, like installing plugins.
-				1. Appear only on some pages.
-				1. Not appear on some pages, to prevent obstructing your workflow.
-				1. Appear only a few times.
-				1. Appear only within a certain timeframe--e.g. for one day within invocation.
-				1. Listen to your dismissal request--taking a single button press, either via AJAX or a HTML form.
-* **Improved:**
-	* **Accessibility:**
-		* The sitemap stylesheet now outputs specific table header and body tags for improved accessibility.
-		* Some sentences have been changed where some users struggled with before. For example, the SEO Bar now conveys what "title branding" means.
-		* You can now tap a tooltip-handler inside a label or link without accidentally activating the label, activating a button, or following the link. A second tap will propagate as a regular click.
-		* We normalized entity escaping for titles and descriptions, so you should now always see their output as intended on the edit-screens.
-		* When (single/double/triple) clicking on a title's prefix or additions hover element, the focus ring of the title input no longer flickers. Instead, it remains solidly focussed.
-		* The "Remove the site name?" toggle no longer stretches its label on term edit, preventing accidental clicks.
-		* We touched up the title settings' layout so it's easier to understand the repercussion of changes.
-	* **AI generators:**
-		* **Descriptions:**
-			* The description generator can now intelligently strip nested HTML elements (getter).
-			* The description generator has gone through another generational leap (parser/renderer):
-				* It is now able to discern between punctuation types for stripping leading characters. For example, an opening bracket will no longer be stripped from the start of a sentence, but closing brackets will.
-				* It now texturizes the input to see how sentences are build in any language by discerning connector and closing punctuations next to word boundaries. For example, when a closing quote is found between two words (e.g. "we're"), it'll compound those two words as one, instead of believing the apostrophe is a closing punctuation type.
-				* It is now able to discern sentence structures that use colons, dashes, or other punctuation, and treats them as connecting.
-				* It is now able to discern latin way or annotating questions or exclamations (¿¡qué!?), and will keep their leading punctuation intact.
-				* It will now strip trailing colons, dashes, and other Unicode connector punctuation.
-				* It will now stop counting trailing words when a connector, dash, mark, or ¡¿ are found.
-				* It can now strip leading punctuation, even when no final punctuation is found.
-	* **Layout:**
-		* The SEO Settings metaboxes are now a bit wider; 740px instead of 690px.
-			* This prevents the settings-tabs from collapsing for some languages.
-		* The (social/logo) image select/change button now updates its text on manual input accordingly.
-		* The primary term selector now loads in graciously and no longer bounces the interface on reload; these improvements are especially noticable with slower server connections.
-		* When you select or remove an image via the image editor, the input URL field no longer animates--we found this to be annoying, especially since we added other image input field cues (like the on-hover preview card) since its inception.
-		* When you remove an image set via the image editor, the removal button now fades out twice as quickly, so it is more in line with the rest of the interface's animation timing.
-		* Image previews now have a checkerboard background, so you can easily differentiate a transparent image, like a pro!
-	* **Performance:**
-		* **Improved browser interaction response times by up to 96% (admin-area):**
-			* We optimized the tooltip handler for performance:
-				* It no longer renders the tooltip twice on tap/click.
-				* It caches the tooltip elements, so it no longer has to perform expensive lookups on movement or change.
-				* It now only looks for active tooltip elements to remove on tap, instead of looping over all registered tooltip holders when using a touch device.
-				* Its arrow's movement now binds to your monitor's frequency, instead of your CPU's. It can do this by waiting for the browser animation renderer's invocation, so it no longer performs expensive calculations as fast as your computer's processor can handle it; instead, it only processes at the speed of your monitor's refresh rate (which is about 60~240 times per second, not 1500 times).
-					* At 4.6GHz on AMD's Ryzen Zen 2, we went down to about 4~10% single-CPU-core usage, from 100%, at 60 and 144hz, respectively. Perfectly linear. Perfect code.
-			* We optimized the administrative browser scripts for performance, among using faster loops, and loosening our bridles with jQuery for element callers, event loaders, and property adjustments.
-		* **Up to 30% quicker browser rendering times (admin-area):**
-			* We reduced CPU overhead during the load time of an administrative screen, by removing jQuery's heavy function loader dependency, and using native JS instead.
-			* We optimized the Block editor's loading time by removing superfluous REST requests that'd fetch terms for components that didn't support the caller's intention.
-			* The (social/logo) image preview icon no longer animates on-load.
-		* **Up to 13% faster server response times on the admin-area, and 26% faster on the front-end:**
-			* We mitigated autorectifying query-checks by preemptively forwarding more specific queries to each method in the plugin, removing needless processing overhead--especially for the sitemap and administrative areas.
-			* We optimized some sanitization callbacks, improving performance by about 4 to 5% per post rendered, without affecting the output.
-			* We improved plugin loading time by removing a (another) redundant class from the default loading stack.
-			* We also scrutinized the code (again), where we found a few minor points for improvement left after the overhault of v4.0.
-				* We couldn't find a reasonable way to make TSF any faster without sacrificing security or removing features. So, this is as fast as we can make it... for now.
-* **Changed:**
-	* **Post type and taxonomy support:**
-		* The General Settings' "Post Types" tabs has been renamed to "Exclusions".
-		* We added support for post types and taxonomies that do not have rewrite capabilities.
-			* We excluded them in the past because many devs don't know the difference between `rewrite = false` and `public = false` (looking at you too, Automattic). This caused a rich profusion of issues (and users **wasting our time** with support for third-party crap). With WP sitemaps coming (which includes non-rewriteable post types and taxonomies), it'll be a common issue, and everyone can suffer. So, we can be complacent about that and revert our rewrite exemption rule. Moreover, we now allow full control over post type and taxonomy support. So, that's why we'll, henceforth, support all rewritable post types and taxonomies by default, as long as they're publicly queryable.
-		* The Formats taxonomy (`post_format`) now has `noindex` applied for all sites installing or upgrading to TSF v4.1. We believe this post type is registered incorrectly, and that it should only be queryable via developers, not visitors.
-	* **User edit:**
-		* Users with the capability `edit_posts` (Contributor) can now set Facebook and Twitter metadata, instead of users with capability `publish_posts` (Author) only; since contributors can be assigned as authors of posts, as well.
-* **Removed:**
-	* **Feed support:**
-		* The first `<h2>` content is no longer added back in the excerpt of feeds. This didn't work anyway when using Gutenberg. And the code we wanted to implement to fix that (`/<h2.*?>(.*?)<\/h2>[^>]*?>(?=$content)/`) could take half a second per excerpt to resolve (yes, that's slow.).
-			* This also fixes a bug, where when the first `<h2>` entry of your post contains content exactly matching in the feed's "transformed-to-excerpt"-content, it will no longer be removed from that excerpt.
-	* **Accessibility:**
-		* Placeholders on various inputs are no longer prefilled by your server. Your browser can fill these in via our JavaScript scripts (when enabled, which is highly likely).
-			* This reduces the load on your server, and removes the need for us to duplicate our work visualizing how the front-end would generate certain areas.
-			* We upheld this for so long because WordPress used to be controllable via text-only browsers. Now, since the advent of the Block-Editor, and with accessible dynamic browsers, this is no longer necessary.
-* **Fixed:**
-	* **Upgrade:**
-		* Concurrent upgrades can no longer happen, which, although rare thanks to earlier mitigations, might've caused upgrading your options twice.
-	* **Settings:**
-		* When you disable a post type, its robots exclusion settings no longer get automatically rendered as checked by accident.
-		* You can now store a lone `0` as the (meta, Open Graph, Twitter) post title and description.
-			* This was already possible for terms.
-			* Don't count on it being useful, or supported throughout the system--you'll find it being transformed to "Untitled" on some parts. You'll also see false-negative reports when using a lone `0` as input.
-				* This is an intermediate step towards perfect consistency.
-				* We've considered making it seamless, but since this is a bad title/description, it's not worth the tradeoff for smelly, unmaintainable code.
-				* See PHPdoc @ `the_seo_framework()->set_and_strlen()`.
-		* You can no longer reset the global SEO settings without confirming it by clicking the button before all browser assets are loaded.
-	* **UI bugs and annoyances (that don't affect the front-end output of the plugin):**
-		* You can no longer empty text fields from TSF via Edge's `ms-clear` button (X at the side of the input field), since it doesn't invoke the proper browser events we rely upon.
-		* Settings and post-edit tabs' contents can no longer stagger when you hold an arrow key switching tabs. So, they now always behave predictably.
-		* Settings and post-edit tabs' containers now have their height locked before switching tabs' content, preventing unnecessary double layout shifting.
-		* Settings tab's contents now correctly match the active tab when navigating back to the settings page (again).
-		* Prevented unnecessary layout shift on the settings page of notifications from other sources (plugins, themes, core).
-		* When clicking on the character counter subsequently, the AJAX loader will now reappear correctly.
-		* Addressed an issue where when you double-clicked on the title prefix on an RTL-based site that causes selection of the title to fail.
-		* The title input fields no longer trim the visual outline on input-focus when using WP 5.3 or later.
-		* The Homepage SEO Settings question mark is now alligned correctly when using WP 5.5 or later.
-		* On the Block editor, if you had more than 2 categories selected and have then deselected all categories, and then register a new category (and keep it selected), and then select another category, the newest category will now have its name correctly populated in the primary term selector. Yup.
-		* On the Block editor, term names are no longer double-escaped inside the primary term selector.
-		* When using WP 5.5 or later, if you hit the new post-meta-box order buttons, the tab labels will now also automatically try to refit themselves (by hiding their text when necessary).
-			* We made sure that any future change will automatically be supported, thanks to the use of resize observers. There's an edge-case for Edge, which still relies on our archaic implementation, however.
-		* You can now use keyboard navigation to select a title separator.
-		* jQuery 3.5.1 is now supported--we faced issues with the load sequence using Firefox and Edge.
-		* Tooltips no longer stick around after you click them using a movable pointer (non-Touch), resolving egregiously annoying behavior on labels and links that have tooltip support.
-		* Closing a TSF-powered postbox with invalid input will no longer cause it to get stuck closed. Instead, you should now see a validation message appear.
-		* When you try to hide a TSF-powered postbox with invalid input, it will now reappear with a validation message since you otherwise can't submit the page's form.
-			* This only works when using the Classic Editor, and on the SEO Settings page. We couldn't reedify this fix in Gutenberg--but, that page isn't affected by the form-passing issue.
-	* **Post type and taxonomy support:**
-		* When a post type or taxonomy isn't publicly queryable, TSF won't consider it as a supported anymore.
-		* You can no longer select the primary term for taxonomies that aren't supported (not publicly viewable or otherwise disabled via the TSF interface).
-
-## For translators
-* **Added:**
-	* New sentences have been added.
-* **Changed:**
-	* We're now calling "blog name" "site title" throughout the plugin.
-		* WordPress shows the "Site Title" at "General Settings", but stores it in the database as "blogname". We can't expect the user to be aware of this discrepancy.
-* **Updated:**
-	* TODO POT translation file.
-	* As always, various sentences have been updated for clarity.
-* **Improved:**
-	* Removed passive voice from some sentences.
-
-## For developers
-* **Database note:** This plugin now uses TSF database version `4103`.
-* **Constant notes:**
-	* **Added:**
-		* `THE_SEO_FRAMEWORK_SETTINGS_CAP`, user-definable.
-			* Use this instead of filter `the_seo_framework_settings_capability`; the filter is marked for deprecation.
-		* `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`, user-definable.
-	* **Removed:**
-		* `THE_SEO_FRAMEWORK_NETWORK_OPTIONS`, was unused.
-* **Option notes:**
-	* For PHP constant `THE_SEO_FRAMEWORK_NETWORK_OPTIONS` (equals db index `autodescription-network-settings`):
-		* **Removed.** That's it.
-	* For PHP constant `THE_SEO_FRAMEWORK_SITE_OPTIONS` (equals db index `autodescription-site-settings`):
-		* **Added:**
-			* `disabled_taxonomies`, array.
-			* `noindex_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'noindex' ) );`.
-			* `nofollow_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'nofollow' ) );`.
-			* `noarchive_taxonomies`, array. Readable via `the_seo_framework()->get_option( the_seo_framework()->get_robots_taxonomy_option_id( 'noarchive' ) );`.
-			* `sitemap_logo_url`, string.
-			* `sitemap_logo_id`, int.
-			* `social_title_rem_additions`, int, 1 or 0.
-		* **Removed:**
-			* Note: Downgrade compatibility will be maintained for the next year, or two major updates; whichever comes first. This means that these options are updated by the plugin according to the latest inputted values, but shouldn't be used or written to elsewhere.
-			* `category_noindex`, now is `$options['noindex_taxonomies']['category']`.
-			* `category_nofollow`, now is `$options['nofollow_taxonomies']['category']`.
-			* `category_noarchive`, now is `$options['noarchive_taxonomies']['category']`.
-			* `tag_noindex`, now is `$options['noindex_taxonomies']['post_tag']`.
-			* `tag_nofollow`, now is `$options['nofollow_taxonomies']['post_tag']`.
-			* `tag_noarchive`, now is `$options['noarchive_taxonomies']['post_tag']`.
-		* **Other:**
-			* `$options['noindex_taxonomies']['post_format']` is now enabled for all new users by default.
-		* **Fixed:**
-			* `disabled_post_types` should now have its warned and default state reflected in the admin UI when you filter those in.
-* **Method notes:**
-	* For object `the_seo_framework()`:
-		* **Added:**
-			* `get_public_taxonomies()`
-			* `get_forced_supported_taxonomies()`
-			* `s_disabled_taxonomies()`
-			* `s_taxonomies()`
-			* `get_robots_taxonomy_option_id()`
-			* `detect_non_html_page_builder()`
-			* `uses_non_html_page_builder()`
-			* `output_js_title_data()`
-			* `output_js_description_data()`
-			* `get_home_title_additions()`
-			* `prepend_tax_label_prefix()`
-			* `get_latest_category_id()`
-		* **Changed:**
-			* `is_taxonomy_public()` now also returns public taxonomies without rewrite capabilities.
-			* `get_hierarchical_post_types()` now also returns post types without rewrite capabilities.
-			* `get_nonhierarchical_post_types()` now also returns post types without rewrite capabilities.
-			* `trim_excerpt()`:
-				1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
-				1. Now performs even faster queries, in most situations. (~0.2ms total (bad case) @ PHP 7.3/PCRE 11).
-				1. Now recognizes connector and final punctuations for preliminary sentence bounding.
-				1. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes, and marks used in some latin languages like ¡¿.
-				1. Is now able to always strip leading punctuation.
-				1. It will now strip leading colon characters.
-				1. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
-				1. Now returns encoded entities once more. So that the return value can be treated the same as anything else revolving around descriptions--preventing double transcoding like `&amp;amp;amp; > &amp;amp; > &amp;` instead of `&amp;amp;`.
-			* `get_title()` now has a third `$social` parameter.
-			* `get_custom_field_title()` now has a third `$social` parameter.
-			* `get_generated_title()` now has a third `$social` parameter.
-			* `get_generated_open_graph_title()` now has a third `$social` parameter.
-			* `use_title_branding()` now has a second `$social` parameter.
-			* `output_js_title_elements` now only outputs a legacy reference and is marked for deprecation.
-			* `output_js_description_elements` now only outputs a legacy reference and is marked for deprecation.
-			* `output_character_counter_wrap` no longer marks up the counter with the `description` HTML class.
-			* `s_excerpt` moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`, meaning that it'll clear those elements, instead of adding spaces around them.
-			* `strip_tags_cs` now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
-			* `get_hierarchical_taxonomies_as()` now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
-			* `get_paged_urls()` no longer memoizes its return value.
-			* `s_singleline()`:
-				1. Made this method about 25~92% faster (more replacements = more faster). 73% slower on empty strings (negligible).
-				1. Now also strips form-feed and vertical whitespace characters--might they appear in the wild.
-			* `s_knowledge_type()` can no longer fall back to its previous value--instead, it will fall back to a generic value.
-		* **Removed:**
-			* `rss_uses_excerpt()`, use `\get_option( 'rss_use_excerpt' )` instead.
-			* `the_content_feed()`, with no alternative available.
-			* `get_site_option()`, with no alternative available. Was never used.
-			* `do_dismissible_sticky_notice()`, with no alternative available. Was never used.
-			* `generate_dismissible_sticky_notice()`. Was never used. Use `register_dismissible_persistent_notice()` instead.
-			* `notices`, was marked private.
-			* `handle_update_post`, relied on security only valid within the plugin. It still exists, but can no longer be accessed directly via the API.
-			* `verify_seo_settings_nonce`, relied on security only valid within the plugin. It still exists, but can no longer be accessed directly via the API.
-		* **Deprecated:**
-			* `is_post_type_page()`, with no alternative available.
-			* `is_taxonomy_public()`, use `the_seo_framework()->is_taxonomy_supported()` instead.
-			* `the_seo_framework_get_option()`. Use `the_seo_framework()->get_option()` instead. Was never advertised to be used.
-			* `get_home_page_tagline()`, use the aptly named `get_home_title_additions()` instead.
-			* `permalink_structure()`, use `get_option( 'permalink_structure' );` instead.
-	* For object `\The_SEO_Framework\Bridges\Feed` (new!):
-		* **Added:**
-			* (static) `get_instance()`
-			* (static) `prepare()`
-	* For object `\The_SEO_Framework\Bridges\Ping`:
-		* **Changed:**
-			* `engage_pinging_cron()` now returns whether its engagement was successful.
-	* For object `\The_SEO_Framework\Bridges\Scripts`:
-		* **Changed:**
-			* `get_list_edit_scripts()`, now depends on title and description scripts.
-* **Object notes:**
-	* For object `\The_SEO_Framework\Interpreters\SeoBar`:
-		* **Added:** constant `STATE_UNDEFINED`; equals `0b0000` (bitwise naught); creates the gray undefined SEO Bar entry.
-	* Object `\The_SEO_Framework\Bridges\Feed` is new.
-	* For object `the_seo_framework()`:
-		* **Changed:**
-			* It no longer loads `\The_SEO_Framework\Feed` class.
-				* This class has been removed.
-* **Filter notes:**
-	* **Added:**
-		* `the_seo_framework_forced_supported_taxonomies`, used to adjust an array of forced supported taxonomies, so no settings can be adjusted for them.
-		* `the_seo_framework_taxonomy_disabled`, used to overwrite taxonomy disabled state.
-		* `the_seo_framework_shortcode_based_page_builder_active`, used to relay an active (conflicting) page builder that renders content dynamically is active.
-		* `the_seo_framework_detect_non_html_page_builder`, used to relay an active (conflicting) page builder is used for the current page.
-		* `the_seo_framework_sitemap_items`, used to filter all valid post IDs for the sitemap.
-	* **Changed:**
-		* `the_seo_framework_general_settings_tabs`'s `posttypes` entry has been renamed to `exclusions`.
-		* `the_seo_framework_use_title_branding` now has a third parameter, `$social`.
-		* `the_seo_framework_list_table_data` now has `doctitle` and `description` indexes in its first parameter.
-	* **Removed:**
-		* `the_seo_framework_network_settings`, was unused.
-* **JS notes:**
-	* **Method notes:**
-		* **Added:**
-			* `tsfDescription.getInputElement()`
-			* `tsfDescription.getStateOf()`
-			* `tsfDescription.updateStateOf()`
-			* `tsfDescription.updateStateAll()`
-			* `tsfTitle.getInputElement()`
-			* `tsfTitle.getStateOf()`
-			* `tsfTitle.updateStateOf()`
-			* `tsfTitle.updateStateAll()`
-		* **Changed:**
-			* `tsfDescription` and `tsfTitle` now handle legacy input elements (discoverable via `HTMLElement.dataset.hasLegacy`) for the unforeseeable future.
-				* You should update to the newer input elements data handlers if you want to handle their counters and hover elements. This allows for multiple meta title and meta descriptions inputs per page.
-					* See `the_seo_framework()` methods `output_js_title_data()` and `output_description_title_data()`.
-			* `tsfSocial.initTitleInputs` now expects `refNa` to be registered in its first parameter object.
-		* **Deprecated:**
-			* `tsfDescription.getState()`, use `tsfDescription.getStateOf()` instead.
-			* `tsfDescription.updateState()`, use `tsfDescription.updateStateOf()` instead.
-			* `tsfTitle.getState()`, use `tsfTitle.getStateOf()` instead.
-			* `tsfTitle.updateState()`, use `tsfTitle.updateStateOf()` instead.
-	* **Event notes:**
-		* **Added:**
-			* `window.tsf-post-type-support-changed`, used to test for post type change states.
-			* `window.tsf-taxonomy-support-changed`, used to test for taxonomy change states. Be warned, it's tricky.
-		* **Changed:**
-			* `window.tsf-tooltip-reset` now debounces by 25ms, so now you can call it in a loop without worrying about impacting performance.
-			* `window.tsf-flex-resize` may now contain `event.detail.target` data--depicting which flex wrapper is triggered--it should, for now, just be the original one.
-	* **Object notes:**
-		* **Added:**
-			* `tsfTitle.untitledTitle`
-			* `tsfTitle.privatePrefix`
-			* `tsfTitle.protectedPrefix`
-			* `tsfTitleL10n` (`=== window.tsfTitle.l10n`) now has the following indexes available:
-				* `i18n.privateTitle`
-				* `i18n.protectedTitle`
-				* `params.stripTitleTags`
-		* **Removed:**
-			* `tsfSettingsL10n` (`=== window.tsfSettings.l10n`) no longer has the following indexes available:
-				* `i18n`, which had:
-					* `confirmReset`
-					* `privateTitle`
-					* `protectedTitle`
-				* `params.refTitleLocked`
-				* `params.refDescriptionLocked`
-			* `tsfTitleL10n` (`=== window.tsfTitle.l10n`) no longer has the following indexes available:
-				* `states.useTagline`
-				* `states.useSocialTagline`
-				* `states.additionPlacement`
-				* `states.additionValue`
-				* `states.defaultTitle`
-			* `tsfDescriptionL10n` (`=== window.tsfDescription.l10n`) is no longer available.
-			* `tsfPostL10n` (`=== window.tsfPost.l10n`) no longer has the following indexes available:
-				* `params.stripTitleTags`
-			* `tsfTermL10n` (`=== window.tsfTerm.l10n`) no longer has the following indexes available:
-				* `params.stripTitleTags`
-				* `params.prefixesForcedDisabled`
-		* **Deprecated:**
-			* `tsfTitle.states.useTagline`, use `tsfTitle.states.addAdditions` instead. Applies to `tsfTitle.getStateOf()` and `tsfTitle.updateStateOf()`.
-	* **Template notes:**
-		* **Added:**
-			* `wp.template( 'tsf-disabled-taxonomy-help' )` is now available on the settings page.
-			* `wp.template( 'tsf-disabled-taxonomy-from-pt-help' )` is now available on the settings page.
-			* `wp.template( 'tsf-disabled-title-additions-help' )` is now available on the settings page.
-* **Fixed:**
-	* Closed some unclosed HTML elements.
-	* Moved some illegal HTML element placements, so they're now legal.
-	* The Block editor's primary term selector no longer binds to unsupported taxonomies.
-		* This was graciously handled before, since PHP never forwarded data of unsupported taxonomies.
-		* This also saves a HTTP request per unsupported taxonomy, where we would otherwise get its listed terms.
+* [Almost 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.1 or later.
+* Newer versions of WordPress are faster, more reliable, and easier to work with; for both you and us.
+* Supporting past versions takes time away that's better used implementing new features.
 
 **Support the development**
 
-We hope you'll love this update as much as we do. Please consider supporting us, by giving us [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or convince your friends and colleagues TSF is amazing!
+We hope you'll love this update as much as we do. Please consider supporting us by giving [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or convince your friends and colleagues TSF is amazing!
 
 **Detailed log**
 
-Fast and steady [wins the race](https://theseoframework.com/?p= TODO #detailed).
+Fast and steady [wins the race](https://theseoframework.com/?p=3598#detailed).
 
 = Full changelog =
 
@@ -676,7 +321,7 @@ Fast and steady [wins the race](https://theseoframework.com/?p= TODO #detailed).
 == Upgrade Notice ==
 
 = 4.1.0 =
-The v4.1.0 update brings a major upgrade. Make a backup of your database before updating. WordPress v5.1 (or higher) is now required. Downgrading to v4.0.7 is possible without repercussions.
+The v4.1.0 update brings a major upgrade. Make a backup of your database before updating. WordPress v5.1 (or higher) is now required. Downgrading to v4.0.7 is possible without side effects.
 
 = 4.0.0 =
 The v4.0.0 update brings a major upgrade. Make a backup of your database before updating. WordPress v4.9 (or higher) and PHP v5.6 (or higher) are now required. If you use the Extension Manager, update it to v2.1.0 (or higher) before updating this plugin. Downgrading to v3.2.4 is possible, however with the caveat that the homepage title may flip its output order back.
@@ -686,11 +331,5 @@ This is a major upgrade. Make a backup of your database before upgrading. WordPr
 
 = 3.0.0 =
 A major update. Make a backup of your database before upgrading.
-
-= 2.8.0 =
-In the 2.8.0 update, WordPress 4.3 and PHP 5.2 support have been dropped for better code quality.
-
-= 2.7.0 =
-The 2.7.0 update is required for the upcoming Extension Manager plugin and includes many improvements.
 
 == Other Notes ==

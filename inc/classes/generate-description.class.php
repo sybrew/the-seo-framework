@@ -742,7 +742,7 @@ class Generate_Description extends Generate {
 		$blogname = $this->get_blogname();
 
 		/* translators: 1: Title, 2: on, 3: Site Title */
-		return trim( sprintf( \__( '%1$s %2$s %3$s', 'autodescription' ), $title, $on, $blogname ) );
+		return trim( sprintf( \_x( '%1$s %2$s %3$s', 'blog page description', 'autodescription' ), $title, $on, $blogname ) );
 	}
 
 	/**

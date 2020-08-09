@@ -493,7 +493,7 @@ class Post_Data extends Detect {
 	 * @since 3.0.0
 	 * @since 4.0.0 1. Now allows updating during `WP_CRON`.
 	 *              2. Now allows updating during `WP_AJAX`.
-	 * @securitycheck 3.0.0 OK.
+	 * @securitycheck 4.1.0 OK.
 	 *
 	 * @param int      $post_id The post ID. Unused, but sent through filter.
 	 * @param \WP_Post $post    The post object.
@@ -541,7 +541,7 @@ class Post_Data extends Detect {
 
 		foreach ( $values as $t => $v ) {
 			if ( ! isset( $_POST[ $v['name'] ] ) ) continue;
-			if ( \wp_verify_nonce( $_POST[ $v['name'] ], $v['action'] ) ) {
+			if ( \wp_verify_nonce( $_POST[ $v['name'] ], $v['action'] ) ) { // Redundant. Fortified.
 				$this->update_primary_term_id( $post->ID, $t, $v['value'] );
 			}
 		}

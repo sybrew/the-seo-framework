@@ -42,7 +42,9 @@ class Profile extends Generate_Ldjson {
 	 */
 	protected function init_profile_fields() {
 
-		//= No need to load anything if the current user can't even publish posts.
+		//= No need to load anything if the current user can't even author posts.
+		// This is ultimately useless checking this on EVERY admin page.
+		// Debug me... 294 microseconds overhead. The cap check is cached, it seems. Takes as much time adding the actions.
 		if ( ! \current_user_can( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
 		\add_action( 'show_user_profile', [ $this, '_add_user_author_fields' ], 0, 1 );

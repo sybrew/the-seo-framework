@@ -76,6 +76,7 @@ function _prepare( $previous_version, $current_version ) {
 	if ( ! empty( \get_plugins()['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] ) ) return;
 
 	/** @source https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/08db1ab7410874c47d8f05b15479ce923857c35e/bootstrap/envtest.php#L68-L77 */
+	// We can forgo this test, since TSF has a higher requirement. We'll probably keep the plugins in line henceforth...
 	$requirements = [
 		'php' => 50605,
 		'wp'  => '4.9-dev',
@@ -110,17 +111,17 @@ function _suggest_extension_manager( $previous_version, $current_version ) {
 
 	$suggest_key = 'suggest-extension-manager';
 
-	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- Might be an integer.
 	if ( $previous_version < '4103' )
 		$tsf->register_dismissible_persistent_notice(
 			$tsf->convert_markdown(
 				vsprintf(
-					'<p>*Placeholder*</p>
-					<p>[Extension Manager plugin](%s) | [Included extensions](%s) | [Pricing](%s)</p>',
+					'<p>The SEO Framework was updated to v4.1! It brings 9 new features and [over 350 QOL improvements for performance and accessibility](%s).</p>
+					<p>Did you know we have [10 premium extensions](%s), adding features beyond SEO? Our anti-spam extension runs locally, has a 99.98%% catch rate, and adds only 0.13Kb to your website.</p>
+					<p>We want to make TSF even better for you &mdash; please consider [filling out our survey](%s), it has 5 questions and should take you about 2 minutes. Thank you.</p>',
 					[
-						'https://theseoframework.com/extension-manager/',
-						'https://theseoframework.com/extensions/',
-						'https://theseoframework.com/pricing/',
+						'https://theseoframework.com/?p=3598',
+						'https://theseoframework.com/?p=3599',
+						'https://theseoframework.com/?p=3591',
 					]
 				),
 				[ 'a', 'em', 'strong' ],

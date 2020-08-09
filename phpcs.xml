@@ -2,7 +2,7 @@
 <ruleset name="The SEO Framework">
 	<description>The coding standard used for The SEO Framework.</description>
 
-	<config name="minimum_supported_wp_version" value="4.9"/>
+	<config name="minimum_supported_wp_version" value="5.1"/>
 	<config name="testVersion" value="5.6-"/>
 
 	<rule ref="PHPCompatibilityWP"/>

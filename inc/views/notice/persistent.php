@@ -27,7 +27,7 @@ $button_js   = sprintf(
 	] )
 );
 $button_nojs = vsprintf(
-	'<form action="%s" method="post" id="tsf-dismiss-notice[%s]" class="hide-if-js">%s</form>',
+	'<form action="%s" method="post" id="tsf-dismiss-notice[%s]" class="hide-if-tsf-js">%s</form>',
 	[
 		// Register this at removable_query_args? Ignore? No one cares, literally? Does anyone even read this? Hello!? HELLO!?!?
 		\esc_attr( \add_query_arg( [ 'tsf-dismissed-notice' => $key ] ) ),
@@ -66,39 +66,3 @@ vprintf(
 		$button_js . $button_nojs,
 	]
 );
-
-// Layout shift prevention. Temporary, until WP figures out why notices should always be outputted above the title, but are always moved below it...
-/*
-echo '<script>',
-<<<'JS'
-( () => {
-	const targetNode = document.getElementById( 'wpbody-content' );
-	const config = { attributes: false, childList: true, subtree: false };
-
-	if ( ! targetNode instanceof HTMLElement ) return;
-
-	const MutationObserver =
-		window.MutationObserver
-		|| window.WebKitMutationObserver
-		|| window.MozMutationObserver;
-
-	const moveTo = target => {
-		target && document.querySelectorAll( '.tsf-notice' ).forEach( el => target.appendChild( el ) );
-	}
-
-	const observer = new MutationObserver( mutationList => {
-		mutationList.forEach( mutation => {
-			for ( const el of mutation.addedNodes.values() ) {
-				if ( el.classList && el.classList.contains( 'wrap' ) ) {
-					moveTo( el.querySelector( '.wp-header-end' ) || el.querySelector( 'h1' ) );
-				}
-			}
-		} );
-		// Always disconnect after first test. Let WP take it over from here.
-		observer.disconnect();
-	} );
-	observer.observe( targetNode, config );
-} )();
-JS
-,'</script>';
-*/

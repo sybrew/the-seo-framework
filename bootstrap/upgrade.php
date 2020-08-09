@@ -38,9 +38,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  */
 
 \add_action( 'init', __NAMESPACE__ . '\\_do_upgrade', 20 );
-\add_action( 'admin_notices', __NAMESPACE__ . '\\_output_upgrade_notices' );
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99, 2 );
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100, 2 );
+
+/**
+ * @since 4.1.0 Deprecated. We can no longer rely on this from WP 5.5.
+ * @deprecated Use persistent notifications, instead.
+ */
+\add_action( 'admin_notices', __NAMESPACE__ . '\\_output_upgrade_notices' );
 
 /**
  * Returns the default site options.
@@ -407,7 +412,7 @@ function _do_install_notice() {
 			$tsf->convert_markdown(
 				sprintf(
 					/* translators: %s = Link, markdown. */
-					\esc_html__( "To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).", 'autodescription' ),
+					\esc_html__( 'To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).', 'autodescription' ),
 					'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
 				),
 				[ 'a' ],
@@ -446,6 +451,8 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) {
  * Memoize and returns upgrade notices to be outputted in admin.
  *
  * @since 2.9.0
+ * @since 4.1.0 Deprecated. We can no longer rely on this from WP 5.5.
+ * @deprecated Use persistent notifications, instead.
  *
  * @param string $notice The upgrade notice.
  * @param bool   $get    Whether to return the upgrade notices.
@@ -467,6 +474,8 @@ function _add_upgrade_notice( $notice = '', $get = false ) {
  *
  * @since 2.9.0
  * @since 3.0.0 Added prefix.
+ * @since 4.1.0 Deprecated. We can no longer rely on this from WP 5.5.
+ * @deprecated Use persistent notifications, instead.
  * @uses _add_upgrade_notice()
  */
 function _output_upgrade_notices() {

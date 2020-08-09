@@ -439,7 +439,7 @@ switch ( $instance ) :
 
 		$i_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
-			esc_html__( '%1$s %2$s %3$s', 'autodescription' ),
+			esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
 			$this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				esc_html__( 'Apply `noindex` to the homepage?', 'autodescription' ),
@@ -455,7 +455,7 @@ switch ( $instance ) :
 
 		$f_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
-			esc_html__( '%1$s %2$s %3$s', 'autodescription' ),
+			esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
 			$this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				esc_html__( 'Apply `nofollow` to the homepage?', 'autodescription' ),
@@ -471,7 +471,7 @@ switch ( $instance ) :
 
 		$a_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
-			esc_html__( '%1$s %2$s %3$s', 'autodescription' ),
+			esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
 			$this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				esc_html__( 'Apply `noarchive` to the homepage?', 'autodescription' ),

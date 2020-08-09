@@ -125,6 +125,7 @@ final class Scripts {
 
 		static::$instance = &$this;
 
+		// These fail when called in the body.
 		\add_filter( 'admin_body_class', [ $this, '_add_body_class' ] );
 		\add_action( 'in_admin_header', [ $this, '_print_tsfjs_script' ] );
 

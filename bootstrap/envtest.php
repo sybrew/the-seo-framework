@@ -12,7 +12,7 @@
  *
  * To use that, we need to add these plugin headers in the plugin's main PHP file:
  * Requires PHP: 5.6.5
- * Requires at least: 4.9
+ * Requires at least: 5.1
  */
 
 defined( 'THE_SEO_FRAMEWORK_DB_VERSION' ) or die;

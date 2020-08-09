@@ -297,7 +297,7 @@ final class SeoBar {
 		if ( null === $gettext ) {
 			$gettext = [
 				/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
-				'aria' => \__( '%1$s: %2$s %3$s', 'autodescription' ),
+				'aria' => \_x( '%1$s: %2$s %3$s', 'SEO Bar ARIA assessment enumeration', 'autodescription' ),
 			];
 		}
 
@@ -341,9 +341,9 @@ final class SeoBar {
 		if ( null === $gettext ) {
 			$gettext = [
 				/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
-				'enum'        => \__( '%1$d: %2$s', 'autodescription' ),
+				'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
 				/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
-				'list'        => \__( '%1$s: %2$s', 'autodescription' ),
+				'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
 				'assessment'  => \__( 'Assessment', 'autodescription' ),
 				'assessments' => \__( 'Assessments', 'autodescription' ),
 			];
