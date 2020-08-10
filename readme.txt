@@ -251,7 +251,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
 		* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
 	* **Other:**
-		* TODO Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
+		* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
 
 **For developers:**
 	* **Changed methods for object `the_seo_framework()`:**
