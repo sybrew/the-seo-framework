@@ -932,13 +932,17 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.1.0 Simplified method.
 	 * @since 4.1.0 1. Made this method about 25~92% faster (more replacements = more faster). 73% slower on empty strings (negligible).
 	 *              2. Now also strips form-feed and vertical whitespace characters--might they appear in the wild.
+	 *              3. Now also strips horizontal tabs (reverted in 4.1.1).
+	 * @since 4.1.1 1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+	 *              2. No longer transforms horizontal tabs. Use `s_tabs()` instead.
+	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
 	 * @param string $new_value The input value with possible multiline.
 	 * @return string The input string without multiple lines.
 	 */
 	public function s_singleline( $new_value ) {
 		// Use x20 because it's a human-visible real space.
-		return trim( strtr( $new_value, "\r\n\t\v\f", "\x20\x20\x20\x20\x20" ) );
+		return trim( strtr( $new_value, "\x0A\x0B\x0C\x0D", "\x20\x20\x20\x20" ) );
 	}
 
 	/**
@@ -960,14 +964,16 @@ class Sanitize extends Admin_Pages {
 	 * Removes tabs and replaces it with spaces.
 	 *
 	 * @since 2.8.2
+	 * @since 4.1.1 Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
 	 * @see $this->s_dupe_space() For removing duplicates spaces.
+	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
 	 * @param string $new_value The input value with possible tabs.
 	 * @return string The input string without tabs.
 	 */
 	public function s_tabs( $new_value ) {
 		// Use x20 because it's a human-visible real space.
-		return strtr( $new_value, "\t", "\x20" );
+		return strtr( $new_value, "\x09", "\x20" );
 	}
 
 	/**
@@ -1335,6 +1341,7 @@ class Sanitize extends Admin_Pages {
 
 	/**
 	 * Removes HTML tags and line breaks from string.
+	 * Also removes all spaces.
 	 *
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.

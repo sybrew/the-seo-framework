@@ -22,7 +22,7 @@ It's easy to get started. Activate this plugin, and your site's instantly protec
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 18 000 hours into this plugin. Here are the results: =
+= We poured over 18&#160;000 hours into this plugin. Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -222,6 +222,14 @@ You should tell the author to check out the "`public` and `rewrite` post type ar
 
 In the meantime, you can disable SEO for the unwanted entries via the "General SEO Settings" under "Exclusions."
 
+= Why aren't focus keywords included? =
+
+[Google warns](https://support.google.com/webmasters/answer/66358) about the keyword stuffing approach implemented by some other SEO plugins. It forces users to write unnatural content, and it can have adverse effects on your site's ranking.
+
+Modern search engines use AI to understand the context of your articles. This means that as long as you write relevant content, you shouldn't have to worry about keywords.
+
+However, we implemented the same API Google uses to help you find appropriate synonyms and inflections for your keywords. This functionality is part of our premium suite of extensions.
+
 = What do the application/ld+json scripts do? =
 
 The JSON-LD scripts are search engine helpers that tell search engines how to connect and index the site. We do this via the Schema.org standard.
@@ -235,6 +243,22 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.1.1 =
+
+**For everyone:**
+	* **Fixed:**
+		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
+		* TODO Addressed an issue where line breaks (`<br>`) didn't add spaces for description generation; but, instead voided them.
+	* **Other:**
+		* TODO Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
+
+**For developers:**
+	* **Changed methods for object `the_seo_framework()`:**
+		* `s_singleline()`:
+			1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+			1`. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
+		* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
 
 = 4.1.0 - Grace =
 
@@ -252,9 +276,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 **Graciously graceful**
 
 This update's name is Grace, and for a good reason: the plugin listens to your inputs respectfully and does everything as you incline, as you would expect.
-The SEO Framework's response-and rendering times have substantially been reduced; everything's much smoother and swifter since 5 years ago--back when it had fewer than 1 000 users.
 
-At first glance, you probably won't notice anything new after updating to 4.1. But, when you look closer, among 350 QOL improvements, you'll find improvements such as:
+The SEO Framework's response-and rendering times have substantially been reduced; everything's much smoother and swifter since 5 years ago--back when it had fewer than 1&#160;000 users.
+
+At first glance, you probably won't notice anything new after updating to 4.1. But, when you look closer, among 350 QOL changes, you'll find improvements such as:
 
 * Tapping a tooltip no longer accidentally activates related inputs.
 * Only necessary REST-requests are made for primary-term support.
@@ -267,7 +292,7 @@ You'll also find many obscure new features, such as:
 * A new accessible SEO Bar color has been added: Gray. It exclaims there was nothing to process.
 * Fancy a custom sitemap stylesheet logo? Now you can upload one.
 * You can now remove branding from social meta titles.
-* Persistent notices may now show up, gracefully (again, more on this below).
+* Persistent notices may now show up, gracefully (more on this below).
 
 You can find more than 340 other noteworthy changes in the [detailed log](https://theseoframework.com/?p=3598#detailed).
 
@@ -308,7 +333,7 @@ WordPress 4.9 and 5.0 are no longer supported. Here's why:
 
 **Support the development**
 
-We hope you'll love this update as much as we do. Please consider supporting us by giving [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or convince your friends and colleagues TSF is amazing!
+We hope you'll love this update as much as we do. Please consider supporting us by giving [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or convince your friends and colleagues that TSF is amazing!
 
 **Detailed log**
 
