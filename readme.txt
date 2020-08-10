@@ -249,7 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 **For everyone:**
 	* **Fixed:**
 		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
-		* TODO Addressed an issue where line breaks (`<br>`) didn't add spaces for description generation; but, instead voided them.
+		* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
 	* **Other:**
 		* TODO Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
 
@@ -259,6 +259,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 			1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
 			1`. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
 		* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+		* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
+	* **Fixed:**
+		* TODO get_public_post_types/get_public_taxonomies aren't returning an array: https://wordpress.org/support/topic/upgraded-to-4-1-0-and-got-some-php-errors-on-the-back-end/
 
 = 4.1.0 - Grace =
 

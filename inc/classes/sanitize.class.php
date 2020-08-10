@@ -998,9 +998,9 @@ class Sanitize extends Admin_Pages {
 
 		$strip_args = [
 			'space' =>
-				[ 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'li', 'main', 'ol', 'p', 'section', 'ul' ],
+				[ 'article', 'aside', 'blockquote', 'br', 'dd', 'div', 'dl', 'dt', 'li', 'main', 'ol', 'p', 'section', 'ul' ],
 			'clear' =>
-				[ 'address', 'bdo', 'br', 'button', 'canvas', 'code', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'tfoot', 'var', 'video' ],
+				[ 'address', 'bdo', 'button', 'canvas', 'code', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'tfoot', 'var', 'video' ],
 		];
 
 		/**
@@ -1861,6 +1861,7 @@ class Sanitize extends Admin_Pages {
 	 *              3. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
 	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
 	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
+	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
 	 * @link https://www.w3schools.com/html/html_blocks.asp
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 	 *
@@ -1885,9 +1886,9 @@ class Sanitize extends Admin_Pages {
 
 		$default_args = [
 			'space' =>
-				[ 'address', 'article', 'aside', 'blockquote', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
+				[ 'address', 'article', 'aside', 'blockquote', 'br', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
 			'clear' =>
-				[ 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
+				[ 'bdo', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
 			'strip' => true,
 		];
 
@@ -1920,8 +1921,9 @@ class Sanitize extends Admin_Pages {
 			$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $args[ $type ] ) );
 
 			if ( $void_query ) {
-				$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $void_query ) );
-				$input  = preg_replace( "/$_regex/si", '', $input );
+				$_regex   = sprintf( '<(%s)\b[^>]*?>', implode( '|', $void_query ) );
+				$_replace = 'space' === $type ? ' ' : '';
+				$input    = preg_replace( "/$_regex/si", $_replace, $input );
 			}
 			if ( $fill_query ) {
 				$_regex   = sprintf( '<(%s)\b[^>]*>([^<]*)(<\/\1>)?|(<\/?(?1)>)', implode( '|', $fill_query ) );
