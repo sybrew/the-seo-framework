@@ -113,6 +113,7 @@ final class Debug {
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.0 Now escapes all input, except for $replacement.
+	 * @since 4.1.1 No longer registers a custom error handler.
 	 * @access private
 	 *
 	 * @param string $function     The function that was called.
@@ -141,32 +142,30 @@ final class Debug {
 		 */
 		if ( WP_DEBUG && \apply_filters( 'deprecated_function_trigger_error', true ) ) {
 
-			set_error_handler( [ $this, 'error_handler_deprecated' ] );
-
 			if ( isset( $replacement ) ) {
-				trigger_error(
-					sprintf(
-						/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
-						\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ),
-						\esc_html( $function ),
-						'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
-						\esc_html( $version ),
-						$replacement // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
-					)
+				$message = sprintf(
+					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
+					\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ),
+					\esc_html( $function ),
+					'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
+					\esc_html( $version ),
+					$replacement // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
 				);
 			} else {
-				trigger_error(
-					sprintf(
-						/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
-						\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
-						\esc_html( $function ),
-						'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
-						\esc_html( $version )
-					)
+				$message = sprintf(
+					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
+					\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
+					\esc_html( $function ),
+					'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
+					\esc_html( $version )
 				);
 			}
 
-			restore_error_handler();
+			trigger_error(
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
+				$this->combobulate_error_message( $this->get_error( E_USER_DEPRECATED ), $message, E_USER_DEPRECATED ),
+				E_USER_DEPRECATED
+			);
 		}
 	}
 
@@ -179,6 +178,7 @@ final class Debug {
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.0 Now escapes all input, except for $message.
+	 * @since 4.1.1 No longer registers a custom error handler.
 	 * @access private
 	 *
 	 * @param string $function The function that was called.
@@ -206,22 +206,23 @@ final class Debug {
 		 */
 		if ( WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
 
-			set_error_handler( [ $this, 'error_handler_doing_it_wrong' ] );
+			/* translators: 1: plugin version */
+			$version = $version ? sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version ) : '';
 
-			/* translators: %s = Version number */
-			$version = empty( $version ) ? '' : sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version );
-			trigger_error(
-				sprintf(
-					/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
-					\esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
-					\esc_html( $function ),
-					'<strong>' . \esc_html__( 'incorrectly', 'autodescription' ) . '</strong>',
-					$message, // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
-					\esc_html( $version )
-				)
+			$message = sprintf(
+				/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
+				\esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
+				\esc_html( $function ),
+				'<strong>' . \esc_html__( 'incorrectly', 'autodescription' ) . '</strong>',
+				$message, // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
+				\esc_html( $version )
 			);
 
-			restore_error_handler();
+			trigger_error(
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
+				$this->combobulate_error_message( $this->get_error( E_USER_NOTICE ), $message, E_USER_NOTICE ),
+				E_USER_NOTICE
+			);
 		}
 	}
 
@@ -232,6 +233,7 @@ final class Debug {
 	 * @since 2.7.0
 	 * @since 2.8.0 1. Now escapes all parameters.
 	 *              2. Removed check for gettext.
+	 * @since 4.1.1 No longer registers a custom error handler.
 	 * @access private
 	 *
 	 * @param string $p_or_m The Property or Method.
@@ -257,20 +259,19 @@ final class Debug {
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
 		if ( WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
-
-			set_error_handler( [ $this, 'error_handler_inaccessible_call' ] );
-
-			trigger_error(
-				sprintf(
-					/* translators: 1: Method or Property name, 2: Message */
-					\esc_html__( '%1$s is not accessible. %2$s', 'autodescription' ),
-					'<code>' . \esc_html( $p_or_m ) . '</code>',
-					\esc_html( $message )
-				),
-				E_USER_ERROR
+			$message = sprintf(
+				/* translators: 1: Method or Property name, 2: The SEO Framework class. 3: Message */
+				\esc_html__( '%1$s is not accessible in %2$s. %3$s', 'autodescription' ),
+				'<code>' . \esc_html( $p_or_m ) . '</code>',
+				'<code>the_seo_framework()</code>',
+				\esc_html( $message )
 			);
 
-			restore_error_handler();
+			trigger_error(
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
+				$this->combobulate_error_message( $this->get_error( E_USER_WARNING ), $message, E_USER_WARNING ),
+				E_USER_WARNING
+			);
 		}
 	}
 
@@ -282,132 +283,104 @@ final class Debug {
 	 * the plugin doesn't trigger this behavior.
 	 *
 	 * @since 3.2.2
+	 * @since 4.1.1 Reworked to work with any error handler.
 	 * @see PHP debug_backtrace()
+	 * @see $this->combobulate_error_message()
 	 *
+	 * @param int|null $type The error type, that helps us locate the error's origin.
 	 * @return array The erroneous caller data
 	 */
-	protected function get_error() {
+	protected function get_error( $type = null ) {
 
 		// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may be disabled.
 		$backtrace = @debug_backtrace();
-		/**
-		 * 0 = This function.
-		 * 1 = Error handler.
-		 * 2 = Error forwarder.
-		 * 3 = Debug handler.
-		 */
-		if ( isset( $backtrace[7]['object'] ) && is_a( $backtrace[7]['object'], \the_seo_framework_class(), false ) ) {
+
+		if ( ! $backtrace ) return [];
+
+		if ( $type & E_USER_DEPRECATED ) {
 			/**
-			 * 4 = TSF Factory magic method.
-			 * 5 = Error invoking thing.
-			 * 6 = TSF Factory. (the_seo_framework(), or a variable that stored this)
-			 * 7 = Erroneous caller.
+			 * 0 = This function.
+			 * 1 = Error handler (This class).
+			 * 2 = Error forwarder (TSF class).
 			 */
-			$error = $backtrace[7];
+			if ( isset( $backtrace[4]['args'][0][0] ) && is_a( $backtrace[4]['args'][0][0], 'The_SEO_Framework\Deprecated', false ) ) {
+				/**
+				 * 3 = Deprecated call.
+				 * 4 = TSF deprecation class fowarder.
+				 * 5 = User mistake.
+				 */
+				$error = $backtrace[5];
+			} else {
+				/**
+				 * 3 = Deprecated call & user mistake. (no forwarder)
+				 */
+				$error = $backtrace[3];
+			}
 		} else {
 			/**
-			 * 4 = Error invoking thing.
-			 * 5 = Erroneous caller.
+			 * 0 = This function.
+			 * 1 = Error handler (This class).
+			 * 2 = Error forwarder (TSF class).
 			 */
-			$error = $backtrace[5];
+			if ( isset( $backtrace[2]['object'] ) && is_a( $backtrace[2]['object'], \the_seo_framework_class(), false ) ) {
+				/**
+				 * 3 = Method with fault test & user mistake.
+				 */
+				$error = $backtrace[3];
+			} else {
+				/**
+				 * 3 = Method with fault test.
+				 * 4 = User mistake.
+				 */
+				$error = $backtrace[4];
+			}
 		}
 
 		return $error;
 	}
 
 	/**
-	 * The SEO Framework error handler.
+	 * Somehow puts together a neat error message from unknown sources.
 	 *
-	 * Only handles user notices: E_USER_NOTICE
+	 * @since 4.1.1
 	 *
-	 * @since 2.6.0
-	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
-	 *
-	 * @param int    $code    The error handler code.
-	 * @param string $message The error message. Expected to be escaped.
-	 */
-	protected function error_handler_deprecated( $code, $message ) {
-
-		//* Only do so if E_USER_NOTICE is passed.
-		if ( E_USER_NOTICE & $code && isset( $message ) ) {
-			$this->error_handler( $this->get_error(), $message );
-		}
-	}
-
-	/**
-	 * The SEO Framework error handler.
-	 *
-	 * Only handles user notices.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @param int    $code    The error handler code.
-	 * @param string $message The error message. Expected to be escaped.
-	 */
-	protected function error_handler_doing_it_wrong( $code, $message ) {
-
-		//* Only do so if E_USER_NOTICE is pased.
-		if ( E_USER_NOTICE === $code && isset( $message ) ) {
-			$this->error_handler( $this->get_error(), $message );
-		}
-	}
-
-	/**
-	 * The SEO Framework error handler.
-	 *
-	 * Only handles user errors.
-	 *
-	 * @since 2.6.0
-	 * @since 3.2.2 Fixed unaccounted-for backtrace depth logic since this class decoupling in 3.1
-	 *
-	 * @param int    $code    The error handler code.
-	 * @param string $message The error message. Expected to be escaped.
-	 */
-	protected function error_handler_inaccessible_call( $code, $message ) {
-
-		//* Only do so if E_USER_ERROR is pased.
-		if ( E_USER_ERROR === $code && isset( $message ) ) {
-			$this->error_handler( $this->get_error(), $message, $code );
-		}
-	}
-
-	/**
-	 * Echos error.
-	 *
-	 * @since 2.6.0
-	 * @since 2.8.0 added $code parameter
-	 *
-	 * @param array  $error   The Error location and file data extruded from debug_backtrace().
-	 * @param string $message The error message. Expected to be escaped.
+	 * @param array  $error   The debug_backtrace() error. May be an empty array.
+	 * @param string $message The error message. May contain HTML. Expected to be escaped.
 	 * @param int    $code    The error handler code.
 	 */
-	protected function error_handler( $error, $message, $code = E_USER_NOTICE ) {
+	protected function combobulate_error_message( $error, $message, $code ) {
 
 		$file = isset( $error['file'] ) ? $error['file'] : '';
 		$line = isset( $error['line'] ) ? $error['line'] : '';
 
-		if ( isset( $message ) ) {
-			switch ( $code ) :
-				case E_USER_ERROR:
-					$type = 'Error';
-					break;
+		switch ( $code ) :
+			case E_USER_ERROR:
+				$type = 'Error';
+				break;
 
-				case E_USER_WARNING:
-					$type = 'Warning';
-					break;
+			case E_USER_DEPRECATED:
+				$type = 'Deprecated';
+				break;
 
-				case E_USER_NOTICE:
-				default:
-					$type = 'Notice';
-					break;
-			endswitch;
+			case E_USER_WARNING:
+				$type = 'Warning';
+				break;
 
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- output is escaped.
-			echo sprintf( '<span><strong>%s:</strong> ', $type ) . $message;
-			echo $file ? ' In ' . \esc_html( $file ) : '';
-			echo $line ? ' on line ' . \esc_html( $line ) : '';
-			echo '.</span><br>' . PHP_EOL;
-		}
+			case E_USER_NOTICE:
+			default:
+				$type = 'Notice';
+				break;
+		endswitch;
+
+		$file = \esc_html( $file );
+		$line = \esc_html( $line );
+
+		$_message  = "'<span><strong>$type:</strong> $message";
+		$_message .=  $file ? " In $file" : '';
+		$_message .=  $line ? " on line $line" : '';
+		$_message .= '</span><br>' . PHP_EOL;
+
+		return $_message;
 	}
 
 	/**

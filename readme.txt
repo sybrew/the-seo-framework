@@ -246,22 +246,43 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.1 =
 
+* We did some professional house cleaning to remove a bit of trash we left in the 4.1.0 update. Now, everything should be squeaky clean and all sparkly.
+
 **For everyone:**
-	* **Fixed:**
-		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
-		* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
-	* **Other:**
-		* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
+
+* **Improved:**
+	* TODO We now use fully qualified function names for pre-evaluated functions. This means that, if you use OpCache on your server (which you should for ~300% performance improvement), we call functions from your memory, instead of forcing a recompile. In layman's terms: you can see a 0~30% (TODO evaluate) performance increase in some scenarios.
+		* https://github.com/php/php-src/blob/PHP-7.4/Zend/zend_compile.c#L3750-L3829
+			* TODO check older versions...
+		* https://github.com/php/php-src/blob/php-7.2.6/ext/opcache/Optimizer/pass1_5.c
+			* TODO check older/newer versions
+		* TODO test for odd behavior at 3v4l.org
+* **Fixed:**
+	* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
+	* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
+* **Other:**
+	* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
 
 **For developers:**
-	* **Changed methods for object `the_seo_framework()`:**
-		* `s_singleline()`:
-			1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-			1`. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
-		* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-		* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-	* **Fixed:**
-		* TODO get_public_post_types/get_public_taxonomies aren't returning an array: https://wordpress.org/support/topic/upgraded-to-4-1-0-and-got-some-php-errors-on-the-back-end/
+
+* **Changed:**
+	* We no longer use custom error handlers, but rely on the system-provided ones, instead.
+		* This is more harmoneous with plugins like Query Monitor, and doesn't override custom error loggers.
+* **Changed methods for object `the_seo_framework()`:**
+	* `s_singleline()`:
+		1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+		1. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
+	* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+	* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
+		* Note that "clear" runs before "space". Mind your duplicates.
+* **Action notes:**
+	* **Added:**
+		* TODO `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
+		* TODO `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
+* **Fixed:**
+	* A single mistake got through our error handler during development. If it can happen once, it can happen again. So, we reworked the error handler akin to WordPress's, so that it'll allow custom handlers to catch these errors and scream at us--instead of them being silently outputted by TSF.
+		* Now, WordPress controls whether errors should be displayed.
+		* Unchanged: Only when WordPress allows debugging, errors are handled. This means that no errors can be or could've been shown on websites in production.
 
 = 4.1.0 - Grace =
 

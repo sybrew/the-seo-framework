@@ -40,7 +40,7 @@ switch ( $instance ) :
 			true
 		);
 
-		if ( $this->rss_uses_excerpt() ) {
+		if ( get_option( 'rss_use_excerpt' ) ) {
 			$this->description_noesc(
 				$this->convert_markdown(
 					sprintf(
