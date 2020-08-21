@@ -770,6 +770,8 @@ function _do_upgrade_4103() {
 		// Transport category_noindex/nofollow/noarchive and tag_noindex/nofollow/noarchive settings.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 			$_option = $tsf->get_robots_taxonomy_option_id( $r );
+			// This check will bite us if we transport it later again and the user upgrades from the far past...
+			// FIXME by not relying on the defaults, but use sane, unfilterable defaults in-line here?
 			if ( isset( $defaults[ $_option ] ) ) {
 				// Set current to default options.
 				$_value = (array) ( $tsf->get_option( $_option, false ) ?: $defaults[ $_option ] );

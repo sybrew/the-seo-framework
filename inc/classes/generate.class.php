@@ -671,10 +671,8 @@ class Generate extends User_Data {
 		if ( 2 === $match_len ) {
 			// Only a language key is provided.
 
-			$locale_keys = (array) $this->language_keys();
-
 			// Find first matching key.
-			$key = array_search( $match, $locale_keys, true );
+			$key = array_search( $match, $this->language_keys(), true );
 
 			if ( $key ) {
 				return $valid_locales[ $key ];

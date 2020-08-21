@@ -1109,7 +1109,7 @@ class Detect extends Render {
 			array_unique(
 				array_merge(
 					$this->get_forced_supported_taxonomies(),
-					//? array_values() because get_post_types() gives a sequential array.
+					//? array_values() because get_taxonomies() gives a sequential array.
 					array_values( (array) \get_taxonomies( [
 						'public'   => true,
 						'_builtin' => false,

@@ -815,6 +815,7 @@ class Cache extends Site_Options {
 	 * @since 2.2.9
 	 * @since 2.8.0 Now listens to option 'cache_sitemap' before deleting transient.
 	 * @since 2.8.2 Added cache to prevent duplicated flushes.
+	 * @since 4.1.1 Now fires an action.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -828,7 +829,20 @@ class Cache extends Site_Options {
 		$transient = $this->get_sitemap_transient_name();
 		$transient and \delete_transient( $transient );
 
-		if ( $this->get_option( 'ping_use_cron' ) ) {
+		$ping_use_cron = $this->get_option( 'ping_use_cron' );
+
+		/**
+		 * @since 4.1.1
+		 * @param array $params Any useful environment parameters.
+		 */
+		\do_action(
+			'the_seo_framework_sitemap_transient_cleared',
+			[
+				'ping_use_cron' => $ping_use_cron,
+			]
+		);
+
+		if ( $ping_use_cron ) {
 			\The_SEO_Framework\Bridges\Ping::engage_pinging_cron();
 		} else {
 			\The_SEO_Framework\Bridges\Ping::ping_search_engines();

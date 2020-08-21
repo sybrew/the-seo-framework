@@ -343,6 +343,7 @@ class Site_Options extends Sanitize {
 		if ( ! isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
 			$cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
 
+		// TODO fall back to default if not registered? This means we no longer have to rely on upgrading. Or, array merge (recursive) at get_all_options?
 		return isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] ) ? $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] : '';
 	}
 
@@ -632,6 +633,8 @@ class Site_Options extends Sanitize {
 	 * Returns Facebook locales array values.
 	 *
 	 * @since 2.5.2
+	 * TODO collapse this with language_keys(), ll_CC => ll?, return array_keys here, array_values there?
+	 *
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
 	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
 	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/

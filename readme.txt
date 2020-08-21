@@ -277,8 +277,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* Note that "clear" runs before "space". Mind your duplicates.
 * **Action notes:**
 	* **Added:**
-		* TODO `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
-		* TODO `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
+		* `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
+		* `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
 * **Fixed:**
 	* A single mistake got through our error handler during development. If it can happen once, it can happen again. So, we reworked the error handler akin to WordPress's, so that it'll allow custom handlers to catch these errors and scream at us--instead of them being silently outputted by TSF.
 		* Now, WordPress controls whether errors should be displayed.

@@ -99,7 +99,7 @@ function _prepare( $previous_version, $current_version ) {
  * Registers "look at TSFEM" notification to applicable plugin users on upgrade.
  *
  * @since 3.0.6
- * @since 4.1.0 Is now a persistent notice, that outputs at most 3 times, on any admin page, only for users that can install plugins.
+ * @since 4.1.0 Is now a persistent notice, that outputs at most 3 times, on some admin pages, only for users that can install plugins.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -116,7 +116,7 @@ function _suggest_extension_manager( $previous_version, $current_version ) {
 			$tsf->convert_markdown(
 				vsprintf(
 					'<p>The SEO Framework was updated to v4.1! It brings 9 new features and [over 350 QOL improvements for performance and accessibility](%s).</p>
-					<p>Did you know we have [10 premium extensions](%s), adding features beyond SEO? Our anti-spam extension runs locally, has a 99.98%% catch rate, and adds only 0.13Kb to your website.</p>
+					<p>Did you know we have [10 premium extensions](%s), adding features beyond SEO? Our anti-spam extension runs locally, has a 99.98%% catch rate, and adds only 0.13KB to your website.</p>
 					<p>We want to make TSF even better for you &mdash; please consider [filling out our survey](%s), it has 5 questions and should take you about 2 minutes. Thank you.</p>',
 					[
 						'https://theseoframework.com/?p=3598',

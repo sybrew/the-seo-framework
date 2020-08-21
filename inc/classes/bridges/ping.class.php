@@ -42,7 +42,7 @@ final class Ping {
 	private function __construct() { }
 
 	/**
-	 * Prepares a CRON-based ping within 30 seconds of calling this.
+	 * Prepares a cronjob-based ping within 30 seconds of calling this.
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now returns whether the cron engagement was successful.
@@ -64,6 +64,7 @@ final class Ping {
 	 *              2. Removed Easter egg.
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @since 4.0.2 Added action.
+	 * @since 4.1.1 Added another action.
 	 *
 	 * @return void Early if blog is not public.
 	 */
@@ -77,6 +78,12 @@ final class Ping {
 
 		//* NOTE: Use legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
+			/**
+			 * @since 4.1.1
+			 * @param string $class The current class name.
+			 */
+			\do_action( 'the_seo_framework_before_ping_search_engines', static::class );
+
 			if ( $tsf->get_option( 'ping_google' ) )
 				static::ping_google();
 
