@@ -246,11 +246,18 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.1 =
 
-* We did some professional house cleaning to remove a bit of trash we left in the 4.1.0 update. Now, everything should be squeaky clean and all sparkly.
+* We did some professional home cleaning to remove a bit of trash we left in the 4.1.0 update. Now, everything should be squeaky clean and all sparkly.
+
+TODO should we test for improvement performance by numbers again? I think it's quite substantial, even over 4.1.0.
 
 **For everyone:**
 
-* **Improved:**
+* **Performance (new section):**
+	* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
+		* This also improves compatibility with non-jQuery driven APIs.
+	* We exchanged jQuery NodeList handlers for native JS in various places, improving browser load time drastically.
+		* This also resolves an issue where jQuery's cache was polluted for unknown reasons (good luck debugging jQuery's code), in combination with ACF Pro's Flexible Content types, where the browser could hang for several minutes.
+	* We reduced the number of events marginally by exempting hidden fields from change listeners.
 	* TODO We now use fully qualified function names for pre-evaluated functions. This means that, if you use OpCache on your server (which you should for ~300% performance improvement), we call functions from your memory, instead of forcing a recompile. In layman's terms: you can see a 0~30% (TODO evaluate) performance increase in some scenarios.
 		* https://github.com/php/php-src/blob/PHP-7.4/Zend/zend_compile.c#L3750-L3829
 			* TODO check older versions...
@@ -262,6 +269,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
 * **Other:**
 	* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
+	* Our scripts can no longer invoke "are you sure"-change listeners. You'll have to manually input or change something to invoke that.
+		* We always thought that we could at some point make a vital input-change for you in the browser, but we never did, nor do we think we ever will. We handle sanitization on the server, which is much neater.
+		* Moreover, if we do make such a change, we have hooks that invoke this for us.
 
 **For developers:**
 
@@ -279,6 +289,34 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* **Added:**
 		* `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
 		* `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
+* **JS notes:**
+	* **Note:** Only changes affecting the API are listed. "We improved performance" and the like are exempted from this list.
+	* **Object notes:**
+		* **Added:**
+			* `tsfAys.areSettingsChanged()`, a clone of `tsfAys.getChangedState()` with a better conveying meaning.
+		* **Changed:**
+			* `tsfAys.reset()` now debounces reloading of the listeners.
+	* **Event notes:**
+		* **Added:**
+			* `tsf-interactive` now triggers on `document.body`.
+				* We required this to register the "Are you sure" script as late as possible, where all other scripts are sequenced before this point.
+			* `tsf-gutenberg-onsave-completed` now triggers on `document`.
+		* **Changed:**
+			* `tsf-gutenberg-saved-document` no longer supplies a second parameter for the event type. Instead, you can now find it in `event.detail.savedType`.
+			* `tsf-title-sep-updated` no longer supplies a second parameter for the event type. Instead, you can now find it in `event.detail.separator`.
+			* You can now use native JS event handlers on these events:
+				* document: `tsf-gutenberg-onpreview`
+				* document: `tsf-gutenberg-onautosave`
+				* document: `tsf-gutenberg-onsave`
+				* document: `tsf-gutenberg-sidebar-opened`
+				* document: `tsf-gutenberg-sidebar-closed`
+				* document: `tsf-subscribed-to-gutenberg`
+				* any description element: `tsf-update-description-counter`
+				* any title element: `tsf-update-title-counter`
+				* window: `tsf-title-sep-updated`
+		* **Other:**
+			* Because we used named event types with jQuery, we masked a few design flaws that came painfully apparent after we moved away from jQuery.
+				* Luckily, by trying the `isTrusted` event parameter, we can mitigate this flaw, and toggling its check allowed us to find and fix a few dependency errors where our logic was flawed.
 * **Fixed:**
 	* A single mistake got through our error handler during development. If it can happen once, it can happen again. So, we reworked the error handler akin to WordPress's, so that it'll allow custom handlers to catch these errors and scream at us--instead of them being silently outputted by TSF.
 		* Now, WordPress controls whether errors should be displayed.
