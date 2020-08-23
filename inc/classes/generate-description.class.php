@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -464,7 +464,7 @@ class Generate_Description extends Generate {
 			$excerpt = $this->get_description_excerpt_from_args( $args );
 		}
 
-		if ( ! in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
+		if ( ! \in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
 			$type = 'search';
 
 		/**
@@ -639,7 +639,7 @@ class Generate_Description extends Generate {
 		if ( $term && \is_wp_error( $term ) )
 			return '';
 
-		if ( is_null( $term ) ) {
+		if ( \is_null( $term ) ) {
 			$in_the_loop = true;
 			$term        = \get_queried_object();
 		} else {
@@ -700,7 +700,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_singular_description_excerpt( $id = null ) {
 
-		if ( is_null( $id ) )
+		if ( \is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
 		//* If the post is protected, don't generate a description.
@@ -911,9 +911,9 @@ class Generate_Description extends Generate {
 			$matches
 		);
 		// Why can $matches[2] still be populated with 3 set? Does it populate empty results upward to last, always???
-		if ( isset( $matches[2] ) && strlen( $matches[2] ) ) {
+		if ( isset( $matches[2] ) && \strlen( $matches[2] ) ) {
 			$excerpt = $matches[1] . $matches[2];
-		} elseif ( isset( $matches[1] ) && strlen( $matches[1] ) ) {
+		} elseif ( isset( $matches[1] ) && \strlen( $matches[1] ) ) {
 			// Ignore useless [3], there's no [2], [1] is open-ended; so, add hellip.
 			$excerpt = $matches[1] . '...'; // This should be texturized later to &hellip;.
 		} else {
@@ -938,7 +938,7 @@ class Generate_Description extends Generate {
 	 */
 	public function is_auto_description_enabled( $args ) {
 
-		if ( is_null( $args ) ) {
+		if ( \is_null( $args ) ) {
 			$args = [
 				'id'       => $this->get_the_real_ID(),
 				'taxonomy' => $this->get_current_taxonomy(),

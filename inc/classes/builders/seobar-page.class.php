@@ -23,7 +23,7 @@ namespace The_SEO_Framework\Builders;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Generates the SEO Bar for posts.
@@ -204,7 +204,7 @@ final class SeoBar_Page extends SeoBar {
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
 		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $title_args, false );
 
-		if ( strlen( $title_part ) ) {
+		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
 
 			if ( $this->query_cache['states']['ishome'] ) {
@@ -285,7 +285,7 @@ final class SeoBar_Page extends SeoBar {
 
 		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent
 		$brand_count =
-			strlen( $cache['params']['blogname_quoted'] )
+			\strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
 				$title,
@@ -428,7 +428,7 @@ final class SeoBar_Page extends SeoBar {
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
 		$desc = static::$tsf->get_description_from_custom_field( $desc_args, false );
 
-		if ( strlen( $desc ) ) {
+		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
 
 			if ( $this->query_cache['states']['ishome'] ) {
@@ -458,7 +458,7 @@ final class SeoBar_Page extends SeoBar {
 
 			$desc = static::$tsf->get_generated_description( $desc_args, false );
 
-			if ( ! strlen( $desc ) ) {
+			if ( ! \strlen( $desc ) ) {
 				$item['reason'] = $cache['reason']['empty'];
 
 				// This is now inaccurate, purge it.
@@ -507,7 +507,7 @@ final class SeoBar_Page extends SeoBar {
 			$max = max( $duplicated_words );
 			$max = reset( $max );
 
-			if ( $max > 3 || count( $duplicated_words ) > 1 ) {
+			if ( $max > 3 || \count( $duplicated_words ) > 1 ) {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
 				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;

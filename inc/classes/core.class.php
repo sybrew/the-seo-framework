@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -104,14 +104,14 @@ class Core {
 
 		static $depr_class = null;
 
-		if ( is_null( $depr_class ) )
+		if ( \is_null( $depr_class ) )
 			$depr_class = new Deprecated;
 
-		if ( is_callable( [ $depr_class, $name ] ) ) {
-			return call_user_func_array( [ $depr_class, $name ], $arguments );
+		if ( \is_callable( [ $depr_class, $name ] ) ) {
+			return \call_user_func_array( [ $depr_class, $name ], $arguments );
 		}
 
-		\the_seo_framework()->_inaccessible_p_or_m( 'the_seo_framework()->' . $name . '()' );
+		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name . '()' );
 	}
 
 	/**
@@ -377,7 +377,7 @@ class Core {
 	 */
 	public function current_blog_is_spam_or_deleted() {
 
-		if ( ! function_exists( '\\get_site' ) || ! \is_multisite() )
+		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() )
 			return false;
 
 		$site = \get_site();
@@ -584,7 +584,7 @@ class Core {
 	 * @return string
 	 */
 	public function hellip_if_over( $string, $over = 0 ) {
-		if ( $over > 0 && strlen( $string ) > $over ) {
+		if ( $over > 0 && \strlen( $string ) > $over ) {
 			$string = substr( $string, 0, abs( $over - 2 ) ) . ' &hellip;';
 		}
 
@@ -624,7 +624,7 @@ class Core {
 
 		static $use_mb;
 
-		isset( $use_mb ) or ( $use_mb = extension_loaded( 'mbstring' ) );
+		isset( $use_mb ) or ( $use_mb = \extension_loaded( 'mbstring' ) );
 
 		// TODO does this test well for "we're"? We haven't had any reports, though.
 		$word_list = preg_split(
@@ -636,7 +636,7 @@ class Core {
 
 		$words_too_many = [];
 
-		if ( count( $word_list ) ) :
+		if ( \count( $word_list ) ) :
 			$words = [];
 			foreach ( $word_list as $wli ) {
 				//= { $words[ int Offset ] => string Word }
@@ -649,7 +649,7 @@ class Core {
 			$word_keys = array_flip( array_reverse( $words, true ) );
 
 			foreach ( $word_count as $word => $count ) {
-				if ( ( $use_mb ? mb_strlen( $word ) : strlen( $word ) ) <= $short_length ) {
+				if ( ( $use_mb ? mb_strlen( $word ) : \strlen( $word ) ) <= $short_length ) {
 					$run = $count >= $dupe_short;
 				} else {
 					$run = $count >= $dupe_count;
@@ -659,7 +659,7 @@ class Core {
 					//! Don't use mb_* here. preg_split's offset is in bytes, NOT multibytes.
 					$args = [
 						'pos' => $word_keys[ $word ],
-						'len' => strlen( $word ),
+						'len' => \strlen( $word ),
 					];
 
 					$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
@@ -691,7 +691,7 @@ class Core {
 		$hex = ltrim( $hex, '#' );
 
 		//* #rgb = #rrggbb
-		if ( 3 === strlen( $hex ) )
+		if ( 3 === \strlen( $hex ) )
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 
 		$hex = str_split( $hex, 2 );
@@ -802,7 +802,7 @@ class Core {
 		$text = trim( $text );
 
 		// You need 3 chars to make a markdown: *m*
-		if ( strlen( $text ) < 3 )
+		if ( \strlen( $text ) < 3 )
 			return '';
 
 		// Merge defaults with $args.
@@ -826,7 +826,7 @@ class Core {
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
-		if ( 2 === count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
+		if ( 2 === \count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
 			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
 			for ( $i = 0; $i < $count; $i++ ) {
 				$text = str_replace(

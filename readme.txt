@@ -246,27 +246,58 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.1 =
 
-* We did some professional home cleaning to remove a bit of trash we left in the 4.1.0 update. Now, everything should be squeaky clean and all sparkly.
+In this minor update, we improved browser performance by cleaning out jQuery calls, fixed a few bugs in the generators, and [improved accessibility](TODO).
 
-TODO should we test for improvement performance by numbers again? I think it's quite substantial, even over 4.1.0.
+TODO consider adding this to `_alter_oembed_response_data()`
+```php
+if ( ! empty( $data['thumbnail_url'] ) ) {
+	$image_details = current( $this->get_image_details(
+		[
+			'id'       => $post->ID,
+			'taxonomy' => '',
+		],
+		true,
+		'embed',
+		true,
+	) );
+
+	if ( $image_details['url'] && $image_details['width'] && $image_details['height'] ) {
+		// Override WordPress provided data.
+		$data['thumbnail_url']    = $image_details['url'];
+		$data['thumbnail_width']  = $image_details['width'];
+		$data['thumbnail_height'] = $image_details['height'];
+	}
+}
+```
+
+TODO consider adding this to `_init_wc_compat()`:
+```php
+// Adjust the widget's tree primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
+\add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
+```
+
+TODO consider changing this to template/view-secrets (see https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/master/views/template/fbtopnotice.php#L5)
+```php
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
+```
 
 **For everyone:**
 
-* **Performance (new section):**
-	* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
-		* This also improves compatibility with non-jQuery driven APIs.
-	* We exchanged jQuery NodeList handlers for native JS in various places, improving browser load time drastically.
-		* This also resolves an issue where jQuery's cache was polluted for unknown reasons (good luck debugging jQuery's code), in combination with ACF Pro's Flexible Content types, where the browser could hang for several minutes.
-	* We reduced the number of events marginally by exempting hidden fields from change listeners.
-	* TODO We now use fully qualified function names for pre-evaluated functions. This means that, if you use OpCache on your server (which you should for ~300% performance improvement), we call functions from your memory, instead of forcing a recompile. In layman's terms: you can see a 0~30% (TODO evaluate) performance increase in some scenarios.
-		* https://github.com/php/php-src/blob/PHP-7.4/Zend/zend_compile.c#L3750-L3829
-			* TODO check older versions...
-		* https://github.com/php/php-src/blob/php-7.2.6/ext/opcache/Optimizer/pass1_5.c
-			* TODO check older/newer versions
-		* TODO test for odd behavior at 3v4l.org
+* **Performance:**
+	* **Up to 99% quicker browser rendering times (admin-area):**
+		* *Yes, 99%; because there's a cache pollution bug in jQuery we no longer interact with.*
+		* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
+			* This also improves compatibility with non-jQuery driven APIs.
+		* We exchanged jQuery NodeList handlers for native JS in various places, improving browser load time drastically.
+			* This also resolves an issue where jQuery's cache was polluted for unknown reasons (good luck debugging jQuery's code), in combination with ACF Pro's Flexible Content types, where the browser could hang for several minutes.
+		* We reduced the number of events marginally by exempting hidden fields from change listeners.
+	* **Up to 0.2% faster server response times (admin and front):**
+		* We looked at the PHP engine's code, and found that we could reduce the number of opcodes (CPU instructions) by adding backslashes to various internal PHP functions.
+			* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes it really pays off.
 * **Fixed:**
 	* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
 	* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
+	* Addressed an issue where the "Are you sure you want to leave this page" notification popped up on the block editor even when you didn't change any content.
 * **Other:**
 	* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
 	* Our scripts can no longer invoke "are you sure"-change listeners. You'll have to manually input or change something to invoke that.
@@ -278,17 +309,26 @@ TODO should we test for improvement performance by numbers again? I think it's q
 * **Changed:**
 	* We no longer use custom error handlers, but rely on the system-provided ones, instead.
 		* This is more harmoneous with plugins like Query Monitor, and doesn't override custom error loggers.
-* **Changed methods for object `the_seo_framework()`:**
-	* `s_singleline()`:
-		1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-		1. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
-	* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-	* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-		* Note that "clear" runs before "space". Mind your duplicates.
-* **Action notes:**
-	* **Added:**
-		* `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
-		* `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
+* **PHP notes:**
+	* **Changed methods for object `the_seo_framework()`:**
+		* `s_singleline()`:
+			1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+			1. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
+		* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+		* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
+			* Note that "clear" runs before "space". Mind your duplicates.
+	* **For object `The_SEO_Framework\Interpreters\SeoBar`:**
+		* Method `collect_seo_bar_items()` is now static.
+			* It should've been from the beginning. You can only access this method statically, anyway.
+	* **Action notes:**
+		* **Added:**
+			* `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
+			* `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
+	* **Other:**
+		* We now use fully qualified function names for pre-evaluated functions, where these functions are registered as opcodes from PHP 7.0 onward. This means that fewer CPU cycles are required every time we call such a function. In layman's terms: you can see a 10~30% performance increase in some scenarios.
+			* Translated to this plugin, it's about 0.1 ms improvement at most. That's a 0.3% improvement on a clean WP install, or about 3% of the plugin.
+				* Totally neglegible. But, that's probably because we optimized for opcodes in the past. We believe we're in the 10% range (of the plugin) already thanks to consistently doing this.
+			* We created a PHPCS sniff for this. Check it out: https://github.com/theseoframework/wpcs-tsf/blob/master/TSF/Sniffs/Performance/OpcodesSniff.php
 * **JS notes:**
 	* **Note:** Only changes affecting the API are listed. "We improved performance" and the like are exempted from this list.
 	* **Object notes:**
@@ -300,6 +340,8 @@ TODO should we test for improvement performance by numbers again? I think it's q
 		* **Added:**
 			* `tsf-interactive` now triggers on `document.body`.
 				* We required this to register the "Are you sure" script as late as possible, where all other scripts are sequenced before this point.
+				* Unfortunately, we still don't honor this correctly since we debounce some interactions.
+					* TODO remove the debouncers?--it's 10ms...
 			* `tsf-gutenberg-onsave-completed` now triggers on `document`.
 		* **Changed:**
 			* `tsf-gutenberg-saved-document` no longer supplies a second parameter for the event type. Instead, you can now find it in `event.detail.savedType`.

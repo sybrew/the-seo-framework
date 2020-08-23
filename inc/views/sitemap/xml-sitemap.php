@@ -4,7 +4,7 @@
  * @subpackage The_SEO_Framework\Sitemap
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
 
 $this->the_seo_framework_debug and $timer_start = microtime( true );
 
@@ -48,9 +48,9 @@ echo $sitemap_content;
 $sitemap_bridge->output_sitemap_urlset_close_tag();
 
 if ( $sitemap_generated ) {
-	echo "\n" . '<!-- ' . \esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
+	echo "\n" . '<!-- ' . esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
 } else {
-	echo "\n" . '<!-- ' . \esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
+	echo "\n" . '<!-- ' . esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 }
 
 if ( $this->the_seo_framework_debug ) {
@@ -59,5 +59,5 @@ if ( $this->the_seo_framework_debug ) {
 	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals_for_sitemap( true ) / 1024, 3 ) . ' kB -->';
 	echo "\n" . '<!-- Sitemap generation time: ' . number_format( microtime( true ) - $timer_start, 6 ) . ' seconds -->';
 	echo "\n" . '<!-- Sitemap caching enabled: ' . ( $this->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ) . ' -->';
-	echo "\n" . '<!-- Sitemap transient key: ' . \esc_html( $this->get_sitemap_transient_name() ) . ' -->';
+	echo "\n" . '<!-- Sitemap transient key: ' . esc_html( $this->get_sitemap_transient_name() ) . ' -->';
 }

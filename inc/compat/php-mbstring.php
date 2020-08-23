@@ -8,7 +8,7 @@
 
 // phpcs:disable -- This file isn't loaded.
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Extended charset support

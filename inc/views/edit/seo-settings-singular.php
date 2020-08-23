@@ -25,17 +25,17 @@ switch ( $instance ) :
 	case 'inpost_main':
 		$default_tabs = [
 			'general'    => [
-				'name'     => \__( 'General', 'autodescription' ),
+				'name'     => __( 'General', 'autodescription' ),
 				'callback' => PostSettings::class . '::_general_tab',
 				'dashicon' => 'admin-generic',
 			],
 			'social'     => [
-				'name'     => \__( 'Social', 'autodescription' ),
+				'name'     => __( 'Social', 'autodescription' ),
 				'callback' => PostSettings::class . '::_social_tab',
 				'dashicon' => 'share',
 			],
 			'visibility' => [
-				'name'     => \__( 'Visibility', 'autodescription' ),
+				'name'     => __( 'Visibility', 'autodescription' ),
 				'callback' => PostSettings::class . '::_visibility_tab',
 				'dashicon' => 'visibility',
 			],
@@ -50,7 +50,7 @@ switch ( $instance ) :
 		 * @param array $default_tabs The default tabs.
 		 * @param null  $depr         The post type label. Deprecated.
 		 */
-		$tabs = (array) \apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, null );
+		$tabs = (array) apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, null );
 
 		echo '<div class="tsf-flex tsf-flex-inside-wrap">';
 		PostSettings::_flex_nav_tab_wrapper( 'inpost', $tabs );

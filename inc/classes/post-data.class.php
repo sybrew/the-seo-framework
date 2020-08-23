@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -276,7 +276,7 @@ class Post_Data extends Detect {
 		foreach ( (array) $data as $field => $value ) {
 			// Save $value, or delete if the $value is empty.
 			// We can safely assume no one-zero/qubit options pass through here thanks to sanitization earlier--alleviating database weight.
-			if ( $value || ( is_string( $value ) && strlen( $value ) ) ) {
+			if ( $value || ( \is_string( $value ) && \strlen( $value ) ) ) {
 				\update_post_meta( $post->ID, $field, $value );
 			} else {
 				// This is fine for as long as we merge the getter values with the defaults.
@@ -627,7 +627,7 @@ class Post_Data extends Detect {
 		 */
 		$detected = \apply_filters( 'the_seo_framework_detect_page_builder', null, $post_id, $meta );
 
-		if ( is_bool( $detected ) )
+		if ( \is_bool( $detected ) )
 			return $detected;
 
 		if ( ! $this->detect_page_builder() )
@@ -636,19 +636,19 @@ class Post_Data extends Detect {
 		if ( empty( $meta ) )
 			return false;
 
-		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && defined( 'ELEMENTOR_VERSION' ) ) :
+		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && \defined( 'ELEMENTOR_VERSION' ) ) :
 			//* Elementor by Elementor LTD
 			return true;
-		elseif ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) ) :
+		elseif ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
 			//* Divi Builder by Elegant Themes
 			return true;
-		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) ) :
+		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
 			//* Visual Composer by WPBakery
 			return true;
-		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && defined( 'SITEORIGIN_PANELS_VERSION' ) ) :
+		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && \defined( 'SITEORIGIN_PANELS_VERSION' ) ) :
 			//* Page Builder by SiteOrigin
 			return true;
-		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && defined( 'FL_BUILDER_VERSION' ) ) :
+		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && \defined( 'FL_BUILDER_VERSION' ) ) :
 			//* Beaver Builder by Fastline Media...
 			return true;
 		endif;
@@ -681,7 +681,7 @@ class Post_Data extends Detect {
 		 */
 		$detected = \apply_filters( 'the_seo_framework_detect_non_html_page_builder', null, $post_id, $meta );
 
-		if ( is_bool( $detected ) )
+		if ( \is_bool( $detected ) )
 			return $detected;
 
 		if ( ! $this->detect_non_html_page_builder() )
@@ -690,10 +690,10 @@ class Post_Data extends Detect {
 		if ( empty( $meta ) )
 			return false;
 
-		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && defined( 'ET_BUILDER_VERSION' ) ) :
+		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
 			//* Divi Builder by Elegant Themes
 			return true;
-		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && defined( 'WPB_VC_VERSION' ) ) :
+		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
 			//* Visual Composer by WPBakery
 			return true;
 		endif;
@@ -754,7 +754,7 @@ class Post_Data extends Detect {
 	 */
 	public function is_draft( $post = null ) {
 		$post = \get_post( $post );
-		return isset( $post->post_status ) && in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true );
+		return isset( $post->post_status ) && \in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true );
 	}
 
 	/**

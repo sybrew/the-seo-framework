@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -757,7 +757,7 @@ class Generate_Title extends Generate_Description {
 		if ( $term && \is_wp_error( $term ) )
 			return '';
 
-		if ( is_null( $term ) ) {
+		if ( \is_null( $term ) ) {
 			$_query = true;
 			$term   = \get_queried_object();
 		} else {
@@ -920,7 +920,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_single_term_title( $term = null ) {
 
-		if ( is_null( $term ) )
+		if ( \is_null( $term ) )
 			$term = \get_queried_object();
 
 		$term_name = '';
@@ -980,7 +980,7 @@ class Generate_Title extends Generate_Description {
 		if ( ! \is_post_type_archive( $post_type ) )
 			return '';
 
-		if ( is_array( $post_type ) )
+		if ( \is_array( $post_type ) )
 			$post_type = reset( $post_type );
 
 		$post_type_obj = \get_post_type_object( $post_type );

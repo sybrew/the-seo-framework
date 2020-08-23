@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -423,7 +423,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
-		if ( is_int( $post_type ) ) {
+		if ( \is_int( $post_type ) ) {
 			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null in the first parameter.', '4.0.0' );
 			$post_type = '';
 		}
@@ -432,7 +432,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( null === $post_type ) {
 			$post_type = \get_query_var( 'post_type' );
-			$post_type = is_array( $post_type ) ? reset( $post_type ) : $post_type;
+			$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 
 			$query = false;
 		}
@@ -764,7 +764,7 @@ class Generate_Url extends Generate_Title {
 
 				$pos = strrpos( $url, $find );
 				//* Defensive programming, only remove if $find matches the stack length, without query arguments.
-				$continue = $pos && $pos + strlen( $find ) === strlen( $url );
+				$continue = $pos && $pos + \strlen( $find ) === \strlen( $url );
 
 				if ( $continue ) {
 					$url = substr( $url, 0, $pos );

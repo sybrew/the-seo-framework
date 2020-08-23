@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -129,7 +129,7 @@ class Cache extends Site_Options {
 				$success[] = $this->delete_cache( 'sitemap' );
 		}
 
-		return ! in_array( false, $success, true );
+		return ! \in_array( false, $success, true );
 	}
 
 	/**
@@ -539,7 +539,7 @@ class Cache extends Site_Options {
 				if ( empty( $_t ) ) {
 					$post_type = \get_query_var( 'post_type' );
 
-					if ( is_array( $post_type ) )
+					if ( \is_array( $post_type ) )
 						reset( $post_type );
 
 					if ( $post_type )
@@ -701,10 +701,10 @@ class Cache extends Site_Options {
 
 		if ( false !== strpos( $taxonomy, '_' ) ) {
 			$taxonomy_name = explode( '_', $taxonomy );
-			if ( is_array( $taxonomy_name ) ) {
+			if ( \is_array( $taxonomy_name ) ) {
 				foreach ( $taxonomy_name as $name ) {
-					if ( strlen( $name ) >= 3 ) {
-						$the_id .= substr( $name, 0, 3 ) . '_';
+					if ( \strlen( $name ) >= 3 ) {
+						$the_id .= \substr( $name, 0, 3 ) . '_';
 					} else {
 						$the_id = $name . '_';
 					}
@@ -713,7 +713,7 @@ class Cache extends Site_Options {
 		}
 
 		if ( ! $the_id ) {
-			if ( strlen( $taxonomy ) >= 6 ) {
+			if ( \strlen( $taxonomy ) >= 6 ) {
 				$the_id = substr( $taxonomy, 0, 6 );
 			} else {
 				$the_id = $taxonomy;
@@ -885,6 +885,7 @@ class Cache extends Site_Options {
 			foreach ( [ 'archive', 'search' ] as $key ) {
 				array_walk(
 					$cache[ $key ],
+					// Performance: This won't be cached completely by OpCache, but we cache the results, anyway.
 					function( &$v ) {
 						if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
 							$v = (int) $v->post_id;

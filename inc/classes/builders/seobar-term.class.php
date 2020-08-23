@@ -23,7 +23,7 @@ namespace The_SEO_Framework\Builders;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Generates the SEO Bar for posts.
@@ -213,7 +213,7 @@ final class SeoBar_Term extends SeoBar {
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
 		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $title_args, false );
 
-		if ( strlen( $title_part ) ) {
+		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
 
 			if ( static::$tsf->has_yoast_syntax( $title_part, false ) ) {
@@ -269,7 +269,7 @@ final class SeoBar_Term extends SeoBar {
 
 		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent
 		$brand_count =
-			strlen( $cache['params']['blogname_quoted'] )
+			\strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
 				$title,
@@ -409,7 +409,7 @@ final class SeoBar_Term extends SeoBar {
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
 		$desc = static::$tsf->get_description_from_custom_field( $desc_args, false );
 
-		if ( strlen( $desc ) ) {
+		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
 
 			if ( static::$tsf->has_yoast_syntax( $desc ) ) {
@@ -430,7 +430,7 @@ final class SeoBar_Term extends SeoBar {
 
 			$desc = static::$tsf->get_generated_description( $desc_args, false );
 
-			if ( ! strlen( $desc ) ) {
+			if ( ! \strlen( $desc ) ) {
 				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNDEFINED;
 				$item['reason'] = $cache['reason']['empty'];
 
@@ -467,7 +467,7 @@ final class SeoBar_Term extends SeoBar {
 			$max = max( $duplicated_words );
 			$max = reset( $max );
 
-			if ( $max > 3 || count( $duplicated_words ) > 1 ) {
+			if ( $max > 3 || \count( $duplicated_words ) > 1 ) {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
 				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
@@ -606,7 +606,7 @@ final class SeoBar_Term extends SeoBar {
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
 			$_post_type_noindex_set[] = isset( $robots_global['posttype']['noindex'][ $_post_type ] );
 		}
-		if ( ! in_array( false, $_post_type_noindex_set, true ) ) {
+		if ( ! \in_array( false, $_post_type_noindex_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
@@ -752,7 +752,7 @@ final class SeoBar_Term extends SeoBar {
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
 			$_post_type_nofollow_set[] = isset( $robots_global['posttype']['nofollow'][ $_post_type ] );
 		}
-		if ( ! in_array( false, $_post_type_nofollow_set, true ) ) {
+		if ( ! \in_array( false, $_post_type_nofollow_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
@@ -869,7 +869,7 @@ final class SeoBar_Term extends SeoBar {
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
 			$_post_type_noarchive_set[] = isset( $robots_global['posttype']['noarchive'][ $_post_type ] );
 		}
-		if ( ! in_array( false, $_post_type_noarchive_set, true ) ) {
+		if ( ! \in_array( false, $_post_type_noarchive_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}

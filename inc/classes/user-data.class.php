@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -112,14 +112,14 @@ class User_Data extends Term_Data {
 	public function get_user_meta( $user_id, $key = THE_SEO_FRAMEWORK_USER_OPTIONS, $use_cache = true ) {
 
 		if ( false === $use_cache )
-			return ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : [];
+			return ( $meta = \get_user_meta( $user_id, $key, true ) ) && \is_array( $meta ) ? $meta : [];
 
 		static $usermeta_cache = [];
 
 		if ( isset( $usermeta_cache[ $user_id ][ $key ] ) )
 			return $usermeta_cache[ $user_id ][ $key ];
 
-		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = \get_user_meta( $user_id, $key, true ) ) && is_array( $meta ) ? $meta : [];
+		return $usermeta_cache[ $user_id ][ $key ] = ( $meta = \get_user_meta( $user_id, $key, true ) ) && \is_array( $meta ) ? $meta : [];
 	}
 
 	/**
@@ -226,7 +226,7 @@ class User_Data extends Term_Data {
 		/**
 		 * @since 2.8.0 initializes new array on empty values.
 		 */
-		is_array( $meta ) or $meta = [];
+		\is_array( $meta ) or $meta = [];
 
 		$meta[ $option ] = $value;
 

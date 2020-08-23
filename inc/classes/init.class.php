@@ -5,7 +5,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -310,7 +310,7 @@ class Init extends Query {
 
 		if ( ! $this->get_option( 'oembed_scripts' ) ) {
 			/**
-			 * Only hide the scripts, don't permeably purge them. That should be enough.
+			 * Only hide the scripts, don't permeably purge them. This should be enough.
 			 *
 			 * This will still allow embedding within WordPress Multisite via WP-REST's proxy, since WP won't look for a script.
 			 * We'd need to empty 'oembed_response_data' in that case... However, thanks to a bug in WP, this 'works' anyway.
@@ -351,7 +351,7 @@ class Init extends Query {
 			if ( ! empty( $function['callback'] ) ) {
 				$args = isset( $function['args'] ) ? $function['args'] : '';
 
-				$output .= call_user_func_array( $function['callback'], (array) $args );
+				$output .= \call_user_func_array( $function['callback'], (array) $args );
 			}
 		}
 
@@ -681,7 +681,7 @@ class Init extends Query {
 				}
 				$output .= "\r\n";
 			} elseif ( $this->get_option( 'sitemaps_robots' ) && ! $this->detect_sitemap_plugin() ) {
-				if ( function_exists( '\\wp_sitemaps_get_server' ) ) {
+				if ( \function_exists( '\\wp_sitemaps_get_server' ) ) {
 					$wp_sitemaps_server = \wp_sitemaps_get_server();
 					if ( $wp_sitemaps_server && method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
 						// This method augments the output--it doesn't overwrite it.
@@ -729,7 +729,7 @@ class Init extends Query {
 		\add_action( 'the_seo_framework_sitemap_header', [ $this, '_output_robots_noindex_headers' ] );
 
 		// This is not necessarily a WordPress query. Test it inline.
-		if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
+		if ( \defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
 			$this->_output_robots_noindex_headers();
 	}
 

@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 // phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
@@ -65,7 +65,7 @@ final class Debug {
 	 */
 	public static function _set_instance( $debug = null ) {
 
-		if ( is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) ) {
 			static::$instance = new static();
 		}
 
@@ -83,7 +83,7 @@ final class Debug {
 	 */
 	public static function get_instance() {
 
-		if ( is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) ) {
 			static::_set_instance();
 		}
 
@@ -376,8 +376,8 @@ final class Debug {
 		$line = \esc_html( $line );
 
 		$_message  = "'<span><strong>$type:</strong> $message";
-		$_message .=  $file ? " In $file" : '';
-		$_message .=  $line ? " on line $line" : '';
+		$_message .= $file ? " In $file" : '';
+		$_message .= $line ? " on line $line" : '';
 		$_message .= '</span><br>' . PHP_EOL;
 
 		return $_message;
@@ -636,9 +636,9 @@ final class Debug {
 
 		$output = '';
 		foreach ( $current as $name => $value ) {
-			$type = '(' . gettype( $value ) . ')';
+			$type = '(' . \gettype( $value ) . ')';
 
-			if ( is_bool( $value ) ) {
+			if ( \is_bool( $value ) ) {
 				$value = $value ? 'true' : 'false';
 			} else {
 				$value = \esc_attr( var_export( $value, true ) );
@@ -650,9 +650,9 @@ final class Debug {
 		}
 
 		foreach ( $not_current as $name => $value ) {
-			$type = '(' . gettype( $value ) . ')';
+			$type = '(' . \gettype( $value ) . ')';
 
-			if ( is_bool( $value ) ) {
+			if ( \is_bool( $value ) ) {
 				$value = $value ? 'true' : 'false';
 			} else {
 				$value = \esc_attr( var_export( $value, true ) );

@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -64,7 +64,7 @@ class Sanitize extends Admin_Pages {
 		 * @since 2.2.9
 		 */
 		if ( empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
-		|| ! is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
+		|| ! \is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
 			return $validated = false;
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
@@ -571,11 +571,11 @@ class Sanitize extends Admin_Pages {
 		if ( $get )
 			return $options;
 
-		if ( is_array( $suboption ) ) {
+		if ( \is_array( $suboption ) ) {
 			foreach ( $suboption as $so ) {
 				$options[ $option ][ $so ] = $filter;
 			}
-		} elseif ( is_null( $suboption ) ) {
+		} elseif ( \is_null( $suboption ) ) {
 			$options[ $option ] = $filter;
 		} else {
 			$options[ $option ][ $suboption ] = $filter;
@@ -611,10 +611,10 @@ class Sanitize extends Admin_Pages {
 		if ( ! isset( $filters[ $option ] ) ) {
 			//* We are not filtering this option at all
 			return $new_value;
-		} elseif ( is_string( $filters[ $option ] ) ) {
+		} elseif ( \is_string( $filters[ $option ] ) ) {
 			//* Single option value
 			return $this->do_filter( $filters[ $option ], $new_value, \get_option( $option ), $option );
-		} elseif ( is_array( $filters[ $option ] ) ) {
+		} elseif ( \is_array( $filters[ $option ] ) ) {
 			//* Array of suboption values to loop through
 			$old_value = \get_option( $option, [] );
 			foreach ( $filters[ $option ] as $suboption => $filter ) {
@@ -646,10 +646,10 @@ class Sanitize extends Admin_Pages {
 
 		$available_filters = $this->get_available_filters();
 
-		if ( ! in_array( $filter, array_keys( $available_filters ), true ) )
+		if ( ! \in_array( $filter, array_keys( $available_filters ), true ) )
 			return $new_value;
 
-		return call_user_func_array(
+		return \call_user_func_array(
 			$available_filters[ $filter ],
 			[
 				$new_value,
@@ -848,7 +848,7 @@ class Sanitize extends Admin_Pages {
 
 		$title_separator = $this->get_separator_list();
 
-		$key = array_key_exists( $new_value, $title_separator );
+		$key = \array_key_exists( $new_value, $title_separator );
 
 		if ( $key )
 			return (string) $new_value;
@@ -1105,7 +1105,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_knowledge_type( $new_value ) {
 
-		if ( in_array( $new_value, [ 'person', 'organization' ], true ) )
+		if ( \in_array( $new_value, [ 'person', 'organization' ], true ) )
 			return $new_value;
 
 		return 'organization';
@@ -1124,7 +1124,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_left_right( $new_value ) {
 
-		if ( in_array( $new_value, [ 'left', 'right' ], true ) )
+		if ( \in_array( $new_value, [ 'left', 'right' ], true ) )
 			return $new_value;
 
 		$previous = $this->get_option( 'title_location' );
@@ -1149,7 +1149,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_left_right_home( $new_value ) {
 
-		if ( in_array( $new_value, [ 'left', 'right' ], true ) )
+		if ( \in_array( $new_value, [ 'left', 'right' ], true ) )
 			return $new_value;
 
 		$previous = $this->get_option( 'home_title_location' );
@@ -1171,7 +1171,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_alter_query_type( $new_value ) {
 
-		if ( in_array( $new_value, [ 'in_query', 'post_query' ], true ) )
+		if ( \in_array( $new_value, [ 'in_query', 'post_query' ], true ) )
 			return $new_value;
 
 		return 'in_query';
@@ -1225,7 +1225,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_disabled_post_types( $new_values ) {
 
-		if ( ! is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) return [];
 
 		foreach ( $this->get_forced_supported_post_types() as $forced ) {
 			unset( $new_values[ $forced ] );
@@ -1246,7 +1246,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_post_types( $new_values ) {
 
-		if ( ! is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) return [];
 
 		foreach ( $new_values as $index => $value ) {
 			$new_values[ $index ] = $this->s_one_zero( $value );
@@ -1267,7 +1267,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_disabled_taxonomies( $new_values ) {
 
-		if ( ! is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) return [];
 
 		foreach ( $this->get_forced_supported_taxonomies() as $forced ) {
 			unset( $new_values[ $forced ] );
@@ -1288,7 +1288,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_taxonomies( $new_values ) {
 
-		if ( ! is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) return [];
 
 		foreach ( $new_values as $index => $value ) {
 			$new_values[ $index ] = $this->s_one_zero( $value );
@@ -1546,7 +1546,7 @@ class Sanitize extends Admin_Pages {
 		//* Fetch Twitter card array.
 		$card = $this->get_twitter_card_types();
 
-		$key = array_key_exists( $new_value, $card );
+		$key = \array_key_exists( $new_value, $card );
 
 		if ( $key ) return (string) $new_value;
 
@@ -1732,7 +1732,7 @@ class Sanitize extends Admin_Pages {
 			'http',
 		];
 
-		if ( in_array( $new_value, $accepted_values, true ) )
+		if ( \in_array( $new_value, $accepted_values, true ) )
 			return (string) $new_value;
 
 		return 'automatic';
@@ -1772,7 +1772,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_image_preview( $new_value ) {
 
-		if ( ! in_array( $new_value, [ 'none', 'standard', 'large' ], true ) )
+		if ( ! \in_array( $new_value, [ 'none', 'standard', 'large' ], true ) )
 			$new_value = 'standard';
 
 		return $new_value;
@@ -1986,7 +1986,7 @@ class Sanitize extends Admin_Pages {
 		 * TODO Should we even test for this here, or at the image generators' type?
 		 * It seems, however, that all services we want to communicate with ignore these types, anyway.
 		 */
-		if ( in_array(
+		if ( \in_array(
 			strtolower( strtok( pathinfo( $url, PATHINFO_EXTENSION ), '?' ) ),
 			[ 'apng', 'bmp', 'ico', 'cur', 'svg', 'tif', 'tiff' ],
 			true
@@ -2014,7 +2014,7 @@ class Sanitize extends Admin_Pages {
 			$alt = \wp_strip_all_tags( $alt );
 			// 420: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/summary.html
 			// Don't "ai"-trim if under, it's unlikely to always be a sentence.
-			$alt = strlen( $alt ) > 420 ? $this->trim_excerpt( $alt, 0, 420 ) : $alt;
+			$alt = \strlen( $alt ) > 420 ? $this->trim_excerpt( $alt, 0, 420 ) : $alt;
 		}
 
 		return compact( 'url', 'id', 'width', 'height', 'alt' );
@@ -2072,7 +2072,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	protected function set_and_strlen( &$var, $value = '' ) {
 
-		if ( is_array( $value ) ) {
+		if ( \is_array( $value ) ) {
 			foreach ( $value as $v ) {
 				if ( $this->set_and_strlen( $var, $v ) )
 					return true;
@@ -2080,6 +2080,6 @@ class Sanitize extends Admin_Pages {
 			return false;
 		}
 
-		return is_string( $var ) && strlen( trim( $var ) );
+		return \is_string( $var ) && \strlen( trim( $var ) );
 	}
 }

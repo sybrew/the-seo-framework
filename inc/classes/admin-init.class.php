@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -133,7 +133,7 @@ class Admin_Init extends Init {
 				}
 			}
 
-			if ( in_array( $hook, $enqueue_hooks, true ) )
+			if ( \in_array( $hook, $enqueue_hooks, true ) )
 				$autoenqueue = true;
 
 			if ( $this->get_static_cache( 'persistent_notices', [] ) )
@@ -431,7 +431,7 @@ class Admin_Init extends Init {
 		$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
 		//* Test if WordPress's redirect header is sent. Bail if true.
-		if ( in_array( $location, $headers_list, true ) )
+		if ( \in_array( $location, $headers_list, true ) )
 			return;
 
 		// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
@@ -478,7 +478,7 @@ class Admin_Init extends Init {
 	public function register_dismissible_persistent_notice( $message, $key, array $args = [], array $conditions = [] ) {
 
 		// We made this mistake ourselves. Let's test against it. Can't wait for PHP 7.1+ support.
-		if ( ! is_scalar( $key ) || ! strlen( $key ) ) return;
+		if ( ! is_scalar( $key ) || ! \strlen( $key ) ) return;
 
 		// Sanitize the key so that HTML, JS, and PHP can communicate easily via it.
 		$key = \sanitize_key( $key );

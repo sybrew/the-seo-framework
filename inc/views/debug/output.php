@@ -24,7 +24,7 @@ if ( ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_pag
 $cache_key = $this->generate_cache_key( $id, $taxonomy );
 
 if ( is_admin() ) {
-	$bstyle = \is_rtl()
+	$bstyle = is_rtl()
 			? 'direction:ltr;color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 180px 40px 20px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18pxfont-feature-settings:normal;font-variant:normal'
 			: 'direction:ltr;color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18pxfont-feature-settings:normal;font-variant:normal';
 	?>

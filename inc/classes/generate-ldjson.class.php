@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -456,7 +456,7 @@ class Generate_Ldjson extends Generate_Image {
 			]
 		);
 
-		if ( is_array( $taxonomies ) ) {
+		if ( \is_array( $taxonomies ) ) {
 			$taxonomy = reset( $taxonomies );
 		} else {
 			$taxonomy = $taxonomies;
@@ -611,7 +611,7 @@ class Generate_Ldjson extends Generate_Image {
 				//* Final cat.
 				$trees[] = $parent;
 			} else {
-				if ( 1 === count( $kitten ) ) {
+				if ( 1 === \count( $kitten ) ) {
 					//* Single tree.
 					$trees[] = [ reset( $kitten ), $parent ];
 				} else {
@@ -620,7 +620,7 @@ class Generate_Ldjson extends Generate_Image {
 
 					foreach ( $kitten as $kit_id => $child_id ) {
 						//* Only add if non-existent in $trees.
-						if ( ! in_array( $child_id, $trees, true ) )
+						if ( ! \in_array( $child_id, $trees, true ) )
 							$add[] = $child_id;
 					}
 
@@ -651,9 +651,9 @@ class Generate_Ldjson extends Generate_Image {
 
 		$found = [];
 
-		if ( in_array( $find, (array) $ids, true ) ) {
+		if ( \in_array( $find, (array) $ids, true ) ) {
 			$found = [ $find ];
-		} elseif ( is_array( $ids ) ) {
+		} elseif ( \is_array( $ids ) ) {
 			foreach ( $ids as $id ) {
 				if ( $this->filter_ld_json_breadcrumb_trees( $id, $find ) ) {
 					$found = array_splice(

@@ -23,7 +23,7 @@ namespace The_SEO_Framework\Bridges;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Sets up class loader as file is loaded.
@@ -144,7 +144,7 @@ final class Sitemap {
 		 */
 		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
 
-		call_user_func( $this->get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
+		\call_user_func( $this->get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
 	}
 
 	/**
@@ -329,7 +329,7 @@ final class Sitemap {
 		$urlset = '<urlset';
 		foreach ( $schemas as $type => $values ) {
 			$urlset .= ' ' . $type . '="';
-			if ( is_array( $values ) ) {
+			if ( \is_array( $values ) ) {
 				$urlset .= implode( ' ', $values );
 			} else {
 				$urlset .= $values;
@@ -495,7 +495,7 @@ final class Sitemap {
 		];
 
 		foreach ( $remove as $key => $value ) {
-			if ( is_array( $value ) ) {
+			if ( \is_array( $value ) ) {
 				foreach ( $value as $v )
 					unset( $GLOBALS[ $key ][ $v ] );
 			} else {

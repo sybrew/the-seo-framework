@@ -42,7 +42,7 @@ $robots_settings = [
 	 * @param string $post_type The current post type.
 	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
-	\do_action_ref_array(
+	do_action_ref_array(
 		'the_seo_framework_before_bulk_edit',
 		[
 			$post_type,
@@ -84,7 +84,7 @@ $robots_settings = [
 	 * @param string $post_type The current post type.
 	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
-	\do_action_ref_array(
+	do_action_ref_array(
 		'the_seo_framework_after_bulk_edit',
 		[
 			$post_type,

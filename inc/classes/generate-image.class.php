@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -447,7 +447,8 @@ class Generate_Image extends Generate_Url {
 		$i     = 0;
 
 		foreach ( $cbs as $cb ) {
-			foreach ( call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
+			// This is one of the slowest calls in this plugin on PHP 5.6. However, PHP 7.0 optimized cuf(a). Neglegible.
+			foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
 				if ( $details['url'] && $this->s_url_query( $details['url'] ) ) {
 					$items[ $i++ ] = $this->merge_extra_image_details( $details, $size );
 					if ( $single ) break 2;
@@ -549,7 +550,7 @@ class Generate_Image extends Generate_Url {
 
 		// Imply there's a correct ID set. When there's not, the loop won't run.
 		$meta  = \wp_get_attachment_metadata( $id );
-		$sizes = ! empty( $meta['sizes'] ) && is_array( $meta['sizes'] ) ? $meta['sizes'] : [];
+		$sizes = ! empty( $meta['sizes'] ) && \is_array( $meta['sizes'] ) ? $meta['sizes'] : [];
 
 		// law = largest accepted width.
 		$law  = 0;

@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -161,7 +161,7 @@ class Detect extends Render {
 		//* Check for constants
 		if ( isset( $plugins['constants'] ) ) {
 			foreach ( $plugins['constants'] as $name ) {
-				if ( defined( $name ) ) {
+				if ( \defined( $name ) ) {
 					return true;
 				}
 			}
@@ -170,7 +170,7 @@ class Detect extends Render {
 		//* Check for functions
 		if ( isset( $plugins['functions'] ) ) {
 			foreach ( $plugins['functions'] as $name ) {
-				if ( function_exists( $name ) ) {
+				if ( \function_exists( $name ) ) {
 					return true;
 				}
 			}
@@ -212,7 +212,7 @@ class Detect extends Render {
 
 		//* Prepare multidimensional array for cache.
 		foreach ( $plugins as $key => $func ) {
-			if ( ! is_array( $func ) )
+			if ( ! \is_array( $func ) )
 				return false; // doing it wrong...
 
 			//* Sort alphanumeric by value, put values back after sorting.
@@ -263,7 +263,7 @@ class Detect extends Render {
 		//* Check for constants
 		if ( isset( $plugins['constants'] ) ) {
 			foreach ( $plugins['constants'] as $name ) {
-				if ( ! defined( $name ) ) {
+				if ( ! \defined( $name ) ) {
 					return false;
 				}
 			}
@@ -272,7 +272,7 @@ class Detect extends Render {
 		//* Check for functions
 		if ( isset( $plugins['functions'] ) ) {
 			foreach ( $plugins['functions'] as $name ) {
-				if ( ! function_exists( $name ) ) {
+				if ( ! \function_exists( $name ) ) {
 					return false;
 				}
 			}
@@ -309,11 +309,11 @@ class Detect extends Render {
 		$theme_parent = strtolower( $wp_get_theme->get( 'Template' ) );
 		$theme_name   = strtolower( $wp_get_theme->get( 'Name' ) );
 
-		if ( is_string( $themes ) ) {
+		if ( \is_string( $themes ) ) {
 			$themes = strtolower( $themes );
 			if ( $themes === $theme_parent || $themes === $theme_name )
 				return true;
-		} elseif ( is_array( $themes ) ) {
+		} elseif ( \is_array( $themes ) ) {
 			foreach ( $themes as $theme ) {
 				$theme = strtolower( $theme );
 				if ( $theme === $theme_parent || $theme === $theme_name ) {
@@ -348,7 +348,7 @@ class Detect extends Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'seo_tools' );
 
 			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( in_array( $plugin, $active_plugins, true ) ) {
+				if ( \in_array( $plugin, $active_plugins, true ) ) {
 					/**
 					 * @since 2.6.1
 					 * @since 3.1.0 Added second and third parameters.
@@ -399,7 +399,7 @@ class Detect extends Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'open_graph' );
 
 			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( in_array( $plugin, $active_plugins, true ) ) {
+				if ( \in_array( $plugin, $active_plugins, true ) ) {
 					/**
 					 * @since 2.6.1
 					 * @since 3.1.0 Added second and third parameters.
@@ -449,7 +449,7 @@ class Detect extends Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'twitter_card' );
 
 			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( in_array( $plugin, $active_plugins, true ) ) {
+				if ( \in_array( $plugin, $active_plugins, true ) ) {
 					/**
 					 * @since 2.6.1
 					 * @param bool   $detected    Whether the plugin should be detected.
@@ -515,7 +515,7 @@ class Detect extends Render {
 			$conflicting_plugins = $this->get_conflicting_plugins( 'sitemaps' );
 
 			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( in_array( $plugin, $active_plugins, true ) ) {
+				if ( \in_array( $plugin, $active_plugins, true ) ) {
 					/**
 					 * @since 2.6.1
 					 * @param bool   $detected    Whether the plugin should be detected.
@@ -639,7 +639,7 @@ class Detect extends Render {
 				return false;
 		}
 
-		return ! $this->has_robots_txt() && strlen( $this->get_robots_txt_url() );
+		return ! $this->has_robots_txt() && \strlen( $this->get_robots_txt_url() );
 	}
 
 	/**
@@ -659,7 +659,7 @@ class Detect extends Render {
 			return $has_robots;
 
 		// Ensure get_home_path() is declared.
-		if ( ! function_exists( '\\get_home_path' ) )
+		if ( ! \function_exists( '\\get_home_path' ) )
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'robots.txt';
@@ -684,7 +684,7 @@ class Detect extends Render {
 			return $has_map;
 
 		// Ensure get_home_path() is declared.
-		if ( ! function_exists( '\\get_home_path' ) )
+		if ( ! \function_exists( '\\get_home_path' ) )
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'sitemap.xml';
@@ -958,7 +958,7 @@ class Detect extends Render {
 			[
 				$post_type
 					&& ! $this->is_post_type_disabled( $post_type )
-					&& in_array( $post_type, $this->get_public_post_types(), true ),
+					&& \in_array( $post_type, $this->get_public_post_types(), true ),
 				$post_type,
 			]
 		);
@@ -990,7 +990,7 @@ class Detect extends Render {
 			[
 				$taxonomy
 					&& ! $this->is_taxonomy_disabled( $taxonomy )
-					&& in_array( $taxonomy, $this->get_public_taxonomies(), true ),
+					&& \in_array( $taxonomy, $this->get_public_taxonomies(), true ),
 				$taxonomy,
 			]
 		);
@@ -1233,10 +1233,10 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function is_gutenberg_page() {
-		if ( function_exists( '\\use_block_editor_for_post' ) )
+		if ( \function_exists( '\\use_block_editor_for_post' ) )
 			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
 
-		if ( function_exists( '\\is_gutenberg_page' ) )
+		if ( \function_exists( '\\is_gutenberg_page' ) )
 			return \is_gutenberg_page();
 
 		return false;

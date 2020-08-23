@@ -140,7 +140,7 @@ function the_seo_framework_pre_boot_test() {
 	$pluginspage = $network_mode ? network_admin_url( 'plugins.php' ) : admin_url( 'plugins.php' );
 
 	//* Let's have some fun with teapots.
-	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
+	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . gmdate( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
 
 	wp_die(
 		sprintf(

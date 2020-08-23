@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 /**
@@ -24,7 +24,7 @@ function _init_wc_compat() {
 			/**
 			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
 			 */
-			if ( function_exists( '\\is_product' ) && \is_product() ) {
+			if ( \function_exists( '\\is_product' ) && \is_product() ) {
 				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
 			}
 		}
@@ -142,10 +142,10 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 
 	if ( null === $args ) {
 		$is_product          = \the_seo_framework()->is_wc_product();
-		$is_product_category = function_exists( '\\is_product_category' ) && \is_product_category();
+		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
 	} else {
 		if ( $args['taxonomy'] ) {
-			if ( function_exists( '\\is_product_category' ) ) {
+			if ( \function_exists( '\\is_product_category' ) ) {
 				$term                = \get_term( $args['id'], $args['taxonomy'] );
 				$is_product_category = $term && \is_product_category( $term );
 			}

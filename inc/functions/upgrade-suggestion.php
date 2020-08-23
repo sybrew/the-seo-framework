@@ -23,7 +23,7 @@ namespace The_SEO_Framework\Suggestion;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * This file holds functions for installing TSFEM.
@@ -63,13 +63,13 @@ function _prepare( $previous_version, $current_version ) {
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version == $current_version ) return;
 	//? 1
-	if ( defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS ) return;
+	if ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS ) return;
 	//? 2
 	if ( ! \is_main_site() ) return;
 	//? 3a
-	if ( defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;
+	if ( \defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;
 
-	if ( ! function_exists( '\\get_plugins' ) )
+	if ( ! \function_exists( '\\get_plugins' ) )
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 	//? 3b
@@ -84,7 +84,7 @@ function _prepare( $previous_version, $current_version ) {
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 	//? PHP_VERSION_ID is definitely defined, but let's keep it homonymous with the envtest of TSFEM.
-	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
+	   ! \defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
 	or version_compare( $GLOBALS['wp_version'], $requirements['wp'], '<' ) and $test = 2
 	or $test = true;
 	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment

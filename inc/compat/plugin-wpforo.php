@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 add_action( 'the_seo_framework_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
 /**
@@ -23,7 +23,7 @@ function _wpforo_fix_page() {
 		'meta'  => true,
 	];
 
-	if ( function_exists( '\\wpforo_feature' ) ) {
+	if ( \function_exists( '\\wpforo_feature' ) ) {
 		if ( \wpforo_feature( 'seo-meta' ) ) {
 			// This also disables titles... It's OK, they handle that too.
 			$override['meta'] = false;
@@ -32,7 +32,7 @@ function _wpforo_fix_page() {
 			$override['title'] = false;
 		}
 	}
-	if ( function_exists( '\\is_wpforo_page' ) && \is_wpforo_page() ) {
+	if ( \function_exists( '\\is_wpforo_page' ) && \is_wpforo_page() ) {
 
 		if ( $override['title'] )
 			\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
@@ -71,7 +71,7 @@ function _wpforo_disable_html_output() {
  * @return string
  */
 function _wpforo_filter_canonical_url( $canonical_url, $post ) {
-	return function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
+	return \function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
 }
 
 /**
@@ -92,7 +92,7 @@ function _wpforo_filter_pre_title( $title = '', $args = null ) {
 
 	if ( null === $args ) {
 		$wpforo_title = \wpforo_meta_title( '' ); //= Either &$title or [ $title, ... ];
-		$title        = is_array( $wpforo_title ) && ! empty( $wpforo_title[0] ) ? $wpforo_title[0] : $title;
+		$title        = \is_array( $wpforo_title ) && ! empty( $wpforo_title[0] ) ? $wpforo_title[0] : $title;
 	}
 
 	return $title;

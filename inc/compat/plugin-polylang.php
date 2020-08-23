@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
 
 /**
  * Warns homepage global title and description about receiving input.
@@ -29,7 +29,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() a
  * @return string
  */
 function pll__( $string ) {
-	if ( function_exists( 'PLL' ) && function_exists( '\\pll__' ) ) {
+	if ( \function_exists( 'PLL' ) && \function_exists( '\\pll__' ) ) {
 		if ( \PLL() instanceof \PLL_Frontend ) {
 			return \pll__( $string );
 		}
@@ -85,11 +85,11 @@ function _blocklist_tsf_sitemap_styles( $blocklist ) {
  */
 function _fix_sitemap_prefix( $prefix = '' ) {
 
-	if ( function_exists( '\\pll_home_url' ) ) {
+	if ( \function_exists( '\\pll_home_url' ) ) {
 		$home_url        = \home_url();
 		$ruined_home_url = \pll_home_url();
 
-		$path = trim( substr_replace( $ruined_home_url, '', 0, strlen( $home_url ) ), '/' );
+		$path = trim( substr_replace( $ruined_home_url, '', 0, \strlen( $home_url ) ), '/' );
 
 		return $path ? "$prefix$path/" : $prefix;
 	}

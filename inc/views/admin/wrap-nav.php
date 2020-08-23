@@ -19,7 +19,7 @@ $count    = 1;
  */
 if ( $use_tabs ) :
 	?>
-	<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?php echo \esc_attr( $id . '-tabs-wrapper' ); ?>">
+	<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>">
 		<?php
 		foreach ( $tabs as $tab => $value ) :
 			$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
@@ -30,13 +30,15 @@ if ( $use_tabs ) :
 				vsprintf(
 					'<input type=radio class="tsf-tabs-radio tsf-input-not-saved" id=%1$s name="%2$s" %3$s><label for=%1$s class=tsf-nav-tab>%4$s</label>',
 					[
-						\esc_attr( 'tsf-' . $id . '-tab-' . $tab ),
-						\esc_attr( 'tsf-' . $id . '-tabs' ),
+						esc_attr( 'tsf-' . $id . '-tab-' . $tab ),
+						esc_attr( 'tsf-' . $id . '-tabs' ),
 						( 1 === $count ? 'checked' : '' ),
 						sprintf(
 							'%s%s',
-							( $dashicon ? '<span class="dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : '' ),
-							( $name ? '<span class="tsf-nav-desktop">' . \esc_attr( $name ) . '</span>' : '' )
+							// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- bug in EscapeOutputSniff
+							( $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : '' ),
+							// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- bug in EscapeOutputSniff
+							( $name ? '<span class="tsf-nav-desktop">' . esc_attr( $name ) . '</span>' : '' )
 						),
 					]
 				)

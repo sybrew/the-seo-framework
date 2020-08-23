@@ -5,6 +5,9 @@
 	<config name="minimum_supported_wp_version" value="5.1"/>
 	<config name="testVersion" value="5.6-"/>
 
+	<!-- https://github.com/theseoframework/wpcs-tsf -->
+	<rule ref="TSF"/>
+
 	<rule ref="PHPCompatibilityWP"/>
 	<rule ref="WordPress-Core">
 		<!-- We don't require redundant PHP <5.4 support, nor do we limit depth. The UTF-8 failsafe for json_encode is edge-case on PHP<5.5 only. -->

@@ -23,7 +23,7 @@ namespace The_SEO_Framework\Builders;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Generates the base sitemap.
@@ -119,7 +119,7 @@ class Sitemap_Base extends Sitemap {
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_hpt_query_args',
 				[
-					'posts_per_page'   => $_hierarchical_posts_limit + count( $_exclude_ids ),
+					'posts_per_page'   => $_hierarchical_posts_limit + \count( $_exclude_ids ),
 					'post_type'        => $hierarchical_post_types,
 					'orderby'          => 'date',
 					'order'            => 'ASC',
@@ -138,7 +138,7 @@ class Sitemap_Base extends Sitemap {
 
 			// Stop confusion: trim query to set value (by one or two, depending on whether the homepage and blog are included).
 			// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
-			if ( count( $hierarchical_post_ids ) > $_hierarchical_posts_limit ) {
+			if ( \count( $hierarchical_post_ids ) > $_hierarchical_posts_limit ) {
 				array_splice( $hierarchical_post_ids, $_hierarchical_posts_limit );
 			}
 		}
@@ -187,7 +187,7 @@ class Sitemap_Base extends Sitemap {
 				$non_hierarchical_post_ids,
 			]
 		);
-		$total_items = count( $_items );
+		$total_items = \count( $_items );
 
 		// 49998 = 50000-2 (home+blog), max sitemap items.
 		if ( $total_items > 49998 ) array_splice( $_items, 49998 );
@@ -487,7 +487,7 @@ class Sitemap_Base extends Sitemap {
 		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [], $args );
 
 		foreach ( $custom_urls as $url => $values ) {
-			if ( ! is_array( $values ) ) {
+			if ( ! \is_array( $values ) ) {
 				//* If there are no args, it's assigned as URL (per example)
 				$url = $values;
 			}

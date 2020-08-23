@@ -5,7 +5,7 @@
 
 namespace The_SEO_Framework;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin
@@ -66,7 +66,7 @@ class Query extends Core {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( defined( 'WP_CLI' ) && WP_CLI )
+		if ( \defined( 'WP_CLI' ) && WP_CLI )
 			return $cache = false;
 
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
@@ -118,7 +118,7 @@ class Query extends Core {
 	 */
 	public function get_post_type_real_ID( $post = null ) {
 
-		$post = is_null( $post ) ? $this->get_the_real_ID() : $post;
+		$post = \is_null( $post ) ? $this->get_the_real_ID() : $post;
 
 		return \get_post_type( $post );
 	}
@@ -446,7 +446,7 @@ class Query extends Core {
 	 */
 	public function is_archive_admin() {
 		global $current_screen;
-		return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit-tags', 'term' ], true );
+		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'edit-tags', 'term' ], true );
 	}
 
 	/**
@@ -496,7 +496,7 @@ class Query extends Core {
 	 */
 	public function is_wp_lists_edit() {
 		global $current_screen;
-		return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit-tags', 'edit' ], true );
+		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'edit-tags', 'edit' ], true );
 	}
 
 	/**
@@ -552,7 +552,7 @@ class Query extends Core {
 
 		static $pfp = null;
 
-		if ( is_null( $pfp ) )
+		if ( \is_null( $pfp ) )
 			$pfp = (int) \get_option( 'page_for_posts' );
 
 		if ( $id && $id === $pfp && false === \is_archive() ) {
@@ -832,8 +832,8 @@ class Query extends Core {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $page ) )
 			return $cache;
 
-		if ( is_int( $page ) || $page instanceof \WP_Post ) {
-			$is_page = in_array( \get_post_type( $page ), $this->get_hierarchical_post_types(), true );
+		if ( \is_int( $page ) || $page instanceof \WP_Post ) {
+			$is_page = \in_array( \get_post_type( $page ), $this->get_hierarchical_post_types(), true );
 		} else {
 			$is_page = \is_page( $page );
 		}
@@ -857,7 +857,7 @@ class Query extends Core {
 	 * @return bool
 	 */
 	public function is_page_admin() {
-		return $this->is_singular_admin() && in_array( $this->get_admin_post_type(), $this->get_hierarchical_post_types(), true );
+		return $this->is_singular_admin() && \in_array( $this->get_admin_post_type(), $this->get_hierarchical_post_types(), true );
 	}
 
 	/**
@@ -921,8 +921,8 @@ class Query extends Core {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
 			return $cache;
 
-		if ( is_int( $post ) || $post instanceof \WP_Post ) {
-			$is_single = in_array( \get_post_type( $post ), $this->get_nonhierarchical_post_types(), true );
+		if ( \is_int( $post ) || $post instanceof \WP_Post ) {
+			$is_single = \in_array( \get_post_type( $post ), $this->get_nonhierarchical_post_types(), true );
 		} else {
 			$is_single = \is_single( $post );
 		}
@@ -947,7 +947,7 @@ class Query extends Core {
 	 */
 	public function is_single_admin() {
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
-		return $this->is_singular_admin() && in_array( $this->get_admin_post_type(), $this->get_nonhierarchical_post_types(), true );
+		return $this->is_singular_admin() && \in_array( $this->get_admin_post_type(), $this->get_nonhierarchical_post_types(), true );
 	}
 
 	/**
@@ -964,7 +964,7 @@ class Query extends Core {
 	 */
 	public function is_singular( $post_types = '' ) {
 
-		if ( is_int( $post_types ) ) {
+		if ( \is_int( $post_types ) ) {
 			// Integers are no longer accepted.
 			$post_types = '';
 		}
@@ -1002,7 +1002,7 @@ class Query extends Core {
 	 */
 	public function is_singular_admin() {
 		global $current_screen;
-		return isset( $current_screen->base ) && in_array( $current_screen->base, [ 'edit', 'post' ], true );
+		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'edit', 'post' ], true );
 	}
 
 	/**
@@ -1169,7 +1169,7 @@ class Query extends Core {
 		if ( isset( $id ) ) {
 			$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
 		} else {
-			$is_shop = ! \is_admin() && function_exists( 'is_shop' ) && \is_shop();
+			$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
 		}
 
 		$this->set_query_cache(
@@ -1206,7 +1206,7 @@ class Query extends Core {
 		if ( $post ) {
 			$is_product = 'product' === \get_post_type( $post );
 		} else {
-			$is_product = function_exists( 'is_product' ) && \is_product();
+			$is_product = \function_exists( 'is_product' ) && \is_product();
 		}
 
 		$this->set_query_cache(
@@ -1459,7 +1459,7 @@ class Query extends Core {
 			 */
 			$_pages = \apply_filters( 'content_pagination', $_pages, $post );
 
-			$numpages = count( $_pages );
+			$numpages = \count( $_pages );
 		} elseif ( isset( $wp_query->max_num_pages ) ) {
 			$numpages = (int) $wp_query->max_num_pages;
 		} else {
