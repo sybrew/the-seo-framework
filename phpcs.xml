@@ -1,83 +1,22 @@
 <?xml version="1.0"?>
 <ruleset name="The SEO Framework">
-	<description>The coding standard used for The SEO Framework.</description>
+	<description>The coding standard used for The SEO Framework plugin for WordPress.</description>
+
+	<!-- Get it here: https://github.com/theseoframework/wpcs-tsf -->
+	<rule ref="TSF"/>
+
+	<rule ref="TSF.Performance.Opcodes">
+		<properties>
+			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,Load,Silencer"/>
+		</properties>
+	</rule>
 
 	<config name="minimum_supported_wp_version" value="5.1"/>
 	<config name="testVersion" value="5.6-"/>
 
-	<!-- https://github.com/theseoframework/wpcs-tsf -->
-	<rule ref="TSF"/>
-
-	<rule ref="PHPCompatibilityWP"/>
-	<rule ref="WordPress-Core">
-		<!-- We don't require redundant PHP <5.4 support, nor do we limit depth. The UTF-8 failsafe for json_encode is edge-case on PHP<5.5 only. -->
-		<exclude name="WordPress.WP.AlternativeFunctions.json_encode_json_encode"/>
-		<exclude name="WordPress.WP.AlternativeFunctions.parse_url_parse_url"/>
-
-		<!-- No. mt_rand() is perfectly fine. -->
-		<exclude name="WordPress.WP.AlternativeFunctions.rand_mt_rand"/>
-
-		<!-- We don't need to clutter code. -->
-		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis"/>
-
-		<!-- Limiting rule is limiting. Learn elementary PHP instead... -->
-		<exclude name="Squiz.Operators.ValidLogicalOperators"/>
-
-		<!-- We don't always make full sentences. But when we do, we do this autonomously. -->
-		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
-		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
-
-		<!-- Inline control structures greatly condense code, thus improving readability. This rule is bad. -->
-		<exclude name="Generic.ControlStructures.InlineControlStructure"/>
-
-		<!-- TEMP - To condense code, we utilize these. When we move to PHP7, we might reimplement this. -->
-		<exclude name="Squiz.PHP.DisallowMultipleAssignments"/>
-		<!-- These two are related... -->
-		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
-		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
-
-		<!-- TEMP - We derived our own standard of commenting by adding tokens, it's easier for me, but harder others. We'll fix this later. -->
-		<exclude name="Squiz.Commenting.InlineComment.NoSpaceBefore"/>
-
-		<!-- TEMP - Revisit this later. We don't add short descriptions for actions, filters, and properties. -->
-		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
-
-		<!-- Asinine standard is radical. https://make.wordpress.org/core/2019/07/12/php-coding-standards-changes/ -->
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
-		<!-- WordPress doesn't like performance for some reason. -->
-		<exclude name="WordPress.PHP.DisallowShortTernary"/>
-
-		<!-- This is already against the rules. However, methods and namespaced functions are allowed to have this; "it's publicly private" -->
-		<exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
-
-		<!-- Goto is bad when doing it Assembly-style (jumping through loops), but not outside in modern structure. Stop being numinous. -->
-		<!-- Besides, PHP errors out when jumping through loops with goto -->
-		<exclude name="Generic.PHP.DiscourageGoto"/>
-	</rule>
-	<rule ref="WordPress-Docs"/>
-	<rule ref="WordPress-Extra"/>
-	<rule ref="VariableAnalysis"/>
-
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="autodescription,default" />
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.Security.EscapeOutput">
-		<!-- TODO: Report issue that T_THIS should be ignored when there's a pointer attached.
-			Now, I added: "if ( '$this' === $this->tokens[ $i ]['content'] ) return;"
-			... It turns out that there's absolutely no method support for this rule.
-		-->
-		<properties>
-			<!-- Custom list of functions which escape values for output. -->
-			<!-- sanitize_key is more effective than most escaping functions... -->
-			<property name="customEscapingFunctions" type="array" value="sanitize_key"/>
-			<!-- Custom list of functions whose return values are pre-escaped for output. Doesn't work, as we need $this... -->
-			<!-- see https://github.com/WordPress/WordPress-Coding-Standards/issues/1766 -->
-			<!-- <property name="customAutoEscapedFunctions" type="array" value="description,attention,code_wrap,get_social_image_uploader_form,make_single_select_form,get_generated_seo_bar"/> -->
-			<!-- Custom list of functions which print output incorporating the passed values. -->
-			<!-- <property name="customPrintingFunctions" type="array" value=""/> -->
+			<property name="text_domain" type="array" value="autodescription,default"/>
 		</properties>
 	</rule>
 
@@ -91,18 +30,10 @@
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>*.min.css</exclude-pattern>
 
-	<!-- Exclude index.php files. They are inert in plugins unless directly included/called. -->
+	<!-- Exclude index.php files. They are inert in (our) plugins unless directly included/called. -->
 	<exclude-pattern>index.php</exclude-pattern>
 
 	<!-- Check all PHP files in directory tree by default. -->
 	<arg name="extensions" value="php"/>
 	<file>.</file>
-
-	<!-- Tweak file name notifications -->
-	<rule ref="WordPress.Files.FileName">
-		<properties>
-			<!-- Disable inconsiderate, conflicting and redundant "class-" prepend on the filename check. Use folders and dots instead. -->
-			<property name="strict_class_file_names" type="bool" value="0"/>
-		</properties>
-	</rule>
 </ruleset>
