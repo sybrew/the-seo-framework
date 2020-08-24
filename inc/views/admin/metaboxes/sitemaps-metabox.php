@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch the required instance within this file.
+// Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $instance );
 
 switch ( $instance ) :
@@ -80,7 +80,7 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Sitemap Output', 'autodescription' ); ?></h4>
 		<?php
 
-		//* Echo checkbox.
+		// Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_output',
@@ -213,7 +213,7 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'The modified time suggests to search engines where to look for content changes first.', 'autodescription' ) );
 
-		//* Echo checkbox.
+		// Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_modified',
@@ -235,7 +235,7 @@ switch ( $instance ) :
 		<?php
 		$this->description( __( 'The priority index suggests to search engines which pages are deemed more important. It has no known impact on the SEO value and it is generally ignored.', 'autodescription' ) );
 
-		//* Echo checkbox.
+		// Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'sitemaps_priority',
@@ -292,7 +292,7 @@ switch ( $instance ) :
 			$ping_checkbox .= $this->make_checkbox( $option, $ping_label, '', true );
 		}
 
-		//* Echo checkbox.
+		// Echo checkbox.
 		$this->wrap_fields( $ping_checkbox, true );
 		break;
 

@@ -609,13 +609,13 @@ class Sanitize extends Admin_Pages {
 		$filters = $this->get_option_filters();
 
 		if ( ! isset( $filters[ $option ] ) ) {
-			//* We are not filtering this option at all
+			// We are not filtering this option at all
 			return $new_value;
 		} elseif ( \is_string( $filters[ $option ] ) ) {
-			//* Single option value
+			// Single option value
 			return $this->do_filter( $filters[ $option ], $new_value, \get_option( $option ), $option );
 		} elseif ( \is_array( $filters[ $option ] ) ) {
-			//* Array of suboption values to loop through
+			// Array of suboption values to loop through
 			$old_value = \get_option( $option, [] );
 			foreach ( $filters[ $option ] as $suboption => $filter ) {
 				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
@@ -625,7 +625,7 @@ class Sanitize extends Admin_Pages {
 			return $new_value;
 		}
 
-		//* Should never hit this, but:
+		// Should never hit this, but:
 		return $new_value;
 	}
 
@@ -744,7 +744,7 @@ class Sanitize extends Admin_Pages {
 					continue 2;
 
 				case 'social_image_id':
-					//* Bound to social_image_url.
+					// Bound to social_image_url.
 					$value = $data['social_image_url'] ? $this->s_absint( $value ) : 0;
 					continue 2;
 
@@ -806,7 +806,7 @@ class Sanitize extends Admin_Pages {
 					continue 2;
 
 				case '_social_image_id':
-					//* Bound to _social_image_url.
+					// Bound to _social_image_url.
 					$value = $data['_social_image_url'] ? $this->s_absint( $value ) : 0;
 					continue 2;
 
@@ -817,7 +817,7 @@ class Sanitize extends Admin_Pages {
 					continue 2;
 
 				case 'redirect':
-					//* Let's keep this as the output really is.
+					// Let's keep this as the output really is.
 					$value = $this->s_redirect_url( $value );
 					continue 2;
 
@@ -855,7 +855,7 @@ class Sanitize extends Admin_Pages {
 
 		$previous = $this->get_option( 'title_separator' );
 
-		//* Fallback to default if empty.
+		// Fallback to default if empty.
 		if ( empty( $previous ) )
 			$previous = $this->get_default_option( 'title_separator' );
 
@@ -993,7 +993,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
 
-		//* No need to parse an empty excerpt.
+		// No need to parse an empty excerpt.
 		if ( '' === $excerpt ) return '';
 
 		$strip_args = [
@@ -1129,7 +1129,7 @@ class Sanitize extends Admin_Pages {
 
 		$previous = $this->get_option( 'title_location' );
 
-		//* Fallback if previous is also empty.
+		// Fallback if previous is also empty.
 		if ( ! $previous )
 			$previous = $this->get_default_option( 'title_location' );
 
@@ -1154,7 +1154,7 @@ class Sanitize extends Admin_Pages {
 
 		$previous = $this->get_option( 'home_title_location' );
 
-		//* Fallback if previous is also empty.
+		// Fallback if previous is also empty.
 		if ( ! $previous )
 			$previous = $this->get_default_option( 'home_title_location' );
 
@@ -1543,7 +1543,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_twitter_card( $new_value ) {
 
-		//* Fetch Twitter card array.
+		// Fetch Twitter card array.
 		$card = $this->get_twitter_card_types();
 
 		$key = \array_key_exists( $new_value, $card );

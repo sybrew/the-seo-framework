@@ -479,7 +479,7 @@ final class Debug {
 		if ( $tsf->is_seo_settings_page( true ) )
 			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_ID' ] );
 
-		//* Start timer.
+		// Start timer.
 		$this->timer( true );
 
 		$output = $tsf->get_html_output();
@@ -489,7 +489,7 @@ final class Debug {
 		$title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
-		//* Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
+		// Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
 		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, \esc_html( str_replace( str_repeat( ' ', 4 ), str_repeat( '&nbsp;', 4 ), $output ) ) );
 		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<font color="arnoldschwarzenegger">$1</font> ', $output );
 
@@ -562,14 +562,14 @@ final class Debug {
 	 */
 	protected function get_debug_query_output( $cache_version = 'nope' ) {
 
-		//* Start timer.
+		// Start timer.
 		$this->timer( true );
 
 		$tsf = \the_seo_framework();
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
-		//* Only get true/false values.
+		// Only get true/false values.
 		$page_id                = $tsf->get_the_real_ID();
 		$is_query_exploited     = $tsf->is_query_exploited();
 		$query_supports_seo     = $tsf->query_supports_seo() ? 'yes' : 'no';
@@ -623,10 +623,10 @@ final class Debug {
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
-		//* Don't debug the class object.
+		// Don't debug the class object.
 		unset( $tsf );
 
-		//* Get all above vars, split them in two (true and false) and sort them by key names.
+		// Get all above vars, split them in two (true and false) and sort them by key names.
 		$vars        = get_defined_vars();
 		$current     = array_filter( $vars );
 		$not_current = array_diff_key( $vars, $current );

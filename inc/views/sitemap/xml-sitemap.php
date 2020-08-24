@@ -27,7 +27,7 @@ $sitemap_content   = $this->get_option( 'cache_sitemap' ) ? $this->get_transient
 if ( false === $sitemap_content ) {
 	$sitemap_generated = true;
 
-	//* Transient doesn't exist yet.
+	// Transient doesn't exist yet.
 	$sitemap_base = new \The_SEO_Framework\Builders\Sitemap_Base;
 	$sitemap_base->prepare_generation();
 

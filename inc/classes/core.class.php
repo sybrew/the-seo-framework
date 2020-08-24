@@ -70,7 +70,7 @@ class Core {
 		 */
 		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name, 'unknown' );
 
-		//* Invoke default behavior: Write variable if it's not protected.
+		// Invoke default behavior: Write variable if it's not protected.
 		if ( ! isset( $this->$name ) )
 			$this->$name = $value;
 	}
@@ -253,7 +253,7 @@ class Core {
 	 */
 	public function proportionate_dimensions( $i, $r1, $r2 ) {
 
-		//* Get aspect ratio.
+		// Get aspect ratio.
 		$ar = $r1 / $r2;
 		$i  = $i / $ar;
 
@@ -486,7 +486,7 @@ class Core {
 	public function seo_settings_page_url() {
 
 		if ( $this->load_options ) {
-			//* Options are allowed to be loaded.
+			// Options are allowed to be loaded.
 
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
 
@@ -722,7 +722,7 @@ class Core {
 
 					$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
 
-					//* Found words that are used too frequently.
+					// Found words that are used too frequently.
 					$words_too_many[] = [ $first_encountered_word => $count ];
 				}
 			}
@@ -748,13 +748,13 @@ class Core {
 
 		$hex = ltrim( $hex, '#' );
 
-		//* #rgb = #rrggbb
+		// #rgb = #rrggbb
 		if ( 3 === \strlen( $hex ) )
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 
 		$hex = str_split( $hex, 2 );
 
-		//* Convert to usable numerics.
+		// Convert to usable numerics.
 		$r = hexdec( $hex[0] );
 		$g = hexdec( $hex[1] );
 		$b = hexdec( $hex[2] );
@@ -771,7 +771,7 @@ class Core {
 			return $lum;
 		};
 
-		//* Use sRGB for relative luminance.
+		// Use sRGB for relative luminance.
 		$sr = 0.2126 * $get_relative_luminance( $r );
 		$sg = 0.7152 * $get_relative_luminance( $g );
 		$sb = 0.0722 * $get_relative_luminance( $b );
@@ -780,18 +780,18 @@ class Core {
 
 		//= Invert colors if they hit luminance boundaries.
 		if ( $rel_lum < 0.5 ) {
-			//* Build dark greyscale.
+			// Build dark greyscale.
 			$gr = 255 - ( $r * 0.2989 / 8 ) * $rel_lum;
 			$gg = 255 - ( $g * 0.5870 / 8 ) * $rel_lum;
 			$gb = 255 - ( $b * 0.1140 / 8 ) * $rel_lum;
 		} else {
-			//* Build light greyscale.
+			// Build light greyscale.
 			$gr = ( $r * 0.2989 / 8 ) * $rel_lum;
 			$gg = ( $g * 0.5870 / 8 ) * $rel_lum;
 			$gb = ( $b * 0.1140 / 8 ) * $rel_lum;
 		}
 
-		//* Build RGB hex.
+		// Build RGB hex.
 		$retr = str_pad( dechex( round( $gr ) ), 2, '0', STR_PAD_LEFT );
 		$retg = str_pad( dechex( round( $gg ) ), 2, '0', STR_PAD_LEFT );
 		$retb = str_pad( dechex( round( $gb ) ), 2, '0', STR_PAD_LEFT );
@@ -939,7 +939,7 @@ class Core {
 				case 'h3':
 				case 'h2':
 				case 'h1':
-					//* Considers word non-boundary. @TODO consider removing this?
+					// Considers word non-boundary. @TODO consider removing this?
 					$expression = sprintf(
 						'/(?:\={%1$d})\B([^\={\%1$s}]+)\B(?:\={%1$d})/',
 						filter_var( $type, FILTER_SANITIZE_NUMBER_INT )

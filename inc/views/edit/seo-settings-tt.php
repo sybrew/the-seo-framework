@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\TermSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch Term ID and taxonomy.
+// Fetch Term ID and taxonomy.
 $term_id = $term->term_id;
 $meta    = $this->get_term_meta( $term_id );
 

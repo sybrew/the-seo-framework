@@ -488,7 +488,7 @@ class Sitemap_Base extends Sitemap {
 
 		foreach ( $custom_urls as $url => $values ) {
 			if ( ! \is_array( $values ) ) {
-				//* If there are no args, it's assigned as URL (per example)
+				// If there are no args, it's assigned as URL (per example)
 				$url = $values;
 			}
 

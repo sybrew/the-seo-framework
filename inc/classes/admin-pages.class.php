@@ -91,7 +91,7 @@ class Admin_Pages extends Profile {
 			$menu['callback']
 		);
 
-		//* Enqueue scripts
+		// Enqueue scripts
 		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, [ $this, '_init_admin_scripts' ], 11 );
 		\add_action( 'load-' . $this->seo_settings_page_hook, [ $this, '_register_seo_settings_meta_boxes' ] );
 	}
@@ -425,7 +425,7 @@ class Admin_Pages extends Profile {
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
 	 * }
 	 */
-	protected function output_dismissible_persistent_notice( $message, $key, array $args ) {
+	protected function output_dismissible_persistent_notice( $message, $key, array $args ) { // phpcs:ignore,VariableAnalysis.CodeAnalysis
 		$this->get_view( 'notice/persistent', get_defined_vars() );
 	}
 

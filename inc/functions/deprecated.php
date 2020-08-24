@@ -89,7 +89,7 @@ function the_seo_framework_dot_version( $version = '2.4' ) {
 		$version_len         = strlen( $version );
 		$current_version_len = strlen( $current_version );
 
-		//* Only allow 3 length.
+		// Only allow 3 length.
 		if ( 3 !== $version_len )
 			$version = substr( $version, 0, 3 );
 

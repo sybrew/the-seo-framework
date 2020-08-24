@@ -289,7 +289,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
 			$term        = \get_queried_object();
 			$description = $term->description ?: '';
 
-			//* Always overwrite, even when none is found.
+			// Always overwrite, even when none is found.
 			$excerpt = \the_seo_framework()->s_description_raw( $description );
 		}
 	}

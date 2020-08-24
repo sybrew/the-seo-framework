@@ -158,7 +158,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for constants
+		// Check for constants
 		if ( isset( $plugins['constants'] ) ) {
 			foreach ( $plugins['constants'] as $name ) {
 				if ( \defined( $name ) ) {
@@ -167,7 +167,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for functions
+		// Check for functions
 		if ( isset( $plugins['functions'] ) ) {
 			foreach ( $plugins['functions'] as $name ) {
 				if ( \function_exists( $name ) ) {
@@ -176,7 +176,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for classes
+		// Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
 				// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
@@ -186,7 +186,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* No globals, constant, function, or class found to exist
+		// No globals, constant, function, or class found to exist
 		return false;
 	}
 
@@ -211,18 +211,18 @@ class Detect extends Render {
 
 		$mapped = [];
 
-		//* Prepare multidimensional array for cache.
+		// Prepare multidimensional array for cache.
 		foreach ( $plugins as $key => $func ) {
 			if ( ! \is_array( $func ) )
 				return false; // doing it wrong...
 
-			//* Sort alphanumeric by value, put values back after sorting.
+			// Sort alphanumeric by value, put values back after sorting.
 			// TODO Use asort or usort instead???
 			$func = array_flip( $func );
 			ksort( $func );
 			$func = array_flip( $func );
 
-			//* Glue with underscore and space for debugging purposes.
+			// Glue with underscore and space for debugging purposes.
 			$mapped[ $key ] = $key . '_' . implode( ' ', $func );
 		}
 
@@ -252,7 +252,7 @@ class Detect extends Render {
 	 */
 	public function detect_plugin_multi( array $plugins ) {
 
-		//* Check for globals
+		// Check for globals
 		if ( isset( $plugins['globals'] ) ) {
 			foreach ( $plugins['globals'] as $name ) {
 				if ( ! isset( $GLOBALS[ $name ] ) ) {
@@ -261,7 +261,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for constants
+		// Check for constants
 		if ( isset( $plugins['constants'] ) ) {
 			foreach ( $plugins['constants'] as $name ) {
 				if ( ! \defined( $name ) ) {
@@ -270,7 +270,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for functions
+		// Check for functions
 		if ( isset( $plugins['functions'] ) ) {
 			foreach ( $plugins['functions'] as $name ) {
 				if ( ! \function_exists( $name ) ) {
@@ -279,7 +279,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* Check for classes
+		// Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
 				// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
@@ -289,7 +289,7 @@ class Detect extends Render {
 			}
 		}
 
-		//* All classes, functions and constant have been found to exist
+		// All classes, functions and constant have been found to exist
 		return true;
 	}
 
@@ -391,7 +391,7 @@ class Detect extends Render {
 		if ( isset( $detected ) )
 			return $detected;
 
-		//* Detect SEO plugins beforehand.
+		// Detect SEO plugins beforehand.
 		if ( $this->detect_seo_plugins() )
 			return $detected = true;
 
@@ -441,7 +441,7 @@ class Detect extends Render {
 		if ( isset( $detected ) )
 			return $detected;
 
-		//* Detect SEO plugins beforehand.
+		// Detect SEO plugins beforehand.
 		if ( $this->detect_seo_plugins() )
 			return $detected = true;
 
@@ -507,7 +507,7 @@ class Detect extends Render {
 		if ( isset( $detected ) )
 			return $detected;
 
-		//* Detect SEO plugins beforehand.
+		// Detect SEO plugins beforehand.
 		if ( $this->detect_seo_plugins() )
 			return $detected = true;
 

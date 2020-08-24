@@ -1001,7 +1001,7 @@ class Render extends Admin_Init {
 	 */
 	public function robots() {
 
-		//* Don't do anything if the blog isn't set to public.
+		// Don't do anything if the blog isn't set to public.
 		if ( false === $this->is_blog_public() ) return '';
 
 		$meta = $this->get_robots_meta();

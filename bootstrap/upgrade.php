@@ -145,7 +145,7 @@ function _do_upgrade() {
 	$previous_version = _previous_db_version();
 
 	if ( ! \get_option( 'the_seo_framework_initial_db_version' ) ) {
-		//* Sets to previous if previous is known. This is a late addition.
+		// Sets to previous if previous is known. This is a late addition.
 		\update_option( 'the_seo_framework_initial_db_version', $previous_version ?: THE_SEO_FRAMEWORK_DB_VERSION, 'no' );
 	}
 
@@ -482,7 +482,7 @@ function _add_upgrade_notice( $notice = '', $get = false ) {
  */
 function _output_upgrade_notices() {
 	foreach ( _add_upgrade_notice( '', true ) as $notice ) {
-		//* @TODO rtl?
+		// @TODO rtl?
 		\the_seo_framework()->do_dismissible_notice( 'SEO: ' . $notice, 'info' );
 	}
 }
@@ -527,7 +527,7 @@ function _do_upgrade_2701() {
  */
 function _do_upgrade_2802() {
 
-	//* Delete old values from database. Removes backwards compatibility.
+	// Delete old values from database. Removes backwards compatibility.
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
 		\delete_option( 'autodescription-term-meta' );
 

@@ -359,14 +359,14 @@ class Post_Data extends Detect {
 		$nonce_name   = $this->inpost_nonce_name;
 		$nonce_action = $this->inpost_nonce_field;
 
-		//* Check that the user is allowed to edit the post
+		// Check that the user is allowed to edit the post
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 		if ( ! isset( $_POST[ $nonce_name ] ) ) return;
 		if ( ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) ) return;
 
 		$data = (array) $_POST['autodescription'];
 
-		//* Perform nonce check and save fields.
+		// Perform nonce check and save fields.
 		$this->save_post_meta( $post, $data );
 	}
 
@@ -386,7 +386,7 @@ class Post_Data extends Detect {
 
 		if ( empty( $post->ID ) ) return;
 
-		//* Check again against ambiguous injection...
+		// Check again against ambiguous injection...
 		// Note, however: function wp_ajax_inline_save() already performs all these checks for us before firing this callback's action.
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 		if ( ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) return;
@@ -444,7 +444,7 @@ class Post_Data extends Detect {
 
 		if ( empty( $post->ID ) ) return;
 
-		//* Check again against ambiguous injection...
+		// Check again against ambiguous injection...
 		// Note, however: function bulk_edit_posts() already performs all these checks for us before firing this callback's action.
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 
@@ -519,7 +519,7 @@ class Post_Data extends Detect {
 		if ( \wp_is_post_autosave( $post ) ) return;
 		if ( \wp_is_post_revision( $post ) ) return;
 
-		//* Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
+		// Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
 
 		$post_type = \get_post_type( $post ) ?: false;
@@ -637,19 +637,19 @@ class Post_Data extends Detect {
 			return false;
 
 		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && \defined( 'ELEMENTOR_VERSION' ) ) :
-			//* Elementor by Elementor LTD
+			// Elementor by Elementor LTD
 			return true;
 		elseif ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
-			//* Divi Builder by Elegant Themes
+			// Divi Builder by Elegant Themes
 			return true;
 		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
-			//* Visual Composer by WPBakery
+			// Visual Composer by WPBakery
 			return true;
 		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && \defined( 'SITEORIGIN_PANELS_VERSION' ) ) :
-			//* Page Builder by SiteOrigin
+			// Page Builder by SiteOrigin
 			return true;
 		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && \defined( 'FL_BUILDER_VERSION' ) ) :
-			//* Beaver Builder by Fastline Media...
+			// Beaver Builder by Fastline Media...
 			return true;
 		endif;
 
@@ -691,10 +691,10 @@ class Post_Data extends Detect {
 			return false;
 
 		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
-			//* Divi Builder by Elegant Themes
+			// Divi Builder by Elegant Themes
 			return true;
 		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
-			//* Visual Composer by WPBakery
+			// Visual Composer by WPBakery
 			return true;
 		endif;
 

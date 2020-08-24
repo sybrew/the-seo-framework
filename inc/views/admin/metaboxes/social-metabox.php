@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch the required instance within this file.
+// Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_social_metabox', $instance );
 
 switch ( $instance ) :
@@ -66,7 +66,7 @@ switch ( $instance ) :
 		<hr>
 		<?php
 
-		//* Echo Open Graph Tags checkboxes.
+		// Echo Open Graph Tags checkboxes.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'og_tags',
@@ -79,7 +79,7 @@ switch ( $instance ) :
 		if ( $this->detect_og_plugin() )
 			$this->attention_description( __( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
-		//* Echo Facebook Tags checkbox.
+		// Echo Facebook Tags checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'facebook_tags',
@@ -90,7 +90,7 @@ switch ( $instance ) :
 			true
 		);
 
-		//* Echo Twitter Tags checkboxes.
+		// Echo Twitter Tags checkboxes.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'twitter_tags',
@@ -103,7 +103,7 @@ switch ( $instance ) :
 		if ( $this->detect_twitter_card_plugin() )
 			$this->attention_description( __( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
-		//* Echo oEmbed scripts checkboxes.
+		// Echo oEmbed scripts checkboxes.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'oembed_scripts',

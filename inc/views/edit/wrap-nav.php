@@ -9,7 +9,7 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Whether tabs are active.
+// Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;
 $count    = 1;
 

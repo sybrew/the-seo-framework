@@ -76,7 +76,7 @@ final class Ping {
 
 		$transient = $tsf->generate_cache_key( 0, '', 'ping' );
 
-		//* NOTE: Use legacy get_transient to bypass TSF's transient filters and prevent ping spam.
+		// NOTE: Use legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
 			/**
 			 * @since 4.1.1
@@ -102,7 +102,7 @@ final class Ping {
 			 */
 			$expiration = (int) \apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
 
-			//* @NOTE: Using legacy set_transient to bypass TSF's transient filters and prevent ping spam.
+			// @NOTE: Using legacy set_transient to bypass TSF's transient filters and prevent ping spam.
 			\set_transient( $transient, 1, $expiration );
 		}
 	}

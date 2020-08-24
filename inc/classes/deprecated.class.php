@@ -472,7 +472,7 @@ final class Deprecated {
 		if ( isset( $term[ $id ] ) )
 			return $term[ $id ];
 
-		//* Return null if no term can be detected.
+		// Return null if no term can be detected.
 		if ( false === $tsf->is_archive() )
 			return false;
 
@@ -522,7 +522,7 @@ final class Deprecated {
 
 		$tsf->_deprecated_function( 'the_seo_framework()->get_custom_field()', '4.0.0', 'the_seo_framework()->get_post_meta_item()' );
 
-		//* If field is falsesque, get_post_meta() will return an array.
+		// If field is falsesque, get_post_meta() will return an array.
 		if ( ! $field )
 			return false;
 
@@ -536,11 +536,11 @@ final class Deprecated {
 
 		$custom_field = \get_post_meta( $post_id, $field, true );
 
-		//* If custom field is empty, empty cache..
+		// If custom field is empty, empty cache..
 		if ( empty( $custom_field ) )
 			$field_cache[ $field ][ $post_id ] = '';
 
-		//* Render custom field, slashes stripped, sanitized if string
+		// Render custom field, slashes stripped, sanitized if string
 		$field_cache[ $field ][ $post_id ] = \is_array( $custom_field ) ? \stripslashes_deep( $custom_field ) : stripslashes( $custom_field );
 
 		return $field_cache[ $field ][ $post_id ];

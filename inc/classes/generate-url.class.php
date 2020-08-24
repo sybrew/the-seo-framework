@@ -494,7 +494,7 @@ class Generate_Url extends Generate_Title {
 			$_get = 'year';
 		}
 
-		//* Determine whether the input matches query.
+		// Determine whether the input matches query.
 		$_paginate = true;
 		switch ( $_get ) {
 			case 'day':
@@ -739,7 +739,7 @@ class Generate_Url extends Generate_Title {
 	public function remove_pagination_from_url( $url, $page = null, $use_base = null ) {
 
 		if ( $this->pretty_permalinks ) {
-			//* Defensive programming...
+			// Defensive programming...
 			static $user_slash, $base;
 			$user_slash = isset( $user_slash ) ? $user_slash :
 				( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
@@ -763,7 +763,7 @@ class Generate_Url extends Generate_Title {
 					$url = $this->s_url( $url );
 
 				$pos = strrpos( $url, $find );
-				//* Defensive programming, only remove if $find matches the stack length, without query arguments.
+				// Defensive programming, only remove if $find matches the stack length, without query arguments.
 				$continue = $pos && $pos + \strlen( $find ) === \strlen( $url );
 
 				if ( $continue ) {
@@ -842,7 +842,7 @@ class Generate_Url extends Generate_Title {
 			} elseif ( $this->is_author() ) {
 				$url = \add_query_arg( [ 'author' => $id ], $home );
 			} elseif ( $this->is_tax() ) {
-				//* Generate shortlink for object type and slug.
+				// Generate shortlink for object type and slug.
 				$object = \get_queried_object();
 
 				$tax  = isset( $object->taxonomy ) ? $object->taxonomy : '';

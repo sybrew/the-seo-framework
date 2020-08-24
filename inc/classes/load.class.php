@@ -128,7 +128,7 @@ final class Load extends Cache {
 
 		$this->the_seo_framework_use_transients = \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
 
-		//* WP Core definition.
+		// WP Core definition.
 		$this->script_debug = \defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ?: $this->script_debug;
 	}
 
@@ -148,45 +148,45 @@ final class Load extends Cache {
 		// $this->_include_compat( 'mbstring', 'php' );
 		// phpcs:enable, Squiz.PHP.CommentedOutCode
 
-		//* Disable Headway theme SEO.
+		// Disable Headway theme SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
 
 		if ( $this->is_theme( 'genesis' ) ) {
-			//* Genesis Framework
+			// Genesis Framework
 			$this->_include_compat( 'genesis', 'theme' );
 		}
 
 		if ( $this->detect_plugin( [ 'constants' => [ 'ICL_LANGUAGE_CODE' ] ] ) ) {
-			//* WPML
+			// WPML
 			$this->_include_compat( 'wpml', 'plugin' );
 		}
 		if ( $this->detect_plugin( [ 'constants' => [ 'POLYLANG_VERSION' ] ] ) ) {
-			//* Polylang
+			// Polylang
 			$this->_include_compat( 'polylang', 'plugin' );
 		}
 
 		if ( $this->detect_plugin( [ 'globals' => [ 'ultimatemember' ] ] ) ) {
-			//* Ultimate Member
+			// Ultimate Member
 			$this->_include_compat( 'ultimatemember', 'plugin' );
 		}
 		if ( $this->detect_plugin( [ 'globals' => [ 'bp' ] ] ) ) {
-			//* BuddyPress
+			// BuddyPress
 			$this->_include_compat( 'buddypress', 'plugin' );
 		}
 
 		if ( $this->detect_plugin( [ 'functions' => [ 'bbpress' ] ] ) ) {
-			//* bbPress
+			// bbPress
 			$this->_include_compat( 'bbpress', 'plugin' );
 		} elseif ( $this->detect_plugin( [ 'constants' => [ 'WPFORO_BASENAME' ] ] ) ) {
-			//* wpForo
+			// wpForo
 			$this->_include_compat( 'wpforo', 'plugin' );
 		}
 
 		if ( $this->detect_plugin( [ 'functions' => [ 'wc' ] ] ) ) {
-			//* WooCommerce.
+			// WooCommerce.
 			$this->_include_compat( 'woocommerce', 'plugin' );
 		} elseif ( $this->detect_plugin( [ 'constants' => [ 'EDD_VERSION' ] ] ) ) {
-			//* Easy Digital Downloads.
+			// Easy Digital Downloads.
 			$this->_include_compat( 'edd', 'plugin' );
 		}
 	}

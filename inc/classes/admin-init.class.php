@@ -396,7 +396,7 @@ class Admin_Init extends Init {
 		$target = \add_query_arg( $query_args, $url );
 		$target = \esc_url_raw( $target, [ 'https', 'http' ] );
 
-		//* Predict white screen:
+		// Predict white screen:
 		$headers_sent = headers_sent();
 
 		/**
@@ -406,7 +406,7 @@ class Admin_Init extends Init {
 		 */
 		$success = \wp_safe_redirect( $target, 302 ); // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
-		//* White screen of death for non-debugging users. Let's make it friendlier.
+		// White screen of death for non-debugging users. Let's make it friendlier.
 		if ( $headers_sent ) {
 			$this->handle_admin_redirect_error( $target );
 		}
@@ -430,7 +430,7 @@ class Admin_Init extends Init {
 		$headers_list = headers_list();
 		$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
-		//* Test if WordPress's redirect header is sent. Bail if true.
+		// Test if WordPress's redirect header is sent. Bail if true.
 		if ( \in_array( $location, $headers_list, true ) )
 			return;
 
@@ -655,12 +655,12 @@ class Admin_Init extends Init {
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$this->_check_tsf_ajax_referer( 'edit_posts' );
 
-		//* Remove output buffer.
+		// Remove output buffer.
 		$this->clean_response_header();
 
-		//* If current user isn't allowed to edit posts, don't do anything and kill PHP.
+		// If current user isn't allowed to edit posts, don't do anything and kill PHP.
 		if ( ! \current_user_can( 'edit_posts' ) ) {
-			//* Encode and echo results. Requires JSON decode within JS.
+			// Encode and echo results. Requires JSON decode within JS.
 			\wp_send_json( [
 				'type'  => 'failure',
 				'value' => '',
@@ -682,7 +682,7 @@ class Admin_Init extends Init {
 		if ( $value > 3 )
 			$value = 0;
 
-		//* Update the option and get results of action.
+		// Update the option and get results of action.
 		$type = $this->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
 
 		$results = [
@@ -690,7 +690,7 @@ class Admin_Init extends Init {
 			'value' => $value,
 		];
 
-		//* Encode and echo results. Requires JSON decode within JS.
+		// Encode and echo results. Requires JSON decode within JS.
 		\wp_send_json( $results );
 
 		// phpcs:enable, WordPress.Security.NonceVerification

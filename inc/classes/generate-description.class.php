@@ -703,7 +703,7 @@ class Generate_Description extends Generate {
 		if ( \is_null( $id ) )
 			$id = $this->get_the_real_ID();
 
-		//* If the post is protected, don't generate a description.
+		// If the post is protected, don't generate a description.
 		if ( $this->is_protected( $id ) ) return '';
 
 		return $this->get_excerpt_by_id( '', $id, null, false );
@@ -765,7 +765,7 @@ class Generate_Description extends Generate {
 		if ( empty( $excerpt ) )
 			$excerpt = $this->fetch_excerpt( $id );
 
-		//* No need to parse an empty excerpt.
+		// No need to parse an empty excerpt.
 		if ( ! $excerpt ) return '';
 
 		return $escape ? $this->s_excerpt( $excerpt ) : $this->s_excerpt_raw( $excerpt );

@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch the required instance within this file.
+// Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_schema_metabox', $instance );
 
 switch ( $instance ) :
@@ -112,7 +112,7 @@ switch ( $instance ) :
 			'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links',
 			false
 		);
-		//* Echo checkbox.
+		// Echo checkbox.
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'knowledge_output',

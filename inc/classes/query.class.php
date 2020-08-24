@@ -98,7 +98,7 @@ class Query extends Core {
 
 		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );
 
-		//* Backtrace debugging.
+		// Backtrace debugging.
 		$depth = 10;
 		static $_more = true;
 		if ( $_more ) {
@@ -176,11 +176,11 @@ class Query extends Core {
 				return $id;
 		}
 
-		//* Try to get ID from plugins when caching is available.
+		// Try to get ID from plugins when caching is available.
 		$id = $use_cache ? $this->check_the_real_ID() : 0;
 
 		if ( ! $id ) {
-			//* This catches most IDs. Even Post IDs.
+			// This catches most IDs. Even Post IDs.
 			$id = \get_queried_object_id();
 		}
 
@@ -205,7 +205,7 @@ class Query extends Core {
 
 		$id = \get_the_ID();
 
-		//* Current term ID (outside loop).
+		// Current term ID (outside loop).
 		if ( ! $id && $this->is_archive_admin() )
 			$id = $this->get_admin_term_id();
 
@@ -694,7 +694,7 @@ class Query extends Core {
 		if ( \is_front_page() )
 			$is_front_page = true;
 
-		//* Elegant Themes Support. Yay.
+		// Elegant Themes Support. Yay.
 		if ( false === $is_front_page && 0 === $this->get_the_real_ID() && $this->is_home() ) {
 			$sof = \get_option( 'show_on_front' );
 
@@ -756,14 +756,14 @@ class Query extends Core {
 
 		$sof = \get_option( 'show_on_front' );
 
-		//* Compare against $id
+		// Compare against $id
 		if ( 'page' === $sof ) {
 			if ( (int) \get_option( 'page_on_front' ) === $id ) {
 				$is_front_page = true;
 			}
 		} elseif ( 'posts' === $sof ) {
 			if ( 0 === $id ) {
-				//* 0 as ID causes many issues. Just test for is_home().
+				// 0 as ID causes many issues. Just test for is_home().
 				if ( $this->is_home() ) {
 					$is_front_page = true;
 				}
@@ -969,7 +969,7 @@ class Query extends Core {
 			$post_types = '';
 		}
 
-		//* WP_Query functions require loop, do alternative check.
+		// WP_Query functions require loop, do alternative check.
 		if ( \is_admin() )
 			return $this->is_singular_admin();
 
@@ -1032,7 +1032,7 @@ class Query extends Core {
 	 */
 	public function is_tag( $tag = '' ) {
 
-		//* Admin requires another check.
+		// Admin requires another check.
 		if ( \is_admin() )
 			return $this->is_tag_admin();
 

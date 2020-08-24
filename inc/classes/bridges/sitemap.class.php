@@ -246,7 +246,7 @@ final class Sitemap {
 	 */
 	public function output_base_sitemap() {
 
-		//* Remove output, if any.
+		// Remove output, if any.
 		static::$tsf->clean_response_header();
 
 		if ( ! headers_sent() ) {
@@ -254,7 +254,7 @@ final class Sitemap {
 			header( 'Content-type: text/xml; charset=utf-8', true );
 		}
 
-		//* Fetch sitemap content and add trailing line. Already escaped internally.
+		// Fetch sitemap content and add trailing line. Already escaped internally.
 		static::$tsf->get_view( 'sitemap/xml-sitemap' );
 		echo "\n";
 

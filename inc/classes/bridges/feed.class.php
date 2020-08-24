@@ -106,10 +106,10 @@ final class Feed {
 	 */
 	public function _init() {
 
-		//* Alter the content feed.
+		// Alter the content feed.
 		\add_filter( 'the_content_feed', [ $this, '_modify_the_content_feed' ], 10, 2 );
 
-		//* Only add the feed link to the excerpt if we're only building excerpts.
+		// Only add the feed link to the excerpt if we're only building excerpts.
 		if ( \get_option( 'rss_use_excerpt' ) )
 			\add_filter( 'the_excerpt_rss', [ $this, '_modify_the_content_feed' ], 10, 1 );
 	}
@@ -158,7 +158,7 @@ final class Feed {
 
 		if ( ! $content ) return '';
 
-		//* Strip all code and lines.
+		// Strip all code and lines.
 		$excerpt = static::$tsf->s_excerpt_raw( $content, false );
 
 		/**
@@ -167,7 +167,7 @@ final class Feed {
 		 */
 		$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
-		//* Generate excerpt.
+		// Generate excerpt.
 		$excerpt = static::$tsf->trim_excerpt( $excerpt, 0, $max_len );
 
 		return '<p>' . $excerpt . '</p>';

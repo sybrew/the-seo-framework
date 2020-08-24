@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch the required instance within this file.
+// Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $instance );
 
 switch ( $instance ) :
@@ -38,7 +38,7 @@ switch ( $instance ) :
 		$post_types = $this->get_public_post_types();
 		$taxonomies = $this->get_public_taxonomies();
 
-		//* Robots i18n
+		// Robots i18n
 		$robots = [
 			'noindex'   => [
 				'value' => 'noindex',
@@ -400,7 +400,7 @@ switch ( $instance ) :
 
 			$id = $this->s_field_id( $type . '_' . $ro_value );
 
-			//* Add warning if it's 'site'.
+			// Add warning if it's 'site'.
 			if ( 'site' === $type ) {
 				$checkboxes .= '<hr class="tsf-option-spacer">';
 

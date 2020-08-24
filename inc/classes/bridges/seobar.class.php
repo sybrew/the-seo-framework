@@ -61,7 +61,7 @@ final class SeoBar extends ListTable {
 
 		$column_keys = array_keys( $columns );
 
-		//* Column keys to look for, in order of appearance.
+		// Column keys to look for, in order of appearance.
 		$order_keys = [
 			'comments',
 			'posts',
@@ -77,20 +77,20 @@ final class SeoBar extends ListTable {
 		$order_keys = (array) \apply_filters( 'the_seo_framework_seo_column_keys_order', $order_keys );
 
 		foreach ( $order_keys as $key ) {
-			//* Put value in $offset, if not false, break loop.
+			// Put value in $offset, if not false, break loop.
 			$offset = array_search( $key, $column_keys, true );
 			if ( false !== $offset )
 				break;
 		}
 
-		//* It tried but found nothing
+		// It tried but found nothing
 		if ( false === $offset ) {
-			//* Add SEO bar at the end of columns.
+			// Add SEO bar at the end of columns.
 			$columns = array_merge( $columns, $seocolumn );
 		} else {
-			//* Add seo bar between columns.
+			// Add seo bar between columns.
 
-			//* Cache columns.
+			// Cache columns.
 			$columns_before = $columns;
 
 			$columns = array_merge(

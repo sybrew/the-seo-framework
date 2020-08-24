@@ -462,7 +462,7 @@ class Generate_Ldjson extends Generate_Image {
 			$taxonomy = $taxonomies;
 		}
 
-		//* Test categories.
+		// Test categories.
 		$r = \is_object_in_term( $post_id, $taxonomy, '' );
 		if ( ! $r || \is_wp_error( $r ) )
 			return '';
@@ -490,7 +490,7 @@ class Generate_Ldjson extends Generate_Image {
 		$parents      = [];
 		$assigned_ids = [];
 
-		//* Fetch cats children id's, if any.
+		// Fetch cats children id's, if any.
 		foreach ( $terms as $term_id => $parent_id ) :
 			$assigned_ids[ $term_id ] = $parent_id;
 			// Check if they have parents (gets them all).
@@ -509,7 +509,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $parents )
 			return '';
 
-		//* Seed out parents that have multiple assigned children.
+		// Seed out parents that have multiple assigned children.
 		foreach ( $parents as $pa_id => $child_id ) :
 			foreach ( $child_id as $ckey => $cid ) :
 				if ( isset( $parents[ $cid ] ) ) {
@@ -518,7 +518,7 @@ class Generate_Ldjson extends Generate_Image {
 			endforeach;
 		endforeach;
 
-		//* Merge tree list.
+		// Merge tree list.
 		$tree_ids = $this->build_ld_json_breadcrumb_trees( $parents );
 
 		if ( ! $tree_ids )
@@ -569,7 +569,7 @@ class Generate_Ldjson extends Generate_Image {
 			}
 			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
-			//* Store in cache.
+			// Store in cache.
 			$items[] = [
 				'@type'    => 'ListItem',
 				'position' => $position,
@@ -608,23 +608,23 @@ class Generate_Ldjson extends Generate_Image {
 
 		foreach ( $cats as $parent => $kitten ) {
 			if ( empty( $kitten ) ) {
-				//* Final cat.
+				// Final cat.
 				$trees[] = $parent;
 			} else {
 				if ( 1 === \count( $kitten ) ) {
-					//* Single tree.
+					// Single tree.
 					$trees[] = [ reset( $kitten ), $parent ];
 				} else {
-					//* Nested categories.
+					// Nested categories.
 					$add = [];
 
 					foreach ( $kitten as $kit_id => $child_id ) {
-						//* Only add if non-existent in $trees.
+						// Only add if non-existent in $trees.
 						if ( ! \in_array( $child_id, $trees, true ) )
 							$add[] = $child_id;
 					}
 
-					//* Put children in right order.
+					// Put children in right order.
 					$add = array_reverse( $add );
 
 					$trees[] = array_merge( $add, [ $parent ] );

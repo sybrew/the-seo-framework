@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch the required instance within this file.
+// Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $instance );
 
 switch ( $instance ) :

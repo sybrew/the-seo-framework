@@ -415,10 +415,10 @@ class Site_Options extends Sanitize {
 		\get_option( THE_SEO_FRAMEWORK_SITE_OPTIONS )
 			or \add_option( THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() );
 
-		//* Check whether the Options Reset initialization has been added.
+		// Check whether the Options Reset initialization has been added.
 		$this->check_options_reset();
 
-		//* Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
+		// Handle post-update actions. Must be initialized on admin_init and is initalized on options.php.
 		if ( 'options.php' === $GLOBALS['pagenow'] )
 			$this->process_settings_submission();
 	}
@@ -556,7 +556,7 @@ class Site_Options extends Sanitize {
 		if ( $depr )
 			$this->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
 
-		//* If we need to bypass the cache
+		// If we need to bypass the cache
 		if ( ! $use_cache ) {
 			$defaults = $this->get_default_site_options();
 			return isset( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : null;
@@ -591,7 +591,7 @@ class Site_Options extends Sanitize {
 		if ( $depr )
 			$this->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
 
-		//* If we need to bypass the cache
+		// If we need to bypass the cache
 		if ( ! $use_cache ) {
 			$warned = $this->get_warned_site_options();
 			return $this->s_one_zero( ! empty( $warned[ $key ] ) );

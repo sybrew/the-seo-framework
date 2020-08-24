@@ -11,10 +11,10 @@ use The_SEO_Framework\Bridges\PostSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Fetch the required instance within this file.
+// Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'inpost', $instance );
 
-//* Setup default vars.
+// Setup default vars.
 $post_id = $this->get_the_real_ID(); // We also have access to object $post at the main call...
 
 $_generator_args = [
@@ -225,7 +225,7 @@ switch ( $instance ) :
 		$canonical             = $this->get_post_meta_item( '_genesis_canonical_uri' );
 		$canonical_placeholder = $this->create_canonical_url( $_generator_args );
 
-		//* Get robots defaults.
+		// Get robots defaults.
 		$r_defaults = $this->robots_meta(
 			$_generator_args,
 			The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
@@ -504,7 +504,7 @@ switch ( $instance ) :
 		</div>
 		<?php
 
-		//* Fetch image placeholder.
+		// Fetch image placeholder.
 		if ( $this->is_static_frontpage( $post_id ) && $this->get_option( 'homepage_social_image_url' ) ) {
 			$image_details     = current( $this->get_image_details( $_generator_args, true, 'social', true ) );
 			$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';

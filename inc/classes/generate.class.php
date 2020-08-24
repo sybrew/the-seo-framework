@@ -206,7 +206,7 @@ class Generate extends User_Data {
 			$max_video_preview = $this->get_option( 'max_video_preview' );
 		}
 
-		//* Check homepage SEO settings, set noindex, nofollow and noarchive
+		// Check homepage SEO settings, set noindex, nofollow and noarchive
 		if ( $this->is_real_front_page() ) {
 			$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
 			$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
@@ -764,7 +764,7 @@ class Generate extends User_Data {
 		$option = $this->get_option( 'twitter_card' );
 		$option = trim( \esc_attr( $option ) );
 
-		//* Option is equal to found cards. Output option.
+		// Option is equal to found cards. Output option.
 		if ( \in_array( $option, $available_cards, true ) ) {
 			if ( 'summary_large_image' === $option ) {
 				$type = 'summary_large_image';

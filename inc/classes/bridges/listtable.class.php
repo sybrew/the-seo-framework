@@ -69,10 +69,10 @@ abstract class ListTable {
 	 */
 	public function __construct() {
 
-		//* Initialize columns.
+		// Initialize columns.
 		\add_action( 'current_screen', [ $this, '_prepare_columns' ] );
 
-		//* Ajax handlers for columns.
+		// Ajax handlers for columns.
 		\add_action( 'wp_ajax_add-tag', [ $this, '_prepare_columns_wp_ajax_add_tag' ], -1 );
 		\add_action( 'wp_ajax_inline-save', [ $this, '_prepare_columns_wp_ajax_inline_save' ], -1 );
 		\add_action( 'wp_ajax_inline-save-tax', [ $this, '_prepare_columns_wp_ajax_inline_save_tax' ], -1 );
@@ -225,7 +225,7 @@ abstract class ListTable {
 			\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, '_output_column_contents_for_term' ], 1, 3 );
 
 		if ( $screen_id ) {
-			//* Everything but inline-save-tax action.
+			// Everything but inline-save-tax action.
 			\add_filter( 'manage_' . $screen_id . '_columns', [ $this, '_add_column' ], 10, 1 );
 
 			/**

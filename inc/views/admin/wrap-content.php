@@ -9,7 +9,7 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-//* Whether tabs are active.
+// Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;
 $count    = 1;
 
@@ -23,13 +23,13 @@ foreach ( $tabs as $tab => $value ) :
 	$the_id   = 'tsf-' . $id . '-tab-' . $tab . '-content';
 	$the_name = 'tsf-' . $id . '-tabs-content';
 
-	//* Current tab for JS.
+	// Current tab for JS.
 	$current = 1 === $count ? ' tsf-active-tab-content' : '';
 
 	?>
 	<div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" >
 		<?php
-		//* No-JS tabs.
+		// No-JS tabs.
 		if ( $use_tabs ) :
 			$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
 			$name     = isset( $value['name'] ) ? $value['name'] : '';
