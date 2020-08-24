@@ -33,6 +33,7 @@ namespace The_SEO_Framework\Bridges;
  * @link https://bugs.php.net/bug.php?id=75771
  */
 $_load_feed_class = function() {
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 	new Feed();
 };
 

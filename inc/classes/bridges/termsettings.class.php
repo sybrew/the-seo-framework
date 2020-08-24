@@ -56,7 +56,7 @@ final class TermSettings {
 	 * @param \WP_Term $term     Current taxonomy term object.
 	 * @param string   $taxonomy Current taxonomy slug.
 	 */
-	public static function _output_setting_fields( $term, $taxonomy ) {
+	public static function _output_setting_fields( $term, $taxonomy ) { // phpcs:ignore,VariableAnalysis
 		/**
 		 * @since 2.9.0
 		 */

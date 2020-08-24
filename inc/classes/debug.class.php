@@ -568,6 +568,7 @@ final class Debug {
 		$tsf = \the_seo_framework();
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
+		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
 		//* Only get true/false values.
 		$page_id                = $tsf->get_the_real_ID();
 		$is_query_exploited     = $tsf->is_query_exploited();
@@ -619,7 +620,8 @@ final class Debug {
 		$is_taxonomy_disabled   = $tsf->is_taxonomy_disabled();
 		$is_post_type_archive   = \is_post_type_archive();
 		$is_protected           = $tsf->is_protected( $page_id );
-		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
+		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 		//* Don't debug the class object.
 		unset( $tsf );

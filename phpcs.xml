@@ -5,14 +5,14 @@
 	<!-- Get it here: https://github.com/theseoframework/wpcs-tsf -->
 	<rule ref="TSF"/>
 
+	<config name="minimum_supported_wp_version" value="5.1"/>
+	<config name="testVersion" value="5.6-"/>
+
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
 			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,Load,Silencer"/>
 		</properties>
 	</rule>
-
-	<config name="minimum_supported_wp_version" value="5.1"/>
-	<config name="testVersion" value="5.6-"/>
 
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -22,7 +22,18 @@
 
 	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
 		<properties>
-			<property name="validUndefinedVariableNames" type="string" value="this"/>
+			<property name="validUndefinedVariableNames" type="string" value="this _secret"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.Security.EscapeOutput">
+		<properties>
+			<!-- Custom list of functions whose return values are pre-escaped for output. Doesn't work, as we need $this... -->
+			<!-- see https://github.com/WordPress/WordPress-Coding-Standards/issues/1766 -->
+			<!-- Should they add `if ( \T_THIS === $this->tokens[ $ptr ]['code'] ) continue;` at `OutputNotEscaped`? -->
+			<!-- <property name="customAutoEscapedFunctions" type="array" value="description,attention,code_wrap,get_social_image_uploader_form,make_single_select_form,get_generated_seo_bar"/> -->
+			<!-- Custom list of functions which print output incorporating the passed values. -->
+			<!-- <property name="customPrintingFunctions" type="array" value=""/> -->
 		</properties>
 	</rule>
 

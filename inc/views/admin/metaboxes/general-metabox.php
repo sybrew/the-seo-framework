@@ -4,11 +4,12 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
 use The_SEO_Framework\Bridges\SeoSettings;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
-
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $instance );
@@ -245,8 +246,6 @@ switch ( $instance ) :
 		<h4><?php esc_html_e( 'Transient Cache Settings', 'autodescription' ); ?></h4>
 		<?php
 		$this->description( __( 'To improve performance, generated output can be stored in the database as transient cache.', 'autodescription' ) );
-		// No longer relevant...
-		// $this->description( __( 'If your website has thousands of pages, or if other forms of caching are used, you might wish to adjust these options.', 'autodescription' ) );
 
 		$this->wrap_fields(
 			$this->make_checkbox(
@@ -322,7 +321,7 @@ switch ( $instance ) :
 			'prev_next_posts',
 			$this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
-				\esc_html__( 'Add `rel` link tags to posts and pages?', 'autodescription' ),
+				esc_html__( 'Add `rel` link tags to posts and pages?', 'autodescription' ),
 				[ 'code' ]
 			),
 			'',
@@ -333,7 +332,7 @@ switch ( $instance ) :
 			'prev_next_archives',
 			$this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
-				\esc_html__( 'Add `rel` link tags to archives?', 'autodescription' ),
+				esc_html__( 'Add `rel` link tags to archives?', 'autodescription' ),
 				[ 'code' ]
 			),
 			'',
@@ -344,7 +343,7 @@ switch ( $instance ) :
 			'prev_next_frontpage',
 			$this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
-				\esc_html__( 'Add `rel` link tags to the homepage?', 'autodescription' ),
+				esc_html__( 'Add `rel` link tags to the homepage?', 'autodescription' ),
 				[ 'code' ]
 			),
 			'',
@@ -356,19 +355,13 @@ switch ( $instance ) :
 
 
 	case 'the_seo_framework_general_metabox_timestamps':
-		//* Sets timezone according to WordPress settings.
-		$this->set_timezone();
-
-		$timestamp_0 = date( 'Y-m-d' );
+		$timestamp_0 = gmdate( 'Y-m-d' );
 
 		/**
 		 * @link https://www.w3.org/TR/NOTE-datetime
 		 * We use the second expression of the time zone offset handling.
 		 */
-		$timestamp_1 = date( 'Y-m-d\TH:iP' );
-
-		//* Reset timezone to previous value.
-		$this->reset_timezone();
+		$timestamp_1 = gmdate( 'Y-m-d\TH:iP' );
 
 		?>
 		<h4><?php esc_html_e( 'Timestamp Settings', 'autodescription' ); ?></h4>

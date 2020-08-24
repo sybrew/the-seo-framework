@@ -4,9 +4,12 @@
  * @subpackage The_SEO_Framework\Sitemap
  */
 
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 //* Adds site icon tags to the sitemap stylesheet.
 \add_action( 'the_seo_framework_xsl_head', 'wp_site_icon', 99 );
@@ -294,7 +297,7 @@ function _print_xsl_description( $tsf ) {
  */
 function _print_xsl_content( $tsf ) {
 
-	$vars = [
+	$vars  = [
 		'itemURL'  => '<xsl:variable name="itemURL" select="sitemap:loc"/>',
 		'lastmod'  => '<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \',substring(sitemap:lastmod,12,5)))"/>',
 		'priority' => '<xsl:variable name="priority" select="substring(sitemap:priority,0,4)"/>',
@@ -448,7 +451,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 				 * @since 3.1.0
 				 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
 				 */
-				do_action( 'the_seo_framework_xsl_head', $this );
+				\do_action( 'the_seo_framework_xsl_head', $this );
 				?>
 			</head>
 			<body>
@@ -458,7 +461,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 					 * @since 3.1.0
 					 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
 					 */
-					do_action( 'the_seo_framework_xsl_description', $this );
+					\do_action( 'the_seo_framework_xsl_description', $this );
 					?>
 				</div>
 				<div id="content">
@@ -467,7 +470,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 					 * @since 3.1.0
 					 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
 					 */
-					do_action( 'the_seo_framework_xsl_content', $this );
+					\do_action( 'the_seo_framework_xsl_content', $this );
 					?>
 				</div>
 				<div id="footer">
@@ -476,7 +479,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 					 * @since 3.1.0
 					 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
 					 */
-					do_action( 'the_seo_framework_xsl_footer', $this );
+					\do_action( 'the_seo_framework_xsl_footer', $this );
 					?>
 				</div>
 			</body>

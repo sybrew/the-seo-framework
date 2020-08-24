@@ -179,7 +179,7 @@ final class ListEdit extends ListTable {
 
 		// NB: The indexes correspond to `autodescription-list[index]` field input names.
 		$data = [
-			'doctitle'       => [
+			'doctitle'    => [
 				'value' => $meta['_genesis_title'],
 			],
 			'description' => [

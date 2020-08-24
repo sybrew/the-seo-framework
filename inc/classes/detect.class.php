@@ -179,6 +179,7 @@ class Detect extends Render {
 		//* Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
+				// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
 				if ( class_exists( $name, false ) ) {
 					return true;
 				}
@@ -281,6 +282,7 @@ class Detect extends Render {
 		//* Check for classes
 		if ( isset( $plugins['classes'] ) ) {
 			foreach ( $plugins['classes'] as $name ) {
+				// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
 				if ( ! class_exists( $name, false ) ) {
 					return false;
 				}
@@ -664,6 +666,7 @@ class Detect extends Render {
 
 		$path = \get_home_path() . 'robots.txt';
 
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
 		return $has_robots = file_exists( $path );
 	}
 
@@ -689,6 +692,7 @@ class Detect extends Render {
 
 		$path = \get_home_path() . 'sitemap.xml';
 
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
 		return $has_map = file_exists( $path );
 	}
 

@@ -144,7 +144,7 @@ function the_seo_framework_get_option( $key, $use_cache = true ) {
  * @param string|null $title the previous title
  * @return string|null The current page title.
  */
-function the_seo_framework_title_from_cache( $title = null ) {
+function the_seo_framework_title_from_cache( $title = null ) { // phpcs:ignore,VariableAnalysis -- deprecated
 	the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->get_title(...)' );
 	return the_seo_framework()->get_title();
 }
@@ -161,7 +161,7 @@ function the_seo_framework_title_from_cache( $title = null ) {
  * @param bool $deprecated Deprecated.
  * @return string|null The current page description.
  */
-function the_seo_framework_description_from_cache( $deprecated = false ) {
+function the_seo_framework_description_from_cache( $deprecated = false ) { // phpcs:ignore,VariableAnalysis -- deprecated
 	the_seo_framework()->_deprecated_function( __FUNCTION__, '3.1.0', 'the_seo_framework()->get_description()' );
 	return the_seo_framework()->get_description();
 }

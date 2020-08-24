@@ -276,16 +276,11 @@ TODO consider adding this to `_init_wc_compat()`:
 \add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 ```
 
-TODO consider changing this to template/view-secrets (see https://github.com/sybrew/The-SEO-Framework-Extension-Manager/blob/master/views/template/fbtopnotice.php#L5)
-```php
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
-```
-
 **For everyone:**
 
 * **Performance:**
 	* **Up to 99% quicker browser rendering times (admin-area):**
-		* *Yes, 99%; because there's a cache pollution bug in jQuery we no longer interact with.*
+		* *Yes, 99%; because there's a cache pollution bug in jQuery (in combination with Safari) we no longer interact with.*
 		* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
 			* This also improves compatibility with non-jQuery driven APIs.
 		* We exchanged jQuery NodeList handlers for native JS in various places, improving browser load time drastically.
@@ -293,7 +288,8 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() an
 		* We reduced the number of events marginally by exempting hidden fields from change listeners.
 	* **Up to 0.2% faster server response times (admin and front):**
 		* We looked at the PHP engine's code, and found that we could reduce the number of opcodes (CPU instructions) by adding backslashes to various internal PHP functions.
-			* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes it really pays off.
+			* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes scrutiny really pays off, as was shown with the 4.0 and 4.1 releases.
+			* We believe this will translate well into the PHP 8.0 release, especially on servers where the JIT compiler is implemented.
 * **Fixed:**
 	* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
 	* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.

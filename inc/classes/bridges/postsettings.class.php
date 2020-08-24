@@ -112,7 +112,7 @@ final class PostSettings {
 	 * }
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
+	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) { // phpcs:ignore,VariableAnalysis
 		\the_seo_framework()->get_view( 'edit/wrap-nav', get_defined_vars() );
 		\the_seo_framework()->get_view( 'edit/wrap-content', get_defined_vars() );
 	}

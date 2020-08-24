@@ -192,26 +192,6 @@ final class Load extends Cache {
 	}
 
 	/**
-	 * Includes compatibility files, only once per request.
-	 *
-	 * @since 2.8.0
-	 * @access private
-	 *
-	 * @param string $what The vendor/plugin/theme name for the compatibilty.
-	 * @param string $type The compatibility type. Be it 'plugin' or 'theme'.
-	 * @return bool True on success, false on failure. Files are expected not to return any values.
-	 */
-	public function _include_compat( $what, $type = 'plugin' ) {
-
-		static $included = [];
-
-		if ( ! isset( $included[ $what ][ $type ] ) )
-			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';
-
-		return $included[ $what ][ $type ];
-	}
-
-	/**
 	 * Mark a filter as deprecated and inform when it has been used.
 	 *
 	 * @since 2.8.0

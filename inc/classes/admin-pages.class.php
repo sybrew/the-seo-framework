@@ -752,7 +752,7 @@ class Admin_Pages extends Profile {
 					vsprintf(
 						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s %s /> %s',
 						[
-							esc_attr( implode( ' ', $cb_classes ) ),
+							\esc_attr( implode( ' ', $cb_classes ) ),
 							$field_name,
 							$field_id,
 							\checked( $value, true, false ),

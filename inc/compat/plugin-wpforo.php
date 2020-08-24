@@ -6,9 +6,9 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = \the_seo_framework_class() and $this instanceof $_this or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
-add_action( 'the_seo_framework_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
+\add_action( 'the_seo_framework_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
 /**
  * Initializes wpForo page fixes.
  *

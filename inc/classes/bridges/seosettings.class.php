@@ -196,7 +196,7 @@ final class SeoSettings {
 	 * }
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public static function _nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
+	public static function _nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) { // phpcs:ignore,VariableAnalysis
 		\the_seo_framework()->get_view( 'admin/wrap-nav', get_defined_vars() );
 		\the_seo_framework()->get_view( 'admin/wrap-content', get_defined_vars() );
 	}

@@ -29,6 +29,7 @@ namespace The_SEO_Framework\Bootstrap;
  */
 
 //! @php7+ convert to IIFE
+// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 _deactivation_unset_options_autoload();
 
 /**

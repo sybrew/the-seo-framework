@@ -4,9 +4,10 @@
  * @subpackage The_SEO_Framework\Debug
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
-
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 $id       = $this->get_the_real_ID();
 $mdash    = ' &mdash; ';
@@ -28,7 +29,7 @@ if ( is_admin() ) {
 			? 'direction:ltr;color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 180px 40px 20px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18pxfont-feature-settings:normal;font-variant:normal'
 			: 'direction:ltr;color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 20px 40px 180px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18pxfont-feature-settings:normal;font-variant:normal';
 	?>
-	<div style="<?php echo $bstyle; ?>">
+	<div style="<?php echo $bstyle; // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 		<h3 style="font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:9002;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
 			SEO Debug Information
 			<?php

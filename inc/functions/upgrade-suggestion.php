@@ -23,6 +23,8 @@ namespace The_SEO_Framework\Suggestion;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
@@ -34,6 +36,7 @@ namespace The_SEO_Framework\Suggestion;
  * @access private
  */
 
+// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 _prepare( $previous_version, $current_version );
 /**
  * Prepares a suggestion notification to ALL applicable plugin users on upgrade;
@@ -92,6 +95,7 @@ function _prepare( $previous_version, $current_version ) {
 	//? 4
 	if ( true !== $test ) return;
 
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 	_suggest_extension_manager( $previous_version, $current_version );
 }
 

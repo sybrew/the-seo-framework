@@ -136,6 +136,30 @@ class Core {
 	}
 
 	/**
+	 * Includes compatibility files, only once per request.
+	 *
+	 * @since 2.8.0
+	 * @access private
+	 *
+	 * @param string $what The vendor/plugin/theme name for the compatibilty.
+	 * @param string $type The compatibility type. Be it 'plugin' or 'theme'.
+	 * @return bool True on success, false on failure. Files are expected not to return any values.
+	 */
+	public function _include_compat( $what, $type = 'plugin' ) {
+
+		static $included = [];
+
+		if ( ! isset( $included[ $what ][ $type ] ) ) {
+			// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
+			$_secret = $this->create_view_secret( uniqid( '', true ) );
+
+			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';
+		}
+
+		return $included[ $what ][ $type ];
+	}
+
+	/**
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *
@@ -154,7 +178,41 @@ class Core {
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
 		unset( $__k, $__v, $__args );
 
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
+		$_secret = $this->create_view_secret( uniqid( '', true ) );
+
 		include $this->get_view_location( $view );
+	}
+
+	/**
+	 * Stores and returns view secret.
+	 *
+	 * This is not cryptographically secure, but it's enough to fend others off including our files where they shouldn't.
+	 * Our view-files have a certain expectation of inputs to meet. If they don't meet that, we could expose our users to security issues.
+	 * We could not measure any meaningful performance impact by using this (0.02% of 54x get_view() runtime).
+	 *
+	 * @since 4.1.1
+	 *
+	 * @param string|null $value The secret.
+	 * @return string|null The stored secret.
+	 */
+	protected function create_view_secret( $value = null ) {
+		static $secret;
+		// TODO PHP7+ `$secret = $value ?? $secret;`
+		return $secret = isset( $value ) ? $value : $secret;
+	}
+
+	/**
+	 * Verifies view secret.
+	 *
+	 * @since 4.1.1
+	 * @access private
+	 *
+	 * @param string $value The secret.
+	 * @return bool
+	 */
+	public function _verify_include_secret( $value ) {
+		return isset( $value ) && $this->create_view_secret() === $value;
 	}
 
 	/**

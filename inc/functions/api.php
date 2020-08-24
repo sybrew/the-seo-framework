@@ -55,9 +55,6 @@ namespace {
 	/**
 	 * Returns the facade class name from cache.
 	 *
-	 * CAUTION: If this is used before plugins_loaded priority 5, then the plugin
-	 * will fail to load views.
-	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Added `did_action()` check.
 	 *

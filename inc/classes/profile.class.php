@@ -86,6 +86,7 @@ class Profile extends Generate_Ldjson {
 
 		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
+		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- includes...
 		$_field_settings = $this->get_profile_field_settings();
 
 		$fields = [
@@ -104,6 +105,7 @@ class Profile extends Generate_Ldjson {
 				'class'       => 'ltr',
 			],
 		];
+		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 		$this->get_view( 'profile/author', get_defined_vars() );
 	}

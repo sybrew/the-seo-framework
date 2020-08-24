@@ -7,7 +7,7 @@
 [![The SEO Framework Reviews](https://img.shields.io/wordpress/plugin/r/autodescription.svg)](https://wordpress.org/support/plugin/autodescription/reviews/)
 [![RIPS CodeRisk](https://coderisk.com/wp/plugin/autodescription/badge)](https://coderisk.com/wp/plugin/autodescription)
 
-> A free WordPress SEO plugin by Sybre Waaijer. [Get it from WordPress.org](https://wordpress.org/plugins/autodescription/).
+> A free WordPress SEO plugin by Sybre Waaijer. [Learn more and get it at WordPress.org](https://wordpress.org/plugins/autodescription/).
 
 ## GitHub master version ##
 

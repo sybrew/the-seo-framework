@@ -4,9 +4,10 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and $_this = the_seo_framework_class() and $this instanceof $_this or die;
-
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 //* Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_webmaster_metabox', $instance );
@@ -21,7 +22,7 @@ switch ( $instance ) :
 		$yandex_site_url = 'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url );
 
 		$settings = [
-			'google'   => [
+			'google'    => [
 				'setting'     => 'google_verification',
 				'label'       => __( 'Google Search Console Verification Code', 'autodescription' ),
 				'info'        => $this->make_info(
@@ -31,7 +32,7 @@ switch ( $instance ) :
 				),
 				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
 			],
-			'bing'     => [
+			'bing'      => [
 				'setting'     => 'bing_verification',
 				'label'       => __( 'Bing Webmaster Verification Code', 'autodescription' ),
 				'info'        => $this->make_info(
@@ -41,7 +42,7 @@ switch ( $instance ) :
 				),
 				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
 			],
-			'yandex'   => [
+			'yandex'    => [
 				'setting'     => 'yandex_verification',
 				'label'       => __( 'Yandex Webmaster Verification Code', 'autodescription' ),
 				'info'        => $this->make_info(
@@ -51,7 +52,7 @@ switch ( $instance ) :
 				),
 				'placeholder' => '12345abc678901d2',
 			],
-			'baidu'    => [
+			'baidu'     => [
 				'setting'     => 'baidu_verification',
 				/* translators: literal translation from '百度搜索资源平台'-Code */
 				'label'       => __( 'Baidu Search Resource Platform Code', 'autodescription' ),

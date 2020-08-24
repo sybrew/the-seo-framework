@@ -37,6 +37,8 @@ namespace The_SEO_Framework\Bootstrap;
  * @since 3.2.4 Applied namspacing to this file. All method names have changed.
  */
 
+// phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
+
 \add_action( 'init', __NAMESPACE__ . '\\_do_upgrade', 20 );
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99, 2 );
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100, 2 );

@@ -33,6 +33,7 @@ namespace The_SEO_Framework\Bridges;
  * @link https://bugs.php.net/bug.php?id=75771
  */
 $_load_scripts_class = function() {
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 	new Scripts();
 };
 
@@ -182,7 +183,7 @@ final class Scripts {
 	 * @return mixed
 	 */
 	public static function decode_entities( $value ) {
-		return $value && is_string( $value ) ? html_entity_decode( $value, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ) : $value;
+		return $value && \is_string( $value ) ? html_entity_decode( $value, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ) : $value;
 	}
 
 	/**
