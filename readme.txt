@@ -246,7 +246,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.1 =
 
-In this minor update, we improved browser performance by cleaning out jQuery calls, fixed a few bugs in the generators, and [improved accessibility](TODO).
+In this minor update, we improved browser performance by cleaning out (TODO number) jQuery calls, fixed a few bugs in the UI and generators, and [improved accessibility](TODO).
+TODO we also added... (see 2 snippets below).
 
 TODO consider adding this to `_alter_oembed_response_data()`
 ```php
@@ -276,10 +277,18 @@ TODO consider adding this to `_init_wc_compat()`:
 \add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 ```
 
+TODO evaluate symbiosis of the homepage social inputs.
+TODO add visual cue for auto-description toggle (in the homepage description holder)? Do people even toggle it, and are they bothered?
+
 **For everyone:**
 
+* **Improved:**
+	* TODO On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
+		* Take from `_initGeneralSettings()`... it's quite elaborate.
+		* We already added classes `tsf-robots-post-types` and `tsf-robots-taxonomies`.
+		* Refrain from adding notice when post type is disabled? Double notice? -> We already have a double notice at
 * **Performance:**
-	* **Up to 99% quicker browser rendering times (admin-area):**
+	* **Up to 99% quicker browser rendering times and interaction (admin-area):**
 		* *Yes, 99%; because there's a cache pollution bug in jQuery (in combination with Safari) we no longer interact with.*
 		* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
 			* This also improves compatibility with non-jQuery driven APIs.
@@ -291,14 +300,24 @@ TODO consider adding this to `_init_wc_compat()`:
 			* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes scrutiny really pays off, as was shown with the 4.0 and 4.1 releases.
 			* We believe this will translate well into the PHP 8.0 release, especially on servers where the JIT compiler is implemented.
 * **Fixed:**
-	* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that'd cause malformed output of description and titles.
+	* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that would've caused malformed output of description and titles.
 	* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
-	* Addressed an issue where the "Are you sure you want to leave this page" notification popped up on the block editor even when you didn't change any content.
+	* Addressed an issue where the "Are you sure you want to leave this page" notification popped up on the block editor even when you didn't change any SEO meta values.
+	* Addressed an issue where on the SEO Settings screen the pixel counter display was toggled when deselecting the character counter options.
+	* Addressed an issue where on the SEO Settings screen the blog name affix was not properly removed from the generated Homepage social titles when the related option is toggled.
+	* TODO Addressed an issue where on the SEO Settings screen the title example could overflow the bounding meta box.
+		* wontfix for now?
+	* TODO Addressed an issue where the title's prefix overflows (slightly) with the input during input boundary overflow.
+		* wontfix for now?
 * **Other:**
 	* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
 	* Our scripts can no longer invoke "are you sure"-change listeners. You'll have to manually input or change something to invoke that.
 		* We always thought that we could at some point make a vital input-change for you in the browser, but we never did, nor do we think we ever will. We handle sanitization on the server, which is much neater.
 		* Moreover, if we do make such a change, we have hooks that invoke this for us.
+
+**For translators:**
+
+* TODO update POT file.
 
 **For developers:**
 
@@ -332,6 +351,9 @@ TODO consider adding this to `_init_wc_compat()`:
 			* `tsfAys.areSettingsChanged()`, a clone of `tsfAys.getChangedState()` with a better conveying meaning.
 		* **Changed:**
 			* `tsfAys.reset()` now debounces reloading of the listeners.
+			* `tsfTitle.enqueueTriggerInput()` now accepts a first parameter, id; which is in line with the `tsfDescription` object.
+		* **Fixed:**
+			* `tsfDescription.enqueueTriggerInput()` now passes the input ID to the input event.
 	* **Event notes:**
 		* **Added:**
 			* `tsf-interactive` now triggers on `document.body`.
@@ -352,6 +374,8 @@ TODO consider adding this to `_init_wc_compat()`:
 				* any description element: `tsf-update-description-counter`
 				* any title element: `tsf-update-title-counter`
 				* window: `tsf-title-sep-updated`
+		* **Fixed:**
+			* window: `tsf-counter-updated` now works.
 		* **Other:**
 			* Because we used named event types with jQuery, we masked a few design flaws that came painfully apparent after we moved away from jQuery.
 				* Luckily, by trying the `isTrusted` event parameter, we can mitigate this flaw, and toggling its check allowed us to find and fix a few dependency errors where our logic was flawed.

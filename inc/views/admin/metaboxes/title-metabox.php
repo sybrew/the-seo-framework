@@ -167,7 +167,7 @@ switch ( $instance ) :
 		$info = $this->make_info(
 			sprintf(
 				/* translators: %s = HTML tag example */
-				__( 'This strips HTML tags, like %s, from the title.', 'autodescription' ),
+				__( 'This strips HTML tags, like %s, from the title. Disable this option to display generated HTML tags as plain text in meta titles.', 'autodescription' ),
 				'<code>&amp;lt;strong&amp;gt;</code>' // Double escaped HTML (&amp;) for attribute display.
 			),
 			'',

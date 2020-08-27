@@ -332,6 +332,7 @@ switch ( $instance ) :
 		foreach ( $post_types as $post_type ) {
 			$checkboxes[] = $this->make_checkbox_array( [
 				'id'       => $pt_option_id,
+				'class'    => 'tsf-robots-post-types',
 				'index'    => $post_type,
 				'label'    => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
@@ -363,6 +364,7 @@ switch ( $instance ) :
 		foreach ( $taxonomies as $taxonomy ) {
 			$checkboxes[] = $this->make_checkbox_array( [
 				'id'       => $tax_option_id,
+				'class'    => 'tsf-robots-taxonomies',
 				'index'    => $taxonomy,
 				'label'    => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
