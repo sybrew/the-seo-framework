@@ -1431,7 +1431,7 @@ class Query extends Core {
 		if ( $this->is_singular() && ! $this->is_singular_archive() )
 			$post = \get_post( $this->get_the_real_ID() );
 
-		if ( $post instanceof \WP_Post ) {
+		if ( isset( $post ) && $post instanceof \WP_Post ) {
 			$content = $post->post_content;
 			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );

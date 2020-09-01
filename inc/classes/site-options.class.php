@@ -78,8 +78,8 @@ class Site_Options extends Sanitize {
 				'alter_archive_query_type' => 'in_query', // Archive query type.
 				'alter_search_query_type'  => 'in_query', // Search query type.
 
-				'cache_sitemap'          => 1, // Sitemap transient cache.
-				'cache_object'           => 1, // Object caching.
+				'cache_sitemap' => 1, // Sitemap transient cache.
+				'cache_object'  => 1, // Object caching.
 
 				// General. Layout.
 				'display_seo_bar_tables'  => 1, // SEO Bar post-list tables.
@@ -93,7 +93,7 @@ class Site_Options extends Sanitize {
 				'canonical_scheme' => 'automatic', // Canonical URL scheme.
 
 				// General. Timestamps.
-				'timestamps_format'   => '1', // Timestamp format, numeric string
+				'timestamps_format' => '1', // Timestamp format, numeric string
 
 				// General. Exclusions.
 				'disabled_post_types' => [], // Post Type support.
@@ -107,13 +107,13 @@ class Site_Options extends Sanitize {
 				'title_strip_tags'    => 1,         // Apply 'strip tags' on titles.
 
 				// Description.
-				'auto_description'      => 1, // Enables auto description.
+				'auto_description' => 1, // Enables auto description.
 
 				// Robots index.
-				'author_noindex'     => 0, // Author Archive robots noindex
-				'date_noindex'       => 1, // Date Archive robots noindex
-				'search_noindex'     => 1, // Search Page robots noindex
-				'site_noindex'       => 0, // Site Page robots noindex
+				'author_noindex' => 0, // Author Archive robots noindex
+				'date_noindex'   => 1, // Date Archive robots noindex
+				'search_noindex' => 1, // Search Page robots noindex
+				'site_noindex'   => 0, // Site Page robots noindex
 				$this->get_robots_post_type_option_id( 'noindex' ) => [
 					'attachment' => 1,
 				], // Post Type support.
@@ -122,18 +122,18 @@ class Site_Options extends Sanitize {
 				], // Taxonomy support.
 
 				// Robots follow.
-				'author_nofollow'     => 0, // Author Archive robots nofollow
-				'date_nofollow'       => 0, // Date Archive robots nofollow
-				'search_nofollow'     => 0, // Search Page robots nofollow
-				'site_nofollow'       => 0, // Site Page robots nofollow
+				'author_nofollow' => 0, // Author Archive robots nofollow
+				'date_nofollow'   => 0, // Date Archive robots nofollow
+				'search_nofollow' => 0, // Search Page robots nofollow
+				'site_nofollow'   => 0, // Site Page robots nofollow
 				$this->get_robots_post_type_option_id( 'nofollow' ) => [], // Post Type support.
 				$this->get_robots_taxonomy_option_id( 'nofollow' ) => [], // Taxonomy support.
 
 				// Robots archive.
-				'author_noarchive'     => 0, // Author Archive robots noarchive
-				'date_noarchive'       => 0, // Date Archive robots noarchive
-				'search_noarchive'     => 0, // Search Page robots noarchive
-				'site_noarchive'       => 0, // Site Page robots noarchive
+				'author_noarchive' => 0, // Author Archive robots noarchive
+				'date_noarchive'   => 0, // Date Archive robots noarchive
+				'search_noarchive' => 0, // Search Page robots noarchive
+				'site_noarchive'   => 0, // Site Page robots noarchive
 				$this->get_robots_post_type_option_id( 'noarchive' ) => [], // Post Type support.
 				$this->get_robots_taxonomy_option_id( 'noarchive' ) => [], // Taxonomy support.
 
@@ -195,10 +195,10 @@ class Site_Options extends Sanitize {
 				'oembed_remove_author' => 0, // Remove author from oEmbeds
 
 				// Social on/off.
-				'og_tags'         => 1, // Output of Open Graph meta tags
-				'facebook_tags'   => 1, // Output the Facebook meta tags
-				'twitter_tags'    => 1, // Output the Twitter meta tags
-				'oembed_scripts'  => 1, // Enable WordPress's oEmbed scripts
+				'og_tags'        => 1, // Output of Open Graph meta tags
+				'facebook_tags'  => 1, // Output the Facebook meta tags
+				'twitter_tags'   => 1, // Output the Twitter meta tags
+				'oembed_scripts' => 1, // Enable WordPress's oEmbed scripts
 
 				// Social title settings.
 				'social_title_rem_additions' => 1, // Remove social title additions
@@ -244,17 +244,17 @@ class Site_Options extends Sanitize {
 				'knowledge_tumblr'     => '', // Tumblr Account
 
 				// Sitemaps.
-				'sitemaps_output'      => 1,    // Output of sitemap
-				'sitemap_query_limit'  => 3000, // Sitemap post limit.
+				'sitemaps_output'     => 1,    // Output of sitemap
+				'sitemap_query_limit' => 3000, // Sitemap post limit.
 
-				'sitemaps_modified'    => 1, // Add sitemap modified time.
-				'sitemaps_priority'    => 0, // Add sitemap priorities.
+				'sitemaps_modified' => 1, // Add sitemap modified time.
+				'sitemaps_priority' => 0, // Add sitemap priorities.
 
-				'sitemaps_robots'      => 1, // Add sitemap location to robots.txt
+				'sitemaps_robots' => 1, // Add sitemap location to robots.txt
 
-				'ping_use_cron'        => 1, // Ping using CRON.
-				'ping_google'          => 1, // Ping Google
-				'ping_bing'            => 1, // Ping Bing
+				'ping_use_cron' => 1, // Ping using CRON.
+				'ping_google'   => 1, // Ping Google
+				'ping_bing'     => 1, // Ping Bing
 
 				'sitemap_styles'       => 1,        // Whether to style the sitemap
 				'sitemap_logo'         => 1,        // Whether to add logo to sitemap
@@ -329,7 +329,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @param string  $key       Option name.
 	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
-	 * @return mixed The value of this $key in the database.
+	 * @return mixed The value of this $key in the database. Empty string when not set.
 	 */
 	public function get_option( $key, $use_cache = true ) {
 

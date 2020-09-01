@@ -57,9 +57,11 @@ if ( $sitemap_generated ) {
 }
 
 if ( $this->the_seo_framework_debug ) {
+	echo "\n" . '<!-- Site estimated current usage: ' . number_format( memory_get_usage() / 1024 / 1024, 3 ) . ' MB -->';
+	echo "\n" . '<!-- System estimated current usage: ' . number_format( memory_get_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $this->clean_up_globals_for_sitemap( true ) / 1024, 3 ) . ' kB -->';
+	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $sitemap_bridge->get_freed_memory( true ) / 1024, 3 ) . ' kB -->';
 	echo "\n" . '<!-- Sitemap generation time: ' . number_format( microtime( true ) - $timer_start, 6 ) . ' seconds -->';
 	echo "\n" . '<!-- Sitemap caching enabled: ' . ( $this->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ) . ' -->';
 	echo "\n" . '<!-- Sitemap transient key: ' . esc_html( $this->get_sitemap_transient_name() ) . ' -->';

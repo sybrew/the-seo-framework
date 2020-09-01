@@ -248,8 +248,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 In this minor update, we improved browser performance by cleaning out (TODO number) jQuery calls, fixed a few bugs in the UI and generators, and [improved accessibility](TODO).
 TODO we also added... (see 2 snippets below).
+TODO retest upgrade from 3.9, 4.0, and 4.1
+TODO retest installation
 
-TODO consider adding this to `_alter_oembed_response_data()`
+TODO consider adding this to `_alter_oembed_response_data()` -> option `oembed_use_social_image` -> default `1` new sites, `0` upgrading sites.
 ```php
 if ( ! empty( $data['thumbnail_url'] ) ) {
 	$image_details = current( $this->get_image_details(
@@ -279,6 +281,9 @@ TODO consider adding this to `_init_wc_compat()`:
 
 TODO evaluate symbiosis of the homepage social inputs.
 TODO add visual cue for auto-description toggle (in the homepage description holder)? Do people even toggle it, and are they bothered?
+TODO evaluate and remove the "FIXME//var_dump()" JS comments. Test for proper HTML to text conversion and vice versa.
+TODO add downgrade notice.
+TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disabled-tsfs-sitemap/ ?
 
 **For everyone:**
 
@@ -286,7 +291,7 @@ TODO add visual cue for auto-description toggle (in the homepage description hol
 	* TODO On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
 		* Take from `_initGeneralSettings()`... it's quite elaborate.
 		* We already added classes `tsf-robots-post-types` and `tsf-robots-taxonomies`.
-		* Refrain from adding notice when post type is disabled? Double notice? -> We already have a double notice at
+		* Refrain from adding notice when post type is disabled? Double notice? -> We already have a double notice at "Social Meta Settings > Social Title Settings" when "Title Settings > Additions > Site Title" is checked.
 * **Performance:**
 	* **Up to 99% quicker browser rendering times and interaction (admin-area):**
 		* *Yes, 99%; because there's a cache pollution bug in jQuery (in combination with Safari) we no longer interact with.*
@@ -299,18 +304,31 @@ TODO add visual cue for auto-description toggle (in the homepage description hol
 		* We looked at the PHP engine's code, and found that we could reduce the number of opcodes (CPU instructions) by adding backslashes to various internal PHP functions.
 			* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes scrutiny really pays off, as was shown with the 4.0 and 4.1 releases.
 			* We believe this will translate well into the PHP 8.0 release, especially on servers where the JIT compiler is implemented.
+	* **Up to 71% less memory consumption for the sitemap:**
+		* When you don't use an object caching plugin, the sitemap generator now clears the post's memoized cache after each URL entry yielded.
 * **Fixed:**
-	* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that would've caused malformed output of description and titles.
-	* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
-	* Addressed an issue where the "Are you sure you want to leave this page" notification popped up on the block editor even when you didn't change any SEO meta values.
-	* Addressed an issue where on the SEO Settings screen the pixel counter display was toggled when deselecting the character counter options.
-	* Addressed an issue where on the SEO Settings screen the blog name affix was not properly removed from the generated Homepage social titles when the related option is toggled.
-	* TODO Addressed an issue where on the SEO Settings screen the title example could overflow the bounding meta box.
-		* wontfix for now?
-	* TODO Addressed an issue where the title's prefix overflows (slightly) with the input during input boundary overflow.
-		* wontfix for now?
+	* **Bugs introduced in v4.1.0**:
+		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that caused malformed output of description and titles.
+		* Addressed an issue where on the SEO Settings screen the blog name affix was not properly removed from the generated Homepage social titles when the related option is toggled.
+		* TODO AFFIRM FIX/EXISTENCE: Addressed an issue where the `post_format`, `category`, and `tag` taxonomy robot's settings `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `4103` (TSF v4.1.0).
+			* This issue rectified itself after the user saves the options once. This was caused by checking for "is set" (either 1 or 0 means enabled) instead of "is empty" (only 1 means enabled).
+			* This fix is applied both pro-and retroactively.
+	* **Bugs from earlier versions**:
+		* Addressed an issue where inline line breaks (`<br>`) didn't add spaces for description/excerpt generation; but, instead voided them.
+		* Addressed an issue where the "Are you sure you want to leave this page" notification popped up on the block editor even when you didn't change any SEO meta values.
+		* Addressed an issue where on the SEO Settings screen the pixel counter display was toggled when deselecting the character counter options.
+		* Addressed an issue where the database version wouldn't update correctly when using an object caching plugin, causing the upgrade-cycle to run twice.
+			* This is probably why some users informed us of newly introduced settings being flipped, or that users were unable to access the SEO settings page until this resolved itself after a few cycles.
+		* TODO AFFIRM FIX/EXISTENCE: Addressed an issue where the `attachment` post type robot's settings `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `3103` (TSF v3.1.0).
+			* This issue rectified itself after the user saves the options once. This was caused by checking for "is set" (either 1 or 0 means enabled) instead of "is empty" (only 1 means enabled).
+			* This fix is applied both pro-and retroactively.
+		* TODO Addressed an issue where on the SEO Settings screen the title example could overflow the bounding meta box.
+			* wontfix for now? -> resolve in TSF v5.0?
+		* TODO Addressed an issue where the title's prefix overflows (slightly) with the input during input boundary overflow.
+			* wontfix for now? I can't identify the cause... probably requires two paints to fix -> performance hog.
 * **Other:**
 	* Reduced the filesize of the `le.min.js` (list edit) script by minifying repeated patterns.
+	* All other scripts have increased in size, since we now barely rely on jQuery. Vanilla JS tends to grow more code since there's not a single function that does everything.
 	* Our scripts can no longer invoke "are you sure"-change listeners. You'll have to manually input or change something to invoke that.
 		* We always thought that we could at some point make a vital input-change for you in the browser, but we never did, nor do we think we ever will. We handle sanitization on the server, which is much neater.
 		* Moreover, if we do make such a change, we have hooks that invoke this for us.
@@ -321,17 +339,34 @@ TODO add visual cue for auto-description toggle (in the homepage description hol
 
 **For developers:**
 
+* **Upgrade notes:**
+	* When upgrading the options, no longer are the defaults considered.
+		* For multisite network owners: This means that filter `the_seo_framework_default_site_options` is ignored for sites that upgrade. But, it's honored for new sites.
+		* We made this change because we can't predict the future: will the new settings be maintained indefinitely? What happens when the defaults are no longer registered? It's much easier for us to just set and migrate new options without considering the default options.
+		* This also makes the upgrader them less prone to unexpected value changes we didn't (or couldn't) consider. We had several reports of this happening.
+	* Upgrade `3060` (`\The_SEO_Framework\Bootstrap\_do_upgrade_3060`) was removed--nothing happened there but clearing the sitemap cache.
 * **Changed:**
 	* We no longer use custom error handlers, but rely on the system-provided ones, instead.
 		* This is more harmoneous with plugins like Query Monitor, and doesn't override custom error loggers.
 * **PHP notes:**
-	* **Changed methods for object `the_seo_framework()`:**
-		* `s_singleline()`:
-			1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-			1. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
-		* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-		* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-			* Note that "clear" runs before "space". Mind your duplicates.
+	* **For facade object `the_seo_framework()`:**
+		* **Changed:**
+			* `s_singleline()`:
+				1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+				1. No longer transforms horizontal tabs (this was added in 4.1.0, which we shouldn't have). Use `s_tabs()` instead.
+			* `s_tabs()` now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+			* `strip_tags_cs()` can now replace void elements with spaces when so inclined via the arguments (space vs clear).
+				* Note that "clear" runs before "space". Mind your duplicates.
+			* `is_post_type_robots_set()` now tests for not empty, instead of isset.
+			* `is_taxonomy_robots_set()` now tests for not empty, instead of isset.
+	* **For object `\The_SEO_Framework\Bridges\Sitemap`:**
+		* Method `get_freed_memory()` is now available.
+	* **For object `The_SEO_Framework\Interpreters\SeoBar`:**
+		* Method `collect_seo_bar_items()` is now static.
+			* It should've been from the beginning. You can only access this method statically, anyway.
+	* **For object `The_SEO_Framework\Builders\Sitemap`:**
+		* Protected method `create_xml_entry()` is now available.
+			* We wanted to use `create_xml()` but it was reserved in our [Articles extension](https://theseoframework.com/extensions/articles/).
 	* **For object `The_SEO_Framework\Interpreters\SeoBar`:**
 		* Method `collect_seo_bar_items()` is now static.
 			* It should've been from the beginning. You can only access this method statically, anyway.
@@ -380,9 +415,10 @@ TODO add visual cue for auto-description toggle (in the homepage description hol
 			* Because we used named event types with jQuery, we masked a few design flaws that came painfully apparent after we moved away from jQuery.
 				* Luckily, by trying the `isTrusted` event parameter, we can mitigate this flaw, and toggling its check allowed us to find and fix a few dependency errors where our logic was flawed.
 * **Fixed:**
-	* A single mistake got through our error handler during development. If it can happen once, it can happen again. So, we reworked the error handler akin to WordPress's, so that it'll allow custom handlers to catch these errors and scream at us--instead of them being silently outputted by TSF.
+	* Two mistakes got through our error handler during development. If it can happen once, it can happen again. So, we reworked the error handler akin to WordPress's, so that it'll allow custom handlers to catch these errors and scream at us--instead of them being silently outputted by TSF.
 		* Now, WordPress controls whether errors should be displayed.
 		* Unchanged: Only when WordPress allows debugging, errors are handled. This means that no errors can be or could've been shown on websites in production.
+	* The freed memory value is now correctly populated for the sitemap.
 
 = 4.1.0 - Grace =
 

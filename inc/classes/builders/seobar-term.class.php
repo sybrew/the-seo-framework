@@ -604,14 +604,14 @@ final class SeoBar_Term extends SeoBar {
 		// Test all post types bound to the term. Only if all post types are excluded, set this option.
 		$_post_type_noindex_set = [];
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
-			$_post_type_noindex_set[] = isset( $robots_global['posttype']['noindex'][ $_post_type ] );
+			$_post_type_noindex_set[] = ! empty( $robots_global['posttype']['noindex'][ $_post_type ] );
 		}
 		if ( ! \in_array( false, $_post_type_noindex_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( isset( $robots_global['taxonomy']['noindex'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['taxonomy']['noindex'][ static::$query['taxonomy'] ] ) ) {
 			// Status is already set.
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
@@ -750,14 +750,14 @@ final class SeoBar_Term extends SeoBar {
 		// Test all post types bound to the term. Only if all post types are excluded, set this option.
 		$_post_type_nofollow_set = [];
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
-			$_post_type_nofollow_set[] = isset( $robots_global['posttype']['nofollow'][ $_post_type ] );
+			$_post_type_nofollow_set[] = ! empty( $robots_global['posttype']['nofollow'][ $_post_type ] );
 		}
 		if ( ! \in_array( false, $_post_type_nofollow_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( isset( $robots_global['taxonomy']['nofollow'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['taxonomy']['nofollow'][ static::$query['taxonomy'] ] ) ) {
 			// Status is already set.
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
@@ -867,14 +867,14 @@ final class SeoBar_Term extends SeoBar {
 		// Test all post types bound to the term. Only if all post types are excluded, set this option.
 		$_post_type_noarchive_set = [];
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
-			$_post_type_noarchive_set[] = isset( $robots_global['posttype']['noarchive'][ $_post_type ] );
+			$_post_type_noarchive_set[] = ! empty( $robots_global['posttype']['noarchive'][ $_post_type ] );
 		}
 		if ( ! \in_array( false, $_post_type_noarchive_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( isset( $robots_global['taxonomy']['noarchive'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['taxonomy']['noarchive'][ static::$query['taxonomy'] ] ) ) {
 			// Status is already set.
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}

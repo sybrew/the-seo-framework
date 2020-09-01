@@ -671,7 +671,7 @@ final class SeoBar_Page extends SeoBar {
 			}
 		}
 
-		if ( isset( $robots_global['posttype']['noindex'][ static::$query['post_type'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['noindex'][ static::$query['post_type'] ] ) ) {
 			// Status is already set.
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
@@ -813,7 +813,7 @@ final class SeoBar_Page extends SeoBar {
 			}
 		}
 
-		if ( isset( $robots_global['posttype']['nofollow'][ static::$query['post_type'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['nofollow'][ static::$query['post_type'] ] ) ) {
 			// Status is already set.
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
@@ -944,7 +944,7 @@ final class SeoBar_Page extends SeoBar {
 			}
 		}
 
-		if ( isset( $robots_global['posttype']['noarchive'][ static::$query['post_type'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['noarchive'][ static::$query['post_type'] ] ) ) {
 			// Status is already set.
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}

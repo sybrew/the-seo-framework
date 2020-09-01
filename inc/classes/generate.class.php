@@ -554,13 +554,14 @@ class Generate extends User_Data {
 	 * @since 3.1.0
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
+	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
 	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public function is_post_type_robots_set( $type, $post_type = '' ) {
-		return isset(
+		return ! empty(
 			$this->get_option(
 				$this->get_robots_post_type_option_id( $type )
 			)[ $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type() ]
@@ -571,13 +572,14 @@ class Generate extends User_Data {
 	 * Determines if the taxonomy has a robots value set.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
 	 *
 	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.
 	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
-		return isset(
+		return ! empty(
 			$this->get_option(
 				$this->get_robots_taxonomy_option_id( $type )
 			)[ $taxonomy ?: $this->get_current_taxonomy() ]

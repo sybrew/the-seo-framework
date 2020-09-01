@@ -502,7 +502,7 @@ class Init extends Query {
 		/** @since 4.0.4 : WP 5.3 patch, added. */
 		$this->reset_timezone();
 
-		$output = $robots . $before . $before_legacy . $output . $after_legacy . $after;
+		$output = "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";
 
 		return $output;
 	}

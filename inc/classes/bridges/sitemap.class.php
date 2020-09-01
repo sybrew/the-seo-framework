@@ -456,9 +456,22 @@ final class Sitemap {
 	}
 
 	/**
+	 * Returns freed memory for debugging.
+	 *
+	 * This method is to be used after outputting the sitemap.
+	 *
+	 * @since 4.1.1
+	 *
+	 * @return int bytes freed.
+	 */
+	public function get_freed_memory() {
+		return $this->clean_up_globals( true );
+	}
+
+	/**
 	 * Destroys unused $GLOBALS.
 	 *
-	 * This method is to be used prior to outputting sitemap.
+	 * This method is to be used prior to outputting the sitemap.
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.0 Renamed from clean_up_globals().
@@ -466,7 +479,7 @@ final class Sitemap {
 	 *              2. Renamed from clean_up_globals_for_sitemap()
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
-	 * @return int $freed_memory
+	 * @return int $freed_memory in bytes
 	 */
 	private function clean_up_globals( $get_freed_memory = false ) {
 
