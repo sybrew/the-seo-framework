@@ -250,12 +250,6 @@ In this minor update, we improved browser performance by cleaning out over 150 (
 
 TODO retest installation
 
-TODO consider adding this to `_init_wc_compat()`:
-```php
-// Adjust the widget's tree primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
-\add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
-```
-
 TODO evaluate symbiosis of the homepage social inputs.
 TODO add visual cue for auto-description toggle (in the homepage description holder)? Do people even toggle it, and are they bothered?
 TODO evaluate and remove the "FIXME//var_dump()" JS comments. Test for proper HTML to text conversion and vice versa.
@@ -270,6 +264,7 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 		* You can now choose whether to overwrite the oEmbed title with the SEO meta title (when manually filled).
 		* You can now choose to use the social image instead of the featured image.
 			* This can only work when you use the image uploader, instead of manually filling in the URL.
+	* WooCommerce's product category widget now evaluates TSF's primary term selection.
 * **Improved:**
 	* TODO On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
 		* Take from `_initGeneralSettings()`... it's quite elaborate.
