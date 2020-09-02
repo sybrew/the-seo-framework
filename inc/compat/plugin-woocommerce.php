@@ -14,6 +14,7 @@ namespace The_SEO_Framework;
  *
  * @since 3.1.0
  * @since 4.0.3 Added primary term support to products.
+ * @since 4.1.1 Added primary term support to category widgets.
  * @access private
  * @uses \is_product()
  */

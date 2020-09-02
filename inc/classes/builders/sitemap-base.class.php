@@ -319,6 +319,12 @@ class Sitemap_Base extends Sitemap {
 					} else {
 						$_values['lastmod'] = $_lastmod_blog;
 					}
+
+					/**
+					 * @since 4.1.1
+					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
+					 */
+					$_values['lastmod'] = (string) \apply_filters( 'the_seo_framework_sitemap_blog_lastmod', $_values['lastmod'] );
 				}
 
 				if ( $args['show_priority'] ) {
@@ -348,10 +354,14 @@ class Sitemap_Base extends Sitemap {
 						],
 						OBJECT
 					);
-					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
-					$_publish_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 
-					$_values['lastmod'] = $_publish_post;
+					$_values['lastmod'] = isset( $latests_posts[0]->post_date_gmt ) ? $latests_posts[0]->post_date_gmt : '0000-00-00 00:00:00';
+
+					/**
+					 * @since 4.1.1
+					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
+					 */
+					$_values['lastmod'] = (string) \apply_filters( 'the_seo_framework_sitemap_blog_lastmod', $_values['lastmod'] );
 				}
 
 				if ( $args['show_priority'] ) {

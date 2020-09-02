@@ -327,6 +327,9 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 * **Changed:**
 	* We no longer use custom error handlers, but rely on the system-provided ones, instead.
 		* This is more harmoneous with plugins like Query Monitor, and doesn't override custom error loggers.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_sitemap_blog_lastmod` string, allows you to set a custom lastmod timestamp for the blog page.
 * **PHP notes:**
 	* **For facade object `the_seo_framework()`:**
 		* **Changed:**
