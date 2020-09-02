@@ -178,7 +178,7 @@ class Site_Options extends Sanitize {
 				'prev_next_frontpage' => 1, // Adds next/prev tags
 
 				// Facebook.
-				'facebook_publisher' => '', // Facebook Business Url
+				'facebook_publisher' => '', // Facebook Business URL
 				'facebook_author'    => '', // Facebook User URl
 				'facebook_appid'     => '', // Facebook App ID
 
@@ -192,7 +192,9 @@ class Site_Options extends Sanitize {
 				'twitter_creator' => '', // Twitter user @username
 
 				// oEmbed.
-				'oembed_remove_author' => 0, // Remove author from oEmbeds
+				'oembed_use_og_title'     => 0, // Use custom meta titles in oEmbeds
+				'oembed_use_social_image' => 1, // Use social images in oEmbeds
+				'oembed_remove_author'    => 0, // Remove author from oEmbeds
 
 				// Social on/off.
 				'og_tags'        => 1, // Output of Open Graph meta tags

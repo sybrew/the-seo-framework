@@ -300,6 +300,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns image generation parameters.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.1 Now only the 'social' context will fetch images from the content.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.
@@ -331,8 +332,10 @@ class Generate_Image extends Generate_Url {
 				} else {
 					$cbs = [
 						'featured' => "$builder::get_featured_image_details",
-						'content'  => "$builder::get_content_image_details",
 					];
+					if ( 'social' === $context ) {
+						$cbs['content'] = "$builder::get_content_image_details";
+					}
 				}
 			} elseif ( $this->is_term_meta_capable() ) {
 				$cbs = [];
@@ -350,8 +353,10 @@ class Generate_Image extends Generate_Url {
 				} else {
 					$cbs = [
 						'featured' => "$builder::get_featured_image_details",
-						'content'  => "$builder::get_content_image_details",
 					];
+					if ( 'social' === $context ) {
+						$cbs['content'] = "$builder::get_content_image_details";
+					}
 				}
 			}
 		}
@@ -371,7 +376,7 @@ class Generate_Image extends Generate_Url {
 		 * @since 4.0.0
 		 * @param array      $params  : [
 		 *    string  size:     The image size to use.
-		 *    boolean multi:    Whether to allow multiple images to be returned.
+		 *    boolean multi:    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
 		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];

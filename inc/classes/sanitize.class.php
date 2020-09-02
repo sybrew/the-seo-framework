@@ -307,6 +307,8 @@ class Sanitize extends Admin_Pages {
 				'prev_next_archives',
 				'prev_next_frontpage',
 
+				'oembed_use_og_title',
+				'oembed_use_social_image',
 				'oembed_remove_author',
 
 				'og_tags',
@@ -2080,6 +2082,6 @@ class Sanitize extends Admin_Pages {
 			return false;
 		}
 
-		return \is_string( $var ) && \strlen( trim( $var ) );
+		return \strlen( $var = trim( $value ) );
 	}
 }

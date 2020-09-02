@@ -24,6 +24,7 @@ $sitemap_bridge->output_sitemap_urlset_open_tag();
 $sitemap_generated = false;
 $sitemap_content   = $this->get_option( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
 
+// TODO convert this to an easily accessible method that stores and returns the value.
 if ( false === $sitemap_content ) {
 	$sitemap_generated = true;
 

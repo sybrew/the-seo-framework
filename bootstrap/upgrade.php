@@ -210,46 +210,23 @@ function _upgrade( $previous_version ) {
 
 	$current_version = $previous_version;
 
-	if ( ! $current_version ) {
-		_do_upgrade_1();
-		$current_version = _set_version( '1' );
-	}
-	if ( $current_version < '2701' ) {
-		_do_upgrade_2701();
-		$current_version = _set_version( '2701' );
-	}
-	if ( $current_version < '2802' ) {
-		_do_upgrade_2802();
-		$current_version = _set_version( '2802' );
-	}
-	if ( $current_version < '2900' ) {
-		_do_upgrade_2900();
-		$current_version = _set_version( '2900' );
-	}
-	if ( $current_version < '3001' ) {
-		_do_upgrade_3001();
-		$current_version = _set_version( '3001' );
-	}
+	// Why did we use a ! here, instead of a compare? Luxury?
+	// if ( ! $current_version ) {
+	// 	_do_upgrade_1();
+	// 	$current_version = _set_version( '1' );
+	// }
 
-	//! From here, the upgrade procedures should be backward compatible.
+	//! From update 3103 henceforth, the upgrade procedures should be backward compatible.
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	//? We must manually delete settings that are no longer used; we merge them otherwise.
+	//? When a user upgrades beyond this scope, they aren't expected to roll back.
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110' ];
 
-	if ( $current_version < '3103' ) {
-		_do_upgrade_3103();
-		$current_version = _set_version( '3103' );
-	}
-	if ( $current_version < '3300' ) {
-		_do_upgrade_3300();
-		$current_version = _set_version( '3300' );
-	}
-	if ( $current_version < '4051' ) {
-		_do_upgrade_4051();
-		$current_version = _set_version( '4051' );
-	}
-	if ( $current_version < '4103' ) {
-		_do_upgrade_4103();
-		$current_version = _set_version( '4103' );
+	foreach ( $versions as $_version ) {
+		if ( $current_version < $_version ) {
+			( __NAMESPACE__ . "\\_do_upgrade_{$_version}" )(); // This is an undocumented method for variable functions.
+			$current_version = _set_version( $_version );
+		}
 	}
 
 	return _set_to_current_version();
@@ -780,3 +757,19 @@ function _do_upgrade_4103() {
 }
 
 // category_$r and tag_$r must be deleted at 4.2 or 5.0 (whichever comes);
+
+/**
+ * Registers the `oembed_use_og_title` option, boolean.
+ * Registers the `oembed_use_social_image` option, boolean. Differs from default option.
+ *
+ * @since 4.1.1
+ */
+function _do_upgrade_4110() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
+		$tsf = \the_seo_framework();
+
+		$tsf->update_option( 'oembed_use_og_title', 0 );
+		$tsf->update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
+	}
+}

@@ -366,11 +366,35 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'oEmbed Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'Some social sharing services and clients, like WordPress and Discord, obtain the linked page information via oEmbed.', 'autodescription' ) );
+		$this->description( __( 'Some social sharing services and clients, like WordPress, LinkedIn, and Discord, obtain the linked page information via oEmbed.', 'autodescription' ) );
 		?>
 		<hr>
 		<?php
 
+		// Split the wraps--the informational messages make for bad legibility otherwise.
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'oembed_use_og_title',
+				__( 'Use Open Graph title?', 'autodescription' ),
+				__( 'Check this option if you want to replace page titles with Open Graph titles in embeds.', 'autodescription' ),
+				true
+			),
+			true
+		);
+		$_info = $this->make_info(
+			__( 'Only custom social images that are selected via the Media Library are considered.', 'autodescription' ),
+			'',
+			false
+		);
+		$this->wrap_fields(
+			$this->make_checkbox(
+				'oembed_use_social_image',
+				esc_html__( 'Use social image?', 'autodescription' ) . ' ' . $_info,
+				esc_html__( "LinkedIn displays the post's featured image in embeds. Check this option if you want to replace it with the social image.", 'autodescription' ),
+				false
+			),
+			true
+		);
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'oembed_remove_author',

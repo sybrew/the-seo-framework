@@ -246,32 +246,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.1 =
 
-In this minor update, we improved browser performance by cleaning out (TODO number) jQuery calls, fixed a few bugs in the UI and generators, and [improved accessibility](TODO).
-TODO we also added... (see 2 snippets below).
-TODO retest upgrade from 3.9, 4.0, and 4.1
+In this minor update, we improved browser performance by cleaning out over 150 (TODO it's 151) jQuery calls, added a few features for oEmbed, fixed a dozen bugs in the UI and generators, and [improved accessibility](TODO).
+
 TODO retest installation
-
-TODO consider adding this to `_alter_oembed_response_data()` -> option `oembed_use_social_image` -> default `1` new sites, `0` upgrading sites.
-```php
-if ( ! empty( $data['thumbnail_url'] ) ) {
-	$image_details = current( $this->get_image_details(
-		[
-			'id'       => $post->ID,
-			'taxonomy' => '',
-		],
-		true,
-		'embed',
-		true,
-	) );
-
-	if ( $image_details['url'] && $image_details['width'] && $image_details['height'] ) {
-		// Override WordPress provided data.
-		$data['thumbnail_url']    = $image_details['url'];
-		$data['thumbnail_width']  = $image_details['width'];
-		$data['thumbnail_height'] = $image_details['height'];
-	}
-}
-```
 
 TODO consider adding this to `_init_wc_compat()`:
 ```php
@@ -284,9 +261,15 @@ TODO add visual cue for auto-description toggle (in the homepage description hol
 TODO evaluate and remove the "FIXME//var_dump()" JS comments. Test for proper HTML to text conversion and vice versa.
 TODO add downgrade notice.
 TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disabled-tsfs-sitemap/ ?
+TODO regression: Tabs' content no longer gets shown when using browser history.
 
 **For everyone:**
 
+* **Added:**
+	* More oEmbed control!
+		* You can now choose whether to overwrite the oEmbed title with the SEO meta title (when manually filled).
+		* You can now choose to use the social image instead of the featured image.
+			* This can only work when you use the image uploader, instead of manually filling in the URL.
 * **Improved:**
 	* TODO On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
 		* Take from `_initGeneralSettings()`... it's quite elaborate.
@@ -310,7 +293,7 @@ TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disab
 	* **Bugs introduced in v4.1.0**:
 		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that caused malformed output of description and titles.
 		* Addressed an issue where on the SEO Settings screen the blog name affix was not properly removed from the generated Homepage social titles when the related option is toggled.
-		* TODO AFFIRM FIX/EXISTENCE: Addressed an issue where the `post_format`, `category`, and `tag` taxonomy robot's settings `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `4103` (TSF v4.1.0).
+		* Addressed an issue where the `post_format`, `category`, and `tag` taxonomy robot's settings `noindex`, `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `4103` (TSF v4.1.0).
 			* This issue rectified itself after the user saves the options once. This was caused by checking for "is set" (either 1 or 0 means enabled) instead of "is empty" (only 1 means enabled).
 			* This fix is applied both pro-and retroactively.
 	* **Bugs from earlier versions**:
@@ -319,7 +302,7 @@ TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disab
 		* Addressed an issue where on the SEO Settings screen the pixel counter display was toggled when deselecting the character counter options.
 		* Addressed an issue where the database version wouldn't update correctly when using an object caching plugin, causing the upgrade-cycle to run twice.
 			* This is probably why some users informed us of newly introduced settings being flipped, or that users were unable to access the SEO settings page until this resolved itself after a few cycles.
-		* TODO AFFIRM FIX/EXISTENCE: Addressed an issue where the `attachment` post type robot's settings `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `3103` (TSF v3.1.0).
+		* Addressed an issue where the `attachment` post type robot's settings `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `3103` (TSF v3.1.0).
 			* This issue rectified itself after the user saves the options once. This was caused by checking for "is set" (either 1 or 0 means enabled) instead of "is empty" (only 1 means enabled).
 			* This fix is applied both pro-and retroactively.
 		* TODO Addressed an issue where on the SEO Settings screen the title example could overflow the bounding meta box.
@@ -339,6 +322,7 @@ TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disab
 
 **For developers:**
 
+* **Datebase note:** This plugin now uses TSF database version `4100`.
 * **Upgrade notes:**
 	* When upgrading the options, no longer are the defaults considered.
 		* For multisite network owners: This means that filter `the_seo_framework_default_site_options` is ignored for sites that upgrade. But, it's honored for new sites.
@@ -359,6 +343,9 @@ TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disab
 				* Note that "clear" runs before "space". Mind your duplicates.
 			* `is_post_type_robots_set()` now tests for not empty, instead of isset.
 			* `is_taxonomy_robots_set()` now tests for not empty, instead of isset.
+			* `get_image_generation_params()` now only the 'social' context will fetch images from the content (by default).
+				* This affects the [Articles extension](https://theseoframework.com/extensions/articles/), among other implementations.
+				* Within TSF, we use 'social' and (since this update, also) 'oembed'.
 	* **For object `\The_SEO_Framework\Bridges\Sitemap`:**
 		* Method `get_freed_memory()` is now available.
 	* **For object `The_SEO_Framework\Interpreters\SeoBar`:**
@@ -366,13 +353,14 @@ TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disab
 			* It should've been from the beginning. You can only access this method statically, anyway.
 	* **For object `The_SEO_Framework\Builders\Sitemap`:**
 		* Protected method `create_xml_entry()` is now available.
-			* We wanted to use `create_xml()` but it was reserved in our [Articles extension](https://theseoframework.com/extensions/articles/).
+			* We wanted to use `create_xml()` but that was reserved in our [Articles extension](https://theseoframework.com/extensions/articles/) as a private member function--we required protected or lower (hindsight is 2020, and 2020 sucks).
 	* **For object `The_SEO_Framework\Interpreters\SeoBar`:**
 		* Method `collect_seo_bar_items()` is now static.
 			* It should've been from the beginning. You can only access this method statically, anyway.
 	* **Action notes:**
 		* **Added:**
 			* `the_seo_framework_sitemap_transient_cleared`, useful when you want to preemptively cache the sitemap before pinging.
+				* For more details, see [issue #540](https://github.com/sybrew/the-seo-framework/issues/540).
 			* `the_seo_framework_before_ping_search_engines`, useful when you want to redirect the pinger.
 	* **Other:**
 		* We now use fully qualified function names for pre-evaluated functions, where these functions are registered as opcodes from PHP 7.0 onward. This means that fewer CPU cycles are required every time we call such a function. In layman's terms: you can see a 10~30% performance increase in some scenarios.

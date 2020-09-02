@@ -422,7 +422,7 @@ class Init extends Query {
 
 		$robots = $this->robots();
 
-		/** @since 4.0.4 : WP 5.3 patch, added. */
+		/** @since 4.0.4 : Added as WP 5.3 patch. */
 		$this->set_timezone( 'UTC' );
 
 		/**
@@ -460,6 +460,7 @@ class Init extends Query {
 			// aqp = advanced query protection
 			$output = '<meta name="tsf:aqp" value="1" />' . PHP_EOL;
 		else :
+			// Inefficient concatenation is inefficient. Improve this?
 			$output = $this->the_description()
 					. $this->og_image()
 					. $this->og_locale()
@@ -499,12 +500,10 @@ class Init extends Query {
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 
-		/** @since 4.0.4 : WP 5.3 patch, added. */
+		/** @since 4.0.4 : Added as WP 5.3 patch. */
 		$this->reset_timezone();
 
-		$output = "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";
-
-		return $output;
+		return "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";
 	}
 
 	/**
@@ -967,18 +966,46 @@ class Init extends Query {
 	 *
 	 * @WARNING: WordPress can switch blogs as this filter runs. So, check all options again, without cache!
 	 *           This should only happen at `/oembed/1.0/proxy`.
-	 * @TODO consider adding the (optional(ly)) thumbnail_url data?
 	 * @since 4.0.5
+	 * @since 4.1.1 Now also alters titles and images.
 	 * @access private
 	 *
-	 * @param array   $data   The response data.
-	 * @param WP_Post $post   The post object.
-	 * @param int     $width  The requested width.
-	 * @param int     $height The calculated height.
+	 * @param array    $data   The response data.
+	 * @param \WP_Post $post   The post object. May not be its placeholder `null`.
+	 * @param int      $width  The requested width.
+	 * @param int      $height The calculated height.
 	 * @return array Possibly altered $data.
 	 */
 	public function _alter_oembed_response_data( $data = [], $post = null, $width = 0, $height = 0 ) {
 
+		// Don't use cache. See @WARNING in doc comment.
+		if ( $this->get_option( 'oembed_use_og_title', false ) ) {
+			$data['title'] = $this->get_open_graph_title(
+				[
+					'id'       => $post->ID,
+					'taxonomy' => '',
+				]
+			) ?: $data['title'];
+		}
+		// Don't use cache. See @WARNING in doc comment.
+		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
+			$image_details = current( $this->get_image_details(
+				[
+					'id'       => $post->ID,
+					'taxonomy' => '',
+				],
+				true,
+				'oembed',
+				true
+			) );
+
+			if ( $image_details && $image_details['url'] && $image_details['width'] && $image_details['height'] ) {
+				// Override WordPress provided data.
+				$data['thumbnail_url']    = $image_details['url'];
+				$data['thumbnail_width']  = $image_details['width'];
+				$data['thumbnail_height'] = $image_details['height'];
+			}
+		}
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_remove_author', false ) ) {
 			unset( $data['author_url'], $data['author_name'] );

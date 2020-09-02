@@ -113,9 +113,22 @@ function _suggest_extension_manager( $previous_version, $current_version ) {
 
 	$tsf = \the_seo_framework();
 
-	$suggest_key = 'suggest-extension-manager';
+	$suggest_key        = 'suggest-extension-manager';
+	$suggest_args       = [
+		'type'   => 'info',
+		'icon'   => false,
+		'escape' => false,
+	];
+	$suggest_conditions = [
+		'screens'      => [],
+		'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
+		'capability'   => 'install_plugins',
+		'user'         => 0,
+		'count'        => 3,
+		'timeout'      => DAY_IN_SECONDS * 7,
+	];
 
-	if ( $previous_version < '4103' )
+	if ( $previous_version < '4100' && $current_version < '4200' )
 		$tsf->register_dismissible_persistent_notice(
 			$tsf->convert_markdown(
 				vsprintf(
@@ -132,18 +145,7 @@ function _suggest_extension_manager( $previous_version, $current_version ) {
 				[ 'a_internal' => false ]
 			),
 			$suggest_key,
-			[
-				'type'   => 'info',
-				'icon'   => false,
-				'escape' => false,
-			],
-			[
-				'screens'      => [],
-				'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
-				'capability'   => 'install_plugins',
-				'user'         => 0,
-				'count'        => 3,
-				'timeout'      => DAY_IN_SECONDS * 7,
-			]
+			$suggest_args,
+			$suggest_conditions
 		);
 }
