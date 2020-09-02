@@ -246,49 +246,48 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.1 =
 
-In this minor update, we improved browser performance by cleaning out over 150 (TODO it's 151) jQuery calls, added a few features for oEmbed, fixed a dozen bugs in the UI and generators, and [improved accessibility](TODO).
+In this minor update, we improved browser performance by cleaning out over 150 jQuery calls, added a few features for oEmbed, fixed a dozen bugs in the UI and generators, and [improved accessibility](TODO).
 
 TODO retest installation
 
 TODO evaluate symbiosis of the homepage social inputs.
 TODO add visual cue for auto-description toggle (in the homepage description holder)? Do people even toggle it, and are they bothered?
 TODO evaluate and remove the "FIXME//var_dump()" JS comments. Test for proper HTML to text conversion and vice versa.
-TODO add downgrade notice.
+TODO add downgrade notice?
 TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disabled-tsfs-sitemap/ ?
-TODO regression: Tabs' content no longer gets shown when using browser history.
 
 **For everyone:**
 
 * **Added:**
-	* More oEmbed control!
+	* **New oEmbed settings:**
 		* You can now choose whether to overwrite the oEmbed title with the SEO meta title (when manually filled).
 		* You can now choose to use the social image instead of the featured image.
 			* This can only work when you use the image uploader, instead of manually filling in the URL.
-	* WooCommerce's product category widget now evaluates TSF's primary term selection.
 * **Improved:**
-	* TODO On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
-		* Take from `_initGeneralSettings()`... it's quite elaborate.
-		* We already added classes `tsf-robots-post-types` and `tsf-robots-taxonomies`.
-		* Refrain from adding notice when post type is disabled? Double notice? -> We already have a double notice at "Social Meta Settings > Social Title Settings" when "Title Settings > Additions > Site Title" is checked.
-* **Performance:**
-	* **Up to 99% quicker browser rendering times and interaction (admin-area):**
-		* *Yes, 99%; because there's a cache pollution bug in jQuery (in combination with Safari) we no longer interact with.*
-		* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
-			* This also improves compatibility with non-jQuery driven APIs.
-		* We exchanged jQuery NodeList handlers for native JS in various places, improving browser load time drastically.
-			* This also resolves an issue where jQuery's cache was polluted for unknown reasons (good luck debugging jQuery's code), in combination with ACF Pro's Flexible Content types, where the browser could hang for several minutes.
-		* We reduced the number of events marginally by exempting hidden fields from change listeners.
-	* **Up to 0.2% faster server response times (admin and front):**
-		* We looked at the PHP engine's code, and found that we could reduce the number of opcodes (CPU instructions) by adding backslashes to various internal PHP functions.
-			* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes scrutiny really pays off, as was shown with the 4.0 and 4.1 releases.
-			* We believe this will translate well into the PHP 8.0 release, especially on servers where the JIT compiler is implemented.
-	* **Up to 71% less memory consumption for the sitemap:**
-		* When you don't use an object caching plugin, the sitemap generator now clears the post's memoized cache after each URL entry yielded.
+	* **Accessibility:**
+		* On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
+			* You won't see a duplicated `[?]` notifier when you disable a post type or taxonomy--the most restricting option will convey its message. Another nice touch that you'll probably never notice is there.
+	* **Compatibility:**
+		* WooCommerce's product category widget now evaluates TSF's primary term selection.
+	* **Performance:**
+		* **Up to 99% quicker browser rendering times and interaction (admin-area):**
+			* *Yes, 99%; because there's a cache pollution bug in jQuery (in combination with Safari) we no longer interact with.*
+			* We exchanged jQuery event handlers for native JS in various places, improving browser load time drastically (even further than v4.1.0 did).
+				* This also improves compatibility with non-jQuery driven APIs.
+			* We exchanged jQuery NodeList handlers for native JS in various places, improving browser load time drastically.
+				* This also resolves an issue where jQuery's cache was polluted for unknown reasons (good luck debugging jQuery's code), in combination with ACF Pro's Flexible Content types, where the browser could hang for several minutes.
+			* We reduced the number of events marginally by exempting hidden fields from change listeners.
+		* **Up to 0.2% faster server response times (admin and front):**
+			* We looked at the PHP engine's code, and found that we could reduce the number of opcodes (CPU instructions) by adding backslashes to various internal PHP functions.
+				* 0.2% isn't much. We spent (wasted) 14 hours on that. However, sometimes scrutiny really pays off, as was shown with the 4.0 and 4.1 releases.
+				* We believe this will translate well into the PHP 8.0 release, especially on servers where the JIT compiler is implemented.
+		* **Up to 71% less memory consumption for the sitemap:**
+			* When you don't use an object caching plugin, the sitemap generator now clears the post's memoized cache after each URL entry yielded.
 * **Fixed:**
 	* **Bugs introduced in v4.1.0**:
 		* Addressed an issue where some byte sequences are improperly transformed on some PHP installations, that caused malformed output of description and titles.
 		* Addressed an issue where on the SEO Settings screen the blog name affix was not properly removed from the generated Homepage social titles when the related option is toggled.
-		* Addressed an issue where the `post_format`, `category`, and `tag` taxonomy robot's settings `noindex`, `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `4103` (TSF v4.1.0).
+		* Addressed an issue where the `post_format`, `category`, and `tag` taxonomy robot's settings `noindex`, `nofollow` and `noarchive` were accidentally asserted as activated when the site upgraded to `4103` (TSF v4.1.0).
 			* This issue rectified itself after the user saves the options once. This was caused by checking for "is set" (either 1 or 0 means enabled) instead of "is empty" (only 1 means enabled).
 			* This fix is applied both pro-and retroactively.
 	* **Bugs from earlier versions**:
@@ -297,7 +296,7 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 		* Addressed an issue where on the SEO Settings screen the pixel counter display was toggled when deselecting the character counter options.
 		* Addressed an issue where the database version wouldn't update correctly when using an object caching plugin, causing the upgrade-cycle to run twice.
 			* This is probably why some users informed us of newly introduced settings being flipped, or that users were unable to access the SEO settings page until this resolved itself after a few cycles.
-		* Addressed an issue where the `attachment` post type robot's settings `nofollow` and `noarchive` were accidentally seen as activated when the site upgraded to `3103` (TSF v3.1.0).
+		* Addressed an issue where the `attachment` post type robot's settings `nofollow` and `noarchive` were accidentally asserted as activated when the site upgraded to `3103` (TSF v3.1.0). Most likely, `noindex`, too--but it's unlikely users allow indexing.
 			* This issue rectified itself after the user saves the options once. This was caused by checking for "is set" (either 1 or 0 means enabled) instead of "is empty" (only 1 means enabled).
 			* This fix is applied both pro-and retroactively.
 		* TODO Addressed an issue where on the SEO Settings screen the title example could overflow the bounding meta box.
@@ -309,7 +308,7 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 	* All other scripts have increased in size, since we now barely rely on jQuery. Vanilla JS tends to grow more code since there's not a single function that does everything.
 	* Our scripts can no longer invoke "are you sure"-change listeners. You'll have to manually input or change something to invoke that.
 		* We always thought that we could at some point make a vital input-change for you in the browser, but we never did, nor do we think we ever will. We handle sanitization on the server, which is much neater.
-		* Moreover, if we do make such a change, we have hooks that invoke this for us.
+		* Moreover, if we do make such a change, we have methods that set the warning programmatically.
 
 **For translators:**
 
@@ -364,7 +363,7 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 		* We now use fully qualified function names for pre-evaluated functions, where these functions are registered as opcodes from PHP 7.0 onward. This means that fewer CPU cycles are required every time we call such a function. In layman's terms: you can see a 10~30% performance increase in some scenarios.
 			* Translated to this plugin, it's about 0.1 ms improvement at most. That's a 0.3% improvement on a clean WP install, or about 3% of the plugin.
 				* Totally neglegible. But, that's probably because we optimized for opcodes in the past. We believe we're in the 10% range (of the plugin) already thanks to consistently doing this.
-			* We created a PHPCS sniff for this. Check it out: https://github.com/theseoframework/wpcs-tsf/blob/master/TSF/Sniffs/Performance/OpcodesSniff.php
+			* [We created a PHPCS sniff for this](https://github.com/theseoframework/wpcs-tsf/blob/master/TSF/Sniffs/Performance/OpcodesSniff.php).
 * **JS notes:**
 	* **Note:** Only changes affecting the API are listed. "We improved performance" and the like are exempted from this list.
 	* **Object notes:**
@@ -377,11 +376,12 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 			* `tsfDescription.enqueueTriggerInput()` now passes the input ID to the input event.
 	* **Event notes:**
 		* **Added:**
-			* `tsf-interactive` now triggers on `document.body`.
+			* `document.body.tsf-interactive`, used to indicate that TSF is interactive.
 				* We required this to register the "Are you sure" script as late as possible, where all other scripts are sequenced before this point.
 				* Unfortunately, we still don't honor this correctly since we debounce some interactions.
-					* TODO remove the debouncers?--it's 10ms...
-			* `tsf-gutenberg-onsave-completed` now triggers on `document`.
+			* `document.tsf-gutenberg-onsave-completed`, runs after Gutenberg/Block Editor is done saving.
+			* `$window.tsf-post-type-robots-changed`, used to test for post type robots change states.
+			* `$window.tsf-taxonomy-robots-change`, used to test for taxonomy robots change states.
 		* **Changed:**
 			* `tsf-gutenberg-saved-document` no longer supplies a second parameter for the event type. Instead, you can now find it in `event.detail.savedType`.
 			* `tsf-title-sep-updated` no longer supplies a second parameter for the event type. Instead, you can now find it in `event.detail.separator`.
@@ -400,6 +400,8 @@ TODO regression: Tabs' content no longer gets shown when using browser history.
 		* **Other:**
 			* Because we used named event types with jQuery, we masked a few design flaws that came painfully apparent after we moved away from jQuery.
 				* Luckily, by trying the `isTrusted` event parameter, we can mitigate this flaw, and toggling its check allowed us to find and fix a few dependency errors where our logic was flawed.
+	* **Template notes:**
+		* `wp.template( 'tsf-robots-pt-help' )` is now available on the settings page.
 * **Fixed:**
 	* Two mistakes got through our error handler during development. If it can happen once, it can happen again. So, we reworked the error handler akin to WordPress's, so that it'll allow custom handlers to catch these errors and scream at us--instead of them being silently outputted by TSF.
 		* Now, WordPress controls whether errors should be displayed.

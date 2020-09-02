@@ -616,7 +616,7 @@ class Site_Options extends Sanitize {
 	 * @return string
 	 */
 	public function get_robots_post_type_option_id( $type ) {
-		return $this->s_field_id( $type . '_post_types' );
+		return $this->s_field_id( "{$type}_post_types" );
 	}
 
 	/**
@@ -628,7 +628,7 @@ class Site_Options extends Sanitize {
 	 * @return string
 	 */
 	public function get_robots_taxonomy_option_id( $type ) {
-		return $this->s_field_id( $type . '_taxonomies' );
+		return $this->s_field_id( "{$type}_taxonomies" );
 	}
 
 	/**

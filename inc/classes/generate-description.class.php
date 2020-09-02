@@ -870,6 +870,8 @@ class Generate_Description extends Generate {
 		/**
 		 * Play with it here: https://regex101.com/r/u0DIgx/5/tests
 		 *
+		 * TODO fix `.*[\p{Pe}\p{Pf}]$`... it suffers from a backtracing issue. I still can't seem to anchor it...
+		 *
 		 * Critically optimized, so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {

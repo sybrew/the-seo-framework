@@ -344,6 +344,9 @@ switch ( $instance ) :
 				'disabled' => false,
 				'default'  => ! empty( $default_options[ $pt_option_id ][ $post_type ] ),
 				'warned'   => ! empty( $warned_options[ $pt_option_id ][ $post_type ] ),
+				'data'     => [
+					'robots' => $ro_value,
+				],
 			] );
 		}
 
@@ -378,6 +381,7 @@ switch ( $instance ) :
 				'warned'   => ! empty( $warned_options[ $tax_option_id ][ $taxonomy ] ),
 				'data'     => [
 					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
+					'robots'    => $ro_value,
 				],
 			] );
 		}

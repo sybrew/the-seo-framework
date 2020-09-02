@@ -49,4 +49,14 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 		?>
 	</span>
 </script>
+
+<script type="text/html" id="tmpl-tsf-robots-pt-help">
+	<span class="tsf-taxonomy-from-pt-robots-warning">
+		<?php
+		the_seo_framework()->make_info(
+			esc_html__( "This taxonomy inherited the state from the post type, so this option won't have any effect.", 'autodescription' )
+		);
+		?>
+	</span>
+</script>
 <?php
