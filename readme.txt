@@ -323,6 +323,8 @@ TODO add "This value is locked at the HomePage SEO Settings"? -> Then we should 
 * **Changed:**
 	* We no longer use custom error handlers, but rely on the system-provided ones, instead.
 		* This is more harmoneous with plugins like Query Monitor, and doesn't override custom error loggers.
+	* `tsf-disabled-post-types` class is now `tsf-excluded-post-types`; this gave us a headache.
+	* `tsf-disabled-taxonomies` class is now `tsf-excluded-taxonomies`; this gave us a headache.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_sitemap_blog_lastmod` string, allows you to set a custom lastmod timestamp for the blog page.

@@ -423,7 +423,7 @@ switch ( $instance ) :
 				[ 'code' ]
 			)
 		);
-		$this->description( __( 'Default post types and taxonomies can not be disabled.', 'autodescription' ) );
+		$this->description( __( 'Default post types and taxonomies can not be excluded.', 'autodescription' ) );
 		?>
 
 		<hr>
@@ -450,7 +450,7 @@ switch ( $instance ) :
 
 			$boxes[] = $this->make_checkbox_array( [
 				'id'       => $pt_option_id,
-				'class'    => 'tsf-disabled-post-types',
+				'class'    => 'tsf-excluded-post-types',
 				'index'    => $post_type,
 				'label'    => $_label,
 				'escape'   => false,
@@ -487,7 +487,7 @@ switch ( $instance ) :
 
 			$boxes[] = $this->make_checkbox_array( [
 				'id'       => 'disabled_taxonomies',
-				'class'    => 'tsf-disabled-taxonomies',
+				'class'    => 'tsf-excluded-taxonomies',
 				'index'    => $taxonomy,
 				'label'    => $_label,
 				'escape'   => false,
