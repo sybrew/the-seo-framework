@@ -41,8 +41,9 @@ namespace The_SEO_Framework\Bootstrap;
 // phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 
 \add_action( 'init', __NAMESPACE__ . '\\_do_upgrade', 20 );
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99, 2 ); // TODO add downgrade notice?
+\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99, 2 );
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100, 2 );
+\add_action( 'the_seo_framework_downgraded', __NAMESPACE__ . '\\_prepare_downgrade_notice', 99, 2 );
 
 /**
  * @since 4.1.0 Deprecated. We can no longer rely on this from WP 5.5.
@@ -349,6 +350,52 @@ function _set_to_current_version() {
 
 	// The option update might've failed. Try to obtain the latest version.
 	return (string) \get_option( 'the_seo_framework_upgraded_db_version' );
+}
+
+/**
+ * Prepares a notice when the downgrade is completed.
+ *
+ * @since 4.1.1
+ * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
+ *       Users that remove query strings (thanks to YSlow) are to blame, though.
+ *       The authors of the plugin that allowed this to happen are even more to blame.
+ * @link <https://wordpress.org/support/topic/4-0-admin-interface-not-loading-correctly/>
+ *
+ * @param string $previous_version The previous version, if any.
+ * @param string $current_version The current version of the site.
+ */
+function _prepare_downgrade_notice( $previous_version, $current_version ) {
+
+	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
+	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
+		$tsf = \the_seo_framework();
+
+		$tsf->register_dismissible_persistent_notice(
+			$tsf->convert_markdown(
+				sprintf(
+					/* translators: %1$s = New, lower version number, surrounded in markdown-backticks. %2$s = Old, higher version number, surrounded in markdown-backticks. */
+					\esc_html__( 'Your website has been downgraded successfully to use The SEO Framework at database version `%1$s` from `%2$s`.', 'autodescription' ),
+					\esc_html( $current_version ),
+					\esc_html( $previous_version )
+				),
+				[ 'code' ]
+			),
+			"notify-downgraded-$current_version",
+			[
+				'type'   => 'updated',
+				'icon'   => true,
+				'escape' => false,
+			],
+			[
+				'screens'      => [],
+				'excl_screens' => [ 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes' ],
+				'capability'   => 'update_plugins',
+				'user'         => 0,
+				'count'        => 1,
+				'timeout'      => DAY_IN_SECONDS,
+			]
+		);
+	}
 }
 
 /**

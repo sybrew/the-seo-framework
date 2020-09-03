@@ -250,11 +250,7 @@ In this minor update, we improved browser performance by cleaning out over 150 j
 
 TODO retest installation
 
-TODO evaluate symbiosis of the homepage social inputs.
-TODO add visual cue for auto-description toggle (in the homepage description holder)? Do people even toggle it, and are they bothered?
-TODO evaluate and remove the "FIXME//var_dump()" JS comments. Test for proper HTML to text conversion and vice versa.
-TODO add downgrade notice?
-TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disabled-tsfs-sitemap/ ?
+TODO add "This value is locked at the HomePage SEO Settings"? -> Then we should also account for filters...tricky?
 
 **For everyone:**
 
@@ -267,6 +263,7 @@ TODO inspect cause https://wordpress.org/support/topic/upgrading-to-wp-5-5-disab
 	* **Accessibility:**
 		* On the SEO Settings screen the taxonomy settings inferred robots (index/follow/archive) state is now conveyed when all its connected post types were checked.
 			* You won't see a duplicated `[?]` notifier when you disable a post type or taxonomy--the most restricting option will convey its message. Another nice touch that you'll probably never notice is there.
+		* When you downgrade to this version, or henceforth to a higher version (from an even higher version), you'll now see a persistent one-time notification that informs you of a completed downgrade.
 	* **Compatibility:**
 		* WooCommerce's product category widget now evaluates TSF's primary term selection.
 	* **Performance:**
