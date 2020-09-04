@@ -14,7 +14,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 	<span class="tsf-post-type-warning">
 		<?php
 		the_seo_framework()->make_info(
-			esc_html__( "This post type is disabled, so this option won't work.", 'autodescription' )
+			esc_html__( "This post type is excluded, so this option won't work.", 'autodescription' )
 		);
 		?>
 	</span>
@@ -24,7 +24,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 	<span class="tsf-taxonomy-warning">
 		<?php
 		the_seo_framework()->make_info(
-			esc_html__( "This taxonomy is disabled, so this option won't work.", 'autodescription' )
+			esc_html__( "This taxonomy is excluded, so this option won't work.", 'autodescription' )
 		);
 		?>
 	</span>
@@ -34,7 +34,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::v
 	<span class="tsf-taxonomy-from-pt-warning">
 		<?php
 		the_seo_framework()->make_info(
-			esc_html__( "This taxonomy's post types are also disabled, so this option won't have any effect.", 'autodescription' )
+			esc_html__( "This taxonomy's post types are also excluded, so this option won't have any effect.", 'autodescription' )
 		);
 		?>
 	</span>

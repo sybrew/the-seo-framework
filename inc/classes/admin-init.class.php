@@ -834,7 +834,7 @@ class Admin_Init extends Init {
 		$attachment_id = \absint( $_POST['id'] );
 
 		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) );
-		$data    = array_map( 'absint', $_POST['cropDetails'] );
+		$data    = array_map( '\\absint', $_POST['cropDetails'] );
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
