@@ -211,12 +211,6 @@ function _upgrade( $previous_version ) {
 
 	$current_version = $previous_version;
 
-	// Why did we use a ! here, instead of a compare? Luxury?
-	// if ( ! $current_version ) {
-	// 	_do_upgrade_1();
-	// 	$current_version = _set_version( '1' );
-	// }
-
 	//! From update 3103 henceforth, the upgrade procedures should be backward compatible.
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	//? We must manually delete settings that are no longer used; we merge them otherwise.
@@ -225,7 +219,8 @@ function _upgrade( $previous_version ) {
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
-			( __NAMESPACE__ . "\\_do_upgrade_{$_version}" )(); // This is an undocumented method for variable functions.
+			// ( __NAMESPACE__ . "\\_do_upgrade_{$_version}" )(); // This is an undocumented method for variable functions. So much for that.
+			call_user_func( __NAMESPACE__ . "\\_do_upgrade_{$_version}" ); // PHP 5.6 compat
 			$current_version = _set_version( $_version );
 		}
 	}
