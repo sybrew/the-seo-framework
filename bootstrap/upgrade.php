@@ -781,8 +781,6 @@ function _do_upgrade_4103() {
 			'noarchive' => [],
 		];
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-			$_option = $tsf->get_robots_taxonomy_option_id( $r );
-
 			$_value = $_new_pt_option_defaults[ $r ];
 
 			$_category_option = (int) (bool) $tsf->get_option( "category_$r", false );

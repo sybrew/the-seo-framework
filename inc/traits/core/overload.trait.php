@@ -24,6 +24,10 @@ namespace The_SEO_Framework\Traits;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Collection, not auto-loaded nor class-mapped.
+// phpcs:disable, Generic.CodeAnalysis.UselessOverridingMethod.Found -- Enforced, not useless.
+// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- The trait doc explains it.
+
 /**
  * Legend/Definitions:
  *
@@ -105,9 +109,6 @@ namespace The_SEO_Framework\Traits;
  *
  *      - <No keyword>: Should not exist.
  */
-
-// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- The trait doc explains it.
-// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- This is a collective, preloaded file for all overloading.
 
 /**
  * Holds private overloading functions to prevent injection or abstraction.

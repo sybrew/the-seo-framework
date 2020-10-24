@@ -238,6 +238,8 @@ class Generate extends User_Data {
 				 * because page builders and templates can and will take over.
 				 *
 				 * Don't use empty(), null is regarded as indexable.
+				 *
+				 * TODO Consider toggling this for author archives?
 				 */
 				if ( isset( $wp_query->post_count ) && ! $wp_query->post_count )
 					$noindex = true;
@@ -274,15 +276,13 @@ class Generate extends User_Data {
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy() as $post_type ) {
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					// SECURITY: Put in array to circumvent GLOBALS injection.
-					// FIXME: Shouldn't we check for $$r before? Saves processing power.
-					$_post_type_meta[ $r ][] = $this->is_post_type_robots_set( $r, $post_type );
+					// SECURITY: Put in array to circumvent GLOBALS injection in sequenting loop.
+					$_post_type_meta[ $r ][] = $$r || $this->is_post_type_robots_set( $r, $post_type );
 				}
 			}
 			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $_type => $_values ) {
-				// FIXME: Isn't $$_type just $$r?
-				$$_type = $$_type || ! \in_array( false, $_values, true );
+			foreach ( $_post_type_meta as $r => $_values ) {
+				$$r = $$r || ! \in_array( false, $_values, true );
 			}
 
 			$taxonomy = $this->get_current_taxonomy();
@@ -412,12 +412,12 @@ class Generate extends User_Data {
 			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
 				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 					// SECURITY: Put in array to circumvent GLOBALS injection.
-					$_post_type_meta[ $r ][] = $this->is_post_type_robots_set( $r, $post_type );
+					$_post_type_meta[ $r ][] = $$r || $this->is_post_type_robots_set( $r, $post_type );
 				}
 			}
 			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $_type => $_values ) {
-				$$_type = $$_type || ! \in_array( false, $_values, true );
+			foreach ( $_post_type_meta as $r => $_values ) {
+				$$r = $$r || ! \in_array( false, $_values, true );
 			}
 
 			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -508,11 +508,11 @@ class Generate extends User_Data {
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
 				// SECURITY: Put in array to circumvent GLOBALS injection.
-				$_post_type_meta['noindex'][] = $this->is_post_type_robots_set( 'noindex', $post_type );
+				$_post_type_meta['noindex'][] = $noindex || $this->is_post_type_robots_set( 'noindex', $post_type );
 			}
 			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $_type => $_values ) {
-				$$_type = $$_type || ! \in_array( false, $_values, true );
+			foreach ( $_post_type_meta as $r => $_values ) {
+				$$r = $$r || ! \in_array( false, $_values, true );
 			}
 
 			$noindex = $noindex || $this->is_taxonomy_robots_set( 'noindex', $args['taxonomy'] );

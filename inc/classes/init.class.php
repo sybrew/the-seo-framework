@@ -103,7 +103,7 @@ class Init extends Query {
 	 * @since 2.8.0
 	 */
 	public function init_cron_actions() {
-		// Init post update/delete caching actions.
+		// Init post update/delete caching actions which may occur during cronjobs.
 		$this->init_post_cache_actions();
 
 		// Ping searchengines.

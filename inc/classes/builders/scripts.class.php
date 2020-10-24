@@ -199,6 +199,20 @@ final class Scripts {
 	}
 
 	/**
+	 * Enqueues all known registeres scripts, styles, and templates,
+	 * in the footer, right before WordPress's last script-outputting call.
+	 *
+	 * @since 4.1.2
+	 * @see ABSPATH.wp-admin/admin-footer.php
+	 */
+	public static function footer_enqueue() {
+
+		if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
+
+		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 );
+	}
+
+	/**
 	 * Registers script to be enqueued. Can register multiple scripts at once.
 	 *
 	 * A better name would've been "collect"...
@@ -449,7 +463,6 @@ final class Scripts {
 		return $out;
 	}
 
-
 	/**
 	 * Concatenates inline JS.
 	 *
@@ -563,6 +576,7 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now clears outputted templates, so to prevent duplications.
+	 * @since 4.1.2 Now clears templates right before outputting them, so to prevent a plausible infinite loop.
 	 * @see $this->forward_known_scripts()
 	 * @see $this->register_template()
 	 * @see $this->autoload_scripts()
@@ -572,9 +586,11 @@ final class Scripts {
 	public function _output_templates() {
 		foreach ( static::$templates as $id => $templates ) {
 			if ( \wp_script_is( $id, 'enqueued' ) ) { // This list retains scripts after they're outputted.
+				// Unset template before the loop, to prevent an infinite loop.
+				unset( static::$templates[ $id ] );
+
 				foreach ( $templates as $t )
 					$this->output_view( $t[0], $t[1] );
-				unset( static::$templates[ $id ] );
 			}
 		}
 	}

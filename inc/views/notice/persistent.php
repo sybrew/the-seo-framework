@@ -13,7 +13,7 @@ if ( ! $message ) return;
 
 // Make sure the scripts are loaded.
 $this->init_admin_scripts();
-\The_SEO_Framework\Builders\Scripts::enqueue();
+The_SEO_Framework\Builders\Scripts::footer_enqueue();
 
 if ( in_array( $args['type'], [ 'warning', 'info' ], true ) )
 	$args['type'] = "notice-{$args['type']}";

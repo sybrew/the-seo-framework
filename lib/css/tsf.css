@@ -63,7 +63,8 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 	content: "\f147";
 }
 
-.tsf-dismiss {
+/* Specific because common.css overrides via `.updated a` */
+.tsf-notice .tsf-dismiss {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -76,7 +77,7 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 	text-decoration: none;
 }
 
-body.rtl .tsf-dismiss {
+body.rtl .tsf-notice .tsf-dismiss {
 	right: initial;
 	left: 0;
 }
@@ -111,7 +112,7 @@ body.rtl .tsf-dismiss {
 	font-size: 13px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
+	-ms-user-select: none; /* Remove me 2022 */
 	user-select: none;
 }
 
@@ -133,7 +134,7 @@ body.rtl .tsf-dismiss {
 	white-space: pre;
 }
 
-body.rtl .sf-title-offset {
+body.rtl .tsf-title-offset {
 	left: initial;
 	right: 0;
 }
@@ -144,7 +145,7 @@ body.rtl .sf-title-offset {
 	color: #777;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
+	-ms-user-select: none; /* Remove me 2022 */
 	user-select: none;
 	box-sizing: content-box;
 	top: 0;
@@ -352,9 +353,6 @@ body.rtl .tsf-counter .tsf-aja {
 .tsf-ajax.tsf-loading:before {
 	content: "\f463";
 	color: #007bd2;
-	-webkit-animation: tsf-spin 1.5s linear infinite;
-	-moz-animation: tsf-spin 1.5s linear infinite;
-	-o-animation: tsf-spin 1.5s linear infinite;
 	animation: tsf-spin 1.5s linear infinite;
 }
 
@@ -366,6 +364,11 @@ body.rtl .tsf-counter .tsf-aja {
 .tsf-ajax.tsf-success:before {
 	content: "\f147";
 	color: #0cc34b;
+}
+
+.tsf-ajax.tsf-unknown:after {
+	content: "\f223";
+	color: #057c99;
 }
 
 .tsf-set-image-button.button,
@@ -434,15 +437,6 @@ body.rtl .tsf-remove-image-button.button {
 .tsf-metaboxes textarea:focus:-ms-input-placeholder {
 	color: transparent;
 	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);
-}
-
-@-webkit-keyframes tsf-spin {
-	0% {
-		-webkit-transform: rotate( 0deg );
-	}
-	100% {
-		-webkit-transform: rotate( 360deg );
-	}
 }
 
 @keyframes tsf-spin {

@@ -11,7 +11,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_
 
 $this->the_seo_framework_debug and $timer_start = microtime( true );
 
-$sitemap_bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+$sitemap_bridge = The_SEO_Framework\Bridges\Sitemap::get_instance();
 $sitemap_bridge->output_sitemap_header();
 
 if ( $this->the_seo_framework_debug ) {

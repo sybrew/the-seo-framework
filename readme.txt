@@ -244,6 +244,52 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.1.2 =
+
+**For everyone:**
+
+* **Added:**
+	* This plugin is now compatible with PHP-RCTODO<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
+		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly.
+* **Fixed:**
+	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
+* **Other:**
+	* This update is required for the upcoming [Extension Manager v2.5](https://tsf.fyi/em).
+
+**For developers:**
+
+* **Method notes:**
+	* For façade object `the_seo_framework()`:
+		* **Changed:**
+			* `get_social_image_uploader_form()` no longer adds a redundant title to the selection button.
+			* `generate_dismissible_notice()`:
+				1. No longer invokes the script loader during AJAX-requests.
+				1. Now accepts empty messages, so that AJAX-invoked generators can grab a notice wrapper.
+				1. Added the `$inline` parameter.
+				1. Now enqueues scripts in the footer, so templates won't spam the header.
+			* `do_dismissible_notice()` added the `$inline` parameter.
+	* For object `\The_SEO_Framework\Builders\Scripts`:
+		* **Added:**
+			* `footer_enqueue()`, this allows you to delay outputting scripts.
+* **JavaScript notes:**
+	* For object `window.tsf`:
+		* **Added:**
+			* `triggerNoticeReset()`, this allows you to dynamically insert interactive TSF notices, even persistent.
+	* For object `window.tsfMedia`:
+		* **Added:**
+			* `resetImageEditorActions()`, this allows you to dynamically insert interactive TSF image editors.
+* **Fixed:**
+	* The template loader unsets templates prior to looping over them. This prevents plausible infinite loops where scripts need to be reenqueued.
+
+TODO resolve the FIXMEs
+TODO test robots-generator's code-cleanup for mistakes!
+TODO PHP 8.0 support.
+TODO remove object caching? -- Let this only work for database transaction, native to WordPress?
+	* How many people will dislike this change? The generators are greatly optimized. Removal should decrease our support load as we can then exclude a common issue.
+TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 750 pixels
+	- (99 char link length, test 'WWWWWW' links!)
+	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
+
 = 4.1.1 =
 
 In this major-minor update, we improved browser performance by up to 99% (not a typo) by exchanging over 300 jQuery calls for vanilla JS ones. We also added two new options for oEmbed, freed a dozen bugs that got stuck in the UI and generators, and [improved accessibility](https://theseoframework.com/?p=3623#detailed).

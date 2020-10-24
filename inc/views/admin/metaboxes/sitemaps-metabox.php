@@ -56,7 +56,7 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general':
-		$sitemap_url        = \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
+		$sitemap_url        = The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected   = $this->has_sitemap_xml();
 
@@ -100,7 +100,7 @@ switch ( $instance ) :
 			$this->description_noesc(
 				sprintf(
 					'<a href="%s" target=_blank rel=noopener>%s</a>',
-					esc_url( \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
+					esc_url( The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
 					esc_html__( 'View the base sitemap.', 'autodescription' )
 				)
 			);

@@ -191,7 +191,7 @@ class Generate_Ldjson extends Generate_Image {
 		];
 
 		//= The searchbox part.
-		$action_name = 'search_term_string';
+		$action_name = 'search_term_string'; // FIXME Should we just feed this to `get_search_link`? -> probably not: esc_url..
 		$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
 		/**
 		 * @since 2.7.0
@@ -202,7 +202,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data += [
 			'potentialAction' => [
 				'@type'       => 'SearchAction',
-				'target'      => sprintf( '%s{%s}', \esc_url( $search_url ), $action_name ),
+				'target'      => sprintf( '%s{%s}', \esc_url( $search_url ), $action_name ), // FIXME This misses `user_trailingslashit`...
 				'query-input' => sprintf( 'required name=%s', $action_name ),
 			],
 		];

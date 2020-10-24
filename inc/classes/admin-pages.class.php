@@ -248,6 +248,8 @@ class Admin_Pages extends Profile {
 	 * @since 2.6.0 Refactored.
 	 * @since 3.1.0 Now prefixes the IDs.
 	 * @since 4.0.0 Deprecated third parameter, silently.
+	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php
+	 * @FIXME why is this static? deprecate me?
 	 *
 	 * @param string $id      The nav-tab ID
 	 * @param array  $tabs    The tab content {
@@ -271,6 +273,8 @@ class Admin_Pages extends Profile {
 	 * @since 2.9.0
 	 * @since 3.0.0 Converted to view.
 	 * @since 4.0.0 Deprecated third parameter, silently.
+	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php
+	 * @FIXME why is this static? deprecate me?
 	 *
 	 * @param string $id       The nav-tab ID
 	 * @param array  $tabs     The tab content {
@@ -355,34 +359,40 @@ class Admin_Pages extends Profile {
 	 * @since 4.0.3 1. Keyboard navigation is now supported on the dismiss icon.
 	 *              2. The info notice type is now supported.
 	 * @since 4.1.0 Now semantically wraps the content with HTML.
-	 * @TODO deprecate--use the more reliable and secure persistent notices registry instead.
+	 * @since 4.1.2 1. No longer invokes the script loader during AJAX-requests.
+	 *              2. Now accepts empty messages, so that AJAX-invoked generators can grab a notice wrapper.
+	 *              3. Added the inline parameter.
+	 *              4. Now enqueues scripts in the footer, so templates won't spam the header.
+	 * @TODO deprecate -- Use the more reliable and secure persistent notices registry instead...
+	 *                    Then again, this allows for AJAX-generated notices.
 	 * @see register_dismissible_persistent_notice()
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
 	 *                        When the message contains HTML, it must start with a <p> tag,
 	 *                        or it will be added for you--regardless of proper semantics.
-	 * @param string $type The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
-	 * @param bool   $icon Whether to add an accessibility icon.
+	 * @param string $type   The notice type : 'updated', 'error', 'warning', 'info'. Expected to be escaped.
+	 * @param bool   $icon   Whether to add an accessibility icon.
 	 * @param bool   $escape Whether to escape the whole output.
+	 * @param bool   $inline Whether WordPress should be allowed to move it.
 	 * @return string The dismissible error notice.
 	 */
-	public function generate_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true ) {
+	public function generate_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true, $inline = false ) {
 
-		// Don't check for strlen. '0' is a useless message, anyway.
-		if ( ! $message ) return '';
-
-		// Make sure the scripts are loaded.
-		$this->init_admin_scripts();
-		Builders\Scripts::enqueue();
+		if ( ! \wp_doing_ajax() ) {
+			// Make sure the scripts are loaded.
+			$this->init_admin_scripts();
+			\The_SEO_Framework\Builders\Scripts::footer_enqueue();
+		}
 
 		if ( \in_array( $type, [ 'warning', 'info' ], true ) )
 			$type = "notice-$type";
 
 		return vsprintf(
-			'<div class="notice %s tsf-notice %s">%s%s</div>',
+			'<div class="notice %s tsf-notice %s %s">%s%s</div>',
 			[
 				\esc_attr( $type ),
 				( $icon ? 'tsf-show-icon' : '' ),
+				( $inline ? 'inline' : '' ),
 				sprintf(
 					( ! $escape && 0 === strpos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
 					( $escape ? \esc_html( $message ) : $message )
@@ -399,17 +409,20 @@ class Admin_Pages extends Profile {
 	 * Echos generated dismissible notice.
 	 *
 	 * @since 2.7.0
-	 * @TODO deprecate--use the more reliable and secure persistent notices registry instead.
+	 * @since 4.1.2 Added the $inline parameter.
+	 * @TODO deprecate -- Use the more reliable and secure persistent notices registry instead...
+	 *                    Then again, this allows for AJAX-generated notices.
 	 * @see register_dismissible_persistent_notice()
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $type    The notice type : 'updated', 'error', 'warning'. Expected to be escaped.
+	 * @param string $type    The notice type : 'updated', 'error', 'warning', 'info'. Expected to be escaped.
 	 * @param bool   $icon    Whether to add an accessibility icon.
 	 * @param bool   $escape  Whether to escape the whole output.
+	 * @param bool   $inline Whether WordPress should be allowed to move it.
 	 */
-	public function do_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true ) {
+	public function do_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true, $inline = false ) {
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- use $escape
-		echo $this->generate_dismissible_notice( $message, $type, $icon, $escape );
+		echo $this->generate_dismissible_notice( $message, $type, $icon, $escape, $inline );
 	}
 
 	/**
@@ -1043,6 +1056,7 @@ class Admin_Pages extends Profile {
 	 * @since 2.8.0
 	 * @since 3.1.0 No longer prepares media l10n data.
 	 * @since 4.0.0 Now adds a media preview dispenser.
+	 * @since 4.1.2 Removed button title.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
@@ -1059,7 +1073,7 @@ class Admin_Pages extends Profile {
 				%s>%s</button>',
 			[
 				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-				\esc_attr_x( 'Select social image', 'Button hover', 'autodescription' ),
+				'', // redundant
 				$s_input_id,
 				$this->make_data_attributes( [
 					'inputId'   => $s_input_id,

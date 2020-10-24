@@ -11,7 +11,7 @@
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
+	-ms-user-select: none; /* Remove me 2022 */
 	user-select: none;
 	will-change: contents;
 }

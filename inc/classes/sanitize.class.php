@@ -2040,7 +2040,7 @@ class Sanitize extends Admin_Pages {
 
 		$cleaned_details = [];
 
-		// Failsafe. Convert associative detailts to a multidimensional sequential array.
+		// Failsafe. Convert associative details to a multidimensional sequential array.
 		if ( isset( $details_array['url'] ) )
 			$details_array = [ $details_array ];
 

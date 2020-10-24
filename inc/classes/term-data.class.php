@@ -298,6 +298,7 @@ class Term_Data extends Post_Data {
 
 		$data = (array) $_POST['autodescription-meta'];
 
+		// Trim, sanitize, and save the metadata.
 		$this->save_term_meta( $term->term_id, $tt_id, $taxonomy, $data );
 	}
 
@@ -332,6 +333,7 @@ class Term_Data extends Post_Data {
 			(array) $_POST['autodescription-quick']
 		);
 
+		// Trim, sanitize, and save the metadata.
 		$this->save_term_meta( $term->term_id, $tt_id, $taxonomy, $data );
 	}
 
