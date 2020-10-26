@@ -31,7 +31,6 @@ namespace The_SEO_Framework\Builders;
  * @since 4.0.0
  */
 final class Images {
-	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
 	 * The constructor. Or rather, the lack thereof.

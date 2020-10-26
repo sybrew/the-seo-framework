@@ -36,7 +36,6 @@ namespace The_SEO_Framework\Bridges;
  * @final Can't be extended.
  */
 final class PostSettings {
-	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * Registers the meta box for the Post edit screens.

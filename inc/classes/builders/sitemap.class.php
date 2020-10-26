@@ -34,7 +34,6 @@ namespace The_SEO_Framework\Builders;
  * @access public
  */
 abstract class Sitemap {
-	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
 	 * @var null|\The_SEO_Framework\Load

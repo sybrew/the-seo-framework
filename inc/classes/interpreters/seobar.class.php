@@ -35,7 +35,6 @@ namespace The_SEO_Framework\Interpreters;
  *         Note that you can't instance this class. Only static methods and properties are accessible.
  */
 final class SeoBar {
-	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	const STATE_UNDEFINED = 0b0000;
 	const STATE_UNKNOWN   = 0b0001;

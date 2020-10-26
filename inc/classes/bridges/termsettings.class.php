@@ -34,7 +34,6 @@ namespace The_SEO_Framework\Bridges;
  * @final Can't be extended.
  */
 final class TermSettings {
-	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * Prepares the setting fields.

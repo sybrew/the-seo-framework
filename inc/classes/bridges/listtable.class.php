@@ -41,7 +41,6 @@ namespace The_SEO_Framework\Bridges;
  * @abstract
  */
 abstract class ListTable {
-	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
 	 * @since 4.0.0

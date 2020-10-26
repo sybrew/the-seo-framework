@@ -45,7 +45,6 @@ $_load_sitemap_class = function() {
  * @final Can't be extended.
  */
 final class Sitemap {
-	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * @since 4.0.0

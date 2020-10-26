@@ -40,7 +40,6 @@ namespace The_SEO_Framework\Builders;
  * @see \The_SEO_Framework\Interpreters\SeoBar
  */
 abstract class SeoBar {
-	use \The_SEO_Framework\Traits\Enclose_Core_Final;
 
 	/**
 	 * @since 4.0.0

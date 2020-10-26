@@ -43,14 +43,6 @@ function _init_locale() {
 	);
 }
 
-/**
- * Loads base overloading trait-collection.
- *
- * For now, other traits must be loaded via this function.
- * However, we might deprecate this method in favor of an autoloader.
- */
-_load_trait( 'core/overload' );
-
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf', 5 );
 /**
  * Loads and memoizes `\The_SEO_Framework\Load` class.

@@ -1088,7 +1088,7 @@ class Admin_Pages extends Profile {
 			]
 		);
 
-		$content .= vsprintf(
+		$content .= sprintf(
 			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
 			$s_input_id
 		);
@@ -1134,7 +1134,7 @@ class Admin_Pages extends Profile {
 			]
 		);
 
-		$content .= vsprintf(
+		$content .= sprintf(
 			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
 			$s_input_id
 		);

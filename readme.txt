@@ -246,11 +246,14 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.2 =
 
+TODO image cropping regression: No longer works with script-debug disabled (on WP 5.6)...
+TODO retest with latest PHP 8 RC.
+
 **For everyone:**
 
 * **Added:**
-	* This plugin is now compatible with PHP-RCTODO<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
-		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly.
+	* This plugin is now compatible with PHP-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
+		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 * **Fixed:**
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
 * **Other:**
@@ -258,6 +261,13 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For developers:**
 
+* **File notes:**
+	* `inc\traits\core\overload.trait.php` is no longer available.
+* **Trait notes:**
+	* **Removed:**
+		* These traits contained magic methods with their visibility changed for added security. This is no longer legal in PHP 8.0. The added security was only beneficial for if we had made oversights in our programming.
+			* `The_SEO_Framework\Traits\Enclose_Stray_Private`
+			* `The_SEO_Framework\Traits\Enclose_Core_Final`
 * **Method notes:**
 	* For façade object `the_seo_framework()`:
 		* **Changed:**

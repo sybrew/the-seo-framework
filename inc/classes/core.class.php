@@ -33,7 +33,6 @@ namespace The_SEO_Framework;
  * @since 2.8.0
  */
 class Core {
-	use Traits\Enclose_Core_Final;
 
 	/**
 	 * Tells if this plugin is loaded.

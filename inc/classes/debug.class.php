@@ -36,7 +36,6 @@ namespace The_SEO_Framework;
  * @since 4.0.0 No longer implements an interface. It's implied.
  */
 final class Debug {
-	use Traits\Enclose_Stray_Private;
 
 	/**
 	 * @since 2.8.0

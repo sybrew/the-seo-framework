@@ -45,7 +45,6 @@ $_load_feed_class = function() {
  * @final Can't be extended.
  */
 final class Feed {
-	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * @since 4.1.0

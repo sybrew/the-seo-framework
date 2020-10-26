@@ -169,7 +169,7 @@ class User_Data extends Term_Data {
 	 * @param mixed  $default The default value to return when the data doesn't exist.
 	 * @return mixed The metadata value.
 	 */
-	public function get_user_option( $user_id = 0, $option, $default = null ) {
+	public function get_user_option( $user_id = 0, $option = '', $default = null ) {
 
 		if ( ! $option )
 			return $default;
@@ -210,7 +210,7 @@ class User_Data extends Term_Data {
 	 * @param mixed  $value   The escaped option value.
 	 * @return bool True on success. False on failure.
 	 */
-	public function update_user_option( $user_id = 0, $option, $value ) {
+	public function update_user_option( $user_id = 0, $option = '', $value = '' ) {
 
 		if ( ! $option )
 			return false;

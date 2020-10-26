@@ -36,7 +36,6 @@ namespace The_SEO_Framework\Bridges;
  * @final Can't be extended.
  */
 final class SeoSettings {
-	use \The_SEO_Framework\Traits\Enclose_Stray_Private;
 
 	/**
 	 * Registers meta boxes on the Site SEO Settings page.

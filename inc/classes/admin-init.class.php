@@ -62,12 +62,13 @@ class Admin_Init extends Init {
 	 * Adds post states for the post/page edit.php query.
 	 *
 	 * @since 4.0.0
+	 * @access private
 	 *
 	 * @param array    $states The current post states array
-	 * @param \WP_Post $post The Post Object.
+	 * @param \WP_Post $post   The Post Object.
 	 * @return array Adjusted $states
 	 */
-	public function _add_post_state( $states = [], $post ) {
+	public function _add_post_state( $states = [], $post = null ) {
 
 		$post_id = isset( $post->ID ) ? $post->ID : false;
 
