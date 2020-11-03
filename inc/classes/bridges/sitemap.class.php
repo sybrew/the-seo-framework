@@ -151,6 +151,8 @@ final class Sitemap {
 	 * Returns the expected sitemap endpoint for the given ID.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.2 No longer passes the path to the home_url function because
+	 *              Polylang is being astonishingly asinine.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @param string $id The base ID. Default 'base'.
@@ -167,15 +169,19 @@ final class Sitemap {
 		$scheme = static::$tsf->get_preferred_scheme();
 		$prefix = $this->get_sitemap_path_prefix();
 
+		$home_url = \trailingslashit( \home_url( '/', $scheme ) );
+
 		if ( $wp_rewrite->using_index_permalinks() ) {
-			$url = \home_url( "/index.php$prefix{$list[ $id ]['endpoint']}", $scheme );
+			$path = "/index.php$prefix{$list[ $id ]['endpoint']}";
 		} elseif ( $wp_rewrite->using_permalinks() ) {
-			$url = \home_url( "$prefix{$list[ $id ]['endpoint']}", $scheme );
+			$path = "$prefix{$list[ $id ]['endpoint']}";
 		} else {
-			$url = \home_url( "$prefix?tsf-sitemap=$id", $scheme );
+			$path = "$prefix?tsf-sitemap=$id";
 		}
 
-		return \esc_url_raw( $url );
+		$path = ltrim( $path, '/' );
+
+		return \esc_url_raw( "$home_url$path" );
 	}
 
 	/**
@@ -352,6 +358,25 @@ final class Sitemap {
 	}
 
 	/**
+	 * Returns the sitemap base path.
+	 * Useful when the path is non-standard, like notoriously in Polylang.
+	 *
+	 * @since 4.1.2
+	 *
+	 * @return string The path.
+	 */
+	private function get_sitemap_base_path() {
+		/**
+		 * @since 4.1.2
+		 * @param string $path The home path.
+		 */
+		return \apply_filters(
+			'the_seo_framework_sitemap_base_path',
+			rtrim( parse_url( \get_home_url(), PHP_URL_PATH ), '/' )
+		);
+	}
+
+	/**
 	 * Returns the sitemap path prefix.
 	 * Useful when the prefix path is non-standard, like notoriously in Polylang.
 	 *
@@ -434,19 +459,19 @@ final class Sitemap {
 	private function get_sitemap_base_path_info() {
 		global $wp_rewrite;
 
-		$home_path = rtrim( parse_url( \get_home_url(), PHP_URL_PATH ), '/' );
+		$base_path = $this->get_sitemap_base_path();
 		$prefix    = $this->get_sitemap_path_prefix();
 
 		$use_query_var = false;
 
 		if ( $wp_rewrite->using_index_permalinks() ) {
-			$path = "$home_path/index.php$prefix";
+			$path = "$base_path/index.php$prefix";
 		} elseif ( $wp_rewrite->using_permalinks() ) {
-			$path = "$home_path$prefix";
+			$path = "$base_path$prefix";
 		} else {
 			// Yes, we know. This is not really checking for standardized query-variables.
 			// It's straightforward and doesn't mess with the rest of the site, however.
-			$path = "$home_path$prefix?tsf-sitemap=";
+			$path = "$base_path$prefix?tsf-sitemap=";
 
 			$use_query_var = true;
 		}

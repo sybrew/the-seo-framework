@@ -104,6 +104,8 @@ switch ( $instance ) :
 					esc_html__( 'View the base sitemap.', 'autodescription' )
 				)
 			);
+			// TODO In settings generator (TSF 5.0): Overwite this section for Polylang/WPML and output each sitemap language link respectively.
+			// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
 		}
 
 		?>

@@ -247,15 +247,32 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 = 4.1.2 =
 
 TODO image cropping regression: No longer works with script-debug disabled (on WP 5.6)...
-TODO retest with latest PHP 8 RC.
+TODO default visibility quick-edit %s's aren't refilled correctly on terms...
+TODO retest with latest PHP 8.0.0 RC.
+TODO Monitor: Test if website is accessible at all via different user agents/ips?
+TODO add helpful message that we detected a broken theme to the title settings; link to Title Fix.
+
+TODO The canonical URL placeholder is not defined with Polylang active...?
+TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
+TODO Bug TSF found: The attachment canonical URL isn't recognized from the UI on the attachment-edit page. -> Nor is any?
+
+TODO: Alt, add Polylang's changes to sitemap KB article, and show examples there.
 
 **For everyone:**
 
 * **Added:**
-	* This plugin is now compatible with PHP-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
+	* This plugin is now compatible with PHP 8.0.0-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
 		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
+	* When Polylang is active, you can access any sitemap language via the `lang` query --- even when Polylang settings are configured otherwise. This helps mitigate any sporadic issues you might still encounter.
+		* For example (es for Spanish sitemap): `https://example.com/sitemap.xml?lang=es`.
+		* Another example (es for Spanish sitemap): `https://en-gb.example.com/sitemap.xml?lang=es`.
 * **Fixed:**
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
+	* **Polylang related:**
+		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
+		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
+		* Resolved an issue where Polylang didn't correctly find the sitemap's language when using cookies.
+		* Resolved an issue where non-translatable post types where excluded from the sitemap. They're now solely appended to the primary language's sitemap.
 * **Other:**
 	* This update is required for the upcoming [Extension Manager v2.5](https://tsf.fyi/em).
 
@@ -288,6 +305,12 @@ TODO retest with latest PHP 8 RC.
 	* For object `window.tsfMedia`:
 		* **Added:**
 			* `resetImageEditorActions()`, this allows you to dynamically insert interactive TSF image editors.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_sitemap_base_path`, used internally to override Polylang's cookie-based home path changing behavior.
+	* **Other:**
+		* The internal use of `the_seo_framework_sitemap_path_prefix` for Polylang compatibility now runs at priority 99, instead of 9.
+			* This eases with intercompatibility between plugins, which might set a custom prefix before we apply the Polylang compatibility layer.
 * **Fixed:**
 	* The template loader unsets templates prior to looping over them. This prevents plausible infinite loops where scripts need to be reenqueued.
 
