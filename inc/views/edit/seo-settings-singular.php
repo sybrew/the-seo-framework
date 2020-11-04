@@ -72,7 +72,10 @@ switch ( $instance ) :
 				</div>
 				<div class="tsf-flex-setting-input tsf-flex">
 					<div>
-						<?php echo $this->get_generated_seo_bar( $_generator_args ); ?>
+						<?php
+						// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
+						echo $this->get_generated_seo_bar( $_generator_args );
+						?>
 					</div>
 				</div>
 			</div>
@@ -334,6 +337,11 @@ switch ( $instance ) :
 									1  => $_s['force_off'],
 								],
 								'default' => $this->get_post_meta_item( $_s['option'] ),
+								'data'    => [
+									'defaultUnprotected' => $_s['_default'],
+									/* translators: %s = default option value */
+									'defaultI18n'        => __( 'Default (%s)', 'autodescription' ),
+								],
 							] );
 							// phpcs:enable, WordPress.Security.EscapeOutput
 						?>

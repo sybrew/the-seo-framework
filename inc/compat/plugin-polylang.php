@@ -101,8 +101,8 @@ function _polylang_set_sitemap_language() {
 		\PLL()->curlang = $new_lang;
 }
 
-\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_nontranslatables' );
-\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_nontranslatables' );
+\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
+\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 /**
  * Appends nontranslatable post types to the sitemap query arguments.
  * Only appends when the default sitemap language is displayed.
@@ -113,7 +113,7 @@ function _polylang_set_sitemap_language() {
  * @param array $args The query arguments.
  * @return array The augmented query arguments.
  */
-function _polylang_sitemap_append_nontranslatables( $args ) {
+function _polylang_sitemap_append_non_translatables( $args ) {
 
 	if ( ! \the_seo_framework()->can_i_use( [
 		'functions' => [

@@ -246,17 +246,16 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.2 =
 
+In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings.
+
 TODO image cropping regression: No longer works with script-debug disabled (on WP 5.6)...
-TODO default visibility quick-edit %s's aren't refilled correctly on terms...
 TODO retest with latest PHP 8.0.0 RC.
-TODO Monitor: Test if website is accessible at all via different user agents/ips?
 TODO add helpful message that we detected a broken theme to the title settings; link to Title Fix.
+TODO do we have time for this? Add full WP 5.5 sitemap support.
 
-TODO The canonical URL placeholder is not defined with Polylang active...?
 TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
-TODO Bug TSF found: The attachment canonical URL isn't recognized from the UI on the attachment-edit page. -> Nor is any?
 
-TODO: Alt, add Polylang's changes to sitemap KB article, and show examples there.
+TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g., alt versions, etc.).
 
 **For everyone:**
 
@@ -266,8 +265,33 @@ TODO: Alt, add Polylang's changes to sitemap KB article, and show examples there
 	* When Polylang is active, you can access any sitemap language via the `lang` query --- even when Polylang settings are configured otherwise. This helps mitigate any sporadic issues you might still encounter.
 		* For example (es for Spanish sitemap): `https://example.com/sitemap.xml?lang=es`.
 		* Another example (es for Spanish sitemap): `https://en-gb.example.com/sitemap.xml?lang=es`.
+* **Improved:**
+	* **UI cohesiveness:**
+		* **Note:** When you use filters, these changes might not be fully cohesive.
+		* **Note:** We did not apply these changes to the quick-edit screens, since the interface is much too intertwined with WordPress's, plausibly causing confusion.
+		* **Glossary:** `protected` means "password protected". WILL means definitely. MAY means depending on other factors interfering unlikely. MIGHT meands depending on other factors interfering likely.
+		* **Page(/post) edit screen:**
+			* When you change a `public` page to `private` or `protected`, you'll now notice before you save the page that:
+				* the description placeholder WILL now become hidden;
+				* the canonical URL placeholder WILL now become hidden;
+				* the default indexing state MIGHT change from 'index' to 'noindex'.
+			* When you change a `private` or `protected` page to `public`, you'll now notice before you save the page that:
+				* the canonical URL placeholder MAY now become visible;
+				* the default indexing state MAY change from 'noindex' to 'index'.
+				* **Note:** We cannot generate a description before you edit a `private` or `protected` post and set the post to `public`. We consider this an edge-case not worth looking into right now because we'll have to affect the underlying description API.
+				* **Note:** When using the Classic Editor, we cannot dynamically fetch the provisioned canonical URL if you change the slug.
+			* When you set a page's indexing state to 'noindex', you'll now notice before you save the page that:
+				* the canonical URL placeholder WILL now become hidden.
+			* When you set a page's indexing state to 'index', you'll now notice before you save the page that:
+				* the canonical URL placeholder MAY now become visible.
+		* **Term edit screen:**
+			* When you set a term's indexing state to 'noindex', you'll now notice before you save the term that:
+				* the canonical URL placeholder WILL now become hidden.
+			* When you set a term's indexing state to 'index', you'll now notice before you save the term that:
+				* the canonical URL placeholder MAY now become visible.
 * **Fixed:**
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
+	* The default indexing state is now correctly annotated when you edit a `private` or `protected` post.
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.

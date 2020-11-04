@@ -547,7 +547,7 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Fetch latest public post ID.
+	 * Fetch latest public post/page ID.
 	 * Memoizes the return value.
 	 *
 	 * @since 2.4.3

@@ -172,7 +172,7 @@ final class ListEdit extends ListTable {
 
 		$r_defaults = $tsf->robots_meta(
 			$query,
-			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
+			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
 		$meta = $tsf->get_post_meta( $post_id );
@@ -321,7 +321,7 @@ final class ListEdit extends ListTable {
 
 		$r_defaults = $tsf->robots_meta(
 			$query,
-			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
+			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
 		$meta = $tsf->get_term_meta( $term_id );
