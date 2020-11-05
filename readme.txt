@@ -302,6 +302,7 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
 	* Resolved an issue where the default robots indexing state selection wasn't correctly annotated when you edit a `private` or `protected` post.
 	* Resolved an issue where the quick-and bulk-edit options weren't correctly styled after disabling the SEO Bar in overview tables.
+	* Resolved an issue where filtered-in query strings were removed from paginated URLs. Props [hivecl](https://github.com/hivecl).
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
@@ -334,6 +335,16 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 				1. Added the `$inline` parameter.
 				1. Now enqueues scripts in the footer, so templates won't spam the header.
 			* `do_dismissible_notice()` added the `$inline` parameter.
+			* `remove_pagination_from_url()` now correctly reappends query when pagination isn't removed.
+			* `get_paged_urls()`:
+				1. Added back memoization.
+				1. Reduced needless canonical URL generation when it wouldn't be processed anyway.
+	* For object `\The_SEO_Framework\Bridges\Scripts`:
+		* **Changed:**
+			* `get_media_scripts()` removed redundant button titles.
+	* For object `\The_SEO_Framework\Bridges\Sitemap`:
+		* **Changed:**
+			* `get_expected_sitemap_endpoint_url()` no longer passes the path to the home_url() function because Polylang is being astonishingly asinine.
 	* For object `\The_SEO_Framework\Builders\Scripts`:
 		* **Added:**
 			* `footer_enqueue()`, this allows you to delay outputting scripts.
@@ -341,6 +352,9 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 	* For object `window.tsf`:
 		* **Added:**
 			* `triggerNoticeReset()`, this allows you to dynamically insert interactive TSF notices, even persistent.
+	* For object `window.tsfDescription`:
+		* **Added:**
+			* `updateStateOf` now listens to `part` `useDefaultDescription`.
 	* For object `window.tsfMedia`:
 		* **Added:**
 			* `resetImageEditorActions()`, this allows you to dynamically insert interactive TSF image editors.
