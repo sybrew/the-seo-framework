@@ -248,11 +248,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings.
 
-TODO image cropping regression: No longer works with script-debug disabled (on WP 5.6)...
 TODO retest with latest PHP 8.0.0 RC.
-TODO add helpful message that we detected a broken theme to the title settings; link to Title Fix.
 TODO do we have time for this? Add full WP 5.5 sitemap support.
-
 TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
 
 TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g., alt versions, etc.).
@@ -265,6 +262,8 @@ TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g
 	* When Polylang is active, you can access any sitemap language via the `lang` query --- even when Polylang settings are configured otherwise. This helps mitigate any sporadic issues you might still encounter.
 		* For example (es for Spanish sitemap): `https://example.com/sitemap.xml?lang=es`.
 		* Another example (es for Spanish sitemap): `https://en-gb.example.com/sitemap.xml?lang=es`.
+	* We now suggest a free extension in-line at the title settings when necessary theme support for titles is found missing. This message is only visible to users that can install plugins and should help lower our ever-increasing support burden.
+		* You can add `define( 'TSF_DISABLE_SUGGESTIONS', true )` to your `wp-config.php` file to prevent any suggestions showing up in your dashboard, even some that are seen as advertisement.
 * **Improved:**
 	* **UI cohesiveness:**
 		* **Note:** When you use filters, these changes might not be fully cohesive.
@@ -299,6 +298,11 @@ TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g
 		* Resolved an issue where non-translatable post types where excluded from the sitemap. They're now solely appended to the primary language's sitemap.
 * **Other:**
 	* This update is required for the upcoming [Extension Manager v2.5](https://tsf.fyi/em).
+
+**For translators:**
+
+* **Added:** New translation strings are available.
+* **Updated:** POT translation file.
 
 **For developers:**
 

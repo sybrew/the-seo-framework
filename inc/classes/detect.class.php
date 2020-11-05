@@ -731,6 +731,7 @@ class Detect extends Render {
 	 *
 	 * @since 2.2.5
 	 * @since 3.1.0 Removed caching
+	 * @TODO deprecate me.
 	 *
 	 * @param string|array required $features The features to check for.
 	 * @return bool theme support.
