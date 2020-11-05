@@ -176,6 +176,7 @@ abstract class Sitemap {
 	 *
 	 * @since 4.0.0
 	 * @see https://github.com/sybrew/tsf-term-sitemap for example.
+	 * @api Not used internally
 	 *
 	 * @param int    $term_id  The Term ID to check.
 	 * @param string $taxonomy The taxonomy.
@@ -187,7 +188,7 @@ abstract class Sitemap {
 		if ( null === $excluded ) {
 			/**
 			 * @since 4.0.0
-			 * @ignore NOT USED INTERNALLY!
+			 * @api Not used internally
 			 * @param array $excluded Sequential list of excluded IDs: [ int ...term_id ]
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_term_ids', [] );

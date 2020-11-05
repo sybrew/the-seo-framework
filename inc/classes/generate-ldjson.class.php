@@ -326,7 +326,7 @@ class Generate_Ldjson extends Generate_Image {
 	 *
 	 * @since 4.0.0
 	 * @uses $this->get_image_details()
-	 * @ignore Not used internally, only externally.
+	 * @api Not used internally, only externally.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                            Leave null to autodetermine query.

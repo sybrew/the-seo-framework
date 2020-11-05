@@ -1072,13 +1072,15 @@ class Render extends Admin_Init {
 	 * Renders Prev/Next Paged URL meta tags.
 	 *
 	 * @since 2.2.2
-	 * @uses $this->get_paged_url()
+	 * @uses $this->get_paged_urls()
 	 *
 	 * @return string The Prev/Next Paged URL meta tags.
 	 */
 	public function paged_urls() {
 
 		$id = $this->get_the_real_ID();
+
+		$paged_urls = $this->get_paged_urls();
 
 		/**
 		 * @since 2.6.0
@@ -1088,7 +1090,7 @@ class Render extends Admin_Init {
 		$next = (string) \apply_filters_ref_array(
 			'the_seo_framework_paged_url_output_next',
 			[
-				$this->get_paged_url( 'next' ),
+				$paged_urls['next'],
 				$id,
 			]
 		);
@@ -1101,7 +1103,7 @@ class Render extends Admin_Init {
 		$prev = (string) \apply_filters_ref_array(
 			'the_seo_framework_paged_url_output_prev',
 			[
-				$this->get_paged_url( 'prev' ),
+				$paged_urls['prev'],
 				$id,
 			]
 		);

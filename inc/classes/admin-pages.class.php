@@ -248,8 +248,7 @@ class Admin_Pages extends Profile {
 	 * @since 2.6.0 Refactored.
 	 * @since 3.1.0 Now prefixes the IDs.
 	 * @since 4.0.0 Deprecated third parameter, silently.
-	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php
-	 * @FIXME why is this static? deprecate me?
+	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php. Deprecate me?
 	 *
 	 * @param string $id      The nav-tab ID
 	 * @param array  $tabs    The tab content {
@@ -273,8 +272,7 @@ class Admin_Pages extends Profile {
 	 * @since 2.9.0
 	 * @since 3.0.0 Converted to view.
 	 * @since 4.0.0 Deprecated third parameter, silently.
-	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php
-	 * @FIXME why is this static? deprecate me?
+	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php. Deprecate me?
 	 *
 	 * @param string $id       The nav-tab ID
 	 * @param array  $tabs     The tab content {
@@ -288,7 +286,7 @@ class Admin_Pages extends Profile {
 	 * @param null   $_depr    Deprecated.
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public static function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
+	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
 		Bridges\PostSettings::_flex_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
@@ -1056,7 +1054,7 @@ class Admin_Pages extends Profile {
 	 * @since 2.8.0
 	 * @since 3.1.0 No longer prepares media l10n data.
 	 * @since 4.0.0 Now adds a media preview dispenser.
-	 * @since 4.1.2 Removed button title.
+	 * @since 4.1.2 No longer adds a redundant title to the selection button.
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.

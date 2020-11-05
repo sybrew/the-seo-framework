@@ -814,7 +814,7 @@ class Query extends Core {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
-	 * @ignore not used internally, polar opposite of is_single().
+	 * @api not used internally, polar opposite of is_single().
 	 * @uses $this->is_singular()
 	 *
 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.

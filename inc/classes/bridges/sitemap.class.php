@@ -151,7 +151,7 @@ final class Sitemap {
 	 * Returns the expected sitemap endpoint for the given ID.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.2 No longer passes the path to the home_url function because
+	 * @since 4.1.2 No longer passes the path to the home_url() function because
 	 *              Polylang is being astonishingly asinine.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
