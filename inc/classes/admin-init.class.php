@@ -92,6 +92,7 @@ class Admin_Init extends Init {
 	 * @since 3.1.0
 	 * @since 4.0.0 Now discerns autoloading between taxonomies and singular types.
 	 * @since 4.1.0 Now invokes autoloading when persistent scripts are enqueued (regardless of validity).
+	 * @since 4.1.2 Now autoenqueues on edit.php and edit-tags.php regardless of SEO Bar output (for quick/bulk-edit support).
 	 * @access private
 	 *
 	 * @param string|null $hook The current page hook.
@@ -122,16 +123,6 @@ class Admin_Init extends Init {
 					'edit-tags.php',
 					'term.php',
 				];
-
-				if ( ! $this->get_option( 'display_seo_bar_tables' ) ) {
-					$enqueue_hooks = array_diff(
-						$enqueue_hooks,
-						[
-							'edit.php',
-							'edit-tags.php',
-						]
-					);
-				}
 			}
 
 			if ( \in_array( $hook, $enqueue_hooks, true ) )

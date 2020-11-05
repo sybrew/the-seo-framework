@@ -246,13 +246,23 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.2 =
 
-In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings.
+In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings. We also... TODO
 
 TODO retest with latest PHP 8.0.0 RC.
 TODO do we have time for this? Add full WP 5.5 sitemap support.
 TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
 
 TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g., alt versions, etc.).
+
+TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as well add a new abstract method to `The_SEO_Framework\Sitemap`: `prerender_sitemap()`
+	* This method essentially builds and stores the sitemap. But ONLY if the sitemap's caching is enabled.
+		* Otherwise, it does nothing. Then, get_sitemap() (or eqv) will return a freshly generated sitemap.
+	* Closes https://github.com/sybrew/the-seo-framework/issues/539
+	* Augments https://github.com/sybrew/the-seo-framework/issues/540
+		* We might just as well address that instantly. Add option 'prerender sitemap' or let this be auto-determined -> post count vs query count and time spent generating?
+			* This is difficult since not every user has cron configured (correctly) on their site. This might lead to unexpected outcomes.
+				* However... when a sitemap takes too long to render, search engines might forgo crawling it (once or twice, or indefinitely?).
+		* Details: https://wordpress.org/support/topic/sitemap-and-memory-exhaustion/
 
 **For everyone:**
 
@@ -290,7 +300,8 @@ TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g
 				* the canonical URL placeholder MAY now become visible.
 * **Fixed:**
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
-	* The default indexing state is now correctly annotated when you edit a `private` or `protected` post.
+	* Resolved an issue where the default robots indexing state selection wasn't correctly annotated when you edit a `private` or `protected` post.
+	* Resolved an issue where the quick-and bulk-edit options weren't correctly styled after disabling the SEO Bar in overview tables.
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
@@ -302,7 +313,7 @@ TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g
 **For translators:**
 
 * **Added:** New translation strings are available.
-* **Updated:** POT translation file.
+* **Updated:** TODO POT translation file.
 
 **For developers:**
 
