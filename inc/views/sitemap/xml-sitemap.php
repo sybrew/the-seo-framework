@@ -12,6 +12,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_
 $this->the_seo_framework_debug and $timer_start = microtime( true );
 
 $sitemap_bridge = The_SEO_Framework\Bridges\Sitemap::get_instance();
+
 $sitemap_bridge->output_sitemap_header();
 
 if ( $this->the_seo_framework_debug ) {
@@ -21,41 +22,20 @@ if ( $this->the_seo_framework_debug ) {
 
 $sitemap_bridge->output_sitemap_urlset_open_tag();
 
-$sitemap_generated = false;
-$sitemap_content   = $this->get_option( 'cache_sitemap' ) ? $this->get_transient( $this->get_sitemap_transient_name() ) : false;
-
-// TODO convert this to an easily accessible method that stores and returns the value.
-if ( false === $sitemap_content ) {
-	$sitemap_generated = true;
-
-	// Transient doesn't exist yet.
-	$sitemap_base = new \The_SEO_Framework\Builders\Sitemap_Base;
-	$sitemap_base->prepare_generation();
-
-	$sitemap_content = $sitemap_base->build_sitemap();
-
-	$sitemap_base->shutdown_generation();
-	$sitemap_base = null; // destroy class.
-
-	/**
-	 * Transient expiration: 1 week.
-	 * Keep the sitemap for at most 1 week.
-	 */
-	$expiration = WEEK_IN_SECONDS;
-
-	if ( $this->get_option( 'cache_sitemap' ) )
-		$this->set_transient( $this->get_sitemap_transient_name(), $sitemap_content, $expiration );
-}
+$sitemap_base = new The_SEO_Framework\Builders\Sitemap_Base;
 // phpcs:ignore, WordPress.Security.EscapeOutput
-echo $sitemap_content;
+echo $sitemap_base->generate_sitemap( $sitemap_id );
 
 $sitemap_bridge->output_sitemap_urlset_close_tag();
 
-if ( $sitemap_generated ) {
+if ( $sitemap_base->base_is_regenerated ) {
 	echo "\n" . '<!-- ' . esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
 } else {
 	echo "\n" . '<!-- ' . esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 }
+
+// Destroy class.
+$sitemap_base = null;
 
 if ( $this->the_seo_framework_debug ) {
 	echo "\n" . '<!-- Site estimated current usage: ' . number_format( memory_get_usage() / 1024 / 1024, 3 ) . ' MB -->';

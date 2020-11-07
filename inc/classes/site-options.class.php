@@ -254,9 +254,10 @@ class Site_Options extends Sanitize {
 
 				'sitemaps_robots' => 1, // Add sitemap location to robots.txt
 
-				'ping_use_cron' => 1, // Ping using CRON.
-				'ping_google'   => 1, // Ping Google
-				'ping_bing'     => 1, // Ping Bing
+				'ping_use_cron'           => 1, // Ping using cron
+				'ping_google'             => 1, // Ping Google
+				'ping_bing'               => 1, // Ping Bing
+				'ping_use_cron_prerender' => 0, // Sitemap cron-ping prerender
 
 				'sitemap_styles'       => 1,        // Whether to style the sitemap
 				'sitemap_logo'         => 1,        // Whether to add logo to sitemap
@@ -285,6 +286,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.9.0 Removed all non-warned settings.
 	 * @since 3.1.0 Now applies the "the_seo_framework_warned_site_options" filter.
 	 * @since 4.1.0 Added robots' post type setting warnings.
+	 * @since 4.1.2 Added `ping_use_cron_prerender`.
 	 *
 	 * @return array $options.
 	 */
@@ -304,11 +306,11 @@ class Site_Options extends Sanitize {
 		return (array) \apply_filters(
 			'the_seo_framework_warned_site_options',
 			[
-				'title_rem_additions' => 1, // Title remove additions.
-				'site_noindex'        => 1, // Site Page robots noindex
-				'site_nofollow'       => 1, // Site Page robots nofollow
-				'homepage_noindex'    => 1, // Homepage robots noindex
-				'homepage_nofollow'   => 1, // Homepage robots noarchive
+				'title_rem_additions'     => 1, // Title remove additions.
+				'site_noindex'            => 1, // Site Page robots noindex.
+				'site_nofollow'           => 1, // Site Page robots nofollow.
+				'homepage_noindex'        => 1, // Homepage robots noindex.
+				'homepage_nofollow'       => 1, // Homepage robots noarchive.
 				$this->get_robots_post_type_option_id( 'noindex' ) => [
 					'post' => 1,
 					'page' => 1,
@@ -317,6 +319,7 @@ class Site_Options extends Sanitize {
 					'post' => 1,
 					'page' => 1,
 				],
+				'ping_use_cron_prerender' => 1, // Sitemap cron-ping prerender.
 			]
 		);
 	}

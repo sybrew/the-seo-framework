@@ -101,14 +101,22 @@ class Init extends Query {
 	 * Initializes cron actions.
 	 *
 	 * @since 2.8.0
+	 * @since 4.1.2 1. Added hook for sitemap prerender.
+	 *              2. Added hook for ping retry.
 	 */
 	public function init_cron_actions() {
 		// Init post update/delete caching actions which may occur during cronjobs.
 		$this->init_post_cache_actions();
 
 		// Ping searchengines.
-		if ( $this->get_option( 'ping_use_cron' ) )
+		if ( $this->get_option( 'ping_use_cron' ) ) {
+			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) ) {
+				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap_Base, 'prerender_sitemap' ] );
+			}
+
 			\add_action( 'tsf_sitemap_cron_hook', Bridges\Ping::class . '::ping_search_engines' );
+			\add_action( 'tsf_sitemap_cron_hook_retry', Bridges\Ping::class . '::retry_ping_search_engines' );
+		}
 	}
 
 	/**

@@ -1,5 +1,6 @@
 === The SEO Framework ===
 Contributors: Cybr
+Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
 Requires at least: 5.1.0
 Tested up to: 5.5
@@ -263,6 +264,13 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 			* This is difficult since not every user has cron configured (correctly) on their site. This might lead to unexpected outcomes.
 				* However... when a sitemap takes too long to render, search engines might forgo crawling it (once or twice, or indefinitely?).
 		* Details: https://wordpress.org/support/topic/sitemap-and-memory-exhaustion/
+TODO resolve the FIXME in generate-ldjson...
+TODO test robots-generator's code-cleanup for mistakes!
+TODO remove object caching? -- Let this only work for database transaction, native to WordPress?
+	* How many people will dislike this change? The generators are greatly optimized. Removal should decrease our support load as we can then exclude a common issue.
+TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 750 pixels
+	- (99 char link length, test 'WWWWWW' links!)
+	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
 
 **For everyone:**
 
@@ -274,6 +282,18 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 		* Another example (es for Spanish sitemap): `https://en-gb.example.com/sitemap.xml?lang=es`.
 	* We now suggest a free extension in-line at the title settings when necessary theme support for titles is found missing. This message is only visible to users that can install plugins and should help lower our ever-increasing support burden.
 		* You can add `define( 'TSF_DISABLE_SUGGESTIONS', true )` to your `wp-config.php` file to prevent any suggestions showing up in your dashboard, even some that are seen as advertisement.
+	* You can now enable sitemap prerendering. This helps mitigate timeout issues when the sitemap takes longer than a minute to render.
+		* Prerendering only works when:
+			1. you use The SEO Framework's optimized sitemap;
+			1. you enable the sitemap's transient caching via the SEO Settings' "General Settings > Performance" options;
+			1. and when pinging via cron is enabled.
+		* When you inspect the source of the sitemap, you can now see whether it's prerendered via cron or generated via a manual request on line 5:
+			* `<-- Sitemap is generated/prerendered on ... -->`.
+	* When the sitemap's caching is enabled, and when no sitemap is generated yet whilst being called multiple times in a row (by anybody), subsequent requests are now blocked with a 503 error until (whichever comes first):
+		* the sitemap is fully generated;
+		* or after PHP's configuration `max_execution_time` seconds (or 3 minutes, whichever is sooner).
+		* **Note:** This feature prevents overloading the server when the sitemap is generated.
+		* **Note:** When using a translation plugin, this feature only prerenders one (most likely the main language's) sitemap.
 * **Improved:**
 	* **UI cohesiveness:**
 		* **Note:** When you use filters, these changes might not be fully cohesive.
@@ -309,6 +329,7 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 		* Resolved an issue where Polylang didn't correctly find the sitemap's language when using cookies.
 		* Resolved an issue where non-translatable post types where excluded from the sitemap. They're now solely appended to the primary language's sitemap.
 * **Other:**
+	* TODO Added a "learn more" link to our KB at 'The sitemap does not contribute to ranking; it only speeds up indexing. Therefore, it is perfectly fine not having every indexable page in the sitemap.'.
 	* This update is required for the upcoming [Extension Manager v2.5](https://tsf.fyi/em).
 
 **For translators:**
@@ -318,6 +339,24 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 
 **For developers:**
 
+* **Database notes:**
+	* This plugin now uses database version `4120`.
+* **Option notes:**
+	* For index `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+		* `ping_use_cron_prerender`, integer `1` or `0`.
+* **Action notes:**
+	* **Added:**
+		* `tsf_sitemap_cron_hook_before`, runs just before pinging.
+		* `tsf_sitemap_cron_hook_after`, runs right after pinging.
+		* `tsf_sitemap_cron_hook_retry`, scheduled when first ping fails due to sitemap lock.
+	* **Changed:**
+		* `the_seo_framework_sitemap_transient_cleared`: Added index `ping_use_cron_prerender` to the first parameter.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_sitemap_base_path`, used internally to override Polylang's cookie-based home path changing behavior.
+	* **Other:**
+		* The internal use of `the_seo_framework_sitemap_path_prefix` for Polylang compatibility now runs at priority 99, instead of 9.
+			* This eases with intercompatibility between plugins, which might set a custom prefix before we apply the Polylang compatibility layer.
 * **File notes:**
 	* `inc\traits\core\overload.trait.php` is no longer available.
 * **Trait notes:**
@@ -325,7 +364,7 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 		* These traits contained magic methods with their visibility changed for added security. This is no longer legal in PHP 8.0. The added security was only beneficial for if we had made oversights in our programming.
 			* `The_SEO_Framework\Traits\Enclose_Stray_Private`
 			* `The_SEO_Framework\Traits\Enclose_Core_Final`
-* **Method notes:**
+* **Object notes:**
 	* For façade object `the_seo_framework()`:
 		* **Changed:**
 			* `get_social_image_uploader_form()` no longer adds a redundant title to the selection button.
@@ -339,15 +378,44 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 			* `get_paged_urls()`:
 				1. Added back memoization.
 				1. Reduced needless canonical URL generation when it wouldn't be processed anyway.
+			* `generate_cache_key_by_type()` now accepts `$type` `sitemap_lock`.
+			* `init_cron_actions()`:
+				1. Added hook for sitemap prerender.
+				1. Added hook for ping retry.
+	* For object `\The_SEO_Framework\Bridges\Ping`:
+		* **Added:**
+			* `engage_pinging_retry_cron()`, engages another pinging cron hook.
+			* `retry_ping_search_engines()`, hooked into the retry cron hook, retries pinging.
+		* **Changed:**
+			* `engage_pinging_cron()` now registers before and after cron hooks. They should run subsequential when successful.
 	* For object `\The_SEO_Framework\Bridges\Scripts`:
 		* **Changed:**
 			* `get_media_scripts()` removed redundant button titles.
 	* For object `\The_SEO_Framework\Bridges\Sitemap`:
+		* **Added:**
+			* `sitemap_cache_enabled()`, tells whether sitemap caching is enabled by the user.
+			* `output_locked_header()`, prevents rendering of the sitemap whilst it's still generating. Tells the visitor the maximum timeout.
+				* The sitemap can unlock before this timeout expires.
+			* `lock_sitemap()`, locks a sitemap for regeneration.
+			* `unlock_sitemap()`, unlocks a sitemap for regeneration.
+			* `is_sitemap_locked()`, tells whether a sitemap is locked.
 		* **Changed:**
 			* `get_expected_sitemap_endpoint_url()` no longer passes the path to the home_url() function because Polylang is being astonishingly asinine.
+			* `output_base_sitemap()` is now static.
+			* `output_stylesheet()` is now static.
 	* For object `\The_SEO_Framework\Builders\Scripts`:
 		* **Added:**
 			* `footer_enqueue()`, this allows you to delay outputting scripts.
+	* For object `\The_SEO_Framework\Builders\Sitemap`:
+		* **Added:**
+			* `generate_sitemap()`, a semi-abstract method that allows you to generate the sitemap.
+	* For object `\The_SEO_Framework\Builders\Sitemap_Base`:
+		* **Added:**
+			* `$base_is_regenerated`, boolean for whether the sitemap is done regenerating.
+			* `$base_is_prerendering`, boolean for whether the sitemap is prerendering in the current request.
+			* `base_get_sitemap_store_key()`, returns the default sitemap transient name used since aeons.
+			* `prerender_sitemap()`, generates and stores the sitemap in transient cache.
+			* `generate_sitemap()`, an abstracted method to generate and store the sitemap in transient cache.
 * **JavaScript notes:**
 	* For object `window.tsf`:
 		* **Added:**
@@ -358,23 +426,8 @@ TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as 
 	* For object `window.tsfMedia`:
 		* **Added:**
 			* `resetImageEditorActions()`, this allows you to dynamically insert interactive TSF image editors.
-* **Filter notes:**
-	* **Added:**
-		* `the_seo_framework_sitemap_base_path`, used internally to override Polylang's cookie-based home path changing behavior.
-	* **Other:**
-		* The internal use of `the_seo_framework_sitemap_path_prefix` for Polylang compatibility now runs at priority 99, instead of 9.
-			* This eases with intercompatibility between plugins, which might set a custom prefix before we apply the Polylang compatibility layer.
 * **Fixed:**
 	* The template loader unsets templates prior to looping over them. This prevents plausible infinite loops where scripts need to be reenqueued.
-
-TODO resolve the FIXMEs
-TODO test robots-generator's code-cleanup for mistakes!
-TODO PHP 8.0 support.
-TODO remove object caching? -- Let this only work for database transaction, native to WordPress?
-	* How many people will dislike this change? The generators are greatly optimized. Removal should decrease our support load as we can then exclude a common issue.
-TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 750 pixels
-	- (99 char link length, test 'WWWWWW' links!)
-	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
 
 = 4.1.1 =
 

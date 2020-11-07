@@ -35,6 +35,105 @@ namespace The_SEO_Framework\Builders;
 class Sitemap_Base extends Sitemap {
 
 	/**
+	 * @since 4.1.2
+	 * @var bool
+	 */
+	public $base_is_regenerated = false;
+
+	/**
+	 * @since 4.1.2
+	 * @var bool
+	 */
+	public $base_is_prerendering = false;
+
+	/**
+	 * Returns the base sitemap's storage transient name.
+	 *
+	 * @since 4.1.2
+	 *
+	 * @return string.
+	 */
+	public function base_get_sitemap_store_key() {
+		return static::$tsf->get_sitemap_transient_name();
+	}
+
+	/**
+	 * Generates the sitemap, and stores the generated content in the database.
+	 *
+	 * Note that this will work sporadically with translation plugins; however,
+	 * it will not conflict, since a unique caching key is generated for each language.
+	 * TODO consider expanding this feature for multilingual sites?
+	 *
+	 * @since 4.1.2
+	 */
+	public function prerender_sitemap() {
+
+		$bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+
+		if ( ! $bridge->sitemap_cache_enabled() ) return;
+
+		// Don't prerender if the sitemap is already generated.
+		if ( false !== static::$tsf->get_transient( $this->base_get_sitemap_store_key() ) ) return;
+
+		set_time_limit( (int) max( ini_get( 'max_execution_time' ), 3 * MINUTE_IN_SECONDS ) );
+
+		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
+		if ( ! $bridge->lock_sitemap( 'base' ) ) return;
+
+		$this->prepare_generation();
+		$this->base_is_prerendering = true;
+
+		static::$tsf->set_transient(
+			$this->base_get_sitemap_store_key(),
+			$this->build_sitemap(),
+			WEEK_IN_SECONDS
+		);
+
+		$bridge->unlock_sitemap( 'base' );
+
+		$this->shutdown_generation();
+		$this->base_is_regenerated = true;
+	}
+
+	/**
+	 * Returns the generated sitemap. Also stores it in the database when caching is enabled.
+	 *
+	 * @since 4.1.2
+	 * @abstract
+	 *
+	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwriten via the API.
+	 * @return string The sitemap content.
+	 */
+	public function generate_sitemap( $sitemap_id = 'base' ) {
+
+		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+		$_caching_enabled = $bridge->sitemap_cache_enabled();
+
+		$sitemap_content = $_caching_enabled ? static::$tsf->get_transient( $this->base_get_sitemap_store_key() ) : false;
+
+		if ( false === $sitemap_content ) {
+			$this->prepare_generation();
+			$_caching_enabled && $bridge->lock_sitemap( $sitemap_id );
+
+			$sitemap_content = $this->build_sitemap();
+
+			$this->shutdown_generation();
+			$this->base_is_regenerated = true;
+
+			if ( $_caching_enabled ) {
+				static::$tsf->set_transient(
+					$this->base_get_sitemap_store_key(),
+					$sitemap_content,
+					WEEK_IN_SECONDS
+				);
+				$bridge->unlock_sitemap( $sitemap_id );
+			}
+		}
+
+		return $sitemap_content;
+	}
+
+	/**
 	 * Generate sitemap.xml content.
 	 *
 	 * @since 2.2.9
@@ -69,8 +168,13 @@ class Sitemap_Base extends Sitemap {
 			$content .= sprintf(
 				'<!-- %s -->',
 				sprintf(
-					/* translators: %s = timestamp */
-					\esc_html__( 'Sitemap is generated on %s', 'autodescription' ),
+					(
+						$this->base_is_prerendering
+							/* translators: %s = timestamp */
+							? \esc_html__( 'Sitemap is prerendered on %s', 'autodescription' )
+							/* translators: %s = timestamp */
+							: \esc_html__( 'Sitemap is generated on %s', 'autodescription' )
+					),
 					\current_time( 'Y-m-d H:i:s \G\M\T' )
 				)
 			) . "\n";

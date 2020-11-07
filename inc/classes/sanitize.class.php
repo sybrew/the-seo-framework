@@ -330,6 +330,7 @@ class Sanitize extends Admin_Pages {
 				'ping_use_cron',
 				'ping_google',
 				'ping_bing',
+				'ping_use_cron_prerender',
 
 				'excerpt_the_feed',
 				'source_the_feed',

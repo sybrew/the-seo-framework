@@ -45,11 +45,52 @@ final class Ping {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now returns whether the cron engagement was successful.
+	 * @since 4.1.2 Now registers before and after cron hooks. They should run subsequential when successful.
+	 * @see static::engage_pinging_retry_cron()
 	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public static function engage_pinging_cron() {
-		return \wp_schedule_single_event( time() + 30, 'tsf_sitemap_cron_hook' );
+
+		$when = time() + 28;
+
+		// Because WordPress sorts the actions, we can't be sure if they're scrambled. Therefore: skew timing.
+		// Note that when WP_CRON_LOCK_TIMEOUT expires, the subsequent actions will run, regardless if previous was successful.
+		return \wp_schedule_single_event( ++$when, 'tsf_sitemap_cron_hook_before' )
+			&& \wp_schedule_single_event( ++$when, 'tsf_sitemap_cron_hook' )
+			&& \wp_schedule_single_event( ++$when, 'tsf_sitemap_cron_hook_after' );
+	}
+
+	/**
+	 * Retries a cronjob-based ping, via another hook.
+	 *
+	 * @since 4.1.2
+	 * @uses \WP_CRON_LOCK_TIMEOUT, default 60 (seconds).
+	 *
+	 * @param array $args Optional. Array containing each separate argument to pass to the hook's callback function.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function engage_pinging_retry_cron( $args = [] ) {
+
+		$when = (int) ( time() + min( \WP_CRON_LOCK_TIMEOUT, 60 ) + 1 );
+
+		return \wp_schedule_single_event( $when, 'tsf_sitemap_cron_hook_retry', [ $args ] );
+	}
+
+	/**
+	 * Retries pinging the search engines.
+	 *
+	 * @since 4.1.2
+	 * @see static::engage_pinging_retry_cron()
+	 * @uses static::ping_search_engines()
+	 *
+	 * @param array $args Array from ping hook.
+	 */
+	public static function retry_ping_search_engines( $args = [] ) {
+
+		if ( empty( $args['id'] ) || 'base' !== $args['id'] ) return;
+
+		static::ping_search_engines();
 	}
 
 	/**
@@ -73,9 +114,14 @@ final class Ping {
 
 		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
 
+		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
+		if ( \The_SEO_Framework\Bridges\Sitemap::get_instance()->is_sitemap_locked() ) {
+			static::engage_pinging_retry_cron( [ 'id' => 'base' ] );
+			return;
+		}
 		$transient = $tsf->generate_cache_key( 0, '', 'ping' );
 
-		// NOTE: Use legacy get_transient to bypass TSF's transient filters and prevent ping spam.
+		// Uses legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
 			/**
 			 * @since 4.1.1
@@ -101,7 +147,7 @@ final class Ping {
 			 */
 			$expiration = (int) \apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
 
-			// @NOTE: Using legacy set_transient to bypass TSF's transient filters and prevent ping spam.
+			// Uses legacy set_transient to bypass TSF's transient filters and prevent ping spam.
 			\set_transient( $transient, 1, $expiration );
 		}
 	}

@@ -82,6 +82,27 @@ abstract class Sitemap {
 	}
 
 	/**
+	 * Generates and returns the sitemap content.
+	 * We recommend you overwriting this method to include caching.
+	 *
+	 * @since 4.1.2
+	 * @abstract
+	 * TODO consider adding ...$args?
+	 *
+	 * @return string The sitemap content.
+	 */
+	public function generate_sitemap() {
+
+		$this->prepare_generation();
+
+		$sitemap = $this->build_sitemap();
+
+		$this->shutdown_generation();
+
+		return $sitemap;
+	}
+
+	/**
 	 * Returns the sitemap content.
 	 *
 	 * @since 4.0.0

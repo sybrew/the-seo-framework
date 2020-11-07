@@ -337,6 +337,8 @@ class Cache extends Site_Options {
 	 * or transients have been disabled through a constant, then the transient
 	 * will be false.
 	 *
+	 * N.B. not all transient settings make use of this function, bypassing the constant check.
+	 *
 	 * @since 2.6.0
 	 * @uses $this->the_seo_framework_use_transients
 	 *
@@ -616,6 +618,7 @@ class Cache extends Site_Options {
 	 *
 	 * @since 2.9.1
 	 * @since 2.9.2 Now returns false when an incorrect $type is supplied.
+	 * @since 4.1.2 Now accepts $type 'sitemap_lock'.
 	 * @see $this->generate_cache_key().
 	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
 	 *
@@ -642,6 +645,8 @@ class Cache extends Site_Options {
 				return $this->add_cache_key_suffix( $this->generate_taxonomical_cache_key( $page_id, $taxonomy ) );
 			case 'ping':
 				return $this->add_cache_key_suffix( 'tsf_throttle_ping' );
+			case 'sitemap_lock':
+				return $this->add_cache_key_suffix( 'tsf_sitemap_lock' );
 			default:
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
 				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
@@ -829,16 +834,19 @@ class Cache extends Site_Options {
 		$transient = $this->get_sitemap_transient_name();
 		$transient and \delete_transient( $transient );
 
-		$ping_use_cron = $this->get_option( 'ping_use_cron' );
+		$ping_use_cron           = $this->get_option( 'ping_use_cron' );
+		$ping_use_cron_prerender = $this->get_option( 'ping_use_cron_prerender' );
 
 		/**
 		 * @since 4.1.1
+		 * @since 4.1.2 Added index `ping_use_cron_prerender` to the first parameter.
 		 * @param array $params Any useful environment parameters.
 		 */
 		\do_action(
 			'the_seo_framework_sitemap_transient_cleared',
 			[
-				'ping_use_cron' => $ping_use_cron,
+				'ping_use_cron'           => $ping_use_cron,
+				'ping_use_cron_prerender' => $ping_use_cron_prerender,
 			]
 		);
 

@@ -84,6 +84,7 @@ function _previous_db_version() {
  * Each called function will upgrade the version by its iteration.
  *
  * @TODO run this upgrader in a separate thread (e.g. via cron)? And store all notices as persistent?
+ * TODO Add a notice that the upgrader is still running (and clear it once the upgrade is completed--preferably before the user can see it!)
  *
  * @since 2.7.0
  * @since 2.9.4 No longer tests WP version. This file won't be loaded anyway if rendered incompatible.
@@ -215,7 +216,7 @@ function _upgrade( $previous_version ) {
 	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	//? We must manually delete settings that are no longer used; we merge them otherwise.
 	//? When a user upgrades beyond this scope, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -811,5 +812,18 @@ function _do_upgrade_4110() {
 
 		$tsf->update_option( 'oembed_use_og_title', 0 );
 		$tsf->update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
+	}
+}
+
+/**
+ * Registers the `ping_use_cron_prerender` option, boolean.
+ *
+ * @since 4.1.2
+ */
+function _do_upgrade_4120() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
+		$tsf = \the_seo_framework();
+
+		$tsf->update_option( 'ping_use_cron_prerender', 0 );
 	}
 }

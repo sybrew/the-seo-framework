@@ -261,17 +261,30 @@ switch ( $instance ) :
 		$this->description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
 
 		$this->wrap_fields(
-			$this->make_checkbox(
-				'ping_use_cron',
-				esc_html__( 'Use cron for pinging?', 'autodescription' )
-					. ' ' . $this->make_info(
-						__( 'This speeds up post and term saving processes, by offsetting pinging to a later time.', 'autodescription' ),
-						'',
-						false
-					),
-				'',
-				false
-			),
+			[
+				$this->make_checkbox(
+					'ping_use_cron',
+					esc_html__( 'Use cron for pinging?', 'autodescription' )
+						. ' ' . $this->make_info(
+							__( 'This speeds up post and term saving processes, by offsetting pinging to a later time.', 'autodescription' ),
+							'',
+							false
+						),
+					'',
+					false
+				),
+				$this->make_checkbox(
+					'ping_use_cron_prerender',
+					esc_html__( 'Prerender sitemap before pinging via cron?', 'autodescription' )
+						. ' ' . $this->make_info(
+							__( 'This mitigates timeouts some search engines may experience when waiting for the sitemap to render. Transient caching for the sitemap must be enabled for this to work.', 'autodescription' ),
+							'',
+							false
+						),
+					__( 'Only enable prerendering when generating the sitemap takes over 60 seconds.', 'autodescription' ),
+					false
+				),
+			],
 			true
 		);
 
