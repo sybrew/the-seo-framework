@@ -323,6 +323,7 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 	* Resolved an issue where the default robots indexing state selection wasn't correctly annotated when you edit a `private` or `protected` post.
 	* Resolved an issue where the quick-and bulk-edit options weren't correctly styled after disabling the SEO Bar in overview tables.
 	* Resolved an issue where filtered-in query strings were removed from paginated URLs. Props [hivecl](https://github.com/hivecl).
+	* Resolved an issue where emojis were converted in the reference title to image-elements by Twemoji via wpEmoji's observer on tags and categories. Props [bjarne](https://profiles.wordpress.org/oldrup/).
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
@@ -382,6 +383,8 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 			* `init_cron_actions()`:
 				1. Added hook for sitemap prerender.
 				1. Added hook for ping retry.
+			* `output_js_title_elements()`, `output_js_title_data()`, `output_js_description_elements()`, and `output_js_description_data()`:
+				* Now prevents `wp-emoji.js` parsing the references and data.
 	* For object `\The_SEO_Framework\Bridges\Ping`:
 		* **Added:**
 			* `engage_pinging_retry_cron()`, engages another pinging cron hook.

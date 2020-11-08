@@ -281,7 +281,7 @@ switch ( $instance ) :
 							'',
 							false
 						),
-					__( 'Only enable prerendering when generating the sitemap takes over 60 seconds.', 'autodescription' ),
+					esc_html__( 'Only enable prerendering when generating the sitemap takes over 60 seconds.', 'autodescription' ),
 					false
 				),
 			],

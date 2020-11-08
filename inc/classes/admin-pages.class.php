@@ -1147,17 +1147,19 @@ class Admin_Pages extends Profile {
 	 *
 	 * @since 3.0.4
 	 * @since 4.1.0 Now only outputs the legacy reference and noadditions reference.
+	 * @since 4.1.2 Now prevents wp-emoji.js parsing the reference.
 	 * @ignore
 	 * @todo deprecate
 	 */
 	public function output_js_title_elements() {
-		echo '<span data-ignore-me=legacy id=tsf-title-reference class="tsf-title-reference hidden" data-do-not-use=legacy></span>';
+		echo '<span data-ignore-me=legacy id=tsf-title-reference class="tsf-title-reference wp-exclude-emoji hidden" data-do-not-use=legacy></span>';
 	}
 
 	/**
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
 	 *
 	 * @param string $id The input ID.
 	 * @param array  $data The input data.
@@ -1167,12 +1169,12 @@ class Admin_Pages extends Profile {
 			implode(
 				'',
 				[
-					'<span id="tsf-title-reference_%1$s" class="tsf-title-reference hidden" data-for="%1$s"></span>',
-					'<span id="tsf-title-noadditions-reference_%1$s" class="tsf-title-noadditions-reference hidden" data-for="%1$s"></span>',
-					'<span id="tsf-title-offset_%1$s" class="tsf-title-offset hide-if-no-tsf-js" data-for="%1$s"></span>',
-					'<span id="tsf-title-placeholder-additions_%1$s" class="tsf-title-placeholder-additions hide-if-no-tsf-js" data-for="%1$s"></span>',
-					'<span id="tsf-title-placeholder-prefix_%1$s" class="tsf-title-placeholder-prefix hide-if-no-tsf-js" data-for="%1$s"></span>',
-					'<span id="tsf-title-data_%1$s" class=hidden data-for="%1$s" %2$s></span>',
+					'<span id="tsf-title-reference_%1$s" class="tsf-title-reference wp-exclude-emoji hidden" data-for="%1$s"></span>',
+					'<span id="tsf-title-noadditions-reference_%1$s" class="tsf-title-noadditions-reference wp-exclude-emoji hidden" data-for="%1$s"></span>',
+					'<span id="tsf-title-offset_%1$s" class="tsf-title-offset wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-placeholder-additions_%1$s" class="tsf-title-placeholder-additions wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-placeholder-prefix_%1$s" class="tsf-title-placeholder-prefix wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s></span>',
 				]
 			),
 			\esc_attr( $id ),
@@ -1187,17 +1189,19 @@ class Admin_Pages extends Profile {
 	 * Do not use. Legacy item output for backward compatibility.
 	 *
 	 * @since 3.0.4
+	 * @since 4.1.2 Now prevents wp-emoji.js parsing the reference.
 	 * @ignore
 	 * @todo deprecate
 	 */
 	public function output_js_description_elements() {
-		echo '<span data-ignore-me=legacy id=tsf-description-reference class="tsf-description-reference hidden" data-do-not-use=legacy></span>';
+		echo '<span data-ignore-me=legacy id=tsf-description-reference class="tsf-description-reference wp-exclude-emoji hidden" data-do-not-use=legacy></span>';
 	}
 
 	/**
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
 	 *
 	 * @param string $id   The description input ID.
 	 * @param array  $data The input data.
@@ -1207,8 +1211,8 @@ class Admin_Pages extends Profile {
 			implode(
 				'',
 				[
-					'<span id="tsf-description-reference_%1$s" class=hidden data-for="%1$s" ></span>',
-					'<span id="tsf-description-data_%1$s" class=hidden data-for="%1$s" %2$s ></span>',
+					'<span id="tsf-description-reference_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" ></span>',
+					'<span id="tsf-description-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s ></span>',
 				]
 			),
 			\esc_attr( $id ),
