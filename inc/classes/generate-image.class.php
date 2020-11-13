@@ -436,7 +436,7 @@ class Generate_Image extends Generate_Url {
 	 * @param array      $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
-	 * @param sring      $size   The image size to use.
+	 * @param string     $size   The image size to use.
 	 * @param bool       $single Whether to fetch one image, or multiple.
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,

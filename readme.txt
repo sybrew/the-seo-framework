@@ -250,24 +250,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings. We also... TODO
 
 TODO retest with latest PHP 8.0.0 RC.
-TODO do we have time for this? Add full WP 5.5 sitemap support.
 TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
 
 TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g., alt versions, etc.).
+TODO: Add Core sitemaps integration changes to sitemap KB article.
+	TODO clean up Core sitemaps integration. Revalidate changes...
 
-TODO since we're going to force updating to TSF 4.1.2 for EM 2.2.0, we might as well add a new abstract method to `The_SEO_Framework\Sitemap`: `prerender_sitemap()`
-	* This method essentially builds and stores the sitemap. But ONLY if the sitemap's caching is enabled.
-		* Otherwise, it does nothing. Then, get_sitemap() (or eqv) will return a freshly generated sitemap.
-	* Closes https://github.com/sybrew/the-seo-framework/issues/539
-	* Augments https://github.com/sybrew/the-seo-framework/issues/540
-		* We might just as well address that instantly. Add option 'prerender sitemap' or let this be auto-determined -> post count vs query count and time spent generating?
-			* This is difficult since not every user has cron configured (correctly) on their site. This might lead to unexpected outcomes.
-				* However... when a sitemap takes too long to render, search engines might forgo crawling it (once or twice, or indefinitely?).
-		* Details: https://wordpress.org/support/topic/sitemap-and-memory-exhaustion/
+TODO default-disable 'Output multiple Open Graph image tags?' (without affecting plugin upgrades)
 TODO resolve the FIXME in generate-ldjson...
 TODO test robots-generator's code-cleanup for mistakes!
-TODO remove object caching? -- Let this only work for database transaction, native to WordPress?
-	* How many people will dislike this change? The generators are greatly optimized. Removal should decrease our support load as we can then exclude a common issue.
 TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 750 pixels
 	- (99 char link length, test 'WWWWWW' links!)
 	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
@@ -275,7 +266,7 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 **For everyone:**
 
 * **Added:**
-	* This plugin is now compatible with PHP 8.0.0-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
+	* TSF is now compatible with PHP 8.0.0-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
 		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 	* When Polylang is active, you can access any sitemap language via the `lang` query --- even when Polylang settings are configured otherwise. This helps mitigate any sporadic issues you might still encounter.
 		* For example (es for Spanish sitemap): `https://example.com/sitemap.xml?lang=es`.
@@ -294,6 +285,16 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 		* or after PHP's configuration `max_execution_time` seconds (or 3 minutes, whichever is sooner).
 		* **Note:** This feature prevents overloading the server when the sitemap is generated.
 		* **Note:** When using a translation plugin, this feature only prerenders one (most likely the main language's) sitemap.
+	* TSF now integrates with WordPress 5.5 Core sitemaps. These sitemaps become active when you disable TSF's "optimized" sitemap.
+		* The following options now affect Core Sitemaps:
+			* Sitemap Query Limit.
+			* Sitemap Hinting.
+			* Timestamps Settings.
+			* Ping Settings.
+				* Excluding the new prerendering feature.
+		* Core sitemaps' entries are now removed they're not indexable.
+			* Since we do not catalogue the indexables, you may find that some sitemaps will return a 404-response because of this. You can safely ignore this issue and we await a proper solution.
+		* Core sitemaps' user-sitemap is now hidden when author pages are marked with `noindex` via TSF's global robots meta settings.
 * **Improved:**
 	* **UI cohesiveness:**
 		* **Note:** When you use filters, these changes might not be fully cohesive.
@@ -318,19 +319,24 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 				* the canonical URL placeholder WILL now become hidden.
 			* When you set a term's indexing state to 'index', you'll now notice before you save the term that:
 				* the canonical URL placeholder MAY now become visible.
+	* **Sitemap UI:**
+		* We now clearly refer to "optimized sitemap" whenever an option (group) only impacts TSF's sitemap.
 * **Fixed:**
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
 	* Resolved an issue where the default robots indexing state selection wasn't correctly annotated when you edit a `private` or `protected` post.
 	* Resolved an issue where the quick-and bulk-edit options weren't correctly styled after disabling the SEO Bar in overview tables.
 	* Resolved an issue where filtered-in query strings were removed from paginated URLs. Props [hivecl](https://github.com/hivecl).
 	* Resolved an issue where emojis were converted in the reference title to image-elements by Twemoji via wpEmoji's observer on tags and categories. Props [bjarne](https://profiles.wordpress.org/oldrup/).
+	* Resolved an issue where the title settings' example page title output could be empty when only invalid tags were supplied to the latest post's title.
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
 		* Resolved an issue where Polylang didn't correctly find the sitemap's language when using cookies.
 		* Resolved an issue where non-translatable post types where excluded from the sitemap. They're now solely appended to the primary language's sitemap.
 * **Other:**
-	* TODO Added a "learn more" link to our KB at 'The sitemap does not contribute to ranking; it only speeds up indexing. Therefore, it is perfectly fine not having every indexable page in the sitemap.'.
+	* The "Priority Settings" for the sitemaps are now hidden when disabled.
+		* This feature is planned to be removed completely in TSF v5.0.
+	* Added a "learn more" link to our KB at the sitemap settings.
 	* This update is required for the upcoming [Extension Manager v2.5](https://tsf.fyi/em).
 
 **For translators:**
@@ -367,6 +373,8 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 			* `The_SEO_Framework\Traits\Enclose_Core_Final`
 * **Object notes:**
 	* For façade object `the_seo_framework()`:
+		* **Added:**
+			* `use_core_sitemaps()`, tells whether WP 5.5 Core Sitemaps are used.
 		* **Changed:**
 			* `get_social_image_uploader_form()` no longer adds a redundant title to the selection button.
 			* `generate_dismissible_notice()`:
@@ -385,6 +393,19 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 				1. Added hook for ping retry.
 			* `output_js_title_elements()`, `output_js_title_data()`, `output_js_description_elements()`, and `output_js_description_data()`:
 				* Now prevents `wp-emoji.js` parsing the references and data.
+	* For object `\The_SEO_Framework\Builders\CoreSitemaps\Main`:
+		* **This is a new object.**
+			* Extends object `\The_SEO_Framework\Builders\Sitemap`.
+		* **Added:**
+			* `get_instance()`
+	* For object `\The_SEO_Framework\Builders\CoreSitemaps\Posts`:
+		* **This is a new object.**
+			* Extends object `\WP_Sitemaps_Posts`.
+			* Overrides `get_url_list()`
+	* For object `\The_SEO_Framework\Builders\CoreSitemaps\Taxonomies`:
+		* **This is a new object.**
+			* Extends object `\WP_Sitemaps_Taxonomies`.
+			* Overrides `get_url_list()`
 	* For object `\The_SEO_Framework\Bridges\Ping`:
 		* **Added:**
 			* `engage_pinging_retry_cron()`, engages another pinging cron hook.

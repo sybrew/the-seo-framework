@@ -27,7 +27,7 @@ switch ( $instance ) :
 		$latest_cat_id  = $this->get_latest_category_id();
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
-		$post_name  = strip_tags( get_the_title( $latest_post_id ) ?: __( 'Example Post', 'autodescription' ) );
+		$post_name  = strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' );
 		$post_title = $this->s_title( $this->hellip_if_over( $post_name, 60 ) );
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.

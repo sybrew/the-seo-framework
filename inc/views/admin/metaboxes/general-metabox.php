@@ -250,7 +250,7 @@ switch ( $instance ) :
 		$this->wrap_fields(
 			$this->make_checkbox(
 				'cache_sitemap',
-				esc_html__( 'Enable sitemap generation cache?', 'autodescription' )
+				esc_html__( 'Enable optimized sitemap generation cache?', 'autodescription' )
 				. ' ' . $this->make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
 				'',
 				false

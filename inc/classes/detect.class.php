@@ -541,6 +541,33 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Tells whether WP 5.5 Core Sitemaps are used.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.2
+	 *
+	 * @return bool
+	 */
+	public function use_core_sitemaps() {
+		static $use;
+
+		if ( isset( $use ) ) return $use;
+
+		if ( $this->get_option( 'sitemaps_output' ) )
+			return $use = false;
+
+		if ( \function_exists( '\\wp_sitemaps_get_server' ) ) {
+			$wp_sitemaps_server = \wp_sitemaps_get_server();
+
+			return $use =
+				method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
+				&& $wp_sitemaps_server->sitemaps_enabled();
+		}
+
+		return $use = false;
+	}
+
+	/**
 	 * Detects presence of a page builder.
 	 * Memoizes the return value.
 	 *
@@ -629,6 +656,7 @@ class Detect extends Render {
 	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
 	 * @since 4.0.0 : 1. Now uses has_robots_txt()
 	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
+	 * FIXME This method also checks for file existence (and location...), but is only used when the file definitely doesn't exist.
 	 *
 	 * @param bool $check_option Whether to check for sitemap option.
 	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
