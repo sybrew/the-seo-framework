@@ -38,6 +38,8 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 	 * Gets a URL list for a taxonomy sitemap.
 	 *
 	 * @since 4.1.2
+	 * @source \WP_Sitemaps_Taxonomies\get_url_list()
+	 * @TEMP https://wordpress.slack.com/archives/CTKTGNJJW/p1604995479019700
 	 *
 	 * @param int    $page_num Page of results.
 	 * @param string $taxonomy Optional. Taxonomy name. Default empty.

@@ -636,11 +636,12 @@ class Core {
 	 *
 	 * @param string $string The string to test and maybe trim
 	 * @param int    $over   The character limit. Must be over 0 to have effect.
-	 *                       If 1 is given, the returned string length will be 3.
-	 *                       If 2 is given, the returned string will only consist of the hellip.
+	 *                       Bug: If 1 is given, the returned string length will be 3.
+	 *                       Bug: If 2 is given, the returned string will only consist of the hellip.
 	 * @return string
 	 */
 	public function hellip_if_over( $string, $over = 0 ) {
+
 		if ( $over > 0 && \strlen( $string ) > $over ) {
 			$string = substr( $string, 0, abs( $over - 2 ) ) . ' &hellip;';
 		}

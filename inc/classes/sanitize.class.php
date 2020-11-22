@@ -800,11 +800,6 @@ class Sanitize extends Admin_Pages {
 
 				case '_genesis_canonical_uri':
 				case '_social_image_url':
-					/**
-					 * Remove unwanted query parameters. They're allowed by Google, but very much rather not.
-					 * Also, they will only cause bugs.
-					 * Query parameters are also only used when no pretty permalinks are used. Which is bad.
-					 */
 					$value = $this->s_url_query( $value );
 					continue 2;
 

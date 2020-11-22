@@ -258,7 +258,6 @@ TODO: Add Core sitemaps integration changes to sitemap KB article.
 
 TODO default-disable 'Output multiple Open Graph image tags?' (without affecting plugin upgrades)
 TODO resolve the FIXME in generate-ldjson...
-TODO test robots-generator's code-cleanup for mistakes!
 TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 750 pixels
 	- (99 char link length, test 'WWWWWW' links!)
 	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
@@ -266,7 +265,7 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 **For everyone:**
 
 * **Added:**
-	* TSF is now compatible with PHP 8.0.0-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
+	* TSF is now compatible with PHP 8.0.0-RC2<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
 		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 	* When Polylang is active, you can access any sitemap language via the `lang` query --- even when Polylang settings are configured otherwise. This helps mitigate any sporadic issues you might still encounter.
 		* For example (es for Spanish sitemap): `https://example.com/sitemap.xml?lang=es`.

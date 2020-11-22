@@ -64,13 +64,13 @@ switch ( $instance ) :
 		?>
 		<h4><?php esc_html_e( 'Sitemap Integration Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. This helps search engines find new and updated content more quickly.', 'autodescription' ) );
+		$this->description( __( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. It helps search engines find new and updated content quickly.', 'autodescription' ) );
 
 		$this->description_noesc(
 			$this->convert_markdown(
 				sprintf(
 					/* translators: %s = Learn more URL. Markdown! */
-					esc_html__( 'The sitemap does not contribute to ranking; [it can only help with indexing](%s). Smaller, less complex sitemaps are processed quicker and speed up indexing.', 'autodescription' ),
+					esc_html__( 'The sitemap does not contribute to ranking; [it can only help with indexing](%s). Search engines process smaller, less complicated sitemaps quicker, which shortens the time required for indexing pages.', 'autodescription' ),
 					'https://kb.theseoframework.com/?p=119'
 				),
 				[ 'a' ],
@@ -140,7 +140,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<?php
-		$this->description( __( 'This setting affects how many posts are requested from the database per query.', 'autodescription' ) );
+		$this->description( __( 'This setting affects how many pages are requested from the database per query.', 'autodescription' ) );
 
 		if ( has_filter( 'the_seo_framework_sitemap_post_limit' ) ) :
 			?>

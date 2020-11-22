@@ -41,7 +41,7 @@ class Posts extends \WP_Sitemaps_Posts {
 	 *
 	 * @since 4.1.2
 	 * @source \WP_Sitemaps_Posts\get_url_list()
-	 * @TEMP
+	 * @TEMP https://wordpress.slack.com/archives/CTKTGNJJW/p1604995479019700
 	 *
 	 * @param int    $page_num  Page of results.
 	 * @param string $post_type Optional. Post type name. Default empty.
@@ -121,7 +121,7 @@ class Posts extends \WP_Sitemaps_Posts {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						OBJECT
+						\OBJECT
 					);
 
 					$lastmod = isset( $latests_posts[0]->post_date_gmt ) ? $latests_posts[0]->post_date_gmt : '0000-00-00 00:00:00';

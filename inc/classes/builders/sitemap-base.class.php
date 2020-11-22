@@ -410,7 +410,7 @@ class Sitemap_Base extends Sitemap {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						OBJECT
+						\OBJECT
 					);
 					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
 					$_publish_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
@@ -456,7 +456,7 @@ class Sitemap_Base extends Sitemap {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						OBJECT
+						\OBJECT
 					);
 
 					$_values['lastmod'] = isset( $latests_posts[0]->post_date_gmt ) ? $latests_posts[0]->post_date_gmt : '0000-00-00 00:00:00';

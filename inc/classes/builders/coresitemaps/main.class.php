@@ -90,6 +90,7 @@ class Main extends \The_SEO_Framework\Builders\Sitemap {
 				break;
 			case 'users':
 				// This option is not reversible through means other than filters.
+				// static::$tsf isn't set, because static doesn't require instantiation here.
 				if ( \the_seo_framework()->get_option( 'author_noindex' ) )
 					$provider = null;
 				break;

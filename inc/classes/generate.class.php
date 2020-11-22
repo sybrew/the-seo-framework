@@ -322,9 +322,7 @@ class Generate extends User_Data {
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
 			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				if ( $this->is_protected( $this->get_the_real_ID() ) ) {
-					$noindex = true;
-				}
+				$noindex = $noindex || $this->is_protected( $this->get_the_real_ID() );
 			endif;
 
 			/**
@@ -455,9 +453,7 @@ class Generate extends User_Data {
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
 			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				if ( $this->is_protected( $args['id'] ) ) {
-					$noindex = true;
-				}
+				$noindex = $noindex || $this->is_protected( $args['id'] );
 			endif;
 		}
 
@@ -539,9 +535,7 @@ class Generate extends User_Data {
 
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
 			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				if ( $this->is_protected( $args['id'] ) ) {
-					$noindex = true;
-				}
+				$noindex = $noindex || $this->is_protected( $args['id'] );
 			endif;
 		}
 
