@@ -262,6 +262,8 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 	- (99 char link length, test 'WWWWWW' links!)
 	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
 
+TODO reminify all changed browser files. Perhaps we've forgotten some?
+
 **For everyone:**
 
 * **Added:**
@@ -355,6 +357,7 @@ TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 
 		* `tsf_sitemap_cron_hook_before`, runs just before pinging.
 		* `tsf_sitemap_cron_hook_after`, runs right after pinging.
 		* `tsf_sitemap_cron_hook_retry`, scheduled when first ping fails due to sitemap lock.
+		* `the_seo_framework_before_redirect`, runs right before redirecting.
 	* **Changed:**
 		* `the_seo_framework_sitemap_transient_cleared`: Added index `ping_use_cron_prerender` to the first parameter.
 * **Filter notes:**

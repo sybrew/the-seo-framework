@@ -542,7 +542,14 @@ class Init extends Query {
 			$url = $this->get_term_meta_item( 'redirect' ) ?: '';
 		}
 
-		$url and $this->do_redirect( $url );
+		if ( $url ) {
+			/**
+			 * @since 4.1.2
+			 * @param string $url The URL we're redirecting to.
+			 */
+			\do_action( 'the_seo_framework_before_redirect', $url );
+			$this->do_redirect( $url );
+		}
 	}
 
 	/**
