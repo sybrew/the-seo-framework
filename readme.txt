@@ -256,8 +256,6 @@ TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g
 TODO: Add Core sitemaps integration changes to sitemap KB article.
 	TODO clean up Core sitemaps integration. Revalidate changes...
 
-TODO resolve the FIXME in generate-ldjson...
-
 TODO reminify all changed browser files. Perhaps we've forgotten some?
 
 **For everyone:**
@@ -327,6 +325,7 @@ TODO reminify all changed browser files. Perhaps we've forgotten some?
 	* Resolved an issue where filtered-in query strings were removed from paginated URLs. Props [hivecl](https://github.com/hivecl).
 	* Resolved an issue where emojis were converted in the reference title to image-elements by Twemoji via wpEmoji's observer on tags and categories. Props [bjarne](https://profiles.wordpress.org/oldrup/).
 	* Resolved an issue where the title settings' example page title output could be empty when only invalid tags were supplied to the latest post's title.
+	* Resolved an issue where the Sitelinks search box URL wasn't properly slashed based on custom permalink settings.
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
@@ -405,6 +404,7 @@ TODO reminify all changed browser files. Perhaps we've forgotten some?
 				* `get_image_from_cache()`
 				* `twitter_image()`
 				* `og_image()`
+			* `get_ld_json_website()` now properly slashes the search URL.
 	* For object `\The_SEO_Framework\Builders\CoreSitemaps\Main`:
 		* **This is a new object.**
 			* Extends object `\The_SEO_Framework\Builders\Sitemap`.
