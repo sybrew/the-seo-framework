@@ -853,7 +853,7 @@ class Admin_Init extends Init {
 				$parent_url = \wp_get_attachment_url( $attachment_id );
 				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
 
-				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may be disabled.
+				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- Feature may be disabled; should not cause fatal errors.
 				$size       = @getimagesize( $cropped );
 				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 

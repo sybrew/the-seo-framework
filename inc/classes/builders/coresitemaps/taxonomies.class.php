@@ -40,6 +40,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 	 * @since 4.1.2
 	 * @source \WP_Sitemaps_Taxonomies\get_url_list()
 	 * @TEMP https://wordpress.slack.com/archives/CTKTGNJJW/p1604995479019700
+	 * @link <https://core.trac.wordpress.org/ticket/51860>
 	 *
 	 * @param int    $page_num Page of results.
 	 * @param string $taxonomy Optional. Taxonomy name. Default empty.

@@ -618,6 +618,7 @@ class Init extends Query {
 	 * @access private
 	 */
 	public function _init_core_sitemap() {
+		// It's not a bridge, don't treat it like one: Submit hooks here. Clean me up?
 		$builder_class = Builders\CoreSitemaps\Main::class;
 
 		\add_filter( 'wp_sitemaps_add_provider', "{$builder_class}::_filter_add_provider", 9, 2 );

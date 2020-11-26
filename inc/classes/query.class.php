@@ -90,7 +90,7 @@ class Query extends Core {
 
 		$message = "You've initiated a method that uses queries too early.";
 
-		$trace = @debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 4 );
+		$trace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 4 );
 		if ( ! empty( $trace[3] ) ) {
 			$message .= ' - In file: ' . $trace[3]['file'];
 			$message .= ' - On line: ' . $trace[3]['line'];
@@ -102,7 +102,7 @@ class Query extends Core {
 		$depth = 10;
 		static $_more = true;
 		if ( $_more ) {
-			error_log( var_export( @debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
+			error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 			$_more = false;
 		}
 	}

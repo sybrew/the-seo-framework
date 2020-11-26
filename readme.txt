@@ -249,19 +249,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings. We also... TODO
 
-TODO retest with latest PHP 8.0.0 RC.
 TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
 
 TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g., alt versions, etc.).
 TODO: Add Core sitemaps integration changes to sitemap KB article.
-	TODO clean up Core sitemaps integration. Revalidate changes...
-
-TODO reminify all changed browser files. Perhaps we've forgotten some?
 
 **For everyone:**
 
 * **Added:**
-	* TSF is now compatible with PHP 8.0.0-RC2<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
+	* TSF is now compatible with PHP 8.0.0. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
 		* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 	* When Polylang is active, you can access any sitemap language via the `lang` query --- even when Polylang settings are configured otherwise. This helps mitigate any sporadic issues you might still encounter.
 		* For example (es for Spanish sitemap): `https://example.com/sitemap.xml?lang=es`.
@@ -289,6 +285,7 @@ TODO reminify all changed browser files. Perhaps we've forgotten some?
 				* Excluding the new prerendering feature.
 		* Core sitemaps' entries are now removed they're not indexable.
 			* Since we do not catalogue the indexables, you may find that some sitemaps will return a 404-response because of this. You can safely ignore this issue and we await a proper solution.
+			* We achieved this through unorthodox means, by reassigning the sitemap provider classes, extending the original classes yet overwriting the WP Core URL list function. This can cause compatibility issues in the long haul. However, we will change this [when a proper workaround is implemented](https://core.trac.wordpress.org/ticket/51860).
 		* Core sitemaps' user-sitemap is now hidden when author pages are marked with `noindex` via TSF's global robots meta settings.
 * **Improved:**
 	* **UI cohesiveness:**
