@@ -206,7 +206,7 @@ class Site_Options extends Sanitize {
 				'social_title_rem_additions' => 1, // Remove social title additions
 
 				// Social image settings.
-				'multi_og_image' => 1, // Allow multiple images to be generated
+				'multi_og_image' => 0, // Allow multiple images to be generated
 
 				// Theme color settings.
 				'theme_color' => '', // Theme color metatag, default none

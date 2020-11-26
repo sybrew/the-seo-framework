@@ -256,11 +256,7 @@ TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g
 TODO: Add Core sitemaps integration changes to sitemap KB article.
 	TODO clean up Core sitemaps integration. Revalidate changes...
 
-TODO default-disable 'Output multiple Open Graph image tags?' (without affecting plugin upgrades)
 TODO resolve the FIXME in generate-ldjson...
-TODO center the sitemap (https://core.trac.wordpress.org/ticket/50658) to about 750 pixels
-	- (99 char link length, test 'WWWWWW' links!)
-	- Mind the performance of 50,0000 links! We should refrain from using flexbox and grid...
 
 TODO reminify all changed browser files. Perhaps we've forgotten some?
 
@@ -322,6 +318,8 @@ TODO reminify all changed browser files. Perhaps we've forgotten some?
 				* the canonical URL placeholder MAY now become visible.
 	* **Sitemap UI:**
 		* We now clearly refer to "optimized sitemap" whenever an option (group) only impacts TSF's sitemap.
+	* **Performance:**
+		* Disabling the "Output multiple Open Graph image tags?" option will now improve front-end performance when a custom social image or a featured image is registered for the post.
 * **Fixed:**
 	* Resolved an issue where the notice dismissal button isn't spanned correctly when administrative script concatenation is turned off.
 	* Resolved an issue where the default robots indexing state selection wasn't correctly annotated when you edit a `private` or `protected` post.
@@ -351,7 +349,13 @@ TODO reminify all changed browser files. Perhaps we've forgotten some?
 	* This plugin now uses database version `4120`.
 * **Option notes:**
 	* For index `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
-		* `ping_use_cron_prerender`, integer `1` or `0`.
+		* **Added:**
+			* `ping_use_cron_prerender`, integer `1` or `0`.
+		* **Changed:**
+			* `multi_og_image` now defaults to `0`, instead of `1`, for new installations.
+				* We made this change to reduce needless processing power.
+				* This feature is also confusing to some users, since it can cause unexpected (from the user's standpoint) sharing behavior on Facebook.
+				* Current TSF installations are unaffected.
 * **Action notes:**
 	* **Added:**
 		* `tsf_sitemap_cron_hook_before`, runs just before pinging.
@@ -395,6 +399,12 @@ TODO reminify all changed browser files. Perhaps we've forgotten some?
 				1. Added hook for ping retry.
 			* `output_js_title_elements()`, `output_js_title_data()`, `output_js_description_elements()`, and `output_js_description_data()`:
 				* Now prevents `wp-emoji.js` parsing the references and data.
+			* `get_image_details_from_cache()` Added a `$single` parameter, which helps reduce processing power required.
+				* This parameter might get deprecated when we start supporting PHP 7.1+ only. This acts as a workaround for WP moving forward too slowly.
+				* In light of this, these methods now forward the `multi_og_image` option to the generator. Temporary workaround.
+				* `get_image_from_cache()`
+				* `twitter_image()`
+				* `og_image()`
 	* For object `\The_SEO_Framework\Builders\CoreSitemaps\Main`:
 		* **This is a new object.**
 			* Extends object `\The_SEO_Framework\Builders\Sitemap`.

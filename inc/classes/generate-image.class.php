@@ -40,6 +40,9 @@ class Generate_Image extends Generate_Url {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.2 Added a $single parameter, which helps reduce processing power required.
+	 *              This parameter might get deprecated when we start supporting PHP 7.1+ only.
+	 * TODO yield from and memoize deeper? Iterators calling this method currently do not affect the generators.
 	 *
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,
@@ -49,9 +52,9 @@ class Generate_Image extends Generate_Url {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	public function get_image_details_from_cache() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->get_image_details();
+	public function get_image_details_from_cache( $single = false ) {
+		static $cache = [];
+		return isset( $cache[ $single ] ) ? $cache[ $single ] : $cache[ $single ] = $this->get_image_details( null, $single );
 	}
 
 	/**

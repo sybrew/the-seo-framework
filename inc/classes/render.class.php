@@ -104,6 +104,9 @@ class Render extends Admin_Init {
 	 * @since 2.2.2
 	 * @since 2.7.0 $get_id parameter has been added.
 	 * @since 4.0.0 Now uses the new image generator.
+	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
+	 *              it'll always use just one image, we read this option so we'll only
+	 *              use a single cache instance internally with the generator.
 	 *
 	 * @return string The image URL.
 	 */
@@ -111,7 +114,7 @@ class Render extends Admin_Init {
 
 		$url = '';
 
-		foreach ( $this->get_image_details_from_cache() as $image ) {
+		foreach ( $this->get_image_details_from_cache( ! $this->get_option( 'multi_og_image' ) ) as $image ) {
 			$url = $image['url'];
 			if ( $url ) break;
 		}
@@ -291,8 +294,10 @@ class Render extends Admin_Init {
 	 * Renders Open Graph image meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 2.6.0 : Added WooCommerce gallery images.
-	 * @since 2.7.0 : Added image dimensions if found.
+	 * @since 2.6.0 Added WooCommerce gallery images.
+	 * @since 2.7.0 Added image dimensions if found.
+	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator to
+	 *              reduce processing power.
 	 *
 	 * @return string The Open Graph image meta tag.
 	 */
@@ -304,7 +309,7 @@ class Render extends Admin_Init {
 
 		$multi = (bool) $this->get_option( 'multi_og_image' );
 
-		foreach ( $this->get_image_details_from_cache() as $image ) {
+		foreach ( $this->get_image_details_from_cache( ! $multi ) as $image ) {
 			$output .= '<meta property="og:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
 
 			if ( $image['height'] && $image['width'] ) {
@@ -542,6 +547,9 @@ class Render extends Admin_Init {
 	 * Renders Twitter Image meta tag.
 	 *
 	 * @since 2.2.2
+	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
+	 *              it'll always use just one image, we read this option so we'll only
+	 *              use a single cache instance internally with the generator.
 	 *
 	 * @return string The Twitter Image meta tag.
 	 */
@@ -551,7 +559,7 @@ class Render extends Admin_Init {
 
 		$output = '';
 
-		foreach ( $this->get_image_details_from_cache() as $image ) {
+		foreach ( $this->get_image_details_from_cache( ! $this->get_option( 'multi_og_image' ) ) as $image ) {
 			$output .= '<meta name="twitter:image" content="' . \esc_attr( $image['url'] ) . '" />' . "\r\n";
 
 			if ( $image['height'] && $image['width'] ) {
