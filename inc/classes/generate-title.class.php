@@ -738,6 +738,25 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
+	 * Combobulates archive title prefixes for WP 5.5+.
+	 *
+	 * @since 4.1.2
+	 * @TEMP
+	 *
+	 * @param string $prefix The archive prefix.
+	 * @param string $title  The archive title.
+	 * @return string The archive title.
+	 */
+	protected function _combobulate_wp550_archive_title( $prefix, $title ) {
+		return sprintf(
+			/* translators: 1: Title prefix. 2: Title. */
+			\_x( '%1$s %2$s', 'archive title', 'default' ),
+			$prefix,
+			$title
+		);
+	}
+
+	/**
 	 * Returns the archive title. Also works in admin.
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work for metadata.
@@ -748,6 +767,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 4.0.5 1: Now no longer uses `get_the_author()` to fetch the author's display name,
 	 *                 but uses the provided term object instead.
 	 *              2: The first parameter now accepts `\WP_User` objects.
+	 * @since 4.1.2 Now checks for WP version since a minor release changed the prefixes used for years.
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Error|null $term The Term object or error. Leave null to autodetermine query.
 	 * @return string The generated archive title, not escaped.
@@ -778,53 +798,128 @@ class Generate_Title extends Generate_Description {
 		$_tax       = isset( $term->taxonomy ) ? $term->taxonomy : '';
 		$use_prefix = $this->use_generated_archive_prefix( $term );
 
+		// TEMP hack. Let's clean this up later.
+		$use_new_string_prefixes = $use_prefix && version_compare( \get_bloginfo( 'version' ), '5.5', '>=' );
+
 		if ( ! $_query ) {
 			if ( $_tax ) {
 				if ( 'category' === $_tax ) {
 					$title = $this->get_generated_single_term_title( $term );
-					/* translators: Category archive title. 1: Category name */
-					$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
+
+					if ( $use_new_string_prefixes ) {
+						$title = $this->_combobulate_wp550_archive_title(
+							\_x( 'Category:', 'category archive title prefix', 'default' ),
+							$title
+						);
+					} else {
+						/* translators: Category archive title. 1: Category name */
+						$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
+					}
 				} elseif ( 'post_tag' === $_tax ) {
 					$title = $this->get_generated_single_term_title( $term );
-					/* translators: Tag archive title. 1: Tag name */
-					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
+
+					if ( $use_new_string_prefixes ) {
+						$title = $this->_combobulate_wp550_archive_title(
+							\_x( 'Tag:', 'tag archive title prefix', 'default' ),
+							$title
+						);
+					} else {
+						/* translators: Tag archive title. 1: Tag name */
+						$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
+					}
 				} else {
 					$title = $this->get_generated_single_term_title( $term );
 					$title = $use_prefix ? $this->prepend_tax_label_prefix( $title, $_tax ) : $title;
 				}
 			} elseif ( $term instanceof \WP_User && isset( $term->display_name ) ) {
 				$title = $term->display_name;
-				/* translators: Author archive title. 1: Author name */
-				$title = $use_prefix ? sprintf( \__( 'Author: %s', 'default' ), $title ) : $title;
+
+				if ( $use_new_string_prefixes ) {
+					$title = $this->_combobulate_wp550_archive_title(
+						\_x( 'Author:', 'author archive title prefix', 'default' ),
+						$title
+					);
+				} else {
+					/* translators: Author archive title. 1: Author name */
+					$title = $use_prefix ? sprintf( \__( 'Author: %s', 'default' ), $title ) : $title;
+				}
 			} else {
 				$title = \__( 'Archives', 'default' );
 			}
 		} else {
 			if ( $this->is_category() ) {
 				$title = $this->get_generated_single_term_title( $term );
-				/* translators: Category archive title. 1: Category name */
-				$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
+
+				if ( $use_new_string_prefixes ) {
+					$title = $this->_combobulate_wp550_archive_title(
+						\_x( 'Category:', 'category archive title prefix', 'default' ),
+						$title
+					);
+				} else {
+					/* translators: Category archive title. 1: Category name */
+					$title = $use_prefix ? sprintf( \__( 'Category: %s', 'default' ), $title ) : $title;
+				}
 			} elseif ( $this->is_tag() ) {
 				$title = $this->get_generated_single_term_title( $term );
-				/* translators: Tag archive title. 1: Tag name */
-				$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
+
+				if ( $use_new_string_prefixes ) {
+					$title = $this->_combobulate_wp550_archive_title(
+						\_x( 'Tag:', 'tag archive title prefix', 'default' ),
+						$title
+					);
+				} else {
+					/* translators: Tag archive title. 1: Tag name */
+					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
+				}
 			} elseif ( $this->is_author() ) {
 				$title = isset( $term->display_name ) ? $term->display_name : '';
-				/* translators: Author archive title. 1: Author name */
-				$title = $use_prefix ? sprintf( \__( 'Author: %s', 'default' ), $title ) : $title;
+
+				if ( $use_new_string_prefixes ) {
+					$title = $this->_combobulate_wp550_archive_title(
+						\_x( 'Author:', 'author archive title prefix', 'default' ),
+						$title
+					);
+				} else {
+					/* translators: Author archive title. 1: Author name */
+					$title = $use_prefix ? sprintf( \__( 'Author: %s', 'default' ), $title ) : $title;
+				}
 			} elseif ( $this->is_date() ) {
 				if ( $this->is_year() ) {
 					$title = \get_the_date( \_x( 'Y', 'yearly archives date format', 'default' ) );
-					/* translators: Yearly archive title. 1: Year */
-					$title = $use_prefix ? sprintf( \__( 'Year: %s', 'default' ), $title ) : $title;
+
+					if ( $use_new_string_prefixes ) {
+						$title = $this->_combobulate_wp550_archive_title(
+							\_x( 'Year:', 'date archive title prefix', 'default' ),
+							$title
+						);
+					} else {
+						/* translators: Yearly archive title. 1: Year */
+						$title = $use_prefix ? sprintf( \__( 'Year: %s', 'default' ), $title ) : $title;
+					}
 				} elseif ( $this->is_month() ) {
 					$title = \get_the_date( \_x( 'F Y', 'monthly archives date format', 'default' ) );
-					/* translators: Monthly archive title. 1: Month name and year */
-					$title = $use_prefix ? sprintf( \__( 'Month: %s', 'default' ), $title ) : $title;
+
+					if ( $use_new_string_prefixes ) {
+						$title = $this->_combobulate_wp550_archive_title(
+							\_x( 'Month:', 'date archive title prefix', 'default' ),
+							$title
+						);
+					} else {
+						/* translators: Monthly archive title. 1: Month name and year */
+						$title = $use_prefix ? sprintf( \__( 'Month: %s', 'default' ), $title ) : $title;
+					}
 				} elseif ( $this->is_day() ) {
 					$title = \get_the_date( \_x( 'F j, Y', 'daily archives date format', 'default' ) );
-					/* translators: Daily archive title. 1: Date */
-					$title = $use_prefix ? sprintf( \__( 'Day: %s', 'default' ), $title ) : $title;
+
+					if ( $use_new_string_prefixes ) {
+						$title = $this->_combobulate_wp550_archive_title(
+							\_x( 'Day:', 'date archive title prefix', 'default' ),
+							$title
+						);
+					} else {
+						/* translators: Daily archive title. 1: Date */
+						$title = $use_prefix ? sprintf( \__( 'Day: %s', 'default' ), $title ) : $title;
+					}
 				}
 			} elseif ( \is_tax( 'post_format' ) ) {
 				if ( \is_tax( 'post_format', 'post-format-aside' ) ) {
@@ -848,8 +943,16 @@ class Generate_Title extends Generate_Description {
 				}
 			} elseif ( \is_post_type_archive() ) {
 				$title = $this->get_generated_post_type_archive_title() ?: $this->get_tax_type_label( $_tax, false );
-				/* translators: Post type archive title. 1: Post type name */
-				$title = $use_prefix ? sprintf( \__( 'Archives: %s', 'default' ), $title ) : $title;
+
+				if ( $use_new_string_prefixes ) {
+					$title = $this->_combobulate_wp550_archive_title(
+						\_x( 'Archives:', 'post type archive title prefix', 'default' ),
+						$title
+					);
+				} else {
+					/* translators: Post type archive title. 1: Post type name */
+					$title = $use_prefix ? sprintf( \__( 'Archives: %s', 'default' ), $title ) : $title;
+				}
 			} elseif ( $this->is_tax() ) {
 				$title = $this->get_generated_single_term_title( $term );
 				$title = $use_prefix ? $this->prepend_tax_label_prefix( $title, $_tax ) : $title;
@@ -1257,6 +1360,7 @@ class Generate_Title extends Generate_Description {
 	 * Prepends the taxonomy label to the title.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.2 Now supports WP 5.5 archive title
 	 *
 	 * @param string $title    The title to prepend taxonomy label to.
 	 * @param string $taxonomy The taxonomy to get label from.
@@ -1267,8 +1371,22 @@ class Generate_Title extends Generate_Description {
 		$prefix = $this->get_tax_type_label( $taxonomy ) ?: '';
 
 		if ( $prefix ) {
-			/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-			$title = sprintf( \_x( '%1$s: %2$s', 'tax prefix: title', 'autodescription' ), $prefix, $title );
+			$use_new_string_prefixes = version_compare( \get_bloginfo( 'version' ), '5.5', '>=' );
+
+			if ( $use_new_string_prefixes ) {
+				$title = $this->_combobulate_wp550_archive_title(
+					/* translators: %s: Taxonomy singular name. */
+					sprintf( \_x( '%s:', 'taxonomy term archive title prefix', 'default' ), $prefix ),
+					$title
+				);
+			} else {
+				$title = sprintf(
+					/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term. */
+					\__( '%1$s: %2$s', 'default' ),
+					$prefix,
+					$title
+				);
+			}
 		}
 
 		return $title;

@@ -249,6 +249,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 In this minor update, we ensure compatibility with PHP 8 and WP 5.6. TSF now fully integrates with WordPress Core Sitemaps, which you can configure via the SEO settings. If you decide to keep using TSF's optimized sitemap, you can now enjoy prerendering, DoS protection, and full Polylang integration. You'll also find various accessibility improvements, and we fixed [about a dozen bugs](TODO).
 
+This is a FOSS project, but it's not sustained as one: we get $0/year from donations, yet we must provide beyond full-time support for four years already. Ultimately, we need resources somehow to maintain this project and ourselves. Please mind the self-dismissing notification that'll help make TSF possible.
+
 TODO POT FILE!
 
 **For everyone:**
@@ -320,6 +322,7 @@ TODO POT FILE!
 	* Resolved an issue where emojis were converted in the reference title to image-elements by Twemoji via wpEmoji's observer on tags and categories. Props [bjarne](https://profiles.wordpress.org/oldrup/).
 	* Resolved an issue where the title settings' example page title output could be empty when only invalid tags were supplied to the latest post's title.
 	* Resolved an issue where the Sitelinks search box URL wasn't properly slashed based on custom permalink settings.
+	* Resolved an issue where archive translation strings from WP 5.5 weren't properly integrated. Props [teropaajoki](https://github.com/teropaajoki).
 	* **Polylang related:**
 		* Resolved an issue where sitemaps didn't output reliably on some subdomains or subdirectories.
 		* Resolved an issue where sitemap stylesheets didn't affect the endpoint's URL correctly to abide by CORS.
@@ -333,8 +336,10 @@ TODO POT FILE!
 
 **For translators:**
 
-* **Added:** New translation strings are available.
-* **Updated:** TODO POT translation file.
+* **Added:**
+	* New translation strings are available.
+* **Updated:**
+	* POT translation file.
 
 **For developers:**
 
