@@ -767,7 +767,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 4.0.5 1: Now no longer uses `get_the_author()` to fetch the author's display name,
 	 *                 but uses the provided term object instead.
 	 *              2: The first parameter now accepts `\WP_User` objects.
-	 * @since 4.1.2 Now checks for WP version since a minor release changed the prefixes used for years.
+	 * @since 4.1.2 Now supports WP 5.5 archive titles.
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Error|null $term The Term object or error. Leave null to autodetermine query.
 	 * @return string The generated archive title, not escaped.
@@ -1360,7 +1360,7 @@ class Generate_Title extends Generate_Description {
 	 * Prepends the taxonomy label to the title.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.2 Now supports WP 5.5 archive title
+	 * @since 4.1.2 Now supports WP 5.5 archive titles.
 	 *
 	 * @param string $title    The title to prepend taxonomy label to.
 	 * @param string $taxonomy The taxonomy to get label from.

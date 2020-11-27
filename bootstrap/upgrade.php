@@ -400,6 +400,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
  * @since 4.0.0
  * @since 4.1.0 1. Moved admin notice user capability check here.
  *              2. Now registers persistent notice for the update version.
+ * @since 4.1.2 No longer can accidentally show the install notice after stale upgrade.
  * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
  *       Users that remove query strings (thanks to YSlow) are to blame, though.
  *       The authors of the plugin that allowed this to happen are even more to blame.
@@ -438,7 +439,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'timeout'      => DAY_IN_SECONDS,
 			]
 		);
-	} elseif ( $current_version ) { // User successfully installed.
+	} elseif ( ! $previous_version && $current_version ) { // User successfully installed.
 		if ( \current_user_can( 'update_plugins' ) ) {
 			\add_action( 'admin_notices', __NAMESPACE__ . '\\_do_install_notice' );
 		}

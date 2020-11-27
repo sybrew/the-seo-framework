@@ -55,6 +55,7 @@ _prepare( $previous_version, $current_version );
  *              3. Can now run on the front-end without crashing.
  *              4. Added the first two parameters, $previous_version and $current_version.
  *              5. Now tests if the upgrade actually happened, before invoking the suggestion.
+ * @since 4.1.2 Can now communicate with Extension Manager.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -69,6 +70,17 @@ function _prepare( $previous_version, $current_version ) {
 	if ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS ) return;
 	//? 2
 	if ( ! \is_main_site() ) return;
+
+	$show_sale = true;
+
+	if ( \function_exists( '\\tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
+		$show_sale = ! \tsf_extension_manager()->is_connected_user();
+	}
+	if ( $show_sale ) {
+		// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
+		_suggest_temp_sale( $previous_version, $current_version );
+	}
+
 	//? 3a
 	if ( \defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;
 
@@ -140,6 +152,54 @@ function _suggest_extension_manager( $previous_version, $current_version ) {
 						'https://theseoframework.com/?p=3599',
 						'https://theseoframework.com/?p=3591',
 					]
+				),
+				[ 'a', 'em', 'strong' ],
+				[ 'a_internal' => false ]
+			),
+			$suggest_key,
+			$suggest_args,
+			$suggest_conditions
+		);
+}
+
+/**
+ * Registers "look at site" notification to applicable plugin users on upgrade.
+ *
+ * Some will hate me for this. Others will thank me they got notified.
+ * In the end, I can't sustain this project without money, and the whiny users still need a good working product.
+ * Win-win.
+ *
+ * @since 4.1.2
+ * @access private
+ *
+ * @param string $previous_version The previous version the site upgraded from, if any.
+ * @param string $current_version  The current version of the site.
+ */
+function _suggest_temp_sale( $previous_version, $current_version ) {
+
+	$tsf = \the_seo_framework();
+
+	$suggest_key        = 'suggest-sale';
+	$suggest_args       = [
+		'type'   => 'info',
+		'icon'   => false,
+		'escape' => false,
+	];
+	$suggest_conditions = [
+		'screens'      => [],
+		'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
+		'capability'   => 'install_plugins',
+		'user'         => 0,
+		'count'        => 2,
+		'timeout'      => strtotime( 'December 1st, 2020, 18:00GMT+1' ) - time(),
+	];
+
+	if ( $previous_version < '4120' && $current_version < '4200' )
+		$tsf->register_dismissible_persistent_notice(
+			$tsf->convert_markdown(
+				sprintf(
+					'<p>The SEO Framework: Cyber Monday [30~50%% off](%s). This notification will self-destruct when the sale ends, or when you dismiss it.</p>',
+					'https://theseoframework.com/?p=3527'
 				),
 				[ 'a', 'em', 'strong' ],
 				[ 'a_internal' => false ]
