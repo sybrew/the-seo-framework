@@ -821,7 +821,7 @@ function _do_upgrade_4110() {
  * @since 4.1.2
  */
 function _do_upgrade_4120() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' ) {
 		$tsf = \the_seo_framework();
 
 		$tsf->update_option( 'ping_use_cron_prerender', 0 );

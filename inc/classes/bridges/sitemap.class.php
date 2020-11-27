@@ -169,7 +169,13 @@ final class Sitemap {
 		$scheme = static::$tsf->get_preferred_scheme();
 		$prefix = $this->get_sitemap_path_prefix();
 
-		$home_url = \trailingslashit( \home_url( '/', $scheme ) );
+		$home_url = \home_url( '/', $scheme );
+
+		// Other plugins may append a query (such as translations).
+		$home_query = parse_url( $home_url, PHP_URL_QUERY );
+		// Remove query from URL when found. Add back later.
+		if ( $home_query )
+			$home_url = static::$tsf->s_url( $home_url );
 
 		if ( $wp_rewrite->using_index_permalinks() ) {
 			$path = "/index.php$prefix{$list[ $id ]['endpoint']}";
@@ -179,9 +185,12 @@ final class Sitemap {
 			$path = "$prefix?tsf-sitemap=$id";
 		}
 
-		$path = ltrim( $path, '/' );
+		$url = \trailingslashit( $home_url ) . ltrim( $path, '/' );
 
-		return \esc_url_raw( "$home_url$path" );
+		if ( $home_query )
+			$url = static::$tsf->append_php_query( $url, $home_query );
+
+		return \esc_url_raw( $url );
 	}
 
 	/**

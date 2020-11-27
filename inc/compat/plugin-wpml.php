@@ -33,7 +33,7 @@ function _wpml_do_current_screen_action() {
 /**
  * Removes "All languages" option from WPML admin switcher.
  *
- * FIXME: Why did we do this again? Does it even affect the settings? Remove me?
+ * FIXME: Why did we do this again? Does it even affect the settings? Does it fix the home query? Remove me?
  *
  * @since 2.8.0
  * @access private

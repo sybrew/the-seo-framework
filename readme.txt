@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
 Requires at least: 5.1.0
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6.0
 Stable tag: 4.1.1
 License: GPLv3
@@ -247,12 +247,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.2 =
 
-In this minor update, we bring you support for PHP 8 and WordPress 5.6. We also resolved a few issues with sitemap support for Polylang, and improved accessibility by making the page-visibility settings dynamically cohesive with the SEO-visibility settings. We also... TODO
+In this minor update, we ensure compatibility with PHP 8 and WP 5.6. TSF now fully integrates with WordPress Core Sitemaps, which you can configure via the SEO settings. If you decide to keep using TSF's optimized sitemap, you can now enjoy prerendering, DoS protection, and full Polylang integration. You'll also find various accessibility improvements, and we fixed [about a dozen bugs](TODO).
 
-TODO WP Bug found: When index.php permalinks are used, the permalinks to the attachment pages (leading from the admin interface) do not include the index.php prefix.
-
-TODO: Add Polylang's changes to sitemap KB article, and show examples there (e.g., alt versions, etc.).
-TODO: Add Core sitemaps integration changes to sitemap KB article.
+TODO POT FILE!
 
 **For everyone:**
 
@@ -433,7 +430,7 @@ TODO: Add Core sitemaps integration changes to sitemap KB article.
 			* `unlock_sitemap()`, unlocks a sitemap for regeneration.
 			* `is_sitemap_locked()`, tells whether a sitemap is locked.
 		* **Changed:**
-			* `get_expected_sitemap_endpoint_url()` no longer passes the path to the home_url() function because Polylang is being astonishingly asinine.
+			* `get_expected_sitemap_endpoint_url()` no longer passes the path to the home_url() function.
 			* `output_base_sitemap()` is now static.
 			* `output_stylesheet()` is now static.
 	* For object `\The_SEO_Framework\Builders\Scripts`:
