@@ -119,6 +119,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * Full screen-reader accessibility via field anchors, ARIA labels, and title attributes.
 * WordPress Multisite setups, this plugin is in fact built upon one.
 * Detection and output of robots.txt and sitemap.xml files.
+* Full integration with WordPress Core sitemaps.
 * Output of structured data via Schema.org JSON-LD scripts.
 * Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO tools to help you switch graciously.
@@ -191,7 +192,7 @@ To correctly analyze your website, it must be done from the outside. If we load 
 
 Please visit [the support forums](https://wordpress.org/support/plugin/autodescription) and kindly tell us about it.
 
-We'll try to get back to you within 72 hours. Typically, we reply within a day.
+We'll try to get back to you within a week. Typically, we reply within three days.
 
 = I am a developer; how can I help? =
 
@@ -245,9 +246,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.1.3 =
+
+* **Fixed:**
+	* The cron pinging now works when TSF sitemaps are deactivated, as was intended since 4.1.2.
+	* TODO fix Twitter desc post-edit: https://wordpress.org/support/topic/twitter-space-before-description/
+
 = 4.1.2 =
 
-In this minor update, we ensured compatibility with PHP 8 and WP 5.6. TSF now fully integrates with WordPress Core Sitemaps, which you can configure via the SEO settings. If you decide to keep using TSF's optimized sitemap, you can now enjoy prerendering, DoS protection, and full Polylang integration. You'll also find various accessibility improvements, and we fixed [about a dozen bugs](https://theseoframework.com/?p=3650).
+In this minor update, we ensured compatibility with PHP 8 and WP 5.6. TSF now also fully integrates with WordPress Core Sitemaps, which you can configure via the SEO settings. If you decide to keep using TSF's optimized sitemap, you can now enjoy prerendering, DoS protection, and full Polylang integration. Lastly, you'll find various accessibility improvements, and we fixed [about a dozen bugs](https://theseoframework.com/?p=3650#detailed).
 
 We included a single-line self-destructing notification about our [Cyber Monday sale](https://theseoframework.com/?p=3527). We hope you'll opt to support our continuous efforts. But we're also kindly asking you to understand we must promote our premium extensions to make TSF possible. We are apprehensive about any embedded advertising and self-promotion in the plugin, so we must rely on notifications until a better system is available in WordPress.
 
@@ -316,7 +323,7 @@ WordPress 5.5 brings new sitemaps. We added support for them, but we didn't inte
 
 Regardless, we don't believe the Core Sitemaps are beneficial for most WordPress sites. We stubbornly kept our sitemap simple; it's easier for us to maintain and faster search engines to process. Search engines crawl your pages more quickly using TSF's sitemap, no matter your website's size.
 
-Nevertheless, TSF will integrate with Core Sitemaps in a future update. However, since we had fewer than two months to anticipate their integration, we couldn't make this happen now.
+Nevertheless, TSF will integrate with Core Sitemaps in a future update. Since we had fewer than two months to anticipate their integration, we couldn't make this happen now.
 
 **Environment upgrade notes**
 

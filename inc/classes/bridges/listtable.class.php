@@ -124,6 +124,7 @@ abstract class ListTable {
 		$post_type = stripslashes( $_POST['post_type'] );
 		$pto       = $post_type ? \get_post_type_object( $post_type ) : false;
 
+		// TODO shouldn't we just use `edit_post`? See _output_column_contents_for_post && get_post_type_capabilities
 		if ( $pto && \current_user_can( 'edit_' . $pto->capability_type, (int) $_POST['post_ID'] ) )
 			$this->init_columns_ajax();
 	}

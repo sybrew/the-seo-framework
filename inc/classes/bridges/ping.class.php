@@ -119,7 +119,7 @@ final class Ping {
 			static::engage_pinging_retry_cron( [ 'id' => 'base' ] );
 			return;
 		}
-		$transient = $tsf->generate_cache_key( 0, '', 'ping' );
+		$transient = $tsf->generate_cache_key( 0, '', 'ping' ) . 'asdd';
 
 		// Uses legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {

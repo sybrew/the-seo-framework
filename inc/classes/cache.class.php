@@ -113,6 +113,8 @@ class Cache extends Site_Options {
 	 *
 	 * @since 2.8.0
 	 * @since 3.0.0 Process is halted when no valid $post_id is supplied.
+	 * @since 4.1.3 Now flushes the sitemap cache (and instigates pinging thereof)
+	 *              even when TSF sitemaps are disabled.
 	 *
 	 * @param int $post_id The Post ID that has been updated.
 	 * @return bool True on success, false on failure.
@@ -123,11 +125,9 @@ class Cache extends Site_Options {
 
 		$success[] = $this->delete_cache( 'post', $post_id );
 
-		if ( $this->get_option( 'sitemaps_output' ) ) {
-			// Don't flush sitemap on revision.
-			if ( ! \wp_is_post_revision( $post_id ) )
-				$success[] = $this->delete_cache( 'sitemap' );
-		}
+		// Don't flush sitemap on revision.
+		if ( ! \wp_is_post_revision( $post_id ) )
+			$success[] = $this->delete_cache( 'sitemap' );
 
 		return ! \in_array( false, $success, true );
 	}
@@ -826,10 +826,7 @@ class Cache extends Site_Options {
 	 */
 	public function delete_sitemap_transient() {
 
-		static $run = false;
-
-		if ( $run )
-			return false;
+		if ( _has_run( __METHOD__ ) ) return false;
 
 		$transient = $this->get_sitemap_transient_name();
 		$transient and \delete_transient( $transient );
@@ -856,7 +853,7 @@ class Cache extends Site_Options {
 			\The_SEO_Framework\Bridges\Ping::ping_search_engines();
 		}
 
-		return $run = true;
+		return true;
 	}
 
 	/**
