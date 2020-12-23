@@ -507,12 +507,10 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="3" cols="4" autocomplete=off>
-					<?php
+				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="3" cols="4" autocomplete=off><?php
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
 					echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) );
-					?>
-				</textarea>
+					?></textarea>
 			</div>
 		</div>
 		<?php

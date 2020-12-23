@@ -250,7 +250,14 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 * **Fixed:**
 	* The cron pinging now works when TSF sitemaps are deactivated, as was intended since 4.1.2.
+	* Removed accidentally added horizontal lines (tabs) around the Twitter description input initiated via PHP code wrapping.
+		* This mistake caused Twitter descriptions to appear mutated --- this was an admin-area issue affecting UX only.
+		* The tabs were transformed to spaces by TSF's sanitization, which were then trimmed, all before saving the actual value. So, this issue couldn't affect any of your inputs, new or old.
 	* TODO fix Twitter desc post-edit: https://wordpress.org/support/topic/twitter-space-before-description/
+	* TODO fix screen bounce in Gutenberg @ WP 5.6
+	* TODO fix fadein bounce of tabs (any post-edit screen & SEO settings)
+		-> merge flextabToggle & tabtoggle beforehand.
+		-> User: "I cant switch tabz boi" -> CTRL+SHIFT+R...
 
 = 4.1.2 =
 
