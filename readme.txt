@@ -248,16 +248,33 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.3 =
 
+In this update [we splashed three bugs](https://theseoframework.com/?p= TODO #detailed) we didn't want around us in 2021.
+
+Note: If you can no longer switch tabs, try hitting CMD+SHIFT+R (Mac) or CTRL+SHIFT+R (Windows); this will fetch the latest scripts from your server.
+
+TODO test 'FIXME Can this cause an infinite loop?'.
+
 * **Fixed:**
 	* The cron pinging now works when TSF sitemaps are deactivated, as was intended since 4.1.2.
 	* Removed accidentally added horizontal lines (tabs) around the Twitter description input initiated via PHP code wrapping.
 		* This mistake caused Twitter descriptions to appear mutated --- this was an admin-area issue affecting UX only.
 		* The tabs were transformed to spaces by TSF's sanitization, which were then trimmed, all before saving the actual value. So, this issue couldn't affect any of your inputs, new or old.
-	* TODO fix Twitter desc post-edit: https://wordpress.org/support/topic/twitter-space-before-description/
-	* TODO fix screen bounce in Gutenberg @ WP 5.6
-	* TODO fix fadein bounce of tabs (any post-edit screen & SEO settings)
-		-> merge flextabToggle & tabtoggle beforehand.
-		-> User: "I cant switch tabz boi" -> CTRL+SHIFT+R...
+	* The screen no longer bounces when toggling TSF's settings-tabs using WP 5.6 or later.
+
+**For developers:**
+
+* **Script notes:**
+	* TSF now registers the `tsf-tabs` script. This script is used to register and perform tab-switching gracefully.
+* **Object notes:**
+	* **For object `\The_SEO_Framework\Bridges\Scripts`:**
+		* Added method `get_tabs_scripts()`.
+* **JS Notes:**
+	* **Added:**
+		* The `tabs` script. Accessible via object `tsfTabs`, with public methods:
+			* `toggleToInstant`
+			* `toggleTo`
+			* `getStack`
+			* `initStack`
 
 = 4.1.2 =
 

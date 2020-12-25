@@ -448,6 +448,25 @@ body.rtl .tsf-remove-image-button.button {
 	}
 }
 
+@keyframes tsf-fade-in {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+@keyframes tsf-fade-out {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
 @media screen and (max-width: 782px) {
 	.notice.tsf-notice,
 	.wp-core-ui .notice.tsf-notice {
