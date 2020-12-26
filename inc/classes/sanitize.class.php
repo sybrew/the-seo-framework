@@ -1390,6 +1390,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.8
 	 * @since 2.8.0 Method is now public.
+	 * @TODO rename to s_url_keep_query?
 	 *
 	 * @param string $new_value String, a URL, possibly unsafe.
 	 * @return string String a safe URL with Query Arguments.

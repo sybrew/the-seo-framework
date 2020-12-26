@@ -252,8 +252,6 @@ In this update [we splashed three bugs](https://theseoframework.com/?p= TODO #de
 
 Note: If you can no longer switch tabs, try hitting CMD+SHIFT+R (Mac) or CTRL+SHIFT+R (Windows); this will fetch the latest scripts from your server.
 
-TODO test 'FIXME Can this cause an infinite loop?'.
-
 * **Fixed:**
 	* The cron pinging now works when TSF sitemaps are deactivated, as was intended since 4.1.2.
 	* Removed accidentally added horizontal lines (tabs) around the Twitter description input initiated via PHP code wrapping.

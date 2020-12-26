@@ -191,7 +191,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 		'capability'   => 'install_plugins',
 		'user'         => 0,
 		'count'        => 2,
-		'timeout'      => strtotime( 'December 1st, 2020, 18:00GMT+1' ) - time(),
+		'timeout'      => strtotime( 'December 6th, 2020, 22:50GMT+1' ) - time(),
 	];
 
 	if ( $previous_version < '4120' && $current_version < '4200' )
