@@ -55,7 +55,8 @@ _prepare( $previous_version, $current_version );
  *              3. Can now run on the front-end without crashing.
  *              4. Added the first two parameters, $previous_version and $current_version.
  *              5. Now tests if the upgrade actually happened, before invoking the suggestion.
- * @since 4.1.2 Can now communicate with Extension Manager.
+ * @since 4.1.2 Can now communicate with Extension Manager for the edge-case sale.
+ * @since 4.1.3 Commented out sale notification conditions, as those can't be met anyway.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -71,15 +72,17 @@ function _prepare( $previous_version, $current_version ) {
 	//? 2
 	if ( ! \is_main_site() ) return;
 
-	$show_sale = true;
+	// phpcs:disable, Squiz.PHP.CommentedOutCode, Squiz.Commenting.InlineComment
+	// $show_sale = true;
 
-	if ( \function_exists( '\\tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
-		$show_sale = ! \tsf_extension_manager()->is_connected_user();
-	}
-	if ( $show_sale ) {
-		// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-		_suggest_temp_sale( $previous_version, $current_version );
-	}
+	// if ( \function_exists( '\\tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
+	// 	$show_sale = ! \tsf_extension_manager()->is_connected_user();
+	// }
+	// if ( $show_sale ) {
+	// 	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
+	// 	_suggest_temp_sale( $previous_version, $current_version );
+	// }
+	// phpcs:enable, Squiz.PHP.CommentedOutCode, Squiz.Commenting.InlineComment
 
 	//? 3a
 	if ( \defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;

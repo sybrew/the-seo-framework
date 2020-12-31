@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.1.0
 Tested up to: 5.6
 Requires PHP: 5.6.0
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -248,31 +248,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.3 =
 
-In this update [we splashed three bugs](https://theseoframework.com/?p= TODO #detailed) we didn't want around us in 2021.
+Before heading into 2021, we wanted to [set free four bugs](https://theseoframework.com/?p=3660#detailed).
 
-Note: If you can no longer switch tabs, try hitting CMD+SHIFT+R (Mac) or CTRL+SHIFT+R (Windows); this will fetch the latest scripts from your server.
-
-* **Fixed:**
-	* The cron pinging now works when TSF sitemaps are deactivated, as was intended since 4.1.2.
-	* Removed accidentally added horizontal lines (tabs) around the Twitter description input initiated via PHP code wrapping.
-		* This mistake caused Twitter descriptions to appear mutated --- this was an admin-area issue affecting UX only.
-		* The tabs were transformed to spaces by TSF's sanitization, which were then trimmed, all before saving the actual value. So, this issue couldn't affect any of your inputs, new or old.
-	* The screen no longer bounces when toggling TSF's settings-tabs using WP 5.6 or later.
-
-**For developers:**
-
-* **Script notes:**
-	* TSF now registers the `tsf-tabs` script. This script is used to register and perform tab-switching gracefully.
-* **Object notes:**
-	* **For object `\The_SEO_Framework\Bridges\Scripts`:**
-		* Added method `get_tabs_scripts()`.
-* **JS Notes:**
-	* **Added:**
-		* The `tabs` script. Accessible via object `tsfTabs`, with public methods:
-			* `toggleToInstant`
-			* `toggleTo`
-			* `getStack`
-			* `initStack`
+Pro tip: If you can no longer switch TSF's settings tabs, try hitting 'CMD+SHIFT+R' (Mac) or 'CTRL+SHIFT+R' (Windows); these keyboard shortcuts will force-fetch the latest scripts from your server.
 
 = 4.1.2 =
 

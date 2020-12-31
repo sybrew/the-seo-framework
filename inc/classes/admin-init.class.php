@@ -445,6 +445,7 @@ class Admin_Init extends Init {
 	 * Registers dismissible persistent notice, that'll respawn during page load until dismissed or otherwise expired.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.3 Now handles timeout values below -1 gracefully, by purging the whole notification gracelessly.
 	 * @uses $this->generate_dismissible_persistent_notice()
 	 *
 	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
@@ -465,6 +466,8 @@ class Admin_Init extends Init {
 	 *     'count'        => int    Optional. The number of times the persistent notice may appear (for everyone allowed to see it).
 	 *                              Set to -1 for unlimited. When -1, the notice must be removed from display manually.
 	 *     'timeout'      => int    Optional. The number of seconds the notice should remain valid for display. Set to -1 to disable check.
+	 *                              When the timeout is below -1, then the notification will not be outputted.
+	 *                              Do not input non-integer values (such as `false`), for those might cause adverse events.
 	 * }
 	 */
 	public function register_dismissible_persistent_notice( $message, $key, array $args = [], array $conditions = [] ) {
@@ -498,6 +501,9 @@ class Admin_Init extends Init {
 
 		// Required key for security.
 		if ( ! $conditions['capability'] ) return;
+
+		// Timeout already expired. Let's not register it.
+		if ( $conditions['timeout'] < -1 ) return;
 
 		// Add current time to timeout, so we can compare against it later.
 		if ( $conditions['timeout'] > -1 )

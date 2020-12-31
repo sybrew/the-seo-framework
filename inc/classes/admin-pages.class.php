@@ -444,6 +444,7 @@ class Admin_Pages extends Profile {
 	 * Outputs registered dismissible persistent notice.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.2 Now only ignores timeout values of -1 to test against.
 	 * @uses $this->output_dismissible_persistent_notice()
 	 * @uses $this->count_down_persistent_notice()
 	 * @global string $page_hook
@@ -463,7 +464,7 @@ class Admin_Pages extends Profile {
 			if ( $cond['screens'] && ! \in_array( $base, $cond['screens'], true ) ) continue;
 			if ( $cond['excl_screens'] && \in_array( $base, $cond['excl_screens'], true ) ) continue;
 
-			if ( $cond['timeout'] > -1 && $cond['timeout'] < time() ) {
+			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
 				$this->clear_persistent_notice( $key );
 				continue;
 			}

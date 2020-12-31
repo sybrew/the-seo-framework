@@ -431,6 +431,7 @@ final class Sitemap {
 	 * Outputs the sitemap header.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.3 Added a trailing newline to the stylesheet-tag for readability.
 	 */
 	public function output_sitemap_header() {
 
@@ -438,7 +439,7 @@ final class Sitemap {
 
 		if ( static::$tsf->get_option( 'sitemap_styles' ) ) {
 			printf(
-				'<?xml-stylesheet type="text/xsl" href="%s"?>',
+				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
 				// phpcs:ignore, WordPress.Security.EscapeOutput
 				$this->get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
 			);
