@@ -772,7 +772,7 @@ final class Deprecated {
 	 * Fetches site icon brought in WordPress 4.3
 	 *
 	 * @since 2.8.0
-	 * @since 3.0.0 : Now sets preferred canonical URL scheme.
+	 * @since 3.0.0 Now sets preferred canonical URL scheme.
 	 * @since 4.0.0 Deprecated.
 	 * @deprecated
 	 *

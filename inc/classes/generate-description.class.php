@@ -749,9 +749,9 @@ class Generate_Description extends Generate {
 	 * Fetches or parses the excerpt of the post.
 	 *
 	 * @since 1.0.0
-	 * @since 2.8.2 : Added 4th parameter for escaping.
-	 * @since 3.1.0 1. No longer returns anything for terms.
-	 *              2. Now strips plausible embeds URLs.
+	 * @since 2.8.2 Added 4th parameter for escaping.
+	 * @since 3.1.0 : 1. No longer returns anything for terms.
+	 *                2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
 	 *
 	 * @param string $excerpt    The Excerpt.

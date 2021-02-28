@@ -165,8 +165,8 @@ abstract class Sitemap {
 		if ( null === $excluded ) {
 			/**
 			 * @since 2.5.2
-			 * @since 2.8.0 : No longer accepts '0' as entry.
-			 * @since 3.1.0 : '0' is accepted again.
+			 * @since 2.8.0 No longer accepts '0' as entry.
+			 * @since 3.1.0 '0' is accepted again.
 			 * @param array $excluded Sequential list of excluded IDs: [ int ...post_id ]
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', [] );

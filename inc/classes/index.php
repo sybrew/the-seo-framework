@@ -35,7 +35,6 @@
  *       | Sanitize
  *       | Site_Options
  *       | Cache
- *       | Feed
  *       | Load
  *          |-> Final
  *          |-> Instanced in function `the_seo_framework()`

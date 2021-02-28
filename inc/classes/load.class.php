@@ -99,7 +99,7 @@ final class Load extends Cache {
 
 		/**
 		 * @since 2.4.3
-		 * @since 2.8.0 : Uses method $this->use_object_cache() as default.
+		 * @since 2.8.0 Uses method $this->use_object_cache() as default.
 		 * @param bool $use_object_cache Whether to enable object caching.
 		 */
 		$this->use_object_cache = (bool) \apply_filters(

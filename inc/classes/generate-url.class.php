@@ -976,8 +976,8 @@ class Generate_Url extends Generate_Title {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.7.0
-	 * @since 2.9.2 : Now considers port too.
-	 *              : Now uses get_home_url(), rather than get_option('home').
+	 * @since 2.9.2 : 1. Now considers port too.
+	 *                2. Now uses get_home_url(), rather than get_option('home').
 	 *
 	 * @return string The home URL host.
 	 */

@@ -246,11 +246,36 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.1.4 =
+
+**For everyone:**
+
+* **Fixed:**
+	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
+
+TODO fix the tooltip actions in media.js
+TODO remove object caching, so that we can output TSF meta instantly
+	-> improving meta performance by what, 5%? Or does this hamper, since the output buffer isn't utilized correctly, although concatenation isn't happening?
+	-> Clean up caching class, such as removing calls that clear the now non-existent object cache, too.
+TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
+TODO figure if we need to check for is_post_status_viewable() (in sitemap/post type supported)?
+	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/
+	-> Thanks, WordPress Core Team, for creating yet another discrepancy with term-code?
+TODO remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' )
+	-> Figure out how to integrate with wp_robots later... we, developers, have been sodomized by this rapid integration.
+	-> or, add_filter( 'wp_robots', function( $robots ) { unset( $robots[ copyright directives ]; return $robots ) }, 911 );
+	-> Core also stated they added Media visibility enhancements? Strip them, for TSF does that (preemptively), but also with options.
+TODO extract get_social_image_uploader_form to a new API, where all data et al. can be manipulated. The methods currently will call that new API.
+	-> This should also affect the social image uploader form for Articles.
+		-> Then again, the News Publishers should be aware of the logo guidelines, and upload an image perfectly.
+TODO remove UM data, add profile picture to image-generator?
+	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
+
 = 4.1.3 =
 
 Before heading into 2021, we wanted to [set free four bugs](https://theseoframework.com/?p=3660#detailed).
 
-Pro tip: If you can no longer switch TSF's settings tabs, try hitting 'CMD+SHIFT+R' (Mac) or 'CTRL+SHIFT+R' (Windows); these keyboard shortcuts will force-fetch the latest scripts from your server.
+Pro tip: If you can no longer switch TSF's settings tabs, try hitting 'CMD+OPTION+R' (Safari Mac), 'CMD+SHIFT+R' (Chrome/Firefox Mac) or 'CTRL+SHIFT+R' (Windows); these keyboard shortcuts will force-fetch the latest scripts from your server.
 
 = 4.1.2 =
 

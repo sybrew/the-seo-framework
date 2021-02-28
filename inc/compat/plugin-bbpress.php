@@ -270,7 +270,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  * This function fixes the Excerpt part.
  *
  * @since 2.9.0
- * @since 3.0.4 : Default value for $max_char_length has been increased from 155 to 300.
+ * @since 3.0.4 Default value for $max_char_length has been increased from 155 to 300.
  * @since 3.1.0 Now no longer fixes the description when `is_tax()` is true.
  *              @see `_bbpress_filter_pre_title()` for explanation.
  * @since 4.0.0 No longer overrules external queries.

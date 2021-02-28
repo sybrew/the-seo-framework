@@ -152,7 +152,7 @@ class Render extends Admin_Init {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 : Added output within filter.
+		 * @since 2.7.0 Added output within filter.
 		 * @param string $description The generated description.
 		 * @param int    $id          The page or term ID.
 		 */

@@ -529,11 +529,8 @@ class Core {
 	 * @return string PHP Timezone String.
 	 */
 	protected function get_tzstring_from_offset( $offset = 0 ) {
-
-		$seconds  = round( $offset * HOUR_IN_SECONDS );
-		$tzstring = timezone_name_from_abbr( '', $seconds, 1 );
-
-		return $tzstring;
+		$seconds = round( $offset * HOUR_IN_SECONDS );
+		return timezone_name_from_abbr( '', $seconds, 1 );
 	}
 
 	/**

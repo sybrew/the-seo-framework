@@ -433,7 +433,7 @@ class Init extends Query {
 
 		$robots = $this->robots();
 
-		/** @since 4.0.4 : Added as WP 5.3 patch. */
+		/** @since 4.0.4 Added as WP 5.3 patch. */
 		$this->set_timezone( 'UTC' );
 
 		/**
@@ -511,7 +511,7 @@ class Init extends Query {
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 
-		/** @since 4.0.4 : Added as WP 5.3 patch. */
+		/** @since 4.0.4 Added as WP 5.3 patch. */
 		$this->reset_timezone();
 
 		return "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";

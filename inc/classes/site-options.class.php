@@ -541,7 +541,7 @@ class Site_Options extends Sanitize {
 	 * Get the default of any of the The SEO Framework settings.
 	 *
 	 * @since 2.2.4
-	 * @since 2.8.2 : No longer decodes entities on request.
+	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 : 1. Now returns null if the option doesn't exist, instead of -1.
 	 *                2. Is now influenced by filters.
 	 *                3. Now also strips slashes when using cache.
@@ -579,7 +579,7 @@ class Site_Options extends Sanitize {
 	 * Get the warned setting of any of the The SEO Framework settings.
 	 *
 	 * @since 2.3.4
-	 * @since 3.1.0 : Now returns 0 if the option doesn't exist, instead of -1.
+	 * @since 3.1.0 Now returns 0 if the option doesn't exist, instead of -1.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 * @uses $this->get_warned_site_options()
 	 *

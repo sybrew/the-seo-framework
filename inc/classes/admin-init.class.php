@@ -342,7 +342,7 @@ class Admin_Init extends Init {
 	 *
 	 * Performs die() on failure.
 	 *
-	 * @since 3.1.0 : Introduced in 2.9.0, but the name changed.
+	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
 	 * @access private
 	 *         It uses an internally and manually created prefix.
 	 * @uses WP Core check_ajax_referer()
@@ -644,7 +644,7 @@ class Admin_Init extends Init {
 	/**
 	 * Handles counter option update on AJAX request for users that can edit posts.
 	 *
-	 * @since 3.1.0 : Introduced in 2.6.0, but the name changed.
+	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
@@ -816,7 +816,7 @@ class Admin_Init extends Init {
 	 *           3. It now only accepts context 'tsf-image'
 	 *           4. It no longer accepts a default context.
 	 *
-	 * @since 3.1.0 : Introduced in 2.9.0, but the name changed.
+	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */

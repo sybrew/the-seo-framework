@@ -883,9 +883,9 @@ class Sanitize extends Admin_Pages {
 	 * Returns an one-line sanitized description and escapes it.
 	 *
 	 * @since 2.5.0
-	 * @since 2.6.6 : Removes duplicated spaces.
-	 * @since 2.8.0 : Method is now public.
-	 * @since 2.8.2 : Added extra sanitation.
+	 * @since 2.6.6 Removes duplicated spaces.
+	 * @since 2.8.0 Method is now public.
+	 * @since 2.8.2 Added extra sanitation.
 	 * @uses $this->s_description_raw().
 	 * @uses $this->escape_description().
 	 *

@@ -444,7 +444,7 @@ class Cache extends Site_Options {
 	 * @since 2.6.0 Refactored.
 	 * @since 2.9.1 : 1. Added early singular type detection.
 	 *                2. Moved generation into $this->generate_cache_key_by_query().
-	 * @since 3.1.1 : The first parameter is now optional.
+	 * @since 3.1.1 The first parameter is now optional.
 	 * @see $this->generate_cache_key_by_query() to get cache key from the query.
 	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
 	 *
@@ -467,7 +467,7 @@ class Cache extends Site_Options {
 	 * Warning: This can generate errors when used too early if no type has been set.
 	 *
 	 * @since 2.9.1
-	 * @since 3.1.1 : The first parameter is now optional.
+	 * @since 3.1.1 The first parameter is now optional.
 	 * @see $this->generate_cache_key_by_type() to get cache key outside of the query.
 	 *
 	 * @param int|string|bool $page_id  The Taxonomy or Post ID.
@@ -796,7 +796,7 @@ class Cache extends Site_Options {
 	 * Checks whether the permalink structure is updated.
 	 *
 	 * @since 2.3.0
-	 * @since 2.7.0 : Added admin referer check.
+	 * @since 2.7.0 Added admin referer check.
 	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
