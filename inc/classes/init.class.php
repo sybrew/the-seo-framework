@@ -307,6 +307,14 @@ class Init extends Query {
 			}
 		}
 
+		/**
+		 * @since 4.1.4
+		 * @param bool $kill_core_robots Whether you lack sympathy for rocks tricked to think.
+		 */
+		if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) ) {
+			\remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' );
+		}
+
 		if ( $this->get_option( 'og_tags' ) ) { // independent from filter at use_og_tags--let that be deciding later.
 			// Disable Jetpack's Open Graph tags. But Sybre, compat files? Yes.
 			\add_filter( 'jetpack_enable_open_graph', '__return_false' );
@@ -385,6 +393,17 @@ class Init extends Query {
 	public function html_output() {
 
 		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
+
+		/**
+		 * We added this filter a second time, for this method is conditional (see two lines above).
+		 * When the query doesn't support TSF's SEO, we want default behavior to ensue.
+		 *
+		 * @since 4.1.4
+		 * @param bool $kill_core_robots Whether you feel sympathy for rocks tricked to think.
+		 */
+		if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) ) {
+			\remove_filter( 'wp_robots', 'wp_robots_noindex_search' );
+		}
 
 		/**
 		 * @since 2.6.0

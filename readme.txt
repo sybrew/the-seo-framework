@@ -250,8 +250,32 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For everyone:**
 
+* **Removed:**
+	* TODO Object caching of the HTML output of TSF.
+		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).
+		* This does not mean we removed basic object caching support! We only purged our very custom implementation for it. You do not need to clear your object cache after updating, and you won't find performance altered.
+* **Other:**
+	* WordPress 5.7 comes with improved robots-directives support. The improvements only go so far, and although WordPress seems dogmatic about bringing the editor experience to the front-end, it falls completely flat recognizing that the back-end query-system is disjointed from the front-end, as such is the newly 'improved' robots-directives support. Because we reliably rely on reliable queries with reliance, we are left with no choice but to strip some of its conflicting functionality from Core, without changing the fully fledged experience you've come to expect from TSF. To summarize our actions:
+		* TSF will not integrate with this new Core feature for now.
+		* TSF will remove some of WordPress 5.7 robots support on these pages:
+			* `noindex` for search. TSF supports this feature with a toggle already. When TSF doesn't support the search query's query (yes, that's a thing), this directive can be reinstated via Core.
+			* The new robots-directive support for maximum-image-preview-directives throughout your site, regardless whether a page is supported by TSF or not. TSF allows you much greater control and supports this directive quintessentially in principle on all pages it supports. We removed this output from WordPress as an enforced opt-out of this directive because there's a conflict of policy, exempting foreboding legal issues from your potential clients for whatever TSF promises on its settings-pages to the site owners. ELI2: no copyright WP-robots, yes copyright TSF-robots. "But... but...!", -- no, talk to your lawyer.
+		* TSF will not remove the newly added `noindex` for embed pages. WordPress can detect embeds, and plugins or themes might respond differently (unpredictably) when embedded.
+		* TSF will not remove the refactored WordPress method for outputting `noindex` when the blog isn't set to public. TSF will warn you about this still -- very much so.
+		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
+	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 * **Fixed:**
 	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
+	* TODO TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile pages, regardless of your SEO settings otherwise.
+		* Now, you can also overwrite these settings effectively.
+		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
+		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. i.e., accessible via `wc_get_page_id()` (WC 3.0 and later).
+
+**For developers:**
+
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
 
 TODO fix the tooltip actions in media.js
 TODO remove object caching, so that we can output TSF meta instantly
