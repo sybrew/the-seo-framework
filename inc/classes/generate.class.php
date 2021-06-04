@@ -208,9 +208,8 @@ class Generate extends User_Data {
 
 		// Check homepage SEO settings, set noindex, nofollow and noarchive
 		if ( $this->is_real_front_page() ) {
-			$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
-			$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
-			$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
+				$$r = $$r || $this->get_option( "homepage_$r" );
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
 				$noindex = $noindex
@@ -256,22 +255,21 @@ class Generate extends User_Data {
 
 			if ( $this->is_archive() ) {
 				if ( $this->is_author() ) {
-					$noindex   = $noindex || $this->get_option( 'author_noindex' );
-					$nofollow  = $nofollow || $this->get_option( 'author_nofollow' );
-					$noarchive = $noarchive || $this->get_option( 'author_noarchive' );
+					foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
+						$$r = $$r || $this->get_option( "author_$r" );
 				} elseif ( $this->is_date() ) {
-					$noindex   = $noindex || $this->get_option( 'date_noindex' );
-					$nofollow  = $nofollow || $this->get_option( 'date_nofollow' );
-					$noarchive = $noarchive || $this->get_option( 'date_noarchive' );
+					foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
+						$$r = $$r || $this->get_option( "date_$r" );
 				}
 			} elseif ( $this->is_search() ) {
-				$noindex   = $noindex || $this->get_option( 'search_noindex' );
-				$nofollow  = $nofollow || $this->get_option( 'search_nofollow' );
-				$noarchive = $noarchive || $this->get_option( 'search_noarchive' );
+				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
+					$$r = $$r || $this->get_option( "search_$r" );
 			}
 		}
 
 		if ( $this->is_archive() ) {
+			$taxonomy = $this->get_current_taxonomy();
+
 			$_post_type_meta = [];
 			// Store values from each post type bound to the taxonomy.
 			foreach ( $this->get_post_types_from_taxonomy() as $post_type ) {
@@ -281,14 +279,11 @@ class Generate extends User_Data {
 				}
 			}
 			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $r => $_values ) {
+			foreach ( $_post_type_meta as $r => $_values )
 				$$r = $$r || ! \in_array( false, $_values, true );
-			}
 
-			$taxonomy = $this->get_current_taxonomy();
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
 				$$r = $$r || $this->is_taxonomy_robots_set( $r, $taxonomy );
-			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$term_meta = $this->get_current_term_meta();
@@ -301,11 +296,10 @@ class Generate extends User_Data {
 				}
 			endif;
 		} elseif ( $this->is_singular() ) {
+			$post_type = $this->get_current_post_type();
 
-			$post_type = $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
+			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
 				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
-			}
 
 			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
 				$post_meta = [
@@ -558,7 +552,7 @@ class Generate extends User_Data {
 		return ! empty(
 			$this->get_option(
 				$this->get_robots_post_type_option_id( $type )
-			)[ $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type() ]
+			)[ $post_type ?: $this->get_current_post_type() ]
 		);
 	}
 

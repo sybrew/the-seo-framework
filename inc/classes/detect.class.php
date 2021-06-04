@@ -978,7 +978,7 @@ class Detect extends Render {
 	 */
 	public function is_post_type_supported( $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
+		$post_type = $post_type ?: $this->get_current_post_type();
 
 		/**
 		 * @since 2.6.2
@@ -1048,7 +1048,7 @@ class Detect extends Render {
 		if ( isset( $cache[ $post_type ] ) )
 			return $cache[ $post_type ];
 
-		$post_type = $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
+		$post_type = $post_type ?: $this->get_current_post_type();
 		if ( ! $post_type ) return false;
 
 		if ( \get_object_taxonomies( $post_type, 'names' ) )
@@ -1191,7 +1191,7 @@ class Detect extends Render {
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
+		$post_type = $post_type ?: $this->get_current_post_type();
 
 		/**
 		 * @since 3.1.2

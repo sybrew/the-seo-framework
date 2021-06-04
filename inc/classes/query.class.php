@@ -297,6 +297,17 @@ class Query extends Core {
 	}
 
 	/**
+	 * Returns the current post type, if any.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @return string The queried post type.
+	 */
+	public function get_current_post_type() {
+		return $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
+	}
+
+	/**
 	 * Detects 404.
 	 *
 	 * @since 2.6.0

@@ -269,10 +269,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* TODO TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile pages, regardless of your SEO settings otherwise.
 		* Now, you can also overwrite these settings effectively.
 		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
+		* TODO Cool: TSF will now also explain this feature with a custom message in the SEO Bar.
 		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. i.e., accessible via `wc_get_page_id()` (WC 3.0 and later).
 
 **For developers:**
 
+* **Method notes:**
+	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
+		* **Added:**
+			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
