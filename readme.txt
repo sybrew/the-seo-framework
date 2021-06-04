@@ -226,7 +226,7 @@ In the meantime, you can disable SEO for the unwanted entries via the "General S
 
 = Why aren't focus keywords included? =
 
-[Google warns](https://support.google.com/webmasters/answer/66358) about the keyword stuffing approach implemented by some other SEO plugins. It forces users to write unnatural content, and it can have adverse effects on your site's ranking.
+[Google warns](https://developers.google.com/search/docs/advanced/guidelines/irrelevant-keywords) about the keyword stuffing approach implemented by some other SEO plugins. It forces users to write unnatural content, and it can have adverse effects on your site's ranking.
 
 Modern search engines use AI to understand the context of your articles. This means that as long as you write relevant content, you shouldn't have to worry about keywords.
 
@@ -254,6 +254,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* TODO Object caching of the HTML output of TSF.
 		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).
 		* This does not mean we removed basic object caching support! We only purged our very custom implementation for it. You do not need to clear your object cache after updating, and you won't find performance altered.
+* **Updated:**
+	* `[?]`/Documentation links to various official Google and Bing resources no longer need to redirect to their latest articles.
 * **Other:**
 	* WordPress 5.7 comes with improved robots-directives support. The improvements only go so far, and although WordPress seems dogmatic about bringing the editor experience to the front-end, it falls completely flat recognizing that the back-end query-system is disjointed from the front-end, as such is the newly 'improved' robots-directives support. Because we reliably rely on reliable queries with reliance, we are left with no choice but to strip some of its conflicting functionality from Core, without changing the fully fledged experience you've come to expect from TSF. To summarize our actions:
 		* TSF will not integrate with this new Core feature for now.

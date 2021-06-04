@@ -604,9 +604,7 @@ class Generate extends User_Data {
 	 * @return string $blogname The escaped and sanitized blogname.
 	 */
 	public function get_blogname() {
-
-		static $blogname = null;
-
+		static $blogname;
 		return isset( $blogname ) ? $blogname : $blogname = trim( \get_bloginfo( 'name', 'display' ) );
 	}
 
@@ -620,9 +618,7 @@ class Generate extends User_Data {
 	 * @return string $blogname The escaped and sanitized blog description.
 	 */
 	public function get_blogdescription() {
-
-		static $description = null;
-
+		static $description;
 		return isset( $description ) ? $description : $description = trim( \get_bloginfo( 'description', 'display' ) );
 	}
 

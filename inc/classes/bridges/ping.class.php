@@ -160,7 +160,7 @@ final class Ping {
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @since 4.0.3 Google now redirects to HTTPS. Updated URL scheme to accomodate.
 	 * @since 4.1.2 Now fetches WP Sitemaps' index URL when it's enabled.
-	 * @link https://support.google.com/webmasters/answer/6065812?hl=en
+	 * @link https://developers.google.com/search/docs/advanced/crawling/ask-google-to-recrawl
 	 */
 	public static function ping_google() {
 
@@ -184,7 +184,7 @@ final class Ping {
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @since 4.0.3 Bing now redirects to HTTPS. Updated URL scheme to accomodate.
 	 * @since 4.1.2 Now fetches WP Sitemaps' index URL when it's enabled.
-	 * @link https://www.bing.com/webmaster/help/how-to-submit-sitemaps-82a15bd4
+	 * @link https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed
 	 */
 	public static function ping_bing() {
 

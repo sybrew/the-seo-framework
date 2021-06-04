@@ -72,7 +72,7 @@ switch ( $instance ) :
 					echo ' ';
 					$this->make_info(
 						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624#page-titles'
+						'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles'
 					);
 				?>
 			</label>
@@ -139,7 +139,7 @@ switch ( $instance ) :
 					echo ' ';
 					$this->make_info(
 						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624#meta-descriptions'
+						'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#meta-descriptions'
 					);
 				?>
 			</label>
@@ -448,7 +448,7 @@ switch ( $instance ) :
 			),
 			$this->make_info(
 				__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/93710',
+				'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
 				false
 			),
 			$noindex_post ? $checked_home : ''
@@ -464,7 +464,7 @@ switch ( $instance ) :
 			),
 			$this->make_info(
 				__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/96569',
+				'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
 				false
 			),
 			$nofollow_post ? $checked_home : ''
@@ -480,7 +480,7 @@ switch ( $instance ) :
 			),
 			$this->make_info(
 				__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/79812',
+				'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 				false
 			),
 			$noarchive_post ? $checked_home : ''

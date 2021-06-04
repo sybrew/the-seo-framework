@@ -60,7 +60,7 @@ $robots_settings = [
 		'_value'    => $noindex,
 		'_info'     => [
 			__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/93710',
+			'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
 		],
 	],
 	'nofollow'  => [
@@ -73,7 +73,7 @@ $robots_settings = [
 		'_value'    => $nofollow,
 		'_info'     => [
 			__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/96569',
+			'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
 		],
 	],
 	'noarchive' => [
@@ -86,7 +86,7 @@ $robots_settings = [
 		'_value'    => $noarchive,
 		'_info'     => [
 			__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
-			'https://support.google.com/webmasters/answer/79812',
+			'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 		],
 	],
 ];
@@ -116,7 +116,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624#page-titles'
+						'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles'
 					);
 					?>
 				</label>
@@ -167,7 +167,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/35624#meta-descriptions'
+						'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#meta-descriptions'
 					);
 					?>
 				</label>
@@ -304,7 +304,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/139066'
+						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
 					);
 					?>
 				</label>
@@ -321,7 +321,7 @@ $robots_settings = [
 				echo ' ';
 				$this->make_info(
 					__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this term.', 'autodescription' ),
-					'https://developers.google.com/search/reference/robots_meta_tag#valid-indexing--serving-directives'
+					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives'
 				);
 				?>
 				</th>
@@ -362,7 +362,7 @@ $robots_settings = [
 					echo ' ';
 					$this->make_info(
 						__( 'This will force visitors to go to another URL.', 'autodescription' ),
-						'https://support.google.com/webmasters/answer/93633'
+						'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
 					);
 					?>
 				</label>

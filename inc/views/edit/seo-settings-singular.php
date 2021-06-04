@@ -121,7 +121,7 @@ switch ( $instance ) :
 						<?php
 						$this->make_info(
 							__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/35624#page-titles'
+							'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles'
 						);
 						?>
 						</div>
@@ -191,7 +191,7 @@ switch ( $instance ) :
 						<?php
 						$this->make_info(
 							__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-							'https://support.google.com/webmasters/answer/35624#meta-descriptions'
+							'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#meta-descriptions'
 						);
 						?>
 						</div>
@@ -270,7 +270,7 @@ switch ( $instance ) :
 						<?php
 							$this->make_info(
 								__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-								'https://support.google.com/webmasters/answer/139066'
+								'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
 							);
 						?>
 						</div>
@@ -291,7 +291,7 @@ switch ( $instance ) :
 						<?php
 							$this->make_info(
 								__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this page.', 'autodescription' ),
-								'https://developers.google.com/search/reference/robots_meta_tag#valid-indexing--serving-directives'
+								'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives'
 							);
 						?>
 						</div>
@@ -401,7 +401,7 @@ switch ( $instance ) :
 							<?php
 							$this->make_info(
 								__( 'This will force visitors to go to another URL.', 'autodescription' ),
-								'https://support.google.com/webmasters/answer/93633'
+								'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
 							);
 							?>
 						</div>

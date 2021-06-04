@@ -256,7 +256,7 @@ switch ( $instance ) :
 			<?php
 			$info = $this->make_info(
 				__( 'Always brand your titles. Search engines may ignore your titles with this feature enabled.', 'autodescription' ),
-				'https://support.google.com/webmasters/answer/35624#page-titles',
+				'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles',
 				false
 			);
 
