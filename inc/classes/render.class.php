@@ -132,9 +132,7 @@ class Render extends Admin_Init {
 	 * @return string The cached Twitter card.
 	 */
 	public function get_current_twitter_card_type() {
-
-		static $cache = null;
-
+		static $cache;
 		return isset( $cache ) ? $cache : $cache = $this->generate_twitter_card_type();
 	}
 
@@ -1030,7 +1028,7 @@ class Render extends Admin_Init {
 	 */
 	public function get_robots_meta() {
 
-		static $cache = null;
+		static $cache;
 
 		/**
 		 * @since 2.6.0

@@ -45,7 +45,7 @@ final class Ping {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now returns whether the cron engagement was successful.
-	 * @since 4.1.2 Now registers before and after cron hooks. They should run subsequential when successful.
+	 * @since 4.1.2 Now registers before and after cron hooks. They should run subsequentially when successful.
 	 * @see static::engage_pinging_retry_cron()
 	 *
 	 * @return bool True on success, false on failure.

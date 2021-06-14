@@ -197,7 +197,6 @@ class Core {
 	 */
 	protected function create_view_secret( $value = null ) {
 		static $secret;
-		// TODO PHP7+ `$secret = $value ?? $secret;`
 		return $secret = isset( $value ) ? $value : $secret;
 	}
 

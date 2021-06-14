@@ -143,11 +143,6 @@ final class Load extends Cache {
 	 */
 	public function _load_early_compat_files() {
 
-		// phpcs:disable, Squiz.PHP.CommentedOutCode
-		// if ( ! extension_loaded( 'mbstring' ) )
-		// $this->_include_compat( 'mbstring', 'php' );
-		// phpcs:enable, Squiz.PHP.CommentedOutCode
-
 		// Disable Headway theme SEO.
 		\add_filter( 'headway_seo_disabled', '__return_true' );
 
