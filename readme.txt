@@ -250,6 +250,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For everyone:**
 
+* **Improved:**
+	* TODO (Forgo this? -> Store progress in branch?) We made the robots-generator a literal generator.
 * **Removed:**
 	* TODO Object caching of the HTML output of TSF.
 		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).
@@ -267,24 +269,54 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 * **Fixed:**
+	* TODO Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage was force-indexed via the homepage's post meta.
 	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
-	* TODO TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile pages, regardless of your SEO settings otherwise.
+	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
 		* Now, you can also overwrite these settings effectively.
+			* Cool: TSF will warn that WooCommerce recommends otherwise via the SEO Bar.
+				* When you don't overwrite its state, TSF will then tell WooCommerce recommended this state.
 		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
-		* TODO Cool: TSF will now also explain this feature with a custom message in the SEO Bar.
-		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. i.e., accessible via `wc_get_page_id()` (WC 3.0 and later).
+		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. The setting is accessible via `wc_get_page_id()` (WC 3.0 and later).
+
+**For translators:**
+
+* **Added:**
+	* A few new strings require translation.
+	* You may find a few strings fuzzy because we updated the links to the documentation of Google and Bing.
+* **Updated:**
+	* Translation POT file.
 
 **For developers:**
 
+* **Object notes:**
+	* **Added:**
+		* TODO `\The_SEO_Framework\Generate_Robots`, extends TODO FIXME `\The_SEO_Framework\Generate`
+			* This class is used to generate Robots directive SEO data based on content.
+			* The methods it contains were moved from the `\The_SEO_Framework\Generate` class, TODO which is now removed.
+			* This class is part of the façade class `\The_SEO_Framework\Load` (callable via `the_seo_framework()`).
+			* This class should not be instantiated directly. Use `the_seo_framework()` to get the object, instead.
+	* **Removed:**
+		* TODO `\The_SEO_Framework\Generate`
 * **Method notes:**
 	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
 		* **Added:**
 			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
+			* TODO `generate_robots_meta()`, returns generated robots metadata.
+		* **Info:**
+			* TODO `robots_meta()` is now marked for deprecation.
+			* `is_robots_meta_noindex_set_by_args()` is now marked for deprecation. Use `robots_meta()` instead (which is also marked for deprecation... hmmm TODO).
+	* **For object `The_SEO_Framework\Builders\SeoBar`
+		* **Added:**
+			* `clear_query_cache()`, clears the query cache.
+			* `get_query_cache()`, presents an unalterable form of query cache.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
+	* **Improved:**
+		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
 
 TODO fix the tooltip actions in media.js
+	-> Did I make a note of this? Has it to do with dynamic loading of the on-hover elements, such as in Local?
 TODO remove object caching, so that we can output TSF meta instantly
 	-> improving meta performance by what, 5%? Or does this hamper, since the output buffer isn't utilized correctly, although concatenation isn't happening?
 	-> Clean up caching class, such as removing calls that clear the now non-existent object cache, too.
@@ -301,6 +333,9 @@ TODO extract get_social_image_uploader_form to a new API, where all data et al. 
 		-> Then again, the News Publishers should be aware of the logo guidelines, and upload an image perfectly.
 TODO remove UM data, add profile picture to image-generator?
 	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
+TODO Figure out how to deal with subdirectories and Polylang...
+	-> Check before and after? Compare? Ugh?
+	-> https://wordpress.org/support/topic/sitemap-issue-with-subfolder-multisite-and-polylang/#post-14547928
 
 = 4.1.3 =
 

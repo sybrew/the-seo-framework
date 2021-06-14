@@ -619,8 +619,6 @@ final class SeoBar_Page extends SeoBar {
 			]
 		);
 
-		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
-
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
 			// TODO Really stop asserting from here?
@@ -630,6 +628,8 @@ final class SeoBar_Page extends SeoBar {
 		} else {
 			$item = $cache['defaults']['index'];
 		}
+
+		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
 
 		if ( ! $robots_global['blogpublic'] ) {
 			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
@@ -773,8 +773,6 @@ final class SeoBar_Page extends SeoBar {
 			]
 		);
 
-		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
-
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
 			// TODO Really stop asserting from here?
@@ -784,6 +782,8 @@ final class SeoBar_Page extends SeoBar {
 		} else {
 			$item = $cache['defaults']['follow'];
 		}
+
+		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
 
 		if ( ! $robots_global['blogpublic'] ) {
 			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
@@ -904,8 +904,6 @@ final class SeoBar_Page extends SeoBar {
 			]
 		);
 
-		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
-
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
 			// TODO Really stop asserting from here?
@@ -915,6 +913,8 @@ final class SeoBar_Page extends SeoBar {
 		} else {
 			$item = $cache['defaults']['archive'];
 		}
+
+		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
 
 		if ( ! $robots_global['blogpublic'] ) {
 			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;

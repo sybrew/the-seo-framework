@@ -142,7 +142,14 @@ class Generate extends User_Data {
 		 * @since 4.0.2 Now contains the copyright diretive values.
 		 * @since 4.0.3 Changed `$meta` key `max_snippet_length` to `max_snippet`
 		 *
-		 * @param array      $meta The current robots meta.
+		 * @param array      $meta The current robots meta. {
+		 *     'noindex'           : 'noindex'|''
+		 *     'nofollow'          : 'nofollow'|''
+		 *     'noarchive'         : 'noarchive'|''
+		 *     'max_snippet'       : 'max-snippet:<int>'|''
+		 *     'max_image_preview' : 'max-image-preview:<string>'|''
+		 *     'max_video_preview' : 'max-video-preview:<string>'|''
+		 * }
 		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
 		 *                         Is null when query is autodetermined.
 		 * @param int <bit>  $ignore The ignore level. {
@@ -184,12 +191,12 @@ class Generate extends User_Data {
 	 *    3 = 0b11: Ignore protection and post/term meta setting.
 	 * }
 	 * @return array|null robots : {
-	 *    bool              'noindex'
-	 *    bool              'nofollow'
-	 *    bool              'noarchive'
-	 *    false|int <R>=-1> 'max_snippet'
-	 *    false|string      'max_image_preview'
-	 *    fasle|int <R>=-1> 'max_video_preview'
+	 *    bool                   'noindex'
+	 *    bool                   'nofollow'
+	 *    bool                   'noarchive'
+	 *    false|int <R>=-1<=600> 'max_snippet'
+	 *    false|string           'max_image_preview'
+	 *    fasle|int <R>=-1<=600> 'max_video_preview'
 	 * }
 	 */
 	protected function get_robots_meta_by_query( $ignore = 0b00 ) {
@@ -226,7 +233,7 @@ class Generate extends User_Data {
 				 * which is exactly as intended. All other pages will relay 404.
 				 *
 				 * We do not test the post_count here, because we want to have
-				 * the first page indexable via user-intend only.
+				 * the first page indexable via user-intent only.
 				 */
 				$noindex = $noindex || $this->is_404();
 			} else {
@@ -239,6 +246,7 @@ class Generate extends User_Data {
 				 * Don't use empty(), null is regarded as indexable.
 				 *
 				 * TODO Consider toggling this for author archives?
+				 * TODO 4.1.4 add filter.
 				 */
 				if ( isset( $wp_query->post_count ) && ! $wp_query->post_count )
 					$noindex = true;
@@ -462,8 +470,13 @@ class Generate extends User_Data {
 	 *
 	 * Note that the home-as-blog page can be used for this method.
 	 *
+	 * We deprecated this because in the real world, it barely mattered. We'd much rather
+	 * have a proper and predictable API.
+	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now uses the new taxonomy robots settings.
+	 * @since 4.1.4 Soft deprecated. Use 'robots_meta' instead.
+	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @param int <bit>  $ignore The ignore level. {
@@ -475,65 +488,10 @@ class Generate extends User_Data {
 	 * @return bool Whether noindex is set or not
 	 */
 	public function is_robots_meta_noindex_set_by_args( $args, $ignore = 0b00 ) {
-
-		$this->fix_generation_args( $args );
-
-		$noindex = (bool) $this->get_option( 'site_noindex' );
-
-		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
-			$noindex = $noindex || $this->get_option( 'homepage_noindex' );
-		}
-
-		if ( $args['taxonomy'] ) {
-			// This block is not used internally...
-
-			$term = \get_term( $args['id'], $args['taxonomy'] );
-			/**
-			 * Check if archive is empty: set noindex for those.
-			 */
-			if ( empty( $term->count ) )
-				$noindex = true;
-
-			$_post_type_meta = [];
-			// Store values from each post type bound to the taxonomy.
-			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
-				// SECURITY: Put in array to circumvent GLOBALS injection.
-				$_post_type_meta['noindex'][] = $noindex || $this->is_post_type_robots_set( 'noindex', $post_type );
-			}
-			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $r => $_values ) {
-				$$r = $$r || ! \in_array( false, $_values, true );
-			}
-
-			$noindex = $noindex || $this->is_taxonomy_robots_set( 'noindex', $args['taxonomy'] );
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
-				$term_meta = $this->get_term_meta( $args['id'] );
-
-				if ( isset( $term_meta['noindex'] ) ) {
-					// Test qubit
-					$noindex = ( $noindex | (int) $term_meta['noindex'] ) > .33;
-				}
-			endif;
-		} elseif ( $args['id'] ) {
-			$post_type = \get_post_type( $args['id'] );
-			$noindex   = $noindex || $this->is_post_type_robots_set( 'noindex', $post_type );
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
-				$post_meta = [
-					'noindex' => $this->get_post_meta_item( '_genesis_noindex', $args['id'] ),
-				];
-				// Test qubit
-				$noindex = ( $noindex | (int) $post_meta['noindex'] ) > .33;
-			endif;
-
-			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
-			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				$noindex = $noindex || $this->is_protected( $args['id'] );
-			endif;
-		}
-
-		return $noindex;
+		// PHP 7+...
+		// return 'noindex' === ( $this->robots_meta( $args, $ignore, 'noindex' )['noindex'] ?? '' );
+		$meta = $this->robots_meta( $args, $ignore );
+		return isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'];
 	}
 
 	/**
@@ -600,6 +558,7 @@ class Generate extends User_Data {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
+	 * TODO add filter?
 	 *
 	 * @return string $blogname The escaped and sanitized blogname.
 	 */

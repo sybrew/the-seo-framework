@@ -84,7 +84,10 @@ final class SeoBar {
 	}
 
 	/**
+	 * Generates the SEO Bar.
+	 *
 	 * @since 4.0.0
+	 * @since 4.1.4 Now manages the builder, too.
 	 *
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
@@ -110,11 +113,18 @@ final class SeoBar {
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
+
+		if ( static::$query['taxonomy'] ) {
+			$builder = \The_SEO_Framework\Builders\SeoBar_Term::get_instance();
+		} else {
+			$builder = \The_SEO_Framework\Builders\SeoBar_Page::get_instance();
+		}
+
 		$instance = static::get_instance();
-		$instance->store_default_bar_items();
+		$instance->store_default_bar_items( $builder );
 
 		/**
-		 * Add or adjust SEO Bar items here.
+		 * Add or adjust SEO Bar items here, after the tests have run.
 		 *
 		 * @link Example: https://gist.github.com/sybrew/59130560fcbeb98f7580dc11c54ba174
 		 * @since 4.0.0
@@ -126,6 +136,7 @@ final class SeoBar {
 
 		// There's no need to leak memory.
 		$instance->clear_seo_bar_items();
+		$builder->clear_query_cache();
 
 		return $bar;
 	}
@@ -203,23 +214,21 @@ final class SeoBar {
 	 * Stores the SEO Bar items.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.4 Offloaded the builder's instantiation.
 	 * @factory
+	 *
+	 * @param \The_SEO_Framework\Builders\SeoBar $builder The builder instance.
 	 */
-	private function store_default_bar_items() {
-
-		if ( static::$query['taxonomy'] ) {
-			$builder = \The_SEO_Framework\Builders\SeoBar_Term::get_instance();
-		} else {
-			$builder = \The_SEO_Framework\Builders\SeoBar_Page::get_instance();
-		}
+	private function store_default_bar_items( $builder ) {
 
 		/**
-		 * Adjust interpreter and builder items here.
+		 * Adjust interpreter and builder items here, before the tests have run.
 		 *
 		 * The only use we can think of here is removing items from `$builder::$tests`,
-		 * and reading `$interpreter::$query`. Do not add tests here. Do not alter the query.
+		 * and reading `$builder::$query{_cache}`. Do not add tests here. Do not alter the query.
 		 *
 		 * @link Example: https://gist.github.com/sybrew/03dd428deadc860309879e1d5208e1c4
+		 * @see related (recommended) action 'the_seo_framework_seo_bar'
 		 * @since 4.0.0
 		 * @param string                             $interpreter The current class name.
 		 * @param \The_SEO_Framework\Builders\SeoBar $builder     The builder object.
