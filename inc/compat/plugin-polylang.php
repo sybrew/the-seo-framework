@@ -14,6 +14,10 @@ namespace The_SEO_Framework;
  * This resolves an issue where the sitemap would otherwise return a 404 error after a
  * cookie has been set.
  *
+ * This function uses the same methods as the main filter.
+ * HOWEVER, because of the languid asinine catabolic implementation of the black/block-list in Polylang,
+ * this method returns a different value. It's truly astounding how one cannot trust the API.
+
  * @since 4.1.2
  * @access private
  *
@@ -39,23 +43,6 @@ function _polylang_fix_sitemap_base_bath( $path ) {
 	}
 
 	return $path;
-}
-
-\add_filter( 'the_seo_framework_sitemap_path_prefix', __NAMESPACE__ . '\\_polylang_fix_sitemap_prefix', 99 );
-/**
- * Fixes the sitemap prefix, because setting the home URL globally requires only one filter.
- *
- * @since 4.0.0
- * @since 4.1.2 1. Now always defaults to the WP home URL. So, now supports other translation paths well,
- *                 other than solely query-strings.
- *              2. Prefixed function name with _polylang.
- * @param string $prefix The path prefix. Ideally appended with a slash.
- *                       Recommended return value: "$prefix$custompath/"
- * @return string Polylang-aware prefix.
- */
-function _polylang_fix_sitemap_prefix( $prefix = '' ) {
-	$path = parse_url( \home_url(), PHP_URL_PATH );
-	return \trailingslashit( "$prefix$path" );
 }
 
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
@@ -130,7 +117,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 	if ( ! isset( $default_lang->slug, $default_lang->term_taxonomy_id ) ) return $args;
 
 	if ( \PLL()->curlang->slug === $default_lang->slug ) {
-		$args['lang'] = ''; // Select all, so that Polylang doesn't affect the query below with an AND (we need OR).
+		$args['lang']      = ''; // Select all lang, so that Polylang doesn't affect the query below with an AND (we need OR).
 		$args['tax_query'] = [
 			'relation' => 'OR',
 			[
@@ -165,6 +152,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * Enables string translation support on titles and descriptions.
  *
  * @since 3.1.0
+ * @access private
  *
  * @param string $string The title or description
  * @return string
@@ -185,6 +173,7 @@ function pll__( $string ) {
  *
  * @since 3.2.4
  * @since 4.1.0 Renamed function and parameters to something racially neutral.
+ * @access private
  *
  * @param array $allowlist The wildcard file parts that are allowlisted.
  * @return array
@@ -203,6 +192,7 @@ function _polylang_allowlist_tsf_urls( $allowlist ) {
  * @since 3.2.4
  * @since 4.1.0 Renamed function and parameters to something racially neutral.
  * @since 4.1.2 Prefixed function name with _polylang.
+ * @access private
  *
  * @param array $blocklist The wildcard file parts that are blocklisted.
  * @return array
@@ -220,8 +210,11 @@ function _polylang_blocklist_tsf_urls( $blocklist ) {
  *
  * @since 3.2.4
  * @since 4.1.2 Prefixed function name with _polylang.
+ * @access private
+ *
  * @param string $url The url to fix.
  * @param int    $id  The page or term ID.
+ * @return string The fixed home URL.
  */
 function _polylang_fix_home_url( $url, $id ) {
 	return \the_seo_framework()->is_front_page_by_ID( $id ) && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;

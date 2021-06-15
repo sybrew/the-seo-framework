@@ -705,7 +705,7 @@ class Generate_Url extends Generate_Title {
 			}
 
 			if ( $_query )
-				$url = $this->append_php_query( $url, $_query );
+				$url = $this->append_url_query( $url, $_query );
 		} else {
 			if ( $_use_base ) {
 				$url = \add_query_arg( 'paged', $_page, $url );
@@ -775,7 +775,7 @@ class Generate_Url extends Generate_Title {
 
 					// Add back the query.
 					if ( $_query )
-						$_url = $this->append_php_query( $_url, $_query );
+						$_url = $this->append_url_query( $_url, $_query );
 				}
 
 				$url = $_url;
@@ -874,7 +874,7 @@ class Generate_Url extends Generate_Title {
 
 		//? Append queries other plugins might've filtered.
 		if ( $this->is_singular() ) {
-			$url = $this->append_php_query(
+			$url = $this->append_url_query(
 				$url,
 				parse_url( \get_permalink( $id ), PHP_URL_QUERY )
 			);
@@ -1068,14 +1068,13 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Appends given query to given URL.
 	 *
-	 * @since 3.0.0
-	 * @since 3.1.0 Now uses parse_str and add_query_arg, preventing duplicated entries.
+	 * @since 4.1.4
 	 *
 	 * @param string $url   A fully qualified URL.
 	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
 	 * @return string A fully qualified URL with appended $query.
 	 */
-	public function append_php_query( $url, $query = '' ) {
+	public function append_url_query( $url, $query = '' ) {
 
 		if ( ! $query )
 			return $url;
@@ -1094,6 +1093,22 @@ class Generate_Url extends Generate_Title {
 			$url .= '#' . $_fragment;
 
 		return $url;
+	}
+
+	/**
+	 * Appends given query to given URL.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Now uses parse_str and add_query_arg, preventing duplicated entries.
+	 * @since 4.1.4 Deprecated
+	 * @deprecated Soft deprecation.
+	 *
+	 * @param string $url   A fully qualified URL.
+	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
+	 * @return string A fully qualified URL with appended $query.
+	 */
+	public function append_php_query( $url, $query = '' ) {
+		return $this->append_url_query( $url, $query );
 	}
 
 	/**

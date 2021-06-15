@@ -726,7 +726,7 @@ class Query extends Core {
 	 *
 	 * @NOTE This doesn't check for anomalies in the query.
 	 * So, don't use this to test user-engaged WordPress queries, ever.
-	 * WARNING: This will lead to **FALSE POSITIVES** for Date, PTA, Search, and other archives.
+	 * WARNING: This will lead to **FALSE POSITIVES** for Date, CPTA, Search, and other archives.
 	 *
 	 * @see $this->is_front_page_by_id(), which supports query checking.
 	 * @see $this->is_real_front_page(), which solely uses query checking.

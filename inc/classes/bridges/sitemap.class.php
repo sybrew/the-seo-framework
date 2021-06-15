@@ -153,6 +153,9 @@ final class Sitemap {
 	 * @since 4.0.0
 	 * @since 4.1.2 No longer passes the path to the home_url() function because
 	 *              Polylang is being astonishingly asinine.
+	 * @since 4.1.4 Now assimilates the output using the base path, so that filter
+	 *              `the_seo_framework_sitemap_base_path` also works. Glues the
+	 *              pieces together using the `get_home_host` value.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @param string $id The base ID. Default 'base'.
@@ -164,31 +167,14 @@ final class Sitemap {
 
 		if ( ! isset( $list[ $id ] ) ) return false;
 
-		global $wp_rewrite;
+		$host      = static::$tsf->set_preferred_url_scheme( static::$tsf->get_home_host() );
+		$path_info = $this->get_sitemap_base_path_info();
 
-		$scheme = static::$tsf->get_preferred_scheme();
-		$prefix = $this->get_sitemap_path_prefix();
-
-		$home_url = \home_url( '/', $scheme );
-
-		// Other plugins may append a query (such as translations).
-		$home_query = parse_url( $home_url, PHP_URL_QUERY );
-		// Remove query from URL when found. Add back later.
-		if ( $home_query )
-			$home_url = static::$tsf->s_url( $home_url );
-
-		if ( $wp_rewrite->using_index_permalinks() ) {
-			$path = "/index.php$prefix{$list[ $id ]['endpoint']}";
-		} elseif ( $wp_rewrite->using_permalinks() ) {
-			$path = "$prefix{$list[ $id ]['endpoint']}";
+		if ( $path_info['use_query_var'] ) {
+			$url = "$host{$path_info['path']}$id";
 		} else {
-			$path = "$prefix?tsf-sitemap=$id";
+			$url = "$host{$path_info['path']}{$list[ $id ]['endpoint']}";
 		}
-
-		$url = \trailingslashit( $home_url ) . ltrim( $path, '/' );
-
-		if ( $home_query )
-			$url = static::$tsf->append_php_query( $url, $home_query );
 
 		return \esc_url_raw( $url );
 	}

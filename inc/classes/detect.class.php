@@ -196,6 +196,7 @@ class Detect extends Render {
 	 * Memoizes the return value for the input argument--sorts the array deeply to ensure a match.
 	 *
 	 * @since 2.5.2
+	 * @since 4.1.4 Fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 	 * @uses $this->detect_plugin_multi()
 	 *
 	 * @param array $plugins   Array of array for globals, constants, classes
@@ -212,18 +213,14 @@ class Detect extends Render {
 		$mapped = [];
 
 		// Prepare multidimensional array for cache.
-		foreach ( $plugins as $key => $func ) {
+		foreach ( $plugins as $type => $func ) {
 			if ( ! \is_array( $func ) )
 				return false; // doing it wrong...
 
-			// Sort alphanumeric by value, put values back after sorting.
-			// TODO Use asort or usort instead???
-			$func = array_flip( $func );
-			ksort( $func );
-			$func = array_flip( $func );
+			sort( $func );
 
 			// Glue with underscore and space for debugging purposes.
-			$mapped[ $key ] = $key . '_' . implode( ' ', $func );
+			$mapped[ $type ] = $type . '_' . implode( ' ', $func );
 		}
 
 		ksort( $mapped );

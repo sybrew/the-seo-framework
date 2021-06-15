@@ -248,6 +248,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.4 =
 
+TODO test changes of `get_expected_sitemap_endpoint_url()`.
+
 **For everyone:**
 
 * **Improved:**
@@ -269,7 +271,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 * **Fixed:**
-	* TODO Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage was force-indexed via the homepage's post meta.
+	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, etc.) sudomains.
+	* TODO Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
 	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
 	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
 		* Now, you can also overwrite these settings effectively.
@@ -277,6 +280,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 				* When you don't overwrite its state, TSF will then tell WooCommerce recommended this state.
 		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
 		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. The setting is accessible via `wc_get_page_id()` (WC 3.0 and later).
+* **Not fixed:**
+	* When you use Polylang, you practically installed a big bug and your website will be destined to break down at some point. It transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirits aren't lifting, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Please use another translation plugin, for we're considering removing support for Polylang altogether; it eats up most of our development time -- time better spent trying to breathe liquids. Moreover, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
+		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but anything else is also much better for SEO regardless.
 
 **For translators:**
 
@@ -302,13 +308,24 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* **Added:**
 			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
 			* TODO `generate_robots_meta()`, returns generated robots metadata.
+		* **Improved:**
+			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 		* **Info:**
 			* TODO `robots_meta()` is now marked for deprecation.
+				* We should use something like `get_robots_meta()`, but that's already taken...
+					-> Assert?
+					-> Render?
+					-> Obtain?
+					-> Generate?
 			* `is_robots_meta_noindex_set_by_args()` is now marked for deprecation. Use `robots_meta()` instead (which is also marked for deprecation... hmmm TODO).
-	* **For object `The_SEO_Framework\Builders\SeoBar`
+			* `append_php_query()` is now marked for deprecation. Use `append_url_query()` instead.
+	* **For object `The_SEO_Framework\Builders\SeoBar`:**
 		* **Added:**
 			* `clear_query_cache()`, clears the query cache.
 			* `get_query_cache()`, presents an unalterable form of query cache.
+	* **For object `The_SEO_Framework\Bridges\Sitemap`:
+		* **Changed:**
+			* `get_expected_sitemap_endpoint_url()` now  Now assimilates the output using the base path, so that filter `the_seo_framework_sitemap_base_path` also works. Glues the pieces together using the `get_home_host` value.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
@@ -324,10 +341,6 @@ TODO specify min-width to quick-edit input fields (canonical/redirect), they're 
 TODO figure if we need to check for is_post_status_viewable() (in sitemap/post type supported)?
 	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/
 	-> Thanks, WordPress Core Team, for creating yet another discrepancy with term-code?
-TODO remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' )
-	-> Figure out how to integrate with wp_robots later... we, developers, have been sodomized by this rapid integration.
-	-> or, add_filter( 'wp_robots', function( $robots ) { unset( $robots[ copyright directives ]; return $robots ) }, 911 );
-	-> Core also stated they added Media visibility enhancements? Strip them, for TSF does that (preemptively), but also with options.
 TODO extract get_social_image_uploader_form to a new API, where all data et al. can be manipulated. The methods currently will call that new API.
 	-> This should also affect the social image uploader form for Articles.
 		-> Then again, the News Publishers should be aware of the logo guidelines, and upload an image perfectly.
