@@ -244,12 +244,20 @@ class Generate extends User_Data {
 				 * because page builders and templates can and will take over.
 				 *
 				 * Don't use empty(), null is regarded as indexable.
-				 *
-				 * TODO Consider toggling this for author archives?
-				 * TODO 4.1.4 add filter.
 				 */
-				if ( isset( $wp_query->post_count ) && ! $wp_query->post_count )
-					$noindex = true;
+				if ( isset( $wp_query->post_count ) && ! $wp_query->post_count ) {
+					/**
+					 * We recommend using this filter ONLY for archives that have useful content but no "posts" attached.
+					 * For example: a specially custom-developed author page for an author that never published a post.
+					 *
+					 * This filter won't run when a few other conditions for noindex have been met.
+					 *
+					 * @since 4.1.4
+					 * @link <https://github.com/sybrew/the-seo-framework/issues/194#issuecomment-864298702>
+					 * @param bool $noindex Whether to enable no posts protection.
+					 */
+					$noindex = $noindex || \apply_filters( 'the_seo_framework_enable_noindex_no_posts', true );
+				}
 			}
 
 			if (

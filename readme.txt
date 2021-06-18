@@ -329,6 +329,7 @@ TODO test changes of `get_expected_sitemap_endpoint_url()`.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
+		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
 
@@ -346,9 +347,6 @@ TODO extract get_social_image_uploader_form to a new API, where all data et al. 
 		-> Then again, the News Publishers should be aware of the logo guidelines, and upload an image perfectly.
 TODO remove UM data, add profile picture to image-generator?
 	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
-TODO Figure out how to deal with subdirectories and Polylang...
-	-> Check before and after? Compare? Ugh?
-	-> https://wordpress.org/support/topic/sitemap-issue-with-subfolder-multisite-and-polylang/#post-14547928
 
 = 4.1.3 =
 
