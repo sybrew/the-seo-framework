@@ -272,7 +272,7 @@ TODO test changes of `get_expected_sitemap_endpoint_url()`.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 * **Fixed:**
 	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, etc.) sudomains.
-	* TODO Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
+	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
 	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
 	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
 		* Now, you can also overwrite these settings effectively.

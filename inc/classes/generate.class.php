@@ -322,6 +322,15 @@ class Generate extends User_Data {
 				}
 			endif;
 
+			// I hate this reiteration of the very same code as above... but, homepage may not always be singular.
+			// The conditions below MUST overwrite this, too. So, this is the perfect placement.
+			if ( $this->is_real_front_page() ) {
+				if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
+					$noindex = $noindex
+						|| ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) );
+				endif;
+			}
+
 			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
 			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
 				$noindex = $noindex || $this->is_protected( $this->get_the_real_ID() );
