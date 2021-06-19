@@ -274,6 +274,7 @@ TODO test changes of `get_expected_sitemap_endpoint_url()`.
 	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, etc.) sudomains.
 	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
 	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
+	* Addressed an issue where in quick-edit, the homepage title wasn't locked correctly, causing it and its counters to render incorrectly.
 	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
 		* Now, you can also overwrite these settings effectively.
 			* Cool: TSF will warn that WooCommerce recommends otherwise via the SEO Bar.
@@ -310,6 +311,7 @@ TODO test changes of `get_expected_sitemap_endpoint_url()`.
 			* TODO `generate_robots_meta()`, returns generated robots metadata.
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
+			* `is_static_frontpage()` now memoizes the front page ID option.
 		* **Info:**
 			* TODO `robots_meta()` is now marked for deprecation.
 				* We should use something like `get_robots_meta()`, but that's already taken...
@@ -332,6 +334,8 @@ TODO test changes of `get_expected_sitemap_endpoint_url()`.
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
+* **Other:**
+	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
 
 TODO fix the tooltip actions in media.js
 	-> Did I make a note of this? Has it to do with dynamic loading of the on-hover elements, such as in Local?

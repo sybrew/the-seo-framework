@@ -1020,16 +1020,19 @@ class Query extends Core {
 	 * Detects the static front page.
 	 *
 	 * @since 2.3.8
+	 * @since 4.1.4 Added memoization.
 	 *
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
-	 * @return bool true if is blog page. Always false if the homepage is a blog.
+	 * @return bool True when homepage is static and given/current ID matches.
 	 */
 	public function is_static_frontpage( $id = 0 ) {
 
-		if ( 'page' === \get_option( 'show_on_front' ) )
-			return (int) \get_option( 'page_on_front' ) === ( $id ?: $this->get_the_real_ID() );
+		static $front_id;
 
-		return false;
+		if ( ! isset( $front_id ) )
+			$front_id = 'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : -1;
+
+		return ( $id ?: $this->get_the_real_ID() ) === $front_id;
 	}
 
 	/**

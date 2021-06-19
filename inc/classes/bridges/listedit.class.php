@@ -261,6 +261,9 @@ final class ListEdit extends ListTable {
 			$is_desc_ref_locked  = false;
 		}
 
+		$post_data  = [
+			'isFront' => $tsf->is_static_frontpage( $query['id'] ),
+		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => $default_title,
@@ -273,6 +276,13 @@ final class ListEdit extends ListTable {
 			'defaultDescription'   => $default_description,
 		];
 
+		printf(
+			// '<span class=hidden id=%s data-le-post-data="%s"></span>',
+			'<span class=hidden id=%s %s></span>',
+			sprintf( 'tsfLePostData[%s]', (int) $post_id ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			$tsf->make_data_attributes( [ 'lePostData' => $post_data ] )
+		);
 		printf(
 			// '<span class=hidden id=%s data-le-title="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
