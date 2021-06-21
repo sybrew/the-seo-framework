@@ -144,7 +144,7 @@ namespace The_SEO_Framework;
 	or \define( 'THE_SEO_FRAMEWORK_SETTINGS_CAP', 'manage_options' );
 
 /**
- * The user capability required to access the extension overview page.
+ * The user capability required to have SEO-fields on their profiles.
  *
  * == WARNING ==
  * When this constant is used incorrectly, you can expose your site to

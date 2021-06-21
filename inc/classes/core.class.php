@@ -243,19 +243,17 @@ class Core {
 	 * AKA Aspect Ratio.
 	 *
 	 * @since 2.6.0
+	 * @ignore Unused. The relying methods were yeeted off in 4.0.0.
+	 *                 "We no longer automatically resize images when they’re deemed too large."
+	 * @TODO delete me? This method makes no sense to the outsider, anyway.
 	 *
 	 * @param int $i  The dimension to resize.
-	 * @param int $r1 The deminsion that determines the ratio.
+	 * @param int $r1 The dimension that determines the ratio.
 	 * @param int $r2 The dimension to proportionate to.
 	 * @return int The proportional dimension, rounded.
 	 */
 	public function proportionate_dimensions( $i, $r1, $r2 ) {
-
-		// Get aspect ratio.
-		$ar = $r1 / $r2;
-		$i  = $i / $ar;
-
-		return round( $i );
+		return round( $i / ( $r1 / $r2 ) );
 	}
 
 	/**
@@ -395,9 +393,7 @@ class Core {
 	 * @return bool Whether external redirect is allowed.
 	 */
 	public function allow_external_redirect() {
-
 		static $cache = null;
-
 		/**
 		 * @since 2.1.0
 		 * @param bool $allowed Whether external redirect is allowed.
@@ -415,9 +411,7 @@ class Core {
 	 * @return bool True is blog is public.
 	 */
 	public function is_blog_public() {
-
 		static $cache = null;
-
 		return isset( $cache ) ? $cache : $cache = (bool) \get_option( 'blog_public' );
 	}
 
@@ -478,16 +472,14 @@ class Core {
 	 * Returns the SEO Settings page URL.
 	 *
 	 * @since 2.6.0
+	 * TODO deprecate me and make a get_seo_settings_page_url().
 	 *
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function seo_settings_page_url() {
 
 		if ( $this->load_options ) {
-			// Options are allowed to be loaded.
-
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
-
 			return \esc_url( $url, [ 'https', 'http' ] );
 		}
 
@@ -623,6 +615,31 @@ class Core {
 	 */
 	public function uses_time_in_timestamp_format() {
 		return '1' === $this->get_option( 'timestamps_format' );
+	}
+
+	/**
+	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
+	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param array ...$arrays The arrays to merge. The rightmost array .
+	 * @return array The merged arrays.
+	 */
+	public function array_merge_recursive_distinct( array ...$arrays ) {
+
+		$i = \count( $arrays );
+
+		if ( 2 === $i ) foreach ( $arrays[1] as $key => $value ) {
+			$arrays[0][ $key ] =
+				isset( $arrays[0][ $key ] ) && \is_array( $arrays[0][ $key ] )
+				? $this->array_merge_recursive_distinct( $arrays[0][ $key ], $value )
+				: $value;
+		} else while ( --$i > 0 ) { // We require available array index 0 and 1.
+			$arrays[ $i - 1 ] = $this->array_merge_recursive_distinct( $arrays[ $i - 1 ], $arrays[ $i ] );
+		}
+
+		return $arrays[0];
 	}
 
 	/**

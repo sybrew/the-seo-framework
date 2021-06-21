@@ -1049,6 +1049,85 @@ class Admin_Pages extends Profile {
 	}
 
 	/**
+	 * Returns image uploader form button.
+	 * Also registers additional i18n strings for JS, and registers a tooltip.
+	 *
+	 * @since 4.1.4
+	 *: {
+	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'icon'   => bool   Optional. Whether to enable icon. Default true.
+	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 * }
+	 *
+	 * @param array $args Required. The image uploader arguments : {
+	 *   'id'      => string Required. The HTML input id to pass URL into.
+	 *   'post_id' => int    Optional. The Post ID to bind the uploaded file to. Default current post ID.
+	 *   'data'    => [
+	 *      'inputType' => string Optional. Whether the upload type is 'social' or 'logo' for i18n. Default 'social'.
+	 *      'width'     => int    Optional. The suggested image width. Default 1200.
+	 *      'height'    => int    Optional. The suggested image height. Default 630.
+	 *      'minWidth'  => int    Optional. The minimum image width. Default 200.
+	 *      'minHeight' => int    Optional. The minimum image height. Default 200.
+	 *      'flex'      => bool   Optional. Whether the image W:H ratio may be changed. Default true.
+	 *   ],
+	 *   'i18n'    => [
+	 *      'button_title' => string Optional. The image-select button on-hover title for accessibility. Default ''.
+	 *                                         Tip: Only fill if 'button_text' is ambiguous.
+	 *      'button_text'  => string Optional. The image-select button title. Defaults l10n 'Select Image',
+	 *   ],
+	 * }
+	 * @return string The image uploader button.
+	 */
+	public function get_image_uploader_form( array $args ) {
+
+		static $image_input_id = 0;
+		$image_input_id++;
+
+		$defaults = [
+			'id'      => null,
+			'post_id' => $this->get_the_real_ID(),
+			'data'    => [
+				'inputType' => 'social',
+				'width'     => 1200,
+				'height'    => 630,
+				'minWidth'  => 200,
+				'minHeight' => 200,
+				'flex'      => true,
+			],
+			'i18n'    => [
+				'button_title' => '',
+				'button_text'  => \__( 'Select Image', 'autodescription' ),
+			],
+		];
+
+		$args = $this->array_merge_recursive_distinct( $defaults, $args );
+
+		if ( ! $args['id'] ) return '';
+
+		$content = vsprintf(
+			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select"
+				%s>%s</button>',
+			[
+				\esc_url( \get_upload_iframe_src( 'image', $defaults['post_id'] ) ),
+				\esc_attr( $args['i18n']['button_title'] ),
+				\esc_attr( $args['id'] ),
+				$this->make_data_attributes(
+					[ 'inputId' => $args['id'] ]
+					+ $args['data']
+				),
+				\esc_html( $args['i18n']['button_text'] ),
+			]
+		);
+
+		$content .= sprintf(
+			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
+			\esc_attr( $args['id'] )
+		);
+
+		return $content;
+	}
+
+	/**
 	 * Returns social image uploader form button.
 	 * Also registers additional i18n strings for JS.
 	 *
@@ -1056,43 +1135,13 @@ class Admin_Pages extends Profile {
 	 * @since 3.1.0 No longer prepares media l10n data.
 	 * @since 4.0.0 Now adds a media preview dispenser.
 	 * @since 4.1.2 No longer adds a redundant title to the selection button.
+	 * @TODO mark for deprecation?
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
 	 */
 	public function get_social_image_uploader_form( $input_id ) {
-
-		if ( ! $input_id )
-			return '';
-
-		$s_input_id = \esc_attr( $input_id );
-
-		$content = vsprintf(
-			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select"
-				%s>%s</button>',
-			[
-				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-				'', // redundant
-				$s_input_id,
-				$this->make_data_attributes( [
-					'inputId'   => $s_input_id,
-					'inputType' => 'social',
-					'width'     => 1200,
-					'height'    => 630,
-					'minWidth'  => 200,
-					'minHeight' => 200,
-					'flex'      => true,
-				] ),
-				\esc_html__( 'Select Image', 'autodescription' ),
-			]
-		);
-
-		$content .= sprintf(
-			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
-			$s_input_id
-		);
-
-		return $content;
+		return $this->get_image_uploader_form( [ 'id' => $input_id ] );
 	}
 
 	/**
@@ -1102,43 +1151,27 @@ class Admin_Pages extends Profile {
 	 * @since 3.0.0
 	 * @since 3.1.0 No longer prepares media l10n data.
 	 * @since 4.0.0 Now adds a media preview dispenser.
+	 * @TODO mark for deprecation?
 	 *
 	 * @param string $input_id Required. The HTML input id to pass URL into.
 	 * @return string The image uploader button.
 	 */
 	public function get_logo_uploader_form( $input_id ) {
-
-		if ( ! $input_id )
-			return '';
-
-		$s_input_id = \esc_attr( $input_id );
-
-		$content = vsprintf(
-			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select"
-				%s>%s</button>',
-			[
-				\esc_url( \get_upload_iframe_src( 'image', $this->get_the_real_ID() ) ),
-				'', // Redundant
-				$s_input_id,
-				$this->make_data_attributes( [
-					'inputId'   => $s_input_id,
-					'inputType' => 'logo',
-					'width'     => 512,
-					'height'    => 512,
-					'minWidth'  => 112,
-					'minHeight' => 112,
-					'flex'      => true,
-				] ),
-				\esc_html__( 'Select Logo', 'autodescription' ),
-			]
-		);
-
-		$content .= sprintf(
-			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
-			$s_input_id
-		);
-
-		return $content;
+		return $this->get_image_uploader_form( [
+			'id'   => $input_id,
+			'data' => [
+				'inputType' => 'logo',
+				'width'     => 512,
+				'height'    => 512,
+				'minWidth'  => 112,
+				'minHeight' => 112,
+				'flex'      => true,
+			],
+			'i18n' => [
+				'button_title' => '',
+				'button_text'  => \__( 'Select Logo', 'autodescription' ),
+			],
+		] );
 	}
 
 	/**

@@ -249,6 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 = 4.1.4 =
 
 TODO test changes of `get_expected_sitemap_endpoint_url()`.
+TODO update `https://theseoframework.com/docs/api/constants/`
 
 **For everyone:**
 
@@ -307,8 +308,11 @@ TODO test changes of `get_expected_sitemap_endpoint_url()`.
 * **Method notes:**
 	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
 		* **Added:**
+			* `array_merge_recursive_distinct()`, a glorified `array_merge()` that allows unlimited multidimensional arrays inputted.
 			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
 			* TODO `generate_robots_meta()`, returns generated robots metadata.
+			* `get_image_uploader_form()`, returns image uploader form button.
+				* This is an abstraction of the `get_social_image_uploader_form()` and `get_logo_uploader_form()` methods, both now call the new one for it has an interpolable API.
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
@@ -343,12 +347,10 @@ TODO remove object caching, so that we can output TSF meta instantly
 	-> improving meta performance by what, 5%? Or does this hamper, since the output buffer isn't utilized correctly, although concatenation isn't happening?
 	-> Clean up caching class, such as removing calls that clear the now non-existent object cache, too.
 TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
-TODO figure if we need to check for is_post_status_viewable() (in sitemap/post type supported)?
+TODO figure if we need to check for is_post_status_viewable() -> is_post_publicly_viewable() (in sitemap/post type supported)?
 	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/
 	-> Thanks, WordPress Core Team, for creating yet another discrepancy with term-code?
-TODO extract get_social_image_uploader_form to a new API, where all data et al. can be manipulated. The methods currently will call that new API.
-	-> This should also affect the social image uploader form for Articles.
-		-> Then again, the News Publishers should be aware of the logo guidelines, and upload an image perfectly.
+	-> OK, so this is a pretty cool new feature. However, not even WordPress utilizes this internally for where it matters for SEO. We need to await further adoption.
 TODO remove UM data, add profile picture to image-generator?
 	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 
