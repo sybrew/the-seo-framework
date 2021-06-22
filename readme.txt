@@ -250,6 +250,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO test changes of `get_expected_sitemap_endpoint_url()`.
 TODO update `https://theseoframework.com/docs/api/constants/`
+TODO fix 'back to top' on extension pages thanks to our new font.
 
 **For everyone:**
 
@@ -282,6 +283,8 @@ TODO update `https://theseoframework.com/docs/api/constants/`
 				* When you don't overwrite its state, TSF will then tell WooCommerce recommended this state.
 		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
 		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. The setting is accessible via `wc_get_page_id()` (WC 3.0 and later).
+	* Resolved a memory leak in image-tooltips.
+	* Addressed an issue where image-tooltips don't load correctly when reloading the DOM, such as with our [Local extension](https://theseoframework.com/extensions/local/).
 * **Not fixed:**
 	* When you use Polylang, you practically installed a big bug and your website will be destined to break down at some point. It transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirits aren't lifting, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Please use another translation plugin, for we're considering removing support for Polylang altogether; it eats up most of our development time -- time better spent trying to breathe liquids. Moreover, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
 		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but anything else is also much better for SEO regardless.
@@ -341,8 +344,6 @@ TODO update `https://theseoframework.com/docs/api/constants/`
 * **Other:**
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
 
-TODO fix the tooltip actions in media.js
-	-> Did I make a note of this? Has it to do with dynamic loading of the on-hover elements, such as in Local?
 TODO remove object caching, so that we can output TSF meta instantly
 	-> improving meta performance by what, 5%? Or does this hamper, since the output buffer isn't utilized correctly, although concatenation isn't happening?
 	-> Clean up caching class, such as removing calls that clear the now non-existent object cache, too.
