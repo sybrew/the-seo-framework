@@ -993,4 +993,164 @@ final class Deprecated {
 
 		return \get_option( 'permalink_structure' );
 	}
+
+	/**
+	 * Appends given query to given URL.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Now uses parse_str and add_query_arg, preventing duplicated entries.
+	 * @since 4.1.4 Soft deprecation.
+	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
+	 *
+	 * @param string $url   A fully qualified URL.
+	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
+	 * @return string A fully qualified URL with appended $query.
+	 */
+	public function append_php_query( $url, $query = '' ) {
+
+		$tsf = \the_seo_framework();
+
+		// $tsf->_deprecated_function( 'the_seo_framework()->append_php_query()', '4.2.0', 'the_seo_framework()->append_url_query()' );
+
+		return $tsf->append_url_query( $url, $query );
+	}
+
+	/**
+	 * Generates front-end HTMl output.
+	 *
+	 * @since 4.0.5
+	 * @since 4.1.4 Soft deprecation.
+	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
+	 *
+	 * @return string The HTML output.
+	 */
+	public function get_html_output() {
+
+		$tsf = \the_seo_framework();
+
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_html_output()', '4.2.0' );
+
+		$robots = $tsf->robots();
+
+		/** @since 4.0.4 Added as WP 5.3 patch. */
+		$tsf->set_timezone( 'UTC' );
+
+		/**
+		 * @since 2.6.0
+		 * @param string $before The content before the SEO output. Stored in object cache.
+		 */
+		$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
+
+		$before_legacy = $tsf->get_legacy_header_filters_output( 'before' );
+
+		// Limit processing and redundant tags on 404 and search.
+		if ( $tsf->is_search() ) :
+			$output = $tsf->og_locale()
+					. $tsf->og_type()
+					. $tsf->og_title()
+					. $tsf->og_url()
+					. $tsf->og_sitename()
+					. $tsf->theme_color()
+					. $tsf->shortlink()
+					. $tsf->canonical()
+					. $tsf->paged_urls()
+					. $tsf->google_site_output()
+					. $tsf->bing_site_output()
+					. $tsf->yandex_site_output()
+					. $tsf->baidu_site_output()
+					. $tsf->pint_site_output();
+		elseif ( $tsf->is_404() ) :
+			$output = $tsf->theme_color()
+					. $tsf->google_site_output()
+					. $tsf->bing_site_output()
+					. $tsf->yandex_site_output()
+					. $tsf->baidu_site_output()
+					. $tsf->pint_site_output();
+		elseif ( $tsf->is_query_exploited() ) :
+			// aqp = advanced query protection
+			$output = '<meta name="tsf:aqp" value="1" />' . PHP_EOL;
+		else :
+			// Inefficient concatenation is inefficient. Improve this?
+			$output = $tsf->the_description()
+					. $tsf->og_image()
+					. $tsf->og_locale()
+					. $tsf->og_type()
+					. $tsf->og_title()
+					. $tsf->og_description()
+					. $tsf->og_url()
+					. $tsf->og_sitename()
+					. $tsf->facebook_publisher()
+					. $tsf->facebook_author()
+					. $tsf->facebook_app_id()
+					. $tsf->article_published_time()
+					. $tsf->article_modified_time()
+					. $tsf->twitter_card()
+					. $tsf->twitter_site()
+					. $tsf->twitter_creator()
+					. $tsf->twitter_title()
+					. $tsf->twitter_description()
+					. $tsf->twitter_image()
+					. $tsf->theme_color()
+					. $tsf->shortlink()
+					. $tsf->canonical()
+					. $tsf->paged_urls()
+					. $tsf->ld_json()
+					. $tsf->google_site_output()
+					. $tsf->bing_site_output()
+					. $tsf->yandex_site_output()
+					. $tsf->baidu_site_output()
+					. $tsf->pint_site_output();
+		endif;
+
+		$after_legacy = $tsf->get_legacy_header_filters_output( 'after' );
+
+		/**
+		 * @since 2.6.0
+		 * @param string $after The content after the SEO output. Stored in object cache.
+		 */
+		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
+
+		/** @since 4.0.4 Added as WP 5.3 patch. */
+		$tsf->reset_timezone();
+
+		return "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";
+	}
+
+	/**
+	 * Generates the `noindex` robots meta code array from arguments.
+	 *
+	 * This method is tailor-made for everything that relies on the noindex-state, as it's
+	 * a very controlling and powerful feature.
+	 *
+	 * Note that the home-as-blog page can be used for this method.
+	 *
+	 * We deprecated this because in the real world, it barely mattered. We'd much rather
+	 * have a proper and predictable API.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.0 Now uses the new taxonomy robots settings.
+	 * @since 4.1.4 Soft deprecated. Use 'robots_meta' instead.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param int <bit>  $ignore The ignore level. {
+	 *    0 = 0b00: Ignore nothing.
+	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+	 *    3 = 0b11: Ignore protection and post/term setting.
+	 * }
+	 * @return bool Whether noindex is set or not
+	 */
+	public function is_robots_meta_noindex_set_by_args( $args, $ignore = 0b00 ) {
+		$tsf = \the_seo_framework();
+
+		// $tsf->_deprecated_function( 'the_seo_framework()->is_robots_meta_noindex_set_by_args()', '4.2.0', 'the_seo_framework()->robots_meta()' );
+
+		// PHP 7+...
+		// return 'noindex' === ( $this->robots_meta( $args, $ignore, 'noindex' )['noindex'] ?? '' );
+		$meta = $tsf->robots_meta( $args, $ignore );
+		return isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'];
+	}
 }

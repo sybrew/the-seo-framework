@@ -853,7 +853,7 @@ class Generate_Description extends Generate {
 	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0 ) {
 
 		// Decode to get a more accurate character length in Unicode.
-		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
+		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
 
 		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
 		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
@@ -864,9 +864,9 @@ class Generate_Description extends Generate {
 		if ( ! $excerpt ) return '';
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
-		$excerpt = htmlentities( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
+		$excerpt = htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' );
 		$excerpt = \wptexturize( $excerpt );
-		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' );
+		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
 		/**
 		 * Play with it here: https://regex101.com/r/u0DIgx/5/tests
 		 *
@@ -923,7 +923,7 @@ class Generate_Description extends Generate {
 			$excerpt = '';
 		}
 
-		return trim( htmlentities( $excerpt, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ) );
+		return trim( htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' ) );
 	}
 
 	/**

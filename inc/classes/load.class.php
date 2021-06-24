@@ -34,14 +34,9 @@ namespace The_SEO_Framework;
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
  * @since 4.1.0 Now extends `Cache` instead of `Feed`.
+ * @since 4.1.4 Removed protected property $use_object_cache.
  */
 final class Load extends Cache {
-
-	/**
-	 * @since 2.4.3
-	 * @var bool Enable object caching.
-	 */
-	protected $use_object_cache = false;
 
 	/**
 	 * @since 2.2.9
@@ -96,16 +91,6 @@ final class Load extends Cache {
 		 * @param bool $load_options Whether to show or hide option pages.
 		 */
 		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
-
-		/**
-		 * @since 2.4.3
-		 * @since 2.8.0 Uses method $this->use_object_cache() as default.
-		 * @param bool $use_object_cache Whether to enable object caching.
-		 */
-		$this->use_object_cache = (bool) \apply_filters(
-			'the_seo_framework_use_object_cache',
-			\wp_using_ext_object_cache() && $this->get_option( 'cache_object' )
-		);
 
 		//? We always use this, because we need to test whether the sitemap must be outputted.
 		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );

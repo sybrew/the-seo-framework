@@ -411,7 +411,9 @@ class Core {
 	 * @return bool True is blog is public.
 	 */
 	public function is_blog_public() {
+
 		static $cache = null;
+
 		return isset( $cache ) ? $cache : $cache = (bool) \get_option( 'blog_public' );
 	}
 

@@ -418,21 +418,14 @@ class Init extends Query {
 		 */
 		$init_start = microtime( true );
 
-		if ( $this->use_object_cache ) {
-			$cache_key = $this->get_meta_output_cache_key_by_query();
-			$output    = $this->object_cache_get( $cache_key );
-		} else {
-			$cache_key = '';
-			$output    = false;
-		}
+		// phpcs:disable, WordPress.Security.EscapeOutput -- Output is escaped.
+		// phpcs:ignore Squiz.WhiteSpace.LanguageConstructSpacing -- We're fancy here.
+		echo PHP_EOL, $this->get_plugin_indicator( 'before' );
 
-		if ( false === $output ) {
-			$output = $this->get_html_output();
-			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, DAY_IN_SECONDS );
-		}
+		$this->do_meta_output();
 
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- $output is escaped.
-		echo PHP_EOL, $this->get_plugin_indicator( 'before' ), $output, $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
+		echo $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
+		// phpcs:enable, WordPress.Security.EscapeOutput
 
 		/**
 		 * @since 2.6.0
@@ -441,16 +434,15 @@ class Init extends Query {
 	}
 
 	/**
-	 * Generates front-end HTMl output.
+	 * Outputs all meta tags for the current query.
 	 *
-	 * @since 4.0.5
-	 * @todo convert $output to array and allow filtering it.
-	 *
-	 * @return string The HTML output.
+	 * @since 4.1.4
 	 */
-	public function get_html_output() {
+	public function do_meta_output() {
 
-		$robots = $this->robots();
+		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
+
+		$get = [ 'robots' ];
 
 		/** @since 4.0.4 Added as WP 5.3 patch. */
 		$this->set_timezone( 'UTC' );
@@ -459,81 +451,91 @@ class Init extends Query {
 		 * @since 2.6.0
 		 * @param string $before The content before the SEO output. Stored in object cache.
 		 */
-		$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
+		echo \apply_filters( 'the_seo_framework_pre', '' );
 
-		$before_legacy = $this->get_legacy_header_filters_output( 'before' );
+		echo $this->get_legacy_header_filters_output( 'before' );
 
 		// Limit processing and redundant tags on 404 and search.
 		if ( $this->is_search() ) :
-			$output = $this->og_locale()
-					. $this->og_type()
-					. $this->og_title()
-					. $this->og_url()
-					. $this->og_sitename()
-					. $this->theme_color()
-					. $this->shortlink()
-					. $this->canonical()
-					. $this->paged_urls()
-					. $this->google_site_output()
-					. $this->bing_site_output()
-					. $this->yandex_site_output()
-					. $this->baidu_site_output()
-					. $this->pint_site_output();
+			$get += [
+				'og_locale',
+				'og_type',
+				'og_title',
+				'og_url',
+				'og_sitename',
+				'theme_color',
+				'shortlink',
+				'canonical',
+				'paged_urls',
+				'google_site_output',
+				'bing_site_output',
+				'yandex_site_output',
+				'baidu_site_output',
+				'pint_site_output',
+			];
 		elseif ( $this->is_404() ) :
-			$output = $this->theme_color()
-					. $this->google_site_output()
-					. $this->bing_site_output()
-					. $this->yandex_site_output()
-					. $this->baidu_site_output()
-					. $this->pint_site_output();
+			$get += [
+				'theme_color',
+				'google_site_output',
+				'bing_site_output',
+				'yandex_site_output',
+				'baidu_site_output',
+				'pint_site_output',
+			];
 		elseif ( $this->is_query_exploited() ) :
-			// aqp = advanced query protection
-			$output = '<meta name="tsf:aqp" value="1" />' . PHP_EOL;
+			$get += [ 'advanced_query_protection' ];
 		else :
-			// Inefficient concatenation is inefficient. Improve this?
-			$output = $this->the_description()
-					. $this->og_image()
-					. $this->og_locale()
-					. $this->og_type()
-					. $this->og_title()
-					. $this->og_description()
-					. $this->og_url()
-					. $this->og_sitename()
-					. $this->facebook_publisher()
-					. $this->facebook_author()
-					. $this->facebook_app_id()
-					. $this->article_published_time()
-					. $this->article_modified_time()
-					. $this->twitter_card()
-					. $this->twitter_site()
-					. $this->twitter_creator()
-					. $this->twitter_title()
-					. $this->twitter_description()
-					. $this->twitter_image()
-					. $this->theme_color()
-					. $this->shortlink()
-					. $this->canonical()
-					. $this->paged_urls()
-					. $this->ld_json()
-					. $this->google_site_output()
-					. $this->bing_site_output()
-					. $this->yandex_site_output()
-					. $this->baidu_site_output()
-					. $this->pint_site_output();
+			$get += [
+				'the_description',
+				'og_image',
+				'og_locale',
+				'og_type',
+				'og_title',
+				'og_description',
+				'og_url',
+				'og_sitename',
+				'og_updated_time',
+				'facebook_publisher',
+				'facebook_author',
+				'facebook_app_id',
+				'article_published_time',
+				'article_modified_time',
+				'twitter_card',
+				'twitter_site',
+				'twitter_creator',
+				'twitter_title',
+				'twitter_description',
+				'twitter_image',
+				'theme_color',
+				'shortlink',
+				'canonical',
+				'paged_urls',
+				'ld_json',
+				'google_site_output',
+				'bing_site_output',
+				'yandex_site_output',
+				'baidu_site_output',
+				'pint_site_output',
+			];
 		endif;
 
-		$after_legacy = $this->get_legacy_header_filters_output( 'after' );
+		// TODO add filter? It won't last a few major updates though...
+		// But that's why I created this method like so... anyway... tough luck.
+		foreach ( $get as $method )
+			echo $this->{$method}();
+
+		echo $this->get_legacy_header_filters_output( 'after' );
 
 		/**
 		 * @since 2.6.0
 		 * @param string $after The content after the SEO output. Stored in object cache.
 		 */
-		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
+		echo \apply_filters( 'the_seo_framework_pro', '' );
 
 		/** @since 4.0.4 Added as WP 5.3 patch. */
 		$this->reset_timezone();
 
-		return "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";
+		// phpcs:enable, WordPress.Security.EscapeOutput
 	}
 
 	/**
@@ -672,10 +674,12 @@ class Init extends Query {
 	 *                4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
 	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
 	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
+	 * @since 4.1.4 Removed object caching support.
 	 * @uses robots_txt filter located at WP core
 	 * @access private
 	 * @TODO extrapolate the contents without a warning to get_robots_txt(). Forward filter to it.
 	 *       See Monitor extension.
+	 * @TODO rework into a workable standard...
 	 *
 	 * @param string $robots_txt The current robots_txt output. Not used.
 	 * @param string $public The blog_public option value.
@@ -683,66 +687,53 @@ class Init extends Query {
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
 
-		if ( $this->use_object_cache ) {
-			$cache_key = $this->get_robots_txt_cache_key();
-			$output    = $this->object_cache_get( $cache_key );
-		} else {
-			$output = false;
+		$site_path = \esc_attr( parse_url( \site_url(), PHP_URL_PATH ) ) ?: '';
+
+		/**
+		 * @since 2.5.0
+		 * @param string $pre The output before this plugin's output.
+		 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
+		 */
+		$output = (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
+
+		// Output defaults
+		$output .= "User-agent: *\r\n";
+		$output .= "Disallow: $site_path/wp-admin/\r\n";
+		$output .= "Allow: $site_path/wp-admin/admin-ajax.php\r\n";
+
+		/**
+		 * @since 2.5.0
+		 * @param bool $disallow Whether to disallow robots queries.
+		 */
+		if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
+			$output .= "Disallow: /*?*\r\n";
 		}
 
-		if ( false === $output ) :
-			$output = '';
+		/**
+		 * @since 2.5.0
+		 * @param string $pro The output after this plugin's output.
+		 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
+		 */
+		$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
-			$site_path = \esc_attr( parse_url( \site_url(), PHP_URL_PATH ) ) ?: '';
-
-			/**
-			 * @since 2.5.0
-			 * @param string $pre The output before this plugin's output.
-			 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
-			 */
-			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
-
-			// Output defaults
-			$output .= "User-agent: *\r\n";
-			$output .= "Disallow: $site_path/wp-admin/\r\n";
-			$output .= "Allow: $site_path/wp-admin/admin-ajax.php\r\n";
-
-			/**
-			 * @since 2.5.0
-			 * @param bool $disallow Whether to disallow robots queries.
-			 */
-			if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
-				$output .= "Disallow: /*?*\r\n";
-			}
-
-			/**
-			 * @since 2.5.0
-			 * @param string $pro The output after this plugin's output.
-			 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
-			 */
-			$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
-
-			// Add extra whitespace and sitemap full URL
-			if ( $this->can_do_sitemap_robots( true ) ) {
-				$sitemaps = Bridges\Sitemap::get_instance();
-				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
-					if ( ! empty( $data['robots'] ) ) {
-						$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
-					}
-				}
-				$output .= "\r\n";
-			} elseif ( $this->get_option( 'sitemaps_robots' ) && ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
-				if ( $this->use_core_sitemaps() ) {
-					$wp_sitemaps_server = \wp_sitemaps_get_server();
-					if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
-						// This method augments the output--it doesn't overwrite it.
-						$output = \wp_sitemaps_get_server()->add_robots( $output, $public );
-					}
+		// Add extra whitespace and sitemap full URL
+		if ( $this->can_do_sitemap_robots( true ) ) {
+			$sitemaps = Bridges\Sitemap::get_instance();
+			foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
+				if ( ! empty( $data['robots'] ) ) {
+					$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
 				}
 			}
-
-			$this->use_object_cache and $this->object_cache_set( $cache_key, $output, 86400 );
-		endif;
+			$output .= "\r\n";
+		} elseif ( $this->get_option( 'sitemaps_robots' ) && ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
+			if ( $this->use_core_sitemaps() ) {
+				$wp_sitemaps_server = \wp_sitemaps_get_server();
+				if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
+					// This method augments the output--it doesn't overwrite it.
+					$output = \wp_sitemaps_get_server()->add_robots( $output, $public );
+				}
+			}
+		}
 
 		$raw_uri = rawurldecode(
 			\wp_check_invalid_utf8(
@@ -761,7 +752,7 @@ class Init extends Query {
 		}
 
 		/**
-		 * The robots.txt output. This filter output not cached; however, the $output variable can be via object caching.
+		 * The robots.txt output.
 		 *
 		 * @since 4.0.5
 		 * @param string $output The (cached) robots.txt output.

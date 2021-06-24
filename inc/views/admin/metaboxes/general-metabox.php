@@ -257,24 +257,6 @@ switch ( $instance ) :
 			),
 			true
 		);
-
-		if ( wp_using_ext_object_cache() ) :
-			?>
-			<hr>
-
-			<h4><?php esc_html_e( 'Object Cache Settings', 'autodescription' ); ?></h4>
-			<?php
-
-			$this->wrap_fields(
-				$this->make_checkbox(
-					'cache_object',
-					esc_html__( 'Enable object cache?', 'autodescription' ),
-					esc_html__( 'An object cache handler has been detected.', 'autodescription' ),
-					false
-				),
-				true
-			);
-		endif;
 		break;
 
 	case 'the_seo_framework_general_metabox_canonical':

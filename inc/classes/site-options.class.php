@@ -79,7 +79,6 @@ class Site_Options extends Sanitize {
 				'alter_search_query_type'  => 'in_query', // Search query type.
 
 				'cache_sitemap' => 1, // Sitemap transient cache.
-				'cache_object'  => 1, // Object caching.
 
 				// General. Layout.
 				'display_seo_bar_tables'  => 1, // SEO Bar post-list tables.

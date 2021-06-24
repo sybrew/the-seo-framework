@@ -261,7 +261,6 @@ class Sanitize extends Admin_Pages {
 				'display_character_counter',
 
 				'cache_sitemap',
-				'cache_object',
 
 				'display_seo_bar_tables',
 				'display_seo_bar_metabox',
@@ -1366,6 +1365,41 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Escapes text for real XHTML attribute usage, instead of using random guesswork.
+	 * This may ONLY be used on QUOTED attribute values.
+	 *
+	 * UNQUOTED ATTRIBUTES VALUES WILL NOT BE ESCAPED PROPERLY. Use `esc_attr()` instead.
+	 *
+	 * @since 4.1.4
+	 * @source Some ideas taken from WordPress's `_wp_specialchars()`. However, now fit-for-purpose.
+	 * @link <https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html#rule-2-attribute-encode-before-inserting-untrusted-data-into-html-common-attributes>
+	 *
+	 * @param string $text The attribute text to escape.
+	 * @return string The escaped attribute, without nonsense processing for prehistoric PHP.
+	 */
+	public function esc_attr_only_quoted( $text ) {
+
+		if ( 0 === \strlen( $text ) ) return '';
+
+		// Don't bother if there are no specialchars - saves some processing.
+		if ( ! preg_match( '/["\']+/', $text ) ) return $text;
+
+		static $charset;
+
+		if ( ! isset( $charset ) ) {
+			$charset = \get_option( 'blog_charset' );
+
+			if ( \in_array( $charset, array( 'utf8', 'utf-8', 'UTF8' ), true ) )
+				$charset = 'UTF-8';
+		}
+
+		// This basically does nothing for us... right? ... Right?
+		$text = \wp_check_invalid_utf8( $text );
+
+		return htmlentities( $text, ENT_QUOTES, $charset, false );
+	}
+
+	/**
 	 * Makes URLs safe and removes query args.
 	 *
 	 * @since 2.2.2
@@ -1806,7 +1840,6 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @see WordPress Core sanitize_key()
 	 * @since 4.0.0
-	 * @deprecated
 	 *
 	 * @param string $id The unsanitized ID.
 	 * @return string The sanitized ID.

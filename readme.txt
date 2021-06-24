@@ -251,6 +251,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 TODO test changes of `get_expected_sitemap_endpoint_url()`.
 TODO update `https://theseoframework.com/docs/api/constants/`
 TODO fix 'back to top' on extension pages thanks to our new font.
+TODO test all deprecated methods
+TODO deprecate is_wc_shop et co. for real.
 
 **For everyone:**
 
@@ -299,6 +301,11 @@ TODO fix 'back to top' on extension pages thanks to our new font.
 
 **For developers:**
 
+* **Option notes:**
+	* From `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+		* **Removed:**
+			`cache_object`, this value will not be deleted when upgrading to this version for backward-compatible reasons.
+				* During a manual option-save, however, this value will vanish.
 * **Object notes:**
 	* **Added:**
 		* TODO `\The_SEO_Framework\Generate_Robots`, extends TODO FIXME `\The_SEO_Framework\Generate`
@@ -316,9 +323,36 @@ TODO fix 'back to top' on extension pages thanks to our new font.
 			* TODO `generate_robots_meta()`, returns generated robots metadata.
 			* `get_image_uploader_form()`, returns image uploader form button.
 				* This is an abstraction of the `get_social_image_uploader_form()` and `get_logo_uploader_form()` methods, both now call the new one for it has an interpolable API.
+			* `advanced_query_protection()`, returns the `tsf:aqp` meta tag.
+				* This tag is used to indicate a malformed query was detected. It's tilt-proof.
+			* `render_element`, do not use. Useful for generating meta tags with few inputs. Escapes for you.
+				* This method is marked 'protected' for we have other plans with it in the future.
+			* `esc_attr_only_quoted()`, escapes attributes mindfully. You probably shouldn't use this unless you know how to hack a website.
+				* Use WP's very own `esc_attr()` instead, which covers mistakes you might (and will) make, albeit less elegantly.
+			* `og_updated_time()`, disjointed from `article_modified_time()`, outputs `og:updated_time` meta tag.
+			* `get_modified_time()`, returns the modified time of the current post.
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
+		* **Changed:**
+			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
+			* `robots_txt()`, removed object caching support.
+			* `delete_cache()`, the following `$types` are no longer supported: `front`, `post`, `term`, `author`, `robots`.
+			* `generate_cache_key_by_type()`, removed support for `author`, `frontpage`, `page`, `post`, `attachment`, `singular`, and `term`.
+			* `delete_main_cache()`, removed support for `front` and `robots` object cache.
+			* `delete_post_cache()`, removed support for `post` object cache.
+			* `generate_cache_key()` no longer returns a key when no `$type` is supplied.
+		* **Removed:**
+			* **Object caching support:** These methods were removed with no alternative available. Calling these methods will output a deprecation notice.
+				* `object_cache_set()`
+				* `object_cache_get()`
+				* `object_cache_delete()`
+				* `get_robots_txt_cache_key()`
+				* `get_meta_output_cache_key_by_query()`
+				* `get_meta_output_cache_key_by_type()`
+				* `generate_cache_key_by_query()`
+				* `generate_front_page_cache_key()`
+				* `delete_author_cache()`
 		* **Info:**
 			* TODO `robots_meta()` is now marked for deprecation.
 				* We should use something like `get_robots_meta()`, but that's already taken...
@@ -328,11 +362,12 @@ TODO fix 'back to top' on extension pages thanks to our new font.
 					-> Generate?
 			* `is_robots_meta_noindex_set_by_args()` is now marked for deprecation. Use `robots_meta()` instead (which is also marked for deprecation... hmmm TODO).
 			* `append_php_query()` is now marked for deprecation. Use `append_url_query()` instead.
+			* `get_html_output()` is now marked for deprecation.
 	* **For object `The_SEO_Framework\Builders\SeoBar`:**
 		* **Added:**
 			* `clear_query_cache()`, clears the query cache.
 			* `get_query_cache()`, presents an unalterable form of query cache.
-	* **For object `The_SEO_Framework\Bridges\Sitemap`:
+	* **For object `The_SEO_Framework\Bridges\Sitemap`:**
 		* **Changed:**
 			* `get_expected_sitemap_endpoint_url()` now  Now assimilates the output using the base path, so that filter `the_seo_framework_sitemap_base_path` also works. Glues the pieces together using the `get_home_host` value.
 * **Filter notes:**
@@ -341,8 +376,11 @@ TODO fix 'back to top' on extension pages thanks to our new font.
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
+	* **Removed:**
+		* `the_seo_framework_use_object_cache`, feature no longer available.
 * **Other:**
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
+	* Cleaned up code, removed dumb quirks.
 
 TODO remove object caching, so that we can output TSF meta instantly
 	-> improving meta performance by what, 5%? Or does this hamper, since the output buffer isn't utilized correctly, although concatenation isn't happening?

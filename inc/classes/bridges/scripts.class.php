@@ -184,7 +184,7 @@ final class Scripts {
 	 * @return mixed
 	 */
 	public static function decode_entities( $value ) {
-		return $value && \is_string( $value ) ? html_entity_decode( $value, ENT_QUOTES | ENT_COMPAT, 'UTF-8' ) : $value;
+		return $value && \is_string( $value ) ? html_entity_decode( $value, ENT_QUOTES, 'UTF-8' ) : $value;
 	}
 
 	/**

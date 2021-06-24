@@ -480,38 +480,6 @@ class Generate extends User_Data {
 	}
 
 	/**
-	 * Generates the `noindex` robots meta code array from arguments.
-	 *
-	 * This method is tailor-made for everything that relies on the noindex-state, as it's
-	 * a very controlling and powerful feature.
-	 *
-	 * Note that the home-as-blog page can be used for this method.
-	 *
-	 * We deprecated this because in the real world, it barely mattered. We'd much rather
-	 * have a proper and predictable API.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 Now uses the new taxonomy robots settings.
-	 * @since 4.1.4 Soft deprecated. Use 'robots_meta' instead.
-	 * @deprecated
-	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
-	 * @param int <bit>  $ignore The ignore level. {
-	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    3 = 0b11: Ignore protection and post/term setting.
-	 * }
-	 * @return bool Whether noindex is set or not
-	 */
-	public function is_robots_meta_noindex_set_by_args( $args, $ignore = 0b00 ) {
-		// PHP 7+...
-		// return 'noindex' === ( $this->robots_meta( $args, $ignore, 'noindex' )['noindex'] ?? '' );
-		$meta = $this->robots_meta( $args, $ignore );
-		return isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'];
-	}
-
-	/**
 	 * Determines if the post type has a robots value set.
 	 *
 	 * @since 3.1.0
@@ -695,6 +663,44 @@ class Generate extends User_Data {
 			[
 				$this->generate_og_type(),
 				$this->get_the_real_ID(),
+			]
+		);
+	}
+
+	/**
+	 * Returns the post's modified time.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @return string The current post's modified time
+	 */
+	public function get_modified_time() {
+
+		static $time = null;
+
+		if ( isset( $time ) )
+			return $time;
+
+		$id = $this->get_the_real_ID();
+
+		$post              = \get_post( $id );
+		$post_modified_gmt = $post->post_modified_gmt;
+
+		if ( '0000-00-00 00:00:00' === $post_modified_gmt )
+			return $time = '';
+
+		/**
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 * @param string $time The article modified time.
+		 * @param int    $id   The current page or term ID.
+		 */
+		return $time = (string) \apply_filters_ref_array(
+			'the_seo_framework_modifiedtime_output',
+			[
+				$this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ),
+				$id,
 			]
 		);
 	}
