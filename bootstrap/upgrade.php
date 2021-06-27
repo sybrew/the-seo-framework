@@ -589,7 +589,7 @@ function _do_upgrade_2900() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
 		$tsf = \the_seo_framework();
 
-		$card_type = trim( \esc_attr( $tsf->get_option( 'twitter_card', false ) ) );
+		$card_type = trim( $tsf->get_option( 'twitter_card', false ) );
 		if ( 'photo' === $card_type ) {
 			$tsf->update_option( 'twitter_card', 'summary_large_image' );
 			_add_upgrade_notice(

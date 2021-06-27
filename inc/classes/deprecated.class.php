@@ -1039,7 +1039,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @param string $before The content before the SEO output. Stored in object cache.
+		 * @param string $before The content before the SEO output.
 		 */
 		$before = (string) \apply_filters( 'the_seo_framework_pre', '' );
 
@@ -1108,7 +1108,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @param string $after The content after the SEO output. Stored in object cache.
+		 * @param string $after The content after the SEO output.
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
 

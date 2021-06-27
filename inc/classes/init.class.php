@@ -449,7 +449,7 @@ class Init extends Query {
 
 		/**
 		 * @since 2.6.0
-		 * @param string $before The content before the SEO output. Stored in object cache.
+		 * @param string $before The content before the SEO output.
 		 */
 		echo \apply_filters( 'the_seo_framework_pre', '' );
 
@@ -457,66 +457,75 @@ class Init extends Query {
 
 		// Limit processing and redundant tags on 404 and search.
 		if ( $this->is_search() ) :
-			$get += [
-				'og_locale',
-				'og_type',
-				'og_title',
-				'og_url',
-				'og_sitename',
-				'theme_color',
-				'shortlink',
-				'canonical',
-				'paged_urls',
-				'google_site_output',
-				'bing_site_output',
-				'yandex_site_output',
-				'baidu_site_output',
-				'pint_site_output',
-			];
+			array_push(
+				$get,
+				...[
+					'og_locale',
+					'og_type',
+					'og_title',
+					'og_url',
+					'og_sitename',
+					'theme_color',
+					'shortlink',
+					'canonical',
+					'paged_urls',
+					'google_site_output',
+					'bing_site_output',
+					'yandex_site_output',
+					'baidu_site_output',
+					'pint_site_output',
+				]
+			);
 		elseif ( $this->is_404() ) :
-			$get += [
-				'theme_color',
-				'google_site_output',
-				'bing_site_output',
-				'yandex_site_output',
-				'baidu_site_output',
-				'pint_site_output',
-			];
+			array_push(
+				$get,
+				...[
+					'theme_color',
+					'google_site_output',
+					'bing_site_output',
+					'yandex_site_output',
+					'baidu_site_output',
+					'pint_site_output',
+				]
+			);
 		elseif ( $this->is_query_exploited() ) :
-			$get += [ 'advanced_query_protection' ];
+			$get[] = 'advanced_query_protection';
 		else :
-			$get += [
-				'the_description',
-				'og_image',
-				'og_locale',
-				'og_type',
-				'og_title',
-				'og_description',
-				'og_url',
-				'og_sitename',
-				'og_updated_time',
-				'facebook_publisher',
-				'facebook_author',
-				'facebook_app_id',
-				'article_published_time',
-				'article_modified_time',
-				'twitter_card',
-				'twitter_site',
-				'twitter_creator',
-				'twitter_title',
-				'twitter_description',
-				'twitter_image',
-				'theme_color',
-				'shortlink',
-				'canonical',
-				'paged_urls',
-				'ld_json',
-				'google_site_output',
-				'bing_site_output',
-				'yandex_site_output',
-				'baidu_site_output',
-				'pint_site_output',
-			];
+			array_push(
+				$get,
+				...[
+					'the_description',
+					'og_image',
+					'og_locale',
+					'og_type',
+					'og_title',
+					'og_description',
+					'og_url',
+					'og_sitename',
+					'og_updated_time',
+					'facebook_publisher',
+					'facebook_author',
+					'facebook_app_id',
+					'article_published_time',
+					'article_modified_time',
+					'twitter_card',
+					'twitter_site',
+					'twitter_creator',
+					'twitter_title',
+					'twitter_description',
+					'twitter_image',
+					'theme_color',
+					'shortlink',
+					'canonical',
+					'paged_urls',
+					'ld_json',
+					'google_site_output',
+					'bing_site_output',
+					'yandex_site_output',
+					'baidu_site_output',
+					'pint_site_output',
+				]
+			);
 		endif;
 
 		// TODO add filter? It won't last a few major updates though...
@@ -528,7 +537,7 @@ class Init extends Query {
 
 		/**
 		 * @since 2.6.0
-		 * @param string $after The content after the SEO output. Stored in object cache.
+		 * @param string $after The content after the SEO output.
 		 */
 		echo \apply_filters( 'the_seo_framework_pro', '' );
 

@@ -774,7 +774,7 @@ class Core {
 		$g = hexdec( $hex[1] );
 		$b = hexdec( $hex[2] );
 
-		$get_relative_luminance = function( $v ) {
+		$get_relative_luminance = static function( $v ) {
 			//= Convert to 0~1 value.
 			$v /= 255;
 

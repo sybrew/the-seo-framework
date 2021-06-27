@@ -253,13 +253,14 @@ TODO update `https://theseoframework.com/docs/api/constants/`
 TODO fix 'back to top' on extension pages thanks to our new font.
 TODO test all deprecated methods
 TODO deprecate is_wc_shop et co. for real.
+TODO render_element -> create_element? We eventually want to 'output_element', but what's the name?
 
 **For everyone:**
 
 * **Improved:**
 	* TODO (Forgo this? -> Store progress in branch?) We made the robots-generator a literal generator.
 * **Removed:**
-	* TODO Object caching of the HTML output of TSF.
+	* Object caching of the HTML output of TSF.
 		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).
 		* This does not mean we removed basic object caching support! We only purged our very custom implementation for it. You do not need to clear your object cache after updating, and you won't find performance altered.
 * **Updated:**
@@ -327,8 +328,6 @@ TODO deprecate is_wc_shop et co. for real.
 				* This tag is used to indicate a malformed query was detected. It's tilt-proof.
 			* `render_element`, do not use. Useful for generating meta tags with few inputs. Escapes for you.
 				* This method is marked 'protected' for we have other plans with it in the future.
-			* `esc_attr_only_quoted()`, escapes attributes mindfully. You probably shouldn't use this unless you know how to hack a website.
-				* Use WP's very own `esc_attr()` instead, which covers mistakes you might (and will) make, albeit less elegantly.
 			* `og_updated_time()`, disjointed from `article_modified_time()`, outputs `og:updated_time` meta tag.
 			* `get_modified_time()`, returns the modified time of the current post.
 		* **Improved:**
@@ -380,11 +379,9 @@ TODO deprecate is_wc_shop et co. for real.
 		* `the_seo_framework_use_object_cache`, feature no longer available.
 * **Other:**
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
+	* We now use static anonymous functions where appropriate, instead of simple lambda functions, to improve performance and reduce memory consumption.
 	* Cleaned up code, removed dumb quirks.
 
-TODO remove object caching, so that we can output TSF meta instantly
-	-> improving meta performance by what, 5%? Or does this hamper, since the output buffer isn't utilized correctly, although concatenation isn't happening?
-	-> Clean up caching class, such as removing calls that clear the now non-existent object cache, too.
 TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
 TODO figure if we need to check for is_post_status_viewable() -> is_post_publicly_viewable() (in sitemap/post type supported)?
 	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/

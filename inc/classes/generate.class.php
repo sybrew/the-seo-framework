@@ -720,6 +720,7 @@ class Generate extends User_Data {
 	 * @since 2.8.2 Now considers description output.
 	 * @since 2.9.0 Now listens to $this->get_available_twitter_cards().
 	 * @since 3.1.0 Now inherits filter `the_seo_framework_twittercard_output`.
+	 * @since 4.1.4 Removed needless preprocessing of the option.
 	 *
 	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
 	 */
@@ -730,7 +731,6 @@ class Generate extends User_Data {
 		if ( ! $available_cards ) return '';
 
 		$option = $this->get_option( 'twitter_card' );
-		$option = trim( \esc_attr( $option ) );
 
 		// Option is equal to found cards. Output option.
 		if ( \in_array( $option, $available_cards, true ) ) {

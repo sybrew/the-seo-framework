@@ -491,8 +491,7 @@ class Cache extends Site_Options {
 			foreach ( [ 'archive', 'search' ] as $key ) {
 				array_walk(
 					$cache[ $key ],
-					// Performance: This won't be cached completely by OpCache, but we cache the results, anyway.
-					function( &$v ) {
+					static function( &$v ) {
 						if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
 							$v = (int) $v->post_id;
 						} else {

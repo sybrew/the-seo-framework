@@ -163,8 +163,10 @@ class Render extends Admin_Init {
 		$attr = '';
 
 		foreach ( $attributes as $_name => $_value ) {
-			if ( 'href' === $_name ) {
-				$_value = \esc_url_raw( $_value );
+			if ( \in_array( $_name, [ 'href', 'xlink:href', 'src' ], true ) ) {
+				$_secure_attr_value = \esc_url_raw( $_value );
+			} else {
+				$_secure_attr_value = \esc_attr( $_value );
 			}
 
 			// phpcs:disable -- Security hint for later, left code intact; Redundant, internal... for now.
@@ -188,7 +190,7 @@ class Render extends Admin_Init {
 				 * support proper UTF. We can afford empty tags in rare situations -- not here.
 				 */
 				preg_replace( '/[^a-zA-Z0-9:_-]+/', '', $_name ),
-				$this->esc_attr_only_quoted( $_value )
+				$_secure_attr_value
 			);
 		}
 
@@ -257,7 +259,10 @@ class Render extends Admin_Init {
 			]
 		);
 
-		return $description ? $this->render_element( [ 'name' => 'description', 'content' => $description ] ) : '';
+		return $description ? $this->render_element( [
+			'name'    => 'description',
+			'content' => $description,
+		] ) : '';
 	}
 
 	/**
@@ -1294,8 +1299,8 @@ class Render extends Admin_Init {
 			if ( $cache['show_timer'] && $timing ) {
 				$timers = sprintf(
 					' | %s meta | %s boot',
-					number_format( ( microtime( true ) - $timing ) * 1e3, 2 ) . 'ms',
-					number_format( _bootstrap_timer() * 1e3, 2 ) . 'ms'
+					number_format( ( microtime( true ) - $timing ) * 1e3, 2, null, '' ) . 'ms',
+					number_format( _bootstrap_timer() * 1e3, 2, null, '' ) . 'ms'
 				);
 			} else {
 				$timers = '';

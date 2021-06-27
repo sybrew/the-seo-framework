@@ -825,7 +825,7 @@ class Admin_Pages extends Profile {
 		 * @param mixed  $value
 		 * @param mixed  $default
 		 */
-		$create_option = function( &$name, $value, $default ) {
+		$create_option = static function( &$name, $value, $default ) {
 			$name = sprintf(
 				'<option value="%s"%s>%s</option>',
 				\esc_attr( $value ),

@@ -114,6 +114,7 @@ abstract class Sitemap {
 
 	/**
 	 * Creates XML entry from array input.
+	 * Input is expected to be escaped and XML-safe.
 	 *
 	 * Note: Not final, other classes may overwrite this.
 	 *

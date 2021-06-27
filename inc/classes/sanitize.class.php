@@ -1245,8 +1245,8 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $new_values ) ) return [];
 
-		foreach ( $new_values as $index => $value ) {
-			$new_values[ $index ] = $this->s_one_zero( $value );
+		foreach ( $new_values as $index => &$value ) {
+			$value = $this->s_one_zero( $value );
 		}
 
 		return $new_values;
@@ -1284,14 +1284,7 @@ class Sanitize extends Admin_Pages {
 	 * @return array
 	 */
 	public function s_taxonomies( $new_values ) {
-
-		if ( ! \is_array( $new_values ) ) return [];
-
-		foreach ( $new_values as $index => $value ) {
-			$new_values[ $index ] = $this->s_one_zero( $value );
-		}
-
-		return $new_values;
+		return $this->s_post_types( $new_values );
 	}
 
 	/**
@@ -1356,47 +1349,13 @@ class Sanitize extends Admin_Pages {
 	 * of entities in HTML input value attributes.
 	 *
 	 * @since 4.0.0
+	 * TODO a better name would've been "esc_attr_revert_amp"...?
 	 *
 	 * @param string $new_value String with possibly ampersands.
 	 * @return string
 	 */
 	public function esc_attr_preserve_amp( $new_value ) {
 		return \esc_attr( str_replace( '&', '&amp;', $new_value ) );
-	}
-
-	/**
-	 * Escapes text for real XHTML attribute usage, instead of using random guesswork.
-	 * This may ONLY be used on QUOTED attribute values.
-	 *
-	 * UNQUOTED ATTRIBUTES VALUES WILL NOT BE ESCAPED PROPERLY. Use `esc_attr()` instead.
-	 *
-	 * @since 4.1.4
-	 * @source Some ideas taken from WordPress's `_wp_specialchars()`. However, now fit-for-purpose.
-	 * @link <https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html#rule-2-attribute-encode-before-inserting-untrusted-data-into-html-common-attributes>
-	 *
-	 * @param string $text The attribute text to escape.
-	 * @return string The escaped attribute, without nonsense processing for prehistoric PHP.
-	 */
-	public function esc_attr_only_quoted( $text ) {
-
-		if ( 0 === \strlen( $text ) ) return '';
-
-		// Don't bother if there are no specialchars - saves some processing.
-		if ( ! preg_match( '/["\']+/', $text ) ) return $text;
-
-		static $charset;
-
-		if ( ! isset( $charset ) ) {
-			$charset = \get_option( 'blog_charset' );
-
-			if ( \in_array( $charset, array( 'utf8', 'utf-8', 'UTF8' ), true ) )
-				$charset = 'UTF-8';
-		}
-
-		// This basically does nothing for us... right? ... Right?
-		$text = \wp_check_invalid_utf8( $text );
-
-		return htmlentities( $text, ENT_QUOTES, $charset, false );
 	}
 
 	/**
