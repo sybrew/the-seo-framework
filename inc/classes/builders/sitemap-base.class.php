@@ -224,27 +224,28 @@ class Sitemap_Base extends Sitemap {
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_hpt_query_args',
 				[
-					'posts_per_page'   => $_hierarchical_posts_limit + \count( $_exclude_ids ),
-					'post_type'        => $hierarchical_post_types,
-					'orderby'          => 'date',
-					'order'            => 'ASC',
-					'post_status'      => 'publish',
-					'has_password'     => false,
-					'fields'           => 'ids',
-					'cache_results'    => false,
-					'suppress_filters' => false,
-					'no_found_rows'    => true,
+					'posts_per_page' => $_hierarchical_posts_limit + \count( $_exclude_ids ),
+					'post_type'      => $hierarchical_post_types,
+					'orderby'        => 'date',
+					'order'          => 'ASC',
+					'post_status'    => 'publish',
+					'has_password'   => false,
+					'fields'         => 'ids',
+					'cache_results'  => false,
+					'no_found_rows'  => true,
 				]
 			);
 
-			$wp_query->query = $wp_query->query_vars = $_args;
+			if ( $_args['post_type'] ) {
+				$wp_query->query = $wp_query->query_vars = $_args;
 
-			$hierarchical_post_ids = array_diff( $wp_query->get_posts(), $_exclude_ids );
+				$hierarchical_post_ids = array_diff( $wp_query->get_posts(), $_exclude_ids );
 
-			// Stop confusion: trim query to set value (by one or two, depending on whether the homepage and blog are included).
-			// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
-			if ( \count( $hierarchical_post_ids ) > $_hierarchical_posts_limit ) {
-				array_splice( $hierarchical_post_ids, $_hierarchical_posts_limit );
+				// Stop confusion: trim query to set value (by one or two, depending on whether the homepage and blog are included).
+				// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
+				if ( \count( $hierarchical_post_ids ) > $_hierarchical_posts_limit ) {
+					array_splice( $hierarchical_post_ids, $_hierarchical_posts_limit );
+				}
 			}
 		}
 
@@ -256,22 +257,23 @@ class Sitemap_Base extends Sitemap {
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_nhpt_query_args',
 				[
-					'posts_per_page'   => $this->get_sitemap_post_limit( false ),
-					'post_type'        => $non_hierarchical_post_types,
-					'orderby'          => 'lastmod',
-					'order'            => 'DESC',
-					'post_status'      => 'publish',
-					'has_password'     => false,
-					'fields'           => 'ids',
-					'cache_results'    => false,
-					'suppress_filters' => false,
-					'no_found_rows'    => true,
+					'posts_per_page' => $this->get_sitemap_post_limit( false ),
+					'post_type'      => $non_hierarchical_post_types,
+					'orderby'        => 'lastmod',
+					'order'          => 'DESC',
+					'post_status'    => 'publish',
+					'has_password'   => false,
+					'fields'         => 'ids',
+					'cache_results'  => false,
+					'no_found_rows'  => true,
 				]
 			);
 
-			$wp_query->query = $wp_query->query_vars = $_args;
+			if ( $_args['post_type'] ) {
+				$wp_query->query = $wp_query->query_vars = $_args;
 
-			$non_hierarchical_post_ids = $wp_query->get_posts();
+				$non_hierarchical_post_ids = $wp_query->get_posts();
+			}
 		}
 
 		// Destroy query instance.

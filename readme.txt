@@ -295,6 +295,7 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 		* TSF will not remove the refactored WordPress method for outputting `noindex` when the blog isn't set to public. TSF will warn you about this still -- very much so.
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
+	* TODO TSF is now copyrighted by someone else... well, still me, but using a different name.
 * **Fixed:**
 	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
 	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
@@ -308,6 +309,7 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. The setting is accessible via `wc_get_page_id()` (WC 3.0 and later).
 	* Resolved a memory leak in image-tooltips.
 	* Addressed an issue where image-tooltips don't load correctly when reloading the DOM, such as with our [Local extension](https://theseoframework.com/extensions/local/).
+	* When using WPML, the main sitemap no longer contains "display translatable" post types, and the translated sitemaps no longer contain "not translatable" post types nor untranslated posts from "display translatable" post types.
 * **Not fixed:**
 	* Polylang transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirit is dying, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Luckily, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
 		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but using any other setting is also much better for SEO regardless.
@@ -411,6 +413,9 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
+		* `the_seo_framework_sitemap_nhpt_query_args` & `the_seo_framework_sitemap_hpt_query_args`:
+			1. No longer pass the superfluously redundant `no_found_rows` index.
+			2. Now can have index `post_type` set to `[]` or `''` to cancel the query.
 	* **Removed:**
 		* `the_seo_framework_use_object_cache`, feature no longer available.
 * **Other:**
