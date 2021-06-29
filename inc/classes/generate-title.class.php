@@ -730,6 +730,7 @@ class Generate_Title extends Generate_Description {
 	 * Generates front page title.
 	 *
 	 * @since 3.1.0
+	 * @TODO figure out why we didn't choose to use $this->get_blogname()?
 	 *
 	 * @return string The generated front page title.
 	 */

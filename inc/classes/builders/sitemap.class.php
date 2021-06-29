@@ -152,7 +152,7 @@ abstract class Sitemap {
 	 * @since 3.1.0 1. Resolved a PHP notice when ID is 0, resulting in returning false-esque unintentionally.
 	 *              2. Now accepts 0 in the filter.
 	 * @since 4.0.0 1. Now tests qubit options.
-	 *              2. Now tests for redirect settings.
+	 *              2. FALSE: Now tests for redirect settings. <- it never did! We did document this though...
 	 *              3. First parameter can now be a post object.
 	 *              4. If the first parameter is 0, it's now indicative of a home-as-blog page.
 	 *              5. Moved to \The_SEO_Framework\Builders\Sitemap

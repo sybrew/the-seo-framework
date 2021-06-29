@@ -201,7 +201,8 @@ switch ( $instance ) :
 		$_example_title = $this->escape_title(
 			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
 		);
-		// FIXME? When no blog description or tagline is set... this will be empty and be ugly on no-JS.
+		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
+		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
 		$_example_blogname  = $this->escape_title( $this->get_home_title_additions() ?: $this->get_static_untitled_title() );
 		$_example_separator = esc_html( $this->get_separator( 'title' ) );
 
@@ -402,7 +403,7 @@ switch ( $instance ) :
 		<p class="hide-if-no-tsf-js">
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-			echo $this->get_social_image_uploader_form( 'tsf_homepage_socialimage' );
+			echo $this->get_image_uploader_form( [ 'id' => 'tsf_homepage_socialimage' ] );
 			?>
 		</p>
 		<?php

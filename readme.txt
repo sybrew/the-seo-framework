@@ -244,6 +244,22 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
+= Why are there so few reviews? =
+
+Compared to other SEO plugins, The SEO Framework barely has any reviews, simply because we do not ask for reviews.
+
+We believe asking for reviews is unethical: You're more likely to leave a positive review, which sweeps negative reviews away, possibly hiding issues that may affect you.
+
+= Why isn't TSF updated frequently? =
+
+When software works as intended, it doesn't need updating. We carefully test our plugins before they reach your website.
+
+Releasing plugin updates periodically helps with exposure on this website, which some other plugin authors abuse intentionally. We want none of that.
+
+= Why have I never heard of this plugin before? =
+
+That's easy: We never paid for reviews or other forms of exposure around the web.
+
 == Changelog ==
 
 = 4.1.4 =
@@ -254,6 +270,10 @@ TODO fix 'back to top' on extension pages thanks to our new font.
 TODO test all deprecated methods
 TODO deprecate is_wc_shop et co. for real.
 TODO render_element -> create_element? We eventually want to 'output_element', but what's the name?
+TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
+TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
+TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
+	-> This was planned for 4.1.0...
 
 **For everyone:**
 
@@ -276,7 +296,7 @@ TODO render_element -> create_element? We eventually want to 'output_element', b
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 * **Fixed:**
-	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, etc.) sudomains.
+	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
 	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
 	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
 	* Addressed an issue where in quick-edit, the homepage title wasn't locked correctly, causing it and its counters to render incorrectly.
@@ -289,8 +309,8 @@ TODO render_element -> create_element? We eventually want to 'output_element', b
 	* Resolved a memory leak in image-tooltips.
 	* Addressed an issue where image-tooltips don't load correctly when reloading the DOM, such as with our [Local extension](https://theseoframework.com/extensions/local/).
 * **Not fixed:**
-	* When you use Polylang, you practically installed a big bug and your website will be destined to break down at some point. It transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirits aren't lifting, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Please use another translation plugin, for we're considering removing support for Polylang altogether; it eats up most of our development time -- time better spent trying to breathe liquids. Moreover, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
-		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but anything else is also much better for SEO regardless.
+	* Polylang transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirit is dying, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Luckily, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
+		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but using any other setting is also much better for SEO regardless.
 
 **For translators:**
 
@@ -314,6 +334,14 @@ TODO render_element -> create_element? We eventually want to 'output_element', b
 			* The methods it contains were moved from the `\The_SEO_Framework\Generate` class, TODO which is now removed.
 			* This class is part of the façade class `\The_SEO_Framework\Load` (callable via `the_seo_framework()`).
 			* This class should not be instantiated directly. Use `the_seo_framework()` to get the object, instead.
+		* TODO `\The_SEO_Framework\Bridges\Ajax`, private, internal use only.
+			* This class is used to handle AJAX requests for The SEO Framework.
+			* The methods it contains were moved from `\The_SEO_Famework\Admin_Init` class.
+			* This class and its methods are static, and cannot be instantiated.
+			* All methods in the class are marked private, and should not be integrated in your software.
+			* This class is final, and cannot be extended.
+			* The class may contain some filters and actions, which are public.
+			* This class is autoloaded when admin-ajax requests are recorded. Since we do not handle "nopriv" requests, these are thus ignored.
 	* **Removed:**
 		* TODO `\The_SEO_Framework\Generate`
 * **Method notes:**
@@ -333,19 +361,21 @@ TODO render_element -> create_element? We eventually want to 'output_element', b
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
+			* `s_image_details()` Fixed theoretical issue where a different image could be set when width and height are supplied and either over 4K, but no ID is given.
 		* **Changed:**
 			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
 			* `robots_txt()`, removed object caching support.
-			* `delete_cache()`, the following `$types` are no longer supported: `front`, `post`, `term`, `author`, `robots`.
+			* `delete_cache()`, the following `$types` are no longer supported: `front`, `post`, `term`, `author`, `robots`, `object`.
 			* `generate_cache_key_by_type()`, removed support for `author`, `frontpage`, `page`, `post`, `attachment`, `singular`, and `term`.
-			* `delete_main_cache()`, removed support for `front` and `robots` object cache.
-			* `delete_post_cache()`, removed support for `post` object cache.
+			* `delete_main_cache()`, no longer flushes `front`, `robots`, and `object` cache.
+			* `delete_post_cache()`, no longer flushes `post` object cache.
 			* `generate_cache_key()` no longer returns a key when no `$type` is supplied.
 		* **Removed:**
 			* **Object caching support:** These methods were removed with no alternative available. Calling these methods will output a deprecation notice.
 				* `object_cache_set()`
 				* `object_cache_get()`
 				* `object_cache_delete()`
+				* `delete_object_cache()`
 				* `get_robots_txt_cache_key()`
 				* `get_meta_output_cache_key_by_query()`
 				* `get_meta_output_cache_key_by_type()`
@@ -353,15 +383,21 @@ TODO render_element -> create_element? We eventually want to 'output_element', b
 				* `generate_front_page_cache_key()`
 				* `delete_author_cache()`
 		* **Info:**
-			* TODO `robots_meta()` is now marked for deprecation.
-				* We should use something like `get_robots_meta()`, but that's already taken...
-					-> Assert?
-					-> Render?
-					-> Obtain?
-					-> Generate?
-			* `is_robots_meta_noindex_set_by_args()` is now marked for deprecation. Use `robots_meta()` instead (which is also marked for deprecation... hmmm TODO).
-			* `append_php_query()` is now marked for deprecation. Use `append_url_query()` instead.
-			* `get_html_output()` is now marked for deprecation.
+			* **The following methods are now marked for deprecation:**
+				* TODO `robots_meta()`
+					* We should use something like `get_robots_meta()`, but that's already taken...
+						-> Assert?
+						-> Render?
+						-> Obtain?
+						-> Generate?
+				* `is_robots_meta_noindex_set_by_args()`. Use `robots_meta()` instead (which is also marked for deprecation... hmmm TODO).
+				* `append_php_query()`. Use `append_url_query()` instead.
+				* `get_html_output()`.
+				* `can_do_sitemap_robots()`.
+				* `nav_tab_wrapper()`. Use `\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper()` instead.
+				* `inpost_flex_nav_tab_wrapper()`. Use `\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper()` instead.
+				* `get_social_image_uploader_form()`. Use `get_image_uploader_form()` instead.
+				* `get_logo_uploader_form()`. Use `get_logo_uploader_form()` instead.
 	* **For object `The_SEO_Framework\Builders\SeoBar`:**
 		* **Added:**
 			* `clear_query_cache()`, clears the query cache.

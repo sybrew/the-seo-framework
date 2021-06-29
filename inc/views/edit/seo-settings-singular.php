@@ -547,7 +547,7 @@ switch ( $instance ) :
 				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
 					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped. (phpcs is broken here?)
-					echo $this->get_social_image_uploader_form( 'autodescription_socialimage' );
+					echo $this->get_image_uploader_form( [ 'id' => 'autodescription_socialimage' ] );
 					?>
 				</div>
 			</div>

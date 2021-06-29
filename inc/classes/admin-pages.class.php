@@ -241,56 +241,6 @@ class Admin_Pages extends Profile {
 	}
 
 	/**
-	 * Setting nav tab wrappers.
-	 * Outputs Tabs and settings content.
-	 *
-	 * @since 2.3.6
-	 * @since 2.6.0 Refactored.
-	 * @since 3.1.0 Now prefixes the IDs.
-	 * @since 4.0.0 Deprecated third parameter, silently.
-	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php. Deprecate me?
-	 *
-	 * @param string $id      The nav-tab ID
-	 * @param array  $tabs    The tab content {
-	 *    string tab ID => array : {
-	 *       string   name     : Tab name.
-	 *       callable callback : Output function.
-	 *       string   dashicon : The dashicon to use.
-	 *       mixed    args     : Optional callback function args.
-	 *    }
-	 * }
-	 * @param null   $depr     Deprecated.
-	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
-	 */
-	public function nav_tab_wrapper( $id, $tabs = [], $depr = null, $use_tabs = true ) {
-		Bridges\SeoSettings::_nav_tab_wrapper( $id, $tabs, $use_tabs );
-	}
-
-	/**
-	 * Outputs in-post flex navigational wrapper and its content.
-	 *
-	 * @since 2.9.0
-	 * @since 3.0.0 Converted to view.
-	 * @since 4.0.0 Deprecated third parameter, silently.
-	 * @TODO is this even used??? See inc\views\edit\seo-settings-singular.php. Deprecate me?
-	 *
-	 * @param string $id       The nav-tab ID
-	 * @param array  $tabs     The tab content {
-	 *    string tab ID => array : {
-	 *       string   name     : Tab name.
-	 *       callable callback : Output function.
-	 *       string   dashicon : The dashicon to use.
-	 *       mixed    args     : Optional callback function args.
-	 *    }
-	 * }
-	 * @param null   $_depr    Deprecated.
-	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
-	 */
-	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
-		Bridges\PostSettings::_flex_nav_tab_wrapper( $id, $tabs, $use_tabs );
-	}
-
-	/**
 	 * Helper function that constructs name attributes for use in form fields.
 	 *
 	 * Other page implementation classes may wish to construct and use a
@@ -1050,14 +1000,11 @@ class Admin_Pages extends Profile {
 
 	/**
 	 * Returns image uploader form button.
-	 * Also registers additional i18n strings for JS, and registers a tooltip.
+	 * Also registers additional i18n strings for JS, and registers a tooltip for image preview.
+	 *
+	 * The default arguments conform to Facebook and Twitter image sharing.
 	 *
 	 * @since 4.1.4
-	 *: {
-	 *    'type'   => string Optional. The notification type. Default 'updated'.
-	 *    'icon'   => bool   Optional. Whether to enable icon. Default true.
-	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
-	 * }
 	 *
 	 * @param array $args Required. The image uploader arguments : {
 	 *   'id'      => string Required. The HTML input id to pass URL into.
@@ -1125,53 +1072,6 @@ class Admin_Pages extends Profile {
 		);
 
 		return $content;
-	}
-
-	/**
-	 * Returns social image uploader form button.
-	 * Also registers additional i18n strings for JS.
-	 *
-	 * @since 2.8.0
-	 * @since 3.1.0 No longer prepares media l10n data.
-	 * @since 4.0.0 Now adds a media preview dispenser.
-	 * @since 4.1.2 No longer adds a redundant title to the selection button.
-	 * @TODO mark for deprecation?
-	 *
-	 * @param string $input_id Required. The HTML input id to pass URL into.
-	 * @return string The image uploader button.
-	 */
-	public function get_social_image_uploader_form( $input_id ) {
-		return $this->get_image_uploader_form( [ 'id' => $input_id ] );
-	}
-
-	/**
-	 * Returns logo uploader form buttons.
-	 * Also registers additional i18n strings for JS.
-	 *
-	 * @since 3.0.0
-	 * @since 3.1.0 No longer prepares media l10n data.
-	 * @since 4.0.0 Now adds a media preview dispenser.
-	 * @TODO mark for deprecation?
-	 *
-	 * @param string $input_id Required. The HTML input id to pass URL into.
-	 * @return string The image uploader button.
-	 */
-	public function get_logo_uploader_form( $input_id ) {
-		return $this->get_image_uploader_form( [
-			'id'   => $input_id,
-			'data' => [
-				'inputType' => 'logo',
-				'width'     => 512,
-				'height'    => 512,
-				'minWidth'  => 112,
-				'minHeight' => 112,
-				'flex'      => true,
-			],
-			'i18n' => [
-				'button_title' => '',
-				'button_text'  => \__( 'Select Logo', 'autodescription' ),
-			],
-		] );
 	}
 
 	/**

@@ -643,33 +643,6 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Determines whether to add a line within robots based by plugin detection, or sitemap output option.
-	 *
-	 * @since 2.6.0
-	 * @since 2.8.0 Added check_option parameter.
-	 * @since 2.9.0 Now also checks for subdirectory installations.
-	 * @since 2.9.2 Now also checks for permalinks.
-	 * @since 2.9.3 Now also checks for sitemap_robots option.
-	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
-	 * @since 4.0.0 : 1. Now uses has_robots_txt()
-	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
-	 * FIXME This method also checks for file existence (and location...), but is only used when the file definitely doesn't exist.
-	 *
-	 * @param bool $check_option Whether to check for sitemap option.
-	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
-	 */
-	public function can_do_sitemap_robots( $check_option = true ) {
-
-		if ( $check_option ) {
-			if ( ! $this->get_option( 'sitemaps_output' )
-			|| ! $this->get_option( 'sitemaps_robots' ) )
-				return false;
-		}
-
-		return ! $this->has_robots_txt() && \strlen( $this->get_robots_txt_url() );
-	}
-
-	/**
 	 * Detects presence of robots.txt in root folder.
 	 * Memoizes the return value.
 	 *

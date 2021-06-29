@@ -96,12 +96,11 @@ class Cache extends Site_Options {
 	 * @since 2.8.0
 	 * @since 3.1.0 Added excluded post ids flush.
 	 * @since 3.1.4 Now flushes object cache.
-	 * @since 4.1.4 No longer flushes 'front' and 'robots' cache.
+	 * @since 4.1.4 No longer flushes 'front', 'robots', or 'object' cache.
 	 */
 	public function delete_main_cache() {
 		$this->delete_cache( 'sitemap' );
 		$this->delete_cache( 'excluded_post_ids' );
-		$this->delete_cache( 'object' );
 	}
 
 	/**
@@ -155,18 +154,6 @@ class Cache extends Site_Options {
 	}
 
 	/**
-	 * Deletes object cache.
-	 *
-	 * @since 2.9.0
-	 * @since 4.0.0 Now does something.
-	 *
-	 * @return bool True on success, false on failure.
-	 */
-	public function delete_object_cache() {
-		return $this->delete_cache( 'object' );
-	}
-
-	/**
 	 * Handles all kinds of cache for removal.
 	 * Main cache deletion function handler.
 	 *
@@ -174,7 +161,7 @@ class Cache extends Site_Options {
 	 * @since 2.9.3 $type = 'front' now also returns true.
 	 * @since 3.1.0 Added action.
 	 * @since 4.0.5 Removed all JSON-LD transient clear calls.
-	 * @since 4.1.4 The following $types are no longer supported: 'front', 'post', 'term', 'author', 'robots'.
+	 * @since 4.1.4 The following $types are no longer supported: 'front', 'post', 'term', 'author', 'robots', 'object'.
 	 *
 	 * @param string $type The type
 	 * @param int    $id The post, page or TT ID. Defaults to $this->get_the_real_ID().
@@ -194,10 +181,6 @@ class Cache extends Site_Options {
 
 			case 'excluded_post_ids':
 				$success = $this->delete_excluded_post_ids_transient();
-				break;
-
-			case 'object':
-				$success = \wp_cache_flush();
 				break;
 
 			case 'detection':

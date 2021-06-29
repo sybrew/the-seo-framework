@@ -1507,9 +1507,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( strpos( $link, 'profile.php' ) ) {
 			//= Gets query parameters.
-			// FIXME why don't we use parse_url( $link, PHP_URL_QUERY );?
-			$q = strtok( substr( $link, strpos( $link, '?' ) ), '?' );
-			parse_str( $q, $r );
+			parse_str( parse_url( $link, PHP_URL_QUERY ), $r );
 			if ( isset( $r['id'] ) ) {
 				$link = 'https://www.facebook.com/profile.php?id=' . \absint( $r['id'] );
 				$link = $this->s_url_query( $link );
@@ -1933,6 +1931,8 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0
 	 * @since 4.0.2 Now finds smaller images when they're over 4K.
 	 * @since 4.0.5 Now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
+	 * @since 4.1.4 Fixed theoretical issue where a different image could be set when width
+	 *              and height are supplied and either over 4K, but no ID is given.
 	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
 	 *
 	 * @param array $details The image details, either associative (see $defaults) or sequential.
@@ -1989,8 +1989,7 @@ class Sanitize extends Admin_Pages {
 		if ( ! $width || ! $height )
 			$width = $height = 0;
 
-		if ( $width > 4096 || $height > 4096 ) {
-			// FIXME Why do we assume there's an $id available here, because we only know $width/$height when there's an $id?
+		if ( $id && ( $width > 4096 || $height > 4096 ) ) {
 			$new_image = $this->get_largest_acceptable_image_src( $id, 4096 );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 

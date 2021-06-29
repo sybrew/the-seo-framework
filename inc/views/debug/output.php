@@ -37,7 +37,7 @@ if ( is_admin() ) {
 				echo ' :: ';
 				echo esc_html( 'Type: ' . $type );
 				echo esc_html( $mdash . 'ID: ' . $id );
-				echo esc_html( $mdash . 'Cache key: ' . $cache_key );
+				echo esc_html( $mdash . 'Cache key: ' . ( $cache_key ?: 'N/A' ) );
 				echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
 				echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
 			endif;
@@ -61,7 +61,7 @@ if ( is_admin() ) {
 			echo ' :: ';
 			echo 'Type: ' . esc_html( $type );
 			echo esc_html( $mdash . 'ID: ' . $id );
-			echo esc_html( $mdash . 'Cache key: ' . $cache_key );
+			echo esc_html( $mdash . 'Cache key: ' . ( $cache_key ?: 'N/A' ) );
 			echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
 			echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
 			?>

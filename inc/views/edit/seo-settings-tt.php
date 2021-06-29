@@ -284,7 +284,7 @@ $robots_settings = [
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php
 					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
-					echo $this->get_social_image_uploader_form( 'autodescription_meta_socialimage' );
+					echo $this->get_image_uploader_form( [ 'id' => 'autodescription_meta_socialimage' ] );
 					?>
 				</div>
 			</td>

@@ -1153,4 +1153,155 @@ final class Deprecated {
 		$meta = $tsf->robots_meta( $args, $ignore );
 		return isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'];
 	}
+
+
+	/**
+	 * Determines whether to add a line within robots based by plugin detection, or sitemap output option.
+	 *
+	 * @since 2.6.0
+	 * @since 2.8.0 Added check_option parameter.
+	 * @since 2.9.0 Now also checks for subdirectory installations.
+	 * @since 2.9.2 Now also checks for permalinks.
+	 * @since 2.9.3 Now also checks for sitemap_robots option.
+	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
+	 * @since 4.0.0 : 1. Now uses has_robots_txt()
+	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
+	 * FIXME This method also checks for file existence (and location...), but is only used when the file definitely doesn't exist.
+	 * @since 4.1.4 Soft deprecated.
+	 * @deprecated
+	 *
+	 * @param bool $check_option Whether to check for sitemap option.
+	 * @return bool True when no conflicting plugins are detected or when The SEO Framework's Sitemaps are output.
+	 */
+	public function can_do_sitemap_robots( $check_option = true ) {
+
+		$tsf = \the_seo_framework();
+
+		// $tsf->_deprecated_function( 'the_seo_framework()->is_robots_meta_noindex_set_by_args()', '4.2.0' );
+
+		if ( $check_option ) {
+			if ( ! $tsf->get_option( 'sitemaps_output' )
+			|| ! $tsf->get_option( 'sitemaps_robots' ) )
+				return false;
+		}
+
+		return ! $tsf->has_robots_txt() && \strlen( $tsf->get_robots_txt_url() );
+	}
+
+	/**
+	 * Setting nav tab wrappers.
+	 * Outputs Tabs and settings content.
+	 *
+	 * @since 2.3.6
+	 * @since 2.6.0 Refactored.
+	 * @since 3.1.0 Now prefixes the IDs.
+	 * @since 4.0.0 Deprecated third parameter, silently.
+	 * @since 4.1.4 Deprecated, silently. Use `\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper()` instead.
+	 * @deprecated
+	 *
+	 * @param string $id      The nav-tab ID
+	 * @param array  $tabs    The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
+	 * }
+	 * @param null   $depr     Deprecated.
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 */
+	public function nav_tab_wrapper( $id, $tabs = [], $depr = null, $use_tabs = true ) {
+
+		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_nav_tab_wrapper' );
+
+		\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper( $id, $tabs, $use_tabs );
+	}
+
+	/**
+	 * Outputs in-post flex navigational wrapper and its content.
+	 *
+	 * @since 2.9.0
+	 * @since 3.0.0 Converted to view.
+	 * @since 4.0.0 Deprecated third parameter, silently.
+	 * @since 4.1.4 Deprecated, silently. Use `\The_SEO_Framework\Bridges\PostSettings()` instead.
+	 * @deprecated
+	 *
+	 * @param string $id       The nav-tab ID
+	 * @param array  $tabs     The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args.
+	 *    }
+	 * }
+	 * @param null   $_depr    Deprecated.
+	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
+	 */
+	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
+
+		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->inpost_flex_nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper' );
+
+		\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper( $id, $tabs, $use_tabs );
+	}
+
+	/**
+	 * Returns social image uploader form button.
+	 * Also registers additional i18n strings for JS.
+	 *
+	 * @since 2.8.0
+	 * @since 3.1.0 No longer prepares media l10n data.
+	 * @since 4.0.0 Now adds a media preview dispenser.
+	 * @since 4.1.2 No longer adds a redundant title to the selection button.
+	 * @since 4.1.4 Deprecated. Use `get_image_uploader_form()` instead.
+	 * @deprecated
+	 *
+	 * @param string $input_id Required. The HTML input id to pass URL into.
+	 * @return string The image uploader button.
+	 */
+	public function get_social_image_uploader_form( $input_id ) {
+
+		$tsf = \the_seo_framework();
+
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_social_image_uploader_form()', '4.2.0', 'the_seo_framework()->get_image_uploader_form()' );
+
+		return $tsf->get_image_uploader_form( [ 'id' => $input_id ] );
+	}
+
+	/**
+	 * Returns logo uploader form buttons.
+	 * Also registers additional i18n strings for JS.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 No longer prepares media l10n data.
+	 * @since 4.0.0 Now adds a media preview dispenser.
+	 * @since 4.1.4 Deprecated. Use `get_image_uploader_form()` instead.
+	 * @deprecated
+	 *
+	 * @param string $input_id Required. The HTML input id to pass URL into.
+	 * @return string The image uploader button.
+	 */
+	public function get_logo_uploader_form( $input_id ) {
+
+		$tsf = \the_seo_framework();
+
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_logo_uploader_form()', '4.2.0', 'the_seo_framework()->get_image_uploader_form()' );
+
+		return $tsf->get_image_uploader_form( [
+			'id'   => $input_id,
+			'data' => [
+				'inputType' => 'logo',
+				'width'     => 512,
+				'height'    => 512,
+				'minWidth'  => 112,
+				'minHeight' => 112,
+				'flex'      => true,
+			],
+			'i18n' => [
+				'button_title' => '',
+				'button_text'  => \__( 'Select Logo', 'autodescription' ),
+			],
+		] );
+	}
 }

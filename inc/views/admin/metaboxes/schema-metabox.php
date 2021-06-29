@@ -186,7 +186,21 @@ switch ( $instance ) :
 		<p class="hide-if-no-tsf-js">
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-			echo $this->get_logo_uploader_form( 'knowledge_logo' );
+			echo $this->get_image_uploader_form( [
+				'id'   => 'sitemap_logo',
+				'data' => [
+					'inputType' => 'logo',
+					'width'     => 512,
+					'height'    => 512,
+					'minWidth'  => 112,
+					'minHeight' => 112,
+					'flex'      => true,
+				],
+				'i18n' => [
+					'button_title' => '',
+					'button_text'  => __( 'Select Logo', 'autodescription' ),
+				],
+			] );
 			?>
 		</p>
 		<?php

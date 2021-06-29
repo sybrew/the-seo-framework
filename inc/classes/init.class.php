@@ -726,20 +726,22 @@ class Init extends Query {
 		$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
 		// Add extra whitespace and sitemap full URL
-		if ( $this->can_do_sitemap_robots( true ) ) {
-			$sitemaps = Bridges\Sitemap::get_instance();
-			foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
-				if ( ! empty( $data['robots'] ) ) {
-					$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
+		if ( $this->get_option( 'sitemaps_robots' ) ) {
+			if ( $this->get_option( 'sitemaps_output' ) ) {
+				$sitemaps = Bridges\Sitemap::get_instance();
+				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
+					if ( ! empty( $data['robots'] ) ) {
+						$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
+					}
 				}
-			}
-			$output .= "\r\n";
-		} elseif ( $this->get_option( 'sitemaps_robots' ) && ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
-			if ( $this->use_core_sitemaps() ) {
-				$wp_sitemaps_server = \wp_sitemaps_get_server();
-				if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
-					// This method augments the output--it doesn't overwrite it.
-					$output = \wp_sitemaps_get_server()->add_robots( $output, $public );
+				$output .= "\r\n";
+			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
+				if ( $this->use_core_sitemaps() ) {
+					$wp_sitemaps_server = \wp_sitemaps_get_server();
+					if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
+						// This method augments the output--it doesn't overwrite it.
+						$output = \wp_sitemaps_get_server()->add_robots( $output, $public );
+					}
 				}
 			}
 		}
