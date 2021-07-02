@@ -279,6 +279,10 @@ TODO add_filter( 'the_seo_framework_timestamp_format' ) in get_timestamp_format(
 TODO PENTEST the new SQL query in get_excluded_ids_from_cache().
 TODO CLEAR MAIN CACHE (for exclusions lookup) on upgrade.
 
+TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redundant 'plucking' request. From Core:
+	$pts      = get_post_types( array( 'public' => true ), 'objects' );
+	$pt_names = array_keys( $pts );
+
 **For everyone:**
 
 * **Improved:**
@@ -321,6 +325,7 @@ TODO CLEAR MAIN CACHE (for exclusions lookup) on upgrade.
 				* As before, this query is only executed when saving the SEO settings, or when updating/publishing any post or page. The result of the query is stored in a non-expiring "transient" option.
 	* Resolved an issue where excluded taxonomies could still have their archives adjusted.
 		* This means your 'excluded' posts may still show up in the excluded taxonomies' terms.
+	* Resolved an issue where post-link queries via the Block Editor were filtered by post-search exclusions settings.
 * **Not fixed:**
 	* Polylang transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirit is dying, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Luckily, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
 		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but using any other setting is also much better for SEO regardless.

@@ -1035,8 +1035,8 @@ class Admin_Pages extends Profile {
 			'post_id' => $this->get_the_real_ID(),
 			'data'    => [
 				'inputType' => 'social',
-				'width'     => 1200,
-				'height'    => 630,
+				'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.
+				'height'    => 630,  // TODO make  640 - 80px overflow margin? It'd be better for mixed platforms.
 				'minWidth'  => 200,
 				'minHeight' => 200,
 				'flex'      => true,

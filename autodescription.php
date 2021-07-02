@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.1.4-dev-18
+ * Version: 4.1.4-dev-19
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) or die;
  * @NOTE This file MUST be written according to WordPress's minimum PHP requirements.
  *       Which is PHP 5.2.
  * When we only support WordPress 5.2+, it'll be PHP 5.6.
- * When we only support WordPress 5.6?+, it'll be PHP 7.1.
+ * When we only support WordPress 5.9?+, it'll be PHP 7.1.
  */
 
 /**

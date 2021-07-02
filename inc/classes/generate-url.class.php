@@ -1082,7 +1082,7 @@ class Generate_Url extends Generate_Title {
 		$_fragment = parse_url( $url, PHP_URL_FRAGMENT );
 
 		if ( $_fragment )
-			$url = str_replace( '#' . $_fragment, '', $url );
+			$url = str_replace( "#$_fragment", '', $url );
 
 		parse_str( $query, $results );
 

@@ -982,10 +982,22 @@ class Init extends Query {
 	/**
 	 * Determines whether the archive query adjustment is blocked.
 	 *
+	 * We do NOT treat this feature with security: If a post still slips through
+	 * a query, then so be it. The post may be accessed anyway, otherwise,
+	 * if not redirected. This last part is of concern, however, because one
+	 * might think the contents of a post is hidden thanks to the redirect, for it
+	 * to be exposable via other means. Nevertheless, we never (and won't ever)
+	 * redirect REST queries, which may access post content regardless of user settings.
+	 *
+	 * Perhaps, we should add a disclaimer: Even IF you redirect the post, noindex it,
+	 * exclude it from search and archive queries, the post content may still be readable
+	 * to the public.
+	 *
 	 * @since 2.9.4
 	 * @since 3.1.0 Now checks for the post type.
 	 * @since 4.1.4 1. Renamed from `is_archive_query_adjustment_blocked()`
 	 *              2. Added taxonomy-supported lookups.
+	 *              3. Added WP Rest checks for the Block Editor.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool
@@ -1003,22 +1015,28 @@ class Init extends Query {
 			 *
 			 * @since 2.9.4
 			 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
-			 * @param \WP_Query $wp_query The current query. Passed by reference.
+			 * @param \WP_Query $wp_query The current query.
 			 */
 			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
 				return true;
 		}
 
-		// TODO
-		// if ( false && $this->is_editor_rest_query( $wp_query ) )
-		// 	return true;
-
-		// Is this redundant???? -> yes. But, it might improve performance when we use this check. For most (read: all) sites, it won't.
-		// This primarily affects 'search'.
-		// if ( ! empty( $wp_query->query_vars['post_type'] ) && 'any' !== $wp_query->query_vars['post_type'] ) {
-		// 	if ( ! $this->is_post_type_supported( $wp_query->query_vars['post_type'] ) )
-		// 		return true;
-		// }
+		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			$referer = \wp_get_referer();
+			if ( false !== strpos( $referer, 'post.php' ) || false !== strpos( $referer, 'post-new.php' ) ) {
+				/**
+				 * WordPress should've authenthicated the user at
+				 * WP_REST_Server::check_authentication() -> rest_cookie_check_errors() -> wp_nonce et al.
+				 * before executing the query. For REST_REQUEST can not be true otherwise. Ergo,
+				 * \current_user_can() should work. If it returns true, can trust it's a safe request.
+				 * If it returns false, the user may still be logged in, but the request isn't sent via
+				 * WordPress's API with the proper nonces supplied. This is as perfect as it can be.
+				 */
+				if ( \current_user_can( 'edit_posts' ) ) {
+					return true;
+				}
+			}
+		}
 
 		// This primarily affects 'terms'.
 		if ( ! empty( $wp_query->tax_query->queries ) ) :

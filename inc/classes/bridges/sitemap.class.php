@@ -451,7 +451,7 @@ final class Sitemap {
 
 		/**
 		 * @since 2.8.0
-		 * @param array $schemas The schema list. URLs are expected to be escaped.
+		 * @param array $schemas The schema list. URLs and indexes are expected to be escaped.
 		 */
 		$schemas = (array) \apply_filters( 'the_seo_framework_sitemap_schemas', $schemas );
 
