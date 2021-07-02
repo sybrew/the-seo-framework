@@ -274,6 +274,10 @@ TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_p
 TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
 TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 	-> This was planned for 4.1.0...
+TODO add_filter( 'the_seo_framework_timestamp_format' ) in get_timestamp_format();
+	-> Report to user https://wordpress.org/support/topic/naver-validation-error-sitemap/ how to use this.
+TODO PENTEST the new SQL query in get_excluded_ids_from_cache().
+TODO CLEAR MAIN CACHE (for exclusions lookup) on upgrade.
 
 **For everyone:**
 
@@ -299,7 +303,7 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 * **Fixed:**
 	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
 	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
-	* Addressed an issue where the character counter wasn't aligned pixel-perfect on RTL-language sites.
+	* Addressed an issue where the character counter wasn't aligned pixel-perfectly on RTL-language sites.
 	* Addressed an issue where in quick-edit, the homepage title wasn't locked correctly, causing it and its counters to render incorrectly.
 	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
 		* Now, you can also overwrite these settings effectively.
@@ -310,6 +314,13 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 	* Resolved a memory leak in image-tooltips.
 	* Addressed an issue where image-tooltips don't load correctly when reloading the DOM, such as with our [Local extension](https://theseoframework.com/extensions/local/).
 	* When using WPML, the main sitemap no longer contains "display translatable" post types, and the translated sitemaps no longer contain "not translatable" post types nor untranslated posts from "display translatable" post types.
+	* Resolved an issue where excluded post types could still have their search-archives adjusted.
+		* The following was done to achieve this (bear with me -- excluding posts from excluded post types... yea):
+			1. Post meta cannot be fetched from excluded post types. This prevents "on the site"-queries filtering excluded post-type-posts.
+			1. A `LEFT JOIN` ... `WHERE $wpdb->posts.post_type IN ('[post_types,]')` query is now executed for fetching excluded posts, but only when post types are excluded. This type of join should minimize the query impact, because we expect users only to exclude few posts. The parent query should be 'slowest', but most likely cached, so actually 'fastest'.
+				* As before, this query is only executed when saving the SEO settings, or when updating/publishing any post or page. The result of the query is stored in a non-expiring "transient" option.
+	* Resolved an issue where excluded taxonomies could still have their archives adjusted.
+		* This means your 'excluded' posts may still show up in the excluded taxonomies' terms.
 * **Not fixed:**
 	* Polylang transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirit is dying, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Luckily, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
 		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but using any other setting is also much better for SEO regardless.
@@ -364,6 +375,8 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
 			* `s_image_details()` Fixed theoretical issue where a different image could be set when width and height are supplied and either over 4K, but no ID is given.
+			* `get_post_meta()` now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
+			* `get_excluded_ids_from_cache()` now tests against post type exclusions.
 		* **Changed:**
 			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
 			* `robots_txt()`, removed object caching support.
@@ -414,7 +427,7 @@ TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
 		* `the_seo_framework_sitemap_nhpt_query_args` & `the_seo_framework_sitemap_hpt_query_args`:
-			1. No longer pass the superfluously redundant `no_found_rows` index.
+			1. No longer pass the superfluously redundant `suppress_filters` index.
 			2. Now can have index `post_type` set to `[]` or `''` to cancel the query.
 	* **Removed:**
 		* `the_seo_framework_use_object_cache`, feature no longer available.

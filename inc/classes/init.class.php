@@ -873,7 +873,7 @@ class Init extends Query {
 			if ( ! isset( $wp_query->query['s'] ) )
 				return;
 
-			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) )
 				return;
 
 			$excluded = $this->get_ids_excluded_from_search();
@@ -906,7 +906,7 @@ class Init extends Query {
 	public function _alter_archive_query_in( $wp_query ) {
 
 		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) )
 				return;
 
 			$excluded = $this->get_ids_excluded_from_archive();
@@ -938,13 +938,12 @@ class Init extends Query {
 	public function _alter_search_query_post( $posts, $wp_query ) {
 
 		if ( $wp_query->is_search ) {
-			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) )
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) ) {
+				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) )
 					unset( $posts[ $n ] );
-				}
 			}
 			//= Reset numeric index.
 			$posts = array_values( $posts );
@@ -966,13 +965,12 @@ class Init extends Query {
 	public function _alter_archive_query_post( $posts, $wp_query ) {
 
 		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( $this->is_archive_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) )
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) ) {
+				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) )
 					unset( $posts[ $n ] );
-				}
 			}
 			//= Reset numeric index.
 			$posts = array_values( $posts );
@@ -986,33 +984,57 @@ class Init extends Query {
 	 *
 	 * @since 2.9.4
 	 * @since 3.1.0 Now checks for the post type.
+	 * @since 4.1.4 1. Renamed from `is_archive_query_adjustment_blocked()`
+	 *              2. Added taxonomy-supported lookups.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool
 	 */
-	protected function is_archive_query_adjustment_blocked( $wp_query ) {
+	protected function is_query_adjustment_blocked( $wp_query ) {
 
 		static $has_filter = null;
-
-		$blocked = false;
 
 		if ( null === $has_filter ) {
 			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
 		}
 		if ( $has_filter ) {
 			/**
+			 * This filter affects both 'search-"archives"' and terms/taxonomies.
+			 *
 			 * @since 2.9.4
 			 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
 			 * @param \WP_Query $wp_query The current query. Passed by reference.
 			 */
 			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
-				$blocked = true;
+				return true;
 		}
 
-		if ( isset( $wp_query->query_vars->post_type ) )
-			$blocked = $this->is_post_type_disabled( $wp_query->query_vars->post_type );
+		// TODO
+		// if ( false && $this->is_editor_rest_query( $wp_query ) )
+		// 	return true;
 
-		return $blocked;
+		// Is this redundant???? -> yes. But, it might improve performance when we use this check. For most (read: all) sites, it won't.
+		// This primarily affects 'search'.
+		// if ( ! empty( $wp_query->query_vars['post_type'] ) && 'any' !== $wp_query->query_vars['post_type'] ) {
+		// 	if ( ! $this->is_post_type_supported( $wp_query->query_vars['post_type'] ) )
+		// 		return true;
+		// }
+
+		// This primarily affects 'terms'.
+		if ( ! empty( $wp_query->tax_query->queries ) ) :
+			$unsupported = [];
+
+			foreach ( $wp_query->tax_query->queries as $_query ) {
+				if ( isset( $_query['taxonomy'] ) )
+					$unsupported[] = ! $this->is_taxonomy_supported( $_query['taxonomy'] );
+			}
+
+			// Only block when taxonomies were found and all of them are unsupported.
+			if ( $unsupported && ! \in_array( false, $unsupported, true ) )
+				return true;
+		endif;
+
+		return false;
 	}
 
 	/**

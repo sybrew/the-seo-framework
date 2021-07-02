@@ -82,6 +82,7 @@ class Post_Data extends Detect {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Now tests for valid post ID in the post object.
+	 * @since 4.1.4 Now returns an empty array when the post type isn't supported.
 	 *
 	 * @param int  $post_id   The post ID.
 	 * @param bool $use_cache Whether to use caching.
@@ -99,7 +100,7 @@ class Post_Data extends Detect {
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
 
-		if ( empty( $post->ID ) )
+		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) )
 			return $cache[ $post_id ] = [];
 
 		/**

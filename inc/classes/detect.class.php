@@ -1051,6 +1051,7 @@ class Detect extends Render {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
+	 * @since 4.1.4 Now resets the index keys of the return value.
 	 *
 	 * @return array All public post types.
 	 */
@@ -1058,17 +1059,19 @@ class Detect extends Render {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = array_filter(
-			array_unique(
-				array_merge(
-					$this->get_forced_supported_post_types(),
-					//? array_values() because get_post_types() gives a sequential array.
-					array_values( (array) \get_post_types( [
-						'public' => true,
-					] ) )
-				)
-			),
-			'\\is_post_type_viewable'
+		return isset( $cache ) ? $cache : $cache = array_values(
+			array_filter(
+				array_unique(
+					array_merge(
+						$this->get_forced_supported_post_types(),
+						//? array_values() because get_post_types() gives a sequential array.
+						array_values( (array) \get_post_types( [
+							'public' => true,
+						] ) )
+					)
+				),
+				'\\is_post_type_viewable'
+			)
 		);
 	}
 

@@ -448,6 +448,7 @@ class Cache extends Site_Options {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now no longer crashes on database errors.
+	 * @since 4.1.4 Now tests against post type exclusions.
 	 *
 	 * @return array : { 'archive', 'search' }
 	 */
@@ -460,20 +461,35 @@ class Cache extends Site_Options {
 
 		if ( false === $cache ) {
 			global $wpdb;
-			$cache = [];
+
+			$supported_post_types = $this->get_supported_post_types();
+			$public_post_types    = $this->get_public_post_types();
+
+			$join  = '';
+			$where = '';
+			if ( $supported_post_types !== $public_post_types ) {
+				// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
+				$post_type__in = "'" . implode( "','", array_map( '\\esc_sql', $supported_post_types ) ) . "'";
+
+				$join  = "LEFT JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID";
+				$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
+			}
 
 			//= Two separated equals queries are faster than a single IN with 'meta_key'.
-			$cache['archive'] = $wpdb->get_results(
-				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'exclude_from_archive'"
-			); // No cache OK, Set in autoloaded transient. DB call ok.
+			// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
+			$cache = [
+				'archive' => $wpdb->get_results(
+					"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where"
+				),
+				'search'  => $wpdb->get_results(
+					"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where"
+				),
+			];
+			// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-			$cache['search'] = $wpdb->get_results(
-				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'exclude_local_search'"
-			); // No cache OK, Set in autoloaded transient. DB call ok.
-
-			foreach ( [ 'archive', 'search' ] as $key ) {
+			foreach ( [ 'archive', 'search' ] as $type ) {
 				array_walk(
-					$cache[ $key ],
+					$cache[ $type ],
 					static function( &$v ) {
 						if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
 							$v = (int) $v->post_id;
@@ -482,7 +498,7 @@ class Cache extends Site_Options {
 						}
 					}
 				);
-				$cache[ $key ] = array_filter( $cache[ $key ] );
+				$cache[ $type ] = array_filter( $cache[ $type ] );
 			}
 
 			$this->set_transient( $this->get_exclusion_transient_name(), $cache, 0 );
