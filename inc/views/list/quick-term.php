@@ -9,6 +9,8 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
+use The_SEO_Framework\Interpreters\Form;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 $robots_settings = [
@@ -59,9 +61,9 @@ $robots_settings = [
 			</label>
 			<?php
 			$this->get_option( 'display_character_counter' )
-				and $this->output_character_counter_wrap( 'autodescription-quick[doctitle]' );
+				and Form::output_character_counter_wrap( 'autodescription-quick[doctitle]' );
 			$this->get_option( 'display_pixel_counter' )
-				and $this->output_pixel_counter_wrap( 'autodescription-quick[doctitle]', 'title' );
+				and Form::output_pixel_counter_wrap( 'autodescription-quick[doctitle]', 'title' );
 			?>
 			<div class="tsf-pad-input tsf-title-wrap">
 				<input type=text id=autodescription-quick[doctitle] name=autodescription-quick[doctitle] value />
@@ -76,9 +78,9 @@ $robots_settings = [
 			</label>
 			<?php
 			$this->get_option( 'display_character_counter' )
-				and $this->output_character_counter_wrap( 'autodescription-quick[description]' );
+				and Form::output_character_counter_wrap( 'autodescription-quick[description]' );
 			$this->get_option( 'display_pixel_counter' )
-				and $this->output_pixel_counter_wrap( 'autodescription-quick[description]', 'description' );
+				and Form::output_pixel_counter_wrap( 'autodescription-quick[description]', 'description' );
 			?>
 			<div class=tsf-pad-input>
 				<textarea id=autodescription-quick[description] name=autodescription-quick[description] rows=3 cols=22></textarea>
@@ -104,7 +106,7 @@ $robots_settings = [
 					echo '<label class=clear>';
 						printf( '<span class="title">%s</span>', esc_html( $_setting['label'] ) );
 						// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
-						echo $this->make_single_select_form( [
+						echo Form::make_single_select_form( [
 							'id'      => $_setting['id'],
 							'name'    => $_setting['name'],
 							'options' => [

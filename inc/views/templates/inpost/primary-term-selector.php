@@ -25,7 +25,7 @@ $tsf = the_seo_framework();
 <script type="text/html" id="tmpl-tsf-primary-term-selector-help">
 	<span class="tsf-primary-term-selector-help-wrap">
 		<?php
-		$tsf->make_info(
+		\The_SEO_Framework\Interpreters\HTML::make_info(
 			sprintf(
 				/* translators: %s = term name */
 				esc_html__( 'The buttons below are for primary %s selection.', 'autodescription' ),

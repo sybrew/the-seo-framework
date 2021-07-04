@@ -7,7 +7,9 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings;
+use The_SEO_Framework\Bridges\SeoSettings,
+	The_SEO_Framework\Interpreters\HTML,
+	The_SEO_Framework\Interpreters\Form;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
@@ -109,54 +111,45 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_robots_metabox_general':
-		?>
-		<h4><?php esc_html_e( 'Advanced Query Protection', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( 'Some URL queries can cause WordPress to show faux archives. When search engines spot these, they will crawl and index them, which may cause a drop in ranking. Advanced query protection will prevent robots from indexing these archives.', 'autodescription' ) );
+		Form::header_title( __( 'Advanced Query Protection', 'autodescription' ) );
+		HTML::description( __( 'Some URL queries can cause WordPress to show faux archives. When search engines spot these, they will crawl and index them, which may cause a drop in ranking. Advanced query protection will prevent robots from indexing these archives.', 'autodescription' ) );
 
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'advanced_query_protection',
-				esc_html__( 'Enable advanced query protection?', 'autodescription' ),
-				'',
-				false
-			),
+		HTML::wrap_fields(
+			Form::make_checkbox( [
+				'id'    => 'advanced_query_protection',
+				'label' => __( 'Enable advanced query protection?', 'autodescription' ),
+			] ),
 			true
 		);
 		?>
 		<hr>
-
-		<h4><?php esc_html_e( 'Paginated Archive Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ) );
+		Form::header_title( __( 'Paginated Archive Settings', 'autodescription' ) );
+		HTML::description( __( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ) );
 
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'paged_noindex',
-				$this->convert_markdown(
+		HTML::wrap_fields(
+			Form::make_checkbox( [
+				'id'     => 'paged_noindex',
+				'label'  => $this->convert_markdown(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					esc_html__( 'Apply `noindex` to every second or later archive page?', 'autodescription' ),
 					[ 'code' ]
 				),
-				'',
-				false
-			),
+				'escape' => false,
+			] ),
 			true
 		);
 		?>
 		<hr>
-
-		<h4><?php esc_html_e( 'Copyright Directive Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "Some search engines allow you to control copyright directives on the content they aggregate. It's best to allow some content to be taken by these aggregators, as that can improve contextualized exposure via snippets and previews. When left unspecified, regional regulations may apply. It is up to the aggregator to honor these requests.", 'autodescription' ) );
+		Form::header_title( __( 'Copyright Directive Settings', 'autodescription' ) );
+		HTML::description( __( "Some search engines allow you to control copyright directives on the content they aggregate. It's best to allow some content to be taken by these aggregators, as that can improve contextualized exposure via snippets and previews. When left unspecified, regional regulations may apply. It is up to the aggregator to honor these requests.", 'autodescription' ) );
 
-		$this->wrap_fields(
-			$this->make_checkbox(
-				'set_copyright_directives',
-				esc_html__( 'Specify aggregator copyright compliance directives?', 'autodescription' ),
-				'',
-				false
-			),
+		HTML::wrap_fields(
+			Form::make_checkbox( [
+				'id'    => 'set_copyright_directives',
+				'label' => __( 'Specify aggregator copyright compliance directives?', 'autodescription' ),
+			] ),
 			true
 		);
 
@@ -189,17 +182,17 @@ switch ( $instance ) :
 
 			$text_snippet_options .= sprintf( '<optgroup label="%s">%s</optgroup>', esc_attr( $_label ), $_options );
 		}
-		$this->wrap_fields(
+		HTML::wrap_fields(
 			vsprintf(
 				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
 				<p><select name="%3$s" id="%1$s">%4$s</select></p>
 				<p class=description>%6$s</p>',
 				[
-					$this->get_field_id( 'max_snippet_length' ),
+					Form::get_field_id( 'max_snippet_length' ),
 					esc_html__( 'Maximum text snippet length', 'autodescription' ),
-					$this->get_field_name( 'max_snippet_length' ),
+					Form::get_field_name( 'max_snippet_length' ),
 					$text_snippet_options,
-					$this->make_info(
+					HTML::make_info(
 						__( 'This may limit the text snippet length for all pages on this site.', 'autodescription' ),
 						'',
 						false
@@ -227,16 +220,16 @@ switch ( $instance ) :
 				]
 			);
 		}
-		$this->wrap_fields(
+		HTML::wrap_fields(
 			vsprintf(
 				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
 				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
 				[
-					$this->get_field_id( 'max_image_preview' ),
+					Form::get_field_id( 'max_image_preview' ),
 					esc_html__( 'Maximum image preview size', 'autodescription' ),
-					$this->get_field_name( 'max_image_preview' ),
+					Form::get_field_name( 'max_image_preview' ),
 					$image_preview_options,
-					$this->make_info(
+					HTML::make_info(
 						__( 'This may limit the image preview size for all images from this site.', 'autodescription' ),
 						'',
 						false
@@ -275,16 +268,16 @@ switch ( $instance ) :
 
 			$video_preview_options .= sprintf( '<optgroup label="%s">%s</optgroup>', esc_attr( $_label ), $_options );
 		}
-		$this->wrap_fields(
+		HTML::wrap_fields(
 			vsprintf(
 				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
 				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
 				[
-					$this->get_field_id( 'max_video_preview' ),
+					Form::get_field_id( 'max_video_preview' ),
 					esc_html__( 'Maximum video preview length', 'autodescription' ),
-					$this->get_field_name( 'max_video_preview' ),
+					Form::get_field_name( 'max_video_preview' ),
 					$video_preview_options,
-					$this->make_info(
+					HTML::make_info(
 						__( 'This may limit the video preview length for all videos on this site.', 'autodescription' ),
 						'',
 						false
@@ -304,33 +297,30 @@ switch ( $instance ) :
 		/* translators: PLURAL. 1 = noindex/nofollow/noarchive, 2 = Archives, Posts, Pages, etc. */
 		$apply_x_to_y_i18n_plural = esc_html_x( 'Apply %1$s to %2$s?', 'plural', 'autodescription' );
 
-		$ro_name_wrapped = $this->code_wrap( $ro_value );
+		$ro_name_wrapped = HTML::code_wrap( $ro_value );
 
 		$default_options = $this->get_default_site_options();
 		$warned_options  = $this->get_warned_site_options();
 
-		?>
-		<h4><?php esc_html_e( 'Robots Settings', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( $ro_i18n );
+		Form::header_title( __( 'Robots Settings', 'autodescription' ) );
+		HTML::description( $ro_i18n );
 		?>
 		<hr>
-
-		<h4><?php esc_html_e( 'Post Type Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
+		Form::header_title( __( 'Post Type Settings', 'autodescription' ) );
+		HTML::description( __( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 
 		$pt_option_id = $this->get_robots_post_type_option_id( $ro_value );
 
 		// When the post OR page post types are available, show this warning.
 		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) && array_intersect( $post_types, [ 'post', 'page' ] ) )
-			$this->attention_description( __( 'Warning: No site should enable these options for Posts and Pages.', 'autodescription' ) );
+			HTML::attention_description( __( 'Warning: No site should enable these options for Posts and Pages.', 'autodescription' ) );
 
 		// TODO can we assume that there's at least one post type at all times? Can WP be used in this way, albeit headless?
 		$checkboxes = [];
 
 		foreach ( $post_types as $post_type ) {
-			$checkboxes[] = $this->make_checkbox_array( [
+			$checkboxes[] = Form::make_checkbox( [
 				'id'       => $pt_option_id,
 				'class'    => 'tsf-robots-post-types',
 				'index'    => $post_type,
@@ -350,14 +340,13 @@ switch ( $instance ) :
 			] );
 		}
 
-		$this->wrap_fields( $checkboxes, true );
+		HTML::wrap_fields( $checkboxes, true );
 
 		?>
 		<hr>
-
-		<h4><?php esc_html_e( 'Taxonomy Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( "These settings apply to the taxonomies of post types. When taxonomies have all their bound post types' options checked, they will inherit their status.", 'autodescription' ) );
+		Form::header_title( __( 'Taxonomy Settings', 'autodescription' ) );
+		HTML::description( __( "These settings apply to the taxonomies of post types. When taxonomies have all their bound post types' options checked, they will inherit their status.", 'autodescription' ) );
 
 		$tax_option_id = $this->get_robots_taxonomy_option_id( $ro_value );
 
@@ -365,7 +354,7 @@ switch ( $instance ) :
 		$checkboxes = [];
 
 		foreach ( $taxonomies as $taxonomy ) {
-			$checkboxes[] = $this->make_checkbox_array( [
+			$checkboxes[] = Form::make_checkbox( [
 				'id'       => $tax_option_id,
 				'class'    => 'tsf-robots-taxonomies',
 				'index'    => $taxonomy,
@@ -386,14 +375,13 @@ switch ( $instance ) :
 			] );
 		}
 
-		$this->wrap_fields( $checkboxes, true );
+		HTML::wrap_fields( $checkboxes, true );
 
 		?>
 		<hr>
-
-		<h4><?php esc_html_e( 'Global Settings', 'autodescription' ); ?></h4>
 		<?php
-		$this->description( __( 'These settings apply to other globally registered content types.', 'autodescription' ) );
+		Form::header_title( __( 'Global Settings', 'autodescription' ) );
+		HTML::description( __( 'These settings apply to other globally registered content types.', 'autodescription' ) );
 
 		$checkboxes = '';
 		foreach ( $global_types as $type => $data ) {
@@ -417,10 +405,14 @@ switch ( $instance ) :
 					);
 			}
 
-			$checkboxes .= $this->make_checkbox( $id, $label, '', false );
+			$checkboxes .= Form::make_checkbox( [
+				'id'     => $id,
+				'label'  => $label,
+				'escape' => false,
+			] );
 		}
 
-		$this->wrap_fields( $checkboxes, true );
+		HTML::wrap_fields( $checkboxes, true );
 		break;
 
 	default:

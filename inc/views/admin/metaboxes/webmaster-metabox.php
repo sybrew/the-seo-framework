@@ -7,6 +7,9 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
+use The_SEO_Framework\Interpreters\HTML,
+	The_SEO_Framework\Interpreters\Form;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 // Fetch the required instance within this file.
@@ -25,7 +28,7 @@ switch ( $instance ) :
 			'google'    => [
 				'setting'     => 'google_verification',
 				'label'       => __( 'Google Search Console Verification Code', 'autodescription' ),
-				'info'        => $this->make_info(
+				'info'        => HTML::make_info(
 					__( 'Get the Google verification code.', 'autodescription' ),
 					'https://www.google.com/webmasters/verification/verification?siteUrl=' . rawurlencode( $site_url ) . '&tid=alternate&vtype=vmeta',
 					false
@@ -35,7 +38,7 @@ switch ( $instance ) :
 			'bing'      => [
 				'setting'     => 'bing_verification',
 				'label'       => __( 'Bing Webmaster Verification Code', 'autodescription' ),
-				'info'        => $this->make_info(
+				'info'        => HTML::make_info(
 					__( 'Get the Bing verification code.', 'autodescription' ),
 					'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url ),
 					false
@@ -45,7 +48,7 @@ switch ( $instance ) :
 			'yandex'    => [
 				'setting'     => 'yandex_verification',
 				'label'       => __( 'Yandex Webmaster Verification Code', 'autodescription' ),
-				'info'        => $this->make_info(
+				'info'        => HTML::make_info(
 					__( 'Get the Yandex verification code.', 'autodescription' ),
 					'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url ),
 					false
@@ -56,7 +59,7 @@ switch ( $instance ) :
 				'setting'     => 'baidu_verification',
 				/* translators: literal translation from '百度搜索资源平台'-Code */
 				'label'       => __( 'Baidu Search Resource Platform Code', 'autodescription' ),
-				'info'        => $this->make_info(
+				'info'        => HTML::make_info(
 					__( 'Get the Baidu verification code.', 'autodescription' ),
 					'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
 					false
@@ -66,7 +69,7 @@ switch ( $instance ) :
 			'pinterest' => [
 				'setting'     => 'pint_verification',
 				'label'       => __( 'Pinterest Analytics Verification Code', 'autodescription' ),
-				'info'        => $this->make_info(
+				'info'        => HTML::make_info(
 					__( 'Get the Pinterest verification code.', 'autodescription' ),
 					'https://analytics.pinterest.com/',
 					false
@@ -75,11 +78,9 @@ switch ( $instance ) :
 			],
 		];
 
-		?>
-		<h4><?php esc_html_e( 'Webmaster Integration Settings', 'autodescription' ); ?></h4>
-		<?php
-		$this->description( __( "When adding your website to Google, Bing and other Webmaster Tools, you'll be asked to add a code or file to your website for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) );
-		$this->description( __( "Verifying your website has no SEO value whatsoever. But you might gain added benefits such as search ranking insights to help you improve your website's content.", 'autodescription' ) );
+		Form::header_title( __( 'Webmaster Integration Settings', 'autodescription' ) );
+		HTML::description( __( "When adding your website to Google, Bing and other Webmaster Tools, you'll be asked to add a code or file to your website for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) );
+		HTML::description( __( "Verifying your website has no SEO value whatsoever. But you might gain added benefits such as search ranking insights to help you improve your website's content.", 'autodescription' ) );
 
 		?>
 		<hr>
@@ -88,7 +89,7 @@ switch ( $instance ) :
 			vprintf(
 				'<p><label for=%s><strong>%s</strong> %s</label></p>',
 				[
-					esc_attr( $this->get_field_id( $setting['setting'] ) ),
+					esc_attr( Form::get_field_id( $setting['setting'] ) ),
 					esc_html( $setting['label'] ),
 					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
 					$setting['info'],
@@ -97,8 +98,8 @@ switch ( $instance ) :
 			vprintf(
 				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s" /></p>',
 				[
-					esc_attr( $this->get_field_name( $setting['setting'] ) ),
-					esc_attr( $this->get_field_id( $setting['setting'] ) ),
+					esc_attr( Form::get_field_name( $setting['setting'] ) ),
+					esc_attr( Form::get_field_id( $setting['setting'] ) ),
 					esc_attr( $setting['placeholder'] ),
 					esc_attr( $this->get_option( $setting['setting'] ) ),
 				]

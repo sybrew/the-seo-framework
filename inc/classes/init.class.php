@@ -150,8 +150,8 @@ class Init extends Query {
 		\add_action( 'admin_enqueue_scripts', [ $this, '_init_admin_scripts' ], 0, 1 );
 
 		// Add plugin links to the plugin activation page.
-		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, [ $this, '_add_plugin_action_links' ], 10, 2 );
-		\add_filter( 'plugin_row_meta', [ $this, '_add_plugin_row_meta' ], 10, 2 );
+		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_action_links', 10, 2 );
+		\add_filter( 'plugin_row_meta', '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_row_meta', 10, 2 );
 
 		if ( $this->load_options ) :
 			// Set up site settings and allow saving resetting them.
@@ -1032,9 +1032,8 @@ class Init extends Query {
 				 * If it returns false, the user may still be logged in, but the request isn't sent via
 				 * WordPress's API with the proper nonces supplied. This is as perfect as it can be.
 				 */
-				if ( \current_user_can( 'edit_posts' ) ) {
+				if ( \current_user_can( 'edit_posts' ) )
 					return true;
-				}
 			}
 		}
 

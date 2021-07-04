@@ -106,9 +106,8 @@ class Core {
 		if ( \is_null( $depr_class ) )
 			$depr_class = new Deprecated;
 
-		if ( \is_callable( [ $depr_class, $name ] ) ) {
+		if ( \is_callable( [ $depr_class, $name ] ) )
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
-		}
 
 		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name . '()' );
 	}
@@ -239,114 +238,6 @@ class Core {
 	}
 
 	/**
-	 * Proportionate dimensions based on Width and Height.
-	 * AKA Aspect Ratio.
-	 *
-	 * @since 2.6.0
-	 * @ignore Unused. The relying methods were yeeted off in 4.0.0.
-	 *                 "We no longer automatically resize images when they’re deemed too large."
-	 * @TODO delete me? This method makes no sense to the outsider, anyway.
-	 *
-	 * @param int $i  The dimension to resize.
-	 * @param int $r1 The dimension that determines the ratio.
-	 * @param int $r2 The dimension to proportionate to.
-	 * @return int The proportional dimension, rounded.
-	 */
-	public function proportionate_dimensions( $i, $r1, $r2 ) {
-		return round( $i / ( $r1 / $r2 ) );
-	}
-
-	/**
-	 * Adds various links to the plugin row on the plugin's screen.
-	 *
-	 * @since 3.1.0
-	 * @access private
-	 *
-	 * @param array $links The current links.
-	 * @return array The plugin links.
-	 */
-	public function _add_plugin_action_links( $links = [] ) {
-
-		$tsf_links = [];
-
-		if ( $this->load_options ) {
-			$tsf_links['settings'] = sprintf(
-				'<a href="%s">%s</a>',
-				\esc_url( \admin_url( 'admin.php?page=' . $this->seo_settings_page_slug ) ),
-				\esc_html__( 'Settings', 'autodescription' )
-			);
-		}
-
-		$tsf_links['tsfem']   = sprintf(
-			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
-			'https://theseoframework.com/extensions/',
-			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
-		);
-		$tsf_links['pricing'] = sprintf(
-			'<a href="%s" rel="noreferrer noopener" target="_blank">%s</a>',
-			'https://theseoframework.com/pricing/',
-			\esc_html_x( 'Pricing', 'Plugin pricing', 'autodescription' )
-		);
-
-		return array_merge( $tsf_links, $links );
-	}
-
-	/**
-	 * Adds more row meta on the plugin screen.
-	 *
-	 * @since 3.2.4
-	 * @access private
-	 *
-	 * @param string[] $plugin_meta An array of the plugin's metadata,
-	 *                              including the version, author,
-	 *                              author URI, and plugin URI.
-	 * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
-	 * @return array $plugin_meta
-	 */
-	public function _add_plugin_row_meta( $plugin_meta, $plugin_file ) {
-
-		if ( THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
-			return $plugin_meta;
-
-		$plugins = \get_plugins();
-		$_get_em = empty( $plugins['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] );
-
-		return array_merge(
-			$plugin_meta,
-			[
-				'support' => vsprintf(
-					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-					[
-						'https://tsf.fyi/support',
-						\esc_html__( 'Get support', 'autodescription' ),
-					]
-				),
-				'docs'    => vsprintf(
-					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-					[
-						'https://tsf.fyi/docs',
-						\esc_html__( 'View documentation', 'autodescription' ),
-					]
-				),
-				'API'     => vsprintf(
-					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-					[
-						'https://tsf.fyi/docs/api',
-						\esc_html__( 'View API docs', 'autodescription' ),
-					]
-				),
-				'EM'      => vsprintf(
-					'<a href="%s" rel="noreferrer noopener nofollow" target="_blank">%s</a>',
-					[
-						'https://tsf.fyi/extension-manager',
-						$_get_em ? \esc_html_x( 'Get Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' ) : 'Extension Manager',
-					]
-				),
-			]
-		);
-	}
-
-	/**
 	 * Returns an array of hierarchical post types.
 	 *
 	 * @since 4.0.0
@@ -452,7 +343,7 @@ class Core {
 	public function get_settings_capability() {
 		/**
 		 * @since 2.6.0
-		 * @todo deprecate, use constant instead.
+		 * @todo deprecate 4.2.0, use constant instead.
 		 * @param string $capability The user capability required to adjust settings.
 		 */
 		return (string) \apply_filters( 'the_seo_framework_settings_capability', THE_SEO_FRAMEWORK_SETTINGS_CAP );
@@ -473,12 +364,11 @@ class Core {
 	/**
 	 * Returns the SEO Settings page URL.
 	 *
-	 * @since 2.6.0
-	 * TODO deprecate me and make a get_seo_settings_page_url().
+	 * @since 4.1.4
 	 *
 	 * @return string The escaped SEO Settings page URL.
 	 */
-	public function seo_settings_page_url() {
+	public function get_seo_settings_page_url() {
 
 		if ( $this->load_options ) {
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
@@ -601,11 +491,26 @@ class Core {
 	 * Returns timestamp format based on timestamp settings.
 	 *
 	 * @since 3.0.0
+	 * @since 4.1.4: 1. Added options-override parameter.
+	 *               1. Added return value filter.
+	 * @link https://www.w3.org/TR/NOTE-datetime
 	 *
+	 * @param null|bool $override_get_time Whether to override the $get_time from option value.
 	 * @return string The timestamp format used in PHP date.
 	 */
-	public function get_timestamp_format() {
-		return $this->uses_time_in_timestamp_format() ? 'Y-m-d\TH:iP' : 'Y-m-d';
+	public function get_timestamp_format( $override_get_time = null ) {
+
+		$get_time = isset( $override_get_time )
+			? $override_get_time
+			: $this->uses_time_in_timestamp_format();
+
+		return \apply_filters_ref_array(
+			'the_seo_framework_timestamp_format',
+			[
+				$get_time ? 'Y-m-d\TH:iP' : 'Y-m-d',
+				$get_time,
+			]
+		);
 	}
 
 	/**
@@ -851,14 +756,13 @@ class Core {
 	 * Converts markdown text into HMTL.
 	 * Does not support list or block elements. Only inline statements.
 	 *
-	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).
-	 *
 	 * @since 2.8.0
 	 * @since 2.9.0 1. Removed word boundary requirement for strong.
-	 *              2. Now accepts regex count their numeric values in string.
+	 *              2. Now lets regex count their numeric values in string.
 	 *              3. Fixed header 1~6 calculation.
 	 * @since 2.9.3 Added $args parameter.
 	 * @since 4.0.3 Added a workaround for connected em/strong elements.
+	 * @since 4.1.4 Offloaded to `The_SEO_Framework\Interpreters\Markdown::convert()`
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text    The text that might contain markdown. Expected to be escaped.
@@ -868,128 +772,6 @@ class Core {
 	 * @return string The markdown converted text.
 	 */
 	public function convert_markdown( $text, $convert = [], $args = [] ) {
-
-		// preprocess
-		$text = str_replace( "\r\n", "\n", $text );
-		$text = str_replace( "\t", ' ', $text );
-		$text = trim( $text );
-
-		// You need 3 chars to make a markdown: *m*
-		if ( \strlen( $text ) < 3 )
-			return '';
-
-		// Merge defaults with $args.
-		$args = array_merge( [ 'a_internal' => false ], $args );
-
-		/**
-		 * The conversion list's keys are per reference only.
-		 */
-		$conversions = [
-			'**'     => 'strong',
-			'*'      => 'em',
-			'`'      => 'code',
-			'[]()'   => 'a',
-			'======' => 'h6',
-			'====='  => 'h5',
-			'===='   => 'h4',
-			'==='    => 'h3',
-			'=='     => 'h2',
-			'='      => 'h1',
-		];
-
-		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
-
-		if ( 2 === \count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
-			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
-			for ( $i = 0; $i < $count; $i++ ) {
-				$text = str_replace(
-					$matches[0][ $i ],
-					sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
-					$text
-				);
-			}
-		endif;
-
-		foreach ( $md_types as $type ) :
-			switch ( $type ) :
-				case 'strong':
-					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'em':
-					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'code':
-					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'h6':
-				case 'h5':
-				case 'h4':
-				case 'h3':
-				case 'h2':
-				case 'h1':
-					// Considers word non-boundary. @TODO consider removing this?
-					$expression = sprintf(
-						'/(?:\={%1$d})\B([^\={\%1$s}]+)\B(?:\={%1$d})/',
-						filter_var( $type, FILTER_SANITIZE_NUMBER_INT )
-					);
-
-					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'a':
-					$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
-
-					$_string = $args['a_internal'] ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( $_string, \esc_url( $matches[2][ $i ], [ 'https', 'http' ] ), \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
-
-		return $text;
+		return Interpreters\Markdown::convert( $text, $convert, $args );
 	}
 }

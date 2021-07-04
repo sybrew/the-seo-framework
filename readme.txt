@@ -272,21 +272,26 @@ TODO deprecate is_wc_shop et co. for real.
 TODO render_element -> create_element? We eventually want to 'output_element', but what's the name?
 TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
 TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
-TODO move all HTML methods (description, code_wrap, field_id) to a HTML class?
-	-> This was planned for 4.1.0...
-TODO add_filter( 'the_seo_framework_timestamp_format' ) in get_timestamp_format();
-	-> Report to user https://wordpress.org/support/topic/naver-validation-error-sitemap/ how to use this.
-TODO PENTEST the new SQL query in get_excluded_ids_from_cache().
-TODO CLEAR MAIN CACHE (for exclusions lookup) on upgrade.
 
-TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redundant 'plucking' request. From Core:
-	$pts      = get_post_types( array( 'public' => true ), 'objects' );
-	$pt_names = array_keys( $pts );
+TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
+TODO figure if we need to check for is_post_status_viewable() -> is_post_publicly_viewable() (in sitemap/post type supported)?
+	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/
+	-> Thanks, WordPress Core Team, for creating yet another discrepancy with term-code?
+	-> OK, so this is a pretty cool new feature. However, not even WordPress utilizes this internally for where it matters for SEO. We need to await further adoption.
+TODO remove UM data, add profile picture to image-generator?
+	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
+
+TODO test plugin size change, it could be less, no?
+	-> With the deprecations removed, that could make up for a lot.
 
 **For everyone:**
 
 * **Improved:**
-	* TODO (Forgo this? -> Store progress in branch?) We made the robots-generator a literal generator.
+
+* **Changed:**
+	* TODO "Remove author name?" is now enabled by default. We found only Discord using this feature in the wild, and asserted most find Discord's way of handling it undesired.
+* **Improved:**
+	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little. TODO measure this?
 * **Removed:**
 	* Object caching of the HTML output of TSF.
 		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).
@@ -360,6 +365,14 @@ TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redunda
 			* This class is final, and cannot be extended.
 			* The class may contain some filters and actions, which are public.
 			* This class is autoloaded when admin-ajax requests are recorded. Since we do not handle "nopriv" requests, these are thus ignored.
+		* In preparation [for the UI redesign project](https://github.com/sybrew/the-seo-framework/projects/7), and to compact the main facade object, these new classes are new and marked as protected; all methods therein can disappear or change behavior without notice:
+			* `\The_SEO_Framework\Interpreters\HTML`
+			* `\The_SEO_Framework\Interpreters\Form`
+			* `\The_SEO_Framework\Interpreters\Markdown`
+		* `\The_SEO_Framework\Bridges\PluginTable`
+			* This class is used to take care of our implementations for the WordPress plugins overview table.
+			* This class is meant to be used internally only.
+			* If you wish to decouple our plugin links, you may need to update your filters now (gone are private methods `_add_plugin_action_links()` and `_add_plugin_row_meta()` from `the_seo_framework()`).
 	* **Removed:**
 		* TODO `\The_SEO_Framework\Generate`
 * **Method notes:**
@@ -382,6 +395,9 @@ TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redunda
 			* `s_image_details()` Fixed theoretical issue where a different image could be set when width and height are supplied and either over 4K, but no ID is given.
 			* `get_post_meta()` now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
 			* `get_excluded_ids_from_cache()` now tests against post type exclusions.
+			* `get_timestamp_format()`:
+				1. Added options-override parameter.
+				1. Added return value filter.
 		* **Changed:**
 			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
 			* `robots_txt()`, removed object caching support.
@@ -402,8 +418,11 @@ TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redunda
 				* `generate_cache_key_by_query()`
 				* `generate_front_page_cache_key()`
 				* `delete_author_cache()`
+			* **Deprecated methods:**
+				* All methods deprecated in TSF v4.0.0 or earlier are no longer available. Calling those will result null and void.
 		* **Info:**
 			* **The following methods are now marked for deprecation:**
+				* *"Marked" means that you should treat them as deprecated, but we honor them as maintained until the next major update.*
 				* TODO `robots_meta()`
 					* We should use something like `get_robots_meta()`, but that's already taken...
 						-> Assert?
@@ -418,6 +437,34 @@ TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redunda
 				* `inpost_flex_nav_tab_wrapper()`. Use `\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper()` instead.
 				* `get_social_image_uploader_form()`. Use `get_image_uploader_form()` instead.
 				* `get_logo_uploader_form()`. Use `get_logo_uploader_form()` instead.
+				* `seo_settings_page_url()`. Use `get_seo_settings_page_url()` instead.
+				* `get_field_name()`
+				* `field_name()`
+				* `get_field_id()`
+				* `field_id()`
+				* `code_wrap()`
+				* `code_wrap_noesc()`
+				* `description()`
+				* `description_noesc()`
+				* `attention()`
+				* `attention_noesc()`
+				* `attention_description()`
+				* `attention_description_noesc()`
+				* `wrap_fields()`
+				* `make_data_attributes()`
+				* `make_checkbox()`
+				* `make_checkbox_array()`
+				* `make_single_select_form()`
+				* `make_info()`
+				* `is_default_checked()`
+				* `is_warning_checked()`
+				* `get_is_conditional_checked()`
+				* `is_conditional_checked()`
+				* `get_image_uploader_form()`
+				* `output_character_counter_wrap()`
+				* `output_pixel_counter_wrap()`
+			* **The following methods are now marked for deletion:**
+				* `proportionate_dimensions()`.
 	* **For object `The_SEO_Framework\Builders\SeoBar`:**
 		* **Added:**
 			* `clear_query_cache()`, clears the query cache.
@@ -429,6 +476,7 @@ TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redunda
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
+		* `the_seo_framework_timestamp_format`, used to change timestamp formats. [Example usage](https://wordpress.org/support/topic/naver-validation-error-sitemap/#post-14623125). We advise not sending seconds, because small automated atomic-time fixes on your server may cause changes noted unscrupulously.
 	* **Improved:**
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
 		* `the_seo_framework_sitemap_nhpt_query_args` & `the_seo_framework_sitemap_hpt_query_args`:
@@ -441,13 +489,6 @@ TODO get_post_types() -> get_post_types( '', 'objects' ) => this skips a redunda
 	* We now use static anonymous functions where appropriate, instead of simple lambda functions, to improve performance and reduce memory consumption.
 	* Cleaned up code, removed dumb quirks.
 
-TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
-TODO figure if we need to check for is_post_status_viewable() -> is_post_publicly_viewable() (in sitemap/post type supported)?
-	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/
-	-> Thanks, WordPress Core Team, for creating yet another discrepancy with term-code?
-	-> OK, so this is a pretty cool new feature. However, not even WordPress utilizes this internally for where it matters for SEO. We need to await further adoption.
-TODO remove UM data, add profile picture to image-generator?
-	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 
 = 4.1.3 =
 

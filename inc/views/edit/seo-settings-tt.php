@@ -7,7 +7,9 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\TermSettings;
+use The_SEO_Framework\Bridges\TermSettings,
+	The_SEO_Framework\Interpreters\HTML,
+	The_SEO_Framework\Interpreters\Form;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
@@ -114,7 +116,7 @@ $robots_settings = [
 					<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
-					$this->make_info(
+					HTML::make_info(
 						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles'
 					);
@@ -122,9 +124,9 @@ $robots_settings = [
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
-					and $this->output_character_counter_wrap( 'autodescription-meta[doctitle]' );
+					and Form::output_character_counter_wrap( 'autodescription-meta[doctitle]' );
 				$this->get_option( 'display_pixel_counter' )
-					and $this->output_pixel_counter_wrap( 'autodescription-meta[doctitle]', 'title' );
+					and Form::output_pixel_counter_wrap( 'autodescription-meta[doctitle]', 'title' );
 				?>
 			</th>
 			<td>
@@ -153,7 +155,7 @@ $robots_settings = [
 					<?php
 					esc_html_e( 'Remove the site title?', 'autodescription' );
 					echo ' ';
-					$this->make_info( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) );
+					HTML::make_info( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) );
 					?>
 				</label>
 			</td>
@@ -165,7 +167,7 @@ $robots_settings = [
 					<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
-					$this->make_info(
+					HTML::make_info(
 						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#meta-descriptions'
 					);
@@ -173,9 +175,9 @@ $robots_settings = [
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
-					and $this->output_character_counter_wrap( 'autodescription-meta[description]' );
+					and Form::output_character_counter_wrap( 'autodescription-meta[description]' );
 				$this->get_option( 'display_pixel_counter' )
-					and $this->output_pixel_counter_wrap( 'autodescription-meta[description]', 'description' );
+					and Form::output_pixel_counter_wrap( 'autodescription-meta[description]', 'description' );
 				?>
 			</th>
 			<td>
@@ -208,7 +210,7 @@ $robots_settings = [
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
-					and $this->output_character_counter_wrap( 'autodescription-meta[og_title]' );
+					and Form::output_character_counter_wrap( 'autodescription-meta[og_title]' );
 				?>
 			</th>
 			<td>
@@ -225,7 +227,7 @@ $robots_settings = [
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
-					and $this->output_character_counter_wrap( 'autodescription-meta[og_description]' );
+					and Form::output_character_counter_wrap( 'autodescription-meta[og_description]' );
 				?>
 			</th>
 			<td>
@@ -240,7 +242,7 @@ $robots_settings = [
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
-					and $this->output_character_counter_wrap( 'autodescription-meta[tw_title]' );
+					and Form::output_character_counter_wrap( 'autodescription-meta[tw_title]' );
 				?>
 			</th>
 			<td>
@@ -257,7 +259,7 @@ $robots_settings = [
 				</label>
 				<?php
 				$this->get_option( 'display_character_counter' )
-					and $this->output_character_counter_wrap( 'autodescription-meta[tw_description]' );
+					and Form::output_character_counter_wrap( 'autodescription-meta[tw_description]' );
 				?>
 			</th>
 			<td>
@@ -271,7 +273,7 @@ $robots_settings = [
 					<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
-					$this->make_info(
+					HTML::make_info(
 						__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
 						'https://developers.facebook.com/docs/sharing/best-practices#images'
 					);
@@ -284,7 +286,7 @@ $robots_settings = [
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php
 					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
-					echo $this->get_image_uploader_form( [ 'id' => 'autodescription_meta_socialimage' ] );
+					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_meta_socialimage' ] );
 					?>
 				</div>
 			</td>
@@ -302,7 +304,7 @@ $robots_settings = [
 					<strong><?php esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
-					$this->make_info(
+					HTML::make_info(
 						__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
 					);
@@ -319,7 +321,7 @@ $robots_settings = [
 				<?php
 				esc_html_e( 'Robots Meta Settings', 'autodescription' );
 				echo ' ';
-				$this->make_info(
+				HTML::make_info(
 					__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives'
 				);
@@ -329,7 +331,7 @@ $robots_settings = [
 				<?php
 				foreach ( $robots_settings as $_s ) :
 					// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
-					echo $this->make_single_select_form( [
+					echo Form::make_single_select_form( [
 						'id'      => $_s['id'],
 						'class'   => 'tsf-term-select-wrap',
 						'name'    => $_s['name'],
@@ -360,7 +362,7 @@ $robots_settings = [
 					<strong><?php esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
-					$this->make_info(
+					HTML::make_info(
 						__( 'This will force visitors to go to another URL.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
 					);

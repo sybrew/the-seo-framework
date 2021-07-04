@@ -71,7 +71,7 @@ final class PostSettings {
 				$title  = sprintf(
 					$schema,
 					\esc_html__( 'Homepage SEO Settings', 'autodescription' ),
-					$tsf->make_info(
+					\The_SEO_Framework\Interpreters\HTML::make_info(
 						\__( 'The SEO Settings may take precedence over these settings.', 'autodescription' ),
 						$tsf->seo_settings_page_url(),
 						false

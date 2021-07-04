@@ -33,6 +33,7 @@ namespace The_SEO_Framework\Interpreters;
  *
  * @access public
  *         Note that you can't instance this class. Only static methods and properties are accessible.
+ * @final Can't be extended.
  */
 final class SeoBar {
 

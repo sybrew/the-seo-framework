@@ -471,6 +471,7 @@ class Cache extends Site_Options {
 				// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
 				$post_type__in = "'" . implode( "','", array_map( '\\esc_sql', $supported_post_types ) ) . "'";
 
+				// This is as fast as I could make it. Yes, it uses IN, but only on a (tiny) subset of data.
 				$join  = "LEFT JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID";
 				$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
 			}

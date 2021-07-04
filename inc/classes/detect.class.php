@@ -1065,9 +1065,7 @@ class Detect extends Render {
 					array_merge(
 						$this->get_forced_supported_post_types(),
 						//? array_values() because get_post_types() gives a sequential array.
-						array_values( (array) \get_post_types( [
-							'public' => true,
-						] ) )
+						array_keys( (array) \get_post_types( [ 'public' => true ] ) )
 					)
 				),
 				'\\is_post_type_viewable'
