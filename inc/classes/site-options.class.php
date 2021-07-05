@@ -140,7 +140,7 @@ class Site_Options extends Sanitize {
 				'advanced_query_protection' => 1,
 
 				// Robots pagination index.
-				'paged_noindex'      => 1, // Every second or later page noindex
+				'paged_noindex'      => 0, // Every second or later page noindex
 				'home_paged_noindex' => 0, // Every second or later homepage noindex
 
 				// Robots copyright.
@@ -193,7 +193,7 @@ class Site_Options extends Sanitize {
 				// oEmbed.
 				'oembed_use_og_title'     => 0, // Use custom meta titles in oEmbeds
 				'oembed_use_social_image' => 1, // Use social images in oEmbeds
-				'oembed_remove_author'    => 0, // Remove author from oEmbeds
+				'oembed_remove_author'    => 1, // Remove author from oEmbeds
 
 				// Social on/off.
 				'og_tags'        => 1, // Output of Open Graph meta tags

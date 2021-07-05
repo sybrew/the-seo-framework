@@ -274,10 +274,6 @@ TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_p
 TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
 
 TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
-TODO figure if we need to check for is_post_status_viewable() -> is_post_publicly_viewable() (in sitemap/post type supported)?
-	-> https://make.wordpress.org/core/2021/02/18/introducing-additional-functions-to-check-if-a-post-is-publicly-viewable-in-wordpress-5-7/
-	-> Thanks, WordPress Core Team, for creating yet another discrepancy with term-code?
-	-> OK, so this is a pretty cool new feature. However, not even WordPress utilizes this internally for where it matters for SEO. We need to await further adoption.
 TODO remove UM data, add profile picture to image-generator?
 	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 
@@ -289,7 +285,10 @@ TODO test plugin size change, it could be less, no?
 * **Improved:**
 
 * **Changed:**
-	* TODO "Remove author name?" is now enabled by default. We found only Discord using this feature in the wild, and asserted most find Discord's way of handling it undesired.
+	* "Remove author name?" is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
+	* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps Google crawl your website more efficiently, it could actually be deleterious to indexing.
+		* We may consider reverting this decision once we can discern separate "post type archive" (including a separate "blog") options for this.
+	* TODO Redirected pages are no longer included in the sitemap. For real this time.
 * **Improved:**
 	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little. TODO measure this?
 * **Removed:**
@@ -346,7 +345,10 @@ TODO test plugin size change, it could be less, no?
 **For developers:**
 
 * **Option notes:**
-	* From `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+	* For `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+		* **Changed:**
+			* `paged_noindex` now defaults to `0`, from `1`.
+			* `oembed_remove_author` now defaults to `1`, from `0`.
 		* **Removed:**
 			`cache_object`, this value will not be deleted when upgrading to this version for backward-compatible reasons.
 				* During a manual option-save, however, this value will vanish.
