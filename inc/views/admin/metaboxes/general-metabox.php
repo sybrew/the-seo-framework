@@ -314,7 +314,6 @@ switch ( $instance ) :
 		HTML::wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
 		break;
 
-
 	case 'the_seo_framework_general_metabox_timestamps':
 		$timestamp_0 = gmdate( $this->get_timestamp_format( false ) );
 		$timestamp_1 = gmdate( $this->get_timestamp_format( true ) );
@@ -334,9 +333,7 @@ switch ( $instance ) :
 					<label for="<?php Form::field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
-						echo HTML::code_wrap( $timestamp_0 );
-						echo ' ';
-						HTML::make_info(
+						echo HTML::code_wrap( $timestamp_0 ), ' ', HTML::make_info(
 							__( 'This outputs the complete date.', 'autodescription' )
 						);
 						?>
@@ -347,9 +344,7 @@ switch ( $instance ) :
 					<label for="<?php Form::field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
-						echo HTML::code_wrap( $timestamp_1 );
-						echo ' ';
-						HTML::make_info(
+						echo HTML::code_wrap( $timestamp_1 ), ' ', HTML::make_info(
 							__( 'This outputs the complete date including hours, minutes, and timezone.', 'autodescription' )
 						);
 						?>

@@ -44,6 +44,7 @@ class Generate_Image extends Generate_Url {
 	 *              This parameter might get deprecated when we start supporting PHP 7.1+ only.
 	 * TODO yield from and memoize deeper? Iterators calling this method currently do not affect the generators.
 	 *
+	 * @param bool $single Whether to return at most a single array item.
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,
 	 *    int    id:     The image ID,

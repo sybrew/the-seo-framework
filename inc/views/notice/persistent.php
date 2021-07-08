@@ -28,7 +28,7 @@ $button_js   = sprintf(
 	HTML::make_data_attributes( [
 		'key'   => $key,
 		// Is this the best nonce key key? Capability validation already happened. See `output_dismissible_persistent_notices()`.
-		'nonce' => wp_create_nonce( $this->get_dismiss_notice_nonce_action( $key ) ),
+		'nonce' => wp_create_nonce( $this->_get_dismiss_notice_nonce_action( $key ) ),
 	] )
 );
 $button_nojs = vsprintf(
@@ -40,7 +40,7 @@ $button_nojs = vsprintf(
 		implode(
 			'',
 			[
-				wp_nonce_field( $this->get_dismiss_notice_nonce_action( $key ), 'tsf-notice-nonce', true, false ),
+				wp_nonce_field( $this->_get_dismiss_notice_nonce_action( $key ), 'tsf-notice-nonce', true, false ),
 				sprintf(
 					'<button class="tsf-dismiss" type=submit name=tsf-notice-submit id=tsf-notice-submit[%s] value=%s title="%s">%s</button>',
 					esc_attr( $key ),

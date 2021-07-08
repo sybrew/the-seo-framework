@@ -158,6 +158,7 @@ class User_Data extends Term_Data {
 	 * Memoizes all meta data per $user_id.
 	 *
 	 * If no $user_id is supplied, it will fetch the current logged in user ID.
+	 * TODO supplement $default===null for $this->get_default_user_data()[$option]?
 	 *
 	 * @since 2.7.0
 	 * @since 3.0.0 1. Default is no longer cached.

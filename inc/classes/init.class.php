@@ -85,6 +85,9 @@ class Init extends Query {
 
 		if ( \wp_doing_cron() )
 			$this->init_cron_actions();
+
+		if ( \wp_doing_ajax() )
+			$this->init_ajax_actions();
 	}
 
 	/**
@@ -116,6 +119,28 @@ class Init extends Query {
 
 			\add_action( 'tsf_sitemap_cron_hook', Bridges\Ping::class . '::ping_search_engines' );
 			\add_action( 'tsf_sitemap_cron_hook_retry', Bridges\Ping::class . '::retry_ping_search_engines' );
+		}
+	}
+
+	/**
+	 * Initializes AJAX actions.
+	 *
+	 * @since 4.1.4
+	 */
+	public function init_ajax_actions() {
+
+		// Admin AJAX for notice dismissal.
+		\add_action( 'wp_ajax_tsf-dismiss-notice', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_dismiss_notice' );
+
+		// Admin AJAX for TSF Cropper
+		\add_action( 'wp_ajax_tsf-crop-image', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_crop_image' );
+
+		if ( $this->load_options ) {
+			// Admin AJAX for counter options.
+			\add_action( 'wp_ajax_the_seo_framework_update_counter', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_update_counter_type' );
+
+			// Admin AJAX for Gutenberg SEO Bar update.
+			\add_action( 'wp_ajax_the_seo_framework_update_post_data', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_get_post_data' );
 		}
 	}
 
@@ -183,18 +208,6 @@ class Init extends Query {
 
 			// Fallback HTML-only notice dismissal.
 			\add_action( 'admin_init', [ $this, '_dismiss_notice' ] );
-
-			// Admin AJAX for notice dismissal.
-			\add_action( 'wp_ajax_tsf-dismiss-notice', [ $this, '_wp_ajax_dismiss_notice' ] );
-
-			// Admin AJAX for counter options.
-			\add_action( 'wp_ajax_the_seo_framework_update_counter', [ $this, '_wp_ajax_update_counter_type' ] );
-
-			// Admin AJAX for Gutenberg SEO Bar update.
-			\add_action( 'wp_ajax_the_seo_framework_update_post_data', [ $this, '_wp_ajax_get_post_data' ] );
-
-			// Admin AJAX for TSF Cropper
-			\add_action( 'wp_ajax_tsf-crop-image', [ $this, '_wp_ajax_crop_image' ] );
 		endif;
 
 		/**

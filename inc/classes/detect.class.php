@@ -1148,7 +1148,6 @@ class Detect extends Render {
 		);
 	}
 
-
 	/**
 	 * Determines if the post type is disabled from SEO all optimization.
 	 *

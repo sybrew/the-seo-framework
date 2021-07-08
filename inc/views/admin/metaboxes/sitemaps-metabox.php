@@ -264,7 +264,7 @@ switch ( $instance ) :
 				] ),
 				true
 			);
-		endif; // endif get_option( 'sitemaps_priority' );
+		endif;
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_notify':

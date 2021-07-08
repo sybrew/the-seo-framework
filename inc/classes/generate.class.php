@@ -97,7 +97,7 @@ class Generate extends User_Data {
 	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    3 = 0b11: Ignore protection and post/term setting.
 	 * }
-	 * @return array {
+	 * @return array Only values actualized for display: {
 	 *    string index : string value
 	 * }
 	 */

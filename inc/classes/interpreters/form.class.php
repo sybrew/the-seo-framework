@@ -468,7 +468,6 @@ final class Form {
 		);
 	}
 
-
 	/**
 	 * Returns image uploader form button.
 	 * Also registers additional i18n strings for JS, and registers a tooltip for image preview.
@@ -525,8 +524,7 @@ final class Form {
 		if ( ! $args['id'] ) return '';
 
 		$content = vsprintf(
-			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select"
-				%s>%s</button>',
+			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select" %s>%s</button>',
 			[
 				\esc_url( \get_upload_iframe_src( 'image', $defaults['post_id'] ) ),
 				\esc_attr( $args['i18n']['button_title'] ),

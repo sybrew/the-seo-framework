@@ -114,7 +114,6 @@ final class SeoBar {
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
-
 		if ( static::$query['taxonomy'] ) {
 			$builder = \The_SEO_Framework\Builders\SeoBar_Term::get_instance();
 		} else {

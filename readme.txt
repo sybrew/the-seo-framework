@@ -279,16 +279,16 @@ TODO remove UM data, add profile picture to image-generator?
 
 TODO test plugin size change, it could be less, no?
 	-> With the deprecations removed, that could make up for a lot.
+TODO reconsider FAQ entries.
 
 **For everyone:**
 
-* **Improved:**
-
 * **Changed:**
 	* "Remove author name?" is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
-	* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps Google crawl your website more efficiently, it could actually be deleterious to indexing.
+	* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps Google crawl your website more efficiently, blocking paginated archives could actually be deleterious to indexing.
 		* We may consider reverting this decision once we can discern separate "post type archive" (including a separate "blog") options for this.
 	* TODO Redirected pages are no longer included in the sitemap. For real this time.
+	* "Sitemap Query Limit" is now lowered to 1000 items, from 3000.
 * **Improved:**
 	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little. TODO measure this?
 * **Removed:**
@@ -306,6 +306,7 @@ TODO test plugin size change, it could be less, no?
 		* TSF will not remove the newly added `noindex` for embed pages. WordPress can detect embeds, and plugins or themes might respond differently (unpredictably) when embedded.
 		* TSF will not remove the refactored WordPress method for outputting `noindex` when the blog isn't set to public. TSF will warn you about this still -- very much so.
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
+	* WordPress 5.8 brings no conflicting changes.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 	* TODO TSF is now copyrighted by someone else... well, still me, but using a different name.
 * **Fixed:**
@@ -349,6 +350,7 @@ TODO test plugin size change, it could be less, no?
 		* **Changed:**
 			* `paged_noindex` now defaults to `0`, from `1`.
 			* `oembed_remove_author` now defaults to `1`, from `0`.
+			* `sitemap_query_limit` now defaults to `1000`, from `3000`.
 		* **Removed:**
 			`cache_object`, this value will not be deleted when upgrading to this version for backward-compatible reasons.
 				* During a manual option-save, however, this value will vanish.
@@ -359,14 +361,14 @@ TODO test plugin size change, it could be less, no?
 			* The methods it contains were moved from the `\The_SEO_Framework\Generate` class, TODO which is now removed.
 			* This class is part of the façade class `\The_SEO_Framework\Load` (callable via `the_seo_framework()`).
 			* This class should not be instantiated directly. Use `the_seo_framework()` to get the object, instead.
-		* TODO `\The_SEO_Framework\Bridges\Ajax`, private, internal use only.
+		* `\The_SEO_Framework\Bridges\Ajax`, private, internal use only.
 			* This class is used to handle AJAX requests for The SEO Framework.
 			* The methods it contains were moved from `\The_SEO_Famework\Admin_Init` class.
 			* This class and its methods are static, and cannot be instantiated.
 			* All methods in the class are marked private, and should not be integrated in your software.
 			* This class is final, and cannot be extended.
-			* The class may contain some filters and actions, which are public.
-			* This class is autoloaded when admin-ajax requests are recorded. Since we do not handle "nopriv" requests, these are thus ignored.
+			* The class may contain some filters and actions (callbacks), which are public.
+			* This class is autoloaded when admin-ajax requests are recorded. Since we do not handle "nopriv" requests, these are thusly ignored.
 		* In preparation [for the UI redesign project](https://github.com/sybrew/the-seo-framework/projects/7), and to compact the main facade object, these new classes are new and marked as protected; all methods therein can disappear or change behavior without notice:
 			* `\The_SEO_Framework\Interpreters\HTML`
 			* `\The_SEO_Framework\Interpreters\Form`
@@ -391,6 +393,7 @@ TODO test plugin size change, it could be less, no?
 				* This method is marked 'protected' for we have other plans with it in the future.
 			* `og_updated_time()`, disjointed from `article_modified_time()`, outputs `og:updated_time` meta tag.
 			* `get_modified_time()`, returns the modified time of the current post.
+			* `init_ajax_actions()`, self explanatory, right?
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
@@ -486,6 +489,13 @@ TODO test plugin size change, it could be less, no?
 			2. Now can have index `post_type` set to `[]` or `''` to cancel the query.
 	* **Removed:**
 		* `the_seo_framework_use_object_cache`, feature no longer available.
+* **Action notes:**
+	* **Changed:**
+		* The following actions are now also available on the front-end (instead of only the back-end), and have their callbacks changed.
+			* `wp_ajax_tsf-dismiss-notice` -> TODO underscore?
+			* `wp_ajax_the_seo_framework_update_counter`
+			* `wp_ajax_the_seo_framework_update_post_data`
+			* `wp_ajax_tsf-crop-image` -> TODO underscore?
 * **Other:**
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
 	* We now use static anonymous functions where appropriate, instead of simple lambda functions, to improve performance and reduce memory consumption.
