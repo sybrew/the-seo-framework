@@ -284,11 +284,14 @@ TODO reconsider FAQ entries.
 **For everyone:**
 
 * **Changed:**
-	* "Remove author name?" is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
-	* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps Google crawl your website more efficiently, blocking paginated archives could actually be deleterious to indexing.
-		* We may consider reverting this decision once we can discern separate "post type archive" (including a separate "blog") options for this.
-	* TODO Redirected pages are no longer included in the sitemap. For real this time.
-	* "Sitemap Query Limit" is now lowered to 1000 items, from 3000.
+	* **Option defaults:**
+		* "Remove author name?" (from oEmbed) is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
+		* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps Google crawl your website more efficiently, blocking paginated archives could actually be deleterious to indexing.
+			* We may consider reverting this decision once we can discern separate "post type archive" (including a separate "blog") options for this.
+		* "Sitemap Query Limit" is now lowered to 1000 items, from 3000.
+			* In combination with not applying `noindex` to every second or later archive page, this will improve indexing rate for almost all sites. This change also reduces the strain on your server, especially when you have many other plugins adding post meta to each post.
+	* Redirected pages/posts/terms\* are no longer included in the sitemap. For real this time.
+		* *\* WordPress Core sitemaps displays terms*.
 * **Improved:**
 	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little. TODO measure this?
 * **Removed:**
@@ -394,6 +397,7 @@ TODO reconsider FAQ entries.
 			* `og_updated_time()`, disjointed from `article_modified_time()`, outputs `og:updated_time` meta tag.
 			* `get_modified_time()`, returns the modified time of the current post.
 			* `init_ajax_actions()`, self explanatory, right?
+			* `get_redirect_url()`, returns the redirect URL for the current query. Also accepts arguments.
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
@@ -474,6 +478,10 @@ TODO reconsider FAQ entries.
 		* **Added:**
 			* `clear_query_cache()`, clears the query cache.
 			* `get_query_cache()`, presents an unalterable form of query cache.
+	* **For object `The_SEO_Framework\Builders\Sitemap`:**
+		* **Changed:**
+			* `is_post_included_in_sitemap()` now returns `false` when the post has a redirect set via The SEO Framework. For real this time.
+			* `is_term_included_in_sitemap()` now returns `false` when the term has a redirect set via The SEO Framework.
 	* **For object `The_SEO_Framework\Bridges\Sitemap`:**
 		* **Changed:**
 			* `get_expected_sitemap_endpoint_url()` now  Now assimilates the output using the base path, so that filter `the_seo_framework_sitemap_base_path` also works. Glues the pieces together using the `get_home_host` value.

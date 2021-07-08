@@ -577,13 +577,7 @@ class Init extends Query {
 
 		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
 
-		$url = '';
-
-		if ( $this->is_singular() ) {
-			$url = $this->get_post_meta_item( 'redirect' ) ?: '';
-		} elseif ( $this->is_term_meta_capable() ) {
-			$url = $this->get_term_meta_item( 'redirect' ) ?: '';
-		}
+		$url = $this->get_redirect_url();
 
 		if ( $url ) {
 			/**

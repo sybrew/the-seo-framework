@@ -844,4 +844,37 @@ class Generate extends User_Data {
 			'summary_large_image' => 'summary-large-image',
 		];
 	}
+
+	/**
+	 * Returns the redirect URL, if any.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
+	 *    int    $id               The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy         The taxonomy.
+	 * }
+	 * @return string The canonical URL if found, empty string otherwise.
+	 */
+	public function get_redirect_url( $args = null ) {
+
+		$url = '';
+
+		if ( null === $args ) {
+			if ( $this->is_singular() ) {
+				$url = $this->get_post_meta_item( 'redirect' ) ?: '';
+			} elseif ( $this->is_term_meta_capable() ) {
+				$url = $this->get_term_meta_item( 'redirect' ) ?: '';
+			}
+		} else {
+			$this->fix_generation_args( $args );
+			if ( ! $args['taxonomy'] ) {
+				$url = $this->get_post_meta_item( 'redirect', $args['id'] ) ?: '';
+			} else {
+				$url = $this->get_term_meta_item( 'redirect', $args['id'] ) ?: '';
+			}
+		}
+
+		return $url;
+	}
 }
