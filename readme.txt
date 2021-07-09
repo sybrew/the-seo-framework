@@ -281,6 +281,8 @@ TODO test plugin size change, it could be less, no?
 	-> With the deprecations removed, that could make up for a lot.
 TODO reconsider FAQ entries.
 
+TODO: This minor update packs a big punch... etc etc.
+
 **For everyone:**
 
 * **Changed:**
@@ -312,6 +314,8 @@ TODO reconsider FAQ entries.
 	* WordPress 5.8 brings no conflicting changes.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 	* TODO TSF is now copyrighted by someone else... well, still me, but using a different name.
+	* TODO "The SEO Framework Title Fix" plugin (from WordPress.org, no longer available), no longer works with The SEO Framework from this version onward.
+		* Use our Extension Manager's [Title Fix](https://theseoframework.com/extensions/title-fix/) instead. Or, better yet, update your theme to follow the latest standards at least once every decade.
 * **Fixed:**
 	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
 	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.

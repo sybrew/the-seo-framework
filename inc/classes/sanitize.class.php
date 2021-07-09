@@ -2032,9 +2032,8 @@ class Sanitize extends Admin_Pages {
 		if ( isset( $details_array['url'] ) )
 			$details_array = [ $details_array ];
 
-		foreach ( $details_array as $details ) {
+		foreach ( $details_array as $details )
 			$cleaned_details[] = $this->s_image_details( $details );
-		}
 
 		return array_values(
 			array_intersect_key(

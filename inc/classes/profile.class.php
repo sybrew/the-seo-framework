@@ -139,7 +139,7 @@ class Profile extends Generate_Ldjson {
 		foreach ( $_field_settings->keys as $option => $post_key ) {
 			if ( isset( $_POST[ $post_key ] ) ) {
 				$value = $this->{$_field_settings->sanitization[ $option ]}( $_POST[ $post_key ] )
-					   ?: $defaults[ $option ]; // phpcs:ignore, WordPress.WhiteSpace
+					  ?: $defaults[ $option ]; // phpcs:ignore, WordPress.WhiteSpace
 
 				$success[] = (bool) $this->update_user_option( $user_id, $option, $value );
 			}

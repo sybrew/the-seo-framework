@@ -528,6 +528,8 @@ class Core {
 	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
 	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
 	 *
+	 * A do-while is faster than while. Sorry for the legibility.
+	 *
 	 * @since 4.1.4
 	 *
 	 * @param array ...$arrays The arrays to merge. The rightmost array .
@@ -542,9 +544,10 @@ class Core {
 				isset( $arrays[0][ $key ] ) && \is_array( $arrays[0][ $key ] )
 				? $this->array_merge_recursive_distinct( $arrays[0][ $key ], $value )
 				: $value;
-		} else while ( --$i > 0 ) { // We require available array index 0 and 1.
-			$arrays[ $i - 1 ] = $this->array_merge_recursive_distinct( $arrays[ $i - 1 ], $arrays[ $i ] );
-		}
+		} else do {
+			// phpcs:ignore -- Imagine assigning from right to left, but also left to right. Yes:
+			$arrays[ --$i - 1 ] = $this->array_merge_recursive_distinct( $arrays[ $i - 1 ], $arrays[ $i ] );
+		} while ( $i > 1 );
 
 		return $arrays[0];
 	}

@@ -119,9 +119,8 @@ class Post_Data extends Detect {
 		);
 
 		// WP converts all entries to arrays, because we got ALL entries. Disarray!
-		foreach ( $meta as $key => $value ) {
+		foreach ( $meta as $key => $value )
 			$meta[ $key ] = $value[0];
-		}
 
 		/**
 		 * @since 4.0.5
@@ -607,7 +606,7 @@ class Post_Data extends Detect {
 	 * @since 2.6.6
 	 * @since 3.1.0 Added Elementor detection
 	 * @since 4.0.0 Now detects page builders before looping over the meta.
-	 * @TODO deprecate?
+	 * @TODO deprecate? -> We may use this data for they have FSE builders. We may want to interface with those, some day.
 	 * @ignore unused.
 	 *
 	 * @param int $post_id The post ID to check.

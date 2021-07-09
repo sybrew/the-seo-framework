@@ -361,7 +361,7 @@ class Render extends Admin_Init {
 
 		return $title ? $this->render_element( [
 			'property' => 'og:title',
-			'content' => $title,
+			'content'  => $title,
 		] ) : '';
 	}
 

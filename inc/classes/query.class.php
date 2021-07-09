@@ -1562,23 +1562,16 @@ class Query extends Core {
 
 		static $cache = [];
 
-		if ( $hash ) {
-			// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
-			$hash = serialize( $hash );
-		} else {
-			$hash = false;
-		}
+		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
+		$hash = $hash ? serialize( $hash ) : false;
 
 		if ( isset( $value_to_set ) ) {
 			$fresh_set                 = ! isset( $cache[ $method ][ $hash ] );
 			$cache[ $method ][ $hash ] = $value_to_set;
 			return $fresh_set;
-		} else {
-			if ( isset( $cache[ $method ][ $hash ] ) )
-				return $cache[ $method ][ $hash ];
 		}
 
-		return null;
+		return isset( $cache[ $method ][ $hash ] ) ? $cache[ $method ][ $hash ] : null;
 	}
 
 	/**
