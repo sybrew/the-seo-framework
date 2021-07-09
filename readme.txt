@@ -244,22 +244,6 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
-= Why are there so few reviews? =
-
-Compared to other SEO plugins, The SEO Framework barely has any reviews, simply because we do not ask for reviews.
-
-We believe asking for reviews is unethical: You're more likely to leave a positive review, which sweeps negative reviews away, possibly hiding issues that may affect you.
-
-= Why isn't TSF updated frequently? =
-
-When software works as intended, it doesn't need updating. We carefully test our plugins before they reach your website.
-
-Releasing plugin updates periodically helps with exposure on this website, which some other plugin authors abuse intentionally. We want none of that.
-
-= Why have I never heard of this plugin before? =
-
-That's easy: We never paid for reviews or other forms of exposure around the web.
-
 == Changelog ==
 
 = 4.1.4 =
@@ -278,7 +262,7 @@ TODO remove UM data, add profile picture to image-generator?
 	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 
 TODO test plugin size change, it could be less, no?
-	-> With the deprecations removed, that could make up for a lot.
+	-> With the class-deprecations removed, that could make up for a lot.
 TODO reconsider FAQ entries.
 
 TODO: This minor update packs a big punch... etc etc.
@@ -314,7 +298,7 @@ TODO: This minor update packs a big punch... etc etc.
 	* WordPress 5.8 brings no conflicting changes.
 	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
 	* TODO TSF is now copyrighted by someone else... well, still me, but using a different name.
-	* TODO "The SEO Framework Title Fix" plugin (from WordPress.org, no longer available), no longer works with The SEO Framework from this version onward.
+	* "The SEO Framework Title Fix" plugin (from WordPress.org, no longer available), no longer works with The SEO Framework from this version onward.
 		* Use our Extension Manager's [Title Fix](https://theseoframework.com/extensions/title-fix/) instead. Or, better yet, update your theme to follow the latest standards at least once every decade.
 * **Fixed:**
 	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
@@ -488,7 +472,20 @@ TODO: This minor update packs a big punch... etc etc.
 			* `is_term_included_in_sitemap()` now returns `false` when the term has a redirect set via The SEO Framework.
 	* **For object `The_SEO_Framework\Bridges\Sitemap`:**
 		* **Changed:**
-			* `get_expected_sitemap_endpoint_url()` now  Now assimilates the output using the base path, so that filter `the_seo_framework_sitemap_base_path` also works. Glues the pieces together using the `get_home_host` value.
+			* `get_expected_sitemap_endpoint_url()` now assimilates the output using the base path, so that filter `the_seo_framework_sitemap_base_path` also works. Glues the pieces together using the `get_home_host` value.
+* **Function notes:**
+	* **Removed (thank you, https://wpdirectory.net/, for helping us verify):**
+		* `the_seo_framework_active()`
+		* `the_seo_framework_version()`
+		* `the_seo_framework_dot_version()`
+		* `the_seo_framework_options_pagehook()`
+		* `the_seo_framework_get_option()`
+		* `the_seo_framework_title_from_cache()`
+		* `the_seo_framework_description_from_cache()`
+		* `the_seo_framework_the_url_from_cache()`
+		* `the_seo_framework_is_settings_page()`
+		* `the_seo_framework_update_option()`
+		* `the_seo_framework_options_page_slug()`
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
