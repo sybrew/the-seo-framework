@@ -40,12 +40,14 @@ final class Load extends Cache {
 
 	/**
 	 * @since 2.2.9
+	 * @TODO make this 'meta_debug'
 	 * @var bool $the_seo_framework_debug Whether TSF-specific debug is enabled.
 	 */
 	public $the_seo_framework_debug = false;
 
 	/**
 	 * @since 2.2.9
+	 * @TODO make this just 'cache_transients'
 	 * @var bool $the_seo_framework_debug Whether TSF-specific transients are used.
 	 */
 	public $the_seo_framework_use_transients = true;
@@ -57,10 +59,26 @@ final class Load extends Cache {
 	public $script_debug = false;
 
 	/**
+	 * @since 4.1.4
+	 * @access protected
+	 *         DO NOT OVERWRITE.
+	 *         Feel free to read.
+	 *         Use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
+	 * @var bool|array $is_headless Whether headless TSF is enabled.
+	 *    If not false, then array: {
+	 *      'meta'     => bool True to disable post/term-meta-data storing/fetching.
+	 *      'settings' => bool True to disable non-default setting.
+	 *      'user'     => bool True to disable SEO user-meta-data storing/fetching.
+	 *    }
+	 */
+	public $is_headless = false;
+
+	/**
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
 	 * @since 2.8.0
 	 * @since 4.0.0 Now informs developer of invalid class instancing.
+	 * @since 4.1.4.Now constructs headlessness.
 	 *
 	 * @return null If called twice or more.
 	 */
@@ -86,17 +104,38 @@ final class Load extends Cache {
 		//= Register the capabilities early.
 		\add_filter( 'option_page_capability_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
 
-		/**
-		 * @since 2.2.2
-		 * @param bool $load_options Whether to show or hide option pages.
-		 */
-		$this->load_options = (bool) \apply_filters( 'the_seo_framework_load_options', true );
-
-		//? We always use this, because we need to test whether the sitemap must be outputted.
 		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
 
 		//= Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
+
+		$this->is_headless = [
+			'meta'     => false,
+			'settings' => false,
+			'user'     => false,
+		];
+
+		if ( ! \apply_filters_deprecated(
+			'the_seo_framework_load_options',
+			[ true ],
+			'4.1.4 of The SEO Framework',
+			'constant THE_SEO_FRAMEWORK_HEADLESS'
+		) ) \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) or \define( 'THE_SEO_FRAMEWORK_HEADLESS', true );
+
+		//= A headless boi is a good boi. Far less annoying, they are.
+		if ( \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) ) {
+			$this->is_headless = [
+				'meta'     => true,
+				'settings' => true,
+				'user'     => true,
+			];
+
+			\is_array( THE_SEO_FRAMEWORK_HEADLESS )
+				and $this->is_headless = array_map(
+					'wp_validate_boolean',
+					array_merge( $this->is_headless, THE_SEO_FRAMEWORK_HEADLESS )
+				);
+		}
 	}
 
 	/**
@@ -107,9 +146,8 @@ final class Load extends Cache {
 	public function init_debug_vars() {
 
 		$this->the_seo_framework_debug = \defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
-		if ( $this->the_seo_framework_debug ) {
+		if ( $this->the_seo_framework_debug )
 			\The_SEO_Framework\Debug::_set_instance( $this->the_seo_framework_debug );
-		}
 
 		$this->the_seo_framework_use_transients = \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
 
@@ -169,21 +207,6 @@ final class Load extends Cache {
 			// Easy Digital Downloads.
 			$this->_include_compat( 'edd', 'plugin' );
 		}
-	}
-
-	/**
-	 * Mark a filter as deprecated and inform when it has been used.
-	 *
-	 * @since 2.8.0
-	 * @see $this->_deprecated_function().
-	 * @access private
-	 *
-	 * @param string $filter      The function that was called.
-	 * @param string $version     The version of WordPress that deprecated the function.
-	 * @param string $replacement Optional. The function that should have been called. Default null.
-	 */
-	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		Debug::get_instance()->_deprecated_filter( $filter, $version, $replacement );
 	}
 
 	/**

@@ -513,6 +513,77 @@ final class Deprecated {
 	}
 
 	/**
+	 * Returns default user meta.
+	 *
+	 * @since 3.0.0
+	 * @since 4.1.4 Deprecated silently. Use `get_user_meta_defaults()` instead.
+	 * @since 4.2.0 Hard deprecation.
+	 *
+	 * @return array The default user meta index and values.
+	 */
+	public function get_default_user_data() {
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_default_user_data()', '4.2.0', 'the_seo_framework()->get_user_meta_defaults()' );
+		return $tsf->get_user_meta_defaults();
+	}
+
+	/**
+	 * Fetches user SEO user meta data by name.
+	 * Memoizes all meta data per $user_id.
+	 *
+	 * If no $user_id is supplied, it will fetch the current logged in user ID.
+	 * TODO supplement $default===null for $this->get_user_meta_defaults()[$option]?
+	 *
+	 * @since 2.7.0
+	 * @since 3.0.0 1. Default is no longer cached.
+	 *              2. Now always fallbacks to $default.
+	 *              3. Added not-found cache.
+	 * @since 4.1.4 Deprecated silently. Use `get_user_meta()` instead.
+	 * @since 4.2.0 Hard deprecation.
+	 *
+	 * @param int    $user_id The user ID. When empty, it will try to fetch the current user.
+	 * @param string $option  The option name.
+	 * @param mixed  $default The default value to return when the data doesn't exist.
+	 * @return mixed The metadata value.
+	 */
+	public function get_user_option( $user_id = 0, $option = '', $default = null ) {
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_user_option()', '4.2.0', 'the_seo_framework()->get_user_meta()' );
+		return $tsf->get_user_meta( $user_id ?: $tsf->get_current_post_author_id(), $option ) ?: $default;
+	}
+
+	/**
+	 * Returns current post author option.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int    $author_id The author ID. When empty, it will return $default.
+	 * @param string $option    The option name. When empty, it will return $default.
+	 * @param mixed  $default   The default value to return when the data doesn't exist.
+	 * @return mixed The metadata value
+	 */
+	public function get_author_option( $author_id, $option, $default = null ) {
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_id()' );
+		return $tsf->get_user_meta_item( $option, $author_id ?: $tsf->get_current_post_author_id() ) ?: $default;
+	}
+
+	/**
+	 * Returns current post author option.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $option  The option name.
+	 * @param mixed  $default The default value to return when the data doesn't exist.
+	 * @return mixed The metadata value
+	 */
+	public function get_current_author_option( $option, $default = null ) {
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_current_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_meta_item()' );
+		return $tsf->get_current_post_author_meta_item( $option ) ?: $default;
+	}
+
+	/**
 	 * Helper function that constructs name attributes for use in form fields.
 	 *
 	 * Other page implementation classes may wish to construct and use a

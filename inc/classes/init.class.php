@@ -135,13 +135,11 @@ class Init extends Query {
 		// Admin AJAX for TSF Cropper
 		\add_action( 'wp_ajax_tsf-crop-image', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_crop_image' );
 
-		if ( $this->load_options ) {
-			// Admin AJAX for counter options.
-			\add_action( 'wp_ajax_the_seo_framework_update_counter', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_update_counter_type' );
+		// Admin AJAX for counter options.
+		\add_action( 'wp_ajax_the_seo_framework_update_counter', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_update_counter_type' );
 
-			// Admin AJAX for Gutenberg SEO Bar update.
-			\add_action( 'wp_ajax_the_seo_framework_update_post_data', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_get_post_data' );
-		}
+		// Admin AJAX for Gutenberg SEO Bar update.
+		\add_action( 'wp_ajax_the_seo_framework_update_post_data', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_get_post_data' );
 	}
 
 	/**
@@ -160,39 +158,12 @@ class Init extends Query {
 		//= Initialize caching actions.
 		$this->init_admin_caching_actions();
 
-		//= Initialize profile fields.
-		$this->init_profile_fields();
+		if ( ! $this->is_headless['meta'] ) {
+			//= Initialize term meta filters and actions.
+			$this->init_term_meta();
 
-		//= Initialize term meta filters and actions.
-		$this->init_term_meta();
-
-		// Save post data.
-		\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
-		\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
-		\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
-
-		// Enqueues admin scripts.
-		\add_action( 'admin_enqueue_scripts', [ $this, '_init_admin_scripts' ], 0, 1 );
-
-		// Add plugin links to the plugin activation page.
-		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_action_links', 10, 2 );
-		\add_filter( 'plugin_row_meta', '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_row_meta', 10, 2 );
-
-		if ( $this->load_options ) :
-			// Set up site settings and allow saving resetting them.
-			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
-
-			// Initialize the SEO Bar for tables.
-			\add_action( 'admin_init', [ $this, '_init_seo_bar_tables' ] );
-
-			// Initialize List Edit for tables.
-			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
-
-			// Adds post states to list view tables.
-			\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 10, 2 );
-
-			// Loads setting notices.
-			\add_action( 'the_seo_framework_setting_notices', [ $this, '_do_settings_page_notices' ] );
+			//= Initialize term meta filters and actions.
+			$this->init_post_meta();
 
 			// Enqueue Post meta boxes.
 			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 2 );
@@ -200,15 +171,46 @@ class Init extends Query {
 			// Enqueue Term meta output.
 			\add_action( 'current_screen', [ $this, '_init_term_edit_view' ] );
 
+			// Adds post states to list view tables.
+			\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 10, 2 );
+
+			// Initialize the SEO Bar for tables.
+			\add_action( 'admin_init', [ $this, '_init_seo_bar_tables' ] );
+		}
+
+		if ( ! $this->is_headless['settings'] ) {
+			// Set up site settings and allow saving resetting them.
+			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
+
+			// Initialize List Edit for tables.
+			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
+
+			// Loads setting notices.
+			\add_action( 'the_seo_framework_setting_notices', [ $this, '_do_settings_page_notices' ] );
+
 			// Add menu links and register $this->seo_settings_page_hook
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
+		}
 
+		if ( ! $this->is_headless['user'] ) {
+			//= Initialize profile fields.
+			$this->init_profile_fields();
+		}
+
+		if ( \in_array( false, $this->is_headless, true ) ) {
 			// Set up notices.
 			\add_action( 'admin_notices', [ $this, '_output_notices' ] );
 
 			// Fallback HTML-only notice dismissal.
 			\add_action( 'admin_init', [ $this, '_dismiss_notice' ] );
-		endif;
+
+			// Enqueues admin scripts.
+			\add_action( 'admin_enqueue_scripts', [ $this, '_init_admin_scripts' ], 0, 1 );
+		}
+
+		// Add plugin links to the plugin activation page.
+		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_action_links', 10, 2 );
+		\add_filter( 'plugin_row_meta', '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_row_meta', 10, 2 );
 
 		/**
 		 * @since 2.9.4

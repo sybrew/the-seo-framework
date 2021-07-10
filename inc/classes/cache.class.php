@@ -448,11 +448,14 @@ class Cache extends Site_Options {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now no longer crashes on database errors.
-	 * @since 4.1.4 Now tests against post type exclusions.
+	 * @since 4.1.4 1. Now tests against post type exclusions.
+	 *              2. Now considers headlessness. This method runs only on the front-end.
 	 *
 	 * @return array : { 'archive', 'search' }
 	 */
 	public function get_excluded_ids_from_cache() {
+
+		if ( $this->is_headless['meta'] ) return [];
 
 		static $cache = null;
 

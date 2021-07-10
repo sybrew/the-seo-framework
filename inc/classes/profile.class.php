@@ -29,7 +29,6 @@ namespace The_SEO_Framework;
  * Class The_SEO_Framework\Profile
  *
  * Outputs Profile fields and saves metadata.
- * TODO move this to admin-pages, invoke like `_init_post_edit_view()`?
  *
  * @since 3.0.0
  */
@@ -94,14 +93,14 @@ class Profile extends Generate_Ldjson {
 				'name'        => \__( 'Facebook profile page', 'autodescription' ),
 				'type'        => 'url',
 				'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
-				'value'       => $this->get_user_option( $user->ID, 'facebook_page' ),
+				'value'       => $this->get_user_meta_item( 'facebook_page', $user->ID ),
 				'class'       => '',
 			],
 			$_field_settings->keys['twitter_page']  => (object) [
 				'name'        => \__( 'Twitter profile name', 'autodescription' ),
 				'type'        => 'text',
 				'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
-				'value'       => $this->get_user_option( $user->ID, 'twitter_page' ),
+				'value'       => $this->get_user_meta_item( 'twitter_page', $user->ID ),
 				'class'       => 'ltr',
 			],
 		];
@@ -132,7 +131,7 @@ class Profile extends Generate_Ldjson {
 		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
 		$success  = [];
-		$defaults = $this->get_default_user_data();
+		$defaults = $this->get_user_meta_defaults();
 
 		$_field_settings = $this->get_profile_field_settings();
 

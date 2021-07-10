@@ -64,6 +64,13 @@ class Core {
 	 * @param mixed  $value The property value.
 	 */
 	final public function __set( $name, $value ) {
+
+		if ( 'load_options' === $name ) {
+			// $this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+			$this->is_headless['settings'] = $value;
+			return;
+		}
+
 		/**
 		 * For now, no deprecation is being handled; as no properties have been deprecated. Just removed.
 		 */
@@ -84,9 +91,15 @@ class Core {
 	 * @since 3.2.2 This method no longer invokes PHP errors, nor returns protected values.
 	 *
 	 * @param string $name The property name.
-	 * @return void
+	 * @return mixed
 	 */
 	final public function __get( $name ) {
+
+		if ( 'load_options' === $name ) {
+			// $this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+			return ! $this->is_headless['settings'];
+		}
+
 		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name, 'unknown' );
 	}
 
@@ -370,7 +383,7 @@ class Core {
 	 */
 	public function get_seo_settings_page_url() {
 
-		if ( $this->load_options ) {
+		if ( ! $this->is_headless['settings'] ) {
 			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
 			return \esc_url( $url, [ 'https', 'http' ] );
 		}
@@ -701,17 +714,17 @@ class Core {
 
 		$rel_lum = ( $sr + $sg + $sb );
 
+		// Build light greyscale.
+		$gr = ( $r * 0.2989 / 8 ) * $rel_lum;
+		$gg = ( $g * 0.5870 / 8 ) * $rel_lum;
+		$gb = ( $b * 0.1140 / 8 ) * $rel_lum;
+
 		//= Invert colors if they hit luminance boundaries.
 		if ( $rel_lum < 0.5 ) {
 			// Build dark greyscale.
-			$gr = 255 - ( $r * 0.2989 / 8 ) * $rel_lum;
-			$gg = 255 - ( $g * 0.5870 / 8 ) * $rel_lum;
-			$gb = 255 - ( $b * 0.1140 / 8 ) * $rel_lum;
-		} else {
-			// Build light greyscale.
-			$gr = ( $r * 0.2989 / 8 ) * $rel_lum;
-			$gg = ( $g * 0.5870 / 8 ) * $rel_lum;
-			$gb = ( $b * 0.1140 / 8 ) * $rel_lum;
+			$gr = 255 - $gr;
+			$gg = 255 - $gg;
+			$gb = 255 - $gb;
 		}
 
 		// Build RGB hex.

@@ -573,7 +573,7 @@ class Render extends Admin_Init {
 		$creator = (string) \apply_filters_ref_array(
 			'the_seo_framework_twittercreator_output',
 			[
-				$this->get_current_author_option( 'twitter_page' ) ?: $this->get_option( 'twitter_creator' ),
+				$this->get_current_post_author_meta_item( 'twitter_page' ) ?: $this->get_option( 'twitter_creator' ),
 				$this->get_the_real_ID(),
 			]
 		);
@@ -737,7 +737,7 @@ class Render extends Admin_Init {
 		$facebook_page = (string) \apply_filters_ref_array(
 			'the_seo_framework_facebookauthor_output',
 			[
-				$this->get_current_author_option( 'facebook_page' ) ?: $this->get_option( 'facebook_author' ),
+				$this->get_current_post_author_meta_item( 'facebook_page' ) ?: $this->get_option( 'facebook_author' ),
 				$this->get_the_real_ID(),
 			]
 		);

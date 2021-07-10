@@ -501,7 +501,7 @@ final class Scripts {
 			if (
 			   ! isset( $_colors[ $_scheme ]->colors ) // phpcs:ignore, WordPress.WhiteSpace
 			|| ! \is_array( $_colors[ $_scheme ]->colors )
-			|| \count( $_colors[ $_scheme ]->colors ) < 4
+			|| \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
 			) {
 				$_colors = [
 					'#222',

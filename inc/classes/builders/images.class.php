@@ -33,6 +33,13 @@ namespace The_SEO_Framework\Builders;
 final class Images {
 
 	/**
+	 * @since 4.1.4
+	 * @internal
+	 * @var int MAX_CONTENT_IMAGES The maximum number of images to get from the content.
+	 */
+	const MAX_CONTENT_IMAGES = 5;
+
+	/**
 	 * The constructor. Or rather, the lack thereof.
 	 *
 	 * @since 4.0.0
@@ -149,7 +156,8 @@ final class Images {
 					'strip' => false,
 				]
 			);
-			// TODO can we somehow limit this search to 5?
+			$i = microtime( true );
+			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match(), but the opcodes won't help.
 			preg_match_all(
 				'/<img[^>]+src=(\"|\')?([^\"\'>\s]+)\1?.*?>/mi',
 				$content,
@@ -160,21 +168,20 @@ final class Images {
 
 		if ( $matches ) {
 			$i = 0;
-			foreach ( $matches as $match ) {
+			for ( $i = 0; $i++ < static::MAX_CONTENT_IMAGES; ) {
+				// Fewer than MAX_CONTENT_IMAGES matched.
+				if ( ! isset( $matches[ $i ][2] ) ) break;
+
 				// Assume every URL to be correct? Yes. WordPress assumes that too.
-				$the_match = $match[2] ?: '';
+				$url = $matches[ $i ][2] ?: '';
 
 				// false-esque matches, like '0', are so uncommon it's not worth dealing with them.
-				if ( ! $the_match )
-					continue;
+				if ( ! $url ) continue;
 
 				yield [
-					'url' => $the_match,
+					'url' => $url,
 					'id'  => 0,
 				];
-
-				// Get no more than 5 images.
-				if ( ++$i > 4 ) break;
 			}
 		} else {
 			yield [

@@ -41,12 +41,6 @@ class Admin_Pages extends Profile {
 	public $seo_settings_page_hook;
 
 	/**
-	 * @since 2.6.0
-	 * @var bool $load_options Determines whether to load the options.
-	 */
-	public $load_options;
-
-	/**
 	 * Adds menu links under "settings" in the wp-admin dashboard
 	 *
 	 * @since 2.2.2

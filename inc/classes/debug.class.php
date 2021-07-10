@@ -90,20 +90,6 @@ final class Debug {
 	}
 
 	/**
-	 * Mark a filter as deprecated and inform when it has been used.
-	 *
-	 * @since 2.8.0
-	 * @see @this->_deprecated_function().
-	 *
-	 * @param string $filter      The function that was called.
-	 * @param string $version     The version of WordPress that deprecated the function.
-	 * @param string $replacement Optional. The function that should have been called. Default null.
-	 */
-	public function _deprecated_filter( $filter, $version, $replacement = null ) {
-		$this->_deprecated_function( 'Filter ' . $filter, $version, $replacement ); // phpcs:ignore -- Wrong asserts, copied method name.
-	}
-
-	/**
 	 * Mark a function as deprecated and inform when it has been used.
 	 *
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
@@ -291,7 +277,7 @@ final class Debug {
 	 */
 	protected function get_error( $type = null ) {
 
-		$backtrace = debug_backtrace();
+		$backtrace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
 
 		if ( ! $backtrace ) return [];
 

@@ -48,6 +48,18 @@ class Post_Data extends Detect {
 	public $inpost_nonce_field = 'tsf_inpost_nonce';
 
 	/**
+	 * Initializes post meta data handlers.
+	 *
+	 * @since 4.1.4
+	 */
+	protected function init_post_meta() {
+		// Save post data.
+		\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
+		\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
+		\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
+	}
+
+	/**
 	 * Returns a post SEO meta item by key.
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
@@ -82,7 +94,8 @@ class Post_Data extends Detect {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Now tests for valid post ID in the post object.
-	 * @since 4.1.4 Now returns an empty array when the post type isn't supported.
+	 * @since 4.1.4 1. Now returns an empty array when the post type isn't supported.
+	 *              2. Now considers headlessness.
 	 *
 	 * @param int  $post_id   The post ID.
 	 * @param bool $use_cache Whether to use caching.
@@ -112,27 +125,35 @@ class Post_Data extends Detect {
 			$this->get_post_meta_defaults( $post->ID )
 		);
 
-		// Filter the post meta items based on defaults' keys.
-		$meta = array_intersect_key(
-			\get_post_meta( $post->ID ), // Gets all post meta. This is a discrepancy with get_term_meta()!
-			$defaults
-		);
+		if ( $this->is_headless['meta'] ) {
+			$meta = [];
+		} else {
+			// Filter the post meta items based on defaults' keys.
+			$meta = array_intersect_key(
+				\get_post_meta( $post->ID ), // Gets all post meta. This is a discrepancy with get_term_meta()!
+				$defaults
+			);
 
-		// WP converts all entries to arrays, because we got ALL entries. Disarray!
-		foreach ( $meta as $key => $value )
-			$meta[ $key ] = $value[0];
+			// WP converts all entries to arrays, because we got ALL entries. Disarray!
+			foreach ( $meta as $key => $value )
+				$meta[ $key ] = $value[0];
+		}
 
 		/**
 		 * @since 4.0.5
+		 * @since 4.1.4 1. Now considers headlessness.
+		 *              2. Now returns a 3rd parameter: boolean $headless.
 		 * @note Do not delete/unset/add indexes! It'll cause errors.
 		 * @param array $meta    The current post meta.
 		 * @param int   $post_id The post ID.
+		 * @param bool  $headless Whether the meta are headless.
 		 */
 		$meta = \apply_filters_ref_array(
 			'the_seo_framework_post_meta',
 			[
 				array_merge( $defaults, $meta ),
 				$post->ID,
+				$this->is_headless['meta'],
 			]
 		);
 
@@ -228,6 +249,7 @@ class Post_Data extends Detect {
 	 * Save post meta / custom field data for a singular post type.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.4 Removed deprecated filter.
 	 *
 	 * @param \WP_Post|integer $post The post object or post ID.
 	 * @param array            $data The post meta fields, will be merged with the defaults.
@@ -239,25 +261,6 @@ class Post_Data extends Detect {
 		if ( ! $post ) return;
 
 		$data = (array) \wp_parse_args( $data, $this->get_post_meta_defaults( $post->ID ) );
-		$data = $this->s_post_meta( $data );
-
-		if ( \has_filter( 'the_seo_framework_save_custom_fields' ) ) {
-			$this->_deprecated_filter( 'the_seo_framework_save_custom_fields', '4.0.0', 'the_seo_framework_save_post_meta' );
-			/**
-			 * @since 3.1.0
-			 * @since 4.0.0 Deprecated.
-			 * @deprecated
-			 * @param array    $data The data that's going to be saved.
-			 * @param \WP_Post $post The post object.
-			 */
-			$data = (array) \apply_filters_ref_array(
-				'the_seo_framework_save_custom_fields',
-				[
-					$data,
-					$post,
-				]
-			);
-		}
 
 		/**
 		 * @since 4.0.0
@@ -267,7 +270,7 @@ class Post_Data extends Detect {
 		$data = (array) \apply_filters_ref_array(
 			'the_seo_framework_save_post_meta',
 			[
-				$data,
+				$this->s_post_meta( $data ),
 				$post,
 			]
 		);

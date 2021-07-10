@@ -35,11 +35,12 @@ namespace The_SEO_Framework;
 class Term_Data extends Post_Data {
 
 	/**
-	 * Initializes term meta data filters and functions.
+	 * Initializes term meta data handlers.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.4 Now protected.
 	 */
-	public function init_term_meta() {
+	protected function init_term_meta() {
 		\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
 		\add_action( 'delete_term', [ $this, '_delete_term_meta' ], 10, 3 );
 	}
@@ -58,6 +59,8 @@ class Term_Data extends Post_Data {
 
 	/**
 	 * Returns the term meta item by key.
+	 *
+	 * @since 4.0.0
 	 *
 	 * @param string $item      The item to get.
 	 * @param int    $term_id   The Term ID.
@@ -112,6 +115,8 @@ class Term_Data extends Post_Data {
 	 * @since 3.1.0 Deprecated filter.
 	 * @since 4.0.0 1. Removed deprecated filter.
 	 *              2. Now fills in defaults.
+	 * @since 4.1.4 1. Removed deprecated filter.
+	 *              2. Now considers headlessness.
 	 *
 	 * @param int  $term_id The Term ID.
 	 * @param bool $use_cache Whether to use caching.
@@ -135,49 +140,27 @@ class Term_Data extends Post_Data {
 			$this->get_term_meta_defaults( $term_id )
 		);
 
-		$meta = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
-
-		static $has_deprecated_filter = null;
-		if ( null === $has_deprecated_filter && \has_filter( 'the_seo_framework_current_term_meta' ) ) {
-			$has_deprecated_filter = true;
-			$this->_deprecated_filter( 'the_seo_framework_current_term_meta', '4.0.0', 'the_seo_framework_term_meta' );
-		}
-
-		if ( $has_deprecated_filter && $meta ) {
-			/**
-			 * @since 3.0.0
-			 * @since 4.0.0 Deprecated.
-			 * @deprecated
-			 * @param array $meta The CURRENT term metadata.
-			 * @param int   $term_id The term ID.
-			 */
-			$meta = \apply_filters( 'the_seo_framework_current_term_meta', $meta, $term_id );
-
-			/**
-			 * Filter the extraneous term meta items based on defaults' keys.
-			 * This is redundant, but in line with the requirement at `get_post_meta()`
-			 * where we get all metadata without a key.
-			 *
-			 * @see `$this->s_term_meta()`, which strips them out, already. As such,
-			 * we only use this when the (deprecated) filter is used.
-			 */
-			$meta = array_intersect_key(
-				$meta,
-				$defaults
-			);
+		if ( $this->is_headless['meta'] ) {
+			$meta = [];
+		} else {
+			$meta = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
 		}
 
 		/**
 		 * @since 4.0.5
+		 * @since 4.1.4 1. Now considers headlessness.
+		 *              2. Now returns a 3rd parameter: boolean $headless.
 		 * @note Do not delete/unset/add indexes! It'll cause errors.
 		 * @param array $meta    The current term meta.
 		 * @param int   $term_id The term ID.
+		 * @param bool  $headless Whether the meta are headless.
 		 */
 		$meta = \apply_filters_ref_array(
 			'the_seo_framework_term_meta',
 			[
 				array_merge( $defaults, $meta ),
 				$term_id,
+				$this->is_headless['meta'],
 			]
 		);
 

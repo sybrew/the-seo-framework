@@ -91,6 +91,7 @@ class Admin_Init extends Init {
 	 * @since 4.0.0 Now discerns autoloading between taxonomies and singular types.
 	 * @since 4.1.0 Now invokes autoloading when persistent scripts are enqueued (regardless of validity).
 	 * @since 4.1.2 Now autoenqueues on edit.php and edit-tags.php regardless of SEO Bar output (for quick/bulk-edit support).
+	 * @since 4.1.4 Now considers headlessness.
 	 * @access private
 	 *
 	 * @param string|null $hook The current page hook.
@@ -105,12 +106,14 @@ class Admin_Init extends Init {
 
 			$enqueue_hooks = [];
 
-			if ( $this->is_archive_admin() ) {
-				$prepare_edit_screen = $this->is_taxonomy_supported();
-			} elseif ( $this->is_singular_admin() ) {
-				$prepare_edit_screen = $this->is_post_type_supported( $this->get_admin_post_type() );
-			} else {
-				$prepare_edit_screen = false;
+			$prepare_edit_screen = false;
+
+			if ( ! $this->is_headless['meta'] ) {
+				if ( $this->is_archive_admin() ) {
+					$prepare_edit_screen = $this->is_taxonomy_supported();
+				} elseif ( $this->is_singular_admin() ) {
+					$prepare_edit_screen = $this->is_post_type_supported( $this->get_admin_post_type() );
+				}
 			}
 
 			if ( $prepare_edit_screen ) {

@@ -375,14 +375,21 @@ class Site_Options extends Sanitize {
 
 		/**
 		 * @since 2.0.0
+		 * @since 4.1.4 1. Now considers headlessness.
+		 *              2. Now returns a 3rd parameter: boolean $headless.
+		 *
 		 * @param array  $settings The settings
 		 * @param string $setting  The settings field.
+		 * @param bool   $headless Whether the options are headless.
 		 */
 		return $cache[ $setting ] = \apply_filters_ref_array(
 			'the_seo_framework_get_options',
 			[
-				\get_option( $setting ),
+				$this->is_headless['settings'] && THE_SEO_FRAMEWORK_SITE_OPTIONS === $setting
+					? $this->get_default_site_options()
+					: \get_option( $setting ),
 				$setting,
+				$this->is_headless['settings'],
 			]
 		);
 	}

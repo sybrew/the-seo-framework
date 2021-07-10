@@ -467,6 +467,7 @@ final class SeoBar_Term extends SeoBar {
 			$max = max( $duplicated_words );
 			$max = reset( $max );
 
+			// Warn when more than 3x triplet+/quintet+ words are found.
 			if ( $max > 3 || \count( $duplicated_words ) > 1 ) {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];

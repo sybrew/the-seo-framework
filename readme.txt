@@ -248,8 +248,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.4 =
 
+TODO 4.2.0 - Headless?
+TODO: This minor update packs a big punch... etc etc.
+TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
+
 TODO test changes of `get_expected_sitemap_endpoint_url()`.
-TODO update `https://theseoframework.com/docs/api/constants/`
 TODO fix 'back to top' on extension pages thanks to our new font.
 TODO test all deprecated methods
 TODO deprecate is_wc_shop et co. for real.
@@ -261,14 +264,22 @@ TODO specify min-width to quick-edit input fields (canonical/redirect), they're 
 TODO remove UM data, add profile picture to image-generator?
 	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 
+TODO move profile.class.php functions to admin-pages.class.php and a separated class.
+	* Reference: `_init_term_edit_view()` && `_update_term_meta()`
+	* `_update_user_settings()` -> `_update_user_meta()`
+
 TODO test plugin size change, it could be less, no?
 	-> With the class-deprecations removed, that could make up for a lot.
-TODO reconsider FAQ entries.
-
-TODO: This minor update packs a big punch... etc etc.
 
 **For everyone:**
 
+* **Added:**
+	* Don't care about SEO? Now you can use TSF headlessly. Simply add the following snippet to your `wp-config.php` file or a (mu-)plugin:
+		* `define( 'THE_SEO_FRAMEWORK_HEADLESS', true );`
+			* This constant must be defined before action `plugins_loaded` priority `5`.
+			* This constant also listens to granular control by setting an array instead of a boolean. See our [Constant API docs](https://theseoframework.com/docs/api/constants/#user-definable).
+			* This constant denies access to database calls, speeding up your website tremendously. However, your SEO (meta) settings won't work.
+			* (But...) This constant can be used conditionally when used in a (mu-)plugin; for example, only super-admins can modify the settings/meta-data. Then, you must disable headlessness on the front-end for them to have an effect.
 * **Changed:**
 	* **Option defaults:**
 		* "Remove author name?" (from oEmbed) is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
@@ -386,15 +397,25 @@ TODO: This minor update packs a big punch... etc etc.
 			* `get_modified_time()`, returns the modified time of the current post.
 			* `init_ajax_actions()`, self explanatory, right?
 			* `get_redirect_url()`, returns the redirect URL for the current query. Also accepts arguments.
+			* We changed these for get them in sync with post and term meta:
+				* `get_user_meta_item()`, replaces the now deprecated `get_user_option()`.
+				* `get_current_post_author_meta_item()`, replaces the now deprecated `get_current_author_option()`.
+				* `get_current_post_author_meta()`, returns all TSF author metadata.
+				* `get_user_meta_defaults()`, replaces the now deprecated `get_default_user_data()`.
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 			* `is_static_frontpage()` now memoizes the front page ID option.
 			* `s_image_details()` Fixed theoretical issue where a different image could be set when width and height are supplied and either over 4K, but no ID is given.
-			* `get_post_meta()` now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
-			* `get_excluded_ids_from_cache()` now tests against post type exclusions.
+			* `get_excluded_ids_from_cache()`
+				1. Now tests against post type exclusions.
+				2. Now considers headlessness. This method runs only on the front-end.
 			* `get_timestamp_format()`:
 				1. Added options-override parameter.
 				1. Added return value filter.
+			* `get_term_meta()` now considers headlessness.
+			* `get_post_meta()`:
+				1. Now considers headlessness.
+				1. now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
 		* **Changed:**
 			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
 			* `robots_txt()`, removed object caching support.
@@ -417,6 +438,8 @@ TODO: This minor update packs a big punch... etc etc.
 				* `delete_author_cache()`
 			* **Deprecated methods:**
 				* All methods deprecated in TSF v4.0.0 or earlier are no longer available. Calling those will result null and void.
+			* **Protected:**
+				* `init_term_meta()` is now protected; it always should've been.
 		* **Info:**
 			* **The following methods are now marked for deprecation:**
 				* *"Marked" means that you should treat them as deprecated, but we honor them as maintained until the next major update.*
@@ -460,6 +483,10 @@ TODO: This minor update packs a big punch... etc etc.
 				* `get_image_uploader_form()`
 				* `output_character_counter_wrap()`
 				* `output_pixel_counter_wrap()`
+				* `get_default_user_data()`. Use `get_user_meta_defaults()` instead.
+				* `get_user_option()`. Use `get_user_meta()` or `get_user_meta_item()` instead.
+				* `get_author_option()`. Use `get_user_meta_item()` instead.
+				* `get_current_author_option()`. Use `get_current_post_author_meta_item()` instead.
 			* **The following methods are now marked for deletion:**
 				* `proportionate_dimensions()`.
 	* **For object `The_SEO_Framework\Builders\SeoBar`:**
@@ -486,18 +513,33 @@ TODO: This minor update packs a big punch... etc etc.
 		* `the_seo_framework_is_settings_page()`
 		* `the_seo_framework_update_option()`
 		* `the_seo_framework_options_page_slug()`
+* **Property notes:**
+	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
+		* **Marked for deprecation:**
+			* `$load_options`. Use `$is_headless['settings']` instead.
+				* When you set this method, you'll find it more restricting. Define `THE_SEO_FRAMEWORK_HEADLESS` instead.
+* **Constant notes:**
+	* **Added:**
+		* `THE_SEO_FRAMEWORK_HEADLESS`, accepts boolean (`true`/`false`) or array, with boolean indexes `'meta' => true/false`, `'settings' => true/false`, and `'user' => true/false`.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
 		* `the_seo_framework_timestamp_format`, used to change timestamp formats. [Example usage](https://wordpress.org/support/topic/naver-validation-error-sitemap/#post-14623125). We advise not sending seconds, because small automated atomic-time fixes on your server may cause changes noted unscrupulously.
-	* **Improved:**
-		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues!
+	* **Changed:**
+		* `the_seo_framework_get_options`, `the_seo_framework_post_meta`, & `the_seo_framework_term_meta`:
+			1. Now considers headlessness.
+			1. Now returns a 3rd parameter: boolean `$headless`.
+		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues! This filter will be executed thousands of times in one load.
 		* `the_seo_framework_sitemap_nhpt_query_args` & `the_seo_framework_sitemap_hpt_query_args`:
 			1. No longer pass the superfluously redundant `suppress_filters` index.
-			2. Now can have index `post_type` set to `[]` or `''` to cancel the query.
+			2. Can now have index `post_type` set to `[]` or `''` to cancel the query.
+	* **Deprecated:**
+		* `the_seo_framework_load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	* **Removed:**
 		* `the_seo_framework_use_object_cache`, feature no longer available.
+		* `the_seo_framework_save_custom_fields`, this filter was deprecated since 4.0.0.
+		* `the_seo_framework_current_term_meta`, this filter was deprecated since 4.0.0.
 * **Action notes:**
 	* **Changed:**
 		* The following actions are now also available on the front-end (instead of only the back-end), and have their callbacks changed.

@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.1.4-dev-24
+ * Version: 4.1.4-dev-25
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -116,6 +116,8 @@ function the_seo_framework_boot() {
 // Debug: Not to be used on production websites as it dumps and/or disables all kinds of stuff everywhere.
 //        This is here as an easily accessible toolset used solely for the development of this plugin.
 //
+// Headless tip: ?tsf_headless[meta]=0&tsf_headless[settings]=0&tsf_headless[user]=0
+//
 // add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
 // if ( is_admin() ) {
 // 	define( 'THE_SEO_FRAMEWORK_DEBUG', true );
@@ -125,6 +127,7 @@ function the_seo_framework_boot() {
 // 	( $_GET['downgrade_tsf'] ?? 0 ) and update_option( 'the_seo_framework_upgraded_db_version', (string) (int) $_GET['downgrade_tsf'] );
 // 	( $_GET['downgrade_tsf_initial'] ?? 0 ) and update_option( 'the_seo_framework_initial_db_version', (string) (int) $_GET['downgrade_tsf_initial'] );
 // 	( $_GET['reset_tsf_tested'] ?? 0 ) and delete_option( 'the_seo_framework_tested_upgrade_version' );
+// 	( $_GET['tsf_headless'] ?? 0 ) and define( 'THE_SEO_FRAMEWORK_HEADLESS', $_GET['tsf_headless'] === 'true' ?: $_GET['tsf_headless'] );
 // }
 // }},0);
 // phpcs:enable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode

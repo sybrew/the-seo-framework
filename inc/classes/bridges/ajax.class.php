@@ -103,7 +103,7 @@ final class AJAX {
 		if ( isset( $_POST['val'] ) ) {
 			$value = (int) $_POST['val'];
 		} else {
-			$value = $tsf->get_user_option( 0, 'counter_type', 3 ) + 1;
+			$value = $tsf->get_user_meta_item( 'counter_type' ) + 1;
 		}
 		$value = \absint( $value );
 

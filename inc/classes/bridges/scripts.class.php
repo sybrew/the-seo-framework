@@ -970,7 +970,7 @@ final class Scripts {
 					'name' => 'tsfCL10n',
 					'data' => [
 						'guidelines'  => $tsf->get_input_guidelines(),
-						'counterType' => \absint( $tsf->get_user_option( 0, 'counter_type', 3 ) ),
+						'counterType' => \absint( $tsf->get_user_meta_item( 'counter_type' ) ),
 						'i18n'        => [
 							'guidelines' => $tsf->get_input_guidelines_i18n(),
 							/* translators: Pixel counter. 1: number (value), 2: number (guideline) */
