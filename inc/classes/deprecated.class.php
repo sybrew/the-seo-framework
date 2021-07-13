@@ -548,8 +548,8 @@ final class Deprecated {
 	 */
 	public function get_user_option( $user_id = 0, $option = '', $default = null ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->get_user_option()', '4.2.0', 'the_seo_framework()->get_user_meta()' );
-		return $tsf->get_user_meta( $user_id ?: $tsf->get_current_post_author_id(), $option ) ?: $default;
+		// $tsf->_deprecated_function( 'the_seo_framework()->get_user_option()', '4.2.0', 'the_seo_framework()->get_user_meta_item()' );
+		return $tsf->get_user_meta_item( $user_id ?: $tsf->get_user_id(), $option ) ?: $default;
 	}
 
 	/**
@@ -806,7 +806,7 @@ final class Deprecated {
 	 * @param bool   $echo        Whether to echo or return.
 	 * @return string HTML checkbox output if $echo is false.
 	 */
-	public static function make_info( $description = '', $link = '', $echo = true ) {
+	public function make_info( $description = '', $link = '', $echo = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_info()', '5.0.0' );
 		return \The_SEO_Framework\Interpreters\HTML::make_info( $description, $link, $echo );
 	}
@@ -825,7 +825,7 @@ final class Deprecated {
 	 * }
 	 * @return string The HTML data attributes, with added space to the start.
 	 */
-	public static function make_data_attributes( array $data ) {
+	public function make_data_attributes( array $data ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_data_attributes()', '5.0.0' );
 		return \The_SEO_Framework\Interpreters\HTML::make_data_attributes( $data );
 	}
@@ -846,9 +846,9 @@ final class Deprecated {
 	 * @param bool   $disabled    Whether to disable the input.
 	 * @return string HTML checkbox output.
 	 */
-	public static function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
+	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_checkbox()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::make_checkbox( [
+		return \The_SEO_Framework\Interpreters\Form::make_checkbox( [
 			'id'          => $field_id,
 			'index'       => '',
 			'label'       => $label,
@@ -879,7 +879,7 @@ final class Deprecated {
 	 * }
 	 * @return string The option field.
 	 */
-	public static function make_single_select_form( array $args ) {
+	public function make_single_select_form( array $args ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_single_select_form()', '5.0.0' );
 		return \The_SEO_Framework\Interpreters\Form::make_single_select_form( $args );
 	}
@@ -901,9 +901,9 @@ final class Deprecated {
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public static function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
+	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_default_checked()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::is_default_checked( $key, $wrap, $echo );
+		return \The_SEO_Framework\Interpreters\Form::is_default_checked( $key, $wrap, $echo );
 	}
 	/**
 	 * Returns the HTML class wrap for warning Checkbox options.
@@ -919,9 +919,9 @@ final class Deprecated {
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public static function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
+	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_warning_checked()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::is_warning_checked( $key, $wrap, $echo );
+		return \The_SEO_Framework\Interpreters\Form::is_warning_checked( $key, $wrap, $echo );
 	}
 	/**
 	 * Returns the HTML class wrap for warning/default Checkbox options.
@@ -934,9 +934,9 @@ final class Deprecated {
 	 * @param string $key  The option name which returns boolean.
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
-	public static function get_is_conditional_checked( $key, $wrap = true ) {
+	public function get_is_conditional_checked( $key, $wrap = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_is_conditional_checked()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::get_is_conditional_checked( $key, $wrap );
+		return \The_SEO_Framework\Interpreters\Form::get_is_conditional_checked( $key, $wrap );
 	}
 
 	/**
@@ -953,9 +953,9 @@ final class Deprecated {
 	 * @param bool   $echo       Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public static function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
+	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_conditional_checked()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::is_conditional_checked( $key, $wrap, $echo );
+		return \The_SEO_Framework\Interpreters\Form::is_conditional_checked( $key, $wrap, $echo );
 	}
 
 	/**
@@ -973,9 +973,9 @@ final class Deprecated {
 	 * @param string $depr    The initial value for no-JS. Deprecated.
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
-	public static function output_character_counter_wrap( $for, $depr = '', $display = true ) {
+	public function output_character_counter_wrap( $for, $depr = '', $display = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_character_counter_wrap()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::output_character_counter_wrap( $for, $display );
+		return \The_SEO_Framework\Interpreters\Form::output_character_counter_wrap( $for, $display );
 	}
 
 	/**
@@ -989,8 +989,8 @@ final class Deprecated {
 	 * @param string $type Whether it's a 'title' or 'description' counter.
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
-	public static function output_pixel_counter_wrap( $for, $type, $display = true ) {
+	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
 		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_pixel_counter_wrap()', '5.0.0' );
-		return \The_SEO_Framework\Interpreters\HTML::output_pixel_counter_wrap( $for, $type, $display );
+		return \The_SEO_Framework\Interpreters\Form::output_pixel_counter_wrap( $for, $type, $display );
 	}
 }

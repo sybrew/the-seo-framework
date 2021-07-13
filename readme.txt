@@ -250,18 +250,13 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 Marketing:
 	TODO 4.2.0 - Headless?
-	TODO: This minor update packs a big punch... etc etc. we've defenestrated the object caching mechanism, etc. etc.
+	TODO: This minor update packs a big punch... we've added headless mode, we've defenestrated the object caching mechanism, etc. etc.
 	TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
 	TODO test plugin size change, it could be less, no?
 		-> With the class-deprecations removed, that could make up for a lot.
 
 Extension Manager:
 	TODO test Headless + Auto-activate Extension Manager + Extensions (prominently: Focus (headless settings only), Articles/Title-Fix/Honeypot (fully headless) ).
-
-Testing:
-	TODO test changes of `get_expected_sitemap_endpoint_url()`.
-	TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
-	TODO test all deprecated methods
 
 Programming:
 	TODO deprecate is_wc_shop et co. for real.
@@ -432,7 +427,7 @@ Website:
 			* `delete_post_cache()`, no longer flushes `post` object cache.
 			* `generate_cache_key()` no longer returns a key when no `$type` is supplied.
 		* **Removed:**
-			* **Object caching support:** These methods were yeeted with no alternative available. Calling these methods will output a deprecation notice.
+			* **Object caching support:** These methods were removed with no alternative available. Calling these methods will output a deprecation notice.
 				* `object_cache_set()`
 				* `object_cache_get()`
 				* `object_cache_delete()`
