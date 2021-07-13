@@ -248,28 +248,35 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.4 =
 
-TODO 4.2.0 - Headless?
-TODO: This minor update packs a big punch... etc etc.
-TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
+Marketing:
+	TODO 4.2.0 - Headless?
+	TODO: This minor update packs a big punch... etc etc. we've defenestrated the object caching mechanism, etc. etc.
+	TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
+	TODO test plugin size change, it could be less, no?
+		-> With the class-deprecations removed, that could make up for a lot.
 
-TODO test changes of `get_expected_sitemap_endpoint_url()`.
-TODO fix 'back to top' on extension pages thanks to our new font.
-TODO test all deprecated methods
-TODO deprecate is_wc_shop et co. for real.
-TODO render_element -> create_element? We eventually want to 'output_element', but what's the name?
-TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
-TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
+Extension Manager:
+	TODO test Headless + Auto-activate Extension Manager + Extensions (prominently: Focus (headless settings only), Articles/Title-Fix/Honeypot (fully headless) ).
 
-TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
-TODO remove UM data, add profile picture to image-generator?
-	-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
+Testing:
+	TODO test changes of `get_expected_sitemap_endpoint_url()`.
+	TODO test deprecations, such as we still use `is_robots_meta_noindex_set_by_args()`...
+	TODO test all deprecated methods
 
-TODO move profile.class.php functions to admin-pages.class.php and a separated class.
-	* Reference: `_init_term_edit_view()` && `_update_term_meta()`
-	* `_update_user_settings()` -> `_update_user_meta()`
+Programming:
+	TODO deprecate is_wc_shop et co. for real.
+	TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
+	TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
+	TODO remove UM data, add profile picture to image-generator?
+		-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
+	TODO move profile.class.php functions to admin-pages.class.php and a separated class.
+		* Reference: `_init_term_edit_view()` && `_update_term_meta()`
+		* `_update_user_settings()` -> `_update_user_meta()`
+	TODO render_element -> create_element? We eventually want to 'output_element', but what's the name?
 
-TODO test plugin size change, it could be less, no?
-	-> With the class-deprecations removed, that could make up for a lot.
+Website:
+	TODO fix 'back to top' on extension pages thanks to our new font.
+
 
 **For everyone:**
 
@@ -425,7 +432,7 @@ TODO test plugin size change, it could be less, no?
 			* `delete_post_cache()`, no longer flushes `post` object cache.
 			* `generate_cache_key()` no longer returns a key when no `$type` is supplied.
 		* **Removed:**
-			* **Object caching support:** These methods were removed with no alternative available. Calling these methods will output a deprecation notice.
+			* **Object caching support:** These methods were yeeted with no alternative available. Calling these methods will output a deprecation notice.
 				* `object_cache_set()`
 				* `object_cache_get()`
 				* `object_cache_delete()`
@@ -541,17 +548,24 @@ TODO test plugin size change, it could be less, no?
 		* `the_seo_framework_save_custom_fields`, this filter was deprecated since 4.0.0.
 		* `the_seo_framework_current_term_meta`, this filter was deprecated since 4.0.0.
 * **Action notes:**
-	* **Changed:**
+	* **Added:**
 		* The following actions are now also available on the front-end (instead of only the back-end), and have their callbacks changed.
-			* `wp_ajax_tsf-dismiss-notice` -> TODO underscore?
-			* `wp_ajax_the_seo_framework_update_counter`
-			* `wp_ajax_the_seo_framework_update_post_data`
-			* `wp_ajax_tsf-crop-image` -> TODO underscore?
+			* `wp_ajax_tsf_dismiss_notice`
+			* `wp_ajax_tsf_update_counter`
+			* `wp_ajax_tsf_update_post_data`
+			* `wp_ajax_tsf_crop_image`
+	* **Removed:**
+		* `wp_ajax_tsf-dismiss-notice`, use `wp_ajax_tsf_dismiss_notice` instead (underscore vs hyphens).
+		* `wp_ajax_the_seo_framework_update_counter`, use `wp_ajax_tsf_update_counter` instead.
+		* `wp_ajax_the_seo_framework_update_post_data`, use `wp_ajax_tsf_update_post_data` instead.
+		* `wp_ajax_tsf-crop-image`, use `wp_ajax_tsf_crop_image` instead (underscore vs hyphens).
 * **Other:**
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
 	* We now use static anonymous functions where appropriate, instead of simple lambda functions, to improve performance and reduce memory consumption.
 	* Cleaned up code, removed dumb quirks.
-
+	* `tsf-notice-nonce` is now `tsf_notice_nonce`
+	* `tsf-dismiss-nonce` is now `tsf_dismiss_nonce`
+	* `tsf-dismiss-key` is now `tsf_dismiss_key`
 
 = 4.1.3 =
 

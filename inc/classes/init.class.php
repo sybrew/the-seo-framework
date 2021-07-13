@@ -130,16 +130,16 @@ class Init extends Query {
 	public function init_ajax_actions() {
 
 		// Admin AJAX for notice dismissal.
-		\add_action( 'wp_ajax_tsf-dismiss-notice', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_dismiss_notice' );
+		\add_action( 'wp_ajax_tsf_dismiss_notice', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_dismiss_notice' );
 
 		// Admin AJAX for TSF Cropper
-		\add_action( 'wp_ajax_tsf-crop-image', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_crop_image' );
+		\add_action( 'wp_ajax_tsf_crop_image', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_crop_image' );
 
 		// Admin AJAX for counter options.
-		\add_action( 'wp_ajax_the_seo_framework_update_counter', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_update_counter_type' );
+		\add_action( 'wp_ajax_tsf_update_counter', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_update_counter_type' );
 
 		// Admin AJAX for Gutenberg SEO Bar update.
-		\add_action( 'wp_ajax_the_seo_framework_update_post_data', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_get_post_data' );
+		\add_action( 'wp_ajax_tsf_update_post_data', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_get_post_data' );
 	}
 
 	/**

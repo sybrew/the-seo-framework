@@ -40,7 +40,7 @@ $button_nojs = vsprintf(
 		implode(
 			'',
 			[
-				wp_nonce_field( $this->_get_dismiss_notice_nonce_action( $key ), 'tsf-notice-nonce', true, false ),
+				wp_nonce_field( $this->_get_dismiss_notice_nonce_action( $key ), 'tsf_notice_nonce', true, false ),
 				sprintf(
 					'<button class="tsf-dismiss" type=submit name=tsf-notice-submit id=tsf-notice-submit[%s] value=%s title="%s">%s</button>',
 					esc_attr( $key ),

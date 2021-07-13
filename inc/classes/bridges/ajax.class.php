@@ -48,7 +48,7 @@ final class AJAX {
 	public static function _wp_ajax_dismiss_notice() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		$key = isset( $_POST['tsf-dismiss-key'] ) ? $_POST['tsf-dismiss-key'] : '';
+		$key = isset( $_POST['tsf_dismiss_key'] ) ? $_POST['tsf_dismiss_key'] : '';
 
 		if ( ! $key )
 			\wp_send_json_error( null, 400 );
@@ -62,7 +62,7 @@ final class AJAX {
 		}
 
 		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-		|| ! \check_ajax_referer( $tsf->_get_dismiss_notice_nonce_action( $key ), 'tsf-dismiss-nonce', false ) )
+		|| ! \check_ajax_referer( $tsf->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false ) )
 			\wp_die( -1, 403 );
 
 		$tsf->clear_persistent_notice( $key );

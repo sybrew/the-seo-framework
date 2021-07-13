@@ -578,14 +578,15 @@ class Admin_Init extends Init {
 	 * Returns the snaitized notice action key.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.4 Now 'public', marked private.
+	 * @since 4.1.4 1. Now 'public', marked private.
+	 *              2. Now uses underscores instead of dashes.
 	 * @access private
 	 *
 	 * @param string $key The notice key.
 	 * @return string The sanitized nonce action.
 	 */
 	public function _get_dismiss_notice_nonce_action( $key ) {
-		return \sanitize_key( "tsf-notice-nonce-$key" );
+		return \sanitize_key( "tsf_notice_nonce_$key" );
 	}
 
 	/**
@@ -605,7 +606,7 @@ class Admin_Init extends Init {
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		$nonce = isset( $_POST['tsf-notice-nonce'] ) ? $_POST['tsf-notice-nonce'] : '';
+		$nonce = isset( $_POST['tsf_notice_nonce'] ) ? $_POST['tsf_notice_nonce'] : '';
 
 		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
 		|| ! \wp_verify_nonce( $nonce, $this->_get_dismiss_notice_nonce_action( $key ) ) ) {
