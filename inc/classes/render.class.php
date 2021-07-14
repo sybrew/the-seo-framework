@@ -1154,7 +1154,7 @@ class Render extends Admin_Init {
 		return isset( $cache ) ? $cache : $cache = (array) \apply_filters_ref_array(
 			'the_seo_framework_robots_meta',
 			[
-				$this->robots_meta(),
+				$this->generate_robots_meta(),
 				$this->get_the_real_ID(),
 			]
 		);

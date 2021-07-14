@@ -190,7 +190,7 @@ abstract class Sitemap {
 			];
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
-			$meta     = static::$tsf->robots_meta( $_args, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
+			$meta     = static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
 			$included = ! ( isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'] );
 
 			if ( ! $included ) break;
@@ -245,7 +245,7 @@ abstract class Sitemap {
 			];
 
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
-			$meta     = static::$tsf->robots_meta( $_args, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
+			$meta     = static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
 			$included = ! ( isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'] );
 
 			if ( ! $included ) break;

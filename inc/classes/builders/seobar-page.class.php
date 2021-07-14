@@ -102,7 +102,7 @@ final class SeoBar_Page extends SeoBar {
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					static::$tsf->robots_meta( [
+					static::$tsf->generate_robots_meta( [
 						'id'       => static::$query['id'],
 						'taxonomy' => '',
 					] )

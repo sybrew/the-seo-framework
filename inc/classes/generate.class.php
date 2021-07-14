@@ -71,26 +71,10 @@ class Generate extends User_Data {
 	/**
 	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
-	 * @since 2.2.2
-	 * @since 2.2.4 Added robots SEO settings check.
-	 * @since 2.2.8 Added check for empty archives.
-	 * @since 2.8.0 Added check for protected/private posts.
-	 * @since 3.0.0 : 1. Removed noodp.
-	 *                2. Improved efficiency by grouping if statements.
-	 * @since 3.1.0 : 1. Simplified statements, often (not always) speeding things up.
-	 *                2. Now checks for wc_shop and blog types for pagination.
-	 *                3. Removed noydir.
-	 * @since 4.0.0 : 1. Now tests for qubit metadata.
-	 *                2. Added custom query support.
-	 *                3. Added two parameters.
-	 * @since 4.0.2 : 1. Added new copyright directive tags.
-	 *                2. Now strictly parses the validity of robots directives via a boolean check.
-	 * @since 4.0.3 : 1. Changed `max_snippet_length` to `max_snippet`
-	 *                2. Changed the copyright directive's spacer from `=` to `:`.
-	 * @since 4.0.5 : 1. Removed copyright directive bug workaround. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
-	 *                2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
+	 * @since 4.1.4
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param null       $get    Reserved.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
 	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
@@ -101,7 +85,7 @@ class Generate extends User_Data {
 	 *    string index : string value
 	 * }
 	 */
-	public function robots_meta( $args = null, $ignore = 0b00 ) {
+	public function generate_robots_meta( $args = null, $get = null, $ignore = 0b00 ) {
 
 		if ( null === $args ) {
 			$_meta = $this->get_robots_meta_by_query( $ignore );

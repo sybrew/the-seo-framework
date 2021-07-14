@@ -231,8 +231,9 @@ switch ( $instance ) :
 		$canonical_placeholder = $this->create_canonical_url( $_generator_args );
 
 		// Get robots defaults.
-		$r_defaults = $this->robots_meta(
+		$r_defaults = $this->generate_robots_meta(
 			$_generator_args,
+			null,
 			The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
 		);
 		$r_settings = [

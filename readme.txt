@@ -1,7 +1,7 @@
 === The SEO Framework ===
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
-Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance
+Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.1.0
 Tested up to: 5.6
 Requires PHP: 5.6.0
@@ -257,21 +257,18 @@ Marketing:
 
 Extension Manager:
 	TODO test Headless + Auto-activate Extension Manager + Extensions (prominently: Focus (headless settings only), Articles/Title-Fix/Honeypot (fully headless) ).
+		-> Yes, this works. Please see constants `TSF_EXTENSION_MANAGER_API_INFORMATION` and `TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS` to manage the subscription and extension activation respectively.
 
 Programming:
 	TODO deprecate is_wc_shop et co. for real.
 	TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
+		-> We use blogname for anything that wants the blogname... and static front page ONLY for the frontpage's <title> tag.
 	TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
 	TODO remove UM data, add profile picture to image-generator?
 		-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 	TODO move profile.class.php functions to admin-pages.class.php and a separated class.
 		* Reference: `_init_term_edit_view()` && `_update_term_meta()`
 		* `_update_user_settings()` -> `_update_user_meta()`
-	TODO render_element -> create_element? We eventually want to 'output_element', but what's the name?
-
-Website:
-	TODO fix 'back to top' on extension pages thanks to our new font.
-
 
 **For everyone:**
 
@@ -292,7 +289,7 @@ Website:
 	* Redirected pages/posts/terms\* are no longer included in the sitemap. For real this time.
 		* *\* WordPress Core sitemaps displays terms*.
 * **Improved:**
-	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little. TODO measure this?
+	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little.
 * **Removed:**
 	* Object caching of the HTML output of TSF.
 		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).
@@ -360,11 +357,6 @@ Website:
 				* During a manual option-save, however, this value will vanish.
 * **Object notes:**
 	* **Added:**
-		* TODO `\The_SEO_Framework\Generate_Robots`, extends TODO FIXME `\The_SEO_Framework\Generate`
-			* This class is used to generate Robots directive SEO data based on content.
-			* The methods it contains were moved from the `\The_SEO_Framework\Generate` class, TODO which is now removed.
-			* This class is part of the façade class `\The_SEO_Framework\Load` (callable via `the_seo_framework()`).
-			* This class should not be instantiated directly. Use `the_seo_framework()` to get the object, instead.
 		* `\The_SEO_Framework\Bridges\Ajax`, private, internal use only.
 			* This class is used to handle AJAX requests for The SEO Framework.
 			* The methods it contains were moved from `\The_SEO_Famework\Admin_Init` class.
@@ -381,14 +373,12 @@ Website:
 			* This class is used to take care of our implementations for the WordPress plugins overview table.
 			* This class is meant to be used internally only.
 			* If you wish to decouple our plugin links, you may need to update your filters now (gone are private methods `_add_plugin_action_links()` and `_add_plugin_row_meta()` from `the_seo_framework()`).
-	* **Removed:**
-		* TODO `\The_SEO_Framework\Generate`
 * **Method notes:**
 	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
 		* **Added:**
 			* `array_merge_recursive_distinct()`, a glorified `array_merge()` that allows unlimited multidimensional arrays inputted.
 			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
-			* TODO `generate_robots_meta()`, returns generated robots metadata.
+			* `generate_robots_meta()`, returns generated robots metadata.
 			* `get_image_uploader_form()`, returns image uploader form button.
 				* This is an abstraction of the `get_social_image_uploader_form()` and `get_logo_uploader_form()` methods, both now call the new one for it has an interpolable API.
 			* `advanced_query_protection()`, returns the `tsf:aqp` meta tag.
@@ -445,13 +435,8 @@ Website:
 		* **Info:**
 			* **The following methods are now marked for deprecation:**
 				* *"Marked" means that you should treat them as deprecated, but we honor them as maintained until the next major update.*
-				* TODO `robots_meta()`
-					* We should use something like `get_robots_meta()`, but that's already taken...
-						-> Assert?
-						-> Render?
-						-> Obtain?
-						-> Generate?
-				* `is_robots_meta_noindex_set_by_args()`. Use `robots_meta()` instead (which is also marked for deprecation... hmmm TODO).
+				* `robots_meta()`, use `generate_robots_meta()` instead.
+				* `is_robots_meta_noindex_set_by_args()`. Use `generate_robots_meta()` instead.
 				* `append_php_query()`. Use `append_url_query()` instead.
 				* `get_html_output()`.
 				* `can_do_sitemap_robots()`.

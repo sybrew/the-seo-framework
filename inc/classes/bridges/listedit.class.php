@@ -172,8 +172,9 @@ final class ListEdit extends ListTable {
 			'taxonomy' => '',
 		];
 
-		$r_defaults = $tsf->robots_meta(
+		$r_defaults = $tsf->generate_robots_meta(
 			$query,
+			null,
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
@@ -331,8 +332,9 @@ final class ListEdit extends ListTable {
 			'taxonomy' => $this->taxonomy,
 		];
 
-		$r_defaults = $tsf->robots_meta(
+		$r_defaults = $tsf->generate_robots_meta(
 			$query,
+			null,
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
