@@ -250,7 +250,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 Marketing:
 	TODO 4.2.0 - Headless?
-	TODO: This minor update packs a big punch... we've added headless mode, we've defenestrated the object caching mechanism, etc. etc.
+	TODO: This minor update packs a big punch... we've added headless mode, we've defenestrated the object caching mechanism, etc. etc. We've removed _40_ methods that were otherwise needlessly registered on the front-end. -> who cares?
 	TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
 	TODO test plugin size change, it could be less, no?
 		-> With the class-deprecations removed, that could make up for a lot.
@@ -263,7 +263,6 @@ Programming:
 	TODO deprecate is_wc_shop et co. for real.
 	TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
 		-> We use blogname for anything that wants the blogname... and static front page ONLY for the frontpage's <title> tag.
-	TODO specify min-width to quick-edit input fields (canonical/redirect), they're getting oddly compressed now.
 	TODO remove UM data, add profile picture to image-generator?
 		-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
 	TODO move profile.class.php functions to admin-pages.class.php and a separated class.
@@ -282,14 +281,15 @@ Programming:
 * **Changed:**
 	* **Option defaults:**
 		* "Remove author name?" (from oEmbed) is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
-		* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps Google crawl your website more efficiently, blocking paginated archives could actually be deleterious to indexing.
+		* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps search engines crawl your website more quickly, blocking paginated archives could actually be deleterious to indexing old content in select scenarios.
 			* We may consider reverting this decision once we can discern separate "post type archive" (including a separate "blog") options for this.
 		* "Sitemap Query Limit" is now lowered to 1000 items, from 3000.
 			* In combination with not applying `noindex` to every second or later archive page, this will improve indexing rate for almost all sites. This change also reduces the strain on your server, especially when you have many other plugins adding post meta to each post.
 	* Redirected pages/posts/terms\* are no longer included in the sitemap. For real this time.
-		* *\* WordPress Core sitemaps displays terms*.
+		* *\* WordPress Core sitemaps can display terms; our optimized version does not*.
 * **Improved:**
 	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little.
+	* The quick-edit column for the Visibiity setting is now 1.5x wider on non-mobile. This change might take some 'getting used to,' but now you can read the URLs you put in.
 * **Removed:**
 	* Object caching of the HTML output of TSF.
 		* We [theorized no benefit having this feature](https://github.com/sybrew/the-seo-framework/issues/565), and thought it rather harmful; later, [we found this true empirically](https://wordpress.org/support/topic/enabled-object-cache-doesnt-allow-to-filter-robots-meta/).

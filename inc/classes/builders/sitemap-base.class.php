@@ -516,9 +516,8 @@ class Sitemap_Base extends Sitemap {
 					]
 				);
 
-				if ( $args['show_modified'] ) {
+				if ( $args['show_modified'] )
 					$_values['lastmod'] = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : '0000-00-00 00:00:00';
-				}
 
 				if ( $args['show_priority'] ) {
 					// Add at least 1 to prevent going negative. We added 8 extra (= 9) to smoothen the slope.
@@ -623,13 +622,11 @@ class Sitemap_Base extends Sitemap {
 			$_values        = [];
 			$_values['loc'] = $url;
 
-			if ( $args['show_modified'] ) {
+			if ( $args['show_modified'] )
 				$_values['lastmod'] = ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00';
-			}
 
-			if ( $args['show_priority'] ) {
+			if ( $args['show_priority'] )
 				$_values['priority'] = ! empty( $values['priority'] ) ? $values['priority'] : 0.9;
-			}
 
 			++$count;
 			yield $_values;
