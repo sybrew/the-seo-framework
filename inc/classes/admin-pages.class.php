@@ -32,7 +32,7 @@ namespace The_SEO_Framework;
  *
  * @since 2.8.0
  */
-class Admin_Pages extends Profile {
+class Admin_Pages extends Generate_Ldjson {
 
 	/**
 	 * @since 2.7.0
@@ -169,6 +169,22 @@ class Admin_Pages extends Profile {
 			$priority,
 			2
 		);
+	}
+
+	/**
+	 * Prepares profile/user edit view, like outputting the SEO fields.
+	 *
+	 * @since 4.1.4
+	 */
+	public function _init_user_edit_view() {
+
+		if ( ! $this->is_profile_edit() ) return;
+
+		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
+		// if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+
+		\add_action( 'show_user_profile', Bridges\UserSettings::class . '::_prepare_setting_fields', 0, 1 );
+		\add_action( 'edit_user_profile', Bridges\UserSettings::class . '::_prepare_setting_fields', 0, 1 );
 	}
 
 	/**

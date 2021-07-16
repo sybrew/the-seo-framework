@@ -718,6 +718,44 @@ final class Deprecated {
 	}
 
 	/**
+	 * Updates user SEO option.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.0 New users now get a new array assigned.
+	 * @since 4.1.4 Deprecated silently. Use `update_single_user_meta_item()` instead.
+	 *
+	 * @param int    $user_id The user ID.
+	 * @param string $option  The user's SEO metadata option.
+	 * @param mixed  $value   The escaped option value.
+	 * @return bool True on success. False on failure.
+	 */
+	public function update_user_option( $user_id = 0, $option = '', $value = '' ) {
+
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->update_user_option()', '5.0.0', 'the_seo_framework()->update_single_user_meta_item()' );
+
+		if ( ! $option )
+			return false;
+
+		if ( empty( $user_id ) )
+			$user_id = $tsf->get_user_id();
+
+		if ( empty( $user_id ) )
+			return false;
+
+		$meta = $tsf->get_user_meta( $user_id, false );
+
+		/**
+		 * @since 2.8.0 initializes new array on empty values.
+		 */
+		\is_array( $meta ) or $meta = [];
+
+		$meta[ $option ] = $value;
+
+		return \update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
+	}
+
+	/**
 	 * Helper function that constructs name attributes for use in form fields.
 	 *
 	 * Other page implementation classes may wish to construct and use a

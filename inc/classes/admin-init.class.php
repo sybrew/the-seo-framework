@@ -374,17 +374,15 @@ class Admin_Init extends Init {
 	 */
 	public function admin_redirect( $page, array $query_args = [] ) {
 
-		if ( empty( $page ) )
-			return;
+		if ( empty( $page ) ) return;
 
 		// This can be empty... so $target will be empty. TODO test for $success and bail?
 		// Might cause security issues... we _must_ exit, always? Show warning?
 		$url = html_entity_decode( \menu_page_url( $page, false ) );
 
-		foreach ( $query_args as $key => $value ) {
+		foreach ( $query_args as $key => $value )
 			if ( empty( $key ) || empty( $value ) )
 				unset( $query_args[ $key ] );
-		}
 
 		$target = \add_query_arg( $query_args, $url );
 		$target = \esc_url_raw( $target, [ 'https', 'http' ] );
@@ -400,9 +398,8 @@ class Admin_Init extends Init {
 		$success = \wp_safe_redirect( $target, 302 ); // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 		// White screen of death for non-debugging users. Let's make it friendlier.
-		if ( $headers_sent ) {
+		if ( $headers_sent )
 			$this->handle_admin_redirect_error( $target );
-		}
 
 		exit;
 	}

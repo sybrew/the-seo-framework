@@ -106,6 +106,7 @@ class Init extends Query {
 	 * @since 2.8.0
 	 * @since 4.1.2 1. Added hook for sitemap prerender.
 	 *              2. Added hook for ping retry.
+	 * TODO make protected?
 	 */
 	public function init_cron_actions() {
 		// Init post update/delete caching actions which may occur during cronjobs.
@@ -113,9 +114,8 @@ class Init extends Query {
 
 		// Ping searchengines.
 		if ( $this->get_option( 'ping_use_cron' ) ) {
-			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) ) {
+			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) )
 				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap_Base, 'prerender_sitemap' ] );
-			}
 
 			\add_action( 'tsf_sitemap_cron_hook', Bridges\Ping::class . '::ping_search_engines' );
 			\add_action( 'tsf_sitemap_cron_hook_retry', Bridges\Ping::class . '::retry_ping_search_engines' );
@@ -126,6 +126,7 @@ class Init extends Query {
 	 * Initializes AJAX actions.
 	 *
 	 * @since 4.1.4
+	 * TODO make protected?
 	 */
 	public function init_ajax_actions() {
 
@@ -193,8 +194,11 @@ class Init extends Query {
 		}
 
 		if ( ! $this->is_headless['user'] ) {
-			//= Initialize profile fields.
-			$this->init_profile_fields();
+			//= Initialize user meta filters and actions.
+			$this->init_user_meta();
+
+			// Enqueue user meta output.
+			\add_action( 'current_screen', [ $this, '_init_user_edit_view' ] );
 		}
 
 		if ( \in_array( false, $this->is_headless, true ) ) {

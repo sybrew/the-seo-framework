@@ -264,9 +264,6 @@ Programming:
 		-> We use blogname for anything that wants the blogname... and static front page ONLY for the frontpage's <title> tag.
 	TODO remove UM data, add profile picture to image-generator?
 		-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
-	TODO move profile.class.php functions to admin-pages.class.php and a separated class.
-		* Reference: `_init_term_edit_view()` && `_update_term_meta()`
-		* `_update_user_settings()` -> `_update_user_meta()`
 
 **For everyone:**
 
@@ -326,11 +323,12 @@ Programming:
 	* Resolved an issue where excluded post types could still have their search-archives adjusted.
 		* The following was done to achieve this (bear with me -- excluding posts from excluded post types... yea):
 			1. Post meta cannot be fetched from excluded post types. This prevents "on the site"-queries filtering excluded post-type-posts.
-			1. A `LEFT JOIN` ... `WHERE $wpdb->posts.post_type IN ('[post_types,]')` query is now executed for fetching excluded posts, but only when post types are excluded. This type of join should minimize the query impact, because we expect users only to exclude few posts. The parent query should be 'slowest', but most likely cached, so actually 'fastest'.
-				* As before, this query is only executed when saving the SEO settings, or when updating/publishing any post or page. The result of the query is stored in a non-expiring "transient" option.
+			1. A `LEFT JOIN` ... `WHERE $wpdb->posts.post_type IN ('post_types[]')` query is now executed for fetching excluded posts, but only when post types are excluded. This type of join should minimize the query impact, because we expect users only to exclude few posts. The parent query should be 'slowest', but ought to be cached, so actually 'fastest'.
+				* As before, this query is executed only once after saving the SEO settings, or after updating/publishing any post or page. The result of the query is stored in a non-expiring "transient" option.
 	* Resolved an issue where excluded taxonomies could still have their archives adjusted.
 		* This means your 'excluded' posts may still show up in the excluded taxonomies' terms.
 	* Resolved an issue where post-link queries via the Block Editor were filtered by post-search exclusions settings.
+	* Removed double-deletion of term meta when deleting a term. That can't happen of course... so, uh... yeah, we removed a redundant database call when deleting a term. Cool.
 * **Not fixed:**
 	* Polylang transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirit is dying, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Luckily, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
 		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but using any other setting is also much better for SEO regardless.
@@ -372,6 +370,10 @@ Programming:
 			* This class is used to take care of our implementations for the WordPress plugins overview table.
 			* This class is meant to be used internally only.
 			* If you wish to decouple our plugin links, you may need to update your filters now (gone are private methods `_add_plugin_action_links()` and `_add_plugin_row_meta()` from `the_seo_framework()`).
+		* `\The_SEO_Framework\Bridges\UserSettings`
+			* This class is used to take care of our implemention for the WordPress profile/user edit page.
+			* This class is meant to be used internally only.
+			* If you wish to remove the user settings, you may need to update your filters now (gone are private methods `_update_user_settings` and `_add_user_author_fields` from `the_seo_framework()`).
 * **Method notes:**
 	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
 		* **Added:**
@@ -388,6 +390,10 @@ Programming:
 			* `get_modified_time()`, returns the modified time of the current post.
 			* `init_ajax_actions()`, self explanatory, right?
 			* `get_redirect_url()`, returns the redirect URL for the current query. Also accepts arguments.
+			* `is_profile_edit()`, tells if (true/false) we're on a user or profile edit page.
+			* `s_user_meta()`, sanitizes (registered) TSF profile metadata.
+			* `update_single_user_meta_item()`, replaces `update_user_option`, but it now filters through your input, and it doesn't expect your input to be escaped.
+			* `save_user_meta()`, sanitizes and saves the user metadata for TSF.
 			* We changed these for get them in sync with post and term meta:
 				* `get_user_meta_item()`, replaces the now deprecated `get_user_option()`.
 				* `get_current_post_author_meta_item()`, replaces the now deprecated `get_current_author_option()`.
@@ -477,6 +483,7 @@ Programming:
 				* `get_user_option()`. Use `get_user_meta()` or `get_user_meta_item()` instead.
 				* `get_author_option()`. Use `get_user_meta_item()` instead.
 				* `get_current_author_option()`. Use `get_current_post_author_meta_item()` instead.
+				* `update_user_option()`. Use `update_single_user_meta_item()` instead.
 			* **The following methods are now marked for deletion:**
 				* `proportionate_dimensions()`.
 	* **For object `The_SEO_Framework\Builders\SeoBar`:**
@@ -511,11 +518,16 @@ Programming:
 * **Constant notes:**
 	* **Added:**
 		* `THE_SEO_FRAMEWORK_HEADLESS`, accepts boolean (`true`/`false`) or array, with boolean indexes `'meta' => true/false`, `'settings' => true/false`, and `'user' => true/false`.
+	* **Changed:**
+		* `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP` applies now only to the user editable; instead of the editor (user self, or administrator) of the user.
+			* This change should not affect anyone; it merely increases sanity in the code.
+			* Use the new headless mode to hide fields from users when not admin.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
 		* `the_seo_framework_timestamp_format`, used to change timestamp formats. [Example usage](https://wordpress.org/support/topic/naver-validation-error-sitemap/#post-14623125). We advise not sending seconds, because small automated atomic-time fixes on your server may cause changes noted unscrupulously.
+		* `the_seo_framework_save_user_data`, allows you to modify or add to the user meta saved by The SEO Framework.
 	* **Changed:**
 		* `the_seo_framework_get_options`, `the_seo_framework_post_meta`, & `the_seo_framework_term_meta`:
 			1. Now considers headlessness.
@@ -538,6 +550,8 @@ Programming:
 			* `wp_ajax_tsf_update_counter`
 			* `wp_ajax_tsf_update_post_data`
 			* `wp_ajax_tsf_crop_image`
+		* `the_seo_framework_before_author_fields` allows you to do stuff.
+		* `the_seo_framework_after_author_fields` allows you to do stuff a little later.
 	* **Removed:**
 		* `wp_ajax_tsf-dismiss-notice`, use `wp_ajax_tsf_dismiss_notice` instead (underscore vs hyphens).
 		* `wp_ajax_the_seo_framework_update_counter`, use `wp_ajax_tsf_update_counter` instead.
@@ -546,6 +560,8 @@ Programming:
 * **Other:**
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
 	* We now use static anonymous functions where appropriate, instead of simple lambda functions, to improve performance and reduce memory consumption.
+	* `tsf_facebook_page` is now `tsf-user-meta[facebook_page]`.
+	* `tsf_twitter_page` is now `tsf-user-meta[twitter_page]`.
 	* Cleaned up code, removed dumb quirks.
 	* `tsf-notice-nonce` is now `tsf_notice_nonce`
 	* `tsf-dismiss-nonce` is now `tsf_dismiss_nonce`

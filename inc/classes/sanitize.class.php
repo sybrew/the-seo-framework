@@ -834,6 +834,35 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Sanitizes user meta.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param array $data The user meta to sanitize.
+	 * @return array The sanitized user meta.
+	 */
+	public function s_user_meta( array $data ) {
+
+		foreach ( $data as $key => &$value ) :
+			switch ( $key ) :
+				case 'facebook_page':
+					$value = $this->s_facebook_profile( $value );
+					continue 2;
+
+				case 'twitter_page':
+					$value = $this->s_twitter_name( $value );
+					continue 2;
+
+				default:
+					unset( $data[ $key ] );
+					break;
+			endswitch;
+		endforeach;
+
+		return $data;
+	}
+
+	/**
 	 * Returns the title separator value string.
 	 *
 	 * @since 2.2.2

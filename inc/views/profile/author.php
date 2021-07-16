@@ -1,13 +1,30 @@
 <?php
 /**
  * @package The_SEO_Framework\Views\Profile
- * @subpackage The_SEO_Framework\Admin\Profile
+ * @subpackage The_SEO_Framework\Admin\Edit\User
  */
 
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
+
+$fields = [
+	'tsf-user-meta[facebook_page]' => (object) [
+		'name'        => \__( 'Facebook profile page', 'autodescription' ),
+		'type'        => 'url',
+		'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
+		'value'       => $this->get_user_meta_item( 'facebook_page', $user->ID ),
+		'class'       => '',
+	],
+	'tsf-user-meta[twitter_page]'  => (object) [
+		'name'        => \__( 'Twitter profile name', 'autodescription' ),
+		'type'        => 'text',
+		'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
+		'value'       => $this->get_user_meta_item( 'twitter_page', $user->ID ),
+		'class'       => 'ltr',
+	],
+];
 
 ?>
 <h2><?php esc_html_e( 'Authorial Info', 'autodescription' ); ?></h2>

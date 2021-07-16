@@ -35,6 +35,16 @@ namespace The_SEO_Framework;
 class User_Data extends Term_Data {
 
 	/**
+	 * Initializes user meta data handlers.
+	 *
+	 * @since 4.1.4 Now protected.
+	 */
+	protected function init_user_meta() {
+		\add_action( 'personal_options_update', [ $this, '_update_user_meta' ], 10, 1 );
+		\add_action( 'edit_user_profile_update', [ $this, '_update_user_meta' ], 10, 1 );
+	}
+
+	/**
 	 * Returns the user meta item by key.
 	 *
 	 * @since 4.1.4
@@ -197,37 +207,83 @@ class User_Data extends Term_Data {
 	}
 
 	/**
+	 * Saves user profile fields.
+	 *
+	 * @since 4.1.4
+	 * @access private
+	 *
+	 * @param int $user_id The user ID.
+	 */
+	public function _update_user_meta( $user_id ) {
+
+		if ( empty( $_POST ) ) return;
+
+		\check_admin_referer( 'update-user_' . $user_id );
+		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
+
+		$user = \get_userdata( $user_id );
+
+		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+
+		$data = (array) $_POST['tsf-user-meta'];
+
+		$this->save_user_meta( $user_id, $data );
+	}
+
+	/**
 	 * Updates user SEO option.
 	 *
-	 * @since 2.7.0
-	 * @since 2.8.0 New users now get a new array assigned.
+	 * @since 4.1.4
 	 *
 	 * @param int    $user_id The user ID.
-	 * @param string $option  The user's SEO metadata option.
-	 * @param mixed  $value   The escaped option value.
-	 * @return bool True on success. False on failure.
+	 * @param string $option  The user's SEO metadata to update.
+	 * @param mixed  $value   The option value.
 	 */
-	public function update_user_option( $user_id = 0, $option = '', $value = '' ) {
+	public function update_single_user_meta_item( $user_id, $option, $value ) {
 
-		if ( ! $option )
-			return false;
+		$user = \get_userdata( $user_id );
 
-		if ( empty( $user_id ) )
-			$user_id = $this->get_user_id();
+		// We could test for !$user, but this is more to the point.
+		if ( empty( $user->ID ) ) return;
 
-		if ( empty( $user_id ) )
-			return false;
-
-		$meta = $this->get_user_meta( $user_id, false );
-
-		/**
-		 * @since 2.8.0 initializes new array on empty values.
-		 */
-		\is_array( $meta ) or $meta = [];
-
+		$meta            = $this->get_user_meta( $user_id, false );
 		$meta[ $option ] = $value;
 
-		return \update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
+		$this->save_user_meta( $user_id, $meta );
+	}
+
+	/**
+	 * Updates users meta from input.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param int   $user_id The user ID.
+	 * @param array $data    The data to save.
+	 */
+	public function save_user_meta( $user_id, array $data ) {
+
+		$user = \get_userdata( $user_id );
+
+		// We could test for !$user, but this is more to the point.
+		if ( empty( $user->ID ) ) return;
+
+		$data = (array) \wp_parse_args( $data, $this->get_user_meta_defaults( $user->ID ) );
+		$data = $this->s_user_meta( $data );
+
+		/**
+		 * @since 4.1.4
+		 * @param array  $data     The data that's going to be saved.
+		 * @param int    $user_id  The user ID.
+		 */
+		$data = (array) \apply_filters_ref_array(
+			'the_seo_framework_save_user_data',
+			[
+				$data,
+				$user->ID,
+			]
+		);
+
+		return \update_user_meta( $user->ID, THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
 	}
 
 	/**

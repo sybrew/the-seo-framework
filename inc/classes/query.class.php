@@ -511,6 +511,19 @@ class Query extends Core {
 	}
 
 	/**
+	 * Detects Profile edit screen in WP Admin.
+	 *
+	 * @since 4.1.4
+	 * @global \WP_Screen $current_screen
+	 *
+	 * @return bool True if on Profile Edit screen. False otherwise.
+	 */
+	public function is_profile_edit() {
+		global $current_screen;
+		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'profile', 'user-edit' ], true );
+	}
+
+	/**
 	 * Detects author archives.
 	 *
 	 * @since 2.6.0

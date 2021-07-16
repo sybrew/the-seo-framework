@@ -42,7 +42,6 @@ class Term_Data extends Post_Data {
 	 */
 	protected function init_term_meta() {
 		\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
-		\add_action( 'delete_term', [ $this, '_delete_term_meta' ], 10, 3 );
 	}
 
 	/**
@@ -391,21 +390,6 @@ class Term_Data extends Post_Data {
 
 		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
 		\update_term_meta( $term->term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
-	}
-
-	/**
-	 * Delete term meta data when a term is deleted.
-	 * Deletes only the default data keys; or everything when only that is present.
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 *
-	 * @param int    $term_id  Term ID.
-	 * @param int    $tt_id    Term Taxonomy ID.
-	 * @param string $taxonomy Taxonomy slug.
-	 */
-	public function _delete_term_meta( $term_id, $tt_id, $taxonomy ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		$this->delete_term_meta( $term_id );
 	}
 
 	/**
