@@ -587,9 +587,7 @@ final class Debug {
 		$is_tag                 = $tsf->is_tag();
 		$is_tax                 = $tsf->is_tax();
 		$is_shop                = $tsf->is_shop();
-		$is_wc_shop             = $tsf->is_wc_shop();
 		$is_product             = $tsf->is_product();
-		$is_wc_product          = $tsf->is_wc_product();
 		$is_seo_settings_page   = $tsf->is_seo_settings_page( true );
 		$numpages               = $tsf->numpages();
 		$is_multipage           = $tsf->is_multipage();

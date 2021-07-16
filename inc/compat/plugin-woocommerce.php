@@ -63,9 +63,8 @@ function _init_wc_compat() {
  */
 function _set_real_id_wc_shop( $id ) {
 
-	if ( \the_seo_framework()->is_wc_shop() ) {
+	if ( \the_seo_framework()->is_wc_shop() )
 		$id = (int) \get_option( 'woocommerce_shop_page_id' );
-	}
 
 	return $id;
 }
@@ -90,15 +89,32 @@ function _set_shop_singular_archive( $is_singular_archive, $id ) {
  * Sets the is_shop query.
  *
  * @since 4.0.5
+ * @since 4.1.4 Now handles the assertion fully.
  * @access private
- * @TODO is this redundant for TSF?
+ * @TODO is this redundant for TSF? -> yes. lol. It's used nowhere, for now...
  *
  * @param bool             $is_shop Whether this is a shop page.
  * @param int|WP_Post|null $post    Post ID or post object.
  * @return bool
  */
 function _set_wc_is_shop( $is_shop, $post ) {
-	return $is_shop || \the_seo_framework()->is_wc_shop( $post );
+
+	if ( $is_shop ) return $is_shop;
+
+	if ( isset( $post ) ) {
+		$post = \get_post( $post );
+		$id   = $post ? $post->ID : 0;
+	} else {
+		$id = null;
+	}
+
+	if ( isset( $id ) ) {
+		$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
+	} else {
+		$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
+	}
+
+	return $is_shop;
 }
 
 \add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
@@ -106,13 +122,23 @@ function _set_wc_is_shop( $is_shop, $post ) {
  * Sets the is_product query.
  *
  * @since 4.0.5
+ * @since 4.1.4 Now handles the assertion fully.
  *
  * @param bool             $is_product Whether this is a product page.
  * @param int|WP_Post|null $post       Post ID or post object.
  * @return bool
  */
 function _set_wc_is_product( $is_product, $post ) {
-	return $is_product || \the_seo_framework()->is_wc_product( $post );
+
+	if ( $is_product ) return $is_product;
+
+	if ( $post ) {
+		$is_product = 'product' === \get_post_type( $post );
+	} else {
+		$is_product = \function_exists( 'is_product' ) && \is_product();
+	}
+
+	return $is_product;
 }
 
 \add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
@@ -120,14 +146,20 @@ function _set_wc_is_product( $is_product, $post ) {
  * Sets the is_product_admin query.
  *
  * @since 4.0.5
+ * @since 4.1.4 Now handles the assertion fully.
  * @access private
- * @TODO is this redundant for TSF?
+ * @TODO is this redundant for TSF? Yup. This very much is because we do not show an interface for OG types.
  *
  * @param bool $is_product_admin Whether this is a product admin query.
  * @return bool
  */
 function _set_wc_is_product_admin( $is_product_admin ) {
-	return $is_product_admin || \the_seo_framework()->is_wc_product_admin();
+
+	if ( $is_product_admin ) return $is_product_admin;
+
+	$tsf = \the_seo_framework();
+
+	return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 }
 
 \add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );

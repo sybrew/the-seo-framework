@@ -585,6 +585,7 @@ class Query extends Core {
 	 * Checks blog page by sole ID.
 	 *
 	 * @since 4.0.0
+	 * @since 4.1.4 Improved performance by switching the conditional.
 	 * @todo deprecate
 	 * @see is_wc_shop() -- that's the correct implementation.
 	 *
@@ -593,9 +594,10 @@ class Query extends Core {
 	 */
 	public function is_blog_page_by_id( $id ) {
 
-		$pfp = (int) \get_option( 'page_for_posts' );
+		// ID 0 cannot be a blog page.
+		if ( ! $id ) return false;
 
-		return 0 !== $pfp && $id === $pfp;
+		return (int) \get_option( 'page_for_posts' ) === $id;
 	}
 
 	/**
@@ -1106,23 +1108,35 @@ class Query extends Core {
 	 * Determines if the $post is a shop page.
 	 *
 	 * @since 4.0.5
+	 * @since 4.1.4 Added memoization.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool
 	 */
 	public function is_shop( $post = null ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
+			return $cache;
+
 		/**
 		 * @since 4.0.5
+		 * @since 4.1.4 Now has its return value memoized.
 		 * @param bool $is_shop Whether the post ID is a shop.
 		 * @param int  $id      The current or supplied post ID.
 		 */
-		return \apply_filters_ref_array( 'the_seo_framework_is_shop', [ false, $post ] );
+		$is_shop = \apply_filters_ref_array( 'the_seo_framework_is_shop', [ false, $post ] );
+
+		$this->set_query_cache( __METHOD__, $is_shop, $post );
+
+		return $is_shop;
 	}
 
 	/**
 	 * Determines if the page is a product page.
 	 *
 	 * @since 4.0.5
+	 * @since 4.1.4 Added memoization.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool True if on a WooCommerce Product page.
@@ -1132,120 +1146,47 @@ class Query extends Core {
 		if ( \is_admin() )
 			return $this->is_product_admin();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
+			return $cache;
+
 		/**
 		 * @since 4.0.5
+		 * @since 4.1.4 Now has its return value memoized.
 		 * @param bool $is_product
 		 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 		 */
-		return (bool) \apply_filters_ref_array( 'the_seo_framework_is_product', [ false, $post ] );
+		$is_product = (bool) \apply_filters_ref_array( 'the_seo_framework_is_product', [ false, $post ] );
+
+		$this->set_query_cache( __METHOD__, $is_product, $post );
+
+		return $is_product;
 	}
 
 	/**
 	 * Determines if the admin page is for a product page.
 	 *
 	 * @since 4.0.5
+	 * @since 4.1.4 Added memoization.
 	 *
 	 * @return bool
 	 */
 	public function is_product_admin() {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
+			return $cache;
+
 		/**
 		 * @since 4.0.5
+		 * @since 4.1.4 Now has its return value memoized.
 		 * @param bool $is_product_admin
 		 */
-		return (bool) \apply_filters( 'the_seo_framework_is_product_admin', false );
-	}
+		$is_product_admin = (bool) \apply_filters( 'the_seo_framework_is_product_admin', false );
 
-	/**
-	 * Determines if the $post is the WooCommerce plugin shop page.
-	 *
-	 * @since 2.5.2
-	 * @since 4.0.5 Now has a first parameter `$post`.
-	 * @since 4.0.5 Soft deprecated.
-	 * @deprecated
-	 * @internal
-	 *
-	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
-	 * @return bool True if on the WooCommerce shop page.
-	 */
-	public function is_wc_shop( $post = null ) {
+		$this->set_query_cache( __METHOD__, $is_product_admin );
 
-		if ( isset( $post ) ) {
-			$post = \get_post( $post );
-			$id   = $post ? $post->ID : 0;
-		} else {
-			$id = null;
-		}
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $id ) )
-			return $cache;
-
-		if ( isset( $id ) ) {
-			$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
-		} else {
-			$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
-		}
-
-		$this->set_query_cache(
-			__METHOD__,
-			$is_shop,
-			$id
-		);
-
-		return $is_shop;
-	}
-
-	/**
-	 * Determines if the page is the WooCommerce plugin Product page.
-	 *
-	 * @since 2.5.2
-	 * @since 4.0.0 : 1. Added admin support.
-	 *                2. Added parameter for the Post ID or post to test.
-	 * @since 4.0.5 Soft deprecated.
-	 * @deprecated
-	 * @internal
-	 *
-	 * @param int|\WP_Post $post When set, checks if the post is of type product.
-	 * @return bool True if on a WooCommerce Product page.
-	 */
-	public function is_wc_product( $post = 0 ) {
-
-		if ( \is_admin() )
-			return $this->is_wc_product_admin();
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = $this->get_query_cache( __METHOD__, null, $post ) )
-			return $cache;
-
-		if ( $post ) {
-			$is_product = 'product' === \get_post_type( $post );
-		} else {
-			$is_product = \function_exists( 'is_product' ) && \is_product();
-		}
-
-		$this->set_query_cache(
-			__METHOD__,
-			$is_product,
-			$post
-		);
-
-		return $is_product;
-	}
-
-	/**
-	 * Detects products within the admin area.
-	 *
-	 * @since 4.0.0
-	 * @see $this->is_wc_product()
-	 * @since 4.0.5 Soft deprecated.
-	 * @deprecated
-	 * @internal
-	 *
-	 * @return bool
-	 */
-	public function is_wc_product_admin() {
-		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
-		return $this->is_singular_admin() && 'product' === $this->get_admin_post_type();
+		return $is_product_admin;
 	}
 
 	/**

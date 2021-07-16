@@ -371,7 +371,7 @@ final class Deprecated {
 	 */
 	public function robots_meta( $args = null, $ignore = 0b00 ) {
 		$tsf = \the_seo_framework();
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->robots_meta()', '5.0.0', 'the_seo_framework()->generate_robots_meta()' );
+		// $tsf->_deprecated_function( 'the_seo_framework()->robots_meta()', '5.0.0', 'the_seo_framework()->generate_robots_meta()' );
 		return $tsf->generate_robots_meta( $args, null, $ignore );
 	}
 
@@ -597,6 +597,8 @@ final class Deprecated {
 	 * Returns current post author option.
 	 *
 	 * @since 3.0.0
+	 * @since 4.1.4 Silently deprecated. use `get_current_post_author_id()` instead.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param int    $author_id The author ID. When empty, it will return $default.
 	 * @param string $option    The option name. When empty, it will return $default.
@@ -613,6 +615,8 @@ final class Deprecated {
 	 * Returns current post author option.
 	 *
 	 * @since 3.0.0
+	 * @since 4.1.4 Silently deprecated. Use `get_current_post_author_meta_item()` instead.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $option  The option name.
 	 * @param mixed  $default The default value to return when the data doesn't exist.
@@ -622,6 +626,95 @@ final class Deprecated {
 		$tsf = \the_seo_framework();
 		// $tsf->_deprecated_function( 'the_seo_framework()->get_current_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_meta_item()' );
 		return $tsf->get_current_post_author_meta_item( $option ) ?: $default;
+	}
+
+	/**
+	 * Determines if the $post is the WooCommerce plugin shop page.
+	 *
+	 * @since 2.5.2
+	 * @since 4.0.5 Now has a first parameter `$post`.
+	 * @since 4.0.5 Soft deprecated.
+	 * @since 4.1.4 1. Another silent deprecation. Use `is_shop()` instead.
+	 *              2. Removed output memoization.
+	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
+	 * @internal
+	 *
+	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
+	 * @return bool True if on the WooCommerce shop page.
+	 */
+	public function is_wc_shop( $post = null ) {
+
+		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_wc_shop()', '5.0.0', 'the_seo_framework()->is_shop()' );
+
+		if ( isset( $post ) ) {
+			$post = \get_post( $post );
+			$id   = $post ? $post->ID : 0;
+		} else {
+			$id = null;
+		}
+
+		if ( isset( $id ) ) {
+			$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
+		} else {
+			$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
+		}
+
+		return $is_shop;
+	}
+
+	/**
+	 * Determines if the page is the WooCommerce plugin Product page.
+	 *
+	 * @since 2.5.2
+	 * @since 4.0.0 : 1. Added admin support.
+	 *                2. Added parameter for the Post ID or post to test.
+	 * @since 4.0.5 Soft deprecated.
+	 * @since 4.1.4 1. Another silent deprecation. Use `is_product()` instead.
+	 *              2. Removed output memoization.
+	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
+	 * @internal
+	 *
+	 * @param int|\WP_Post $post When set, checks if the post is of type product.
+	 * @return bool True if on a WooCommerce Product page.
+	 */
+	public function is_wc_product( $post = 0 ) {
+
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->is_wc_product()', '5.0.0', 'the_seo_framework()->is_product()' );
+
+		if ( \is_admin() )
+			return $tsf->is_wc_product_admin();
+
+		if ( $post ) {
+			$is_product = 'product' === \get_post_type( $post );
+		} else {
+			$is_product = \function_exists( 'is_product' ) && \is_product();
+		}
+
+		return $is_product;
+	}
+
+	/**
+	 * Detects products within the admin area.
+	 *
+	 * @since 4.0.0
+	 * @see $this->is_wc_product()
+	 * @since 4.0.5 Soft deprecated.
+	 * @since 4.1.4 1. Another silent deprecation. Use `is_product_admin()` instead.
+	 *              2. Removed output memoization.
+	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
+	 * @internal
+	 *
+	 * @return bool
+	 */
+	public function is_wc_product_admin() {
+		$tsf = \the_seo_framework();
+		// $tsf->_deprecated_function( 'the_seo_framework()->is_wc_product_admin()', '5.0.0', 'the_seo_framework()->is_product_admin()' );
+		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
+		return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 	}
 
 	/**

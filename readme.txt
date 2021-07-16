@@ -250,7 +250,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 Marketing:
 	TODO 4.2.0 - Headless?
-	TODO: This minor update packs a big punch... we've added headless mode, we've defenestrated the object caching mechanism, etc. etc. We've removed _40_ methods that were otherwise needlessly registered on the front-end. -> who cares?
+	TODO: This minor update packs a big punch... we've added headless mode, we've defenestrated the object caching mechanism, etc. etc. We've removed _43_ methods that were otherwise needlessly registered on the front-end. -> who cares?
 	TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
 	TODO test plugin size change, it could be less, no?
 		-> With the class-deprecations removed, that could make up for a lot.
@@ -260,7 +260,6 @@ Extension Manager:
 		-> Yes, this works. Please see constants `TSF_EXTENSION_MANAGER_API_INFORMATION` and `TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS` to manage the subscription and extension activation respectively.
 
 Programming:
-	TODO deprecate is_wc_shop et co. for real.
 	TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
 		-> We use blogname for anything that wants the blogname... and static front page ONLY for the frontpage's <title> tag.
 	TODO remove UM data, add profile picture to image-generator?
@@ -408,6 +407,7 @@ Programming:
 			* `get_post_meta()`:
 				1. Now considers headlessness.
 				1. now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
+			* `is_blog_page_by_id()` should now be faster thanks to bypassing the options when the input ID is `0`.
 		* **Changed:**
 			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
 			* `robots_txt()`, removed object caching support.
@@ -416,6 +416,9 @@ Programming:
 			* `delete_main_cache()`, no longer flushes `front`, `robots`, and `object` cache.
 			* `delete_post_cache()`, no longer flushes `post` object cache.
 			* `generate_cache_key()` no longer returns a key when no `$type` is supplied.
+			* `is_shop()` now has its return value memoized.
+			* `is_product()` now has its return value memoized.
+			* `is_product_admin()` now has its return value memoized.
 		* **Removed:**
 			* **Object caching support:** These methods were removed with no alternative available. Calling these methods will output a deprecation notice.
 				* `object_cache_set()`
@@ -521,6 +524,7 @@ Programming:
 		* `the_seo_framework_sitemap_nhpt_query_args` & `the_seo_framework_sitemap_hpt_query_args`:
 			1. No longer pass the superfluously redundant `suppress_filters` index.
 			2. Can now have index `post_type` set to `[]` or `''` to cancel the query.
+		* `the_seo_framework_is_shop`, `the_seo_framework_is_product`, & `the_seo_framework_is_product_admin` now have their return values memoized.
 	* **Deprecated:**
 		* `the_seo_framework_load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	* **Removed:**
