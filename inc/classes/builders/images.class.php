@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Builders;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2019 - 2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2019 - 2021 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -156,7 +156,6 @@ final class Images {
 					'strip' => false,
 				]
 			);
-			$i = microtime( true );
 			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match(), but the opcodes won't help.
 			preg_match_all(
 				'/<img[^>]+src=(\"|\')?([^\"\'>\s]+)\1?.*?>/mi',
@@ -167,7 +166,6 @@ final class Images {
 		}
 
 		if ( $matches ) {
-			$i = 0;
 			for ( $i = 0; $i++ < static::MAX_CONTENT_IMAGES; ) {
 				// Fewer than MAX_CONTENT_IMAGES matched.
 				if ( ! isset( $matches[ $i ][2] ) ) break;

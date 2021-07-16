@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2021 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -191,11 +191,8 @@ final class Deprecated {
 	 * @return string A fully qualified URL with appended $query.
 	 */
 	public function append_php_query( $url, $query = '' ) {
-
 		$tsf = \the_seo_framework();
-
 		// $tsf->_deprecated_function( 'the_seo_framework()->append_php_query()', '4.2.0', 'the_seo_framework()->append_url_query()' );
-
 		return $tsf->append_url_query( $url, $query );
 	}
 

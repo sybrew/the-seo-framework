@@ -70,7 +70,7 @@ function _wpforo_disable_html_output() {
  * @param \WP_Post $post          Post object.
  * @return string
  */
-function _wpforo_filter_canonical_url( $canonical_url, $post ) {
+function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
 	return \function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
 }
 

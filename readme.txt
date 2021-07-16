@@ -302,8 +302,8 @@ Programming:
 		* TSF will not remove the refactored WordPress method for outputting `noindex` when the blog isn't set to public. TSF will warn you about this still -- very much so.
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
 	* WordPress 5.8 brings no conflicting changes.
-	* TODO It's 2021 now... so we extended the plugin's copyright year notes.
-	* TODO TSF is now copyrighted by someone else... well, still me, but using a different name.
+	* It's 2021 now... so we extended the plugin's copyright year notes.
+	* TSF's ownership has been transferred from CyberWire to CyberWire B.V.. Or, did the company itself transfer its own ownership? Who owns what? Do I own me? Technicalities aside, the new company will ruin everything.
 	* "The SEO Framework Title Fix" plugin (from WordPress.org, no longer available), no longer works with The SEO Framework from this version onward.
 		* Use our Extension Manager's [Title Fix](https://theseoframework.com/extensions/title-fix/) instead. Or, better yet, update your theme to follow the latest standards at least once every decade.
 * **Fixed:**

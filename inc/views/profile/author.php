@@ -11,16 +11,16 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_
 
 $fields = [
 	'tsf-user-meta[facebook_page]' => (object) [
-		'name'        => \__( 'Facebook profile page', 'autodescription' ),
+		'name'        => __( 'Facebook profile page', 'autodescription' ),
 		'type'        => 'url',
-		'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
+		'placeholder' => _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
 		'value'       => $this->get_user_meta_item( 'facebook_page', $user->ID ),
 		'class'       => '',
 	],
 	'tsf-user-meta[twitter_page]'  => (object) [
-		'name'        => \__( 'Twitter profile name', 'autodescription' ),
+		'name'        => __( 'Twitter profile name', 'autodescription' ),
 		'type'        => 'text',
-		'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
+		'placeholder' => _x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
 		'value'       => $this->get_user_meta_item( 'twitter_page', $user->ID ),
 		'class'       => 'ltr',
 	],

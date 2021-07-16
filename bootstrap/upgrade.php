@@ -488,7 +488,7 @@ function _do_install_notice() {
  * @param string $current_version The current version of the site.
  * @return void Early when already enqueued
  */
-function _prepare_upgrade_suggestion( $previous_version, $current_version ) {
+function _prepare_upgrade_suggestion( $previous_version, $current_version ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
 	// Don't invoke if the user didn't upgrade.
 	if ( ! $previous_version ) return;
 

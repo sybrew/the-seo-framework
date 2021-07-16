@@ -90,7 +90,7 @@ function _wpml_flush_sitemap( $type, $id, $args, $success ) {
 	}
 }
 
-add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
+\add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
 /**
  * Filters "display translatable" post types from the sitemap query arguments.
  * Only appends actually translated posts to the translated sitemap.
