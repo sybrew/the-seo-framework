@@ -175,6 +175,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * Prepares profile/user edit view, like outputting the SEO fields.
 	 *
 	 * @since 4.1.4
+	 * @access private
 	 */
 	public function _init_user_edit_view() {
 

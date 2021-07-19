@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.1.0
-Tested up to: 5.6
+Tested up to: 5.8
 Requires PHP: 5.6.0
 Stable tag: 4.1.3
 License: GPLv3
@@ -126,6 +126,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
 * E-commerce plugins, like WooCommerce and Easy Digital Downloads.
 * Editing posts and terms via WordPress's native bulk-and-quick-edit interfaces.
+* Headless mode via a single [constant definition](https://kb.theseoframework.com/?p=136).
 
 = Copyright legislation notice =
 
@@ -248,22 +249,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.4 =
 
-Marketing:
-	TODO 4.2.0 - Headless?
-	TODO: This minor update packs a big punch... we've added headless mode, we've defenestrated the object caching mechanism, etc. etc. We've removed _43_ methods that were otherwise needlessly registered on the front-end. -> who cares?
-	TODO update `https://theseoframework.com/docs/api/constants/` (more than just THE_SEO_FRAMEWORK_HEADLESS)
-	TODO test plugin size change, it could be less, no?
-		-> With the class-deprecations removed, that could make up for a lot.
+This minor update packs a major punch. TSF now supports [headless mode](https://kb.theseoframework.com/?p=136), rejustifying itself as a turnkey solution. We defenestrated the pernicious object caching mechanism, and we updated some option defaults effective only on new sites. We improved performance iterably, fixed about 12 bugs, and enjoyed the weather. Lastly, introduced a new API for user meta handling, among other things --- developers that wrote software interfacing with TSF are served well reading the detailed changelog.
 
-Extension Manager:
-	TODO test Headless + Auto-activate Extension Manager + Extensions (prominently: Focus (headless settings only), Articles/Title-Fix/Honeypot (fully headless) ).
-		-> Yes, this works. Please see constants `TSF_EXTENSION_MANAGER_API_INFORMATION` and `TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS` to manage the subscription and extension activation respectively.
-
-Programming:
-	TODO add filter to getbloginfo sitename??? get_blogname() and get_static_front_page_title()... Why do we have both?
-		-> We use blogname for anything that wants the blogname... and static front page ONLY for the frontpage's <title> tag.
-	TODO remove UM data, add profile picture to image-generator?
-		-> https://wordpress.org/support/topic/double-the-seo-2/#post-14087556
+Pro tip: If you can no longer crop images via TSF, save your changes, and then try hitting <span class="nowrap"><kbd>CMD ⌘</kbd>+<kbd>OPTION ⌥</kbd>+<kbd>R</kbd> (Safari Mac)</span>, <span class="nowrap"><kbd>CMD ⌘</kbd>+<kbd>SHIFT ⇧</kbd>+<kbd>R</kbd> (Chrome/Firefox Mac)</span> or <span class="nowrap"><kbd>CTRL ^</kbd>+<kbd>SHIFT ⇧</kbd>+<kbd>R</kbd> (Windows)</span>; these keyboard shortcuts will force-fetch the latest scripts from your server.
 
 **For everyone:**
 
@@ -271,20 +259,21 @@ Programming:
 	* Don't care about SEO? Now you can use TSF headlessly. Simply add the following snippet to your `wp-config.php` file or a (mu-)plugin:
 		* `define( 'THE_SEO_FRAMEWORK_HEADLESS', true );`
 			* This constant must be defined before action `plugins_loaded` priority `5`.
-			* This constant also listens to granular control by setting an array instead of a boolean. See our [Constant API docs](https://theseoframework.com/docs/api/constants/#user-definable).
+			* This constant also listens to granular control by setting an array instead of a boolean.
 			* This constant denies access to database calls, speeding up your website tremendously. However, your SEO (meta) settings won't work.
 			* (But...) This constant can be used conditionally when used in a (mu-)plugin; for example, only super-admins can modify the settings/meta-data. Then, you must disable headlessness on the front-end for them to have an effect.
+			* [Learn more about headless mode](https://kb.theseoframework.com/?p=136).
 * **Changed:**
 	* **Option defaults:**
-		* "Remove author name?" (from oEmbed) is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
 		* "Apply `noindex` to every second or later archive page?" is now disabled by default. We found that, even though it helps search engines crawl your website more quickly, blocking paginated archives could actually be deleterious to indexing old content in select scenarios.
 			* We may consider reverting this decision once we can discern separate "post type archive" (including a separate "blog") options for this.
+		* "Remove author name?" (from oEmbed) is now enabled by default. We asserted only Discord using this feature in the wild, and found those who care think Discord's way of handling it undesired.
 		* "Sitemap Query Limit" is now lowered to 1000 items, from 3000.
 			* In combination with not applying `noindex` to every second or later archive page, this will improve indexing rate for almost all sites. This change also reduces the strain on your server, especially when you have many other plugins adding post meta to each post.
 	* Redirected pages/posts/terms\* are no longer included in the sitemap. For real this time.
 		* *\* WordPress Core sitemaps can display terms; our optimized version does not*.
 * **Improved:**
-	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly by offloading various methods to flyweight objects. This should improve load times, albeit only a little.
+	* Continuing the trend we set since TSF v4.0.0, we reduced the size of the main object of TSF significantly (7.8%) by offloading various methods to flyweight objects. This should improve load times, albeit only a little.
 	* The quick-edit column for the Visibiity setting is now 1.5x wider on non-mobile. This change might take some 'getting used to,' but now you can read the URLs you put in.
 * **Removed:**
 	* Object caching of the HTML output of TSF.
@@ -293,7 +282,11 @@ Programming:
 * **Updated:**
 	* `[?]`/Documentation links to various official Google and Bing resources no longer need to redirect to their latest articles.
 * **Other:**
-	* WordPress 5.7 comes with improved robots-directives support. The improvements only go so far, and although WordPress seems dogmatic about bringing the editor experience to the front-end, it falls completely flat recognizing that the back-end query-system is disjointed from the front-end, as such is the newly 'improved' robots-directives support. Because we reliably rely on reliable queries with reliance, we are left with no choice but to strip some of its conflicting functionality from Core, without changing the fully fledged experience you've come to expect from TSF. To summarize our actions:
+	* It's 2021 now... so, we extended the plugin's copyright year notes.
+	* TSF's ownership has been transferred from CyberWire to CyberWire B.V.. Or, did the company itself transfer its own ownership? Who owns what? Do I own me? Technicalities aside, the new company will ruin everything.
+	* "The SEO Framework Title Fix" plugin (from WordPress.org, no longer available) no longer works with The SEO Framework from this version onward.
+		* Use our Extension Manager's [Title Fix](https://theseoframework.com/extensions/title-fix/) instead. Or, better yet, update your theme to follow the latest standards at least once every decade.
+	* WordPress 5.7 came with improved robots-directives support. The improvements only go so far, and although WordPress seems dogmatic about bringing the editor experience to the front-end, it falls completely flat recognizing that the back-end query-system is disjointed from the front-end, as such is the newly 'improved' robots-directives support. Because we reliably rely on reliable queries with reliance, we are left with no choice but to strip some of its conflicting functionality from Core, without changing the fully fledged experience you've come to expect from TSF. To summarize our actions:
 		* TSF will not integrate with this new Core feature for now.
 		* TSF will remove some of WordPress 5.7 robots support on these pages:
 			* `noindex` for search. TSF supports this feature with a toggle already. When TSF doesn't support the search query's query (yes, that's a thing), this directive can be reinstated via Core.
@@ -302,24 +295,13 @@ Programming:
 		* TSF will not remove the refactored WordPress method for outputting `noindex` when the blog isn't set to public. TSF will warn you about this still -- very much so.
 		* TSF will not remove any implementation from other plugins or themes. First, this is definitely not a domain of a theme. Secondly, we cannot predict what others plugin authors might do, and we're very much inclinded to shift the blame... always.
 	* WordPress 5.8 brings no conflicting changes.
-	* It's 2021 now... so we extended the plugin's copyright year notes.
-	* TSF's ownership has been transferred from CyberWire to CyberWire B.V.. Or, did the company itself transfer its own ownership? Who owns what? Do I own me? Technicalities aside, the new company will ruin everything.
-	* "The SEO Framework Title Fix" plugin (from WordPress.org, no longer available), no longer works with The SEO Framework from this version onward.
-		* Use our Extension Manager's [Title Fix](https://theseoframework.com/extensions/title-fix/) instead. Or, better yet, update your theme to follow the latest standards at least once every decade.
 * **Fixed:**
-	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
 	* Addressed an issue where "Apply `noindex` to every second or later page on the homepage?" wasn't honored when the homepage is force-indexed via the homepage's post meta.
 	* Addressed an issue where the character counter wasn't aligned pixel-perfectly on RTL-language sites.
-	* Addressed an issue where in quick-edit, the homepage title wasn't locked correctly, causing it and its counters to render incorrectly.
-	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
-		* Now, you can also overwrite these settings effectively.
-			* Cool: TSF will warn that WooCommerce recommends otherwise via the SEO Bar.
-				* When you don't overwrite its state, TSF will then tell WooCommerce recommended this state.
-		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
-		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. The setting is accessible via `wc_get_page_id()` (WC 3.0 and later).
-	* Resolved a memory leak in image-tooltips.
 	* Addressed an issue where image-tooltips don't load correctly when reloading the DOM, such as with our [Local extension](https://theseoframework.com/extensions/local/).
-	* When using WPML, the main sitemap no longer contains "display translatable" post types, and the translated sitemaps no longer contain "not translatable" post types nor untranslated posts from "display translatable" post types.
+	* Addressed an issue where in quick-edit, the homepage title wasn't locked correctly, causing it and its counters to render incorrectly.
+	* Removed double-deletion of term meta when deleting a term. That can't happen of course... so, uh... yeah, we removed a redundant database call when deleting a term. Cool.
+	* Resolved a memory leak in image-tooltips.
 	* Resolved an issue where excluded post types could still have their search-archives adjusted.
 		* The following was done to achieve this (bear with me -- excluding posts from excluded post types... yea):
 			1. Post meta cannot be fetched from excluded post types. This prevents "on the site"-queries filtering excluded post-type-posts.
@@ -328,7 +310,14 @@ Programming:
 	* Resolved an issue where excluded taxonomies could still have their archives adjusted.
 		* This means your 'excluded' posts may still show up in the excluded taxonomies' terms.
 	* Resolved an issue where post-link queries via the Block Editor were filtered by post-search exclusions settings.
-	* Removed double-deletion of term meta when deleting a term. That can't happen of course... so, uh... yeah, we removed a redundant database call when deleting a term. Cool.
+	* The expected sitemap URL now generates a correct URL for (WordPress, WordPress Multisite, Polylang, WPML, etc.) subdirectories.
+	* TSF now disables WooCommerce's robots-meta output, and its new WP 5.7 implementation thereof. In turn, TSF will hint `noindex` as default for the Cart, Checkout, and Profile (My Account) pages, regardless of your SEO settings otherwise.
+		* Now, you can also overwrite these settings effectively.
+			* Cool: TSF will warn that WooCommerce recommends otherwise via the SEO Bar.
+				* When you don't overwrite its state, TSF will then tell WooCommerce recommended this state.
+		* Because of this, TSF will now remove these pages from the sitemap by default. When you force-index these pages, they'll get added back to the sitemap.
+		* **Nota bene:** This only works when setting a page ID via WooCommerce's settings UI. The setting is accessible via `wc_get_page_id()` (WC 3.0 and later).
+	* When using WPML, the main sitemap no longer contains "display translatable" post types, and the translated sitemaps no longer contain "not translatable" post types nor untranslated posts from "display translatable" post types.
 * **Not fixed:**
 	* Polylang transforms (ruins) the home URL, and depending on your Polylang configuration, sitemaps may or may not output as expected. We've been beating this same horse iterably, and our spirit is dying, for their developers have been reluctant to communicate about this hitherto -- even deleting our comments. Luckily, WordPress will eventually support translatable content natively, after which we can all sigh in relief.
 		* Briefly, when using Polylang, do not set "URL Modifications" to "The language is set from content"; use any other setting instead. You'll encounter fewer issues, but using any other setting is also much better for SEO regardless.
@@ -339,15 +328,15 @@ Programming:
 	* A few new strings require translation.
 	* You may find a few strings fuzzy because we updated the links to the documentation of Google and Bing.
 * **Updated:**
-	* Translation POT file.
+	* TODO Translation POT file.
 
 **For developers:**
 
 * **Option notes:**
 	* For `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* **Changed:**
-			* `paged_noindex` now defaults to `0`, from `1`.
 			* `oembed_remove_author` now defaults to `1`, from `0`.
+			* `paged_noindex` now defaults to `0`, from `1`.
 			* `sitemap_query_limit` now defaults to `1000`, from `3000`.
 		* **Removed:**
 			`cache_object`, this value will not be deleted when upgrading to this version for backward-compatible reasons.
@@ -377,113 +366,147 @@ Programming:
 * **Method notes:**
 	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
 		* **Added:**
-			* `array_merge_recursive_distinct()`, a glorified `array_merge()` that allows unlimited multidimensional arrays inputted.
-			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
-			* `generate_robots_meta()`, returns generated robots metadata.
-			* `get_image_uploader_form()`, returns image uploader form button.
-				* This is an abstraction of the `get_social_image_uploader_form()` and `get_logo_uploader_form()` methods, both now call the new one for it has an interpolable API.
 			* `advanced_query_protection()`, returns the `tsf:aqp` meta tag.
 				* This tag is used to indicate a malformed query was detected. It's tilt-proof.
+			* `append_url_query()`, replaces `append_php_query()`.
+			* `array_merge_recursive_distinct()`, a glorified `array_merge()` that allows unlimited multidimensional arrays inputted combobulated by yours truly.
+			* `do_meta_output()`, outputs all meta tags for the current query.
+			* `generate_robots_meta()`, returns generated robots metadata.
+			* `get_current_post_type()`, shorthand for two other methods to (1) get an estimated post type from the front-end query, with page-as-archive support. (2) Also works extensively in the admin area.
+			* `get_image_uploader_form()`, returns image uploader form button.
+				* This is an abstraction of the `get_social_image_uploader_form()` and `get_logo_uploader_form()` methods, both now call the new one for it has an interpolable API.
+			* `get_modified_time()`, returns the modified time of the current post.
+			* `get_redirect_url()`, returns the redirect URL for the current query. Also accepts arguments.
+			* `get_seo_settings_page_url()`, replaces `seo_settings_page_url()`.
+			* `is_profile_edit()`, tells if (true/false) we're on a user or profile edit page.
+			* `og_updated_time()`, disjointed from `article_modified_time()`, outputs `og:updated_time` meta tag.
 			* `render_element`, do not use. Useful for generating meta tags with few inputs. Escapes for you.
 				* This method is marked 'protected' for we have other plans with it in the future.
-			* `og_updated_time()`, disjointed from `article_modified_time()`, outputs `og:updated_time` meta tag.
-			* `get_modified_time()`, returns the modified time of the current post.
-			* `init_ajax_actions()`, self explanatory, right?
-			* `get_redirect_url()`, returns the redirect URL for the current query. Also accepts arguments.
-			* `is_profile_edit()`, tells if (true/false) we're on a user or profile edit page.
 			* `s_user_meta()`, sanitizes (registered) TSF profile metadata.
-			* `update_single_user_meta_item()`, replaces `update_user_option`, but it now filters through your input, and it doesn't expect your input to be escaped.
 			* `save_user_meta()`, sanitizes and saves the user metadata for TSF.
-			* We changed these for get them in sync with post and term meta:
-				* `get_user_meta_item()`, replaces the now deprecated `get_user_option()`.
-				* `get_current_post_author_meta_item()`, replaces the now deprecated `get_current_author_option()`.
+			* We added these to get the names in sync with post-and term meta:
 				* `get_current_post_author_meta()`, returns all TSF author metadata.
+				* `get_current_post_author_meta_item()`, replaces the now deprecated `get_current_author_option()`.
+				* `update_single_user_meta_item()`, replaces `update_user_option`, but it now filters through your input, and it doesn't expect your input to be escaped.
 				* `get_user_meta_defaults()`, replaces the now deprecated `get_default_user_data()`.
+				* `get_user_meta_item()`, replaces the now deprecated `get_user_option()`.
 		* **Improved:**
 			* `can_i_use()`, fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
-			* `is_static_frontpage()` now memoizes the front page ID option.
-			* `s_image_details()` Fixed theoretical issue where a different image could be set when width and height are supplied and either over 4K, but no ID is given.
 			* `get_excluded_ids_from_cache()`
 				1. Now tests against post type exclusions.
 				2. Now considers headlessness. This method runs only on the front-end.
+			* `get_post_meta()`:
+				1. Now considers headlessness.
+				1. now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
 			* `get_timestamp_format()`:
 				1. Added options-override parameter.
 				1. Added return value filter.
 			* `get_term_meta()` now considers headlessness.
-			* `get_post_meta()`:
-				1. Now considers headlessness.
-				1. now returns an empty array when post type isn't supported. This improvement also affects `get_post_meta_item()`, which will return `null`.
 			* `is_blog_page_by_id()` should now be faster thanks to bypassing the options when the input ID is `0`.
+			* `is_static_frontpage()` now memoizes the front page ID option.
+			* `s_image_details()`, fixed theoretical issue where a different image could be set when width and height are supplied and either over 4K, but no ID is given.
 		* **Changed:**
 			* `article_modified_time()` no longer outputs `og:updated_time`. Use `og_updated_time()` instead.
-			* `robots_txt()`, removed object caching support.
 			* `delete_cache()`, the following `$types` are no longer supported: `front`, `post`, `term`, `author`, `robots`, `object`.
-			* `generate_cache_key_by_type()`, removed support for `author`, `frontpage`, `page`, `post`, `attachment`, `singular`, and `term`.
 			* `delete_main_cache()`, no longer flushes `front`, `robots`, and `object` cache.
 			* `delete_post_cache()`, no longer flushes `post` object cache.
 			* `generate_cache_key()` no longer returns a key when no `$type` is supplied.
-			* `is_shop()` now has its return value memoized.
+			* `generate_cache_key_by_type()`, removed support for `author`, `frontpage`, `page`, `post`, `attachment`, `singular`, and `term`.
 			* `is_product()` now has its return value memoized.
 			* `is_product_admin()` now has its return value memoized.
+			* `is_shop()` now has its return value memoized.
+			* `robots_txt()`, removed object caching support.
 		* **Removed:**
 			* **Object caching support:** These methods were removed with no alternative available. Calling these methods will output a deprecation notice.
+				* `delete_author_cache()`
+				* `delete_object_cache()`
+				* `generate_cache_key_by_query()`
+				* `generate_front_page_cache_key()`
+				* `get_meta_output_cache_key_by_query()`
+				* `get_meta_output_cache_key_by_type()`
+				* `get_robots_txt_cache_key()`
 				* `object_cache_set()`
 				* `object_cache_get()`
 				* `object_cache_delete()`
-				* `delete_object_cache()`
-				* `get_robots_txt_cache_key()`
-				* `get_meta_output_cache_key_by_query()`
-				* `get_meta_output_cache_key_by_type()`
-				* `generate_cache_key_by_query()`
-				* `generate_front_page_cache_key()`
-				* `delete_author_cache()`
 			* **Deprecated methods:**
-				* All methods deprecated in TSF v4.0.0 or earlier are no longer available. Calling those will result null and void.
+				* All methods deprecated in TSF v4.0.0 or earlier are no longer available. Calling those will result null and void:
+					* `get_default_scripts()`
+					* `enqueue_gutenberg_compat_scripts()`
+					* `enqueue_media_scripts()`
+					* `enqueue_primaryterm_scripts()`
+					* `get_seo_bar()`
+					* `post_status()`
+					* `metabox_scripts()`
+					* `Scripts()`
+					* `doing_ajax()`
+					* `initialize_term_meta()`
+					* `ping_searchengines()`
+					* `ping_google()`
+					* `ping_bing()`
+					* `get_sitemap_xsl_url()`
+					* `get_sitemap_xml_url()`
+					* `output_sitemap_xsl_stylesheet()`
+					* `post_type_supports_custom_seo()`
+					* `taxonomy_supports_custom_seo()`
+					* `get_taxonomial_canonical_url()`
+					* `get_custom_field()`
+					* `get_schema_image()`
+					* `get_social_image()`
+					* `get_social_image_url_from_home_meta()`
+					* `get_social_image_url_from_post_meta()`
+					* `get_social_image_url_from_seo_settings()`
+					* `get_social_image_url_from_post_thumbnail()`
+					* `get_social_image_url_from_attachment()`
+					* `get_image_from_woocommerce_gallery()`
+					* `get_header_image()`
+					* `get_site_icon()`
+					* `get_site_logo()`
+					* `sanitize_field_id()`
 			* **Protected:**
 				* `init_term_meta()` is now protected; it always should've been.
 		* **Info:**
 			* **The following methods are now marked for deprecation:**
 				* *"Marked" means that you should treat them as deprecated, but we honor them as maintained until the next major update.*
-				* `robots_meta()`, use `generate_robots_meta()` instead.
-				* `is_robots_meta_noindex_set_by_args()`. Use `generate_robots_meta()` instead.
 				* `append_php_query()`. Use `append_url_query()` instead.
-				* `get_html_output()`.
+				* `attention()`
+				* `attention_description()`
+				* `attention_description_noesc()`
+				* `attention_noesc()`
 				* `can_do_sitemap_robots()`.
-				* `nav_tab_wrapper()`. Use `\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper()` instead.
-				* `inpost_flex_nav_tab_wrapper()`. Use `\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper()` instead.
-				* `get_social_image_uploader_form()`. Use `get_image_uploader_form()` instead.
-				* `get_logo_uploader_form()`. Use `get_logo_uploader_form()` instead.
-				* `seo_settings_page_url()`. Use `get_seo_settings_page_url()` instead.
-				* `get_field_name()`
-				* `field_name()`
-				* `get_field_id()`
-				* `field_id()`
 				* `code_wrap()`
 				* `code_wrap_noesc()`
 				* `description()`
 				* `description_noesc()`
-				* `attention()`
-				* `attention_noesc()`
-				* `attention_description()`
-				* `attention_description_noesc()`
-				* `wrap_fields()`
+				* `field_id()`
+				* `field_name()`
+				* `get_author_option()`. Use `get_user_meta_item()` instead.
+				* `get_current_author_option()`. Use `get_current_post_author_meta_item()` instead.
+				* `get_default_user_data()`. Use `get_user_meta_defaults()` instead.
+				* `get_field_id()`
+				* `get_field_name()`
+				* `get_html_output()`.
+				* `get_image_uploader_form()`
+				* `get_is_conditional_checked()`
+				* `get_logo_uploader_form()`. Use `get_logo_uploader_form()` instead.
+				* `get_social_image_uploader_form()`. Use `get_image_uploader_form()` instead.
+				* `get_user_option()`. Use `get_user_meta()` or `get_user_meta_item()` instead.
+				* `is_conditional_checked()`
+				* `is_default_checked()`
+				* `is_robots_meta_noindex_set_by_args()`. Use `generate_robots_meta()` instead.
+				* `is_warning_checked()`
+				* `nav_tab_wrapper()`.
+				* `inpost_flex_nav_tab_wrapper()`.
+				* `seo_settings_page_url()`. Use `get_seo_settings_page_url()` instead.
 				* `make_data_attributes()`
 				* `make_checkbox()`
 				* `make_checkbox_array()`
 				* `make_single_select_form()`
 				* `make_info()`
-				* `is_default_checked()`
-				* `is_warning_checked()`
-				* `get_is_conditional_checked()`
-				* `is_conditional_checked()`
-				* `get_image_uploader_form()`
 				* `output_character_counter_wrap()`
 				* `output_pixel_counter_wrap()`
-				* `get_default_user_data()`. Use `get_user_meta_defaults()` instead.
-				* `get_user_option()`. Use `get_user_meta()` or `get_user_meta_item()` instead.
-				* `get_author_option()`. Use `get_user_meta_item()` instead.
-				* `get_current_author_option()`. Use `get_current_post_author_meta_item()` instead.
+				* `robots_meta()`, use `generate_robots_meta()` instead.
 				* `update_user_option()`. Use `update_single_user_meta_item()` instead.
+				* `wrap_fields()`
 			* **The following methods are now marked for deletion:**
 				* `proportionate_dimensions()`.
 	* **For object `The_SEO_Framework\Builders\SeoBar`:**
@@ -500,16 +523,16 @@ Programming:
 * **Function notes:**
 	* **Removed (thank you, https://wpdirectory.net/, for helping us verify):**
 		* `the_seo_framework_active()`
-		* `the_seo_framework_version()`
-		* `the_seo_framework_dot_version()`
-		* `the_seo_framework_options_pagehook()`
-		* `the_seo_framework_get_option()`
-		* `the_seo_framework_title_from_cache()`
 		* `the_seo_framework_description_from_cache()`
-		* `the_seo_framework_the_url_from_cache()`
+		* `the_seo_framework_dot_version()`
+		* `the_seo_framework_get_option()`
 		* `the_seo_framework_is_settings_page()`
-		* `the_seo_framework_update_option()`
 		* `the_seo_framework_options_page_slug()`
+		* `the_seo_framework_options_pagehook()`
+		* `the_seo_framework_the_url_from_cache()`
+		* `the_seo_framework_title_from_cache()`
+		* `the_seo_framework_update_option()`
+		* `the_seo_framework_version()`
 * **Property notes:**
 	* **For object `\The_SEO_Framework\Load` (`the_seo_framework()`):**
 		* **Marked for deprecation:**
@@ -524,48 +547,51 @@ Programming:
 			* Use the new headless mode to hide fields from users when not admin.
 * **Filter notes:**
 	* **Added:**
-		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
 		* `the_seo_framework_enable_noindex_no_posts`, useful for overriding the 404-protection for "empty" archives.
+		* `the_seo_framework_kill_core_robots`; mind that this filter can run twice per page! Use (our) action-hooks to target one or the other... or both.
+		* `the_seo_framework_post_meta_defaults`, replaces `the_seo_framework_inpost_seo_save_defaults`.
 		* `the_seo_framework_timestamp_format`, used to change timestamp formats. [Example usage](https://wordpress.org/support/topic/naver-validation-error-sitemap/#post-14623125). We advise not sending seconds, because small automated atomic-time fixes on your server may cause changes noted unscrupulously.
 		* `the_seo_framework_save_user_data`, allows you to modify or add to the user meta saved by The SEO Framework.
+		* `the_seo_framework_user_meta_defaults`, allows you to adjust the user meta defaults.
 	* **Changed:**
 		* `the_seo_framework_get_options`, `the_seo_framework_post_meta`, & `the_seo_framework_term_meta`:
 			1. Now considers headlessness.
 			1. Now returns a 3rd parameter: boolean `$headless`.
+		* `the_seo_framework_is_shop`, `the_seo_framework_is_product`, & `the_seo_framework_is_product_admin` now have their return values memoized.
 		* `the_seo_framework_robots_meta_array` now affects the sitemap. Be wary of performance issues! This filter will be executed thousands of times in one load.
 		* `the_seo_framework_sitemap_nhpt_query_args` & `the_seo_framework_sitemap_hpt_query_args`:
 			1. No longer pass the superfluously redundant `suppress_filters` index.
 			2. Can now have index `post_type` set to `[]` or `''` to cancel the query.
-		* `the_seo_framework_is_shop`, `the_seo_framework_is_product`, & `the_seo_framework_is_product_admin` now have their return values memoized.
 	* **Deprecated:**
+		* `the_seo_framework_inpost_seo_save_defaults`, use filter `the_seo_framework_post_meta_defaults` instead.
 		* `the_seo_framework_load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	* **Removed:**
-		* `the_seo_framework_use_object_cache`, feature no longer available.
-		* `the_seo_framework_save_custom_fields`, this filter was deprecated since 4.0.0.
 		* `the_seo_framework_current_term_meta`, this filter was deprecated since 4.0.0.
+		* `the_seo_framework_save_custom_fields`, this filter was deprecated since 4.0.0.
+		* `the_seo_framework_use_object_cache`, feature no longer available.
 * **Action notes:**
 	* **Added:**
 		* The following actions are now also available on the front-end (instead of only the back-end), and have their callbacks changed.
+			* `wp_ajax_tsf_crop_image`
 			* `wp_ajax_tsf_dismiss_notice`
 			* `wp_ajax_tsf_update_counter`
 			* `wp_ajax_tsf_update_post_data`
-			* `wp_ajax_tsf_crop_image`
-		* `the_seo_framework_before_author_fields` allows you to do stuff.
 		* `the_seo_framework_after_author_fields` allows you to do stuff a little later.
+		* `the_seo_framework_before_author_fields` allows you to do stuff here.
 	* **Removed:**
-		* `wp_ajax_tsf-dismiss-notice`, use `wp_ajax_tsf_dismiss_notice` instead (underscore vs hyphens).
 		* `wp_ajax_the_seo_framework_update_counter`, use `wp_ajax_tsf_update_counter` instead.
 		* `wp_ajax_the_seo_framework_update_post_data`, use `wp_ajax_tsf_update_post_data` instead.
 		* `wp_ajax_tsf-crop-image`, use `wp_ajax_tsf_crop_image` instead (underscore vs hyphens).
+		* `wp_ajax_tsf-dismiss-notice`, use `wp_ajax_tsf_dismiss_notice` instead (underscore vs hyphens).
 * **Other:**
+	* Cleaned up code, removed dumb quirks.
 	* Introduced the `tsfLePostData`-container. This helps assert post data for list-edit, such as whether the post is the front page.
 	* We now use static anonymous functions where appropriate, instead of simple lambda functions, to improve performance and reduce memory consumption.
 	* `tsf_facebook_page` is now `tsf-user-meta[facebook_page]`.
 	* `tsf_twitter_page` is now `tsf-user-meta[twitter_page]`.
-	* Cleaned up code, removed dumb quirks.
-	* `tsf-notice-nonce` is now `tsf_notice_nonce`
-	* `tsf-dismiss-nonce` is now `tsf_dismiss_nonce`
 	* `tsf-dismiss-key` is now `tsf_dismiss_key`
+	* `tsf-dismiss-nonce` is now `tsf_dismiss_nonce`
+	* `tsf-notice-nonce` is now `tsf_notice_nonce`
 
 = 4.1.3 =
 

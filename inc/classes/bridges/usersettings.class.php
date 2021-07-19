@@ -39,6 +39,7 @@ final class UserSettings {
 	 * Prepares the user setting fields.
 	 *
 	 * @since 4.1.4
+	 * @access private
 	 *
 	 * @param \WP_User $user WP_User object.
 	 */
@@ -46,18 +47,17 @@ final class UserSettings {
 
 		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
-		static::_add_user_author_fields( $user );
+		static::add_user_author_fields( $user );
 	}
 
 	/**
 	 * Outputs user profile fields.
 	 *
 	 * @since 4.1.4
-	 * @access private
 	 *
 	 * @param \WP_User $user WP_User object.
 	 */
-	public static function _add_user_author_fields( \WP_User $user ) {
+	private static function add_user_author_fields( \WP_User $user ) {
 		/**
 		 * @since 4.1.4
 		 */

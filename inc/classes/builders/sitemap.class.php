@@ -156,7 +156,7 @@ abstract class Sitemap {
 	 *              3. First parameter can now be a post object.
 	 *              4. If the first parameter is 0, it's now indicative of a home-as-blog page.
 	 *              5. Moved to \The_SEO_Framework\Builders\Sitemap
-	 * @since 4.1.4 TRUE:  Now tests for redirect settings.
+	 * @since 4.1.4 TRUE: Now tests for redirect settings.
 	 *
 	 * @param int $post_id The Post ID to check.
 	 * @return bool True if included, false otherwise.

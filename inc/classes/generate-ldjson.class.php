@@ -187,8 +187,8 @@ class Generate_Ldjson extends Generate_Image {
 		$alternate_name = $kname && $kname !== $blogname ? $kname : '';
 
 		$data += [
-			'name'          => $this->escape_title( $blogname ),
-			'alternateName' => $this->escape_title( $alternate_name ),
+			'name'          => \strlen( $blogname ) ? $this->escape_title( $blogname ) : '',
+			'alternateName' => \strlen( $alternate_name ) ? $this->escape_title( $alternate_name ) : '',
 		];
 
 		//= The searchbox part.

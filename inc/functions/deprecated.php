@@ -33,5 +33,5 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
  * @since 2.3.5 Emptied. (~2.5 months later)
  * @since 2.6.2 Emptied. (~6 months later)
  * @since 2.9.2 Emptied. (~8 months later)
- * @since 4.1.4 Emptied. (~22 months after 3.1.0 deprecations)
+ * @since 4.1.4 Emptied. (~22 months after the 3.1.0 deprecations)
  */

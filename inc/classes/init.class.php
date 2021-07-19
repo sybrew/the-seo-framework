@@ -126,9 +126,8 @@ class Init extends Query {
 	 * Initializes AJAX actions.
 	 *
 	 * @since 4.1.4
-	 * TODO make protected?
 	 */
-	public function init_ajax_actions() {
+	protected function init_ajax_actions() {
 
 		// Admin AJAX for notice dismissal.
 		\add_action( 'wp_ajax_tsf_dismiss_notice', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_dismiss_notice' );
@@ -1041,7 +1040,7 @@ class Init extends Query {
 				 * WordPress should've authenthicated the user at
 				 * WP_REST_Server::check_authentication() -> rest_cookie_check_errors() -> wp_nonce et al.
 				 * before executing the query. For REST_REQUEST can not be true otherwise. Ergo,
-				 * \current_user_can() should work. If it returns true, can trust it's a safe request.
+				 * \current_user_can() should work. If it returns true, we can trust it's a safe request.
 				 * If it returns false, the user may still be logged in, but the request isn't sent via
 				 * WordPress's API with the proper nonces supplied. This is as perfect as it can be.
 				 */

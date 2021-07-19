@@ -23,8 +23,9 @@ function _set_edd_is_product( $is_product, $post ) {
 
 	if ( ! $is_product ) {
 		if ( \function_exists( 'edd_get_download' ) ) {
-			$post_id  = $post ? \get_post( $post ) : \the_seo_framework()->get_the_real_ID();
-			$download = \edd_get_download( $post_id );
+			$download = \edd_get_download(
+				$post ? \get_post( $post ) : \the_seo_framework()->get_the_real_ID()
+			);
 
 			$is_product = ! empty( $download->ID );
 		}

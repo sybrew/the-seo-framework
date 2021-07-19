@@ -159,9 +159,10 @@ class Cache extends Site_Options {
 	 *
 	 * @since 2.8.0
 	 * @since 2.9.3 $type = 'front' now also returns true.
-	 * @since 3.1.0 Added action.
+	 * @since 3.1.0 1. Added action.
+	 *              2. Removed support for $type 'detection'.
 	 * @since 4.0.5 Removed all JSON-LD transient clear calls.
-	 * @since 4.1.4 The following $types are no longer supported: 'front', 'post', 'term', 'author', 'robots', 'object'.
+	 * @since 4.1.4 The following $type's are no longer supported: 'front', 'post', 'term', 'author', 'robots', 'object'.
 	 *
 	 * @param string $type The type
 	 * @param int    $id The post, page or TT ID. Defaults to $this->get_the_real_ID().
@@ -181,9 +182,6 @@ class Cache extends Site_Options {
 
 			case 'excluded_post_ids':
 				$success = $this->delete_excluded_post_ids_transient();
-				break;
-
-			case 'detection':
 				break;
 
 			default:
@@ -455,7 +453,10 @@ class Cache extends Site_Options {
 	 */
 	public function get_excluded_ids_from_cache() {
 
-		if ( $this->is_headless['meta'] ) return [];
+		if ( $this->is_headless['meta'] ) return [
+			'archive' => '',
+			'search'  => '',
+		];
 
 		static $cache = null;
 

@@ -545,7 +545,7 @@ class Core {
 	 *
 	 * @since 4.1.4
 	 *
-	 * @param array ...$arrays The arrays to merge. The rightmost array .
+	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
 	 * @return array The merged arrays.
 	 */
 	public function array_merge_recursive_distinct( array ...$arrays ) {

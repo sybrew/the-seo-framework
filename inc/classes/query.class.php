@@ -598,7 +598,8 @@ class Query extends Core {
 	 * Checks blog page by sole ID.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.4 Improved performance by switching the conditional.
+	 * @since 4.1.4 1. Improved performance by switching the conditional.
+	 *              2. Improved performance by adding memoization.
 	 * @todo deprecate
 	 * @see is_wc_shop() -- that's the correct implementation.
 	 *
@@ -610,7 +611,12 @@ class Query extends Core {
 		// ID 0 cannot be a blog page.
 		if ( ! $id ) return false;
 
-		return (int) \get_option( 'page_for_posts' ) === $id;
+		static $pfp = null;
+
+		if ( \is_null( $pfp ) )
+			$pfp = (int) \get_option( 'page_for_posts' );
+
+		return $pfp === $id;
 	}
 
 	/**
@@ -1045,9 +1051,9 @@ class Query extends Core {
 		static $front_id;
 
 		if ( ! isset( $front_id ) )
-			$front_id = 'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : -1;
+			$front_id = 'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : false;
 
-		return ( $id ?: $this->get_the_real_ID() ) === $front_id;
+		return false !== $front_id && ( $id ?: $this->get_the_real_ID() ) === $front_id;
 	}
 
 	/**

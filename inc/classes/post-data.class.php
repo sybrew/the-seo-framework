@@ -176,19 +176,35 @@ class Post_Data extends Detect {
 	 * @return array The default post meta.
 	 */
 	public function get_post_meta_defaults( $post_id = 0 ) {
+
 		/**
-		 * @since 3.1.0
+		 * @since 4.1.4
 		 * @param array    $defaults
 		 * @param integer  $post_id Post ID.
 		 * @param \WP_Post $post    Post object.
 		 */
-		return (array) \apply_filters_ref_array(
-			'the_seo_framework_inpost_seo_save_defaults', // TODO rename to the_seo_framework_post_meta_defaults. 4.1.0?
+		$defaults = (array) \apply_filters_ref_array(
+			'the_seo_framework_post_meta_defaults',
 			[
 				$this->get_unfiltered_post_meta_defaults(),
 				$post_id,
-				\get_post( $post_id ),
+				$post = \get_post( $post_id ),
 			]
+		);
+
+		/**
+		 * @since 3.1.0
+		 * @since 4.1.4 Deprecated. Use filter `the_seo_framework_post_meta_defaults` instead.
+		 * @deprecated
+		 * @param array    $defaults
+		 * @param integer  $post_id Post ID.
+		 * @param \WP_Post $post    Post object.
+		 */
+		return (array) \apply_filters_deprecated(
+			'the_seo_framework_inpost_seo_save_defaults',
+			[ $defaults, $post_id, $post ],
+			'4.1.4 of The SEO Framework',
+			'the_seo_framework_post_meta_defaults'
 		);
 	}
 
