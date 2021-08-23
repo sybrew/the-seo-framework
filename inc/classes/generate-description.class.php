@@ -487,7 +487,8 @@ class Generate_Description extends Generate {
 		$excerpt = $this->trim_excerpt(
 			$excerpt,
 			0,
-			$this->get_input_guidelines()['description'][ $type ]['chars']['goodUpper']
+			$this->get_input_guidelines()['description'][ $type ]['chars']['goodUpper'],
+			true
 		);
 
 		/**
@@ -848,9 +849,10 @@ class Generate_Description extends Generate {
 	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
 	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
+	 * @param bool   $strip_html      Strip HTML tags from the output
 	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.
 	 */
-	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0 ) {
+	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0, $strip_html = false) {
 
 		// Decode to get a more accurate character length in Unicode.
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
@@ -921,6 +923,9 @@ class Generate_Description extends Generate {
 		} else {
 			// If there's no matches[1], only some form of non-closing-leading punctuation was left in $excerpt. Empty it.
 			$excerpt = '';
+		}
+		if( $strip_html ) {
+			return trim( strip_tags( $excerpt ) );
 		}
 
 		return trim( htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' ) );
