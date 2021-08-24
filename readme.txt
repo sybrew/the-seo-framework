@@ -247,6 +247,19 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.1.5 =
+
+This minor update addresses a breaking change in Gutenberg 11.3.0.
+
+## Detailed log
+
+**For everyone:**
+
+* **Improved:**
+	* Reduced script-payload of TSF's Primary Term selector when using the Block Editor.
+* **Fixed:**
+	* Addressed a breaking chnage in Gutenberg 11.3.0 (WordPress 5.9).
+
 = 4.1.4 =
 
 This minor update packs a major punch. TSF now supports [headless mode](https://kb.theseoframework.com/?p=136), cementing itself as a turnkey solution. We defenestrated the pernicious object caching mechanism, and we updated some options' defaults effective only on new sites. We improved performance iterably, fixed about 12 bugs, and enjoyed the weather. Lastly, we introduced a new API for user meta handling, among other things --- developers that wrote software interfacing with TSF are employed well reading the [detailed changelog](https://theseoframework.com/?p=3727#detailed).
