@@ -801,9 +801,8 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
 
-		if ( null === $post ) {
+		if ( null === $post )
 			$post = \get_post( $this->get_the_real_ID() );
-		}
 
 		return $this->get_primary_term( $post->ID, $term->taxonomy ) ?: $term;
 	}

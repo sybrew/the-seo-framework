@@ -829,7 +829,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.5 : 1. Now decodes the excerpt input, improving accuracy, and so that HTML entities at
 	 *                   the end won't be transformed into gibberish.
 	 * @since 4.1.0 : 1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
-	 *                2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11 ).
+	 *                2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11).
 	 *                   Mind you, this method probably boots PCRE and wptexturize; so, it'll be slower than what we noted--it's
 	 *                   overhead that otherwise WP, the theme, or other plugin would cause anyway. So, deduct that.
 	 *                3. Now recognizes connector and final punctuations for preliminary sentence bounding.
@@ -840,37 +840,56 @@ class Generate_Description extends Generate {
 	 *                7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
 	 *                8. Now returns encoded entities once more. So that the return value can be treated the same as anything else
 	 *                   revolving around descriptions--preventing double transcoding like `&amp;amp; > &amp; > &` instead of `&amp;`.
+	 * @since 4.1.5 : 1. The second parameter now accepts values again. From "current description length" to minimum accepted char length.
+	 *                2. Can now return an empty string when the input string doesn't satisfy the minimum character length.
+	 *                3. The third parameter now defaults to 4096, so no longer unexpected results are created.
+	 *                4. Resolved some backtracking issues.
+	 *                5. Resolved an issue where a character followed by punctuation would cause the match to fail.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
 	 * This is perfect. Please have the courtesy to credit us when taking it. :)
 	 *
 	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
-	 * @param int    $depr            The current excerpt length. No longer needed. Deprecated.
+	 * @param int    $min_char_length The minimum character length. Leave 0 to ignore the requirement.
+	 *                                This is read as a SUGGESTION. Multibyte characters will create inaccuracies.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
 	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.
 	 */
-	public function trim_excerpt( $excerpt, $depr = 0, $max_char_length = 0 ) {
+	public function trim_excerpt( $excerpt, $min_char_length = 1, $max_char_length = 4096 ) {
+
+		// We should _actually_ use mb_strlen, but that's wasteful on resources for something benign.
+		// We'll rectify that later, somewhat, where characters are transformed.
+		// We could also use preg_match_all( '/./u' ); or count( preg_split( '/./u', $excerpt, $min_char_length ) );
+		// But, again, that'll eat CPU cycles.
+		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
 		// Decode to get a more accurate character length in Unicode.
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
 
 		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
-		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|$){1}/su', $max_char_length ), trim( $excerpt ), $matches );
+		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su', $max_char_length ), trim( $excerpt ), $matches );
 		$excerpt = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
 
 		$excerpt = trim( $excerpt );
 
-		if ( ! $excerpt ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
 		$excerpt = htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' );
 		$excerpt = \wptexturize( $excerpt );
 		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
 		/**
-		 * Play with it here: https://regex101.com/r/u0DIgx/5/tests
+		 * Play with it here: https://regex101.com/r/u0DIgx/5/ (old) https://regex101.com/r/G92lUt/3 (new)
 		 *
-		 * TODO fix `.*[\p{Pe}\p{Pf}]$`... it suffers from a backtracing issue. I still can't seem to anchor it...
+		 * TODO Group 4's match is repeated. However, referring to it as (4) will cause it to congeal into 3.
+		 *
+		 * TODO .+[\p{Pe}\p{Pf}](*THEN)\Z              still backtracks; it should just find \Z and see if one char is in front of it.
+		 *   -> [^\p{Pe}\p{Pf}]++.*?[\p{Pe}\p{Pf}]+?\Z would solve it... but I don't trust it; it's populating 4 and 5 in edge-cases.
+		 *
+		 * TODO we can futher optimize this by capturing the last 4 words and refer to that. Of thence more than 3 words
+		 * found, we could simply end the query, mitigating all forms of backtracking. For now, backtracking cannot
+		 * exceed step-count=($max_char_length*2+56) = 160*2+56 = 376, which is perfectly acceptable as a 'worst case'.
 		 *
 		 * Critically optimized, so the $matches don't make much sense. Bear with me:
 		 *
@@ -884,7 +903,7 @@ class Generate_Description extends Generate {
 		 * }
 		 */
 		preg_match(
-			'/(?:^[\p{P}\p{Z}]*?)([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]$(*ACCEPT))|((?(?=.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]$)(?:.*[\p{Pe}\p{Pf}]$|.*[^\P{Po}\p{M}\xBF\xA1:])|.*$(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
+			'/(?:\A[\p{P}\p{Z}]*?)?([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:.+[\p{Pe}\p{Pf}](*THEN)\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:])|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$excerpt,
 			$matches
 		);
@@ -899,6 +918,8 @@ class Generate_Description extends Generate {
 		} elseif ( isset( $matches[1] ) ) {
 			$excerpt = $matches[1];
 		}
+
+		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
 		/**
 		 * @param array $matches: {
@@ -922,6 +943,8 @@ class Generate_Description extends Generate {
 			// If there's no matches[1], only some form of non-closing-leading punctuation was left in $excerpt. Empty it.
 			$excerpt = '';
 		}
+
+		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
 		return trim( htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' ) );
 	}

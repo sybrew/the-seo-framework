@@ -229,6 +229,9 @@ class Core {
 	 * Gets view location.
 	 *
 	 * @since 3.1.0
+	 * @access private
+	 * @TODO add path traversal mitigation via realpath()?
+	 *    -> $file must always be dev-supplied, never user-.
 	 *
 	 * @param string $file The file name.
 	 * @return string The view location.
