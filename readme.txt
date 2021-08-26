@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.1.0
 Tested up to: 5.8
 Requires PHP: 5.6.0
-Stable tag: 4.1.4
+Stable tag: 4.1.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -249,38 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.1.5 =
 
-This minor update adds support for Gutenberg 11.3.0 and improves performance of description generation.
-
-## Detailed log
-
-**For everyone:**
-
-* **Improved:**
-	* Improved load-times and responsiveness of the Primary Term selection when using the Block Editor.
-	* Empty descriptions are no longer processed, saving some generation performance.
-* **Fixed:**
-	* Addressed a backward-compatible-breaking change in Gutenberg 11.3.0 (WordPress 5.9).
-	* When deleting a term once marked primary, the post now correctly shows the real primary term when using Gutenberg, instead of performing a faulty guess.
-	* Resolved backtracking issues in description generation, improving performance.
-	* Resolved an issue where the description generation wouldn't work when the content begins with a single character followed by closing punctuation.
-
-**For developers:**
-
-* **Changed:**
-	* `the_seo_framework()->trim_excerpt()`
-		1. The second parameter now accepts values again. It's now "minimum accepted char length", from deprecated "current description length".
-			* This change is neat because a deprecated input would incur the total description length, resulting in it being ignored.
-		2. Can now return an empty string when the input string doesn't satisfy the minimum character length.
-		3. The third parameter (maximum character length) now defaults to `4096`, so no longer unexpected results are created from it being `0`.
-		4. Resolved some backtracking issues.
-		5. Resolved an issue where a character followed by punctuation would cause the match to fail.
-	* `the_seo_framework()->get_primary_term()`
-		1. Added memoization.
-		2. The first and second parameters are now required.
-	* `the_seo_framework()->get_primary_term_id()`
-		1. Now validates if the stored term ID's term exists (for the post or at all); defaults to id `0` on failure (as it always did).
-		2. The first and second parameters are now required.
-
+This minor update adds support for Gutenberg 11.3.0 and [fixes a few bugs](https://theseoframework.com/?p=3756#detailed).
 
 = 4.1.4 =
 

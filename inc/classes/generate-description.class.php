@@ -851,7 +851,7 @@ class Generate_Description extends Generate {
 	 * This is perfect. Please have the courtesy to credit us when taking it. :)
 	 *
 	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
-	 * @param int    $min_char_length The minimum character length. Leave 0 to ignore the requirement.
+	 * @param int    $min_char_length The minimum character length. Set to 0 to ignore the requirement.
 	 *                                This is read as a SUGGESTION. Multibyte characters will create inaccuracies.
 	 * @param int    $max_char_length At what point to shave off the excerpt.
 	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.

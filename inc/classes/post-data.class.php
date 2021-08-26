@@ -842,6 +842,8 @@ class Post_Data extends Detect {
 		// Users can alter the term list via quick/bulk edit, but cannot set a primary term that way.
 		// Users can also delete a term from the site that was previously assigned as primary.
 		// So, test if the term still exists for the post.
+		// Although 'get_the_terms()' is an expensive function, it memoizes, and
+		// is always called by WP before we fetch a primary term. So, 0 overhead here.
 		$terms        = \get_the_terms( $post_id, $taxonomy );
 		$primary_term = false;
 
