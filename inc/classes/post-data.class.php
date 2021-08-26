@@ -821,8 +821,10 @@ class Post_Data extends Detect {
 	 * Returns the primary term for post.
 	 *
 	 * @since 3.0.0
-	 * @since 4.1.5 1. Added memoization.
-	 *              2. The first and second parameters are now required.
+	 * @since 4.1.5   1. Added memoization.
+	 *                2. The first and second parameters are now required.
+	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
+	 *                2. This method now converts the post meta to an integer, making the comparison work again.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -835,7 +837,7 @@ class Post_Data extends Detect {
 		if ( isset( $primary_terms[ $post_id ][ $taxonomy ] ) )
 			return $primary_terms[ $post_id ][ $taxonomy ];
 
-		$primary_id = \get_post_meta( $post_id, '_primary_term_' . $taxonomy, true ) ?: 0;
+		$primary_id = (int) \get_post_meta( $post_id, '_primary_term_' . $taxonomy, true ) ?: 0;
 
 		if ( ! $primary_id ) return $primary_terms[ $post_id ][ $taxonomy ] = false;
 
@@ -846,6 +848,9 @@ class Post_Data extends Detect {
 		// is always called by WP before we fetch a primary term. So, 0 overhead here.
 		$terms        = \get_the_terms( $post_id, $taxonomy );
 		$primary_term = false;
+
+		// Test for otherwise foreach emits a PHP warning in the unlikely event a post's taxonomy is gone.
+		if ( ! \is_array( $terms ) ) return $primary_terms[ $post_id ][ $taxonomy ] = false;
 
 		foreach ( $terms as $term ) {
 			if ( $primary_id === (int) $term->term_id ) {
