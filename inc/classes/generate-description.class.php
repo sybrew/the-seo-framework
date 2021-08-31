@@ -112,6 +112,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @since 4.0.0 Added term meta item checks.
+	 * @since 4.1.6 No longer returns an escaped custom field description.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -125,17 +126,17 @@ class Generate_Description extends Generate {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field();
+					 ?: $this->get_description_from_custom_field( null, false );
 			} else {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field();
+					 ?: $this->get_description_from_custom_field( null, false );
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_post_meta_item( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field();
+				 ?: $this->get_description_from_custom_field( null, false );
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'og_description' )
-				 ?: $this->get_description_from_custom_field();
+				 ?: $this->get_description_from_custom_field( null, false );
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
@@ -150,6 +151,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
+	 * @since 4.1.6 No longer returns an escaped custom field description.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -162,18 +164,18 @@ class Generate_Description extends Generate {
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'og_description', $args['id'] )
-				 ?: $this->get_description_from_custom_field( $args );
+				 ?: $this->get_description_from_custom_field( $args, false );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args );
+					 ?: $this->get_description_from_custom_field( $args, false );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args );
+					 ?: $this->get_description_from_custom_field( $args, false );
 			} else {
 				$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args );
+					 ?: $this->get_description_from_custom_field( $args, false );
 			}
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
@@ -238,6 +240,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
+	 * @since 4.1.6 No longer returns an escaped custom field description.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -253,23 +256,23 @@ class Generate_Description extends Generate {
 					 ?: $this->get_post_meta_item( '_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field()
+					 ?: $this->get_description_from_custom_field( null, false )
 					 ?: '';
 			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
-					?: $this->get_description_from_custom_field()
+					?: $this->get_description_from_custom_field( null, false )
 					?: '';
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_post_meta_item( '_twitter_description' )
 				 ?: $this->get_post_meta_item( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field()
+				 ?: $this->get_description_from_custom_field( null, false )
 				 ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'tw_description' )
 				 ?: $this->get_term_meta_item( 'og_description' )
-				 ?: $this->get_description_from_custom_field()
+				 ?: $this->get_description_from_custom_field( null, false )
 				 ?: '';
 		}
 		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
@@ -285,6 +288,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
+	 * @since 4.1.6 No longer returns an escaped custom field description.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -297,7 +301,7 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'tw_description', $args['id'] )
 				 ?: $this->get_term_meta_item( 'og_description', $args['id'] )
-				 ?: $this->get_description_from_custom_field( $args )
+				 ?: $this->get_description_from_custom_field( $args, false )
 				 ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
@@ -305,17 +309,17 @@ class Generate_Description extends Generate {
 					 ?: $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args )
+					 ?: $this->get_description_from_custom_field( $args, false )
 					 ?: '';
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args )
+					 ?: $this->get_description_from_custom_field( $args, false )
 					 ?: '';
 			} else {
 				$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args )
+					 ?: $this->get_description_from_custom_field( $args, false )
 					 ?: '';
 			}
 		}
@@ -446,6 +450,9 @@ class Generate_Description extends Generate {
 	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
 	 * @since 3.2.2 Now converts HTML characters prior trimming.
 	 * @uses $this->generate_description()
+	 * @TODO Should we enforce a minimum description length, where this result is ignored? e.g., use the input
+	 *       guidelines' 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
+	 *       This isn't truly helpful, since then search engines can truly fetch whatever with zero guidance.
 	 *
 	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
 	 *                           Accepts int values for backward compatibility.
@@ -479,11 +486,9 @@ class Generate_Description extends Generate {
 		 */
 		$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, 0, $args );
 
-		// TODO Should we enforce a minimum description length, where this result is ignored?
-		// e.g. use the input guidelines 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
 		// This page has a generated description that's far too short: https://theseoframework.com/em-changelog/1-0-0-amplified-seo/.
 		// A direct directory-'site:' query will accept the description outputted--anything else will ignore it...
-		// We should then create a new method which processes this with a parameter for the minimum length, so we can optimize it for performance.
+		// We should not work around that, because it won't direct in the slightest what to display.
 		$excerpt = $this->trim_excerpt(
 			$excerpt,
 			0,

@@ -158,7 +158,7 @@ final class Images {
 			);
 			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match(), but the opcodes won't help.
 			preg_match_all(
-				'/<img[^>]+src=(\"|\')?([^\"\'>\s]+)\1?.*?>/mi',
+				'/<img[^>]+?src=(\"|\')?([^\"\'>\s]+)\1?[^>]*?>/mi',
 				$content,
 				$matches,
 				PREG_SET_ORDER

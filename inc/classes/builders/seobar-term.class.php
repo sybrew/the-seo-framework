@@ -211,7 +211,7 @@ final class SeoBar_Term extends SeoBar {
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $title_args, false );
+		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $title_args );
 
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
@@ -231,7 +231,7 @@ final class SeoBar_Term extends SeoBar {
 				$item['assess']['prefixed'] = $cache['assess']['prefixed'];
 			}
 
-			$title_part = static::$tsf->get_filtered_raw_generated_title( $title_args, false );
+			$title_part = static::$tsf->get_filtered_raw_generated_title( $title_args );
 		}
 
 		if ( ! $title_part ) {

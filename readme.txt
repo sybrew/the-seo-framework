@@ -247,9 +247,37 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.1.6 =
+
+In this update, we polished the final rough bits we found.
+
+**For everyone:**
+
+* **Improved:**
+	* Images are now fetched faster from the content.
+	* The SEO Bar now parses the title item faster.
+	* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
+	* TODO Open Graph, Twitter, and meta titles are now regenerated faster.
+	* TODO The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
+	* TODO The robots-meta is now generated on-demand only, meaning it generates sitemaps faster.
+* **Fixed:**
+	* _Is this OUR bug? TODO_ Loading categories in the block-editor no longer takes an hour or two.
+
+**For developers:**
+
+* **Object notes:**
+	* For object `\The_SEO_Framework\Load` (callable via `the_seo_framework()`):
+		* **Methods added:**
+			* TODO `memo`, this method stores and returns memoized values for the caller.
+		* **Methods changed:**
+			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+	* For object `\The_SEO_Framework\Bridges\Ping`
+			* TODO `engage_pinging_cron()` is now deprecated. Use TODO instead.
+				* Did anyone actually use this? Is there ANY conceivable reason?
+
 = 4.1.5.1 =
 
-This patch addresses an oversight where primary terms could no longer get fetched.
+This patch addresses an oversight whence primary terms could no longer get fetched.
 
 = 4.1.5 =
 
