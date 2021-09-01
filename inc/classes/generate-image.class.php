@@ -54,8 +54,7 @@ class Generate_Image extends Generate_Url {
 	 * }
 	 */
 	public function get_image_details_from_cache( $single = false ) {
-		static $cache = [];
-		return isset( $cache[ $single ] ) ? $cache[ $single ] : $cache[ $single ] = $this->get_image_details( null, $single );
+		return memo( null, $single ) ?? memo( $this->get_image_details( null, $single ), $single );
 	}
 
 	/**

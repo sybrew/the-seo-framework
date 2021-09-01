@@ -112,7 +112,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.1.6 No longer returns an escaped custom field description.
+	 * @since 4.2.0 No longer returns an escaped custom field description.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -151,7 +151,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.1.6 No longer returns an escaped custom field description.
+	 * @since 4.2.0 No longer returns an escaped custom field description.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -240,7 +240,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.1.6 No longer returns an escaped custom field description.
+	 * @since 4.2.0 No longer returns an escaped custom field description.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -288,7 +288,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.1.6 No longer returns an escaped custom field description.
+	 * @since 4.2.0 No longer returns an escaped custom field description.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -874,7 +874,7 @@ class Generate_Description extends Generate {
 
 		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
 		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su', $max_char_length ), trim( $excerpt ), $matches );
-		$excerpt = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
+		$excerpt = trim( ( $matches[0] ?? '' ) ?: '' );
 
 		$excerpt = trim( $excerpt );
 

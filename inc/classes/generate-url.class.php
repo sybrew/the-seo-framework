@@ -74,8 +74,7 @@ class Generate_Url extends Generate_Title {
 	 * @return string The current URL.
 	 */
 	public function get_current_canonical_url() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->get_canonical_url();
+		return memo() ?? memo( $this->get_canonical_url() );
 	}
 
 	/**
@@ -91,11 +90,12 @@ class Generate_Url extends Generate_Title {
 	 * @return string The current permalink.
 	 */
 	public function get_current_permalink() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( [
-			'id'       => $this->get_the_real_ID(),
-			'taxonomy' => $this->get_current_taxonomy(),
-		] );
+		return memo() ?? memo(
+			$this->create_canonical_url( [
+				'id'       => $this->get_the_real_ID(),
+				'taxonomy' => $this->get_current_taxonomy(),
+			] )
+		);
 	}
 
 	/**
@@ -107,11 +107,12 @@ class Generate_Url extends Generate_Title {
 	 * @return string The home URL.
 	 */
 	public function get_homepage_permalink() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->create_canonical_url( [
-			'id'       => $this->get_the_front_page_ID(),
-			'taxonomy' => '',
-		] );
+		return memo() ?? memo(
+			$this->create_canonical_url( [
+				'id'       => $this->get_the_front_page_ID(),
+				'taxonomy' => '',
+			] )
+		);
 	}
 
 	/**
@@ -348,11 +349,15 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via $this->paged().
 	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
 	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
+	 * @since 4.2.0 Added memoization.
 	 *
 	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public function get_singular_canonical_url( $id = null ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $id ) ) return $memo;
 
 		$url = \wp_get_canonical_url( $id ) ?: '';
 
@@ -367,7 +372,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		return $url;
+		return memo( $url, $id );
 	}
 
 	/**
@@ -680,13 +685,14 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function add_url_pagination( $url, $page = null, $use_base = null ) {
 
-		$_page = isset( $page ) ? $page : max( $this->paged(), $this->page() );
+		$_page = $page ?? max( $this->paged(), $this->page() );
 
 		if ( $_page < 2 )
 			return $url;
 
-		$_use_base = isset( $use_base ) ? $use_base :
-			$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive();
+		$_use_base = $use_base ?? (
+			$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive()
+		);
 
 		if ( $this->pretty_permalinks ) {
 
@@ -742,17 +748,17 @@ class Generate_Url extends Generate_Title {
 		if ( $this->pretty_permalinks ) {
 			// Defensive programming...
 			static $user_slash, $base;
-			$user_slash = isset( $user_slash ) ? $user_slash :
-				( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
-			$base       = isset( $base ) ? $base : $GLOBALS['wp_rewrite']->pagination_base;
+			$user_slash = $user_slash ?? ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
+			$base       = $base ?? $GLOBALS['wp_rewrite']->pagination_base;
 
-			$_page = isset( $page ) ? $page : max( $this->paged(), $this->page() );
+			$_page = $page ?? max( $this->paged(), $this->page() );
 
 			if ( $_page > 1 ) {
 				$_url = $url;
 
-				$_use_base = isset( $use_base ) ? $use_base
-					: $this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive();
+				$_use_base = $use_base ?? (
+					$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive()
+				);
 
 				if ( $_use_base ) {
 					$find = '/' . $base . '/' . $_page . $user_slash;
@@ -838,9 +844,9 @@ class Generate_Url extends Generate_Title {
 				// FIXME: Core Report: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
 				$_query = $GLOBALS['wp_query']->query;
 				$_date  = [
-					'y' => isset( $_query['year'] ) ? $_query['year'] : '',
-					'm' => isset( $_query['monthnum'] ) ? $_query['monthnum'] : '',
-					'd' => isset( $_query['day'] ) ? $_query['day'] : '',
+					'y' => $_query['year'] ?? '',
+					'm' => $_query['monthnum'] ?? '',
+					'd' => $_query['day'] ?? '',
 				];
 
 				$url = \add_query_arg( [ 'm' => implode( '', $_date ) ], $home );
@@ -850,12 +856,11 @@ class Generate_Url extends Generate_Title {
 				// Generate shortlink for object type and slug.
 				$object = \get_queried_object();
 
-				$tax  = isset( $object->taxonomy ) ? $object->taxonomy : '';
-				$slug = isset( $object->slug ) ? $object->slug : '';
+				$tax  = $object->taxonomy ?? '';
+				$slug = $object->slug ?? '';
 
-				if ( $tax && $slug ) {
+				if ( $tax && $slug )
 					$url = \add_query_arg( [ $tax => $slug ], $home );
-				}
 			}
 		} elseif ( $this->is_search() ) {
 			$url = \add_query_arg( [ 's' => \get_search_query( false ) ], $home );
@@ -982,6 +987,9 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_home_host() {
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
 		static $cache = null;
 
 		if ( isset( $cache ) )
@@ -989,12 +997,12 @@ class Generate_Url extends Generate_Title {
 
 		$parsed_url = parse_url( \get_home_url() );
 
-		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+		$host = $parsed_url['host'] ?? '';
 
 		if ( $host && isset( $parsed_url['port'] ) )
 			$host .= ':' . $parsed_url['port'];
 
-		return $cache = $host;
+		return memo( $host );
 	}
 
 	/**

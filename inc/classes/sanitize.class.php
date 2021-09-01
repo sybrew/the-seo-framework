@@ -154,10 +154,10 @@ class Sanitize extends Admin_Pages {
 		//= Category and Tag robots backward compat.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
 			$robots_option_id   = $this->get_robots_taxonomy_option_id( $r );
-			$new_robots_options = isset( $new_value[ $robots_option_id ] ) ? $new_value[ $robots_option_id ] : [];
+			$new_robots_options = $new_value[ $robots_option_id ] ?? [];
 
-			$new_category_option = isset( $new_robots_options['category'] ) ? $new_robots_options['category'] : 0;
-			$new_tag_option      = isset( $new_robots_options['post_tag'] ) ? $new_robots_options['post_tag'] : 0;
+			$new_category_option = $new_robots_options['category'] ?? 0;
+			$new_tag_option      = $new_robots_options['post_tag'] ?? 0;
 
 			// Don't compare to old option--it's never reliably set; it might skip otherwise, although it's always correct.
 			// Do not resanitize. Others might've overwritten that, let's keep their value.
@@ -620,8 +620,8 @@ class Sanitize extends Admin_Pages {
 			// Array of suboption values to loop through
 			$old_value = \get_option( $option, [] );
 			foreach ( $filters[ $option ] as $suboption => $filter ) {
-				$old_value[ $suboption ] = isset( $old_value[ $suboption ] ) ? $old_value[ $suboption ] : '';
-				$new_value[ $suboption ] = isset( $new_value[ $suboption ] ) ? $new_value[ $suboption ] : '';
+				$old_value[ $suboption ] = $old_value[ $suboption ] ?? '';
+				$new_value[ $suboption ] = $new_value[ $suboption ] ?? '';
 				$new_value[ $suboption ] = $this->do_filter( $filter, $new_value[ $suboption ], $old_value[ $suboption ], $option, $suboption );
 			}
 			return $new_value;
@@ -1916,15 +1916,10 @@ class Sanitize extends Admin_Pages {
 			$args = $default_args;
 		} else {
 			foreach ( [ 'space', 'clear' ] as $type ) {
-				if ( isset( $args[ $type ] ) ) {
-					if ( ! $args[ $type ] ) {
-						$args[ $type ] = [];
-					} else {
-						$args[ $type ] = (array) $args[ $type ];
-					}
-				}
+				if ( isset( $args[ $type ] ) )
+					$args[ $type ] = $args[ $type ] ? (array) $args[ $type ] : [];
 			}
-			$args['strip'] = isset( $args['strip'] ) ? $args['strip'] : $default_args['strip'];
+			$args['strip'] = $args['strip'] ?? $default_args['strip'];
 		}
 
 		// Clear first, so there's less to process; then add spaces.

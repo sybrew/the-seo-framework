@@ -31,8 +31,8 @@ foreach ( $tabs as $tab => $value ) :
 		<?php
 		// No-JS tabs.
 		if ( $use_tabs ) :
-			$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-			$name     = isset( $value['name'] ) ? $value['name'] : '';
+			$dashicon = $value['dashicon'] ?? '';
+			$name     = $value['name'] ?? '';
 
 			?>
 			<div class="hide-if-tsf-js tsf-content-no-js">
@@ -46,12 +46,9 @@ foreach ( $tabs as $tab => $value ) :
 			<?php
 		endif;
 
-		$callback = isset( $value['callback'] ) ? $value['callback'] : '';
-
-		if ( $callback ) {
-			$params = isset( $value['args'] ) ? [ $value['args'] ] : [];
-			call_user_func_array( $callback, $params );
-		}
+		// TODO discrepancy with edit/wrap-content! Use something new? do_action()!
+		if ( ! empty( $value['callback'] ) )
+			call_user_func_array( $value['callback'], [ ( $value['args'] ?? null ) ] );
 		?>
 	</div>
 	<?php

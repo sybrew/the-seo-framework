@@ -562,7 +562,7 @@ final class Scripts {
 		foreach ( $templates as $t ) {
 			static::$templates[ $id ][] = [
 				$t['file'],
-				isset( $t['args'] ) ? $t['args'] : [],
+				$t['args'] ?? [],
 			];
 		}
 	}

@@ -520,11 +520,9 @@ switch ( $instance ) :
 
 		// Fetch image placeholder.
 		if ( $this->is_static_frontpage( $post_id ) && $this->get_option( 'homepage_social_image_url' ) ) {
-			$image_details     = current( $this->get_image_details( $_generator_args, true, 'social', true ) );
-			$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+			$image_placeholder = current( $this->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
 		} else {
-			$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
-			$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+			$image_placeholder = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
 		}
 
 		?>

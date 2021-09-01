@@ -60,8 +60,8 @@ namespace The_SEO_Framework\Bootstrap;
  * @return array The default site options.
  */
 function _upgrade_default_site_options() {
-	static $cache;
-	return isset( $cache ) ? $cache : $cache = \the_seo_framework()->get_default_site_options();
+	static $memo;
+	return $memo ?? ( $memo = \the_seo_framework()->get_default_site_options() );
 }
 
 /**
@@ -73,8 +73,8 @@ function _upgrade_default_site_options() {
  * @return string The prior-to-upgrade TSF db version.
  */
 function _previous_db_version() {
-	static $cache;
-	return isset( $cache ) ? $cache : $cache = \get_option( 'the_seo_framework_upgraded_db_version', '0' );
+	static $memo;
+	return $memo ?? ( $memo = \get_option( 'the_seo_framework_upgraded_db_version', '0' ) );
 }
 
 /**

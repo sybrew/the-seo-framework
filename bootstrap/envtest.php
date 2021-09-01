@@ -78,7 +78,7 @@ function the_seo_framework_pre_boot_test() {
 	}
 
 	$requirements = array(
-		'php' => 50600,
+		'php' => 70200,
 		'wp'  => '5.1-dev',
 	);
 

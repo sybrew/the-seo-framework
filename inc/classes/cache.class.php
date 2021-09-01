@@ -249,9 +249,7 @@ class Cache extends Site_Options {
 	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
 	 */
 	public function set_transient( $transient, $value, $expiration = 0 ) {
-
-		if ( $this->the_seo_framework_use_transients )
-			\set_transient( $transient, $value, $expiration );
+		$this->the_seo_framework_use_transients and \set_transient( $transient, $value, $expiration );
 	}
 
 	/**
@@ -322,11 +320,7 @@ class Cache extends Site_Options {
 	 * @return string The generated cache key by query or type.
 	 */
 	public function generate_cache_key( $id = 0, $taxonomy = '', $type = null ) {
-
-		if ( isset( $type ) )
-			return $this->generate_cache_key_by_type( $id, $taxonomy, $type );
-
-		return '';
+		return isset( $type ) ? $this->generate_cache_key_by_type( $id, $taxonomy, $type ) : '';
 	}
 
 	/**
@@ -429,7 +423,9 @@ class Cache extends Site_Options {
 			]
 		);
 
+		// TODO move this outside of this call?
 		if ( $ping_use_cron ) {
+			// This name is wrong. It's not exclusively used for pinging.
 			\The_SEO_Framework\Bridges\Ping::engage_pinging_cron();
 		} else {
 			\The_SEO_Framework\Bridges\Ping::ping_search_engines();

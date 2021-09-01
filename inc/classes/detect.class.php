@@ -208,8 +208,6 @@ class Detect extends Render {
 		if ( ! $use_cache )
 			return $this->detect_plugin_multi( $plugins );
 
-		static $cache = [];
-
 		$mapped = [];
 
 		// Prepare multidimensional array for cache.
@@ -227,10 +225,7 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$key = serialize( $mapped );
 
-		if ( isset( $cache[ $key ] ) )
-			return $cache[ $key ];
-
-		return $cache[ $key ] = $this->detect_plugin_multi( $plugins );
+		return memo( null, $key ) ?: memo( $this->detect_plugin_multi( $plugins ), $key );
 	}
 
 	/**
@@ -250,40 +245,28 @@ class Detect extends Render {
 	public function detect_plugin_multi( array $plugins ) {
 
 		// Check for globals
-		if ( isset( $plugins['globals'] ) ) {
-			foreach ( $plugins['globals'] as $name ) {
-				if ( ! isset( $GLOBALS[ $name ] ) ) {
-					return false;
-				}
-			}
+		foreach ( $plugins['globals'] ?? [] as $name ) {
+			if ( ! isset( $GLOBALS[ $name ] ) )
+				return false;
 		}
 
 		// Check for constants
-		if ( isset( $plugins['constants'] ) ) {
-			foreach ( $plugins['constants'] as $name ) {
-				if ( ! \defined( $name ) ) {
-					return false;
-				}
-			}
+		foreach ( $plugins['constants'] ?? [] as $name ) {
+			if ( ! \defined( $name ) )
+				return false;
 		}
 
 		// Check for functions
-		if ( isset( $plugins['functions'] ) ) {
-			foreach ( $plugins['functions'] as $name ) {
-				if ( ! \function_exists( $name ) ) {
-					return false;
-				}
-			}
+		foreach ( $plugins['functions'] ?? [] as $name ) {
+			if ( ! \function_exists( $name ) )
+				return false;
 		}
 
 		// Check for classes
-		if ( isset( $plugins['classes'] ) ) {
-			foreach ( $plugins['classes'] as $name ) {
-				// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
-				if ( ! class_exists( $name, false ) ) {
-					return false;
-				}
-			}
+		foreach ( $plugins['classes'] ?? [] as $name ) {
+			// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+			if ( ! class_exists( $name, false ) )
+				return false;
 		}
 
 		// All classes, functions and constant have been found to exist
@@ -1013,18 +996,13 @@ class Detect extends Render {
 	 */
 	public function post_type_supports_taxonomies( $post_type = '' ) {
 
-		static $cache = [];
-
-		if ( isset( $cache[ $post_type ] ) )
-			return $cache[ $post_type ];
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
 
 		$post_type = $post_type ?: $this->get_current_post_type();
-		if ( ! $post_type ) return false;
 
-		if ( \get_object_taxonomies( $post_type, 'names' ) )
-			return $cache[ $post_type ] = true;
-
-		return $cache[ $post_type ] = false;
+		// Return false if no post type if found -- do not memo that, for query call might be too early.
+		return $post_type && memo( (bool) \get_object_taxonomies( $post_type, 'names' ), $post_type );
 	}
 
 	/**
@@ -1036,14 +1014,9 @@ class Detect extends Render {
 	 * @return array The supported post types.
 	 */
 	public function get_supported_post_types() {
-
-		static $cache = [];
-		// Can't be recursively empty. Right?
-		if ( $cache ) return $cache;
-
-		return $cache = array_values(
+		return memo() ?? memo( array_values(
 			array_filter( $this->get_public_post_types(), [ $this, 'is_post_type_supported' ] )
-		);
+		) );
 	}
 
 	/**
@@ -1056,19 +1029,18 @@ class Detect extends Render {
 	 * @return array All public post types.
 	 */
 	protected function get_public_post_types() {
-
-		static $cache = null;
-
-		return isset( $cache ) ? $cache : $cache = array_values(
-			array_filter(
-				array_unique(
-					array_merge(
-						$this->get_forced_supported_post_types(),
-						//? array_values() because get_post_types() gives a sequential array.
-						array_keys( (array) \get_post_types( [ 'public' => true ] ) )
-					)
-				),
-				'\\is_post_type_viewable'
+		return memo() ?? memo(
+			array_values(
+				array_filter(
+					array_unique(
+						array_merge(
+							$this->get_forced_supported_post_types(),
+							//? array_values() because get_post_types() gives a sequential array.
+							array_keys( (array) \get_post_types( [ 'public' => true ] ) )
+						)
+					),
+					'\\is_post_type_viewable'
+				)
 			)
 		);
 	}
@@ -1082,18 +1054,18 @@ class Detect extends Render {
 	 * @return array Forced supported post types.
 	 */
 	protected function get_forced_supported_post_types() {
-
-		static $cache = null;
-		/**
-		 * @since 3.1.0
-		 * @param array $forced Forced supported post types
-		 */
-		return isset( $cache ) ? $cache : $cache = (array) \apply_filters(
-			'the_seo_framework_forced_supported_post_types',
-			array_values( \get_post_types( [
-				'public'   => true,
-				'_builtin' => true,
-			] ) )
+		return memo() ?? memo(
+			(array) \apply_filters(
+				/**
+				 * @since 3.1.0
+				 * @param array $forced Forced supported post types
+				 */
+				'the_seo_framework_forced_supported_post_types',
+				array_values( \get_post_types( [
+					'public'   => true,
+					'_builtin' => true,
+				] ) )
+			)
 		);
 	}
 
@@ -1106,21 +1078,20 @@ class Detect extends Render {
 	 * @return array The taxonomies that are public.
 	 */
 	protected function get_public_taxonomies() {
-
-		static $cache = null;
-
-		return isset( $cache ) ? $cache : $cache = array_filter(
-			array_unique(
-				array_merge(
-					$this->get_forced_supported_taxonomies(),
-					//? array_values() because get_taxonomies() gives a sequential array.
-					array_values( (array) \get_taxonomies( [
-						'public'   => true,
-						'_builtin' => false,
-					] ) )
-				)
-			),
-			'\\is_taxonomy_viewable'
+		return memo() ?? memo(
+			array_filter(
+				array_unique(
+					array_merge(
+						$this->get_forced_supported_taxonomies(),
+						//? array_values() because get_taxonomies() gives a sequential array.
+						array_values( (array) \get_taxonomies( [
+							'public'   => true,
+							'_builtin' => false,
+						] ) )
+					)
+				),
+				'\\is_taxonomy_viewable'
+			)
 		);
 	}
 
@@ -1133,18 +1104,18 @@ class Detect extends Render {
 	 * @return array Forced supported taxonomies
 	 */
 	protected function get_forced_supported_taxonomies() {
-
-		static $cache = null;
-		/**
-		 * @since 4.1.0
-		 * @param array $forced Forced supported post types
-		 */
-		return isset( $cache ) ? $cache : $cache = (array) \apply_filters(
-			'the_seo_framework_forced_supported_taxonomies',
-			array_values( \get_taxonomies( [
-				'public'   => true,
-				'_builtin' => true,
-			] ) )
+		return memo() ?? memo(
+			/**
+			 * @since 4.1.0
+			 * @param array $forced Forced supported post types
+			 */
+			(array) \apply_filters(
+				'the_seo_framework_forced_supported_taxonomies',
+				array_values( \get_taxonomies( [
+					'public'   => true,
+					'_builtin' => true,
+				] ) )
+			)
 		);
 	}
 
@@ -1169,9 +1140,7 @@ class Detect extends Render {
 		 * @param string $post_type
 		 */
 		return \apply_filters( 'the_seo_framework_post_type_disabled',
-			isset(
-				$this->get_option( 'disabled_post_types' )[ $post_type ]
-			),
+			isset( $this->get_option( 'disabled_post_types' )[ $post_type ] ),
 			$post_type
 		);
 	}
@@ -1193,9 +1162,11 @@ class Detect extends Render {
 
 		$disabled = false;
 
+		// First, test pertaining option directly.
 		if ( isset( $this->get_option( 'disabled_taxonomies' )[ $taxonomy ] ) ) {
 			$disabled = true;
 		} else {
+			// Then, test some() post types.
 			foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
 				// Set here, because the taxonomy might not have post types at all.
 				$disabled = true;

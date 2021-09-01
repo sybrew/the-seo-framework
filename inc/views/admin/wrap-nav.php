@@ -23,16 +23,16 @@ if ( $use_tabs ) :
 	<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>">
 		<?php
 		foreach ( $tabs as $tab => $value ) :
-			$dashicon = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-			$name     = isset( $value['name'] ) ? $value['name'] : '';
+			$dashicon = $value['dashicon'] ?? '';
+			$name     = $value['name'] ?? '';
 
 			printf(
 				'<div class=tsf-tab>%s</div>',
 				vsprintf(
 					'<input type=radio class="tsf-tabs-radio tsf-input-not-saved" id=%1$s name="%2$s" %3$s><label for=%1$s class=tsf-nav-tab>%4$s</label>',
 					[
-						esc_attr( 'tsf-' . $id . '-tab-' . $tab ),
-						esc_attr( 'tsf-' . $id . '-tabs' ),
+						esc_attr( "tsf-$id-tab-$tab" ),
+						esc_attr( "tsf-$id-tabs" ),
 						( 1 === $count ? 'checked' : '' ),
 						sprintf(
 							'%s%s',

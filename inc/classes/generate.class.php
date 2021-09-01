@@ -515,11 +515,7 @@ class Generate extends User_Data {
 	 * @return string The separator.
 	 */
 	public function get_separator( $type = 'title' ) {
-
-		$sep_option = $this->get_option( $type . '_separator' );
-		$sep_list   = $this->get_separator_list();
-
-		return isset( $sep_list[ $sep_option ] ) ? $sep_list[ $sep_option ] : '&#x2d;';
+		return $this->get_separator_list()[ $this->get_option( $type . '_separator' ) ] ?? '&#x2d;';
 	}
 
 	/**
@@ -532,8 +528,7 @@ class Generate extends User_Data {
 	 * @return string $blogname The escaped and sanitized blogname.
 	 */
 	public function get_blogname() {
-		static $blogname;
-		return isset( $blogname ) ? $blogname : $blogname = trim( \get_bloginfo( 'name', 'display' ) );
+		return memo() ?? memo( trim( \get_bloginfo( 'name', 'display' ) ) );
 	}
 
 	/**
@@ -546,8 +541,7 @@ class Generate extends User_Data {
 	 * @return string $blogname The escaped and sanitized blog description.
 	 */
 	public function get_blogdescription() {
-		static $description;
-		return isset( $description ) ? $description : $description = trim( \get_bloginfo( 'description', 'display' ) );
+		return memo() ?? memo( trim( \get_bloginfo( 'description', 'display' ) ) );
 	}
 
 	/**
@@ -565,18 +559,17 @@ class Generate extends User_Data {
 			$match = \get_locale();
 
 		$match_len     = \strlen( $match );
-		$valid_locales = $this->fb_locales();
+		$valid_locales = $this->supported_social_locales(); // [ ll_LL => ll ]
 
 		if ( $match_len > 5 ) {
 			$match_len = 5;
-			// More than standard-full locale ID is used. Make it just full.
+			// More than standard-full locale type is used. Make it just full.
 			$match = substr( $match, 0, $match_len );
 		}
 
 		if ( 5 === $match_len ) {
-			// Full locale is used.
-
-			if ( \in_array( $match, $valid_locales, true ) )
+			// Full locale is used. See if it's valid and return it.
+			if ( isset( $valid_locales[ $match ] ) )
 				return $match;
 
 			// Convert to only language portion.
@@ -585,17 +578,14 @@ class Generate extends User_Data {
 		}
 
 		if ( 2 === $match_len ) {
-			// Only a language key is provided.
+			// Only two letters of the lang are provided. Find first match and return it.
+			$key = array_search( $match, $valid_locales, true );
 
-			// Find first matching key.
-			$key = array_search( $match, $this->language_keys(), true );
-
-			if ( $key ) {
-				return $valid_locales[ $key ];
-			}
+			if ( $key )
+				return $key;
 		}
 
-		// Return default locale.
+		// Return default WordPress locale.
 		return 'en_US';
 	}
 
@@ -630,24 +620,20 @@ class Generate extends User_Data {
 	 * @return string
 	 */
 	public function get_og_type() {
-
-		static $type = null;
-
-		if ( isset( $type ) )
-			return $type;
-
-		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $type The OG type.
-		 * @param int    $id   The page/term/object ID.
-		 */
-		return $type = (string) \apply_filters_ref_array(
-			'the_seo_framework_ogtype_output',
-			[
-				$this->generate_og_type(),
-				$this->get_the_real_ID(),
-			]
+		return memo() ?? memo(
+			/**
+			 * @since 2.3.0
+			 * @since 2.7.0 Added output within filter.
+			 * @param string $type The OG type.
+			 * @param int    $id   The page/term/object ID.
+			 */
+			(string) \apply_filters_ref_array(
+				'the_seo_framework_ogtype_output',
+				[
+					$this->generate_og_type(),
+					$this->get_the_real_ID(),
+				]
+			)
 		);
 	}
 
@@ -661,31 +647,30 @@ class Generate extends User_Data {
 	 */
 	public function get_modified_time() {
 
-		static $time = null;
-
-		if ( isset( $time ) )
-			return $time;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$id = $this->get_the_real_ID();
 
 		$post              = \get_post( $id );
 		$post_modified_gmt = $post->post_modified_gmt;
 
-		if ( '0000-00-00 00:00:00' === $post_modified_gmt )
-			return $time = '';
-
-		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $time The article modified time.
-		 * @param int    $id   The current page or term ID.
-		 */
-		return $time = (string) \apply_filters_ref_array(
-			'the_seo_framework_modifiedtime_output',
-			[
-				$this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ),
-				$id,
-			]
+		return memo(
+			'0000-00-00 00:00:00' === $post_modified_gmt
+			? ''
+			/**
+			 * @since 2.3.0
+			 * @since 2.7.0 Added output within filter.
+			 * @param string $time The article modified time.
+			 * @param int    $id   The current page or term ID.
+			 */
+			: (string) \apply_filters_ref_array(
+				'the_seo_framework_modifiedtime_output',
+				[
+					$this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ),
+					$id,
+				]
+			)
 		);
 	}
 
@@ -744,34 +729,26 @@ class Generate extends User_Data {
 
 	/**
 	 * Determines which Twitter cards can be used.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
 	 * @since 4.0.0 1. Now only asserts the social titles as required.
 	 *              2. Now always returns an array, instead of a boolean (false) on failure.
+	 * @since 4.2.0 No longer memoizes the return value.
 	 *
 	 * @return array False when it shouldn't be used. Array of available cards otherwise.
 	 */
 	public function get_available_twitter_cards() {
 
-		static $cache = null;
+		$cards = [];
 
-		if ( isset( $cache ) )
-			return $cache;
-
-		if ( ! $this->get_twitter_title() ) {
-			$retval = [];
-		} else {
-			$retval = [ 'summary_large_image', 'summary' ];
-		}
+		if ( $this->get_twitter_title() )
+			$cards = [ 'summary_large_image', 'summary' ];
 
 		/**
 		 * @since 2.9.0
-		 * @param array $retval The available Twitter cards. Use empty array to invalidate Twitter card.
+		 * @param array $cards The available Twitter cards. Use empty array to invalidate Twitter card.
 		 */
-		$retval = (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $retval );
-
-		return $cache = $retval ?: [];
+		return (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $cards ) ?: [];
 	}
 
 	/**

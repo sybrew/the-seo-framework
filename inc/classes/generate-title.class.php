@@ -570,6 +570,7 @@ class Generate_Title extends Generate_Description {
 	 * Generates a title, based on expected or current query, without additions or prefixes.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 Added memoization.
 	 * @uses $this->generate_title_from_query()
 	 * @uses $this->generate_title_from_args()
 	 *
@@ -578,6 +579,9 @@ class Generate_Title extends Generate_Description {
 	 * @return string The generated title.
 	 */
 	public function get_raw_generated_title( $args = null ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $args ) ) return $memo;
 
 		$this->remove_default_title_filters( false, $args );
 
@@ -590,7 +594,7 @@ class Generate_Title extends Generate_Description {
 
 		$this->reset_default_title_filters();
 
-		return $title ?: $this->get_static_untitled_title();
+		return memo( $title ?: $this->get_static_untitled_title(), $args );
 	}
 
 	/**
@@ -795,7 +799,7 @@ class Generate_Title extends Generate_Description {
 		if ( $title )
 			return $title;
 
-		$_tax       = isset( $term->taxonomy ) ? $term->taxonomy : '';
+		$_tax       = $term->taxonomy ?? '';
 		$use_prefix = $this->use_generated_archive_prefix( $term );
 
 		// TEMP hack. Let's clean this up later.
@@ -872,7 +876,7 @@ class Generate_Title extends Generate_Description {
 					$title = $use_prefix ? sprintf( \__( 'Tag: %s', 'default' ), $title ) : $title;
 				}
 			} elseif ( $this->is_author() ) {
-				$title = isset( $term->display_name ) ? $term->display_name : '';
+				$title = $term->display_name ?? '';
 
 				if ( $use_new_string_prefixes ) {
 					$title = $this->_combobulate_wp550_archive_title(
@@ -1550,7 +1554,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function use_generated_archive_prefix( $term = null ) {
 
-		$term = isset( $term ) ? $term : \get_queried_object();
+		$term = $term ?? \get_queried_object();
 		$use  = ! $this->get_option( 'title_rem_prefixes' );
 
 		/**
@@ -1607,11 +1611,12 @@ class Generate_Title extends Generate_Description {
 	 * @return string The trimmed tagline.
 	 */
 	public function get_home_title_additions() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->s_title_raw(
-			trim( $this->get_option( 'homepage_title_tagline' ) )
-			?: $this->get_blogdescription()
-			?: ''
+		return memo() ?? memo(
+			$this->s_title_raw(
+				trim( $this->get_option( 'homepage_title_tagline' ) )
+				?: $this->get_blogdescription()
+				?: ''
+			)
 		);
 	}
 }

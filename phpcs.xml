@@ -6,11 +6,11 @@
 	<rule ref="TSF"/>
 
 	<config name="minimum_supported_wp_version" value="5.1"/>
-	<config name="testVersion" value="5.6-"/>
+	<config name="testVersion" value="7.2-"/>
 
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
-			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,Load,Silencer"/>
+			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,memo,Load,Silencer"/>
 		</properties>
 	</rule>
 

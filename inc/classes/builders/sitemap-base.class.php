@@ -414,7 +414,7 @@ class Sitemap_Base extends Sitemap {
 						],
 						\OBJECT
 					);
-					$latest_post   = isset( $latests_posts[0] ) ? $latests_posts[0] : null;
+					$latest_post   = $latests_posts[0] ?? null;
 					$_publish_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
 
 					$post          = \get_post( $posts_page_id );
@@ -499,10 +499,6 @@ class Sitemap_Base extends Sitemap {
 	 */
 	protected function generate_url_item_values( $post_ids, $args, &$count = 0 ) {
 
-		static $using_external_object_cache = null;
-
-		$using_external_object_cache = isset( $using_external_object_cache ) ? $using_external_object_cache : (bool) \wp_using_ext_object_cache();
-
 		foreach ( $post_ids as $post_id ) {
 			// Setup post cache, which is also used in is_post_included_in_sitemap() and create_canonical_url().
 			$post = \get_post( $post_id );
@@ -528,7 +524,12 @@ class Sitemap_Base extends Sitemap {
 				yield $_values;
 			}
 
-			$using_external_object_cache or \clean_post_cache( $post );
+			// TODO make new method to memoize return values in one call? e.g.:
+			// memo( fn() => (bool) \wp_using_ext_object_cache() }, 'wp_ueoc' );
+			// The memo must then not try to override data via first parameter. Even when null: [ 'v' => null, 'is_set' => true ];
+			// Anyway, only clean post cache when NOT using an external object caching plugin.
+			memo( null, 'wp_ueoc' ) ?? memo( (bool) \wp_using_ext_object_cache(), 'wp_ueoc' )
+				or \clean_post_cache( $post );
 		}
 	}
 

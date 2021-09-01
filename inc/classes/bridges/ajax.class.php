@@ -48,7 +48,7 @@ final class AJAX {
 	public static function _wp_ajax_dismiss_notice() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		$key = isset( $_POST['tsf_dismiss_key'] ) ? $_POST['tsf_dismiss_key'] : '';
+		$key = $_POST['tsf_dismiss_key'] ?? '';
 
 		if ( ! $key )
 			\wp_send_json_error( null, 400 );
@@ -270,7 +270,7 @@ final class AJAX {
 				array_intersect_key(
 					array_merge(
 						$_get_defaults,
-						(array) ( isset( $_POST['get'] ) ? $_POST['get'] : [] )
+						(array) ( $_POST['get'] ?? [] )
 					),
 					$_get_defaults
 				)
@@ -306,12 +306,12 @@ final class AJAX {
 							break;
 						case 'ogdescription':
 							// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Smart loop.
-							$_social_ph = isset( $_social_ph ) ? $_social_ph : $tsf->_get_social_placeholders( $_generator_args );
+							$_social_ph = $_social_ph ?? $tsf->_get_social_placeholders( $_generator_args );
 							$data[ $g ] = $_social_ph['description']['og'];
 							break;
 						case 'twdescription':
 							// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Smart loop.
-							$_social_ph = isset( $_social_ph ) ? $_social_ph : $tsf->_get_social_placeholders( $_generator_args );
+							$_social_ph = $_social_ph ?? $tsf->_get_social_placeholders( $_generator_args );
 							$data[ $g ] = $_social_ph['description']['twitter'];
 							break;
 					}
@@ -321,11 +321,9 @@ final class AJAX {
 
 				case 'imageurl':
 					if ( $tsf->is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
-						$image_details = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) );
-						$data[ $g ]    = isset( $image_details['url'] ) ? $image_details['url'] : '';
+						$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
 					} else {
-						$image_details = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) );
-						$data[ $g ]    = isset( $image_details['url'] ) ? $image_details['url'] : '';
+						$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
 					}
 					break;
 

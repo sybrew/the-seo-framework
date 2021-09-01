@@ -357,7 +357,7 @@ class Admin_Pages extends Generate_Ldjson {
 
 		$notices        = $this->get_static_cache( 'persistent_notices', [] );
 		$current_screen = \get_current_screen();
-		$base           = isset( $current_screen->base ) ? $current_screen->base : '';
+		$base           = $current_screen->base ?? '';
 
 		// Ideally, we don't want to output more than one on no-js. Alas, we can't anticipate the importance and order of the notices.
 		foreach ( $notices as $key => $notice ) {

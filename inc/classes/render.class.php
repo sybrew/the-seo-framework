@@ -132,8 +132,7 @@ class Render extends Admin_Init {
 	 * @return string The cached Twitter card.
 	 */
 	public function get_current_twitter_card_type() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->generate_twitter_card_type();
+		return memo() ?? memo( $this->generate_twitter_card_type() );
 	}
 
 	/**
@@ -1143,20 +1142,19 @@ class Render extends Admin_Init {
 	 * @return array
 	 */
 	public function get_robots_meta() {
-
-		static $cache;
-
-		/**
-		 * @since 2.6.0
-		 * @param array $meta The robots meta.
-		 * @param int   $id   The current post or term ID.
-		 */
-		return isset( $cache ) ? $cache : $cache = (array) \apply_filters_ref_array(
-			'the_seo_framework_robots_meta',
-			[
-				$this->generate_robots_meta(),
-				$this->get_the_real_ID(),
-			]
+		return memo() ?? memo(
+			/**
+			 * @since 2.6.0
+			 * @param array $meta The robots meta.
+			 * @param int   $id   The current post or term ID.
+			 */
+			(array) \apply_filters_ref_array(
+				'the_seo_framework_robots_meta',
+				[
+					$this->generate_robots_meta(),
+					$this->get_the_real_ID(),
+				]
+			)
 		);
 	}
 
@@ -1352,19 +1350,21 @@ class Render extends Admin_Init {
 	 * @since 3.1.0 Removed cache.
 	 * @since 3.1.4 : 1. Added filter.
 	 *                2. Reintroduced cache because of filter.
-	 * @TODO add facebook validation.
+	 * @TODO add facebook validation? -> Not all services that use OG tags are called Facebook.
+	 *       And not all of those services require the same standards as Facebook.
 	 *
 	 * @return bool
 	 */
 	public function use_og_tags() {
-		static $cache;
-		/**
-		 * @since 3.1.4
-		 * @param bool $use
-		 */
-		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters(
-			'the_seo_framework_use_og_tags',
-			(bool) $this->get_option( 'og_tags' )
+		return memo() ?? memo(
+			/**
+			 * @since 3.1.4
+			 * @param bool $use
+			 */
+			(bool) \apply_filters(
+				'the_seo_framework_use_og_tags',
+				(bool) $this->get_option( 'og_tags' )
+			)
 		);
 	}
 
@@ -1380,14 +1380,11 @@ class Render extends Admin_Init {
 	 * @return bool
 	 */
 	public function use_facebook_tags() {
-		static $cache;
-		/**
-		 * @since 3.1.4
-		 * @param bool $use
-		 */
-		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters(
-			'the_seo_framework_use_facebook_tags',
-			(bool) $this->get_option( 'facebook_tags' )
+		return memo() ?? memo(
+			(bool) \apply_filters(
+				'the_seo_framework_use_facebook_tags',
+				(bool) $this->get_option( 'facebook_tags' )
+			)
 		);
 	}
 
@@ -1402,14 +1399,11 @@ class Render extends Admin_Init {
 	 * @return bool
 	 */
 	public function use_twitter_tags() {
-		static $cache;
-		/**
-		 * @since 3.1.4
-		 * @param bool $use
-		 */
-		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters(
-			'the_seo_framework_use_twitter_tags',
-			$this->get_option( 'twitter_tags' ) && $this->get_current_twitter_card_type()
+		return memo() ?? memo(
+			(bool) \apply_filters(
+				'the_seo_framework_use_twitter_tags',
+				$this->get_option( 'twitter_tags' ) && $this->get_current_twitter_card_type()
+			)
 		);
 	}
 }

@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.1.0
 Tested up to: 5.8
-Requires PHP: 5.6.0
+Requires PHP: 7.2.0
 Stable tag: 4.1.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -140,7 +140,7 @@ If you wish to learn more, please refer to the [EU commission on copyright](http
 
 = This plugin requires: =
 
-* PHP 5.6 or higher.
+* PHP 7.2 or higher.
 * WordPress 5.1 or higher.
 * Any modern browser for administration.
 
@@ -247,33 +247,53 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.1.6 =
+= 4.2.0 =
 
-In this update, we polished the final rough bits we found.
+TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
+
+TODO fix discrepancy in views/admin/wrap-content and views/edit/wrap-content by adding a new action.
+TODO memo() can be faster. Gotta check opcodes.
+TODO in get_available_twitter_cards(), get_twitter_title() should always return something, so that check is redundant.
+	* However, in the edge-case it doesn't return something, the Twitter output should be discarded!
+	* So, how do we solve this? get_twitter_title() is a heavy method, for it tries to render twitter -> og -> meta.
+TODO yield from...
+TODO clean up image generator, it's messy.
+
+TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` isn't found.
+	* This will be difficult.
 
 **For everyone:**
 
+* **Upgrade notes:**
+	* PHP 7.2 or higher is now required, from PHP 5.6 or higher.
+	* TODO WP 5.4 or higher is now required, from WP 5.1 or higher.
+		* Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
+		* TODO Flex patch (lookup 'WP 5.4').
+		* TODO Archive title patch (lookup 'WP 5.5')
+		* TODO Auto-update patch (lookup 'WP 5.5')
+		* TODO Core sitemaps patch (lookup 'WP 5.5')
 * **Improved:**
 	* Images are now fetched faster from the content.
 	* The SEO Bar now parses the title item faster.
 	* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
-	* TODO Open Graph, Twitter, and meta titles are now regenerated faster.
-	* TODO The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
+	* Open Graph, Twitter, and meta titles are now regenerated faster.
+	* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
 	* TODO The robots-meta is now generated on-demand only, meaning it generates sitemaps faster.
-* **Fixed:**
-	* _Is this OUR bug? TODO_ Loading categories in the block-editor no longer takes an hour or two.
 
 **For developers:**
 
 * **Object notes:**
 	* For object `\The_SEO_Framework\Load` (callable via `the_seo_framework()`):
 		* **Methods added:**
-			* TODO `memo`, this method stores and returns memoized values for the caller.
+			* `memo`, this method stores and returns memoized values for the caller.
 		* **Methods changed:**
 			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+			* TODO `fb_locales()`, use `supported_social_locales()` instead.
+			* TODO `language_keys()`, use `supported_social_locales()` instead.
 	* For object `\The_SEO_Framework\Bridges\Ping`
+		* **Methods deprecated:**
 			* TODO `engage_pinging_cron()` is now deprecated. Use TODO instead.
-				* Did anyone actually use this? Is there ANY conceivable reason?
+				* Did anyone actually use this method externally? Is there ANY conceivable reason they ought?
 
 = 4.1.5.1 =
 

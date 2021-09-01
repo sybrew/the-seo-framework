@@ -334,9 +334,6 @@ final class Debug {
 	 */
 	protected function combobulate_error_message( $error, $message, $code ) {
 
-		$file = isset( $error['file'] ) ? $error['file'] : '';
-		$line = isset( $error['line'] ) ? $error['line'] : '';
-
 		switch ( $code ) :
 			case E_USER_ERROR:
 				$type = 'Error';
@@ -356,8 +353,8 @@ final class Debug {
 				break;
 		endswitch;
 
-		$file = \esc_html( $file );
-		$line = \esc_html( $line );
+		$file = \esc_html( $error['file'] ?? '' );
+		$line = \esc_html( $error['line'] ?? '' );
 
 		$_message  = "'<span><strong>$type:</strong> $message";
 		$_message .= $file ? " In $file" : '';

@@ -62,7 +62,7 @@ final class Images {
 	 */
 	public static function get_attachment_image_details( $args = null, $size = 'full' ) {
 
-		$id = isset( $args['id'] ) ? $args['id'] : \the_seo_framework()->get_the_real_ID();
+		$id = $args['id'] ?? \the_seo_framework()->get_the_real_ID();
 
 		if ( $id ) {
 			yield [
@@ -93,7 +93,7 @@ final class Images {
 	 */
 	public static function get_featured_image_details( $args = null, $size = 'full' ) {
 
-		$post_id = isset( $args['id'] ) ? $args['id'] : \the_seo_framework()->get_the_real_ID();
+		$post_id = $args['id'] ?? \the_seo_framework()->get_the_real_ID();
 		$id      = \get_post_thumbnail_id( $post_id );
 
 		if ( $id ) {

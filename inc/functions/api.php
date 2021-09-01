@@ -151,4 +151,40 @@ namespace The_SEO_Framework {
 		static $time  = 0;
 		return $time += $add;
 	}
+
+	/**
+	 * Stores and returns memoized values for the caller.
+	 *
+	 * @since 4.2.0
+	 * @see get_query_cache() -- practically the same, but then with query testing
+	 *                           and without backtracing for improved performance.
+	 *
+	 * @param mixed $value_to_set The value to set.
+	 * @param mixed ...$args      Extra arguments, that are used to differentiaty callbacks.
+	 * @return mixed : {
+	 *    mixed The cached value if set and $value_to_set is null.
+	 *       null When no value has been set.
+	 *       If $value_to_set is set : {
+	 *          true If the value is being set for the first time.
+	 *          false If the value has been set and $value_to_set is being overwritten.
+	 *       }
+	 * }
+	 */
+	function memo( $value_to_set = null, ...$args ) {
+
+		static $memo = [];
+
+		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects inserted, nor ever unserialized.
+		$hash = serialize(
+			[
+				'args' => $args,
+				'file' => 0,
+				'line' => 0,
+			]
+			// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
+			+ debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]
+		);
+
+		return $memo[ $hash ] = $value_to_set ?? $memo[ $hash ] ?? null;
+	}
 }

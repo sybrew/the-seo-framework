@@ -277,7 +277,7 @@ final class Form {
 				) : '',
 				$args['info'] ? ' ' . HTML::make_info(
 					$args['info'][0],
-					isset( $args['info'][1] ) ? $args['info'][1] : '',
+					$args['info'][1] ?? '',
 					false
 				) : '',
 				vsprintf(

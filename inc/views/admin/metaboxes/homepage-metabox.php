@@ -376,11 +376,6 @@ switch ( $instance ) :
 		<?php
 		Form::header_title( __( 'Social Image Settings', 'autodescription' ) );
 		HTML::description( __( 'A social image can be displayed when your homepage is shared. It is a great way to grab attention.', 'autodescription' ) );
-
-		// Fetch image placeholder.
-		$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
-		$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
-
 		?>
 		<p>
 			<label for="tsf_homepage_socialimage-url">
@@ -394,7 +389,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="url" name="<?php Form::field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'homepage_social_image_url' ) ); ?>" />
+			<input class="large-text" type="url" name="<?php Form::field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ); ?>" value="<?php echo esc_url( $this->get_option( 'homepage_social_image_url' ) ); ?>" />
 			<input type="hidden" name="<?php Form::field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_option( 'homepage_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 		</p>
 		<p class="hide-if-no-tsf-js">

@@ -45,7 +45,7 @@ $social_placeholders = $this->_get_social_placeholders( $_generator_args );
 
 //! Social image placeholder.
 $image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
-$image_placeholder = isset( $image_details['url'] ) ? $image_details['url'] : '';
+$image_placeholder = $image_details['url'] ?? '';
 
 $canonical_placeholder = $this->create_canonical_url( $_generator_args ); // implies get_custom_field = false
 $robots_defaults       = $this->generate_robots_meta( $_generator_args, null, The_SEO_Framework\ROBOTS_IGNORE_SETTINGS );

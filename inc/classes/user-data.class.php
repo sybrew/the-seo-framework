@@ -87,8 +87,7 @@ class User_Data extends Term_Data {
 	 * @return array The current author meta.
 	 */
 	public function get_current_post_author_meta() {
-		static $cache;
-		return isset( $cache ) ? $cache : $cache = $this->get_user_meta( $this->get_current_post_author_id() );
+		return memo() ?? memo( $this->get_user_meta( $this->get_current_post_author_id() ) );
 	}
 
 	/**
@@ -100,6 +99,7 @@ class User_Data extends Term_Data {
 	 * @since 4.1.4 1. Now returns default values when custom values are missing.
 	 *              2. Now listens to headlessness.
 	 *              3. Deprecated the second argument, and moved it to the second.
+	 * @todo Send deprecation warning for 3rd parameter
 	 *
 	 * @param int  $user_id   The user ID.
 	 * @param bool $use_cache Whether to store and use options from cache, or bypass it.
@@ -112,12 +112,9 @@ class User_Data extends Term_Data {
 
 		$user_id = $user_id ?: $this->get_user_id();
 
-		if ( $use_cache ) {
-			static $cache = [];
-
-			if ( isset( $cache[ $user_id ] ) )
-				return $cache[ $user_id ];
-		}
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( $use_cache && null !== $memo = memo( null, $user_id ) )
+			return $memo;
 
 		/**
 		 * We can't trust the filter to always contain the expected keys.
@@ -165,7 +162,7 @@ class User_Data extends Term_Data {
 			]
 		);
 
-		return $cache[ $user_id ] = $meta;
+		return memo( $meta, $user_id );
 	}
 
 	/**

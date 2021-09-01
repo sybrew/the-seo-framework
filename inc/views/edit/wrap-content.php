@@ -31,8 +31,8 @@ foreach ( $tabs as $tab => $value ) :
 		<?php
 		// No-JS tabs.
 		if ( $use_tabs ) :
-			$dashicon   = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-			$label_name = isset( $value['name'] ) ? $value['name'] : '';
+			$dashicon   = $value['dashicon'] ?? '';
+			$label_name = $value['name'] ?? '';
 
 			?>
 			<div class="tsf-flex tsf-flex-hide-if-js tsf-flex-tabs-content-no-js">
@@ -46,12 +46,9 @@ foreach ( $tabs as $tab => $value ) :
 			<?php
 		endif;
 
-		$callback = isset( $value['callback'] ) ? $value['callback'] : '';
-
-		if ( $callback ) {
-			$params = isset( $value['args'] ) ? $value['args'] : '';
-			call_user_func_array( $callback, (array) $params );
-		}
+		// TODO discrepancy with admin/wrap-content! Use something new? do_action()!
+		if ( ! empty( $value['callback'] ) )
+			call_user_func_array( $value['callback'], ( $value['args'] ?? [] ) );
 		?>
 	</div>
 	<?php

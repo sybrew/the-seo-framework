@@ -62,7 +62,7 @@ function _polylang_set_sitemap_language() {
 	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return;
 
 	// phpcs:ignore, WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
-	$lang = isset( $_GET['lang'] ) ? $_GET['lang'] : '';
+	$lang = $_GET['lang'] ?? '';
 
 	// Language codes are user-definable: copy Polylang's filtering.
 	// The preg_match's source: \PLL_Admin_Model::validate_lang();

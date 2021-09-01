@@ -76,10 +76,7 @@ class Post_Data extends Detect {
 	 * @param bool   $use_cache Whether to use caching.
 	 */
 	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
-
-		$meta = $this->get_post_meta( $post_id ?: $this->get_the_real_ID(), $use_cache );
-
-		return isset( $meta[ $item ] ) ? $meta[ $item ] : null;
+		return $this->get_post_meta( $post_id ?: $this->get_the_real_ID(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -103,18 +100,14 @@ class Post_Data extends Detect {
 	 */
 	public function get_post_meta( $post_id, $use_cache = true ) {
 
-		if ( $use_cache ) {
-			static $cache = [];
-
-			if ( isset( $cache[ $post_id ] ) )
-				return $cache[ $post_id ];
-		}
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( $use_cache && ( $memo = memo( null, $post_id ) ) ) return $memo;
 
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
 
 		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) )
-			return $cache[ $post_id ] = [];
+			return memo( [], $post_id );
 
 		/**
 		 * We can't trust the filter to always contain the expected keys.
@@ -157,8 +150,8 @@ class Post_Data extends Detect {
 			]
 		);
 
-		// Cache using the input ID, otherwise invalid queries can bypass the cache.
-		return $cache[ $post_id ] = $meta;
+		// Cache using $post_id, not $post->ID, otherwise invalid queries can bypass the cache.
+		return memo( $meta, $post_id );
 	}
 
 	/**
@@ -554,7 +547,7 @@ class Post_Data extends Detect {
 			$values[ $_taxonomy ] = [
 				'action' => $this->inpost_nonce_field . '_pt',
 				'name'   => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
-				'value'  => isset( $_POST['autodescription'][ $_post_key ] ) ? \absint( $_POST['autodescription'][ $_post_key ] ) : 0,
+				'value'  => \absint( $_POST['autodescription'][ $_post_key ] ?? 0 ),
 			];
 		}
 
@@ -809,12 +802,9 @@ class Post_Data extends Detect {
 	 * @return string The Post Type name/label, if found.
 	 */
 	public function get_post_type_label( $post_type, $singular = true ) {
-
-		$pto = \get_post_type_object( $post_type );
-
 		return $singular
-			? ( isset( $pto->labels->singular_name ) ? $pto->labels->singular_name : '' )
-			: ( isset( $pto->labels->name ) ? $pto->labels->name : '' );
+			? \get_post_type_object( $post_type )->labels->singular_name ?? ''
+			: \get_post_type_object( $post_type )->labels->name ?? '';
 	}
 
 	/**
@@ -834,12 +824,11 @@ class Post_Data extends Detect {
 
 		static $primary_terms = [];
 
-		if ( isset( $primary_terms[ $post_id ][ $taxonomy ] ) )
-			return $primary_terms[ $post_id ][ $taxonomy ];
+		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
 
 		$primary_id = (int) \get_post_meta( $post_id, '_primary_term_' . $taxonomy, true ) ?: 0;
 
-		if ( ! $primary_id ) return $primary_terms[ $post_id ][ $taxonomy ] = false;
+		if ( ! $primary_id ) return memo( false, $post_id, $taxonomy );
 
 		// Users can alter the term list via quick/bulk edit, but cannot set a primary term that way.
 		// Users can also delete a term from the site that was previously assigned as primary.
@@ -859,7 +848,7 @@ class Post_Data extends Detect {
 			}
 		}
 
-		return $primary_terms[ $post_id ][ $taxonomy ] = $primary_term;
+		return memo( $primary_term, $post_id, $taxonomy );
 	}
 
 	/**
@@ -874,8 +863,7 @@ class Post_Data extends Detect {
 	 * @return int   The primary term ID. 0 if not found.
 	 */
 	public function get_primary_term_id( $post_id, $taxonomy ) {
-		$primary_term = $this->get_primary_term( $post_id, $taxonomy );
-		return isset( $primary_term->term_id ) ? $primary_term->term_id : 0;
+		return $this->get_primary_term( $post_id, $taxonomy )->term_id ?? 0;
 	}
 
 	/**

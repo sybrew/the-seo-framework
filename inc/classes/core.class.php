@@ -158,16 +158,18 @@ class Core {
 	 */
 	public function _include_compat( $what, $type = 'plugin' ) {
 
-		static $included = [];
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $what, $type ) ) return $memo;
+		unset( $memo );
 
-		if ( ! isset( $included[ $what ][ $type ] ) ) {
-			// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
-			$_secret = $this->create_view_secret( uniqid( '', true ) );
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
+		$_secret = $this->create_view_secret( uniqid( '', true ) );
 
-			$included[ $what ][ $type ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . $type . '-' . $what . '.php';
-		}
-
-		return $included[ $what ][ $type ];
+		return memo(
+			(bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . "$type-$what.php",
+			$what,
+			$type
+		);
 	}
 
 	/**
@@ -208,8 +210,7 @@ class Core {
 	 * @return string|null The stored secret.
 	 */
 	protected function create_view_secret( $value = null ) {
-		static $secret;
-		return $secret = isset( $value ) ? $value : $secret;
+		return memo( $value );
 	}
 
 	/**
@@ -262,13 +263,14 @@ class Core {
 	 * @return array The public hierarchical post types.
 	 */
 	public function get_hierarchical_post_types() {
-		static $types;
-		return $types ?: $types = \get_post_types(
-			[
-				'hierarchical' => true,
-				'public'       => true,
-			],
-			'names'
+		return memo() ?: memo(
+			\get_post_types(
+				[
+					'hierarchical' => true,
+					'public'       => true,
+				],
+				'names'
+			)
 		);
 	}
 
@@ -300,12 +302,11 @@ class Core {
 	 * @return bool Whether external redirect is allowed.
 	 */
 	public function allow_external_redirect() {
-		static $cache = null;
 		/**
 		 * @since 2.1.0
 		 * @param bool $allowed Whether external redirect is allowed.
 		 */
-		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true );
+		return memo() ?? memo( (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true ) );
 	}
 
 	/**
@@ -318,10 +319,7 @@ class Core {
 	 * @return bool True is blog is public.
 	 */
 	public function is_blog_public() {
-
-		static $cache = null;
-
-		return isset( $cache ) ? $cache : $cache = (bool) \get_option( 'blog_public' );
+		return memo() ?? memo( (bool) \get_option( 'blog_public' ) );
 	}
 
 	/**
@@ -516,9 +514,7 @@ class Core {
 	 */
 	public function get_timestamp_format( $override_get_time = null ) {
 
-		$get_time = isset( $override_get_time )
-			? $override_get_time
-			: $this->uses_time_in_timestamp_format();
+		$get_time = $override_get_time ?? $this->uses_time_in_timestamp_format();
 
 		return \apply_filters_ref_array(
 			'the_seo_framework_timestamp_format',
@@ -545,6 +541,7 @@ class Core {
 	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
 	 *
 	 * A do-while is faster than while. Sorry for the legibility.
+	 * TODO instead of calling thyself, would a goto not be better?
 	 *
 	 * @since 4.1.4
 	 *
@@ -619,9 +616,7 @@ class Core {
 
 		if ( ! $string ) return [];
 
-		static $use_mb;
-
-		isset( $use_mb ) or ( $use_mb = \extension_loaded( 'mbstring' ) );
+		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
 
 		// TODO does this test well for "we're"? We haven't had any reports, though.
 		$word_list = preg_split(

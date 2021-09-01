@@ -333,6 +333,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * If that's not even true, then I don't know what happens. But then you're in a grey area...
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 Now gets correctly separated results when $args changes.
 	 * @uses $this->get_image_details()
 	 * @api Not used internally, only externally.
 	 *
@@ -343,15 +344,9 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_safe_schema_image( $args = null, $details = false ) {
 
-		static $image_details = null;
+		$image_details = memo( null, $args ) ?? memo( current( $this->get_image_details( $args, true, 'schema' ), $args ) );
 
-		if ( ! isset( $image_details ) )
-			$image_details = current( $this->get_image_details( $args, true, 'schema' ) );
-
-		if ( $details )
-			return $image_details;
-
-		return isset( $image_details['url'] ) ? $image_details['url'] : '';
+		return $details ? $image_details : ( $image_details['url'] ?? '' );
 	}
 
 	/**
@@ -847,88 +842,58 @@ class Generate_Ldjson extends Generate_Image {
 	 * @return bool
 	 */
 	public function ld_json_breadcrumbs_use_seo_title() {
-
-		static $cache = null;
-
 		/**
 		 * @since 2.9.0
 		 * @param bool $use_seo_title Whether to use the SEO title.
 		 */
-		return isset( $cache ) ? $cache : $cache = (bool) \apply_filters( 'the_seo_framework_use_breadcrumb_seo_title', true );
+		return memo() ?? memo( (bool) \apply_filters( 'the_seo_framework_use_breadcrumb_seo_title', true ) );
 	}
 
 	/**
 	 * Determines if breadcrumbs scripts are enabled.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
+	 * @since 4.2.0 No longer memoizes the return value.
 	 *
 	 * @return bool
 	 */
 	public function enable_ld_json_breadcrumbs() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
 		/**
 		 * @since 2.4.2
-		 * @param bool $filter Whether to force disable Schema.org breadcrumbs.
+		 * @param bool $enable Whether to force disable Schema.org breadcrumbs.
 		 */
-		$filter = (bool) \apply_filters( 'the_seo_framework_json_breadcrumb_output', true );
-		$option = $this->get_option( 'ld_json_breadcrumbs' );
-
-		return $cache = $filter && $option;
+		return (bool) \apply_filters( 'the_seo_framework_json_breadcrumb_output', $this->get_option( 'ld_json_breadcrumbs' ) );
 	}
 
 	/**
 	 * Determines if searchbox script is enabled.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
+	 * @since 4.2.0 No longer memoizes the return value.
 	 *
 	 * @return bool
 	 */
 	public function enable_ld_json_searchbox() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
 		/**
 		 * @since 2.3.9
-		 * @param bool $filter Whether to force disable Schema.org searchbox.
+		 * @param bool $enable Whether to force disable Schema.org searchbox.
 		 */
-		$filter = (bool) \apply_filters( 'the_seo_framework_json_search_output', true );
-		$option = $this->get_option( 'ld_json_searchbox' );
-
-		return $cache = $filter && $option;
+		return (bool) \apply_filters( 'the_seo_framework_json_search_output', $this->get_option( 'ld_json_searchbox' ) );
 	}
 
 	/**
 	 * Determines if Knowledge Graph Script is enabled.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.5
+	 * @since 4.2.0 No longer memoizes the return value.
 	 *
 	 * @return bool
 	 */
 	public function enable_ld_json_knowledge() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
 		/**
-		 * @since 2.6.5
-		 * @param bool $filter Whether to force disable Schema.org knowledge.
+		 * @since 2.3.9
+		 * @param bool $enable Whether to force disable Schema.org knowledge.
 		 */
-		$filter = (bool) \apply_filters( 'the_seo_framework_json_knowledge_output', true );
-		$option = $this->get_option( 'knowledge_output' );
-
-		return $cache = $filter && $option;
+		return (bool) \apply_filters( 'the_seo_framework_json_knowledge_output', $this->get_option( 'knowledge_output' ) );
 	}
 }

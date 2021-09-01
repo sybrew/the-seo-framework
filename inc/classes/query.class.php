@@ -61,16 +61,15 @@ class Query extends Core {
 	 */
 	protected function can_cache_query( $method ) {
 
-		static $cache;
+		// Don't use method memo() here for this method is called over 85 times per page.
+		static $memo;
 
-		if ( isset( $cache ) )
-			return $cache;
+		if ( isset( $memo ) ) return $memo;
 
 		if ( \defined( 'WP_CLI' ) && WP_CLI )
-			return $cache = false;
-
+			return $memo = false;
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
-			return $cache = true;
+			return $memo = true;
 
 		$this->the_seo_framework_debug
 			and $this->do_query_error_notice( $method );
@@ -132,8 +131,7 @@ class Query extends Core {
 	 * @return string
 	 */
 	public function get_admin_post_type() {
-		global $current_screen;
-		return isset( $current_screen->post_type ) ? $current_screen->post_type : '';
+		return $GLOBALS['current_screen']->post_type ?? '';
 	}
 
 	/**
@@ -167,14 +165,10 @@ class Query extends Core {
 		if ( \is_admin() )
 			return $this->get_the_real_admin_ID();
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( $use_cache && null !== $memo = memo() ) return $memo;
+
 		$use_cache = $use_cache && $this->can_cache_query( __METHOD__ );
-
-		if ( $use_cache ) {
-			static $id = null;
-
-			if ( isset( $id ) )
-				return $id;
-		}
 
 		// Try to get ID from plugins when caching is available.
 		$id = $use_cache ? $this->check_the_real_ID() : 0;
@@ -186,10 +180,12 @@ class Query extends Core {
 
 		/**
 		 * @since 2.6.2
-		 * @param int $id Can be either the Post ID, or the Term ID.
-		 * @param bool    Whether this value is stored in runtime caching.
+		 * @param int  $id        Can be either the Post ID, or the Term ID.
+		 * @param bool $use_cache Whether this value is stored in runtime caching.
 		 */
-		return $id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $use_cache );
+		$id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $use_cache );
+
+		return $use_cache ? memo( $id ) : $id;
 	}
 
 	/**
@@ -227,14 +223,14 @@ class Query extends Core {
 	 * @return int The admin ID.
 	 */
 	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-
-		$id = $this->is_feed() ? \get_the_ID() : 0;
-
 		/**
 		 * @since 2.5.0
 		 * @param int $id
 		 */
-		return (int) \apply_filters( 'the_seo_framework_real_id', $id );
+		return (int) \apply_filters(
+			'the_seo_framework_real_id',
+			$this->is_feed() ? \get_the_ID() : 0
+		);
 	}
 
 	/**
@@ -245,10 +241,7 @@ class Query extends Core {
 	 * @return int the ID.
 	 */
 	public function get_the_front_page_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-		static $front_id;
-		return isset( $front_id )
-			? $front_id
-			: $front_id = ( $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0 );
+		return memo() ?? memo( $this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0 );
 	}
 
 	/**
@@ -286,14 +279,13 @@ class Query extends Core {
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
+		static $memo;
 
-		static $cache;
-
-		if ( isset( $cache ) ) return $cache;
+		if ( isset( $memo ) ) return $memo;
 
 		$_object = \is_admin() ? $GLOBALS['current_screen'] : \get_queried_object();
 
-		return $cache = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
+		return $memo = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
 	}
 
 	/**
@@ -434,17 +426,23 @@ class Query extends Core {
 		if ( \is_admin() )
 			return $this->is_archive_admin();
 
-		if ( \is_archive() && false === $this->is_singular() )
-			return true;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
-		if ( $this->can_cache_query( __METHOD__ ) && false === $this->is_singular() ) {
+		$can_cache = $this->can_cache_query( __METHOD__ );
+
+		if ( \is_archive() && false === $this->is_singular() )
+			return $can_cache ? memo( true ) : true;
+
+		// The $can_cache check is used here because it asserted $wp_query is valid on the front-end.
+		if ( $can_cache && false === $this->is_singular() ) {
 			global $wp_query;
 
-			if ( $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author || $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
-				return true;
+			if ( $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax || $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author )
+				return memo( true );
 		}
 
-		return false;
+		return $can_cache ? memo( false ) : false;
 	}
 
 	/**
@@ -456,8 +454,7 @@ class Query extends Core {
 	 * @return bool Post Type is archive
 	 */
 	public function is_archive_admin() {
-		global $current_screen;
-		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'edit-tags', 'term' ], true );
+		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'edit-tags', 'term' ], true );
 	}
 
 	/**
@@ -474,11 +471,9 @@ class Query extends Core {
 		if ( null !== $cache = $this->get_query_cache( __METHOD__ ) )
 			return $cache;
 
-		global $current_screen;
-
 		$this->set_query_cache(
 			__METHOD__,
-			$is_term_edit = isset( $current_screen->base ) && ( 'term' === $current_screen->base )
+			$is_term_edit = ( 'term' === $GLOBALS['current_screen']->base ?? '' )
 		);
 
 		return $is_term_edit;
@@ -493,8 +488,7 @@ class Query extends Core {
 	 * @return bool We're on Post Edit screen.
 	 */
 	public function is_post_edit() {
-		global $current_screen;
-		return isset( $current_screen->base ) && 'post' === $current_screen->base;
+		return 'post' === $GLOBALS['current_screen']->base ?? '';
 	}
 
 	/**
@@ -506,8 +500,7 @@ class Query extends Core {
 	 * @return bool We're on the edit screen.
 	 */
 	public function is_wp_lists_edit() {
-		global $current_screen;
-		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'edit-tags', 'edit' ], true );
+		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'edit-tags', 'edit' ], true );
 	}
 
 	/**
@@ -519,8 +512,7 @@ class Query extends Core {
 	 * @return bool True if on Profile Edit screen. False otherwise.
 	 */
 	public function is_profile_edit() {
-		global $current_screen;
-		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'profile', 'user-edit' ], true );
+		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'profile', 'user-edit' ], true );
 	}
 
 	/**
@@ -1033,8 +1025,7 @@ class Query extends Core {
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular_admin() {
-		global $current_screen;
-		return isset( $current_screen->base ) && \in_array( $current_screen->base, [ 'edit', 'post' ], true );
+		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'edit', 'post' ], true );
 	}
 
 	/**
@@ -1228,10 +1219,7 @@ class Query extends Core {
 	 * @return bool True if SSL, false otherwise.
 	 */
 	public function is_ssl() {
-
-		static $cache = null;
-
-		return isset( $cache ) ? $cache : $cache = \is_ssl();
+		return memo() ?? memo( \is_ssl() );
 	}
 
 	/**
@@ -1531,7 +1519,7 @@ class Query extends Core {
 			return $fresh_set;
 		}
 
-		return isset( $cache[ $method ][ $hash ] ) ? $cache[ $method ][ $hash ] : null;
+		return $cache[ $method ][ $hash ] ?? null;
 	}
 
 	/**

@@ -344,11 +344,12 @@ class Site_Options extends Sanitize {
 
 		static $cache = [];
 
+		// PHP 7.4: null coalesce equal operator: ??=
 		if ( ! isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
 			$cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
 
 		// TODO fall back to default if not registered? This means we no longer have to rely on upgrading. Or, array merge (recursive) at get_all_options?
-		return isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] ) ? $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] : '';
+		return $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] ?? '';
 	}
 
 	/**
@@ -444,8 +445,7 @@ class Site_Options extends Sanitize {
 	 * @return mixed Cache value on success, $default if non-existent.
 	 */
 	public function get_static_cache( $key, $default = false ) {
-		$cache = \get_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
-		return isset( $cache[ $key ] ) ? $cache[ $key ] : $default;
+		return \get_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] )[ $key ] ?? $default;
 	}
 
 	/**
@@ -578,7 +578,7 @@ class Site_Options extends Sanitize {
 		if ( ! isset( $cache ) )
 			$cache = \stripslashes_deep( $this->get_default_site_options() );
 
-		return isset( $cache[ $key ] ) ? $cache[ $key ] : null;
+		return $cache[ $key ] ?? null;
 	}
 
 	/**
@@ -644,7 +644,7 @@ class Site_Options extends Sanitize {
 	 * Returns Facebook locales array values.
 	 *
 	 * @since 2.5.2
-	 * TODO collapse this with language_keys(), ll_CC => ll?, return array_keys here, array_values there?
+	 * @TODO deprecate me.
 	 *
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
 	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
@@ -654,148 +654,7 @@ class Site_Options extends Sanitize {
 	 * @return array Valid Facebook locales
 	 */
 	public function fb_locales() {
-		return [
-			'af_ZA', // Afrikaans
-			'ak_GH', // Akan
-			'am_ET', // Amharic
-			'ar_AR', // Arabic
-			'as_IN', // Assamese
-			'ay_BO', // Aymara
-			'az_AZ', // Azerbaijani
-			'be_BY', // Belarusian
-			'bg_BG', // Bulgarian
-			'bn_IN', // Bengali
-			'br_FR', // Breton
-			'bs_BA', // Bosnian
-			'ca_ES', // Catalan
-			'cb_IQ', // Sorani Kurdish
-			'ck_US', // Cherokee
-			'co_FR', // Corsican
-			'cs_CZ', // Czech
-			'cx_PH', // Cebuano
-			'cy_GB', // Welsh
-			'da_DK', // Danish
-			'de_DE', // German
-			'el_GR', // Greek
-			'en_GB', // English (UK)
-			'en_IN', // English (India)
-			'en_PI', // English (Pirate)
-			'en_UD', // English (Upside Down)
-			'en_US', // English (US)
-			'eo_EO', // Esperanto
-			'es_CL', // Spanish (Chile)
-			'es_CO', // Spanish (Colombia)
-			'es_ES', // Spanish (Spain)
-			'es_LA', // Spanish
-			'es_MX', // Spanish (Mexico)
-			'es_VE', // Spanish (Venezuela)
-			'et_EE', // Estonian
-			'eu_ES', // Basque
-			'fa_IR', // Persian
-			'fb_LT', // Leet Speak
-			'ff_NG', // Fulah
-			'fi_FI', // Finnish
-			'fo_FO', // Faroese
-			'fr_CA', // French (Canada)
-			'fr_FR', // French (France)
-			'fy_NL', // Frisian
-			'ga_IE', // Irish
-			'gl_ES', // Galician
-			'gn_PY', // Guarani
-			'gu_IN', // Gujarati
-			'gx_GR', // Classical Greek
-			'ha_NG', // Hausa
-			'he_IL', // Hebrew
-			'hi_IN', // Hindi
-			'hr_HR', // Croatian
-			'hu_HU', // Hungarian
-			'hy_AM', // Armenian
-			'id_ID', // Indonesian
-			'ig_NG', // Igbo
-			'is_IS', // Icelandic
-			'it_IT', // Italian
-			'ja_JP', // Japanese
-			'ja_KS', // Japanese (Kansai)
-			'jv_ID', // Javanese
-			'ka_GE', // Georgian
-			'kk_KZ', // Kazakh
-			'km_KH', // Khmer
-			'kn_IN', // Kannada
-			'ko_KR', // Korean
-			'ku_TR', // Kurdish (Kurmanji)
-			'ky_KG', // Kyrgyz
-			'la_VA', // Latin
-			'lg_UG', // Ganda
-			'li_NL', // Limburgish
-			'ln_CD', // Lingala
-			'lo_LA', // Lao
-			'lt_LT', // Lithuanian
-			'lv_LV', // Latvian
-			'mg_MG', // Malagasy
-			'mi_NZ', // Māori
-			'mk_MK', // Macedonian
-			'ml_IN', // Malayalam
-			'mn_MN', // Mongolian
-			'mr_IN', // Marathi
-			'ms_MY', // Malay
-			'mt_MT', // Maltese
-			'my_MM', // Burmese
-			'nb_NO', // Norwegian (bokmal)
-			'nd_ZW', // Ndebele
-			'ne_NP', // Nepali
-			'nl_BE', // Dutch (België)
-			'nl_NL', // Dutch
-			'nn_NO', // Norwegian (nynorsk)
-			'ny_MW', // Chewa
-			'or_IN', // Oriya
-			'pa_IN', // Punjabi
-			'pl_PL', // Polish
-			'ps_AF', // Pashto
-			'pt_BR', // Portuguese (Brazil)
-			'pt_PT', // Portuguese (Portugal)
-			'qu_PE', // Quechua
-			'rm_CH', // Romansh
-			'ro_RO', // Romanian
-			'ru_RU', // Russian
-			'rw_RW', // Kinyarwanda
-			'sa_IN', // Sanskrit
-			'sc_IT', // Sardinian
-			'se_NO', // Northern Sámi
-			'si_LK', // Sinhala
-			'sk_SK', // Slovak
-			'sl_SI', // Slovenian
-			'sn_ZW', // Shona
-			'so_SO', // Somali
-			'sq_AL', // Albanian
-			'sr_RS', // Serbian
-			'sv_SE', // Swedish
-			'sy_SY', // Swahili
-			'sw_KE', // Syriac
-			'sz_PL', // Silesian
-			'ta_IN', // Tamil
-			'te_IN', // Telugu
-			'tg_TJ', // Tajik
-			'th_TH', // Thai
-			'tk_TM', // Turkmen
-			'tl_PH', // Filipino
-			'tl_ST', // Klingon
-			'tr_TR', // Turkish
-			'tt_RU', // Tatar
-			'tz_MA', // Tamazight
-			'uk_UA', // Ukrainian
-			'ur_PK', // Urdu
-			'uz_UZ', // Uzbek
-			'vi_VN', // Vietnamese
-			'wo_SN', // Wolof
-			'xh_ZA', // Xhosa
-			'yi_DE', // Yiddish
-			'yo_NG', // Yoruba
-			'zh_CN', // Simplified Chinese (China)
-			'zh_HK', // Traditional Chinese (Hong Kong)
-			'zh_TW', // Traditional Chinese (Taiwan)
-			'zu_ZA', // Zulu
-			'zz_TR', // Zazaki
-		];
+		return \array_keys( $this->supported_social_locales() );
 	}
 
 	/**
@@ -805,6 +664,7 @@ class Site_Options extends Sanitize {
 	 * Use this to compare the numeric key position.
 	 *
 	 * @since 2.5.2
+	 * @TODO deprecate me.
 	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
 	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
 	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
@@ -812,147 +672,161 @@ class Site_Options extends Sanitize {
 	 * @return array Valid Facebook locale keys
 	 */
 	public function language_keys() {
+		return \array_values( $this->supported_social_locales() );
+	}
+
+	/**
+	 * Returns supported social site locales.
+	 *
+	 * @since 4.2.0
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
+	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
+	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
+	 *
+	 * @return array Valid social locales
+	 */
+	public function supported_social_locales() {
 		return [
-			'af', // Afrikaans
-			'ak', // Akan
-			'am', // Amharic
-			'ar', // Arabic
-			'as', // Assamese
-			'ay', // Aymara
-			'az', // Azerbaijani
-			'be', // Belarusian
-			'bg', // Bulgarian
-			'bn', // Bengali
-			'br', // Breton
-			'bs', // Bosnian
-			'ca', // Catalan
-			'cb', // Sorani Kurdish
-			'ck', // Cherokee
-			'co', // Corsican
-			'cs', // Czech
-			'cx', // Cebuano
-			'cy', // Welsh
-			'da', // Danish
-			'de', // German
-			'el', // Greek
-			'en', // English (UK)
-			'en', // English (India)
-			'en', // English (Pirate)
-			'en', // English (Upside Down)
-			'en', // English (US)
-			'eo', // Esperanto
-			'es', // Spanish (Chile)
-			'es', // Spanish (Colombia)
-			'es', // Spanish (Spain)
-			'es', // Spanish
-			'es', // Spanish (Mexico)
-			'es', // Spanish (Venezuela)
-			'et', // Estonian
-			'eu', // Basque
-			'fa', // Persian
-			'fb', // Leet Speak
-			'ff', // Fulah
-			'fi', // Finnish
-			'fo', // Faroese
-			'fr', // French (Canada)
-			'fr', // French (France)
-			'fy', // Frisian
-			'ga', // Irish
-			'gl', // Galician
-			'gn', // Guarani
-			'gu', // Gujarati
-			'gx', // Classical Greek
-			'ha', // Hausa
-			'he', // Hebrew
-			'hi', // Hindi
-			'hr', // Croatian
-			'hu', // Hungarian
-			'hy', // Armenian
-			'id', // Indonesian
-			'ig', // Igbo
-			'is', // Icelandic
-			'it', // Italian
-			'ja', // Japanese
-			'ja', // Japanese (Kansai)
-			'jv', // Javanese
-			'ka', // Georgian
-			'kk', // Kazakh
-			'km', // Khmer
-			'kn', // Kannada
-			'ko', // Korean
-			'ku', // Kurdish (Kurmanji)
-			'ky', // Kyrgyz
-			'la', // Latin
-			'lg', // Ganda
-			'li', // Limburgish
-			'ln', // Lingala
-			'lo', // Lao
-			'lt', // Lithuanian
-			'lv', // Latvian
-			'mg', // Malagasy
-			'mi', // Māori
-			'mk', // Macedonian
-			'ml', // Malayalam
-			'mn', // Mongolian
-			'mr', // Marathi
-			'ms', // Malay
-			'mt', // Maltese
-			'my', // Burmese
-			'nb', // Norwegian (bokmal)
-			'nd', // Ndebele
-			'ne', // Nepali
-			'nl', // Dutch (België)
-			'nl', // Dutch
-			'nn', // Norwegian (nynorsk)
-			'ny', // Chewa
-			'or', // Oriya
-			'pa', // Punjabi
-			'pl', // Polish
-			'ps', // Pashto
-			'pt', // Portuguese (Brazil)
-			'pt', // Portuguese (Portugal)
-			'qu', // Quechua
-			'rm', // Romansh
-			'ro', // Romanian
-			'ru', // Russian
-			'rw', // Kinyarwanda
-			'sa', // Sanskrit
-			'sc', // Sardinian
-			'se', // Northern Sámi
-			'si', // Sinhala
-			'sk', // Slovak
-			'sl', // Slovenian
-			'sn', // Shona
-			'so', // Somali
-			'sq', // Albanian
-			'sr', // Serbian
-			'sv', // Swedish
-			'sy', // Swahili
-			'sw', // Syriac
-			'sz', // Silesian
-			'ta', // Tamil
-			'te', // Telugu
-			'tg', // Tajik
-			'th', // Thai
-			'tk', // Turkmen
-			'tl', // Filipino
-			'tl', // Klingon
-			'tr', // Turkish
-			'tt', // Tatar
-			'tz', // Tamazight
-			'uk', // Ukrainian
-			'ur', // Urdu
-			'uz', // Uzbek
-			'vi', // Vietnamese
-			'wo', // Wolof
-			'xh', // Xhosa
-			'yi', // Yiddish
-			'yo', // Yoruba
-			'zh', // Simplified Chinese (China)
-			'zh', // Traditional Chinese (Hong Kong)
-			'zh', // Traditional Chinese (Taiwan)
-			'zu', // Zulu
-			'zz', // Zazaki
+			'af_ZA' => 'af',  // Afrikaans
+			'ak_GH' => 'ak',  // Akan
+			'am_ET' => 'am',  // Amharic
+			'ar_AR' => 'ar',  // Arabic
+			'as_IN' => 'as',  // Assamese
+			'ay_BO' => 'ay',  // Aymara
+			'az_AZ' => 'az',  // Azerbaijani
+			'be_BY' => 'be',  // Belarusian
+			'bg_BG' => 'bg',  // Bulgarian
+			'bn_IN' => 'bn',  // Bengali
+			'br_FR' => 'br',  // Breton
+			'bs_BA' => 'bs',  // Bosnian
+			'ca_ES' => 'ca',  // Catalan
+			'cb_IQ' => 'cb',  // Sorani Kurdish
+			'ck_US' => 'ck',  // Cherokee
+			'co_FR' => 'co',  // Corsican
+			'cs_CZ' => 'cs',  // Czech
+			'cx_PH' => 'cx',  // Cebuano
+			'cy_GB' => 'cy',  // Welsh
+			'da_DK' => 'da',  // Danish
+			'de_DE' => 'de',  // German
+			'el_GR' => 'el',  // Greek
+			'en_GB' => 'en',  // English (UK)
+			'en_IN' => 'en',  // English (India)
+			'en_PI' => 'en',  // English (Pirate)
+			'en_UD' => 'en',  // English (Upside Down)
+			'en_US' => 'en',  // English (US)
+			'eo_EO' => 'eo',  // Esperanto
+			'es_CL' => 'es',  // Spanish (Chile)
+			'es_CO' => 'es',  // Spanish (Colombia)
+			'es_ES' => 'es',  // Spanish (Spain)
+			'es_LA' => 'es',  // Spanish
+			'es_MX' => 'es',  // Spanish (Mexico)
+			'es_VE' => 'es',  // Spanish (Venezuela)
+			'et_EE' => 'et',  // Estonian
+			'eu_ES' => 'eu',  // Basque
+			'fa_IR' => 'fa',  // Persian
+			'fb_LT' => 'fb',  // Leet Speak
+			'ff_NG' => 'ff',  // Fulah
+			'fi_FI' => 'fi',  // Finnish
+			'fo_FO' => 'fo',  // Faroese
+			'fr_CA' => 'fr',  // French (Canada)
+			'fr_FR' => 'fr',  // French (France)
+			'fy_NL' => 'fy',  // Frisian
+			'ga_IE' => 'ga',  // Irish
+			'gl_ES' => 'gl',  // Galician
+			'gn_PY' => 'gn',  // Guarani
+			'gu_IN' => 'gu',  // Gujarati
+			'gx_GR' => 'gx',  // Classical Greek
+			'ha_NG' => 'ha',  // Hausa
+			'he_IL' => 'he',  // Hebrew
+			'hi_IN' => 'hi',  // Hindi
+			'hr_HR' => 'hr',  // Croatian
+			'hu_HU' => 'hu',  // Hungarian
+			'hy_AM' => 'hy',  // Armenian
+			'id_ID' => 'id',  // Indonesian
+			'ig_NG' => 'ig',  // Igbo
+			'is_IS' => 'is',  // Icelandic
+			'it_IT' => 'it',  // Italian
+			'ja_JP' => 'ja',  // Japanese
+			'ja_KS' => 'ja',  // Japanese (Kansai)
+			'jv_ID' => 'jv',  // Javanese
+			'ka_GE' => 'ka',  // Georgian
+			'kk_KZ' => 'kk',  // Kazakh
+			'km_KH' => 'km',  // Khmer
+			'kn_IN' => 'kn',  // Kannada
+			'ko_KR' => 'ko',  // Korean
+			'ku_TR' => 'ku',  // Kurdish (Kurmanji)
+			'ky_KG' => 'ky',  // Kyrgyz
+			'la_VA' => 'la',  // Latin
+			'lg_UG' => 'lg',  // Ganda
+			'li_NL' => 'li',  // Limburgish
+			'ln_CD' => 'ln',  // Lingala
+			'lo_LA' => 'lo',  // Lao
+			'lt_LT' => 'lt',  // Lithuanian
+			'lv_LV' => 'lv',  // Latvian
+			'mg_MG' => 'mg',  // Malagasy
+			'mi_NZ' => 'mi',  // Māori
+			'mk_MK' => 'mk',  // Macedonian
+			'ml_IN' => 'ml',  // Malayalam
+			'mn_MN' => 'mn',  // Mongolian
+			'mr_IN' => 'mr',  // Marathi
+			'ms_MY' => 'ms',  // Malay
+			'mt_MT' => 'mt',  // Maltese
+			'my_MM' => 'my',  // Burmese
+			'nb_NO' => 'nb',  // Norwegian (bokmal)
+			'nd_ZW' => 'nd',  // Ndebele
+			'ne_NP' => 'ne',  // Nepali
+			'nl_BE' => 'nl',  // Dutch (België)
+			'nl_NL' => 'nl',  // Dutch
+			'nn_NO' => 'nn',  // Norwegian (nynorsk)
+			'ny_MW' => 'ny',  // Chewa
+			'or_IN' => 'or',  // Oriya
+			'pa_IN' => 'pa',  // Punjabi
+			'pl_PL' => 'pl',  // Polish
+			'ps_AF' => 'ps',  // Pashto
+			'pt_BR' => 'pt',  // Portuguese (Brazil)
+			'pt_PT' => 'pt',  // Portuguese (Portugal)
+			'qu_PE' => 'qu',  // Quechua
+			'rm_CH' => 'rm',  // Romansh
+			'ro_RO' => 'ro',  // Romanian
+			'ru_RU' => 'ru',  // Russian
+			'rw_RW' => 'rw',  // Kinyarwanda
+			'sa_IN' => 'sa',  // Sanskrit
+			'sc_IT' => 'sc',  // Sardinian
+			'se_NO' => 'se',  // Northern Sámi
+			'si_LK' => 'si',  // Sinhala
+			'sk_SK' => 'sk',  // Slovak
+			'sl_SI' => 'sl',  // Slovenian
+			'sn_ZW' => 'sn',  // Shona
+			'so_SO' => 'so',  // Somali
+			'sq_AL' => 'sq',  // Albanian
+			'sr_RS' => 'sr',  // Serbian
+			'sv_SE' => 'sv',  // Swedish
+			'sy_SY' => 'sy',  // Swahili
+			'sw_KE' => 'sw',  // Syriac
+			'sz_PL' => 'sz',  // Silesian
+			'ta_IN' => 'ta',  // Tamil
+			'te_IN' => 'te',  // Telugu
+			'tg_TJ' => 'tg',  // Tajik
+			'th_TH' => 'th',  // Thai
+			'tk_TM' => 'tk',  // Turkmen
+			'tl_PH' => 'tl',  // Filipino
+			'tl_ST' => 'tl',  // Klingon
+			'tr_TR' => 'tr',  // Turkish
+			'tt_RU' => 'tt',  // Tatar
+			'tz_MA' => 'tz',  // Tamazight
+			'uk_UA' => 'uk',  // Ukrainian
+			'ur_PK' => 'ur',  // Urdu
+			'uz_UZ' => 'uz',  // Uzbek
+			'vi_VN' => 'vi',  // Vietnamese
+			'wo_SN' => 'wo',  // Wolof
+			'xh_ZA' => 'xh',  // Xhosa
+			'yi_DE' => 'yi',  // Yiddish
+			'yo_NG' => 'yo',  // Yoruba
+			'zh_CN' => 'zh',  // Simplified Chinese (China)
+			'zh_HK' => 'zh',  // Traditional Chinese (Hong Kong)
+			'zh_TW' => 'zh',  // Traditional Chinese (Taiwan)
+			'zu_ZA' => 'zu',  // Zulu
+			'zz_TR' => 'zz',  // Zazaki
 		];
 	}
 }

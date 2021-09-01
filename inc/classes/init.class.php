@@ -377,6 +377,7 @@ class Init extends Query {
 
 		/**
 		 * @since 2.2.6
+		 * @TODO Deprecate me.
 		 * @param array $functions {
 		 *    'callback' => string|array The function to call.
 		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
@@ -385,11 +386,8 @@ class Init extends Query {
 		$functions = (array) \apply_filters( "the_seo_framework_{$location}_output", [] );
 
 		foreach ( $functions as $function ) {
-			if ( ! empty( $function['callback'] ) ) {
-				$args = isset( $function['args'] ) ? $function['args'] : '';
-
-				$output .= \call_user_func_array( $function['callback'], (array) $args );
-			}
+			if ( ! empty( $function['callback'] ) )
+				$output .= \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
 		}
 
 		return $output;
@@ -467,6 +465,7 @@ class Init extends Query {
 
 		/**
 		 * @since 2.6.0
+		 * @todo deprecate me.
 		 * @param string $before The content before the SEO output.
 		 */
 		echo \apply_filters( 'the_seo_framework_pre', '' );
@@ -546,15 +545,22 @@ class Init extends Query {
 			);
 		endif;
 
+		// TODO add action. TODO shift deprecated junk to this action.
+		// do_action( 'the_seo_framework_output_before' );
+
 		// TODO add filter? It won't last a few major updates though...
 		// But that's why I created this method like so... anyway... tough luck.
 		foreach ( $get as $method )
 			echo $this->{$method}();
 
+		// TODO add action. TODO shift deprecated junk to this action.
+		// do_action( 'the_seo_framework_output_after' );
+
 		echo $this->get_legacy_header_filters_output( 'after' );
 
 		/**
 		 * @since 2.6.0
+		 * @todo deprecate me.
 		 * @param string $after The content after the SEO output.
 		 */
 		echo \apply_filters( 'the_seo_framework_pro', '' );

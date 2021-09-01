@@ -24,8 +24,8 @@ if ( $use_tabs ) :
 		<div class="tsf-flex tsf-flex-nav-tab-inner">
 			<?php
 			foreach ( $tabs as $tab => $value ) :
-				$dashicon   = isset( $value['dashicon'] ) ? $value['dashicon'] : '';
-				$label_name = isset( $value['name'] ) ? $value['name'] : '';
+				$dashicon   = $value['dashicon'] ?? '';
+				$label_name = $value['name'] ?? '';
 
 				$wrapper_id     = esc_attr( "tsf-flex-nav-tab-{$tab}" );
 				$wrapper_active = 1 === $count ? ' tsf-flex-nav-tab-active' : '';

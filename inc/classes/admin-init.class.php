@@ -68,7 +68,7 @@ class Admin_Init extends Init {
 	 */
 	public function _add_post_state( $states = [], $post = null ) {
 
-		$post_id = isset( $post->ID ) ? $post->ID : false;
+		$post_id = $post->ID ?? false;
 
 		if ( $post_id ) {
 			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_post_meta_item( 'exclude_local_search', $post_id );
@@ -177,15 +177,13 @@ class Admin_Init extends Init {
 	 */
 	public function get_input_guidelines( $locale = null ) {
 
-		static $guidelines = [];
-
 		$locale = $locale ?: \get_locale();
 
 		// Strip the "_formal" and other suffixes. 5 length: xx_YY
 		$locale = substr( $locale, 0, 5 );
 
-		if ( isset( $guidelines[ $locale ] ) )
-			return $guidelines[ $locale ];
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $locale ) ) return $memo;
 
 		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		$character_adjustments = [
@@ -204,7 +202,7 @@ class Admin_Init extends Init {
 		];
 		// phpcs:enable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 
-		$c_adjust = isset( $character_adjustments[ $locale ] ) ? $character_adjustments[ $locale ] : 1;
+		$c_adjust = $character_adjustments[ $locale ] ?? 1;
 
 		$pixel_adjustments = [
 			'ar'    => 760 / 910, // Arabic (العربية)
@@ -215,7 +213,7 @@ class Admin_Init extends Init {
 			'ckb'   => 760 / 910, // Central Kurdish (كوردی)
 		];
 
-		$p_adjust = isset( $pixel_adjustments[ $locale ] ) ? $pixel_adjustments[ $locale ] : 1;
+		$p_adjust = $pixel_adjustments[ $locale ] ?? 1;
 
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
@@ -223,78 +221,81 @@ class Admin_Init extends Init {
 		 * @param array $guidelines The title and description guidelines.
 		 *              Don't alter the format. Only change the numeric values.
 		 */
-		return $guidelines[ $locale ] = (array) \apply_filters(
-			'the_seo_framework_input_guidelines',
-			[
-				'title' => [
-					'search' => [
-						'chars'  => [
-							'lower'     => (int) ( 25 * $c_adjust ),
-							'goodLower' => (int) ( 35 * $c_adjust ),
-							'goodUpper' => (int) ( 65 * $c_adjust ),
-							'upper'     => (int) ( 75 * $c_adjust ),
+		return memo(
+			(array) \apply_filters(
+				'the_seo_framework_input_guidelines',
+				[
+					'title' => [
+						'search' => [
+							'chars'  => [
+								'lower'     => (int) ( 25 * $c_adjust ),
+								'goodLower' => (int) ( 35 * $c_adjust ),
+								'goodUpper' => (int) ( 65 * $c_adjust ),
+								'upper'     => (int) ( 75 * $c_adjust ),
+							],
+							'pixels' => [
+								'lower'     => (int) ( 200 * $p_adjust ),
+								'goodLower' => (int) ( 280 * $p_adjust ),
+								'goodUpper' => (int) ( 520 * $p_adjust ),
+								'upper'     => (int) ( 600 * $p_adjust ),
+							],
 						],
-						'pixels' => [
-							'lower'     => (int) ( 200 * $p_adjust ),
-							'goodLower' => (int) ( 280 * $p_adjust ),
-							'goodUpper' => (int) ( 520 * $p_adjust ),
-							'upper'     => (int) ( 600 * $p_adjust ),
+						'opengraph' => [
+							'chars'  => [
+								'lower'     => 15,
+								'goodLower' => 25,
+								'goodUpper' => 88,
+								'upper'     => 100,
+							],
+							'pixels' => [],
 						],
-					],
-					'opengraph' => [
-						'chars'  => [
-							'lower'     => 15,
-							'goodLower' => 25,
-							'goodUpper' => 88,
-							'upper'     => 100,
-						],
-						'pixels' => [],
-					],
-					'twitter' => [
-						'chars'  => [
-							'lower'     => 15,
-							'goodLower' => 25,
-							'goodUpper' => 69,
-							'upper'     => 70,
-						],
-						'pixels' => [],
-					],
-				],
-				'description' => [
-					'search' => [
-						'chars'  => [
-							'lower'     => (int) ( 45 * $c_adjust ),
-							'goodLower' => (int) ( 80 * $c_adjust ),
-							'goodUpper' => (int) ( 160 * $c_adjust ),
-							'upper'     => (int) ( 320 * $c_adjust ),
-						],
-						'pixels' => [
-							'lower'     => (int) ( 256 * $p_adjust ),
-							'goodLower' => (int) ( 455 * $p_adjust ),
-							'goodUpper' => (int) ( 910 * $p_adjust ),
-							'upper'     => (int) ( 1820 * $p_adjust ),
+						'twitter' => [
+							'chars'  => [
+								'lower'     => 15,
+								'goodLower' => 25,
+								'goodUpper' => 69,
+								'upper'     => 70,
+							],
+							'pixels' => [],
 						],
 					],
-					'opengraph' => [
-						'chars'  => [
-							'lower'     => 45,
-							'goodLower' => 80,
-							'goodUpper' => 200,
-							'upper'     => 300,
+					'description' => [
+						'search' => [
+							'chars'  => [
+								'lower'     => (int) ( 45 * $c_adjust ),
+								'goodLower' => (int) ( 80 * $c_adjust ),
+								'goodUpper' => (int) ( 160 * $c_adjust ),
+								'upper'     => (int) ( 320 * $c_adjust ),
+							],
+							'pixels' => [
+								'lower'     => (int) ( 256 * $p_adjust ),
+								'goodLower' => (int) ( 455 * $p_adjust ),
+								'goodUpper' => (int) ( 910 * $p_adjust ),
+								'upper'     => (int) ( 1820 * $p_adjust ),
+							],
 						],
-						'pixels' => [],
-					],
-					'twitter' => [
-						'chars'  => [
-							'lower'     => 45,
-							'goodLower' => 80,
-							'goodUpper' => 200,
-							'upper'     => 200,
+						'opengraph' => [
+							'chars'  => [
+								'lower'     => 45,
+								'goodLower' => 80,
+								'goodUpper' => 200,
+								'upper'     => 300,
+							],
+							'pixels' => [],
 						],
-						'pixels' => [],
+						'twitter' => [
+							'chars'  => [
+								'lower'     => 45,
+								'goodLower' => 80,
+								'goodUpper' => 200,
+								'upper'     => 200,
+							],
+							'pixels' => [],
+						],
 					],
-				],
-			]
+				]
+			),
+			$locale
 		);
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}
@@ -595,18 +596,17 @@ class Admin_Init extends Init {
 	public function _dismiss_notice() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		$key = isset( $_POST['tsf-notice-submit'] ) ? $_POST['tsf-notice-submit'] : '';
+		$key = $_POST['tsf-notice-submit'] ?? '';
+
 		if ( ! $key ) return;
 
 		$notices = $this->get_static_cache( 'persistent_notices', [] );
 		// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;
 
-		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		$nonce = isset( $_POST['tsf_notice_nonce'] ) ? $_POST['tsf_notice_nonce'] : '';
-
 		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-		|| ! \wp_verify_nonce( $nonce, $this->_get_dismiss_notice_nonce_action( $key ) ) ) {
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
+		|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'] ?? '', $this->_get_dismiss_notice_nonce_action( $key ) ) ) {
 			\wp_die( -1, 403 );
 		}
 
