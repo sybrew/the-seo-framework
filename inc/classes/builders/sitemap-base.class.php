@@ -25,6 +25,8 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function The_SEO_Framework\memo;
+
 /**
  * Generates the base sitemap.
  *

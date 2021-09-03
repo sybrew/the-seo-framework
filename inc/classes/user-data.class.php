@@ -55,14 +55,7 @@ class User_Data extends Term_Data {
 	 * @return mixed The user meta item. Null when not found.
 	 */
 	public function get_user_meta_item( $item, $user_id = 0, $use_cache = true ) {
-
-		if ( ! $user_id ) {
-			$meta = $this->get_user_meta( $this->get_user_id(), $use_cache );
-		} else {
-			$meta = $this->get_user_meta( $user_id, $use_cache );
-		}
-
-		return isset( $meta[ $item ] ) ? $meta[ $item ] : null;
+		return $this->get_user_meta( $user_id ?: $this->get_user_id(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -83,6 +76,7 @@ class User_Data extends Term_Data {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 4.1.4
+	 * @TODO Throw this away? We do not use it... never have.
 	 *
 	 * @return array The current author meta.
 	 */
@@ -162,7 +156,8 @@ class User_Data extends Term_Data {
 			]
 		);
 
-		return memo( $meta, $user_id );
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+		return $use_cache ? memo( $meta, $user_id ) : $meta;
 	}
 
 	/**
@@ -264,9 +259,6 @@ class User_Data extends Term_Data {
 		// We could test for !$user, but this is more to the point.
 		if ( empty( $user->ID ) ) return;
 
-		$data = (array) \wp_parse_args( $data, $this->get_user_meta_defaults( $user->ID ) );
-		$data = $this->s_user_meta( $data );
-
 		/**
 		 * @since 4.1.4
 		 * @param array  $data     The data that's going to be saved.
@@ -275,7 +267,10 @@ class User_Data extends Term_Data {
 		$data = (array) \apply_filters_ref_array(
 			'the_seo_framework_save_user_data',
 			[
-				$data,
+				$this->s_user_meta( (array) \wp_parse_args(
+					$data,
+					$this->get_user_meta_defaults( $user->ID )
+				) ),
 				$user->ID,
 			]
 		);
@@ -294,17 +289,11 @@ class User_Data extends Term_Data {
 	 * @return int Post author ID on success, 0 on failure.
 	 */
 	public function get_current_post_author_id() {
-
-		static $cache;
-
-		if ( isset( $cache ) ) return $cache;
-
-		if ( $this->is_singular() ) {
-			$post  = \get_post( $this->get_the_real_ID() );
-			$cache = isset( $post->post_author ) ? (int) $post->post_author : 0;
-		}
-
-		return $cache ?: ( $cache = 0 );
+		return memo() ?? memo(
+			$this->is_singular()
+			? (int) ( \get_post( $this->get_the_real_ID() )->post_author ?? 0 )
+			: 0
+		);
 	}
 
 	/**
@@ -317,14 +306,12 @@ class User_Data extends Term_Data {
 	 */
 	public function get_user_id() {
 
-		static $user_id = null;
-
-		if ( isset( $user_id ) )
-			return $user_id;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$user = \wp_get_current_user();
 
-		return $user_id = $user->exists() ? (int) $user->ID : 0;
+		return memo( $user->exists() ? (int) $user->ID : 0 );
 	}
 
 	/**

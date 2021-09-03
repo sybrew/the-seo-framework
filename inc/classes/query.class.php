@@ -173,10 +173,8 @@ class Query extends Core {
 		// Try to get ID from plugins when caching is available.
 		$id = $use_cache ? $this->check_the_real_ID() : 0;
 
-		if ( ! $id ) {
-			// This catches most IDs. Even Post IDs.
-			$id = \get_queried_object_id();
-		}
+		// This catches most IDs. Even Post IDs.
+		$id = $id ?: \get_queried_object_id();
 
 		/**
 		 * @since 2.6.2
@@ -185,6 +183,7 @@ class Query extends Core {
 		 */
 		$id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $use_cache );
 
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
 		return $use_cache ? memo( $id ) : $id;
 	}
 
@@ -279,13 +278,10 @@ class Query extends Core {
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
-		static $memo;
-
-		if ( isset( $memo ) ) return $memo;
-
-		$_object = \is_admin() ? $GLOBALS['current_screen'] : \get_queried_object();
-
-		return $memo = ! empty( $_object->taxonomy ) ? $_object->taxonomy : '';
+		return memo() ?? memo(
+			( \is_admin() ? $GLOBALS['current_screen'] : \get_queried_object() )
+				->taxonomy ?? ''
+		);
 	}
 
 	/**

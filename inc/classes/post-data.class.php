@@ -74,6 +74,7 @@ class Post_Data extends Detect {
 	 * @param string $item      The item to get.
 	 * @param int    $post_id   The post ID.
 	 * @param bool   $use_cache Whether to use caching.
+	 * @return mixed The post meta item's value. Null when item isn't registered.
 	 */
 	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
 		return $this->get_post_meta( $post_id ?: $this->get_the_real_ID(), $use_cache )[ $item ] ?? null;
@@ -106,8 +107,10 @@ class Post_Data extends Detect {
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
 
-		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) )
-			return memo( [], $post_id );
+		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) ) {
+			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+			return $use_cache ? memo( [], $post_id ) : [];
+		}
 
 		/**
 		 * We can't trust the filter to always contain the expected keys.
@@ -128,8 +131,8 @@ class Post_Data extends Detect {
 			);
 
 			// WP converts all entries to arrays, because we got ALL entries. Disarray!
-			foreach ( $meta as $key => $value )
-				$meta[ $key ] = $value[0];
+			foreach ( $meta as &$value )
+				$value = $value[0];
 		}
 
 		/**
@@ -151,7 +154,8 @@ class Post_Data extends Detect {
 		);
 
 		// Cache using $post_id, not $post->ID, otherwise invalid queries can bypass the cache.
-		return memo( $meta, $post_id );
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+		return $use_cache ? memo( $meta, $post_id ) : $meta;
 	}
 
 	/**
@@ -824,6 +828,7 @@ class Post_Data extends Detect {
 
 		static $primary_terms = [];
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
 
 		$primary_id = (int) \get_post_meta( $post_id, '_primary_term_' . $taxonomy, true ) ?: 0;

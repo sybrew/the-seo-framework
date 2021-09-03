@@ -258,6 +258,7 @@ TODO in get_available_twitter_cards(), get_twitter_title() should always return 
 	* So, how do we solve this? get_twitter_title() is a heavy method, for it tries to render twitter -> og -> meta.
 TODO yield from...
 TODO clean up image generator, it's messy.
+TODO add link to our KB about same-site sitemaps when WPML or Polylang is detected? We get this question every week...
 
 TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` isn't found.
 	* This will be difficult.
