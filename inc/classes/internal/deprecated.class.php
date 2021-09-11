@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Deprecated
+ * @package The_SEO_Framework\Classes\Internal\Deprecated
  * @subpackage The_SEO_Framework\Debug\Deprecated
  */
 
-namespace The_SEO_Framework;
+namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -34,6 +34,7 @@ namespace The_SEO_Framework;
  * @since 3.1.0 Removed all methods deprecated in 3.0.0.
  * @since 4.0.0 Removed all methods deprecated in 3.1.0.
  * @since 4.1.4 Removed all methods deprecated in 4.0.0.
+ * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
  * @ignore
  */
 final class Deprecated {

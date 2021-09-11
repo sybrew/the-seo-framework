@@ -284,6 +284,8 @@ TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` 
 **For developers:**
 
 * **Object notes:**
+	* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
+	* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
 	* For object `\The_SEO_Framework\Load` (callable via `the_seo_framework()`):
 		* **Methods added:**
 			* `memo`, this method stores and returns memoized values for the caller.
@@ -295,6 +297,7 @@ TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` 
 		* **Methods deprecated:**
 			* TODO `engage_pinging_cron()` is now deprecated. Use TODO instead.
 				* Did anyone actually use this method externally? Is there ANY conceivable reason they ought?
+	* Object `\The_SEO_Framework\Silencer` is now `\The_SEO_Framework\Internal\Silencer`.
 
 = 4.1.5.1 =
 

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Silencer
+ * @package The_SEO_Framework\Classes\Internal\Silencer
  * @subpackage The_SEO_Framework\Classes\Facade
  */
 
-namespace The_SEO_Framework;
+namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -34,6 +34,7 @@ namespace The_SEO_Framework;
  * This alleviates redundant checks throughout the plugin API.
  *
  * @since 3.1.0
+ * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
  * @ignore
  * @property false $loaded
  */

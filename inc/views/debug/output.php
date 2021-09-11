@@ -7,6 +7,8 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
+use The_SEO_Framework\Internal\Debug;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
 
 $id       = $this->get_the_real_ID();
@@ -45,8 +47,8 @@ if ( is_admin() ) {
 		</h3>
 		<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 			<?php
-			The_SEO_Framework\Debug::_output_debug_header();
-			The_SEO_Framework\Debug::_output_debug_query();
+			Debug::_output_debug_header();
+			Debug::_output_debug_query();
 			?>
 		</div>
 	</div>
@@ -68,15 +70,15 @@ if ( is_admin() ) {
 		</h3>
 		<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
 			<?php
-			The_SEO_Framework\Debug::_output_debug_header();
+			Debug::_output_debug_header();
 			?>
 			<div style="width:50%;float:left;">
 				<?php
-				The_SEO_Framework\Debug::_output_debug_query_from_cache();
+				Debug::_output_debug_query_from_cache();
 				?>
 			</div><div style="width:50%;float:right;">
 				<?php
-				The_SEO_Framework\Debug::_output_debug_query();
+				Debug::_output_debug_query();
 				?>
 			</div>
 		</div>

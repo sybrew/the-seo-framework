@@ -147,7 +147,7 @@ final class Load extends Cache {
 
 		$this->the_seo_framework_debug = \defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
 		if ( $this->the_seo_framework_debug )
-			\The_SEO_Framework\Debug::_set_instance( $this->the_seo_framework_debug );
+			Internal\Debug::_set_instance( $this->the_seo_framework_debug );
 
 		$this->the_seo_framework_use_transients = \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
 
@@ -222,7 +222,8 @@ final class Load extends Cache {
 	 * @param string $replacement Optional. The function that should have been called. Default null.
 	 */
 	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
-		Debug::get_instance()->_deprecated_function( $function, $version, $replacement ); // phpcs:ignore -- Wrong asserts, copied method name.
+		// phpcs:ignore -- Wrong asserts, copied method name.
+		Internal\Debug::get_instance()->_deprecated_function( $function, $version, $replacement );
 	}
 
 	/**
@@ -238,7 +239,8 @@ final class Load extends Cache {
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
-		Debug::get_instance()->_doing_it_wrong( $function, $message, $version ); // phpcs:ignore -- Wrong asserts, copied method name.
+		// phpcs:ignore -- Wrong asserts, copied method name.
+		Internal\Debug::get_instance()->_doing_it_wrong( $function, $message, $version );
 	}
 
 	/**
@@ -252,6 +254,6 @@ final class Load extends Cache {
 	 * @param string $message A message explaining what has been done incorrectly.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
-		Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message );
+		Internal\Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message );
 	}
 }

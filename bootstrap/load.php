@@ -94,7 +94,7 @@ function _init_tsf() {
 		 */
 		\do_action( 'the_seo_framework_loaded' );
 	} else {
-		$tsf         = new Silencer();
+		$tsf         = new Internal\Silencer();
 		$tsf->loaded = false;
 	}
 

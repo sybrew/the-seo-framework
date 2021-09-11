@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Debug
+ * @package The_SEO_Framework\Classes\Internal\Debug
  * @subpackage The_SEO_Framework\Debug
  */
 
-namespace The_SEO_Framework;
+namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -34,6 +34,7 @@ namespace The_SEO_Framework;
  *
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
+ * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
  */
 final class Debug {
 
