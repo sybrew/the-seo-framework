@@ -355,9 +355,8 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	protected function output_dismissible_persistent_notices() {
 
-		$notices        = $this->get_static_cache( 'persistent_notices', [] );
-		$current_screen = \get_current_screen();
-		$base           = $current_screen->base ?? '';
+		$notices    = $this->get_static_cache( 'persistent_notices', [] );
+		$screenbase = \get_current_screen()->base ?? '';
 
 		// Ideally, we don't want to output more than one on no-js. Alas, we can't anticipate the importance and order of the notices.
 		foreach ( $notices as $key => $notice ) {
@@ -365,8 +364,8 @@ class Admin_Pages extends Generate_Ldjson {
 
 			if ( ! \current_user_can( $cond['capability'] ) ) continue;
 			if ( $cond['user'] && $cond['user'] !== $this->get_user_id() ) continue;
-			if ( $cond['screens'] && ! \in_array( $base, $cond['screens'], true ) ) continue;
-			if ( $cond['excl_screens'] && \in_array( $base, $cond['excl_screens'], true ) ) continue;
+			if ( $cond['screens'] && ! \in_array( $screenbase, $cond['screens'], true ) ) continue;
+			if ( $cond['excl_screens'] && \in_array( $screenbase, $cond['excl_screens'], true ) ) continue;
 
 			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
 				$this->clear_persistent_notice( $key );
