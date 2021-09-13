@@ -28,7 +28,7 @@ namespace The_SEO_Framework\Internal;
  */
 
 /**
- * Singleton class The_SEO_Framework\Debug
+ * Singleton class The_SEO_Framework\Internal\Debug
  *
  * Holds plugin debug functions.
  *
@@ -288,7 +288,7 @@ final class Debug {
 			 * 1 = Error handler (This class).
 			 * 2 = Error forwarder (TSF class).
 			 */
-			if ( isset( $backtrace[4]['args'][0][0] ) && is_a( $backtrace[4]['args'][0][0], 'The_SEO_Framework\Deprecated', false ) ) {
+			if ( isset( $backtrace[4]['args'][0][0] ) && is_a( $backtrace[4]['args'][0][0], 'The_SEO_Framework\Internal\Deprecated', false ) ) {
 				/**
 				 * 3 = Deprecated call.
 				 * 4 = TSF deprecation class fowarder.

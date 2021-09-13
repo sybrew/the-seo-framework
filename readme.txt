@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
-Requires at least: 5.1.0
+Requires at least: 5.4.0
 Tested up to: 5.8
 Requires PHP: 7.2.0
 Stable tag: 4.1.5.1
@@ -251,8 +251,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
 
+TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
+	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
+
 TODO fix discrepancy in views/admin/wrap-content and views/edit/wrap-content by adding a new action.
-TODO memo() can be faster. Gotta check opcodes.
 TODO in get_available_twitter_cards(), get_twitter_title() should always return something, so that check is redundant.
 	* However, in the edge-case it doesn't return something, the Twitter output should be discarded!
 	* So, how do we solve this? get_twitter_title() is a heavy method, for it tries to render twitter -> og -> meta.
@@ -260,15 +262,45 @@ TODO yield from...
 TODO clean up image generator, it's messy.
 TODO add link to our KB about same-site sitemaps when WPML or Polylang is detected? We get this question every week...
 
+TODO Ultimate Member, "double the SEO" (when WPML is also active? on non-default languages?)
+	-> https://wordpress.org/support/topic/double-the-seo-2/
+	-> Also email from hash Z9tDo5Ygrv0JzYXhM.
+
 TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` isn't found.
 	* This will be difficult.
+
+TODO deprecate _do_settings_page_notices(), and use the new persistent notice system instead.
+	-> Rename set_plugin_check_caches() to `notify_user_of_conflicting_plugin( 'seo' )`.
+	-> In effect, do_dismissible_notice()?
+		-> The notice called at `_output_notices()` can be used with persistent notices as well.
+			-> In fact, we can make it Multisite compatible that way. Sub site has SEO plugin->main site activates conflicting SEO plugin->notice on sub-site.
+				-> Show 3x. Delete if detected conflict is gone (hook at plugin_activated). -> Test show 10x to make sure it works as intended (activate/deactivate, etc.).
+TODO Move notice handlers to new class.
+
+TODO overthrow the structured data. Clean-room Yoast's implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
+
+TODO can we change behavior of, since we require PHP 7.2 "_class = function() {"
+
+TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
+
+TODO (return/variable) strict type enforcements?
+	-> This negatively affects performance, for more opcodes are performed every function call.
+		-> We're talking milliseconds...
+	-> HOWEVER, future OpCache versions might use hinting to streamline opcodes. Increasing performance.
+		-> We're talking microseconds...
+	-> The real benefit is that we'll find bugs, and prevent other plugin authors creating bugs using TSF.
+		-> The cost is that users will experience fatal errors.
+	-> Conclusion: Do not use it.
+
+get_static_front_page_title / get_blogname... -> ??
 
 **For everyone:**
 
 * **Upgrade notes:**
 	* PHP 7.2 or higher is now required, from PHP 5.6 or higher.
-	* TODO WP 5.4 or higher is now required, from WP 5.1 or higher.
-		* Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
+	* WP 5.4 (TODO 5.5?) or higher is now required, from WP 5.1 or higher.
+		* TODO Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
+			* Mind the gmdate()/date()/get_the_date/gmt2date()/->post_date function calls.
 		* TODO Flex patch (lookup 'WP 5.4').
 		* TODO Archive title patch (lookup 'WP 5.5')
 		* TODO Auto-update patch (lookup 'WP 5.5')
@@ -279,7 +311,9 @@ TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` 
 	* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
 	* Open Graph, Twitter, and meta titles are now regenerated faster.
 	* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
-	* TODO The robots-meta is now generated on-demand only, meaning it generates sitemaps faster.
+	* TODO The robots-meta is now generated on-demand only, meaning sitemaps generate much faster.
+		* TODO can we prevent sitemap post-cache invoking locally? We can clear WP cache.
+			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
 
 **For developers:**
 
@@ -291,13 +325,80 @@ TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` 
 			* `memo`, this method stores and returns memoized values for the caller.
 		* **Methods changed:**
 			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
-			* TODO `fb_locales()`, use `supported_social_locales()` instead.
-			* TODO `language_keys()`, use `supported_social_locales()` instead.
+		* **Methods deprecated:**
+			* `append_php_query()`, use `the_seo_framework()->append_url_query()` instead.
+			* `get_html_output()`, with no alternative available.
+			* `is_robots_meta_noindex_set_by_args()`, use `the_seo_framework()->generate_robots_meta()` instead.
+			* `robots_meta()`, use `the_seo_framework()->generate_robots_meta()` instead.
+			* `can_do_sitemap_robots()`, with no alternative available.
+			* `nav_tab_wrapper()`, use `\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper()` instead.
+			* `inpost_flex_nav_tab_wrapper()`, use `\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper()` instead.
+			* `get_social_image_uploader_form()`, use `\The_SEO_Framework\Interpreters\Form::get_image_uploader_form()` instead.
+			* `get_logo_uploader_form()`, use `\The_SEO_Framework\Interpreters\Form::get_image_uploader_form()` instead.
+			* `seo_settings_page_url()`, use `the_seo_framework()->get_seo_settings_page_url()` instead.
+			* `get_default_user_data()`, use `the_seo_framework()->get_user_meta_defaults()` instead.
+			* `get_user_option()`, use `the_seo_framework()->get_user_meta_item()` instead.
+			* `get_author_option()`, use `the_seo_framework()->get_current_post_author_id()` instead.
+			* `get_current_author_option()`, use `the_seo_framework()->get_current_post_author_meta_item()` instead.
+			* `is_wc_shop()`, use `the_seo_framework()->is_shop()` instead.
+			* `is_wc_product()`, use `the_seo_framework()->is_product()` instead.
+			* `is_wc_product_admin()`, use `the_seo_framework()->is_product_admin()` instead.
+			* `update_user_option()`, use `the_seo_framework()->update_single_user_meta_item()` instead.
+			TODO: set public alternatives?
+			* `get_field_name()`, with no alternative available.
+			* `field_name()`, with no alternative available.
+			* `get_field_id()`, with no alternative available.
+			* `field_id()`, with no alternative available.
+			* `code_wrap()`, with no alternative available.
+			* `code_wrap_noesc()`, with no alternative available.
+			* `description()`, with no alternative available.
+			* `description_noesc()`, with no alternative available.
+			* `attention()`, with no alternative available.
+			* `attention_noesc()`, with no alternative available.
+			* `attention_description()`, with no alternative available.
+			* `attention_description_noesc()`, with no alternative available.
+			* `wrap_fields()`, with no alternative available.
+			* `make_info()`, with no alternative available.
+			* `make_data_attributes()`, with no alternative available.
+			* `make_checkbox()`, with no alternative available.
+			* `make_single_select_form()`, with no alternative available.
+			* `is_default_checked()`, with no alternative available.
+			* `is_warning_checked()`, with no alternative available.
+			* `get_is_conditional_checked()`, with no alternative available.
+			* `is_conditional_checked()`, with no alternative available.
+			* `output_character_counter_wrap()`, with no alternative available.
+			* `output_pixel_counter_wrap()`, with no alternative available.
+			ENDTODO.
+			* `wp_version()` with no alternative available.
+			* `detect_theme_support()` with no alternative available.
+			* `detect_page_builder()` with no alternative available.
+			* `uses_page_builder()` with no alternative available.
+			* `fb_locales()`, use `supported_social_locales()` instead.
+			* `language_keys()`, use `supported_social_locales()` instead.
+		* **Methods removed:**
+			* `is_post_type_page()`, was deprecated since 4.1.0.
+			* `is_taxonomy_public()`, was deprecated since 4.1.0.
+			* `the_seo_framework_get_option()`, was deprecated since 4.1.0.
+			* `get_home_page_tagline()`, was deprecated since 4.1.0.
+			* `permalink_structure()`, was deprecated since 4.1.0.
+		* **Properties deprecated:**
+			* `$load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	* For object `\The_SEO_Framework\Bridges\Ping`
 		* **Methods deprecated:**
 			* TODO `engage_pinging_cron()` is now deprecated. Use TODO instead.
 				* Did anyone actually use this method externally? Is there ANY conceivable reason they ought?
 	* Object `\The_SEO_Framework\Silencer` is now `\The_SEO_Framework\Internal\Silencer`.
+* **Filter notes:**
+	* **Deprecated:**
+		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
+		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta` instead.
+		* `the_seo_framework_pro`, use action `the_seo_framework_after_meta` instead.
+		* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta` instead.
+		* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta` instead.
+* **Action notes:**
+	* **Added:**
+		* `the_seo_framework_before_meta`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`
+		* `the_seo_framework_after_meta`, this replaces filters `the_seo_framework_pro` and `the_seo_framework_after_output`
 
 = 4.1.5.1 =
 

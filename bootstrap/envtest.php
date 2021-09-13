@@ -79,7 +79,7 @@ function the_seo_framework_pre_boot_test() {
 
 	$requirements = array(
 		'php' => 70200,
-		'wp'  => '5.1-dev',
+		'wp'  => '5.4-dev',
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
@@ -117,7 +117,7 @@ function the_seo_framework_pre_boot_test() {
 	switch ( $test ) :
 		case 1:
 			// PHP requirements not met, always count up to encourage best standards.
-			$requirement = 'PHP 5.6.0 or later';
+			$requirement = 'PHP 7.2.0 or later';
 			$issue       = 'PHP version';
 			$version     = PHP_VERSION;
 			$subtitle    = 'Server Requirements';
@@ -125,7 +125,7 @@ function the_seo_framework_pre_boot_test() {
 
 		case 2:
 			// WordPress requirements not met.
-			$requirement = 'WordPress 5.1 or later';
+			$requirement = 'WordPress 5.4 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';

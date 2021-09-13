@@ -610,69 +610,6 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Determines whether the post has a page builder attached to it.
-	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
-	 *
-	 * Detects the following builders:
-	 * - Elementor by Elementor LTD
-	 * - Divi Builder by Elegant Themes
-	 * - Visual Composer by WPBakery
-	 * - Page Builder by SiteOrigin
-	 * - Beaver Builder by Fastline Media
-	 *
-	 * @since 2.6.6
-	 * @since 3.1.0 Added Elementor detection
-	 * @since 4.0.0 Now detects page builders before looping over the meta.
-	 * @TODO deprecate? -> We may use this data for they have FSE builders. We may want to interface with those, some day.
-	 * @ignore unused.
-	 *
-	 * @param int $post_id The post ID to check.
-	 * @return bool
-	 */
-	public function uses_page_builder( $post_id ) {
-
-		$meta = \get_post_meta( $post_id );
-
-		/**
-		 * @since 2.6.6
-		 * @since 3.1.0 : 1. Now defaults to `null`
-		 *                2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
-		 * @param boolean|null $detected Whether a builder should be detected.
-		 * @param int          $post_id The current Post ID.
-		 * @param array        $meta The current post meta.
-		 */
-		$detected = \apply_filters( 'the_seo_framework_detect_page_builder', null, $post_id, $meta );
-
-		if ( \is_bool( $detected ) )
-			return $detected;
-
-		if ( ! $this->detect_page_builder() )
-			return false;
-
-		if ( empty( $meta ) )
-			return false;
-
-		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && \defined( 'ELEMENTOR_VERSION' ) ) :
-			// Elementor by Elementor LTD
-			return true;
-		elseif ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
-			// Divi Builder by Elegant Themes
-			return true;
-		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
-			// Visual Composer by WPBakery
-			return true;
-		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && \defined( 'SITEORIGIN_PANELS_VERSION' ) ) :
-			// Page Builder by SiteOrigin
-			return true;
-		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && \defined( 'FL_BUILDER_VERSION' ) ) :
-			// Beaver Builder by Fastline Media...
-			return true;
-		endif;
-
-		return false;
-	}
-
-	/**
 	 * Determines whether the post has a page builder that renders content dynamically attached to it.
 	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
 	 *

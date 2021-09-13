@@ -267,6 +267,9 @@ class Init extends Query {
 		// Prepares requisite robots headers to avoid low-quality content penalties.
 		$this->prepare_robots_headers();
 
+		\add_action( 'the_seo_framework_before_meta', [ $this, '_do_deprecated_output_hooks_before' ] );
+		\add_action( 'the_seo_framework_after_meta', [ $this, '_do_deprecated_output_hooks_after' ] );
+
 		// Output meta tags.
 		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
 
@@ -364,33 +367,87 @@ class Init extends Query {
 	}
 
 	/**
-	 * Runs header actions.
+	 * Outputs deprecated output hooks.
 	 *
-	 * @since 3.1.0
-	 *
-	 * @param string $location Either 'before' or 'after'.
-	 * @return string The filter output.
+	 * @since 4.2.0
+	 * @access private
 	 */
-	public function get_legacy_header_filters_output( $location = 'before' ) {
-
-		$output = '';
+	public function _do_deprecated_output_hooks_before() {
+		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
+		/**
+		 * @since 2.6.0
+		 * @since 4.2.0 Deprecated.
+		 * @param string $before The content before the SEO output.
+		 */
+		echo \apply_filters_deprecated(
+			'the_seo_framework_pre',
+			[ '' ],
+			'4.2.0 of The SEO Framework',
+			'Action the_seo_framework_before_meta'
+		);
 
 		/**
 		 * @since 2.2.6
-		 * @TODO Deprecate me.
+		 * @since 4.2.0 Deprecated
 		 * @param array $functions {
 		 *    'callback' => string|array The function to call.
 		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
 		 * }
 		 */
-		$functions = (array) \apply_filters( "the_seo_framework_{$location}_output", [] );
+		$functions = (array) \apply_filters_deprecated(
+			'the_seo_framework_before_output',
+			[ [] ],
+			'4.2.0 of The SEO Framework',
+			'Action the_seo_framework_before_meta'
+		);
 
 		foreach ( $functions as $function ) {
 			if ( ! empty( $function['callback'] ) )
-				$output .= \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
+				echo \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
+		}
+		// phpcs:enable, WordPress.Security.EscapeOutput
+	}
+
+	/**
+	 * Outputs deprecated output hooks.
+	 *
+	 * @since 4.2.0
+	 * @access private
+	 */
+	public function _do_deprecated_output_hooks_after() {
+		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
+		/**
+		 * @since 2.2.6
+		 * @since 4.2.0 Deprecated
+		 * @param array $functions {
+		 *    'callback' => string|array The function to call.
+		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
+		 * }
+		 */
+		$functions = (array) \apply_filters_deprecated(
+			'the_seo_framework_after_output',
+			[ [] ],
+			'4.2.0 of The SEO Framework',
+			'Action the_seo_framework_after_meta'
+		);
+
+		foreach ( $functions as $function ) {
+			if ( ! empty( $function['callback'] ) )
+				echo \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
 		}
 
-		return $output;
+		/**
+		 * @since 2.6.0
+		 * @since 4.2.0 Deprecated.
+		 * @param string $after The content after the SEO output.
+		 */
+		echo \apply_filters_deprecated(
+			'the_seo_framework_pro',
+			[ '' ],
+			'4.2.0 of The SEO Framework',
+			'Action the_seo_framework_after_meta'
+		);
+		// phpcs:enable, WordPress.Security.EscapeOutput
 	}
 
 	/**
@@ -417,9 +474,8 @@ class Init extends Query {
 		 * @since 4.1.4
 		 * @param bool $kill_core_robots Whether you feel sympathy for rocks tricked to think.
 		 */
-		if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) ) {
+		if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) )
 			\remove_filter( 'wp_robots', 'wp_robots_noindex_search' );
-		}
 
 		/**
 		 * @since 2.6.0
@@ -438,7 +494,17 @@ class Init extends Query {
 		// phpcs:ignore Squiz.WhiteSpace.LanguageConstructSpacing -- We're fancy here.
 		echo PHP_EOL, $this->get_plugin_indicator( 'before' );
 
+		/**
+		 * @since 4.2.0
+		 */
+		\do_action( 'the_seo_framework_before_meta' );
+
 		$this->do_meta_output();
+
+		/**
+		 * @since 4.2.0
+		 */
+		\do_action( 'the_seo_framework_after_meta' );
 
 		echo $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
 		// phpcs:enable, WordPress.Security.EscapeOutput
@@ -453,24 +519,11 @@ class Init extends Query {
 	 * Outputs all meta tags for the current query.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 No longer rectifies timezones.
 	 */
 	public function do_meta_output() {
 
-		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
-
 		$get = [ 'robots' ];
-
-		/** @since 4.0.4 Added as WP 5.3 patch. */
-		$this->set_timezone( 'UTC' );
-
-		/**
-		 * @since 2.6.0
-		 * @todo deprecate me.
-		 * @param string $before The content before the SEO output.
-		 */
-		echo \apply_filters( 'the_seo_framework_pre', '' );
-
-		echo $this->get_legacy_header_filters_output( 'before' );
 
 		// Limit processing and redundant tags on 404 and search.
 		if ( $this->is_search() ) :
@@ -545,30 +598,10 @@ class Init extends Query {
 			);
 		endif;
 
-		// TODO add action. TODO shift deprecated junk to this action.
-		// do_action( 'the_seo_framework_output_before' );
-
-		// TODO add filter? It won't last a few major updates though...
+		// TODO add filter to $get? It won't last a few major updates though...
 		// But that's why I created this method like so... anyway... tough luck.
-		foreach ( $get as $method )
-			echo $this->{$method}();
-
-		// TODO add action. TODO shift deprecated junk to this action.
-		// do_action( 'the_seo_framework_output_after' );
-
-		echo $this->get_legacy_header_filters_output( 'after' );
-
-		/**
-		 * @since 2.6.0
-		 * @todo deprecate me.
-		 * @param string $after The content after the SEO output.
-		 */
-		echo \apply_filters( 'the_seo_framework_pro', '' );
-
-		/** @since 4.0.4 Added as WP 5.3 patch. */
-		$this->reset_timezone();
-
-		// phpcs:enable, WordPress.Security.EscapeOutput
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
+		foreach ( $get as $method ) echo $this->{$method}();
 	}
 
 	/**

@@ -548,50 +548,6 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Detects presence of a page builder.
-	 * Memoizes the return value.
-	 *
-	 * Detects the following builders:
-	 * - Elementor by Elementor LTD
-	 * - Divi Builder by Elegant Themes
-	 * - Visual Composer by WPBakery
-	 * - Page Builder by SiteOrigin
-	 * - Beaver Builder by Fastline Media
-	 *
-	 * @since 4.0.0
-	 * @since 4.0.6 The output is now filterable.
-	 * @TODO deprecate?
-	 * @ignore unused.
-	 *
-	 * @return bool
-	 */
-	public function detect_page_builder() {
-
-		static $detected = null;
-
-		if ( isset( $detected ) ) return $detected;
-
-		/**
-		 * @since 4.0.6
-		 * @param bool $detected Whether an active page builder is detected.
-		 * @NOTE not to be confused with `the_seo_framework_detect_page_builder`, which tests
-		 *       the page builder status for each post individually.
-		 */
-		return $detected = (bool) \apply_filters(
-			'the_seo_framework_page_builder_active',
-			$this->detect_plugin( [
-				'constants' => [
-					'ELEMENTOR_VERSION',
-					'ET_BUILDER_VERSION',
-					'WPB_VC_VERSION',
-					'SITEORIGIN_PANELS_VERSION',
-					'FL_BUILDER_VERSION',
-				],
-			] )
-		);
-	}
-
-	/**
 	 * Detects presence of a page builder that renders content dynamically.
 	 *
 	 * Detects the following builders:
@@ -675,58 +631,6 @@ class Detect extends Render {
 
 		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
 		return $has_map = file_exists( $path );
-	}
-
-	/**
-	 * Determines if WP is above or below a version
-	 *
-	 * @since 2.2.1
-	 * @since 2.3.8 Added caching
-	 * @since 2.8.0 No longer overwrites global $wp_version
-	 * @since 3.1.0 1. No longer caches.
-	 *              2. Removed redundant parameter checks.
-	 *              3. Now supports x.yy.zz WordPress versions.
-	 *
-	 * @param string $version the three part version to compare to WordPress
-	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
-	 * @return bool True if the WordPress version comparison passes.
-	 */
-	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
-
-		$wp_version = $GLOBALS['wp_version'];
-
-		/**
-		 * Add a .0 if WP outputs something like 4.3 instead of 4.3.0
-		 * Does consider 4.xx, which will become 4.xx.0
-		 */
-		if ( 1 === substr_count( $wp_version, '.' ) )
-			$wp_version = $wp_version . '.0';
-
-		return (bool) version_compare( $wp_version, $version, $compare );
-	}
-
-	/**
-	 * Checks for current theme support.
-	 *
-	 * Maintains detection cache, array and strings are mixed through foreach loops.
-	 *
-	 * @since 2.2.5
-	 * @since 3.1.0 Removed caching
-	 * @TODO deprecate me.
-	 *
-	 * @param string|array required $features The features to check for.
-	 * @return bool theme support.
-	 */
-	public function detect_theme_support( $features ) {
-
-		foreach ( (array) $features as $feature ) {
-			if ( \current_theme_supports( $feature ) ) {
-				return true;
-			}
-			continue;
-		}
-
-		return false;
 	}
 
 	/**

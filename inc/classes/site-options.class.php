@@ -641,41 +641,6 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
-	 * Returns Facebook locales array values.
-	 *
-	 * @since 2.5.2
-	 * @TODO deprecate me.
-	 *
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
-	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
-	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
-	 * @see $this->language_keys() for the associative array keys.
-	 *
-	 * @return array Valid Facebook locales
-	 */
-	public function fb_locales() {
-		return \array_keys( $this->supported_social_locales() );
-	}
-
-	/**
-	 * Returns Facebook locales' associative array keys.
-	 *
-	 * This is apart from the fb_locales array since there are "duplicated" keys.
-	 * Use this to compare the numeric key position.
-	 *
-	 * @since 2.5.2
-	 * @TODO deprecate me.
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
-	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
-	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
-	 *
-	 * @return array Valid Facebook locale keys
-	 */
-	public function language_keys() {
-		return \array_values( $this->supported_social_locales() );
-	}
-
-	/**
 	 * Returns supported social site locales.
 	 *
 	 * @since 4.2.0

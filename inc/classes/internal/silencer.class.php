@@ -28,7 +28,7 @@ namespace The_SEO_Framework\Internal;
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- That's the whole premise of this file.
 
 /**
- * Class The_SEO_Framework\Silencer
+ * Class The_SEO_Framework\Internal\Silencer
  *
  * This is an empty class to silence invalid API calls when the plugin is soft-disabled.
  * This alleviates redundant checks throughout the plugin API.

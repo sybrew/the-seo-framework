@@ -25,8 +25,10 @@ namespace The_SEO_Framework\Internal;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use function The_SEO_Framework\memo; // Precautionary.
+
 /**
- * Class The_SEO_Framework\Deprecated
+ * Class The_SEO_Framework\Internal\Deprecated
  *
  * Contains all deprecated functions.
  *
@@ -34,149 +36,11 @@ namespace The_SEO_Framework\Internal;
  * @since 3.1.0 Removed all methods deprecated in 3.0.0.
  * @since 4.0.0 Removed all methods deprecated in 3.1.0.
  * @since 4.1.4 Removed all methods deprecated in 4.0.0.
- * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
+ * @since 4.2.0 1. Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
+ *              2. Removed all methods deprecated in 4.1.0.
  * @ignore
  */
 final class Deprecated {
-
-	/**
-	 * Detect if the current screen type is a page or taxonomy.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.3.1
-	 * @since 4.1.0 Deprecated.
-	 * @deprecated
-	 *
-	 * @param string $type the Screen type
-	 * @return bool true if post type is a page or post
-	 */
-	public function is_post_type_page( $type ) {
-
-		static $is_page = [];
-
-		if ( isset( $is_page[ $type ] ) )
-			return $is_page[ $type ];
-
-		$tsf = \the_seo_framework();
-
-		$tsf->_deprecated_function( 'the_seo_framework()->is_post_type_page()', '4.1.0' );
-
-		$post_page = (array) \get_post_types( [ 'public' => true ] );
-
-		foreach ( $post_page as $screen ) {
-			if ( $type === $screen ) {
-				return $is_page[ $type ] = true;
-			}
-		}
-
-		return $is_page[ $type ] = false;
-	}
-
-	/**
-	 * Checks whether the taxonomy is public and rewritable.
-	 *
-	 * @since 3.1.0
-	 * @since 4.1.0 1: Now returns true on all public taxonomies; not just public taxonomies with rewrite capabilities.
-	 *              2: Deprecated.
-	 * @deprecated
-	 *
-	 * @param string $taxonomy The taxonomy name.
-	 * @return bool
-	 */
-	public function is_taxonomy_public( $taxonomy = '' ) {
-
-		$tsf = \the_seo_framework();
-
-		$tsf->_deprecated_function( 'the_seo_framework()->is_taxonomy_public()', '4.1.0', 'the_seo_framework()->is_taxonomy_supported()' );
-
-		$taxonomy = $taxonomy ?: $tsf->get_current_taxonomy();
-		if ( ! $taxonomy ) return false;
-
-		$tax = \get_taxonomy( $taxonomy );
-
-		if ( false === $tax ) return false;
-
-		return ! empty( $tax->public );
-	}
-
-	/**
-	 * Return option from the options table and cache result.
-	 * Memoizes the return value.
-	 *
-	 * Values pulled from the database are cached on each request, so a second request for the same value won't cause a
-	 * second DB interaction.
-	 *
-	 * @since 2.0.0
-	 * @since 2.8.2 No longer decodes entities on request.
-	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
-	 * @since 4.1.0 Deprecated.
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
-	 * @deprecated
-	 *
-	 * @param string  $key        Option name.
-	 * @param string  $setting    Optional. Settings field name. Eventually defaults to null if not passed as an argument.
-	 * @param boolean $use_cache  Optional. Whether to use the cache value or not.
-	 * @return mixed The value of this $key in the database. Empty string on failure.
-	 */
-	public function the_seo_framework_get_option( $key, $setting = null, $use_cache = true ) {
-
-		if ( ! $setting ) return '';
-
-		$tsf = \the_seo_framework();
-
-		$tsf->_deprecated_function( 'the_seo_framework()->the_seo_framework_get_option()', '4.1.0', 'the_seo_framework()->get_option()' );
-
-		if ( ! $use_cache ) {
-			$options = $tsf->get_all_options( $setting, true );
-			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
-		}
-
-		static $cache = [];
-
-		if ( ! isset( $cache[ $setting ] ) )
-			$cache[ $setting ] = \stripslashes_deep( $tsf->get_all_options( $setting ) );
-
-		return isset( $cache[ $setting ][ $key ] ) ? $cache[ $setting ][ $key ] : '';
-	}
-
-	/**
-	 * Returns the homepage tagline from option or bloginfo, when set.
-	 *
-	 * @since 3.0.4
-	 * @since 4.0.0 Added caching.
-	 * @since 4.1.0 Deprecated.
-	 * @uses $this->get_blogdescription(), this method already trims.
-	 * @deprecated
-	 *
-	 * @return string The trimmed tagline.
-	 */
-	public function get_home_page_tagline() {
-
-		$tsf = \the_seo_framework();
-
-		$tsf->_deprecated_function( 'the_seo_framework()->get_home_page_tagline()', '4.1.0', 'the_seo_framework()->get_home_title_additions()' );
-
-		return $tsf->get_home_title_additions();
-	}
-
-	/**
-	 * Cached WordPress permalink structure settings.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Removed caching.
-	 * @since 4.1.0 Deprecated.
-	 * @deprecated
-	 *
-	 * @return string permalink structure.
-	 */
-	public function permalink_structure() {
-
-		$tsf = \the_seo_framework();
-
-		$tsf->_deprecated_function( 'the_seo_framework()->permalink_structure()', '4.1.0', "get_option( 'permalink_structure' )" );
-
-		return \get_option( 'permalink_structure' );
-	}
 
 	/**
 	 * Appends given query to given URL.
@@ -193,7 +57,7 @@ final class Deprecated {
 	 */
 	public function append_php_query( $url, $query = '' ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->append_php_query()', '4.2.0', 'the_seo_framework()->append_url_query()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->append_php_query()', '4.2.0', 'the_seo_framework()->append_url_query()' );
 		return $tsf->append_url_query( $url, $query );
 	}
 
@@ -211,7 +75,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		// $tsf->_deprecated_function( 'the_seo_framework()->get_html_output()', '4.2.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_html_output()', '4.2.0' );
 
 		$robots = $tsf->robots();
 
@@ -327,7 +191,7 @@ final class Deprecated {
 	 */
 	public function is_robots_meta_noindex_set_by_args( $args, $ignore = 0b00 ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->is_robots_meta_noindex_set_by_args()', '4.2.0', 'the_seo_framework()->robots_meta()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->is_robots_meta_noindex_set_by_args()', '4.2.0', 'the_seo_framework()->generate_robots_meta()' );
 		$meta = $tsf->generate_robots_meta( $args, null, $ignore );
 		return isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'];
 	}
@@ -369,7 +233,7 @@ final class Deprecated {
 	 */
 	public function robots_meta( $args = null, $ignore = 0b00 ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->robots_meta()', '5.0.0', 'the_seo_framework()->generate_robots_meta()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->robots_meta()', '4.2.0', 'the_seo_framework()->generate_robots_meta()' );
 		return $tsf->generate_robots_meta( $args, null, $ignore );
 	}
 
@@ -396,7 +260,7 @@ final class Deprecated {
 
 		$tsf = \the_seo_framework();
 
-		// $tsf->_deprecated_function( 'the_seo_framework()->is_robots_meta_noindex_set_by_args()', '4.2.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->can_do_sitemap_robots()', '4.2.0' );
 
 		if ( $check_option ) {
 			if ( ! $tsf->get_option( 'sitemaps_output' )
@@ -432,7 +296,7 @@ final class Deprecated {
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function nav_tab_wrapper( $id, $tabs = [], $depr = null, $use_tabs = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_nav_tab_wrapper' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper' );
 		\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
@@ -459,7 +323,7 @@ final class Deprecated {
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->inpost_flex_nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->inpost_flex_nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper' );
 		\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
@@ -479,7 +343,7 @@ final class Deprecated {
 	 * @return string The image uploader button.
 	 */
 	public function get_social_image_uploader_form( $input_id ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
 		return \The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [ 'id' => $input_id ] );
 	}
 
@@ -498,7 +362,7 @@ final class Deprecated {
 	 * @return string The image uploader button.
 	 */
 	public function get_logo_uploader_form( $input_id ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_logo_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_logo_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
 		return \The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [
 			'id'   => $input_id,
 			'data' => [
@@ -547,7 +411,7 @@ final class Deprecated {
 	 */
 	public function seo_settings_page_url() {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->seo_settings_page_url()', '4.2.0', 'the_seo_framework()->get_seo_settings_page_url()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->seo_settings_page_url()', '4.2.0', 'the_seo_framework()->get_seo_settings_page_url()' );
 		return $tsf->get_seo_settings_page_url();
 	}
 
@@ -562,7 +426,7 @@ final class Deprecated {
 	 */
 	public function get_default_user_data() {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->get_default_user_data()', '4.2.0', 'the_seo_framework()->get_user_meta_defaults()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_default_user_data()', '4.2.0', 'the_seo_framework()->get_user_meta_defaults()' );
 		return $tsf->get_user_meta_defaults();
 	}
 
@@ -587,7 +451,7 @@ final class Deprecated {
 	 */
 	public function get_user_option( $user_id = 0, $option = '', $default = null ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->get_user_option()', '4.2.0', 'the_seo_framework()->get_user_meta_item()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_user_option()', '4.2.0', 'the_seo_framework()->get_user_meta_item()' );
 		return $tsf->get_user_meta_item( $user_id ?: $tsf->get_user_id(), $option ) ?: $default;
 	}
 
@@ -605,7 +469,7 @@ final class Deprecated {
 	 */
 	public function get_author_option( $author_id, $option, $default = null ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->get_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_id()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_id()' );
 		return $tsf->get_user_meta_item( $option, $author_id ?: $tsf->get_current_post_author_id() ) ?: $default;
 	}
 
@@ -622,7 +486,7 @@ final class Deprecated {
 	 */
 	public function get_current_author_option( $option, $default = null ) {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->get_current_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_meta_item()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->get_current_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_meta_item()' );
 		return $tsf->get_current_post_author_meta_item( $option ) ?: $default;
 	}
 
@@ -643,7 +507,7 @@ final class Deprecated {
 	 */
 	public function is_wc_shop( $post = null ) {
 
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_wc_shop()', '5.0.0', 'the_seo_framework()->is_shop()' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_wc_shop()', '4.2.0', 'the_seo_framework()->is_shop()' );
 
 		if ( isset( $post ) ) {
 			$post = \get_post( $post );
@@ -680,7 +544,7 @@ final class Deprecated {
 	public function is_wc_product( $post = 0 ) {
 
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->is_wc_product()', '5.0.0', 'the_seo_framework()->is_product()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->is_wc_product()', '4.2.0', 'the_seo_framework()->is_product()' );
 
 		if ( \is_admin() )
 			return $tsf->is_wc_product_admin();
@@ -710,7 +574,7 @@ final class Deprecated {
 	 */
 	public function is_wc_product_admin() {
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->is_wc_product_admin()', '5.0.0', 'the_seo_framework()->is_product_admin()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->is_wc_product_admin()', '4.2.0', 'the_seo_framework()->is_product_admin()' );
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
 		return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 	}
@@ -721,6 +585,7 @@ final class Deprecated {
 	 * @since 2.7.0
 	 * @since 2.8.0 New users now get a new array assigned.
 	 * @since 4.1.4 Deprecated silently. Use `update_single_user_meta_item()` instead.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param int    $user_id The user ID.
 	 * @param string $option  The user's SEO metadata option.
@@ -730,7 +595,7 @@ final class Deprecated {
 	public function update_user_option( $user_id = 0, $option = '', $value = '' ) {
 
 		$tsf = \the_seo_framework();
-		// $tsf->_deprecated_function( 'the_seo_framework()->update_user_option()', '5.0.0', 'the_seo_framework()->update_single_user_meta_item()' );
+		$tsf->_deprecated_function( 'the_seo_framework()->update_user_option()', '4.2.0', 'the_seo_framework()->update_single_user_meta_item()' );
 
 		if ( ! $option )
 			return false;
@@ -761,14 +626,14 @@ final class Deprecated {
 	 *
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 * @deprecated
 	 *
 	 * @param string $name Field name base
 	 * @return string Full field name
 	 */
 	public function get_field_name( $name ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_field_name()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_field_name()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::get_field_name( $name );
 	}
 
@@ -777,13 +642,13 @@ final class Deprecated {
 	 *
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 * @uses $this->get_field_name() Construct name attributes for use in form fields.
 	 *
 	 * @param string $name Field name base
 	 */
 	public function field_name( $name ) {
-		// $tsf->_deprecated_function( 'the_seo_framework()->field_name()', '5.0.0' );
+		$tsf->_deprecated_function( 'the_seo_framework()->field_name()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::field_name( $name );
 	}
 
@@ -792,13 +657,13 @@ final class Deprecated {
 	 *
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $id Field id base
 	 * @return string Full field id
 	 */
 	public function get_field_id( $id ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_field_id()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_field_id()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::get_field_id( $id );
 	}
 
@@ -807,7 +672,7 @@ final class Deprecated {
 	 *
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string  $id Field id base.
@@ -815,7 +680,7 @@ final class Deprecated {
 	 * @return string Full field id
 	 */
 	public function field_id( $id, $echo = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->field_id()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->field_id()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::field_id( $id, $echo );
 	}
 
@@ -825,13 +690,13 @@ final class Deprecated {
 	 *
 	 * @since 2.0.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in code tags.
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap( $content ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->code_wrap()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->code_wrap()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::code_wrap( $content );
 	}
 
@@ -841,13 +706,13 @@ final class Deprecated {
 	 *
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in code tags.
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap_noesc( $content ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->code_wrap_noesc()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->code_wrap_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::code_wrap_noesc( $content );
 	}
 
@@ -857,13 +722,13 @@ final class Deprecated {
 	 *
 	 * @since 2.7.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in the description wrap.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function description( $content, $block = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->description()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->description()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::description( $content, $block );
 	}
 
@@ -872,13 +737,13 @@ final class Deprecated {
 	 *
 	 * @since 2.7.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function description_noesc( $content, $block = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->description_noesc()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->description_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::description_noesc( $content, $block );
 	}
 
@@ -888,13 +753,13 @@ final class Deprecated {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in the attention wrap.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention( $content, $block = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention( $content, $block );
 	}
 
@@ -903,13 +768,13 @@ final class Deprecated {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in the attention wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention_noesc( $content, $block = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_noesc()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention_noesc( $content, $block );
 	}
 
@@ -919,13 +784,13 @@ final class Deprecated {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention_description( $content, $block = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_description()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_description()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention_description( $content, $block );
 	}
 
@@ -934,13 +799,13 @@ final class Deprecated {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention_description_noesc( $content, $block = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_description_noesc()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_description_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention_description_noesc( $content, $block );
 	}
 
@@ -951,14 +816,14 @@ final class Deprecated {
 	 *
 	 * @since 2.6.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $input The input to wrap. Should already be escaped.
 	 * @param bool   $echo  Whether to escape echo or just return.
 	 * @return string|void Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->wrap_fields()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->wrap_fields()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::wrap_fields( $input, $echo );
 	}
 
@@ -969,7 +834,7 @@ final class Deprecated {
 	 * @since 3.0.0 Links are now no longer followed, referred or bound to opener.
 	 * @since 4.0.0 Now adds a tabindex to the span tag, so you can focus it using keyboard navigation.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link        The non-escaped link.
@@ -977,7 +842,7 @@ final class Deprecated {
 	 * @return string HTML checkbox output if $echo is false.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_info()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_info()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::make_info( $description, $link, $echo );
 	}
 
@@ -987,7 +852,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.1.0 No longer adds an extra space in front of the return value when no data is generated.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 * @internal
 	 *
 	 * @param array $data : {
@@ -996,7 +861,7 @@ final class Deprecated {
 	 * @return string The HTML data attributes, with added space to the start.
 	 */
 	public function make_data_attributes( array $data ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_data_attributes()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_data_attributes()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::make_data_attributes( $data );
 	}
 
@@ -1007,7 +872,7 @@ final class Deprecated {
 	 * @since 2.7.0 Added escape parameter. Defaults to true.
 	 * @since 3.0.3 Added $disabled parameter. Defaults to false.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $field_id    The option ID. Must be within the Autodescription settings.
 	 * @param string $label       The checkbox description label.
@@ -1017,7 +882,7 @@ final class Deprecated {
 	 * @return string HTML checkbox output.
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_checkbox()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_checkbox()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::make_checkbox( [
 			'id'          => $field_id,
 			'index'       => '',
@@ -1034,7 +899,7 @@ final class Deprecated {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param array $args : {
 	 *    string     $id       The select field ID.
@@ -1050,7 +915,7 @@ final class Deprecated {
 	 * @return string The option field.
 	 */
 	public function make_single_select_form( array $args ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_single_select_form()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_single_select_form()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::make_single_select_form( $args );
 	}
 
@@ -1063,7 +928,7 @@ final class Deprecated {
 	 * @since 2.2.5
 	 * @since 3.1.0 Deprecated second parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $depr Deprecated
@@ -1072,7 +937,7 @@ final class Deprecated {
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_default_checked()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_default_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::is_default_checked( $key, $wrap, $echo );
 	}
 	/**
@@ -1081,7 +946,7 @@ final class Deprecated {
 	 * @since 2.3.4
 	 * @since 3.1.0 Deprecated second parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $deprecated Deprecated.
@@ -1090,7 +955,7 @@ final class Deprecated {
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_warning_checked()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_warning_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::is_warning_checked( $key, $wrap, $echo );
 	}
 	/**
@@ -1099,13 +964,13 @@ final class Deprecated {
 	 * @since 2.6.0
 	 * @since 3.1.0 Added the $wrap parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
 	public function get_is_conditional_checked( $key, $wrap = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_is_conditional_checked()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_is_conditional_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::get_is_conditional_checked( $key, $wrap );
 	}
 
@@ -1115,7 +980,7 @@ final class Deprecated {
 	 * @since 2.3.4
 	 * @since 3.1.0 Deprecated second parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $key        The option name which returns boolean.
 	 * @param string $deprecated Deprecated. Used to be the settings field.
@@ -1124,7 +989,7 @@ final class Deprecated {
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_conditional_checked()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_conditional_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::is_conditional_checked( $key, $wrap, $echo );
 	}
 
@@ -1137,14 +1002,14 @@ final class Deprecated {
 	 *                3. The whole output is now hidden from no-js.
 	 * @since 4.1.0 No longer marks up the counter with the `description` HTML class.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $for     The input ID it's for.
 	 * @param string $depr    The initial value for no-JS. Deprecated.
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_character_counter_wrap( $for, $depr = '', $display = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_character_counter_wrap()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_character_counter_wrap()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::output_character_counter_wrap( $for, $display );
 	}
 
@@ -1153,14 +1018,237 @@ final class Deprecated {
 	 *
 	 * @since 3.0.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 5.0.0 Hard deprecation.
+	 * @since 4.2.0 Hard deprecation.
 	 *
 	 * @param string $for  The input ID it's for.
 	 * @param string $type Whether it's a 'title' or 'description' counter.
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
-		// \the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_pixel_counter_wrap()', '5.0.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_pixel_counter_wrap()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::output_pixel_counter_wrap( $for, $type, $display );
+	}
+
+	/**
+	 * Determines if WP is above or below a version
+	 *
+	 * @since 2.2.1
+	 * @since 2.3.8 Added caching
+	 * @since 2.8.0 No longer overwrites global $wp_version
+	 * @since 3.1.0 1. No longer caches.
+	 *              2. Removed redundant parameter checks.
+	 *              3. Now supports x.yy.zz WordPress versions.
+	 * @since 4.2.0 Deprecated. Use your own method instead.
+	 *
+	 * @param string $version the three part version to compare to WordPress
+	 * @param string $compare the comparing operator, default "$version >= Current WP Version"
+	 * @return bool True if the WordPress version comparison passes.
+	 */
+	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->wp_version()', '4.2.0' );
+
+		$wp_version = $GLOBALS['wp_version'];
+
+		/**
+		 * Add a .0 if WP outputs something like 4.3 instead of 4.3.0
+		 * Does consider 4.xx, which will become 4.xx.0.
+		 * Does not consider 4.xx-dev, which will become 4.xx-dev.0. Oh well.
+		 */
+		if ( 1 === substr_count( $wp_version, '.' ) )
+			$wp_version .= '.0';
+
+		return (bool) version_compare( $wp_version, $version, $compare );
+	}
+
+
+	/**
+	 * Checks for current theme support.
+	 *
+	 * Maintains detection cache, array and strings are mixed through foreach loops.
+	 *
+	 * @since 2.2.5
+	 * @since 3.1.0 Removed caching
+	 * @since 4.2.0 Deprecated. Use WP core `current_theme_supports()` instead.
+	 *
+	 * @param string|array required $features The features to check for.
+	 * @return bool theme support.
+	 */
+	public function detect_theme_support( $features ) {
+
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->detect_theme_support()', '4.2.0', 'current_theme_supports' );
+
+		foreach ( (array) $features as $feature ) {
+			if ( \current_theme_supports( $feature ) ) {
+				return true;
+			}
+			continue;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Detects presence of a page builder.
+	 * Memoizes the return value.
+	 *
+	 * Detects the following builders:
+	 * - Elementor by Elementor LTD
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 * - Page Builder by SiteOrigin
+	 * - Beaver Builder by Fastline Media
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.6 The output is now filterable.
+	 * @since 4.2.0 Deprecated
+	 * @ignore unused.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function detect_page_builder() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->detect_page_builder()', '4.2.0' );
+
+		static $detected = null;
+
+		if ( isset( $detected ) ) return $detected;
+
+		/**
+		 * @since 4.0.6
+		 * @param bool $detected Whether an active page builder is detected.
+		 * @NOTE not to be confused with `the_seo_framework_detect_page_builder`, which tests
+		 *       the page builder status for each post individually.
+		 */
+		return $detected = (bool) \apply_filters(
+			'the_seo_framework_page_builder_active',
+			$tsf->detect_plugin( [
+				'constants' => [
+					'ELEMENTOR_VERSION',
+					'ET_BUILDER_VERSION',
+					'WPB_VC_VERSION',
+					'SITEORIGIN_PANELS_VERSION',
+					'FL_BUILDER_VERSION',
+				],
+			] )
+		);
+	}
+
+	/**
+	 * Determines whether the post has a page builder attached to it.
+	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
+	 *
+	 * Detects the following builders:
+	 * - Elementor by Elementor LTD
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 * - Page Builder by SiteOrigin
+	 * - Beaver Builder by Fastline Media
+	 *
+	 * @since 2.6.6
+	 * @since 3.1.0 Added Elementor detection
+	 * @since 4.0.0 Now detects page builders before looping over the meta.
+	 * @since 4.2.0 Deprecated.
+	 * @TODO -> We may use this data for they have FSE builders. We may want to interface with those, some day.
+	 *    -> We'd want to return the TYPE of pagebuilder used, if anything. Just deprecate this.
+	 * @ignore unused.
+	 * @deprecated
+	 *
+	 * @param int $post_id The post ID to check.
+	 * @return bool
+	 */
+	public function uses_page_builder( $post_id ) {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->uses_page_builder()', '4.2.0' );
+
+		$meta = \get_post_meta( $post_id );
+
+		/**
+		 * @since 2.6.6
+		 * @since 3.1.0 : 1. Now defaults to `null`
+		 *                2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
+		 * @param boolean|null $detected Whether a builder should be detected.
+		 * @param int          $post_id The current Post ID.
+		 * @param array        $meta The current post meta.
+		 */
+		$detected = \apply_filters( 'the_seo_framework_detect_page_builder', null, $post_id, $meta );
+
+		if ( \is_bool( $detected ) )
+			return $detected;
+
+		if ( ! $tsf->detect_page_builder() )
+			return false;
+
+		if ( empty( $meta ) )
+			return false;
+
+		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && \defined( 'ELEMENTOR_VERSION' ) ) :
+			// Elementor by Elementor LTD
+			return true;
+		elseif ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
+			// Divi Builder by Elegant Themes
+			return true;
+		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
+			// Visual Composer by WPBakery
+			return true;
+		elseif ( isset( $meta['panels_data'][0] ) && '' !== $meta['panels_data'][0] && \defined( 'SITEORIGIN_PANELS_VERSION' ) ) :
+			// Page Builder by SiteOrigin
+			return true;
+		elseif ( isset( $meta['_fl_builder_enabled'][0] ) && '1' === $meta['_fl_builder_enabled'][0] && \defined( 'FL_BUILDER_VERSION' ) ) :
+			// Beaver Builder by Fastline Media...
+			return true;
+		endif;
+
+		return false;
+	}
+
+	/**
+	 * Returns Facebook locales array values.
+	 *
+	 * @since 2.5.2
+	 * @TODO deprecate me.
+	 *
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
+	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
+	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
+	 * @see $this->language_keys() for the associative array keys.
+	 *
+	 * @return array Valid Facebook locales
+	 */
+	public function fb_locales() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->fb_locales()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
+
+		return \array_keys( $tsf->supported_social_locales() );
+	}
+
+	/**
+	 * Returns Facebook locales' associative array keys.
+	 *
+	 * This is apart from the fb_locales array since there are "duplicated" keys.
+	 * Use this to compare the numeric key position.
+	 *
+	 * @since 2.5.2
+	 * @TODO deprecate me.
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
+	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
+	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
+	 *
+	 * @return array Valid Facebook locale keys
+	 */
+	public function language_keys() {
+
+		$tsf = \the_seo_framework();
+
+		$tsf->_deprecated_function( 'the_seo_framework()->language_keys()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
+
+		return \array_values( $tsf->supported_social_locales() );
 	}
 }

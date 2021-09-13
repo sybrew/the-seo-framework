@@ -31,6 +31,7 @@ namespace The_SEO_Framework;
  * Initializes the plugin & Holds plugin core functions.
  *
  * @since 2.8.0
+ * @since 4.2.0 Deprecated $load_options
  */
 class Core {
 
@@ -66,7 +67,7 @@ class Core {
 	final public function __set( $name, $value ) {
 
 		if ( 'load_options' === $name ) {
-			// $this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+			$this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
 			$this->is_headless['settings'] = $value;
 			return;
 		}
@@ -357,10 +358,16 @@ class Core {
 	public function get_settings_capability() {
 		/**
 		 * @since 2.6.0
-		 * @todo deprecate 4.2.0, use constant instead.
+		 * @since 4.2.0 Deprecated. Define constant THE_SEO_FRAMEWORK_SETTINGS_CAP instead.
+		 * @deprecated
 		 * @param string $capability The user capability required to adjust settings.
 		 */
-		return (string) \apply_filters( 'the_seo_framework_settings_capability', THE_SEO_FRAMEWORK_SETTINGS_CAP );
+		return (string) \apply_filters_deprecated(
+			'the_seo_framework_settings_capability',
+			[ THE_SEO_FRAMEWORK_SETTINGS_CAP ],
+			'4.2.0 of The SEO Framework',
+			'constant THE_SEO_FRAMEWORK_SETTINGS_CAP'
+		);
 	}
 
 	/**
@@ -383,13 +390,14 @@ class Core {
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function get_seo_settings_page_url() {
-
-		if ( ! $this->is_headless['settings'] ) {
-			$url = html_entity_decode( \menu_page_url( $this->seo_settings_page_slug, false ) );
-			return \esc_url( $url, [ 'https', 'http' ] );
-		}
-
-		return '';
+		return $this->is_headless['settings']
+			? ''
+			: \esc_url(
+				html_entity_decode(
+					\menu_page_url( $this->seo_settings_page_slug, false )
+				),
+				[ 'https', 'http' ]
+			);
 	}
 
 	/**
@@ -426,8 +434,7 @@ class Core {
 	 * @return string PHP Timezone String.
 	 */
 	protected function get_tzstring_from_offset( $offset = 0 ) {
-		$seconds = round( $offset * HOUR_IN_SECONDS );
-		return timezone_name_from_abbr( '', $seconds, 1 );
+		return timezone_name_from_abbr( '', round( $offset * HOUR_IN_SECONDS ), 1 );
 	}
 
 	/**
