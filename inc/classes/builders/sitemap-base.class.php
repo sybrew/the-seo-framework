@@ -170,13 +170,11 @@ class Sitemap_Base extends Sitemap {
 			$content .= sprintf(
 				'<!-- %s -->',
 				sprintf(
-					(
-						$this->base_is_prerendering
-							/* translators: %s = timestamp */
-							? \esc_html__( 'Sitemap is prerendered on %s', 'autodescription' )
-							/* translators: %s = timestamp */
-							: \esc_html__( 'Sitemap is generated on %s', 'autodescription' )
-					),
+					$this->base_is_prerendering
+						/* translators: %s = timestamp */
+						? \esc_html__( 'Sitemap is prerendered on %s', 'autodescription' )
+						/* translators: %s = timestamp */
+						: \esc_html__( 'Sitemap is generated on %s', 'autodescription' ),
 					\current_time( 'Y-m-d H:i:s \G\M\T' )
 				)
 			) . "\n";

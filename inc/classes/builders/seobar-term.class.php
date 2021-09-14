@@ -267,16 +267,13 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 		}
 
-		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent
-		$brand_count =
-			\strlen( $cache['params']['blogname_quoted'] )
+		$brand_count = \strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
 				$title,
 				$matches
 			)
 			: 0;
-		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
 
 		if ( ! $brand_count ) {
 			// Override branding state.

@@ -291,8 +291,8 @@ class User_Data extends Term_Data {
 	public function get_current_post_author_id() {
 		return memo() ?? memo(
 			$this->is_singular()
-			? (int) ( \get_post( $this->get_the_real_ID() )->post_author ?? 0 )
-			: 0
+				? (int) ( \get_post( $this->get_the_real_ID() )->post_author ?? 0 )
+				: 0
 		);
 	}
 

@@ -252,8 +252,8 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 		0 !== \the_seo_framework()->s_qubit(
 			\The_SEO_Framework\Builders\SeoBar_Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
 		)
-		? $interpreter::STATE_OKAY
-		: $interpreter::STATE_UNKNOWN;
+			? $interpreter::STATE_OKAY
+			: $interpreter::STATE_UNKNOWN;
 	$index_item['assess']['recommends'] = \__( 'WooCommerce recommends not indexing this dynamic page.', 'autodescription' );
 }
 

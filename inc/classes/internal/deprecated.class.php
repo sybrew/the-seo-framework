@@ -6,8 +6,6 @@
 
 namespace The_SEO_Framework\Internal;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2021 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -24,6 +22,8 @@ namespace The_SEO_Framework\Internal;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\memo; // Precautionary.
 

@@ -165,8 +165,8 @@ switch ( $instance ) :
 		$_current             = $this->get_option( 'max_snippet_length' );
 		foreach ( $_text_snippet_types as $_type => $_values ) {
 			$_label = 'default' === $_type
-					? __( 'Standard directive', 'autodescription' )
-					: __( 'Granular directive', 'autodescription' );
+				? __( 'Standard directive', 'autodescription' )
+				: __( 'Granular directive', 'autodescription' );
 
 			$_options = '';
 			foreach ( $_values as $_value => $_name ) {
@@ -251,8 +251,8 @@ switch ( $instance ) :
 		$_current              = $this->get_option( 'max_video_preview' );
 		foreach ( $_video_snippet_types as $_type => $_values ) {
 			$_label = 'default' === $_type
-					? __( 'Standard directive', 'autodescription' )
-					: __( 'Granular directive', 'autodescription' );
+				? __( 'Standard directive', 'autodescription' )
+				: __( 'Granular directive', 'autodescription' );
 
 			$_options = '';
 			foreach ( $_values as $_value => $_name ) {

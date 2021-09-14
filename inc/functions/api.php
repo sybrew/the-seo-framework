@@ -67,7 +67,7 @@ namespace {
 		if ( isset( $class ) )
 			return $class;
 
-		// did_action() checks for current action too.
+		// did_action() returns true for current action match, too.
 		if ( ! did_action( 'plugins_loaded' ) )
 			return false;
 
@@ -87,17 +87,12 @@ namespace The_SEO_Framework {
 	 * @return bool Whether to allow loading of plugin.
 	 */
 	function _can_load() {
-
 		static $load = null;
-
-		if ( isset( $load ) )
-			return $load;
-
 		/**
 		 * @since 2.3.7
 		 * @param bool $load
 		 */
-		return $load = (bool) \apply_filters( 'the_seo_framework_load', true );
+		return $load = $load ?? (bool) \apply_filters( 'the_seo_framework_load', true );
 	}
 
 	/**
@@ -111,15 +106,9 @@ namespace The_SEO_Framework {
 	 * @return bool True if loaded, false otherwise.
 	 */
 	function _load_trait( $file ) {
-
-		static $loaded = [];
-
-		if ( isset( $loaded[ $file ] ) )
-			return $loaded[ $file ];
-
-		$_file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
-
-		return $loaded[ $file ] = (bool) require THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . $_file . '.trait.php';
+		static $loaded          = [];
+		return $loaded[ $file ] = $loaded[ $file ]
+			?? (bool) require THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . str_replace( '/', DIRECTORY_SEPARATOR, $file ) . '.trait.php';
 	}
 
 	/**
@@ -132,10 +121,8 @@ namespace The_SEO_Framework {
 	 * @return bool True if already called, false otherwise.
 	 */
 	function _has_run( $caller ) {
-
 		static $cache = [];
-
-		return isset( $cache[ $caller ] ) ?: ( ( $cache[ $caller ] = true ) && false );
+		return $cache[ $caller ] ?? ! ( $cache[ $caller ] = true );
 	}
 
 	/**
@@ -164,10 +151,7 @@ namespace The_SEO_Framework {
 	 * @return mixed : {
 	 *    mixed The cached value if set and $value_to_set is null.
 	 *       null When no value has been set.
-	 *       If $value_to_set is set : {
-	 *          true If the value is being set for the first time.
-	 *          false If the value has been set and $value_to_set is being overwritten.
-	 *       }
+	 *       If $value_to_set is set, the new value.
 	 * }
 	 */
 	function memo( $value_to_set = null, ...$args ) {

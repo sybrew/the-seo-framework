@@ -657,20 +657,20 @@ class Generate extends User_Data {
 
 		return memo(
 			'0000-00-00 00:00:00' === $post_modified_gmt
-			? ''
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @param string $time The article modified time.
-			 * @param int    $id   The current page or term ID.
-			 */
-			: (string) \apply_filters_ref_array(
-				'the_seo_framework_modifiedtime_output',
-				[
-					$this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ),
-					$id,
-				]
-			)
+				? ''
+				/**
+				 * @since 2.3.0
+				 * @since 2.7.0 Added output within filter.
+				 * @param string $time The article modified time.
+				 * @param int    $id   The current page or term ID.
+				 */
+				: (string) \apply_filters_ref_array(
+					'the_seo_framework_modifiedtime_output',
+					[
+						$this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ),
+						$id,
+					]
+				)
 		);
 	}
 

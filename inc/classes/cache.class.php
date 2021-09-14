@@ -419,11 +419,10 @@ class Cache extends Site_Options {
 			'the_seo_framework_sitemap_transient_cleared',
 			[
 				'ping_use_cron'           => $ping_use_cron,
-				'ping_use_cron_prerender' => $ping_use_cron_prerender,
+				'ping_use_cron_prerender' => $ping_use_cron_prerender, // TODO migrate this so it can run regardless of pinging?
 			]
 		);
 
-		// TODO move this outside of this call?
 		if ( $ping_use_cron ) {
 			// This name is wrong. It's not exclusively used for pinging.
 			\The_SEO_Framework\Bridges\Ping::engage_pinging_cron();

@@ -294,7 +294,6 @@ TODO (return/variable) strict type enforcements?
 
 get_static_front_page_title / get_blogname... -> ??
 
-TODO center the sitemap?
 TODO introduce a settings generator, even if high-level?
 
 TODO Elementor SEO Box?
@@ -302,6 +301,8 @@ TODO Elementor SEO Box?
 		-> It's really their problem, though.
 
 TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/builder class, so that the view file is small and neat.
+TODO fix js lint warnings about the l10n const being unavailable.
+	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
 **For everyone:**
 
@@ -315,15 +316,16 @@ TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/
 		* TODO Auto-update patch (lookup 'WP 5.5')
 		* TODO Core sitemaps patch (lookup 'WP 5.5')
 * **Changed:**
-	* TODO The styled optimized sitemap now has its content centered.
+	* The styled optimized sitemap now has its content centered.
 * **Improved:**
+	* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
 	* Images are now fetched faster from the content.
 	* The SEO Bar now parses the title item faster.
 	* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
 	* Open Graph, Twitter, and meta titles are now regenerated faster.
 	* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
-	* TODO The robots-meta is now generated on-demand only, meaning sitemaps generate much faster.
-		* TODO can we prevent sitemap post-cache invoking locally? We can clear WP cache.
+	* TODO The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
+		* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
 			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
 	* The sitemap now displays more accessibly on mobile devices.
 	* Large sitemaps are now rendered more quickly by the browser.
@@ -333,6 +335,9 @@ TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/
 * **Changed:**
 	* TODO The sitemap stylesheet now uses a different hierarchy to output items. We made this change so we could center the sitemap.
 * **Object notes:**
+	* For object `\The_SEO_Framework\Bridges\Ping`:
+		* **Methods added:**
+			* `get_ping_url()`
 	* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
 	* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
 	* For object `\The_SEO_Framework\Load` (callable via `the_seo_framework()`):
