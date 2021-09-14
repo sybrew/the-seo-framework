@@ -277,7 +277,7 @@ TODO deprecate _do_settings_page_notices(), and use the new persistent notice sy
 				-> Show 3x. Delete if detected conflict is gone (hook at plugin_activated). -> Test show 10x to make sure it works as intended (activate/deactivate, etc.).
 TODO Move notice handlers to new class.
 
-TODO overthrow the structured data. Clean-room Yoast's implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
+TODO overthrow the structured data. Clean-room Yoast's/WPSSO/AIOSEO implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
 
 TODO can we change behavior of, since we require PHP 7.2 "_class = function() {"
 
@@ -294,6 +294,15 @@ TODO (return/variable) strict type enforcements?
 
 get_static_front_page_title / get_blogname... -> ??
 
+TODO center the sitemap?
+TODO introduce a settings generator, even if high-level?
+
+TODO Elementor SEO Box?
+	-> While we're at it, also define a default for their broken post type?
+		-> It's really their problem, though.
+
+TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/builder class, so that the view file is small and neat.
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -305,6 +314,8 @@ get_static_front_page_title / get_blogname... -> ??
 		* TODO Archive title patch (lookup 'WP 5.5')
 		* TODO Auto-update patch (lookup 'WP 5.5')
 		* TODO Core sitemaps patch (lookup 'WP 5.5')
+* **Changed:**
+	* TODO The styled optimized sitemap now has its content centered.
 * **Improved:**
 	* Images are now fetched faster from the content.
 	* The SEO Bar now parses the title item faster.
@@ -314,9 +325,13 @@ get_static_front_page_title / get_blogname... -> ??
 	* TODO The robots-meta is now generated on-demand only, meaning sitemaps generate much faster.
 		* TODO can we prevent sitemap post-cache invoking locally? We can clear WP cache.
 			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
+	* The sitemap now displays more accessibly on mobile devices.
+	* Large sitemaps are now rendered more quickly by the browser.
 
 **For developers:**
 
+* **Changed:**
+	* TODO The sitemap stylesheet now uses a different hierarchy to output items. We made this change so we could center the sitemap.
 * **Object notes:**
 	* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
 	* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
@@ -325,6 +340,7 @@ get_static_front_page_title / get_blogname... -> ??
 			* `memo`, this method stores and returns memoized values for the caller.
 		* **Methods changed:**
 			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
 		* **Methods deprecated:**
 			* `append_php_query()`, use `the_seo_framework()->append_url_query()` instead.
 			* `get_html_output()`, with no alternative available.
@@ -383,10 +399,6 @@ get_static_front_page_title / get_blogname... -> ??
 			* `permalink_structure()`, was deprecated since 4.1.0.
 		* **Properties deprecated:**
 			* `$load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
-	* For object `\The_SEO_Framework\Bridges\Ping`
-		* **Methods deprecated:**
-			* TODO `engage_pinging_cron()` is now deprecated. Use TODO instead.
-				* Did anyone actually use this method externally? Is there ANY conceivable reason they ought?
 	* Object `\The_SEO_Framework\Silencer` is now `\The_SEO_Framework\Internal\Silencer`.
 * **Filter notes:**
 	* **Deprecated:**

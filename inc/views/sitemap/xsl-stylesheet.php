@@ -19,6 +19,7 @@ namespace The_SEO_Framework;
  * Prints global XSL variables.
  *
  * @since 3.1.0
+ * @since 4.2.0 $tableMinWidth no longer adds 'px'.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
  * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
@@ -28,7 +29,7 @@ function _print_xsl_global_variables( $tsf ) {
 	//= Styles generic.
 	printf(
 		'<xsl:variable name="tableMinWidth" select="\'%s\'"/>',
-		$tsf->get_option( 'sitemaps_modified' ) ? '600px' : '450px'
+		$tsf->get_option( 'sitemaps_modified' ) ? '700' : '550'
 	);
 
 	$colors = $tsf->get_sitemap_colors();
@@ -99,6 +100,7 @@ function _print_xsl_title( $tsf ) {
  * Prints XSL styles.
  *
  * @since 3.1.0
+ * @since 4.2.0 Centered sitemap.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
  * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
@@ -110,6 +112,12 @@ function _print_xsl_styles( $tsf ) {
 		font-size: 14px;
 		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 		margin: 0;
+	}
+	.wrap {
+		max-width: <xsl:value-of select="concat( $tableMinWidth, 'px' )" />;
+		margin: 0 auto;
+		overflow: auto;
+		overflow-wrap: break-word;
 	}
 	a {
 		color: #05809e;
@@ -131,26 +139,28 @@ function _print_xsl_styles( $tsf ) {
 		background-color: <xsl:value-of select="$colorMain" />;
 		border-bottom: 7px solid <xsl:value-of select="$colorAccent" />;
 		color: <xsl:value-of select="$relativeFontColor" />;
-		padding: 30px 30px 20px;
+		padding: 30px 20px 20px;
 	}
 	#description a {
 		color: <xsl:value-of select="$relativeFontColor" />;
 	}
 	#content {
-		padding: 10px 30px 30px;
+		padding: 10px 20px 20px;
 		background: #fff;
 	}
 	a:hover {
 		border-bottom: 1px solid;
 	}
 	table {
-		min-width: <xsl:value-of select="$tableMinWidth" />;
 		border-spacing: 0;
+		table-layout: fixed;
 	}
 	th, td {
 		font-size: 12px;
 		border: 0px solid;
 		padding: 10px 15px;
+		max-width: <xsl:value-of select="concat( $tableMinWidth - 159, 'px' )" />;
+		min-width: 99px;
 	}
 	th {
 		text-align: left;
@@ -446,6 +456,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<?php
 				/**
 				 * @since 3.1.0
@@ -456,31 +467,37 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 			</head>
 			<body>
 				<div id="description">
-					<?php
-					/**
-					 * @since 3.1.0
-					 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
-					 */
-					\do_action( 'the_seo_framework_xsl_description', $this );
-					?>
+					<div class="wrap">
+						<?php
+						/**
+						 * @since 3.1.0
+						 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+						 */
+						\do_action( 'the_seo_framework_xsl_description', $this );
+						?>
+					</div>
 				</div>
 				<div id="content">
-					<?php
-					/**
-					 * @since 3.1.0
-					 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
-					 */
-					\do_action( 'the_seo_framework_xsl_content', $this );
-					?>
+					<div class="wrap">
+						<?php
+						/**
+						 * @since 3.1.0
+						 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+						 */
+						\do_action( 'the_seo_framework_xsl_content', $this );
+						?>
+					</div>
 				</div>
 				<div id="footer">
-					<?php
-					/**
-					 * @since 3.1.0
-					 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
-					 */
-					\do_action( 'the_seo_framework_xsl_footer', $this );
-					?>
+					<div class="wrap">
+						<?php
+						/**
+						 * @since 3.1.0
+						 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+						 */
+						\do_action( 'the_seo_framework_xsl_footer', $this );
+						?>
+					</div>
 				</div>
 			</body>
 		</html>

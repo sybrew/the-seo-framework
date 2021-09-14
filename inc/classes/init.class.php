@@ -106,9 +106,10 @@ class Init extends Query {
 	 * @since 2.8.0
 	 * @since 4.1.2 1. Added hook for sitemap prerender.
 	 *              2. Added hook for ping retry.
-	 * TODO make protected?
+	 * @since 4.2.0 Is now protexted
+	 * @access protected
 	 */
-	public function init_cron_actions() {
+	protected function init_cron_actions() {
 		// Init post update/delete caching actions which may occur during cronjobs.
 		$this->init_post_cache_actions();
 

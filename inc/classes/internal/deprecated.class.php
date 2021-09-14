@@ -74,7 +74,6 @@ final class Deprecated {
 	public function get_html_output() {
 
 		$tsf = \the_seo_framework();
-
 		$tsf->_deprecated_function( 'the_seo_framework()->get_html_output()', '4.2.0' );
 
 		$robots = $tsf->robots();
@@ -259,7 +258,6 @@ final class Deprecated {
 	public function can_do_sitemap_robots( $check_option = true ) {
 
 		$tsf = \the_seo_framework();
-
 		$tsf->_deprecated_function( 'the_seo_framework()->can_do_sitemap_robots()', '4.2.0' );
 
 		if ( $check_option ) {
@@ -648,7 +646,7 @@ final class Deprecated {
 	 * @param string $name Field name base
 	 */
 	public function field_name( $name ) {
-		$tsf->_deprecated_function( 'the_seo_framework()->field_name()', '4.2.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->field_name()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::field_name( $name );
 	}
 
@@ -1110,7 +1108,6 @@ final class Deprecated {
 	public function detect_page_builder() {
 
 		$tsf = \the_seo_framework();
-
 		$tsf->_deprecated_function( 'the_seo_framework()->detect_page_builder()', '4.2.0' );
 
 		static $detected = null;
@@ -1163,7 +1160,6 @@ final class Deprecated {
 	public function uses_page_builder( $post_id ) {
 
 		$tsf = \the_seo_framework();
-
 		$tsf->_deprecated_function( 'the_seo_framework()->uses_page_builder()', '4.2.0' );
 
 		$meta = \get_post_meta( $post_id );
@@ -1221,11 +1217,8 @@ final class Deprecated {
 	 * @return array Valid Facebook locales
 	 */
 	public function fb_locales() {
-
 		$tsf = \the_seo_framework();
-
 		$tsf->_deprecated_function( 'the_seo_framework()->fb_locales()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
-
 		return \array_keys( $tsf->supported_social_locales() );
 	}
 
@@ -1244,11 +1237,8 @@ final class Deprecated {
 	 * @return array Valid Facebook locale keys
 	 */
 	public function language_keys() {
-
 		$tsf = \the_seo_framework();
-
 		$tsf->_deprecated_function( 'the_seo_framework()->language_keys()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
-
 		return \array_values( $tsf->supported_social_locales() );
 	}
 }
