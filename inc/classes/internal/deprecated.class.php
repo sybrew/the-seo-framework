@@ -1059,7 +1059,6 @@ final class Deprecated {
 		return (bool) version_compare( $wp_version, $version, $compare );
 	}
 
-
 	/**
 	 * Checks for current theme support.
 	 *
@@ -1240,5 +1239,94 @@ final class Deprecated {
 		$tsf = \the_seo_framework();
 		$tsf->_deprecated_function( 'the_seo_framework()->language_keys()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
 		return \array_values( $tsf->supported_social_locales() );
+	}
+
+	/**
+	 * Returns the PHP timezone compatible string.
+	 * UTC offsets are unreliable.
+	 *
+	 * @since 2.6.0
+	 * @since 4.2.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param bool $guess If true, the timezone will be guessed from the
+	 *                    WordPress core gmt_offset option.
+	 * @return string PHP Timezone String. May be empty (thus invalid).
+	 */
+	public function get_timezone_string( $guess = false ) {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_timezone_string()', '4.2.0' );
+
+		$tzstring = \get_option( 'timezone_string' );
+
+		if ( false !== strpos( $tzstring, 'Etc/GMT' ) )
+			$tzstring = '';
+
+		if ( $guess && empty( $tzstring ) ) {
+			$tzstring = timezone_name_from_abbr( '', round( \get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ), 1 );
+		}
+
+		return $tzstring;
+	}
+
+	/**
+	 * Sets and resets the timezone.
+	 *
+	 * NOTE: Always call reset_timezone() ASAP. Don't let changes linger, as they can be destructive.
+	 *
+	 * This exists because WordPress's current_time() adds discrepancies between UTC and GMT.
+	 * This is also far more accurate than WordPress's tiny time table.
+	 *
+	 * @TODO Note that WordPress 5.3 no longer requires this, and that we should rely on wp_date() instead.
+	 *       So, we should remove this dependency ASAP.
+	 *
+	 * @since 2.6.0
+	 * @since 3.0.6 Now uses the old timezone string when a new one can't be generated.
+	 * @since 4.0.4 Now also unsets the stored timezone string on reset.
+	 * @since 4.2.0 Deprecated.
+	 * @link http://php.net/manual/en/timezones.php
+	 * @deprecated
+	 *
+	 * @param string $tzstring Optional. The PHP Timezone string. Best to leave empty to always get a correct one.
+	 * @param bool   $reset Whether to reset to default. Ignoring first parameter.
+	 * @return bool True on success. False on failure.
+	 */
+	public function set_timezone( $tzstring = '', $reset = false ) {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->set_timezone()', '4.2.0' );
+
+		static $old_tz = null;
+
+		$old_tz = $old_tz ?: date_default_timezone_get() ?: 'UTC';
+
+		if ( $reset ) {
+			$_revert_tz = $old_tz;
+			$old_tz     = null;
+			// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
+			return date_default_timezone_set( $_revert_tz );
+		}
+
+		if ( empty( $tzstring ) )
+			$tzstring = $tsf->get_timezone_string( true ) ?: $old_tz;
+
+		// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
+		return date_default_timezone_set( $tzstring );
+	}
+
+	/**
+	 * Resets the timezone to default or UTC.
+	 *
+	 * @since 2.6.0
+	 * @since 4.2.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool True on success. False on failure.
+	 */
+	public function reset_timezone() {
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->reset_timezone()', '4.2.0' );
+		return $tsf->set_timezone( '', true );
 	}
 }

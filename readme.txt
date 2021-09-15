@@ -304,6 +304,11 @@ TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
+TODO use goto in array_merge_recursive_distinct?
+	-> Also clean up its sole caller...
+
+TODO clean up tt.js, I made a mess of it.
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -311,12 +316,13 @@ TODO fix js lint warnings about the l10n const being unavailable.
 	* WP 5.4 (TODO 5.5?) or higher is now required, from WP 5.1 or higher.
 		* TODO Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
 			* Mind the gmdate()/date()/get_the_date/gmt2date()/->post_date function calls.
+			* -> Removal of set_timezone/reset_timezone()
 		* TODO Flex patch (lookup 'WP 5.4').
 		* TODO Archive title patch (lookup 'WP 5.5')
 		* TODO Auto-update patch (lookup 'WP 5.5')
 		* TODO Core sitemaps patch (lookup 'WP 5.5')
 * **Changed:**
-	* The styled optimized sitemap now has its content centered.
+	* The styled optimized sitemap now has its content centered, and is fully responsive.
 * **Improved:**
 	* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
 	* Images are now fetched faster from the content.
@@ -329,11 +335,15 @@ TODO fix js lint warnings about the l10n const being unavailable.
 			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
 	* The sitemap now displays more accessibly on mobile devices.
 	* Large sitemaps are now rendered more quickly by the browser.
+	* Tooltips despawn 25% quicker now.
+	* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
+* **Fixed:**
+	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 
 **For developers:**
 
 * **Changed:**
-	* TODO The sitemap stylesheet now uses a different hierarchy to output items. We made this change so we could center the sitemap.
+	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
 * **Object notes:**
 	* For object `\The_SEO_Framework\Bridges\Ping`:
 		* **Methods added:**
@@ -396,6 +406,9 @@ TODO fix js lint warnings about the l10n const being unavailable.
 			* `uses_page_builder()` with no alternative available.
 			* `fb_locales()`, use `supported_social_locales()` instead.
 			* `language_keys()`, use `supported_social_locales()` instead.
+			* `get_timezone_string()`, with no alternative available.
+			* `set_timezone()`, with no alternative available.
+			* `reset_timezone()`, with no alternative available.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.
@@ -416,6 +429,13 @@ TODO fix js lint warnings about the l10n const being unavailable.
 	* **Added:**
 		* `the_seo_framework_before_meta`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`
 		* `the_seo_framework_after_meta`, this replaces filters `the_seo_framework_pro` and `the_seo_framework_after_output`
+* **JavaScript notes:**
+	* Object `window.tsfTT`:
+		* **Changed:**
+			* `doTooltip`
+				1. Is now asynchronous.
+				1. Now returns boolean whether the tooltip was entered successfully.
+			* `getTooltip` now returns a `HTMLElement` instead of a `jQuery.Element`.
 
 = 4.1.5.1 =
 

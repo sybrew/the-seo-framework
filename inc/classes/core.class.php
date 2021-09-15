@@ -401,111 +401,17 @@ class Core {
 	}
 
 	/**
-	 * Returns the PHP timezone compatible string.
-	 * UTC offsets are unreliable.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @param bool $guess If true, the timezone will be guessed from the
-	 *                    WordPress core gmt_offset option.
-	 * @return string PHP Timezone String. May be empty (thus invalid).
-	 */
-	public function get_timezone_string( $guess = false ) {
-
-		$tzstring = \get_option( 'timezone_string' );
-
-		if ( false !== strpos( $tzstring, 'Etc/GMT' ) )
-			$tzstring = '';
-
-		if ( $guess && empty( $tzstring ) ) {
-			$tzstring = $this->get_tzstring_from_offset( \get_option( 'gmt_offset' ) );
-		}
-
-		return $tzstring;
-	}
-
-	/**
-	 * Fetches the Timezone String from given offset.
-	 *
-	 * @since 2.6.0
-	 * @since 4.0.0 Removed PHP <5.6 support.
-	 *
-	 * @param int $offset The GMT offzet.
-	 * @return string PHP Timezone String.
-	 */
-	protected function get_tzstring_from_offset( $offset = 0 ) {
-		return timezone_name_from_abbr( '', round( $offset * HOUR_IN_SECONDS ), 1 );
-	}
-
-	/**
-	 * Sets and resets the timezone.
-	 *
-	 * NOTE: Always call reset_timezone() ASAP. Don't let changes linger, as they can be destructive.
-	 *
-	 * This exists because WordPress's current_time() adds discrepancies between UTC and GMT.
-	 * This is also far more accurate than WordPress's tiny time table.
-	 *
-	 * @TODO Note that WordPress 5.3 no longer requires this, and that we should rely on wp_date() instead.
-	 *       So, we should remove this dependency ASAP.
-	 *
-	 * @since 2.6.0
-	 * @since 3.0.6 Now uses the old timezone string when a new one can't be generated.
-	 * @since 4.0.4 Now also unsets the stored timezone string on reset.
-	 * @link http://php.net/manual/en/timezones.php
-	 *
-	 * @param string $tzstring Optional. The PHP Timezone string. Best to leave empty to always get a correct one.
-	 * @param bool   $reset Whether to reset to default. Ignoring first parameter.
-	 * @return bool True on success. False on failure.
-	 */
-	public function set_timezone( $tzstring = '', $reset = false ) {
-
-		static $old_tz = null;
-
-		$old_tz = $old_tz ?: date_default_timezone_get() ?: 'UTC';
-
-		if ( $reset ) {
-			$_revert_tz = $old_tz;
-			$old_tz     = null;
-			// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
-			return date_default_timezone_set( $_revert_tz );
-		}
-
-		if ( empty( $tzstring ) )
-			$tzstring = $this->get_timezone_string( true ) ?: $old_tz;
-
-		// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
-		return date_default_timezone_set( $tzstring );
-	}
-
-	/**
-	 * Resets the timezone to default or UTC.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return bool True on success. False on failure.
-	 */
-	public function reset_timezone() {
-		return $this->set_timezone( '', true );
-	}
-
-	/**
 	 * Converts time from GMT input to given format.
 	 *
 	 * @since 2.7.0
 	 * @since 4.0.4 Now uses `gmdate()` instead of `date()`.
-	 * @see `$this->set_timezone()`
-	 * @see `$this->reset_timezone()`
 	 *
 	 * @param string $format The datetime format.
 	 * @param string $time The GMT time. Expects timezone to be omitted.
 	 * @return string The converted time. Empty string if no $time is given.
 	 */
 	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
-
-		if ( $time )
-			return gmdate( $format, strtotime( $time . ' GMT' ) );
-
-		return '';
+		return $time ? gmdate( $format, strtotime( $time . ' GMT' ) ) : '';
 	}
 
 	/**

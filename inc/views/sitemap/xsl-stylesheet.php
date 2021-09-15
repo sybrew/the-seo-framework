@@ -108,9 +108,16 @@ function _print_xsl_title( $tsf ) {
 function _print_xsl_styles( $tsf ) {
 
 	$styles = <<<'STYLES'
+	html {
+		font-size: 62.5%;
+		height: 100%;
+	}
 	body {
-		font-size: 14px;
+		font-size: 1.4rem;
 		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+		min-height: 100%;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
 		margin: 0;
 	}
 	.wrap {
@@ -124,7 +131,7 @@ function _print_xsl_styles( $tsf ) {
 		text-decoration: none;
 	}
 	h1 {
-		font-size: 24px;
+		font-size: 2.4rem;
 		font-family: Verdana,Geneva,sans-serif;
 		font-weight: normal;
 		margin: 0;
@@ -132,20 +139,20 @@ function _print_xsl_styles( $tsf ) {
 	}
 	h1 img {
 		vertical-align: bottom;
-		margin-right: 14px;
+		margin-right: 1.4rem;
 		image-rendering: -webkit-optimize-contrast;
 	}
 	#description {
 		background-color: <xsl:value-of select="$colorMain" />;
-		border-bottom: 7px solid <xsl:value-of select="$colorAccent" />;
+		border-bottom: .7rem solid <xsl:value-of select="$colorAccent" />;
 		color: <xsl:value-of select="$relativeFontColor" />;
-		padding: 30px 20px 20px;
+		padding: 2rem 2rem 1.3rem;
 	}
 	#description a {
 		color: <xsl:value-of select="$relativeFontColor" />;
 	}
 	#content {
-		padding: 10px 20px 20px;
+		padding: 2rem;
 		background: #fff;
 	}
 	a:hover {
@@ -156,9 +163,9 @@ function _print_xsl_styles( $tsf ) {
 		table-layout: fixed;
 	}
 	th, td {
-		font-size: 12px;
+		font-size: 1.2rem;
 		border: 0px solid;
-		padding: 10px 15px;
+		padding: 1rem 1.5rem;
 		max-width: <xsl:value-of select="concat( $tableMinWidth - 159, 'px' )" />;
 		min-width: 99px;
 	}
@@ -170,8 +177,8 @@ function _print_xsl_styles( $tsf ) {
 		background-color: #eaeaea;
 	}
 	#footer {
-		margin: 20px 30px;
-		font-size: 12px;
+		padding: 0 3rem 2rem;
+		font-size: 1.1rem;
 		color: #999;
 	}
 	#footer a {
@@ -445,7 +452,7 @@ function _convert_site_icon_meta_tags( $tags ) {
 }
 
 // echo here, otherwise it closes PHP.
-echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 
 ?>
 <xsl:stylesheet version="2.0"

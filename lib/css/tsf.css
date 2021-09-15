@@ -457,7 +457,6 @@ body.rtl .tsf-remove-image-button.button {
 	}
 }
 
-
 @keyframes tsf-fade-out {
 	0% {
 		opacity: 1;

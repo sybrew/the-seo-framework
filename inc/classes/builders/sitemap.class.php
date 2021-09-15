@@ -63,23 +63,20 @@ abstract class Sitemap {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.4 Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
+	 * @since 4.2.0 No longer sets timezone.
 	 */
 	final public function prepare_generation() {
-
 		\wp_raise_memory_limit( 'sitemap' );
-
-		// Set timezone according to settings.
-		static::$tsf->set_timezone( 'UTC' );
 	}
 
 	/**
 	 * Shuts down the sitemap generator.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 No longer resets timezone.
+	 * @ignore
 	 */
-	final public function shutdown_generation() {
-		static::$tsf->reset_timezone();
-	}
+	final public function shutdown_generation() { }
 
 	/**
 	 * Generates and returns the sitemap content.
@@ -190,8 +187,9 @@ abstract class Sitemap {
 			];
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
-			$meta     = static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
-			$included = ! ( isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'] );
+			$included = 'noindex'
+				!== static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					?? false; // We cast type false for Zend tests strict type before identical-string-comparing.
 
 			if ( ! $included ) break;
 
@@ -236,7 +234,7 @@ abstract class Sitemap {
 
 		$included = ! isset( $excluded[ $term_id ] );
 
-		// Yes, 90% of this code code isn't DRY. However, terms != posts. terms == posts, though :).
+		// Yes, 90% of this code code isn't DRY. However, terms !== posts. terms == posts, though :).
 		// Really: <https://core.trac.wordpress.org/ticket/50568>
 		while ( $included ) :
 			$_args = [
@@ -245,8 +243,9 @@ abstract class Sitemap {
 			];
 
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
-			$meta     = static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION );
-			$included = ! ( isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'] );
+			$included = 'noindex'
+				!== static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					?? false; // We cast type false for Zend tests strict type before identical-string-comparing.
 
 			if ( ! $included ) break;
 
