@@ -433,7 +433,7 @@ TODO clean up tt.js, I made a mess of it.
 	* Object `window.tsfTT`:
 		* **Changed:**
 			* `doTooltip`
-				1. Is now asynchronous.
+				1. Can now work asynchronously.
 				1. Now returns boolean whether the tooltip was entered successfully.
 			* `getTooltip` now returns a `HTMLElement` instead of a `jQuery.Element`.
 

@@ -166,6 +166,7 @@ function _print_xsl_styles( $tsf ) {
 		font-size: 1.2rem;
 		border: 0px solid;
 		padding: 1rem 1.5rem;
+		width: 100%;
 		max-width: <xsl:value-of select="concat( $tableMinWidth - 159, 'px' )" />;
 		min-width: 99px;
 	}

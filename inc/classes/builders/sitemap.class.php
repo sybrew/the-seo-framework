@@ -188,8 +188,10 @@ abstract class Sitemap {
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
 			$included = 'noindex'
-				!== static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
-					?? false; // We cast type false for Zend tests strict type before identical-string-comparing.
+				!== (
+					static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					?? false // We cast type false for Zend tests strict type before identical-string-comparing.
+				);
 
 			if ( ! $included ) break;
 
@@ -244,8 +246,10 @@ abstract class Sitemap {
 
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
 			$included = 'noindex'
-				!== static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
-					?? false; // We cast type false for Zend tests strict type before identical-string-comparing.
+				!== (
+					static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					?? false // We cast type false for Zend tests strict type before identical-string-comparing.
+				);
 
 			if ( ! $included ) break;
 
