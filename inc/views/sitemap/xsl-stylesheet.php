@@ -123,7 +123,6 @@ function _print_xsl_styles( $tsf ) {
 	.wrap {
 		max-width: <xsl:value-of select="concat( $tableMinWidth, 'px' )" />;
 		margin: 0 auto;
-		overflow: auto;
 		overflow-wrap: break-word;
 	}
 	a {
@@ -169,6 +168,7 @@ function _print_xsl_styles( $tsf ) {
 		width: 100%;
 		max-width: <xsl:value-of select="concat( $tableMinWidth - 159, 'px' )" />;
 		min-width: 99px;
+		overflow-wrap: anywhere;
 	}
 	th {
 		text-align: left;

@@ -307,8 +307,6 @@ TODO fix js lint warnings about the l10n const being unavailable.
 TODO use goto in array_merge_recursive_distinct?
 	-> Also clean up its sole caller...
 
-TODO clean up tt.js, I made a mess of it.
-
 **For everyone:**
 
 * **Upgrade notes:**
@@ -333,12 +331,13 @@ TODO clean up tt.js, I made a mess of it.
 	* TODO The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
 		* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
 			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
-	* The sitemap now displays more accessibly on mobile devices.
 	* Large sitemaps are now rendered more quickly by the browser.
 	* Tooltips despawn 25% quicker now.
+	* Tooltip animations no longer spawn when a tooltip is touched, potentially saving battery-life.
 	* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 * **Fixed:**
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
+	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
 
 **For developers:**
 
