@@ -943,7 +943,7 @@ class Detect extends Render {
 							array_keys( (array) \get_post_types( [ 'public' => true ] ) )
 						)
 					),
-					'\\is_post_type_viewable'
+					'is_post_type_viewable'
 				)
 			)
 		);
@@ -994,7 +994,7 @@ class Detect extends Render {
 						] ) )
 					)
 				),
-				'\\is_taxonomy_viewable'
+				'is_taxonomy_viewable'
 			)
 		);
 	}

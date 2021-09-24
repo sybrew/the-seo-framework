@@ -327,7 +327,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 	if ( $post_id && \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
 		$product_image_gallery = \get_post_meta( $post_id, '_product_image_gallery', true );
 
-		$attachment_ids = array_map( '\\absint', array_filter( explode( ',', $product_image_gallery ) ) );
+		$attachment_ids = array_map( 'absint', array_filter( explode( ',', $product_image_gallery ) ) );
 	}
 
 	if ( $attachment_ids ) {

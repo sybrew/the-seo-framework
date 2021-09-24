@@ -387,7 +387,7 @@ final class Debug {
 	 * @return string
 	 */
 	protected function debug_key_wrapper( $key ) {
-		return '<font color="chucknorris">' . \esc_attr( $key ) . '</font>';
+		return '<font color="chucknorris">' . \esc_html( $key ) . '</font>';
 	}
 
 	/**
@@ -405,7 +405,7 @@ final class Debug {
 		if ( ! is_scalar( $value ) )
 			return '<em>Debug message: not scalar</em>';
 
-		return '<span class="wp-ui-notification">' . \esc_attr( trim( $value ) ) . '</span>';
+		return '<span class="wp-ui-notification">' . \esc_html( trim( $value ) ) . '</span>';
 	}
 
 	/**
@@ -623,7 +623,7 @@ final class Debug {
 			if ( \is_bool( $value ) ) {
 				$value = $value ? 'true' : 'false';
 			} else {
-				$value = \esc_attr( var_export( $value, true ) );
+				$value = \esc_html( var_export( $value, true ) );
 			}
 
 			$value   = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
@@ -637,7 +637,7 @@ final class Debug {
 			if ( \is_bool( $value ) ) {
 				$value = $value ? 'true' : 'false';
 			} else {
-				$value = \esc_attr( var_export( $value, true ) );
+				$value = \esc_html( var_export( $value, true ) );
 			}
 
 			$value = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';

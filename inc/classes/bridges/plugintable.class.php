@@ -50,7 +50,7 @@ final class PluginTable {
 
 		$tsf = \the_seo_framework();
 
-		if ( $tsf->load_options ) {
+		if ( ! $tsf->is_headless['settings'] ) {
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
 				\esc_url( \admin_url( 'admin.php?page=' . $tsf->seo_settings_page_slug ) ),

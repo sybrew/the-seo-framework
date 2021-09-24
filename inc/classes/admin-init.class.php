@@ -471,7 +471,8 @@ class Admin_Init extends Init {
 	 */
 	public function register_dismissible_persistent_notice( $message, $key, array $args = [], array $conditions = [] ) {
 
-		// We made this mistake ourselves. Let's test against it. Can't wait for PHP 7.1+ support.
+		// We made this mistake ourselves. Let's test against it.
+		// We can't type $key to scalar, for PHP is dumb with that type.
 		if ( ! is_scalar( $key ) || ! \strlen( $key ) ) return;
 
 		// Sanitize the key so that HTML, JS, and PHP can communicate easily via it.

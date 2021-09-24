@@ -15,7 +15,7 @@
 
 .tsf-flex-inside-wrap {
 	flex-direction: row;
-	width: 100%; /* WP 5.4+ fix */
+	width: 100%; /* WP 5.4+ fix -- no longer needed, but will mitigate future issues. https://tsf.fyi/p/3505 */
 }
 
 .tsf-is-block-editor .tsf-flex-inside-wrap {

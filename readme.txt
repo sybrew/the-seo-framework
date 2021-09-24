@@ -315,7 +315,6 @@ TODO use goto in array_merge_recursive_distinct?
 		* TODO Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
 			* Mind the gmdate()/date()/get_the_date/gmt2date()/->post_date function calls.
 			* -> Removal of set_timezone/reset_timezone()
-		* TODO Flex patch (lookup 'WP 5.4').
 		* TODO Archive title patch (lookup 'WP 5.5')
 		* TODO Auto-update patch (lookup 'WP 5.5')
 		* TODO Core sitemaps patch (lookup 'WP 5.5')
@@ -335,6 +334,15 @@ TODO use goto in array_merge_recursive_distinct?
 	* Tooltips despawn 25% quicker now.
 	* Tooltip animations no longer spawn when a tooltip is touched, potentially saving battery-life.
 	* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
+	* Upgrade notices are now persistent; so, now you won't miss an auto-upgrade.
+		* Shown only to users with `THE_SEO_FRAMEWORK_SETTINGS_CAP` (default `update_options`) capability.
+		* Shown once in total.
+		* These messages are always truly white-label; there's no mention of "The SEO Framework".
+	* The first-activation notice is now persistent.
+		* Shown only to users with `activate_plugins` capability.
+		* Shown twice in total.
+		* Only within two minutes of activation the notice is shown.
+		* On multisite, it's shown on every sub-site, unless the plugin is network activated, then you'll see it only on the main site.
 * **Fixed:**
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.

@@ -97,7 +97,7 @@ class Core {
 	final public function __get( $name ) {
 
 		if ( 'load_options' === $name ) {
-			// $this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+			$this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
 			return ! $this->is_headless['settings'];
 		}
 
