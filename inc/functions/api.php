@@ -121,8 +121,8 @@ namespace The_SEO_Framework {
 	 * @return bool True if already called, false otherwise.
 	 */
 	function _has_run( $caller ) {
-		static $cache = [];
-		return $cache[ $caller ] ?? ! ( $cache[ $caller ] = true );
+		static $runners = [];
+		return $runners[ $caller ] ?? ! ( $runners[ $caller ] = true );
 	}
 
 	/**
@@ -141,6 +141,21 @@ namespace The_SEO_Framework {
 
 	/**
 	 * Stores and returns memoized values for the caller.
+	 *
+	 * This method is not forward-compatible with PHP: It expects values it doesn't want populated,
+	 * instead of filtering what's actually useful for memoization. For example, it expects `file`
+	 * and `line` from debug_backtrace() -- those are expected to be dynamic from the caller, and
+	 * we set them to `0` to prevent a few opcode calls, rather than telling which array indexes
+	 * we want exactly. The chance this failing in a future update is slim, for all useful data of
+	 * the callee is given already via debug_backtrace().
+	 * We also populate the `args` value "manually" for it's faster than using debug_backtrace()'s
+	 * `DEBUG_BACKTRACE_PROVIDE_OBJECT` option.
+	 *
+	 * We should keep a tap on debug_backtrace changes. Hopefully, they allow us to ignore
+	 * more than just args.
+	 *
+	 * This method does not memoize the object via debug_backtrace. This means that the
+	 * objects will have values memoized cross-instantiations.
 	 *
 	 * @since 4.2.0
 	 * @see get_query_cache() -- practically the same, but then with query testing

@@ -4,16 +4,6 @@
  *
  * # Namespace: The_SEO_Framework
  *
- * ## Separated:
- *    - Deprecated
- *       |-> Final
- *    - Debug
- *       |-> Final
- *
- * ## Failsafe:
- *    - Silencer
- *       |-> Final
- *
  * ## Façade (bottom is called first):
  *    -  | Core
  *       | Query

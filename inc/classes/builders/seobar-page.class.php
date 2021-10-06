@@ -92,21 +92,26 @@ final class SeoBar_Page extends SeoBar {
 			'post'   => \get_post( static::$query['id'] ),
 			'meta'   => static::$tsf->get_post_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
-				'ishome'      => static::$tsf->is_real_front_page_by_id( static::$query['id'] ),
-				'locale'      => \get_locale(),
-				'isprotected' => static::$tsf->is_protected( static::$query['id'] ),
-				'isdraft'     => static::$tsf->is_draft( static::$query['id'] ),
-				'robotsmeta'  => array_merge(
+				'ishome'       => static::$tsf->is_real_front_page_by_id( static::$query['id'] ),
+				'locale'       => \get_locale(),
+				'isprotected'  => static::$tsf->is_protected( static::$query['id'] ),
+				'isdraft'      => static::$tsf->is_draft( static::$query['id'] ),
+				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					static::$tsf->generate_robots_meta( [
-						'id'       => static::$query['id'],
-						'taxonomy' => '',
-					] )
+					static::$tsf->generate_robots_meta(
+						[
+							'id'       => static::$query['id'],
+							'taxonomy' => '',
+						],
+						[ 'noindex', 'nofollow', 'noarchive' ],
+						\The_SEO_Framework\ROBOTS_ASSERT
+					)
 				),
+				'robotsassert' => static::$tsf->obtain_robots_meta_assertions(),
 			],
 		];
 	}

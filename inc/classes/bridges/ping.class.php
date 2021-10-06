@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function The_SEO_Framework\memo;
+use function \The_SEO_Framework\memo;
 
 /**
  * Pings search engines.

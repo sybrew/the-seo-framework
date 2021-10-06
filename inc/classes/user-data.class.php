@@ -156,7 +156,7 @@ class User_Data extends Term_Data {
 			]
 		);
 
-		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 		return $use_cache ? memo( $meta, $user_id ) : $meta;
 	}
 

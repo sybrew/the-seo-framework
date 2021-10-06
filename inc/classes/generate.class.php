@@ -69,52 +69,52 @@ class Generate extends User_Data {
 	}
 
 	/**
+	 * Returns an array of the collected robots meta assertions.
+	 *
+	 * This only works when generate_robots_meta()'s $options value was given:
+	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
+	 *
+	 * @since 4.2.0
+	 */
+	public function obtain_robots_meta_assertions() {
+		return Builders\Robots\Main::instance()->collect_assertions();
+	}
+
+	/**
 	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
 	 * @since 4.1.4
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
-	 * @param null       $get    Reserved.
-	 * @param int <bit>  $ignore The ignore level. {
-	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    3 = 0b11: Ignore protection and post/term setting.
+	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
+	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
+	 * }
+	 * @param int <bit>  $options The options level. {
+	 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
+	 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+	 *    4 = 0b100: Collect assertions.
 	 * }
 	 * @return array Only values actualized for display: {
 	 *    string index : string value
 	 * }
 	 */
-	public function generate_robots_meta( $args = null, $get = null, $ignore = 0b00 ) {
+	public function generate_robots_meta( $args = null, $get = null, $options = 0b00 ) {
 
-		if ( null === $args ) {
-			$_meta = $this->get_robots_meta_by_query( $ignore );
-
-			if ( $this->is_query_exploited() ) {
-				$_meta['noindex']  = true;
-				$_meta['nofollow'] = true;
-			}
-		} else {
+		if ( null !== $args )
 			$this->fix_generation_args( $args );
-			$_meta = $this->get_robots_meta_by_args( $args, $ignore );
-		}
 
-		$meta = [
-			'noindex'           => '',
-			'nofollow'          => '',
-			'noarchive'         => '',
-			'max_snippet'       => '',
-			'max_image_preview' => '',
-			'max_video_preview' => '',
-		];
+		$meta = Builders\Robots\Main::instance( true )->set( $args, $options )->get( $get );
 
+		// Convert the [ 'noindex' => true ] to [ 'noindex' => 'noindex' ]
 		foreach (
-			array_intersect_key( $_meta, array_flip( [ 'noindex', 'nofollow', 'noarchive' ] ) )
+			array_intersect_key( $meta, array_flip( [ 'noindex', 'nofollow', 'noarchive' ] ) )
 			as $k => $v
 		) $v and $meta[ $k ] = $k;
 
+		// Convert the [ 'max_snippet' => x ] to [ 'max-snippet' => 'max-snippet:x' ]
 		foreach (
-			array_intersect_key( $_meta, array_flip( [ 'max_snippet', 'max_image_preview', 'max_video_preview' ] ) )
+			array_intersect_key( $meta, array_flip( [ 'max_snippet', 'max_image_preview', 'max_video_preview' ] ) )
 			as $k => $v
 		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
 
@@ -136,11 +136,11 @@ class Generate extends User_Data {
 		 * }
 		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
 		 *                         Is null when query is autodetermined.
-		 * @param int <bit>  $ignore The ignore level. {
-		 *    0 = 0b00: Ignore nothing.
-		 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-		 *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-		 *    3 = 0b11: Ignore protection and post/term setting.
+		 * @param int <bit>  $options The ignore level. {
+		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
+		 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+		 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+		 *    4 = 0b100: Collect assertions.
 		 * }
 		 */
 		return array_filter(
@@ -149,318 +149,10 @@ class Generate extends User_Data {
 				[
 					$meta,
 					$args,
-					$ignore,
+					$options,
 				]
 			)
 		);
-	}
-
-	/**
-	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from query.
-	 *
-	 * @since 4.0.0
-	 * @since 4.0.2 Added new copyright directive tags.
-	 * @since 4.0.3 Changed `max_snippet_length` to `max_snippet`
-	 * @since 4.0.5 1. The `$post_type` test now uses a real query ID, instead of `$GLOBALS['post']`;
-	 *                 mitigating issues with singular-archives pages (blog, shop, etc.).
-	 *              2. Now disregards empty blog pages for automatic `noindex`; although this protection is necessary,
-	 *                 it can not be reflected in the SEO Bar.
-	 * @since 4.1.0 Now uses the new taxonomy robots settings.
-	 * @global \WP_Query $wp_query
-	 *
-	 * @param int <bit> $ignore The ignore level. {
-	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term meta settings. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    3 = 0b11: Ignore protection and post/term meta setting.
-	 * }
-	 * @return array|null robots : {
-	 *    bool                   'noindex'
-	 *    bool                   'nofollow'
-	 *    bool                   'noarchive'
-	 *    false|int <R>=-1<=600> 'max_snippet'
-	 *    false|string           'max_image_preview'
-	 *    fasle|int <R>=-1<=600> 'max_video_preview'
-	 * }
-	 */
-	protected function get_robots_meta_by_query( $ignore = 0b00 ) {
-
-		$noindex   = (bool) $this->get_option( 'site_noindex' );
-		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
-		$noarchive = (bool) $this->get_option( 'site_noarchive' );
-
-		$max_snippet = $max_image_preview = $max_video_preview = false;
-
-		if ( $this->get_option( 'set_copyright_directives' ) ) {
-			$max_snippet       = $this->get_option( 'max_snippet_length' );
-			$max_image_preview = $this->get_option( 'max_image_preview' );
-			$max_video_preview = $this->get_option( 'max_video_preview' );
-		}
-
-		// Check homepage SEO settings, set noindex, nofollow and noarchive
-		if ( $this->is_real_front_page() ) {
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
-				$$r = $$r || $this->get_option( "homepage_$r" );
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				$noindex = $noindex
-					|| ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) );
-			endif;
-		} else {
-			global $wp_query;
-
-			if ( $this->is_singular_archive() ) {
-				/**
-				 * Pagination overflow protection via 404 test.
-				 *
-				 * When there are no posts, the first page will NOT relay 404;
-				 * which is exactly as intended. All other pages will relay 404.
-				 *
-				 * We do not test the post_count here, because we want to have
-				 * the first page indexable via user-intent only.
-				 */
-				$noindex = $noindex || $this->is_404();
-			} else {
-				/**
-				 * Check for 404, or if archive is empty: set noindex for those.
-				 *
-				 * Don't check this on the homepage. The homepage is sacred in this regard,
-				 * because page builders and templates can and will take over.
-				 *
-				 * Don't use empty(), null is regarded as indexable.
-				 */
-				if ( isset( $wp_query->post_count ) && ! $wp_query->post_count ) {
-					/**
-					 * We recommend using this filter ONLY for archives that have useful content but no "posts" attached.
-					 * For example: a specially custom-developed author page for an author that never published a post.
-					 *
-					 * This filter won't run when a few other conditions for noindex have been met.
-					 *
-					 * @since 4.1.4
-					 * @link <https://github.com/sybrew/the-seo-framework/issues/194#issuecomment-864298702>
-					 * @param bool $noindex Whether to enable no posts protection.
-					 */
-					$noindex = $noindex || \apply_filters( 'the_seo_framework_enable_noindex_no_posts', true );
-				}
-			}
-
-			if (
-				! $noindex
-				&& $this->get_option( 'paged_noindex' )
-				&& ( $this->is_archive() || $this->is_singular_archive() )
-				&& $this->paged() > 1
-			) {
-				$noindex = true;
-			}
-
-			if ( $this->is_archive() ) {
-				if ( $this->is_author() ) {
-					foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
-						$$r = $$r || $this->get_option( "author_$r" );
-				} elseif ( $this->is_date() ) {
-					foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
-						$$r = $$r || $this->get_option( "date_$r" );
-				}
-			} elseif ( $this->is_search() ) {
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
-					$$r = $$r || $this->get_option( "search_$r" );
-			}
-		}
-
-		if ( $this->is_archive() ) {
-			$taxonomy = $this->get_current_taxonomy();
-
-			$_post_type_meta = [];
-			// Store values from each post type bound to the taxonomy.
-			foreach ( $this->get_post_types_from_taxonomy() as $post_type ) {
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					// SECURITY: Put in array to circumvent GLOBALS injection in sequenting loop.
-					$_post_type_meta[ $r ][] = $$r || $this->is_post_type_robots_set( $r, $post_type );
-				}
-			}
-			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $r => $_values )
-				$$r = $$r || ! \in_array( false, $_values, true );
-
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
-				$$r = $$r || $this->is_taxonomy_robots_set( $r, $taxonomy );
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
-				$term_meta = $this->get_current_term_meta();
-
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					if ( isset( $term_meta[ $r ] ) ) {
-						// Test qubit
-						$$r = ( $$r | (int) $term_meta[ $r ] ) > .33;
-					}
-				}
-			endif;
-		} elseif ( $this->is_singular() ) {
-			$post_type = $this->get_current_post_type();
-
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r )
-				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
-				$post_meta = [
-					'noindex'   => $this->get_post_meta_item( '_genesis_noindex' ),
-					'nofollow'  => $this->get_post_meta_item( '_genesis_nofollow' ),
-					'noarchive' => $this->get_post_meta_item( '_genesis_noarchive' ),
-				];
-
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					// Test qubit
-					$$r = ( $$r | (int) $post_meta[ $r ] ) > .33;
-				}
-			endif;
-
-			// I hate this reiteration of the very same code as above... but, homepage may not always be singular.
-			// The conditions below MUST overwrite this, too. So, this is the perfect placement.
-			if ( $this->is_real_front_page() ) {
-				if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-					$noindex = $noindex
-						|| ( $this->get_option( 'home_paged_noindex' ) && ( $this->page() > 1 || $this->paged() > 1 ) );
-				endif;
-			}
-
-			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
-			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				$noindex = $noindex || $this->is_protected( $this->get_the_real_ID() );
-			endif;
-
-			/**
-			 * Noindex on comment pagination.
-			 * Overwrites and ignores the user's settings, always.
-			 *
-			 * N.B. WordPress protects this query variable with options 'page_comments'
-			 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
-			 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
-			 */
-			if ( (int) \get_query_var( 'cpage', 0 ) > 0 ) {
-				/**
-				 * We do not recommend using this filter as it'll likely get those pages flagged as
-				 * duplicated by Google anyway; unless the theme strips or trims the content.
-				 *
-				 * This filter won't run when other conditions for noindex have been met.
-				 *
-				 * @since 4.0.5
-				 * @param bool $noindex Whether to enable comment pagination protection.
-				 */
-				$noindex = $noindex || \apply_filters( 'the_seo_framework_enable_noindex_comment_pagination', true );
-			}
-		}
-
-		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview' );
-	}
-
-	/**
-	 * Generates the `noindex`, `nofollow`, `noarchive` robots meta code array from arguments.
-	 *
-	 * Note that the home-as-blog page can be used for this method.
-	 *
-	 * @since 4.0.0
-	 * @since 4.0.2 Added new copyright directive tags.
-	 * @since 4.0.3 Changed `max_snippet_length` to `max_snippet`
-	 * @since 4.1.0 Now uses the new taxonomy robots settings.
-	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
-	 * @param int <bit>  $ignore The ignore level. {
-	 *    0 = 0b00: Ignore nothing.
-	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b10: Ignore post/term meta setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    3 = 0b11: Ignore protection and post/term meta setting.
-	 * }
-	 * @return array|null robots : {
-	 *    bool              'noindex'
-	 *    bool              'nofollow'
-	 *    bool              'noarchive'
-	 *    false|int <R>=-1> 'max_snippet'
-	 *    false|string      'max_image_preview'
-	 *    fasle|int <R>=-1> 'max_video_preview'
-	 * }
-	 */
-	protected function get_robots_meta_by_args( $args, $ignore = 0b00 ) {
-
-		$noindex   = (bool) $this->get_option( 'site_noindex' );
-		$nofollow  = (bool) $this->get_option( 'site_nofollow' );
-		$noarchive = (bool) $this->get_option( 'site_noarchive' );
-
-		$max_snippet = $max_image_preview = $max_video_preview = false;
-
-		if ( $this->get_option( 'set_copyright_directives' ) ) {
-			$max_snippet       = $this->get_option( 'max_snippet_length' );
-			$max_image_preview = $this->get_option( 'max_image_preview' );
-			$max_video_preview = $this->get_option( 'max_video_preview' );
-		}
-
-		// Put outside the loop, id=0 may be used here for home-as-blog.
-		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
-			$noindex   = $noindex || $this->get_option( 'homepage_noindex' );
-			$nofollow  = $nofollow || $this->get_option( 'homepage_nofollow' );
-			$noarchive = $noarchive || $this->get_option( 'homepage_noarchive' );
-		}
-
-		if ( $args['taxonomy'] ) {
-			$term = \get_term( $args['id'], $args['taxonomy'] );
-			/**
-			 * Check if archive is empty: set noindex for those.
-			 */
-			if ( empty( $term->count ) )
-				$noindex = true;
-
-			$_post_type_meta = [];
-			// Store values from each post type bound to the taxonomy.
-			foreach ( $this->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					// SECURITY: Put in array to circumvent GLOBALS injection.
-					$_post_type_meta[ $r ][] = $$r || $this->is_post_type_robots_set( $r, $post_type );
-				}
-			}
-			// Only enable if all post types have the value ticked.
-			foreach ( $_post_type_meta as $r => $_values ) {
-				$$r = $$r || ! \in_array( false, $_values, true );
-			}
-
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-				$$r = $$r || $this->is_taxonomy_robots_set( $r, $args['taxonomy'] );
-			}
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
-				$term_meta = $this->get_term_meta( $args['id'] );
-
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					if ( isset( $term_meta[ $r ] ) ) {
-						// Test qubit
-						$$r = ( $$r | (int) $term_meta[ $r ] ) > .33;
-					}
-				}
-			endif;
-		} elseif ( $args['id'] ) {
-			$post_type = \get_post_type( $args['id'] );
-			foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-				$$r = $$r || $this->is_post_type_robots_set( $r, $post_type );
-			}
-
-			if ( ! ( $ignore & ROBOTS_IGNORE_SETTINGS ) ) :
-				$post_meta = [
-					'noindex'   => $this->get_post_meta_item( '_genesis_noindex', $args['id'] ),
-					'nofollow'  => $this->get_post_meta_item( '_genesis_nofollow', $args['id'] ),
-					'noarchive' => $this->get_post_meta_item( '_genesis_noarchive', $args['id'] ),
-				];
-
-				foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-					// Test qubit
-					$$r = ( $$r | (int) $post_meta[ $r ] ) > .33;
-				}
-			endif;
-
-			// Overwrite and ignore the user's settings, regardless; unless ignore is set.
-			if ( ! ( $ignore & ROBOTS_IGNORE_PROTECTION ) ) :
-				$noindex = $noindex || $this->is_protected( $args['id'] );
-			endif;
-		}
-
-		return compact( 'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview' );
 	}
 
 	/**
@@ -812,8 +504,8 @@ class Generate extends User_Data {
 	 * @since 4.1.4
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
-	 *    int    $id               The Post, Page or Term ID to generate the URL for.
-	 *    string $taxonomy         The taxonomy.
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The taxonomy.
 	 * }
 	 * @return string The canonical URL if found, empty string otherwise.
 	 */

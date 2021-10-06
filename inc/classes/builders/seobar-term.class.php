@@ -100,20 +100,25 @@ final class SeoBar_Term extends SeoBar {
 			'term'   => $term,
 			'meta'   => static::$tsf->get_term_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
-				'locale'     => \get_locale(),
-				'isempty'    => empty( $term->count ),
-				'posttypes'  => static::$tsf->get_post_types_from_taxonomy( static::$query['taxonomy'] ),
-				'robotsmeta' => array_merge(
+				'locale'       => \get_locale(),
+				'isempty'      => empty( $term->count ),
+				'posttypes'    => static::$tsf->get_post_types_from_taxonomy( static::$query['taxonomy'] ),
+				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					static::$tsf->generate_robots_meta( [
-						'id'       => static::$query['id'],
-						'taxonomy' => static::$query['taxonomy'],
-					] )
+					static::$tsf->generate_robots_meta(
+						[
+							'id'       => static::$query['id'],
+							'taxonomy' => static::$query['taxonomy'],
+						],
+						[ 'noindex', 'nofollow', 'noarchive' ],
+						\The_SEO_Framework\ROBOTS_ASSERT
+					)
 				),
+				'robotsassert' => static::$tsf->obtain_robots_meta_assertions(),
 			],
 		];
 	}

@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function The_SEO_Framework\memo; // Precautionary.
+use function \The_SEO_Framework\memo; // Precautionary.
 
 /**
  * Class The_SEO_Framework\Internal\Deprecated
@@ -1328,5 +1328,35 @@ final class Deprecated {
 		$tsf = \the_seo_framework();
 		$tsf->_deprecated_function( 'the_seo_framework()->reset_timezone()', '4.2.0' );
 		return $tsf->set_timezone( '', true );
+	}
+
+	/**
+	 * Returns and caches term meta for the current query.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.1 Now uses the filterable `get_the_real_ID()`
+	 * @since 4.2.0 Deprecated. Use get_term_meta() or get_term_meta_item() instead.
+	 * @deprecated
+	 *
+	 * @return array The current term meta.
+	 */
+	public function get_current_term_meta() {
+
+		$tsf = \the_seo_framework();
+		$tsf->_deprecated_function( 'the_seo_framework()->get_current_term_meta()', '4.2.0', 'the_seo_framework()->get_term_meta()' );
+
+		static $cache;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		if ( $tsf->is_term_meta_capable() ) {
+			$cache = $tsf->get_term_meta( $tsf->get_the_real_ID() ) ?: [];
+		} else {
+			$cache = [];
+		}
+
+		return $cache;
 	}
 }

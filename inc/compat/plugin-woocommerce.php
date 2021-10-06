@@ -173,9 +173,9 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
- *                         Is null when query is autodetermined.
- * @param int <bit>  $ignore The ignore level. {
+ * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
+ *                            Is null when query is autodetermined.
+ * @param int <bit>  $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
  *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
  *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
@@ -183,7 +183,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  * }
  * @return array
  */
-function _set_wc_noindex_defaults( $meta, $args, $ignore ) {
+function _set_wc_noindex_defaults( $meta, $args, $options ) {
 
 	// Nothing to do here...
 	if ( 'noindex' === $meta['noindex'] ) return $meta;
@@ -213,7 +213,7 @@ function _set_wc_noindex_defaults( $meta, $args, $ignore ) {
 	if ( ! \in_array( $page_id, $page_ids, true ) ) return $meta;
 
 	// Set the default.
-	if ( $ignore & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) {
+	if ( $options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) {
 		$meta['noindex'] = 'noindex';
 	} elseif ( 0 === $tsf->s_qubit( $tsf->get_post_meta_item( '_genesis_noindex', $page_id ) ) ) {
 		$meta['noindex'] = 'noindex';

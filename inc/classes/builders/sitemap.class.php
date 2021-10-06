@@ -154,6 +154,7 @@ abstract class Sitemap {
 	 *              4. If the first parameter is 0, it's now indicative of a home-as-blog page.
 	 *              5. Moved to \The_SEO_Framework\Builders\Sitemap
 	 * @since 4.1.4 TRUE: Now tests for redirect settings.
+	 * @since 4.2.0 Now only asserts noindex robots-values, instead of all robots-values, improving performance.
 	 *
 	 * @param int $post_id The Post ID to check.
 	 * @return bool True if included, false otherwise.
@@ -170,12 +171,8 @@ abstract class Sitemap {
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', [] );
 
-			if ( empty( $excluded ) ) {
-				$excluded = [];
-			} else {
-				// isset() is faster than in_array(). So, we flip it.
-				$excluded = array_flip( $excluded );
-			}
+			// isset() is faster than in_array(). So, we flip it.
+			$excluded = $excluded ? array_flip( $excluded ) : [];
 		}
 
 		$included = ! isset( $excluded[ $post_id ] );
@@ -189,7 +186,7 @@ abstract class Sitemap {
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' (because of sole 'publish'), and 'password' (because of false 'has_password')
 			$included = 'noindex'
 				!== (
-					static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					static::$tsf->generate_robots_meta( $_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
 					?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
@@ -210,6 +207,7 @@ abstract class Sitemap {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Now tests for redirect settings.
+	 * @since 4.2.0 Now only asserts noindex robots-values, instead of all robots-values, improving performance.
 	 * @see https://github.com/sybrew/tsf-term-sitemap for example.
 	 *
 	 * @param int    $term_id  The Term ID to check.
@@ -226,12 +224,8 @@ abstract class Sitemap {
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_term_ids', [] );
 
-			if ( empty( $excluded ) ) {
-				$excluded = [];
-			} else {
-				// isset() is faster than in_array(). So, we flip it.
-				$excluded = array_flip( $excluded );
-			}
+			// isset() is faster than in_array(). So, we flip it.
+			$excluded = $excluded ? array_flip( $excluded ) : [];
 		}
 
 		$included = ! isset( $excluded[ $term_id ] );
@@ -247,7 +241,7 @@ abstract class Sitemap {
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
 			$included = 'noindex'
 				!== (
-					static::$tsf->generate_robots_meta( $_args, null, \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					static::$tsf->generate_robots_meta( $_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
 					?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 

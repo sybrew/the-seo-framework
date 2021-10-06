@@ -48,7 +48,11 @@ $image_details     = current( $this->get_generated_image_details( $_generator_ar
 $image_placeholder = $image_details['url'] ?? '';
 
 $canonical_placeholder = $this->create_canonical_url( $_generator_args ); // implies get_custom_field = false
-$robots_defaults       = $this->generate_robots_meta( $_generator_args, null, The_SEO_Framework\ROBOTS_IGNORE_SETTINGS );
+$robots_defaults       = $this->generate_robots_meta(
+	$_generator_args,
+	[ 'noindex', 'nofollow', 'noarchive' ],
+	The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
+);
 
 // TODO reintroduce the info blocks, and place the labels at the left, instead??
 $robots_settings = [

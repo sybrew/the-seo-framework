@@ -49,7 +49,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 	 * @param string $object_subtype Optional. Taxonomy name. Default empty.
 	 * @return array Array of URLs for a sitemap.
 	 */
-	public function get_url_list( $page_num, $object_subtype  = '' ) {
+	public function get_url_list( $page_num, $object_subtype = '' ) {
 		// Restores the more descriptive, specific name for use within this method.
 		$taxonomy        = $object_subtype;
 		$supported_types = $this->get_object_subtypes();

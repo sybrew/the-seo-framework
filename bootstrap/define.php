@@ -163,7 +163,7 @@ namespace The_SEO_Framework;
  * @since 4.0.0
  * @see \The_SEO_Framework\Generate\robots_meta()
  */
-const ROBOTS_IGNORE_PROTECTION = 0b01;
+const ROBOTS_IGNORE_PROTECTION = 0b001;
 
 /**
  * Robots setting, ignore settings.
@@ -171,4 +171,12 @@ const ROBOTS_IGNORE_PROTECTION = 0b01;
  * @since 4.0.0
  * @see \The_SEO_Framework\Generate\robots_meta()
  */
-const ROBOTS_IGNORE_SETTINGS = 0b10;
+const ROBOTS_IGNORE_SETTINGS = 0b010;
+
+/**
+ * Robots setting, enable asserting.
+ *
+ * @since 4.2.0
+ * @see \The_SEO_Framework\Generate\robots_meta()
+ */
+const ROBOTS_ASSERT = 0b100;

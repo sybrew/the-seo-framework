@@ -6,10 +6,6 @@
 
 namespace The_SEO_Framework\Internal;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2021 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -26,6 +22,12 @@ namespace The_SEO_Framework\Internal;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
+
+use function \The_SEO_Framework\memo;
 
 /**
  * Singleton class The_SEO_Framework\Internal\Debug
@@ -65,13 +67,11 @@ final class Debug {
 	 */
 	public static function _set_instance( $debug = null ) {
 
-		if ( \is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) )
 			static::$instance = new static();
-		}
 
-		if ( isset( $debug ) ) {
+		if ( isset( $debug ) )
 			static::$instance->the_seo_framework_debug = (bool) $debug;
-		}
 	}
 
 	/**
@@ -83,9 +83,8 @@ final class Debug {
 	 */
 	public static function get_instance() {
 
-		if ( \is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) )
 			static::_set_instance();
-		}
 
 		return static::$instance;
 	}
@@ -523,13 +522,7 @@ final class Debug {
 	 * @return string Wrapped Query State debug output.
 	 */
 	protected function get_debug_query_output_from_cache() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = $this->get_debug_query_output( 'yup' );
+		return memo() ?? memo( $this->get_debug_query_output( 'yup' ) );
 	}
 
 	/**
@@ -626,7 +619,7 @@ final class Debug {
 				$value = \esc_html( var_export( $value, true ) );
 			}
 
-			$value   = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
+			$value   = '<font color="harrisonford">' . "$type $value" . '</font>';
 			$out     = \esc_html( $name ) . ' => ' . $value;
 			$output .= '<span style="background:#dadada">' . $out . '</span>' . PHP_EOL;
 		}
@@ -640,7 +633,7 @@ final class Debug {
 				$value = \esc_html( var_export( $value, true ) );
 			}
 
-			$value = '<font color="harrisonford">' . $type . ' ' . $value . '</font>';
+			$value = '<font color="harrisonford">' . "$type $value" . '</font>';
 			$out   = \esc_html( $name ) . ' => ' . $value;
 
 			$output .= $out . PHP_EOL;

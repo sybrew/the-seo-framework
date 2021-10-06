@@ -233,7 +233,7 @@ switch ( $instance ) :
 		// Get robots defaults.
 		$r_defaults = $this->generate_robots_meta(
 			$_generator_args,
-			null,
+			[ 'noindex', 'nofollow', 'noarchive' ],
 			The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
 		);
 		$r_settings = [

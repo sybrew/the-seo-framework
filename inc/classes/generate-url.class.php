@@ -40,8 +40,8 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.2.4
 	 *
 	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
-	 *    int    $id               The Post, Page or Term ID to generate the URL for.
-	 *    string $taxonomy         The taxonomy.
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The taxonomy.
 	 * }
 	 * @return bool
 	 */
@@ -989,11 +989,6 @@ class Generate_Url extends Generate_Title {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
 
 		$parsed_url = parse_url( \get_home_url() );
 

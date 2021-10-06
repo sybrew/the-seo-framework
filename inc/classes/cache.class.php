@@ -448,62 +448,60 @@ class Cache extends Site_Options {
 	 */
 	public function get_excluded_ids_from_cache() {
 
-		if ( $this->is_headless['meta'] ) return [
-			'archive' => '',
-			'search'  => '',
-		];
-
-		static $cache = null;
-
-		if ( null === $cache )
-			$cache = $this->get_transient( $this->get_exclusion_transient_name() );
-
-		if ( false === $cache ) {
-			global $wpdb;
-
-			$supported_post_types = $this->get_supported_post_types();
-			$public_post_types    = $this->get_public_post_types();
-
-			$join  = '';
-			$where = '';
-			if ( $supported_post_types !== $public_post_types ) {
-				// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
-				$post_type__in = "'" . implode( "','", array_map( 'esc_sql', $supported_post_types ) ) . "'";
-
-				// This is as fast as I could make it. Yes, it uses IN, but only on a (tiny) subset of data.
-				$join  = "LEFT JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID";
-				$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
-			}
-
-			//= Two separated equals queries are faster than a single IN with 'meta_key'.
-			// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
-			$cache = [
-				'archive' => $wpdb->get_results(
-					"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where"
-				),
-				'search'  => $wpdb->get_results(
-					"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where"
-				),
+		if ( $this->is_headless['meta'] )
+			return [
+				'archive' => '',
+				'search'  => '',
 			];
-			// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-			foreach ( [ 'archive', 'search' ] as $type ) {
-				array_walk(
-					$cache[ $type ],
-					static function( &$v ) {
-						if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
-							$v = (int) $v->post_id;
-						} else {
-							$v = false;
-						}
-					}
-				);
-				$cache[ $type ] = array_filter( $cache[ $type ] );
-			}
+		$cache = memo() ?? memo( $this->get_transient( $this->get_exclusion_transient_name() ) );
 
-			$this->set_transient( $this->get_exclusion_transient_name(), $cache, 0 );
+		if ( false !== $cache ) return $cache;
+
+		global $wpdb;
+
+		$supported_post_types = $this->get_supported_post_types();
+		$public_post_types    = $this->get_public_post_types();
+
+		$join  = '';
+		$where = '';
+		if ( $supported_post_types !== $public_post_types ) {
+			// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
+			$post_type__in = "'" . implode( "','", array_map( 'esc_sql', $supported_post_types ) ) . "'";
+
+			// This is as fast as I could make it. Yes, it uses IN, but only on a (tiny) subset of data.
+			$join  = "LEFT JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID";
+			$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
 		}
 
-		return $cache;
+		//= Two separated equals queries are faster than a single IN with 'meta_key'.
+		// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
+		$cache = [
+			'archive' => $wpdb->get_results(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where"
+			),
+			'search'  => $wpdb->get_results(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where"
+			),
+		];
+		// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		foreach ( [ 'archive', 'search' ] as $type ) {
+			array_walk(
+				$cache[ $type ],
+				static function( &$v ) {
+					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
+						$v = (int) $v->post_id;
+					} else {
+						$v = false;
+					}
+				}
+			);
+			$cache[ $type ] = array_filter( $cache[ $type ] );
+		}
+
+		$this->set_transient( $this->get_exclusion_transient_name(), $cache, 0 );
+
+		return memo( $cache );
 	}
 }

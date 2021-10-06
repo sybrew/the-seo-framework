@@ -107,6 +107,7 @@ class Post_Data extends Detect {
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
 
+		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) ) {
 			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
 			return $use_cache ? memo( [], $post_id ) : [];
@@ -125,6 +126,7 @@ class Post_Data extends Detect {
 			$meta = [];
 		} else {
 			// Filter the post meta items based on defaults' keys.
+			// Fix: <https://github.com/sybrew/the-seo-framework/issues/185>
 			$meta = array_intersect_key(
 				\get_post_meta( $post->ID ), // Gets all post meta. This is a discrepancy with get_term_meta()!
 				$defaults
@@ -173,35 +175,20 @@ class Post_Data extends Detect {
 	 * @return array The default post meta.
 	 */
 	public function get_post_meta_defaults( $post_id = 0 ) {
-
 		/**
 		 * @since 4.1.4
+		 * @since 4.2.0 1. Now corrects the $post_id when none is supplied.
+		 *              2. No longer returns the third parameter.
 		 * @param array    $defaults
 		 * @param integer  $post_id Post ID.
 		 * @param \WP_Post $post    Post object.
 		 */
-		$defaults = (array) \apply_filters_ref_array(
+		return (array) \apply_filters_ref_array(
 			'the_seo_framework_post_meta_defaults',
 			[
 				$this->get_unfiltered_post_meta_defaults(),
-				$post_id,
-				$post = \get_post( $post_id ),
+				$post_id ?: $this->get_the_real_ID(),
 			]
-		);
-
-		/**
-		 * @since 3.1.0
-		 * @since 4.1.4 Deprecated. Use filter `the_seo_framework_post_meta_defaults` instead.
-		 * @deprecated
-		 * @param array    $defaults
-		 * @param integer  $post_id Post ID.
-		 * @param \WP_Post $post    Post object.
-		 */
-		return (array) \apply_filters_deprecated(
-			'the_seo_framework_inpost_seo_save_defaults',
-			[ $defaults, $post_id, $post ],
-			'4.1.4 of The SEO Framework',
-			'the_seo_framework_post_meta_defaults'
 		);
 	}
 
@@ -605,8 +592,8 @@ class Post_Data extends Detect {
 	 * @return string The post content.
 	 */
 	public function get_post_content( $id = 0 ) {
-		$post = \get_post( $id ?: $this->get_the_real_ID() );
-		return empty( $post->post_content ) ? '' : $post->post_content;
+		// '0' is not deemed content. Return empty string for it's a slippery slope.
+		return ( \get_post( $id ?: $this->get_the_real_ID() )->post_content ?? '' ) ?: '';
 	}
 
 	/**
@@ -680,8 +667,7 @@ class Post_Data extends Detect {
 	 * @return bool True if protected, false otherwise.
 	 */
 	public function is_password_protected( $post = null ) {
-		$post = \get_post( $post );
-		return isset( $post->post_password ) && '' !== $post->post_password;
+		return '' !== ( \get_post( $post )->post_password ?? '' );
 	}
 
 	/**
@@ -693,8 +679,7 @@ class Post_Data extends Detect {
 	 * @return bool True if private, false otherwise.
 	 */
 	public function is_private( $post = null ) {
-		$post = \get_post( $post );
-		return isset( $post->post_status ) && 'private' === $post->post_status;
+		return 'private' === ( \get_post( $post )->post_status ?? '' );
 	}
 
 	/**
@@ -706,8 +691,7 @@ class Post_Data extends Detect {
 	 * @return bool True if draft, false otherwise.
 	 */
 	public function is_draft( $post = null ) {
-		$post = \get_post( $post );
-		return isset( $post->post_status ) && \in_array( $post->post_status, [ 'draft', 'auto-draft', 'pending' ], true );
+		return \in_array( \get_post( $post )->post_status ?? '', [ 'draft', 'auto-draft', 'pending' ], true );
 	}
 
 	/**

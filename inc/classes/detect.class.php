@@ -225,7 +225,7 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$key = serialize( $mapped );
 
-		return memo( null, $key ) ?: memo( $this->detect_plugin_multi( $plugins ), $key );
+		return memo( null, $key ) ?? memo( $this->detect_plugin_multi( $plugins ), $key );
 	}
 
 	/**
@@ -680,9 +680,8 @@ class Detect extends Render {
 		 * This protects against (accidental) negative-SEO bombarding.
 		 * Support broken queries, so we can noindex them.
 		 */
-		if ( ! $supported && $this->is_query_exploited() ) {
+		if ( ! $supported && $this->is_query_exploited() )
 			$supported = true;
-		}
 
 		/**
 		 * @since 4.0.0
@@ -730,16 +729,15 @@ class Detect extends Render {
 	 */
 	public function is_query_exploited() {
 
-		static $exploited;
-
-		if ( isset( $exploited ) ) return $exploited;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		if ( ! $this->get_option( 'advanced_query_protection' ) )
-			return $exploited = false;
+			return memo( false );
 
 		// When the page ID is not 0, a real page will always be returned.
 		if ( $this->get_the_real_ID() )
-			return $exploited = false;
+			return memo( false );
 
 		global $wp_query;
 
@@ -779,20 +777,17 @@ class Detect extends Render {
 			]
 		);
 
-		$query     = $wp_query->query;
-		$exploited = false;
+		$query = $wp_query->query;
 
 		foreach ( $exploitables as $type => $qvs ) :
 			foreach ( $qvs as $qv ) :
-				// Don't guess "empty", because falsey or empty-array is also empty.
+				// Don't guess "empty" nor null-coalesce, because falsey or empty-array is also empty.
 				if ( ! isset( $query[ $qv ] ) ) continue;
 
 				switch ( $type ) :
 					case 'numeric':
-						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) ) {
-							$exploited = true;
-							break 3;
-						}
+						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) )
+							return memo( true );
 						break;
 
 					case 'numeric_array':
@@ -801,17 +796,13 @@ class Detect extends Render {
 
 						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
 						// WordPress mitigates this via a 404 query when a numeric value is found.
-						if ( ! preg_match( '/[0-9]/', $query[ $qv ] ) ) {
-							$exploited = true;
-							break 3;
-						}
+						if ( ! preg_match( '/[0-9]/', $query[ $qv ] ) )
+							return memo( true );
 						break;
 
 					case 'requires_s':
-						if ( ! isset( $query['s'] ) ) {
-							$exploited = true;
-							break 3;
-						}
+						if ( ! isset( $query['s'] ) )
+							return memo( true );
 						break;
 
 					default:
@@ -820,7 +811,7 @@ class Detect extends Render {
 			endforeach;
 		endforeach;
 
-		return $exploited;
+		return memo( false );
 	}
 
 	/**
@@ -1144,9 +1135,8 @@ class Detect extends Render {
 	 * @return string URL location of robots.txt. Unescaped.
 	 */
 	public function get_robots_txt_url() {
-		global $wp_rewrite;
 
-		if ( $wp_rewrite->using_permalinks() && ! $this->is_subdirectory_installation() ) {
+		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! $this->is_subdirectory_installation() ) {
 			$home = \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) );
 			$path = "{$home}robots.txt";
 		} elseif ( $this->has_robots_txt() ) {
@@ -1168,15 +1158,11 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function is_subdirectory_installation() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		$parsed_url = parse_url( \get_option( 'home' ) );
-
-		return $cache = ! empty( $parsed_url['path'] ) && ltrim( $parsed_url['path'], ' \\/' );
+		return memo() ?? memo(
+			(bool) \strlen(
+				ltrim( parse_url( \get_option( 'home' ) )['path'] ?? '', ' \\/' )
+			)
+		);
 	}
 
 	/**
@@ -1193,14 +1179,12 @@ class Detect extends Render {
 		if ( false === strpos( $text, '%%' ) ) return false;
 
 		$tags_simple = [ 'date', 'title', 'parent_title', 'archive_title', 'sitename', 'sitedesc', 'excerpt', 'excerpt_only', 'tag', 'category', 'primary_category', 'category_description', 'tag_description', 'term_description', 'term_title', 'searchphrase', 'sep', 'pt_single', 'pt_plural', 'modified', 'id', 'name', 'user_description', 'page', 'pagetotal', 'pagenumber', 'caption', 'focuskw', 'term404', 'ct_product_cat', 'ct_product_tag', 'wc_shortdesc', 'wc_sku', 'wc_brand', 'wc_price' ];
-
-		$_regex = sprintf( '%%%s%%', implode( '|', $tags_simple ) );
+		$_regex      = sprintf( '%%%s%%', implode( '|', $tags_simple ) );
 
 		if ( preg_match( "/$_regex/i", $text ) ) return true;
 
 		$tags_wildcard_end = [ 'cs_', 'ct_desc_', 'ct_pa_' ];
-
-		$_regex = sprintf( '%%(%s)[^\s]*?%%', implode( '|', $tags_wildcard_end ) );
+		$_regex            = sprintf( '%%(%s)[^\s]*?%%', implode( '|', $tags_wildcard_end ) );
 
 		if ( preg_match( "/$_regex/", $text ) ) return true;
 

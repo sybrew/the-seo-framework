@@ -60,6 +60,7 @@ class Term_Data extends Post_Data {
 	 * Returns the term meta item by key.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 No longer accidentally returns an empty array on failure.
 	 *
 	 * @param string $item      The item to get.
 	 * @param int    $term_id   The Term ID.
@@ -67,39 +68,7 @@ class Term_Data extends Post_Data {
 	 * @return mixed The term meta item. Null when not found.
 	 */
 	public function get_term_meta_item( $item, $term_id = 0, $use_cache = true ) {
-
-		if ( ! $term_id ) {
-			$meta = $this->get_current_term_meta();
-		} else {
-			$meta = $this->get_term_meta( $term_id, $use_cache );
-		}
-
-		return isset( $meta[ $item ] ) ? $meta[ $item ] : null;
-	}
-
-	/**
-	 * Returns and caches term meta for the current query.
-	 * Memoizes the return value for the current request.
-	 *
-	 * @since 3.0.0
-	 * @since 4.0.1 Now uses the filterable `get_the_real_ID()`
-	 *
-	 * @return array The current term meta.
-	 */
-	public function get_current_term_meta() {
-
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		if ( $this->is_term_meta_capable() ) {
-			$cache = $this->get_term_meta( $this->get_the_real_ID() ) ?: [];
-		} else {
-			$cache = [];
-		}
-
-		return $cache;
+		return $this->get_term_meta( $term_id ?: $this->get_the_real_ID(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -116,6 +85,7 @@ class Term_Data extends Post_Data {
 	 *              2. Now fills in defaults.
 	 * @since 4.1.4 1. Removed deprecated filter.
 	 *              2. Now considers headlessness.
+	 * @since 4.2.0 Now returns an empty array when the term's taxonomy isn't supported.
 	 *
 	 * @param int  $term_id The Term ID.
 	 * @param bool $use_cache Whether to use caching.
@@ -123,11 +93,15 @@ class Term_Data extends Post_Data {
 	 */
 	public function get_term_meta( $term_id, $use_cache = true ) {
 
-		if ( $use_cache ) {
-			static $cache = [];
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( $use_cache && ( $memo = memo( null, $term_id ) ) ) return $memo;
 
-			if ( isset( $cache[ $term_id ] ) )
-				return $cache[ $term_id ];
+		$term = \get_term( $term_id );
+
+		// We test taxonomy support to be consistent with `get_post_meta()`.
+		if ( empty( $term->term_id ) || ! $this->is_taxonomy_supported( $term->taxonomy ) ) {
+			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+			return $use_cache ? memo( [], $term_id ) : [];
 		}
 
 		/**
@@ -136,13 +110,15 @@ class Term_Data extends Post_Data {
 		 */
 		$defaults = array_merge(
 			$this->get_unfiltered_term_meta_defaults(),
-			$this->get_term_meta_defaults( $term_id )
+			$this->get_term_meta_defaults( $term->term_id )
 		);
 
 		if ( $this->is_headless['meta'] ) {
 			$meta = [];
 		} else {
-			$meta = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
+			// Unlike get_post_meta(), we need not filter here.
+			// See: <https://github.com/sybrew/the-seo-framework/issues/185>
+			$meta = \get_term_meta( $term->term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
 		}
 
 		/**
@@ -158,12 +134,14 @@ class Term_Data extends Post_Data {
 			'the_seo_framework_term_meta',
 			[
 				array_merge( $defaults, $meta ),
-				$term_id,
+				$term->term_id,
 				$this->is_headless['meta'],
 			]
 		);
 
-		return $cache[ $term_id ] = $meta;
+		// Cache using $term_id, not $term->term_id, otherwise invalid queries can bypass the cache.
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+		return $use_cache ? memo( $meta, $term_id ) : $meta;
 	}
 
 	/**

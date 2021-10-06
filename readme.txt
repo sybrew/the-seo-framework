@@ -251,6 +251,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
 
+TODO Fix Elementor's library post type issue
+
 TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 
@@ -279,7 +281,8 @@ TODO Move notice handlers to new class.
 
 TODO overthrow the structured data. Clean-room Yoast's/WPSSO/AIOSEO implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
 
-TODO can we change behavior of, since we require PHP 7.2 "_class = function() {"
+TODO can we change behavior of class-loaders, since we require PHP 7.2 (search "_class = function() {")
+	-> Perhaps we should just clean up those classes.
 
 TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
 
@@ -307,6 +310,16 @@ TODO fix js lint warnings about the l10n const being unavailable.
 TODO use goto in array_merge_recursive_distinct?
 	-> Also clean up its sole caller...
 
+TODO https://github.com/sybrew/the-seo-framework/issues/185
+	-> This will allow bigger sitemaps, for we won't accidentally call redundant post meta.
+	-> This forces us to implement a migrator, which we should...
+	-> This will cause all sorts of issues we cannot help our users with.
+		-> Although this will help speed up queries, especially those of large sites, it will hinder large sites for they might use special queries to test against TSF.
+			-> Then again, you should assert in PHP more than the database. TSF's "qubit" system is a poster child for that.
+
+TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination.
+	* This to be in line with homepage pagination.
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -327,9 +340,10 @@ TODO use goto in array_merge_recursive_distinct?
 	* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
 	* Open Graph, Twitter, and meta titles are now regenerated faster.
 	* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
-	* TODO The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
+	* The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
 		* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
 			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
+			* No, this would require us migrating to a new post meta system... https://github.com/sybrew/the-seo-framework/issues/185
 	* Large sitemaps are now rendered more quickly by the browser.
 	* Tooltips despawn 25% quicker now.
 	* Tooltip animations no longer spawn when a tooltip is touched, potentially saving battery-life.
@@ -432,6 +446,8 @@ TODO use goto in array_merge_recursive_distinct?
 		* `the_seo_framework_pro`, use action `the_seo_framework_after_meta` instead.
 		* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta` instead.
 		* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta` instead.
+	* **Removed:**
+		* `the_seo_framework_inpost_seo_save_defaults`, was deprecated. Use `the_seo_framework_post_meta_defaults` instead.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_before_meta`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`

@@ -174,7 +174,7 @@ final class ListEdit extends ListTable {
 
 		$r_defaults = $tsf->generate_robots_meta(
 			$query,
-			null,
+			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
@@ -334,7 +334,7 @@ final class ListEdit extends ListTable {
 
 		$r_defaults = $tsf->generate_robots_meta(
 			$query,
-			null,
+			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
