@@ -133,7 +133,7 @@ abstract class SeoBar {
 	 * @return mixed|null The cache value. Null on failure.
 	 */
 	final protected static function get_cache( $key ) {
-		return isset( self::$cache[ $key ] ) ? self::$cache[ $key ] : null;
+		return self::$cache[ $key ] ?? null;
 	}
 
 	/**

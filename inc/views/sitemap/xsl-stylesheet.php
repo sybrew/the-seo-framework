@@ -324,7 +324,7 @@ function _print_xsl_content( $tsf ) {
 
 	$url = [
 		'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'URL', 'autodescription' ) ) ) ),
-		'td' => '<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;99"><xsl:value-of select="substring($itemURL,0,96)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>',
+		'td' => '<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;95"><xsl:value-of select="substring($itemURL,0,93)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>',
 	];
 
 	if ( $tsf->get_option( 'sitemaps_modified' ) ) {

@@ -991,7 +991,7 @@ final class SeoBar_Page extends SeoBar {
 	protected function test_redirect() {
 
 		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
-			return static::get_cache( 'page/redirect/default/0' ) ?: static::set_cache(
+			$default = static::get_cache( 'page/redirect/default/0' ) ?: static::set_cache(
 				'page/redirect/default/0',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
@@ -999,13 +999,18 @@ final class SeoBar_Page extends SeoBar {
 					'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
 					'reason' => \__( 'Page does not redirect visitors.', 'autodescription' ),
 					'assess' => [
-						'redirect' => \__( 'All visitors and crawlers may access this page.', 'autodescription' ),
+						'redirect' => \__( 'Visitors and crawlers may view this page.', 'autodescription' ),
 					],
 					'meta'   => [
 						'blocking' => false,
 					],
 				]
 			);
+
+			if ( $this->query_cache['states']['isdraft'] )
+				$default['assess']['redirect'] = \__( 'Visitors and crawlers may view this page once published.', 'autodescription' );
+
+			return $default;
 		} else {
 			return static::get_cache( 'post/redirect/default/1' ) ?: static::set_cache(
 				'post/redirect/default/1',

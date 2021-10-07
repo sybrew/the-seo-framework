@@ -158,9 +158,9 @@ final class Form {
 		) );
 
 		$value = $tsf->get_option( $args['id'] );
-		if ( $index ) {
-			$value = isset( $value[ $index ] ) ? $value[ $index ] : '';
-		}
+
+		if ( $index )
+			$value = $value[ $index ] ?? '';
 
 		$cb_classes = [];
 

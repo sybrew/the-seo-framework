@@ -48,7 +48,7 @@ final class Args extends Factory {
 	protected static function assert_no( $type ) {
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
 		// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
-		// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gototoo.
+		// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
 
 		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf/static::$args hereinafter.
 		$tsf  = static::$tsf;
@@ -78,13 +78,10 @@ final class Args extends Factory {
 				case $qubit > .33:
 					// Force noindex.
 					yield 'meta_qubit_force' => true;
-					// We won't override this. Terminate generator.
-					goto end;
+					// We won't override this. Terminate generator. "goto end".
+					// No break, generator stops here anyway.
 				case isset( $qubit ):
 					yield 'meta_qubit_default' => false;
-					break;
-				default:
-					break;
 			endswitch;
 		}
 		after_meta_settings:;

@@ -372,6 +372,7 @@ class Init extends Query {
 	 *
 	 * @since 4.2.0
 	 * @access private
+	 * @TODO delete me. v5.0.0+
 	 */
 	public function _do_deprecated_output_hooks_before() {
 		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
@@ -414,6 +415,7 @@ class Init extends Query {
 	 *
 	 * @since 4.2.0
 	 * @access private
+	 * @TODO delete me. v5.0.0+
 	 */
 	public function _do_deprecated_output_hooks_after() {
 		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.

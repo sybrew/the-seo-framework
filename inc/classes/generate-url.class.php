@@ -38,6 +38,7 @@ class Generate_Url extends Generate_Title {
 	 * Determines if the given page has a custom canonical URL.
 	 *
 	 * @since 3.2.4
+	 * @since 4.2.0 Now also detects canonical URLs for taxonomies.
 	 *
 	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -47,16 +48,18 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function has_custom_canonical_url( $args = null ) {
 
-		if ( ! $args ) {
+		if ( null === $args ) {
 			if ( $this->is_singular() ) {
 				$has = $this->get_singular_custom_canonical_url( $this->get_the_real_ID() );
+			} elseif ( $this->is_term_meta_capable() ) {
+				$has = $this->get_taxonomical_custom_canonical_url( $this->get_the_real_ID() );
 			} else {
 				$has = false;
 			}
 		} else {
 			$this->fix_generation_args( $args );
-			if ( ! $args || $args['taxonomy'] ) {
-				$has = false;
+			if ( $args['taxonomy'] ) {
+				$has = $this->get_taxonomical_custom_canonical_url( $args['id'] );
 			} else {
 				$has = $this->get_singular_custom_canonical_url( $args['id'] );
 			}
@@ -357,7 +360,7 @@ class Generate_Url extends Generate_Title {
 	public function get_singular_canonical_url( $id = null ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $id ) ) return $memo;
+		if ( null !== $memo = fastmemo( __METHOD__, null, $id ) ) return $memo;
 
 		$url = \wp_get_canonical_url( $id ) ?: '';
 
@@ -372,7 +375,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		return memo( $url, $id );
+		return fastmemo( __METHOD__, $url, $id );
 	}
 
 	/**
@@ -392,27 +395,32 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.0 1. Renamed from "get_taxonomical_canonical_url" (note the typo)
+	 * @since 4.0.0 1. Renamed from "get_taxonomial_canonical_url" (note the typo)
 	 *              2. Now works on the admin-screens.
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. The parameters are now optional.
 	 *
 	 * @param int    $term_id The term ID.
 	 * @param string $taxonomy The taxonomy.
 	 * @return string The taxonomical canonical URL, if any.
 	 */
-	public function get_taxonomical_canonical_url( $term_id, $taxonomy ) {
+	public function get_taxonomical_canonical_url( $term_id = 0, $taxonomy = '' ) {
 
-		$term = \get_term( $term_id, $taxonomy );
-		$link = \get_term_link( $term, $taxonomy );
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = fastmemo( __METHOD__, null, $term_id, $taxonomy ) )
+			return $memo;
 
-		if ( \is_wp_error( $link ) )
-			return '';
+		$url = \get_term_link( $term_id ?: $this->get_the_real_ID(), $taxonomy );
+
+		if ( \is_wp_error( $url ) )
+			return fastmemo( __METHOD__, '', $term_id, $taxonomy );
 
 		if ( $term_id === $this->get_the_real_ID() ) {
 			//= Adds pagination if ID matches query.
-			$link = $this->add_url_pagination( $link, $this->paged(), true );
+			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		return $link;
+		return fastmemo( __METHOD__, $url, $term_id, $taxonomy );
 	}
 
 	/**

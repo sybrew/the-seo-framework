@@ -463,7 +463,10 @@ final class Debug {
 		// Start timer.
 		$this->timer( true );
 
-		$output = $tsf->get_html_output();
+		// I hate ob_*.
+		ob_start();
+		$tsf->html_output();
+		$output = ob_get_clean();
 
 		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>';
 

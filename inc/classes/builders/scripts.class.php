@@ -184,7 +184,7 @@ final class Scripts {
 	 * @return int <bit>
 	 */
 	public static function get_status_of( $id, $type ) {
-		return isset( static::$queue[ $type ][ $id ] ) ? static::$queue[ $type ][ $id ] : 0b0;
+		return static::$queue[ $type ][ $id ] ?? 0b0;
 	}
 
 	/**

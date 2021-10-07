@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo; // Precautionary.
+use function \The_SEO_Framework\{ memo, fastmemo }; // Precautionary.
 
 /**
  * Class The_SEO_Framework\Internal\Deprecated
@@ -59,6 +59,45 @@ final class Deprecated {
 		$tsf = \the_seo_framework();
 		$tsf->_deprecated_function( 'the_seo_framework()->append_php_query()', '4.2.0', 'the_seo_framework()->append_url_query()' );
 		return $tsf->append_url_query( $url, $query );
+	}
+
+	/**
+	 * Runs header actions.
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 Deprecated
+	 * @deprecated
+	 *
+	 * @param string $location Either 'before' or 'after'.
+	 * @return string The filter output.
+	 */
+	public function get_legacy_header_filters_output( $location = 'before' ) {
+
+		$output = '';
+
+		/**
+		 * @since 2.2.6
+		 * @since 4.2.0 Deprecated
+		 * @deprecated
+		 * @param array $functions {
+		 *    'callback' => string|array The function to call.
+		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
+		 * }
+		 */
+		$functions = (array) \apply_filters_deprecated(
+			"the_seo_framework_{$location}_output",
+			[ [] ],
+			'4.2.0 of The SEO Framework',
+			"Action the_seo_framework_{$location}_meta"
+		);
+
+		foreach ( $functions as $function ) {
+			if ( ! empty( $function['callback'] ) ) {
+				$output .= \call_user_func_array( $function['callback'], (array) ( $function['args'] ?? '' ) );
+			}
+		}
+
+		return $output;
 	}
 
 	/**

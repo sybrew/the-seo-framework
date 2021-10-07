@@ -285,6 +285,7 @@ TODO can we change behavior of class-loaders, since we require PHP 7.2 (search "
 	-> Perhaps we should just clean up those classes.
 
 TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
+	-> What's there to clean? Well, we could move the constants around...
 
 TODO (return/variable) strict type enforcements?
 	-> This negatively affects performance, for more opcodes are performed every function call.
@@ -319,6 +320,13 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 
 TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination.
 	* This to be in line with homepage pagination.
+TODO mention & implement for query caching: fastmemo
+
+TODO move Builder/Sitemap to Builder/Sitemap/Main|... (deprecate?)
+TODO move Builder/SEOBar to Builder/SEOBar/Main|... (private, no deprecation)
+
+TODO allow custom robots generators?
+TODO enable `public static function _run_all_tests`
 
 **For everyone:**
 
@@ -334,29 +342,38 @@ TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents te
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 * **Improved:**
-	* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
-	* Images are now fetched faster from the content.
-	* The SEO Bar now parses the title item faster.
-	* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
-	* Open Graph, Twitter, and meta titles are now regenerated faster.
-	* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
-	* The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
-		* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
-			* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
-			* No, this would require us migrating to a new post meta system... https://github.com/sybrew/the-seo-framework/issues/185
-	* Large sitemaps are now rendered more quickly by the browser.
-	* Tooltips despawn 25% quicker now.
-	* Tooltip animations no longer spawn when a tooltip is touched, potentially saving battery-life.
-	* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
-	* Upgrade notices are now persistent; so, now you won't miss an auto-upgrade.
-		* Shown only to users with `THE_SEO_FRAMEWORK_SETTINGS_CAP` (default `update_options`) capability.
-		* Shown once in total.
-		* These messages are always truly white-label; there's no mention of "The SEO Framework".
-	* The first-activation notice is now persistent.
-		* Shown only to users with `activate_plugins` capability.
-		* Shown twice in total.
-		* Only within two minutes of activation the notice is shown.
-		* On multisite, it's shown on every sub-site, unless the plugin is network activated, then you'll see it only on the main site.
+	* **Performance:**
+		* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
+		* Images are now fetched faster from the content.
+		* The SEO Bar now parses the title item faster.
+		* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
+		* Open Graph, Twitter, and meta titles are now regenerated faster.
+		* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
+		* The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
+			-> TODO this isn't really faster now...
+			* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
+				* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
+				* No, this would require us migrating to a new post meta system... https://github.com/sybrew/the-seo-framework/issues/185
+		* Large sitemaps are now rendered more quickly by the browser.
+		* Tooltips despawn 25% quicker now.
+		* Tapping the tooltip no longer conjures tooltip animations, potentially saving battery-life.
+		* Administrative Markdown-text now generates a tad swifter.
+	* **Timestamps:**
+		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
+	* **Notices:**
+		* Upgrade notices are now persistent; so, now you won't miss an auto-upgrade.
+			* Shown only to users with `THE_SEO_FRAMEWORK_SETTINGS_CAP` (default `update_options`) capability.
+			* Shown once globally.
+			* These messages are always truly white-label; there's no mention of "The SEO Framework".
+		* The first-activation notice is now persistent.
+			* Shown only to users with `activate_plugins` capability.
+			* Shown twice globally.
+			* Shown only within two minutes of activation.
+			* On multisite, it can be shown on every sub-site, unless the plugin is network activated, then you'll see it only on the main site.
+	* **Accessibility:**
+		* The SEO Bar item "Redirect" now conveys a more proper message when the page status is draft: "... once published."
+	* **Other:**
+		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 * **Fixed:**
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
@@ -365,6 +382,8 @@ TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents te
 
 * **Changed:**
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
+* **Fixed:**
+	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
 * **Object notes:**
 	* For object `\The_SEO_Framework\Bridges\Ping`:
 		* **Methods added:**
@@ -436,6 +455,8 @@ TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents te
 			* `the_seo_framework_get_option()`, was deprecated since 4.1.0.
 			* `get_home_page_tagline()`, was deprecated since 4.1.0.
 			* `permalink_structure()`, was deprecated since 4.1.0.
+			* `get_query_cache()`, using this won't cause issues: Caching simply fails.
+			* `set_query_cache()`, using this won't cause issues: Caching simply fails.
 		* **Properties deprecated:**
 			* `$load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	* Object `\The_SEO_Framework\Silencer` is now `\The_SEO_Framework\Internal\Silencer`.

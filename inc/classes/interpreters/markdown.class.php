@@ -85,9 +85,8 @@ final class Markdown {
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
-		if ( 2 === \count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
+		if ( isset( $md_types['*'], $md_types['**'] ) )
 			$text = static::strong_em( $text );
-		endif;
 
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :
@@ -136,6 +135,7 @@ final class Markdown {
 	private static function strong_em( $text ) {
 
 		$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
+
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
 				$matches[0][ $i ],

@@ -131,13 +131,16 @@ class Posts extends \WP_Sitemaps_Posts {
 						\OBJECT
 					);
 
-					$lastmod = isset( $latests_posts[0]->post_date_gmt ) ? $latests_posts[0]->post_date_gmt : '0000-00-00 00:00:00';
-
 					/**
 					 * @since 4.1.1
 					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
 					 */
-					$sitemap_entry['lastmod'] = (string) \apply_filters( 'the_seo_framework_sitemap_blog_lastmod', $lastmod );
+					$sitemap_entry['lastmod'] = (string) \apply_filters_ref_array(
+						'the_seo_framework_sitemap_blog_lastmod',
+						[
+							$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
+						]
+					);
 				}
 
 				/**
@@ -167,9 +170,9 @@ class Posts extends \WP_Sitemaps_Posts {
 			 * @augmented Adds lastmod to sitemap entry.
 			 */
 			if ( $show_modified ) {
-				$lastmod = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : false;
+				$lastmod = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
-				if ( $lastmod && '0000-00-00 00:00:00' !== $lastmod )
+				if ( '0000-00-00 00:00:00' !== $lastmod )
 					$sitemap_entry['lastmod'] = $tsf->gmt2date( $timestamp_format, $lastmod );
 			}
 

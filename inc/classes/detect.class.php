@@ -909,9 +909,11 @@ class Detect extends Render {
 	 * @return array The supported post types.
 	 */
 	public function get_supported_post_types() {
-		return memo() ?? memo( array_values(
-			array_filter( $this->get_public_post_types(), [ $this, 'is_post_type_supported' ] )
-		) );
+		return memo() ?? memo(
+			array_values(
+				array_filter( $this->get_public_post_types(), [ $this, 'is_post_type_supported' ] )
+			)
+		);
 	}
 
 	/**
@@ -924,43 +926,45 @@ class Detect extends Render {
 	 * @return array All public post types.
 	 */
 	protected function get_public_post_types() {
-		return memo() ?? memo(
-			array_values(
-				array_filter(
-					array_unique(
-						array_merge(
-							$this->get_forced_supported_post_types(),
-							//? array_values() because get_post_types() gives a sequential array.
-							array_keys( (array) \get_post_types( [ 'public' => true ] ) )
-						)
-					),
-					'is_post_type_viewable'
+		return fastmemo( __METHOD__ )
+			?? fastmemo(
+				__METHOD__,
+				array_values(
+					array_filter(
+						array_unique(
+							array_merge(
+								$this->get_forced_supported_post_types(),
+								//? array_values() because get_post_types() gives a sequential array.
+								array_keys( (array) \get_post_types( [ 'public' => true ] ) )
+							)
+						),
+						'is_post_type_viewable'
+					)
 				)
-			)
-		);
+			);
 	}
 
 	/**
 	 * Returns a list of builtin public post types.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 Removed memoization.
 	 *
 	 * @return array Forced supported post types.
 	 */
 	protected function get_forced_supported_post_types() {
-		return memo() ?? memo(
-			(array) \apply_filters(
-				/**
-				 * @since 3.1.0
-				 * @param array $forced Forced supported post types
-				 */
-				'the_seo_framework_forced_supported_post_types',
+		/**
+		* @since 3.1.0
+		* @param array $forced Forced supported post types
+		*/
+		return (array) \apply_filters_ref_array(
+			'the_seo_framework_forced_supported_post_types',
+			[
 				array_values( \get_post_types( [
 					'public'   => true,
 					'_builtin' => true,
-				] ) )
-			)
+				] ) ),
+			]
 		);
 	}
 
@@ -973,44 +977,46 @@ class Detect extends Render {
 	 * @return array The taxonomies that are public.
 	 */
 	protected function get_public_taxonomies() {
-		return memo() ?? memo(
-			array_filter(
-				array_unique(
-					array_merge(
-						$this->get_forced_supported_taxonomies(),
-						//? array_values() because get_taxonomies() gives a sequential array.
-						array_values( (array) \get_taxonomies( [
-							'public'   => true,
-							'_builtin' => false,
-						] ) )
-					)
-				),
-				'is_taxonomy_viewable'
-			)
-		);
+		return fastmemo( __METHOD__ )
+			?? fastmemo(
+				__METHOD__,
+				array_filter(
+					array_unique(
+						array_merge(
+							$this->get_forced_supported_taxonomies(),
+							//? array_values() because get_taxonomies() gives a sequential array.
+							array_values( (array) \get_taxonomies( [
+								'public'   => true,
+								'_builtin' => false,
+							] ) )
+						)
+					),
+					'is_taxonomy_viewable'
+				)
+			);
 	}
 
 	/**
 	 * Returns a list of builtin public taxonomies.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
+	 * @since 4.2.0 Removed memoization.
 	 *
 	 * @return array Forced supported taxonomies
 	 */
 	protected function get_forced_supported_taxonomies() {
-		return memo() ?? memo(
-			/**
-			 * @since 4.1.0
-			 * @param array $forced Forced supported post types
-			 */
-			(array) \apply_filters(
-				'the_seo_framework_forced_supported_taxonomies',
+		/**
+		 * @since 4.1.0
+		 * @param array $forced Forced supported post types
+		 */
+		return (array) \apply_filters_ref_array(
+			'the_seo_framework_forced_supported_taxonomies',
+			[
 				array_values( \get_taxonomies( [
 					'public'   => true,
 					'_builtin' => true,
-				] ) )
-			)
+				] ) ),
+			]
 		);
 	}
 
@@ -1034,9 +1040,12 @@ class Detect extends Render {
 		 * @param bool   $disabled
 		 * @param string $post_type
 		 */
-		return \apply_filters( 'the_seo_framework_post_type_disabled',
-			isset( $this->get_option( 'disabled_post_types' )[ $post_type ] ),
-			$post_type
+		return \apply_filters_ref_array(
+			'the_seo_framework_post_type_disabled',
+			[
+				isset( $this->get_option( 'disabled_post_types' )[ $post_type ] ),
+				$post_type,
+			]
 		);
 	}
 
@@ -1062,13 +1071,13 @@ class Detect extends Render {
 			$disabled = true;
 		} else {
 			// Then, test some() post types.
+			// Populate $disabled within loop, for the taxonomy might not have post types at all.
 			foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
-				// Set here, because the taxonomy might not have post types at all.
-				$disabled = true;
 				if ( $this->is_post_type_supported( $type ) ) {
 					$disabled = false;
 					break;
 				}
+				$disabled = true;
 			}
 		}
 
@@ -1077,7 +1086,13 @@ class Detect extends Render {
 		 * @param bool   $disabled
 		 * @param string $taxonomy
 		 */
-		return \apply_filters( 'the_seo_framework_taxonomy_disabled', $disabled, $taxonomy );
+		return \apply_filters_ref_array(
+			'the_seo_framework_taxonomy_disabled',
+			[
+				$disabled,
+				$taxonomy,
+			]
+		);
 	}
 
 	/**

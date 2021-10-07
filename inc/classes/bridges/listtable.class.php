@@ -161,8 +161,8 @@ abstract class ListTable {
 		|| empty( $screen->id ) )
 			return;
 
-		$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
-		$taxonomy  = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
+		$post_type = $screen->post_type ?? '';
+		$taxonomy  = $screen->taxonomy  ?? '';
 
 		if ( $taxonomy ) {
 			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )
@@ -176,9 +176,9 @@ abstract class ListTable {
 		$this->taxonomy  = $taxonomy;
 
 		if ( $taxonomy )
-			\add_filter( 'manage_' . $taxonomy . '_custom_column', [ $this, '_output_column_contents_for_term' ], 1, 3 );
+			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, '_output_column_contents_for_term' ], 1, 3 );
 
-		\add_filter( 'manage_' . $screen->id . '_columns', [ $this, '_add_column' ], 10, 1 );
+		\add_filter( "manage_{$screen->id}_columns", [ $this, '_add_column' ], 10, 1 );
 		/**
 		 * Always load pages and posts.
 		 * Many CPT plugins rely on these.

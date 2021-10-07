@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\fastmemo;
 
 /**
  * Generates the base sitemap.
@@ -381,7 +381,7 @@ class Sitemap_Base extends Sitemap {
 
 				if ( $args['show_modified'] ) {
 					$post               = \get_post( $front_page_id );
-					$_values['lastmod'] = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : false;
+					$_values['lastmod'] = $post->post_modified_gmt ?? false;
 				}
 
 				if ( $args['show_priority'] ) {
@@ -414,28 +414,25 @@ class Sitemap_Base extends Sitemap {
 						],
 						\OBJECT
 					);
-					$latest_post   = $latests_posts[0] ?? null;
-					$_publish_post = isset( $latest_post->post_date_gmt ) ? $latest_post->post_date_gmt : '0000-00-00 00:00:00';
-
-					$post          = \get_post( $posts_page_id );
-					$_lastmod_blog = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : '0000-00-00 00:00:00';
-
-					if ( strtotime( $_publish_post ) > strtotime( $_lastmod_blog ) ) {
-						$_values['lastmod'] = $_publish_post;
-					} else {
-						$_values['lastmod'] = $_lastmod_blog;
-					}
+					$_publish_post = $latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00';
+					$_lastmod_blog = \get_post( $posts_page_id )->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 					/**
 					 * @since 4.1.1
 					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
 					 */
-					$_values['lastmod'] = (string) \apply_filters( 'the_seo_framework_sitemap_blog_lastmod', $_values['lastmod'] );
+					$_values['lastmod'] = (string) \apply_filters_ref_array(
+						'the_seo_framework_sitemap_blog_lastmod',
+						[
+							strtotime( $_publish_post ) > strtotime( $_lastmod_blog )
+								? $_publish_post
+								: $_lastmod_blog,
+						]
+					);
 				}
 
-				if ( $args['show_priority'] ) {
+				if ( $args['show_priority'] )
 					$_values['priority'] = '1.0';
-				}
 
 				++$count;
 				yield $_values;
@@ -461,18 +458,20 @@ class Sitemap_Base extends Sitemap {
 						\OBJECT
 					);
 
-					$_values['lastmod'] = isset( $latests_posts[0]->post_date_gmt ) ? $latests_posts[0]->post_date_gmt : '0000-00-00 00:00:00';
-
 					/**
 					 * @since 4.1.1
 					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
 					 */
-					$_values['lastmod'] = (string) \apply_filters( 'the_seo_framework_sitemap_blog_lastmod', $_values['lastmod'] );
+					$_values['lastmod'] = (string) \apply_filters_ref_array(
+						'the_seo_framework_sitemap_blog_lastmod',
+						[
+							$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
+						]
+					);
 				}
 
-				if ( $args['show_priority'] ) {
+				if ( $args['show_priority'] )
 					$_values['priority'] = '1.0';
-				}
 
 				++$count;
 				yield $_values;
@@ -504,16 +503,15 @@ class Sitemap_Base extends Sitemap {
 			$post = \get_post( $post_id );
 
 			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
-				$_values        = [];
-				$_values['loc'] = static::$tsf->create_canonical_url(
-					[
+				$_values = [
+					'loc' => static::$tsf->create_canonical_url( [
 						'id'       => $post_id,
 						'taxonomy' => '',
-					]
-				);
+					] ),
+				];
 
 				if ( $args['show_modified'] )
-					$_values['lastmod'] = isset( $post->post_modified_gmt ) ? $post->post_modified_gmt : '0000-00-00 00:00:00';
+					$_values['lastmod'] = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 				if ( $args['show_priority'] ) {
 					// Add at least 1 to prevent going negative. We added 8 extra (= 9) to smoothen the slope.
@@ -528,8 +526,9 @@ class Sitemap_Base extends Sitemap {
 			// memo( fn() => (bool) \wp_using_ext_object_cache() }, 'wp_ueoc' );
 			// The memo must then not try to override data via first parameter. Even when null: [ 'v' => null, 'is_set' => true ];
 			// Anyway, only clean post cache when NOT using an external object caching plugin.
-			memo( null, 'wp_ueoc' ) ?? memo( (bool) \wp_using_ext_object_cache(), 'wp_ueoc' )
-				or \clean_post_cache( $post );
+			fastmemo( __METHOD__, null, 'wp_ueoc' )
+				?? fastmemo( __METHOD__, (bool) \wp_using_ext_object_cache(), 'wp_ueoc' )
+			or \clean_post_cache( $post );
 		}
 	}
 
@@ -550,17 +549,17 @@ class Sitemap_Base extends Sitemap {
 
 		if ( empty( $args['loc'] ) ) return '';
 
-		static $timestamp_format = null;
-
-		if ( ! isset( $timestamp_format ) )
-			$timestamp_format = static::$tsf->get_timestamp_format();
-
 		$xml = [
 			'loc' => $args['loc'], // Already escaped.
 		];
 
-		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] )
+		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {
+			static $timestamp_format;
+
+			$timestamp_format = $timestamp_format ?? static::$tsf->get_timestamp_format();
+
 			$xml['lastmod'] = static::$tsf->gmt2date( $timestamp_format, $args['lastmod'] );
+		}
 
 		if ( isset( $args['priority'] ) && is_numeric( $args['priority'] ) )
 			$xml['priority'] = number_format( $args['priority'], 1, '.', ',' );

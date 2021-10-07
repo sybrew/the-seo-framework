@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\fastmemo;
 
 /**
  * Generates robots meta.
@@ -82,9 +82,10 @@ final class Main {
 	 * @return Main
 	 */
 	public static function instance( $new = false ) {
-		return memo(
+		return fastmemo(
+			__METHOD__,
 			$new ? new static : null
-		) ?? memo( new static );
+		) ?? static::instance( true );
 	}
 
 	/**
@@ -122,36 +123,54 @@ final class Main {
 			? array_intersect( static::GETTERS, $get )
 			: static::GETTERS;
 
-		$results = [];
-
 		// Remit FETCH_OBJ_R opcode calls every time we'd otherwise use $this->options hereinafter.
 		$options = $this->options;
 
-		$factory = $this->get_factory()->set(
+		$options & \The_SEO_Framework\ROBOTS_ASSERT
+			and $this->reset_assertions();
+
+		$factory   = $this->get_factory();
+		$halt      = $factory::HALT;
+		$generator = $factory->set(
 			$this->args,
 			$options
-		);
+		)->generator();
+
+		$results = [];
 
 		foreach ( $get as $g ) {
-			$generator     = $factory->generator();
-			$results[ $g ] = $generator->send( $g );
+			$generator->send( $g );
 
-			while ( $generator->valid() ) {
-				$results[ $g ] = $generator->current();
+			do {
+				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK. I'm a professional.
+				if ( ( $r = $generator->current() ) === $halt ) continue;
+
+				$results[ $g ] = $r;
 
 				$options & \The_SEO_Framework\ROBOTS_ASSERT
-					and $this->store_assertion( $g, $generator->key(), $results[ $g ] );
-
-				// TODO FIXME: We should NOT rely on this. Call generator and ask if we can continue asserting, instead.
-				// The assert_copyright() method can yield (int)0, failing a break. This is not an issue _now_, though.
-				if ( $results[ $g ] )
-					break;
-
-				$generator->next();
-			}
+					and $this->store_assertion( $g, $generator->key(), $r );
+				// We could send anything, really. But this is the only method that loops and yields at the same time.
+			} while ( null !== $generator->send( true ) );
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Returns the robots factory. Factory changes depending on input arguments.
+	 *
+	 * @since 4.2.0
+	 * @factory
+	 *
+	 * @return The_SEO_Framework\Builders\Robots\<Args|Query>
+	 */
+	private function get_factory() {
+		return fastmemo( __METHOD__, null, isset( $this->args ) )
+			?? fastmemo(
+				__METHOD__,
+				isset( $this->args ) ? new Args : new Query,
+				isset( $this->args )
+			);
 	}
 
 	/**
@@ -185,18 +204,14 @@ final class Main {
 	}
 
 	/**
-	 * Returns the robots factory. Factory changes depending on input arguments.
+	 * Resets the robots-assertions.
 	 *
 	 * @since 4.2.0
-	 * @factory
-	 *
-	 * @return The_SEO_Framework\Builders\Robots\<Args|Query>
+	 * @see $this->collect_assertions()
 	 */
-	private function get_factory() {
-
-		$has_args = isset( $this->args );
-
-		return memo( null, $has_args )
-			?? memo( $has_args ? new Args : new Query, $has_args );
+	private function reset_assertions() {
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- No function by reference support?
+		$collection = &$this->collect_assertions();
+		$collection = [];
 	}
 }

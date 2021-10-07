@@ -25,6 +25,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\memo;
+
 /**
  * Sets up class loader as file is loaded.
  * This is done asynchronously, because static calls are handled prior and after.
@@ -289,7 +291,7 @@ final class Sitemap {
 
 		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
 
-		$lock_id = isset( $ep_list[ $sitemap_id ]['lock_id'] ) ? $ep_list[ $sitemap_id ]['lock_id'] : $sitemap_id;
+		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
 
 		return static::$tsf->generate_cache_key( 0, '', 'sitemap_lock' ) . "_{$lock_id}";
 	}
@@ -630,10 +632,7 @@ final class Sitemap {
 	 */
 	private function clean_up_globals( $get_freed_memory = false ) {
 
-		static $freed_memory = null;
-
-		if ( $get_freed_memory )
-			return $freed_memory;
+		if ( $get_freed_memory ) return memo();
 
 		$memory = memory_get_usage();
 
@@ -667,7 +666,7 @@ final class Sitemap {
 		// This one requires to be an array for wp_texturize(). There's an API, let's use it:
 		\remove_all_shortcodes();
 
-		$freed_memory = $memory - memory_get_usage();
+		memo( $memory - memory_get_usage() );
 	}
 }
 

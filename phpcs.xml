@@ -10,7 +10,7 @@
 
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
-			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,memo,Load,Silencer"/>
+			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,memo,fastmemo,Load,Silencer"/>
 		</properties>
 	</rule>
 

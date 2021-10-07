@@ -100,7 +100,7 @@ class Term_Data extends Post_Data {
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
 		if ( empty( $term->term_id ) || ! $this->is_taxonomy_supported( $term->taxonomy ) ) {
-			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 			return $use_cache ? memo( [], $term_id ) : [];
 		}
 
@@ -140,7 +140,7 @@ class Term_Data extends Post_Data {
 		);
 
 		// Cache using $term_id, not $term->term_id, otherwise invalid queries can bypass the cache.
-		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing conflicts.
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 		return $use_cache ? memo( $meta, $term_id ) : $meta;
 	}
 
@@ -436,12 +436,9 @@ class Term_Data extends Post_Data {
 	 * @return string The Taxonomy Type name/label, if found.
 	 */
 	public function get_tax_type_label( $tax_type, $singular = true ) {
-
-		$tto = \get_taxonomy( $tax_type );
-
-		return $singular
-			? ( isset( $tto->labels->singular_name ) ? $tto->labels->singular_name : '' )
-			: ( isset( $tto->labels->name ) ? $tto->labels->name : '' );
+		return \get_taxonomy( $tax_type )->labels->{
+			$singular ? 'singular_name' : 'name'
+		} ?? '';
 	}
 
 	/**

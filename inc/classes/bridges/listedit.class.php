@@ -65,9 +65,7 @@ final class ListEdit extends ListTable {
 	 */
 	public function _prepare_edit_box( $screen ) {
 
-		$taxonomy = isset( $screen->taxonomy ) ? $screen->taxonomy : '';
-
-		if ( ! $taxonomy ) {
+		if ( empty( $screen->taxonomy ) ) {
 			// WordPress doesn't support this feature yet for taxonomies.
 			// Exclude it for when the time may come and faulty fields are displayed.
 			// Mind the "2".

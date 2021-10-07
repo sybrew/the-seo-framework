@@ -342,14 +342,14 @@ class Site_Options extends Sanitize {
 			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
 		}
 
-		static $cache = [];
+		static $cache;
 
 		// PHP 7.4: null coalesce equal operator: ??=
-		if ( ! isset( $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
-			$cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
+		if ( ! isset( $cache ) )
+			$cache = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
 
 		// TODO fall back to default if not registered? This means we no longer have to rely on upgrading. Or, array merge (recursive) at get_all_options?
-		return $cache[ THE_SEO_FRAMEWORK_SITE_OPTIONS ][ $key ] ?? '';
+		return $cache[ $key ] ?? '';
 	}
 
 	/**
@@ -368,11 +368,11 @@ class Site_Options extends Sanitize {
 
 		static $cache = [];
 
-		if ( ! $reset && isset( $cache[ $setting ] ) )
-			return $cache[ $setting ];
-
 		if ( ! $setting )
 			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+		if ( ! $reset && isset( $cache[ $setting ] ) )
+			return $cache[ $setting ];
 
 		/**
 		 * @since 2.0.0

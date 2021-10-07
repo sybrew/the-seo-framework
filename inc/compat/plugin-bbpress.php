@@ -254,7 +254,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
 	if ( null === $args && \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {
 			$term  = \get_queried_object();
-			$title = isset( $term->name ) ? $term->name : \the_seo_framework()->get_static_untitled_title();
+			$title = $term->name ?? \the_seo_framework()->get_static_untitled_title();
 		}
 	}
 

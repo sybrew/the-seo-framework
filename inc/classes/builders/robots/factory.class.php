@@ -36,6 +36,12 @@ class Factory {
 
 	/**
 	 * @since 4.2.0
+	 * @param int The halter. A unique ID sent to stop the generator.
+	 */
+	public const HALT = 0b01100011011110010110001001110010;
+
+	/**
+	 * @since 4.2.0
 	 * @var \The_SEO_Framework\Load The SEO Framework class.
 	 */
 	protected static $tsf;
@@ -91,18 +97,35 @@ class Factory {
 	 * @generator
 	 */
 	public static function generator() {
-		switch ( $sender = yield ) :
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
+		while ( true ) switch ( $sender = yield ) :
 			case 'noindex':
 			case 'nofollow':
 			case 'noarchive':
-				yield from static::assert_no( $sender );
-				return null;
+				foreach ( static::assert_no( $sender ) as $key => $value ) {
+					yield $key => $value;
+					if ( $value ) {
+						yield static::HALT;
+						break;
+					}
+				}
+				break;
 
 			case 'max_snippet':
 			case 'max_image_preview':
 			case 'max_video_preview':
 				yield from static::assert_copyright( $sender );
-				return null;
+				yield static::HALT;
+				break;
+
+			default:
+				static::$tsf->_doing_it_wrong(
+					__METHOD__,
+					sprintf( 'Unregistered robots-generator getter provided: <code>%s</code>.', \esc_html( $sender ) ),
+					'4.2.0'
+				);
+				yield static::HALT;
+				break;
 		endswitch;
 	}
 
