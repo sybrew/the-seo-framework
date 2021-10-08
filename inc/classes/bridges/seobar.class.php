@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\SeoBar
- * @subpackage The_SEO_Framework\SeoBar
+ * @package The_SEO_Framework\Classes\Bridges\SEOBar
+ * @subpackage The_SEO_Framework\SEOBar
  */
 
 namespace The_SEO_Framework\Bridges;
@@ -29,12 +29,12 @@ namespace The_SEO_Framework\Bridges;
  * Loads the SEO Bar for administrative tables.
  *
  * @since 4.0.0
- * @uses \The_SEO_Framework\Interpreters\SeoBar
- * @see \The_SEO_Framework\Interpreters\SeoBar to generate a bar.
+ * @uses \The_SEO_Framework\Interpreters\SEOBar
+ * @see \The_SEO_Framework\Interpreters\SEOBar to generate a bar.
  *
  * @access private
  */
-final class SeoBar extends ListTable {
+final class SEOBar extends ListTable {
 
 	/**
 	 * @since 4.0.0
@@ -118,7 +118,7 @@ final class SeoBar extends ListTable {
 		if ( $this->column_name !== $column_name ) return;
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput
-		echo \The_SEO_Framework\Interpreters\SeoBar::generate_bar( [
+		echo \The_SEO_Framework\Interpreters\SEOBar::generate_bar( [
 			'id'        => $post_id,
 			'post_type' => $this->post_type,
 		] );
@@ -150,7 +150,7 @@ final class SeoBar extends ListTable {
 		if ( $this->doing_ajax )
 			$string .= $this->get_ajax_dispatch_updated_event();
 
-		return \The_SEO_Framework\Interpreters\SeoBar::generate_bar( [
+		return \The_SEO_Framework\Interpreters\SEOBar::generate_bar( [
 			'id'       => $term_id,
 			'taxonomy' => $this->taxonomy,
 		] ) . $string;

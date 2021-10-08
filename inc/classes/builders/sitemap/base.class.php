@@ -4,7 +4,7 @@
  * @subpackage The_SEO_Framework\Sitemap
  */
 
-namespace The_SEO_Framework\Builders;
+namespace The_SEO_Framework\Builders\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\fastmemo;
+use function \The_SEO_Framework\umemo;
 
 /**
  * Generates the base sitemap.
@@ -34,7 +34,7 @@ use function \The_SEO_Framework\fastmemo;
  *
  * @access private
  */
-class Sitemap_Base extends Sitemap {
+class Base extends Main {
 
 	/**
 	 * @since 4.1.2
@@ -147,7 +147,7 @@ class Sitemap_Base extends Sitemap {
 	 * @since 4.0.0 1. Now assesses all public post types, in favor of qubit options.
 	 *              2. Improved performance by a factor of two+.
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".
-	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap_Base
+	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap\Base
 	 * @abstract
 	 *
 	 * @return string The sitemap content.
@@ -526,8 +526,7 @@ class Sitemap_Base extends Sitemap {
 			// memo( fn() => (bool) \wp_using_ext_object_cache() }, 'wp_ueoc' );
 			// The memo must then not try to override data via first parameter. Even when null: [ 'v' => null, 'is_set' => true ];
 			// Anyway, only clean post cache when NOT using an external object caching plugin.
-			fastmemo( __METHOD__, null, 'wp_ueoc' )
-				?? fastmemo( __METHOD__, (bool) \wp_using_ext_object_cache(), 'wp_ueoc' )
+			umemo( __METHOD__ . '/wp_ueoc' ) ?? umemo( __METHOD__ . '/wp_ueoc', (bool) \wp_using_ext_object_cache() )
 			or \clean_post_cache( $post );
 		}
 	}

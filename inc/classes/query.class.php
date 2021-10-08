@@ -163,7 +163,7 @@ class Query extends Core {
 			return $this->get_the_real_admin_ID();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && null !== $memo = fastmemo( __METHOD__ ) ) return $memo;
+		if ( $use_cache && null !== $memo = umemo( __METHOD__ ) ) return $memo;
 
 		$use_cache = $use_cache && $this->can_cache_query( __METHOD__ );
 
@@ -181,7 +181,7 @@ class Query extends Core {
 		$id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $use_cache );
 
 		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-		return $use_cache ? fastmemo( __METHOD__, $id ) : $id;
+		return $use_cache ? umemo( __METHOD__, $id ) : $id;
 	}
 
 	/**
@@ -237,8 +237,8 @@ class Query extends Core {
 	 * @return int the ID.
 	 */
 	public function get_the_front_page_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-		return fastmemo( __METHOD__ )
-			?? fastmemo(
+		return umemo( __METHOD__ )
+			?? umemo(
 				__METHOD__,
 				$this->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0
 			);
@@ -1334,6 +1334,7 @@ class Query extends Core {
 			}
 		}
 
-		return fastmemo( $caller, $value_to_set, ...$hash );
+		// Prepend unique ID to caller to prevent conflicts.
+		return umemo( __METHOD__ . "/$caller", $value_to_set, ...$hash );
 	}
 }

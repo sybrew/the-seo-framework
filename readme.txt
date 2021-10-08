@@ -320,13 +320,14 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 
 TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination.
 	* This to be in line with homepage pagination.
-TODO mention & implement for query caching: fastmemo
-
-TODO move Builder/Sitemap to Builder/Sitemap/Main|... (deprecate?)
-TODO move Builder/SEOBar to Builder/SEOBar/Main|... (private, no deprecation)
+TODO mention & implement for query caching: umemo
 
 TODO allow custom robots generators?
 TODO enable `public static function _run_all_tests`
+TODO implement `retrieve_robots_meta_assertions`
+TODO in the robots-generators, can/should we memo the globals?
+
+TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
 
 **For everyone:**
 
@@ -358,6 +359,7 @@ TODO enable `public static function _run_all_tests`
 		* Tooltips despawn 25% quicker now.
 		* Tapping the tooltip no longer conjures tooltip animations, potentially saving battery-life.
 		* Administrative Markdown-text now generates a tad swifter.
+		* Throughout the plugin, we found ways to reduce opcodes.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -384,17 +386,49 @@ TODO enable `public static function _run_all_tests`
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
 * **Fixed:**
 	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
+* **Function notes:**
+	* **Added:**
+		* `\The_SEO_Framework\memo()` stores and returns memoized values for the caller.
+			* This function is neat because you can use it without specifying a caching key; it knows who invokes it: `return memo() ?? memo( expensive_call() );`.
+				* This neatness is limited to methods, not files or lines. Yet, this allows you to call `memo()` multiple times per method.
+			* The second and later parameters can be used to forward arguments.
+			* We found it impossible to further optimize this method. If you inspect its source, you find it does things in reverse, assigns variables unnecessarily, etc. This all leads to PHP performing it quickest; both during set and fetch.
+		* `\The_SEO_Framework\umemo()` stores and returns memoized values for the caller using a user-defined key.
+			* This function is roughly 10 times faster than `\The_SEO_Framework\memo()`, but requires from you a unique identifier `$key`. Example: `return umemo( __METHOD__ ) ?? umemo( __METHOD__, expensive_call() );`
 * **Object notes:**
+	* Henceforth, `SeoBar` is now referred to as `SEOBar`. This affects namespaces and classes.
+		* In PHP, those are case-insensitive; so, nothing changes here.
 	* For object `\The_SEO_Framework\Bridges\Ping`:
 		* **Methods added:**
 			* `get_ping_url()`
-	* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
-	* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
+	* For object `\The_SEO_Framework\Builders\SEOBar\<Page|Term>`:
+		* **Method changed:**
+			* `get_query_cache()` no longer returns the robots-copyright data at `['states']['robotsmeta']`. Use the options API instead.
+	* These objects are marked as private and should not be called. This is informational only.
+		* Object `\The_SEO_Framework\Builders\SeoBar` is now `\The_SEO_Framework\Builders\SEOBar\Main`.
+		* Object `\The_SEO_Framework\Builders\SeoBar_Page` is now `\The_SEO_Framework\Builders\SEOBar\Page`.
+		* Object `\The_SEO_Framework\Builders\SeoBar_Term` is now `\The_SEO_Framework\Builders\SEOBar\Term`.
+		* Object `\The_SEO_Framework\Builders\Sitemap_Base` is now `\The_SEO_Framework\Builders\Sitemap\Base`.
+		* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
+		* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
+		* Object `The_SEO_Framework\Builders\Robots\Main` is new.
+			* Used by new object `The_SEO_Framework\Builders\Robots\Args` and `The_SEO_Framework\Builders\Robots\Query`.
+			* Use public method `the_seo_framework()->generate_robots_meta()` to access the builder.
+	* Object `\The_SEO_Framework\Builders\Sitemap` is now `\The_SEO_Framework\Builders\Sitemap\Main`.
+		* A class alias is made Just-in-Time to smoothen deprecation.
 	* For object `\The_SEO_Framework\Load` (callable via `the_seo_framework()`):
 		* **Methods added:**
-			* `memo`, this method stores and returns memoized values for the caller.
+			* `retrieve_robots_meta_assertions`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
 		* **Methods changed:**
+			* `do_meta_output()`
+				1. Now invokes two actions before and after output.
+				2. No longer rectifies timezones.
 			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+			* `get_taxonomical_canonical_url()`:
+				1. Added memoization.
+				1. The parameters are now optional.
+			* `get_term_meta_item()` no longer accidentally returns an empty array on failure, but `null` (as intended) instead.
+			* `has_custom_canonical_url()` now also detects canonical URLs for taxonomies.
 			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
 		* **Methods deprecated:**
 			* `append_php_query()`, use `the_seo_framework()->append_url_query()` instead.
@@ -444,35 +478,40 @@ TODO enable `public static function _run_all_tests`
 			* `detect_theme_support()` with no alternative available.
 			* `detect_page_builder()` with no alternative available.
 			* `uses_page_builder()` with no alternative available.
-			* `fb_locales()`, use `supported_social_locales()` instead.
-			* `language_keys()`, use `supported_social_locales()` instead.
+			* `fb_locales()`, use `the_seo_framework()->supported_social_locales()` instead.
+			* `language_keys()`, use `the_seo_framework()->supported_social_locales()` instead.
 			* `get_timezone_string()`, with no alternative available.
 			* `set_timezone()`, with no alternative available.
 			* `reset_timezone()`, with no alternative available.
+			* `get_current_term_meta()`, use `the_seo_framework()->get_term_meta()` instead.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.
 			* `the_seo_framework_get_option()`, was deprecated since 4.1.0.
 			* `get_home_page_tagline()`, was deprecated since 4.1.0.
 			* `permalink_structure()`, was deprecated since 4.1.0.
-			* `get_query_cache()`, using this won't cause issues: Caching simply fails.
-			* `set_query_cache()`, using this won't cause issues: Caching simply fails.
+			* `get_query_cache()`, still calling this shouldn't cause notable issues: Caching simply fails.
+			* `set_query_cache()`, still calling this shouldn't cause notable issues: Caching simply fails.
 		* **Properties deprecated:**
 			* `$load_options`, use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	* Object `\The_SEO_Framework\Silencer` is now `\The_SEO_Framework\Internal\Silencer`.
+* **Constant notes:**
+	* **Namespace `\The_SEO_Framework\`**
+		* `ROBOTS_ASSERT`, used for the `the_seo_framework()->robots_meta()` method family; makes the generator store assertions at the slight cost of performance.
+			* Use `the_seo_framework()->retrieve_robots_meta_assertions()` to obtain what's asserted in the last run.
 * **Filter notes:**
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
-		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta` instead.
-		* `the_seo_framework_pro`, use action `the_seo_framework_after_meta` instead.
-		* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta` instead.
-		* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta` instead.
+		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.
+		* `the_seo_framework_pro`, use action `the_seo_framework_after_meta_output` instead.
+		* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta_output` instead.
+		* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta_output` instead.
 	* **Removed:**
 		* `the_seo_framework_inpost_seo_save_defaults`, was deprecated. Use `the_seo_framework_post_meta_defaults` instead.
 * **Action notes:**
 	* **Added:**
-		* `the_seo_framework_before_meta`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`
-		* `the_seo_framework_after_meta`, this replaces filters `the_seo_framework_pro` and `the_seo_framework_after_output`
+		* `the_seo_framework_before_meta_output`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`
+		* `the_seo_framework_after_meta_output`, this replaces filters `the_seo_framework_pro` and `the_seo_framework_after_output`
 * **JavaScript notes:**
 	* Object `window.tsfTT`:
 		* **Changed:**

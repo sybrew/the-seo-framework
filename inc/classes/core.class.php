@@ -466,7 +466,7 @@ class Core {
 		$i = \count( $arrays );
 
 		if ( 2 === $i ) foreach ( $arrays[1] as $key => $value ) {
-			$arrays[0][ $key ] = isset( $arrays[0][ $key ] ) && \is_array( $arrays[0][ $key ] )
+			$arrays[0][ $key ] = \is_array( $arrays[0][ $key ] ?? null )
 				? $this->array_merge_recursive_distinct( $arrays[0][ $key ], $value )
 				: $value;
 		} else do {

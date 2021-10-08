@@ -196,7 +196,7 @@ final class Form {
 							$field_id,
 							\checked( $value, true, false ),
 							( $args['disabled'] ? 'disabled' : '' ),
-							$args['data'] ? HTML::make_data_attributes( $args['data'] ) : '',
+							HTML::make_data_attributes( $args['data'] ),
 							$args['label'],
 						]
 					),
@@ -204,9 +204,11 @@ final class Form {
 			)
 		);
 
-		$output .= $args['description'] ? sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] ) : '';
-
-		return $output;
+		return $output .= (
+			$args['description']
+				? sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] )
+				: ''
+		);
 	}
 
 	/**
@@ -286,7 +288,7 @@ final class Form {
 						$tsf->s_field_id( $args['id'] ),
 						\esc_attr( $args['name'] ),
 						$args['required'] ? 'required' : '',
-						$args['data'] ? HTML::make_data_attributes( $args['data'] ) : '',
+						HTML::make_data_attributes( $args['data'] ),
 						implode( $html_options ),
 					]
 				),

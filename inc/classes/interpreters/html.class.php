@@ -215,7 +215,7 @@ final class HTML {
 	 * @param array $data : {
 	 *    string $k => mixed $v
 	 * }
-	 * @return string The HTML data attributes, with added space to the start.
+	 * @return string The HTML data attributes, with added space to the start if something's created.
 	 */
 	public static function make_data_attributes( array $data ) {
 

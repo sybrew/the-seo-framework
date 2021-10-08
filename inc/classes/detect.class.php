@@ -150,41 +150,24 @@ class Detect extends Render {
 	 */
 	public function detect_plugin( $plugins ) {
 
-		if ( isset( $plugins['globals'] ) ) {
-			foreach ( $plugins['globals'] as $name ) {
-				if ( isset( $GLOBALS[ $name ] ) ) {
-					return true;
-				}
-			}
-		}
+		foreach ( $plugins['globals'] ?? [] as $name )
+			if ( isset( $GLOBALS[ $name ] ) )
+				return true;
 
 		// Check for constants
-		if ( isset( $plugins['constants'] ) ) {
-			foreach ( $plugins['constants'] as $name ) {
-				if ( \defined( $name ) ) {
-					return true;
-				}
-			}
-		}
+		foreach ( $plugins['constants'] ?? [] as $name )
+			if ( \defined( $name ) )
+				return true;
 
 		// Check for functions
-		if ( isset( $plugins['functions'] ) ) {
-			foreach ( $plugins['functions'] as $name ) {
-				if ( \function_exists( $name ) ) {
-					return true;
-				}
-			}
-		}
+		foreach ( $plugins['functions'] ?? [] as $name )
+			if ( \function_exists( $name ) )
+				return true;
 
 		// Check for classes
-		if ( isset( $plugins['classes'] ) ) {
-			foreach ( $plugins['classes'] as $name ) {
-				// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
-				if ( class_exists( $name, false ) ) {
-					return true;
-				}
-			}
-		}
+		foreach ( $plugins['classes'] ?? [] as $name )
+			if ( class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+				return true;
 
 		// No globals, constant, function, or class found to exist
 		return false;
@@ -245,29 +228,24 @@ class Detect extends Render {
 	public function detect_plugin_multi( array $plugins ) {
 
 		// Check for globals
-		foreach ( $plugins['globals'] ?? [] as $name ) {
+		foreach ( $plugins['globals'] ?? [] as $name )
 			if ( ! isset( $GLOBALS[ $name ] ) )
 				return false;
-		}
 
 		// Check for constants
-		foreach ( $plugins['constants'] ?? [] as $name ) {
+		foreach ( $plugins['constants'] ?? [] as $name )
 			if ( ! \defined( $name ) )
 				return false;
-		}
 
 		// Check for functions
-		foreach ( $plugins['functions'] ?? [] as $name ) {
+		foreach ( $plugins['functions'] ?? [] as $name )
 			if ( ! \function_exists( $name ) )
 				return false;
-		}
 
 		// Check for classes
-		foreach ( $plugins['classes'] ?? [] as $name ) {
-			// phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
-			if ( ! class_exists( $name, false ) )
+		foreach ( $plugins['classes'] ?? [] as $name )
+			if ( ! class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
 				return false;
-		}
 
 		// All classes, functions and constant have been found to exist
 		return true;
@@ -644,9 +622,8 @@ class Detect extends Render {
 	 */
 	public function query_supports_seo() {
 
-		static $cache;
-
-		if ( isset( $cache ) ) return $cache;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		switch ( true ) :
 			case $this->is_feed():
@@ -687,7 +664,7 @@ class Detect extends Render {
 		 * @since 4.0.0
 		 * @param bool $supported Whether the query supports SEO.
 		 */
-		return $cache = (bool) \apply_filters( 'the_seo_framework_query_supports_seo', $supported );
+		return memo( (bool) \apply_filters( 'the_seo_framework_query_supports_seo', $supported ) );
 	}
 
 	/**
@@ -926,8 +903,8 @@ class Detect extends Render {
 	 * @return array All public post types.
 	 */
 	protected function get_public_post_types() {
-		return fastmemo( __METHOD__ )
-			?? fastmemo(
+		return umemo( __METHOD__ )
+			?? umemo(
 				__METHOD__,
 				array_values(
 					array_filter(
@@ -977,8 +954,8 @@ class Detect extends Render {
 	 * @return array The taxonomies that are public.
 	 */
 	protected function get_public_taxonomies() {
-		return fastmemo( __METHOD__ )
-			?? fastmemo(
+		return umemo( __METHOD__ )
+			?? umemo(
 				__METHOD__,
 				array_filter(
 					array_unique(

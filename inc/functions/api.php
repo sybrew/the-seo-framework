@@ -158,9 +158,7 @@ namespace The_SEO_Framework {
 	 * objects will have values memoized cross-instantiations.
 	 *
 	 * @since 4.2.0
-	 * @see fastmemo() -- sacrifices cleanliness for performance.
-	 * @see get_query_cache() -- practically the same, but then with query testing
-	 *                           and without backtracing for improved (=10x) performance.
+	 * @see umemo() -- sacrifices cleanliness for performance.
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty callbacks.
@@ -206,7 +204,7 @@ namespace The_SEO_Framework {
 	 *       If $value_to_set is set, the new value.
 	 * }
 	 */
-	function fastmemo( $key, $value_to_set = null, ...$args ) {
+	function umemo( $key, $value_to_set = null, ...$args ) {
 
 		static $memo = [];
 

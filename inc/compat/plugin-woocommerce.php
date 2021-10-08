@@ -250,7 +250,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status']               =
 		0 !== \the_seo_framework()->s_qubit(
-			\The_SEO_Framework\Builders\SeoBar_Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
+			\The_SEO_Framework\Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
 		)
 			? $interpreter::STATE_OKAY
 			: $interpreter::STATE_UNKNOWN;

@@ -500,7 +500,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
  * @since 2.9.0
  * @since 4.1.0 Deprecated. We can no longer rely on this from WP 5.5.
  * @since 4.2.0 1. Reinstated, and now forwards notices to the persistent-notice system.
- *              2. No longer returns values.
+ *              2. No longer returns values. Removed pertaining second parameter.
  *
  * @param string $notice The upgrade notice. Doesn't need to be escaped.
  */

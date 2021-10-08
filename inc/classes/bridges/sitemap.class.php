@@ -626,13 +626,14 @@ final class Sitemap {
 	 * @since 2.8.0 Renamed from clean_up_globals().
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from clean_up_globals_for_sitemap()
+	 * @since 4.2.0 Now always returns the freed memory.
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory in bytes
 	 */
 	private function clean_up_globals( $get_freed_memory = false ) {
 
-		if ( $get_freed_memory ) return memo();
+		if ( $get_freed_memory ) return memo() ?? 0;
 
 		$memory = memory_get_usage();
 
@@ -666,7 +667,7 @@ final class Sitemap {
 		// This one requires to be an array for wp_texturize(). There's an API, let's use it:
 		\remove_all_shortcodes();
 
-		memo( $memory - memory_get_usage() );
+		return memo( $memory - memory_get_usage() );
 	}
 }
 

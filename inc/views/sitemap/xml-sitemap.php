@@ -22,7 +22,7 @@ if ( $this->the_seo_framework_debug ) {
 
 $sitemap_bridge->output_sitemap_urlset_open_tag();
 
-$sitemap_base = new The_SEO_Framework\Builders\Sitemap_Base;
+$sitemap_base = new The_SEO_Framework\Builders\Sitemap\Base;
 // phpcs:ignore, WordPress.Security.EscapeOutput
 echo $sitemap_base->generate_sitemap( $sitemap_id );
 

@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{ memo, fastmemo }; // Precautionary.
+use function \The_SEO_Framework\{ memo, umemo }; // Precautionary.
 
 /**
  * Class The_SEO_Framework\Internal\Deprecated

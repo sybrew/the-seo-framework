@@ -1262,52 +1262,53 @@ class Render extends Admin_Init {
 	 */
 	public function get_plugin_indicator( $where = 'before', $timing = 0 ) {
 
-		static $cache;
+		$cache = memo() ?? memo( [
+			/**
+			 * @since 2.0.0
+			 * @param bool $run Whether to run and show the plugin indicator.
+			 */
+			'run'        => (bool) \apply_filters( 'the_seo_framework_indicator', true ),
+			/**
+			 * @since 2.4.0
+			 * @param bool $sybre Whether to show the author name in the indicator.
+			 */
+			// phpcs:ignore, WordPress.NamingConventions.ValidHookName -- Easter egg.
+			'author'     => (bool) \apply_filters( 'sybre_waaijer_<3', true ) ? \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '',
+			/**
+			 * @since 2.4.0
+			 * @param bool $show_timer Whether to show the generation time in the indicator.
+			 */
+			'show_timer' => (bool) \apply_filters( 'the_seo_framework_indicator_timing', true ),
+		] );
 
-		if ( ! $cache ) {
-			$cache = [
-				/**
-				 * @since 2.0.0
-				 * @param bool $run Whether to run and show the plugin indicator.
-				 */
-				'run'        => (bool) \apply_filters( 'the_seo_framework_indicator', true ),
-				/**
-				 * @since 2.4.0
-				 * @param bool $sybre Whether to show the author name in the indicator.
-				 */
-				// phpcs:ignore, WordPress.NamingConventions.ValidHookName -- Easter egg.
-				'author'     => (bool) \apply_filters( 'sybre_waaijer_<3', true ) ? \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '',
-				/**
-				 * @since 2.4.0
-				 * @param bool $show_timer Whether to show the generation time in the indicator.
-				 */
-				'show_timer' => (bool) \apply_filters( 'the_seo_framework_indicator_timing', true ),
-			];
-		}
+		if ( ! $cache['run'] ) return '';
 
-		if ( false === $cache['run'] )
-			return '';
+		switch ( $where ) :
+			case 'before':
+				return sprintf(
+					'<!-- %s -->',
+					/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
+					trim( sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] ) )
+				) . PHP_EOL;
 
-		if ( 'before' === $where ) {
-			/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
-			$output = sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] );
+			case 'after':
+			default:
+				if ( $cache['show_timer'] && $timing ) {
+					$timers = sprintf(
+						' | %s meta | %s boot',
+						number_format( ( microtime( true ) - $timing ) * 1e3, 2, null, '' ) . 'ms',
+						number_format( _bootstrap_timer() * 1e3, 2, null, '' ) . 'ms'
+					);
+				} else {
+					$timers = '';
+				}
 
-			return sprintf( '<!-- %s -->', trim( $output ) ) . PHP_EOL;
-		} else {
-			if ( $cache['show_timer'] && $timing ) {
-				$timers = sprintf(
-					' | %s meta | %s boot',
-					number_format( ( microtime( true ) - $timing ) * 1e3, 2, null, '' ) . 'ms',
-					number_format( _bootstrap_timer() * 1e3, 2, null, '' ) . 'ms'
-				);
-			} else {
-				$timers = '';
-			}
-			/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
-			$output = sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] ) . $timers;
-
-			return sprintf( '<!-- / %s -->', trim( $output ) ) . PHP_EOL;
-		}
+				return sprintf(
+					'<!-- / %s -->',
+					/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
+					trim( sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] ) . $timers )
+				) . PHP_EOL;
+		endswitch;
 	}
 
 	/**

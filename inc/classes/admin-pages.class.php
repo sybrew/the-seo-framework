@@ -383,7 +383,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * Returns the SEO Bar.
 	 *
 	 * @since 4.0.0
-	 * @uses \The_SEO_Framework\Interpreters\SeoBar::generate_bar();
+	 * @uses \The_SEO_Framework\Interpreters\SEOBar::generate_bar();
 	 *
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
@@ -394,7 +394,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @return string The generated SEO bar, in HTML.
 	 */
 	public function get_generated_seo_bar( array $query ) {
-		return Interpreters\SeoBar::generate_bar( $query );
+		return Interpreters\SEOBar::generate_bar( $query );
 	}
 
 	/**

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\SeoBar
- * @subpackage The_SEO_Framework\SeoBar
+ * @package The_SEO_Framework\Classes\Builders\SEOBar\Main
+ * @subpackage The_SEO_Framework\SEOBar
  */
 
-namespace The_SEO_Framework\Builders;
+namespace The_SEO_Framework\Builders\SEOBar;
 
 /**
  * The SEO Framework plugin
@@ -29,17 +29,18 @@ namespace The_SEO_Framework\Builders;
  * Generates the SEO Bar.
  *
  * @since 4.0.0
+ * @since 4.2.0 Moved to different namespace
  * Mind the late static binding. We use "self" if the variable is shared between instances.
  * We use "static" if the variable isn't shared between instances.
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
  * @access private
- *      Use \The_SEO_Framework\Interpreters\SeoBar::generate_bar() instead.
+ *      Use \The_SEO_Framework\Interpreters\SEOBar::generate_bar() instead.
  * @internal
  * @abstract Implements test_{$*}, see property $tests and method `_run_test()` for what * may be.
- * @see \The_SEO_Framework\Interpreters\SeoBar
+ * @see \The_SEO_Framework\Interpreters\SEOBar
  */
-abstract class SeoBar {
+abstract class Main {
 
 	/**
 	 * @since 4.0.0
@@ -80,7 +81,7 @@ abstract class SeoBar {
 	/**
 	 * @since 4.0.0
 	 * Not shared between instances
-	 * @var \The_SEO_Framework\Builders\SeoBar_* $instance The instance.
+	 * @var \The_SEO_Framework\Builders\SEOBar_* $instance The instance.
 	 */
 	protected static $instance;
 

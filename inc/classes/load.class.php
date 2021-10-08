@@ -94,7 +94,7 @@ final class Load extends Cache {
 		$this->init_debug_vars();
 
 		if ( $this->the_seo_framework_debug ) {
-			$debug_instance = Debug::get_instance();
+			$debug_instance = Internal\Debug::get_instance();
 
 			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );
 			\add_action( 'admin_footer', [ $debug_instance, '_debug_output' ] );

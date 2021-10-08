@@ -290,7 +290,7 @@ final class Debug {
 			if ( isset( $backtrace[4]['args'][0][0] ) && is_a( $backtrace[4]['args'][0][0], 'The_SEO_Framework\Internal\Deprecated', false ) ) {
 				/**
 				 * 3 = Deprecated call.
-				 * 4 = TSF deprecation class fowarder.
+				 * 4 = TSF deprecation class forwarder.
 				 * 5 = User mistake.
 				 */
 				$error = $backtrace[5];

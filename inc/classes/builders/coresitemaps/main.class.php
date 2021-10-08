@@ -32,11 +32,11 @@ namespace The_SEO_Framework\Builders\CoreSitemaps;
  *
  * @access private
  */
-class Main extends \The_SEO_Framework\Builders\Sitemap {
+class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 
 	/**
 	 * @since 4.1.2
-	 * @var \The_SEO_Framework\Builders\Sitemap
+	 * @var \The_SEO_Framework\Builders\Sitemap\Main
 	 */
 	private static $instance;
 
@@ -45,7 +45,7 @@ class Main extends \The_SEO_Framework\Builders\Sitemap {
 	 *
 	 * @since 4.1.2
 	 *
-	 * @return \The_SEO_Framework\Builders\Sitemap $instance
+	 * @return \The_SEO_Framework\Builders\Sitemap\Main $instance
 	 */
 	public static function get_instance() {
 		return static::$instance ?: ( static::$instance = new static );

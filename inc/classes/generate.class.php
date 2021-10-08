@@ -75,8 +75,10 @@ class Generate extends User_Data {
 	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
 	 *
 	 * @since 4.2.0
+	 *
+	 * @return array
 	 */
-	public function obtain_robots_meta_assertions() {
+	public function retrieve_robots_meta_assertions() {
 		return Builders\Robots\Main::instance()->collect_assertions();
 	}
 

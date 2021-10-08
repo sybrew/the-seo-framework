@@ -102,7 +102,7 @@ class Post_Data extends Detect {
 	public function get_post_meta( $post_id, $use_cache = true ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && ( $memo = fastmemo( __METHOD__, null, $post_id ) ) ) return $memo;
+		if ( $use_cache && ( $memo = umemo( __METHOD__, null, $post_id ) ) ) return $memo;
 
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
@@ -110,7 +110,7 @@ class Post_Data extends Detect {
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) ) {
 			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-			return $use_cache ? fastmemo( __METHOD__, [], $post_id ) : [];
+			return $use_cache ? umemo( __METHOD__, [], $post_id ) : [];
 		}
 
 		/**
@@ -157,7 +157,7 @@ class Post_Data extends Detect {
 
 		// Cache using $post_id, not $post->ID, otherwise invalid queries can bypass the cache.
 		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-		return $use_cache ? fastmemo( __METHOD__, $meta, $post_id ) : $meta;
+		return $use_cache ? umemo( __METHOD__, $meta, $post_id ) : $meta;
 	}
 
 	/**

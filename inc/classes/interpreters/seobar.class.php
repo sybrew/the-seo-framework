@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Interpreters\SeoBar
- * @subpackage The_SEO_Framework\SeoBar
+ * @package The_SEO_Framework\Classes\Interpreters\SEOBar
+ * @subpackage The_SEO_Framework\SEOBar
  */
 
 namespace The_SEO_Framework\Interpreters;
@@ -35,7 +35,7 @@ namespace The_SEO_Framework\Interpreters;
  *         Note that you can't instance this class. Only static methods and properties are accessible.
  * @final Can't be extended.
  */
-final class SeoBar {
+final class SEOBar {
 
 	const STATE_UNDEFINED = 0b0000;
 	const STATE_UNKNOWN   = 0b0001;
@@ -51,7 +51,7 @@ final class SeoBar {
 
 	/**
 	 * @since 4.0.0
-	 * @var \The_SEO_Framework\Interpreters\SeoBar $instance The instance.
+	 * @var \The_SEO_Framework\Interpreters\SEOBar $instance The instance.
 	 */
 	private static $instance;
 
@@ -115,9 +115,9 @@ final class SeoBar {
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
 		if ( static::$query['taxonomy'] ) {
-			$builder = \The_SEO_Framework\Builders\SeoBar_Term::get_instance();
+			$builder = \The_SEO_Framework\Builders\SEOBar\Term::get_instance();
 		} else {
-			$builder = \The_SEO_Framework\Builders\SeoBar_Page::get_instance();
+			$builder = \The_SEO_Framework\Builders\SEOBar\Page::get_instance();
 		}
 
 		$instance = static::get_instance();
@@ -217,7 +217,7 @@ final class SeoBar {
 	 * @since 4.1.4 Offloaded the builder's instantiation.
 	 * @factory
 	 *
-	 * @param \The_SEO_Framework\Builders\SeoBar $builder The builder instance.
+	 * @param \The_SEO_Framework\Builders\SEOBar\Main $builder The builder instance.
 	 */
 	private function store_default_bar_items( $builder ) {
 
@@ -230,8 +230,8 @@ final class SeoBar {
 		 * @link Example: https://gist.github.com/sybrew/03dd428deadc860309879e1d5208e1c4
 		 * @see related (recommended) action 'the_seo_framework_seo_bar'
 		 * @since 4.0.0
-		 * @param string                             $interpreter The current class name.
-		 * @param \The_SEO_Framework\Builders\SeoBar $builder     The builder object.
+		 * @param string                                  $interpreter The current class name.
+		 * @param \The_SEO_Framework\Builders\SEOBar\Main $builder     The builder object.
 		 */
 		\do_action_ref_array( 'the_seo_framework_prepare_seo_bar', [ static::class, $builder ] );
 

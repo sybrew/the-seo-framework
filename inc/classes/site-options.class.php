@@ -567,7 +567,6 @@ class Site_Options extends Sanitize {
 		if ( $depr )
 			$this->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
 
-		// If we need to bypass the cache
 		if ( ! $use_cache ) {
 			$defaults = $this->get_default_site_options();
 			return isset( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : null;
@@ -575,10 +574,9 @@ class Site_Options extends Sanitize {
 
 		static $cache;
 
-		if ( ! isset( $cache ) )
-			$cache = \stripslashes_deep( $this->get_default_site_options() );
-
-		return $cache[ $key ] ?? null;
+		return (
+			$cache = $cache ?? \stripslashes_deep( $this->get_default_site_options() )
+		)[ $key ] ?? null;
 	}
 
 	/**
@@ -602,11 +600,8 @@ class Site_Options extends Sanitize {
 		if ( $depr )
 			$this->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
 
-		// If we need to bypass the cache
-		if ( ! $use_cache ) {
-			$warned = $this->get_warned_site_options();
-			return $this->s_one_zero( ! empty( $warned[ $key ] ) );
-		}
+		if ( ! $use_cache )
+			return $this->s_one_zero( ! empty( $this->get_warned_site_options()[ $key ] ) );
 
 		static $cache;
 

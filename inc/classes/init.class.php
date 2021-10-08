@@ -116,7 +116,7 @@ class Init extends Query {
 		// Ping searchengines.
 		if ( $this->get_option( 'ping_use_cron' ) ) {
 			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) )
-				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap_Base, 'prerender_sitemap' ] );
+				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap\Base, 'prerender_sitemap' ] );
 
 			\add_action( 'tsf_sitemap_cron_hook', Bridges\Ping::class . '::ping_search_engines' );
 			\add_action( 'tsf_sitemap_cron_hook_retry', Bridges\Ping::class . '::retry_ping_search_engines' );
@@ -268,8 +268,8 @@ class Init extends Query {
 		// Prepares requisite robots headers to avoid low-quality content penalties.
 		$this->prepare_robots_headers();
 
-		\add_action( 'the_seo_framework_before_meta', [ $this, '_do_deprecated_output_hooks_before' ] );
-		\add_action( 'the_seo_framework_after_meta', [ $this, '_do_deprecated_output_hooks_after' ] );
+		\add_action( 'the_seo_framework_before_meta_output', [ $this, '_do_deprecated_output_hooks_before' ] );
+		\add_action( 'the_seo_framework_after_meta_output', [ $this, '_do_deprecated_output_hooks_after' ] );
 
 		// Output meta tags.
 		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
@@ -385,7 +385,7 @@ class Init extends Query {
 			'the_seo_framework_pre',
 			[ '' ],
 			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_before_meta'
+			'Action the_seo_framework_before_meta_output'
 		);
 
 		/**
@@ -400,7 +400,7 @@ class Init extends Query {
 			'the_seo_framework_before_output',
 			[ [] ],
 			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_before_meta'
+			'Action the_seo_framework_before_meta_output'
 		);
 
 		foreach ( $functions as $function ) {
@@ -431,7 +431,7 @@ class Init extends Query {
 			'the_seo_framework_after_output',
 			[ [] ],
 			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_after_meta'
+			'Action the_seo_framework_after_meta_output'
 		);
 
 		foreach ( $functions as $function ) {
@@ -448,7 +448,7 @@ class Init extends Query {
 			'the_seo_framework_pro',
 			[ '' ],
 			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_after_meta'
+			'Action the_seo_framework_after_meta_output'
 		);
 		// phpcs:enable, WordPress.Security.EscapeOutput
 	}
@@ -497,17 +497,7 @@ class Init extends Query {
 		// phpcs:ignore Squiz.WhiteSpace.LanguageConstructSpacing -- We're fancy here.
 		echo PHP_EOL, $this->get_plugin_indicator( 'before' );
 
-		/**
-		 * @since 4.2.0
-		 */
-		\do_action( 'the_seo_framework_before_meta' );
-
 		$this->do_meta_output();
-
-		/**
-		 * @since 4.2.0
-		 */
-		\do_action( 'the_seo_framework_after_meta' );
 
 		echo $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
 		// phpcs:enable, WordPress.Security.EscapeOutput
@@ -522,9 +512,15 @@ class Init extends Query {
 	 * Outputs all meta tags for the current query.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.0 No longer rectifies timezones.
+	 * @since 4.2.0 : 1. Now invokes two actions before and after output.
+	 *                2. No longer rectifies timezones.
 	 */
 	public function do_meta_output() {
+
+		/**
+		 * @since 4.2.0
+		 */
+		\do_action( 'the_seo_framework_before_meta_output' );
 
 		$get = [ 'robots' ];
 
@@ -605,6 +601,11 @@ class Init extends Query {
 		// But that's why I created this method like so... anyway... tough luck.
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
 		foreach ( $get as $method ) echo $this->{$method}();
+
+		/**
+		 * @since 4.2.0
+		 */
+		\do_action( 'the_seo_framework_after_meta_output' );
 	}
 
 	/**

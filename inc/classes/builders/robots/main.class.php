@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\fastmemo;
+use function \The_SEO_Framework\umemo;
 
 /**
  * Generates robots meta.
@@ -82,7 +82,7 @@ final class Main {
 	 * @return Main
 	 */
 	public static function instance( $new = false ) {
-		return fastmemo(
+		return umemo(
 			__METHOD__,
 			$new ? new static : null
 		) ?? static::instance( true );
@@ -143,7 +143,7 @@ final class Main {
 
 			do {
 				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK. I'm a professional.
-				if ( ( $r = $generator->current() ) === $halt ) continue;
+				if ( ( $r = $generator->current() ) === $halt ) continue; // goto while() -- motivating generator.
 
 				$results[ $g ] = $r;
 
@@ -165,8 +165,8 @@ final class Main {
 	 * @return The_SEO_Framework\Builders\Robots\<Args|Query>
 	 */
 	private function get_factory() {
-		return fastmemo( __METHOD__, null, isset( $this->args ) )
-			?? fastmemo(
+		return umemo( __METHOD__, null, isset( $this->args ) )
+			?? umemo(
 				__METHOD__,
 				isset( $this->args ) ? new Args : new Query,
 				isset( $this->args )

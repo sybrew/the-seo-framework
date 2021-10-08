@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\SeoBar\Term
- * @subpackage The_SEO_Framework\SeoBar
+ * @package The_SEO_Framework\Classes\Builders\SEOBar\Page
+ * @subpackage The_SEO_Framework\SEOBar
  */
 
-namespace The_SEO_Framework\Builders;
+namespace The_SEO_Framework\Builders\SEOBar;
 
 /**
  * The SEO Framework plugin
@@ -29,13 +29,14 @@ namespace The_SEO_Framework\Builders;
  * Generates the SEO Bar for posts.
  *
  * @since 4.0.0
+ * @since 4.2.0 Moved to different namespace
  *
  * @access private
  * @internal
- * @see \The_SEO_Framework\Interpreters\SeoBar
- *      Use \The_SEO_Framework\Interpreters\SeoBar::generate_bar() instead.
+ * @see \The_SEO_Framework\Interpreters\SEOBar
+ *      Use \The_SEO_Framework\Interpreters\SEOBar::generate_bar() instead.
  */
-final class SeoBar_Term extends SeoBar {
+final class Page extends Main {
 
 	/**
 	 * @since 4.0.0
@@ -74,14 +75,9 @@ final class SeoBar_Term extends SeoBar {
 						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'nofollow' ) ),
 						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'noarchive' ) ),
 					],
-					'taxonomy'     => [
-						'noindex'   => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'noindex' ) ),
-						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'nofollow' ) ),
-						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'noarchive' ) ),
-					],
 				]
 			);
-		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
+		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 	}
 
 	/**
@@ -93,16 +89,14 @@ final class SeoBar_Term extends SeoBar {
 	 * @param array $query_cache The current query cache. Passed by reference.
 	 */
 	protected function prime_query_cache( array &$query_cache = [] ) {
-
-		$term = \get_term( static::$query['id'], static::$query['taxonomy'] );
-
 		$query_cache = [
-			'term'   => $term,
-			'meta'   => static::$tsf->get_term_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
+			'post'   => \get_post( static::$query['id'] ),
+			'meta'   => static::$tsf->get_post_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
+				'ishome'       => static::$tsf->is_real_front_page_by_id( static::$query['id'] ),
 				'locale'       => \get_locale(),
-				'isempty'      => empty( $term->count ),
-				'posttypes'    => static::$tsf->get_post_types_from_taxonomy( static::$query['taxonomy'] ),
+				'isprotected'  => static::$tsf->is_protected( static::$query['id'] ),
+				'isdraft'      => static::$tsf->is_draft( static::$query['id'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
@@ -112,13 +106,13 @@ final class SeoBar_Term extends SeoBar {
 					static::$tsf->generate_robots_meta(
 						[
 							'id'       => static::$query['id'],
-							'taxonomy' => static::$query['taxonomy'],
+							'taxonomy' => '',
 						],
 						[ 'noindex', 'nofollow', 'noarchive' ],
 						\The_SEO_Framework\ROBOTS_ASSERT
 					)
 				),
-				'robotsassert' => static::$tsf->obtain_robots_meta_assertions(),
+				'robotsassert' => static::$tsf->retrieve_robots_meta_assertions(),
 			],
 		];
 	}
@@ -139,14 +133,12 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs title tests.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.5 1. Removed `['params']['prefixed'] from cache.
-	 *              2. Now tests for term title prefix per state.
-	 *              3. Added syntax test.
+	 * @since 4.0.5 Added syntax test.
 	 *
 	 * @return array $item : {
 	 *    string  $symbol : The displayed symbol that identifies your bar.
 	 *    string  $title  : The title of the assessment.
-	 *    int     $status : Power of two. See \The_SEO_Framework\Interpreters\SeoBar's class constants.
+	 *    int     $status : Power of two. See \The_SEO_Framework\Interpreters\SEOBar's class constants.
 	 *    string  $reason : The final assessment: The reason for the $status. The latest state-changing reason is used.
 	 *    string  $assess : The assessments on why the reason is set. Keep it short and concise!
 	 *                     Does not accept HTML for performant ARIA support.
@@ -154,8 +146,8 @@ final class SeoBar_Term extends SeoBar {
 	 */
 	protected function test_title() {
 
-		$cache = static::get_cache( 'term/title/defaults' ) ?: static::set_cache(
-			'term/title/defaults',
+		$cache = static::get_cache( 'page/title/defaults' ) ?: static::set_cache(
+			'page/title/defaults',
 			[
 				'params'   => [
 					'untitled'        => static::$tsf->get_static_untitled_title(),
@@ -171,7 +163,7 @@ final class SeoBar_Term extends SeoBar {
 						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
 						static::$tsf->get_static_untitled_title()
 					),
-					'prefixed'   => \__( 'A term label prefix is automatically added which increases the length.', 'autodescription' ),
+					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
 						'not'       => \__( "It's not branded. Search engines may ignore your title. Consider adding back the site title.", 'autodescription' ),
 						'manual'    => \__( "It's manually branded.", 'autodescription' ),
@@ -190,19 +182,19 @@ final class SeoBar_Term extends SeoBar {
 					'generated' => [
 						'symbol' => \_x( 'TG', 'Title Generated', 'autodescription' ),
 						'title'  => \__( 'Title, generated', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from the term name.", 'autodescription' ),
+							'base' => \__( "It's built from the page title.", 'autodescription' ),
 						],
 					],
 					'custom'    => [
 						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
 						'title'  => \__( 'Title', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from term SEO meta input.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'reason' => \__( 'Obtained from page SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from term SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from page SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
@@ -211,7 +203,7 @@ final class SeoBar_Term extends SeoBar {
 
 		$title_args = [
 			'id'       => static::$query['id'],
-			'taxonomy' => static::$query['taxonomy'],
+			'taxonomy' => '',
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
@@ -221,8 +213,17 @@ final class SeoBar_Term extends SeoBar {
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
 
-			if ( static::$tsf->has_yoast_syntax( $title_part, false ) ) {
-				$item['status']           = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			if ( $this->query_cache['states']['ishome'] ) {
+				// Don't use cache here, only one page can have this state.
+				if ( static::$tsf->get_option( 'homepage_title' ) ) {
+					$item['assess']['homepage'] = \__( 'The title inputted at the SEO Settings screen is used.', 'autodescription' );
+				} else {
+					$item['assess']['homepage'] = \__( 'The title inputted at the Edit Page screen is used.', 'autodescription' );
+				}
+			}
+
+			if ( static::$tsf->has_yoast_syntax( $title_part ) ) {
+				$item['status']           = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
 
@@ -232,22 +233,23 @@ final class SeoBar_Term extends SeoBar {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			if ( static::$tsf->use_generated_archive_prefix( $this->query_cache['term'] ) ) {
-				$item['assess']['prefixed'] = $cache['assess']['prefixed'];
+			if ( $this->query_cache['states']['ishome'] ) {
+				// Don't use cache here, only one page can have this state.
+				$item['assess']['base'] = \__( "It's built using the site title.", 'autodescription' );
 			}
 
 			$title_part = static::$tsf->get_filtered_raw_generated_title( $title_args );
 		}
 
 		if ( ! $title_part ) {
-			$item['status']          = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status']          = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason']          = $cache['reason']['incomplete'];
 			$item['assess']['empty'] = $cache['assess']['empty'];
 
 			// Further assessments must be made later. Halt assertion here to prevent confusion.
 			return $item;
 		} elseif ( $title_part === $cache['params']['untitled'] ) {
-			$item['status']             = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status']             = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason']             = $cache['reason']['incomplete'];
 			$item['assess']['untitled'] = $cache['assess']['untitled'];
 
@@ -256,6 +258,14 @@ final class SeoBar_Term extends SeoBar {
 		}
 
 		$title = $title_part;
+
+		// Don't use cache, as this can be filtered.
+		if ( static::$tsf->use_title_protection( $title_args ) ) {
+			$_title_before = $title;
+			static::$tsf->merge_title_protection( $title, $title_args );
+			if ( $title !== $_title_before )
+				$item['assess']['protected'] = $cache['assess']['protected'];
+		}
 
 		if ( static::$tsf->use_title_branding( $title_args ) ) {
 			$_title_before = $title;
@@ -266,10 +276,17 @@ final class SeoBar_Term extends SeoBar {
 				// Title didn't change, so no automatic branding was added.
 				$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 			} else {
+				// This is true unless it's the home page and the user passed the site title exactly.
 				$item['assess']['branding'] = $cache['assess']['branding']['automatic'];
 			}
 		} else {
-			$item['assess']['branding'] = $cache['assess']['branding']['manual'];
+			// Absence assertion is done after this.
+			if ( $this->query_cache['states']['ishome'] ) {
+				// This is true unless it's the home page and the user passed the site title exactly.
+				$item['assess']['branding'] = $cache['assess']['branding']['automatic'];
+			} else {
+				$item['assess']['branding'] = $cache['assess']['branding']['manual'];
+			}
 		}
 
 		$brand_count = \strlen( $cache['params']['blogname_quoted'] )
@@ -282,11 +299,11 @@ final class SeoBar_Term extends SeoBar {
 
 		if ( ! $brand_count ) {
 			// Override branding state.
-			$item['status']             = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
+			$item['status']             = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
 			$item['reason']             = $cache['reason']['notbranded'];
 			$item['assess']['branding'] = $cache['assess']['branding']['not'];
 		} elseif ( $brand_count > 1 ) {
-			$item['status']               = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status']               = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason']               = $cache['reason']['duplicated'];
 			$item['assess']['duplicated'] = $cache['assess']['duplicated'];
 
@@ -305,19 +322,19 @@ final class SeoBar_Term extends SeoBar {
 		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
 
 		if ( $title_len < $guidelines['lower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooShort'];
 			$length_i18n    = $guidelines_i18n['long']['farTooShort'];
 		} elseif ( $title_len < $guidelines['goodLower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooShort'];
 			$length_i18n    = $guidelines_i18n['long']['tooShort'];
 		} elseif ( $title_len > $guidelines['upper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooLong'];
 			$length_i18n    = $guidelines_i18n['long']['farTooLong'];
 		} elseif ( $title_len > $guidelines['goodUpper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooLong'];
 			$length_i18n    = $guidelines_i18n['long']['tooLong'];
 		} else {
@@ -345,8 +362,8 @@ final class SeoBar_Term extends SeoBar {
 	 */
 	protected function test_description() {
 
-		$cache = static::get_cache( 'term/description/defaults' ) ?: static::set_cache(
-			'term/description/defaults',
+		$cache = static::get_cache( 'page/description/defaults' ) ?: static::set_cache(
+			'page/description/defaults',
 			[
 				'params'   => [
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
@@ -359,10 +376,13 @@ final class SeoBar_Term extends SeoBar {
 					'dupe_short' => (int) \apply_filters( 'the_seo_framework_bother_me_desc_length', 3 ),
 				],
 				'assess'   => [
-					'empty'  => \__( 'No description could be generated.', 'autodescription' ),
+					'empty'     => \__( 'There is no usable content, so no description could be generated.', 'autodescription' ),
+					'builder'   => \__( 'A page builder is used that renders content dynamically, so no description can be generated for performance and privacy reasons. Consider providing a custom description.', 'autodescription' ),
+					'protected' => \__( 'The page is protected, so no description is generated.', 'autodescription' ),
+					'excerpt'   => \__( "It's built from the page excerpt field.", 'autodescription' ),
 					/* translators: %s = list of duplicated words */
-					'dupes'  => \__( 'Found duplicated words: %s', 'autodescription' ),
-					'syntax' => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
+					'dupes'     => \__( 'Found duplicated words: %s', 'autodescription' ),
+					'syntax'    => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
 				],
 				'reason'   => [
 					'empty'         => \__( 'Empty.', 'autodescription' ),
@@ -374,28 +394,28 @@ final class SeoBar_Term extends SeoBar {
 					'generated'   => [
 						'symbol' => \_x( 'DG', 'Description Generated', 'autodescription' ),
 						'title'  => \__( 'Description, generated', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from the term description field.", 'autodescription' ),
+							'base' => \__( "It's built from the page content.", 'autodescription' ),
 						],
 					],
 					'emptynoauto' => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
 						'reason' => \__( 'Empty.', 'autodescription' ),
 						'assess' => [
-							'noauto' => \__( 'No term description is set.', 'autodescription' ),
+							'noauto' => \__( 'No page description is set.', 'autodescription' ),
 						],
 					],
 					'custom'      => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Obtained from the term SEO meta input.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'reason' => \__( 'Obtained from the page SEO meta input.', 'autodescription' ),
 						'assess' => [
-							'base' => \__( "It's built from the term SEO meta input.", 'autodescription' ),
+							'base' => \__( "It's built from the page SEO meta input.", 'autodescription' ),
 						],
 					],
 				],
@@ -404,7 +424,7 @@ final class SeoBar_Term extends SeoBar {
 
 		$desc_args = [
 			'id'       => static::$query['id'],
-			'taxonomy' => static::$query['taxonomy'],
+			'taxonomy' => '',
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
@@ -414,8 +434,17 @@ final class SeoBar_Term extends SeoBar {
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
 
+			if ( $this->query_cache['states']['ishome'] ) {
+				// Don't use cache here, only one page can have this state.
+				if ( static::$tsf->get_option( 'homepage_description' ) ) {
+					$item['assess']['homepage'] = \__( 'The description inputted at the SEO Settings screen is used.', 'autodescription' );
+				} else {
+					$item['assess']['homepage'] = \__( 'The description inputted at the Edit Page screen is used.', 'autodescription' );
+				}
+			}
+
 			if ( static::$tsf->has_yoast_syntax( $desc ) ) {
-				$item['status']           = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+				$item['status']           = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
 
@@ -433,17 +462,29 @@ final class SeoBar_Term extends SeoBar {
 			$desc = static::$tsf->get_generated_description( $desc_args, false );
 
 			if ( ! \strlen( $desc ) ) {
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNDEFINED;
 				$item['reason'] = $cache['reason']['empty'];
 
 				// This is now inaccurate, purge it.
 				// TODO consider alternative? "It TRIED to build it from...."?
 				unset( $item['assess']['base'] );
 
-				$item['assess']['empty'] = $cache['assess']['empty'];
+				if ( static::$tsf->uses_non_html_page_builder( static::$query['id'] ) ) {
+					$item['status']          = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
+					$item['assess']['empty'] = $cache['assess']['builder'];
+				} elseif ( static::$tsf->is_protected( static::$query['id'] ) ) {
+					$item['status']          = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
+					$item['assess']['empty'] = $cache['assess']['protected'];
+				} else {
+					$item['status']          = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNDEFINED;
+					$item['assess']['empty'] = $cache['assess']['empty'];
+				}
 
 				// No description is found. There's no need to continue parsing.
 				return $item;
+			} else {
+				if ( ! empty( $this->query_cache['post']->post_excerpt ) ) {
+					$item['assess']['base'] = $cache['assess']['excerpt'];
+				}
 			}
 		}
 
@@ -473,11 +514,11 @@ final class SeoBar_Term extends SeoBar {
 			if ( $max > 3 || \count( $duplicated_words ) > 1 ) {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 				return $item;
 			} else {
 				$item['reason'] = $cache['reason']['founddupe'];
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 			}
 		}
 
@@ -492,19 +533,19 @@ final class SeoBar_Term extends SeoBar {
 		);
 
 		if ( $desc_len < $guidelines['lower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooShort'];
 			$length_i18n    = $guidelines_i18n['long']['farTooShort'];
 		} elseif ( $desc_len < $guidelines['goodLower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooShort'];
 			$length_i18n    = $guidelines_i18n['long']['tooShort'];
 		} elseif ( $desc_len > $guidelines['upper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooLong'];
 			$length_i18n    = $guidelines_i18n['long']['farTooLong'];
 		} elseif ( $desc_len > $guidelines['goodUpper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooLong'];
 			$length_i18n    = $guidelines_i18n['long']['tooLong'];
 		} else {
@@ -525,40 +566,37 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs indexing tests.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 Now asserts all taxonomy robots settings.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
 	 */
 	protected function test_indexing() {
 
-		$cache = static::get_cache( 'term/indexing/defaults' ) ?: static::set_cache(
-			'term/indexing/defaults',
+		$cache = static::get_cache( 'page/indexing/defaults' ) ?: static::set_cache(
+			'page/indexing/defaults',
 			[
 				'params'   => [],
 				'assess'   => [
-					'robotstxt'     => \__( 'The robots.txt file is nonstandard, and may still direct search engines differently.', 'autodescription' ),
-					'notpublic'     => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
-					'site'          => \__( 'Indexing is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
-					'posttypes'     => \__( 'Indexing is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'taxonomy'      => \__( 'Indexing is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
-					'override'      => \__( 'The term SEO meta input overrides the indexing state.', 'autodescription' ),
-					'empty'         => \__( 'No posts are attached to this term, so indexing is disabled.', 'autodescription' ),
-					'emptyoverride' => \__( 'No posts are attached to this term, so indexing should be disabled.', 'autodescription' ),
-					'canonicalurl'  => \__( 'A custom canonical URL is set that points to another page.', 'autodescription' ),
+					'robotstxt'    => \__( 'The robots.txt file is nonstandard, and may still direct search engines differently.', 'autodescription' ),
+					'notpublic'    => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
+					'site'         => \__( 'Indexing is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
+					'posttype'     => \__( 'Indexing is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
+					'protected'    => \__( 'The page is protected, so indexing is discouraged.', 'autodescription' ),
+					'override'     => \__( 'The page SEO meta input overrides the indexing state.', 'autodescription' ),
+					'canonicalurl' => \__( 'A custom canonical URL is set that points to another page.', 'autodescription' ),
 				],
 				'reason'   => [
-					'notpublic'     => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
-					'empty'         => \__( 'The term is empty.', 'autodescription' ),
-					'emptyoverride' => \__( 'The term is empty yet still indexed.', 'autodescription' ),
-					'canonicalurl'  => \__( 'The canonical URL points to another page.', 'autodescription' ),
+					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
+					'protected'    => \__( 'The page is protected.', 'autodescription' ),
+					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
+					'canonicalurl' => \__( 'The canonical URL points to another page.', 'autodescription' ),
 				],
 				'defaults' => [
 					'index'   => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Term may be indexed.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'reason' => \__( 'Page may be indexed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag allows indexing.', 'autodescription' ),
 						],
@@ -566,26 +604,39 @@ final class SeoBar_Term extends SeoBar {
 					'noindex' => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
-						'reason' => \__( 'Term may not be indexed.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'reason' => \__( 'Page may not be indexed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag does not allow indexing.', 'autodescription' ),
+						],
+					],
+					'draft'   => [
+						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
+						'title'  => \__( 'Indexing', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'reason' => \__( 'Page is invisible.', 'autodescription' ),
+						'assess' => [
+							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
 				],
 			]
 		);
 
-		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
-
-		if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
+		if ( $this->query_cache['states']['isdraft'] ) {
+			$item = $cache['defaults']['draft'];
+			// TODO Really stop asserting from here?
+			return $item;
+		} elseif ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
 			$item = $cache['defaults']['noindex'];
 		} else {
 			$item = $cache['defaults']['index'];
 		}
 
+		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
+
 		if ( ! $robots_global['blogpublic'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $cache['reason']['notpublic'];
 
 			unset( $item['assess']['base'] );
@@ -599,69 +650,65 @@ final class SeoBar_Term extends SeoBar {
 			return $item;
 		}
 
+		if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
+			// Don't trickle when noindex is not set, as this may be filtered.
+			if ( $this->query_cache['states']['isprotected'] ) {
+				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
+				$item['reason'] = $cache['reason']['protected'];
+
+				$item['assess']['protected'] = $cache['assess']['protected'];
+
+				return $item;
+			}
+		}
+
 		if ( $robots_global['site']['noindex'] ) {
 			// Status is already set.
 			$item['assess']['site'] = $cache['assess']['site'];
 		}
 
-		// Test all post types bound to the term. Only if all post types are excluded, set this option.
-		$_post_type_noindex_set = [];
-		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
-			$_post_type_noindex_set[] = ! empty( $robots_global['posttype']['noindex'][ $_post_type ] );
-		}
-		if ( ! \in_array( false, $_post_type_noindex_set, true ) ) {
+		if ( $this->query_cache['states']['ishome'] ) {
 			// Status is already set.
-			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
+			if ( static::$tsf->get_option( 'homepage_noindex' ) ) {
+				// Don't use cache as this only runs once.
+				$item['assess']['homepage'] = \__( 'Indexing is discouraged for the homepage at the SEO Settings screen.', 'autodescription' );
+			}
 		}
 
-		if ( ! empty( $robots_global['taxonomy']['noindex'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['noindex'][ static::$query['post_type'] ] ) ) {
 			// Status is already set.
-			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
+			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noindex'] ) ) {
-			// Status is already set.
-
-			// Don't assert posttype nor site as "blocking" if there's an overide.
-			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
-
-			$item['assess']['override'] = $cache['assess']['override'];
-		}
-
-		if ( $this->query_cache['meta']['canonical'] ) {
+		if ( $this->query_cache['meta']['_genesis_canonical_uri'] ) {
 			$permalink = static::$tsf->create_canonical_url( [
 				'id'               => static::$query['id'],
-				'taxonomy'         => static::$query['taxonomy'],
 				'get_custom_field' => false,
 			] );
 			// We create it because filters may apply.
 			$canonical = static::$tsf->create_canonical_url( [
 				'id'               => static::$query['id'],
-				'taxonomy'         => static::$query['taxonomy'],
 				'get_custom_field' => true,
 			] );
 			if ( $permalink !== $canonical ) {
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
+				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['canonicalurl'];
 
 				$item['assess']['protected'] = $cache['assess']['canonicalurl'];
 			}
 		}
 
-		if ( $this->query_cache['states']['isempty'] ) {
-			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-				// Everything's as intended...
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN;
-				$item['reason'] = $cache['reason']['empty'];
+		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
+			// Status is already set.
 
-				$item['assess']['empty'] = $cache['assess']['empty'];
-			} else {
-				// Something's wrong. Maybe override, maybe filter, maybe me.
-				$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
+			unset(
+				$item['assess']['posttype'],
+				$item['assess']['homepage'],
+				$item['assess']['site']
+			);
 
-				$item['reason']          = $cache['reason']['emptyoverride'];
-				$item['assess']['empty'] = $cache['assess']['emptyoverride'];
-			}
+			$item['assess']['override'] = $cache['assess']['override'];
 		}
 
 		if ( ! $this->query_cache['states']['robotsmeta']['noindex'] && $robots_global['hasrobotstxt'] ) {
@@ -676,35 +723,34 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs following tests.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 Now asserts all taxonomy robots settings.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
 	 */
 	protected function test_following() {
 
-		$cache = static::get_cache( 'term/following/defaults' ) ?: static::set_cache(
-			'term/following/defaults',
+		$cache = static::get_cache( 'page/following/defaults' ) ?: static::set_cache(
+			'page/following/defaults',
 			[
 				'params'   => [],
 				'assess'   => [
 					'robotstxt' => \__( 'The robots.txt file is nonstandard, and may still direct search engines differently.', 'autodescription' ),
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Link following is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
-					'posttypes' => \__( 'Link following is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'taxonomy'  => \__( 'Link following is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
-					'override'  => \__( 'The term SEO meta input overrides the link following state.', 'autodescription' ),
-					'noindex'   => \__( 'The term may not be indexed, this may also discourage link following.', 'autodescription' ),
+					'posttype'  => \__( 'Link following is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
+					'override'  => \__( 'The page SEO meta input overrides the link following state.', 'autodescription' ),
+					'noindex'   => \__( 'The page may not be indexed, this may also discourage link following.', 'autodescription' ),
 				],
 				'reason'   => [
-					'notpublic' => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
+					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
+					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
 				],
 				'defaults' => [
 					'follow'   => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Term links may be followed.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'reason' => \__( 'Page links may be followed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag allows link following.', 'autodescription' ),
 						],
@@ -712,26 +758,39 @@ final class SeoBar_Term extends SeoBar {
 					'nofollow' => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
-						'reason' => \__( 'Term links may not be followed.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'reason' => \__( 'Page links may not be followed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag does not allow link following.', 'autodescription' ),
+						],
+					],
+					'draft'    => [
+						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
+						'title'  => \__( 'Following', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'reason' => \__( 'Page is invisible.', 'autodescription' ),
+						'assess' => [
+							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
 				],
 			]
 		);
 
-		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
-
-		if ( $this->query_cache['states']['robotsmeta']['nofollow'] ) {
+		if ( $this->query_cache['states']['isdraft'] ) {
+			$item = $cache['defaults']['draft'];
+			// TODO Really stop asserting from here?
+			return $item;
+		} elseif ( $this->query_cache['states']['robotsmeta']['nofollow'] ) {
 			$item = $cache['defaults']['nofollow'];
 		} else {
 			$item = $cache['defaults']['follow'];
 		}
 
+		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
+
 		if ( ! $robots_global['blogpublic'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $cache['reason']['notpublic'];
 
 			unset( $item['assess']['base'] );
@@ -750,33 +809,35 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['site'] = $cache['assess']['site'];
 		}
 
-		// Test all post types bound to the term. Only if all post types are excluded, set this option.
-		$_post_type_nofollow_set = [];
-		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
-			$_post_type_nofollow_set[] = ! empty( $robots_global['posttype']['nofollow'][ $_post_type ] );
-		}
-		if ( ! \in_array( false, $_post_type_nofollow_set, true ) ) {
+		if ( $this->query_cache['states']['ishome'] ) {
 			// Status is already set.
-			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
+			if ( static::$tsf->get_option( 'homepage_nofollow' ) ) {
+				// Don't use cache as this only runs once.
+				$item['assess']['homepage'] = \__( 'Link following is discouraged for the homepage at the SEO Settings screen.', 'autodescription' );
+			}
 		}
 
-		if ( ! empty( $robots_global['taxonomy']['nofollow'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['nofollow'][ static::$query['post_type'] ] ) ) {
 			// Status is already set.
-			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
+			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['nofollow'] ) ) {
+		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype nor site as "blocking" if there's an overide.
-			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
+			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
+			unset(
+				$item['assess']['posttype'],
+				$item['assess']['homepage'],
+				$item['assess']['site']
+			);
 
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
 
 		if ( ! $this->query_cache['states']['robotsmeta']['nofollow'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-				$item['status']            = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+				$item['status']            = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 				$item['assess']['noindex'] = $cache['assess']['noindex'];
 			}
 
@@ -793,35 +854,34 @@ final class SeoBar_Term extends SeoBar {
 	 * Runs archiving tests.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 Now asserts all taxonomy robots settings.
 	 * @see test_title() for return value.
 	 *
 	 * @return array $item
 	 */
 	protected function test_archiving() {
 
-		$cache = static::get_cache( 'term/archiving/defaults' ) ?: static::set_cache(
-			'term/archiving/defaults',
+		$cache = static::get_cache( 'page/archiving/defaults' ) ?: static::set_cache(
+			'page/archiving/defaults',
 			[
 				'params'   => [],
 				'assess'   => [
 					'robotstxt' => \__( 'The robots.txt file is nonstandard, and may still direct search engines differently.', 'autodescription' ),
 					'notpublic' => \__( 'WordPress discourages crawling via the Reading Settings.', 'autodescription' ),
 					'site'      => \__( 'Archiving is discouraged for the whole site at the SEO Settings screen.', 'autodescription' ),
-					'posttypes' => \__( 'Archiving is discouraged for all bound post types to this term at the SEO Settings screen.', 'autodescription' ),
-					'taxonomy'  => \__( 'Archiving is discouraged for this taxonomy at the SEO Settings screen.', 'autodescription' ),
-					'override'  => \__( 'The term SEO meta input overrides the archiving state.', 'autodescription' ),
-					'noindex'   => \__( 'The term may not be indexed, this may also discourage archiving.', 'autodescription' ),
+					'posttype'  => \__( 'Archiving is discouraged for this post type at the SEO Settings screen.', 'autodescription' ),
+					'override'  => \__( 'The page SEO meta input overrides the archiving state.', 'autodescription' ),
+					'noindex'   => \__( 'The page may not be indexed, this may also discourage archiving.', 'autodescription' ),
 				],
 				'reason'   => [
-					'notpublic' => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
+					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
+					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
 				],
 				'defaults' => [
 					'archive'   => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-						'reason' => \__( 'Term may be archived.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'reason' => \__( 'Page may be archived.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag allows archiving.', 'autodescription' ),
 						],
@@ -829,26 +889,39 @@ final class SeoBar_Term extends SeoBar {
 					'noarchive' => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
-						'reason' => \__( 'Term may not be archived.', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'reason' => \__( 'Page may not be archived.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag does not allow archiving.', 'autodescription' ),
+						],
+					],
+					'draft'     => [
+						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
+						'title'  => \__( 'Archiving', 'autodescription' ),
+						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'reason' => \__( 'Page is invisible.', 'autodescription' ),
+						'assess' => [
+							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
 				],
 			]
 		);
 
-		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
-
-		if ( $this->query_cache['states']['robotsmeta']['noarchive'] ) {
+		if ( $this->query_cache['states']['isdraft'] ) {
+			$item = $cache['defaults']['draft'];
+			// TODO Really stop asserting from here?
+			return $item;
+		} elseif ( $this->query_cache['states']['robotsmeta']['noarchive'] ) {
 			$item = $cache['defaults']['noarchive'];
 		} else {
 			$item = $cache['defaults']['archive'];
 		}
 
+		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
+
 		if ( ! $robots_global['blogpublic'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SeoBar::STATE_BAD;
+			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 			$item['reason'] = $cache['reason']['notpublic'];
 
 			unset( $item['assess']['base'] );
@@ -867,33 +940,35 @@ final class SeoBar_Term extends SeoBar {
 			$item['assess']['site'] = $cache['assess']['site'];
 		}
 
-		// Test all post types bound to the term. Only if all post types are excluded, set this option.
-		$_post_type_noarchive_set = [];
-		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
-			$_post_type_noarchive_set[] = ! empty( $robots_global['posttype']['noarchive'][ $_post_type ] );
-		}
-		if ( ! \in_array( false, $_post_type_noarchive_set, true ) ) {
+		if ( $this->query_cache['states']['ishome'] ) {
 			// Status is already set.
-			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
+			if ( static::$tsf->get_option( 'homepage_noarchive' ) ) {
+				// Don't use cache as this only runs once.
+				$item['assess']['homepage'] = \__( 'Archiving is discouraged for the homepage at the SEO Settings screen.', 'autodescription' );
+			}
 		}
 
-		if ( ! empty( $robots_global['taxonomy']['noarchive'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['noarchive'][ static::$query['post_type'] ] ) ) {
 			// Status is already set.
-			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
+			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noarchive'] ) ) {
+		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype nor site as "blocking" if there's an overide.
-			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
+			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
+			unset(
+				$item['assess']['posttype'],
+				$item['assess']['homepage'],
+				$item['assess']['site']
+			);
 
 			$item['assess']['override'] = $cache['assess']['override'];
 		}
 
 		if ( ! $this->query_cache['states']['robotsmeta']['noarchive'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-				$item['status']            = \The_SEO_Framework\Interpreters\SeoBar::STATE_OKAY;
+				$item['status']            = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
 				$item['assess']['noindex'] = $cache['assess']['noindex'];
 			}
 
@@ -915,30 +990,36 @@ final class SeoBar_Term extends SeoBar {
 	 * @return array $item
 	 */
 	protected function test_redirect() {
+
 		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
-			return static::get_cache( 'term/redirect/default/0' ) ?: static::set_cache(
-				'term/redirect/default/0',
+			$default = static::get_cache( 'page/redirect/default/0' ) ?: static::set_cache(
+				'page/redirect/default/0',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
 					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_GOOD,
-					'reason' => \__( 'Term does not redirect visitors.', 'autodescription' ),
+					'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+					'reason' => \__( 'Page does not redirect visitors.', 'autodescription' ),
 					'assess' => [
-						'redirect' => \__( 'All visitors and crawlers may access this page.', 'autodescription' ),
+						'redirect' => \__( 'Visitors and crawlers may view this page.', 'autodescription' ),
 					],
 					'meta'   => [
 						'blocking' => false,
 					],
 				]
 			);
+
+			if ( $this->query_cache['states']['isdraft'] )
+				$default['assess']['redirect'] = \__( 'Visitors and crawlers may view this page once published.', 'autodescription' );
+
+			return $default;
 		} else {
-			return static::get_cache( 'term/redirect/default/1' ) ?: static::set_cache(
-				'term/redirect/default/1',
+			return static::get_cache( 'post/redirect/default/1' ) ?: static::set_cache(
+				'post/redirect/default/1',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
 					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => \The_SEO_Framework\Interpreters\SeoBar::STATE_UNKNOWN,
-					'reason' => \__( 'Term redirects visitors.', 'autodescription' ),
+					'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+					'reason' => \__( 'Page redirects visitors.', 'autodescription' ),
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
 					],

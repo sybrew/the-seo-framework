@@ -43,7 +43,7 @@ class Admin_Init extends Init {
 	 */
 	public function _init_seo_bar_tables() {
 		if ( $this->get_option( 'display_seo_bar_tables' ) )
-			new Bridges\SeoBar;
+			new Bridges\SEOBar;
 	}
 
 	/**

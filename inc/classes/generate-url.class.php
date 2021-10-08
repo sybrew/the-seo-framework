@@ -360,7 +360,7 @@ class Generate_Url extends Generate_Title {
 	public function get_singular_canonical_url( $id = null ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = fastmemo( __METHOD__, null, $id ) ) return $memo;
+		if ( null !== $memo = umemo( __METHOD__, null, $id ) ) return $memo;
 
 		$url = \wp_get_canonical_url( $id ) ?: '';
 
@@ -375,7 +375,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		return fastmemo( __METHOD__, $url, $id );
+		return umemo( __METHOD__, $url, $id );
 	}
 
 	/**
@@ -407,20 +407,20 @@ class Generate_Url extends Generate_Title {
 	public function get_taxonomical_canonical_url( $term_id = 0, $taxonomy = '' ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = fastmemo( __METHOD__, null, $term_id, $taxonomy ) )
+		if ( null !== $memo = umemo( __METHOD__, null, $term_id, $taxonomy ) )
 			return $memo;
 
 		$url = \get_term_link( $term_id ?: $this->get_the_real_ID(), $taxonomy );
 
 		if ( \is_wp_error( $url ) )
-			return fastmemo( __METHOD__, '', $term_id, $taxonomy );
+			return umemo( __METHOD__, '', $term_id, $taxonomy );
 
 		if ( $term_id === $this->get_the_real_ID() ) {
 			//= Adds pagination if ID matches query.
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		return fastmemo( __METHOD__, $url, $term_id, $taxonomy );
+		return umemo( __METHOD__, $url, $term_id, $taxonomy );
 	}
 
 	/**
