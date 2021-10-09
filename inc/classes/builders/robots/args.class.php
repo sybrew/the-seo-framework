@@ -89,14 +89,9 @@ final class Args extends Factory {
 		globals: {
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
-			if ( ! $args['taxonomy'] && $tsf->is_real_front_page_by_id( $args['id'] ) ) {
-				yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
-			} else {
-				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
-			}
-
-			// is_real_front_page_by_id() can still be singular or archive. Thus, this conditional block is split up.
 			if ( $args['taxonomy'] ) {
+				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
+
 				yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $args['taxonomy'] );
 
 				// Store values from each post type bound to the taxonomy.
@@ -105,8 +100,13 @@ final class Args extends Factory {
 
 				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
-			} elseif ( $args['id'] ) {
-				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+			} else {
+				// $args['id'] can be empty, pointing to a plausible homepage query.
+				if ( $tsf->is_real_front_page_by_id( $args['id'] ) )
+					yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
+
+				if ( $args['id'] )
+					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
 			}
 		}
 
@@ -141,8 +141,7 @@ final class Args extends Factory {
 
 		switch ( $pass ) :
 			case '404':
-				if ( $args['taxonomy'] )
-					yield '404' => empty( \get_term( $args['id'], $args['taxonomy'] )->count );
+				yield '404' => empty( \get_term( $args['id'], $args['taxonomy'] )->count );
 				break;
 
 			case 'protected':

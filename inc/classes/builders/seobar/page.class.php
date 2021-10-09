@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Builders\SEOBar;
  * Generates the SEO Bar for posts.
  *
  * @since 4.0.0
- * @since 4.2.0 Moved to different namespace
+ * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\SEOBar\Page` from `The_SEO_Framework\Builders\SeoBar_Page`
  *
  * @access private
  * @internal
@@ -112,6 +112,8 @@ final class Page extends Main {
 						\The_SEO_Framework\ROBOTS_ASSERT
 					)
 				),
+				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
+				// The asserter should be leading, but the SEO Bar should be readable.
 				'robotsassert' => static::$tsf->retrieve_robots_meta_assertions(),
 			],
 		];

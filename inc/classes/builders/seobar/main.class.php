@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Builders\SEOBar;
  * Generates the SEO Bar.
  *
  * @since 4.0.0
- * @since 4.2.0 Moved to different namespace
+ * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\SEOBar\Main` from `The_SEO_Framework\Builders\SeoBar`
  * Mind the late static binding. We use "self" if the variable is shared between instances.
  * We use "static" if the variable isn't shared between instances.
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
@@ -140,11 +140,9 @@ abstract class Main {
 	/**
 	 * Runs all SEO bar tests.
 	 *
-	 * @since ?.?.?
+	 * @since 4.2.0
 	 * @access private
 	 * @generator
-	 * @TODO only available from PHP 7+
-	 * @ignore
 	 *
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
@@ -156,11 +154,9 @@ abstract class Main {
 	 *    string $test => array The testing results.
 	 * }
 	 */
-	// phpcs:disable, Squiz.PHP.CommentedOutCode -- Ignore. PHP 7.0+
-	// public static function _run_all_tests( array $query ) {
-	// yield from static::_run_test( static::$tests, $query );
-	// }
-	// phpcs:enable, Squiz.PHP.CommentedOutCode
+	public function _run_all_tests( array $query ) {
+		yield from $this->_run_test( static::$tests, $query );
+	}
 
 	/**
 	 * Runs one or more SEO bar tests.

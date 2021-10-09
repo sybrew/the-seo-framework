@@ -1283,8 +1283,15 @@ class Render extends Admin_Init {
 
 		if ( ! $cache['run'] ) return '';
 
+		static $_bootstrap_timer = null;
+		// The bootstrap timer keeps adding when metadata is strapping. This causes both timers to increase simultaneously.
+		// We cache the bootstrap here, and let the meta-timer take over.
+		if ( ! isset( $_bootstrap_timer ) )
+			$_bootstrap_timer = _bootstrap_timer();
+
 		switch ( $where ) :
 			case 'before':
+
 				return sprintf(
 					'<!-- %s -->',
 					/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
@@ -1297,7 +1304,7 @@ class Render extends Admin_Init {
 					$timers = sprintf(
 						' | %s meta | %s boot',
 						number_format( ( microtime( true ) - $timing ) * 1e3, 2, null, '' ) . 'ms',
-						number_format( _bootstrap_timer() * 1e3, 2, null, '' ) . 'ms'
+						number_format( $_bootstrap_timer * 1e3, 2, null, '' ) . 'ms'
 					);
 				} else {
 					$timers = '';

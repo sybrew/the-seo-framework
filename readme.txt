@@ -251,8 +251,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
 
-TODO Fix Elementor's library post type issue
-
 TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 
@@ -308,9 +306,6 @@ TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
-TODO use goto in array_merge_recursive_distinct?
-	-> Also clean up its sole caller...
-
 TODO https://github.com/sybrew/the-seo-framework/issues/185
 	-> This will allow bigger sitemaps, for we won't accidentally call redundant post meta.
 	-> This forces us to implement a migrator, which we should...
@@ -320,11 +315,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 
 TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination.
 	* This to be in line with homepage pagination.
-TODO mention & implement for query caching: umemo
 
 TODO allow custom robots generators?
-TODO enable `public static function _run_all_tests`
-TODO implement `retrieve_robots_meta_assertions`
 TODO in the robots-generators, can/should we memo the globals?
 
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
@@ -360,6 +352,9 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 		* Tapping the tooltip no longer conjures tooltip animations, potentially saving battery-life.
 		* Administrative Markdown-text now generates a tad swifter.
 		* Throughout the plugin, we found ways to reduce opcodes.
+		* The bootstrap timer keeps timing while metadata is strapping. This time spent is added to both timers. We rectified the "boot" timer.
+			* The reason is that the plugin should be done "booting" once it starts generating the metadata.
+			* This issue became more apparent once we started splitting the generators in their respective builder-classes.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -424,6 +419,8 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 				1. Now invokes two actions before and after output.
 				2. No longer rectifies timezones.
 			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.
+			* `get_robots_taxonomy_option_id` no longer sanitizes the input parameter.
 			* `get_taxonomical_canonical_url()`:
 				1. Added memoization.
 				1. The parameters are now optional.

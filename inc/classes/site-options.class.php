@@ -615,24 +615,26 @@ class Site_Options extends Sanitize {
 	 * Returns the option value for Post Type robots settings.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 No longer sanitizes the input parameter.
 	 *
 	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @return string
 	 */
 	public function get_robots_post_type_option_id( $type ) {
-		return $this->s_field_id( "{$type}_post_types" );
+		return "{$type}_post_types";
 	}
 
 	/**
 	 * Returns the option value for Taxonomy robots settings.
 	 *
 	 * @since 4.1.0
+	 * @since 4.2.0 No longer sanitizes the input parameter.
 	 *
 	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @return string
 	 */
 	public function get_robots_taxonomy_option_id( $type ) {
-		return $this->s_field_id( "{$type}_taxonomies" );
+		return "{$type}_taxonomies";
 	}
 
 	/**

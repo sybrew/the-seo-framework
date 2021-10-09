@@ -237,7 +237,7 @@ final class SEOBar {
 
 		$items = &$this->collect_seo_bar_items();
 
-		foreach ( $builder->_run_test( $builder::$tests, static::$query ) as $key => $data )
+		foreach ( $builder->_run_all_tests( static::$query ) as $key => $data )
 			$items[ $key ] = $data;
 	}
 

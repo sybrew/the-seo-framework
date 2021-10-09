@@ -31,6 +31,7 @@ use function \The_SEO_Framework\umemo;
  * Generates the base sitemap.
  *
  * @since 4.0.0
+ * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\Sitemap\Base` from `The_SEO_Framework\Builders\Sitemap_Base`
  *
  * @access private
  */

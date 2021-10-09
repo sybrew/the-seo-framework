@@ -499,36 +499,38 @@ final class Form {
 	 */
 	public static function get_image_uploader_form( array $args ) {
 
+		// Required.
+		if ( empty( $args['id'] ) ) return '';
+
 		static $image_input_id = 0;
 		$image_input_id++;
 
 		$tsf = \the_seo_framework();
 
-		$defaults = [
-			'id'      => null,
-			'post_id' => $tsf->get_the_real_ID(),
-			'data'    => [
-				'inputType' => 'social',
-				'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.
-				'height'    => 630,  // TODO make  640 - 80px overflow margin? It'd be better for mixed platforms.
-				'minWidth'  => 200,
-				'minHeight' => 200,
-				'flex'      => true,
+		$args = $tsf->array_merge_recursive_distinct(
+			[
+				'id'      => '',
+				'post_id' => $tsf->get_the_real_ID(),
+				'data'    => [
+					'inputType' => 'social',
+					'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.
+					'height'    => 630,  // TODO make  640 - 80px overflow margin? It'd be better for mixed platforms.
+					'minWidth'  => 200,
+					'minHeight' => 200,
+					'flex'      => true,
+				],
+				'i18n'    => [
+					'button_title' => '',
+					'button_text'  => \__( 'Select Image', 'autodescription' ),
+				],
 			],
-			'i18n'    => [
-				'button_title' => '',
-				'button_text'  => \__( 'Select Image', 'autodescription' ),
-			],
-		];
-
-		$args = $tsf->array_merge_recursive_distinct( $defaults, $args );
-
-		if ( ! $args['id'] ) return '';
+			$args
+		);
 
 		$content = vsprintf(
 			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select" %s>%s</button>',
 			[
-				\esc_url( \get_upload_iframe_src( 'image', $defaults['post_id'] ) ),
+				\esc_url( \get_upload_iframe_src( 'image', $args['post_id'] ) ),
 				\esc_attr( $args['i18n']['button_title'] ),
 				\esc_attr( $args['id'] ),
 				HTML::make_data_attributes(
