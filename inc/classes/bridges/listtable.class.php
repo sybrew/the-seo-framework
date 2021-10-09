@@ -162,7 +162,7 @@ abstract class ListTable {
 			return;
 
 		$post_type = $screen->post_type ?? '';
-		$taxonomy  = $screen->taxonomy  ?? '';
+		$taxonomy  = $screen->taxonomy ?? '';
 
 		if ( $taxonomy ) {
 			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )

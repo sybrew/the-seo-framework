@@ -177,14 +177,14 @@ class Init extends Query {
 
 			// Initialize the SEO Bar for tables.
 			\add_action( 'admin_init', [ $this, '_init_seo_bar_tables' ] );
+
+			// Initialize List Edit for tables.
+			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
 		}
 
 		if ( ! $this->is_headless['settings'] ) {
 			// Set up site settings and allow saving resetting them.
 			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
-
-			// Initialize List Edit for tables.
-			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
 
 			// Loads setting notices.
 			\add_action( 'the_seo_framework_setting_notices', [ $this, '_do_settings_page_notices' ] );
@@ -268,8 +268,8 @@ class Init extends Query {
 		// Prepares requisite robots headers to avoid low-quality content penalties.
 		$this->prepare_robots_headers();
 
-		\add_action( 'the_seo_framework_before_meta_output', [ $this, '_do_deprecated_output_hooks_before' ] );
-		\add_action( 'the_seo_framework_after_meta_output', [ $this, '_do_deprecated_output_hooks_after' ] );
+		\add_action( 'the_seo_framework_before_meta_output', [ $this, '_do_deprecated_output_hooks_before' ], 5 );
+		\add_action( 'the_seo_framework_after_meta_output', [ $this, '_do_deprecated_output_hooks_after' ], 15 );
 
 		// Output meta tags.
 		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );

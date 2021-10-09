@@ -121,7 +121,7 @@ final class SEOBar {
 		}
 
 		$instance = static::get_instance();
-		$instance->store_default_bar_items( $builder );
+		$instance->store_seo_bar_items( $builder );
 
 		/**
 		 * Add or adjust SEO Bar items here, after the tests have run.
@@ -219,7 +219,7 @@ final class SEOBar {
 	 *
 	 * @param \The_SEO_Framework\Builders\SEOBar\Main $builder The builder instance.
 	 */
-	private function store_default_bar_items( $builder ) {
+	private function store_seo_bar_items( $builder ) {
 
 		/**
 		 * Adjust interpreter and builder items here, before the tests have run.

@@ -879,7 +879,7 @@ final class Deprecated {
 	 * @return string HTML checkbox output if $echo is false.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_info()', '4.2.0' );
+		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_info()', '4.2.0', '\The_SEO_Framework\Interpreters\HTML::make_info()' );
 		return \The_SEO_Framework\Interpreters\HTML::make_info( $description, $link, $echo );
 	}
 

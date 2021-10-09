@@ -523,12 +523,8 @@ class Base extends Main {
 				yield $_values;
 			}
 
-			// TODO make new method to memoize return values in one call? e.g.:
-			// memo( fn() => (bool) \wp_using_ext_object_cache() }, 'wp_ueoc' );
-			// The memo must then not try to override data via first parameter. Even when null: [ 'v' => null, 'is_set' => true ];
-			// Anyway, only clean post cache when NOT using an external object caching plugin.
-			umemo( __METHOD__ . '/wp_ueoc' ) ?? umemo( __METHOD__ . '/wp_ueoc', (bool) \wp_using_ext_object_cache() )
-			or \clean_post_cache( $post );
+			// Only clean post cache when NOT using an external object caching plugin.
+			\wp_using_ext_object_cache() or \clean_post_cache( $post );
 		}
 	}
 

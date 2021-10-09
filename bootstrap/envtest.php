@@ -3,8 +3,7 @@
  * @package The_SEO_Framework\Bootstrap\Install
  *
  * @NOTE This file MUST be written according to WordPress's minimum PHP requirements.
- *       Which is PHP 5.2.
- * When we only support WordPress 5.2+, it'll be PHP 5.6.
+ *       Which is PHP 5.6.
  * When we only support WordPress 5.6?+, it'll be PHP 7.1.
  *
  * This file can be removed when we only support WordPress 5.2 or later. However, their

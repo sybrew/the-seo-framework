@@ -374,6 +374,7 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 * **Fixed:**
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
+	* Addressed an issue with settings-headless mode where the list-edit (quick/bulk-edit) features was untentionally disabled; it's now disabled when the meta-headless mode is enabled.
 
 **For developers:**
 
@@ -427,6 +428,7 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 			* `get_term_meta_item()` no longer accidentally returns an empty array on failure, but `null` (as intended) instead.
 			* `has_custom_canonical_url()` now also detects canonical URLs for taxonomies.
 			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
+			* `is_theme()` no longer "loads" the theme; instead, simply compares input to active theme options.
 		* **Methods deprecated:**
 			* `append_php_query()`, use `the_seo_framework()->append_url_query()` instead.
 			* `get_html_output()`, with no alternative available.
@@ -460,7 +462,7 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 			* `attention_description()`, with no alternative available.
 			* `attention_description_noesc()`, with no alternative available.
 			* `wrap_fields()`, with no alternative available.
-			* `make_info()`, with no alternative available.
+			* `make_info()`, use `\The_SEO_Framework\Interpreters\HTML::make_info()` instead.
 			* `make_data_attributes()`, with no alternative available.
 			* `make_checkbox()`, with no alternative available.
 			* `make_single_select_form()`, with no alternative available.

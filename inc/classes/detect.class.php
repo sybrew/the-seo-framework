@@ -255,31 +255,19 @@ class Detect extends Render {
 	 * Checks if the (parent) theme name is loaded.
 	 *
 	 * @since 2.1.0
+	 * @since 4.2.0 No longer "loads" the theme; instead, simply compares input to active theme options.
 	 *
-	 * @param string|array $themes the current theme name.
+	 * @param string|array $themes The theme names to test.
 	 * @return bool is theme active.
 	 */
 	public function is_theme( $themes = '' ) {
 
-		if ( empty( $themes ) )
-			return false;
+		$stylesheet = strtolower( \get_option( 'stylesheet' ) ); // Parent
+		$template   = strtolower( \get_option( 'template' ) );   // Child
 
-		$wp_get_theme = \wp_get_theme();
-
-		$theme_parent = strtolower( $wp_get_theme->get( 'Template' ) );
-		$theme_name   = strtolower( $wp_get_theme->get( 'Name' ) );
-
-		if ( \is_string( $themes ) ) {
-			$themes = strtolower( $themes );
-			if ( $themes === $theme_parent || $themes === $theme_name )
+		foreach ( (array) $themes as $theme ) {
+			if ( \in_array( strtolower( $theme ), [ $stylesheet, $template ], true ) )
 				return true;
-		} elseif ( \is_array( $themes ) ) {
-			foreach ( $themes as $theme ) {
-				$theme = strtolower( $theme );
-				if ( $theme === $theme_parent || $theme === $theme_name ) {
-					return true;
-				}
-			}
 		}
 
 		return false;
