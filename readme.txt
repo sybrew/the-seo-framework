@@ -355,6 +355,7 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 		* The bootstrap timer keeps timing while metadata is strapping. This time spent is added to both timers. We rectified the "boot" timer.
 			* The reason is that the plugin should be done "booting" once it starts generating the metadata.
 			* This issue became more apparent once we started splitting the generators in their respective builder-classes.
+		* TODO Addressed an issue where canonical URLs accidentally bypassed some caches. This should vastly improve canonical URL and Structured Data generation.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**

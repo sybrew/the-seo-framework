@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\PostSettings,
 	The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Form;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'inpost', $instance );
@@ -510,10 +510,13 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="3" cols="4" autocomplete=off><?php
+				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="3" cols="4" autocomplete=off><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
+
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
 					echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) );
-					?></textarea>
+
+				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
+				?></textarea>
 			</div>
 		</div>
 		<?php

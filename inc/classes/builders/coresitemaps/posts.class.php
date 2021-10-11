@@ -95,7 +95,7 @@ class Posts extends \WP_Sitemaps_Posts {
 		/**
 		 * @augmented This differs from the inherented.
 		 */
-		$tsf              = \the_seo_framework();
+		$tsf              = \tsf();
 		$main             = Main::get_instance();
 		$show_modified    = (bool) $tsf->get_option( 'sitemaps_modified' );
 		$timestamp_format = $tsf->get_timestamp_format();

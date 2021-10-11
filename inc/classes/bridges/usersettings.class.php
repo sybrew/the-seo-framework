@@ -62,7 +62,7 @@ final class UserSettings {
 		 * @since 4.1.4
 		 */
 		\do_action( 'the_seo_framework_before_author_fields' );
-		\the_seo_framework()->get_view( 'profile/author', get_defined_vars() );
+		\tsf()->get_view( 'profile/author', get_defined_vars() );
 		/**
 		 * @since 4.1.4
 		 */

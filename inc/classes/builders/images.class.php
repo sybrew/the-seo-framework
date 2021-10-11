@@ -62,7 +62,7 @@ final class Images {
 	 */
 	public static function get_attachment_image_details( $args = null, $size = 'full' ) {
 
-		$id = $args['id'] ?? \the_seo_framework()->get_the_real_ID();
+		$id = $args['id'] ?? \tsf()->get_the_real_ID();
 
 		if ( $id ) {
 			yield [
@@ -93,7 +93,7 @@ final class Images {
 	 */
 	public static function get_featured_image_details( $args = null, $size = 'full' ) {
 
-		$post_id = $args['id'] ?? \the_seo_framework()->get_the_real_ID();
+		$post_id = $args['id'] ?? \tsf()->get_the_real_ID();
 		$id      = \get_post_thumbnail_id( $post_id );
 
 		if ( $id ) {
@@ -129,7 +129,7 @@ final class Images {
 	 */
 	public static function get_content_image_details( $args = null, $size = 'full' ) {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		if ( null === $args ) {
 			if ( $tsf->is_singular() ) {
@@ -205,7 +205,7 @@ final class Images {
 	 */
 	public static function get_fallback_image_details( $args = null, $size = 'full' ) {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		yield [
 			'url' => $tsf->get_option( 'social_image_fb_url' ) ?: '',

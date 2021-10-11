@@ -9,7 +9,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 // Adds site icon tags to the sitemap stylesheet.
 \add_action( 'the_seo_framework_xsl_head', 'wp_site_icon', 99 );
@@ -22,7 +22,7 @@ namespace The_SEO_Framework;
  * @since 4.2.0 $tableMinWidth no longer adds 'px'.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
+ * @param \The_SEO_Framework\Load $tsf tsf() object.
  */
 function _print_xsl_global_variables( $tsf ) {
 
@@ -81,7 +81,7 @@ function _print_xsl_global_variables( $tsf ) {
  * @since 4.0.0 Now uses a consistent titling scheme.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
+ * @param \The_SEO_Framework\Load $tsf tsf() object.
  */
 function _print_xsl_title( $tsf ) {
 
@@ -103,7 +103,7 @@ function _print_xsl_title( $tsf ) {
  * @since 4.2.0 Centered sitemap.
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
+ * @param \The_SEO_Framework\Load $tsf tsf() object.
  */
 function _print_xsl_styles( $tsf ) {
 
@@ -211,7 +211,7 @@ STYLES;
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
+ * @param \The_SEO_Framework\Load $tsf tsf() object.
  */
 function _print_xsl_description( $tsf ) {
 
@@ -311,7 +311,7 @@ function _print_xsl_description( $tsf ) {
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
+ * @param \The_SEO_Framework\Load $tsf tsf() object.
  */
 function _print_xsl_content( $tsf ) {
 
@@ -381,7 +381,7 @@ CONTENT;
  * @since 3.1.0
  * @access private
  * @TODO move this to a dedicated sitemap "module" (a system that loads everything sitemap related).
- * @param \The_SEO_Framework\Load $tsf the_seo_framework() object.
+ * @param \The_SEO_Framework\Load $tsf tsf() object.
  */
 function _print_xsl_footer( $tsf ) {
 
@@ -468,7 +468,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 				<?php
 				/**
 				 * @since 3.1.0
-				 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+				 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 				 */
 				\do_action( 'the_seo_framework_xsl_head', $this );
 				?>
@@ -479,7 +479,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 						<?php
 						/**
 						 * @since 3.1.0
-						 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+						 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 						 */
 						\do_action( 'the_seo_framework_xsl_description', $this );
 						?>
@@ -490,7 +490,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 						<?php
 						/**
 						 * @since 3.1.0
-						 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+						 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 						 */
 						\do_action( 'the_seo_framework_xsl_content', $this );
 						?>
@@ -501,7 +501,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 						<?php
 						/**
 						 * @since 3.1.0
-						 * @param \The_SEO_Framework\Load $this Alias of `the_seo_framework()`
+						 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 						 */
 						\do_action( 'the_seo_framework_xsl_footer', $this );
 						?>

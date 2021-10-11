@@ -9,7 +9,7 @@
 
 use The_SEO_Framework\Interpreters\HTML;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 if ( ! $message ) return;
 

@@ -248,7 +248,7 @@ final class Debug {
 				/* translators: 1: Method or Property name, 2: The SEO Framework class. 3: Message */
 				\esc_html__( '%1$s is not accessible in %2$s. %3$s', 'autodescription' ),
 				'<code>' . \esc_html( $p_or_m ) . '</code>',
-				'<code>the_seo_framework()</code>',
+				'<code>tsf()</code>',
 				\esc_html( $message )
 			);
 
@@ -372,7 +372,7 @@ final class Debug {
 	 * @access private
 	 */
 	public function _debug_output() {
-		\the_seo_framework()->get_view( 'debug/output' );
+		\tsf()->get_view( 'debug/output' );
 	}
 
 	/**
@@ -452,7 +452,7 @@ final class Debug {
 	 */
 	protected function get_debug_header_output() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		if ( \is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) )
 			return;
@@ -543,7 +543,7 @@ final class Debug {
 		// Start timer.
 		$this->timer( true );
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.

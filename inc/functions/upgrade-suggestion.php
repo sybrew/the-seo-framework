@@ -126,7 +126,7 @@ function _prepare( $previous_version, $current_version ) {
  */
 function _suggest_extension_manager( $previous_version, $current_version ) {
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	$suggest_key        = 'suggest-extension-manager';
 	$suggest_args       = [
@@ -180,7 +180,7 @@ function _suggest_extension_manager( $previous_version, $current_version ) {
  */
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	$suggest_key        = 'suggest-sale';
 	$suggest_args       = [

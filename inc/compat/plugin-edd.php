@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 \add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_edd_is_product', 10, 2 );
 /**
@@ -24,7 +24,7 @@ function _set_edd_is_product( $is_product, $post ) {
 	if ( ! $is_product ) {
 		if ( \function_exists( 'edd_get_download' ) ) {
 			$download = \edd_get_download(
-				$post ? \get_post( $post ) : \the_seo_framework()->get_the_real_ID()
+				$post ? \get_post( $post ) : \tsf()->get_the_real_ID()
 			);
 
 			$is_product = ! empty( $download->ID );
@@ -48,7 +48,7 @@ function _set_edd_is_product( $is_product, $post ) {
 function _set_edd_is_product_admin( $is_product_admin ) {
 
 	if ( ! $is_product_admin ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
 		$is_product_admin = $tsf->is_singular_admin() && 'download' === $tsf->get_admin_post_type();
 	}

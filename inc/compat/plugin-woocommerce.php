@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 /**
@@ -34,7 +34,7 @@ function _init_wc_compat() {
 		}
 	);
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	// Adjust the product link acknowledging the primary category.
 	\add_filter( 'wc_product_post_type_link_product_cat', [ $tsf, '_adjust_post_link_category' ], 10, 3 );
@@ -63,7 +63,7 @@ function _init_wc_compat() {
  */
 function _set_real_id_wc_shop( $id ) {
 
-	if ( \the_seo_framework()->is_wc_shop() )
+	if ( \tsf()->is_wc_shop() )
 		$id = (int) \get_option( 'woocommerce_shop_page_id' );
 
 	return $id;
@@ -81,7 +81,7 @@ function _set_real_id_wc_shop( $id ) {
  * @return bool
  */
 function _set_shop_singular_archive( $is_singular_archive, $id ) {
-	return $is_singular_archive || \the_seo_framework()->is_wc_shop( $id );
+	return $is_singular_archive || \tsf()->is_wc_shop( $id );
 }
 
 \add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
@@ -153,7 +153,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
 
 	if ( $is_product_admin ) return $is_product_admin;
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 }
@@ -188,7 +188,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// Nothing to do here...
 	if ( 'noindex' === $meta['noindex'] ) return $meta;
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	if ( null === $args ) {
 		if ( \is_singular() )
@@ -249,7 +249,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 
 	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status']               =
-		0 !== \the_seo_framework()->s_qubit(
+		0 !== \tsf()->s_qubit(
 			\The_SEO_Framework\Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
 		)
 			? $interpreter::STATE_OKAY
@@ -280,7 +280,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 	$is_product_category = false;
 
 	if ( null === $args ) {
-		$is_product          = \the_seo_framework()->is_wc_product();
+		$is_product          = \tsf()->is_wc_product();
 		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
 	} else {
 		if ( $args['taxonomy'] ) {
@@ -289,7 +289,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 				$is_product_category = $term && \is_product_category( $term );
 			}
 		} else {
-			$is_product = \the_seo_framework()->is_wc_product( $args['id'] );
+			$is_product = \tsf()->is_wc_product( $args['id'] );
 		}
 	}
 
@@ -321,7 +321,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  */
 function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 
-	$post_id        = $args['id'] ?? \the_seo_framework()->get_the_real_ID();
+	$post_id        = $args['id'] ?? \tsf()->get_the_real_ID();
 	$attachment_ids = [];
 
 	if ( $post_id && \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
@@ -362,7 +362,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  */
 function _get_product_category_thumbnail_image_details( $args = null, $size = 'full' ) {
 
-	$term_id      = $args['id'] ?? \the_seo_framework()->get_the_real_ID();
+	$term_id      = $args['id'] ?? \tsf()->get_the_real_ID();
 	$thumbnail_id = \get_term_meta( $term_id, 'thumbnail_id', true ) ?: 0;
 
 	if ( $thumbnail_id ) {

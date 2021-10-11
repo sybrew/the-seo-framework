@@ -96,7 +96,7 @@ final class Scripts {
 	 */
 	public static function _init() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$_scripts = [
 			static::get_tsf_scripts(),
@@ -215,7 +215,7 @@ final class Scripts {
 	 */
 	public static function prepare_media_scripts() {
 
-		$tsf  = \the_seo_framework();
+		$tsf  = \tsf();
 		$args = [];
 
 		if ( $tsf->is_post_edit() ) {
@@ -278,7 +278,7 @@ final class Scripts {
 						],
 						'states' => [
 							'isRTL' => (bool) \is_rtl(),
-							'debug' => \the_seo_framework()->script_debug,
+							'debug' => \tsf()->script_debug,
 						],
 					],
 				],
@@ -407,7 +407,7 @@ final class Scripts {
 	 */
 	public static function get_seo_settings_scripts() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$front_id = $tsf->get_the_front_page_ID();
 
@@ -456,7 +456,7 @@ final class Scripts {
 	 */
 	public static function get_post_edit_scripts() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 		$id  = $tsf->get_the_real_ID();
 
 		$is_static_frontpage = $tsf->is_static_frontpage( $id );
@@ -526,7 +526,7 @@ final class Scripts {
 	 */
 	public static function get_term_edit_scripts() {
 
-		$tsf      = \the_seo_framework();
+		$tsf      = \tsf();
 		$taxonomy = $tsf->get_current_taxonomy();
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
@@ -671,7 +671,7 @@ final class Scripts {
 	 */
 	public static function get_title_scripts() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		return [
 			'id'       => 'tsf-title',
@@ -732,7 +732,7 @@ final class Scripts {
 	 */
 	public static function get_social_scripts() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$_query = [
 			'id'       => $tsf->is_seo_settings_page() ? $tsf->get_the_front_page_ID() : $tsf->get_the_real_ID(),
@@ -835,7 +835,7 @@ final class Scripts {
 	 */
 	public static function get_primaryterm_scripts() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$id = $tsf->get_the_real_admin_ID();
 
@@ -955,7 +955,7 @@ final class Scripts {
 	 */
 	public static function get_counter_scripts() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		return [
 			[

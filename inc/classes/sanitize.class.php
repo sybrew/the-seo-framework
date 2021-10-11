@@ -1837,7 +1837,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Strips all URLs that are placed on new lines. These are prone to be embeds.
 	 *
-	 * This might leave stray line feeds. Use `the_seo_framework()->s_singleline()` to fix that.
+	 * This might leave stray line feeds. Use `tsf()->s_singleline()` to fix that.
 	 *
 	 * @since 3.1.0
 	 * @see \WP_Embed::autoembed()
@@ -1852,7 +1852,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Strips all URLs that are placed in paragraphs on their own. These are prone to be embeds.
 	 *
-	 * This might leave stray line feeds. Use `the_seo_framework()->s_singleline()` to fix that.
+	 * This might leave stray line feeds. Use `tsf()->s_singleline()` to fix that.
 	 *
 	 * @since 3.1.0
 	 * @see \WP_Embed::autoembed()

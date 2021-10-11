@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 /**
  * Removes extraneous (therefore erroneous) Open Graph and meta functionality of Ultimate Member.
@@ -29,7 +29,7 @@ namespace The_SEO_Framework;
  */
 function _um_filter_generated_title( $title = '', $args = null ) {
 
-	if ( null === $args && \the_seo_framework()->can_i_use( [
+	if ( null === $args && \tsf()->can_i_use( [
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',
@@ -64,7 +64,7 @@ function _um_filter_generated_title( $title = '', $args = null ) {
  */
 function _um_filter_generated_url( $url = '' ) {
 
-	if ( \the_seo_framework()->can_i_use( [
+	if ( \tsf()->can_i_use( [
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',
@@ -98,7 +98,7 @@ function _um_filter_generated_url( $url = '' ) {
  */
 function _um_filter_generated_description( $desc = '', $args = null ) {
 
-	if ( null === $args && \the_seo_framework()->can_i_use( [
+	if ( null === $args && \tsf()->can_i_use( [
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',

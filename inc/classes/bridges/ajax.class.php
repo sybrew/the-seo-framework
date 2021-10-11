@@ -53,7 +53,7 @@ final class AJAX {
 		if ( ! $key )
 			\wp_send_json_error( null, 400 );
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$notices = $tsf->get_static_cache( 'persistent_notices', [] );
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) {
@@ -79,7 +79,7 @@ final class AJAX {
 	 */
 	public static function _wp_ajax_update_counter_type() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$tsf->_check_tsf_ajax_referer( 'edit_posts' );
@@ -148,7 +148,7 @@ final class AJAX {
 	public static function _wp_ajax_crop_image() {
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
-		\the_seo_framework()->_check_tsf_ajax_referer( 'upload_files' );
+		\tsf()->_check_tsf_ajax_referer( 'upload_files' );
 
 		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
@@ -239,7 +239,7 @@ final class AJAX {
 	 */
 	public static function _wp_ajax_get_post_data() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$tsf->_check_tsf_ajax_referer( 'edit_posts' );

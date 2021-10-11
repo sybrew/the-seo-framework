@@ -94,7 +94,7 @@ abstract class Main {
 	 */
 	final protected function __construct() {
 		static::$instance = &$this;
-		self::$tsf        = self::$tsf ?: \the_seo_framework();
+		self::$tsf        = self::$tsf ?: \tsf();
 		$this->prime_cache();
 	}
 

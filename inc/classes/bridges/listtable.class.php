@@ -157,7 +157,7 @@ abstract class ListTable {
 	 */
 	private function init_columns( $screen ) {
 
-		if ( ! \the_seo_framework()->is_wp_lists_edit()
+		if ( ! \tsf()->is_wp_lists_edit()
 		|| empty( $screen->id ) )
 			return;
 
@@ -165,10 +165,10 @@ abstract class ListTable {
 		$taxonomy  = $screen->taxonomy ?? '';
 
 		if ( $taxonomy ) {
-			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )
+			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! \the_seo_framework()->is_post_type_supported( $post_type ) )
+			if ( ! \tsf()->is_post_type_supported( $post_type ) )
 				return;
 		}
 
@@ -207,10 +207,10 @@ abstract class ListTable {
 				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 
 		if ( $taxonomy ) {
-			if ( ! \the_seo_framework()->is_taxonomy_supported( $taxonomy ) )
+			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! \the_seo_framework()->is_post_type_supported( $post_type ) )
+			if ( ! \tsf()->is_post_type_supported( $post_type ) )
 				return;
 		}
 

@@ -47,7 +47,7 @@ abstract class Main {
 	 * @since 4.0.0
 	 */
 	final public function __construct() {
-		static::$tsf = \the_seo_framework();
+		static::$tsf = \tsf();
 	}
 
 	/**

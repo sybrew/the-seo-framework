@@ -123,7 +123,7 @@ final class ListEdit extends ListTable {
 		if ( $taxonomy ) {
 			// Not yet.
 		} else {
-			\the_seo_framework()->get_view( 'list/bulk-post', get_defined_vars() );
+			\tsf()->get_view( 'list/bulk-post', get_defined_vars() );
 		}
 	}
 
@@ -142,9 +142,9 @@ final class ListEdit extends ListTable {
 		if ( $this->column_name !== $column_name ) return;
 
 		if ( $taxonomy ) {
-			\the_seo_framework()->get_view( 'list/quick-term', get_defined_vars() );
+			\tsf()->get_view( 'list/quick-term', get_defined_vars() );
 		} else {
-			\the_seo_framework()->get_view( 'list/quick-post', get_defined_vars() );
+			\tsf()->get_view( 'list/quick-post', get_defined_vars() );
 		}
 	}
 
@@ -163,7 +163,7 @@ final class ListEdit extends ListTable {
 		if ( $this->column_name !== $column_name )          return;
 		if ( ! \current_user_can( 'edit_post', $post_id ) ) return;
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$query = [
 			'id'       => $post_id,
@@ -323,7 +323,7 @@ final class ListEdit extends ListTable {
 		if ( $this->column_name !== $column_name )          return $string;
 		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$query = [
 			'id'       => $term_id,

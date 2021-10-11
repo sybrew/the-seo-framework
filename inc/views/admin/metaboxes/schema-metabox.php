@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Form;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_schema_metabox', $instance );
@@ -57,7 +57,8 @@ switch ( $instance ) :
 		HTML::description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
 		HTML::description( __( "For example, search engines display your pages' URLs when listed in the search results. These options allow you to enhance those URLs output.", 'autodescription' ) );
 		?>
-		<hr>		<?php
+		<hr>
+		<?php
 		Form::header_title( __( 'Breadcrumbs', 'autodescription' ) );
 		HTML::description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the search results when available.", 'autodescription' ) );
 

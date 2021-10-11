@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 /**
  * Warns homepage global title and description about receiving input.
@@ -25,7 +25,7 @@ namespace The_SEO_Framework;
  */
 function _wpml_do_current_screen_action() {
 
-	if ( \the_seo_framework()->is_seo_settings_page() ) {
+	if ( \tsf()->is_seo_settings_page() ) {
 		\add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_remove_all_languages' );
 	}
 }
@@ -58,7 +58,7 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  * @access private
  *
  * @param string $type    The flush type. Comes in handy when you use a catch-all function.
- * @param int    $id      The post, page or TT ID. Defaults to the_seo_framework()->get_the_real_ID().
+ * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_ID().
  * @param array  $args    Additional arguments. They can overwrite $type and $id.
  * @param bool   $success Whether the action cleared.
  */

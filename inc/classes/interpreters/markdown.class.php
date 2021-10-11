@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Interpreters;
  * Interprets anything you send here into Markdown. Or so it should.
  *
  * @since 4.1.4
- * @note Use `the_seo_framework()->convert_markdown() for easy access.
+ * @note Use `tsf()->convert_markdown() for easy access.
  *
  * @access protected
  *         Everything in this class is subject to change or deletion.

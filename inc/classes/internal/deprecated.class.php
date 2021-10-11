@@ -56,8 +56,8 @@ final class Deprecated {
 	 * @return string A fully qualified URL with appended $query.
 	 */
 	public function append_php_query( $url, $query = '' ) {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->append_php_query()', '4.2.0', 'the_seo_framework()->append_url_query()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->append_php_query()', '4.2.0', 'tsf()->append_url_query()' );
 		return $tsf->append_url_query( $url, $query );
 	}
 
@@ -112,8 +112,8 @@ final class Deprecated {
 	 */
 	public function get_html_output() {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_html_output()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_html_output()', '4.2.0' );
 
 		$robots = $tsf->robots();
 
@@ -228,8 +228,8 @@ final class Deprecated {
 	 * @return bool Whether noindex is set or not
 	 */
 	public function is_robots_meta_noindex_set_by_args( $args, $ignore = 0b00 ) {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->is_robots_meta_noindex_set_by_args()', '4.2.0', 'the_seo_framework()->generate_robots_meta()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_robots_meta_noindex_set_by_args()', '4.2.0', 'tsf()->generate_robots_meta()' );
 		$meta = $tsf->generate_robots_meta( $args, null, $ignore );
 		return isset( $meta['noindex'] ) && 'noindex' === $meta['noindex'];
 	}
@@ -270,8 +270,8 @@ final class Deprecated {
 	 * }
 	 */
 	public function robots_meta( $args = null, $ignore = 0b00 ) {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->robots_meta()', '4.2.0', 'the_seo_framework()->generate_robots_meta()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->robots_meta()', '4.2.0', 'tsf()->generate_robots_meta()' );
 		return $tsf->generate_robots_meta( $args, null, $ignore );
 	}
 
@@ -296,8 +296,8 @@ final class Deprecated {
 	 */
 	public function can_do_sitemap_robots( $check_option = true ) {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->can_do_sitemap_robots()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->can_do_sitemap_robots()', '4.2.0' );
 
 		if ( $check_option ) {
 			if ( ! $tsf->get_option( 'sitemaps_output' )
@@ -333,7 +333,7 @@ final class Deprecated {
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function nav_tab_wrapper( $id, $tabs = [], $depr = null, $use_tabs = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper' );
+		\tsf()->_deprecated_function( 'tsf()->nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper' );
 		\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
@@ -360,7 +360,7 @@ final class Deprecated {
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public function inpost_flex_nav_tab_wrapper( $id, $tabs = [], $_depr = null, $use_tabs = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->inpost_flex_nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper' );
+		\tsf()->_deprecated_function( 'tsf()->inpost_flex_nav_tab_wrapper()', '4.2.0', '\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper' );
 		\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper( $id, $tabs, $use_tabs );
 	}
 
@@ -380,7 +380,7 @@ final class Deprecated {
 	 * @return string The image uploader button.
 	 */
 	public function get_social_image_uploader_form( $input_id ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_social_image_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
+		\tsf()->_deprecated_function( 'tsf()->get_social_image_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
 		return \The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [ 'id' => $input_id ] );
 	}
 
@@ -399,7 +399,7 @@ final class Deprecated {
 	 * @return string The image uploader button.
 	 */
 	public function get_logo_uploader_form( $input_id ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_logo_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
+		\tsf()->_deprecated_function( 'tsf()->get_logo_uploader_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::get_image_uploader_form()' );
 		return \The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [
 			'id'   => $input_id,
 			'data' => [
@@ -447,8 +447,8 @@ final class Deprecated {
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function seo_settings_page_url() {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->seo_settings_page_url()', '4.2.0', 'the_seo_framework()->get_seo_settings_page_url()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->seo_settings_page_url()', '4.2.0', 'tsf()->get_seo_settings_page_url()' );
 		return $tsf->get_seo_settings_page_url();
 	}
 
@@ -462,8 +462,8 @@ final class Deprecated {
 	 * @return array The default user meta index and values.
 	 */
 	public function get_default_user_data() {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_default_user_data()', '4.2.0', 'the_seo_framework()->get_user_meta_defaults()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_default_user_data()', '4.2.0', 'tsf()->get_user_meta_defaults()' );
 		return $tsf->get_user_meta_defaults();
 	}
 
@@ -487,8 +487,8 @@ final class Deprecated {
 	 * @return mixed The metadata value.
 	 */
 	public function get_user_option( $user_id = 0, $option = '', $default = null ) {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_user_option()', '4.2.0', 'the_seo_framework()->get_user_meta_item()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_user_option()', '4.2.0', 'tsf()->get_user_meta_item()' );
 		return $tsf->get_user_meta_item( $user_id ?: $tsf->get_user_id(), $option ) ?: $default;
 	}
 
@@ -505,8 +505,8 @@ final class Deprecated {
 	 * @return mixed The metadata value
 	 */
 	public function get_author_option( $author_id, $option, $default = null ) {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_id()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_author_option()', '4.2.0', 'tsf()->get_current_post_author_id()' );
 		return $tsf->get_user_meta_item( $option, $author_id ?: $tsf->get_current_post_author_id() ) ?: $default;
 	}
 
@@ -522,8 +522,8 @@ final class Deprecated {
 	 * @return mixed The metadata value
 	 */
 	public function get_current_author_option( $option, $default = null ) {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_current_author_option()', '4.2.0', 'the_seo_framework()->get_current_post_author_meta_item()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_author_option()', '4.2.0', 'tsf()->get_current_post_author_meta_item()' );
 		return $tsf->get_current_post_author_meta_item( $option ) ?: $default;
 	}
 
@@ -544,7 +544,7 @@ final class Deprecated {
 	 */
 	public function is_wc_shop( $post = null ) {
 
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_wc_shop()', '4.2.0', 'the_seo_framework()->is_shop()' );
+		\tsf()->_deprecated_function( 'tsf()->is_wc_shop()', '4.2.0', 'tsf()->is_shop()' );
 
 		if ( isset( $post ) ) {
 			$post = \get_post( $post );
@@ -580,8 +580,8 @@ final class Deprecated {
 	 */
 	public function is_wc_product( $post = 0 ) {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->is_wc_product()', '4.2.0', 'the_seo_framework()->is_product()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_wc_product()', '4.2.0', 'tsf()->is_product()' );
 
 		if ( \is_admin() )
 			return $tsf->is_wc_product_admin();
@@ -610,8 +610,8 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_wc_product_admin() {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->is_wc_product_admin()', '4.2.0', 'the_seo_framework()->is_product_admin()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_wc_product_admin()', '4.2.0', 'tsf()->is_product_admin()' );
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
 		return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 	}
@@ -631,8 +631,8 @@ final class Deprecated {
 	 */
 	public function update_user_option( $user_id = 0, $option = '', $value = '' ) {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->update_user_option()', '4.2.0', 'the_seo_framework()->update_single_user_meta_item()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_user_option()', '4.2.0', 'tsf()->update_single_user_meta_item()' );
 
 		if ( ! $option )
 			return false;
@@ -670,7 +670,7 @@ final class Deprecated {
 	 * @return string Full field name
 	 */
 	public function get_field_name( $name ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_field_name()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_field_name()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::get_field_name( $name );
 	}
 
@@ -685,7 +685,7 @@ final class Deprecated {
 	 * @param string $name Field name base
 	 */
 	public function field_name( $name ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->field_name()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->field_name()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::field_name( $name );
 	}
 
@@ -700,7 +700,7 @@ final class Deprecated {
 	 * @return string Full field id
 	 */
 	public function get_field_id( $id ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_field_id()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_field_id()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::get_field_id( $id );
 	}
 
@@ -717,7 +717,7 @@ final class Deprecated {
 	 * @return string Full field id
 	 */
 	public function field_id( $id, $echo = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->field_id()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->field_id()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::field_id( $id, $echo );
 	}
 
@@ -733,7 +733,7 @@ final class Deprecated {
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap( $content ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->code_wrap()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->code_wrap()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::code_wrap( $content );
 	}
 
@@ -749,7 +749,7 @@ final class Deprecated {
 	 * @return string Content wrapped in code tags.
 	 */
 	public function code_wrap_noesc( $content ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->code_wrap_noesc()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->code_wrap_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::code_wrap_noesc( $content );
 	}
 
@@ -765,7 +765,7 @@ final class Deprecated {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function description( $content, $block = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->description()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->description()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::description( $content, $block );
 	}
 
@@ -780,7 +780,7 @@ final class Deprecated {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function description_noesc( $content, $block = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->description_noesc()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->description_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::description_noesc( $content, $block );
 	}
 
@@ -796,7 +796,7 @@ final class Deprecated {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention( $content, $block = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->attention()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention( $content, $block );
 	}
 
@@ -811,7 +811,7 @@ final class Deprecated {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention_noesc( $content, $block = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_noesc()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->attention_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention_noesc( $content, $block );
 	}
 
@@ -827,7 +827,7 @@ final class Deprecated {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention_description( $content, $block = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_description()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->attention_description()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention_description( $content, $block );
 	}
 
@@ -842,7 +842,7 @@ final class Deprecated {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public function attention_description_noesc( $content, $block = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->attention_description_noesc()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->attention_description_noesc()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::attention_description_noesc( $content, $block );
 	}
 
@@ -860,7 +860,7 @@ final class Deprecated {
 	 * @return string|void Wrapped $input.
 	 */
 	public function wrap_fields( $input = '', $echo = false ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->wrap_fields()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->wrap_fields()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::wrap_fields( $input, $echo );
 	}
 
@@ -879,7 +879,7 @@ final class Deprecated {
 	 * @return string HTML checkbox output if $echo is false.
 	 */
 	public function make_info( $description = '', $link = '', $echo = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_info()', '4.2.0', '\The_SEO_Framework\Interpreters\HTML::make_info()' );
+		\tsf()->_deprecated_function( 'tsf()->make_info()', '4.2.0', '\The_SEO_Framework\Interpreters\HTML::make_info()' );
 		return \The_SEO_Framework\Interpreters\HTML::make_info( $description, $link, $echo );
 	}
 
@@ -898,7 +898,7 @@ final class Deprecated {
 	 * @return string The HTML data attributes, with added space to the start.
 	 */
 	public function make_data_attributes( array $data ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_data_attributes()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->make_data_attributes()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::make_data_attributes( $data );
 	}
 
@@ -919,7 +919,7 @@ final class Deprecated {
 	 * @return string HTML checkbox output.
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_checkbox()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->make_checkbox()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::make_checkbox( [
 			'id'          => $field_id,
 			'index'       => '',
@@ -952,7 +952,7 @@ final class Deprecated {
 	 * @return string The option field.
 	 */
 	public function make_single_select_form( array $args ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->make_single_select_form()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->make_single_select_form()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::make_single_select_form( $args );
 	}
 
@@ -974,7 +974,7 @@ final class Deprecated {
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_default_checked()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->is_default_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::is_default_checked( $key, $wrap, $echo );
 	}
 	/**
@@ -992,7 +992,7 @@ final class Deprecated {
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_warning_checked()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->is_warning_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::is_warning_checked( $key, $wrap, $echo );
 	}
 	/**
@@ -1007,7 +1007,7 @@ final class Deprecated {
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
 	public function get_is_conditional_checked( $key, $wrap = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->get_is_conditional_checked()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_is_conditional_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::get_is_conditional_checked( $key, $wrap );
 	}
 
@@ -1026,7 +1026,7 @@ final class Deprecated {
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
 	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->is_conditional_checked()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->is_conditional_checked()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::is_conditional_checked( $key, $wrap, $echo );
 	}
 
@@ -1046,7 +1046,7 @@ final class Deprecated {
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_character_counter_wrap( $for, $depr = '', $display = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_character_counter_wrap()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->output_character_counter_wrap()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::output_character_counter_wrap( $for, $display );
 	}
 
@@ -1062,7 +1062,7 @@ final class Deprecated {
 	 * @param bool   $display Whether to display the counter. (options page gimmick)
 	 */
 	public function output_pixel_counter_wrap( $for, $type, $display = true ) {
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->output_pixel_counter_wrap()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->output_pixel_counter_wrap()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::output_pixel_counter_wrap( $for, $type, $display );
 	}
 
@@ -1083,7 +1083,7 @@ final class Deprecated {
 	 */
 	public function wp_version( $version = '4.3.0', $compare = '>=' ) {
 
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->wp_version()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->wp_version()', '4.2.0' );
 
 		$wp_version = $GLOBALS['wp_version'];
 
@@ -1112,7 +1112,7 @@ final class Deprecated {
 	 */
 	public function detect_theme_support( $features ) {
 
-		\the_seo_framework()->_deprecated_function( 'the_seo_framework()->detect_theme_support()', '4.2.0', 'current_theme_supports' );
+		\tsf()->_deprecated_function( 'tsf()->detect_theme_support()', '4.2.0', 'current_theme_supports' );
 
 		foreach ( (array) $features as $feature ) {
 			if ( \current_theme_supports( $feature ) ) {
@@ -1145,8 +1145,8 @@ final class Deprecated {
 	 */
 	public function detect_page_builder() {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->detect_page_builder()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->detect_page_builder()', '4.2.0' );
 
 		static $detected = null;
 
@@ -1197,8 +1197,8 @@ final class Deprecated {
 	 */
 	public function uses_page_builder( $post_id ) {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->uses_page_builder()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->uses_page_builder()', '4.2.0' );
 
 		$meta = \get_post_meta( $post_id );
 
@@ -1255,8 +1255,8 @@ final class Deprecated {
 	 * @return array Valid Facebook locales
 	 */
 	public function fb_locales() {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->fb_locales()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->fb_locales()', '4.2.0', 'tsf()->supported_social_locales()' );
 		return \array_keys( $tsf->supported_social_locales() );
 	}
 
@@ -1275,8 +1275,8 @@ final class Deprecated {
 	 * @return array Valid Facebook locale keys
 	 */
 	public function language_keys() {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->language_keys()', '4.2.0', 'the_seo_framework()->supported_social_locales()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->language_keys()', '4.2.0', 'tsf()->supported_social_locales()' );
 		return \array_values( $tsf->supported_social_locales() );
 	}
 
@@ -1294,8 +1294,8 @@ final class Deprecated {
 	 */
 	public function get_timezone_string( $guess = false ) {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_timezone_string()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_timezone_string()', '4.2.0' );
 
 		$tzstring = \get_option( 'timezone_string' );
 
@@ -1333,8 +1333,8 @@ final class Deprecated {
 	 */
 	public function set_timezone( $tzstring = '', $reset = false ) {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->set_timezone()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->set_timezone()', '4.2.0' );
 
 		static $old_tz = null;
 
@@ -1364,8 +1364,8 @@ final class Deprecated {
 	 * @return bool True on success. False on failure.
 	 */
 	public function reset_timezone() {
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->reset_timezone()', '4.2.0' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->reset_timezone()', '4.2.0' );
 		return $tsf->set_timezone( '', true );
 	}
 
@@ -1382,8 +1382,8 @@ final class Deprecated {
 	 */
 	public function get_current_term_meta() {
 
-		$tsf = \the_seo_framework();
-		$tsf->_deprecated_function( 'the_seo_framework()->get_current_term_meta()', '4.2.0', 'the_seo_framework()->get_term_meta()' );
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_term_meta()', '4.2.0', 'tsf()->get_term_meta()' );
 
 		static $cache;
 

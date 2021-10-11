@@ -44,7 +44,7 @@ _activation_set_plugin_check_caches();
  */
 function _activation_set_plugin_check_caches() {
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	if ( $tsf->loaded ) {
 		$tsf->set_plugin_check_caches();
@@ -60,7 +60,7 @@ function _activation_set_plugin_check_caches() {
  */
 function _activation_set_options_autoload() {
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	if ( $tsf->loaded ) {
 		$options = $tsf->get_all_options();

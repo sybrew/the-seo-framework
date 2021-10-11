@@ -53,7 +53,7 @@ function _init_locale() {
  * @since 3.1.0
  * @access private
  * @see function tsf().
- * @see function the_seo_framework().
+ * @see function tsf().
  * @factory
  *
  * @return object|null The SEO Framework Facade class object. Null on failure.
@@ -101,7 +101,7 @@ function _init_tsf() {
 
 	// did_action() checks for current action too.
 	if ( ! \did_action( 'plugins_loaded' ) )
-		$tsf->_doing_it_wrong( 'the_seo_framework() or ' . __FUNCTION__, 'Use <code>the_seo_framework()</code> after action <code>plugins_loaded</code> priority 5.', '3.1' );
+		$tsf->_doing_it_wrong( 'tsf(), the_seo_framework(), or ' . __FUNCTION__, 'Use <code>tsf()</code> after action <code>plugins_loaded</code> priority 5.', '3.1' );
 
 	return $tsf;
 }

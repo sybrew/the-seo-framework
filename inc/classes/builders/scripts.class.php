@@ -428,7 +428,7 @@ final class Scripts {
 		static $min, $rtl;
 
 		if ( ! isset( $min, $rtl ) ) {
-			$min = \the_seo_framework()->script_debug ? '' : '.min';
+			$min = \tsf()->script_debug ? '' : '.min';
 			$rtl = \is_rtl() ? '.rtl' : '';
 		}
 
@@ -496,7 +496,7 @@ final class Scripts {
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
-			$tsf = \the_seo_framework();
+			$tsf = \tsf();
 
 			if (
 			   ! isset( $_colors[ $_scheme ]->colors ) // phpcs:ignore, WordPress.WhiteSpace

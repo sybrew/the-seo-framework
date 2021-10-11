@@ -147,7 +147,7 @@ final class Form {
 			$args['label']       = \esc_html( $args['label'] );
 		}
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$index = $args['index'] ? $tsf->s_field_id( $args['index'] ?: '' ) : '';
 
@@ -264,7 +264,7 @@ final class Form {
 		};
 		array_walk( $html_options, $create_option, $args['default'] );
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		return vsprintf(
 			sprintf( '<div class="%s">%s</div>',
@@ -313,7 +313,7 @@ final class Form {
 
 		$class = '';
 
-		$default = \the_seo_framework()->get_default_settings( $key );
+		$default = \tsf()->get_default_settings( $key );
 
 		if ( 1 === $default )
 			$class = 'tsf-default-selected';
@@ -346,7 +346,7 @@ final class Form {
 
 		$class = '';
 
-		$warned = \the_seo_framework()->get_warned_settings( $key );
+		$warned = \tsf()->get_warned_settings( $key );
 
 		if ( 1 === $warned )
 			$class = 'tsf-warning-selected';
@@ -505,7 +505,7 @@ final class Form {
 		static $image_input_id = 0;
 		$image_input_id++;
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$args = $tsf->array_merge_recursive_distinct(
 			[

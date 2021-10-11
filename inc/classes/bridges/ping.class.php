@@ -112,7 +112,7 @@ final class Ping {
 	 */
 	public static function ping_search_engines() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
 
@@ -209,7 +209,7 @@ final class Ping {
 	public static function get_ping_url() {
 		return memo() ?? memo(
 			(
-				\the_seo_framework()->use_core_sitemaps()
+				\tsf()->use_core_sitemaps()
 					? \get_sitemap_url( 'index' )
 					: \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
 			)

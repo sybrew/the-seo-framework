@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Interpreters;
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * @see \the_seo_framework()->get_generated_seo_bar( $args ) for easy access.
+ * @see \tsf()->get_generated_seo_bar( $args ) for easy access.
  *
  * @access public
  *         Note that you can't instance this class. Only static methods and properties are accessible.
@@ -429,7 +429,7 @@ final class SEOBar {
 
 		static $use_symbols = null;
 		if ( null === $use_symbols ) {
-			$use_symbols = (bool) \the_seo_framework()->get_option( 'seo_bar_symbols' );
+			$use_symbols = (bool) \tsf()->get_option( 'seo_bar_symbols' );
 		}
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {

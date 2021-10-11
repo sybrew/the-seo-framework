@@ -38,7 +38,7 @@ class Render extends Admin_Init {
 	 * Returns the document title.
 	 *
 	 * This method serves as a callback for filter `pre_get_document_title`.
-	 * Use the_seo_framework()->get_title() instead.
+	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
 	 * @see $this->get_title()
@@ -69,7 +69,7 @@ class Render extends Admin_Init {
 	 * Returns the document title.
 	 *
 	 * This method serves as a callback for filter `wp_title`.
-	 * Use the_seo_framework()->get_title() instead.
+	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Removed extraneous, unused parameters.
@@ -1291,7 +1291,6 @@ class Render extends Admin_Init {
 
 		switch ( $where ) :
 			case 'before':
-
 				return sprintf(
 					'<!-- %s -->',
 					/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */

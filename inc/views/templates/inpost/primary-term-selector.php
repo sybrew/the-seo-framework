@@ -9,7 +9,7 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
 
-$tsf = the_seo_framework();
+$tsf = tsf();
 
 ?>
 <script type="text/html" id="tmpl-tsf-primary-term-selector">

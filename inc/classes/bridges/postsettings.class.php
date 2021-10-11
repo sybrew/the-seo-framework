@@ -48,7 +48,7 @@ final class PostSettings {
 	 */
 	public static function _prepare_meta_box( $post_type ) {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$label = $tsf->get_post_type_label( $post_type );
 
@@ -112,8 +112,8 @@ final class PostSettings {
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) { // phpcs:ignore,VariableAnalysis
-		\the_seo_framework()->get_view( 'edit/wrap-nav', get_defined_vars() );
-		\the_seo_framework()->get_view( 'edit/wrap-content', get_defined_vars() );
+		\tsf()->get_view( 'edit/wrap-nav', get_defined_vars() );
+		\tsf()->get_view( 'edit/wrap-content', get_defined_vars() );
 	}
 
 	/**
@@ -125,7 +125,7 @@ final class PostSettings {
 
 		static::output_nonce_field();
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		/**
 		 * @since 2.9.0
@@ -153,7 +153,7 @@ final class PostSettings {
 	 */
 	public static function _add_postbox_class( $classes = [] ) {
 
-		if ( \the_seo_framework()->is_gutenberg_page() )
+		if ( \tsf()->is_gutenberg_page() )
 			$classes[] = 'tsf-is-block-editor';
 
 		return $classes;
@@ -166,7 +166,7 @@ final class PostSettings {
 	 * @since 4.0.0
 	 */
 	private static function output_nonce_field() {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 		\wp_nonce_field( $tsf->inpost_nonce_field, $tsf->inpost_nonce_name );
 	}
 
@@ -180,7 +180,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
-		\the_seo_framework()->get_view( 'edit/seo-settings-singular', [], 'general' );
+		\tsf()->get_view( 'edit/seo-settings-singular', [], 'general' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -197,7 +197,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
-		\the_seo_framework()->get_view( 'edit/seo-settings-singular', [], 'visibility' );
+		\tsf()->get_view( 'edit/seo-settings-singular', [], 'visibility' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -214,7 +214,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
-		\the_seo_framework()->get_view( 'edit/seo-settings-singular', [], 'social' );
+		\tsf()->get_view( 'edit/seo-settings-singular', [], 'social' );
 		/**
 		 * @since 2.9.0
 		 */

@@ -653,7 +653,7 @@ class Generate_Description extends Generate {
 
 		/**
 		 * @since 3.1.0
-		 * @see `\the_seo_framework()->s_excerpt_raw()` to strip HTML tags neatly.
+		 * @see `\tsf()->s_excerpt_raw()` to strip HTML tags neatly.
 		 * @param string   $excerpt The short circuit excerpt.
 		 * @param \WP_Term $term    The Term object.
 		 */

@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-\the_seo_framework()->_deprecated_function( 'The_SEO_Framework\Builders\Sitemap', '4.2.0', 'The_SEO_Framework\Builders\Sitemap\Main' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Sitemap', '4.2.0', 'The_SEO_Framework\Builders\Sitemap\Main' );
 /**
  * Generates the sitemap.
  *

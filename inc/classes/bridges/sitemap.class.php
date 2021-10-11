@@ -95,7 +95,7 @@ final class Sitemap {
 		static $count = 0;
 		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
 
-		static::$tsf      = \the_seo_framework();
+		static::$tsf      = \tsf();
 		static::$instance = &$this;
 	}
 

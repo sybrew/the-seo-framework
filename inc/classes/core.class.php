@@ -67,7 +67,7 @@ class Core {
 	final public function __set( $name, $value ) {
 
 		if ( 'load_options' === $name ) {
-			$this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
 			$this->is_headless['settings'] = $value;
 			return;
 		}
@@ -75,7 +75,7 @@ class Core {
 		/**
 		 * For now, no deprecation is being handled; as no properties have been deprecated. Just removed.
 		 */
-		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name, 'unknown' );
+		$this->_inaccessible_p_or_m( 'tsf()->' . $name, 'unknown' );
 
 		// Invoke default behavior: Write variable if it's not protected.
 		if ( ! isset( $this->$name ) )
@@ -97,11 +97,11 @@ class Core {
 	final public function __get( $name ) {
 
 		if ( 'load_options' === $name ) {
-			$this->_inaccessible_p_or_m( 'the_seo_framework()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
 			return ! $this->is_headless['settings'];
 		}
 
-		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name, 'unknown' );
+		$this->_inaccessible_p_or_m( 'tsf()->' . $name, 'unknown' );
 	}
 
 	/**
@@ -123,7 +123,7 @@ class Core {
 		if ( \is_callable( [ $depr_class, $name ] ) )
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
 
-		$this->_inaccessible_p_or_m( 'the_seo_framework()->' . $name . '()' );
+		$this->_inaccessible_p_or_m( 'tsf()->' . $name . '()' );
 	}
 
 	/**

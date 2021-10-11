@@ -54,7 +54,7 @@ namespace The_SEO_Framework\Bootstrap;
  */
 function _upgrade_default_site_options() {
 	static $memo;
-	return $memo ?? ( $memo = \the_seo_framework()->get_default_site_options() );
+	return $memo ?? ( $memo = \tsf()->get_default_site_options() );
 }
 
 /**
@@ -101,7 +101,7 @@ function _previous_db_version() {
  */
 function _do_upgrade() {
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	if ( ! $tsf->loaded ) return;
 	if ( \wp_doing_ajax() ) return;
@@ -356,7 +356,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$tsf->register_dismissible_persistent_notice(
 			$tsf->convert_markdown(
@@ -406,7 +406,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully upgraded.
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$tsf->register_dismissible_persistent_notice(
 			$tsf->convert_markdown(
@@ -437,7 +437,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 		// Only show notice when not in network mode, or on main site otherwise.
 		if ( ! $network_mode || \is_main_site() ) {
-			$tsf = \the_seo_framework();
+			$tsf = \tsf();
 
 			$tsf->register_dismissible_persistent_notice(
 				sprintf(
@@ -506,7 +506,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
  */
 function _add_upgrade_notice( $notice = '' ) {
 
-	$tsf = \the_seo_framework();
+	$tsf = \tsf();
 
 	$tsf->register_dismissible_persistent_notice(
 		"SEO: $notice",
@@ -527,7 +527,7 @@ function _add_upgrade_notice( $notice = '' ) {
  * @since 3.1.0
  */
 function _do_upgrade_1() {
-	\the_seo_framework()->register_settings();
+	\tsf()->register_settings();
 }
 
 /**
@@ -572,7 +572,7 @@ function _do_upgrade_2802() {
 function _do_upgrade_2900() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$card_type = trim( $tsf->get_option( 'twitter_card', false ) );
 		if ( 'photo' === $card_type ) {
@@ -596,7 +596,7 @@ function _do_upgrade_2900() {
 function _do_upgrade_3001() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		//= Only show notice if old option exists. Falls back to default upgrader otherwise.
 		$sitemap_timestamps = $tsf->get_option( 'sitemap_timestamps', false );
@@ -633,7 +633,7 @@ function _do_upgrade_3103() {
 	\add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// Transport title separator (option name typo).
 		$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator', false ) ?: 'hyphen' );
@@ -680,7 +680,7 @@ function _do_upgrade_3103() {
 function _do_upgrade_3300() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// Remove old rewrite rules.
 		unset(
@@ -729,7 +729,7 @@ function _do_upgrade_3300() {
 function _do_upgrade_4051() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$tsf->update_option( 'advanced_query_protection', 0 );
 		$tsf->update_option( 'index_the_feed', 0 );
@@ -752,7 +752,7 @@ function _do_upgrade_4051() {
 function _do_upgrade_4103() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4103' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$tsf->update_option( 'disabled_taxonomies', [] );
 		$tsf->update_option( 'sitemap_logo_url', '' );
@@ -794,7 +794,7 @@ function _do_upgrade_4103() {
 function _do_upgrade_4110() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$tsf->update_option( 'oembed_use_og_title', 0 );
 		$tsf->update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
@@ -808,7 +808,7 @@ function _do_upgrade_4110() {
  */
 function _do_upgrade_4120() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' ) {
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$tsf->update_option( 'ping_use_cron_prerender', 0 );
 	}

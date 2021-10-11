@@ -10,7 +10,7 @@
 use The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Form;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 $_ays_reset = esc_js( __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ) );
 

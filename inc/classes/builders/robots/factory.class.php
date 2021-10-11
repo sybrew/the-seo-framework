@@ -67,7 +67,7 @@ class Factory {
 	 * @since 4.2.0
 	 */
 	public function __construct() {
-		static::$tsf = static::$tsf ?? \the_seo_framework();
+		static::$tsf = static::$tsf ?? \tsf();
 	}
 
 	/**

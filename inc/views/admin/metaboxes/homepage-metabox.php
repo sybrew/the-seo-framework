@@ -11,7 +11,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Form;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and the_seo_framework()->_verify_include_secret( $_secret ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Fetch the required instance within this file.
 $instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );

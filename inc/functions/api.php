@@ -29,10 +29,11 @@ namespace {
 	 * Returns the class from cache.
 	 *
 	 * This is the recommended way of calling the class, if needed.
-	 * Call this after action 'init' priority 0 otherwise it will kill the plugin,
-	 * or even other plugins.
+	 * Call this after action 'plugins_loaded' priority 5 otherwise you'll cause
+	 * unforeseen issues.
 	 *
 	 * @since 4.2.0
+	 * @see `the_seo_framework()` alias.
 	 *
 	 * @return null|object The plugin class object.
 	 */
@@ -44,10 +45,11 @@ namespace {
 	 * Returns the class from cache.
 	 *
 	 * This is the recommended way of calling the class, if needed.
-	 * Call this after action 'init' priority 0 otherwise it will kill the plugin,
-	 * or even other plugins.
+	 * Call this after action 'plugins_loaded' priority 5 otherwise you'll cause
+	 * unforeseen issues.
 	 *
 	 * @since 2.2.5
+	 * @see `tsf()` alias.
 	 *
 	 * @return null|object The plugin class object.
 	 */
@@ -86,7 +88,7 @@ namespace {
 		if ( ! did_action( 'plugins_loaded' ) )
 			return false;
 
-		return $class = get_class( the_seo_framework() );
+		return $class = get_class( tsf() );
 	}
 }
 

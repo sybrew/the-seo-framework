@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \the_seo_framework()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 \add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\\_polylang_fix_sitemap_base_bath' );
 /**
@@ -102,7 +102,7 @@ function _polylang_set_sitemap_language() {
  */
 function _polylang_sitemap_append_non_translatables( $args ) {
 
-	if ( ! \the_seo_framework()->can_i_use( [
+	if ( ! \tsf()->can_i_use( [
 		'functions' => [
 			'PLL',
 			'pll_languages_list',
@@ -217,7 +217,7 @@ function _polylang_blocklist_tsf_urls( $blocklist ) {
  * @return string The fixed home URL.
  */
 function _polylang_fix_home_url( $url, $id ) {
-	return \the_seo_framework()->is_front_page_by_ID( $id ) && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
+	return \tsf()->is_front_page_by_ID( $id ) && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
 }
 
 \add_action( 'the_seo_framework_delete_cache_sitemap', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10, 4 );
@@ -230,7 +230,7 @@ function _polylang_fix_home_url( $url, $id ) {
  * @access private
  *
  * @param string $type    The flush type. Comes in handy when you use a catch-all function.
- * @param int    $id      The post, page or TT ID. Defaults to the_seo_framework()->get_the_real_ID().
+ * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_ID().
  * @param array  $args    Additional arguments. They can overwrite $type and $id.
  * @param bool   $success Whether the action cleared.
  */

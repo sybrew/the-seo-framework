@@ -48,7 +48,7 @@ final class PluginTable {
 
 		$tsf_links = [];
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		if ( ! $tsf->is_headless['settings'] ) {
 			$tsf_links['settings'] = sprintf(
