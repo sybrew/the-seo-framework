@@ -1398,4 +1398,99 @@ final class Deprecated {
 
 		return $cache;
 	}
+
+	/**
+	 * Detect the non-home blog page by query (ID).
+	 *
+	 * @since 2.3.4
+	 * @since 4.2.0 Deprecated. Use is_home_as_page() instead.
+	 * @deprecated
+	 * @see is_wc_shop() -- that's the correct implementation. However, we're dealing with erratic queries here (ET & legacy WP)
+	 *
+	 * @param int $id the Page ID.
+	 * @return bool true if is blog page. Always false if blog page is homepage.
+	 */
+	public function is_blog_page( $id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_blog_page()', '4.2.0', 'tsf()->is_home_as_page()' );
+
+		// When the blog page is the front page, treat it as front instead of blog.
+		if ( ! $tsf->has_page_on_front() )
+			return false;
+
+		$id = $id ?: $tsf->get_the_real_ID();
+
+		static $pfp;
+
+		$pfp = $pfp ?? (int) \get_option( 'page_for_posts' );
+
+		return ( $id && $id === $pfp && false === \is_archive() ) || \is_home();
+	}
+
+	/**
+	 * Checks blog page by sole ID.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.4 1. Improved performance by switching the conditional.
+	 *              2. Improved performance by adding memoization.
+	 * @since 4.2.0 1. Removed memoization.
+	 *              2. Deprecated. Use is_home() instead.
+	 * @deprecated
+	 * @see is_wc_shop() -- that's the correct implementation.
+	 *
+	 * @param int $id The ID to check
+	 * @return bool
+	 */
+	public function is_blog_page_by_id( $id ) {
+		\tsf()->_deprecated_function( 'tsf()->is_blog_page()', '4.2.0', 'tsf()->is_home()' );
+
+		// ID 0 cannot be a blog page.
+		if ( ! $id ) return false;
+
+		return (int) \get_option( 'page_for_posts' ) === $id;
+	}
+
+	/**
+	 * Checks for front page by input ID.
+	 *
+	 * NOTE: Doesn't always return true when the ID is 0, although the homepage might be.
+	 *       This is because it checks for the query, to prevent conflicts.
+	 *
+	 * @see $this->is_real_front_page_by_id(); Alternative to NOTE.
+	 *
+	 * @since 2.9.0
+	 * @since 2.9.3 Now tests for archive and 404 before testing homepage as blog.
+	 * @since 3.2.2 Removed SEO settings page check. This now returns false on that page.
+	 * @since 4.2.0 1. No longer casts input $id to integer.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The page ID, required. Can be 0.
+	 * @return bool True if ID if for the homepage.
+	 */
+	public function is_front_page_by_id( $id ) {
+		\tsf()->_deprecated_function( 'tsf()->is_front_page_by_id()', '4.2.0', 'tsf()->is_real_front_page_by_id()' );
+
+		$pof = (int) \get_option( 'page_on_front' );
+
+		switch ( \get_option( 'show_on_front' ) ) :
+			case 'page':
+				$is_front_page = $pof === $id;
+				break;
+
+			case 'posts':
+				$is_front_page =
+					( 0 === $pof && $this->is_home() )
+					|| $pof === $id;
+				break;
+
+			default:
+				// Elegant Themes' Extra support
+				$is_front_page = 0 === $id && $this->is_home();
+				break;
+		endswitch;
+
+		return $is_front_page;
+	}
 }

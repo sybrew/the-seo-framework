@@ -68,7 +68,10 @@ final class Query extends Factory {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type" );
 			}
 
-			switch ( true ) :
+			switch ( isset( $qubit ) ) :
+				case false:
+					// Page doesn't support metadata.
+					break;
 				case $qubit < -.33:
 					// 'Force' index.
 					yield 'meta_qubit_force' => false;
@@ -79,7 +82,8 @@ final class Query extends Factory {
 					yield 'meta_qubit_force' => true;
 					// We won't override this. Terminate generator. "goto end".
 					// No break, generator stops here anyway.
-				case isset( $qubit ):
+				default:
+					// qubit is (closer to) 0. Assert we use _default, albeit false.
 					yield 'meta_qubit_default' => false;
 			endswitch;
 		}
@@ -157,8 +161,9 @@ final class Query extends Factory {
 		after_exploit_protection:;
 
 		end:;
-		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable.
-		// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment.
+		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+		// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
+		// phpcs:enable, Generic.WhiteSpace.ScopeIndent.IncorrectExact
 	}
 
 	/**

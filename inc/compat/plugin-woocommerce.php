@@ -102,8 +102,9 @@ function _set_wc_is_shop( $is_shop, $post ) {
 	if ( $is_shop ) return $is_shop;
 
 	if ( isset( $post ) ) {
-		$post = \get_post( $post );
-		$id   = $post ? $post->ID : 0;
+		$id = \is_int( $post )
+			? $post
+			: \get_post( $post )->ID ?? 0;
 
 		$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
 	} else {

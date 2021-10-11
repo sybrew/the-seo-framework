@@ -540,6 +540,7 @@ class Generate_Description extends Generate {
 	 * Returns a description excerpt for the current query.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 Flipped order of query tests.
 	 *
 	 * @return string
 	 */
@@ -552,14 +553,14 @@ class Generate_Description extends Generate {
 
 		$excerpt = '';
 
-		if ( $this->is_blog_page() ) {
-			$excerpt = $this->get_blog_page_description_excerpt();
-		} elseif ( $this->is_real_front_page() ) {
+		if ( $this->is_real_front_page() ) {
 			$excerpt = $this->get_front_page_description_excerpt();
-		} elseif ( $this->is_archive() ) {
-			$excerpt = $this->get_archival_description_excerpt();
+		} elseif ( $this->is_home_as_page() ) {
+			$excerpt = $this->get_blog_page_description_excerpt();
 		} elseif ( $this->is_singular() ) {
 			$excerpt = $this->get_singular_description_excerpt();
+		} elseif ( $this->is_archive() ) {
+			$excerpt = $this->get_archival_description_excerpt();
 		}
 
 		return $excerpt;
@@ -581,10 +582,10 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$excerpt = $this->get_archival_description_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
 		} else {
-			if ( $this->is_blog_page_by_id( $args['id'] ) ) {
-				$excerpt = $this->get_blog_page_description_excerpt();
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$excerpt = $this->get_front_page_description_excerpt();
+			} elseif ( $this->is_home_as_page( $args['id'] ) ) {
+				$excerpt = $this->get_blog_page_description_excerpt();
 			} else {
 				$excerpt = $this->get_singular_description_excerpt( $args['id'] );
 			}
@@ -618,14 +619,11 @@ class Generate_Description extends Generate {
 
 		$id = $this->get_the_front_page_ID();
 
-		$excerpt = '';
-		if ( $id ) {
-			$excerpt = $this->get_singular_description_excerpt( $id );
-		}
-		$excerpt = $excerpt ?: $this->get_description_additions( [
-			'id'       => $id,
-			'taxonomy' => '',
-		] );
+		$excerpt = ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
+			?: $this->get_description_additions( [
+				'id'       => $id,
+				'taxonomy' => '',
+			] );
 
 		return $excerpt;
 	}
@@ -725,19 +723,18 @@ class Generate_Description extends Generate {
 	 *
 	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
 	 *                           Accepts int values for backward compatibility.
-	 * @param bool       $forced Whether to force the additions, bypassing options and filters.
 	 * @return string The description additions.
 	 */
-	protected function get_description_additions( $args, $forced = false ) {
+	protected function get_description_additions( $args ) {
 
 		$this->fix_generation_args( $args );
 
-		if ( $this->is_blog_page_by_id( $args['id'] ) ) {
+		if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			$title = $this->get_home_title_additions();
+		} elseif ( $this->is_home_as_page( $args['id'] ) ) {
 			$title = $this->get_filtered_raw_generated_title( $args );
 			/* translators: %s = Blog page title. Front-end output. */
 			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
-		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-			$title = $this->get_home_title_additions();
 		}
 
 		if ( empty( $title ) )
@@ -746,8 +743,14 @@ class Generate_Description extends Generate {
 		$on       = \_x( 'on', 'Placement. e.g. Post Title "on" Site Title', 'autodescription' );
 		$blogname = $this->get_blogname();
 
-		/* translators: 1: Title, 2: on, 3: Site Title */
-		return trim( sprintf( \_x( '%1$s %2$s %3$s', 'blog page description', 'autodescription' ), $title, $on, $blogname ) );
+		return trim(
+			/* translators: 1: Title, 2: on, 3: Site Title */
+			sprintf( \_x( '%1$s %2$s %3$s', 'blog page description', 'autodescription' ),
+				$title,
+				$on,
+				$blogname
+			)
+		);
 	}
 
 	/**

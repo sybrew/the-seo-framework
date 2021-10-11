@@ -284,13 +284,14 @@ class Core {
 	 * @return array The public nonhierarchical post types.
 	 */
 	public function get_nonhierarchical_post_types() {
-		static $types;
-		return $types ?: $types = \get_post_types(
-			[
-				'hierarchical' => false,
-				'public'       => true,
-			],
-			'names'
+		return memo() ?: memo(
+			\get_post_types(
+				[
+					'hierarchical' => false,
+					'public'       => true,
+				],
+				'names'
+			)
 		);
 	}
 

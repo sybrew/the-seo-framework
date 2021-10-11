@@ -258,7 +258,6 @@ TODO fix discrepancy in views/admin/wrap-content and views/edit/wrap-content by 
 TODO in get_available_twitter_cards(), get_twitter_title() should always return something, so that check is redundant.
 	* However, in the edge-case it doesn't return something, the Twitter output should be discarded!
 	* So, how do we solve this? get_twitter_title() is a heavy method, for it tries to render twitter -> og -> meta.
-TODO yield from...
 TODO clean up image generator, it's messy.
 TODO add link to our KB about same-site sitemaps when WPML or Polylang is detected? We get this question every week...
 
@@ -318,8 +317,15 @@ TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents te
 
 TODO allow custom robots generators?
 TODO in the robots-generators, can/should we memo the globals?
-
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
+TODO make umemo kmemo, and introduce umemo which allows callbacks
+	-> I'm afraid it'd require PHP 8.1 for best effect, though: `fn()=>{}`
+	-> But use keywords are useful. Pun intended.
+	-> or keep umemo and make fmemo (amemo -> actionable memo?)?
+TODO 404 -> noindex isn't working anymore.
+TODO array -> iterable?
+TODO ?array -> ?iterable?
+TODO apply yield from... in base sitemap?
 
 **For everyone:**
 
@@ -387,6 +393,7 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
 * **Function notes:**
 	* **Added:**
+		* `tsf()`, an alias of `the_seo_framework()`. They have exactly the same opcodes, so neither is faster than the other. Pick your poison.
 		* `\The_SEO_Framework\memo()` stores and returns memoized values for the caller.
 			* This function is neat because you can use it without specifying a caching key; it knows who invokes it: `return memo() ?? memo( expensive_call() );`.
 				* This neatness is limited to methods, not files or lines. Yet, this allows you to call `memo()` multiple times per method.
@@ -412,45 +419,58 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 		* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
 		* Object `The_SEO_Framework\Builders\Robots\Main` is new.
 			* Used by new object `The_SEO_Framework\Builders\Robots\Args` and `The_SEO_Framework\Builders\Robots\Query`.
-			* Use public method `the_seo_framework()->generate_robots_meta()` to access the builder.
+			* Use public method `tsf()->generate_robots_meta()` to access the builder.
 	* Object `\The_SEO_Framework\Builders\Sitemap` is now `\The_SEO_Framework\Builders\Sitemap\Main`.
 		* A class alias is made Just-in-Time to smoothen deprecation.
-	* For object `\The_SEO_Framework\Load` (callable via `the_seo_framework()`):
+	* For object `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 		* **Methods added:**
-			* `retrieve_robots_meta_assertions`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
+			* `retrieve_robots_meta_assertions()`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
+			* `is_home_as_page()`, detects the non-front blog page.
 		* **Methods changed:**
 			* `do_meta_output()`
 				1. Now invokes two actions before and after output.
-				2. No longer rectifies timezones.
+				1. No longer rectifies timezones.
 			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+			* `get_author_canonical_url()`
+				1. The first parameter is now optional.
+				2. When the $id isn't set, the URL won't get tested for pagination issues.
 			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.
 			* `get_robots_taxonomy_option_id` no longer sanitizes the input parameter.
 			* `get_taxonomical_canonical_url()`:
 				1. Added memoization.
 				1. The parameters are now optional.
+			* `get_taxonomical_custom_canonical_url()`, the first parameter is now optional.
 			* `get_term_meta_item()` no longer accidentally returns an empty array on failure, but `null` (as intended) instead.
+			* `get_singular_canonical_url()`
+				1. Added memoization.
+				1. When the `$id` isn't set, the URL won't get tested for pagination issues.
+			* `get_singular_custom_canonical_url()`, the first parameter is now optional.
 			* `has_custom_canonical_url()` now also detects canonical URLs for taxonomies.
 			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
+			* `is_home()`, added the first parameter to allow custom query testing.
 			* `is_theme()` no longer "loads" the theme; instead, simply compares input to active theme options.
 		* **Methods deprecated:**
-			* `append_php_query()`, use `the_seo_framework()->append_url_query()` instead.
+			* `append_php_query()`, use `tsf()->append_url_query()` instead.
 			* `get_html_output()`, with no alternative available.
-			* `is_robots_meta_noindex_set_by_args()`, use `the_seo_framework()->generate_robots_meta()` instead.
-			* `robots_meta()`, use `the_seo_framework()->generate_robots_meta()` instead.
+			* `is_blog_page()`, use `tsf()->is_home_as_page()` instead.
+			* `is_blog_page_by_id()`, use `tsf()->is_home()` instead.
+			* `is_front_page_by_id()`, use `tsf()->is_real_front_page_by_id()` instead.
+			* `is_robots_meta_noindex_set_by_args()`, use `tsf()->generate_robots_meta()` instead.
+			* `robots_meta()`, use `tsf()->generate_robots_meta()` instead.
 			* `can_do_sitemap_robots()`, with no alternative available.
 			* `nav_tab_wrapper()`, use `\The_SEO_Framework\Bridges\SeoSettings::_nav_tab_wrapper()` instead.
 			* `inpost_flex_nav_tab_wrapper()`, use `\The_SEO_Framework\Bridges\PostSettings::_flex_nav_tab_wrapper()` instead.
 			* `get_social_image_uploader_form()`, use `\The_SEO_Framework\Interpreters\Form::get_image_uploader_form()` instead.
 			* `get_logo_uploader_form()`, use `\The_SEO_Framework\Interpreters\Form::get_image_uploader_form()` instead.
-			* `seo_settings_page_url()`, use `the_seo_framework()->get_seo_settings_page_url()` instead.
-			* `get_default_user_data()`, use `the_seo_framework()->get_user_meta_defaults()` instead.
-			* `get_user_option()`, use `the_seo_framework()->get_user_meta_item()` instead.
-			* `get_author_option()`, use `the_seo_framework()->get_current_post_author_id()` instead.
-			* `get_current_author_option()`, use `the_seo_framework()->get_current_post_author_meta_item()` instead.
-			* `is_wc_shop()`, use `the_seo_framework()->is_shop()` instead.
-			* `is_wc_product()`, use `the_seo_framework()->is_product()` instead.
-			* `is_wc_product_admin()`, use `the_seo_framework()->is_product_admin()` instead.
-			* `update_user_option()`, use `the_seo_framework()->update_single_user_meta_item()` instead.
+			* `seo_settings_page_url()`, use `tsf()->get_seo_settings_page_url()` instead.
+			* `get_default_user_data()`, use `tsf()->get_user_meta_defaults()` instead.
+			* `get_user_option()`, use `tsf()->get_user_meta_item()` instead.
+			* `get_author_option()`, use `tsf()->get_current_post_author_id()` instead.
+			* `get_current_author_option()`, use `tsf()->get_current_post_author_meta_item()` instead.
+			* `is_wc_shop()`, use `tsf()->is_shop()` instead.
+			* `is_wc_product()`, use `tsf()->is_product()` instead.
+			* `is_wc_product_admin()`, use `tsf()->is_product_admin()` instead.
+			* `update_user_option()`, use `tsf()->update_single_user_meta_item()` instead.
 			TODO: set public alternatives?
 			* `get_field_name()`, with no alternative available.
 			* `field_name()`, with no alternative available.
@@ -480,12 +500,12 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 			* `detect_theme_support()` with no alternative available.
 			* `detect_page_builder()` with no alternative available.
 			* `uses_page_builder()` with no alternative available.
-			* `fb_locales()`, use `the_seo_framework()->supported_social_locales()` instead.
-			* `language_keys()`, use `the_seo_framework()->supported_social_locales()` instead.
+			* `fb_locales()`, use `tsf()->supported_social_locales()` instead.
+			* `language_keys()`, use `tsf()->supported_social_locales()` instead.
 			* `get_timezone_string()`, with no alternative available.
 			* `set_timezone()`, with no alternative available.
 			* `reset_timezone()`, with no alternative available.
-			* `get_current_term_meta()`, use `the_seo_framework()->get_term_meta()` instead.
+			* `get_current_term_meta()`, use `tsf()->get_term_meta()` instead.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.
@@ -499,8 +519,8 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 	* Object `\The_SEO_Framework\Silencer` is now `\The_SEO_Framework\Internal\Silencer`.
 * **Constant notes:**
 	* **Namespace `\The_SEO_Framework\`**
-		* `ROBOTS_ASSERT`, used for the `the_seo_framework()->robots_meta()` method family; makes the generator store assertions at the slight cost of performance.
-			* Use `the_seo_framework()->retrieve_robots_meta_assertions()` to obtain what's asserted in the last run.
+		* `ROBOTS_ASSERT`, used for the `tsf()->robots_meta()` method family; makes the generator store assertions at the slight cost of performance.
+			* Use `tsf()->retrieve_robots_meta_assertions()` to obtain what's asserted in the last run.
 * **Filter notes:**
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.

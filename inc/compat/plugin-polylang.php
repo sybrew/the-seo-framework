@@ -202,22 +202,22 @@ function _polylang_blocklist_tsf_urls( $blocklist ) {
 	return $blocklist;
 }
 
-\add_filter( 'the_seo_framework_rel_canonical_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 2 );
-\add_filter( 'the_seo_framework_ogurl_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 2 );
+\add_filter( 'the_seo_framework_rel_canonical_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 );
+\add_filter( 'the_seo_framework_ogurl_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 );
 /**
  * Adds a trailing slash to whatever's deemed as the homepage URL.
  * This fixes user_trailingslashit() issues.
  *
  * @since 3.2.4
  * @since 4.1.2 Prefixed function name with _polylang.
+ * @since 4.2.0 No longer uses the second parameter, and relies on theq query to find the homepage, instead.
  * @access private
  *
  * @param string $url The url to fix.
- * @param int    $id  The page or term ID.
  * @return string The fixed home URL.
  */
-function _polylang_fix_home_url( $url, $id ) {
-	return \tsf()->is_front_page_by_ID( $id ) && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
+function _polylang_fix_home_url( $url ) {
+	return \tsf()->is_real_front_page() && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
 }
 
 \add_action( 'the_seo_framework_delete_cache_sitemap', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10, 4 );

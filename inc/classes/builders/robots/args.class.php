@@ -69,7 +69,10 @@ final class Args extends Factory {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type", $args['id'] );
 			}
 
-			switch ( true ) :
+			switch ( isset( $qubit ) ) :
+				case false:
+					// Page doesn't support metadata.
+					break;
 				case $qubit < -.33:
 					// 'Force' index.
 					yield 'meta_qubit_force' => false;
@@ -80,7 +83,8 @@ final class Args extends Factory {
 					yield 'meta_qubit_force' => true;
 					// We won't override this. Terminate generator. "goto end".
 					// No break, generator stops here anyway.
-				case isset( $qubit ):
+				default:
+					// qubit is (closer to) 0. Assert we use _default, albeit false.
 					yield 'meta_qubit_default' => false;
 			endswitch;
 		}

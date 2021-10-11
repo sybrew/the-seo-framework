@@ -678,6 +678,7 @@ class Generate_Title extends Generate_Description {
 	 * Generates a title, based on current query, without additions or prefixes.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 Flipped order of query tests.
 	 * @internal
 	 * @see $this->get_raw_generated_title()
 	 *
@@ -693,10 +694,10 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_generated_search_query_title();
 		} elseif ( $this->is_real_front_page() ) {
 			$title = $this->get_static_front_page_title();
-		} elseif ( $this->is_archive() ) {
-			$title = $this->get_generated_archive_title();
 		} elseif ( $this->is_singular() ) {
 			$title = $this->get_generated_single_post_title();
+		} elseif ( $this->is_archive() ) {
+			$title = $this->get_generated_archive_title();
 		}
 
 		return $title;

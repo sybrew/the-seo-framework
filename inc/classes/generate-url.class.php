@@ -50,9 +50,9 @@ class Generate_Url extends Generate_Title {
 
 		if ( null === $args ) {
 			if ( $this->is_singular() ) {
-				$has = $this->get_singular_custom_canonical_url( $this->get_the_real_ID() );
+				$has = $this->get_singular_custom_canonical_url();
 			} elseif ( $this->is_term_meta_capable() ) {
-				$has = $this->get_taxonomical_custom_canonical_url( $this->get_the_real_ID() );
+				$has = $this->get_taxonomical_custom_canonical_url();
 			} else {
 				$has = false;
 			}
@@ -189,7 +189,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
 	 * @see $this->create_canonical_url()
 	 *
-	 * @param array $args Use $this->create_canonical_url().
+	 * @param array $args Required. Use $this->create_canonical_url().
 	 * @return string The canonical URL.
 	 */
 	protected function build_canonical_url( array $args ) {
@@ -197,23 +197,26 @@ class Generate_Url extends Generate_Title {
 		$url = '';
 
 		if ( $args['taxonomy'] ) {
-			if ( $args['get_custom_field'] ) {
-				$url = $this->get_taxonomical_custom_canonical_url( $args['id'] );
-			}
-			$url = $url ?: $this->get_taxonomical_canonical_url( $args['id'], $args['taxonomy'] );
+			$url = (
+				$args['get_custom_field']
+					? $this->get_taxonomical_custom_canonical_url( $args['id'] )
+					: ''
+				) ?: $this->get_taxonomical_canonical_url( $args['id'], $args['taxonomy'] );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
-				if ( $args['get_custom_field'] ) {
-					$url = $this->get_singular_custom_canonical_url( $args['id'] );
-				}
-				$url = $url ?: $this->get_home_canonical_url();
+				$url = (
+					$args['get_custom_field']
+						? $this->get_singular_custom_canonical_url( $args['id'] )
+						: ''
+					) ?: $this->get_home_canonical_url();
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$url = $this->get_home_canonical_url();
 			} elseif ( $args['id'] ) {
-				if ( $args['get_custom_field'] ) {
-					$url = $this->get_singular_custom_canonical_url( $args['id'] );
-				}
-				$url = $url ?: $this->get_singular_canonical_url( $args['id'] );
+				$url = (
+					$args['get_custom_field']
+						? $this->get_singular_custom_canonical_url( $args['id'] )
+						: ''
+					) ?: $this->get_singular_canonical_url( $args['id'] );
 			}
 		}
 
@@ -225,34 +228,31 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
-	 * @TODO Remove the $id passthrough requirement? Methods lower than this pass it to the query handler...
+	 * @since 4.2.0 No longer relies on passing through the page ID.
 	 * @see $this->get_canonical_url()
 	 *
 	 * @return string The canonical URL.
 	 */
 	protected function generate_canonical_url() {
 
-		$id  = $this->get_the_real_ID();
-		$url = '';
-
 		if ( $this->is_real_front_page() ) {
 			if ( $this->has_page_on_front() ) {
-				$url = $this->get_singular_custom_canonical_url( $id )
+				$url = $this->get_singular_custom_canonical_url()
 					?: $this->get_home_canonical_url();
 			} else {
 				$url = $this->get_home_canonical_url();
 			}
 		} elseif ( $this->is_singular() ) {
-			$url = $this->get_singular_custom_canonical_url( $id )
-				?: $this->get_singular_canonical_url( $id );
+			$url = $this->get_singular_custom_canonical_url()
+				?: $this->get_singular_canonical_url();
 		} elseif ( $this->is_archive() ) {
 			if ( $this->is_term_meta_capable() ) {
-				$url = $this->get_taxonomical_custom_canonical_url( $id )
-					?: $this->get_taxonomical_canonical_url( $id, $this->get_current_taxonomy() );
+				$url = $this->get_taxonomical_custom_canonical_url()
+					?: $this->get_taxonomical_canonical_url();
 			} elseif ( \is_post_type_archive() ) {
 				$url = $this->get_post_type_archive_canonical_url();
 			} elseif ( $this->is_author() ) {
-				$url = $this->get_author_canonical_url( $id );
+				$url = $this->get_author_canonical_url();
 			} elseif ( $this->is_date() ) {
 				if ( $this->is_day() ) {
 					$url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ), \get_query_var( 'day' ) );
@@ -266,7 +266,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->get_search_canonical_url();
 		}
 
-		return $url;
+		return $url ?? '';
 	}
 
 	/**
@@ -280,14 +280,11 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function clean_canonical_url( $url ) {
 
-		if ( $this->pretty_permalinks ) {
-			$url = \esc_url( $url, [ 'https', 'http' ] );
-		} else {
-			//= Keep the &'s more readable.
-			$url = \esc_url_raw( $url, [ 'https', 'http' ] );
-		}
+		if ( $this->pretty_permalinks )
+			return \esc_url( $url, [ 'https', 'http' ] );
 
-		return $url;
+		//= Keep the &'s more readable when using query-parameters.
+		return \esc_url_raw( $url, [ 'https', 'http' ] );
 	}
 
 	/**
@@ -337,11 +334,12 @@ class Generate_Url extends Generate_Title {
 	 * Returns singular custom field's canonical URL.
 	 *
 	 * @since 3.0.0
+	 * @since 4.2.0 The first parameter is now optional.
 	 *
-	 * @param int $id The page ID.
+	 * @param int|null $id The page ID.
 	 * @return string The custom canonical URL, if any.
 	 */
-	public function get_singular_custom_canonical_url( $id ) {
+	public function get_singular_custom_canonical_url( $id = null ) {
 		return $this->get_post_meta_item( '_genesis_canonical_uri', $id ) ?: '';
 	}
 
@@ -352,9 +350,10 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via $this->paged().
 	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
 	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
-	 * @since 4.2.0 Added memoization.
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
 	 *
-	 * @param int|null $id The page ID.
+	 * @param int|null $id The page ID. Leave null to autodetermine.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public function get_singular_canonical_url( $id = null ) {
@@ -362,17 +361,22 @@ class Generate_Url extends Generate_Title {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = umemo( __METHOD__, null, $id ) ) return $memo;
 
-		$url = \wp_get_canonical_url( $id ) ?: '';
+		$url = \wp_get_canonical_url( $id ?? $this->get_the_real_ID() ) ?: '';
 
-		$_page = \get_query_var( 'page', 1 ) ?: 1; // WP_Query tests isset, not empty.
-		if ( $url && $_page !== $this->page() ) {
-			/** @link https://core.trac.wordpress.org/ticket/37505 */
-			$url = $this->remove_pagination_from_url( $url, $_page, false );
-		}
+		if ( ! $url ) return '';
 
-		if ( $url && $this->is_singular_archive( $id ) ) {
-			// Singular archives, like blog pages and shop pages, use the pagination base with paged.
-			$url = $this->add_url_pagination( $url, $this->paged(), true );
+		if ( null !== $id ) {
+			$_page = \get_query_var( 'page', 1 ) ?: 1;
+
+			if ( $_page > 1 && $_page !== $this->page() ) {
+				/** @link https://core.trac.wordpress.org/ticket/37505 */
+				$url = $this->remove_pagination_from_url( $url, $_page, false );
+			}
+
+			if ( $this->is_singular_archive( $id ) ) {
+				// Singular archives, like blog pages and shop pages, use the pagination base with paged.
+				$url = $this->add_url_pagination( $url, $this->paged(), true );
+			}
 		}
 
 		return umemo( __METHOD__, $url, $id );
@@ -382,11 +386,12 @@ class Generate_Url extends Generate_Title {
 	 * Returns taxonomical custom field's canonical URL.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 The first parameter is now optional.
 	 *
 	 * @param int $term_id The term ID.
 	 * @return string The custom canonical URL, if any.
 	 */
-	public function get_taxonomical_custom_canonical_url( $term_id ) {
+	public function get_taxonomical_custom_canonical_url( $term_id = null ) {
 		return $this->get_term_meta_item( 'canonical', $term_id ) ?: '';
 	}
 
@@ -400,11 +405,11 @@ class Generate_Url extends Generate_Title {
 	 * @since 4.2.0 1. Added memoization.
 	 *              2. The parameters are now optional.
 	 *
-	 * @param int    $term_id The term ID.
-	 * @param string $taxonomy The taxonomy.
+	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
+	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
 	 * @return string The taxonomical canonical URL, if any.
 	 */
-	public function get_taxonomical_canonical_url( $term_id = 0, $taxonomy = '' ) {
+	public function get_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = umemo( __METHOD__, null, $term_id, $taxonomy ) )
@@ -415,9 +420,11 @@ class Generate_Url extends Generate_Title {
 		if ( \is_wp_error( $url ) )
 			return umemo( __METHOD__, '', $term_id, $taxonomy );
 
-		if ( $term_id === $this->get_the_real_ID() ) {
-			//= Adds pagination if ID matches query.
-			$url = $this->add_url_pagination( $url, $this->paged(), true );
+		if ( null !== $term_id ) {
+			$paged = $this->paged();
+
+			if ( $paged > 1 )
+				$url = $this->add_url_pagination( $url, $paged, true );
 		}
 
 		return umemo( __METHOD__, $url, $term_id, $taxonomy );
@@ -450,12 +457,12 @@ class Generate_Url extends Generate_Title {
 			$query = false;
 		}
 
-		$link = \get_post_type_archive_link( $post_type ) ?: '';
+		$url = \get_post_type_archive_link( $post_type ) ?: '';
 
-		if ( $query && $link )
-			$link = $this->add_url_pagination( $link, $this->paged(), true );
+		if ( $query && $url )
+			$url = $this->add_url_pagination( $url, $this->paged(), true );
 
-		return $link;
+		return $url;
 	}
 
 	/**
@@ -463,23 +470,21 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the ID matches the query.
 	 *
 	 * @since 3.0.0
+	 * @since 4.2.0 1. The first parameter is now optional.
+	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
 	 *
-	 * @param int $author_id The author ID.
+	 * @param int|null $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
 	 */
-	public function get_author_canonical_url( $author_id ) {
+	public function get_author_canonical_url( $id = null ) {
 
-		$link = \get_author_posts_url( $author_id );
+		$url = \get_author_posts_url( $id ?? $this->get_the_real_ID() );
 
-		if ( ! $link )
-			return '';
+		if ( ! $url ) return '';
 
-		if ( $author_id === $this->get_the_real_ID() ) {
-			//= Adds pagination if ID matches query.
-			$link = $this->add_url_pagination( $link, $this->paged(), true );
-		}
-
-		return $link;
+		return null === $id
+			? $this->add_url_pagination( $url, $this->paged(), true )
+			: $url;
 	}
 
 	/**
@@ -966,15 +971,15 @@ class Generate_Url extends Generate_Title {
 		// See if-statements below.
 		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) goto end;
 
-		$canonical = $this->remove_pagination_from_url( $this->get_current_canonical_url() );
+		$canonical_url = memo() ?? memo( $this->remove_pagination_from_url( $this->get_current_canonical_url() ) );
 
 		// If this page is not the last, create a next-URL.
 		if ( $page + 1 <= $_numpages ) {
-			$next = $this->add_url_pagination( $canonical, $page + 1 );
+			$next = $this->add_url_pagination( $canonical_url, $page + 1 );
 		}
 		// If this page is not the first, create a prev-URL.
 		if ( $page > 1 ) {
-			$prev = $this->add_url_pagination( $canonical, $page - 1 );
+			$prev = $this->add_url_pagination( $canonical_url, $page - 1 );
 		}
 
 		end:;

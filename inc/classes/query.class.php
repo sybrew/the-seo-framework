@@ -369,8 +369,9 @@ class Query extends Core {
 	public function is_singular_archive( $post = null ) {
 
 		if ( isset( $post ) ) {
-			$post = \get_post( $post );
-			$id   = $post ? $post->ID : 0;
+			$id = \is_int( $post )
+				? $post
+				: ( \get_post( $post )->ID ?? 0 );
 		} else {
 			$id = null;
 		}
@@ -386,7 +387,7 @@ class Query extends Core {
 				\apply_filters_ref_array(
 					'the_seo_framework_is_singular_archive',
 					[
-						isset( $id ) ? $this->is_blog_page_by_id( $id ) : $this->is_blog_page(),
+						$this->is_home_as_page( $id ),
 						$id,
 					]
 				),
@@ -497,7 +498,7 @@ class Query extends Core {
 	 */
 	public function is_author( $author = '' ) {
 
-		if ( empty( $author ) )
+		if ( ! $author )
 			return \is_author();
 
 		return $this->memo_query( null, $author )
@@ -505,52 +506,42 @@ class Query extends Core {
 	}
 
 	/**
-	 * Detect the non-home blog page by query (ID).
+	 * Detects the blog page.
 	 *
-	 * @since 2.3.4
-	 * @todo deprecate
-	 * @see is_wc_shop() -- that's the correct implementation. However, we're dealing with erratic queries here (ET & legacy WP)
+	 * @since 2.6.0
+	 * @since 4.2.0 Added the first parameter to allow custom query testing.
 	 *
-	 * @param int $id the Page ID.
-	 * @return bool true if is blog page. Always false if blog page is homepage.
+	 * @param int|WP_Post|null $post Optional. Post ID or post object.
+	 *                               Do not supply from WP_Query's main loop-query.
+	 * @return bool
 	 */
-	public function is_blog_page( $id = 0 ) {
+	public function is_home( $post = null ) {
 
-		// When the blog page is the front page, treat it as front instead of blog.
-		if ( ! $this->has_page_on_front() )
-			return false;
+		if ( isset( $post ) ) {
+			$id = \is_int( $post )
+				? $post
+				: ( \get_post( $post )->ID ?? 0 );
 
-		$id = $id ?: $this->get_the_real_ID();
+			$is_pfp = (int) \get_option( 'page_for_posts' ) === $id;
+		} else {
+			$is_pfp = \is_home();
+		}
 
-		static $pfp = null;
-
-		$pfp = $pfp ?? (int) \get_option( 'page_for_posts' );
-
-		return $this->memo_query( null, $id )
-			?? $this->memo_query(
-				( $id && $id === $pfp && false === \is_archive() ) || \is_home(),
-				$id
-			);
+		return $is_pfp;
 	}
 
 	/**
-	 * Checks blog page by sole ID.
+	 * Detects the non-front blog page.
 	 *
-	 * @since 4.0.0
-	 * @since 4.1.4 1. Improved performance by switching the conditional.
-	 *              2. Improved performance by adding memoization.
-	 * @since 4.2.0 Removed memoization.
-	 * @todo deprecate
-	 * @see is_wc_shop() -- that's the correct implementation.
+	 * @since 4.2.0
 	 *
-	 * @param int $id The ID to check
+	 * @param int|WP_Post|null $post Optional. Post ID or post object.
+	 *                               Do not supply from WP_Query's main loop-query.
 	 * @return bool
 	 */
-	public function is_blog_page_by_id( $id ) {
-		// ID 0 cannot be a blog page.
-		if ( ! $id ) return false;
-
-		return (int) \get_option( 'page_for_posts' ) === $id;
+	public function is_home_as_page( $post = null ) {
+		// If front is a blog, the blog is never a page.
+		return $this->has_page_on_front() ? $this->is_home( $post ) : false;
 	}
 
 	/**
@@ -646,12 +637,9 @@ class Query extends Core {
 		if ( null !== $cache = $this->memo_query() )
 			return $cache;
 
-		$is_front_page = false;
+		$is_front_page = \is_front_page();
 
-		if ( \is_front_page() )
-			$is_front_page = true;
-
-		// Elegant Themes Support. Yay.
+		// Elegant Themes' Extra Support. Yay.
 		if ( false === $is_front_page && 0 === $this->get_the_real_ID() && $this->is_home() ) {
 			$sof = \get_option( 'show_on_front' );
 
@@ -679,67 +667,6 @@ class Query extends Core {
 	 */
 	public function is_real_front_page_by_id( $id ) {
 		return $id === $this->get_the_front_page_ID();
-	}
-
-	/**
-	 * Checks for front page by input ID.
-	 *
-	 * NOTE: Doesn't always return true when the ID is 0, although the homepage might be.
-	 *       This is because it checks for the query, to prevent conflicts.
-	 *
-	 * @see $this->is_real_front_page_by_id(); Alternative to NOTE above.
-	 *
-	 * @since 2.9.0
-	 * @since 2.9.3 Now tests for archive and 404 before testing homepage as blog.
-	 * @since 3.2.2 Removed SEO settings page check. This now returns false on that page.
-	 * @since 4.2.0 No longer casts input $id to integer.
-	 *
-	 * @param int $id The page ID, required. Can be 0.
-	 * @return bool True if ID if for the homepage.
-	 */
-	public function is_front_page_by_id( $id ) {
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = $this->memo_query( null, $id ) )
-			return $cache;
-
-		$is_front_page = false;
-
-		$sof = \get_option( 'show_on_front' );
-
-		// Compare against $id
-		if ( 'page' === $sof ) {
-			if ( (int) \get_option( 'page_on_front' ) === $id ) {
-				$is_front_page = true;
-			}
-		} elseif ( 'posts' === $sof ) {
-			if ( 0 === $id ) {
-				// 0 as ID causes many issues. Just test for is_home().
-				if ( $this->is_home() ) {
-					$is_front_page = true;
-				}
-			} elseif ( (int) \get_option( 'page_for_posts' ) === $id ) {
-				$is_front_page = true;
-			}
-		} else {
-			// Elegant Themes' Extra support
-			if ( 0 === $id && $this->is_home() ) {
-				$is_front_page = true;
-			}
-		}
-
-		return $this->memo_query( $is_front_page, $id );
-	}
-
-	/**
-	 * Determines whether the query is for the blog page.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return bool
-	 */
-	public function is_home() {
-		return \is_home();
 	}
 
 	/**
@@ -812,11 +739,11 @@ class Query extends Core {
 		$is_preview = false;
 
 		if ( \is_preview()
-		&& \is_user_logged_in()
-		&& \is_singular()
-		&& \current_user_can( 'edit_post', \get_the_ID() )
-		&& isset( $_GET['preview_id'], $_GET['preview_nonce'] )
-		&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] ) // WP doesn't check for unslash either; who would've guessed.
+			&& \is_user_logged_in()
+			&& \is_singular()
+			&& \current_user_can( 'edit_post', \get_the_ID() )
+			&& isset( $_GET['preview_id'], $_GET['preview_nonce'] )
+			&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] ) // WP doesn't check for unslash either; who would've guessed.
 		) {
 			$is_preview = true;
 		}
@@ -930,10 +857,11 @@ class Query extends Core {
 	 */
 	public function is_static_frontpage( $id = 0 ) {
 
-		static $front_id;
-
-		if ( ! isset( $front_id ) )
-			$front_id = 'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : false;
+		$front_id = umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : false
+			);
 
 		return false !== $front_id && ( $id ?: $this->get_the_real_ID() ) === $front_id;
 	}
@@ -1075,7 +1003,8 @@ class Query extends Core {
 	 * @return bool True if SSL, false otherwise.
 	 */
 	public function is_ssl() {
-		return memo() ?? memo( \is_ssl() );
+		return umemo( __METHOD__ )
+			?? umemo( __METHOD__, \is_ssl() );
 	}
 
 	/**
@@ -1223,8 +1152,6 @@ class Query extends Core {
 		}
 
 		global $wp_query;
-
-		$post = null;
 
 		if ( $this->is_singular() && ! $this->is_singular_archive() )
 			$post = \get_post( $this->get_the_real_ID() );

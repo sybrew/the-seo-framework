@@ -649,12 +649,13 @@ class Post_Data extends Detect {
 	 * @since 3.0.0 1. No longer checks for current query.
 	 *              2. Input parameter now default to null.
 	 *                 This currently doesn't affect how it works.
+	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected or private, false otherwise.
 	 */
 	public function is_protected( $post = null ) {
-		$post = \get_post( $post ); // This is here so we don't have to create another instance in the methods called.
+		$post = \get_post( $post ); // This is here so we don't have to create another instance hereinafter.
 		return $this->is_password_protected( $post ) || $this->is_private( $post );
 	}
 
@@ -667,7 +668,8 @@ class Post_Data extends Detect {
 	 * @return bool True if protected, false otherwise.
 	 */
 	public function is_password_protected( $post = null ) {
-		return '' !== ( \get_post( $post )->post_password ?? '' );
+		// return '' !== ( \get_post( $post )->post_password ?? '' ); // https://core.trac.wordpress.org/ticket/50567
+		return '' !== ( $post->post_password ?? \get_post( $post )->post_password ?? '' );
 	}
 
 	/**
@@ -679,7 +681,8 @@ class Post_Data extends Detect {
 	 * @return bool True if private, false otherwise.
 	 */
 	public function is_private( $post = null ) {
-		return 'private' === ( \get_post( $post )->post_status ?? '' );
+		// return 'private' === ( \get_post( $post )->post_status ?? '' ); // https://core.trac.wordpress.org/ticket/50567
+		return 'private' === ( $post->post_status ?? \get_post( $post )->post_status ?? '' );
 	}
 
 	/**

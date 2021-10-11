@@ -408,29 +408,6 @@ final class Debug {
 	}
 
 	/**
-	 * Times code until it's called again.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Now is protected.
-	 *
-	 * @param bool $reset Whether to reset the timer.
-	 * @return float The time it took for code execution.
-	 */
-	protected function timer( $reset = false ) {
-
-		static $previous = null;
-
-		if ( isset( $previous ) && false === $reset ) {
-			$output   = microtime( true ) - $previous;
-			$previous = null;
-		} else {
-			$output = $previous = microtime( true );
-		}
-
-		return $output;
-	}
-
-	/**
 	 * Outputs the debug header.
 	 *
 	 * @since 2.8.0
@@ -461,14 +438,14 @@ final class Debug {
 			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_ID' ] );
 
 		// Start timer.
-		$this->timer( true );
+		$t = microtime( true );
 
 		// I hate ob_*.
 		ob_start();
 		$tsf->html_output();
 		$output = ob_get_clean();
 
-		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( $this->timer(), 5 ) . ' seconds</div>';
+		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $t, 5 ) . ' seconds</div>';
 
 		$title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
@@ -541,13 +518,12 @@ final class Debug {
 	protected function get_debug_query_output( $cache_version = 'nope' ) {
 
 		// Start timer.
-		$this->timer( true );
+		$_t = microtime( true );
 
 		$tsf = \tsf();
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
-		// Only get true/false values.
 		$page_id                = $tsf->get_the_real_ID();
 		$is_query_exploited     = $tsf->is_query_exploited();
 		$query_supports_seo     = $tsf->query_supports_seo() ? 'yes' : 'no';
@@ -559,7 +535,6 @@ final class Debug {
 		$is_post_edit           = $tsf->is_post_edit();
 		$is_wp_lists_edit       = $tsf->is_wp_lists_edit();
 		$is_author              = $tsf->is_author();
-		$is_blog_page           = $tsf->is_blog_page();
 		$is_category            = $tsf->is_category();
 		$is_date                = $tsf->is_date();
 		$is_year                = $tsf->is_year();
@@ -567,8 +542,8 @@ final class Debug {
 		$is_day                 = $tsf->is_day();
 		$is_feed                = $tsf->is_feed();
 		$is_real_front_page     = $tsf->is_real_front_page();
-		$is_front_page_by_id    = $tsf->is_front_page_by_id( $page_id );
 		$is_home                = $tsf->is_home();
+		$is_home_as_page        = $tsf->is_home_as_page();
 		$is_page                = $tsf->is_page();
 		$page                   = $tsf->page();
 		$paged                  = $tsf->paged();
@@ -599,18 +574,19 @@ final class Debug {
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
-		// Don't debug the class object.
-		unset( $tsf );
+		$timer = microtime( true ) - $_t;
 
 		// Get all above vars, split them in two (true and false) and sort them by key names.
-		$vars        = get_defined_vars();
+		$vars = get_defined_vars();
+
+		// Don't debug the class object nor timer.
+		unset( $vars['tsf'], $vars['timer'], $vars['_t'] );
+
 		$current     = array_filter( $vars );
 		$not_current = array_diff_key( $vars, $current );
 
 		ksort( $current );
 		ksort( $not_current );
-
-		$timer = $this->timer();
 
 		$output = '';
 		foreach ( $current as $name => $value ) {
@@ -657,7 +633,7 @@ final class Debug {
 			),
 			sprintf(
 				'<div style="display:inline-block;width:100%%;padding:20px;border-bottom:1px solid #666;">Generated in: %s seconds</div>',
-				number_format( $timer, 5 )
+				number_format( number_format( $timer, 5 ), 5 )
 			),
 			sprintf(
 				'<div style="display:inline-block;width:100%%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">%s</div>',

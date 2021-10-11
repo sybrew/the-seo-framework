@@ -1931,8 +1931,6 @@ class Sanitize extends Admin_Pages {
 			// fill = Normal, template, raw text, escapable text, foreign.
 			$fill_query = array_diff( $args[ $type ], $void );
 
-			$_regex = sprintf( '<(%s)\b[^>]*?>', implode( '|', $args[ $type ] ) );
-
 			if ( $void_query ) {
 				$_regex   = sprintf( '<(%s)\b[^>]*?>', implode( '|', $void_query ) );
 				$_replace = 'space' === $type ? ' ' : '';

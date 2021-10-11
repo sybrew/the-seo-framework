@@ -16,7 +16,7 @@ $mdash    = ' &mdash; ';
 $taxonomy = $this->get_current_taxonomy();
 
 // This will return 'Page' on all non-archive types (except the homepage)
-if ( ! $this->is_archive() && $this->is_real_front_page() || $this->is_front_page_by_id( $id ) ) {
+if ( $this->is_real_front_page() ) {
 	$type = 'Front Page';
 } elseif ( $taxonomy ) {
 	$type = $this->get_tax_type_label( $taxonomy );

@@ -262,13 +262,14 @@ class Detect extends Render {
 	 */
 	public function is_theme( $themes = '' ) {
 
-		$stylesheet = strtolower( \get_option( 'stylesheet' ) ); // Parent
-		$template   = strtolower( \get_option( 'template' ) );   // Child
+		$active_theme = [
+			strtolower( \get_option( 'stylesheet' ) ), // Parent
+			strtolower( \get_option( 'template' ) ),   // Child
+		];
 
-		foreach ( (array) $themes as $theme ) {
-			if ( \in_array( strtolower( $theme ), [ $stylesheet, $template ], true ) )
+		foreach ( (array) $themes as $theme )
+			if ( \in_array( strtolower( $theme ), $active_theme, true ) )
 				return true;
-		}
 
 		return false;
 	}
@@ -525,25 +526,22 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function detect_non_html_page_builder() {
-
-		static $detected = null;
-
-		if ( isset( $detected ) ) return $detected;
-
-		/**
-		 * @since 4.1.0
-		 * @param bool $detected Whether an active page builder that renders content dynamically is detected.
-		 * @NOTE not to be confused with `the_seo_framework_detect_non_html_page_builder`, which tests
-		 *       the page builder status for each post individually.
-		 */
-		return $detected = (bool) \apply_filters(
-			'the_seo_framework_shortcode_based_page_builder_active',
-			$this->detect_plugin( [
-				'constants' => [
-					'ET_BUILDER_VERSION',
-					'WPB_VC_VERSION',
-				],
-			] )
+		return memo() ?? memo(
+			/**
+			 * @since 4.1.0
+			 * @param bool $detected Whether an active page builder that renders content dynamically is detected.
+			 * @NOTE not to be confused with `the_seo_framework_detect_non_html_page_builder`, which tests
+			 *       the page builder status for each post individually.
+			 */
+			(bool) \apply_filters(
+				'the_seo_framework_shortcode_based_page_builder_active',
+				$this->detect_plugin( [
+					'constants' => [
+						'ET_BUILDER_VERSION',
+						'WPB_VC_VERSION',
+					],
+				] )
+			)
 		);
 	}
 
@@ -557,11 +555,8 @@ class Detect extends Render {
 	 * @return bool Whether the robots.txt file exists.
 	 */
 	public function has_robots_txt() {
-
-		static $has_robots = null;
-
-		if ( isset( $has_robots ) )
-			return $has_robots;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		// Ensure get_home_path() is declared.
 		if ( ! \function_exists( '\\get_home_path' ) )
@@ -570,7 +565,7 @@ class Detect extends Render {
 		$path = \get_home_path() . 'robots.txt';
 
 		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
-		return $has_robots = file_exists( $path );
+		return memo( file_exists( $path ) );
 	}
 
 	/**
@@ -583,11 +578,8 @@ class Detect extends Render {
 	 * @return bool Whether the sitemap.xml file exists.
 	 */
 	public function has_sitemap_xml() {
-
-		static $has_map = null;
-
-		if ( isset( $has_map ) )
-			return $has_map;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		// Ensure get_home_path() is declared.
 		if ( ! \function_exists( '\\get_home_path' ) )
@@ -596,7 +588,7 @@ class Detect extends Render {
 		$path = \get_home_path() . 'sitemap.xml';
 
 		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
-		return $has_map = file_exists( $path );
+		return memo( file_exists( $path ) );
 	}
 
 	/**
@@ -950,7 +942,7 @@ class Detect extends Render {
 						array_merge(
 							$this->get_forced_supported_taxonomies(),
 							//? array_values() because get_taxonomies() gives a sequential array.
-							array_values( (array) \get_taxonomies( [
+							array_values( \get_taxonomies( [
 								'public'   => true,
 								'_builtin' => false,
 							] ) )
@@ -1032,7 +1024,7 @@ class Detect extends Render {
 		$disabled = false;
 
 		// First, test pertaining option directly.
-		if ( isset( $this->get_option( 'disabled_taxonomies' )[ $taxonomy ] ) ) {
+		if ( $taxonomy && isset( $this->get_option( 'disabled_taxonomies' )[ $taxonomy ] ) ) {
 			$disabled = true;
 		} else {
 			// Then, test some() post types.
