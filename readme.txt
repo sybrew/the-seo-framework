@@ -378,6 +378,8 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 
 **For developers:**
 
+* **Added:**
+	* We introduce function `tsf()`, an alias of `the_seo_framework()`.
 * **Changed:**
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
 * **Fixed:**

@@ -52,6 +52,7 @@ function _init_locale() {
  *
  * @since 3.1.0
  * @access private
+ * @see function tsf().
  * @see function the_seo_framework().
  * @factory
  *

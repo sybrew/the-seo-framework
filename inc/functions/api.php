@@ -32,6 +32,21 @@ namespace {
 	 * Call this after action 'init' priority 0 otherwise it will kill the plugin,
 	 * or even other plugins.
 	 *
+	 * @since 4.2.0
+	 *
+	 * @return null|object The plugin class object.
+	 */
+	function tsf() {
+		return The_SEO_Framework\_init_tsf();
+	}
+
+	/**
+	 * Returns the class from cache.
+	 *
+	 * This is the recommended way of calling the class, if needed.
+	 * Call this after action 'init' priority 0 otherwise it will kill the plugin,
+	 * or even other plugins.
+	 *
 	 * @since 2.2.5
 	 *
 	 * @return null|object The plugin class object.
