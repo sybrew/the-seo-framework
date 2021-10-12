@@ -90,7 +90,7 @@ final class Load extends Cache {
 			return null;
 		}
 
-		//= Setup debug vars before initializing anything else.
+		// Setup debug vars before initializing anything else.
 		$this->init_debug_vars();
 
 		if ( $this->the_seo_framework_debug ) {
@@ -101,12 +101,12 @@ final class Load extends Cache {
 			\add_action( 'wp_footer', [ $debug_instance, '_debug_output' ] );
 		}
 
-		//= Register the capabilities early.
+		// Register the capabilities early.
 		\add_filter( 'option_page_capability_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
 
 		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
 
-		//= Load plugin at init 0.
+		// Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 
 		$this->is_headless = [
@@ -122,7 +122,7 @@ final class Load extends Cache {
 			'constant THE_SEO_FRAMEWORK_HEADLESS'
 		) ) \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) or \define( 'THE_SEO_FRAMEWORK_HEADLESS', true );
 
-		//= A headless boi is a good boi. Far less annoying, they are.
+		// A headless boi is a good boi. Far less annoying, they are.
 		if ( \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) ) {
 			$this->is_headless = [
 				'meta'     => true,

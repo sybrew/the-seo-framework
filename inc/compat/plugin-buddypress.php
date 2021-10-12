@@ -18,7 +18,7 @@ namespace The_SEO_Framework;
  */
 function _buddypress_init_compat() {
 	if ( \is_buddypress() ) {
-		//= Remove TSF canonical URL, and let BuddyPress handle it.
+		// Remove TSF canonical URL, and let BuddyPress handle it.
 		\add_filter( 'the_seo_framework_rel_canonical_output', '__return_empty_string' );
 	}
 }

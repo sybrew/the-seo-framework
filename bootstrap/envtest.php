@@ -72,7 +72,7 @@ function the_seo_framework_pre_boot_test() {
 				return;
 			}
 		}
-		//= Free memory.
+		// Free memory.
 		unset( $nw );
 	}
 

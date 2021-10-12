@@ -58,9 +58,8 @@ class Posts extends \WP_Sitemaps_Posts {
 		// Bail early if the queried post type is not supported.
 		$supported_types = $this->get_object_subtypes();
 
-		if ( ! isset( $supported_types[ $post_type ] ) ) {
+		if ( ! isset( $supported_types[ $post_type ] ) )
 			return [];
-		}
 
 		/**
 		 * Filters the posts URL list before it is generated.
@@ -81,9 +80,8 @@ class Posts extends \WP_Sitemaps_Posts {
 			$page_num
 		);
 
-		if ( null !== $url_list ) {
+		if ( null !== $url_list )
 			return $url_list;
-		}
 
 		$args          = $this->get_posts_query_args( $post_type );
 		$args['paged'] = $page_num;
@@ -155,7 +153,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			}
 		}
 
-		foreach ( $query->posts as $post ) {
+		foreach ( $query->posts as $post ) :
 			/**
 			 * @augmented This if-statement prevents including the post in the sitemap when conditions apply.
 			 */
@@ -187,7 +185,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			 */
 			$sitemap_entry = \apply_filters( 'wp_sitemaps_posts_entry', $sitemap_entry, $post, $post_type );
 			$url_list[]    = $sitemap_entry;
-		}
+		endforeach;
 
 		return $url_list;
 	}

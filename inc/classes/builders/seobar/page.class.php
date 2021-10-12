@@ -382,14 +382,14 @@ final class Page extends Main {
 					'builder'   => \__( 'A page builder is used that renders content dynamically, so no description can be generated for performance and privacy reasons. Consider providing a custom description.', 'autodescription' ),
 					'protected' => \__( 'The page is protected, so no description is generated.', 'autodescription' ),
 					'excerpt'   => \__( "It's built from the page excerpt field.", 'autodescription' ),
-					/* translators: %s = list of duplicated words */
-					'dupes'     => \__( 'Found duplicated words: %s', 'autodescription' ),
+					/* translators: %s = list of repeated words */
+					'dupes'     => \__( 'Found repeated words: %s', 'autodescription' ),
 					'syntax'    => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
 				],
 				'reason'   => [
 					'empty'         => \__( 'Empty.', 'autodescription' ),
-					'founddupe'     => \__( 'Found duplicated words.', 'autodescription' ),
-					'foundmanydupe' => \__( 'Found too many duplicated words.', 'autodescription' ),
+					'founddupe'     => \__( 'Found repeated words.', 'autodescription' ),
+					'foundmanydupe' => \__( 'Found too many repeated words.', 'autodescription' ),
 					'syntax'        => \__( 'Found markup syntax.', 'autodescription' ),
 				],
 				'defaults' => [

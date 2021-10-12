@@ -212,7 +212,7 @@ class Cache extends Site_Options {
 	 */
 	protected function parse_delete_cache_keys( &$type, &$id, &$args ) {
 
-		//= Don't use cache on fetching ID.
+		// Don't use cache on fetching ID.
 		$id = $id ?: $this->get_the_real_ID( false );
 
 		$defaults = [
@@ -474,7 +474,7 @@ class Cache extends Site_Options {
 			$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
 		}
 
-		//= Two separated equals queries are faster than a single IN with 'meta_key'.
+		// Two separated equals queries are faster than a single IN with 'meta_key'.
 		// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
 		$cache = [
 			'archive' => $wpdb->get_results(

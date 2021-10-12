@@ -77,9 +77,8 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 */
 	public static function _filter_add_provider( $provider, $name ) {
 
-		if ( ! $provider instanceof \WP_Sitemaps_Provider ) {
+		if ( ! $provider instanceof \WP_Sitemaps_Provider )
 			return $provider;
-		}
 
 		switch ( $name ) {
 			case 'posts':
@@ -94,7 +93,6 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 				if ( \tsf()->get_option( 'author_noindex' ) )
 					$provider = null;
 				break;
-
 			default:
 				break;
 		}

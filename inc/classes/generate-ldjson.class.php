@@ -147,13 +147,13 @@ class Generate_Ldjson extends Generate_Image {
 	public function render_ld_json_scripts() {
 
 		if ( $this->is_real_front_page() ) {
-			//= Homepage Schema.
+			// Homepage Schema.
 			$output = '';
 
 			$output .= $this->get_ld_json_website() ?: '';
 			$output .= $this->get_ld_json_links() ?: '';
 		} else {
-			//= All other pages' Schema.
+			// All other pages' Schema.
 			$output = $this->get_ld_json_breadcrumbs() ?: '';
 		}
 
@@ -180,7 +180,7 @@ class Generate_Ldjson extends Generate_Image {
 			'url'      => $this->get_homepage_permalink(),
 		];
 
-		//= The name part.
+		// The name part.
 		$blogname = $this->get_blogname();
 		$kname    = $this->get_option( 'knowledge_name' );
 
@@ -191,7 +191,7 @@ class Generate_Ldjson extends Generate_Image {
 			'alternateName' => \strlen( $alternate_name ) ? $this->escape_title( $alternate_name ) : '',
 		];
 
-		//= The searchbox part.
+		// The searchbox part.
 		$pattern     = '%s{%s}';
 		$action_name = 'search_term_string';
 		$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
@@ -215,7 +215,7 @@ class Generate_Ldjson extends Generate_Image {
 			],
 		];
 
-		//= Building
+		// Building
 		$key = 'website';
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );
@@ -499,14 +499,14 @@ class Generate_Ldjson extends Generate_Image {
 			// Check if they have parents (gets them all).
 			$ancestors = \get_ancestors( $term_id, $taxonomy );
 			if ( $ancestors ) {
-				//= Save parents to find duplicates.
+				// Save parents to find duplicates.
 				$parents[ $term_id ] = $ancestors;
 			} else {
-				//= Save current only with empty parent id..
+				// Save current only with empty parent id..
 				$parents[ $term_id ] = [];
 			}
 		endforeach;
-		//= Circle of life...
+		// Circle of life...
 		unset( $terms );
 
 		if ( ! $parents )
@@ -543,7 +543,7 @@ class Generate_Ldjson extends Generate_Image {
 			}
 		}
 		if ( ! $filtered ) {
-			//= Only get the first tree through numeric ordering.
+			// Only get the first tree through numeric ordering.
 			ksort( $assigned_ids, SORT_NUMERIC );
 			$tree_ids = $this->filter_ld_json_breadcrumb_trees( $tree_ids, key( $assigned_ids ) );
 		}

@@ -201,9 +201,8 @@ final class Scripts {
 		if ( is_scalar( $values ) )
 			return static::decode_entities( $values );
 
-		foreach ( $values as &$v ) {
+		foreach ( $values as &$v )
 			$v = static::decode_entities( $v );
-		}
 
 		return $values;
 	}
@@ -218,9 +217,8 @@ final class Scripts {
 		$tsf  = \tsf();
 		$args = [];
 
-		if ( $tsf->is_post_edit() ) {
+		if ( $tsf->is_post_edit() )
 			$args['post'] = $tsf->get_the_real_admin_ID();
-		}
 
 		\wp_enqueue_media( $args );
 	}

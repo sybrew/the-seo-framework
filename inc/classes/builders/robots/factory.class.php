@@ -36,9 +36,15 @@ class Factory {
 
 	/**
 	 * @since 4.2.0
-	 * @param int The halter. A unique ID sent to stop the generator.
+	 * @param int The starter. A unique ID sent to start the generator switcher.
 	 */
-	public const HALT = 0b01100011011110010110001001110010;
+	public const START = 0b01000011011110010110001001110010;
+
+	/**
+	 * @since 4.2.0
+	 * @param int The halter. A unique ID sent to stop the generator switcher.
+	 */
+	public const HALT = 0b01010111011010010111001001100101;
 
 	/**
 	 * @since 4.2.0
@@ -98,7 +104,7 @@ class Factory {
 	 */
 	public static function generator() {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
-		while ( true ) switch ( $sender = yield ) :
+		while ( true ) switch ( $sender = yield static::START ) :
 			case 'noindex':
 			case 'nofollow':
 			case 'noarchive':

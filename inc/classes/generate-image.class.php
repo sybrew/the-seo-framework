@@ -516,7 +516,7 @@ class Generate_Image extends Generate_Url {
 		];
 
 		if ( $image ) {
-			list( $src, $width, $height ) = $image;
+			[ $src, $width, $height ] = $image;
 
 			$test_src = \esc_url_raw( $this->set_url_scheme( $src, 'https' ), [ 'https', 'http' ] );
 			$test_url = \esc_url_raw( $this->set_url_scheme( $url, 'https' ), [ 'https', 'http' ] );

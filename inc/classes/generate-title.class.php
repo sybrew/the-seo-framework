@@ -1466,13 +1466,10 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function use_title_branding( $args = null, $social = false ) {
 
-		$use = true;
+		// If social, test its option first.
+		$use = $social ? ! $this->get_option( 'social_title_rem_additions' ) : true;
 
-		if ( $social ) {
-			$use = ! $this->get_option( 'social_title_rem_additions' );
-		}
-
-		// When social titles tend to use it, evaluate again from general title settings.
+		// Reevaluate from general title settings, overriding social.
 		if ( $use ) {
 			if ( null === $args ) {
 				$use = $this->use_title_branding_from_query();

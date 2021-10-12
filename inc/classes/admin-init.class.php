@@ -367,6 +367,7 @@ class Admin_Init extends Init {
 	 * @since 2.9.2 Added user-friendly exception handling.
 	 * @since 2.9.3 : 1. Query arguments work again (regression 2.9.2).
 	 *                2. Now only accepts http and https protocols.
+	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
 	 *
 	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.
 	 * @param array  $query_args Optional. Associative array of query string arguments
@@ -381,11 +382,7 @@ class Admin_Init extends Init {
 		// Might cause security issues... we _must_ exit, always? Show warning?
 		$url = html_entity_decode( \menu_page_url( $page, false ) );
 
-		foreach ( $query_args as $key => $value )
-			if ( empty( $key ) || empty( $value ) )
-				unset( $query_args[ $key ] );
-
-		$target = \add_query_arg( $query_args, $url );
+		$target = \add_query_arg( array_filter( $query_args, 'strlen' ), $url );
 		$target = \esc_url_raw( $target, [ 'https', 'http' ] );
 
 		// Predict white screen:

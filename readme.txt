@@ -326,6 +326,13 @@ TODO 404 -> noindex isn't working anymore.
 TODO array -> iterable?
 TODO ?array -> ?iterable?
 TODO apply yield from... in base sitemap?
+TODO s_...$new_value -> $something_else?
+
+TODO get_home_canonical_url() needs an admin-friendly-non-pagination-test version.
+TODO make a function of `umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() )`..
+TODO further optimize get_word_count(), array flips and whatnot...
+
+TODO translation POT file.
 
 **For everyone:**
 
@@ -376,6 +383,7 @@ TODO apply yield from... in base sitemap?
 			* On multisite, it can be shown on every sub-site, unless the plugin is network activated, then you'll see it only on the main site.
 	* **Accessibility:**
 		* The SEO Bar item "Redirect" now conveys a more proper message when the page status is draft: "... once published."
+		* "Duplicated words" is now "repeated words."
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 * **Fixed:**
@@ -435,6 +443,7 @@ TODO apply yield from... in base sitemap?
 			* `get_author_canonical_url()`
 				1. The first parameter is now optional.
 				2. When the $id isn't set, the URL won't get tested for pagination issues.
+			* `get_relative_fontcolor` optimized code, but it now has some rounding changes at the end. This could offset the returned values by 1/255th.
 			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.
 			* `get_robots_taxonomy_option_id` no longer sanitizes the input parameter.
 			* `get_taxonomical_canonical_url()`:

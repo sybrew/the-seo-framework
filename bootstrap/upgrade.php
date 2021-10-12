@@ -546,7 +546,7 @@ function _do_upgrade_2701() {
 			\add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
 		}
 
-		//= Rudimentary test for remaining ~300 users of earlier versions passed, set initial version to 2600.
+		// Rudimentary test for remaining ~300 users of earlier versions passed, set initial version to 2600.
 		\update_option( 'the_seo_framework_initial_db_version', '2600', 'no' );
 	}
 }
@@ -598,7 +598,7 @@ function _do_upgrade_3001() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
 		$tsf = \tsf();
 
-		//= Only show notice if old option exists. Falls back to default upgrader otherwise.
+		// Only show notice if old option exists. Falls back to default upgrader otherwise.
 		$sitemap_timestamps = $tsf->get_option( 'sitemap_timestamps', false );
 		if ( '' !== $sitemap_timestamps ) {
 			$tsf->update_option( 'timestamps_format', (string) (int) $sitemap_timestamps );

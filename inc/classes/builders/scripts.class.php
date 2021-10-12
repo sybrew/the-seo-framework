@@ -316,7 +316,7 @@ final class Scripts {
 	 * @uses static::egister_script()
 	 */
 	private function forward_known_scripts() {
-		//= Register them first to accomodate for dependencies.
+		// Register them first to accomodate for dependencies.
 		foreach ( static::$scripts as $s ) {
 			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
 			static::forward_script( $s );
@@ -555,7 +555,7 @@ final class Scripts {
 	 * }
 	 */
 	private function register_template( $id, array $templates ) {
-		//= Wrap template if it's only one on the base.
+		// Wrap template if it's only one on the base.
 		if ( isset( $templates['file'] ) )
 			$templates = [ $templates ];
 
@@ -615,7 +615,7 @@ final class Scripts {
 			$$_key = $_val;
 		unset( $_key, $_val, $args );
 
-		//= Prevents private-includes hijacking.
+		// Prevents private-includes hijacking.
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- Read the include?
 		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include $file;

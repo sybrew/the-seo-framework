@@ -283,7 +283,7 @@ class Generate_Url extends Generate_Title {
 		if ( $this->pretty_permalinks )
 			return \esc_url( $url, [ 'https', 'http' ] );
 
-		//= Keep the &'s more readable when using query-parameters.
+		// Keep the &'s more readable when using query-parameters.
 		return \esc_url_raw( $url, [ 'https', 'http' ] );
 	}
 
@@ -300,8 +300,9 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_home_canonical_url() {
 
-		//= Prevent admin bias by passing preferred scheme.
-		$url = \get_home_url( null, '', $this->get_preferred_scheme() );
+		$url = $this->set_preferred_url_scheme(
+			umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() )
+		);
 
 		if ( ! $url ) return '';
 
@@ -532,7 +533,7 @@ class Generate_Url extends Generate_Title {
 		}
 
 		if ( $_paginate ) {
-			//= Adds pagination if input matches query.
+			// Adds pagination if input matches query.
 			$link = $this->add_url_pagination( $link, $this->paged(), true );
 		}
 
@@ -564,7 +565,7 @@ class Generate_Url extends Generate_Title {
 		$link = \get_search_link( $query );
 
 		if ( $_paginate ) {
-			//= Adds pagination if input query isn't null.
+			// Adds pagination if input query isn't null.
 			$link = $this->add_url_pagination( $link, $this->paged(), true );
 		}
 
@@ -583,10 +584,8 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_preferred_scheme() {
 
-		static $scheme;
-
-		if ( isset( $scheme ) )
-			return $scheme;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		switch ( $this->get_option( 'canonical_scheme' ) ) :
 			case 'https':
@@ -607,9 +606,7 @@ class Generate_Url extends Generate_Title {
 		 * @since 2.8.0
 		 * @param string $scheme The current URL scheme.
 		 */
-		$scheme = (string) \apply_filters( 'the_seo_framework_preferred_url_scheme', $scheme );
-
-		return $scheme;
+		return memo( (string) \apply_filters( 'the_seo_framework_preferred_url_scheme', $scheme ) );
 	}
 
 	/**
@@ -628,7 +625,11 @@ class Generate_Url extends Generate_Title {
 	 * @return string The detected URl scheme, lowercase.
 	 */
 	public function detect_site_url_scheme() {
-		return strtolower( parse_url( \get_home_url(), PHP_URL_SCHEME ) ) ?: ( $this->is_ssl() ? 'https' : 'http' );
+		return strtolower( parse_url(
+			umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() ),
+			PHP_URL_SCHEME
+		) )
+		?: ( $this->is_ssl() ? 'https' : 'http' );
 	}
 
 	/**
@@ -759,10 +760,6 @@ class Generate_Url extends Generate_Title {
 	public function remove_pagination_from_url( $url, $page = null, $use_base = null ) {
 
 		if ( $this->pretty_permalinks ) {
-			// Defensive programming...
-			static $user_slash, $base;
-			$user_slash = $user_slash ?? ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
-			$base       = $base ?? $GLOBALS['wp_rewrite']->pagination_base;
 
 			$_page = $page ?? max( $this->paged(), $this->page() );
 
@@ -773,10 +770,12 @@ class Generate_Url extends Generate_Title {
 					$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive()
 				);
 
+				$user_slash = ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
+
 				if ( $_use_base ) {
-					$find = '/' . $base . '/' . $_page . $user_slash;
+					$find = "/{$GLOBALS['wp_rewrite']->pagination_base}/{$_page}{$user_slash}";
 				} else {
-					$find = '/' . $_page . $user_slash;
+					$find = "/{$_page}{$user_slash}";
 				}
 
 				$_query = parse_url( $_url, PHP_URL_QUERY );
@@ -1003,7 +1002,9 @@ class Generate_Url extends Generate_Title {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$parsed_url = parse_url( \get_home_url() );
+		$parsed_url = parse_url(
+			umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() )
+		);
 
 		$host = $parsed_url['host'] ?? '';
 
@@ -1124,26 +1125,21 @@ class Generate_Url extends Generate_Title {
 		if ( ! $url )
 			return false;
 
-		static $home_domain;
-
-		if ( ! $home_domain ) {
-			$home_domain = \esc_url_raw( \get_home_url(), [ 'https', 'http' ] );
-			//= Simply convert to HTTPS/HTTP based on is_ssl()
-			$home_domain = $this->set_url_scheme( $home_domain );
-		}
+		$home_domain = memo() ?? memo(
+			$this->set_url_scheme( \esc_url_raw(
+				umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() ),
+				[ 'https', 'http' ]
+			) )
+		);
 
 		// Test for likely match early, before transforming.
 		if ( 0 === stripos( $url, $home_domain ) )
 			return true;
 
 		$url = \esc_url_raw( $url, [ 'https', 'http' ] );
-		//= Simply convert to HTTPS/HTTP based on is_ssl()
 		$url = $this->set_url_scheme( $url );
 
-		//= If they start with the same, we can assume it's the same domain.
-		if ( 0 === stripos( $url, $home_domain ) )
-			return true;
-
-		return false;
+		// If they start with the same, we can assume it's the same domain.
+		return 0 === stripos( $url, $home_domain );
 	}
 }

@@ -26,7 +26,7 @@ namespace The_SEO_Framework;
  */
 function _print_xsl_global_variables( $tsf ) {
 
-	//= Styles generic.
+	// Styles generic.
 	printf(
 		'<xsl:variable name="tableMinWidth" select="\'%s\'"/>',
 		$tsf->get_option( 'sitemaps_modified' ) ? '700' : '550'

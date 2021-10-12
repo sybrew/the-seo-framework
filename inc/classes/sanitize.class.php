@@ -151,7 +151,7 @@ class Sanitize extends Admin_Pages {
 	public function _set_backward_compatibility( $new_value ) {
 
 		db_4103:
-		//= Category and Tag robots backward compat.
+		// Category and Tag robots backward compat.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
 			$robots_option_id   = $this->get_robots_taxonomy_option_id( $r );
 			$new_robots_options = $new_value[ $robots_option_id ] ?? [];
@@ -1274,9 +1274,8 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $new_values ) ) return [];
 
-		foreach ( $new_values as $index => &$value ) {
+		foreach ( $new_values as $index => &$value )
 			$value = $this->s_one_zero( $value );
-		}
 
 		return $new_values;
 	}
@@ -1535,7 +1534,7 @@ class Sanitize extends Admin_Pages {
 		$link = 'https://www.facebook.com/' . $path;
 
 		if ( strpos( $link, 'profile.php' ) ) {
-			//= Gets query parameters.
+			// Gets query parameters.
 			parse_str( parse_url( $link, PHP_URL_QUERY ), $r );
 			if ( isset( $r['id'] ) ) {
 				$link = 'https://www.facebook.com/profile.php?id=' . \absint( $r['id'] );
@@ -1979,7 +1978,7 @@ class Sanitize extends Admin_Pages {
 			'alt'    => '',
 		];
 
-		list( $url, $id, $width, $height, $alt ) = array_values( array_merge( $defaults, $details ) );
+		[ $url, $id, $width, $height, $alt ] = array_values( array_merge( $defaults, $details ) );
 
 		if ( ! $url ) return $defaults;
 

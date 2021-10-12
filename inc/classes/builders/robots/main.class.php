@@ -131,6 +131,7 @@ final class Main {
 
 		$factory   = $this->get_factory();
 		$halt      = $factory::HALT;
+		$start     = $factory::START;
 		$generator = $factory->set(
 			$this->args,
 			$options
@@ -150,7 +151,7 @@ final class Main {
 				$options & \The_SEO_Framework\ROBOTS_ASSERT
 					and $this->store_assertion( $g, $generator->key(), $r );
 				// We could send anything, really. But this is the only method that loops and yields at the same time.
-			} while ( null !== $generator->send( true ) );
+			} while ( $start !== $generator->send( true ) );
 		}
 
 		return $results;

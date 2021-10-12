@@ -491,9 +491,8 @@ class Core {
 	 */
 	public function hellip_if_over( $string, $over = 0 ) {
 
-		if ( $over > 0 && \strlen( $string ) > $over ) {
+		if ( $over > 0 && \strlen( $string ) > $over )
 			$string = substr( $string, 0, abs( $over - 2 ) ) . ' &hellip;';
-		}
 
 		return $string;
 	}
@@ -524,8 +523,7 @@ class Core {
 	 */
 	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
 
-		$string = html_entity_decode( $string );
-		$string = \wp_check_invalid_utf8( $string );
+		$string = \wp_check_invalid_utf8( html_entity_decode( $string ) );
 
 		if ( ! $string ) return [];
 
@@ -539,21 +537,16 @@ class Core {
 			PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
 		);
 
-		$words_too_many = [];
-
 		if ( \count( $word_list ) ) :
 			$words = [];
-			foreach ( $word_list as $wli ) {
-				//= { $words[ int Offset ] => string Word }
-				$words[ $wli[1] ] = $wli[0];
-			}
 
-			$word_count = array_count_values( $words );
+			foreach ( $word_list as [ $_word, $_offset ] )
+				$words[ $_offset ] = $_word;
 
 			// We're going to fetch words based on position, and then flip it to become the key.
 			$word_keys = array_flip( array_reverse( $words, true ) );
 
-			foreach ( $word_count as $word => $count ) {
+			foreach ( array_count_values( $words ) as $word => $count ) {
 				if ( ( $use_mb ? mb_strlen( $word ) : \strlen( $word ) ) <= $short_length ) {
 					$run = $count >= $dupe_short;
 				} else {
@@ -569,13 +562,14 @@ class Core {
 
 					$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
 
-					// Found words that are used too frequently.
+					// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You need more PHP7.
 					$words_too_many[] = [ $first_encountered_word => $count ];
 				}
 			}
 		endif;
 
-		return $words_too_many;
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
+		return $words_too_many ?? [];
 	}
 
 	/**
@@ -584,31 +578,33 @@ class Core {
 	 * @since 2.8.0
 	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
 	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
-	 * @since 3.0.4 Now uses WCAG's relative luminance formula
+	 * @since 3.0.4 Now uses WCAG's relative luminance formula.
+	 * @since 4.2.0 Optimized code, but it now has some rounding changes at the end. This could
+	 *              offset the returned values by 1/255th.
 	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
 	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
 	 *
 	 * @param string $hex The 3 to 6 character RGB hex. The '#' prefix may be added.
+	 *                    RRGGBBAA is supported, but the Alpha channels won't be returned.
 	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
 	 */
 	public function get_relative_fontcolor( $hex = '' ) {
 
 		$hex = ltrim( $hex, '#' );
 
-		// #rgb = #rrggbb
-		if ( 3 === \strlen( $hex ) )
-			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-
-		$hex = str_split( $hex, 2 );
-
-		// Convert to usable numerics.
-		$r = hexdec( $hex[0] );
-		$g = hexdec( $hex[1] );
-		$b = hexdec( $hex[2] );
+		// Convert hex to usable numerics.
+		[ $r, $g, $b ] = array_map(
+			'hexdec',
+			str_split(
+				// rgb == rrggbb.
+				\strlen( $hex ) >= 6 ? $hex : "$hex[0]$hex[0]$hex[1]$hex[1]$hex[2]$hex[2]",
+				2
+			)
+		);
 
 		$get_relative_luminance = static function( $v ) {
-			//= Convert to 0~1 value.
-			$v /= 255;
+			// Convert to 0~1 value.
+			$v /= 0xFF;
 
 			if ( $v > .03928 ) {
 				$lum = ( ( $v + .055 ) / 1.055 ) ** 2.4;
@@ -618,32 +614,25 @@ class Core {
 			return $lum;
 		};
 
-		// Use sRGB for relative luminance.
-		$sr = 0.2126 * $get_relative_luminance( $r );
-		$sg = 0.7152 * $get_relative_luminance( $g );
-		$sb = 0.0722 * $get_relative_luminance( $b );
-
-		$rel_lum = ( $sr + $sg + $sb );
+		// Create Relative Luminance via sRGB.
+		$rl = ( 0.2126 * $get_relative_luminance( $r ) )
+			+ ( 0.7152 * $get_relative_luminance( $g ) )
+			+ ( 0.0722 * $get_relative_luminance( $b ) );
 
 		// Build light greyscale.
-		$gr = ( $r * 0.2989 / 8 ) * $rel_lum;
-		$gg = ( $g * 0.5870 / 8 ) * $rel_lum;
-		$gb = ( $b * 0.1140 / 8 ) * $rel_lum;
+		$gr = ( $r * 0.2989 / 8 ) * $rl;
+		$gg = ( $g * 0.5870 / 8 ) * $rl;
+		$gb = ( $b * 0.1140 / 8 ) * $rl;
 
-		//= Invert colors if they hit luminance boundaries.
-		if ( $rel_lum < 0.5 ) {
-			// Build dark greyscale.
-			$gr = 255 - $gr;
-			$gg = 255 - $gg;
-			$gb = 255 - $gb;
+		// Invert colors if they hit this luminance boundary.
+		if ( $rl < 0.5 ) {
+			// Build dark greyscale. bitwise operators round...
+			$gr ^= 0xFF;
+			$gg ^= 0xFF;
+			$gb ^= 0xFF;
 		}
 
-		// Build RGB hex.
-		$retr = str_pad( dechex( round( $gr ) ), 2, '0', STR_PAD_LEFT );
-		$retg = str_pad( dechex( round( $gg ) ), 2, '0', STR_PAD_LEFT );
-		$retb = str_pad( dechex( round( $gb ) ), 2, '0', STR_PAD_LEFT );
-
-		return $retr . $retg . $retb;
+		return vsprintf( '%02x%02x%02x', [ $gr, $gg, $gb ] );
 	}
 
 	/**

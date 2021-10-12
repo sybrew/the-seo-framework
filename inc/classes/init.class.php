@@ -156,14 +156,14 @@ class Init extends Query {
 		 */
 		\do_action( 'the_seo_framework_admin_init' );
 
-		//= Initialize caching actions.
+		// Initialize caching actions.
 		$this->init_admin_caching_actions();
 
 		if ( ! $this->is_headless['meta'] ) {
-			//= Initialize term meta filters and actions.
+			// Initialize term meta filters and actions.
 			$this->init_term_meta();
 
-			//= Initialize term meta filters and actions.
+			// Initialize term meta filters and actions.
 			$this->init_post_meta();
 
 			// Enqueue Post meta boxes.
@@ -194,7 +194,7 @@ class Init extends Query {
 		}
 
 		if ( ! $this->is_headless['user'] ) {
-			//= Initialize user meta filters and actions.
+			// Initialize user meta filters and actions.
 			$this->init_user_meta();
 
 			// Enqueue user meta output.
@@ -652,7 +652,7 @@ class Init extends Query {
 			return;
 		}
 
-		//= All WP defined protocols are allowed.
+		// All WP defined protocols are allowed.
 		$url = \esc_url_raw( $url );
 
 		if ( empty( $url ) ) {
@@ -670,7 +670,7 @@ class Init extends Query {
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
 
 		if ( ! $this->allow_external_redirect() ) {
-			//= Only HTTP/HTTPS and home URLs are allowed.
+			// Only HTTP/HTTPS and home URLs are allowed.
 			$path = $this->set_url_scheme( $url, 'relative' );
 			$url  = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
 
@@ -769,9 +769,8 @@ class Init extends Query {
 		 * @since 2.5.0
 		 * @param bool $disallow Whether to disallow robots queries.
 		 */
-		if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
+		if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) )
 			$output .= "Disallow: /*?*\r\n";
-		}
 
 		/**
 		 * @since 2.5.0
@@ -784,11 +783,11 @@ class Init extends Query {
 		if ( $this->get_option( 'sitemaps_robots' ) ) {
 			if ( $this->get_option( 'sitemaps_output' ) ) {
 				$sitemaps = Bridges\Sitemap::get_instance();
-				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
-					if ( ! empty( $data['robots'] ) ) {
+
+				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data )
+					if ( ! empty( $data['robots'] ) )
 						$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
-					}
-				}
+
 				$output .= "\r\n";
 			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
 				if ( $this->use_core_sitemaps() ) {
@@ -1000,7 +999,7 @@ class Init extends Query {
 				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) )
 					unset( $posts[ $n ] );
 			}
-			//= Reset numeric index.
+			// Reset numeric index.
 			$posts = array_values( $posts );
 		}
 
@@ -1027,7 +1026,7 @@ class Init extends Query {
 				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) )
 					unset( $posts[ $n ] );
 			}
-			//= Reset numeric index.
+			// Reset numeric index.
 			$posts = array_values( $posts );
 		}
 

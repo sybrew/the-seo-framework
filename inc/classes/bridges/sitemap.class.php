@@ -25,7 +25,10 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\{
+	memo,
+	umemo,
+};
 
 /**
  * Sets up class loader as file is loaded.
@@ -497,7 +500,13 @@ final class Sitemap {
 		 */
 		return \apply_filters(
 			'the_seo_framework_sitemap_base_path',
-			rtrim( parse_url( \get_home_url(), PHP_URL_PATH ), '/' )
+			rtrim(
+				parse_url(
+					umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() ),
+					PHP_URL_PATH
+				),
+				'/'
+			)
 		);
 	}
 

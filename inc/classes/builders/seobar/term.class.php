@@ -363,14 +363,14 @@ final class Term extends Main {
 				],
 				'assess'   => [
 					'empty'  => \__( 'No description could be generated.', 'autodescription' ),
-					/* translators: %s = list of duplicated words */
-					'dupes'  => \__( 'Found duplicated words: %s', 'autodescription' ),
+					/* translators: %s = list of repeated words */
+					'dupes'  => \__( 'Found repeated words: %s', 'autodescription' ),
 					'syntax' => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
 				],
 				'reason'   => [
 					'empty'         => \__( 'Empty.', 'autodescription' ),
-					'founddupe'     => \__( 'Found duplicated words.', 'autodescription' ),
-					'foundmanydupe' => \__( 'Found too many duplicated words.', 'autodescription' ),
+					'founddupe'     => \__( 'Found repeated words.', 'autodescription' ),
+					'foundmanydupe' => \__( 'Found too many repeated words.', 'autodescription' ),
 					'syntax'        => \__( 'Found markup syntax.', 'autodescription' ),
 				],
 				'defaults' => [
@@ -451,11 +451,11 @@ final class Term extends Main {
 		}
 
 		// Fetch words that are outputted more than 3 times.
-		$duplicated_words = static::$tsf->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
+		$repeated_words = static::$tsf->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
 
-		if ( $duplicated_words ) {
+		if ( $repeated_words ) {
 			$dupes = [];
-			foreach ( $duplicated_words as $_dw ) :
+			foreach ( $repeated_words as $_dw ) :
 				// Keep abbreviations... WordPress, make multibyte support mandatory already.
 				// $_word = ctype_upper( reset( $_dw ) ) ? reset( $_dw ) : mb_strtolower( reset( $_dw ) );
 
@@ -469,11 +469,11 @@ final class Term extends Main {
 
 			$item['assess']['dupe'] = implode( ' ', $dupes );
 
-			$max = max( $duplicated_words );
+			$max = max( $repeated_words );
 			$max = reset( $max );
 
 			// Warn when more than 3x triplet+/quintet+ words are found.
-			if ( $max > 3 || \count( $duplicated_words ) > 1 ) {
+			if ( $max > 3 || \count( $repeated_words ) > 1 ) {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
 				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
