@@ -352,7 +352,7 @@ TODO apply yield from... in base sitemap?
 			-> TODO this isn't really faster now...
 			* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
 				* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
-				* No, this would require us migrating to a new post meta system... https://github.com/sybrew/the-seo-framework/issues/185
+				* No, this would require us migrating to a new post meta system (Key-Value store)... https://github.com/sybrew/the-seo-framework/issues/185
 		* Large sitemaps are now rendered more quickly by the browser.
 		* Tooltips despawn 25% quicker now.
 		* Tapping the tooltip no longer conjures tooltip animations, potentially saving battery-life.
@@ -382,6 +382,7 @@ TODO apply yield from... in base sitemap?
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
 	* Addressed an issue with settings-headless mode where the list-edit (quick/bulk-edit) features was untentionally disabled; it's now disabled when the meta-headless mode is enabled.
+	* Addressed a corner-case issue with Polylang where on WP installations instated prior WP v4.4 the primary sitemap got emptied when no new languages have been setup since WP v4.4 or later.
 
 **For developers:**
 
@@ -572,88 +573,37 @@ In this major-minor update, we improved browser performance by up to 99% (not a 
 
 = 4.1.0 - Grace =
 
-*Happiness can be found, even in the darkest of times, if one only remembers to turn on the light. - [J.K. Rowling &amp; Steve Kloves](https://www.warnerbros.com/movies/harry-potter-and-prisoner-azkaban)*
+*A related quote of a book I just read or film I just saw - [Author]()*
 
 **Release highlights**
 
-* This update brings you up to 96% faster browser interaction, up to 30% faster browser rendering times, and up to 26% faster server response times.
-* You can now use quick-edit to adjust meta titles and descriptions of all your posts and terms.
-* New custom taxonomy settings are added, so you can quickly deindex custom taxonomies, or exclude SEO for them entirely.
-* Well-known page builders that aren't built upon shortcodes, like Elementor, Beaver Builder, and Siteorigin's, now support meta description generation.
-* The description generator is now far more intelligent--it can now recognize contractions, and other complex punctuations and marks (¡¿Que?! Y'all'dn't've!? 「やった！」).
-* WordPress 5.5 support is now integrated deeply. To get there, we had to implement new query listeners, browser observers, and persistent notices.
-
-**Graciously graceful**
-
-This update's name is Grace, and for a good reason: the plugin listens to your inputs respectfully and does everything as you incline, as you would expect.
-
-The SEO Framework's response-and rendering times have substantially been reduced; everything's much smoother and swifter since 5 years ago--back when it had fewer than 1&#160;000 users.
-
-At first glance, you probably won't notice anything new after updating to 4.1. But, when you look closer, among 350 QOL changes, you'll find improvements such as:
-
-* Tapping a tooltip no longer accidentally activates related inputs.
-* Only necessary REST-requests are made for primary-term support.
-* Browser animations execute more naturally, like removing a notification.
-* Switching a settings-tab can no longer cause staggered tab-content.
-* The description generator now detects deeply nested HTML, improving the accuracy of intent.
-
-You'll also find many obscure new features, such as:
-
-* A new accessible SEO Bar color has been added: Gray. It exclaims there was nothing to process.
-* Fancy a custom sitemap stylesheet logo? Now you can upload one.
-* You can now remove branding from social meta titles.
-* Persistent notices may now show up, gracefully (more on this below).
-
-You can find more than 340 other noteworthy changes in the [detailed log](https://theseoframework.com/?p=3598#detailed).
-
-**Persistent notices**
-
-TSF now stores some notices in your database, so they can be shown to you later, and sometimes even more than once. We call these "persistent notices".
-
-Persistent notices are awfully annoying. We know that. However, since plugin auto-updates are part of WordPress 5.5, we can no longer expect you to invoke an update manually.
-
-These notices are used when we expect them to go unnoticed otherwise--they are conditional, and may only show up when **all** of these conditions are met:
-
-* You have sufficient administrative capabilities or a matching user ID. For example, you must be able to install plugins.
-* You are (or aren't) on a specific administrative page. For example, we won't show some notices on the block-editor.
-* The time limit hasn't expired. For example, the update-notice won't show up after 7 days from updating.
-* The view count hasn't been reached, regardless of who has seen it. For example, we only show some notices 3 times.
-* You haven't dismissed it. There's an X-button at the top-right.
-
-If you find a notice reappearing indefinitely, you might have a stubborn caching plugin enabled. So, clear your site's cache.
-
-**Core Sitemaps support**
-
-WordPress 5.5 brings new sitemaps. We added support for them, but we didn't integrate with them. To explain briefly:
-
-* Support: When you enable TSF's sitemap, Core Sitemaps are disabled. When you disable TSF's sitemap, Core Sitemaps will become accessible again.
-* Integrate: Core Sitemaps does not listen to the indexing state enforced by TSF. This will cause issues with search engines.
-
-Regardless, we don't believe the Core Sitemaps are beneficial for most WordPress sites. We stubbornly kept our sitemap simple; it's easier for us to maintain and faster search engines to process. Search engines crawl your pages more quickly using TSF's sitemap, no matter your website's size.
-
-Nevertheless, TSF will integrate with Core Sitemaps in a future update. Since we had fewer than two months to anticipate their integration, we couldn't make this happen now.
+* TODO Cool stuff
+* TODO More stuff
 
 **Environment upgrade notes**
 
-WordPress 4.9 and 5.0 are no longer supported. Here's why:
+WordPress 5.1 through 5.3 are no longer supported. Here's why:
 
-* [Almost 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.1 or later.
+* [Over 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.4 or later.
 * Newer versions of WordPress are faster, more reliable, and easier to work with; for both you and us.
 * Supporting past versions takes time away that's better used implementing new features.
 
 **Support the development**
 
-We hope you'll love this update as much as we do. Please consider supporting us by giving [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or convince your friends and colleagues that TSF is amazing!
+We hope you'll love this update as much as we do. Please consider supporting us by sharing [an awesome review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or do your friends and colleagues a favor by installing TSF.
 
 **Detailed log**
 
-Fast and steady [wins the race](https://theseoframework.com/?p=3598#detailed).
+A pertaining oneliner [with a link]();
 
 = Full changelog =
 
 * **The full changelog can be found [here](http://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 4.2.0 =
+TODO The v4.2.0 update brings a major upgrade (TODO does it?). Make a backup of your database before updating. WordPress v5.4 (or higher) is now required. Downgrading to v4.1.5.1 is possible without side effects (TODO is it?).
 
 = 4.1.0 =
 The v4.1.0 update brings a major upgrade. Make a backup of your database before updating. WordPress v5.1 (or higher) is now required. Downgrading to v4.0.7 is possible without side effects.

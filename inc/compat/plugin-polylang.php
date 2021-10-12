@@ -88,13 +88,22 @@ function _polylang_set_sitemap_language() {
 		\PLL()->curlang = $new_lang;
 }
 
-\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
-\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
+\add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
+\add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 /**
  * Appends nontranslatable post types to the sitemap query arguments.
  * Only appends when the default sitemap language is displayed.
  *
+ * TODO Should we fix this? If user unassigns a post type as translatable, previously "translated" posts are still
+ *      found "translated" by this query. This query, however, is forwarded to WP_Query, which Polylang can filter.
+ *      It wouldn't surprise me if they added another black/white list for that. So, my investigation stops here.
+ *
  * @since 4.1.2
+ * @since 4.2.0 Now relies on the term_id, instead of mixing term_taxonomy_id and term_id.
+ *              This is unlike Polylang, which relies on term_taxonomy_id somewhat consistently; however,
+ *              in this case we can use term_id since we're specifying the taxonomy directly.
+ *              WordPress 4.4.0 and later also rectifies term_id/term_taxonomy_id stratification, which is
+ *              why we couldn't find an issue whilst introducing this filter.
  * @access private
  *
  * @param array $args The query arguments.
@@ -112,11 +121,12 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 
 	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return $args;
 
+	// Redundantly prefixed \, OBJECT is actually a constant; however, the linter derps out, thinking it's a cast.
 	$default_lang = \pll_default_language( \OBJECT );
 
-	if ( ! isset( $default_lang->slug, $default_lang->term_taxonomy_id ) ) return $args;
+	if ( ! isset( $default_lang->slug, $default_lang->term_id ) ) return $args;
 
-	if ( \PLL()->curlang->slug === $default_lang->slug ) {
+	if ( ( \PLL()->curlang->slug ?? null ) === $default_lang->slug ) {
 		$args['lang']      = ''; // Select all lang, so that Polylang doesn't affect the query below with an AND (we need OR).
 		$args['tax_query'] = [
 			'relation' => 'OR',
@@ -127,7 +137,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 			],
 			[
 				'taxonomy' => 'language',
-				'terms'    => $default_lang->term_taxonomy_id,
+				'terms'    => $default_lang->term_id,
 				'operator' => 'IN',
 			],
 		];
@@ -158,11 +168,10 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * @return string
  */
 function pll__( $string ) {
-	if ( \function_exists( 'PLL' ) && \function_exists( '\\pll__' ) ) {
-		if ( \PLL() instanceof \PLL_Frontend ) {
+	if ( \function_exists( 'PLL' ) && \function_exists( '\\pll__' ) )
+		if ( \PLL() instanceof \PLL_Frontend )
 			return \pll__( $string );
-		}
-	}
+
 	return $string;
 }
 
