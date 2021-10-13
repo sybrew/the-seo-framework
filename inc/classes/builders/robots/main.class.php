@@ -54,6 +54,12 @@ final class Main {
 
 	/**
 	 * @since 4.2.0
+	 * @var Main This instance.
+	 */
+	private static $instance;
+
+	/**
+	 * @since 4.2.0
 	 * @param array List of registered getters.
 	 */
 	private const GETTERS = [
@@ -78,14 +84,10 @@ final class Main {
 	 *
 	 * @since 4.2.0
 	 *
-	 * @param bool $new Whether to create a new instance.
 	 * @return Main
 	 */
-	public static function instance( $new = false ) {
-		return umemo(
-			__METHOD__,
-			$new ? new static : null
-		) ?? static::instance( true );
+	public static function instance() {
+		return static::$instance ?? ( static::$instance = new static );
 	}
 
 	/**

@@ -535,17 +535,15 @@ class Post_Data extends Detect {
 		foreach ( $_taxonomies as $_taxonomy ) {
 			$_post_key = '_primary_term_' . $_taxonomy;
 
-			$values[ $_taxonomy ] = [
-				'action' => $this->inpost_nonce_field . '_pt',
-				'name'   => $this->inpost_nonce_name . '_pt_' . $_taxonomy,
-				'value'  => \absint( $_POST['autodescription'][ $_post_key ] ?? 0 ),
-			];
-		}
-
-		foreach ( $values as $_taxonomy => $v ) {
-			if ( ! isset( $_POST[ $v['name'] ] ) ) continue;
-			if ( \wp_verify_nonce( $_POST[ $v['name'] ], $v['action'] ) ) { // Redundant. Fortified.
-				$this->update_primary_term_id( $post->ID, $_taxonomy, $v['value'] );
+			if ( \wp_verify_nonce(
+				$_POST[ $this->inpost_nonce_name . '_pt_' . $_taxonomy ] ?? '', // If empty, wp_verify_nonce will return false.
+				$this->inpost_nonce_field . '_pt'
+			) ) { // Redundant. Fortified.
+				$this->update_primary_term_id(
+					$post->ID,
+					$_taxonomy,
+					\absint( $_POST['autodescription'][ $_post_key ] ?? 0 )
+				);
 			}
 		}
 	}
@@ -624,16 +622,14 @@ class Post_Data extends Detect {
 		if ( \is_bool( $detected ) )
 			return $detected;
 
-		if ( ! $this->detect_non_html_page_builder() )
+		// If there's no meta, or no builder active, it doesn't use a builder.
+		if ( empty( $meta ) || ! $this->detect_non_html_page_builder() )
 			return false;
 
-		if ( empty( $meta ) )
-			return false;
-
-		if ( isset( $meta['_et_pb_use_builder'][0] ) && 'on' === $meta['_et_pb_use_builder'][0] && \defined( 'ET_BUILDER_VERSION' ) ) :
+		if ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) ) :
 			// Divi Builder by Elegant Themes
 			return true;
-		elseif ( isset( $meta['_wpb_vc_js_status'][0] ) && 'true' === $meta['_wpb_vc_js_status'][0] && \defined( 'WPB_VC_VERSION' ) ) :
+		elseif ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) ) :
 			// Visual Composer by WPBakery
 			return true;
 		endif;

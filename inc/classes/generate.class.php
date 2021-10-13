@@ -103,10 +103,9 @@ class Generate extends User_Data {
 	 */
 	public function generate_robots_meta( $args = null, $get = null, $options = 0b00 ) {
 
-		if ( null !== $args )
-			$this->fix_generation_args( $args );
+		$this->fix_generation_args( $args );
 
-		$meta = Builders\Robots\Main::instance( true )->set( $args, $options )->get( $get );
+		$meta = Builders\Robots\Main::instance()->set( $args, $options )->get( $get );
 
 		// Convert the [ 'noindex' => true ] to [ 'noindex' => 'noindex' ]
 		foreach (

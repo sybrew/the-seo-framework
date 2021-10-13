@@ -321,9 +321,6 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function get_image_generation_params( $args = null, $context = 'social' ) {
 
-		if ( null !== $args )
-			$this->fix_generation_args( $args );
-
 		$builder = Builders\Images::class;
 
 		if ( null === $args ) {
@@ -346,6 +343,8 @@ class Generate_Image extends Generate_Url {
 				$cbs = [];
 			}
 		} else {
+			$this->fix_generation_args( $args );
+
 			if ( $args['taxonomy'] ) {
 				$cbs = [];
 			} else {

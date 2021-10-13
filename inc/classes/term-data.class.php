@@ -408,10 +408,8 @@ class Term_Data extends Post_Data {
 	 */
 	public function get_latest_category_id() {
 
-		static $cat_id = null;
-
-		if ( null !== $cat_id )
-			return $cat_id;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$cats = \get_terms( [
 			'taxonomy'   => 'category',
@@ -422,7 +420,7 @@ class Term_Data extends Post_Data {
 			'number'     => 1,
 		] );
 
-		return $cat_id = reset( $cats );
+		return memo( reset( $cats ) );
 	}
 
 	/**

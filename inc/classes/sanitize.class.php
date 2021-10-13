@@ -51,10 +51,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	protected function verify_seo_settings_nonce() {
 
-		static $validated = null;
-
-		if ( isset( $validated ) )
-			return $validated;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		/**
 		 * If this page doesn't parse the site options,
@@ -65,17 +63,17 @@ class Sanitize extends Admin_Pages {
 		 */
 		if ( empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
 		|| ! \is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
-			return $validated = false;
+			return memo( false );
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		if ( ! \current_user_can( $this->get_settings_capability() ) )
-			return $validated = false;
+			return memo( false );
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		// This also checks the nonce: `_wpnonce`.
 		\check_admin_referer( THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options' );
 
-		return $validated = true;
+		return memo( true );
 	}
 
 	/**

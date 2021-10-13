@@ -93,8 +93,7 @@ abstract class Main {
 	 * @since 4.0.0
 	 */
 	final protected function __construct() {
-		static::$instance = &$this;
-		self::$tsf        = self::$tsf ?: \tsf();
+		self::$tsf = self::$tsf ?: \tsf();
 		$this->prime_cache();
 	}
 
@@ -106,8 +105,7 @@ abstract class Main {
 	 * @return static
 	 */
 	final public static function get_instance() {
-		static::$instance instanceof static or new static;
-		return static::$instance;
+		return static::$instance ?? ( static::$instance = new static );
 	}
 
 	/**

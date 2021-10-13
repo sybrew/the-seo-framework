@@ -45,10 +45,8 @@ class Detect extends Render {
 	 */
 	public function active_plugins() {
 
-		static $active_plugins = null;
-
-		if ( isset( $active_plugins ) )
-			return $active_plugins;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$active_plugins = (array) \get_option( 'active_plugins', [] );
 
@@ -63,7 +61,7 @@ class Detect extends Render {
 
 		sort( $active_plugins );
 
-		return $active_plugins = array_unique( $active_plugins );
+		return memo( array_unique( $active_plugins ) );
 	}
 
 	/**
@@ -286,10 +284,8 @@ class Detect extends Render {
 	 */
 	public function detect_seo_plugins() {
 
-		static $detected = null;
-
-		if ( isset( $detected ) )
-			return $detected;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$active_plugins = $this->active_plugins();
 
@@ -318,7 +314,7 @@ class Detect extends Render {
 			}
 		}
 
-		return $detected = (bool) $detected;
+		return memo( (bool) $detected );
 	}
 
 	/**
@@ -333,14 +329,12 @@ class Detect extends Render {
 	 */
 	public function detect_og_plugin() {
 
-		static $detected = null;
-
-		if ( isset( $detected ) )
-			return $detected;
-
 		// Detect SEO plugins beforehand.
 		if ( $this->detect_seo_plugins() )
-			return $detected = true;
+			return true;
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$active_plugins = $this->active_plugins();
 
@@ -369,7 +363,7 @@ class Detect extends Render {
 			}
 		}
 
-		return $detected = (bool) $detected;
+		return memo( (bool) $detected );
 	}
 
 	/**
@@ -383,14 +377,12 @@ class Detect extends Render {
 	 */
 	public function detect_twitter_card_plugin() {
 
-		static $detected = null;
-
-		if ( isset( $detected ) )
-			return $detected;
-
 		// Detect SEO plugins beforehand.
 		if ( $this->detect_seo_plugins() )
-			return $detected = true;
+			return true;
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$active_plugins = $this->active_plugins();
 
@@ -418,7 +410,7 @@ class Detect extends Render {
 			}
 		}
 
-		return $detected = (bool) $detected;
+		return memo( (bool) $detected );
 	}
 
 	/**
@@ -449,14 +441,12 @@ class Detect extends Render {
 	 */
 	public function detect_sitemap_plugin() {
 
-		static $detected = null;
-
-		if ( isset( $detected ) )
-			return $detected;
-
 		// Detect SEO plugins beforehand.
 		if ( $this->detect_seo_plugins() )
-			return $detected = true;
+			return true;
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$active_plugins = $this->active_plugins();
 
@@ -484,7 +474,7 @@ class Detect extends Render {
 			}
 		}
 
-		return $detected = (bool) $detected;
+		return memo( (bool) $detected );
 	}
 
 	/**
@@ -496,22 +486,23 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function use_core_sitemaps() {
-		static $use;
 
-		if ( isset( $use ) ) return $use;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		if ( $this->get_option( 'sitemaps_output' ) )
-			return $use = false;
+			return memo( false );
 
 		if ( \function_exists( '\\wp_sitemaps_get_server' ) ) {
 			$wp_sitemaps_server = \wp_sitemaps_get_server();
 
-			return $use =
+			return memo(
 				method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
-				&& $wp_sitemaps_server->sitemaps_enabled();
+					&& $wp_sitemaps_server->sitemaps_enabled()
+			);
 		}
 
-		return $use = false;
+		return memo( false );
 	}
 
 	/**

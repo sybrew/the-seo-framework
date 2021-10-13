@@ -64,15 +64,6 @@ final class SEOBar {
 	private static $items = [];
 
 	/**
-	 * Constructor.
-	 *
-	 * @since 4.0.0
-	 */
-	private function __construct() {
-		static::$instance = &$this;
-	}
-
-	/**
 	 * Returns this instance.
 	 *
 	 * @since 4.0.0
@@ -80,8 +71,7 @@ final class SEOBar {
 	 * @return static
 	 */
 	private static function get_instance() {
-		static::$instance instanceof static or new static;
-		return static::$instance;
+		return static::$instance ?? ( static::$instance = new static );
 	}
 
 	/**
@@ -428,9 +418,8 @@ final class SEOBar {
 	private function interpret_status_to_symbol( array $item ) {
 
 		static $use_symbols = null;
-		if ( null === $use_symbols ) {
+		if ( null === $use_symbols )
 			$use_symbols = (bool) \tsf()->get_option( 'seo_bar_symbols' );
-		}
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) :

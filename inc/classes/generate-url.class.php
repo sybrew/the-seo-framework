@@ -136,7 +136,6 @@ class Generate_Url extends Generate_Title {
 	public function create_canonical_url( $args = [] ) {
 
 		$this->fix_generation_args( $args );
-		$args = $args ?: [];
 
 		$defaults = [
 			'id'               => 0,
@@ -144,7 +143,7 @@ class Generate_Url extends Generate_Title {
 			'get_custom_field' => false,
 		];
 
-		return $this->get_canonical_url( array_merge( $defaults, $args ) );
+		return $this->get_canonical_url( array_merge( $defaults, (array) $args ) );
 	}
 
 	/**
@@ -300,9 +299,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_home_canonical_url() {
 
-		$url = $this->set_preferred_url_scheme(
-			umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() )
-		);
+		$url = $this->set_preferred_url_scheme( $this->get_home_url() );
 
 		if ( ! $url ) return '';
 
@@ -362,7 +359,9 @@ class Generate_Url extends Generate_Title {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = umemo( __METHOD__, null, $id ) ) return $memo;
 
-		$url = \wp_get_canonical_url( $id ?? $this->get_the_real_ID() ) ?: '';
+		$url = \wp_get_canonical_url(
+			$id ?? $this->get_the_real_ID()
+		) ?: '';
 
 		if ( ! $url ) return '';
 
@@ -626,10 +625,10 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function detect_site_url_scheme() {
 		return strtolower( parse_url(
-			umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() ),
+			$this->get_home_url(),
 			PHP_URL_SCHEME
 		) )
-		?: ( $this->is_ssl() ? 'https' : 'http' );
+			?: ( $this->is_ssl() ? 'https' : 'http' );
 	}
 
 	/**
@@ -1003,7 +1002,7 @@ class Generate_Url extends Generate_Title {
 		if ( null !== $memo = memo() ) return $memo;
 
 		$parsed_url = parse_url(
-			umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() )
+			$this->get_home_url()
 		);
 
 		$host = $parsed_url['host'] ?? '';
@@ -1127,7 +1126,7 @@ class Generate_Url extends Generate_Title {
 
 		$home_domain = memo() ?? memo(
 			$this->set_url_scheme( \esc_url_raw(
-				umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() ),
+				$this->get_home_url(),
 				[ 'https', 'http' ]
 			) )
 		);
@@ -1136,10 +1135,26 @@ class Generate_Url extends Generate_Title {
 		if ( 0 === stripos( $url, $home_domain ) )
 			return true;
 
-		$url = \esc_url_raw( $url, [ 'https', 'http' ] );
-		$url = $this->set_url_scheme( $url );
+		$url = $this->set_url_scheme( \esc_url_raw(
+			$url,
+			[ 'https', 'http' ]
+		) );
 
 		// If they start with the same, we can assume it's the same domain.
 		return 0 === stripos( $url, $home_domain );
+	}
+
+	/**
+	 * Returns the home URL. Created for the WordPress method is slow for it
+	 * performs "set_url_scheme" calls slowly. We rely on this method for some
+	 * plugins filter `home_url`.
+	 * Memoized.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string The home URL.
+	 */
+	public function get_home_url() {
+		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_home_url() );
 	}
 }

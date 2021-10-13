@@ -193,52 +193,53 @@ final class Sitemap {
 	 * @return array The sitemap endpoints with their callbacks.
 	 */
 	public function get_sitemap_endpoint_list() {
-		static $list;
-		/**
-		 * @since 4.0.0
-		 * @since 4.0.2 Made the endpoints' regex case-insensitive.
-		 * @link Example: https://github.com/sybrew/tsf-term-sitemap
-		 * @param array $list The endpoints: {
-		 *   'id' => array: {
-		 *      'cache_id' => string   Optional. The cache key to use for locking. Defaults to index 'id'.
-		 *      'endpoint' => string   The expected "pretty" endpoint, meant for administrative display.
-		 *      'epregex'  => string   The endpoint regex, following the home path regex.
-		 *                             N.B. Be wary of case sensitivity. Append the i-flag.
-		 *                             N.B. Trailing slashes will cause the match to fail.
-		 *                             N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
-		 *      'callback' => callable The callback for the sitemap output.
-		 *                             Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
-		 *                             Tip: In the callback, use
-		 *                                  `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
-		 *                                  It returns the arguments you've passed in this filter; including your arbitrary indexes.
-		 *      'robots'   => bool     Whether the endpoint should be mentioned in the robots.txt file.
-		 *   }
-		 * }
-		 */
-		return $list = $list ?: \apply_filters(
-			'the_seo_framework_sitemap_endpoint_list',
-			[
-				'base'           => [
-					'lock_id'  => 'base',
-					'endpoint' => 'sitemap.xml',
-					'regex'    => '/^sitemap\.xml/i',
-					'callback' => static::class . '::output_base_sitemap',
-					'robots'   => true,
-				],
-				'index'          => [
-					'lock_id'  => 'base',
-					'endpoint' => 'sitemap_index.xml',
-					'regex'    => '/^sitemap_index\.xml/i',
-					'callback' => static::class . '::output_base_sitemap',
-					'robots'   => false,
-				],
-				'xsl-stylesheet' => [
-					'endpoint' => 'sitemap.xsl',
-					'regex'    => '/^sitemap\.xsl/i',
-					'callback' => static::class . '::output_stylesheet',
-					'robots'   => false,
-				],
-			]
+		return memo() ?? memo(
+			/**
+			 * @since 4.0.0
+			 * @since 4.0.2 Made the endpoints' regex case-insensitive.
+			 * @link Example: https://github.com/sybrew/tsf-term-sitemap
+			 * @param array $list The endpoints: {
+			 *   'id' => array: {
+			 *      'cache_id' => string   Optional. The cache key to use for locking. Defaults to index 'id'.
+			 *      'endpoint' => string   The expected "pretty" endpoint, meant for administrative display.
+			 *      'epregex'  => string   The endpoint regex, following the home path regex.
+			 *                             N.B. Be wary of case sensitivity. Append the i-flag.
+			 *                             N.B. Trailing slashes will cause the match to fail.
+			 *                             N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
+			 *      'callback' => callable The callback for the sitemap output.
+			 *                             Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
+			 *                             Tip: In the callback, use
+			 *                                  `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
+			 *                                  It returns the arguments you've passed in this filter; including your arbitrary indexes.
+			 *      'robots'   => bool     Whether the endpoint should be mentioned in the robots.txt file.
+			 *   }
+			 * }
+			 */
+			\apply_filters(
+				'the_seo_framework_sitemap_endpoint_list',
+				[
+					'base'           => [
+						'lock_id'  => 'base',
+						'endpoint' => 'sitemap.xml',
+						'regex'    => '/^sitemap\.xml/i',
+						'callback' => static::class . '::output_base_sitemap',
+						'robots'   => true,
+					],
+					'index'          => [
+						'lock_id'  => 'base',
+						'endpoint' => 'sitemap_index.xml',
+						'regex'    => '/^sitemap_index\.xml/i',
+						'callback' => static::class . '::output_base_sitemap',
+						'robots'   => false,
+					],
+					'xsl-stylesheet' => [
+						'endpoint' => 'sitemap.xsl',
+						'regex'    => '/^sitemap\.xsl/i',
+						'callback' => static::class . '::output_stylesheet',
+						'robots'   => false,
+					],
+				]
+			)
 		);
 	}
 
@@ -502,7 +503,7 @@ final class Sitemap {
 			'the_seo_framework_sitemap_base_path',
 			rtrim(
 				parse_url(
-					umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() ),
+					static::$tsf->get_home_url(),
 					PHP_URL_PATH
 				),
 				'/'

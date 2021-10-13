@@ -686,9 +686,8 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_breadcrumb_home_crumb() {
 
-		static $crumb = null;
-		if ( isset( $crumb ) )
-			return $crumb;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$_generator_args = [
 			'id'       => $this->get_the_front_page_ID(),
@@ -701,16 +700,14 @@ class Generate_Ldjson extends Generate_Image {
 			$title = $this->get_filtered_raw_generated_title( $_generator_args ) ?: $this->get_blogname();
 		}
 
-		$crumb = [
+		return memo( [
 			'@type'    => 'ListItem',
 			'position' => 1,
 			'item'     => [
 				'@id'  => $this->get_schema_url_id( 'breadcrumb', 'homepage' ),
 				'name' => $this->escape_title( $title ),
 			],
-		];
-
-		return $crumb;
+		] );
 	}
 
 	/**

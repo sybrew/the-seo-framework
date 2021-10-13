@@ -433,6 +433,7 @@ TODO translation POT file.
 		* A class alias is made Just-in-Time to smoothen deprecation.
 	* For object `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 		* **Methods added:**
+			* `get_home_url()`, a memoized version of WordPress Core's `get_home_url()`.
 			* `retrieve_robots_meta_assertions()`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
 			* `is_home_as_page()`, detects the non-front blog page.
 		* **Methods changed:**
