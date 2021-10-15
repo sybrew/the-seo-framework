@@ -86,10 +86,10 @@ class Factory {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
 	 *    string $taxonomy The taxonomy.
 	 * }
-	 * @param null|array $options Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
+	 * @param int        $options Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
 	 * @return Factory $this
 	 */
-	public function set( ?array $args = null, int $options = 0 ) {
+	public function set( $args = null, $options = 0 ) {
 		static::$args    = $args;
 		static::$options = $options;
 		return $this;

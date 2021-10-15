@@ -899,7 +899,7 @@ final class Deprecated {
 	 * }
 	 * @return string The HTML data attributes, with added space to the start.
 	 */
-	public function make_data_attributes( array $data ) {
+	public function make_data_attributes( $data ) {
 		\tsf()->_deprecated_function( 'tsf()->make_data_attributes()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\HTML::make_data_attributes( $data );
 	}
@@ -953,7 +953,7 @@ final class Deprecated {
 	 * }
 	 * @return string The option field.
 	 */
-	public function make_single_select_form( array $args ) {
+	public function make_single_select_form( $args ) {
 		\tsf()->_deprecated_function( 'tsf()->make_single_select_form()', '4.2.0' );
 		return \The_SEO_Framework\Interpreters\Form::make_single_select_form( $args );
 	}

@@ -212,12 +212,12 @@ final class HTML {
 	 * @since 4.1.0 No longer adds an extra space in front of the return value when no data is generated.
 	 * @internal
 	 *
-	 * @param array $data : {
+	 * @param iterable $data : {
 	 *    string $k => mixed $v
 	 * }
 	 * @return string The HTML data attributes, with added space to the start if something's created.
 	 */
-	public static function make_data_attributes( array $data ) {
+	public static function make_data_attributes( $data ) {
 
 		$ret = [];
 

@@ -191,7 +191,7 @@ class Generate_Url extends Generate_Title {
 	 * @param array $args Required. Use $this->create_canonical_url().
 	 * @return string The canonical URL.
 	 */
-	protected function build_canonical_url( array $args ) {
+	protected function build_canonical_url( $args ) {
 
 		$url = '';
 

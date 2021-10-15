@@ -25,6 +25,8 @@ namespace The_SEO_Framework\Interpreters;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\umemo;
+
 /**
  * Interprets the SEO Bar into an HTML item.
  *
@@ -88,7 +90,7 @@ final class SEOBar {
 	 * }
 	 * @return string The SEO Bar.
 	 */
-	public static function generate_bar( array $query ) {
+	public static function generate_bar( $query ) {
 
 		static::$query = array_merge(
 			[
@@ -159,7 +161,7 @@ final class SEOBar {
 	 *                               Does not accept HTML for performant ARIA support.
 	 * }
 	 */
-	public static function register_seo_bar_item( $key, array $item ) {
+	public static function register_seo_bar_item( $key, $item ) {
 		static::$items[ $key ] = $item;
 	}
 
@@ -236,10 +238,10 @@ final class SEOBar {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param array $items The SEO Bar items.
+	 * @param iterable $items The SEO Bar items.
 	 * @return string The SEO Bar
 	 */
-	private function create_seo_bar( array $items ) {
+	private function create_seo_bar( $items ) {
 
 		$blocks = [];
 
@@ -264,10 +266,10 @@ final class SEOBar {
 	 *        WordPress still hangs on tight to their PHP5.2 roots, where HTML4+ escaping wasn't supported well. Updating that requires
 	 *        a whole lot of time, and paves way for potential security issues due to oversight. But, that'd speed up escaping for everyone.
 	 *
-	 * @param array $items The SEO Bar items.
+	 * @param iterable $items The SEO Bar items.
 	 * @yield The SEO Bar HTML item.
 	 */
-	private function generate_seo_bar_blocks( array $items ) {
+	private function generate_seo_bar_blocks( $items ) {
 		foreach ( $items as $item )
 			yield vsprintf(
 				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
@@ -290,7 +292,7 @@ final class SEOBar {
 	 * @param string $type The description type. Accepts 'html' or 'aria'.
 	 * @return string The SEO Bar item description.
 	 */
-	private function build_item_description( array $item, $type ) {
+	private function build_item_description( $item, $type ) {
 
 		static $gettext = null;
 		if ( null === $gettext ) {
@@ -331,7 +333,7 @@ final class SEOBar {
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The SEO Bar item assessment, in plaintext.
 	 */
-	private function enumerate_assessment_list( array $item ) {
+	private function enumerate_assessment_list( $item ) {
 
 		$count       = \count( $item['assess'] );
 		$assessments = [];
@@ -415,13 +417,12 @@ final class SEOBar {
 	 * @param array $item See `$this->register_seo_bar_item()`
 	 * @return string The SEO Bar item assessment, in plaintext.
 	 */
-	private function interpret_status_to_symbol( array $item ) {
+	private function interpret_status_to_symbol( $item ) {
 
-		static $use_symbols = null;
-		if ( null === $use_symbols )
-			$use_symbols = (bool) \tsf()->get_option( 'seo_bar_symbols' );
+		$symbols = umemo( __METHOD__ . '\use_symbols' )
+				?? umemo( __METHOD__ . '\use_symbols', (bool) \tsf()->get_option( 'seo_bar_symbols' ) );
 
-		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
+		if ( $symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) :
 				case static::STATE_OKAY:
 					$symbol = '!?';

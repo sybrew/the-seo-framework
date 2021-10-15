@@ -152,7 +152,7 @@ abstract class Main {
 	 *    string $test => array The testing results.
 	 * }
 	 */
-	public function _run_all_tests( array $query ) {
+	public function _run_all_tests( $query ) {
 		yield from $this->_run_test( static::$tests, $query );
 	}
 
@@ -175,7 +175,7 @@ abstract class Main {
 	 *    string $test => array $item The SEO Bar compatible results.
 	 * }
 	 */
-	final public function _run_test( $tests, array $query ) {
+	final public function _run_test( $tests, $query ) {
 
 		$tests = array_intersect( static::$tests, (array) $tests );
 

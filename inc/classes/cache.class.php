@@ -169,7 +169,7 @@ class Cache extends Site_Options {
 	 * @param array  $args Additional arguments. They can overwrite $type and $id.
 	 * @return bool true on success, false on failure.
 	 */
-	public function delete_cache( $type, $id = 0, array $args = [] ) {
+	public function delete_cache( $type, $id = 0, $args = [] ) {
 
 		$this->parse_delete_cache_keys( $type, $id, $args );
 

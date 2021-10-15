@@ -340,7 +340,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
 	 * }
 	 */
-	protected function output_dismissible_persistent_notice( $message, $key, array $args ) { // phpcs:ignore,VariableAnalysis.CodeAnalysis
+	protected function output_dismissible_persistent_notice( $message, $key, $args ) { // phpcs:ignore,VariableAnalysis.CodeAnalysis
 		$this->get_view( 'notice/persistent', get_defined_vars() );
 	}
 
@@ -393,7 +393,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * }
 	 * @return string The generated SEO bar, in HTML.
 	 */
-	public function get_generated_seo_bar( array $query ) {
+	public function get_generated_seo_bar( $query ) {
 		return Interpreters\SEOBar::generate_bar( $query );
 	}
 
@@ -421,7 +421,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @param string $id The input ID.
 	 * @param array  $data The input data.
 	 */
-	public function output_js_title_data( $id, array $data ) {
+	public function output_js_title_data( $id, $data ) {
 		printf(
 			implode(
 				'',
@@ -463,7 +463,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @param string $id   The description input ID.
 	 * @param array  $data The input data.
 	 */
-	public function output_js_description_data( $id, array $data ) {
+	public function output_js_description_data( $id, $data ) {
 		printf(
 			implode(
 				'',
@@ -492,7 +492,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @param string $for  The screen it's for. Accepts 'edit' and 'settings'.
 	 * @return array An array social of titles and descriptions.
 	 */
-	public function _get_social_placeholders( array $args, $for = 'edit' ) {
+	public function _get_social_placeholders( $args, $for = 'edit' ) {
 
 		$desc_from_custom_field = $this->get_description_from_custom_field( $args, false );
 

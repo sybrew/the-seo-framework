@@ -374,7 +374,7 @@ class Admin_Init extends Init {
 	 *               (key => value). Default is an empty array.
 	 * @return null Return early if first argument is false.
 	 */
-	public function admin_redirect( $page, array $query_args = [] ) {
+	public function admin_redirect( $page, $query_args = [] ) {
 
 		if ( empty( $page ) ) return;
 
@@ -393,7 +393,7 @@ class Admin_Init extends Init {
 		 * 1. Change 302 to 500 if you wish to test headers.
 		 * 2. Also force handle_admin_redirect_error() to run.
 		 */
-		$success = \wp_safe_redirect( $target, 302 ); // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		\wp_safe_redirect( $target, 302 );
 
 		// White screen of death for non-debugging users. Let's make it friendlier.
 		if ( $headers_sent )
@@ -466,7 +466,7 @@ class Admin_Init extends Init {
 	 *                              Do not input non-integer values (such as `false`), for those might cause adverse events.
 	 * }
 	 */
-	public function register_dismissible_persistent_notice( $message, $key, array $args = [], array $conditions = [] ) {
+	public function register_dismissible_persistent_notice( $message, $key, $args = [], $conditions = [] ) {
 
 		// We made this mistake ourselves. Let's test against it.
 		// We can't type $key to scalar, for PHP is dumb with that type.

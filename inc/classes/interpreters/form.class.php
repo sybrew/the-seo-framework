@@ -124,7 +124,7 @@ final class Form {
 	 * }
 	 * @return string HTML checkbox output.
 	 */
-	public static function make_checkbox( array $args = [] ) {
+	public static function make_checkbox( $args = [] ) {
 
 		$args = array_merge(
 			[
@@ -231,7 +231,7 @@ final class Form {
 	 * }
 	 * @return string The option field.
 	 */
-	public static function make_single_select_form( array $args ) {
+	public static function make_single_select_form( $args ) {
 
 		$defaults = [
 			'id'       => '',
@@ -497,7 +497,7 @@ final class Form {
 	 * }
 	 * @return string The image uploader button.
 	 */
-	public static function get_image_uploader_form( array $args ) {
+	public static function get_image_uploader_form( $args ) {
 
 		// Required.
 		if ( empty( $args['id'] ) ) return '';

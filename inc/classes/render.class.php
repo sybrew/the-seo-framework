@@ -112,14 +112,12 @@ class Render extends Admin_Init {
 	 */
 	public function get_image_from_cache() {
 
-		$url = '';
-
 		foreach ( $this->get_image_details_from_cache( ! $this->get_option( 'multi_og_image' ) ) as $image ) {
 			$url = $image['url'];
 			if ( $url ) break;
 		}
 
-		return $url;
+		return $url ?? '';
 	}
 
 	/**
@@ -157,7 +155,7 @@ class Render extends Admin_Init {
 	 * @param bool|string $text     The element's contents, if any.
 	 * @param bool        $new_line Whether to add a new line to the end of the element.
 	 */
-	public function render_element( array $attributes = [], $tag = 'meta', $text = false, $new_line = true ) {
+	public function render_element( $attributes = [], $tag = 'meta', $text = false, $new_line = true ) {
 
 		$attr = '';
 

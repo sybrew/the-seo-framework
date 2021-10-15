@@ -118,9 +118,9 @@ abstract class Main {
 	 *
 	 * @since 4.1.1
 	 *
-	 * @param array $data  The data to create an XML item from. Expected to be escaped and XML-safe!
-	 * @param int   $level The iteration level. Default 1 (one level in from urlset).
-	 *                     Affects non-mandatory tab indentation for readability.
+	 * @param iterable $data  The data to create an XML item from. Expected to be escaped and XML-safe!
+	 * @param int      $level The iteration level. Default 1 (one level in from urlset).
+	 *                        Affects non-mandatory tab indentation for readability.
 	 * @return string The XML data.
 	 */
 	protected function create_xml_entry( $data, $level = 1 ) {

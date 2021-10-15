@@ -158,7 +158,7 @@ class Generate_Description extends Generate {
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string Open Graph description.
 	 */
-	protected function get_custom_open_graph_description_from_args( array $args ) {
+	protected function get_custom_open_graph_description_from_args( $args ) {
 
 		$desc = '';
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
@@ -295,7 +295,7 @@ class Generate_Description extends Generate {
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string Twitter description.
 	 */
-	protected function get_custom_twitter_description_from_args( array $args ) {
+	protected function get_custom_twitter_description_from_args( $args ) {
 
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
@@ -417,7 +417,7 @@ class Generate_Description extends Generate {
 	 * @param array $args Array of 'id' and 'taxonomy' values.
 	 * @return string The custom description.
 	 */
-	protected function get_custom_description_from_args( array $args ) {
+	protected function get_custom_description_from_args( $args ) {
 
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
@@ -575,7 +575,7 @@ class Generate_Description extends Generate {
 	 * @param array|null $args An array of 'id' and 'taxonomy' values.
 	 * @return string
 	 */
-	protected function get_description_excerpt_from_args( array $args ) {
+	protected function get_description_excerpt_from_args( $args ) {
 
 		$excerpt = '';
 

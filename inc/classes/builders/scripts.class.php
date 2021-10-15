@@ -245,7 +245,7 @@ final class Scripts {
 	 *    }
 	 * }
 	 */
-	public static function register( array $script ) {
+	public static function register( $script ) {
 		if ( array_values( $script ) === $script ) {
 			foreach ( $script as $s ) static::register( $s );
 			return;
@@ -352,7 +352,7 @@ final class Scripts {
 	 *
 	 * @param array $s The script.
 	 */
-	private static function forward_script( array $s ) {
+	private static function forward_script( $s ) {
 
 		$instance   = static::$instance;
 		$registered = false;
@@ -423,7 +423,7 @@ final class Scripts {
 	 * @param array $type Either 'js' or 'css'.
 	 * @return string The file URL.
 	 */
-	private function generate_file_url( array $script, $type = 'js' ) {
+	private function generate_file_url( $script, $type = 'js' ) {
 
 		static $min, $rtl;
 
@@ -449,14 +449,16 @@ final class Scripts {
 	 * @since 3.1.0
 	 * @uses $this->convert_color_css()
 	 *
-	 * @param array $styles The styles to add.
+	 * @param iterable $styles The styles to add.
 	 * @return string
 	 */
-	private function create_inline_css( array $styles ) {
+	private function create_inline_css( $styles ) {
 
 		$out = '';
+
 		foreach ( $styles as $selector => $css ) {
-			$out .= $selector . '{' . implode( ';', $this->convert_color_css( $css ) ) . '}';
+			$css  = implode( ';', $this->convert_color_css( $css ) );
+			$out .= "$selector{$css}";
 		}
 
 		return $out;
@@ -467,15 +469,15 @@ final class Scripts {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param array $scripts The scripts to add.
+	 * @param iterable $scripts The scripts to add.
 	 * @return string
 	 */
-	private function create_inline_js( array $scripts ) {
+	private function create_inline_js( $scripts ) {
 
 		$out = '';
-		foreach ( $scripts as $script ) {
+
+		foreach ( $scripts as $script )
 			$out .= ";$script";
-		}
 
 		return $out;
 	}
@@ -488,7 +490,7 @@ final class Scripts {
 	 * @param array $css The CSS to convert.
 	 * @return array $css
 	 */
-	private function convert_color_css( array $css ) {
+	private function convert_color_css( $css ) {
 
 		static $c_ck, $c_cv;
 		// Memoize the conversion types.
@@ -554,7 +556,7 @@ final class Scripts {
 	 *   'args' => array $args. Optional,
 	 * }
 	 */
-	private function register_template( $id, array $templates ) {
+	private function register_template( $id, $templates ) {
 		// Wrap template if it's only one on the base.
 		if ( isset( $templates['file'] ) )
 			$templates = [ $templates ];
@@ -606,10 +608,10 @@ final class Scripts {
 	 * @since 3.2.4 Enabled entropy to prevent system sleep.
 	 * @uses static::$include_secret
 	 *
-	 * @param string $file The file location.
-	 * @param array  $args The registered view arguments.
+	 * @param string   $file The file location.
+	 * @param iterable $args The registered view arguments.
 	 */
-	private function output_view( $file, array $args ) {
+	private function output_view( $file, $args ) {
 
 		foreach ( $args as $_key => $_val )
 			$$_key = $_val;

@@ -18,38 +18,54 @@ $count    = 1;
  *
  * The content is relative to the navigation and outputs navigational tabs too, but uses CSS to become invisible on JS.
  */
-foreach ( $tabs as $tab => $value ) :
+foreach ( $tabs as $tab => $params ) :
 
-	$the_id   = 'tsf-' . $id . '-tab-' . $tab . '-content';
-	$the_name = 'tsf-' . $id . '-tabs-content';
+	$radio_id    = "tsf-{$id}-tab-{$tab}-content";
+	$radio_class = "tsf-{$id}-tabs-content";
 
 	// Current tab for JS.
-	$current = 1 === $count ? ' tsf-active-tab-content' : '';
+	$current_class = 1 === $count ? ' tsf-active-tab-content' : '';
 
 	?>
-	<div class="tsf-tabs-content <?php echo esc_attr( $the_name . $current ); ?>" id="<?php echo esc_attr( $the_id ); ?>" >
+	<div class="tsf-tabs-content <?php echo esc_attr( $radio_class . $current_class ); ?>" id="<?php echo esc_attr( $radio_id ); ?>" >
 		<?php
 		// No-JS tabs.
 		if ( $use_tabs ) :
-			$dashicon = $value['dashicon'] ?? '';
-			$name     = $value['name'] ?? '';
+			$dashicon = $params['dashicon'] ?? '';
+			$name     = $params['name'] ?? '';
 
 			?>
 			<div class="hide-if-tsf-js tsf-content-no-js">
 				<div class="tsf-tab tsf-tab-no-js">
 					<span class="tsf-nav-tab tsf-active-tab">
 						<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
-						<?php echo $name ? '<span>' . esc_attr( $name ) . '</span>' : ''; ?>
+						<?php echo $name ? '<span>' . esc_html( $name ) . '</span>' : ''; ?>
 					</span>
 				</div>
 			</div>
 			<?php
 		endif;
 
-		// TODO discrepancy with edit/wrap-content! Use something new? do_action()!
-		if ( ! empty( $value['callback'] ) )
-			call_user_func_array( $value['callback'], [ ( $value['args'] ?? null ) ] );
-		?>
+		if ( ! empty( $params['callback'] ) )
+			call_user_func_array( $params['callback'], [ ( $params['args'] ?? [] ) ] );
+
+		/**
+		 * @since 4.2.0
+		 * @param array $args The tab arguments: {
+		 *    @param string id
+		 *    @param string tab
+		 *    @param array  params
+		 * }
+		 */
+		do_action(
+			'the_seo_framework_tab_content',
+			[
+				'id'     => $id,
+				'tab'    => $tab,
+				'params' => $params,
+			]
+		);
+	?>
 	</div>
 	<?php
 

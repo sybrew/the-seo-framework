@@ -484,7 +484,7 @@ class Generate_Image extends Generate_Url {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	public function merge_extra_image_details( array $details, $size = 'full' ) {
+	public function merge_extra_image_details( $details, $size = 'full' ) {
 
 		$details += $this->get_image_dimensions( $details['id'], $details['url'], $size );
 		$details += [ 'alt' => $this->get_image_alt_tag( $details['id'] ) ];

@@ -286,7 +286,7 @@ class Generate_Title extends Generate_Description {
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string Twitter Title.
 	 */
-	protected function get_custom_twitter_title_from_args( array $args ) {
+	protected function get_custom_twitter_title_from_args( $args ) {
 
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
@@ -427,7 +427,7 @@ class Generate_Title extends Generate_Description {
 	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string Open Graph Title.
 	 */
-	protected function get_custom_open_graph_title_from_args( array $args ) {
+	protected function get_custom_open_graph_title_from_args( $args ) {
 
 		$title = '';
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
@@ -544,7 +544,7 @@ class Generate_Title extends Generate_Description {
 	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string The custom title.
 	 */
-	protected function get_custom_field_title_from_args( array $args ) {
+	protected function get_custom_field_title_from_args( $args ) {
 
 		$title = '';
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
@@ -713,7 +713,7 @@ class Generate_Title extends Generate_Description {
 	 * @param array $args The query arguments. Required. Accepts 'id' and 'taxonomy'.
 	 * @return string The generated title. Empty if query can't be replicated.
 	 */
-	protected function generate_title_from_args( array $args ) {
+	protected function generate_title_from_args( $args ) {
 
 		$title = '';
 
@@ -1211,7 +1211,7 @@ class Generate_Title extends Generate_Description {
 	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return array { 'addition', 'seplocation' }
 	 */
-	protected function get_title_branding_from_args( array $args ) {
+	protected function get_title_branding_from_args( $args ) {
 
 		if ( ! $args['taxonomy'] && $this->is_real_front_page_by_id( $args['id'] ) ) {
 			$addition    = $this->get_home_title_additions();
@@ -1525,7 +1525,7 @@ class Generate_Title extends Generate_Description {
 	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return bool
 	 */
-	protected function use_title_branding_from_args( array $args ) {
+	protected function use_title_branding_from_args( $args ) {
 
 		if ( $args['taxonomy'] ) {
 			$use = $this->use_taxonomical_title_branding( $args['id'] );

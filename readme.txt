@@ -254,7 +254,6 @@ TODO this is no longer 'minor'... In this update, we polished the final rough bi
 TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 
-TODO fix discrepancy in views/admin/wrap-content and views/edit/wrap-content by adding a new action.
 TODO in get_available_twitter_cards(), get_twitter_title() should always return something, so that check is redundant.
 	* However, in the edge-case it doesn't return something, the Twitter output should be discarded!
 	* So, how do we solve this? get_twitter_title() is a heavy method, for it tries to render twitter -> og -> meta.
@@ -312,19 +311,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 		-> Although this will help speed up queries, especially those of large sites, it will hinder large sites for they might use special queries to test against TSF.
 			-> Then again, you should assert in PHP more than the database. TSF's "qubit" system is a poster child for that.
 
-TODO mention: `\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination.
-	* This to be in line with homepage pagination.
-
 TODO allow custom robots generators?
-TODO in the robots-generators, can/should we memo the globals?
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
-TODO make umemo kmemo, and introduce umemo which allows callbacks
-	-> I'm afraid it'd require PHP 8.1 for best effect, though: `fn()=>{}`
-	-> But use keywords are useful. Pun intended.
-	-> or keep umemo and make fmemo (amemo -> actionable memo?)?
-TODO 404 -> noindex isn't working anymore.
-TODO array -> iterable?
-TODO ?array -> ?iterable?
 TODO apply yield from... in base sitemap?
 TODO s_...$new_value -> $something_else?
 
@@ -401,6 +389,10 @@ TODO _suggest_temp... :)
 	* We introduce function `tsf()`, an alias of `the_seo_framework()`.
 * **Changed:**
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
+	* Throughout the code, we removed typehinting. Typehinting is great for API consistency, but we thoroughly and correctly prefix every function with documentation on which type to use.
+		* The goal was to remove redundant opcodes.
+		* Yes, typehinting can help find bugs in development. But, its results can be catastrophic on user websites, something we do not have the time to deal with. We expect other developers to uphold the API.
+		* In the future, OpCache might look for typehints and use those to improve performance. When that day comes, we'll typehint everything we can.
 * **Fixed:**
 	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
 * **Option notes:**
@@ -540,6 +532,7 @@ TODO _suggest_temp... :)
 	* **Namespace `\The_SEO_Framework\`**
 		* `ROBOTS_ASSERT`, used for the `tsf()->robots_meta()` method family; makes the generator store assertions at the slight cost of performance.
 			* Use `tsf()->retrieve_robots_meta_assertions()` to obtain what's asserted in the last run.
+		* `ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination. This to make the constant in line with homepage pagination.
 * **Filter notes:**
 	* **Changed:**
 		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.

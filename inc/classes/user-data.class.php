@@ -252,7 +252,7 @@ class User_Data extends Term_Data {
 	 * @param int   $user_id The user ID.
 	 * @param array $data    The data to save.
 	 */
-	public function save_user_meta( $user_id, array $data ) {
+	public function save_user_meta( $user_id, $data ) {
 
 		$user = \get_userdata( $user_id );
 

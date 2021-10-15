@@ -254,7 +254,7 @@ class Post_Data extends Detect {
 	 * @param \WP_Post|integer $post The post object or post ID.
 	 * @param array            $data The post meta fields, will be merged with the defaults.
 	 */
-	public function save_post_meta( $post, array $data ) {
+	public function save_post_meta( $post, $data ) {
 
 		$post = \get_post( $post );
 
@@ -529,10 +529,7 @@ class Post_Data extends Detect {
 		// Can this even fail?
 		if ( ! $post_type ) return;
 
-		$_taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
-		$values      = [];
-
-		foreach ( $_taxonomies as $_taxonomy ) {
+		foreach ( $this->get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
 			$_post_key = '_primary_term_' . $_taxonomy;
 
 			if ( \wp_verify_nonce(

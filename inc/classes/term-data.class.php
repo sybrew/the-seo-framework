@@ -339,7 +339,7 @@ class Term_Data extends Post_Data {
 	 * @param string $taxonomy Taxonomy slug.
 	 * @param array  $data     The data to save.
 	 */
-	public function save_term_meta( $term_id, $tt_id, $taxonomy, array $data ) {
+	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 
@@ -385,9 +385,8 @@ class Term_Data extends Post_Data {
 		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		if ( \is_array( $data ) ) {
-			foreach ( $this->get_term_meta_defaults( $term_id ) as $key => $value ) {
+			foreach ( $this->get_term_meta_defaults( $term_id ) as $key => $value )
 				unset( $data[ $key ] );
-			}
 		}
 
 		// Only delete when no values are left, because someone else might've filtered it.

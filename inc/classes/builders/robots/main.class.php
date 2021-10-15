@@ -100,10 +100,10 @@ final class Main {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
 	 *    string $taxonomy The taxonomy.
 	 * }
-	 * @param null|array $options Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
+	 * @param int        $options Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
 	 * @return Main $this
 	 */
-	public function set( ?array $args = null, int $options = 0 ) {
+	public function set( $args = null, $options = 0 ) {
 		$this->args    = $args;
 		$this->options = $options;
 		return $this;
@@ -118,7 +118,7 @@ final class Main {
 	 * @param null|array $get The robots types to retrieve. See class constant GETTERS for valid values.
 	 * @return array The robots-values results. Assert values may be true-esque.
 	 */
-	public function get( ?array $get = null ) {
+	public function get( $get = null ) {
 
 		// If this leads to 0 getters, so be it: The dev might've used a deprecated value, which is fine. Continue method.
 		$get = ( $get ?? false )

@@ -45,10 +45,10 @@ class Generate_Ldjson extends Generate_Image {
 	 * @see $this->receive_json_data()
 	 * @uses $this->build_json_data_cache()
 	 *
-	 * @param string $key  The JSON data key.
-	 * @param array  $data The JSON data.
+	 * @param string   $key  The JSON data key.
+	 * @param iterable $data The JSON data.
 	 */
-	public function build_json_data( $key, array $data ) {
+	public function build_json_data( $key, $data ) {
 
 		$key  = \sanitize_key( $key );
 		$data = array_filter( $data );
@@ -107,7 +107,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @param string $key   The JSON data key.
 	 * @param array  $entry The JSON data entry.
 	 */
-	protected function build_json_data_cache( $key, array $entry ) {
+	protected function build_json_data_cache( $key, $entry ) {
 		$this->cache_json_data( false, $key, $entry );
 	}
 
@@ -123,7 +123,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @param array  $entry The JSON data entry.
 	 * @return array The JSON data for $key.
 	 */
-	protected function cache_json_data( $get = true, $key = '', array $entry = [] ) {
+	protected function cache_json_data( $get = true, $key = '', $entry = [] ) {
 
 		static $data = [];
 
@@ -605,7 +605,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @param array $previous_tree A previous set tree to compare to, if set.
 	 * @return array Trees in order.
 	 */
-	protected function build_ld_json_breadcrumb_trees( $cats, array $previous_tree = [] ) {
+	protected function build_ld_json_breadcrumb_trees( $cats, $previous_tree = [] ) {
 
 		$trees = $previous_tree;
 

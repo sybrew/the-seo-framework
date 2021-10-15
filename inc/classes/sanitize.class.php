@@ -721,7 +721,7 @@ class Sanitize extends Admin_Pages {
 	 * @param array $data The term meta to sanitize.
 	 * @return array The sanitized term meta.
 	 */
-	public function s_term_meta( array $data ) {
+	public function s_term_meta( $data ) {
 
 		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
@@ -778,7 +778,7 @@ class Sanitize extends Admin_Pages {
 	 * @param array $data The post meta to sanitize.
 	 * @return array The sanitized post meta.
 	 */
-	public function s_post_meta( array $data ) {
+	public function s_post_meta( $data ) {
 
 		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
@@ -838,7 +838,7 @@ class Sanitize extends Admin_Pages {
 	 * @param array $data The user meta to sanitize.
 	 * @return array The sanitized user meta.
 	 */
-	public function s_user_meta( array $data ) {
+	public function s_user_meta( $data ) {
 
 		foreach ( $data as $key => &$value ) :
 			switch ( $key ) :
@@ -1250,9 +1250,8 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $new_values ) ) return [];
 
-		foreach ( $this->get_forced_supported_post_types() as $forced ) {
+		foreach ( $this->get_forced_supported_post_types() as $forced )
 			unset( $new_values[ $forced ] );
-		}
 
 		return $this->s_post_types( $new_values );
 	}
@@ -1291,9 +1290,8 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $new_values ) ) return [];
 
-		foreach ( $this->get_forced_supported_taxonomies() as $forced ) {
+		foreach ( $this->get_forced_supported_taxonomies() as $forced )
 			unset( $new_values[ $forced ] );
-		}
 
 		return $this->s_taxonomies( $new_values );
 	}
@@ -1528,7 +1526,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! $path ) return '';
 
-		$link = 'https://www.facebook.com/' . $path;
+		$link = "https://www.facebook.com/{$path}";
 
 		if ( strpos( $link, 'profile.php' ) ) {
 			// Gets query parameters.
@@ -1962,7 +1960,7 @@ class Sanitize extends Admin_Pages {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	public function s_image_details( array $details ) {
+	public function s_image_details( $details ) {
 
 		if ( array_values( $details ) === $details )
 			return $this->s_image_details_deep( $details );
@@ -2042,7 +2040,7 @@ class Sanitize extends Admin_Pages {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	public function s_image_details_deep( array $details_array ) {
+	public function s_image_details_deep( $details_array ) {
 
 		$cleaned_details = [];
 

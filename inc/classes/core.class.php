@@ -181,12 +181,12 @@ class Core {
 	 * @access private
 	 * @credits Akismet For some code.
 	 *
-	 * @param string $view     The file name.
-	 * @param array  $__args   The arguments to be supplied within the file name.
-	 *                         Each array key is converted to a variable with its value attached.
-	 * @param string $instance The instance suffix to call back upon.
+	 * @param string   $view     The file name.
+	 * @param iterable $__args   The arguments to be supplied within the file name.
+	 *                           Each array key is converted to a variable with its value attached.
+	 * @param string   $instance The instance suffix to call back upon.
 	 */
-	public function get_view( $view, array $__args = [], $instance = 'main' ) {
+	public function get_view( $view, iterable $__args = [], $instance = 'main' ) {
 
 		//? A faster extract().
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
