@@ -112,25 +112,31 @@ class Detect extends Render {
 		 * @since 2.6.0
 		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
-		return (array) \apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
+		return (array) \apply_filters_ref_array( 'the_seo_framework_conflicting_plugins', [ $conflicting_plugins ] );
 	}
 
 	/**
 	 * Fetches type of conflicting plugins.
 	 *
 	 * @since 2.6.0
+	 * @since 4.2.0 Now always runs the filter, even when $type is not registered.
 	 *
 	 * @param string $type The Key from $this->conflicting_plugins()
 	 * @return array
 	 */
 	public function get_conflicting_plugins( $type = 'seo_tools' ) {
-
-		$conflicting_plugins = $this->conflicting_plugins();
-
-		if ( isset( $conflicting_plugins[ $type ] ) )
-			return (array) \apply_filters( 'the_seo_framework_conflicting_plugins_type', $conflicting_plugins[ $type ], $type );
-
-		return [];
+		/**
+		 * @since 2.6.1
+		 * @param array  $conflicting_plugins Conflicting plugins
+		 * @param string $type                The type of plugins to get.
+		*/
+		return (array) \apply_filters_ref_array(
+			'the_seo_framework_conflicting_plugins_type',
+			[
+				$this->conflicting_plugins()[ $type ] ?? [],
+				$type,
+			]
+		);
 	}
 
 	/**
@@ -289,32 +295,32 @@ class Detect extends Render {
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! empty( $active_plugins ) ) {
-			$conflicting_plugins = $this->get_conflicting_plugins( 'seo_tools' );
+		if ( ! $active_plugins ) return memo( false );
 
-			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( \in_array( $plugin, $active_plugins, true ) ) {
-					/**
-					 * @since 2.6.1
-					 * @since 3.1.0 Added second and third parameters.
-					 * @param bool   $detected    Whether the plugin should be detected.
-					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-					 * @param string $plugin      The plugin that's been detected.
-					 */
-					$detected = \apply_filters_ref_array(
-						'the_seo_framework_seo_plugin_detected',
-						[
-							true,
-							$plugin_name,
-							$plugin,
-						]
-					);
-					if ( $detected ) break;
+		foreach ( $this->get_conflicting_plugins( 'seo_tools' ) as $plugin_name => $plugin ) {
+			if ( \in_array( $plugin, $active_plugins, true ) ) {
+				/**
+				 * @since 2.6.1
+				 * @since 3.1.0 Added second and third parameters.
+				 * @param bool   $detected    Whether the plugin should be detected.
+				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+				 * @param string $plugin      The plugin that's been detected.
+				 */
+				if ( \apply_filters_ref_array(
+					'the_seo_framework_seo_plugin_detected',
+					[
+						true,
+						$plugin_name,
+						$plugin,
+					]
+				) ) {
+					$detected = true;
+					break;
 				}
 			}
 		}
 
-		return memo( (bool) $detected );
+		return memo( (bool) ( $detected ?? false ) );
 	}
 
 	/**
@@ -338,32 +344,32 @@ class Detect extends Render {
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! empty( $active_plugins ) ) {
-			$conflicting_plugins = $this->get_conflicting_plugins( 'open_graph' );
+		if ( ! $active_plugins ) return memo( false );
 
-			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( \in_array( $plugin, $active_plugins, true ) ) {
-					/**
-					 * @since 2.6.1
-					 * @since 3.1.0 Added second and third parameters.
-					 * @param bool   $detected    Whether the plugin should be detected.
-					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-					 * @param string $plugin      The plugin that's been detected.
-					 */
-					$detected = \apply_filters_ref_array(
-						'the_seo_framework_og_plugin_detected',
-						[
-							true,
-							$plugin_name,
-							$plugin,
-						]
-					);
-					if ( $detected ) break;
+		foreach ( $this->get_conflicting_plugins( 'open_graph' ) as $plugin_name => $plugin ) {
+			if ( \in_array( $plugin, $active_plugins, true ) ) {
+				/**
+				 * @since 2.6.1
+				 * @since 3.1.0 Added second and third parameters.
+				 * @param bool   $detected    Whether the plugin should be detected.
+				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+				 * @param string $plugin      The plugin that's been detected.
+				 */
+				if ( \apply_filters_ref_array(
+					'the_seo_framework_og_plugin_detected',
+					[
+						true,
+						$plugin_name,
+						$plugin,
+					]
+				) ) {
+					$detected = true;
+					break;
 				}
 			}
 		}
 
-		return memo( (bool) $detected );
+		return memo( (bool) ( $detected ?? false ) );
 	}
 
 	/**
@@ -386,31 +392,31 @@ class Detect extends Render {
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! empty( $active_plugins ) ) {
-			$conflicting_plugins = $this->get_conflicting_plugins( 'twitter_card' );
+		if ( ! $active_plugins ) return memo( false );
 
-			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( \in_array( $plugin, $active_plugins, true ) ) {
-					/**
-					 * @since 2.6.1
-					 * @param bool   $detected    Whether the plugin should be detected.
-					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-					 * @param string $plugin      The plugin that's been detected.
-					 */
-					$detected = \apply_filters_ref_array(
-						'the_seo_framework_twittercard_plugin_detected',
-						[
-							true,
-							$plugin_name,
-							$plugin,
-						]
-					);
-					if ( $detected ) break;
+		foreach ( $this->get_conflicting_plugins( 'twitter_card' ) as $plugin_name => $plugin ) {
+			if ( \in_array( $plugin, $active_plugins, true ) ) {
+				/**
+				 * @since 2.6.1
+				 * @param bool   $detected    Whether the plugin should be detected.
+				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+				 * @param string $plugin      The plugin that's been detected.
+				 */
+				if ( \apply_filters_ref_array(
+					'the_seo_framework_twittercard_plugin_detected',
+					[
+						true,
+						$plugin_name,
+						$plugin,
+					]
+				) ) {
+					$detected = true;
+					break;
 				}
 			}
 		}
 
-		return memo( (bool) $detected );
+		return memo( (bool) ( $detected ?? false ) );
 	}
 
 	/**
@@ -450,31 +456,31 @@ class Detect extends Render {
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! empty( $active_plugins ) ) {
-			$conflicting_plugins = $this->get_conflicting_plugins( 'sitemaps' );
+		if ( ! $active_plugins ) return memo( false );
 
-			foreach ( $conflicting_plugins as $plugin_name => $plugin ) {
-				if ( \in_array( $plugin, $active_plugins, true ) ) {
-					/**
-					 * @since 2.6.1
-					 * @param bool   $detected    Whether the plugin should be detected.
-					 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-					 * @param string $plugin      The plugin that's been detected.
-					 */
-					$detected = \apply_filters(
-						'the_seo_framework_sitemap_plugin_detected',
-						[
-							true,
-							$plugin_name,
-							$plugin,
-						]
-					);
-					if ( $detected ) break;
+		foreach ( $this->get_conflicting_plugins( 'sitemaps' ) as $plugin_name => $plugin ) {
+			if ( \in_array( $plugin, $active_plugins, true ) ) {
+				/**
+				 * @since 2.6.1
+				 * @param bool   $detected    Whether the plugin should be detected.
+				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+				 * @param string $plugin      The plugin that's been detected.
+				 */
+				if ( \apply_filters(
+					'the_seo_framework_sitemap_plugin_detected',
+					[
+						true,
+						$plugin_name,
+						$plugin,
+					]
+				) ) {
+					$detected = true;
+					break;
 				}
 			}
 		}
 
-		return memo( (bool) $detected );
+		return memo( (bool) ( $detected ?? false ) );
 	}
 
 	/**
@@ -493,16 +499,15 @@ class Detect extends Render {
 		if ( $this->get_option( 'sitemaps_output' ) )
 			return memo( false );
 
-		if ( \function_exists( '\\wp_sitemaps_get_server' ) ) {
-			$wp_sitemaps_server = \wp_sitemaps_get_server();
+		if ( ! \function_exists( '\\wp_sitemaps_get_server' ) )
+			return memo( false );
 
-			return memo(
-				method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
-					&& $wp_sitemaps_server->sitemaps_enabled()
-			);
-		}
+		$wp_sitemaps_server = \wp_sitemaps_get_server();
 
-		return memo( false );
+		return memo(
+			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
+				&& $wp_sitemaps_server->sitemaps_enabled()
+		);
 	}
 
 	/**

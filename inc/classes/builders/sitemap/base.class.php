@@ -158,7 +158,6 @@ class Base extends Main {
 		$content = '';
 		$count   = 0;
 
-		$show_priority = (bool) static::$tsf->get_option( 'sitemaps_priority' );
 		$show_modified = (bool) static::$tsf->get_option( 'sitemaps_modified' );
 
 		/**
@@ -181,7 +180,7 @@ class Base extends Main {
 			) . "\n";
 
 		foreach ( $this->generate_front_and_blog_url_items(
-			compact( 'show_priority', 'show_modified' ),
+			compact( 'show_modified' ),
 			$count
 		) as $_values ) {
 			$content .= $this->build_url_item( $_values );
@@ -304,7 +303,7 @@ class Base extends Main {
 
 		foreach ( $this->generate_url_item_values(
 			$_items,
-			compact( 'show_priority', 'show_modified', 'total_items' ),
+			compact( 'show_modified', 'total_items' ),
 			$count
 		) as $_values ) {
 			$content .= $this->build_url_item( $_values );
@@ -312,7 +311,7 @@ class Base extends Main {
 
 		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) ) {
 			foreach ( $this->generate_additional_base_urls(
-				compact( 'show_priority', 'show_modified', 'count' ),
+				compact( 'show_modified', 'count' ),
 				$count
 			) as $_values ) {
 				$content .= $this->build_url_item( $_values );
@@ -325,9 +324,9 @@ class Base extends Main {
 		 *
 		 * @since 2.5.2
 		 * @since 4.0.0 Added $args parameter.
+		 * @since 4.2.0 No longer forwards the 'show_priority' index in the second ($args) parameter.
 		 * @param string $extend Custom sitemap extension. Must be escaped.
 		 * @param array $args : {
-		 *   bool $show_priority : Whether to display priority
 		 *   bool $show_modified : Whether to display modified date.
 		 *   int  $total_itemns  : Estimate: The total sitemap items before adding additional URLs.
 		 * }
@@ -336,7 +335,7 @@ class Base extends Main {
 			'the_seo_framework_sitemap_extend',
 			[
 				'',
-				compact( 'show_priority', 'show_modified', 'count' ),
+				compact( 'show_modified', 'count' ),
 			]
 		);
 
@@ -385,10 +384,6 @@ class Base extends Main {
 					$_values['lastmod'] = $post->post_modified_gmt ?? false;
 				}
 
-				if ( $args['show_priority'] ) {
-					$_values['priority'] = '1.0';
-				}
-
 				++$count;
 				yield $_values;
 			}
@@ -432,9 +427,6 @@ class Base extends Main {
 					);
 				}
 
-				if ( $args['show_priority'] )
-					$_values['priority'] = '1.0';
-
 				++$count;
 				yield $_values;
 			}
@@ -470,9 +462,6 @@ class Base extends Main {
 						]
 					);
 				}
-
-				if ( $args['show_priority'] )
-					$_values['priority'] = '1.0';
 
 				++$count;
 				yield $_values;
@@ -514,11 +503,6 @@ class Base extends Main {
 				if ( $args['show_modified'] )
 					$_values['lastmod'] = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
-				if ( $args['show_priority'] ) {
-					// Add at least 1 to prevent going negative. We added 8 extra (= 9) to smoothen the slope.
-					$_values['priority'] = .949999 - ( $count / ( $args['total_items'] + 9 ) );
-				}
-
 				++$count;
 				yield $_values;
 			}
@@ -557,9 +541,6 @@ class Base extends Main {
 			$xml['lastmod'] = static::$tsf->gmt2date( $timestamp_format, $args['lastmod'] );
 		}
 
-		if ( isset( $args['priority'] ) && is_numeric( $args['priority'] ) )
-			$xml['priority'] = number_format( $args['priority'], 1, '.', ',' );
-
 		return $this->create_xml_entry( [ 'url' => $xml ], 1 );
 	}
 
@@ -573,7 +554,6 @@ class Base extends Main {
 	 * @iterator
 	 *
 	 * @param array $args  : {
-	 *   bool $show_priority : Whether to display priority
 	 *   bool $show_modified : Whether to display modified date.
 	 *   int  $count         : The total sitemap items before adding additional URLs.
 	 * }
@@ -590,7 +570,8 @@ class Base extends Main {
 		 * @since 2.5.2
 		 * @since 3.2.2 Invalid URLs are now skipped.
 		 * @since 4.0.0 Added $args parameter.
-		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018', 'priority' => 0.9 ] ]
+		 * @since 4.2.0 No longer forwards the 'show_priority' index in the second ($args) parameter.
+		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018' ] ]
 		 * @param array $custom_urls : {
 		 *    string (key) $url The absolute url to the page. : array {
 		 *       string           $lastmod  : UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
@@ -598,7 +579,6 @@ class Base extends Main {
 		 *    }
 		 * }
 		 * @param array $args : {
-		 *   bool $show_priority : Whether to display priority
 		 *   bool $show_modified : Whether to display modified date.
 		 *   int  $count         : Estimate: The total sitemap items before adding additional URLs.
 		 * }
@@ -620,9 +600,6 @@ class Base extends Main {
 
 			if ( $args['show_modified'] )
 				$_values['lastmod'] = ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00';
-
-			if ( $args['show_priority'] )
-				$_values['priority'] = ! empty( $values['priority'] ) ? $values['priority'] : 0.9;
 
 			++$count;
 			yield $_values;

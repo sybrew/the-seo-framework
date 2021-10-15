@@ -329,10 +329,11 @@ TODO apply yield from... in base sitemap?
 TODO s_...$new_value -> $something_else?
 
 TODO get_home_canonical_url() needs an admin-friendly-non-pagination-test version.
-TODO make a function of `umemo( 'tsf\get_home_url' ) ?? umemo( 'tsf\get_home_url', \get_home_url() )`..
 TODO further optimize get_word_count(), array flips and whatnot...
 
 TODO translation POT file.
+
+TODO _suggest_temp... :)
 
 **For everyone:**
 
@@ -386,6 +387,8 @@ TODO translation POT file.
 		* "Duplicated words" is now "repeated words."
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
+* **Removed:**
+	* Toggled off by default three years ago, hidden for almost all users one year ago, and now removed entirely: The Optimized Sitemap's priority-meta feature. This feature hasn't been used by any popular search engine for a long time.
 * **Fixed:**
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
@@ -400,6 +403,10 @@ TODO translation POT file.
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
 * **Fixed:**
 	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
+* **Option notes:**
+	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+		* Index `show_priority` is no longer used nor sanitized.
+			* Updating the options will purge this index. Then, it'll be rendered as disabled on downgrade.
 * **Function notes:**
 	* **Added:**
 		* `tsf()`, an alias of `the_seo_framework()`. They have exactly the same opcodes, so neither is faster than the other. Pick your poison.
@@ -444,6 +451,7 @@ TODO translation POT file.
 			* `get_author_canonical_url()`
 				1. The first parameter is now optional.
 				2. When the $id isn't set, the URL won't get tested for pagination issues.
+			* `get_conflicting_plugins()` now always runs the filter (`the_seo_framework_conflicting_plugins_type`), even when `$type` is not registered.
 			* `get_relative_fontcolor` optimized code, but it now has some rounding changes at the end. This could offset the returned values by 1/255th.
 			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.
 			* `get_robots_taxonomy_option_id` no longer sanitizes the input parameter.
@@ -533,6 +541,9 @@ TODO translation POT file.
 		* `ROBOTS_ASSERT`, used for the `tsf()->robots_meta()` method family; makes the generator store assertions at the slight cost of performance.
 			* Use `tsf()->retrieve_robots_meta_assertions()` to obtain what's asserted in the last run.
 * **Filter notes:**
+	* **Changed:**
+		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
+		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.

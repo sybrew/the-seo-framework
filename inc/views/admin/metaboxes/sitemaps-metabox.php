@@ -243,28 +243,6 @@ switch ( $instance ) :
 			] ),
 			true
 		);
-
-		if ( $this->get_option( 'sitemaps_priority' ) ) :
-			?>
-			<hr>
-			<?php
-			Form::header_title( __( 'Priority Settings', 'autodescription' ) );
-			HTML::description( __( 'The priority index suggests to search engines which pages are deemed more important. It has no known impact on the SEO value and it is generally ignored.', 'autodescription' ) );
-
-			// Echo checkbox.
-			HTML::wrap_fields(
-				Form::make_checkbox( [
-					'id'     => 'sitemaps_priority',
-					'label'  => $this->convert_markdown(
-						/* translators: the backticks are Markdown! Preserve them as-is! */
-						esc_html__( 'Add `<priority>` to the optimized sitemap?', 'autodescription' ),
-						[ 'code' ]
-					),
-					'escape' => false,
-				] ),
-				true
-			);
-		endif;
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_notify':

@@ -339,7 +339,6 @@ class Sanitize extends Admin_Pages {
 				'sitemaps_output',
 				'sitemaps_robots',
 				'sitemaps_modified',
-				'sitemaps_priority',
 				'sitemap_styles',
 				'sitemap_logo',
 			]

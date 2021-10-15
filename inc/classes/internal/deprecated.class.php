@@ -289,7 +289,6 @@ final class Deprecated {
 	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
 	 * @since 4.0.0 : 1. Now uses has_robots_txt()
 	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
-	 * FIXME This method also checks for file existence (and location...), but is only used when the file definitely doesn't exist.
 	 * @since 4.1.4 Soft deprecated.
 	 * @since 4.2.0 Hard deprecation.
 	 * @deprecated

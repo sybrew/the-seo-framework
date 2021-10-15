@@ -74,19 +74,17 @@ namespace {
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Added `did_action()` check.
+	 * @since 4.2.0 Removed memoization.
 	 *
 	 * @return string|bool The SEO Framework class name. False if The SEO Framework isn't loaded (yet).
 	 */
 	function the_seo_framework_class() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
-
 		// did_action() returns true for current action match, too.
 		if ( ! did_action( 'plugins_loaded' ) )
 			return false;
 
-		return memo( get_class( tsf() ) );
+		return get_class( tsf() );
 	}
 }
 
@@ -295,7 +293,7 @@ namespace The_SEO_Framework {
 	 * @since 4.2.0
 	 * @see memo() -- sacrifices performance for cleanliness.
 	 * @see umemo() -- sacrifices cleanliness for performance.
-	 * @ignore We couldn't find a use for this... yet.
+	 * @ignore We couldn't find a use for this... yet. Probably once we support only PHP7.4+
 	 *
 	 * @param \Closure $fn The Closure or function to memoize.
 	 * @return mixed : {

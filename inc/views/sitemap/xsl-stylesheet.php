@@ -316,9 +316,8 @@ function _print_xsl_description( $tsf ) {
 function _print_xsl_content( $tsf ) {
 
 	$vars  = [
-		'itemURL'  => '<xsl:variable name="itemURL" select="sitemap:loc"/>',
-		'lastmod'  => '<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \',substring(sitemap:lastmod,12,5)))"/>',
-		'priority' => '<xsl:variable name="priority" select="substring(sitemap:priority,0,4)"/>',
+		'itemURL' => '<xsl:variable name="itemURL" select="sitemap:loc"/>',
+		'lastmod' => '<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \',substring(sitemap:lastmod,12,5)))"/>',
 	];
 	$empty = array_fill_keys( [ 'th', 'td' ], '' );
 
@@ -337,16 +336,6 @@ function _print_xsl_content( $tsf ) {
 		unset( $vars['lastmod'] );
 	}
 
-	if ( $tsf->get_option( 'sitemaps_priority' ) ) {
-		$priority = [
-			'th' => sprintf( '<th>%s</th>', \esc_html( \ent2ncr( \__( 'Priority', 'autodescription' ) ) ) ),
-			'td' => '<td><xsl:value-of select="$priority" /></td>',
-		];
-	} else {
-		$priority = $empty;
-		unset( $vars['priority'] );
-	}
-
 	$vars = implode( $vars );
 
 	// phpcs:disable, WordPress.Security.EscapeOutput, output is escaped.
@@ -356,7 +345,6 @@ function _print_xsl_content( $tsf ) {
 		<tr>
 			{$url['th']}
 			{$last_updated['th']}
-			{$priority['th']}
 		</tr>
 	</thead>
 	<tbody>
@@ -365,7 +353,6 @@ function _print_xsl_content( $tsf ) {
 		<tr>
 			{$url['td']}
 			{$last_updated['td']}
-			{$priority['td']}
 		</tr>
 	</xsl:for-each>
 	</tbody>

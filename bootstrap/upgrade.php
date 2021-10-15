@@ -659,9 +659,6 @@ function _do_upgrade_3103() {
 
 		// Add non-default HTML stripping option. Defaulting to previous behavior.
 		$tsf->update_option( 'title_strip_tags', 0 ); // NOTE: Default is 1.
-
-		// Adds non-default priority option.
-		$tsf->update_option( 'sitemaps_priority', 1 ); // NOTE: Default is 0.
 	}
 }
 
