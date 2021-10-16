@@ -254,9 +254,6 @@ TODO this is no longer 'minor'... In this update, we polished the final rough bi
 TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 
-TODO in get_available_twitter_cards(), get_twitter_title() should always return something, so that check is redundant.
-	* However, in the edge-case it doesn't return something, the Twitter output should be discarded!
-	* So, how do we solve this? get_twitter_title() is a heavy method, for it tries to render twitter -> og -> meta.
 TODO clean up image generator, it's messy.
 TODO add link to our KB about same-site sitemaps when WPML or Polylang is detected? We get this question every week...
 
@@ -345,10 +342,7 @@ TODO _suggest_temp... :)
 		* Open Graph, Twitter, and meta titles are now regenerated faster.
 		* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
 		* The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
-			-> TODO this isn't really faster now...
-			* TODO can we prevent sitemap post-meta-cache invoking locally? We can clear WP cache.
-				* Would this require a new memoization system? Could we not, at that point, better depend on wp_cache_*?
-				* No, this would require us migrating to a new post meta system (Key-Value store)... https://github.com/sybrew/the-seo-framework/issues/185
+			-> TODO this isn't really faster now...? Further code enhancements did help somewhat.
 		* Large sitemaps are now rendered more quickly by the browser.
 		* Tooltips despawn 25% quicker now.
 		* Tapping the tooltip no longer conjures tooltip animations, potentially saving battery-life.
@@ -357,7 +351,8 @@ TODO _suggest_temp... :)
 		* The bootstrap timer keeps timing while metadata is strapping. This time spent is added to both timers. We rectified the "boot" timer.
 			* The reason is that the plugin should be done "booting" once it starts generating the metadata.
 			* This issue became more apparent once we started splitting the generators in their respective builder-classes.
-		* TODO Addressed an issue where canonical URLs accidentally bypassed some caches. This should vastly improve canonical URL and Structured Data generation.
+		* Addressed an issue where canonical URLs accidentally bypassed some caches. This should vastly improve canonical URL and Structured Data generation.
+		* Twitter Cards generate 61% quicker now by removing redundant tests.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -443,6 +438,9 @@ TODO _suggest_temp... :)
 			* `get_author_canonical_url()`
 				1. The first parameter is now optional.
 				2. When the $id isn't set, the URL won't get tested for pagination issues.
+			* `get_available_twitter_cards()`
+				1. No longer memoizes the return value.
+				2. No longer tests for the Twitter title.
 			* `get_conflicting_plugins()` now always runs the filter (`the_seo_framework_conflicting_plugins_type`), even when `$type` is not registered.
 			* `get_relative_fontcolor` optimized code, but it now has some rounding changes at the end. This could offset the returned values by 1/255th.
 			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.

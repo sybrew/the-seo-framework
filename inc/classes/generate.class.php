@@ -368,14 +368,6 @@ class Generate extends User_Data {
 	}
 
 	/**
-	 * @since 3.1.0
-	 * @TODO use this
-	 * @see get_available_twitter_cards
-	 * @ignore
-	 */
-	public function get_available_open_graph_types() { }
-
-	/**
 	 * Generates the Twitter Card type.
 	 *
 	 * @since 2.7.0
@@ -395,15 +387,7 @@ class Generate extends User_Data {
 		$option = $this->get_option( 'twitter_card' );
 
 		// Option is equal to found cards. Output option.
-		if ( \in_array( $option, $available_cards, true ) ) {
-			if ( 'summary_large_image' === $option ) {
-				$type = 'summary_large_image';
-			} elseif ( 'summary' === $option ) {
-				$type = 'summary';
-			}
-		} else {
-			$type = 'summary';
-		}
+		$type = \in_array( $option, $available_cards, true ) ? $option : 'summary';
 
 		/**
 		 * @since 2.3.0
@@ -426,22 +410,20 @@ class Generate extends User_Data {
 	 * @since 2.9.0
 	 * @since 4.0.0 1. Now only asserts the social titles as required.
 	 *              2. Now always returns an array, instead of a boolean (false) on failure.
-	 * @since 4.2.0 No longer memoizes the return value.
+	 * @since 4.2.0 1. No longer memoizes the return value.
+	 *              2. No longer tests for the Twitter title.
 	 *
 	 * @return array False when it shouldn't be used. Array of available cards otherwise.
 	 */
 	public function get_available_twitter_cards() {
-
-		$cards = [];
-
-		if ( $this->get_twitter_title() )
-			$cards = [ 'summary_large_image', 'summary' ];
-
 		/**
 		 * @since 2.9.0
 		 * @param array $cards The available Twitter cards. Use empty array to invalidate Twitter card.
 		 */
-		return (array) \apply_filters( 'the_seo_framework_available_twitter_cards', $cards ) ?: [];
+		return (array) \apply_filters(
+			'the_seo_framework_available_twitter_cards',
+			[ 'summary_large_image', 'summary' ]
+		);
 	}
 
 	/**
