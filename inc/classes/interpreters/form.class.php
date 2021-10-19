@@ -502,15 +502,12 @@ final class Form {
 		// Required.
 		if ( empty( $args['id'] ) ) return '';
 
-		static $image_input_id = 0;
-		$image_input_id++;
-
 		$tsf = \tsf();
 
 		$args = $tsf->array_merge_recursive_distinct(
 			[
 				'id'      => '',
-				'post_id' => $tsf->get_the_real_ID(),
+				'post_id' => $tsf->get_the_real_ID(), // TODO why? Introduced <https://github.com/sybrew/the-seo-framework/commit/6ca4425abf3edafd75d7d47e60e54eb8bca91cc2>
 				'data'    => [
 					'inputType' => 'social',
 					'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.
@@ -520,7 +517,7 @@ final class Form {
 					'flex'      => true,
 				],
 				'i18n'    => [
-					'button_title' => '',
+					'button_title' => '', // Redundant.
 					'button_text'  => \__( 'Select Image', 'autodescription' ),
 				],
 			],

@@ -178,7 +178,7 @@ switch ( $instance ) :
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo Form::get_image_uploader_form( [
-				'id'   => 'sitemap_logo',
+				'id'   => 'knowledge_logo',
 				'data' => [
 					'inputType' => 'logo',
 					'width'     => 512,

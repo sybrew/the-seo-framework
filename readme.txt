@@ -253,16 +253,13 @@ TODO this is no longer 'minor'... In this update, we polished the final rough bi
 
 TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
+	-> This is actually why we set up a custom `_deprecation_function()`.
 
-TODO clean up image generator, it's messy.
 TODO add link to our KB about same-site sitemaps when WPML or Polylang is detected? We get this question every week...
 
 TODO Ultimate Member, "double the SEO" (when WPML is also active? on non-default languages?)
 	-> https://wordpress.org/support/topic/double-the-seo-2/
 	-> Also email from hash Z9tDo5Ygrv0JzYXhM.
-
-TODO strip_tags_cs() should be able to skip backtracking for `<aside` when `<a` isn't found.
-	* This will be difficult.
 
 TODO deprecate _do_settings_page_notices(), and use the new persistent notice system instead.
 	-> Rename set_plugin_check_caches() to `notify_user_of_conflicting_plugin( 'seo' )`.
@@ -319,6 +316,9 @@ TODO further optimize get_word_count(), array flips and whatnot...
 TODO translation POT file.
 
 TODO _suggest_temp... :)
+TODO implement WP Fix for sitemaps and use get_posts()?
+	-> This would explode the RAM usage, but reduce the number of expensive get_post() calls in is_private/get_permalink
+		-> However, the way we do it now, the cache is properly instigated... Needs investigation.
 
 **For everyone:**
 
@@ -377,6 +377,7 @@ TODO _suggest_temp... :)
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
 	* Addressed an issue with settings-headless mode where the list-edit (quick/bulk-edit) features was untentionally disabled; it's now disabled when the meta-headless mode is enabled.
 	* Addressed a corner-case issue with Polylang where on WP installations instated prior WP v4.4 the primary sitemap got emptied when no new languages have been setup since WP v4.4 or later.
+	* Addressed a regression from TSF v4.1.4 where the Schema.org setting "Logo URL" couldn't be selected nor could the Sitemap Logo be assigned correctly (due to duplicated _unique_ IDs).
 
 **For developers:**
 
@@ -497,7 +498,7 @@ TODO _suggest_temp... :)
 			* `make_info()`, use `\The_SEO_Framework\Interpreters\HTML::make_info()` instead.
 			* `make_data_attributes()`, with no alternative available.
 			* `make_checkbox()`, with no alternative available.
-			* `make_single_select_form()`, with no alternative available.
+			* `make_single_select_form()`, use `\The_SEO_Framework\Interpreters\Form::make_single_select_form()` instead.
 			* `is_default_checked()`, with no alternative available.
 			* `is_warning_checked()`, with no alternative available.
 			* `get_is_conditional_checked()`, with no alternative available.

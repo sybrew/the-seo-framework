@@ -1922,7 +1922,7 @@ class Sanitize extends Admin_Pages {
 
 			// void = element without content.
 			$void_query = array_intersect( $args[ $type ], $void );
-			// fill = Normal, template, raw text, escapable text, foreign.
+			// fill = <normal | template | raw text | escapable text | foreign> element.
 			$fill_query = array_diff( $args[ $type ], $void );
 
 			if ( $void_query ) {

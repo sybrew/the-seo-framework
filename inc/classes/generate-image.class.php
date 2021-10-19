@@ -457,8 +457,9 @@ class Generate_Image extends Generate_Url {
 			// This is one of the slowest calls in this plugin on PHP 5.6. However, PHP 7.0 optimized cuf(a). Neglegible.
 			foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
 				if ( $details['url'] && $this->s_url_query( $details['url'] ) ) {
-					$items[ $i++ ] = $this->merge_extra_image_details( $details, $size );
+					$items[ $i ] = $this->merge_extra_image_details( $details, $size );
 					if ( $single ) break 2;
+					$i++;
 				}
 			}
 		}

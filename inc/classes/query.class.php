@@ -1238,15 +1238,18 @@ class Query extends Core {
 	 * Memoizes queries.
 	 * Should not be used on methods that aren't final.
 	 *
+	 * The first parameter might not get retrieved in a later call, for this method
+	 * also tests whether the query is setup correctly at the time of the call.
+	 *
 	 * @since 4.2.0
 	 *
 	 * @param mixed $value_to_set The value to set.
-	 * @param mixed ...$hash      Extra arguments, that are used to differentiaty queries.
+	 * @param mixed ...$args      Extra arguments, that are used to differentiaty queries.
 	 * @return mixed $value_to_set when provided.
 	 *               Otherwise, the previously sent $value_to_set.
 	 *               When that's not set either, null.
 	 */
-	protected function memo_query( $value_to_set = null, ...$hash ) {
+	protected function memo_query( $value_to_set = null, ...$args ) {
 
 		static $can_cache_query = null;
 
@@ -1257,11 +1260,11 @@ class Query extends Core {
 			if ( $this->can_cache_query( $caller ) ) {
 				$can_cache_query = true;
 			} else {
-				return $value_to_set ?? null;
+				return $value_to_set;
 			}
 		}
 
 		// Prepend unique ID to caller to prevent conflicts.
-		return umemo( __METHOD__ . "/$caller", $value_to_set, ...$hash );
+		return umemo( __METHOD__ . "/$caller", $value_to_set, ...$args );
 	}
 }

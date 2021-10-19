@@ -954,7 +954,7 @@ final class Deprecated {
 	 * @return string The option field.
 	 */
 	public function make_single_select_form( $args ) {
-		\tsf()->_deprecated_function( 'tsf()->make_single_select_form()', '4.2.0' );
+		\tsf()->_deprecated_function( 'tsf()->make_single_select_form()', '4.2.0', 'The_SEO_Framework\Interpreters\Form::make_single_select_form()' );
 		return \The_SEO_Framework\Interpreters\Form::make_single_select_form( $args );
 	}
 
@@ -1114,7 +1114,7 @@ final class Deprecated {
 	 */
 	public function detect_theme_support( $features ) {
 
-		\tsf()->_deprecated_function( 'tsf()->detect_theme_support()', '4.2.0', 'current_theme_supports' );
+		\tsf()->_deprecated_function( 'tsf()->detect_theme_support()', '4.2.0', 'current_theme_supports()' );
 
 		foreach ( (array) $features as $feature ) {
 			if ( \current_theme_supports( $feature ) ) {
