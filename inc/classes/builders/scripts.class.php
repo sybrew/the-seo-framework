@@ -25,17 +25,7 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-/**
- * Sets up class loader as file is loaded.
- * This is done asynchronously, because static calls are handled prior and after.
- *
- * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
- * @link https://bugs.php.net/bug.php?id=75771
- */
-$_load_scripts_class = function() {
-	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-	new Scripts();
-};
+Scripts::prepare();
 
 /**
  * Registers and outputs admin GUI scripts. Auto-invokes everything the moment
@@ -106,11 +96,12 @@ final class Scripts {
 	 *
 	 * @since 3.1.0
 	 */
-	public static function prepare() {}
+	public static function prepare() {
+		static::$instance ?? ( static::$instance = new static );
+	}
 
 	/**
-	 * The constructor. Can't be instantiated externally from this file.
-	 * Kills PHP on subsequent duplicated request. Enforces singleton.
+	 * The constructor.
 	 *
 	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
 	 *
@@ -118,13 +109,7 @@ final class Scripts {
 	 * @access private
 	 * @internal
 	 */
-	public function __construct() {
-
-		static $count = 0;
-		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-
-		static::$instance = &$this;
-
+	private function __construct() {
 		// These fail when called in the body.
 		\add_filter( 'admin_body_class', [ $this, '_add_body_class' ] );
 		\add_action( 'in_admin_header', [ $this, '_print_tsfjs_script' ] );
@@ -624,5 +609,3 @@ final class Scripts {
 		static::$include_secret = null;
 	}
 }
-
-$_load_scripts_class();

@@ -26,18 +26,6 @@ namespace The_SEO_Framework\Bridges;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
- * Sets up class loader as file is loaded.
- * This is done asynchronously, because static calls are handled prior and after.
- *
- * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
- * @link https://bugs.php.net/bug.php?id=75771
- */
-$_load_scripts_class = function() {
-	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-	new Scripts();
-};
-
-/**
  * Prepares admin GUI scripts. Auto-invokes everything the moment this file is required.
  * Relies on \The_SEO_Framework\Builders\Scripts to register and load scripts.
  *
@@ -54,24 +42,20 @@ $_load_scripts_class = function() {
 final class Scripts {
 
 	/**
-	 * @since 4.0.0
-	 * @var \The_SEO_Framework\Bridges\Scripts $instance The instance.
-	 */
-	private static $instance;
-
-	/**
 	 * Prepares the class and loads constructor.
 	 *
 	 * Use this if the actions need to be registered early, but nothing else of
 	 * this class is needed yet.
 	 *
 	 * @since 4.0.0
+	 * @ignore
+	 * @deprecated
 	 */
 	public static function prepare() {}
 
 	/**
-	 * The constructor. Can't be instantiated externally from this file.
-	 * Kills PHP on subsequent duplicated request. Enforces singleton.
+	 * The constructor. Can't be instantiated.
+	 * Kills PHP. Enforces singleton.
 	 *
 	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
 	 *
@@ -79,13 +63,7 @@ final class Scripts {
 	 * @access private
 	 * @internal
 	 */
-	public function __construct() {
-
-		static $count = 0;
-		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-
-		static::$instance = &$this;
-	}
+	private function __construct() {}
 
 	/**
 	 * Initializes scripts based on admin query.
@@ -990,5 +968,3 @@ final class Scripts {
 		];
 	}
 }
-
-$_load_scripts_class();

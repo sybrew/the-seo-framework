@@ -26,18 +26,6 @@ namespace The_SEO_Framework\Bridges;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
- * Sets up class loader as file is loaded.
- * This is done asynchronously, because static calls are handled prior and after.
- *
- * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
- * @link https://bugs.php.net/bug.php?id=75771
- */
-$_load_feed_class = function() {
-	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-	new Feed();
-};
-
-/**
  * Prepares feed mofifications.
  *
  * @since 4.1.0
@@ -65,7 +53,7 @@ final class Feed {
 	 * @return \The_SEO_Framework\Bridges\Feed $instance
 	 */
 	public static function get_instance() {
-		return static::$instance;
+		return static::$instance ?? ( static::$instance = new static );
 	}
 
 	/**
@@ -76,7 +64,9 @@ final class Feed {
 	 *
 	 * @since 4.1.0
 	 */
-	public static function prepare() {}
+	public static function prepare() {
+		static::get_instance();
+	}
 
 	/**
 	 * The constructor. Can't be instantiated externally from this file.
@@ -93,8 +83,7 @@ final class Feed {
 		static $count = 0;
 		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
 
-		static::$tsf      = \tsf();
-		static::$instance = &$this;
+		static::$tsf = \tsf();
 	}
 
 	/**
@@ -197,5 +186,3 @@ final class Feed {
 		);
 	}
 }
-
-$_load_feed_class();

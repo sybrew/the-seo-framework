@@ -31,18 +31,6 @@ use function \The_SEO_Framework\{
 };
 
 /**
- * Sets up class loader as file is loaded.
- * This is done asynchronously, because static calls are handled prior and after.
- *
- * @see EOF. Because of the autoloader and (future) trait calling, we can't do it before the class is read.
- * @link https://bugs.php.net/bug.php?id=75771
- */
-$_load_sitemap_class = function() {
-	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-	new Sitemap();
-};
-
-/**
  * Prepares sitemap output.
  *
  * @since 4.0.0
@@ -70,7 +58,7 @@ final class Sitemap {
 	 * @return \The_SEO_Framework\Bridges\Sitemap $instance
 	 */
 	public static function get_instance() {
-		return static::$instance;
+		return static::$instance ?? ( static::$instance = new static );
 	}
 
 	/**
@@ -81,7 +69,9 @@ final class Sitemap {
 	 *
 	 * @since 4.0.0
 	 */
-	public static function prepare() {}
+	public static function prepare() {
+		static::get_instance();
+	}
 
 	/**
 	 * The constructor. Can't be instantiated externally from this file.
@@ -98,8 +88,7 @@ final class Sitemap {
 		static $count = 0;
 		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
 
-		static::$tsf      = \tsf();
-		static::$instance = &$this;
+		static::$tsf = \tsf();
 	}
 
 	/**
@@ -680,5 +669,3 @@ final class Sitemap {
 		return memo( $memory - memory_get_usage() );
 	}
 }
-
-$_load_sitemap_class();
