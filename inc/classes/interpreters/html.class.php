@@ -60,7 +60,7 @@ final class HTML {
 	 * @return string Content wrapped in code tags.
 	 */
 	public static function code_wrap_noesc( $content ) {
-		return '<code>' . $content . '</code>';
+		return "<code>$content</code>";
 	}
 
 	/**
@@ -85,9 +85,11 @@ final class HTML {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public static function description_noesc( $content, $block = true ) {
-		$output = '<span class="description">' . $content . '</span>';
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
-		echo $block ? '<p>' . $output . '</p>' : $output;
+		printf(
+			( $block ? '<p>%s</p>' : '%s' ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+			"<span class=description>$content</span>"
+		);
 	}
 
 	/**
@@ -112,9 +114,11 @@ final class HTML {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public static function attention_noesc( $content, $block = true ) {
-		$output = '<span class="attention">' . $content . '</span>';
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
-		echo $block ? '<p>' . $output . '</p>' : $output;
+		printf(
+			( $block ? '<p>%s</p>' : '%s' ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+			"<span class=attention>$content</span>"
+		);
 	}
 
 	/**
@@ -139,9 +143,11 @@ final class HTML {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public static function attention_description_noesc( $content, $block = true ) {
-		$output = '<span class="description attention">' . $content . '</span>';
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
-		echo $block ? '<p>' . $output . '</p>' : $output;
+		printf(
+			( $block ? '<p>%s</p>' : '%s' ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+			"<span class=\"description attention\">$content</span>"
+		);
 	}
 
 	/**
@@ -160,11 +166,13 @@ final class HTML {
 		if ( \is_array( $input ) )
 			$input = implode( PHP_EOL, $input );
 
+		$output = "<div class=tsf-fields>$input</div>";
+
 		if ( $echo ) {
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- Escape your $input prior!
-			echo '<div class="tsf-fields">' . $input . '</div>';
+			echo $output;
 		} else {
-			return '<div class="tsf-fields">' . $input . '</div>';
+			return $output;
 		}
 	}
 
@@ -184,7 +192,7 @@ final class HTML {
 
 		if ( $link ) {
 			$output = sprintf(
-				'<a href="%1$s" class="tsf-tooltip-item tsf-help" target="_blank" rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
+				'<a href="%1$s" class="tsf-tooltip-item tsf-help" target=_blank rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
 				\esc_url( $link, [ 'https', 'http' ] ),
 				\esc_attr( $description )
 			);
@@ -195,7 +203,7 @@ final class HTML {
 			);
 		}
 
-		$output = sprintf( '<span class="tsf-tooltip-wrap">%s</span>', $output );
+		$output = sprintf( '<span class=tsf-tooltip-wrap>%s</span>', $output );
 
 		if ( $echo ) {
 			// phpcs:ignore, WordPress.Security.EscapeOutput

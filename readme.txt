@@ -247,6 +247,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+PUNTED -- not important for 4.2.0:
+TODO deprecate _do_settings_page_notices(), and use the new persistent notice system instead.
+	-> Rename set_plugin_check_caches() to `notify_user_of_conflicting_plugin( 'seo' )`.
+	-> In effect, do_dismissible_notice()?
+		-> The notice called at `_output_notices()` can be used with persistent notices as well.
+			-> In fact, we can make it Multisite compatible that way. Sub site has SEO plugin->main site activates conflicting SEO plugin->notice on sub-site.
+				-> Show 3x. Delete if detected conflict is gone (hook at plugin_activated). -> Test show 10x to make sure it works as intended (activate/deactivate, etc.).
+TODO Move notice handlers to new class.
+
 = 4.2.0 =
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
@@ -255,19 +264,9 @@ TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 	-> This is actually why we set up a custom `_deprecation_function()`.
 
-TODO add link to our KB about same-site sitemaps when WPML or Polylang is detected? We get this question every week...
-
 TODO Ultimate Member, "double the SEO" (when WPML is also active? on non-default languages?)
 	-> https://wordpress.org/support/topic/double-the-seo-2/
 	-> Also email from hash Z9tDo5Ygrv0JzYXhM.
-
-TODO deprecate _do_settings_page_notices(), and use the new persistent notice system instead.
-	-> Rename set_plugin_check_caches() to `notify_user_of_conflicting_plugin( 'seo' )`.
-	-> In effect, do_dismissible_notice()?
-		-> The notice called at `_output_notices()` can be used with persistent notices as well.
-			-> In fact, we can make it Multisite compatible that way. Sub site has SEO plugin->main site activates conflicting SEO plugin->notice on sub-site.
-				-> Show 3x. Delete if detected conflict is gone (hook at plugin_activated). -> Test show 10x to make sure it works as intended (activate/deactivate, etc.).
-TODO Move notice handlers to new class.
 
 TODO overthrow the structured data. Clean-room Yoast's/WPSSO/AIOSEO implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
 
@@ -368,6 +367,7 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 	* **Accessibility:**
 		* The SEO Bar item "Redirect" now conveys a more proper message when the page status is draft: "... once published."
 		* "Duplicated words" is now "repeated words."
+		* The Optimized Sitemap's settings now explain there might be multiple sitemaps when Polylang or WPML is detected.
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 * **Removed:**
@@ -533,6 +533,8 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 			* Use `tsf()->retrieve_robots_meta_assertions()` to obtain what's asserted in the last run.
 		* `ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination. This to make the constant in line with homepage pagination.
 * **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_tell_multilingual_sitemap`, whether to tell about multilingual sitemaps on the setting pages.
 	* **Changed:**
 		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.

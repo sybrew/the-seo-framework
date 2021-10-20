@@ -520,7 +520,6 @@ switch ( $instance ) :
 		Form::header_title( __( 'Homepage Pagination Robots Settings', 'autodescription' ) );
 		HTML::description( __( "If your homepage is paginated and outputs content that's also found elsewhere on the website, enabling this option may prevent duplicate content.", 'autodescription' ) );
 
-		// Echo checkbox.
 		HTML::wrap_fields(
 			Form::make_checkbox( [
 				'id'     => 'home_paged_noindex',

@@ -106,7 +106,6 @@ switch ( $instance ) :
 			'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links',
 			false
 		);
-		// Echo checkbox.
 		HTML::wrap_fields(
 			Form::make_checkbox( [
 				'id'     => 'knowledge_output',

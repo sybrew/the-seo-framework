@@ -90,7 +90,6 @@ switch ( $instance ) :
 		<?php
 		Form::header_title( __( 'Sitemap Output', 'autodescription' ) );
 
-		// Echo checkbox.
 		HTML::wrap_fields(
 			Form::make_checkbox( [
 				'id'     => 'sitemaps_output',
@@ -127,8 +126,26 @@ switch ( $instance ) :
 						)
 					);
 			}
-		}
 
+			/**
+			 * @since 4.2.0
+			 * @param bool $tell Whether to tell that there's a plugin active that can use multiple sitemaps.
+			 */
+			if ( apply_filters( 'the_seo_framework_tell_multilingual_sitemap', false ) ) {
+				HTML::description_noesc(
+					// Markdown escapes.
+					$this->convert_markdown(
+						sprintf(
+							/* translators: %s = Documentation URL in markdown */
+							esc_html__( 'A multilingual plugin has been detected, so your site may have multiple sitemaps. [Learn more](%s).', 'autodescription' ),
+							'https://kb.theseoframework.com/?p=104#same-site-sitemaps'
+						),
+						[ 'a' ],
+						[ 'a_internal' => false ] // opens in new tab.
+					)
+				);
+			}
+		}
 		?>
 		<hr>
 
@@ -230,7 +247,6 @@ switch ( $instance ) :
 		Form::header_title( __( 'Timestamps Settings', 'autodescription' ) );
 		HTML::description( __( 'The modified time suggests to search engines where to look for content changes first.', 'autodescription' ) );
 
-		// Echo checkbox.
 		HTML::wrap_fields(
 			Form::make_checkbox( [
 				'id'     => 'sitemaps_modified',
@@ -298,7 +314,6 @@ switch ( $instance ) :
 			] );
 		}
 
-		// Echo checkbox.
 		HTML::wrap_fields( $ping_checkbox, true );
 		break;
 

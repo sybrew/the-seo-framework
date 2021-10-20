@@ -15,6 +15,7 @@ namespace The_SEO_Framework;
  */
 \add_filter( 'the_seo_framework_warn_homepage_global_title', '__return_true' );
 \add_filter( 'the_seo_framework_warn_homepage_global_description', '__return_true' );
+\add_filter( 'the_seo_framework_tell_multilingual_sitemap', '__return_true' );
 
 \add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 /**
