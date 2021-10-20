@@ -264,10 +264,6 @@ TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 	-> This is actually why we set up a custom `_deprecation_function()`.
 
-TODO Ultimate Member, "double the SEO" (when WPML is also active? on non-default languages?)
-	-> https://wordpress.org/support/topic/double-the-seo-2/
-	-> Also email from hash Z9tDo5Ygrv0JzYXhM.
-
 TODO overthrow the structured data. Clean-room Yoast's/WPSSO/AIOSEO implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
 
 TODO can we change behavior of class-loaders, since we require PHP 7.2 (search "_class = function() {")
@@ -332,6 +328,7 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 		* TODO Core sitemaps patch (lookup 'WP 5.5')
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
+	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.
 * **Improved:**
 	* **Performance:**
 		* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
