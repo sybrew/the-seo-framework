@@ -59,8 +59,13 @@ final class SEOBar {
 
 	/**
 	 * @since 4.0.0
-	 * @var array $item The current SEO Bar item list : {
-	 *
+	 * @var array $item The current SEO Bar item list. {
+	 *    string $symbol : The displayed symbol that identifies your bar.
+	 *    string $title  : The title of the assessment.
+	 *    string $status : Accepts 'good', 'okay', 'bad', 'unknown'.
+	 *    string $reason : The final assessment: The reason for the $status.
+	 *    string $assess : The assessments on why the reason is set. Keep it short and concise!
+	 *                     Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	private static $items = [];
@@ -140,7 +145,14 @@ final class SEOBar {
 	 * @since 4.1.1 Is now static.
 	 * @collector
 	 *
-	 * @return array SEO Bar items. Passed by reference.
+	 * @return array SEO Bar items. Passed by reference. {
+	 *    string $symbol : The displayed symbol that identifies your bar.
+	 *    string $title  : The title of the assessment.
+	 *    string $status : Accepts 'good', 'okay', 'bad', 'unknown'.
+	 *    string $reason : The final assessment: The reason for the $status.
+	 *    string $assess : The assessments on why the reason is set. Keep it short and concise!
+	 *                     Does not accept HTML for performant ARIA support.
+	 * }
 	 */
 	public static function &collect_seo_bar_items() {
 		return static::$items;

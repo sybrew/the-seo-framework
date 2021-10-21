@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
-Requires at least: 5.4.0
+Requires at least: 5.5.0
 Tested up to: 5.8
 Requires PHP: 7.2.0
 Stable tag: 4.1.5.1
@@ -278,7 +278,6 @@ TODO Elementor SEO Box?
 	-> While we're at it, also define a default for their broken post type?
 		-> It's really their problem, though.
 
-TODO clean up xsl-stylesheet.php: Move all functions to a dedicated interpreter/builder class, so that the view file is small and neat.
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
@@ -306,17 +305,20 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 
 * **Upgrade notes:**
 	* PHP 7.2 or higher is now required, from PHP 5.6 or higher.
-	* WP 5.4 (TODO 5.5?) or higher is now required, from WP 5.1 or higher.
+	* WP 5.5 or higher is now required, from WP 5.1 or higher.
 		* TODO Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
 			* Mind the gmdate()/date()/get_the_date/gmt2date()/->post_date function calls.
 			* -> Removal of set_timezone/reset_timezone()
 		* TODO Archive title patch (lookup 'WP 5.5')
 		* TODO Auto-update patch (lookup 'WP 5.5')
 		* TODO Core sitemaps patch (lookup 'WP 5.5')
+		* esc_xml... (WP 5.5)
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.
 * **Improved:**
+	* **Sitemaps:**
+		* Aside from the optimized sitemap being centered and responsive, it now also fully embraces RTL languages (Arabic, Hebrew, Farsi, et al.).
 	* **Performance:**
 		* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
 		* Images are now fetched faster from the content.
@@ -369,6 +371,7 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 	* We introduce function `tsf()`, an alias of `the_seo_framework()`.
 * **Changed:**
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
+		* We also offloaded the sitemap's styles over different "views". Located at `inc/views/sitemap/xsl`.
 	* Throughout the code, you'll find we now use more modern PHP syntax, since we jumped off the delapidated PHP v5.6 boat, and onto the [unsupported PHP v7.2 one](https://www.php.net/supported-versions.php).
 		* Over [25% of hosts are NOT doing their jobs well](https://wordpress.org/about/stats/) keeping your site secure.
 	* Throughout the code, we removed typehinting. Typehinting is great for API consistency, but we thoroughly and correctly prefix every function with documentation on which type to use.
@@ -401,15 +404,16 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 		* **Method changed:**
 			* `get_query_cache()` no longer returns the robots-copyright data at `['states']['robotsmeta']`. Use the options API instead.
 	* These objects are marked as private and should not be called. This is informational only.
+		* Object `The_SEO_Framework\Builders\Robots\Main` is new.
+			* Used by new object `The_SEO_Framework\Builders\Robots\Args` and `The_SEO_Framework\Builders\Robots\Query`.
+			* Use public method `tsf()->generate_robots_meta()` to access the builder.
 		* Object `\The_SEO_Framework\Builders\SeoBar` is now `\The_SEO_Framework\Builders\SEOBar\Main`.
 		* Object `\The_SEO_Framework\Builders\SeoBar_Page` is now `\The_SEO_Framework\Builders\SEOBar\Page`.
 		* Object `\The_SEO_Framework\Builders\SeoBar_Term` is now `\The_SEO_Framework\Builders\SEOBar\Term`.
 		* Object `\The_SEO_Framework\Builders\Sitemap_Base` is now `\The_SEO_Framework\Builders\Sitemap\Base`.
 		* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
 		* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
-		* Object `The_SEO_Framework\Builders\Robots\Main` is new.
-			* Used by new object `The_SEO_Framework\Builders\Robots\Args` and `The_SEO_Framework\Builders\Robots\Query`.
-			* Use public method `tsf()->generate_robots_meta()` to access the builder.
+		* Object `\The_SEO_Framework\Interpreters\Sitemap_XSL` is new.
 	* Object `\The_SEO_Framework\Builders\Sitemap` is now `\The_SEO_Framework\Builders\Sitemap\Main`.
 		* A class alias is made Just-in-Time to smoothen deprecation.
 	* For object `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
@@ -585,9 +589,9 @@ In this major-minor update, we improved browser performance by up to 99% (not a 
 
 **Environment upgrade notes**
 
-WordPress 5.1 through 5.3 are no longer supported. Here's why:
+WordPress 5.1 through 5.4 are no longer supported. Here's why:
 
-* [Over 75% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.4 or later.
+* [Over 66% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.5 or later.
 * Newer versions of WordPress are faster, more reliable, and easier to work with; for both you and us.
 * Supporting past versions takes time away that's better used implementing new features.
 
@@ -606,7 +610,7 @@ A pertaining oneliner [with a link]();
 == Upgrade Notice ==
 
 = 4.2.0 =
-TODO The v4.2.0 update brings a major upgrade (TODO does it?). Make a backup of your database before updating. WordPress v5.4 (or higher) is now required. Downgrading to v4.1.5.1 is possible without side effects (TODO is it?).
+TODO The v4.2.0 update brings a major upgrade (TODO does it?). Make a backup of your database before updating. WordPress v5.5 (or higher) is now required. Downgrading to v4.1.5.1 is possible without side effects (TODO is it?).
 
 = 4.1.0 =
 The v4.1.0 update brings a major upgrade. Make a backup of your database before updating. WordPress v5.1 (or higher) is now required. Downgrading to v4.0.7 is possible without side effects.

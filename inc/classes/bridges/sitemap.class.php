@@ -404,6 +404,8 @@ final class Sitemap {
 			header( 'Cache-Control: max-age=1800', true );
 		}
 
+		\The_SEO_Framework\Interpreters\Sitemap_XSL::prepare();
+
 		static::$tsf->get_view( 'sitemap/xsl-stylesheet' );
 		exit;
 	}

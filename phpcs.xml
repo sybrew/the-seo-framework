@@ -5,8 +5,9 @@
 	<!-- Get it here: https://github.com/theseoframework/wpcs-tsf -->
 	<rule ref="TSF"/>
 
-	<config name="minimum_supported_wp_version" value="5.1"/>
-	<config name="testVersion" value="7.2-"/>
+	<!-- Defined at wpcs-tsf. We cannot override that here... -->
+	<!-- <config name="minimum_supported_wp_version" value="5.5"/> -->
+	<!-- <config name="testVersion" value="7.2-"/> -->
 
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>

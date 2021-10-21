@@ -31,6 +31,8 @@ namespace The_SEO_Framework\Interpreters;
  * @since 4.1.4
  * @note Use `tsf()->convert_markdown() for easy access.
  *
+ * @NOTE to self: This is also used in XHTML configurations. Keep it strict!
+ *
  * @access protected
  *         Everything in this class is subject to change or deletion.
  * @internal
@@ -259,6 +261,7 @@ final class Markdown {
 
 		$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
 
+		// Keep this XHTML compatible!
 		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
 
 		for ( $i = 0; $i < $count; $i++ ) {

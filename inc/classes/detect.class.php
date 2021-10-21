@@ -499,9 +499,6 @@ class Detect extends Render {
 		if ( $this->get_option( 'sitemaps_output' ) )
 			return memo( false );
 
-		if ( ! \function_exists( '\\wp_sitemaps_get_server' ) )
-			return memo( false );
-
 		$wp_sitemaps_server = \wp_sitemaps_get_server();
 
 		return memo(

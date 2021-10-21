@@ -58,14 +58,8 @@ function the_seo_framework_pre_boot_test() {
 
 	if ( $ms && function_exists( 'get_network' ) ) {
 		// Try bypassing testing and deactivation gaming when the main blog has already been tested.
-
-		/**
-		 * @since 2.9.4
-		 * Delete old and redundant network option.
-		 */
-		delete_site_option( 'the_seo_framework_tested_upgrade_version' );
-
 		$nw = get_network();
+
 		if ( $nw instanceof WP_Network ) {
 			if ( get_blog_option( $nw->site_id, 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION ) {
 				update_option( 'the_seo_framework_tested_upgrade_version', THE_SEO_FRAMEWORK_DB_VERSION );
@@ -78,7 +72,7 @@ function the_seo_framework_pre_boot_test() {
 
 	$requirements = array(
 		'php' => 70200,
-		'wp'  => '5.4-dev',
+		'wp'  => '5.5-dev',
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
@@ -124,7 +118,7 @@ function the_seo_framework_pre_boot_test() {
 
 		case 2:
 			// WordPress requirements not met.
-			$requirement = 'WordPress 5.4 or later';
+			$requirement = 'WordPress 5.5 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';
