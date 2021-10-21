@@ -362,76 +362,59 @@ class Base extends Main {
 	 */
 	protected function generate_front_and_blog_url_items( $args, &$count = 0 ) {
 
-		$front_page_id = (int) \get_option( 'page_on_front' );
-		$posts_page_id = (int) \get_option( 'page_for_posts' );
-
 		if ( static::$tsf->has_page_on_front() ) {
-			if ( $front_page_id && $this->is_post_included_in_sitemap( $front_page_id ) ) {
-				// TODO use this instead @ PHP7
-				// yield from $this->generate_url_item_values()
+			$front_page_id = (int) \get_option( 'page_on_front' );
+			$posts_page_id = (int) \get_option( 'page_for_posts' );
 
-				// Reset.
-				$_values        = [];
-				$_values['loc'] = static::$tsf->create_canonical_url(
-					[
-						'id'       => $front_page_id,
-						'taxonomy' => '',
-					]
+			if ( $front_page_id ) {
+				yield from $this->generate_url_item_values(
+					[ $front_page_id ],
+					$args,
+					$count
 				);
-
-				if ( $args['show_modified'] ) {
-					$post               = \get_post( $front_page_id );
-					$_values['lastmod'] = $post->post_modified_gmt ?? false;
-				}
-
-				++$count;
-				yield $_values;
 			}
+
 			if ( $posts_page_id && $this->is_post_included_in_sitemap( $posts_page_id ) ) {
-				// Reset.
-				$_values        = [];
-				$_values['loc'] = static::$tsf->create_canonical_url(
-					[
-						'id'       => $posts_page_id,
-						'taxonomy' => '',
-					]
-				);
+				foreach ( $this->generate_url_item_values(
+					[ $posts_page_id ],
+					$args,
+					$count
+				) as $_values ) {
+					if ( $_values['loc'] && $args['show_modified'] ) {
+						$latests_posts = \wp_get_recent_posts(
+							[
+								'numberposts'  => 1,
+								'post_type'    => 'post',
+								'post_status'  => 'publish',
+								'has_password' => false,
+								'orderby'      => 'post_date',
+								'order'        => 'DESC',
+								'offset'       => 0,
+							],
+							OBJECT
+						);
+						$_publish_post = $latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00';
+						$_lastmod_blog = $_values['lastmod']; // Inferred from generator generate_url_item_values()
 
-				if ( $args['show_modified'] ) {
-					$latests_posts = \wp_get_recent_posts(
-						[
-							'numberposts'  => 1,
-							'post_type'    => 'post',
-							'post_status'  => 'publish',
-							'has_password' => false,
-							'orderby'      => 'post_date',
-							'order'        => 'DESC',
-							'offset'       => 0,
-						],
-						\OBJECT
-					);
-					$_publish_post = $latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00';
-					$_lastmod_blog = \get_post( $posts_page_id )->post_modified_gmt ?? '0000-00-00 00:00:00';
+						/**
+						 * @since 4.1.1
+						 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
+						 */
+						$_values['lastmod'] = (string) \apply_filters_ref_array(
+							'the_seo_framework_sitemap_blog_lastmod',
+							[
+								strtotime( $_publish_post ) > strtotime( $_lastmod_blog )
+									? $_publish_post
+									: $_lastmod_blog,
+							]
+						);
+					}
 
-					/**
-					 * @since 4.1.1
-					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
-					 */
-					$_values['lastmod'] = (string) \apply_filters_ref_array(
-						'the_seo_framework_sitemap_blog_lastmod',
-						[
-							strtotime( $_publish_post ) > strtotime( $_lastmod_blog )
-								? $_publish_post
-								: $_lastmod_blog,
-						]
-					);
+					yield $_values;
 				}
-
-				++$count;
-				yield $_values;
 			}
 		} else {
-			// Blog page as front.
+			// Blog page as front. Unique; cannot go through generate_url_item_values().
 			if ( $this->is_post_included_in_sitemap( 0 ) ) {
 				// Reset.
 				$_values        = [];
@@ -448,7 +431,7 @@ class Base extends Main {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						\OBJECT
+						OBJECT
 					);
 
 					/**

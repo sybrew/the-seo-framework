@@ -265,14 +265,14 @@ TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports
 TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
 	-> What's there to clean? Well, we could move the constants around... and we could add namespacing... yay.
 
+TODO introduce a settings generator, even if high-level?
+TODO s_...$new_value -> $something_else?
 
 = 4.2.0 =
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
 
 get_static_front_page_title / get_blogname... -> ??
-
-TODO introduce a settings generator, even if high-level?
 
 TODO Elementor SEO Box?
 	-> While we're at it, also define a default for their broken post type?
@@ -291,8 +291,6 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 
 TODO allow custom robots generators?
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
-TODO apply yield from... in base sitemap?
-TODO s_...$new_value -> $something_else?
 
 TODO get_home_canonical_url() needs an admin-friendly-non-pagination-test version.
 TODO further optimize get_word_count(), array flips and whatnot...

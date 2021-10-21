@@ -315,17 +315,20 @@ class Init extends Query {
 
 			// New WordPress 4.4.0 filter. Hurray! It's also much faster :)
 			\add_filter( 'pre_get_document_title', [ $this, 'get_document_title' ], 10 );
-			// Override WooThemes Title TODO move this to wc compat file.
-			\add_filter( 'woo_title', [ $this, 'get_document_title' ], 99 );
 
 			/**
 			 * @since 2.4.1
 			 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
+			 *
+			 * TODO remove this block? -- it's been 6 years...
+			 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
 			 */
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
 				\remove_all_filters( 'wp_title', false );
 				// Override WordPress Title
 				\add_filter( 'wp_title', [ $this, 'get_wp_title' ], 9 );
+				// Override WooThemes Title TODO move this to wc compat file.
+				\add_filter( 'woo_title', [ $this, 'get_document_title' ], 99 );
 			}
 		}
 

@@ -120,9 +120,6 @@ final class Deprecated {
 
 		$robots = $tsf->robots();
 
-		/** @since 4.0.4 Added as WP 5.3 patch. */
-		$tsf->set_timezone( 'UTC' );
-
 		/**
 		 * @since 2.6.0
 		 * @param string $before The content before the SEO output.
@@ -197,9 +194,6 @@ final class Deprecated {
 		 * @param string $after The content after the SEO output.
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_pro', '' );
-
-		/** @since 4.0.4 Added as WP 5.3 patch. */
-		$tsf->reset_timezone();
 
 		return "{$robots}{$before}{$before_legacy}{$output}{$after_legacy}{$after}";
 	}
