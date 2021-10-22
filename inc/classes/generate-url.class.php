@@ -942,7 +942,6 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->has_custom_canonical_url() ) goto end;
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_singular() && ! $this->is_singular_archive() && $this->is_multipage() ) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
@@ -964,7 +963,6 @@ class Generate_Url extends Generate_Title {
 		} else {
 			goto end;
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		// See if-statements below.
 		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) goto end;

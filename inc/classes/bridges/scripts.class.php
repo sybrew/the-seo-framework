@@ -497,6 +497,7 @@ final class Scripts {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Updated l10n.data.
+	 * @since 4.2.0 Now properly populates use_generated_archive_prefix() with a \WP_Term object.
 	 *
 	 * @return array The script params.
 	 */
@@ -507,8 +508,13 @@ final class Scripts {
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
 
-		$term_prefix = $tsf->use_generated_archive_prefix( \get_taxonomy( $taxonomy ) )
-			? $tsf->prepend_tax_label_prefix( '', $taxonomy )
+		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( $tsf->get_the_real_ID(), $taxonomy ) )
+			/* translators: %s: Taxonomy singular name. */
+			? sprintf(
+				/* translators: %s: Taxonomy singular name. */
+				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
+				$tsf->get_tax_type_label( $taxonomy )
+			)
 			: '';
 
 		return [

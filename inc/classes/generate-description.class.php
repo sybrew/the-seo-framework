@@ -49,10 +49,8 @@ class Generate_Description extends Generate {
 	 */
 	public function get_description( $args = null, $escape = true ) {
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_description_from_custom_field( $args, false )
 			 ?: $this->get_generated_description( $args, false );
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -73,10 +71,8 @@ class Generate_Description extends Generate {
 	 */
 	public function get_open_graph_description( $args = null, $escape = true ) {
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_open_graph_description_from_custom_field( $args, false )
 			 ?: $this->get_generated_open_graph_description( $args, false );
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -121,7 +117,6 @@ class Generate_Description extends Generate {
 	protected function get_custom_open_graph_description_from_query() {
 
 		$desc = '';
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
@@ -138,7 +133,6 @@ class Generate_Description extends Generate {
 			$desc = $this->get_term_meta_item( 'og_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -161,7 +155,6 @@ class Generate_Description extends Generate {
 	protected function get_custom_open_graph_description_from_args( $args ) {
 
 		$desc = '';
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'og_description', $args['id'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
@@ -178,7 +171,6 @@ class Generate_Description extends Generate {
 					 ?: $this->get_description_from_custom_field( $args, false );
 			}
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -200,10 +192,8 @@ class Generate_Description extends Generate {
 	 */
 	public function get_twitter_description( $args = null, $escape = true ) {
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		$desc = $this->get_twitter_description_from_custom_field( $args, false )
 			 ?: $this->get_generated_twitter_description( $args, false );
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -249,7 +239,6 @@ class Generate_Description extends Generate {
 	protected function get_custom_twitter_description_from_query() {
 
 		$desc = '';
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
@@ -275,7 +264,6 @@ class Generate_Description extends Generate {
 				 ?: $this->get_description_from_custom_field( null, false )
 				 ?: '';
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -297,7 +285,6 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_twitter_description_from_args( $args ) {
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'tw_description', $args['id'] )
 				 ?: $this->get_term_meta_item( 'og_description', $args['id'] )
@@ -323,7 +310,6 @@ class Generate_Description extends Generate {
 					 ?: '';
 			}
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -381,7 +367,6 @@ class Generate_Description extends Generate {
 
 		$desc = '';
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_description' )
@@ -401,7 +386,6 @@ class Generate_Description extends Generate {
 			 */
 			$desc = (string) \apply_filters( 'the_seo_framework_pta_description', '' ) ?: '';
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}
@@ -419,7 +403,6 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_description_from_args( $args ) {
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'description', $args['id'] ) ?: '';
 		} else {
@@ -433,7 +416,6 @@ class Generate_Description extends Generate {
 				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] ) ?: '';
 			}
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		return $desc;
 	}

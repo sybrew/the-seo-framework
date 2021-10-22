@@ -34,18 +34,22 @@ switch ( $instance ) :
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
 		$cat_name   = strip_tags( get_cat_name( $latest_cat_id ) ?: __( 'Example Category', 'autodescription' ) );
-		$cat_prefix = $this->s_title( $this->get_tax_type_label( 'category', true ) ?: __( 'Category', 'default' ) );
+		$cat_prefix = $this->s_title( _x( 'Category:', 'category archive title prefix', 'default' ) );
 		$tax_title  = sprintf(
-			'<span class=tsf-title-prefix-example style=display:%s>%s: </span> %s', // TODO RTL?
-			$this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline',
-			$cat_prefix,
+			/* translators: 1: Title prefix. 2: Title. */
+			_x( '%1$s %2$s', 'archive title', 'default' ),
+			sprintf(
+				'<span class=tsf-title-prefix-example style=display:%s>%s</span>',
+				$this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline',
+				$cat_prefix
+			),
 			$this->s_title( $this->hellip_if_over( $cat_name, 60 - strlen( $cat_prefix ) ) )
 		);
 
-		$example_post_left  = '<em>' . $additions_left . $post_name . '</em>';
-		$example_post_right = '<em>' . $post_name . $additions_right . '</em>';
-		$example_tax_left   = '<em>' . $additions_left . $tax_title . '</em>';
-		$example_tax_right  = '<em>' . $tax_title . $additions_right . '</em>';
+		$example_post_left  = "<em>{$additions_left}{$post_name}</em>";
+		$example_post_right = "<em>{$post_name}{$additions_right}</em>";
+		$example_tax_left   = "<em>{$additions_left}{$tax_title}</em>";
+		$example_tax_right  = "<em>{$tax_title}{$additions_right}</em>";
 
 		Form::header_title( __( 'Automated Title Settings', 'autodescription' ) );
 		HTML::description( __( 'The page title is prominently shown within the browser tab as well as within the search engine results pages.', 'autodescription' ) );

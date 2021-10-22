@@ -235,7 +235,6 @@ final class ListEdit extends ListTable {
 		);
 
 		if ( $tsf->is_static_frontpage( $query['id'] ) ) {
-			// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
@@ -251,7 +250,6 @@ final class ListEdit extends ListTable {
 								 ? $tsf->get_description_from_custom_field( $query )
 								 : $tsf->get_generated_description( $query );
 			$is_desc_ref_locked  = $_has_home_desc;
-			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 		} else {
 			$default_title       = $tsf->get_filtered_raw_generated_title( $query );
 			$addition            = $tsf->get_blogname();
@@ -307,6 +305,7 @@ final class ListEdit extends ListTable {
 	 * Returns the quick edit data for terms.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 Now properly populates use_generated_archive_prefix() with a \WP_Term object.
 	 * @access private
 	 * @abstract
 	 * @NOTE Unlike `_output_column_post_data()`, this is a filter callback.
@@ -395,8 +394,12 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		$term_prefix = $tsf->use_generated_archive_prefix( \get_taxonomy( $query['taxonomy'] ) )
-			? $tsf->prepend_tax_label_prefix( '', $query['taxonomy'] )
+		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( $query['id'], $query['taxonomy'] ) )
+			? sprintf(
+				/* translators: %s: Taxonomy singular name. */
+				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
+				$tsf->get_tax_type_label( $query['taxonomy'] )
+			)
 			: '';
 
 		$title_data = [

@@ -100,12 +100,10 @@ function _prepare( $previous_version, $current_version ) {
 		'wp'  => '4.9-dev',
 	];
 
-	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 	//? PHP_VERSION_ID is definitely defined, but let's keep it homonymous with the envtest of TSFEM.
 	   ! \defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
 	or version_compare( $GLOBALS['wp_version'], $requirements['wp'], '<' ) and $test = 2
 	or $test = true;
-	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 
 	//? 4
 	if ( true !== $test ) return;

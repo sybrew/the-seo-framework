@@ -482,6 +482,7 @@ class Core {
 	 * Shortens string and adds ellipses when over a threshold in length.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 No longer prepends a space before the hellip.
 	 *
 	 * @param string $string The string to test and maybe trim
 	 * @param int    $over   The character limit. Must be over 0 to have effect.
@@ -492,7 +493,7 @@ class Core {
 	public function hellip_if_over( $string, $over = 0 ) {
 
 		if ( $over > 0 && \strlen( $string ) > $over )
-			$string = substr( $string, 0, abs( $over - 2 ) ) . ' &hellip;';
+			$string = substr( $string, 0, abs( $over - 2 ) ) . '&hellip;';
 
 		return $string;
 	}

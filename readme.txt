@@ -262,13 +262,15 @@ TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 	-> This is actually why we set up a custom `_deprecation_function()`.
 
-TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
-	-> What's there to clean? Well, we could move the constants around... and we could add namespacing... yay.
-
 TODO introduce a settings generator, even if high-level?
 TODO s_...$new_value -> $something_else?
 
 = 4.2.0 =
+
+TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
+	-> What's there to clean? Well, we could move the constants around... and we could add namespacing... yay.
+	-> We can remove the envtest file and in place put headers in autodescription.php
+	-> also delete option the_seo_framework_tested_upgrade_version
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
 
@@ -301,18 +303,21 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 	-> This would explode the RAM usage, but reduce the number of expensive get_post() calls in is_private/get_permalink
 		-> However, the way we do it now, the cache is properly instigated... Needs investigation.
 
+TODO remove resizeObserver backport in post.js.
+
 **For everyone:**
 
 * **Upgrade notes:**
 	* PHP 7.2 or higher is now required, from PHP 5.6 or higher.
-	* WP 5.5 or higher is now required, from WP 5.1 or higher.
-		* TODO Reason: Removal of timezone patches: lookup 'WP 5.3' in code. TODO Should we? Other plugins might mess it up still?
-			* Mind the gmdate()/date()/get_the_date/gmt2date()/->post_date function calls.
-			* -> Removal of set_timezone/reset_timezone()
-		* TODO Archive title patch (lookup 'WP 5.5')
+	* WP 5.5 or higher is now required, from WP 5.1 or higher. Reasons:
+		* Removal of redundant timezone patches, fixed in WP 5.3.
+		* Archive title translations were changed in WP 5.5, now we no longer have to support two versions.
+		* Various "unexplainable" bugs have been resolved, among [one where archive titles could be empty](https://core.trac.wordpress.org/ticket/47573) (although not brought up in that ticket, it solved the issue). These fixes alleviate our support burden.
+		* Core Sitemaps support is now mandatory. We no longer have to say "if" you have WP 5.5 or later.
+		* Core Sitemaps brought a new escaping method, `esc_xml()`, which will ensure future security.
+		* TODO The Color Picker was missing CSS styles, fixed in WP 5.5. (lookup WP 5.5)
 		* TODO Auto-update patch (lookup 'WP 5.5')
-		* TODO Core sitemaps patch (lookup 'WP 5.5')
-		* esc_xml... (WP 5.5)
+		* TODO We no longer need to support WordPress and PHP environment testing, of which the burden was shifted to WP 5.2.
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.
@@ -354,6 +359,7 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 		* The SEO Bar item "Redirect" now conveys a more proper message when the page status is draft: "... once published."
 		* "Duplicated words" is now "repeated words."
 		* The Optimized Sitemap's settings now explain there might be multiple sitemaps when Polylang or WPML is detected.
+		* The Title Settings their examples now better reflect real-world usage in certain corner cases.
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 * **Removed:**
@@ -446,6 +452,7 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 				1. When the `$id` isn't set, the URL won't get tested for pagination issues.
 			* `get_singular_custom_canonical_url()`, the first parameter is now optional.
 			* `has_custom_canonical_url()` now also detects canonical URLs for taxonomies.
+			* `hellip_if_over()` no longer prepends a space before the hellip.
 			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
 			* `is_home()`, added the first parameter to allow custom query testing.
 			* `is_theme()` no longer "loads" the theme; instead, simply compares input to active theme options.
@@ -506,6 +513,7 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 			* `set_timezone()`, with no alternative available.
 			* `reset_timezone()`, with no alternative available.
 			* `get_current_term_meta()`, use `tsf()->get_term_meta()` instead.
+			* `prepend_tax_label_prefix`, with no alternative available.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.
@@ -525,15 +533,19 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_tell_multilingual_sitemap`, whether to tell about multilingual sitemaps on the setting pages.
+		* `the_seo_framework_generated_archive_title_prefix`, filters the archive title prefix.
 	* **Changed:**
 		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.
+		* `the_seo_framework_generated_archive_title`, added the `$prefix` and `$original_title` parameters, akin to WordPress Core's `get_the_archive_title`, albeit shifted by one parameter.
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.
 		* `the_seo_framework_pro`, use action `the_seo_framework_after_meta_output` instead.
 		* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta_output` instead.
 		* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta_output` instead.
+	* **Fixed:**
+		* `the_seo_framework_use_archive_prefix` now gets a proper term object when (quick-)editing terms, instead of the taxonomy object.
 	* **Removed:**
 		* `the_seo_framework_inpost_seo_save_defaults`, was deprecated. Use `the_seo_framework_post_meta_defaults` instead.
 * **Action notes:**

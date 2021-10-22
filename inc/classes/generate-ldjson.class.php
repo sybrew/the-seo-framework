@@ -561,7 +561,6 @@ class Generate_Ldjson extends Generate_Image {
 				'taxonomy' => $taxonomy,
 			];
 
-			// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 				$cat_name = $this->get_filtered_raw_custom_field_title( $_generator_args )
 						 ?: $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
@@ -570,7 +569,6 @@ class Generate_Ldjson extends Generate_Image {
 				$cat_name = $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
 						 ?: $this->get_static_untitled_title();
 			}
-			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 			// Store in cache.
 			$items[] = [
@@ -738,7 +736,6 @@ class Generate_Ldjson extends Generate_Image {
 			'taxonomy' => '',
 		];
 
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$name = $this->get_filtered_raw_custom_field_title( $_generator_args )
 				 ?: $this->get_generated_single_post_title( $post_id )
@@ -747,7 +744,6 @@ class Generate_Ldjson extends Generate_Image {
 			$name = $this->get_generated_single_post_title( $post_id )
 				 ?: $this->get_static_untitled_title();
 		}
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 
 		$crumb = [
 			'@type'    => 'ListItem',

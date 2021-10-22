@@ -296,10 +296,8 @@ final class AJAX {
 					switch ( $g ) {
 						case 'metadescription':
 							if ( $tsf->is_static_frontpage( $post_id ) ) {
-								// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 								$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										   ?: $tsf->get_generated_description( $_generator_args, false );
-								// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 							} else {
 								$data[ $g ] = $tsf->get_generated_description( $_generator_args, false );
 							}

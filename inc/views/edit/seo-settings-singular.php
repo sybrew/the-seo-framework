@@ -88,7 +88,6 @@ switch ( $instance ) :
 			$_has_home_title = (bool) $this->escape_title( $this->get_option( 'homepage_title' ) );
 			$_has_home_desc  = (bool) $this->escape_title( $this->get_option( 'homepage_description' ) );
 
-			// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment
 			// When the homepage title is set, we can safely get the custom field.
 			$default_title     = $_has_home_title
 				? $this->get_custom_field_title( $_generator_args )
@@ -102,7 +101,6 @@ switch ( $instance ) :
 				? $this->get_description_from_custom_field( $_generator_args )
 				: $this->get_generated_description( $_generator_args );
 			$description_ref_locked = $_has_home_desc;
-			// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment
 		} else {
 			$default_title     = $this->get_filtered_raw_generated_title( $_generator_args );
 			$title_ref_locked  = false;
