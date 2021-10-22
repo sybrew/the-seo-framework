@@ -115,6 +115,7 @@ final class Images {
 	 * @since 4.0.0
 	 * @since 4.0.5 1. Now strips tags before looking for images.
 	 *              2. Now only yields at most 5 images.
+	 * @since 4.2.0 Fixed OB1 error causing the first image to be ignored.
 	 * @generator
 	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *       Combine query, instead of using WP API? Only do that for the first image, instead?
@@ -166,7 +167,7 @@ final class Images {
 		}
 
 		if ( $matches ) {
-			for ( $i = 0; $i++ < static::MAX_CONTENT_IMAGES; ) {
+			for ( $i = 0; $i < static::MAX_CONTENT_IMAGES; $i++ ) {
 				// Fewer than MAX_CONTENT_IMAGES matched.
 				if ( ! isset( $matches[ $i ][2] ) ) break;
 

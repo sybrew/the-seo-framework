@@ -374,6 +374,7 @@ TODO add CSS templating colors?
 	* Addressed an issue with settings-headless mode where the list-edit (quick/bulk-edit) features was untentionally disabled; it's now disabled when the meta-headless mode is enabled.
 	* Addressed a corner-case issue with Polylang where on WP installations instated prior WP v4.4 the primary sitemap got emptied when no new languages have been setup since WP v4.4 or later.
 	* Addressed a regression from TSF v4.1.4 where the Schema.org setting "Logo URL" couldn't be selected nor could the Sitemap Logo be assigned correctly (due to assigning duplicated _unique_ IDs).
+	* Addressed an off-by-one error causing the first content-image to be skipped for social sharing. [Props daxelrod](https://wordpress.org/support/topic/content-social-image-skips-first-image/).
 
 **For developers:**
 
