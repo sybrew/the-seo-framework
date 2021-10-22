@@ -512,7 +512,7 @@ TODO add CSS templating colors?
 			* `output_character_counter_wrap()`, with no alternative available.
 			* `output_pixel_counter_wrap()`, with no alternative available.
 			ENDTODO.
-			* `wp_version()` with no alternative available.
+			* `wp_version()`, with no alternative available.
 			* `detect_theme_support()` with no alternative available.
 			* `detect_page_builder()` with no alternative available.
 			* `uses_page_builder()` with no alternative available.
@@ -523,6 +523,7 @@ TODO add CSS templating colors?
 			* `reset_timezone()`, with no alternative available.
 			* `get_current_term_meta()`, use `tsf()->get_term_meta()` instead.
 			* `prepend_tax_label_prefix`, with no alternative available.
+			* `check_the_real_ID()`, use `tsf()->get_the_real_ID()` instead.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.

@@ -685,8 +685,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_singular_description_excerpt( $id = null ) {
 
-		if ( \is_null( $id ) )
-			$id = $this->get_the_real_ID();
+		$id = $id ?? $this->get_the_real_ID();
 
 		// If the post is protected, don't generate a description.
 		if ( $this->is_protected( $id ) ) return '';
@@ -703,34 +702,31 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 Now works for homepages from external requests.
 	 * @see $this->get_generated_description()
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param null $args An array of 'id' and 'taxonomy' values.
+	 *                   This method should always have 'taxonomy' set to ''.
 	 * @return string The description additions.
 	 */
 	protected function get_description_additions( $args ) {
 
-		$this->fix_generation_args( $args );
-
 		if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 			$title = $this->get_home_title_additions();
 		} elseif ( $this->is_home_as_page( $args['id'] ) ) {
-			$title = $this->get_filtered_raw_generated_title( $args );
-			/* translators: %s = Blog page title. Front-end output. */
-			$title = sprintf( \__( 'Latest posts: %s', 'autodescription' ), $title );
+			$title = sprintf(
+				/* translators: %s = Blog page title. Front-end output. */
+				\__( 'Latest posts: %s', 'autodescription' ),
+				$this->get_filtered_raw_generated_title( $args )
+			);
 		}
 
 		if ( empty( $title ) )
 			return '';
 
-		$on       = \_x( 'on', 'Placement. e.g. Post Title "on" Site Title', 'autodescription' );
-		$blogname = $this->get_blogname();
-
 		return trim(
 			/* translators: 1: Title, 2: on, 3: Site Title */
 			sprintf( \_x( '%1$s %2$s %3$s', 'blog page description', 'autodescription' ),
 				$title,
-				$on,
-				$blogname
+				\_x( 'on', 'Placement. e.g. Post Title "on" Site Title', 'autodescription' ),
+				$this->get_blogname()
 			)
 		);
 	}
@@ -943,6 +939,7 @@ class Generate_Description extends Generate {
 	 * Determines whether automated descriptions are enabled.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 Now fixes the input arguments.
 	 * @access private
 	 * @see $this->get_the_real_ID()
 	 * @see $this->get_current_taxonomy()
@@ -958,6 +955,8 @@ class Generate_Description extends Generate {
 				'id'       => $this->get_the_real_ID(),
 				'taxonomy' => $this->get_current_taxonomy(),
 			];
+		} else {
+			$this->fix_generation_args( $args );
 		}
 
 		/**

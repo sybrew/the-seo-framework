@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.2.0-dev-34
+ * Version: 4.2.0-dev-35
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -84,37 +84,37 @@ require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 
 // # Zelda is here to protect your site from hackers.
 // #
-// #                OLLLLLLLLL
-// #             GGOiiiiiiiilGGG
-// #         GGGOllttttttttttlllll
-// #       GG1111tt1;;;;;;lltttt..L
-// #      GttLLLLttiiiiiii;;tttl..,;
-// #    GGtLLLLLLLLLiiiiiiii;tttttt,,
-// #   GllLLLLLLLLLLLLiiiiiii;;tttt,,.
-// #    OttLLLLLLtttLttiiii;;i;;:ttt::.                  ttttG
-// #    Olll;;:::ittL::,;;;;;;ii;ttttt.                i.iii..
-// #        LLiii:LL:,,:iiiii;ii;ttttt.              ;::iii0..
-// # _______LL.,,;;;,.....,ii;ii;...ll.            :::OO,GG.
-// # L...........,::O::.00Gii;ii;ll.11.           .,,G,,0..
-// # L..0000LL000LLL0::.00Gii,;;l..lll.  ...    ..,00,00.
-// # L..L;;;..1LLLLLLLL1iiiii,ll;ttt11t..:::.  .,,0,,0..
-// # L..O;;i;;;;;LLLLLLiiiiii,;;L;;t11t..:ii.;;,0i:0;,
-// # L..Oiii;;;;;LLL1iiiii,::t,,t111::1:::00.,,,00L..
-// # L..Oiiiii:::t.........::tttt11tttttt:::.OOiii.
-// # L..Oiit00tttLlll11lttt;;tll1llllltttt..GGGO:::..
-// # L..L..;00tttOii...:tt;;;tll::::::lttttt.OO::::::.
-// # L..O;;L00:::011;..l::;tttll:..   ;::lll...:::0ii.
-// # L..L;;L00:::011;..llllttttt.     :..:..LLL.......
-// # L..L::;GGLLL011;,,iGGGOOGGGG:: ;;;GG.....
-// #   :LLiiiiiiiii.iiGOOOGGtttt.. ;;;::.
-// #   :LLiiiiiiiii.lltttttttttl..   :;
-// #    ::tiiiiiittllllllllllllll.
-// #    tt:ttiiit;;::::::::::::::::::
-// #      l::iii:..:OOO..    :::::0,,
-// #       11;;;,;;:OO.        ,::L;;:
-// #         1..Lll;..         .ll1tt.
-// #       11t11l11,           .ll111l.. It's Link?! Not Zelda??
-// #       ll......             ........ - Sybre drew this by hand.
+// #                  OLLLLLLLLL
+// #               GGOiiiiiiiilGGG
+// #           GGGOllttttttttttlllll
+// #         GG1111tt1;;;;;;lltttt..L
+// #        GttLLLLttiiiiiii;;tttl..,;
+// #      GGtLLLLLLLLLiiiiiiii;tttttt,,
+// #     GllLLLLLLLLLLLLiiiiiii;;tttt,,.
+// #    ,;OttLLLLLLtttLttiiii;;i;;:ttt::.                  ttttG
+// #    ;;Olll;;:::ittL::,;;;;;;ii;ttttt.                i.iii..
+// #        ;,iiiii:LL:,,:iiiii;ii;ttttt.              ;::iii0..
+// #        ,,...,,;;;,.....,ii;ii;...ll.            :::OO,GG.
+// # , L...........,::O::.00Gii;ii;ll.11.           .,,G,,0..
+// # , L..0000LL000LLL0::.00Gii,;;l..lll.  ...    ..,00,00.
+// # , L..L;;;..1LLLLLLLL1iiiii,ll;ttt11t..:::.  .,,0,,0..
+// # , L..O;;i;;;;;LLLLLLiiiiii,;;L;;t11t..:ii.;;,0i:0;,
+// # , L..Oiii;;;;;LLL1iiiii,::t,,t111::1:::00.,,,00L..
+// # , L..Oiiiii:::t.........::tttt11tttttt:::.OOiii.
+// # , L..Oiit00tttLlll11lttt;;tll1llllltttt..GGGO:::..
+// # , L..L..;00tttOii...:tt;;;tll::::::lttttt.OO::::::.
+// # , L..O;;L00:::011;..l::;tttll:..   ;::lll...:::0ii.
+// # , L..L;;L00:::011;..llllttttt.     :..:..LLL.......
+// # , L..L::;GGLLL011;,,iGGGOOGGGG:: ;;;GG.....
+// #   , :LLiiiiiiiii.iiGOOOGGtttt.. ;;;::.
+// #    ,:LLiiiiiiiii.lltttttttttl..   :;
+// #      ::tiiiiiittllllllllllllll.
+// #      tt:ttiiit;;::::::::::::::::::
+// #        l::iii:..:OOO..    :::::0,,
+// #         11;;;,;;:OO.        ,::L;;:
+// #           1..Lll;..         .ll1tt.
+// #         11t11l11,           .ll111l.. It's Link?! Not Zelda??
+// #         ll......             ........ - Sybre drew this by hand.
 
 // phpcs:disable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode
 //

@@ -1482,11 +1482,69 @@ final class Deprecated {
 				break;
 
 			default:
-				// Elegant Themes' Extra support
+				// Elegant Themes's Extra support
 				$is_front_page = 0 === $id && $this->is_home();
 				break;
 		endswitch;
 
 		return $is_front_page;
+	}
+
+	/**
+	 * Prepends the taxonomy label to the title.
+	 *
+	 * @since 4.1.0
+	 * @since 4.1.2 Now supports WP 5.5 archive titles.
+	 * @since 4.2.0 Deprecated
+	 * @deprecated
+	 *
+	 * @param string $title    The title to prepend taxonomy label to.
+	 * @param string $taxonomy The taxonomy to get label from.
+	 * @return string The title with possibly prepended tax-label.
+	 */
+	public function prepend_tax_label_prefix( $title, $taxonomy ) {
+
+		$tsf = \tsf();
+		\tsf()->_deprecated_function( 'tsf()->prepend_tax_label_prefix()', '4.2.0' );
+
+		$prefix = $tsf->get_tax_type_label( $taxonomy ) ?: '';
+
+		if ( $prefix ) {
+			$title = sprintf(
+				/* translators: 1: Title prefix. 2: Title. */
+				\_x( '%1$s %2$s', 'archive title', 'default' ),
+				/* translators: %s: Taxonomy singular name. */
+				sprintf( \_x( '%s:', 'taxonomy term archive title prefix', 'default' ), $prefix ),
+				$title
+			);
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Get the real ID from plugins.
+	 *
+	 * Only works on front-end as there's no need to check for inconsistent
+	 * functions for the current ID in the admin.
+	 *
+	 * @since 2.5.0
+	 * @since 3.1.0 1. Now checks for the feed.
+	 *              2. No longer caches.
+	 * @since 4.0.5 1. The shop ID is now handled via the filter.
+	 *              2. The question ID (AnsPress) is no longer called. This should work out-of-the-box since AnsPress 4.1.
+	 *
+	 * @return int The admin ID.
+	 */
+	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
+		\tsf()->_deprecated_function( 'tsf()->check_the_real_ID()', '4.2.0', `tsf()->get_the_real_ID()` );
+		/**
+		 * @since 2.5.0
+		 * @param int $id
+		 */
+		return (int) \apply_filters(
+			'the_seo_framework_real_id',
+			$this->is_feed() ? \get_the_ID() : 0
+		);
 	}
 }

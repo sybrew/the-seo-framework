@@ -167,18 +167,31 @@ class Query extends Core {
 
 		$use_cache = $use_cache && $this->can_cache_query( __METHOD__ );
 
-		// Try to get ID from plugins when caching is available.
-		$id = $use_cache ? $this->check_the_real_ID() : 0;
-
-		// This catches most IDs. Even Post IDs.
-		$id = $id ?: \get_queried_object_id();
+		// Try to get ID from plugins or feed when caching is available.
+		if ( $use_cache ) {
+			/**
+			 * @since 2.5.0
+			 * @param int $id
+			 */
+			$id = \apply_filters(
+				'the_seo_framework_real_id',
+				$this->is_feed() ? \get_the_ID() : 0
+			);
+		}
 
 		/**
 		 * @since 2.6.2
 		 * @param int  $id        Can be either the Post ID, or the Term ID.
 		 * @param bool $use_cache Whether this value is stored in runtime caching.
 		 */
-		$id = (int) \apply_filters( 'the_seo_framework_current_object_id', $id, $use_cache );
+		$id = (int) \apply_filters_ref_array(
+			'the_seo_framework_current_object_id',
+			[
+				// This catches most IDs. Even Post IDs.
+				( $id ?? 0 ) ?: \get_queried_object_id(),
+				$use_cache,
+			]
+		);
 
 		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 		return $use_cache ? umemo( __METHOD__, $id ) : $id;
@@ -202,31 +215,6 @@ class Query extends Core {
 			$id = $this->get_admin_term_id();
 
 		return (int) \apply_filters( 'the_seo_framework_current_admin_id', $id );
-	}
-
-	/**
-	 * Get the real ID from plugins.
-	 *
-	 * Only works on front-end as there's no need to check for inconsistent
-	 * functions for the current ID in the admin.
-	 *
-	 * @since 2.5.0
-	 * @since 3.1.0 1. Now checks for the feed.
-	 *              2. No longer caches.
-	 * @since 4.0.5 1. The shop ID is now handled via the filter.
-	 *              2. The question ID (AnsPress) is no longer called. This should work out-of-the-box since AnsPress 4.1.
-	 *
-	 * @return int The admin ID.
-	 */
-	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-		/**
-		 * @since 2.5.0
-		 * @param int $id
-		 */
-		return (int) \apply_filters(
-			'the_seo_framework_real_id',
-			$this->is_feed() ? \get_the_ID() : 0
-		);
 	}
 
 	/**
@@ -639,12 +627,10 @@ class Query extends Core {
 
 		$is_front_page = \is_front_page();
 
-		// Elegant Themes' Extra Support. Yay.
-		if ( false === $is_front_page && 0 === $this->get_the_real_ID() && $this->is_home() ) {
-			$sof = \get_option( 'show_on_front' );
-
-			if ( 'page' !== $sof && 'posts' !== $sof )
-				$is_front_page = true;
+		if ( ! $is_front_page ) {
+			// Elegant Themes's Extra Support: Assert home, but only when it's not registered as such.
+			$is_front_page = $this->is_home() && 0 === $this->get_the_real_ID()
+				&& ! \in_array( \get_option( 'show_on_front' ), [ 'page', 'post' ], true );
 		}
 
 		return $this->memo_query( $is_front_page );
