@@ -254,7 +254,6 @@ class Init extends Query {
 
 		// Prepares sitemap or stylesheet output.
 		if ( $this->can_run_sitemap() ) {
-			// We can use action `set_404` when we support WP 5.5+...?
 			\add_action( 'template_redirect', [ $this, '_init_sitemap' ], 1 );
 			\add_filter( 'wp_sitemaps_enabled', '__return_false' );
 		} else {
@@ -467,6 +466,7 @@ class Init extends Query {
 	 * @since 4.0.0 Now no longer outputs anything on Customizer.
 	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 *              2. Now always sets timezone regardless of settings, because, again, bug.
+	 * @since 4.2.0 No longer sets timezone.
 	 * @access private
 	 */
 	public function html_output() {

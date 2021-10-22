@@ -217,35 +217,3 @@ body.js .tsf-tabs-content.tsf-active-tab-content {
 /**
  * End tabs.
  */
-
-/**
- * TEMP (Fixed in WP 5.5)
- * @see https://core.trac.wordpress.org/ticket/49543
- */
-
-.wp-picker-input-wrap .button.wp-picker-clear {
-	margin-left: 6px;
-	padding: 0 8px;
-	line-height: 2.54545455; /* 28px */
-	min-height: 30px;
-}
-
-body.rtl .wp-picker-input-wrap .button.wp-picker-clear {
-	margin-right: 6px;
-	padding: 0 8px;
-	line-height: 2.54545455; /* 28px */
-	min-height: 30px;
-}
-
-@media screen and (max-width: 782px) {
-	.wp-picker-input-wrap .button.wp-picker-clear,
-	body.rtl .wp-picker-input-wrap .button.wp-picker-clear {
-		padding: 0 8px;
-		line-height: 2.14285714; /* 30px */
-		min-height: 32px;
-	}
-}
-
-/**
- * End TEMP (Fixed in WP 5.5).
- */

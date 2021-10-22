@@ -303,7 +303,9 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 	-> This would explode the RAM usage, but reduce the number of expensive get_post() calls in is_private/get_permalink
 		-> However, the way we do it now, the cache is properly instigated... Needs investigation.
 
-TODO remove resizeObserver backport in post.js.
+TODO add CSS templating colors?
+	-> Also from Core, and their "relative" friends? I don't think WP uses "var" in production?
+	-> This should speed up some stuff, and makes the plugin easier to maintain.
 
 **For everyone:**
 
@@ -315,12 +317,13 @@ TODO remove resizeObserver backport in post.js.
 		* Various "unexplainable" bugs have been resolved, among [one where archive titles could be empty](https://core.trac.wordpress.org/ticket/47573) (although not brought up in that ticket, it solved the issue). These fixes alleviate our support burden.
 		* Core Sitemaps support is now mandatory. We no longer have to say "if" you have WP 5.5 or later.
 		* Core Sitemaps brought a new escaping method, `esc_xml()`, which will ensure future security.
-		* TODO The Color Picker was missing CSS styles, fixed in WP 5.5. (lookup WP 5.5)
-		* TODO Auto-update patch (lookup 'WP 5.5')
-		* TODO We no longer need to support WordPress and PHP environment testing, of which the burden was shifted to WP 5.2.
+		* Support for newer (less buggy) admin styles, such as a proper "default" button for the color-picker in WP 5.5 or later.
+		* We no longer need to support WordPress and PHP environment testing, of which the burden was shifted to WP 5.2.
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.
+	* TSF no longer tests for the correct PHP or WordPress version -- we now rely on WordPress handling this.
+		* WordPress isn't as gracious as we were: WP doesn't deactivate the plugin if you upload an incompatible version via FTP, which TSF did. However, we consider this an edge case beyond corners.
 * **Improved:**
 	* **Sitemaps:**
 		* Aside from the optimized sitemap being centered and responsive, it now also fully embraces RTL languages (Arabic, Hebrew, Farsi, et al.).
@@ -364,15 +367,17 @@ TODO remove resizeObserver backport in post.js.
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 * **Removed:**
 	* Toggled off by default three years ago, hidden for almost all users one year ago, and now removed entirely: The Optimized Sitemap's priority-meta feature. This feature hasn't been used by any popular search engine for a long time.
+	* Older browsers no longer support window-resize support for the tabs of the "inpost SEO meta box."
 * **Fixed:**
 	* Addressed an issue after using keyboard navigation to invoke tooltips, a mouse hover to invoke a tooltip didn't clear the keyboard-invoked tooltip when spawned elsewhere.
 	* Addressed an issue after using mouse hover to invoke tooltips, after using keyboard navigation to invoke tooltips, a mouse click to invoke a tooltip thence caused the arrow to not animate correctly.
 	* Addressed an issue with settings-headless mode where the list-edit (quick/bulk-edit) features was untentionally disabled; it's now disabled when the meta-headless mode is enabled.
 	* Addressed a corner-case issue with Polylang where on WP installations instated prior WP v4.4 the primary sitemap got emptied when no new languages have been setup since WP v4.4 or later.
-	* Addressed a regression from TSF v4.1.4 where the Schema.org setting "Logo URL" couldn't be selected nor could the Sitemap Logo be assigned correctly (due to duplicated _unique_ IDs).
+	* Addressed a regression from TSF v4.1.4 where the Schema.org setting "Logo URL" couldn't be selected nor could the Sitemap Logo be assigned correctly (due to assigning duplicated _unique_ IDs).
 
 **For developers:**
 
+* **Plugin database version is now at `4200` (TODO)**.
 * **Added:**
 	* We introduce function `tsf()`, an alias of `the_seo_framework()`.
 * **Changed:**
@@ -390,6 +395,7 @@ TODO remove resizeObserver backport in post.js.
 	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* Index `show_priority` is no longer used nor sanitized.
 			* Updating the options will purge this index. Then, it'll be rendered as disabled on downgrade.
+	* Global option `the_seo_framework_tested_upgrade_version` is now removed. We let WordPress test for us now (WP5.2+ feature)
 * **Function notes:**
 	* **Added:**
 		* `tsf()`, an alias of `the_seo_framework()`. They have exactly the same opcodes, so neither is faster than the other. Pick your poison.
@@ -400,6 +406,9 @@ TODO remove resizeObserver backport in post.js.
 			* We found it impossible to further optimize this method. If you inspect its source, you find it does things in reverse, assigns variables unnecessarily, etc. This all leads to PHP performing it quickest; both during set and fetch.
 		* `\The_SEO_Framework\umemo()` stores and returns memoized values for the caller using a user-defined key.
 			* This function is roughly 10 times faster than `\The_SEO_Framework\memo()`, but requires from you a unique identifier `$key`. Example: `return umemo( __METHOD__ ) ?? umemo( __METHOD__, expensive_call() );`
+	* **Removed:**
+		* `the_seo_framework_boot()`
+			* This function was marked as "private," and should've never been used publicly.
 * **Object notes:**
 	* Henceforth, `SeoBar` is now referred to as `SEOBar`. This affects namespaces and classes.
 		* In PHP, those are case-insensitive; so, nothing changes here.
@@ -561,6 +570,8 @@ TODO remove resizeObserver backport in post.js.
 			* `getTooltip` now returns a `HTMLElement` instead of a `jQuery.Element`.
 * **Other:**
 	* Removed workarounds for [PHP bug 75771](https://bugs.php.net/bug.php?id=75771).
+	* You can now autoload The SEO Framework's classes using the wrong case for the first "chunk" of namespace: `\ThE_sEo_FrAmEwOrK\`.
+		* Pro tip: Don't. We 'implemented' it only in the spirit of PHP's case-handling.
 
 = 4.1.5.1 =
 

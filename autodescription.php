@@ -3,12 +3,14 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.2.0-dev-33
+ * Version: 4.2.0-dev-34
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
+ * Requires at least: 5.5.0
+ * Requires PHP: 7.2.0
  *
  * @package The_SEO_Framework\Bootstrap
  */
@@ -33,12 +35,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * @NOTE This file MUST be written according to WordPress's minimum PHP requirements.
- *       Which is PHP 5.6.
- * When we only support WordPress 5.9?+, it'll be PHP 7.1.
- */
-
-/**
  * The plugin version.
  *
  * 3 point: x.x.y; x.x is major; y is minor.
@@ -54,7 +50,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '4.2.0' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '4120' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '4200' );
 
 /**
  * The plugin file, absolute unix path.
@@ -70,45 +66,55 @@ define( 'THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE', __FILE__ );
  */
 define( 'THE_SEO_FRAMEWORK_BOOTSTRAP_PATH', dirname( THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
 
-/**
- * Checks whether to start plugin or test the server environment first.
- *
- * @since 2.8.0
- */
-if ( get_option( 'the_seo_framework_tested_upgrade_version' ) < THE_SEO_FRAMEWORK_DB_VERSION ) {
-	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'envtest.php';
+// Defines environental constants.
+require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'define.php';
 
-	if ( get_option( 'the_seo_framework_tested_upgrade_version' ) >= THE_SEO_FRAMEWORK_DB_VERSION )
-		the_seo_framework_boot();
-} else {
-	the_seo_framework_boot();
-}
+// Load plugin API functions.
+require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'api.php';
 
-/**
- * Starts the plugin, loads files outside of the global scope.
- *
- * @since 3.1.0
- * @since 4.1.4 Unloaded the functions' deprecated.php file.
- * @access private
- */
-function the_seo_framework_boot() {
+// Prepare plugin upgrader before the plugin loads. This may also downgrade (3103 or higher).
+the_seo_framework_db_version() !== THE_SEO_FRAMEWORK_DB_VERSION
+	and require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'upgrade.php';
 
-	// Defines environental constants.
-	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'define.php';
+// Load deprecated functions.
+// require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php';
 
-	// Load plugin API functions.
-	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'api.php';
+// Load plugin.
+require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 
-	// Prepare plugin upgrader before the plugin loads. This may also downgrade (3103 or higher).
-	the_seo_framework_db_version() !== THE_SEO_FRAMEWORK_DB_VERSION
-		and require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'upgrade.php';
-
-	// Load deprecated functions.
-	// require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'deprecated.php';
-
-	// Load plugin.
-	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
-}
+// # Zelda is here to protect your site from hackers.
+// #
+// #                OLLLLLLLLL
+// #             GGOiiiiiiiilGGG
+// #         GGGOllttttttttttlllll
+// #       GG1111tt1;;;;;;lltttt..L
+// #      GttLLLLttiiiiiii;;tttl..,;
+// #    GGtLLLLLLLLLiiiiiiii;tttttt,,
+// #   GllLLLLLLLLLLLLiiiiiii;;tttt,,.
+// #    OttLLLLLLtttLttiiii;;i;;:ttt::.                  ttttG
+// #    Olll;;:::ittL::,;;;;;;ii;ttttt.                i.iii..
+// #        LLiii:LL:,,:iiiii;ii;ttttt.              ;::iii0..
+// # _______LL.,,;;;,.....,ii;ii;...ll.            :::OO,GG.
+// # L...........,::O::.00Gii;ii;ll.11.           .,,G,,0..
+// # L..0000LL000LLL0::.00Gii,;;l..lll.  ...    ..,00,00.
+// # L..L;;;..1LLLLLLLL1iiiii,ll;ttt11t..:::.  .,,0,,0..
+// # L..O;;i;;;;;LLLLLLiiiiii,;;L;;t11t..:ii.;;,0i:0;,
+// # L..Oiii;;;;;LLL1iiiii,::t,,t111::1:::00.,,,00L..
+// # L..Oiiiii:::t.........::tttt11tttttt:::.OOiii.
+// # L..Oiit00tttLlll11lttt;;tll1llllltttt..GGGO:::..
+// # L..L..;00tttOii...:tt;;;tll::::::lttttt.OO::::::.
+// # L..O;;L00:::011;..l::;tttll:..   ;::lll...:::0ii.
+// # L..L;;L00:::011;..llllttttt.     :..:..LLL.......
+// # L..L::;GGLLL011;,,iGGGOOGGGG:: ;;;GG.....
+// #   :LLiiiiiiiii.iiGOOOGGtttt.. ;;;::.
+// #   :LLiiiiiiiii.lltttttttttl..   :;
+// #    ::tiiiiiittllllllllllllll.
+// #    tt:ttiiit;;::::::::::::::::::
+// #      l::iii:..:OOO..    :::::0,,
+// #       11;;;,;;:OO.        ,::L;;:
+// #         1..Lll;..         .ll1tt.
+// #       11t11l11,           .ll111l.. It's Link?! Not Zelda??
+// #       ll......             ........ - Sybre drew this by hand.
 
 // phpcs:disable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode
 //

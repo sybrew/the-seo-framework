@@ -117,6 +117,7 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  * @since 4.0.0 : 1. Streamlined folder lookup by more effectively using the namespace.
  *                2. Added timing functionality
  *                3. No longer loads interfaces automatically.
+ * @since 4.2.0 Now supports mixed class case.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  *
@@ -128,7 +129,8 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  */
 function _autoload_classes( $class ) {
 
-	if ( 0 !== strpos( $class, 'The_SEO_Framework\\', 0 ) ) return;
+	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't gotten any friends.
+	if ( 0 !== strpos( strtolower( $class ), 'the_seo_framework\\', 0 ) ) return;
 
 	static $_timenow = true;
 	// Lock $_timenow to prevent stacking timers during class extending. This is released when the class stack loaded.
