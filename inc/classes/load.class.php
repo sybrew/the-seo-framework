@@ -207,6 +207,11 @@ final class Load extends Cache {
 			// Easy Digital Downloads.
 			$this->_include_compat( 'edd', 'plugin' );
 		}
+
+		if ( $this->detect_plugin( [ 'constants' => [ 'ELEMENTOR_VERSION' ] ] ) ) {
+			// Elementor
+			$this->_include_compat( 'elementor', 'plugin' );
+		}
 	}
 
 	/**

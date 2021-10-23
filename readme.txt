@@ -276,10 +276,6 @@ TODO this is no longer 'minor'... In this update, we polished the final rough bi
 
 get_static_front_page_title / get_blogname... -> ??
 
-TODO Elementor SEO Box?
-	-> While we're at it, also define a default for their broken post type?
-		-> It's really their problem, though.
-
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
@@ -365,6 +361,9 @@ TODO add CSS templating colors?
 		* The Title Settings their examples now better reflect real-world usage in certain corner cases.
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
+		* We did Elementor's developer's job by marking the post types `elementor_library` and `e-landing-page` as "not-publicly-queryable" -- but only for The SEO Framework.
+			* If we'd mark it as "not-publicly-queryable" for all of WordPress, some functionality in Elementor might break. We do not care for that.
+			* Elementor's devs had to mark it conditionally-public instead of conditionally-not-public. Thinking backwardly poses some difficulty for the average mind. Nevertheless, that'd remove about 2000 support inquiries for/about them yearly.
 * **Removed:**
 	* Toggled off by default three years ago, hidden for almost all users one year ago, and now removed entirely: The Optimized Sitemap's priority-meta feature. This feature hasn't been used by any popular search engine for a long time.
 	* Older browsers no longer support window-resize support for the tabs of the "inpost SEO meta box."
@@ -375,6 +374,7 @@ TODO add CSS templating colors?
 	* Addressed a corner-case issue with Polylang where on WP installations instated prior WP v4.4 the primary sitemap got emptied when no new languages have been setup since WP v4.4 or later.
 	* Addressed a regression from TSF v4.1.4 where the Schema.org setting "Logo URL" couldn't be selected nor could the Sitemap Logo be assigned correctly (due to assigning duplicated _unique_ IDs).
 	* Addressed an off-by-one error causing the first content-image to be skipped for social sharing. [Props daxelrod](https://wordpress.org/support/topic/content-social-image-skips-first-image/).
+		* This fix also addresses that "only" 'four' images got taken from the content, instead of the intended 'five'.
 
 **For developers:**
 
@@ -545,6 +545,9 @@ TODO add CSS templating colors?
 	* **Added:**
 		* `the_seo_framework_tell_multilingual_sitemap`, whether to tell about multilingual sitemaps on the setting pages.
 		* `the_seo_framework_generated_archive_title_prefix`, filters the archive title prefix.
+		* These should never be used. If I find you use these filters in the wild, I'll call you out for being a dumb developer. Properly annotate your post types and taxonomies before thinking about touching these filters!
+			* `the_seo_framework_public_post_types`, filters public post types.
+			* `the_seo_framework_public_taxonomies`, filters public taxonomies.this filter!
 	* **Changed:**
 		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.

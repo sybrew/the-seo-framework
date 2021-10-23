@@ -854,9 +854,8 @@ class Detect extends Render {
 	 * Returns a list of all supported post types.
 	 *
 	 * @since 3.1.0
-	 * @stativar array $cache
 	 *
-	 * @return array The supported post types.
+	 * @return string[] The supported post types.
 	 */
 	public function get_supported_post_types() {
 		return memo() ?? memo(
@@ -873,22 +872,31 @@ class Detect extends Render {
 	 * @since 4.1.0
 	 * @since 4.1.4 Now resets the index keys of the return value.
 	 *
-	 * @return array All public post types.
+	 * @return string[] All public post types.
 	 */
 	protected function get_public_post_types() {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				array_values(
-					array_filter(
-						array_unique(
-							array_merge(
-								$this->get_forced_supported_post_types(),
-								//? array_values() because get_post_types() gives a sequential array.
-								array_keys( (array) \get_post_types( [ 'public' => true ] ) )
-							)
-						),
-						'is_post_type_viewable'
+				/**
+				 * Do not consider using this filter. Properly register your post type, noob.
+				 *
+				 * @since 4.2.0
+				 * @param string[] $post_types The public post types.
+				 */
+				\apply_filters(
+					'the_seo_framework_public_post_types',
+					array_values(
+						array_filter(
+							array_unique(
+								array_merge(
+									$this->get_forced_supported_post_types(),
+									//? array_values() because get_post_types() gives a sequential array.
+									array_keys( (array) \get_post_types( [ 'public' => true ] ) )
+								)
+							),
+							'is_post_type_viewable'
+						)
 					)
 				)
 			);
@@ -900,12 +908,12 @@ class Detect extends Render {
 	 * @since 3.1.0
 	 * @since 4.2.0 Removed memoization.
 	 *
-	 * @return array Forced supported post types.
+	 * @return string[] Forced supported post types.
 	 */
 	protected function get_forced_supported_post_types() {
 		/**
 		* @since 3.1.0
-		* @param array $forced Forced supported post types
+		* @param string[] $forced Forced supported post types
 		*/
 		return (array) \apply_filters_ref_array(
 			'the_seo_framework_forced_supported_post_types',
@@ -924,24 +932,33 @@ class Detect extends Render {
 	 *
 	 * @since 4.1.0
 	 *
-	 * @return array The taxonomies that are public.
+	 * @return string[] The taxonomies that are public.
 	 */
 	protected function get_public_taxonomies() {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				array_filter(
-					array_unique(
-						array_merge(
-							$this->get_forced_supported_taxonomies(),
-							//? array_values() because get_taxonomies() gives a sequential array.
-							array_values( \get_taxonomies( [
-								'public'   => true,
-								'_builtin' => false,
-							] ) )
-						)
-					),
-					'is_taxonomy_viewable'
+				/**
+				 * Do not consider using this filter. Properly register your taxonomy, noob.
+				 *
+				 * @since 4.2.0
+				 * @param string[] $post_types The public post types.
+				 */
+				\apply_filters(
+					'the_seo_framework_public_taxonomies',
+					array_filter(
+						array_unique(
+							array_merge(
+								$this->get_forced_supported_taxonomies(),
+								//? array_values() because get_taxonomies() gives a sequential array.
+								array_values( \get_taxonomies( [
+									'public'   => true,
+									'_builtin' => false,
+								] ) )
+							)
+						),
+						'is_taxonomy_viewable'
+					)
 				)
 			);
 	}
@@ -952,12 +969,12 @@ class Detect extends Render {
 	 * @since 4.1.0
 	 * @since 4.2.0 Removed memoization.
 	 *
-	 * @return array Forced supported taxonomies
+	 * @return string[] Forced supported taxonomies
 	 */
 	protected function get_forced_supported_taxonomies() {
 		/**
 		 * @since 4.1.0
-		 * @param array $forced Forced supported post types
+		 * @param string[] $forced Forced supported post types
 		 */
 		return (array) \apply_filters_ref_array(
 			'the_seo_framework_forced_supported_taxonomies',
