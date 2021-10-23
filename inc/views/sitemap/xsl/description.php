@@ -55,7 +55,7 @@ printf(
 		]
 	),
 	esc_xml(
-		$this->get_blogname() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' )
+		$this->s_title_raw( $this->get_blogname() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) )
 	)
 );
 ?>

@@ -144,10 +144,10 @@ switch ( $instance ) :
 						[
 							'state' => [
 								'refTitleLocked'    => $title_ref_locked,
-								'defaultTitle'      => $default_title,
+								'defaultTitle'      => $this->s_title( $default_title ),
 								'addAdditions'      => $this->use_title_branding( $_generator_args ),
 								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-								'additionValue'     => $this->s_title_raw( $title_additions ),
+								'additionValue'     => $this->s_title( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],
@@ -212,7 +212,7 @@ switch ( $instance ) :
 					'autodescription_description',
 					[
 						'state' => [
-							'defaultDescription'   => $default_description,
+							'defaultDescription'   => $this->s_description( $default_description ),
 							'refDescriptionLocked' => $description_ref_locked,
 							'hasLegacy'            => true,
 						],

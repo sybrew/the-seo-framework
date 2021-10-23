@@ -700,6 +700,7 @@ class Generate_Description extends Generate {
 	 * @since 3.2.0 : 1. Now no longer listens to options.
 	 *                2. Now only works for the front and blog pages.
 	 * @since 3.2.2 Now works for homepages from external requests.
+	 * @since 4.2.0 No longer adds "on Blogname".
 	 * @see $this->get_generated_description()
 	 *
 	 * @param null $args An array of 'id' and 'taxonomy' values.
@@ -718,17 +719,7 @@ class Generate_Description extends Generate {
 			);
 		}
 
-		if ( empty( $title ) )
-			return '';
-
-		return trim(
-			/* translators: 1: Title, 2: on, 3: Site Title */
-			sprintf( \_x( '%1$s %2$s %3$s', 'blog page description', 'autodescription' ),
-				$title,
-				\_x( 'on', 'Placement. e.g. Post Title "on" Site Title', 'autodescription' ),
-				$this->get_blogname()
-			)
-		);
+		return ( $title ?? '' ) ?: '';
 	}
 
 	/**

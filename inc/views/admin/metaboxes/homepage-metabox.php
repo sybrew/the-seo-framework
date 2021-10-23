@@ -197,8 +197,6 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_homepage_metabox_additions':
-		$tagline_placeholder = $this->s_title_raw( $this->get_blogdescription() );
-
 		// Fetches escaped title parts.
 		$_example_title = $this->escape_title(
 			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
@@ -220,7 +218,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $tagline_placeholder ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Form::field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->s_title_raw( $this->get_blogdescription() ) ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
 		<div id="tsf-title-tagline-toggle">

@@ -99,7 +99,8 @@ class Site_Options extends Sanitize {
 				'disabled_taxonomies' => [], // Taxonomy support.
 
 				// Title.
-				'title_separator'     => 'hyphen',  // Title separator, dropdown
+				'site_title'          => '',        // Blog name.
+				'title_separator'     => 'hyphen',  // Title separator, radio selection.
 				'title_location'      => $titleloc, // Title separation location
 				'title_rem_additions' => 0,         // Remove title additions
 				'title_rem_prefixes'  => 0,         // Remove title prefixes from archives.

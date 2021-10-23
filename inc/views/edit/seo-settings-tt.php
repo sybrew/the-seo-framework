@@ -146,7 +146,7 @@ $robots_settings = [
 								'defaultTitle'      => $this->get_filtered_raw_generated_title( $_generator_args ),
 								'addAdditions'      => $this->use_title_branding( $_generator_args ),
 								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-								'additionValue'     => $this->s_title_raw( $this->get_blogname() ),
+								'additionValue'     => $this->s_title( $this->get_blogname() ),
 								'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],

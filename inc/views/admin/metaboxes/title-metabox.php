@@ -18,12 +18,12 @@ $instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instan
 
 switch ( $instance ) :
 	case 'the_seo_framework_title_metabox_main':
-		$blogname = $this->get_blogname();
+		$blogname = esc_html( $this->get_blogname() );
 		$sep      = esc_html( $this->get_separator( 'title' ) );
 		$showleft = 'left' === $this->get_option( 'title_location' );
 
-		$additions_left  = '<span class=tsf-title-additions-js>' . $blogname . '<span class=tsf-sep-js>' . " $sep " . '</span></span>';
-		$additions_right = '<span class=tsf-title-additions-js><span class=tsf-sep-js>' . " $sep " . '</span>' . $blogname . '</span>';
+		$additions_left  = "<span class=tsf-title-additions-js><span class=tsf-site-title-js>$blogname</span><span class=tsf-sep-js> $sep </span></span>";
+		$additions_right = "<span class=tsf-title-additions-js><span class=tsf-sep-js> $sep </span><span class=tsf-site-title-js>$blogname</span></span>";
 
 		$latest_post_id = $this->get_latest_post_id();
 		$latest_cat_id  = $this->get_latest_category_id();
@@ -214,11 +214,25 @@ switch ( $instance ) :
 		break;
 
 	case 'the_seo_framework_title_metabox_additions':
+		?>
+		<p>
+			<label for="<?php Form::field_id( 'site_title' ); ?>" class="tsf-toblock">
+				<strong><?php esc_html_e( 'Site Title', 'autodescription' ); ?></strong>
+			</label>
+		</p>
+		<p class=tsf-title-wrap>
+			<input type="text" name="<?php Form::field_name( 'site_title' ); ?>" class="large-text" id="<?php Form::field_id( 'site_title' ); ?>" placeholder="<?php echo esc_attr( $this->s_title_raw( $this->get_filtered_raw_blogname() ) ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ); ?>" autocomplete=off />
+		</p>
+		<?php
+		HTML::description( __( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );
+		?>
+
+		<hr>
+		<?php
 		$example_left  = $examples['left'];
 		$example_right = $examples['right'];
 
 		$homepage_has_option = __( 'This option does not affect the homepage; it uses a different one.', 'autodescription' );
-
 		?>
 		<fieldset>
 			<legend><?php Form::header_title( __( 'Site Title Location', 'autodescription' ) ); ?></legend>
@@ -249,7 +263,7 @@ switch ( $instance ) :
 
 		<hr>
 
-		<?php Form::header_title( __( 'Site Title', 'autodescription' ) ); ?>
+		<?php Form::header_title( __( 'Site Title Removal', 'autodescription' ) ); ?>
 		<div id="tsf-title-additions-toggle">
 			<?php
 			$info = HTML::make_info(

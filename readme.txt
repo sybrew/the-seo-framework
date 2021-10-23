@@ -274,8 +274,6 @@ TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
 
 TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
 
-get_static_front_page_title / get_blogname... -> ??
-
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
@@ -302,6 +300,8 @@ TODO implement WP Fix for sitemaps and use get_posts()?
 TODO add CSS templating colors?
 	-> Also from Core, and their "relative" friends? I don't think WP uses "var" in production?
 	-> This should speed up some stuff, and makes the plugin easier to maintain.
+
+TODO test title trimming..?
 
 **For everyone:**
 
@@ -375,6 +375,9 @@ TODO add CSS templating colors?
 	* Addressed a regression from TSF v4.1.4 where the Schema.org setting "Logo URL" couldn't be selected nor could the Sitemap Logo be assigned correctly (due to assigning duplicated _unique_ IDs).
 	* Addressed an off-by-one error causing the first content-image to be skipped for social sharing. [Props daxelrod](https://wordpress.org/support/topic/content-social-image-skips-first-image/).
 		* This fix also addresses that "only" 'four' images got taken from the content, instead of the intended 'five'.
+	* Addressed a regression where a part of the HTML comments was not fully translatable.
+	* Addressed layout issues where the site title might be smaller than 60px, making the examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
+	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
 
 **For developers:**
 
@@ -390,13 +393,20 @@ TODO add CSS templating colors?
 		* The goal was to remove redundant opcodes.
 		* Yes, typehinting can help find bugs in development. But, its results can be catastrophic on user websites, something we do not have the time to deal with. We expect other developers to uphold the API.
 		* In the future, OpCache might look for typehints and use those to improve performance. When that day comes, we'll typehint everything we can.
+	* For the description generator, we removed the "on 'Blogname'" part on the homepage and blog page.
+		* We did this to ease integration of a custom blog name, which would otherwise have to be reflected in that description, making for smelly code we did not want to maintain.
+		* This change does not affect ranking directly.
+		* It'd be best if you provide a custom description, regardless. Search engines can also ignore your descriptions when they don't meet certain requirements, which this one never did.
 * **Fixed:**
 	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
 * **Option notes:**
 	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* Index `show_priority` is no longer used nor sanitized.
 			* Updating the options will purge this index. Then, it'll be rendered as disabled on downgrade.
-	* Global option `the_seo_framework_tested_upgrade_version` is now removed. We let WordPress test for us now (WP5.2+ feature)
+		* Index `knowledge_name` is no longer 'sanitized and escaped' on-save, but now only 'sanitized'.
+		* Index `site_title` is new, and overrides WordPress's `\get_bloginfo( 'name' )` value used within The SEO Framework.
+			* This affects all titles, including those of Structured Data (which can be superseded by `knowledge_name`).
+	* Global option `the_seo_framework_tested_upgrade_version` is now removed. We let WordPress test for us now (WP5.2+ feature).
 * **Function notes:**
 	* **Added:**
 		* `tsf()`, an alias of `the_seo_framework()`. They have exactly the same opcodes, so neither is faster than the other. Pick your poison.
@@ -437,6 +447,7 @@ TODO add CSS templating colors?
 			* `get_home_url()`, a memoized version of WordPress Core's `get_home_url()`.
 			* `retrieve_robots_meta_assertions()`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
 			* `is_home_as_page()`, detects the non-front blog page.
+			* `get_filtered_raw_blogname()` fetches the filtered blogname without considering TSF's `site_title` option.
 		* **Methods changed:**
 			* `do_meta_output()`
 				1. Now invokes two actions before and after output.
@@ -449,9 +460,13 @@ TODO add CSS templating colors?
 				1. No longer memoizes the return value.
 				2. No longer tests for the Twitter title.
 			* `get_conflicting_plugins()` now always runs the filter (`the_seo_framework_conflicting_plugins_type`), even when `$type` is not registered.
+			* `get_plugin_indicator()` is no longer publicly accessible.
 			* `get_relative_fontcolor` optimized code, but it now has some rounding changes at the end. This could offset the returned values by 1/255th.
 			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.
 			* `get_robots_taxonomy_option_id` no longer sanitizes the input parameter.
+			* `get_static_front_page_title()` &amp; alias `get_blogname()`
+				1. Now listens to the new `site_title` option.
+				2. Now applies filters.
 			* `get_taxonomical_canonical_url()`:
 				1. Added memoization.
 				1. The parameters are now optional.

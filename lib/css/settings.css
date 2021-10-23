@@ -100,22 +100,17 @@ body.rtl .tsf-bottom-buttons {
 	display: block;
 }
 
-#tsf-title-location label span,
-#tsf-home-title-location label span {
+#tsf-title-location label > span,
+#tsf-home-title-location label > span {
 	display: inline-block;
 	min-width: 60px;
 	vertical-align: baseline;
 }
 
-#tsf-home-title-location label .tsf-custom-title-js,
-#tsf-home-title-location label .tsf-custom-blogname-js,
-#tsf-home-title-location label .tsf-custom-tagline-js,
-#tsf-title-location label .tsf-sep-js,
-#tsf-title-location label .tsf-title-additions-js,
-#tsf-home-title-location label .tsf-sep-js {
-	display: inline;
-	min-width: 0;
-	white-space: pre;
+.tsf-title-additions-js,
+.tsf-title-additions-example-left code,
+.tsf-title-additions-example-right code {
+	white-space: pre-wrap;
 }
 
 /**

@@ -715,13 +715,17 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Generates front page title.
 	 *
+	 * This is an alias of get_blogname(). The difference is that this is used for
+	 * the front-page title output solely, whereas the other one has a mixed usage.
+	 *
 	 * @since 3.1.0
-	 * @TODO figure out why we didn't choose to use $this->get_blogname()?
+	 * @since 4.2.0 1. Now listens to the new `site_title` option.
+	 *              2. Now applies filters.
 	 *
 	 * @return string The generated front page title.
 	 */
 	public function get_static_front_page_title() {
-		return \get_bloginfo( 'name', 'raw' );
+		return $this->get_blogname();
 	}
 
 	/**
@@ -1523,7 +1527,7 @@ class Generate_Title extends Generate_Description {
 	public function get_home_title_additions() {
 		return memo() ?? memo(
 			$this->s_title_raw(
-				trim( $this->get_option( 'homepage_title_tagline' ) )
+				$this->get_option( 'homepage_title_tagline' )
 				?: $this->get_blogdescription()
 				?: ''
 			)

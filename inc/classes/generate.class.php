@@ -212,26 +212,56 @@ class Generate extends User_Data {
 	}
 
 	/**
-	 * Fetches blogname (site title).
+	 * Fetches public blogname (site title).
 	 * Memoizes the return value.
 	 *
-	 * @since 2.5.2
-	 * TODO add filter?
+	 * Do not consider this function safe for printing!
 	 *
-	 * @return string $blogname The escaped and sanitized blogname.
+	 * @since 2.5.2
+	 * @since 4.2.0 1. Now listens to the new `site_title` option.
+	 *              2. Now applies filters.
+	 *
+	 * @return string $blogname The sanitized blogname.
 	 */
 	public function get_blogname() {
-		return memo() ?? memo( trim( \get_bloginfo( 'name', 'display' ) ) );
+		return memo()
+			?? memo( $this->get_option( 'site_title' ) ?: $this->get_filtered_raw_blogname() );
+	}
+
+	/**
+	 * Fetches blogname (site title).
+	 *
+	 * Do not consider this function safe for printing!
+	 *
+	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string $blogname The sanitized blogname.
+	 */
+	public function get_filtered_raw_blogname() {
+		/**
+		 * @since 4.2.0
+		 * @param string The blog name.
+		 */
+		return (string) \apply_filters(
+			'the_seo_framework_blog_name',
+			trim( \get_bloginfo( 'name', 'display' ) )
+		);
 	}
 
 	/**
 	 * Fetch blog description.
 	 * Memoizes the return value.
 	 *
+	 * Do not consider this function safe for printing!
+	 *
+	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
+	 *
 	 * @since 2.5.2
 	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
 	 *
-	 * @return string $blogname The escaped and sanitized blog description.
+	 * @return string $blogname The sanitized blog description.
 	 */
 	public function get_blogdescription() {
 		return memo() ?? memo( trim( \get_bloginfo( 'description', 'display' ) ) );

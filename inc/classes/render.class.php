@@ -1252,13 +1252,16 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.0 Added boot timers.
+	 * @since 4.2.0 1. The annotation is translatable again (regressed in 4.0.0).
+	 *              2. Is now a protected function.
+	 * @access private
 	 *
 	 * @param string $where  Determines the position of the indicator.
 	 *                       Accepts 'before' for before, anything else for after.
 	 * @param int    $timing Determines when the output started.
 	 * @return string The SEO Framework's HTML plugin indicator.
 	 */
-	public function get_plugin_indicator( $where = 'before', $timing = 0 ) {
+	protected function get_plugin_indicator( $where = 'before', $timing = 0 ) {
 
 		$cache = memo() ?? memo( [
 			/**
@@ -1268,15 +1271,23 @@ class Render extends Admin_Init {
 			'run'        => (bool) \apply_filters( 'the_seo_framework_indicator', true ),
 			/**
 			 * @since 2.4.0
-			 * @param bool $sybre Whether to show the author name in the indicator.
-			 */
-			// phpcs:ignore, WordPress.NamingConventions.ValidHookName -- Easter egg.
-			'author'     => (bool) \apply_filters( 'sybre_waaijer_<3', true ) ? \esc_html__( 'by Sybre Waaijer', 'autodescription' ) : '',
-			/**
-			 * @since 2.4.0
 			 * @param bool $show_timer Whether to show the generation time in the indicator.
 			 */
 			'show_timer' => (bool) \apply_filters( 'the_seo_framework_indicator_timing', true ),
+			'annotation' => trim( vsprintf(
+				/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
+				\esc_html__( '%1$s %2$s', 'autodescription' ),
+				[
+					'The SEO Framework',
+					/**
+					 * @since 2.4.0
+					 * @param bool $sybre Whether to show the author name in the indicator.
+					 */
+					\apply_filters( 'sybre_waaijer_<3', true ) // phpcs:ignore, WordPress.NamingConventions.ValidHookName -- Easter egg.
+						? \esc_html__( 'by Sybre Waaijer', 'autodescription' )
+						: '',
+				]
+			) ),
 		] );
 
 		if ( ! $cache['run'] ) return '';
@@ -1289,11 +1300,7 @@ class Render extends Admin_Init {
 
 		switch ( $where ) :
 			case 'before':
-				return sprintf(
-					'<!-- %s -->',
-					/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
-					trim( sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] ) )
-				) . PHP_EOL;
+				return "<!-- {$cache['annotation']} -->\n";
 
 			case 'after':
 			default:
@@ -1307,11 +1314,7 @@ class Render extends Admin_Init {
 					$timers = '';
 				}
 
-				return sprintf(
-					'<!-- / %s -->',
-					/* translators: 1 = The SEO Framework, 2 = 'by Sybre Waaijer */
-					trim( sprintf( '%1$s %2$s', 'The SEO Framework', $cache['author'] ) . $timers )
-				) . PHP_EOL;
+				return "<!-- {$cache['annotation']}{$timers} -->\n";
 		endswitch;
 	}
 

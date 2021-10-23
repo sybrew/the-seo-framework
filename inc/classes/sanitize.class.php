@@ -197,17 +197,11 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
-			's_title',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[
-				'knowledge_name',
-			]
-		);
-
-		$this->add_option_filter(
 			's_title_raw',
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
+				'site_title',
+				'knowledge_name',
 				'homepage_title',
 				'homepage_title_tagline',
 				'homepage_og_title',
