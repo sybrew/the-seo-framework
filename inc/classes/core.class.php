@@ -186,7 +186,7 @@ class Core {
 	 *                           Each array key is converted to a variable with its value attached.
 	 * @param string   $instance The instance suffix to call back upon.
 	 */
-	public function get_view( $view, iterable $__args = [], $instance = 'main' ) {
+	public function get_view( $view, $__args = [], $instance = 'main' ) {
 
 		//? A faster extract().
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
@@ -252,7 +252,10 @@ class Core {
 	 * @return string The file instance case.
 	 */
 	protected function get_view_instance( $base, $instance = 'main' ) {
-		return $base . '_' . str_replace( '-', '_', $instance );
+
+		$instance = str_replace( '-', '_', $instance );
+
+		return "{$base}_{$instance}";
 	}
 
 	/**

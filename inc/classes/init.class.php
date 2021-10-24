@@ -1098,6 +1098,7 @@ class Init extends Query {
 		if ( ! empty( $wp_query->tax_query->queries ) ) :
 			$unsupported = [];
 
+			// TODO use `$has_supported_taxonomy = array_intersect( array_column( $wp_query->tax_query->queries, 'taxonomy' ), $this->get_supported_taxonomies() )`?
 			foreach ( $wp_query->tax_query->queries as $_query ) {
 				if ( isset( $_query['taxonomy'] ) )
 					$unsupported[] = ! $this->is_taxonomy_supported( $_query['taxonomy'] );

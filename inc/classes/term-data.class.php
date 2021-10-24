@@ -177,7 +177,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return array The default, unfiltered, post meta.
+	 * @return array The default, unfiltered, term meta.
 	 */
 	protected function get_unfiltered_term_meta_defaults() {
 		return [

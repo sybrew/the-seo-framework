@@ -12,11 +12,8 @@ use The_SEO_Framework\Interpreters\HTML,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_feed_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_feed_metabox_main':
+switch ( $this->get_view_instance( 'feed', $instance ) ) :
+	case 'feed_main':
 		Form::header_title( __( 'Content Feed Settings', 'autodescription' ) );
 		HTML::description( __( "Sometimes, your content can get stolen by robots through the WordPress feeds. This can cause duplicate content issues. To prevent this from happening, it's recommended to convert the feed's content into an excerpt.", 'autodescription' ) );
 		HTML::description( __( 'Adding a backlink below the feed entries will also let the visitors know where the content came from.', 'autodescription' ) );

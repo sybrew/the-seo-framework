@@ -714,7 +714,12 @@ final class Deprecated {
 	 */
 	public function field_id( $id, $echo = true ) {
 		\tsf()->_deprecated_function( 'tsf()->field_id()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::field_id( $id, $echo );
+		if ( $echo ) {
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- this escapes.
+			echo \The_SEO_Framework\Interpreters\Form::field_id( $id );
+		} else {
+			return \The_SEO_Framework\Interpreters\Form::field_id( $id );
+		}
 	}
 
 	/**
@@ -1537,7 +1542,9 @@ final class Deprecated {
 	 * @return int The admin ID.
 	 */
 	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-		\tsf()->_deprecated_function( 'tsf()->check_the_real_ID()', '4.2.0', `tsf()->get_the_real_ID()` );
+
+		\tsf()->_deprecated_function( 'tsf()->check_the_real_ID()', '4.2.0', 'tsf()->get_the_real_ID()' );
+
 		/**
 		 * @since 2.5.0
 		 * @param int $id

@@ -39,7 +39,7 @@ if ( $use_tabs ) :
 							// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- bug in EscapeOutputSniff
 							( $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : '' ),
 							// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- bug in EscapeOutputSniff
-							( $name ? '<span class="tsf-nav-desktop">' . esc_attr( $name ) . '</span>' : '' )
+							( $name ? '<span class=tsf-nav-desktop>' . esc_attr( $name ) . '</span>' : '' )
 						),
 					]
 				)

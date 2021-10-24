@@ -12,11 +12,8 @@ use The_SEO_Framework\Interpreters\HTML,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_webmaster_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_webmaster_metabox_main':
+switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
+	case 'webmaster_main':
 		$site_url = $this->get_homepage_permalink();
 
 		$bing_site_url   = 'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url );

@@ -45,6 +45,8 @@ final class SeoSettings {
 	 */
 	public static function _register_seo_settings_meta_boxes() {
 
+		$tsf = \tsf();
+
 		/**
 		 * Various metabox filters.
 		 * Set any to false if you wish the meta box to be removed.
@@ -58,14 +60,14 @@ final class SeoSettings {
 		$description       = (bool) \apply_filters( 'the_seo_framework_description_metabox', true );
 		$robots            = (bool) \apply_filters( 'the_seo_framework_robots_metabox', true );
 		$home              = (bool) \apply_filters( 'the_seo_framework_home_metabox', true );
-		$post_type_archive = (bool) \apply_filters( 'the_seo_framework_post_type_archive_metabox', false ); // DEV: TEMP
+		$post_type_archive = (bool) \apply_filters( 'the_seo_framework_post_type_archive_metabox', false ); // TODO dev.
 		$social            = (bool) \apply_filters( 'the_seo_framework_social_metabox', true );
 		$schema            = (bool) \apply_filters( 'the_seo_framework_schema_metabox', true );
 		$webmaster         = (bool) \apply_filters( 'the_seo_framework_webmaster_metabox', true );
 		$sitemap           = (bool) \apply_filters( 'the_seo_framework_sitemap_metabox', true );
 		$feed              = (bool) \apply_filters( 'the_seo_framework_feed_metabox', true );
 
-		$settings_page_hook = \tsf()->seo_settings_page_hook;
+		$settings_page_hook = $tsf->seo_settings_page_hook;
 
 		$class = static::class;
 
@@ -109,7 +111,7 @@ final class SeoSettings {
 				'main'
 			);
 
-		if ( $post_type_archive )
+		if ( $post_type_archive && $tsf->get_public_post_type_archives() )
 			\add_meta_box(
 				'autodescription-post-type-archive-settings',
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),
@@ -199,8 +201,9 @@ final class SeoSettings {
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
 	public static function _nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) { // phpcs:ignore,VariableAnalysis
-		\tsf()->get_view( 'admin/wrap-nav', get_defined_vars() );
-		\tsf()->get_view( 'admin/wrap-content', get_defined_vars() );
+		$tsf = \tsf();
+		$tsf->get_view( 'admin/wrap-nav', get_defined_vars() );
+		$tsf->get_view( 'admin/wrap-content', get_defined_vars() );
 	}
 
 	/**
@@ -257,7 +260,7 @@ final class SeoSettings {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_general_tab() {
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'general' );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'general_tab' );
 	}
 
 	/**
@@ -268,7 +271,7 @@ final class SeoSettings {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_layout_tab() {
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'layout' );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'layout_tab' );
 	}
 
 	/**
@@ -279,7 +282,7 @@ final class SeoSettings {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_performance_tab() {
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'performance' );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'performance_tab' );
 	}
 
 	/**
@@ -290,7 +293,7 @@ final class SeoSettings {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_canonical_tab() {
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'canonical' );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'canonical_tab' );
 	}
 
 	/**
@@ -301,7 +304,7 @@ final class SeoSettings {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_timestamps_tab() {
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'timestamps' );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'timestamps_tab' );
 	}
 
 	/**
@@ -312,7 +315,7 @@ final class SeoSettings {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_exclusions_tab() {
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'exclusions' );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox', [], 'exclusions_tab' );
 	}
 
 	/**
@@ -326,7 +329,7 @@ final class SeoSettings {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_title_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/title-metabox');
+		\tsf()->get_view( 'admin/metaboxes/title-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -341,7 +344,7 @@ final class SeoSettings {
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 */
 	public static function _title_metabox_general_tab() {
-		\tsf()->get_view( 'admin/metaboxes/title-metabox', [], 'general' );
+		\tsf()->get_view( 'admin/metaboxes/title-metabox', [], 'general_tab' );
 	}
 
 	/**
@@ -354,7 +357,7 @@ final class SeoSettings {
 	 * @param array $args The variables to pass to the metabox tab.
 	 */
 	public static function _title_metabox_additions_tab( $args ) {
-		\tsf()->get_view( 'admin/metaboxes/title-metabox', $args, 'additions' );
+		\tsf()->get_view( 'admin/metaboxes/title-metabox', $args, 'additions_tab' );
 	}
 
 	/**
@@ -367,7 +370,7 @@ final class SeoSettings {
 	 * @param array $args The variables to pass to the metabox tab.
 	 */
 	public static function _title_metabox_prefixes_tab( $args ) {
-		\tsf()->get_view( 'admin/metaboxes/title-metabox', $args, 'prefixes' );
+		\tsf()->get_view( 'admin/metaboxes/title-metabox', $args, 'prefixes_tab' );
 	}
 
 	/**
@@ -407,18 +410,18 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Robots Metabox General Tab output.
+	 * Robots Meta Box General Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 */
 	public static function _robots_metabox_general_tab() {
-		\tsf()->get_view( 'admin/metaboxes/robots-metabox', [], 'general' );
+		\tsf()->get_view( 'admin/metaboxes/robots-metabox', [], 'general_tab' );
 	}
 
 	/**
-	 * Robots Metabox "No-: Index/Follow/Archive" Tab output.
+	 * Robots Meta Box "No-: Index/Follow/Archive" Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
@@ -427,7 +430,7 @@ final class SeoSettings {
 	 * @param array $args The variables to pass to the metabox tab.
 	 */
 	public static function _robots_metabox_no_tab( $args ) {
-		\tsf()->get_view( 'admin/metaboxes/robots-metabox', $args, 'no' );
+		\tsf()->get_view( 'admin/metaboxes/robots-metabox', $args, 'no_tab' );
 	}
 
 	/**
@@ -449,51 +452,101 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Homepage Metabox General Tab Output.
+	 * Homepage meta box General Tab Output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_general_tab() {
-		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'general' );
+		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'general_tab' );
 	}
 
 	/**
-	 * Homepage Metabox Additions Tab Output.
+	 * Homepage meta box Additions Tab Output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_additions_tab() {
-		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'additions' );
+		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'additions_tab' );
 	}
 
 	/**
-	 * Homepage Metabox Robots Tab Output
+	 * Homepage meta box Robots Tab Output
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_robots_tab() {
-		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'robots' );
+		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'robots_tab' );
 	}
 
 	/**
-	 * Homepage Metabox Social Tab Output
+	 * Homepage meta box Social Tab Output
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_social_tab() {
-		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'social' );
+		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'social_tab' );
 	}
 
+	/**
+	 * Post Type Archive meta box on the Site SEO Settings page.
+	 *
+	 * @since 4.2.0
+	 * @access private
+	 */
 	public static function _post_type_archive_metabox() {
-		\tsf()->get_view( 'admin/metaboxes/post-type-archive-metabox', [], 'general' );
+		/**
+		 * @since 4.2.0
+		 */
+		\do_action( 'the_seo_framework_post_type_archive_before' );
+		\tsf()->get_view( 'admin/metaboxes/post-type-archive-metabox' );
+		/**
+		 * @since 4.2.0
+		 */
+		\do_action( 'the_seo_framework_post_type_archive_after' );
+	}
+
+	/**
+	 * Social Meta Box General Tab output.
+	 *
+	 * @since 4.2.0
+	 * @access private
+	 *
+	 * @param array $args The variables to pass to the metabox tab.
+	 */
+	public static function _post_type_archive_metabox_general_tab( $args ) {
+		\tsf()->get_view( 'admin/metaboxes/post-type-archive-metabox', $args, 'general_tab' );
+	}
+
+	/**
+	 * Post Type Archive meta box on the Site SEO Settings page.
+	 *
+	 * @since 4.2.0
+	 * @access private
+	 *
+	 * @param array $args The variables to pass to the metabox tab.
+	 */
+	public static function _post_type_archive_metabox_social_tab( $args ) {
+		\tsf()->get_view( 'admin/metaboxes/post-type-archive-metabox', $args, 'social_tab' );
+	}
+
+	/**
+	 * Post Type Archive meta box on the Site SEO Settings page.
+	 *
+	 * @since 4.2.0
+	 * @access private
+	 *
+	 * @param array $args The variables to pass to the metabox tab.
+	 */
+	public static function _post_type_archive_metabox_visibility_tab( $args ) {
+		\tsf()->get_view( 'admin/metaboxes/post-type-archive-metabox', $args, 'visibility_tab' );
 	}
 
 	/**
@@ -515,58 +568,58 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Social Metabox General Tab output.
+	 * Social Meta Box General Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_general_tab() {
-		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'general' );
+		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'general_tab' );
 	}
 
 	/**
-	 * Social Metabox Facebook Tab output.
+	 * Social Meta Box Facebook Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_facebook_tab() {
-		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'facebook' );
+		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'facebook_tab' );
 	}
 
 	/**
-	 * Social Metabox Twitter Tab output.
+	 * Social Meta Box Twitter Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_twitter_tab() {
-		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'twitter' );
+		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'twitter_tab' );
 	}
 
 	/**
-	 * Social Metabox oEmbed Tab output.
+	 * Social Meta Box oEmbed Tab output.
 	 *
 	 * @since 4.0.5
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_oembed_tab() {
-		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'oembed' );
+		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'oembed_tab' );
 	}
 
 	/**
-	 * Social Metabox PostDates Tab output.
+	 * Social Meta Box PostDates Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_postdates_tab() {
-		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'postdates' );
+		\tsf()->get_view( 'admin/metaboxes/social-metabox', [], 'postdates_tab' );
 	}
 
 	/**
@@ -607,62 +660,62 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Sitemaps Metabox General Tab output.
+	 * Sitemaps Meta Box General Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_general_tab() {
-		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'general' );
+		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'general_tab' );
 	}
 
 	/**
-	 * Sitemaps Metabox Robots Tab output.
+	 * Sitemaps Meta Box Robots Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_robots_tab() {
-		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'robots' );
+		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'robots_tab' );
 	}
 
 	/**
-	 * Sitemaps Metabox Metadata Tab output.
+	 * Sitemaps Meta Box Metadata Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_metadata_tab() {
-		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'metadata' );
+		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'metadata_tab' );
 	}
 
 	/**
-	 * Sitemaps Metabox Notify Tab output.
+	 * Sitemaps Meta Box Notify Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_notify_tab() {
-		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'notify' );
+		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'notify_tab' );
 	}
 
 	/**
-	 * Sitemaps Metabox Style Tab output.
+	 * Sitemaps Meta Box Style Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_style_tab() {
-		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'style' );
+		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', [], 'style_tab' );
 	}
 
 	/**
-	 * Feed Metabox on the Site SEO Settings page.
+	 * Feed meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
 	 * @access private
@@ -680,7 +733,7 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Schema Metabox on the Site SEO Settings page.
+	 * Schema meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
 	 * @access private
@@ -698,24 +751,24 @@ final class SeoSettings {
 	}
 
 	/**
-	 * Schema Metabox Structure Tab output.
+	 * Schema Meta Box Structure Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_structure_tab() {
-		\tsf()->get_view( 'admin/metaboxes/schema-metabox', [], 'structure' );
+		\tsf()->get_view( 'admin/metaboxes/schema-metabox', [], 'structure_tab' );
 	}
 
 	/**
-	 * Schema Metabox PResence Tab output.
+	 * Schema Meta Box Presence Tab output.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_presence_tab() {
-		\tsf()->get_view( 'admin/metaboxes/schema-metabox', [], 'presence' );
+		\tsf()->get_view( 'admin/metaboxes/schema-metabox', [], 'presence_tab' );
 	}
 }

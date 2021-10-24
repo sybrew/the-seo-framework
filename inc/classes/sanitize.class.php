@@ -708,6 +708,26 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Sanitizes post type archjive meta.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param array $data The post type archive meta to sanitize : {
+	 *    string $post_type => array $data
+	 * }
+	 * @return array The sanitized post type archive meta.
+	 */
+	public function s_post_type_archive_meta( $data ) {
+
+		// Do NOT test for post type's existence -- it might be registered incorrectly.
+		// If the metadata yields empty -- do not unset key! It'll override "defaults" that way.
+		foreach ( $data as $_post_type => &$meta )
+			$meta = $this->s_term_meta( $meta ); // Coincidence? I think not.
+
+		return $data;
+	}
+
+	/**
 	 * Sanitizes term meta.
 	 *
 	 * @since 4.0.0

@@ -307,6 +307,31 @@ TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenbe
 	-> Users will face issues moving back the metabox.
 		-> This PR will fix that, though... https://github.com/WordPress/gutenberg/pull/25187, eventually.
 
+TODO reset the metabox order of the SEO Settings page?
+	-> Should we delete user settings, keeping things tidy?
+		-> toplevel_page_theseoframework-settings / tsf()->seo_settings_page_hook
+		-> see core wp_ajax_meta_box_order()
+			-> update_user_meta( $user->ID, "meta-box-order_$page", $order );
+				-> `delete_user_meta( 0, 'meta-box-order_' . tsf()->seo_settings_page_hook, false, true );`
+		-> Should we annotate this in https://tsf.fyi/kb/a/108?
+	-> We'll reset it again (purging the option completely) in TSF 5.0...
+
+TODO replace -metabox' -> '
+	-> Then replace -metabox.php -> .php
+	-> The folder name already tells it contains metaboxes.
+
+TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );` in `get_generate_archive_title_from_query()`, which will probably cause issues with "The Events Calendar"'s broken query.
+	-> Should we add a compat file auto-excluding their non-WP coherent "post type"?
+
+TODO remove the og refs, we don't have pixel counters for those.
+TODO regex to find non-breaking HTML attributes: class=example.
+	-> input type="text" -> input type=text
+
+Accepts 'id' and 'taxonomy'.
+Accepts 'id', 'taxonomy', and 'pta'.
+
+useSocialTagline -> useSocialAdditions
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -346,6 +371,9 @@ TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenbe
 			* This issue became more apparent once we started splitting the generators in their respective builder-classes.
 		* Addressed an issue where canonical URLs accidentally bypassed some caches. This should vastly improve canonical URL and Structured Data generation.
 		* Twitter Cards generate 61% quicker now by removing redundant tests.
+		* Title and description input counters are now synchronized at 60fps, instead of at 75~100fps sporadically.
+			* Only the trained eye can spot a minor delay on low response time monitors, but only whilst holding a repeat-key, which isn't realistic.
+		* Image previews now get loaded only after the "slowest" typist is done typing the image URL.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -391,8 +419,8 @@ TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenbe
 * **Changed:**
 	* The sitemap stylesheet now uses a different HTML hierarchy to output items. We made this change so we could center the sitemap.
 		* We also offloaded the sitemap's styles over different "views". Located at `inc/views/sitemap/xsl`.
-	* Throughout the code, you'll find we now use more modern PHP syntax, since we jumped off the delapidated PHP v5.6 boat, and onto the [unsupported PHP v7.2 one](https://www.php.net/supported-versions.php).
-		* Over [25% of hosts are NOT doing their jobs well](https://wordpress.org/about/stats/) keeping your site secure.
+	* Throughout the code, you'll find we now use more modern PHP syntax, since we jumped off the delapidated PHP v5.6 boat, and onto the [deprecated PHP v7.2 one](https://www.php.net/supported-versions.php).
+		* Over [25% of hosts are NOT doing their jobs](https://wordpress.org/about/stats/) to keep your site secure.
 	* Throughout the code, we removed typehinting. Typehinting is great for API consistency, but we thoroughly and correctly prefix every function with documentation on which type to use.
 		* The goal was to remove redundant opcodes.
 		* Yes, typehinting can help find bugs in development. But, its results can be catastrophic on user websites, something we do not have the time to deal with. We expect other developers to uphold the API.
@@ -485,6 +513,8 @@ TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenbe
 			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
 			* `is_home()`, added the first parameter to allow custom query testing.
 			* `is_theme()` no longer "loads" the theme; instead, simply compares input to active theme options.
+			* **The following methods now support the `$args = [ 'pta' => $post_type ]` parameter:**
+				*
 		* **Methods deprecated:**
 			* `append_php_query()`, use `tsf()->append_url_query()` instead.
 			* `get_html_output()`, with no alternative available.
@@ -571,7 +601,7 @@ TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenbe
 		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_generated_archive_title`, added the `$prefix` and `$original_title` parameters, akin to WordPress Core's `get_the_archive_title`, albeit shifted by one parameter.
-		* The following filters have had their needless second parameter (`$args`) removed:
+		* **The following filters have had their needless second parameter (`$args`) removed:**
 			* `the_seo_framework_general_settings_tabs`
 			* `the_seo_framework_homepage_settings_tabs`
 			* `the_seo_framework_robots_settings_tabs`
@@ -579,6 +609,8 @@ TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenbe
 			* `the_seo_framework_sitemaps_settings_tabs`
 			* `the_seo_framework_social_settings_tabs`
 			* `the_seo_framework_title_settings_tabs`
+		* **The following filters may now receive the `$args = [ 'pta' => $post_type ]` argument:**
+			*
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.

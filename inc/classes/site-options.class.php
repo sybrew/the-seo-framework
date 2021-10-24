@@ -171,6 +171,9 @@ class Site_Options extends Sanitize {
 				'homepage_social_image_url' => '',
 				'homepage_social_image_id'  => 0,
 
+				// Post Type Archives.
+				'pta' => [], // All of it. See $this->get_post_type_archive_meta(), which calls this index.
+
 				// Relationships.
 				'shortlink_tag'       => 0, // Adds shortlink tag
 				'prev_next_posts'     => 1, // Adds next/prev tags
@@ -789,6 +792,115 @@ class Site_Options extends Sanitize {
 			'zh_TW' => 'zh',  // Traditional Chinese (Taiwan)
 			'zu_ZA' => 'zu',  // Zulu
 			'zz_TR' => 'zz',  // Zazaki
+		];
+	}
+
+	public function get_post_type_archive_meta( $post_type, $use_cache = true ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( $use_cache && ( $memo = memo( null, $post_type ) ) ) return $memo;
+
+		/**
+		 * This check should not be here, for it'll conflict on data-fills on the SEO settings page.
+		 * This meta should never get called on the front-end if the post type is disabled, anyway,
+		 * for we never query post types externally, aside from the SEO settings page.
+		 */
+		// if ( ! $this->is_post_type_supported( $post_type ) ) {
+		// 	// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
+		// 	return $use_cache ? umemo( __METHOD__, [], $post_type ) : [];
+		// }
+
+		/**
+		 * We can't trust the filter to always contain the expected keys.
+		 * However, it may contain more keys than we anticipated. Merge them.
+		 */
+		$defaults = array_merge(
+			$this->get_unfiltered_term_meta_defaults(),
+			$this->get_post_type_archive_meta_defaults( $post_type )
+		);
+
+		// Yes, we abide by the "settings". WordPress never gave us Post Type Archive settings-pages.
+		if ( $this->is_headless['settings'] ) {
+			$meta = [];
+		} else {
+			// Unlike get_post_meta(), we need not filter here.
+			// See: <https://github.com/sybrew/the-seo-framework/issues/185>
+			$meta = ( $this->get_option( 'pta', $use_cache )[ $post_type ] ?? null ) ?: [];
+		}
+
+		/**
+		 * @since 4.2.0
+		 * @note Do not delete/unset/add indexes! It'll cause errors.
+		 * @param array $meta      The current term meta.
+		 * @param int   $post_type The post type.
+		 * @param bool  $headless  Whether the meta are headless.
+		 */
+		$meta = \apply_filters_ref_array(
+			'the_seo_framework_post_type_archive_meta',
+			[
+				array_merge( $defaults, $meta ),
+				$post_type,
+				$this->is_headless['settings'],
+			]
+		);
+
+		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
+		return $use_cache ? memo( $meta, $post_type ) : $meta;
+	}
+
+	public function get_post_type_archive_meta_item( $item, $post_type = '', $use_cache = true ) {
+		return $this->get_post_type_archive_meta(
+			$post_type ?: $this->get_post_type_real_ID(),
+			$use_cache
+		)[ $item ] ?? null;
+	}
+
+	/**
+	 * Returns an array of default post type archive meta.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param int $post_type The post type.
+	 * @return array The Post Type Archive Metadata default options.
+	 */
+	public function get_post_type_archive_meta_defaults( $post_type = '' ) {
+		/**
+		 * @since 4.2.0
+		 * @param array $defaults
+		 * @param int   $term_id The current term ID.
+		 */
+		return (array) \apply_filters_ref_array(
+			'the_seo_framework_get_post_type_archive_meta_defaults',
+			[
+				$this->get_unfiltered_post_type_archive_meta_defaults(),
+				$post_type ?: $this->get_post_type_real_ID(),
+			]
+		);
+	}
+
+	/**
+	 * Returns the unfiltered post type archive meta defaults.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return array The default, unfiltered, post type archive meta.
+	 */
+	protected function get_unfiltered_post_type_archive_meta_defaults() {
+		return [
+			'doctitle'           => '',
+			'title_no_blog_name' => 0,
+			'description'        => '',
+			'og_title'           => '',
+			'og_description'     => '',
+			'tw_title'           => '',
+			'tw_description'     => '',
+			'social_image_url'   => '',
+			'social_image_id'    => 0,
+			'canonical'          => '',
+			'noindex'            => 0,
+			'nofollow'           => 0,
+			'noarchive'          => 0,
+			'redirect'           => '',
 		];
 	}
 }

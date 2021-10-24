@@ -13,11 +13,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_schema_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_schema_metabox_main':
+switch ( $this->get_view_instance( 'schema', $instance ) ) :
+	case 'schema_main':
 		Form::header_title( __( 'Schema.org Output Settings', 'autodescription' ) );
 
 		if ( $this->has_json_ld_plugin() )
@@ -52,7 +49,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_schema_metabox_structure':
+	case 'schema_structure_tab':
 		Form::header_title( __( 'Site Structure Options', 'autodescription' ) );
 		HTML::description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
 		HTML::description( __( "For example, search engines display your pages' URLs when listed in the search results. These options allow you to enhance those URLs output.", 'autodescription' ) );
@@ -97,7 +94,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_schema_metabox_presence':
+	case 'schema_presence_tab':
 		Form::header_title( __( 'Authorized Presence Options', 'autodescription' ) );
 		HTML::description( __( 'The authorized presence Schema.org output helps search engine users find ways to interact with this website.', 'autodescription' ) );
 

@@ -41,8 +41,6 @@ $_generator_args = [
 $show_og = (bool) $this->get_option( 'og_tags' );
 $show_tw = (bool) $this->get_option( 'twitter_tags' );
 
-$social_placeholders = $this->_get_social_placeholders( $_generator_args );
-
 //! Social image placeholder.
 $image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
 $image_placeholder = $image_details['url'] ?? '';
@@ -155,7 +153,7 @@ $robots_settings = [
 					?>
 				</div>
 				<label for="autodescription-meta[title_no_blog_name]" class="tsf-term-checkbox-wrap">
-					<input type="checkbox" name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value="1" <?php checked( $this->get_term_meta_item( 'title_no_blog_name', $term_id ) ); ?> />
+					<input type="checkbox" name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value="1" <?php checked( $this->get_term_meta_item( 'title_no_blog_name' ) ); ?> />
 					<?php
 					esc_html_e( 'Remove the site title?', 'autodescription' );
 					echo ' ';
@@ -204,6 +202,46 @@ $robots_settings = [
 </table>
 
 <h2><?php esc_html_e( 'Social SEO Settings', 'autodescription' ); ?></h2>
+<?php
+$this->output_js_social_title_data(
+	[
+		'og' => 'autodescription-meta[og_title]',
+		'tw' => 'autodescription-meta[tw_title]',
+	],
+	[
+		'og' => [
+			'state' => [
+				'defaultTitle' => $this->s_title( $this->get_generated_open_graph_title( $_generator_args, false ) ),
+				'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ), // useSocialTagline
+			],
+		],
+		'tw' => [
+			'state' => [
+				'defaultTitle' => $this->s_title( $this->get_generated_twitter_title( $_generator_args, false ) ),
+				'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ), // useSocialTagline
+			],
+		],
+	]
+);
+$this->output_js_social_description_data(
+	[
+		'og' => 'autodescription-meta[og_description]',
+		'tw' => 'autodescription-meta[tw_description]',
+	],
+	[
+		'og' => [
+			'state' => [
+				'defaultDesc' => $this->s_description( $this->get_generated_open_graph_description( $_generator_args, false ) ),
+			],
+		],
+		'tw' => [
+			'state' => [
+				'defaultDesc' => $this->s_description( $this->get_generated_twitter_description( $_generator_args, false ) ),
+			],
+		],
+	]
+);
+?>
 
 <table class="form-table tsf-term-meta">
 	<tbody>
@@ -219,7 +257,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div id="tsf-og-title-wrap">
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" placeholder="<?php echo esc_attr( $social_placeholders['title']['og'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $og_title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $og_title ); ?>" size="40" autocomplete=off />
 				</div>
 			</td>
 		</tr>
@@ -235,7 +273,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" placeholder="<?php echo esc_attr( $social_placeholders['description']['og'] ); ?>" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $og_description ); ?></textarea>
+				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $og_description ); ?></textarea>
 			</td>
 		</tr>
 
@@ -251,7 +289,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div id="tsf-tw-title-wrap">
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" placeholder="<?php echo esc_attr( $social_placeholders['title']['twitter'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $tw_title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $tw_title ); ?>" size="40" autocomplete=off />
 				</div>
 			</td>
 		</tr>
@@ -267,7 +305,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $tw_description ); ?></textarea>
+				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $tw_description ); ?></textarea>
 			</td>
 		</tr>
 

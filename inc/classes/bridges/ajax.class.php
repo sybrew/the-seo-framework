@@ -303,14 +303,20 @@ final class AJAX {
 							}
 							break;
 						case 'ogdescription':
-							// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Smart loop.
-							$_social_ph = $_social_ph ?? $tsf->_get_social_placeholders( $_generator_args );
-							$data[ $g ] = $_social_ph['description']['og'];
+							if ( $tsf->is_static_frontpage( $post_id ) ) {
+								$data[ $g ] = $tsf->get_option( 'homepage_description' )
+										   ?: $tsf->get_generated_open_graph_description( $_generator_args, false );
+							} else {
+								$data[ $g ] = $tsf->get_generated_open_graph_description( $_generator_args, false );
+							}
 							break;
 						case 'twdescription':
-							// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Smart loop.
-							$_social_ph = $_social_ph ?? $tsf->_get_social_placeholders( $_generator_args );
-							$data[ $g ] = $_social_ph['description']['twitter'];
+							if ( $tsf->is_static_frontpage( $post_id ) ) {
+								$data[ $g ] = $tsf->get_option( 'homepage_description' )
+										   ?: $tsf->get_generated_twitter_description( $_generator_args, false );
+							} else {
+								$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
+							}
 							break;
 					}
 

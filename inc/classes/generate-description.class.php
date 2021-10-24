@@ -42,8 +42,8 @@ class Generate_Description extends Generate {
 	 * @uses $this->get_description_from_custom_field()
 	 * @uses $this->get_generated_description()
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real description output.
 	 */
@@ -64,8 +64,8 @@ class Generate_Description extends Generate {
 	 * @uses $this->get_open_graph_description_from_custom_field()
 	 * @uses $this->get_generated_open_graph_description()
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Open Graph description output.
 	 */
@@ -185,8 +185,8 @@ class Generate_Description extends Generate {
 	 * @uses $this->get_twitter_description_from_custom_field()
 	 * @uses $this->get_generated_twitter_description()
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Twitter description output.
 	 */
@@ -320,8 +320,8 @@ class Generate_Description extends Generate {
 	 * @since 3.0.6
 	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The custom field description.
 	 */
@@ -436,8 +436,8 @@ class Generate_Description extends Generate {
 	 *       guidelines' 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
 	 *       This isn't truly helpful, since then search engines can truly fetch whatever with zero guidance.
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
 	 * @return string The generated description output.
@@ -494,8 +494,8 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.0.4
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Twitter description output.
 	 */
@@ -509,8 +509,8 @@ class Generate_Description extends Generate {
 	 * @since 3.0.4
 	 * @uses $this->generate_description()
 	 *
-	 * @param array|null $args   An array of 'id' and 'taxonomy' values.
-	 *                           Accepts int values for backward compatibility.
+	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Open Graph description output.
 	 */
@@ -554,7 +554,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Fixed front-page as blog logic.
 	 *
-	 * @param array|null $args An array of 'id' and 'taxonomy' values.
+	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
 	 * @return string
 	 */
 	protected function get_description_excerpt_from_args( $args ) {
@@ -703,8 +703,8 @@ class Generate_Description extends Generate {
 	 * @since 4.2.0 No longer adds "on Blogname".
 	 * @see $this->get_generated_description()
 	 *
-	 * @param null $args An array of 'id' and 'taxonomy' values.
-	 *                   This method should always have 'taxonomy' set to ''.
+	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                    This method should always have 'taxonomy' set to ''.
 	 * @return string The description additions.
 	 */
 	protected function get_description_additions( $args ) {
@@ -935,8 +935,8 @@ class Generate_Description extends Generate {
 	 * @see $this->get_the_real_ID()
 	 * @see $this->get_current_taxonomy()
 	 *
-	 * @param array|null $args An array of 'id' and 'taxonomy' values.
-	 *                         Can be null when query is autodetermined.
+	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 *                         Leave null to autodetermine query.
 	 * @return bool
 	 */
 	public function is_auto_description_enabled( $args ) {

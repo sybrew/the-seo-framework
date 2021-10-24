@@ -13,11 +13,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_social_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_social_metabox_main':
+switch ( $this->get_view_instance( 'social', $instance ) ) :
+	case 'social_main':
 		$_settings_class = SeoSettings::class;
 
 		$tabs = [
@@ -58,7 +55,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_social_metabox_general':
+	case 'social_general_tab':
 		Form::header_title( __( 'Social Meta Tags Settings', 'autodescription' ) );
 		HTML::description( __( 'Output various meta tags for social site integration, among other third-party services.', 'autodescription' ) );
 
@@ -187,7 +184,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_social_metabox_facebook':
+	case 'social_facebook_tab':
 		$fb_author             = $this->get_option( 'facebook_author' );
 		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
@@ -254,7 +251,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_social_metabox_twitter':
+	case 'social_twitter_tab':
 		$tw_site             = $this->get_option( 'twitter_site' );
 		$tw_site_placeholder = _x( '@your-site-username', 'Twitter @username', 'autodescription' );
 
@@ -345,7 +342,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_social_metabox_oembed':
+	case 'social_oembed_tab':
 		Form::header_title( __( 'oEmbed Settings', 'autodescription' ) );
 		HTML::description( __( 'Some social sharing services and clients, like WordPress, LinkedIn, and Discord, obtain the linked page information via oEmbed.', 'autodescription' ) );
 		?>
@@ -385,7 +382,7 @@ switch ( $instance ) :
 		);
 
 		break;
-	case 'the_seo_framework_social_metabox_postdates':
+	case 'social_postdates_tab':
 		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
 
 		Form::header_title( __( 'Post Date Settings', 'autodescription' ) );

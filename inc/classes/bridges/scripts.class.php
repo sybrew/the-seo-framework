@@ -679,6 +679,7 @@ final class Scripts {
 						'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 						'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
+						'ptaTitle'       => static::decode_entities( trim( \_x( 'Archives:', 'post type archive title prefix', 'default' ) ) ),
 					],
 				],
 			],
@@ -752,26 +753,12 @@ final class Scripts {
 					'twDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_twitter_description', $_query['id'] ),
 					'ogDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_open_graph_description', $_query['id'] ),
 				];
-
-				$_homepage_desc_placeholder = $tsf->get_post_meta_item( '_genesis_description', $_query['id'] );
-
-				$settings_placeholders = [
-					'ogDesc' => $_homepage_desc_placeholder,
-					'twDesc' => $_homepage_desc_placeholder,
-				];
 			} elseif ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
 				$home_locks = [
 					'ogTitleLock'       => (bool) $tsf->get_option( 'homepage_og_title' ),
 					'ogDescriptionLock' => (bool) $tsf->get_option( 'homepage_og_description' ),
 					'twTitleLock'       => (bool) $tsf->get_option( 'homepage_twitter_title' ),
 					'twDescriptionLock' => (bool) $tsf->get_option( 'homepage_twitter_description' ),
-				];
-
-				$_homepage_desc_placeholder = $tsf->get_option( 'homepage_description' );
-
-				$settings_placeholders = [
-					'ogDesc' => $_homepage_desc_placeholder,
-					'twDesc' => $_homepage_desc_placeholder,
 				];
 			}
 		}
@@ -830,8 +817,7 @@ final class Scripts {
 		foreach ( $_taxonomies as $_t ) {
 			if ( ! $tsf->is_taxonomy_supported( $_t->name ) ) continue;
 
-			$singular_name = $tsf->get_tax_type_label( $_t->name );
-
+			$singular_name   = $tsf->get_tax_type_label( $_t->name );
 			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name ) ?: 0;
 
 			if ( ! $primary_term_id ) {

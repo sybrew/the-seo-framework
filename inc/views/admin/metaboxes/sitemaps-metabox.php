@@ -13,11 +13,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_sitemaps_metabox_main':
+switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
+	case 'sitemaps_main':
 		$_settings_class = SeoSettings::class;
 
 		$tabs = [
@@ -58,7 +55,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_general':
+	case 'sitemaps_general_tab':
 		$sitemap_url        = The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$use_core_sitemaps  = $this->use_core_sitemaps();
@@ -175,7 +172,7 @@ switch ( $instance ) :
 		HTML::description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_robots':
+	case 'sitemaps_robots_tab':
 		$show_settings = true;
 		$robots_url    = $this->get_robots_txt_url();
 
@@ -218,10 +215,7 @@ switch ( $instance ) :
 		echo '<hr>';
 
 		if ( $show_settings ) :
-			printf(
-				'<h4>%s</h4>',
-				esc_html__( 'Sitemap Hinting', 'autodescription' )
-			);
+			Form::header_title( __( 'Sitemap Hinting', 'autodescription' ) );
 			HTML::wrap_fields(
 				Form::make_checkbox( [
 					'id'    => 'sitemaps_robots',
@@ -244,7 +238,7 @@ switch ( $instance ) :
 		}
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_metadata':
+	case 'sitemaps_metadata_tab':
 		Form::header_title( __( 'Timestamps Settings', 'autodescription' ) );
 		HTML::description( __( 'The modified time suggests to search engines where to look for content changes first.', 'autodescription' ) );
 
@@ -262,7 +256,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_notify':
+	case 'sitemaps_notify_tab':
 		Form::header_title( __( 'Ping Settings', 'autodescription' ) );
 		HTML::description( __( 'Notifying search engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
 		HTML::description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
@@ -318,7 +312,7 @@ switch ( $instance ) :
 		HTML::wrap_fields( $ping_checkbox, true );
 		break;
 
-	case 'the_seo_framework_sitemaps_metabox_style':
+	case 'sitemaps_style_tab':
 		Form::header_title( __( 'Optimized Sitemap Styling Settings', 'autodescription' ) );
 		HTML::description( __( 'You can style the optimized sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
 		HTML::description( __( 'Note: Changes may not appear to have an effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );

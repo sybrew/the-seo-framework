@@ -13,9 +13,6 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_homepage_metabox', $instance );
-
 $home_id = $this->get_the_front_page_ID();
 
 $_generator_args = [
@@ -23,8 +20,8 @@ $_generator_args = [
 	'taxonomy' => '',
 ];
 
-switch ( $instance ) :
-	case 'the_seo_framework_homepage_metabox_main':
+switch ( $this->get_view_instance( 'homepage', $instance ) ) :
+	case 'homepage_main':
 		HTML::description( __( 'These settings will take precedence over the settings set within the homepage edit screen, if any.', 'autodescription' ) );
 		?>
 		<hr>
@@ -64,7 +61,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_homepage_metabox_general':
+	case 'homepage_general_tab':
 		?>
 		<p>
 			<label for="<?php Form::field_id( 'homepage_title' ); ?>" class="tsf-toblock">
@@ -108,9 +105,8 @@ switch ( $instance ) :
 		<?php
 		HTML::description( __( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
 
-		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
+		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) )
 			HTML::description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
-		}
 
 		/**
 		 * @since 2.8.0
@@ -195,7 +191,7 @@ switch ( $instance ) :
 		}
 		break;
 
-	case 'the_seo_framework_homepage_metabox_additions':
+	case 'homepage_additions_tab':
 		// Fetches escaped title parts.
 		$_example_title = $this->escape_title(
 			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
@@ -206,11 +202,10 @@ switch ( $instance ) :
 		$_example_separator = esc_html( $this->get_separator( 'title' ) );
 
 		// TODO very readable.
-		$example_left  = '<em><span class="tsf-custom-blogname-js"><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span><span class="tsf-sep-js"> ' . $_example_separator . ' </span></span><span class="tsf-custom-title-js">' . $_example_title . '</span></em>';
-		$example_right = '<em><span class="tsf-custom-title-js">' . $_example_title . '</span><span class="tsf-custom-blogname-js"><span class="tsf-sep-js"> ' . $_example_separator . ' </span><span class="tsf-custom-tagline-js">' . $_example_blogname . '</span></span></em>';
+		$example_left  = "<em><span class=tsf-custom-blogname-js><span class=tsf-custom-tagline-js>$_example_blogname</span><span class=tsf-sep-js> $_example_separator </span></span><span class=tsf-custom-title-js>$_example_title</span></em>";
+		$example_right = "<em><span class=tsf-custom-title-js>$_example_title</span><span class=tsf-custom-blogname-js><span class=tsf-sep-js> $_example_separator </span><span class=tsf-custom-tagline-js>$_example_blogname</span></span></em>";
 
 		?>
-
 		<p>
 			<label for="<?php Form::field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Meta Title Additions', 'autodescription' ); ?></strong>
@@ -263,15 +258,75 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_homepage_metabox_social':
+	case 'homepage_social_tab':
 		// Gets custom fields from page.
-		$custom_og_title = $home_id ? $this->get_post_meta_item( '_open_graph_title', $home_id ) : '';
-		$custom_og_desc  = $home_id ? $this->get_post_meta_item( '_open_graph_description', $home_id ) : '';
-		$custom_tw_title = $home_id ? $this->get_post_meta_item( '_twitter_title', $home_id ) : '';
-		$custom_tw_desc  = $home_id ? $this->get_post_meta_item( '_twitter_description', $home_id ) : '';
+		if ( $home_id ) {
+			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $home_id );
+			$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
+			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $home_id );
+			$custom_tw_desc  = $this->get_post_meta_item( '_twitter_description', $home_id );
+		} else {
+			$custom_og_title = '';
+			$custom_tw_title = '';
+			$custom_og_desc  = '';
+			$custom_tw_desc  = '';
+		}
 
-		$social_placeholders = $this->_get_social_placeholders( $_generator_args, 'settings' );
+		$_social_title       = [
+			'og' => $custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args, false ),
+			'tw' => $custom_tw_title ?: $this->get_generated_twitter_title( $_generator_args, false ),
+		];
+		$_social_description = [
+			'og' => $custom_og_desc ?: $this->get_generated_open_graph_description( $_generator_args, false ),
+			'tw' => $custom_tw_desc ?: $this->get_generated_twitter_description( $_generator_args, false ),
+		];
 
+		$this->output_js_social_title_data(
+			[
+				'og' => Form::get_field_id( 'homepage_og_title' ),
+				'tw' => Form::get_field_id( 'homepage_twitter_title' ),
+			],
+			[
+				'og' => [
+					'state' => [
+						'defaultTitle' => $this->s_title(
+							$custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args, false )
+						),
+						'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ), // useSocialTagline
+					],
+				],
+				'tw' => [
+					'state' => [
+						'defaultTitle' => $this->s_title(
+							$custom_tw_title ?: $this->get_generated_twitter_title( $_generator_args, false )
+						),
+						'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ), // useSocialTagline
+					],
+				],
+			]
+		);
+		$this->output_js_social_description_data(
+			[
+				'og' => Form::get_field_id( 'homepage_og_description' ),
+				'tw' => Form::get_field_id( 'homepage_twitter_description' ),
+			],
+			[
+				'og' => [
+					'state' => [
+						'defaultDesc' => $this->s_description(
+							$custom_og_desc ?: $this->get_generated_open_graph_description( $_generator_args, false )
+						),
+					],
+				],
+				'tw' => [
+					'state' => [
+						'defaultDesc' => $this->s_description(
+							$custom_tw_desc ?: $this->get_generated_twitter_description( $_generator_args, false )
+						),
+					],
+				],
+			]
+		);
 		?>
 		<p>
 			<label for="<?php Form::field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
@@ -287,7 +342,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_og_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_title' ); ?>" placeholder="<?php echo esc_attr( $social_placeholders['title']['og'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Form::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -311,7 +366,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_og_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $social_placeholders['description']['og'] ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
+			<textarea name="<?php Form::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_desc ) {
@@ -336,7 +391,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_twitter_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_title' ); ?>" placeholder="<?php echo esc_attr( $social_placeholders['title']['twitter'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Form::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
@@ -360,7 +415,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_twitter_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
+			<textarea name="<?php Form::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
@@ -398,7 +453,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_homepage_metabox_robots':
+	case 'homepage_robots_tab':
 		$noindex_post   = $home_id ? $this->get_post_meta_item( '_genesis_noindex', $home_id ) : '';
 		$nofollow_post  = $home_id ? $this->get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
 		$noarchive_post = $home_id ? $this->get_post_meta_item( '_genesis_noarchive', $home_id ) : '';

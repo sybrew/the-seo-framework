@@ -822,7 +822,7 @@ class Generate_Title extends Generate_Description {
 	 * Returns the generated archive title by evaluating the input Term only.
 	 *
 	 * @since 4.2.0
-	 * @see $this->get_generate_archive_title_from_query() which evalutates the query only.
+	 * @see $this->get_generate_archive_title_from_term() which evaluates from arguments.
 	 *
 	 * @return array[$title,$prefix] The title and prefix.
 	 */
@@ -872,8 +872,7 @@ class Generate_Title extends Generate_Description {
 				$title = \_x( 'Chats', 'post format archive title', 'default' );
 			}
 		} elseif ( \is_post_type_archive() ) {
-			$title  = $this->get_generated_post_type_archive_title()
-				   ?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );
+			$title  = $this->get_generated_post_type_archive_title();
 			$prefix = \_x( 'Archives:', 'post type archive title prefix', 'default' );
 		} elseif ( $this->is_tax() ) {
 			$term = \get_queried_object();
@@ -1029,21 +1028,23 @@ class Generate_Title extends Generate_Description {
 	 * @see WP Core post_type_archive_title()
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.0 Now actually works in the admin area, provided you forward $post_type.
 	 *
 	 * @param string $post_type The post type.
 	 * @return string The generated post type archive title.
 	 */
 	public function get_generated_post_type_archive_title( $post_type = '' ) {
 
-		$post_type = $post_type ?: \get_query_var( 'post_type' );
-
-		if ( ! \is_post_type_archive( $post_type ) )
+		if ( ! $post_type && ! \is_post_type_archive() )
 			return '';
+
+		$post_type = $post_type ?: \get_query_var( 'post_type' );
 
 		if ( \is_array( $post_type ) )
 			$post_type = reset( $post_type );
 
-		$post_type_obj = \get_post_type_object( $post_type );
+		if ( ! \in_array( $post_type, $this->get_public_post_type_archives(), true ) )
+			return '';
 
 		/**
 		 * Filters the post type archive title.
@@ -1053,7 +1054,13 @@ class Generate_Title extends Generate_Description {
 		 * @param string $post_type_name Post type 'name' label.
 		 * @param string $post_type      Post type.
 		 */
-		$title = \apply_filters( 'post_type_archive_title', $post_type_obj->labels->name, $post_type );
+		$title = \apply_filters_ref_array(
+			'post_type_archive_title',
+			[
+				$this->get_post_type_label( $post_type, false ),
+				$post_type,
+			]
+		);
 
 		return $title;
 	}
@@ -1375,9 +1382,10 @@ class Generate_Title extends Generate_Description {
 	 * @uses $this->use_title_branding_from_query()
 	 * @uses $this->use_title_branding_from_args()
 	 *
-	 * @param array|null $args  The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null  $args  The query arguments. Accepts 'id' and 'taxonomy'.
 	 *                           Leave null to autodetermine query.
-	 * @param bool       $social Whether the title is meant for social display.
+	 * @param bool|string $social Whether the title is meant for social display.
+	 *                            Also accepts string 'og' and 'twitter' for future proofing.
 	 * @return bool True when additions are allowed.
 	 */
 	public function use_title_branding( $args = null, $social = false ) {
@@ -1403,7 +1411,7 @@ class Generate_Title extends Generate_Description {
 		 *                           Is null when query is autodetermined.
 		 * @param bool       $social Whether the title is meant for social display.
 		 */
-		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args, $social ] );
+		return \apply_filters_ref_array( 'the_seo_framework_use_title_branding', [ $use, $args, (bool) $social ] );
 	}
 
 	/**

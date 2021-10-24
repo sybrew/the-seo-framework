@@ -13,9 +13,6 @@ use The_SEO_Framework\Bridges\PostSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'inpost', $instance );
-
 // Setup default vars.
 $post_id = $this->get_the_real_ID(); // We also have access to object $post at the main call...
 
@@ -24,22 +21,24 @@ $_generator_args = [
 	'taxonomy' => '',
 ];
 
-switch ( $instance ) :
+switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 	case 'inpost_main':
+		$post_settings_class = PostSettings::class;
+
 		$default_tabs = [
 			'general'    => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => PostSettings::class . '::_general_tab',
+				'callback' => "$post_settings_class::_general_tab",
 				'dashicon' => 'admin-generic',
 			],
 			'social'     => [
 				'name'     => __( 'Social', 'autodescription' ),
-				'callback' => PostSettings::class . '::_social_tab',
+				'callback' => "$post_settings_class::_social_tab",
 				'dashicon' => 'share',
 			],
 			'visibility' => [
 				'name'     => __( 'Visibility', 'autodescription' ),
-				'callback' => PostSettings::class . '::_visibility_tab',
+				'callback' => "$post_settings_class::_visibility_tab",
 				'dashicon' => 'visibility',
 			],
 		];
@@ -60,7 +59,7 @@ switch ( $instance ) :
 		echo '</div>';
 		break;
 
-	case 'inpost_general':
+	case 'inpost_general_tab':
 		if ( $this->get_option( 'display_seo_bar_metabox' ) ) :
 			?>
 			<div class="tsf-flex-setting tsf-flex" id="tsf-doing-it-right-wrap">
@@ -136,7 +135,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title', $post_id ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ); ?>" autocomplete=off />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -205,7 +204,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" rows="4" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_description', $post_id ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" rows="4" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_description' ) ); ?></textarea>
 				<?php
 				$this->output_js_description_elements(); // legacy
 				$this->output_js_description_data(
@@ -224,7 +223,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'inpost_visibility':
+	case 'inpost_visibility_tab':
 		$canonical             = $this->get_post_meta_item( '_genesis_canonical_uri' );
 		$canonical_placeholder = $this->create_canonical_url( $_generator_args );
 
@@ -416,12 +415,72 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'inpost_social':
-		$social_placeholders = $this->_get_social_placeholders( $_generator_args );
-
+	case 'inpost_social_tab':
 		// Yes, this is hacky, but we don't want to lose the user's input.
 		$show_og = (bool) $this->get_option( 'og_tags' );
 		$show_tw = (bool) $this->get_option( 'twitter_tags' );
+
+		if ( $this->is_static_frontpage( $post_id ) ) {
+			$_home_title_option       = $this->get_option( 'homepage_title' );
+			$_home_description_option = $this->get_option( 'homepage_description' );
+
+			$_social_title       = [
+				'og' => $_home_title_option ?: $this->get_generated_open_graph_title( $_generator_args, false ),
+				'tw' => $_home_title_option ?: $this->get_generated_twitter_title( $_generator_args, false ),
+			];
+			$_social_description = [
+				'og' => $_home_description_option ?: $this->get_generated_open_graph_description( $_generator_args, false ),
+				'tw' => $_home_description_option ?: $this->get_generated_twitter_description( $_generator_args, false ),
+			];
+		} else {
+			$_social_title       = [
+				'og' => $this->get_generated_open_graph_title( $_generator_args, false ),
+				'tw' => $this->get_generated_twitter_title( $_generator_args, false ),
+			];
+			$_social_description = [
+				'og' => $this->get_generated_open_graph_description( $_generator_args, false ),
+				'tw' => $this->get_generated_twitter_description( $_generator_args, false ),
+			];
+		}
+
+		$this->output_js_social_title_data(
+			[
+				'og' => 'autodescription_og_title',
+				'tw' => 'autodescription_twitter_title',
+			],
+			[
+				'og' => [
+					'state' => [
+						'defaultTitle' => $this->s_title( $_social_title['og'] ),
+						'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ), // useSocialTagline
+					],
+				],
+				'tw' => [
+					'state' => [
+						'defaultTitle' => $this->s_title( $_social_title['tw'] ),
+						'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ), // useSocialTagline
+					],
+				],
+			]
+		);
+		$this->output_js_social_description_data(
+			[
+				'og' => 'autodescription_og_description',
+				'tw' => 'autodescription_twitter_description',
+			],
+			[
+				'og' => [
+					'state' => [
+						'defaultDesc' => $this->s_description( $_social_description['og'] ),
+					],
+				],
+				'tw' => [
+					'state' => [
+						'defaultDesc' => $this->s_description( $_social_description['tw'] ),
+					],
+				],
+			]
+		);
 
 		?>
 		<div class="tsf-flex-setting tsf-flex" <?php echo $show_og ? '' : 'style=display:none'; ?>>
@@ -442,7 +501,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-og-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" placeholder="<?php echo esc_attr( $social_placeholders['title']['og'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -464,7 +523,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['og'] ); ?>" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" rows="3" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
 			</div>
 		</div>
 
@@ -486,7 +545,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-twitter-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" placeholder="<?php echo esc_attr( $social_placeholders['title']['twitter'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off />
 				</div>
 			</div>
 		</div>
@@ -508,7 +567,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" placeholder="<?php echo esc_attr( $social_placeholders['description']['twitter'] ); ?>" rows="3" cols="4" autocomplete=off><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
+				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" rows="3" cols="4" autocomplete=off><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
 
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
 					echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) );

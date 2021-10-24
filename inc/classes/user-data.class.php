@@ -92,7 +92,7 @@ class User_Data extends Term_Data {
 	 * @since 2.8.0 Always returns array, even if no value is assigned.
 	 * @since 4.1.4 1. Now returns default values when custom values are missing.
 	 *              2. Now listens to headlessness.
-	 *              3. Deprecated the second argument, and moved it to the second.
+	 *              3. Deprecated the third argument, and moved it to the second.
 	 * @todo Send deprecation warning for 3rd parameter
 	 *
 	 * @param int  $user_id   The user ID.

@@ -12,11 +12,8 @@ use The_SEO_Framework\Interpreters\HTML,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_description_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_description_metabox_main':
+switch ( $this->get_view_instance( 'description', $instance ) ) :
+	case 'description_main':
 		Form::header_title( __( 'Description Settings', 'autodescription' ) );
 		HTML::description(
 			__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' )

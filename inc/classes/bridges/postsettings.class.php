@@ -182,7 +182,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
-		\tsf()->get_view( 'edit/seo-settings-singular', [], 'general' );
+		\tsf()->get_view( 'edit/seo-settings-singular', [], 'general_tab' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -199,7 +199,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
-		\tsf()->get_view( 'edit/seo-settings-singular', [], 'visibility' );
+		\tsf()->get_view( 'edit/seo-settings-singular', [], 'visibility_tab' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -216,7 +216,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
-		\tsf()->get_view( 'edit/seo-settings-singular', [], 'social' );
+		\tsf()->get_view( 'edit/seo-settings-singular', [], 'social_tab' );
 		/**
 		 * @since 2.9.0
 		 */

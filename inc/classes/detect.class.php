@@ -851,11 +851,53 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Returns a list of all supported post types with archives.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string[] Supported post types with post type archive support.
+	 */
+	public function get_supported_post_type_archives() {
+		return memo() ?? memo(
+			array_values(
+				array_filter(
+					$this->get_supported_post_types(),
+					static function( $post_type ) {
+						return \get_post_type_object( $post_type )->has_archive ?? false;
+					}
+				)
+			)
+		);
+	}
+
+	/**
+	 * Gets all post types that have PTA and could possibly support SEO.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string[] Public post types with post type archive support.
+	 */
+	public function get_public_post_type_archives() {
+		return memo() ?? memo(
+			array_values(
+				array_filter(
+					$this->get_public_post_types(),
+					static function( $post_type ) {
+						return \get_post_type_object( $post_type )->has_archive ?? false;
+					}
+				)
+			)
+		);
+	}
+
+	/**
 	 * Returns a list of all supported post types.
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return string[] The supported post types.
+	 * @return string[] All supported post types.
 	 */
 	public function get_supported_post_types() {
 		return memo() ?? memo(
@@ -923,6 +965,21 @@ class Detect extends Render {
 					'_builtin' => true,
 				] ) ),
 			]
+		);
+	}
+
+	/**
+	 * Returns a list of all supported taxonomies.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string[] All supported taxonomies.
+	 */
+	public function get_supported_taxonomies() {
+		return memo() ?? memo(
+			array_values(
+				array_filter( $this->get_public_taxonomies(), [ $this, 'is_taxonomy_supported' ] )
+			)
 		);
 	}
 

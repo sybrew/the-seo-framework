@@ -13,11 +13,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_robots_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_robots_metabox_main':
+switch ( $this->get_view_instance( 'robots', $instance ) ) :
+	case 'robots_main':
 		$global_types = [
 			'author' => [
 				'i18n'     => __( 'Author pages', 'autodescription' ),
@@ -110,7 +107,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_robots_metabox_general':
+	case 'robots_general_tab':
 		Form::header_title( __( 'Advanced Query Protection', 'autodescription' ) );
 		HTML::description( __( 'Some URL queries can cause WordPress to show faux archives. When search engines spot these, they will crawl and index them, which may cause a drop in ranking. Advanced query protection will prevent robots from indexing these archives.', 'autodescription' ) );
 
@@ -288,7 +285,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_robots_metabox_no':
+	case 'robots_no_tab':
 		$ro_value = $robots['value'];
 		$ro_i18n  = $robots['desc'];
 

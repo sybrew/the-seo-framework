@@ -13,11 +13,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_title_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_title_metabox_main':
+switch ( $this->get_view_instance( 'title', $instance ) ) :
+	case 'title_main':
 		$blogname = esc_html( $this->get_blogname() );
 		$sep      = esc_html( $this->get_separator( 'title' ) );
 		$showleft = 'left' === $this->get_option( 'title_location' );
@@ -156,7 +153,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_title_metabox_general':
+	case 'title_general_tab':
 		$title_separator         = $this->get_separator_list();
 		$default_title_separator = $this->get_option( 'title_separator' );
 
@@ -213,7 +210,7 @@ switch ( $instance ) :
 		HTML::description( __( 'Tip: It is a bad practice to style page titles with HTML as inconsistent behavior might occur.', 'autodescription' ) );
 		break;
 
-	case 'the_seo_framework_title_metabox_additions':
+	case 'title_additions_tab':
 		?>
 		<p>
 			<label for="<?php Form::field_id( 'site_title' ); ?>" class="tsf-toblock">
@@ -288,7 +285,7 @@ switch ( $instance ) :
 		HTML::description( $homepage_has_option, false );
 		break;
 
-	case 'the_seo_framework_title_metabox_prefixes':
+	case 'title_prefixes_tab':
 		Form::header_title( __( 'Title Prefix Options', 'autodescription' ) );
 		HTML::description( __( 'For archives, a descriptive prefix may be added to generated titles.', 'autodescription' ) );
 

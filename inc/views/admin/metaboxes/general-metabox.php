@@ -13,11 +13,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-// Fetch the required instance within this file.
-$instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $instance );
-
-switch ( $instance ) :
-	case 'the_seo_framework_general_metabox_main':
+switch ( $this->get_view_instance( 'general', $instance ) ) :
+	case 'general_main':
 		$_settings_class = SeoSettings::class;
 
 		$tabs = [
@@ -58,7 +55,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_general_metabox_layout':
+	case 'general_layout_tab':
 		Form::header_title( __( 'Administrative Layout Settings', 'autodescription' ) );
 		HTML::description( __( 'SEO hints can be visually displayed throughout the dashboard.', 'autodescription' ) );
 
@@ -125,7 +122,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_general_metabox_performance':
+	case 'general_performance_tab':
 		Form::header_title( __( 'Performance Settings', 'autodescription' ) );
 		HTML::description( __( "Depending on your server's configuration, adjusting these settings can affect performance.", 'autodescription' ) );
 
@@ -245,7 +242,7 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'the_seo_framework_general_metabox_canonical':
+	case 'general_canonical_tab':
 		Form::header_title( __( 'Canonical URL Settings', 'autodescription' ) );
 		HTML::description( __( 'The canonical URL meta tag urges search engines to go to the outputted URL.', 'autodescription' ) );
 		HTML::description( __( 'If the canonical URL meta tag represents the visited page, then the search engine will crawl the visited page. Otherwise, the search engine may go to the outputted URL.', 'autodescription' ) );
@@ -314,7 +311,7 @@ switch ( $instance ) :
 		HTML::wrap_fields( $prev_next_posts_checkbox . $prev_next_archives_checkbox . $prev_next_frontpage_checkbox, true );
 		break;
 
-	case 'the_seo_framework_general_metabox_timestamps':
+	case 'general_timestamps_tab':
 		$timestamp_0 = gmdate( $this->get_timestamp_format( false ) );
 		$timestamp_1 = gmdate( $this->get_timestamp_format( true ) );
 
@@ -355,7 +352,7 @@ switch ( $instance ) :
 		<?php
 		break;
 
-	case 'the_seo_framework_general_metabox_exclusions':
+	case 'general_exclusions_tab':
 		$default_options = $this->get_default_site_options();
 		$warned_options  = $this->get_warned_site_options();
 

@@ -164,7 +164,7 @@ class Admin_Pages extends Generate_Ldjson {
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
 
 		\add_action(
-			$taxonomy . '_edit_form',
+			"{$taxonomy}_edit_form",
 			Bridges\TermSettings::class . '::_prepare_setting_fields',
 			$priority,
 			2
@@ -184,8 +184,10 @@ class Admin_Pages extends Generate_Ldjson {
 		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
 		// if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
-		\add_action( 'show_user_profile', Bridges\UserSettings::class . '::_prepare_setting_fields', 0, 1 );
-		\add_action( 'edit_user_profile', Bridges\UserSettings::class . '::_prepare_setting_fields', 0, 1 );
+		$user_settings_class = Bridges\UserSettings::class;
+
+		\add_action( 'show_user_profile', "$user_settings_class::_prepare_setting_fields", 0, 1 );
+		\add_action( 'edit_user_profile', "$user_settings_class::_prepare_setting_fields", 0, 1 );
 	}
 
 	/**
@@ -441,6 +443,34 @@ class Admin_Pages extends Generate_Ldjson {
 	}
 
 	/**
+	 * Outputs reference social title HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string[og,tw] $id   The social title input IDs.
+	 * @param array[og,tw]  $data The input data.
+	 */
+	public function output_js_social_title_data( $id, $data ) {
+		printf(
+			implode(
+				'',
+				[
+					'<span id="tsf-og-title-reference_%1$s" class="tsf-og-title-reference wp-exclude-emoji hidden" data-for="%1$s"></span>',
+					'<span id="tsf-tw-title-reference_%2$s" class="tsf-tw-title-reference wp-exclude-emoji hidden" data-for="%2$s"></span>',
+					'<span id="tsf-og-title-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %3$s></span>',
+					'<span id="tsf-tw-title-data_%2$s" class="hidden wp-exclude-emoji" data-for="%2$s" %4$s></span>',
+				]
+			),
+			\esc_attr( $id['og'] ),
+			\esc_attr( $id['tw'] ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			Interpreters\HTML::make_data_attributes( $data['og'] ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			Interpreters\HTML::make_data_attributes( $data['tw'] )
+		);
+	}
+
+	/**
 	 * Outputs reference description HTML elements for JavaScript.
 	 *
 	 * Do not use. Legacy item output for backward compatibility.
@@ -479,132 +509,30 @@ class Admin_Pages extends Generate_Ldjson {
 	}
 
 	/**
-	 * Calculates the social title and description placeholder values.
-	 * This is intricated, voluminous, and convoluted; but, there's no other way :(
+	 * Outputs reference social description HTML elements for JavaScript for a specific ID.
 	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 Now consistently applies escaping and transformation of the titles and descriptions.
-	 *              This was not a security issue, since we always escape properly at output for sanity.
-	 * @access private
-	 * @todo deprecate--let JS handle this.
+	 * @since 4.2.0
 	 *
-	 * @param array  $args An array of 'id' and 'taxonomy' values.
-	 * @param string $for  The screen it's for. Accepts 'edit' and 'settings'.
-	 * @return array An array social of titles and descriptions.
+	 * @param string[og,tw] $id   The social description input ID.
+	 * @param array[og,tw]  $data The input data.
 	 */
-	public function _get_social_placeholders( $args, $for = 'edit' ) {
-
-		$desc_from_custom_field = $this->get_description_from_custom_field( $args, false );
-
-		if ( 'settings' === $for ) {
-			$pm_edit_og_title = $args['id'] ? $this->get_post_meta_item( '_open_graph_title', $args['id'] ) : '';
-			$pm_edit_og_desc  = $args['id'] ? $this->get_post_meta_item( '_open_graph_description', $args['id'] ) : '';
-			$pm_edit_tw_title = $args['id'] ? $this->get_post_meta_item( '_twitter_title', $args['id'] ) : '';
-			$pm_edit_tw_desc  = $args['id'] ? $this->get_post_meta_item( '_twitter_description', $args['id'] ) : '';
-
-			// Gets custom fields from SEO settings.
-			$home_og_title = $this->get_option( 'homepage_og_title' );
-			$home_og_desc  = $this->get_option( 'homepage_og_description' );
-
-			//! OG title generator falls back to meta input. The description does not.
-			$og_tit_placeholder  = $pm_edit_og_title
-								?: $this->get_generated_open_graph_title( $args, false );
-			$og_desc_placeholder = $pm_edit_og_desc
-								?: $desc_from_custom_field
-								?: $this->get_generated_open_graph_description( $args, false );
-
-			//! TW title generator falls back to meta input. The description does not.
-			$tw_tit_placeholder  = $pm_edit_tw_title
-								?: $home_og_title
-								?: $pm_edit_og_title
-								?: $this->get_generated_twitter_title( $args, false );
-			$tw_desc_placeholder = $pm_edit_tw_desc
-								?: $home_og_desc
-								?: $pm_edit_og_desc
-								?: $desc_from_custom_field
-								?: $this->get_generated_twitter_description( $args, false );
-		} elseif ( 'edit' === $for ) {
-			if ( ! $args['taxonomy'] ) {
-				if ( $this->is_static_frontpage( $args['id'] ) ) {
-					// Gets custom fields from SEO settings.
-					$home_desc = $this->get_option( 'homepage_description' );
-
-					$home_og_title = $this->get_option( 'homepage_og_title' );
-					$home_og_desc  = $this->get_option( 'homepage_og_description' );
-					$home_tw_title = $this->get_option( 'homepage_twitter_title' );
-					$home_tw_desc  = $this->get_option( 'homepage_twitter_description' );
-
-					// Gets custom fields from page.
-					$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
-					$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $args['id'] );
-
-					//! OG title generator falls back to meta input. The description does not.
-					$og_tit_placeholder  = $home_og_title
-										?: $this->get_generated_open_graph_title( $args, false );
-					$og_desc_placeholder = $home_og_desc
-										?: $home_desc
-										?: $desc_from_custom_field
-										?: $this->get_generated_open_graph_description( $args, false );
-
-					//! TW title generator falls back to meta input. The description does not.
-					$tw_tit_placeholder  = $home_tw_title
-										?: $home_og_title
-										?: $custom_og_title
-										?: $this->get_generated_twitter_title( $args, false );
-					$tw_desc_placeholder = $home_tw_desc
-										?: $home_og_desc
-										?: $custom_og_desc
-										?: $home_desc
-										?: $desc_from_custom_field
-										?: $this->get_generated_twitter_description( $args, false );
-				} else {
-					// Gets custom fields.
-					$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
-					$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $args['id'] );
-
-					//! OG title generator falls back to meta input. The description does not.
-					$og_tit_placeholder  = $this->get_generated_open_graph_title( $args, false );
-					$og_desc_placeholder = $desc_from_custom_field
-										?: $this->get_generated_open_graph_description( $args, false );
-
-					//! TW title generator falls back to meta input. The description does not.
-					$tw_tit_placeholder  = $custom_og_title
-										?: $this->get_generated_twitter_title( $args, false );
-					$tw_desc_placeholder = $custom_og_desc
-										?: $desc_from_custom_field
-										?: $this->get_generated_twitter_description( $args, false );
-				}
-			} else {
-				$meta = $this->get_term_meta( $args['id'] );
-
-				//! OG title generator falls back to meta input. The description does not.
-				$og_tit_placeholder  = $this->get_generated_open_graph_title( $args, false );
-				$og_desc_placeholder = $desc_from_custom_field
-									?: $this->get_generated_open_graph_description( $args, false );
-
-				//! TW title generator falls back to meta input. The description does not.
-				$tw_tit_placeholder  = $meta['og_title']
-									?: $og_tit_placeholder;
-				$tw_desc_placeholder = $meta['og_description']
-									?: $desc_from_custom_field
-									?: $this->get_generated_twitter_description( $args, false );
-			}
-		} else {
-			$og_tit_placeholder  = '';
-			$tw_tit_placeholder  = '';
-			$og_desc_placeholder = '';
-			$tw_desc_placeholder = '';
-		}
-
-		return [
-			'title'       => [
-				'og'      => $this->escape_title( $og_tit_placeholder ?: '' ),
-				'twitter' => $this->escape_title( $tw_tit_placeholder ?: '' ),
-			],
-			'description' => [
-				'og'      => $this->escape_description( $og_desc_placeholder ?: '' ),
-				'twitter' => $this->escape_description( $tw_desc_placeholder ?: '' ),
-			],
-		];
+	public function output_js_social_description_data( $id, $data ) {
+		printf(
+			implode(
+				'',
+				[
+					'<span id="tsf-og-description-reference_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" ></span>',
+					'<span id="tsf-tw-description-reference_%2$s" class="hidden wp-exclude-emoji" data-for="%2$s" ></span>',
+					'<span id="tsf-og-description-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %3$s ></span>',
+					'<span id="tsf-tw-description-data_%2$s" class="hidden wp-exclude-emoji" data-for="%2$s" %4$s ></span>',
+				]
+			),
+			\esc_attr( $id['og'] ),
+			\esc_attr( $id['tw'] ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			Interpreters\HTML::make_data_attributes( $data['og'] ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			Interpreters\HTML::make_data_attributes( $data['tw'] )
+		);
 	}
 }

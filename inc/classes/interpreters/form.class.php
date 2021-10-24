@@ -26,7 +26,7 @@ namespace The_SEO_Framework\Interpreters;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
- * Interprets anything you send here into HTML. Or so it should.
+ * Interprets anything you send here into Form HTML. Or so it should.
  *
  * @since 4.1.4
  *
@@ -38,6 +38,18 @@ namespace The_SEO_Framework\Interpreters;
 final class Form {
 
 	/**
+	 * Helper function that constructs header elements. Does not escape.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param string $title The header title.
+	 * @return string The header title.
+	 */
+	public static function get_header_title( $title ) {
+		return sprintf( '<h4>%s</h4>', $title );
+	}
+
+	/**
 	 * Helper function that constructs header elements.
 	 *
 	 * @since 4.1.4
@@ -45,64 +57,85 @@ final class Form {
 	 * @param string $title The header title.
 	 */
 	public static function header_title( $title ) {
-		printf( '<h4>%s</h4>', \esc_html( $title ) );
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
+		echo static::get_header_title( \esc_html( $title ) );
 	}
 
 	/**
 	 * Helper function that constructs name attributes for use in form fields.
 	 *
-	 * Other page implementation classes may wish to construct and use a
-	 * get_field_id() method, if the naming format needs to be different.
+	 * Alias of field_id.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 Added the index parameter.
+	 * @ignore
 	 *
-	 * @param string $name Field name base
+	 * @param string     $name  Field name base.
+	 * @param string|map $index Optional. The field index or map of indexes.
 	 * @return string Full field name
 	 */
-	public static function get_field_name( $name ) {
-		return sprintf( '%s[%s]', THE_SEO_FRAMEWORK_SITE_OPTIONS, $name );
+	public static function get_field_name( $name, $index = '' ) {
+		return static::get_field_id( $name, $index );
 	}
 
 	/**
 	 * Echo constructed name attributes in form fields.
 	 *
+	 * Alias of field_id.
+	 *
 	 * @since 4.1.4
 	 * @uses static::get_field_name() Construct name attributes for use in form fields.
+	 * @ignore
 	 *
-	 * @param string $name Field name base
+	 * @param string     $name  Field name base.
+	 * @param string|map $index Optional. The field index or map of indexes.
 	 */
-	public static function field_name( $name ) {
-		echo \esc_attr( static::get_field_name( $name ) );
+	public static function field_name( $name, $index = '' ) {
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- field_id escapes.
+		echo static::field_id( $name, $index );
 	}
 
 	/**
 	 * Helper function that constructs id attributes for use in form fields.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 Added the index parameter.
 	 *
-	 * @param string $id Field id base
+	 * @param string     $id    Field id base.
+	 * @param string|map $index Optional. The field index or map of indexes.
 	 * @return string Full field id
 	 */
-	public static function get_field_id( $id ) {
-		return sprintf( '%s[%s]', THE_SEO_FRAMEWORK_SITE_OPTIONS, $id );
+	public static function get_field_id( $id, $index = '' ) {
+
+		if ( $index ) {
+			$field_id = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+			// Push $id to index so we can loop over them quickly. $id being added last.
+			$index   = (array) $index;
+			$index[] = $id;
+
+			foreach ( $index as $subid )
+				$field_id .= "[$subid]";
+
+			return $field_id;
+		} else {
+			return sprintf( '%s[%s]', THE_SEO_FRAMEWORK_SITE_OPTIONS, $id );
+		}
 	}
 
 	/**
 	 * Echo constructed id attributes in form fields.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 1. Exchanged second parameter for $index, from $echo.
+	 *              2. No longer returns.
 	 * @uses static::get_field_id() Constructs id attributes for use in form fields.
 	 *
-	 * @param string  $id Field id base.
-	 * @param boolean $echo Whether to escape echo or just return.
-	 * @return string Full field id
+	 * @param string     $id    Field id base.
+	 * @param string|map $index Optional. The field index or map of indexes.
 	 */
-	public static function field_id( $id, $echo = true ) {
-		if ( $echo ) {
-			echo \esc_attr( static::get_field_id( $id ) );
-		} else {
-			return static::get_field_id( $id );
-		}
+	public static function field_id( $id, $index = '' ) {
+		echo \esc_attr( static::get_field_id( $id, $index ) );
 	}
 
 	/**
@@ -151,14 +184,9 @@ final class Form {
 
 		$index = $args['index'] ? $tsf->s_field_id( $args['index'] ?: '' ) : '';
 
-		$field_id = $field_name = \esc_attr( sprintf(
-			'%s%s',
-			Form::get_field_id( $args['id'] ),
-			$index ? sprintf( '[%s]', $index ) : ''
-		) );
+		$field_id = $field_name = static::get_field_id( $args['id'], $index );
 
 		$value = $tsf->get_option( $args['id'] );
-
 		if ( $index )
 			$value = $value[ $index ] ?? '';
 
