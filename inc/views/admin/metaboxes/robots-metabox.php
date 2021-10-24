@@ -56,16 +56,18 @@ switch ( $instance ) :
 			],
 		];
 
-		$default_tabs = [
+		$_settings_class = SeoSettings::class;
+
+		$tabs = [
 			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_robots_metabox_general_tab',
+				'callback' => "$_settings_class::_robots_metabox_general_tab",
 				'dashicon' => 'admin-generic',
 				'args'     => '',
 			],
 			'index'   => [
 				'name'     => __( 'Indexing', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_robots_metabox_no_tab',
+				'callback' => "$_settings_class::_robots_metabox_no_tab",
 				'dashicon' => 'filter',
 				'args'     => [
 					'global_types' => $global_types,
@@ -76,7 +78,7 @@ switch ( $instance ) :
 			],
 			'follow'  => [
 				'name'     => __( 'Following', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_robots_metabox_no_tab',
+				'callback' => "$_settings_class::_robots_metabox_no_tab",
 				'dashicon' => 'editor-unlink',
 				'args'     => [
 					'global_types' => $global_types,
@@ -87,7 +89,7 @@ switch ( $instance ) :
 			],
 			'archive' => [
 				'name'     => __( 'Archiving', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_robots_metabox_no_tab',
+				'callback' => "$_settings_class::_robots_metabox_no_tab",
 				'dashicon' => 'download',
 				'args'     => [
 					'global_types' => $global_types,
@@ -98,16 +100,14 @@ switch ( $instance ) :
 			],
 		];
 
-		/**
-		 * @since 2.2.4
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_robots_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'robots', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'robots',
+			/**
+			 * @since 2.2.4
+			 * @param array $tabs The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_robots_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_robots_metabox_general':

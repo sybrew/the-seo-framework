@@ -117,15 +117,17 @@ switch ( $instance ) :
 			<?php
 		}
 
-		$default_tabs = [
+		$_settings_class = SeoSettings::class;
+
+		$tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_title_metabox_general_tab',
+				'callback' => "$_settings_class::_title_metabox_general_tab",
 				'dashicon' => 'admin-generic',
 			],
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_title_metabox_additions_tab',
+				'callback' => "$_settings_class::_title_metabox_additions_tab",
 				'dashicon' => 'plus',
 				'args'     => [
 					'examples' => [
@@ -136,7 +138,7 @@ switch ( $instance ) :
 			],
 			'prefixes'  => [
 				'name'     => __( 'Prefixes', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_title_metabox_prefixes_tab',
+				'callback' => "$_settings_class::_title_metabox_prefixes_tab",
 				'dashicon' => 'plus-alt',
 				'args'     => [
 					'showleft' => $showleft,
@@ -144,16 +146,14 @@ switch ( $instance ) :
 			],
 		];
 
-		/**
-		 * @since 2.6.0
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_title_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'title', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'title',
+			/**
+			 * @since 2.6.0
+			 * @param array $tabs The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_title_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_title_metabox_general':

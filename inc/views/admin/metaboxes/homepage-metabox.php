@@ -29,40 +29,39 @@ switch ( $instance ) :
 		?>
 		<hr>
 		<?php
+		$_settings_class = SeoSettings::class;
 
-		$default_tabs = [
+		$tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_homepage_metabox_general_tab',
+				'callback' => "$_settings_class::_homepage_metabox_general_tab",
 				'dashicon' => 'admin-generic',
 			],
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_homepage_metabox_additions_tab',
+				'callback' => "$_settings_class::_homepage_metabox_additions_tab",
 				'dashicon' => 'plus',
 			],
 			'social'    => [
 				'name'     => __( 'Social', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_homepage_metabox_social_tab',
+				'callback' => "$_settings_class::_homepage_metabox_social_tab",
 				'dashicon' => 'share',
 			],
 			'robots'    => [
 				'name'     => __( 'Robots', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_homepage_metabox_robots_tab',
+				'callback' => "$_settings_class::_homepage_metabox_robots_tab",
 				'dashicon' => 'visibility',
 			],
 		];
 
-		/**
-		 * @since 2.6.0
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_homepage_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'homepage', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'homepage',
+			/**
+			 * @since 2.6.0
+			 * @param array $tabs The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_homepage_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_homepage_metabox_general':

@@ -18,44 +18,44 @@ $instance = $this->get_view_instance( 'the_seo_framework_general_metabox', $inst
 
 switch ( $instance ) :
 	case 'the_seo_framework_general_metabox_main':
-		$default_tabs = [
+		$_settings_class = SeoSettings::class;
+
+		$tabs = [
 			'layout'      => [
 				'name'     => __( 'Layout', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_general_metabox_layout_tab',
+				'callback' => "$_settings_class::_general_metabox_layout_tab",
 				'dashicon' => 'screenoptions',
 			],
 			'performance' => [
 				'name'     => __( 'Performance', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_general_metabox_performance_tab',
+				'callback' => "$_settings_class::_general_metabox_performance_tab",
 				'dashicon' => 'performance',
 			],
 			'canonical'   => [
 				'name'     => __( 'Canonical', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_general_metabox_canonical_tab',
+				'callback' => "$_settings_class::_general_metabox_canonical_tab",
 				'dashicon' => 'external',
 			],
 			'timestamps'  => [
 				'name'     => __( 'Timestamps', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_general_metabox_timestamps_tab',
+				'callback' => "$_settings_class::_general_metabox_timestamps_tab",
 				'dashicon' => 'clock',
 			],
 			'exclusions'  => [
 				'name'     => __( 'Exclusions', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_general_metabox_exclusions_tab',
+				'callback' => "$_settings_class::_general_metabox_exclusions_tab",
 				'dashicon' => 'editor-unlink',
 			],
 		];
 
-		/**
-		 * @since 2.8.0
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_general_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'general', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'general',
+			/**
+			 * @since 2.8.0
+			 * @param array $tabs The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_general_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_general_metabox_layout':

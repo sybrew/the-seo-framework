@@ -89,8 +89,10 @@ final class PostSettings {
 		// Implies `\get_current_screen()->id`. Is always 'post'.
 		$screen_id = 'post';
 
-		\add_meta_box( $box_id, $title, __CLASS__ . '::_meta_box', $post_type, $context, $priority, [] );
-		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", __CLASS__ . '::_add_postbox_class' );
+		$class = static::class;
+
+		\add_meta_box( $box_id, $title, "$class::_meta_box", $post_type, $context, $priority, [] );
+		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", "$class::_add_postbox_class" );
 	}
 
 	/**

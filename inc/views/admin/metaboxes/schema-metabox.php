@@ -27,29 +27,29 @@ switch ( $instance ) :
 		HTML::description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
 		HTML::description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
 
-		$default_tabs = [
+		$_settings_class = SeoSettings::class;
+
+		$tabs = [
 			'structure' => [
 				'name'     => __( 'Structure', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_schema_metabox_structure_tab',
+				'callback' => "$_settings_class::_schema_metabox_structure_tab",
 				'dashicon' => 'admin-multisite',
 			],
 			'presence'  => [
 				'name'     => __( 'Presence', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_schema_metabox_presence_tab',
+				'callback' => "$_settings_class::_schema_metabox_presence_tab",
 				'dashicon' => 'networking',
 			],
 		];
 
-		/**
-		 * @since 2.8.0
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_schema_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'schema', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'schema',
+			/**
+			 * @since 2.8.0
+			 * @param array $defaults The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_schema_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_schema_metabox_structure':
@@ -168,8 +168,8 @@ switch ( $instance ) :
 				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
 			</label>
 		</p>
+		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<span class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
 			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Form::field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'knowledge_logo_url' ) ); ?>" />
 			<input type="hidden" name="<?php Form::field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_option( 'knowledge_logo_id' ) ); ?>" />
 		</p>

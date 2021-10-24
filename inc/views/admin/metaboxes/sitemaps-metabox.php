@@ -18,43 +18,44 @@ $instance = $this->get_view_instance( 'the_seo_framework_sitemaps_metabox', $ins
 
 switch ( $instance ) :
 	case 'the_seo_framework_sitemaps_metabox_main':
-		$default_tabs = [
+		$_settings_class = SeoSettings::class;
+
+		$tabs = [
 			'general'  => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_sitemaps_metabox_general_tab',
+				'callback' => "$_settings_class::_sitemaps_metabox_general_tab",
 				'dashicon' => 'admin-generic',
 			],
 			'robots'   => [
 				'name'     => 'Robots.txt',
-				'callback' => SeoSettings::class . '::_sitemaps_metabox_robots_tab',
+				'callback' => "$_settings_class::_sitemaps_metabox_robots_tab",
 				'dashicon' => 'share-alt2',
 			],
 			'metadata' => [
 				'name'     => __( 'Metadata', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_sitemaps_metabox_metadata_tab',
+				'callback' => "$_settings_class::_sitemaps_metabox_metadata_tab",
 				'dashicon' => 'index-card',
 			],
 			'notify'   => [
 				'name'     => _x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_sitemaps_metabox_notify_tab',
+				'callback' => "$_settings_class::_sitemaps_metabox_notify_tab",
 				'dashicon' => 'megaphone',
 			],
 			'style'    => [
 				'name'     => __( 'Style', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_sitemaps_metabox_style_tab',
+				'callback' => "$_settings_class::_sitemaps_metabox_style_tab",
 				'dashicon' => 'art',
 			],
 		];
 
-		/**
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'sitemaps', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'sitemaps',
+			/**
+			 * @since 2.6.0
+			 * @param array $tabs The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_sitemaps_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_sitemaps_metabox_general':
@@ -384,8 +385,8 @@ switch ( $instance ) :
 				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
 			</label>
 		</p>
+		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<span class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></span>
 			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Form::field_name( 'sitemap_logo_url' ); ?>" id="sitemap_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'sitemap_logo_url' ) ); ?>" />
 			<input type="hidden" name="<?php Form::field_name( 'sitemap_logo_id' ); ?>" id="sitemap_logo-id" value="<?php echo absint( $this->get_option( 'sitemap_logo_id' ) ); ?>" />
 		</p>

@@ -303,6 +303,10 @@ TODO add CSS templating colors?
 
 TODO test title trimming..?
 
+TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenberg_page()"?
+	-> Users will face issues moving back the metabox.
+		-> This PR will fix that, though... https://github.com/WordPress/gutenberg/pull/25187, eventually.
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -567,6 +571,14 @@ TODO test title trimming..?
 		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.
 		* `the_seo_framework_generated_archive_title`, added the `$prefix` and `$original_title` parameters, akin to WordPress Core's `get_the_archive_title`, albeit shifted by one parameter.
+		* The following filters have had their needless second parameter (`$args`) removed:
+			* `the_seo_framework_general_settings_tabs`
+			* `the_seo_framework_homepage_settings_tabs`
+			* `the_seo_framework_robots_settings_tabs`
+			* `the_seo_framework_schema_settings_tabs`
+			* `the_seo_framework_sitemaps_settings_tabs`
+			* `the_seo_framework_social_settings_tabs`
+			* `the_seo_framework_title_settings_tabs`
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.

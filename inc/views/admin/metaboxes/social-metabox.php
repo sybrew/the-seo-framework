@@ -18,44 +18,44 @@ $instance = $this->get_view_instance( 'the_seo_framework_social_metabox', $insta
 
 switch ( $instance ) :
 	case 'the_seo_framework_social_metabox_main':
-		$default_tabs = [
+		$_settings_class = SeoSettings::class;
+
+		$tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_social_metabox_general_tab',
+				'callback' => "$_settings_class::_social_metabox_general_tab",
 				'dashicon' => 'admin-generic',
 			],
 			'facebook'  => [
 				'name'     => 'Facebook',
-				'callback' => SeoSettings::class . '::_social_metabox_facebook_tab',
+				'callback' => "$_settings_class::_social_metabox_facebook_tab",
 				'dashicon' => 'facebook-alt',
 			],
 			'twitter'   => [
 				'name'     => 'Twitter',
-				'callback' => SeoSettings::class . '::_social_metabox_twitter_tab',
+				'callback' => "$_settings_class::_social_metabox_twitter_tab",
 				'dashicon' => 'twitter',
 			],
 			'oembed'    => [
 				'name'     => 'oEmbed',
-				'callback' => SeoSettings::class . '::_social_metabox_oembed_tab',
+				'callback' => "$_settings_class::_social_metabox_oembed_tab",
 				'dashicon' => 'share-alt2',
 			],
 			'postdates' => [
 				'name'     => __( 'Post Dates', 'autodescription' ),
-				'callback' => SeoSettings::class . '::_social_metabox_postdates_tab',
+				'callback' => "$_settings_class::_social_metabox_postdates_tab",
 				'dashicon' => 'backup',
 			],
 		];
 
-		/**
-		 * @since 2.2.2
-		 * @param array $defaults The default tabs.
-		 * @param array $args     The args added on the callback.
-		 */
-		$defaults = (array) apply_filters( 'the_seo_framework_social_settings_tabs', $default_tabs, $args );
-
-		$tabs = wp_parse_args( $args, $defaults );
-
-		SeoSettings::_nav_tab_wrapper( 'social', $tabs );
+		SeoSettings::_nav_tab_wrapper(
+			'social',
+			/**
+			 * @since 2.2.2
+			 * @param array $defaults The default tabs.
+			 */
+			(array) apply_filters( 'the_seo_framework_social_settings_tabs', $tabs )
+		);
 		break;
 
 	case 'the_seo_framework_social_metabox_general':

@@ -51,29 +51,32 @@ final class SeoSettings {
 		 *
 		 * @since 2.2.4
 		 * @since 2.8.0 Added `the_seo_framework_general_metabox` filter.
+		 * @since 4.2.0 Added `the_seo_framework_post_type_archive_metabox` filter.
 		 */
-		$general     = (bool) \apply_filters( 'the_seo_framework_general_metabox', true );
-		$title       = (bool) \apply_filters( 'the_seo_framework_title_metabox', true );
-		$description = (bool) \apply_filters( 'the_seo_framework_description_metabox', true );
-		$robots      = (bool) \apply_filters( 'the_seo_framework_robots_metabox', true );
-		$home        = (bool) \apply_filters( 'the_seo_framework_home_metabox', true );
-		$social      = (bool) \apply_filters( 'the_seo_framework_social_metabox', true );
-		$schema      = (bool) \apply_filters( 'the_seo_framework_schema_metabox', true );
-		$webmaster   = (bool) \apply_filters( 'the_seo_framework_webmaster_metabox', true );
-		$sitemap     = (bool) \apply_filters( 'the_seo_framework_sitemap_metabox', true );
-		$feed        = (bool) \apply_filters( 'the_seo_framework_feed_metabox', true );
+		$general           = (bool) \apply_filters( 'the_seo_framework_general_metabox', true );
+		$title             = (bool) \apply_filters( 'the_seo_framework_title_metabox', true );
+		$description       = (bool) \apply_filters( 'the_seo_framework_description_metabox', true );
+		$robots            = (bool) \apply_filters( 'the_seo_framework_robots_metabox', true );
+		$home              = (bool) \apply_filters( 'the_seo_framework_home_metabox', true );
+		$post_type_archive = (bool) \apply_filters( 'the_seo_framework_post_type_archive_metabox', false ); // DEV: TEMP
+		$social            = (bool) \apply_filters( 'the_seo_framework_social_metabox', true );
+		$schema            = (bool) \apply_filters( 'the_seo_framework_schema_metabox', true );
+		$webmaster         = (bool) \apply_filters( 'the_seo_framework_webmaster_metabox', true );
+		$sitemap           = (bool) \apply_filters( 'the_seo_framework_sitemap_metabox', true );
+		$feed              = (bool) \apply_filters( 'the_seo_framework_feed_metabox', true );
 
 		$settings_page_hook = \tsf()->seo_settings_page_hook;
+
+		$class = static::class;
 
 		// General Meta Box
 		if ( $general )
 			\add_meta_box(
 				'autodescription-general-settings',
 				\esc_html__( 'General Settings', 'autodescription' ),
-				__CLASS__ . '::_general_metabox',
+				"$class::_general_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Title Meta Box
@@ -81,10 +84,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-title-settings',
 				\esc_html__( 'Title Settings', 'autodescription' ),
-				__CLASS__ . '::_title_metabox',
+				"$class::_title_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Description Meta Box
@@ -92,10 +94,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-description-settings',
 				\esc_html__( 'Description Meta Settings', 'autodescription' ),
-				__CLASS__ . '::_description_metabox',
+				"$class::_description_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Homepage Meta Box
@@ -103,10 +104,18 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-homepage-settings',
 				\esc_html__( 'Homepage Settings', 'autodescription' ),
-				__CLASS__ . '::_homepage_metabox',
+				"$class::_homepage_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
+			);
+
+		if ( $post_type_archive )
+			\add_meta_box(
+				'autodescription-post-type-archive-settings',
+				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),
+				"$class::_post_type_archive_metabox",
+				$settings_page_hook,
+				'main'
 			);
 
 		// Social Meta Box
@@ -114,10 +123,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-social-settings',
 				\esc_html__( 'Social Meta Settings', 'autodescription' ),
-				__CLASS__ . '::_social_metabox',
+				"$class::_social_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Schema Meta Box
@@ -125,10 +133,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-schema-settings',
 				\esc_html__( 'Schema.org Settings', 'autodescription' ),
-				__CLASS__ . '::_schema_metabox',
+				"$class::_schema_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Robots Meta Box
@@ -136,10 +143,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-robots-settings',
 				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
-				__CLASS__ . '::_robots_metabox',
+				"$class::_robots_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Webmaster Meta Box
@@ -147,10 +153,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-webmaster-settings',
 				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
-				__CLASS__ . '::_webmaster_metabox',
+				"$class::_webmaster_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Sitemaps Meta Box
@@ -158,10 +163,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-sitemap-settings',
 				\esc_html__( 'Sitemap Settings', 'autodescription' ),
-				__CLASS__ . '::_sitemaps_metabox',
+				"$class::_sitemaps_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 
 		// Feed Meta Box
@@ -169,10 +173,9 @@ final class SeoSettings {
 			\add_meta_box(
 				'autodescription-feed-settings',
 				\esc_html__( 'Feed Settings', 'autodescription' ),
-				__CLASS__ . '::_feed_metabox',
+				"$class::_feed_metabox",
 				$settings_page_hook,
-				'main',
-				[]
+				'main'
 			);
 	}
 
@@ -233,16 +236,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The metabox arguments.
 	 */
-	public static function _general_metabox( $post = null, $args = [] ) {
+	public static function _general_metabox() {
 		/**
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_general_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/general-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/general-metabox' );
 		/**
 		 * @since 2.8.0
 		 */
@@ -320,16 +320,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The metabox arguments.
 	 */
-	public static function _title_metabox( $post = null, $args = [] ) {
+	public static function _title_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_title_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/title-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/title-metabox');
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -378,16 +375,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The metabox arguments.
 	 */
-	public static function _description_metabox( $post = null, $args = [] ) {
+	public static function _description_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_description_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/description-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/description-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -399,16 +393,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The metabox arguments.
 	 */
-	public static function _robots_metabox( $post = null, $args = [] ) {
+	public static function _robots_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_robots_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/robots-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/robots-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -444,16 +435,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The navigation tabs args.
 	 */
-	public static function _homepage_metabox( $post = null, $args = [] ) {
+	public static function _homepage_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_homepage_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/homepage-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -504,21 +492,22 @@ final class SeoSettings {
 		\tsf()->get_view( 'admin/metaboxes/homepage-metabox', [], 'social' );
 	}
 
+	public static function _post_type_archive_metabox() {
+		\tsf()->get_view( 'admin/metaboxes/post-type-archive-metabox', [], 'general' );
+	}
+
 	/**
 	 * Social meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The navigation tabs args.
 	 */
-	public static function _social_metabox( $post = null, $args = [] ) {
+	public static function _social_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_social_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/social-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/social-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -585,16 +574,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The navigation tabs args.
 	 */
-	public static function _webmaster_metabox( $post = null, $args = [] ) {
+	public static function _webmaster_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_webmaster_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/webmaster-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/webmaster-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -607,16 +593,13 @@ final class SeoSettings {
 	 * @since 4.0.0
 	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The navigation tabs args.
 	 */
-	public static function _sitemaps_metabox( $post = null, $args = [] ) {
+	public static function _sitemaps_metabox() {
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_sitemaps_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/sitemaps-metabox' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -683,16 +666,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The navigation tabs args.
 	 */
-	public static function _feed_metabox( $post = null, $args = [] ) {
+	public static function _feed_metabox() {
 		/**
 		 * @since 2.5.2
 		 */
 		\do_action( 'the_seo_framework_feed_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/feed-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/feed-metabox' );
 		/**
 		 * @since 2.5.2
 		 */
@@ -704,16 +684,13 @@ final class SeoSettings {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 *
-	 * @param \WP_Post|null $post The current post object.
-	 * @param array         $args The navigation tabs args.
 	 */
-	public static function _schema_metabox( $post = null, $args = [] ) {
+	public static function _schema_metabox() {
 		/**
 		 * @since 2.6.0
 		 */
 		\do_action( 'the_seo_framework_schema_metabox_before' );
-		\tsf()->get_view( 'admin/metaboxes/schema-metabox', $args );
+		\tsf()->get_view( 'admin/metaboxes/schema-metabox' );
 		/**
 		 * @since 2.6.0
 		 */

@@ -307,6 +307,7 @@ class Admin_Init extends Init {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Now added a short leading-dot version for ARIA labels.
+	 * @TODO move this to another object? -> i18n/guidelines
 	 *
 	 * @return array
 	 */
