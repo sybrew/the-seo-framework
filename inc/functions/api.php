@@ -219,7 +219,10 @@ namespace The_SEO_Framework {
 			+ debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]
 		);
 
-		return $memo[ $hash ] = $value_to_set ?? $memo[ $hash ] ?? null;
+		if ( isset( $value_to_set ) )
+			return $memo[ $hash ] = $value_to_set;
+
+		return $memo[ $hash ] ?? null;
 	}
 
 	/**
@@ -264,7 +267,10 @@ namespace The_SEO_Framework {
 		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$hash = serialize( [ $key, $args ] );
 
-		return $memo[ $hash ] = $value_to_set ?? $memo[ $hash ] ?? null;
+		if ( isset( $value_to_set ) )
+			return $memo[ $hash ] = $value_to_set;
+
+		return $memo[ $hash ] ?? null;
 	}
 
 	/**
@@ -316,13 +322,14 @@ namespace The_SEO_Framework {
 			+ debug_backtrace( 0, 2 )[1]
 		);
 
-		// Store the result of the function. If that's null, store hash.
 		// If the hash is stored, return null back to the caller.
-		return (
-			$memo[ $hash ] =
-				$memo[ $hash ]
-				?? \call_user_func( $fn )
-				?? $hash
-		) === $hash ? null : $memo[ $hash ];
+		if ( isset( $memo[ $hash ] ) )
+			return $memo[ $hash ] === $hash ? null : $memo[ $hash ];
+
+		// Store the result of the function. If that's null/void, store hash.
+		$memo[ $hash ] = \call_user_func( $fn ) ?? $hash;
+
+		// If the hash is stored, return null back to the caller.
+		return $memo[ $hash ] === $hash ? null : $memo[ $hash ];
 	}
 }
