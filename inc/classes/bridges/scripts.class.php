@@ -710,67 +710,11 @@ final class Scripts {
 	 * Returns Social scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 No longer outputs data.
 	 *
 	 * @return array The script params.
 	 */
 	public static function get_social_scripts() {
-
-		$tsf = \tsf();
-
-		$_query = [
-			'id'       => $tsf->is_seo_settings_page() ? $tsf->get_the_front_page_ID() : $tsf->get_the_real_ID(),
-			'taxonomy' => $tsf->get_current_taxonomy(),
-		];
-
-		// These placeholders are required as there are three description lengths: search, og, twitter.
-		$settings_placeholders = [
-			'ogDesc' => '',
-			'twDesc' => '',
-		];
-
-		// These locks are required as we have an extra homepage metabox that can override social settings.
-		// PH = placeholder
-		$home_locks = array_fill_keys(
-			[
-				'ogTitleLock',
-				'ogTitlePHLock',
-				'ogDescriptionLock',
-				'ogDescriptionPHLock',
-
-				'twTitleLock',
-				'twTitlePHLock',
-				'twDescriptionLock',
-				'twDescriptionPHLock',
-			],
-			false
-		);
-
-		if ( $tsf->has_page_on_front() ) {
-			if ( $tsf->is_seo_settings_page() ) {
-				$home_locks = [
-					'ogTitlePHLock'       => (bool) $tsf->get_post_meta_item( '_open_graph_title', $_query['id'] ),
-					'twTitlePHLock'       => (bool) $tsf->get_post_meta_item( '_twitter_title', $_query['id'] ),
-					'twDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_twitter_description', $_query['id'] ),
-					'ogDescriptionPHLock' => (bool) $tsf->get_post_meta_item( '_open_graph_description', $_query['id'] ),
-				];
-			} elseif ( ! $_query['taxonomy'] && $tsf->is_static_frontpage( $_query['id'] ) ) {
-				$home_locks = [
-					'ogTitleLock'       => (bool) $tsf->get_option( 'homepage_og_title' ),
-					'ogDescriptionLock' => (bool) $tsf->get_option( 'homepage_og_description' ),
-					'twTitleLock'       => (bool) $tsf->get_option( 'homepage_twitter_title' ),
-					'twDescriptionLock' => (bool) $tsf->get_option( 'homepage_twitter_description' ),
-				];
-			}
-		}
-
-		$settings_placeholders['ogDesc'] = $tsf->s_description(
-			$settings_placeholders['ogDesc'] ?: $tsf->get_generated_open_graph_description( $_query, false )
-		);
-
-		$settings_placeholders['twDesc'] = $tsf->s_description(
-			$settings_placeholders['twDesc'] ?: $tsf->get_generated_twitter_description( $_query, false )
-		);
-
 		return [
 			'id'       => 'tsf-social',
 			'type'     => 'js',
@@ -781,17 +725,9 @@ final class Scripts {
 			'ver'      => THE_SEO_FRAMEWORK_VERSION,
 			'l10n'     => [
 				'name' => 'tsfSocialL10n',
-				'data' => [
-					'params' => [
-						'homeLocks' => $home_locks,
-					],
-					'states' => [
-						'placeholders' => static::decode_all_entities( $settings_placeholders ),
-					],
-				],
+				'data' => [],
 			],
 		];
-
 	}
 
 	/**

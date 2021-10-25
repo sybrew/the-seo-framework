@@ -146,19 +146,20 @@ final class Feed {
 
 		if ( ! $content ) return '';
 
-		// Strip all code and lines.
-		$excerpt = static::$tsf->s_excerpt_raw( $content, false );
-
 		/**
 		 * @since 2.5.2
 		 * @param int $max_len The maximum feed (multibyte) string length.
 		 */
 		$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
-		// Generate excerpt.
-		$excerpt = static::$tsf->trim_excerpt( $excerpt, 0, $max_len );
+		// Strip all code and lines, and AI-trim it.
+		$excerpt = static::$tsf->trim_excerpt(
+			static::$tsf->s_excerpt_raw( $content, false ),
+			0,
+			$max_len
+		);
 
-		return '<p>' . $excerpt . '</p>';
+		return "<p>$excerpt</p>";
 	}
 
 	/**
@@ -180,7 +181,7 @@ final class Feed {
 		);
 
 		return sprintf(
-			'<p><a href="%s" rel="nofollow">%s</a></p>',
+			'<p><a href="%s" rel="nofollow">%s</a></p>', // Keep XHTML
 			\esc_url( \get_permalink() ),
 			\esc_html( $source_i18n )
 		);

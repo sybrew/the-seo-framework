@@ -259,74 +259,47 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		break;
 
 	case 'homepage_social_tab':
+		$custom_og_title = '';
+		$custom_og_desc  = '';
+		$custom_tw_title = '';
+		$custom_tw_desc  = '';
+
 		// Gets custom fields from page.
 		if ( $home_id ) {
 			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $home_id );
-			$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
 			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $home_id );
+			$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
 			$custom_tw_desc  = $this->get_post_meta_item( '_twitter_description', $home_id );
-		} else {
-			$custom_og_title = '';
-			$custom_tw_title = '';
-			$custom_og_desc  = '';
-			$custom_tw_desc  = '';
 		}
 
-		$_social_title       = [
-			'og' => $custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args, false ),
-			'tw' => $custom_tw_title ?: $this->get_generated_twitter_title( $_generator_args, false ),
-		];
-		$_social_description = [
-			'og' => $custom_og_desc ?: $this->get_generated_open_graph_description( $_generator_args, false ),
-			'tw' => $custom_tw_desc ?: $this->get_generated_twitter_description( $_generator_args, false ),
-		];
-
-		$this->output_js_social_title_data(
-			[
-				'og' => Form::get_field_id( 'homepage_og_title' ),
-				'tw' => Form::get_field_id( 'homepage_twitter_title' ),
-			],
+		$this->output_js_social_data(
+			'homepage_social_settings',
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->s_title(
-							$custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args, false )
-						),
-						'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ), // useSocialTagline
-					],
-				],
-				'tw' => [
-					'state' => [
-						'defaultTitle' => $this->s_title(
-							$custom_tw_title ?: $this->get_generated_twitter_title( $_generator_args, false )
-						),
-						'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ), // useSocialTagline
-					],
-				],
-			]
-		);
-		$this->output_js_social_description_data(
-			[
-				'og' => Form::get_field_id( 'homepage_og_description' ),
-				'tw' => Form::get_field_id( 'homepage_twitter_description' ),
-			],
-			[
-				'og' => [
-					'state' => [
-						'defaultDesc' => $this->s_description(
+						'defaultTitle' => $this->s_title( $custom_og_title ?: $this->get_generated_open_graph_title( $_generator_args, false ) ),
+						'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ),
+						'defaultDesc'  => $this->s_description(
 							$custom_og_desc ?: $this->get_generated_open_graph_description( $_generator_args, false )
 						),
+						'titlePhLock'  => (bool) $custom_og_title,
+						'descPhLock'   => (bool) $custom_og_desc,
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultDesc' => $this->s_description(
+						'defaultTitle' => $this->s_title( $custom_tw_title ?: $this->get_generated_twitter_title( $_generator_args, false ) ),
+						'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ),
+						'defaultDesc'  => $this->s_description(
 							$custom_tw_desc ?: $this->get_generated_twitter_description( $_generator_args, false )
 						),
+						'titlePhLock'  => (bool) $custom_tw_title,
+						'descPhLock'   => (bool) $custom_tw_desc,
 					],
 				],
 			]
 		);
+
 		?>
 		<p>
 			<label for="<?php Form::field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
@@ -342,7 +315,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_og_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Form::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off  autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -366,7 +339,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_og_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
+			<textarea name="<?php Form::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_desc ) {
@@ -391,7 +364,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_twitter_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Form::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
@@ -415,7 +388,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_twitter_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" autocomplete=off><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
+			<textarea name="<?php Form::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {

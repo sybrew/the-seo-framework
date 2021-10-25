@@ -203,40 +203,22 @@ $robots_settings = [
 
 <h2><?php esc_html_e( 'Social SEO Settings', 'autodescription' ); ?></h2>
 <?php
-$this->output_js_social_title_data(
-	[
-		'og' => 'autodescription-meta[og_title]',
-		'tw' => 'autodescription-meta[tw_title]',
-	],
+
+$this->output_js_social_data(
+	'autodescription_social_tt',
 	[
 		'og' => [
 			'state' => [
 				'defaultTitle' => $this->s_title( $this->get_generated_open_graph_title( $_generator_args, false ) ),
-				'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ), // useSocialTagline
+				'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ),
+				'defaultDesc'  => $this->s_description( $this->get_generated_open_graph_description( $_generator_args, false ) ),
 			],
 		],
 		'tw' => [
 			'state' => [
 				'defaultTitle' => $this->s_title( $this->get_generated_twitter_title( $_generator_args, false ) ),
-				'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ), // useSocialTagline
-			],
-		],
-	]
-);
-$this->output_js_social_description_data(
-	[
-		'og' => 'autodescription-meta[og_description]',
-		'tw' => 'autodescription-meta[tw_description]',
-	],
-	[
-		'og' => [
-			'state' => [
-				'defaultDesc' => $this->s_description( $this->get_generated_open_graph_description( $_generator_args, false ) ),
-			],
-		],
-		'tw' => [
-			'state' => [
-				'defaultDesc' => $this->s_description( $this->get_generated_twitter_description( $_generator_args, false ) ),
+				'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ),
+				'defaultDesc'  => $this->s_description( $this->get_generated_twitter_description( $_generator_args, false ) ),
 			],
 		],
 	]
@@ -257,7 +239,7 @@ $this->output_js_social_description_data(
 			</th>
 			<td>
 				<div id="tsf-og-title-wrap">
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $og_title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $og_title ); ?>" size="40" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
 				</div>
 			</td>
 		</tr>
@@ -273,7 +255,7 @@ $this->output_js_social_description_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $og_description ); ?></textarea>
+				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows="4" cols="50" class="large-text" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?php echo $this->esc_attr_preserve_amp( $og_description ); ?></textarea>
 			</td>
 		</tr>
 
@@ -289,7 +271,7 @@ $this->output_js_social_description_data(
 			</th>
 			<td>
 				<div id="tsf-tw-title-wrap">
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $tw_title ); ?>" size="40" autocomplete=off />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $tw_title ); ?>" size="40" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
 				</div>
 			</td>
 		</tr>
@@ -305,7 +287,7 @@ $this->output_js_social_description_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows="4" cols="50" class="large-text" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $tw_description ); ?></textarea>
+				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows="4" cols="50" class="large-text" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?php echo $this->esc_attr_preserve_amp( $tw_description ); ?></textarea>
 			</td>
 		</tr>
 

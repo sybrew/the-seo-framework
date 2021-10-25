@@ -323,14 +323,27 @@ TODO replace -metabox' -> '
 TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );` in `get_generate_archive_title_from_query()`, which will probably cause issues with "The Events Calendar"'s broken query.
 	-> Should we add a compat file auto-excluding their non-WP coherent "post type"?
 
-TODO remove the og refs, we don't have pixel counters for those.
 TODO regex to find non-breaking HTML attributes: class=example.
 	-> input type="text" -> input type=text
 
 Accepts 'id' and 'taxonomy'.
 Accepts 'id', 'taxonomy', and 'pta'.
 
-useSocialTagline -> useSocialAdditions
+tsfTitle.useSocialTagline -> tsfSocial.addAdditions
+
+TODO modernize getStateOf. => ?.
+
+TODO data-social-group -> add subgroup -> utilize -> automate.
+	-> This way, we need not register the element IDs. Instead, it can automatically retrieve them by "social-group"
+
+TODO add debouncer in tsf.js?
+	-> tsf.debounce( () => { }, timeout, key || void 0 );
+
+TODO add maxlength to title/description input fields?
+	-> Also enforce it in the back-end?
+	-> This will prevent overloading the database with large blobs. However, users can do this anywhere in WP, regardless.
+
+TODO add "padlock" to the counters on the homepage "page edit screen" if it's locked via the homepage SEO settings?
 
 **For everyone:**
 
@@ -374,6 +387,7 @@ useSocialTagline -> useSocialAdditions
 		* Title and description input counters are now synchronized at 60fps, instead of at 75~100fps sporadically.
 			* Only the trained eye can spot a minor delay on low response time monitors, but only whilst holding a repeat-key, which isn't realistic.
 		* Image previews now get loaded only after the "slowest" typist is done typing the image URL.
+		* When no excerpt of the content can be fetched, needless trimming no longer happens.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -410,6 +424,7 @@ useSocialTagline -> useSocialAdditions
 	* Addressed a regression where a part of the HTML comments was not fully translatable.
 	* Addressed layout issues where the site title might be smaller than 60px, making the examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
 	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
+	* Addressed an issue where the counters would fault when adding only spaces to the input, instead of showing the "true" output after save -- this will strip all spaces.
 
 **For developers:**
 

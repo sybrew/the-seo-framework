@@ -443,30 +443,24 @@ class Admin_Pages extends Generate_Ldjson {
 	}
 
 	/**
-	 * Outputs reference social title HTML elements for JavaScript for a specific ID.
+	 * Outputs reference social HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.2.0
 	 *
-	 * @param string[og,tw] $id   The social title input IDs.
-	 * @param array[og,tw]  $data The input data.
+	 * @param string       $group    The social input group ID.
+	 * @param array[og,tw] $settings The input settings data.
 	 */
-	public function output_js_social_title_data( $id, $data ) {
+	public function output_js_social_data( $group, $settings ) {
 		printf(
 			implode(
 				'',
 				[
-					'<span id="tsf-og-title-reference_%1$s" class="tsf-og-title-reference wp-exclude-emoji hidden" data-for="%1$s"></span>',
-					'<span id="tsf-tw-title-reference_%2$s" class="tsf-tw-title-reference wp-exclude-emoji hidden" data-for="%2$s"></span>',
-					'<span id="tsf-og-title-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %3$s></span>',
-					'<span id="tsf-tw-title-data_%2$s" class="hidden wp-exclude-emoji" data-for="%2$s" %4$s></span>',
+					'<span id="tsf-social-data_%1$s" class="hidden wp-exclude-emoji" data-group="%1$s" %2$s></span>',
 				]
 			),
-			\esc_attr( $id['og'] ),
-			\esc_attr( $id['tw'] ),
+			\esc_attr( $group ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( $data['og'] ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( $data['tw'] )
+			Interpreters\HTML::make_data_attributes( [ 'settings' => $settings ] )
 		);
 	}
 
@@ -505,34 +499,6 @@ class Admin_Pages extends Generate_Ldjson {
 			\esc_attr( $id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			Interpreters\HTML::make_data_attributes( $data )
-		);
-	}
-
-	/**
-	 * Outputs reference social description HTML elements for JavaScript for a specific ID.
-	 *
-	 * @since 4.2.0
-	 *
-	 * @param string[og,tw] $id   The social description input ID.
-	 * @param array[og,tw]  $data The input data.
-	 */
-	public function output_js_social_description_data( $id, $data ) {
-		printf(
-			implode(
-				'',
-				[
-					'<span id="tsf-og-description-reference_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" ></span>',
-					'<span id="tsf-tw-description-reference_%2$s" class="hidden wp-exclude-emoji" data-for="%2$s" ></span>',
-					'<span id="tsf-og-description-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %3$s ></span>',
-					'<span id="tsf-tw-description-data_%2$s" class="hidden wp-exclude-emoji" data-for="%2$s" %4$s ></span>',
-				]
-			),
-			\esc_attr( $id['og'] ),
-			\esc_attr( $id['tw'] ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( $data['og'] ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( $data['tw'] )
 		);
 	}
 }

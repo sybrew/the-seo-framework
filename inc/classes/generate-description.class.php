@@ -822,6 +822,7 @@ class Generate_Description extends Generate {
 	 *                3. The third parameter now defaults to 4096, so no longer unexpected results are created.
 	 *                4. Resolved some backtracking issues.
 	 *                5. Resolved an issue where a character followed by punctuation would cause the match to fail.
+	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
@@ -834,6 +835,9 @@ class Generate_Description extends Generate {
 	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.
 	 */
 	public function trim_excerpt( $excerpt, $min_char_length = 1, $max_char_length = 4096 ) {
+
+		// At least 1.
+		$min_char_length = $min_char_length < 1 ? 1 : $min_char_length;
 
 		// We should _actually_ use mb_strlen, but that's wasteful on resources for something benign.
 		// We'll rectify that later, somewhat, where characters are transformed.
