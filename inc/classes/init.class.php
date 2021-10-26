@@ -118,8 +118,8 @@ class Init extends Query {
 			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) )
 				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap\Base, 'prerender_sitemap' ] );
 
-			\add_action( 'tsf_sitemap_cron_hook', Bridges\Ping::class . '::ping_search_engines' );
-			\add_action( 'tsf_sitemap_cron_hook_retry', Bridges\Ping::class . '::retry_ping_search_engines' );
+			\add_action( 'tsf_sitemap_cron_hook', [ Bridges\Ping::class, 'ping_search_engines' ] );
+			\add_action( 'tsf_sitemap_cron_hook_retry', [ Bridges\Ping::class, 'retry_ping_search_engines' ] );
 		}
 	}
 
@@ -131,16 +131,16 @@ class Init extends Query {
 	protected function init_ajax_actions() {
 
 		// Admin AJAX for notice dismissal.
-		\add_action( 'wp_ajax_tsf_dismiss_notice', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_dismiss_notice' );
+		\add_action( 'wp_ajax_tsf_dismiss_notice', [ Bridges\AJAX::class, '_wp_ajax_dismiss_notice' ] );
 
 		// Admin AJAX for TSF Cropper
-		\add_action( 'wp_ajax_tsf_crop_image', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_crop_image' );
+		\add_action( 'wp_ajax_tsf_crop_image', [ Bridges\AJAX::class, '_wp_ajax_crop_image' ] );
 
 		// Admin AJAX for counter options.
-		\add_action( 'wp_ajax_tsf_update_counter', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_update_counter_type' );
+		\add_action( 'wp_ajax_tsf_update_counter', [ Bridges\AJAX::class, '_wp_ajax_update_counter_type' ] );
 
 		// Admin AJAX for Gutenberg SEO Bar update.
-		\add_action( 'wp_ajax_tsf_update_post_data', '\The_SEO_Framework\Bridges\AJAX::_wp_ajax_get_post_data' );
+		\add_action( 'wp_ajax_tsf_update_post_data', [ Bridges\AJAX::class, '_wp_ajax_get_post_data' ] );
 	}
 
 	/**
@@ -706,11 +706,9 @@ class Init extends Query {
 	 * @access private
 	 */
 	public function _init_core_sitemap() {
-		// It's not a bridge, don't treat it like one: Submit hooks here. Clean me up?
-		$builder_class = Builders\CoreSitemaps\Main::class;
-
-		\add_filter( 'wp_sitemaps_add_provider', "{$builder_class}::_filter_add_provider", 9, 2 );
-		\add_filter( 'wp_sitemaps_max_urls', "{$builder_class}::_filter_max_urls", 9 );
+		// It's not a bridge, don't treat it like one: So, submit hooks here... But, clean me up?
+		\add_filter( 'wp_sitemaps_add_provider', [ Builders\CoreSitemaps\Main::class, '_filter_add_provider' ], 9, 2 );
+		\add_filter( 'wp_sitemaps_max_urls', [ Builders\CoreSitemaps\Main::class, '_filter_max_urls' ], 9 );
 	}
 
 	/**

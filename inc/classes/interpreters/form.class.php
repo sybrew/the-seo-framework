@@ -38,213 +38,13 @@ namespace The_SEO_Framework\Interpreters;
 final class Form {
 
 	/**
-	 * Helper function that constructs header elements. Does not escape.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param string $title The header title.
-	 * @return string The header title.
-	 */
-	public static function get_header_title( $title ) {
-		return sprintf( '<h4>%s</h4>', $title );
-	}
-
-	/**
-	 * Helper function that constructs header elements.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param string $title The header title.
-	 */
-	public static function header_title( $title ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
-		echo static::get_header_title( \esc_html( $title ) );
-	}
-
-	/**
-	 * Helper function that constructs name attributes for use in form fields.
-	 *
-	 * Alias of field_id.
-	 *
-	 * @since 4.1.4
-	 * @since 4.2.0 Added the index parameter.
-	 * @ignore
-	 *
-	 * @param string     $name  Field name base.
-	 * @param string|map $index Optional. The field index or map of indexes.
-	 * @return string Full field name
-	 */
-	public static function get_field_name( $name, $index = '' ) {
-		return static::get_field_id( $name, $index );
-	}
-
-	/**
-	 * Echo constructed name attributes in form fields.
-	 *
-	 * Alias of field_id.
-	 *
-	 * @since 4.1.4
-	 * @uses static::get_field_name() Construct name attributes for use in form fields.
-	 * @ignore
-	 *
-	 * @param string     $name  Field name base.
-	 * @param string|map $index Optional. The field index or map of indexes.
-	 */
-	public static function field_name( $name, $index = '' ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- field_id escapes.
-		echo static::field_id( $name, $index );
-	}
-
-	/**
-	 * Helper function that constructs id attributes for use in form fields.
-	 *
-	 * @since 4.1.4
-	 * @since 4.2.0 Added the index parameter.
-	 *
-	 * @param string     $id    Field id base.
-	 * @param string|map $index Optional. The field index or map of indexes.
-	 * @return string Full field id
-	 */
-	public static function get_field_id( $id, $index = '' ) {
-
-		if ( $index ) {
-			$field_id = THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-			// Push $id to index so we can loop over them quickly. $id being added last.
-			$index   = (array) $index;
-			$index[] = $id;
-
-			foreach ( $index as $subid )
-				$field_id .= "[$subid]";
-
-			return $field_id;
-		} else {
-			return sprintf( '%s[%s]', THE_SEO_FRAMEWORK_SITE_OPTIONS, $id );
-		}
-	}
-
-	/**
-	 * Echo constructed id attributes in form fields.
-	 *
-	 * @since 4.1.4
-	 * @since 4.2.0 1. Exchanged second parameter for $index, from $echo.
-	 *              2. No longer returns.
-	 * @uses static::get_field_id() Constructs id attributes for use in form fields.
-	 *
-	 * @param string     $id    Field id base.
-	 * @param string|map $index Optional. The field index or map of indexes.
-	 */
-	public static function field_id( $id, $index = '' ) {
-		echo \esc_attr( static::get_field_id( $id, $index ) );
-	}
-
-	/**
-	 * Returns a chechbox wrapper.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param array $args : {
-	 *    string $id          The option name, used as field ID.
-	 *    string $class       The checkbox class.
-	 *    string $index       The option index, used when the option is an array.
-	 *    string $label       The checkbox label description, placed inline of the checkbox.
-	 *    string $description The checkbox additional description, placed underneat.
-	 *    array  $data        The checkbox field data. Sub-items are expected to be escaped if they're not an array.
-	 *    bool   $escape      Whether to enable escaping of the $label and $description.
-	 *    bool   $disabled    Whether to disable the checkbox field.
-	 *    bool   $default     Whether to display-as-default. This is autodetermined when no $index is set.
-	 *    bool   $warned      Whether to warn the checkbox field value.
-	 * }
-	 * @return string HTML checkbox output.
-	 */
-	public static function make_checkbox( $args = [] ) {
-
-		$args = array_merge(
-			[
-				'id'          => '',
-				'class'       => '',
-				'index'       => '',
-				'label'       => '',
-				'description' => '',
-				'data'        => [],
-				'escape'      => true,
-				'disabled'    => false,
-				'default'     => false,
-				'warned'      => false,
-			],
-			$args
-		);
-
-		if ( $args['escape'] ) {
-			$args['description'] = \esc_html( $args['description'] );
-			$args['label']       = \esc_html( $args['label'] );
-		}
-
-		$tsf = \tsf();
-
-		$index = $args['index'] ? $tsf->s_field_id( $args['index'] ?: '' ) : '';
-
-		$field_id = $field_name = static::get_field_id( $args['id'], $index );
-
-		$value = $tsf->get_option( $args['id'] );
-		if ( $index )
-			$value = $value[ $index ] ?? '';
-
-		$cb_classes = [];
-
-		if ( $args['class'] ) {
-			$cb_classes[] = $args['class'];
-		}
-
-		if ( $args['disabled'] ) {
-			$cb_classes[] = 'tsf-disabled';
-		} elseif ( ! $args['index'] ) {
-			// Can't fetch conditionals in index.
-			$cb_classes[] = static::get_is_conditional_checked( $args['id'], false );
-		} else {
-			if ( $args['default'] ) {
-				$cb_classes[] = 'tsf-default-selected';
-			} elseif ( $args['warned'] ) {
-				$cb_classes[] = 'tsf-warning-selected';
-			}
-		}
-
-		$output = sprintf(
-			'<span class="tsf-toblock">%s</span>',
-			vsprintf(
-				'<label for="%s" %s>%s</label>',
-				[
-					$field_id,
-					( $args['disabled'] ? 'class="tsf-disabled"' : '' ),
-					vsprintf(
-						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s %s /> %s',
-						[
-							\esc_attr( implode( ' ', $cb_classes ) ),
-							$field_name,
-							$field_id,
-							\checked( $value, true, false ),
-							( $args['disabled'] ? 'disabled' : '' ),
-							HTML::make_data_attributes( $args['data'] ),
-							$args['label'],
-						]
-					),
-				]
-			)
-		);
-
-		return $output .= (
-			$args['description']
-				? sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] )
-				: ''
-		);
-	}
-
-	/**
 	 * Returns a HTML select form elements for qubit options: -1, 0, or 1.
 	 * Does not support "multiple" field selections.
 	 *
+	 * @FIXME: Discrepancy... this is the only INPUT function used that DOES NOT pertain
+	 *        to the SEO Settings page: The `$id` argument is fluid, and DOES NOT
+	 *        relate to the settings page.
 	 * @since 4.1.4
-	 * @TODO allow arrays as index, so we can support multidimensional options easily? @see is_conditional_checked
 	 *
 	 * @param array $args : {
 	 *    string     $id       The select field ID.
@@ -301,7 +101,7 @@ final class Form {
 			),
 			[
 				$args['label'] ? sprintf(
-					'<label for=%s>%s</label> ', // NOTE: extra space!
+					'<label for="%s">%s</label> ', // NOTE: extra space!
 					$tsf->s_field_id( $args['id'] ),
 					\esc_html( $args['label'] )
 				) : '',
@@ -311,7 +111,7 @@ final class Form {
 					false
 				) : '',
 				vsprintf(
-					'<select id=%s name=%s %s %s>%s</select>',
+					'<select id="%s" name="%s" %s %s>%s</select>',
 					[
 						$tsf->s_field_id( $args['id'] ),
 						\esc_attr( $args['name'] ),
@@ -322,126 +122,6 @@ final class Form {
 				),
 			]
 		);
-	}
-
-	/**
-	 * Returns the HTML class wrap for default Checkbox options.
-	 *
-	 * This function does nothing special. But is merely a simple wrapper.
-	 * Just like code_wrap.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param string $key  The option name which returns boolean.
-	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
-	 * @param bool   $echo Whether to echo or return the output.
-	 * @return string Empty on echo or the class name with an optional wrapper.
-	 */
-	public static function is_default_checked( $key, $wrap = true, $echo = true ) {
-
-		$class = '';
-
-		$default = \tsf()->get_default_settings( $key );
-
-		if ( 1 === $default )
-			$class = 'tsf-default-selected';
-
-		if ( $echo ) {
-			if ( $wrap ) {
-				printf( 'class="%s"', \esc_attr( $class ) );
-			} else {
-				echo \esc_attr( $class );
-			}
-		} else {
-			if ( $wrap )
-				return sprintf( 'class="%s"', $class );
-
-			return $class;
-		}
-	}
-
-	/**
-	 * Returns the HTML class wrap for warning Checkbox options.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param string $key  The option name which returns boolean.
-	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
-	 * @param bool   $echo Whether to echo or return the output.
-	 * @return string Empty on echo or the class name with an optional wrapper.
-	 */
-	public static function is_warning_checked( $key, $wrap = true, $echo = true ) {
-
-		$class = '';
-
-		$warned = \tsf()->get_warned_settings( $key );
-
-		if ( 1 === $warned )
-			$class = 'tsf-warning-selected';
-
-		if ( $echo ) {
-			if ( $wrap ) {
-				printf( 'class="%s"', \esc_attr( $class ) );
-			} else {
-				echo \esc_attr( $class );
-			}
-		} else {
-			if ( $wrap )
-				return sprintf( 'class="%s"', $class );
-
-			return $class;
-		}
-	}
-
-	/**
-	 * Returns the HTML class wrap for warning/default Checkbox options.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param string $key  The option name which returns boolean.
-	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
-	 */
-	public static function get_is_conditional_checked( $key, $wrap = true ) {
-		return static::is_conditional_checked( $key, '', $wrap, false );
-	}
-
-	/**
-	 * Returns the HTML class wrap for warning/default Checkbox options.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @param string $key        The option name which returns boolean.
-	 * @param bool   $wrap       Whether to wrap the class name in `class="%s"`
-	 * @param bool   $echo       Whether to echo or return the output.
-	 * @return string Empty on echo or the class name with an optional wrapper.
-	 */
-	public static function is_conditional_checked( $key, $wrap = true, $echo = true ) {
-
-		$class = '';
-
-		$default = static::is_default_checked( $key, false, false );
-		$warned  = static::is_warning_checked( $key, false, false );
-
-		if ( '' !== $default && '' !== $warned ) {
-			$class = $default . ' ' . $warned;
-		} elseif ( '' !== $default ) {
-			$class = $default;
-		} elseif ( '' !== $warned ) {
-			$class = $warned;
-		}
-
-		if ( $echo ) {
-			if ( $wrap ) {
-				printf( 'class="%s"', \esc_attr( $class ) );
-			} else {
-				echo \esc_attr( $class );
-			}
-		} else {
-			if ( $wrap )
-				return sprintf( 'class="%s"', $class );
-
-			return $class;
-		}
 	}
 
 	/**

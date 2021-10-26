@@ -8,7 +8,7 @@
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 use The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -24,7 +24,7 @@ $_save_button  = get_submit_button(
 $_reset_button = get_submit_button(
 	__( 'Reset Settings', 'autodescription' ),
 	'secondary',
-	Form::get_field_name( 'tsf-settings-reset' ),
+	Input::get_field_name( 'tsf-settings-reset' ),
 	false,
 	[
 		'id'      => '', // we ouput this twice, don't set ID.

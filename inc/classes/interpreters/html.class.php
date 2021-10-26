@@ -38,6 +38,30 @@ namespace The_SEO_Framework\Interpreters;
 final class HTML {
 
 	/**
+	 * Helper function that constructs header elements. Does not escape.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param string $title The header title.
+	 * @return string The header title.
+	 */
+	public static function get_header_title( $title ) {
+		return sprintf( '<h4>%s</h4>', $title );
+	}
+
+	/**
+	 * Helper function that constructs header elements.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param string $title The header title.
+	 */
+	public static function header_title( $title ) {
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
+		echo static::get_header_title( \esc_html( $title ) );
+	}
+
+	/**
 	 * Mark up content with code tags.
 	 * Escapes all HTML, so `<` gets changed to `&lt;` and displays correctly.
 	 *

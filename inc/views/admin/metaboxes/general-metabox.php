@@ -9,7 +9,7 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -56,26 +56,26 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		break;
 
 	case 'general_layout_tab':
-		Form::header_title( __( 'Administrative Layout Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Administrative Layout Settings', 'autodescription' ) );
 		HTML::description( __( 'SEO hints can be visually displayed throughout the dashboard.', 'autodescription' ) );
 
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'SEO Bar Settings', 'autodescription' ) );
+		HTML::header_title( __( 'SEO Bar Settings', 'autodescription' ) );
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'display_seo_bar_tables',
 					'label'  => esc_html__( 'Display the SEO Bar in overview tables?', 'autodescription' ),
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'display_seo_bar_metabox',
 					'label'  => esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'seo_bar_symbols',
 					'label'  => esc_html__( 'Use symbols for warnings?', 'autodescription' ) . ' ' . HTML::make_info(
 						__( 'If you have difficulty discerning colors, this may help you spot issues more easily.', 'autodescription' ),
@@ -91,7 +91,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Counter Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Counter Settings', 'autodescription' ) );
 
 		$pixel_info = HTML::make_info(
 			__( 'The pixel counter computes whether the input will fit on search engine result pages.', 'autodescription' ),
@@ -107,12 +107,12 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'display_pixel_counter',
 					'label'  => esc_html__( 'Display pixel counters?', 'autodescription' ) . ' ' . $pixel_info,
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'display_character_counter',
 					'label'  => esc_html__( 'Display character counters?', 'autodescription' ) . ' ' . $character_info,
 					'escape' => false,
@@ -123,13 +123,13 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		break;
 
 	case 'general_performance_tab':
-		Form::header_title( __( 'Performance Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Performance Settings', 'autodescription' ) );
 		HTML::description( __( "Depending on your server's configuration, adjusting these settings can affect performance.", 'autodescription' ) );
 
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Query Alteration Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Query Alteration Settings', 'autodescription' ) );
 		HTML::description_noesc(
 			esc_html__( "Altering the query allows for more control of the site's hierarchy.", 'autodescription' )
 			. '<br>' .
@@ -182,9 +182,9 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			'<label for="%1$s">%2$s</label>
 			<select name="%3$s" id="%1$s">%4$s</select>',
 			[
-				Form::get_field_id( 'alter_search_query_type' ),
+				Input::get_field_id( 'alter_search_query_type' ),
 				$perform_alteration_i18n,
-				Form::get_field_name( 'alter_search_query_type' ),
+				Input::get_field_name( 'alter_search_query_type' ),
 				$search_query_select_options,
 			]
 		);
@@ -193,16 +193,16 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			'<label for="%1$s">%2$s</label>
 			<select name="%3$s" id="%1$s">%4$s</select>',
 			[
-				Form::get_field_id( 'alter_archive_query_type' ),
+				Input::get_field_id( 'alter_archive_query_type' ),
 				$perform_alteration_i18n,
-				Form::get_field_name( 'alter_archive_query_type' ),
+				Input::get_field_name( 'alter_archive_query_type' ),
 				$archive_query_select_options,
 			]
 		);
 
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'alter_search_query',
 					'label'  => esc_html__( 'Enable search query alteration?', 'autodescription' )
 						. ' ' . HTML::make_info( __( 'This allows you to exclude pages from on-site search results.', 'autodescription' ), '', false ),
@@ -215,7 +215,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'alter_archive_query',
 					'label'  => esc_html__( 'Enable archive query alteration?', 'autodescription' )
 						. ' ' . HTML::make_info( __( 'This allows you to exclude pages from on-site archive listings.', 'autodescription' ), '', false ),
@@ -228,11 +228,11 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Transient Cache Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Transient Cache Settings', 'autodescription' ) );
 		HTML::description( __( 'To improve performance, generated output can be stored in the database as transient cache.', 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'cache_sitemap',
 				'label'  => esc_html__( 'Enable optimized sitemap generation cache?', 'autodescription' )
 					. ' ' . HTML::make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
@@ -243,17 +243,17 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		break;
 
 	case 'general_canonical_tab':
-		Form::header_title( __( 'Canonical URL Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Canonical URL Settings', 'autodescription' ) );
 		HTML::description( __( 'The canonical URL meta tag urges search engines to go to the outputted URL.', 'autodescription' ) );
 		HTML::description( __( 'If the canonical URL meta tag represents the visited page, then the search engine will crawl the visited page. Otherwise, the search engine may go to the outputted URL.', 'autodescription' ) );
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Scheme Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Scheme Settings', 'autodescription' ) );
 		HTML::description( __( 'If your website is accessible via both HTTP as HTTPS, you may want to set this to HTTPS if not detected automatically. Secure connections are preferred by search engines.', 'autodescription' ) );
 		?>
-		<label for="<?php Form::field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>
-		<select name="<?php Form::field_name( 'canonical_scheme' ); ?>" id="<?php Form::field_id( 'canonical_scheme' ); ?>">
+		<label for="<?php Input::field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>
+		<select name="<?php Input::field_name( 'canonical_scheme' ); ?>" id="<?php Input::field_id( 'canonical_scheme' ); ?>">
 			<?php
 			$scheme_types = (array) apply_filters(
 				'the_seo_framework_canonical_scheme_types',
@@ -274,11 +274,11 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 		<hr>
 		<?php
-		Form::header_title( __( 'Link Relationship Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Link Relationship Settings', 'autodescription' ) );
 		HTML::description( __( 'Some search engines look for relations between the content of your pages. If you have pagination on a post or page, or have archives indexed, these options will help search engines look for the right page to display in the search results.', 'autodescription' ) );
 		HTML::description( __( "It's recommended to turn these options on for better SEO consistency and to prevent duplicated content issues.", 'autodescription' ) );
 
-		$prev_next_posts_checkbox = Form::make_checkbox( [
+		$prev_next_posts_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_posts',
 			'label'  => $this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
@@ -288,7 +288,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			'escape' => false,
 		] );
 
-		$prev_next_archives_checkbox = Form::make_checkbox( [
+		$prev_next_archives_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_archives',
 			'label'  => $this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
@@ -298,7 +298,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			'escape' => false,
 		] );
 
-		$prev_next_frontpage_checkbox = Form::make_checkbox( [
+		$prev_next_frontpage_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_frontpage',
 			'label'  => $this->convert_markdown(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
@@ -315,19 +315,19 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		$timestamp_0 = gmdate( $this->get_timestamp_format( false ) );
 		$timestamp_1 = gmdate( $this->get_timestamp_format( true ) );
 
-		Form::header_title( __( 'Timestamp Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Timestamp Settings', 'autodescription' ) );
 		HTML::description( __( 'Timestamps help indicate when a page has been published and modified.', 'autodescription' ) );
 		?>
 		<hr>
 
 		<fieldset>
-			<legend><?php Form::header_title( __( 'Timestamp Format Settings', 'autodescription' ) ); ?></legend>
+			<legend><?php HTML::header_title( __( 'Timestamp Format Settings', 'autodescription' ) ); ?></legend>
 			<?php HTML::description( __( 'This setting determines how specific the timestamp is.', 'autodescription' ) ); ?>
 
 			<p id="sitemaps-timestamp-format" class="tsf-fields">
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php Form::field_name( 'timestamps_format' ); ?>" id="<?php Form::field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
-					<label for="<?php Form::field_id( 'timestamps_format_0' ); ?>">
+					<input type="radio" name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
+					<label for="<?php Input::field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo HTML::code_wrap( $timestamp_0 ), ' ', HTML::make_info(
@@ -337,8 +337,8 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 					</label>
 				</span>
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php Form::field_name( 'timestamps_format' ); ?>" id="<?php Form::field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
-					<label for="<?php Form::field_id( 'timestamps_format_1' ); ?>">
+					<input type="radio" name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
+					<label for="<?php Input::field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo HTML::code_wrap( $timestamp_1 ), ' ', HTML::make_info(
@@ -353,10 +353,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		break;
 
 	case 'general_exclusions_tab':
-		$default_options = $this->get_default_site_options();
-		$warned_options  = $this->get_warned_site_options();
-
-		Form::header_title( __( 'Exclusion Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Exclusion Settings', 'autodescription' ) );
 		HTML::description( __( 'When checked, these options will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types and taxonomies. This will allow search engines to crawl the post type and taxonomies without advanced restrictions or directions.', 'autodescription' ) );
 		HTML::attention_description_noesc(
 			$this->convert_markdown(
@@ -370,14 +367,12 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 		<hr>
 		<?php
-		Form::header_title( __( 'Post Type Exclusions', 'autodescription' ) );
+		HTML::header_title( __( 'Post Type Exclusions', 'autodescription' ) );
 		HTML::description( __( 'Select post types which should be excluded.', 'autodescription' ) );
 		HTML::description( __( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 
 		$forced_pt = $this->get_forced_supported_post_types();
 		$boxes     = [];
-
-		$pt_option_id = 'disabled_post_types';
 
 		foreach ( $this->get_public_post_types() as $post_type ) {
 			$_label = $this->get_post_type_label( $post_type, false );
@@ -389,15 +384,12 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 				esc_html( $post_type )
 			);
 
-			$boxes[] = Form::make_checkbox( [
-				'id'       => $pt_option_id,
+			$boxes[] = Input::make_checkbox( [
+				'id'       => [ 'disabled_post_types', $post_type ],
 				'class'    => 'tsf-excluded-post-types',
-				'index'    => $post_type,
 				'label'    => $_label,
 				'escape'   => false,
 				'disabled' => in_array( $post_type, $forced_pt, true ),
-				'default'  => ! empty( $default_options[ $pt_option_id ][ $post_type ] ),
-				'warned'   => ! empty( $warned_options[ $pt_option_id ][ $post_type ] ),
 			] );
 		}
 
@@ -406,7 +398,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Taxonomy Exclusions', 'autodescription' ) );
+		HTML::header_title( __( 'Taxonomy Exclusions', 'autodescription' ) );
 		HTML::description( __( 'Select taxonomies which should be excluded.', 'autodescription' ) );
 		HTML::description( __( 'When taxonomies have all their bound post types excluded, they will inherit their exclusion status.', 'autodescription' ) );
 
@@ -425,15 +417,12 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 				esc_html( $taxonomy )
 			);
 
-			$boxes[] = Form::make_checkbox( [
-				'id'       => 'disabled_taxonomies',
+			$boxes[] = Input::make_checkbox( [
+				'id'       => [ 'disabled_taxonomies', $taxonomy ],
 				'class'    => 'tsf-excluded-taxonomies',
-				'index'    => $taxonomy,
 				'label'    => $_label,
 				'escape'   => false,
 				'disabled' => in_array( $taxonomy, $forced_tax, true ),
-				'default'  => ! empty( $default_options[ $tax_option_id ][ $taxonomy ] ),
-				'warned'   => ! empty( $warned_options[ $tax_option_id ][ $taxonomy ] ),
 				'data'     => [
 					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
 				],

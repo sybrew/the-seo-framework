@@ -347,6 +347,11 @@ TODO add "padlock" to the counters on the homepage "page edit screen" if it's lo
 
 TODO process changelog https://github.com/sybrew/the-seo-framework/compare/64b64e28e534304ee7e1bea65b25e8ec46241f85...master
 
+TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
+	-> Will this work with quick/bulk-edit?
+
+TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
+
 **For everyone:**
 
 * **Upgrade notes:**

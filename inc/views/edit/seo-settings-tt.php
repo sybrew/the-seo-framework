@@ -133,7 +133,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" type="text" value="<?php echo $this->esc_attr_preserve_amp( $title ); ?>" size="40" autocomplete=off />
+					<input type="text" name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?php echo $this->esc_attr_preserve_amp( $title ); ?>" size="40" autocomplete=off />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -305,7 +305,7 @@ $this->output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input name="autodescription-meta[social_image_url]" id="autodescription_meta_socialimage-url" type="url" placeholder="<?php echo esc_attr( $image_placeholder ); ?>" value="<?php echo esc_attr( $social_image_url ); ?>" size="40" autocomplete=off />
+				<input type="url" name="autodescription-meta[social_image_url]" id="autodescription_meta_socialimage-url" placeholder="<?php echo esc_attr( $image_placeholder ); ?>" value="<?php echo esc_attr( $social_image_url ); ?>" size="40" autocomplete=off />
 				<input type="hidden" name="autodescription-meta[social_image_id]" id="autodescription_meta_socialimage-id" value="<?php echo absint( $social_image_id ); ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php
@@ -336,7 +336,7 @@ $this->output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" type=url placeholder="<?php echo esc_attr( $canonical_placeholder ); ?>" value="<?php echo esc_attr( $canonical ); ?>" size="40" autocomplete=off />
+				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?php echo esc_attr( $canonical_placeholder ); ?>" value="<?php echo esc_attr( $canonical ); ?>" size="40" autocomplete=off />
 			</td>
 		</tr>
 
@@ -394,7 +394,7 @@ $this->output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" type=url value="<?php echo esc_attr( $redirect ); ?>" size="40" autocomplete=off />
+				<input type=url name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" value="<?php echo esc_attr( $redirect ); ?>" size="40" autocomplete=off />
 			</td>
 		</tr>
 	</tbody>

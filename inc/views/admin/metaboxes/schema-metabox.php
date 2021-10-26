@@ -9,13 +9,14 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Form,
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'schema', $instance ) ) :
 	case 'schema_main':
-		Form::header_title( __( 'Schema.org Output Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Schema.org Output Settings', 'autodescription' ) );
 
 		if ( $this->has_json_ld_plugin() )
 			HTML::attention_description( __( 'Another Schema.org plugin has been detected. These markup settings might conflict.', 'autodescription' ) );
@@ -50,13 +51,13 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		break;
 
 	case 'schema_structure_tab':
-		Form::header_title( __( 'Site Structure Options', 'autodescription' ) );
+		HTML::header_title( __( 'Site Structure Options', 'autodescription' ) );
 		HTML::description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
 		HTML::description( __( "For example, search engines display your pages' URLs when listed in the search results. These options allow you to enhance those URLs output.", 'autodescription' ) );
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Breadcrumbs', 'autodescription' ) );
+		HTML::header_title( __( 'Breadcrumbs', 'autodescription' ) );
 		HTML::description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the search results when available.", 'autodescription' ) );
 
 		$info = HTML::make_info(
@@ -65,7 +66,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			false
 		);
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'ld_json_breadcrumbs',
 				'label'  => esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
 				'escape' => false,
@@ -85,7 +86,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			false
 		);
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'ld_json_searchbox',
 				'label'  => esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . ' ' . $info,
 				'escape' => false,
@@ -95,7 +96,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		break;
 
 	case 'schema_presence_tab':
-		Form::header_title( __( 'Authorized Presence Options', 'autodescription' ) );
+		HTML::header_title( __( 'Authorized Presence Options', 'autodescription' ) );
 		HTML::description( __( 'The authorized presence Schema.org output helps search engine users find ways to interact with this website.', 'autodescription' ) );
 
 		$info = HTML::make_info(
@@ -104,7 +105,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			false
 		);
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'knowledge_output',
 				'label'  => esc_html__( 'Output Authorized Presence?', 'autodescription' ) . ' ' . $info,
 				'escape' => false,
@@ -114,10 +115,10 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		?>
 		<hr>
 
-		<?php Form::header_title( __( 'About this website', 'autodescription' ) ); ?>
+		<?php HTML::header_title( __( 'About this website', 'autodescription' ) ); ?>
 		<p>
-			<label for="<?php Form::field_id( 'knowledge_type' ); ?>"><?php echo esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
-			<select name="<?php Form::field_name( 'knowledge_type' ); ?>" id="<?php Form::field_id( 'knowledge_type' ); ?>">
+			<label for="<?php Input::field_id( 'knowledge_type' ); ?>"><?php echo esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
+			<select name="<?php Input::field_name( 'knowledge_type' ); ?>" id="<?php Input::field_id( 'knowledge_type' ); ?>">
 				<?php
 				$knowledge_type = (array) apply_filters(
 					'the_seo_framework_knowledge_types',
@@ -134,16 +135,16 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		</p>
 
 		<p>
-			<label for="<?php Form::field_id( 'knowledge_name' ); ?>">
+			<label for="<?php Input::field_id( 'knowledge_name' ); ?>">
 				<strong><?php esc_html_e( 'The organization or personal name', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php Form::field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ); ?>" value="<?php echo esc_attr( $this->get_option( 'knowledge_name' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Input::field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ); ?>" value="<?php echo esc_attr( $this->get_option( 'knowledge_name' ) ); ?>" autocomplete=off />
 		</p>
 		<hr>
 		<?php
-		Form::header_title( __( 'Website logo', 'autodescription' ) );
+		HTML::header_title( __( 'Website logo', 'autodescription' ) );
 		HTML::description( esc_html__( 'These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere.', 'autodescription' ) );
 		$info = HTML::make_info(
 			__( 'Learn how this data is used.', 'autodescription' ),
@@ -151,7 +152,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			false
 		);
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'knowledge_logo',
 				'label'  => esc_html__( 'Enable logo?', 'autodescription' ) . ' ' . $info,
 				'escape' => false,
@@ -167,8 +168,8 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Form::field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'knowledge_logo_url' ) ); ?>" />
-			<input type="hidden" name="<?php Form::field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_option( 'knowledge_logo_id' ) ); ?>" />
+			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'knowledge_logo_url' ) ); ?>" />
+			<input type="hidden" name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_option( 'knowledge_logo_id' ) ); ?>" />
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
@@ -279,7 +280,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			?>
 			<hr>
 			<?php
-			Form::header_title( __( 'Connected Social Pages', 'autodescription' ) );
+			HTML::header_title( __( 'Connected Social Pages', 'autodescription' ) );
 			HTML::description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
 			HTML::description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
 			HTML::description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
@@ -301,7 +302,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 				?>
 				<p>
-					<label for="<?php Form::field_id( $v['option'] ); ?>">
+					<label for="<?php Input::field_id( $v['option'] ); ?>">
 						<strong><?php echo esc_html( $v['desc'] ); ?></strong>
 						<?php
 						if ( $v['examplelink'] ) {
@@ -314,7 +315,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 					</label>
 				</p>
 				<p>
-					<input type="url" name="<?php Form::field_name( $v['option'] ); ?>" class="large-text" id="<?php Form::field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" autocomplete=off />
+					<input type="url" name="<?php Input::field_name( $v['option'] ); ?>" class="large-text" id="<?php Input::field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" autocomplete=off />
 				</p>
 				<?php
 			}

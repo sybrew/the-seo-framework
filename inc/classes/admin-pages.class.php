@@ -110,8 +110,8 @@ class Admin_Pages extends Generate_Ldjson {
 	public function _output_settings_wrap() {
 
 		\add_action(
-			$this->seo_settings_page_hook . '_settings_page_boxes',
-			Bridges\SeoSettings::class . '::_output_columns'
+			"{$this->seo_settings_page_hook}_settings_page_boxes",
+			[ Bridges\SeoSettings::class, '_output_columns' ]
 		);
 
 		Bridges\SeoSettings::_output_wrap();
@@ -139,7 +139,7 @@ class Admin_Pages extends Generate_Ldjson {
 		if ( $show_seobox )
 			\add_action(
 				'add_meta_boxes',
-				Bridges\PostSettings::class . '::_prepare_meta_box'
+				[ Bridges\PostSettings::class, '_prepare_meta_box' ]
 			);
 	}
 
@@ -165,7 +165,7 @@ class Admin_Pages extends Generate_Ldjson {
 
 		\add_action(
 			"{$taxonomy}_edit_form",
-			Bridges\TermSettings::class . '::_prepare_setting_fields',
+			[ Bridges\TermSettings::class, '_prepare_setting_fields' ],
 			$priority,
 			2
 		);
@@ -184,10 +184,8 @@ class Admin_Pages extends Generate_Ldjson {
 		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
 		// if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
-		$user_settings_class = Bridges\UserSettings::class;
-
-		\add_action( 'show_user_profile', "$user_settings_class::_prepare_setting_fields", 0, 1 );
-		\add_action( 'edit_user_profile', "$user_settings_class::_prepare_setting_fields", 0, 1 );
+		\add_action( 'show_user_profile', [ Bridges\UserSettings::class, '_prepare_setting_fields' ], 0, 1 );
+		\add_action( 'edit_user_profile', [ Bridges\UserSettings::class, '_prepare_setting_fields' ], 0, 1 );
 	}
 
 	/**
@@ -424,7 +422,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @param array  $data The input data.
 	 */
 	public function output_js_title_data( $id, $data ) {
-		printf(
+		vprintf(
 			implode(
 				'',
 				[
@@ -436,9 +434,11 @@ class Admin_Pages extends Generate_Ldjson {
 					'<span id="tsf-title-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s></span>',
 				]
 			),
-			\esc_attr( $id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( $data )
+			[
+				\esc_attr( $id ),
+				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				Interpreters\HTML::make_data_attributes( $data ),
+			]
 		);
 	}
 
@@ -451,16 +451,13 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @param array[og,tw] $settings The input settings data.
 	 */
 	public function output_js_social_data( $group, $settings ) {
-		printf(
-			implode(
-				'',
-				[
-					'<span id="tsf-social-data_%1$s" class="hidden wp-exclude-emoji" data-group="%1$s" %2$s></span>',
-				]
-			),
-			\esc_attr( $group ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( [ 'settings' => $settings ] )
+		vprintf(
+			'<span id="tsf-social-data_%1$s" class="hidden wp-exclude-emoji" data-group="%1$s" %2$s></span>',
+			[
+				\esc_attr( $group ),
+				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				Interpreters\HTML::make_data_attributes( [ 'settings' => $settings ] ),
+			]
 		);
 	}
 
@@ -488,7 +485,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @param array  $data The input data.
 	 */
 	public function output_js_description_data( $id, $data ) {
-		printf(
+		vprintf(
 			implode(
 				'',
 				[
@@ -496,9 +493,11 @@ class Admin_Pages extends Generate_Ldjson {
 					'<span id="tsf-description-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s ></span>',
 				]
 			),
-			\esc_attr( $id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			Interpreters\HTML::make_data_attributes( $data )
+			[
+				\esc_attr( $id ),
+				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				Interpreters\HTML::make_data_attributes( $data ),
+			]
 		);
 	}
 }

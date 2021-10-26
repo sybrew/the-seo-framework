@@ -9,7 +9,7 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -108,11 +108,11 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		break;
 
 	case 'robots_general_tab':
-		Form::header_title( __( 'Advanced Query Protection', 'autodescription' ) );
+		HTML::header_title( __( 'Advanced Query Protection', 'autodescription' ) );
 		HTML::description( __( 'Some URL queries can cause WordPress to show faux archives. When search engines spot these, they will crawl and index them, which may cause a drop in ranking. Advanced query protection will prevent robots from indexing these archives.', 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'    => 'advanced_query_protection',
 				'label' => __( 'Enable advanced query protection?', 'autodescription' ),
 			] ),
@@ -121,11 +121,11 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Paginated Archive Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Paginated Archive Settings', 'autodescription' ) );
 		HTML::description( __( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'paged_noindex',
 				'label'  => $this->convert_markdown(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
@@ -139,11 +139,11 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Copyright Directive Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Copyright Directive Settings', 'autodescription' ) );
 		HTML::description( __( "Some search engines allow you to control copyright directives on the content they aggregate. It's best to allow some content to be taken by these aggregators, as that can improve contextualized exposure via snippets and previews. When left unspecified, regional regulations may apply. It is up to the aggregator to honor these requests.", 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'    => 'set_copyright_directives',
 				'label' => __( 'Specify aggregator copyright compliance directives?', 'autodescription' ),
 			] ),
@@ -185,9 +185,9 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				<p><select name="%3$s" id="%1$s">%4$s</select></p>
 				<p class=description>%6$s</p>',
 				[
-					Form::get_field_id( 'max_snippet_length' ),
+					Input::get_field_id( 'max_snippet_length' ),
 					esc_html__( 'Maximum text snippet length', 'autodescription' ),
-					Form::get_field_name( 'max_snippet_length' ),
+					Input::get_field_name( 'max_snippet_length' ),
 					$text_snippet_options,
 					HTML::make_info(
 						__( 'This may limit the text snippet length for all pages on this site.', 'autodescription' ),
@@ -222,9 +222,9 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
 				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
 				[
-					Form::get_field_id( 'max_image_preview' ),
+					Input::get_field_id( 'max_image_preview' ),
 					esc_html__( 'Maximum image preview size', 'autodescription' ),
-					Form::get_field_name( 'max_image_preview' ),
+					Input::get_field_name( 'max_image_preview' ),
 					$image_preview_options,
 					HTML::make_info(
 						__( 'This may limit the image preview size for all images from this site.', 'autodescription' ),
@@ -270,9 +270,9 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				'<p><label for="%1$s"><strong>%2$s</strong> %5$s</label></p>
 				<p><select name="%3$s" id="%1$s">%4$s</select></p>',
 				[
-					Form::get_field_id( 'max_video_preview' ),
+					Input::get_field_id( 'max_video_preview' ),
 					esc_html__( 'Maximum video preview length', 'autodescription' ),
-					Form::get_field_name( 'max_video_preview' ),
+					Input::get_field_name( 'max_video_preview' ),
 					$video_preview_options,
 					HTML::make_info(
 						__( 'This may limit the video preview length for all videos on this site.', 'autodescription' ),
@@ -296,42 +296,34 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 
 		$ro_name_wrapped = HTML::code_wrap( $ro_value );
 
-		$default_options = $this->get_default_site_options();
-		$warned_options  = $this->get_warned_site_options();
-
-		Form::header_title( __( 'Robots Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Robots Settings', 'autodescription' ) );
 		HTML::description( $ro_i18n );
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Post Type Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Post Type Settings', 'autodescription' ) );
 		HTML::description( __( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
-
-		$pt_option_id = $this->get_robots_post_type_option_id( $ro_value );
 
 		// When the post OR page post types are available, show this warning.
 		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) && array_intersect( $post_types, [ 'post', 'page' ] ) )
 			HTML::attention_description( __( 'Warning: No site should enable these options for Posts and Pages.', 'autodescription' ) );
 
-		// TODO can we assume that there's at least one post type at all times? Can WP be used in this way, albeit headless?
 		$checkboxes = [];
 
+		$pt_option_id = $this->get_robots_post_type_option_id( $ro_value );
+
 		foreach ( $post_types as $post_type ) {
-			$checkboxes[] = Form::make_checkbox( [
-				'id'       => $pt_option_id,
-				'class'    => 'tsf-robots-post-types',
-				'index'    => $post_type,
-				'label'    => sprintf(
+			$checkboxes[] = Input::make_checkbox( [
+				'id'     => [ $pt_option_id, $post_type ],
+				'class'  => 'tsf-robots-post-types',
+				'label'  => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
 					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, esc_html( $this->get_post_type_label( $post_type, false ) ) ),
 					esc_html( $post_type )
 				),
-				'escape'   => false,
-				'disabled' => false,
-				'default'  => ! empty( $default_options[ $pt_option_id ][ $post_type ] ),
-				'warned'   => ! empty( $warned_options[ $pt_option_id ][ $post_type ] ),
-				'data'     => [
+				'escape' => false,
+				'data'   => [
 					'robots' => $ro_value,
 				],
 			] );
@@ -342,42 +334,38 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Taxonomy Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Taxonomy Settings', 'autodescription' ) );
 		HTML::description( __( "These settings apply to the taxonomies of post types. When taxonomies have all their bound post types' options checked, they will inherit their status.", 'autodescription' ) );
 
 		$tax_option_id = $this->get_robots_taxonomy_option_id( $ro_value );
 
-		// TODO can we assume that there's at least one taxonomy at all times? Can WP be used in this way, albeit headless?
 		$checkboxes = [];
 
 		foreach ( $taxonomies as $taxonomy ) {
-			$checkboxes[] = Form::make_checkbox( [
-				'id'       => $tax_option_id,
-				'class'    => 'tsf-robots-taxonomies',
-				'index'    => $taxonomy,
-				'label'    => sprintf(
+			$checkboxes[] = Input::make_checkbox( [
+				'id'     => [ $tax_option_id, $taxonomy ],
+				'class'  => 'tsf-robots-taxonomies',
+				'label'  => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
 					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, esc_html( $this->get_tax_type_label( $taxonomy, false ) ) ),
 					esc_html( $taxonomy )
 				),
-				'escape'   => false,
-				'disabled' => false,
-				'default'  => ! empty( $default_options[ $tax_option_id ][ $taxonomy ] ),
-				'warned'   => ! empty( $warned_options[ $tax_option_id ][ $taxonomy ] ),
-				'data'     => [
+				'escape' => false,
+				'data'   => [
 					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
 					'robots'    => $ro_value,
 				],
 			] );
 		}
 
+		// TODO can we assume that there's at least one taxonomy at all times? Can WP be used in this way, albeit headless?
 		HTML::wrap_fields( $checkboxes, true );
 
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Global Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Global Settings', 'autodescription' ) );
 		HTML::description( __( 'These settings apply to other globally registered content types.', 'autodescription' ) );
 
 		$checkboxes = '';
@@ -389,7 +377,8 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				esc_html( $data['i18n'] )
 			);
 
-			$id = $this->s_field_id( $type . '_' . $ro_value );
+			// Legacy.
+			$id = $this->s_field_id( "{$type}_{$ro_value}" );
 
 			// Add warning if it's 'site'.
 			if ( 'site' === $type ) {
@@ -402,7 +391,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 					);
 			}
 
-			$checkboxes .= Form::make_checkbox( [
+			$checkboxes .= Input::make_checkbox( [
 				'id'     => $id,
 				'label'  => $label,
 				'escape' => false,

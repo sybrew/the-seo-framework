@@ -8,20 +8,20 @@
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 use The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'feed', $instance ) ) :
 	case 'feed_main':
-		Form::header_title( __( 'Content Feed Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Content Feed Settings', 'autodescription' ) );
 		HTML::description( __( "Sometimes, your content can get stolen by robots through the WordPress feeds. This can cause duplicate content issues. To prevent this from happening, it's recommended to convert the feed's content into an excerpt.", 'autodescription' ) );
 		HTML::description( __( 'Adding a backlink below the feed entries will also let the visitors know where the content came from.', 'autodescription' ) );
 
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Change Feed Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Change Feed Settings', 'autodescription' ) );
 		$excerpt_the_feed_label  = esc_html__( 'Convert feed entries into excerpts?', 'autodescription' );
 		$excerpt_the_feed_label .= ' ' . HTML::make_info( __( 'By default the excerpt will be at most 400 characters long.', 'autodescription' ), '', false );
 
@@ -33,17 +33,17 @@ switch ( $this->get_view_instance( 'feed', $instance ) ) :
 
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'excerpt_the_feed',
 					'label'  => $excerpt_the_feed_label,
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'source_the_feed',
 					'label'  => $source_the_feed_label,
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'index_the_feed',
 					'label'  => $index_the_feed_label,
 					'escape' => false,

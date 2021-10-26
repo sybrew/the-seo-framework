@@ -8,7 +8,7 @@
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 use The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -75,7 +75,7 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 			],
 		];
 
-		Form::header_title( __( 'Webmaster Integration Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Webmaster Integration Settings', 'autodescription' ) );
 		HTML::description( __( "When adding your website to Google, Bing and other Webmaster Tools, you'll be asked to add a code or file to your website for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) );
 		HTML::description( __( "Verifying your website has no SEO value whatsoever. But you might gain added benefits such as search ranking insights to help you improve your website's content.", 'autodescription' ) );
 
@@ -86,7 +86,7 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 			vprintf(
 				'<p><label for=%s><strong>%s</strong> %s</label></p>',
 				[
-					esc_attr( Form::get_field_id( $setting['setting'] ) ),
+					esc_attr( Input::get_field_id( $setting['setting'] ) ),
 					esc_html( $setting['label'] ),
 					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
 					$setting['info'],
@@ -95,8 +95,8 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 			vprintf(
 				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s" /></p>',
 				[
-					esc_attr( Form::get_field_name( $setting['setting'] ) ),
-					esc_attr( Form::get_field_id( $setting['setting'] ) ),
+					esc_attr( Input::get_field_name( $setting['setting'] ) ),
+					esc_attr( Input::get_field_id( $setting['setting'] ) ),
 					esc_attr( $setting['placeholder'] ),
 					esc_attr( $this->get_option( $setting['setting'] ) ),
 				]

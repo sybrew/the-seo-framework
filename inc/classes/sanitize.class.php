@@ -393,6 +393,14 @@ class Sanitize extends Admin_Pages {
 			]
 		);
 
+		$this->add_option_filter(
+			's_post_type_archive_meta',
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[
+				'pta'
+			]
+		);
+
 		/**
 		 * @todo create content="code" stripper in PHP (redundant from JS's)
 		 */
@@ -675,34 +683,35 @@ class Sanitize extends Admin_Pages {
 		return (array) \apply_filters(
 			'the_seo_framework_available_sanitizer_filters',
 			[
-				's_left_right'          => [ $this, 's_left_right' ],
-				's_left_right_home'     => [ $this, 's_left_right_home' ],
-				's_title_separator'     => [ $this, 's_title_separator' ],
-				's_description'         => [ $this, 's_description' ],
-				's_description_raw'     => [ $this, 's_description_raw' ],
-				's_title'               => [ $this, 's_title' ],
-				's_title_raw'           => [ $this, 's_title_raw' ],
-				's_knowledge_type'      => [ $this, 's_knowledge_type' ],
-				's_alter_query_type'    => [ $this, 's_alter_query_type' ],
-				's_one_zero'            => [ $this, 's_one_zero' ],
-				's_disabled_post_types' => [ $this, 's_disabled_post_types' ],
-				's_disabled_taxonomies' => [ $this, 's_disabled_taxonomies' ],
-				's_post_types'          => [ $this, 's_post_types' ],
-				's_taxonomies'          => [ $this, 's_taxonomies' ],
-				's_numeric_string'      => [ $this, 's_numeric_string' ],
-				's_no_html'             => [ $this, 's_no_html' ],
-				's_no_html_space'       => [ $this, 's_no_html_space' ],
-				's_absint'              => [ $this, 's_absint' ],
-				's_safe_html'           => [ $this, 's_safe_html' ],
-				's_url'                 => [ $this, 's_url' ],
-				's_url_query'           => [ $this, 's_url_query' ],
-				's_facebook_profile'    => [ $this, 's_facebook_profile' ],
-				's_twitter_name'        => [ $this, 's_twitter_name' ],
-				's_twitter_card'        => [ $this, 's_twitter_card' ],
-				's_canonical_scheme'    => [ $this, 's_canonical_scheme' ],
-				's_min_max_sitemap'     => [ $this, 's_min_max_sitemap' ],
-				's_image_preview'       => [ $this, 's_image_preview' ],
-				's_snippet_length'      => [ $this, 's_snippet_length' ],
+				's_left_right'             => [ $this, 's_left_right' ],
+				's_left_right_home'        => [ $this, 's_left_right_home' ],
+				's_title_separator'        => [ $this, 's_title_separator' ],
+				's_description'            => [ $this, 's_description' ],
+				's_description_raw'        => [ $this, 's_description_raw' ],
+				's_title'                  => [ $this, 's_title' ],
+				's_title_raw'              => [ $this, 's_title_raw' ],
+				's_knowledge_type'         => [ $this, 's_knowledge_type' ],
+				's_alter_query_type'       => [ $this, 's_alter_query_type' ],
+				's_one_zero'               => [ $this, 's_one_zero' ],
+				's_disabled_post_types'    => [ $this, 's_disabled_post_types' ],
+				's_disabled_taxonomies'    => [ $this, 's_disabled_taxonomies' ],
+				's_post_types'             => [ $this, 's_post_types' ],
+				's_taxonomies'             => [ $this, 's_taxonomies' ],
+				's_post_type_archive_meta' => [ $this, 's_post_type_archive_meta' ],
+				's_numeric_string'         => [ $this, 's_numeric_string' ],
+				's_no_html'                => [ $this, 's_no_html' ],
+				's_no_html_space'          => [ $this, 's_no_html_space' ],
+				's_absint'                 => [ $this, 's_absint' ],
+				's_safe_html'              => [ $this, 's_safe_html' ],
+				's_url'                    => [ $this, 's_url' ],
+				's_url_query'              => [ $this, 's_url_query' ],
+				's_facebook_profile'       => [ $this, 's_facebook_profile' ],
+				's_twitter_name'           => [ $this, 's_twitter_name' ],
+				's_twitter_card'           => [ $this, 's_twitter_card' ],
+				's_canonical_scheme'       => [ $this, 's_canonical_scheme' ],
+				's_min_max_sitemap'        => [ $this, 's_min_max_sitemap' ],
+				's_image_preview'          => [ $this, 's_image_preview' ],
+				's_snippet_length'         => [ $this, 's_snippet_length' ],
 			]
 		);
 	}

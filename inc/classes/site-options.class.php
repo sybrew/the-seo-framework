@@ -172,7 +172,7 @@ class Site_Options extends Sanitize {
 				'homepage_social_image_id'  => 0,
 
 				// Post Type Archives.
-				'pta' => [], // All of it. See $this->get_post_type_archive_meta(), which calls this index.
+				'pta' => $this->get_all_post_type_archive_meta_defaults(), // All of it. See $this->get_post_type_archive_meta(), which calls this index.
 
 				// Relationships.
 				'shortlink_tag'       => 0, // Adds shortlink tag
@@ -289,40 +289,43 @@ class Site_Options extends Sanitize {
 	 * @since 3.1.0 Now applies the "the_seo_framework_warned_site_options" filter.
 	 * @since 4.1.0 Added robots' post type setting warnings.
 	 * @since 4.1.2 Added `ping_use_cron_prerender`.
+	 * @since 4.2.0 Added caching.
 	 *
 	 * @return array $options.
 	 */
 	public function get_warned_site_options() {
-		/**
-		 * Warned site settings. Only accepts checkbox options.
-		 * When listed as 1, it's a feature which can destroy your website's SEO value when checked.
-		 *
-		 * Unchecking a box is simply "I'm not active." - Removing features generally do not negatively impact SEO value.
-		 * Since it's all about the content.
-		 *
-		 * Only used within the SEO Settings page.
-		 *
-		 * @since 2.3.4
-		 * @param array $options The warned site options.
-		 */
-		return (array) \apply_filters(
-			'the_seo_framework_warned_site_options',
-			[
-				'title_rem_additions'     => 1, // Title remove additions.
-				'site_noindex'            => 1, // Site Page robots noindex.
-				'site_nofollow'           => 1, // Site Page robots nofollow.
-				'homepage_noindex'        => 1, // Homepage robots noindex.
-				'homepage_nofollow'       => 1, // Homepage robots noarchive.
-				$this->get_robots_post_type_option_id( 'noindex' ) => [
-					'post' => 1,
-					'page' => 1,
-				],
-				$this->get_robots_post_type_option_id( 'nofollow' ) => [
-					'post' => 1,
-					'page' => 1,
-				],
-				'ping_use_cron_prerender' => 1, // Sitemap cron-ping prerender.
-			]
+		return memo() ?? memo(
+			/**
+			 * Warned site settings. Only accepts checkbox options.
+			 * When listed as 1, it's a feature which can destroy your website's SEO value when checked.
+			 *
+			 * Unchecking a box is simply "I'm not active." - Removing features generally do not negatively impact SEO value.
+			 * Since it's all about the content.
+			 *
+			 * Only used within the SEO Settings page.
+			 *
+			 * @since 2.3.4
+			 * @param array $options The warned site options.
+			 */
+			(array) \apply_filters(
+				'the_seo_framework_warned_site_options',
+				[
+					'title_rem_additions'     => 1, // Title remove additions.
+					'site_noindex'            => 1, // Site Page robots noindex.
+					'site_nofollow'           => 1, // Site Page robots nofollow.
+					'homepage_noindex'        => 1, // Homepage robots noindex.
+					'homepage_nofollow'       => 1, // Homepage robots noarchive.
+					$this->get_robots_post_type_option_id( 'noindex' ) => [
+						'post' => 1,
+						'page' => 1,
+					],
+					$this->get_robots_post_type_option_id( 'nofollow' ) => [
+						'post' => 1,
+						'page' => 1,
+					],
+					'ping_use_cron_prerender' => 1, // Sitemap cron-ping prerender.
+				]
+			)
 		);
 	}
 
@@ -332,17 +335,25 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
+	 * @since 4.2.0 Now supports an option index forf $key.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
-	 * @param string  $key       Option name.
-	 * @param boolean $use_cache Optional. Whether to use the cache value or not. Defaults to true.
+	 * @param string|string[] $key       Option name, or a map of indexes therefor.
+	 *                                   If you send an empty array, you'll get all options. Don't.
+	 * @param boolean         $use_cache Optional. Whether to use the cache value or not. Defaults to true.
 	 * @return mixed The value of this $key in the database. Empty string when not set.
 	 */
 	public function get_option( $key, $use_cache = true ) {
 
 		if ( ! $use_cache ) {
-			$options = $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS, true );
-			return isset( $options[ $key ] ) ? \stripslashes_deep( $options[ $key ] ) : '';
+			// Preassign all options to $val so we can loop through it.
+			$val = $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS, true );
+
+			// This loop digs through itself: $val[ $index ][ $index ]... etc.
+			foreach ( (array) $key as $k )
+				$val = $val[ $k ] ?? '';
+
+			return ! empty( $val ) ? \stripslashes_deep( $val ) : '';
 		}
 
 		static $cache;
@@ -351,13 +362,22 @@ class Site_Options extends Sanitize {
 		if ( ! isset( $cache ) )
 			$cache = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
 
-		// TODO fall back to default if not registered? This means we no longer have to rely on upgrading. Or, array merge (recursive) at get_all_options?
-		return $cache[ $key ] ?? '';
+		$val = $cache;
+
+		// This loop digs through itself: $val[ $index ][ $index ]... etc.
+		foreach ( (array) $key as $k )
+			$val = $val[ $k ] ?? '';
+
+		return $val;
 	}
 
 	/**
 	 * Return current option array.
 	 * Memoizes the return value, can be bypassed and reset with second parameter.
+	 *
+	 * @TODO Should we fall back to default options when one isn't registered (correctly)?
+	 *       See get_term_meta(), which falls back to default term meta.
+	 *       We'd need our fancy in-house array_merge_recursive_distinct() though.
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.2 Added $use_current parameter.
@@ -402,15 +422,47 @@ class Site_Options extends Sanitize {
 	 * Return Default SEO options from the SEO options array.
 	 *
 	 * @since 2.2.5
+	 * @since 4.2.0 1. The first parameter can now fetch deeper option indexes.
+	 *              2. Removed second parameter (`$use_cache`).
+	 *              3. Now always memoizes.
 	 * @uses $this->get_default_settings() Return option from the options table and cache result.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
-	 * @param string  $key       Required. The option name.
-	 * @param boolean $use_cache Optional. Whether to use the cache value or not.
-	 * @return mixed The value of this $key in the database.
+	 * @param string|string[] $key Required. The option name, or a map of indexes.
+	 * @return mixed The default option. Null if it's not registered.
 	 */
-	public function get_default_option( $key, $use_cache = true ) {
-		return $this->get_default_settings( $key, '', $use_cache );
+	public function get_default_option( $key ) {
+
+		$val = umemo( __METHOD__ )
+			?? umemo( __METHOD__, \stripslashes_deep( $this->get_default_site_options() ) );
+
+		// This loop digs through itself: $val[ $index ][ $index ]... etc.
+		foreach ( (array) $key as $k )
+			$val = $val[ $k ] ?? null;
+
+		return $val ?? null;
+	}
+
+	/**
+	 * Return Warned SEO options from the SEO options array.
+	 *
+	 * @since 4.2.0
+	 * @uses $this->get_default_settings() Return option from the options table and cache result.
+	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 *
+	 * @param string|string[] $key Required. The option name, or a map of indexes.
+	 * @return bool True if warning is registered. False otherwise.
+	 */
+	public function get_warned_option( $key ) {
+
+		$val = umemo( __METHOD__ )
+			?? umemo( __METHOD__, \stripslashes_deep( $this->get_warned_site_options() ) );
+
+		// This loop digs through itself: $val[ $index ][ $index ]... etc.
+		foreach ( (array) $key as $k )
+			$val = $val[ $k ] ?? null;
+
+		return (bool) ( $val ?? false );
 	}
 
 	/**
@@ -544,74 +596,6 @@ class Site_Options extends Sanitize {
 		$settings = \wp_parse_args( $new_option, \get_option( $settings_field ) );
 
 		return \update_option( $settings_field, $settings );
-	}
-
-	/**
-	 * Get the default of any of the The SEO Framework settings.
-	 *
-	 * @since 2.2.4
-	 * @since 2.8.2 No longer decodes entities on request.
-	 * @since 3.1.0 : 1. Now returns null if the option doesn't exist, instead of -1.
-	 *                2. Is now influenced by filters.
-	 *                3. Now also strips slashes when using cache.
-	 *                4. The second parameter is deprecated.
-	 * @uses $this->get_default_site_options()
-	 *
-	 * @param string $key       Required. The option name.
-	 * @param string $depr      Deprecated. Leave empty.
-	 * @param bool   $use_cache Optional. Whether to use the options cache or bypass it.
-	 * @return mixed default option
-	 *         null If option doesn't exist.
-	 */
-	public function get_default_settings( $key, $depr = '', $use_cache = true ) {
-
-		if ( ! $key ) return false;
-
-		if ( $depr )
-			$this->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
-
-		if ( ! $use_cache ) {
-			$defaults = $this->get_default_site_options();
-			return isset( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : null;
-		}
-
-		static $cache;
-
-		return (
-			$cache = $cache ?? \stripslashes_deep( $this->get_default_site_options() )
-		)[ $key ] ?? null;
-	}
-
-	/**
-	 * Get the warned setting of any of the The SEO Framework settings.
-	 *
-	 * @since 2.3.4
-	 * @since 3.1.0 Now returns 0 if the option doesn't exist, instead of -1.
-	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
-	 * @uses $this->get_warned_site_options()
-	 *
-	 * @param string $key       Required. The option name.
-	 * @param string $depr      Deprecated. Leave empty.
-	 * @param bool   $use_cache Optional. Whether to use the options cache or bypass it.
-	 * @return int 0|1 Whether the option is flagged as dangerous for SEO.
-	 */
-	public function get_warned_settings( $key, $depr = '', $use_cache = true ) {
-
-		if ( empty( $key ) )
-			return false;
-
-		if ( $depr )
-			$this->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
-
-		if ( ! $use_cache )
-			return $this->s_one_zero( ! empty( $this->get_warned_site_options()[ $key ] ) );
-
-		static $cache;
-
-		if ( ! isset( $cache ) )
-			$cache = $this->get_warned_site_options();
-
-		return $this->s_one_zero( ! empty( $cache[ $key ] ) );
 	}
 
 	/**
@@ -795,6 +779,15 @@ class Site_Options extends Sanitize {
 		];
 	}
 
+	/**
+	 * Returns all post type archive meta.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $post_type The post type.
+	 * @param bool   $use_cache Whether to use caching.
+	 * @return array The post type archive's meta item's values.
+	 */
 	public function get_post_type_archive_meta( $post_type, $use_cache = true ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
@@ -806,8 +799,8 @@ class Site_Options extends Sanitize {
 		 * for we never query post types externally, aside from the SEO settings page.
 		 */
 		// if ( ! $this->is_post_type_supported( $post_type ) ) {
-		// 	// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-		// 	return $use_cache ? umemo( __METHOD__, [], $post_type ) : [];
+		// // Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
+		// return $use_cache ? umemo( __METHOD__, [], $post_type ) : [];
 		// }
 
 		/**
@@ -848,12 +841,40 @@ class Site_Options extends Sanitize {
 		return $use_cache ? memo( $meta, $post_type ) : $meta;
 	}
 
+	/**
+	 * Returns a single post type archive item's value
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $item      The item to get.
+	 * @param string $post_type The post type.
+	 * @param bool   $use_cache Whether to use caching.
+	 * @return array|null The post type archive's meta item's value. Null when item isn't registered.
+	 */
 	public function get_post_type_archive_meta_item( $item, $post_type = '', $use_cache = true ) {
 		return $this->get_post_type_archive_meta(
 			$post_type ?: $this->get_post_type_real_ID(),
 			$use_cache
 		)[ $item ] ?? null;
 	}
+
+	// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP 7.
+	/**
+	 * Returns an array of all public post type archive option defaults.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return array[] The Post Type Archive Metadata default options
+	 *                 of all public Post Type archives.
+	 */
+	public function get_all_post_type_archive_meta_defaults() {
+
+		foreach ( $this->get_public_post_type_archives() as $pta )
+			$defaults[ $pta ] = $this->get_post_type_archive_meta_defaults( $pta );
+
+		return $defaults ?? [];
+	}
+	// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
 
 	/**
 	 * Returns an array of default post type archive meta.

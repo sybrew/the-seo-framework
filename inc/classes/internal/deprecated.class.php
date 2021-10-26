@@ -667,7 +667,7 @@ final class Deprecated {
 	 */
 	public function get_field_name( $name ) {
 		\tsf()->_deprecated_function( 'tsf()->get_field_name()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::get_field_name( $name );
+		return \The_SEO_Framework\Interpreters\Settings_Input::get_field_name( $name );
 	}
 
 	/**
@@ -682,7 +682,7 @@ final class Deprecated {
 	 */
 	public function field_name( $name ) {
 		\tsf()->_deprecated_function( 'tsf()->field_name()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::field_name( $name );
+		return \The_SEO_Framework\Interpreters\Settings_Input::field_name( $name );
 	}
 
 	/**
@@ -697,7 +697,7 @@ final class Deprecated {
 	 */
 	public function get_field_id( $id ) {
 		\tsf()->_deprecated_function( 'tsf()->get_field_id()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::get_field_id( $id );
+		return \The_SEO_Framework\Interpreters\Settings_Input::get_field_id( $id );
 	}
 
 	/**
@@ -716,9 +716,9 @@ final class Deprecated {
 		\tsf()->_deprecated_function( 'tsf()->field_id()', '4.2.0' );
 		if ( $echo ) {
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- this escapes.
-			echo \The_SEO_Framework\Interpreters\Form::field_id( $id );
+			echo \The_SEO_Framework\Interpreters\Settings_Input::field_id( $id );
 		} else {
-			return \The_SEO_Framework\Interpreters\Form::field_id( $id );
+			return \The_SEO_Framework\Interpreters\Settings_Input::field_id( $id );
 		}
 	}
 
@@ -921,7 +921,7 @@ final class Deprecated {
 	 */
 	public function make_checkbox( $field_id = '', $label = '', $description = '', $escape = true, $disabled = false ) {
 		\tsf()->_deprecated_function( 'tsf()->make_checkbox()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::make_checkbox( [
+		return \The_SEO_Framework\Interpreters\Settings_Input::make_checkbox( [
 			'id'          => $field_id,
 			'index'       => '',
 			'label'       => $label,
@@ -966,7 +966,8 @@ final class Deprecated {
 	 * @since 2.2.5
 	 * @since 3.1.0 Deprecated second parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 4.2.0 Hard deprecation.
+	 * @since 4.2.0 1. Hard deprecation.
+	 *              2. Now always returns an empty string.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $depr Deprecated
@@ -976,15 +977,17 @@ final class Deprecated {
 	 */
 	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
 		\tsf()->_deprecated_function( 'tsf()->is_default_checked()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::is_default_checked( $key, $wrap, $echo );
+		return '';
 	}
+
 	/**
 	 * Returns the HTML class wrap for warning Checkbox options.
 	 *
 	 * @since 2.3.4
 	 * @since 3.1.0 Deprecated second parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 4.2.0 Hard deprecation.
+	 * @since 4.2.0 10 Hard deprecation.
+	 *              2. Now always returns an empty string.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $deprecated Deprecated.
@@ -994,22 +997,24 @@ final class Deprecated {
 	 */
 	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 		\tsf()->_deprecated_function( 'tsf()->is_warning_checked()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::is_warning_checked( $key, $wrap, $echo );
+		return '';
 	}
+
 	/**
 	 * Returns the HTML class wrap for warning/default Checkbox options.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Added the $wrap parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 4.2.0 Hard deprecation.
+	 * @since 4.2.0 1. Hard deprecation.
+	 *              2. Now always returns false.
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
 	public function get_is_conditional_checked( $key, $wrap = true ) {
 		\tsf()->_deprecated_function( 'tsf()->get_is_conditional_checked()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::get_is_conditional_checked( $key, $wrap );
+		return false;
 	}
 
 	/**
@@ -1018,7 +1023,8 @@ final class Deprecated {
 	 * @since 2.3.4
 	 * @since 3.1.0 Deprecated second parameter.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
-	 * @since 4.2.0 Hard deprecation.
+	 * @since 4.2.0 1. Hard deprecation.
+	 *              2. Now always returns false.
 	 *
 	 * @param string $key        The option name which returns boolean.
 	 * @param string $deprecated Deprecated. Used to be the settings field.
@@ -1028,7 +1034,7 @@ final class Deprecated {
 	 */
 	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
 		\tsf()->_deprecated_function( 'tsf()->is_conditional_checked()', '4.2.0' );
-		return \The_SEO_Framework\Interpreters\Form::is_conditional_checked( $key, $wrap, $echo );
+		return false;
 	}
 
 	/**
@@ -1538,6 +1544,8 @@ final class Deprecated {
 	 *              2. No longer caches.
 	 * @since 4.0.5 1. The shop ID is now handled via the filter.
 	 *              2. The question ID (AnsPress) is no longer called. This should work out-of-the-box since AnsPress 4.1.
+	 * @since 4.2.0 Deprecated
+	 * @deprecated
 	 *
 	 * @return int The admin ID.
 	 */
@@ -1553,5 +1561,83 @@ final class Deprecated {
 			'the_seo_framework_real_id',
 			$this->is_feed() ? \get_the_ID() : 0
 		);
+	}
+
+	/**
+	 * Get the default of any of the The SEO Framework settings.
+	 *
+	 * @since 2.2.4
+	 * @since 2.8.2 No longer decodes entities on request.
+	 * @since 3.1.0 : 1. Now returns null if the option doesn't exist, instead of -1.
+	 *                2. Is now influenced by filters.
+	 *                3. Now also strips slashes when using cache.
+	 *                4. The second parameter is deprecated.
+	 * @since 4.2.0 Deprecated
+	 * @deprecated
+	 * @uses $this->get_default_site_options()
+	 *
+	 * @param string $key       Required. The option name.
+	 * @param string $depr      Deprecated. Leave empty.
+	 * @param bool   $use_cache Optional. Whether to use the options cache or bypass it.
+	 * @return mixed default option
+	 *         null If option doesn't exist.
+	 */
+	public function get_default_settings( $key, $depr = '', $use_cache = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_default_settings()', '4.2.0', 'tsf()->get_default_option()' );
+
+		if ( ! $key ) return false;
+
+		if ( $depr )
+			$tsf->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
+
+		if ( ! $use_cache ) {
+			$defaults = $tsf->get_default_site_options();
+			return isset( $defaults[ $key ] ) ? \stripslashes_deep( $defaults[ $key ] ) : null;
+		}
+
+		static $cache;
+
+		return (
+			$cache = $cache ?? \stripslashes_deep( $tsf->get_default_site_options() )
+		)[ $key ] ?? null;
+	}
+
+	/**
+	 * Get the warned setting of any of the The SEO Framework settings.
+	 *
+	 * @since 2.3.4
+	 * @since 3.1.0 Now returns 0 if the option doesn't exist, instead of -1.
+	 * @since 4.2.0 Deprecated
+	 * @deprecated
+	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 * @uses $this->get_warned_site_options()
+	 *
+	 * @param string $key       Required. The option name.
+	 * @param string $depr      Deprecated. Leave empty.
+	 * @param bool   $use_cache Optional. Whether to use the options cache or bypass it.
+	 * @return int 0|1 Whether the option is flagged as dangerous for SEO.
+	 */
+	public function get_warned_settings( $key, $depr = '', $use_cache = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_warned_settings()', '4.2.0', 'tsf()->get_warned_option()' );
+
+		if ( empty( $key ) )
+			return false;
+
+		if ( $depr )
+			$tsf->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
+
+		if ( ! $use_cache )
+			return $tsf->s_one_zero( ! empty( $tsf->get_warned_site_options()[ $key ] ) );
+
+		static $cache;
+
+		if ( ! isset( $cache ) )
+			$cache = $tsf->get_warned_site_options();
+
+		return $tsf->s_one_zero( ! empty( $cache[ $key ] ) );
 	}
 }

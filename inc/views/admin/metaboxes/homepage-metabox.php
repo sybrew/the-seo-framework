@@ -9,7 +9,8 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Form,
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -64,7 +65,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 	case 'homepage_general_tab':
 		?>
 		<p>
-			<label for="<?php Form::field_id( 'homepage_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_title' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
@@ -77,15 +78,15 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_title' ), (bool) $this->get_option( 'display_character_counter' ) );
-		Form::output_pixel_counter_wrap( Form::get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_title' ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_pixel_counter_wrap( Input::get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
 		?>
 		<p class=tsf-title-wrap>
-			<input type="text" name="<?php Form::field_name( 'homepage_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Input::field_name( 'homepage_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ); ?>" autocomplete=off />
 			<?php
 			$this->output_js_title_elements(); // legacy
 			$this->output_js_title_data(
-				Form::get_field_id( 'homepage_title' ),
+				Input::get_field_id( 'homepage_title' ),
 				[
 					'state' => [
 						'refTitleLocked'    => false,
@@ -119,7 +120,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [homepage](%s).', 'autodescription' ),
-						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
+						esc_url( admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) )
 					),
 					[ 'a' ],
 					[ 'a_internal' => false ] // opens in new tab.
@@ -130,7 +131,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Form::field_id( 'homepage_description' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_description' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
@@ -143,15 +144,15 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_description' ), (bool) $this->get_option( 'display_character_counter' ) );
-		Form::output_pixel_counter_wrap( Form::get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_description' ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_pixel_counter_wrap( Input::get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_description' ); ?>" rows="3" cols="70"><?php echo esc_attr( $this->get_option( 'homepage_description' ) ); ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_description' ); ?>" rows="3" cols="70"><?php echo esc_attr( $this->get_option( 'homepage_description' ) ); ?></textarea>
 			<?php
 			$this->output_js_description_elements(); // legacy
 			$this->output_js_description_data(
-				Form::get_field_id( 'homepage_description' ),
+				Input::get_field_id( 'homepage_description' ),
 				[
 					'state' => [
 						'defaultDescription' =>
@@ -194,11 +195,15 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 	case 'homepage_additions_tab':
 		// Fetches escaped title parts.
 		$_example_title = $this->escape_title(
-			$this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_filtered_raw_generated_title( $_generator_args )
+			$this->get_filtered_raw_custom_field_title( $_generator_args )
+			?: $this->get_filtered_raw_generated_title( $_generator_args )
 		);
 		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
 		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
-		$_example_blogname  = $this->escape_title( $this->get_home_title_additions() ?: $this->get_static_untitled_title() );
+		$_example_blogname  = $this->escape_title(
+			$this->get_home_title_additions()
+			?: $this->get_static_untitled_title()
+		);
 		$_example_separator = esc_html( $this->get_separator( 'title' ) );
 
 		// TODO very readable.
@@ -207,18 +212,18 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		?>
 		<p>
-			<label for="<?php Form::field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( 'Meta Title Additions', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->s_title_raw( $this->get_blogdescription() ) ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?php echo esc_attr( $this->s_title_raw( $this->get_blogdescription() ) ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ); ?>" autocomplete=off />
 		</p>
 
-		<div id="tsf-title-tagline-toggle">
+		<div class=tsf-title-tagline-toggle>
 		<?php
 			HTML::wrap_fields(
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'    => 'homepage_tagline',
 					'label' => __( 'Add Meta Title Additions to the homepage title?', 'autodescription' ),
 				] ),
@@ -230,12 +235,12 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<hr>
 
 		<fieldset>
-			<legend><?php Form::header_title( __( 'Meta Title Additions Location', 'autodescription' ) ); ?></legend>
+			<legend><?php HTML::header_title( __( 'Meta Title Additions Location', 'autodescription' ) ); ?></legend>
 
 			<p id="tsf-home-title-location" class="tsf-fields">
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php Form::field_name( 'home_title_location' ); ?>" id="<?php Form::field_id( 'home_title_location_left' ); ?>" value="left" <?php checked( $this->get_option( 'home_title_location' ), 'left' ); ?> />
-					<label for="<?php Form::field_id( 'home_title_location_left' ); ?>">
+					<input type="radio" name="<?php Input::field_name( 'home_title_location' ); ?>" id="<?php Input::field_id( 'home_title_location_left' ); ?>" value="left" <?php checked( $this->get_option( 'home_title_location' ), 'left' ); ?> />
+					<label for="<?php Input::field_id( 'home_title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- $example_left is already escaped.
@@ -244,8 +249,8 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					</label>
 				</span>
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php Form::field_name( 'home_title_location' ); ?>" id="<?php Form::field_id( 'home_title_location_right' ); ?>" value="right" <?php checked( $this->get_option( 'home_title_location' ), 'right' ); ?> />
-					<label for="<?php Form::field_id( 'home_title_location_right' ); ?>">
+					<input type="radio" name="<?php Input::field_name( 'home_title_location' ); ?>" id="<?php Input::field_id( 'home_title_location_right' ); ?>" value="right" <?php checked( $this->get_option( 'home_title_location' ), 'right' ); ?> />
+					<label for="<?php Input::field_id( 'home_title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- $example_right is already escaped.
@@ -302,7 +307,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		?>
 		<p>
-			<label for="<?php Form::field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
 					esc_html_e( 'Open Graph Title', 'autodescription' );
@@ -312,10 +317,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_og_title' ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off  autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
+			<input type="text" name="<?php Input::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off  autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -326,7 +331,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		?>
 
 		<p>
-			<label for="<?php Form::field_id( 'homepage_og_description' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_og_description' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
 					esc_html_e( 'Open Graph Description', 'autodescription' );
@@ -336,10 +341,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_og_description' ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?php echo esc_attr( $this->get_option( 'homepage_og_description' ) ); ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_desc ) {
@@ -351,7 +356,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Form::field_id( 'homepage_twitter_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_twitter_title' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
 					esc_html_e( 'Twitter Title', 'autodescription' );
@@ -361,10 +366,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_twitter_title' ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_twitter_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
+			<input type="text" name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ); ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
@@ -375,7 +380,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		?>
 
 		<p>
-			<label for="<?php Form::field_id( 'homepage_twitter_description' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_twitter_description' ); ?>" class="tsf-toblock">
 				<strong>
 					<?php
 					esc_html_e( 'Twitter Description', 'autodescription' );
@@ -385,10 +390,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Form::get_field_id( 'homepage_twitter_description' ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_twitter_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Form::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Form::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?php echo esc_attr( $this->get_option( 'homepage_twitter_description' ) ); ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
@@ -399,7 +404,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Social Image Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Social Image Settings', 'autodescription' ) );
 		HTML::description( __( 'A social image can be displayed when your homepage is shared. It is a great way to grab attention.', 'autodescription' ) );
 		?>
 		<p>
@@ -414,8 +419,8 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="url" name="<?php Form::field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ); ?>" value="<?php echo esc_url( $this->get_option( 'homepage_social_image_url' ) ); ?>" />
-			<input type="hidden" name="<?php Form::field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_option( 'homepage_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
+			<input class="large-text" type="url" name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?php echo esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ); ?>" value="<?php echo esc_url( $this->get_option( 'homepage_social_image_url' ) ); ?>" />
+			<input type="hidden" name="<?php Input::field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?php echo absint( $this->get_option( 'homepage_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
@@ -452,7 +457,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			);
 		}
 
-		Form::header_title( __( 'Robots Meta Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Robots Meta Settings', 'autodescription' ) );
 
 		$i_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
@@ -506,17 +511,17 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'homepage_noindex',
 					'label'  => $i_label,
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'homepage_nofollow',
 					'label'  => $f_label,
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'homepage_noarchive',
 					'label'  => $a_label,
 					'escape' => false,
@@ -542,11 +547,11 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		<hr>
 		<?php
-		Form::header_title( __( 'Homepage Pagination Robots Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Homepage Pagination Robots Settings', 'autodescription' ) );
 		HTML::description( __( "If your homepage is paginated and outputs content that's also found elsewhere on the website, enabling this option may prevent duplicate content.", 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'home_paged_noindex',
 				'label'  => $this->convert_markdown(
 					/* translators: the backticks are Markdown! Preserve them as-is! */

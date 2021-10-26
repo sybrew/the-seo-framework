@@ -211,20 +211,20 @@ final class Sitemap {
 						'lock_id'  => 'base',
 						'endpoint' => 'sitemap.xml',
 						'regex'    => '/^sitemap\.xml/i',
-						'callback' => static::class . '::output_base_sitemap',
+						'callback' => [ static::class, 'output_base_sitemap' ],
 						'robots'   => true,
 					],
 					'index'          => [
 						'lock_id'  => 'base',
 						'endpoint' => 'sitemap_index.xml',
 						'regex'    => '/^sitemap_index\.xml/i',
-						'callback' => static::class . '::output_base_sitemap',
+						'callback' => [ static::class, 'output_base_sitemap' ],
 						'robots'   => false,
 					],
 					'xsl-stylesheet' => [
 						'endpoint' => 'sitemap.xsl',
 						'regex'    => '/^sitemap\.xsl/i',
-						'callback' => static::class . '::output_stylesheet',
+						'callback' => [ static::class, 'output_stylesheet' ],
 						'robots'   => false,
 					],
 				]

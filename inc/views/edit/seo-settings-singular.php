@@ -439,7 +439,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				'tw' => $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_option( 'homepage_description' )
-					?: $this->get_generated_twitter_description( $_generator_args, false ),
+					 ?: $this->get_generated_twitter_description( $_generator_args, false ),
 			];
 		} else {
 			$_social_title       = [

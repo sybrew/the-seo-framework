@@ -8,13 +8,13 @@
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 use The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'description', $instance ) ) :
 	case 'description_main':
-		Form::header_title( __( 'Description Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Description Settings', 'autodescription' ) );
 		HTML::description(
 			__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' )
 		);
@@ -22,7 +22,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Automated Description Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Automated Description Settings', 'autodescription' ) );
 		HTML::description(
 			__( 'A description can be automatically generated for every page.', 'autodescription' )
 		);
@@ -37,7 +37,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		);
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'auto_description',
 				'label'  => esc_html__( 'Automatically generate descriptions?', 'autodescription' ) . ' ' . $info,
 				'escape' => false,

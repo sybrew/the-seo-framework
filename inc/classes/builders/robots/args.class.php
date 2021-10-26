@@ -35,6 +35,9 @@ namespace The_SEO_Framework\Builders\Robots;
  */
 final class Args extends Factory {
 
+	// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
+	// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
+	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
 	/**
 	 * Generates robots assertions for no[index|archive|follow].
 	 *
@@ -46,9 +49,6 @@ final class Args extends Factory {
 	 * @param string $type The robots generator type (noindex, nofollow...).
 	 */
 	protected static function assert_no( $type ) {
-		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
-		// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
-		// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
 
 		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf/static::$args hereinafter.
 		$tsf  = static::$tsf;
@@ -125,10 +125,10 @@ final class Args extends Factory {
 		after_index_protection:;
 
 		end:;
-		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
-		// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
-		// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact
 	}
+	// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+	// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
+	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact
 
 	/**
 	 * Generates robots assertions for noindex in passes.

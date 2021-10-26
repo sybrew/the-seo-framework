@@ -40,6 +40,7 @@ class Generate extends User_Data {
 	 * @since 3.1.0
 	 * @since 4.1.0 1: Improved performance by testing for null first.
 	 *              2: Improved performance by testing argument keys prior array merge.
+	 * @since 4.2.0 Added the 'pta' index.
 	 * @internal
 	 *
 	 * @param array|int|null $args The arguments, passed by reference.
@@ -49,11 +50,12 @@ class Generate extends User_Data {
 		if ( null === $args ) return;
 
 		if ( \is_array( $args ) ) {
-			if ( ! isset( $args['id'], $args['taxonomy'] ) ) {
+			if ( ! isset( $args['id'], $args['taxonomy'], $args['pta'] ) ) {
 				$args = array_merge(
 					[
 						'id'       => 0,
 						'taxonomy' => '',
+						'pta'      => '',
 					],
 					$args
 				);
@@ -62,6 +64,7 @@ class Generate extends User_Data {
 			$args = [
 				'id'       => (int) $args,
 				'taxonomy' => '',
+				'pta'      => '',
 			];
 		} else {
 			$args = null;

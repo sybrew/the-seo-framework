@@ -9,7 +9,8 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Form,
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -61,7 +62,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		$use_core_sitemaps  = $this->use_core_sitemaps();
 		$sitemap_detected   = $this->has_sitemap_xml();
 
-		Form::header_title( __( 'Sitemap Integration Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Sitemap Integration Settings', 'autodescription' ) );
 		HTML::description( __( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. It helps search engines find new and updated content quickly.', 'autodescription' ) );
 
 		HTML::description_noesc(
@@ -86,10 +87,10 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Sitemap Output', 'autodescription' ) );
+		HTML::header_title( __( 'Sitemap Output', 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'sitemaps_output',
 				'label'  => esc_html__( 'Output optimized sitemap?', 'autodescription' )
 					. ' ' . HTML::make_info(
@@ -148,7 +149,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Form::field_id( 'sitemap_query_limit' ); ?>">
+			<label for="<?php Input::field_id( 'sitemap_query_limit' ); ?>">
 				<strong><?php esc_html_e( 'Sitemap Query Limit', 'autodescription' ); ?></strong>
 			</label>
 		</p>
@@ -157,15 +158,15 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 
 		if ( has_filter( 'the_seo_framework_sitemap_post_limit' ) ) :
 			?>
-			<input type=hidden name="<?php Form::field_name( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>">
+			<input type=hidden name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>">
 			<p>
-				<input type="number" id="<?php Form::field_id( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>" disabled />
+				<input type="number" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>" disabled />
 			</p>
 			<?php
 		else :
 			?>
 			<p>
-				<input type="number" min=1 max=50000 name="<?php Form::field_name( 'sitemap_query_limit' ); ?>" id="<?php Form::field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo absint( $this->get_default_option( 'sitemap_query_limit' ) ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
+				<input type="number" min=1 max=50000 name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo absint( $this->get_default_option( 'sitemap_query_limit' ) ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
 			</p>
 			<?php
 		endif;
@@ -176,7 +177,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		$show_settings = true;
 		$robots_url    = $this->get_robots_txt_url();
 
-		Form::header_title( __( 'Robots.txt Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Robots.txt Settings', 'autodescription' ) );
 
 		if ( $this->has_robots_txt() ) :
 			HTML::attention_description(
@@ -215,9 +216,9 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		echo '<hr>';
 
 		if ( $show_settings ) :
-			Form::header_title( __( 'Sitemap Hinting', 'autodescription' ) );
+			HTML::header_title( __( 'Sitemap Hinting', 'autodescription' ) );
 			HTML::wrap_fields(
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'    => 'sitemaps_robots',
 					'label' => __( 'Add sitemap location to robots.txt?', 'autodescription' ),
 				] ),
@@ -239,11 +240,11 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		break;
 
 	case 'sitemaps_metadata_tab':
-		Form::header_title( __( 'Timestamps Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Timestamps Settings', 'autodescription' ) );
 		HTML::description( __( 'The modified time suggests to search engines where to look for content changes first.', 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'sitemaps_modified',
 				'label'  => $this->convert_markdown(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
@@ -257,13 +258,13 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		break;
 
 	case 'sitemaps_notify_tab':
-		Form::header_title( __( 'Ping Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Ping Settings', 'autodescription' ) );
 		HTML::description( __( 'Notifying search engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
 		HTML::description( __( 'By default this will happen at most once an hour.', 'autodescription' ) );
 
 		HTML::wrap_fields(
 			[
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'     => 'ping_use_cron',
 					'label'  => esc_html__( 'Use cron for pinging?', 'autodescription' )
 						. ' ' . HTML::make_info(
@@ -273,7 +274,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 						),
 					'escape' => false,
 				] ),
-				Form::make_checkbox( [
+				Input::make_checkbox( [
 					'id'          => 'ping_use_cron_prerender',
 					'label'       => esc_html__( 'Prerender optimized sitemap before pinging via cron?', 'autodescription' )
 						. ' ' . HTML::make_info(
@@ -291,7 +292,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Notify Search Engines', 'autodescription' ) );
+		HTML::header_title( __( 'Notify Search Engines', 'autodescription' ) );
 
 		$engines = [
 			'ping_google' => 'Google',
@@ -303,7 +304,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		foreach ( $engines as $option => $engine ) {
 			/* translators: %s = Google */
 			$ping_label     = sprintf( __( 'Notify %s about sitemap changes?', 'autodescription' ), $engine );
-			$ping_checkbox .= Form::make_checkbox( [
+			$ping_checkbox .= Input::make_checkbox( [
 				'id'    => $option,
 				'label' => $ping_label,
 			] );
@@ -313,16 +314,16 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		break;
 
 	case 'sitemaps_style_tab':
-		Form::header_title( __( 'Optimized Sitemap Styling Settings', 'autodescription' ) );
+		HTML::header_title( __( 'Optimized Sitemap Styling Settings', 'autodescription' ) );
 		HTML::description( __( 'You can style the optimized sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
 		HTML::description( __( 'Note: Changes may not appear to have an effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
 		?>
 		<hr>
 		<?php
-		Form::header_title( __( 'Enable Styling', 'autodescription' ) );
+		HTML::header_title( __( 'Enable Styling', 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'     => 'sitemap_styles',
 				'label'  => esc_html__( 'Style sitemap?', 'autodescription' ) . ' ' . HTML::make_info( __( 'This makes the sitemap more readable for humans.', 'autodescription' ), '', false ),
 				'escape' => false,
@@ -339,29 +340,29 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 
 		?>
 		<p>
-			<label for="<?php Form::field_id( 'sitemap_color_main' ); ?>">
+			<label for="<?php Input::field_id( 'sitemap_color_main' ); ?>">
 				<strong><?php esc_html_e( 'Sitemap Header Background Color', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'sitemap_color_main' ); ?>" class="tsf-color-picker" id="<?php Form::field_id( 'sitemap_color_main' ); ?>" placeholder="<?php echo esc_attr( $default_colors['main'] ); ?>" value="<?php echo esc_attr( $current_colors['main'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['main'] ); ?>" />
+			<input type="text" name="<?php Input::field_name( 'sitemap_color_main' ); ?>" class="tsf-color-picker" id="<?php Input::field_id( 'sitemap_color_main' ); ?>" placeholder="<?php echo esc_attr( $default_colors['main'] ); ?>" value="<?php echo esc_attr( $current_colors['main'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['main'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php Form::field_id( 'sitemap_color_accent' ); ?>">
+			<label for="<?php Input::field_id( 'sitemap_color_accent' ); ?>">
 				<strong><?php esc_html_e( 'Sitemap Title and Lines Color', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Form::field_name( 'sitemap_color_accent' ); ?>" class="tsf-color-picker" id="<?php Form::field_id( 'sitemap_color_accent' ); ?>" placeholder="<?php echo esc_attr( $default_colors['accent'] ); ?>" value="<?php echo esc_attr( $current_colors['accent'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['accent'] ); ?>" />
+			<input type="text" name="<?php Input::field_name( 'sitemap_color_accent' ); ?>" class="tsf-color-picker" id="<?php Input::field_id( 'sitemap_color_accent' ); ?>" placeholder="<?php echo esc_attr( $default_colors['accent'] ); ?>" value="<?php echo esc_attr( $current_colors['accent'] ); ?>" data-tsf-default-color="<?php echo esc_attr( $default_colors['accent'] ); ?>" />
 		</p>
 
 		<hr>
 		<?php
-		Form::header_title( __( 'Header Title Logo', 'autodescription' ) );
+		HTML::header_title( __( 'Header Title Logo', 'autodescription' ) );
 
 		HTML::wrap_fields(
-			Form::make_checkbox( [
+			Input::make_checkbox( [
 				'id'    => 'sitemap_logo',
 				'label' => __( 'Show logo next to sitemap header title?', 'autodescription' ),
 			] ),
@@ -381,8 +382,8 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Form::field_name( 'sitemap_logo_url' ); ?>" id="sitemap_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'sitemap_logo_url' ) ); ?>" />
-			<input type="hidden" name="<?php Form::field_name( 'sitemap_logo_id' ); ?>" id="sitemap_logo-id" value="<?php echo absint( $this->get_option( 'sitemap_logo_id' ) ); ?>" />
+			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Input::field_name( 'sitemap_logo_url' ); ?>" id="sitemap_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'sitemap_logo_url' ) ); ?>" />
+			<input type="hidden" name="<?php Input::field_name( 'sitemap_logo_id' ); ?>" id="sitemap_logo-id" value="<?php echo absint( $this->get_option( 'sitemap_logo_id' ) ); ?>" />
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
