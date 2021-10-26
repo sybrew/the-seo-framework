@@ -345,6 +345,8 @@ TODO add maxlength to title/description input fields?
 
 TODO add "padlock" to the counters on the homepage "page edit screen" if it's locked via the homepage SEO settings?
 
+TODO process changelog https://github.com/sybrew/the-seo-framework/compare/64b64e28e534304ee7e1bea65b25e8ec46241f85...master
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -367,6 +369,7 @@ TODO add "padlock" to the counters on the homepage "page edit screen" if it's lo
 		* Aside from the optimized sitemap being centered and responsive, it now also fully embraces RTL languages (Arabic, Hebrew, Farsi, et al.).
 	* **Performance:**
 		* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
+			* JS: 1.5x fewer style-recalc per second.
 		* Images are now fetched faster from the content.
 		* The SEO Bar now parses the title item faster.
 		* Open Graph and Twitter titles are now fetched faster when no custom one is provided.
@@ -384,7 +387,8 @@ TODO add "padlock" to the counters on the homepage "page edit screen" if it's lo
 			* This issue became more apparent once we started splitting the generators in their respective builder-classes.
 		* Addressed an issue where canonical URLs accidentally bypassed some caches. This should vastly improve canonical URL and Structured Data generation.
 		* Twitter Cards generate 61% quicker now by removing redundant tests.
-		* Title and description input counters are now synchronized at 60fps, instead of at 75~100fps sporadically.
+		* Twitter and description inputs now use generators to assert the correct description that only sanitize the input when there is some, halving total input-processing time.
+		* Those title and description's input counters are now synchronized at 60fps, instead of at 75~100fps sporadically.
 			* Only the trained eye can spot a minor delay on low response time monitors, but only whilst holding a repeat-key, which isn't realistic.
 		* Image previews now get loaded only after the "slowest" typist is done typing the image URL.
 		* When no excerpt of the content can be fetched, needless trimming no longer happens.
@@ -424,7 +428,6 @@ TODO add "padlock" to the counters on the homepage "page edit screen" if it's lo
 	* Addressed a regression where a part of the HTML comments was not fully translatable.
 	* Addressed layout issues where the site title might be smaller than 60px, making the examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
 	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
-	* Addressed an issue where the counters would fault when adding only spaces to the input, instead of showing the "true" output after save -- this will strip all spaces.
 
 **For developers:**
 
