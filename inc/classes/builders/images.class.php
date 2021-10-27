@@ -137,7 +137,7 @@ final class Images {
 				$content = $tsf->get_post_content();
 			}
 		} else {
-			if ( $args['taxonomy'] ) {
+			if ( $args['taxonomy'] || $args['pta'] ) {
 				$content = '';
 			} else {
 				$content = $tsf->get_post_content( $args['id'] );

@@ -32,22 +32,22 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		$tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => "$_settings_class::_homepage_metabox_general_tab",
+				'callback' => [ $_settings_class, '_homepage_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => "$_settings_class::_homepage_metabox_additions_tab",
+				'callback' => [ $_settings_class, '_homepage_metabox_additions_tab' ],
 				'dashicon' => 'plus',
 			],
 			'social'    => [
 				'name'     => __( 'Social', 'autodescription' ),
-				'callback' => "$_settings_class::_homepage_metabox_social_tab",
+				'callback' => [ $_settings_class, '_homepage_metabox_social_tab' ],
 				'dashicon' => 'share',
 			],
 			'robots'    => [
 				'name'     => __( 'Robots', 'autodescription' ),
-				'callback' => "$_settings_class::_homepage_metabox_robots_tab",
+				'callback' => [ $_settings_class, '_homepage_metabox_robots_tab' ],
 				'dashicon' => 'visibility',
 			],
 		];
@@ -308,11 +308,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		?>
 		<p>
 			<label for="<?php Input::field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
-				<strong>
-					<?php
-					esc_html_e( 'Open Graph Title', 'autodescription' );
-					?>
-				</strong>
+				<strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
@@ -320,7 +316,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off  autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
+			<input type="text" name="<?php Input::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ); ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -332,11 +328,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_og_description' ); ?>" class="tsf-toblock">
-				<strong>
-					<?php
-					esc_html_e( 'Open Graph Description', 'autodescription' );
-					?>
-				</strong>
+				<strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
@@ -357,11 +349,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_twitter_title' ); ?>" class="tsf-toblock">
-				<strong>
-					<?php
-					esc_html_e( 'Twitter Title', 'autodescription' );
-					?>
-				</strong>
+				<strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
@@ -381,11 +369,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_twitter_description' ); ?>" class="tsf-toblock">
-				<strong>
-					<?php
-					esc_html_e( 'Twitter Description', 'autodescription' );
-					?>
-				</strong>
+				<strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php

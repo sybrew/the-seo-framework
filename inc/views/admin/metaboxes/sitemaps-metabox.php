@@ -21,27 +21,27 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		$tabs = [
 			'general'  => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => "$_settings_class::_sitemaps_metabox_general_tab",
+				'callback' => [ $_settings_class, '_sitemaps_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
 			'robots'   => [
 				'name'     => 'Robots.txt',
-				'callback' => "$_settings_class::_sitemaps_metabox_robots_tab",
+				'callback' => [ $_settings_class, '_sitemaps_metabox_robots_tab' ],
 				'dashicon' => 'share-alt2',
 			],
 			'metadata' => [
 				'name'     => __( 'Metadata', 'autodescription' ),
-				'callback' => "$_settings_class::_sitemaps_metabox_metadata_tab",
+				'callback' => [ $_settings_class, '_sitemaps_metabox_metadata_tab' ],
 				'dashicon' => 'index-card',
 			],
 			'notify'   => [
 				'name'     => _x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
-				'callback' => "$_settings_class::_sitemaps_metabox_notify_tab",
+				'callback' => [ $_settings_class, '_sitemaps_metabox_notify_tab' ],
 				'dashicon' => 'megaphone',
 			],
 			'style'    => [
 				'name'     => __( 'Style', 'autodescription' ),
-				'callback' => "$_settings_class::_sitemaps_metabox_style_tab",
+				'callback' => [ $_settings_class, '_sitemaps_metabox_style_tab' ],
 				'dashicon' => 'art',
 			],
 		];

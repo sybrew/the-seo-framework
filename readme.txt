@@ -352,6 +352,13 @@ TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
 
 TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
 
+TODO /(@since [0-9\.]+\s):\s/ -> $1\s
+
+TODO was this an issue? -> PTA canonical URLs always point to the main page.
+	* ref method (flipped is_query conditional): get_post_type_archive_canonical_url()
+
+TODO in get_archival_description_excerpt(), assert object filters in non-query??
+
 **For everyone:**
 
 * **Upgrade notes:**

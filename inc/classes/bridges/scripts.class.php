@@ -679,7 +679,6 @@ final class Scripts {
 						'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 						'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
-						'ptaTitle'       => static::decode_entities( trim( \_x( 'Archives:', 'post type archive title prefix', 'default' ) ) ),
 					],
 				],
 			],

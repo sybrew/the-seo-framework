@@ -119,12 +119,12 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => "$_settings_class::_title_metabox_general_tab",
+				'callback' => [ $_settings_class, '_title_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
-				'callback' => "$_settings_class::_title_metabox_additions_tab",
+				'callback' => [ $_settings_class, '_title_metabox_additions_tab' ],
 				'dashicon' => 'plus',
 				'args'     => [
 					'examples' => [
@@ -135,7 +135,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			],
 			'prefixes'  => [
 				'name'     => __( 'Prefixes', 'autodescription' ),
-				'callback' => "$_settings_class::_title_metabox_prefixes_tab",
+				'callback' => [ $_settings_class, '_title_metabox_prefixes_tab' ],
 				'dashicon' => 'plus-alt',
 				'args'     => [
 					'showleft' => $showleft,

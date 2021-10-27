@@ -58,13 +58,13 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		$tabs = [
 			'general' => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => "$_settings_class::_robots_metabox_general_tab",
+				'callback' => [ $_settings_class, '_robots_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 				'args'     => '',
 			],
 			'index'   => [
 				'name'     => __( 'Indexing', 'autodescription' ),
-				'callback' => "$_settings_class::_robots_metabox_no_tab",
+				'callback' => [ $_settings_class, '_robots_metabox_no_tab' ],
 				'dashicon' => 'filter',
 				'args'     => [
 					'global_types' => $global_types,
@@ -75,7 +75,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 			],
 			'follow'  => [
 				'name'     => __( 'Following', 'autodescription' ),
-				'callback' => "$_settings_class::_robots_metabox_no_tab",
+				'callback' => [ $_settings_class, '_robots_metabox_no_tab' ],
 				'dashicon' => 'editor-unlink',
 				'args'     => [
 					'global_types' => $global_types,
@@ -86,7 +86,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 			],
 			'archive' => [
 				'name'     => __( 'Archiving', 'autodescription' ),
-				'callback' => "$_settings_class::_robots_metabox_no_tab",
+				'callback' => [ $_settings_class, '_robots_metabox_no_tab' ],
 				'dashicon' => 'download',
 				'args'     => [
 					'global_types' => $global_types,

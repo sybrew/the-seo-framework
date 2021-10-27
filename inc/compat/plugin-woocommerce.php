@@ -289,6 +289,8 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 				$term                = \get_term( $args['id'], $args['taxonomy'] );
 				$is_product_category = $term && \is_product_category( $term );
 			}
+		} elseif ( $args['pta'] ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement.DetectedElseif
+			// TODO ? Which public non-page-PTA does WC have, actually?
 		} else {
 			$is_product = \tsf()->is_wc_product( $args['id'] );
 		}

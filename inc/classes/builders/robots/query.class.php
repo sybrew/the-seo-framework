@@ -66,6 +66,8 @@ final class Query extends Factory {
 				$qubit = (int) $tsf->get_term_meta_item( $type );
 			} elseif ( $tsf->is_singular() ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type" );
+			} elseif ( \is_post_type_archive() ) {
+				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type );
 			}
 
 			switch ( isset( $qubit ) ) :

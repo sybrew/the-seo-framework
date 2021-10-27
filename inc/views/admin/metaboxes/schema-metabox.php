@@ -30,12 +30,12 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		$tabs = [
 			'structure' => [
 				'name'     => __( 'Structure', 'autodescription' ),
-				'callback' => "$_settings_class::_schema_metabox_structure_tab",
+				'callback' => [ $_settings_class, '_schema_metabox_structure_tab' ],
 				'dashicon' => 'admin-multisite',
 			],
 			'presence'  => [
 				'name'     => __( 'Presence', 'autodescription' ),
-				'callback' => "$_settings_class::_schema_metabox_presence_tab",
+				'callback' => [ $_settings_class, '_schema_metabox_presence_tab' ],
 				'dashicon' => 'networking',
 			],
 		];

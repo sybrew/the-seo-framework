@@ -132,6 +132,9 @@ class Generate_Description extends Generate {
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'og_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
+		} elseif ( \is_post_type_archive() ) {
+			$desc = $this->get_post_type_archive_meta_item( 'og_description' )
+				 ?: $this->get_description_from_custom_field( null, false );
 		}
 
 		return $desc;
@@ -157,6 +160,9 @@ class Generate_Description extends Generate {
 		$desc = '';
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'og_description', $args['id'] )
+				 ?: $this->get_description_from_custom_field( $args, false );
+		} elseif ( $args['pta'] ) {
+			$desc = $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
@@ -263,6 +269,11 @@ class Generate_Description extends Generate {
 				 ?: $this->get_term_meta_item( 'og_description' )
 				 ?: $this->get_description_from_custom_field( null, false )
 				 ?: '';
+		} elseif ( \is_post_type_archive() ) {
+			$desc = $this->get_post_type_archive_meta_item( 'tw_description' )
+				 ?: $this->get_post_type_archive_meta_item( 'og_description' )
+				 ?: $this->get_description_from_custom_field( null, false )
+				 ?: '';
 		}
 
 		return $desc;
@@ -288,6 +299,11 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'tw_description', $args['id'] )
 				 ?: $this->get_term_meta_item( 'og_description', $args['id'] )
+				 ?: $this->get_description_from_custom_field( $args, false )
+				 ?: '';
+		} elseif ( $args['pta'] ) {
+			$desc = $this->get_post_type_archive_meta_item( 'tw_description', $args['pta'] )
+				 ?: $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false )
 				 ?: '';
 		} else {
@@ -382,9 +398,15 @@ class Generate_Description extends Generate {
 		} elseif ( \is_post_type_archive() ) {
 			/**
 			 * @since 4.0.6
+			 * @since 4.2.0 Deprecated.
+			 * @deprecated Use options instead.
 			 * @param string $desc The post type archive description.
 			 */
-			$desc = (string) \apply_filters( 'the_seo_framework_pta_description', '' ) ?: '';
+			$desc = (string) \apply_filters_deprecated(
+				'the_seo_framework_pta_description',
+				[ $this->get_post_type_archive_meta_item( 'description' ) ?: '' ],
+				'4.2.0 of The SEO Framework'
+			) ?: '';
 		}
 
 		return $desc;
@@ -405,6 +427,8 @@ class Generate_Description extends Generate {
 
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'description', $args['id'] ) ?: '';
+		} elseif ( $args['pta'] ) {
+			$desc = $this->get_post_type_archive_meta_item( 'description', $args['pta'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' )
@@ -563,6 +587,8 @@ class Generate_Description extends Generate {
 
 		if ( $args['taxonomy'] ) {
 			$excerpt = $this->get_archival_description_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
+		} elseif ( $args['pta'] ) {
+			$excerpt = $this->get_archival_description_excerpt( \get_post_type_object( $args['pta'] ) );
 		} else {
 			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$excerpt = $this->get_front_page_description_excerpt();
@@ -615,18 +641,19 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Now processes HTML tags via s_excerpt_raw() for the author descriptions.
+	 * @TODO fixme: why don't we parse filters?
 	 *
-	 * @param null|\WP_Term $term The term.
+	 * @param null|\WP_Term|\WP_Post_Type $object The term or post type object.
 	 * @return string
 	 */
-	protected function get_archival_description_excerpt( $term = null ) {
+	protected function get_archival_description_excerpt( $object = null ) {
 
-		if ( $term && \is_wp_error( $term ) )
+		if ( $object && \is_wp_error( $object ) )
 			return '';
 
-		if ( \is_null( $term ) ) {
+		if ( \is_null( $object ) ) {
 			$in_the_loop = true;
-			$term        = \get_queried_object();
+			$object      = \get_queried_object();
 		} else {
 			$in_the_loop = false;
 		}
@@ -634,10 +661,10 @@ class Generate_Description extends Generate {
 		/**
 		 * @since 3.1.0
 		 * @see `\tsf()->s_excerpt_raw()` to strip HTML tags neatly.
-		 * @param string   $excerpt The short circuit excerpt.
-		 * @param \WP_Term $term    The Term object.
+		 * @param string                 $excerpt The short circuit excerpt.
+		 * @param \WP_Term|\WP_Post_Type $object  The Term object or post type object.
 		 */
-		$excerpt = (string) \apply_filters( 'the_seo_framework_generated_archive_excerpt', '', $term );
+		$excerpt = (string) \apply_filters( 'the_seo_framework_generated_archive_excerpt', '', $object );
 
 		if ( $excerpt ) return $excerpt;
 
@@ -647,29 +674,29 @@ class Generate_Description extends Generate {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
-				$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
+				$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
 			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} elseif ( \is_post_type_archive() ) {
+				$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
 				/**
-				 * @TODO can we even obtain anything useful ourselves?
-				 *
 				 * @since 4.0.6
+				 * @since 4.2.0 Now provides the post type object description, if assigned.
 				 * @param string $excerpt The archive description excerpt.
-				 * @param mixed  $term    The queried object.
+				 * @param \WP_Term|\WP_Post_Type $object The post type object.
 				 */
-				$excerpt = (string) \apply_filters( 'the_seo_framework_pta_description_excerpt', '', $term );
+				$excerpt = (string) \apply_filters( 'the_seo_framework_pta_description_excerpt', $excerpt, $object );
 			} else {
 				/**
 				 * @since 4.0.6
-				 * @since 4.1.0 Added the $term object parameter.
+				 * @since 4.1.0 Added the $object object parameter.
 				 * @param string $excerpt The fallback archive description excerpt.
-				 * @param \WP_Term $term    The Term object.
+				 * @param \WP_Term $object    The Term object.
 				 */
-				$excerpt = (string) \apply_filters( 'the_seo_framework_fallback_archive_description_excerpt', '', $term );
+				$excerpt = (string) \apply_filters( 'the_seo_framework_fallback_archive_description_excerpt', '', $object );
 			}
 		} else {
-			$excerpt = ! empty( $term->description ) ? $this->s_description_raw( $term->description ) : '';
+			$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
 		}
 
 		return $excerpt;

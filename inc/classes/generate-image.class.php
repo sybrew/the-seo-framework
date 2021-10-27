@@ -222,6 +222,11 @@ class Generate_Image extends Generate_Url {
 				'url' => $this->get_term_meta_item( 'social_image_url' ),
 				'id'  => $this->get_term_meta_item( 'social_image_id' ),
 			];
+		} elseif ( \is_post_type_archive() ) {
+			$details = [
+				'url' => $this->get_post_type_archive_meta_item( 'social_image_url' ),
+				'id'  => $this->get_post_type_archive_meta_item( 'social_image_id' ),
+			];
 		} else {
 			$details = [
 				'url' => '',
@@ -261,6 +266,11 @@ class Generate_Image extends Generate_Url {
 			$details = [
 				'url' => $this->get_term_meta_item( 'social_image_url', $args['id'] ),
 				'id'  => $this->get_term_meta_item( 'social_image_id', $args['id'] ),
+			];
+		} elseif ( $args['pta'] ) {
+			$details = [
+				'url' => $this->get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
+				'id'  => $this->get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
 			];
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
@@ -327,14 +337,14 @@ class Generate_Image extends Generate_Url {
 			if ( $this->is_singular() ) {
 				if ( $this->is_attachment() ) {
 					$cbs = [
-						'attachment' => "$builder::get_attachment_image_details",
+						'attachment' => [ $builder, 'get_attachment_image_details' ],
 					];
 				} else {
 					$cbs = [
-						'featured' => "$builder::get_featured_image_details",
+						'featured' => [ $builder, 'get_featured_image_details' ],
 					];
 					if ( 'social' === $context ) {
-						$cbs['content'] = "$builder::get_content_image_details";
+						$cbs['content'] = [ $builder, 'get_content_image_details' ];
 					}
 				}
 			} elseif ( $this->is_term_meta_capable() ) {
@@ -345,19 +355,19 @@ class Generate_Image extends Generate_Url {
 		} else {
 			$this->fix_generation_args( $args );
 
-			if ( $args['taxonomy'] ) {
+			if ( $args['taxonomy'] || $args['pta'] ) {
 				$cbs = [];
 			} else {
 				if ( \wp_attachment_is_image( $args['id'] ) ) {
 					$cbs = [
-						'attachment' => "$builder::get_attachment_image_details",
+						'attachment' => [ $builder, 'get_attachment_image_details' ],
 					];
 				} else {
 					$cbs = [
-						'featured' => "$builder::get_featured_image_details",
+						'featured' => [ $builder, 'get_featured_image_details' ],
 					];
 					if ( 'social' === $context ) {
-						$cbs['content'] = "$builder::get_content_image_details";
+						$cbs['content'] = [ $builder, 'get_content_image_details' ];
 					}
 				}
 			}
@@ -365,10 +375,10 @@ class Generate_Image extends Generate_Url {
 
 		if ( 'social' === $context ) {
 			$fallback = [
-				'settings' => "$builder::get_fallback_image_details",
-				'header'   => "$builder::get_theme_header_image_details",
-				'logo'     => "$builder::get_site_logo_image_details",
-				'icon'     => "$builder::get_site_icon_image_details",
+				'settings' => [ $builder, 'get_fallback_image_details' ],
+				'header'   => [ $builder, 'get_theme_header_image_details' ],
+				'logo'     => [ $builder, 'get_site_logo_image_details' ],
+				'icon'     => [ $builder, 'get_site_icon_image_details' ],
 			];
 		} else {
 			$fallback = [];

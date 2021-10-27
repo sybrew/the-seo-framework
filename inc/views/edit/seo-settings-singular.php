@@ -481,11 +481,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_og_title" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong>
-							<?php
-							esc_html_e( 'Open Graph Title', 'autodescription' );
-							?>
-						</strong></div>
+						<div><strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
@@ -504,11 +500,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_og_description" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong>
-							<?php
-							esc_html_e( 'Open Graph Description', 'autodescription' );
-							?>
-						</strong></div>
+						<div><strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
@@ -525,11 +517,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_twitter_title" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong>
-							<?php
-							esc_html_e( 'Twitter Title', 'autodescription' );
-							?>
-						</strong></div>
+						<div><strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )
@@ -548,11 +536,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_twitter_description" class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong>
-							<?php
-							esc_html_e( 'Twitter Description', 'autodescription' );
-							?>
-						</strong></div>
+						<div><strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
 					$this->get_option( 'display_character_counter' )

@@ -38,7 +38,8 @@ class Generate_Url extends Generate_Title {
 	 * Determines if the given page has a custom canonical URL.
 	 *
 	 * @since 3.2.4
-	 * @since 4.2.0 Now also detects canonical URLs for taxonomies.
+	 * @since 4.2.0 1. Now also detects canonical URLs for taxonomies.
+	 *              2. Now also detects canonical URLs for PTAs.
 	 *
 	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -53,6 +54,8 @@ class Generate_Url extends Generate_Title {
 				$has = $this->get_singular_custom_canonical_url();
 			} elseif ( $this->is_term_meta_capable() ) {
 				$has = $this->get_taxonomical_custom_canonical_url();
+			} elseif ( \is_post_type_archive() ) {
+				$has = $this->get_post_type_archive_custom_canonical_url();
 			} else {
 				$has = false;
 			}
@@ -60,6 +63,8 @@ class Generate_Url extends Generate_Title {
 			$this->fix_generation_args( $args );
 			if ( $args['taxonomy'] ) {
 				$has = $this->get_taxonomical_custom_canonical_url( $args['id'] );
+			} elseif ( $args['pta'] ) {
+				$has = $this->get_post_type_archive_custom_canonical_url( $args['pta'] );
 			} else {
 				$has = $this->get_singular_custom_canonical_url( $args['id'] );
 			}
@@ -129,6 +134,7 @@ class Generate_Url extends Generate_Title {
 	 * @param array $args The canonical URL arguments : {
 	 *    int    $id               The Post, Page or Term ID to generate the URL for.
 	 *    string $taxonomy         The taxonomy.
+	 *    string $pta              The pta.
 	 *    bool   $get_custom_field Whether to get custom canonical URLs from user settings.
 	 * }
 	 * @return string The canonical URL, if any.
@@ -140,6 +146,7 @@ class Generate_Url extends Generate_Title {
 		$defaults = [
 			'id'               => 0,
 			'taxonomy'         => '',
+			'pta'              => '',
 			'get_custom_field' => false,
 		];
 
@@ -201,6 +208,12 @@ class Generate_Url extends Generate_Title {
 					? $this->get_taxonomical_custom_canonical_url( $args['id'] )
 					: ''
 				) ?: $this->get_taxonomical_canonical_url( $args['id'], $args['taxonomy'] );
+		} elseif ( $args['pta'] ) {
+			$url = (
+				$args['get_custom_field']
+					? $this->get_post_type_archive_custom_canonical_url( $args['pta'] )
+					: ''
+				) ?: $this->get_post_type_archive_canonical_url( $args['pta'] );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$url = (
@@ -249,7 +262,8 @@ class Generate_Url extends Generate_Title {
 				$url = $this->get_taxonomical_custom_canonical_url()
 					?: $this->get_taxonomical_canonical_url();
 			} elseif ( \is_post_type_archive() ) {
-				$url = $this->get_post_type_archive_canonical_url();
+				$url = $this->get_post_type_archive_custom_canonical_url()
+					?: $this->get_post_type_archive_canonical_url();
 			} elseif ( $this->is_author() ) {
 				$url = $this->get_author_canonical_url();
 			} elseif ( $this->is_date() ) {
@@ -396,6 +410,18 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
+	 * Returns post type archive custom field's canonical URL.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $pta The post type.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public function get_post_type_archive_custom_canonical_url( $pta = '' ) {
+		return $this->get_post_type_archive_meta_item( 'canonical', $pta ) ?: '';
+	}
+
+	/**
 	 * Returns taxonomical canonical URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
@@ -434,8 +460,9 @@ class Generate_Url extends Generate_Title {
 	 * Returns post type archive canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.0 : 1. Deprecated first parameter as integer. Use strings or null.
-	 *                2. Now forwards post type object calling to WordPress's function.
+	 * @since 4.0.0 1. Deprecated first parameter as integer. Use strings or null.
+	 *              2. Now forwards post type object calling to WordPress's function.
+	 * @since 4.2.0 Now correctly adds pagination to the URL.
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                               Leave null to use query, and allow pagination.
@@ -444,22 +471,22 @@ class Generate_Url extends Generate_Title {
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
 		if ( \is_int( $post_type ) ) {
-			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null in the first parameter.', '4.0.0' );
+			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null to the first parameter.', '4.0.0' );
 			$post_type = '';
 		}
 
-		$query = true;
-
-		if ( null === $post_type ) {
+		if ( ! $post_type ) {
 			$post_type = \get_query_var( 'post_type' );
 			$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 
-			$query = false;
+			$is_query = true;
+		} else {
+			$is_query = false;
 		}
 
 		$url = \get_post_type_archive_link( $post_type ) ?: '';
 
-		if ( $query && $url )
+		if ( $is_query && $url )
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 
 		return $url;

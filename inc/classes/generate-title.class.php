@@ -262,6 +262,10 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_term_meta_item( 'tw_title' )
 				  ?: $this->get_term_meta_item( 'og_title' )
 				  ?: '';
+		} elseif ( \is_post_type_archive() ) {
+			$title = $this->get_post_type_archive_meta_item( 'tw_title' )
+				  ?: $this->get_post_type_archive_meta_item( 'og_title' )
+				  ?: '';
 		}
 
 		return $title;
@@ -285,6 +289,10 @@ class Generate_Title extends Generate_Description {
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'tw_title', $args['id'] )
 				  ?: $this->get_term_meta_item( 'og_title', $args['id'] )
+				  ?: '';
+		} elseif ( $args['pta'] ) {
+			$title = $this->get_post_type_archive_meta_item( 'tw_title', $args['pta'] )
+				  ?: $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] )
 				  ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
@@ -397,6 +405,8 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_post_meta_item( '_open_graph_title' ) ?: '';
 		} elseif ( $this->is_term_meta_capable() ) {
 			$title = $this->get_term_meta_item( 'og_title' ) ?: '';
+		} elseif ( \is_post_type_archive() ) {
+			$title = $this->get_post_type_archive_meta_item( 'og_title' ) ?: '';
 		}
 
 		return $title;
@@ -417,9 +427,10 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_open_graph_title_from_args( $args ) {
 
-		$title = '';
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'og_title', $args['id'] ) ?: '';
+		} elseif ( $args['pta'] ) {
+			$title = $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' )
@@ -493,6 +504,7 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_field_title_from_query() {
 
 		$title = '';
+
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_title' )
@@ -508,9 +520,15 @@ class Generate_Title extends Generate_Description {
 		} elseif ( \is_post_type_archive() ) {
 			/**
 			 * @since 4.0.6
+			 * @since 4.2.0 Deprecated.
+			 * @deprecated Use options instead.
 			 * @param string $title The post type archive title.
 			 */
-			$title = (string) \apply_filters( 'the_seo_framework_pta_title', '' ) ?: '';
+			$title = (string) \apply_filters_deprecated(
+				'the_seo_framework_pta_title',
+				[ $this->get_post_type_archive_meta_item( 'doctitle' ) ],
+				'4.2.0 of The SEO Framework'
+			) ?: '';
 		}
 
 		return $title;
@@ -530,9 +548,10 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_field_title_from_args( $args ) {
 
-		$title = '';
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'doctitle', $args['id'] ) ?: '';
+		} elseif ( $args['pta'] ) {
+			$title = $this->get_post_type_archive_meta_item( 'doctitle', $args['pta'] ) ?: '';
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' )
@@ -701,6 +720,8 @@ class Generate_Title extends Generate_Description {
 
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_generated_archive_title( \get_term( $args['id'], $args['taxonomy'] ) );
+		} elseif ( $args['pta'] ) {
+			$title = $this->get_generated_archive_title( \get_post_type_object( $args['pta'] ) );
 		} else {
 			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_static_front_page_title();
@@ -741,48 +762,50 @@ class Generate_Title extends Generate_Description {
 	 *              2: The first parameter now accepts `\WP_User` objects.
 	 * @since 4.1.2 Now supports WP 5.5 archive titles.
 	 *
-	 * @param \WP_Term|\WP_User|\WP_Error|null $term The Term object or error. Leave null to autodetermine query.
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error. Leave null to autodetermine query.
 	 * @return string The generated archive title, not escaped.
 	 */
-	public function get_generated_archive_title( $term = null ) {
+	public function get_generated_archive_title( $object = null ) {
 
-		if ( $term && \is_wp_error( $term ) )
+		if ( $object && \is_wp_error( $object ) )
 			return '';
 
 		/**
 		 * @since 2.6.0
 		 *
-		 * @param string            $title The short circuit title.
-		 * @param \WP_Term|\WP_User $term  The Term object.
+		 * @param string                          $title The short circuit title.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $term  The Term object.
 		 */
 		$title = (string) \apply_filters_ref_array(
 			'the_seo_framework_the_archive_title',
 			[
 				'',
-				$term ?: \get_queried_object(),
+				$object ?: \get_queried_object(),
 			]
 		);
 
 		if ( $title )
 			return $title;
 
-		[ $title, $prefix ] = $term
-			? $this->get_generate_archive_title_from_term( $term )
+		[ $title, $prefix ] = $object
+			? $this->get_generate_archive_title_from_term( $object )
 			: $this->get_generate_archive_title_from_query();
 
 		$original_title = $title;
 
-		if ( $this->use_generated_archive_prefix( $term ) ) {
+		if ( $this->use_generated_archive_prefix( $object ) ) {
 			/**
 			 * Filters the archive title prefix.
 			 * This is a sibling of WordPress's `get_the_archive_title_prefix`,
-			 * but then without the HTML, and runs optionally, based on site-settings.
+			 * but then without the HTML, and runs optionally, based on site-settings,
+			 * and then with the second paramter: `$object`.
 			 *
 			 * @since 4.2.0
 			 *
 			 * @param string $prefix Archive title prefix.
+			 * @param \WP_Term|\WP_User|\WP_Post_Type $term  The Term object.
 			 */
-			$prefix = \apply_filters( 'the_seo_framework_generated_archive_title_prefix', $prefix );
+			$prefix = \apply_filters( 'the_seo_framework_generated_archive_title_prefix', $prefix, $object );
 
 			if ( $prefix ) {
 				$title = sprintf(
@@ -802,16 +825,16 @@ class Generate_Title extends Generate_Description {
 		 * @since 3.0.4
 		 * @since 4.2.0 Added the `$prefix` and `$original_title` parameters.
 		 *
-		 * @param string   $title          Archive title to be displayed.
-		 * @param \WP_Term $term           The term object.
-		 * @param string   $original_title Archive title without prefix.
-		 * @param string   $prefix         Archive title prefix.
+		 * @param string                          $title          Archive title to be displayed.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $object         The term object.
+		 * @param string                          $original_title Archive title without prefix.
+		 * @param string                          $prefix         Archive title prefix.
 		 */
 		return \apply_filters_ref_array(
 			'the_seo_framework_generated_archive_title',
 			[
 				$title,
-				$term,
+				$object,
 				$original_title,
 				$prefix,
 			]
@@ -1432,6 +1455,8 @@ class Generate_Title extends Generate_Description {
 			$use = $this->use_singular_title_branding();
 		} elseif ( $this->is_term_meta_capable() ) {
 			$use = $this->use_taxonomical_title_branding();
+		} elseif ( \is_post_type_archive() ) {
+			$use = $this->use_post_type_archive_title_branding();
 		} else {
 			$use = ! $this->get_option( 'title_rem_additions' );
 		}
@@ -1453,6 +1478,8 @@ class Generate_Title extends Generate_Description {
 
 		if ( $args['taxonomy'] ) {
 			$use = $this->use_taxonomical_title_branding( $args['id'] );
+		} elseif ( $args['pta'] ) {
+			$use = $this->use_post_type_archive_title_branding( $args['pta'] );
 		} else {
 			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$use = $this->use_home_page_title_tagline();
@@ -1471,7 +1498,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 4.0.5 1: Added first parameter `$term`.
 	 *              2: Added filter.
 	 *
-	 * @param \WP_Term|\WP_User|null $term The Term object. Leave null to autodermine query.
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $term The Term object. Leave null to autodermine query.
 	 * @return bool
 	 */
 	public function use_generated_archive_prefix( $term = null ) {
@@ -1481,8 +1508,8 @@ class Generate_Title extends Generate_Description {
 
 		/**
 		 * @since 4.0.5
-		 * @param string            $use  Whether to use branding.
-		 * @param \WP_Term|\WP_User $term The current term.
+		 * @param string                          $use  Whether to use branding.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $term The current term.
 		 */
 		return \apply_filters_ref_array( 'the_seo_framework_use_archive_prefix', [ $use, $term ] );
 	}
@@ -1521,6 +1548,18 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function use_taxonomical_title_branding( $id = 0 ) {
 		return ! $this->get_term_meta_item( 'title_no_blog_name', $id ) && ! $this->get_option( 'title_rem_additions' );
+	}
+
+	/**
+	 * Determines whether to add the title tagline for the pta.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $pta The post type archive. Optional.
+	 * @return bool
+	 */
+	public function use_post_type_archive_title_branding( $pta = '' ) {
+		return ! $this->get_post_type_archive_meta_item( 'title_no_blog_name', $pta ) && ! $this->get_option( 'title_rem_additions' );
 	}
 
 	/**

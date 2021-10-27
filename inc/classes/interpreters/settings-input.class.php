@@ -105,6 +105,10 @@ final class Settings_Input {
 	/**
 	 * Returns a chechbox wrapper.
 	 *
+	 * This is put in this class, instead of Form, because
+	 * 1) Retrieves the global settings ID from input.
+	 * 2) Retrieves the default-state of the checkbox via the global settings.
+	 *
 	 * @since 4.2.0
 	 *
 	 * @param array $args : {
@@ -157,18 +161,18 @@ final class Settings_Input {
 		$output = sprintf(
 			'<span class="tsf-toblock">%s</span>',
 			vsprintf(
-				'<label for="%s" %s>%s</label>',
+				'<label for="%s"%s>%s</label>',
 				[
 					$tsf->s_field_id( $field_id ),
-					( $args['disabled'] ? 'class="tsf-disabled"' : '' ),
+					( $args['disabled'] ? ' class="tsf-disabled"' : '' ),
 					vsprintf(
-						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s %s %s /> %s',
+						'<input type=checkbox class="%s" name="%s" id="%s" value="1" %s%s %s /> %s',
 						[
-							\esc_attr( implode( ' ', $cb_classes ) ),
+							\esc_attr( implode( ' ', array_filter( $cb_classes ) ) ),
 							$tsf->s_field_id( $field_name ),
 							$tsf->s_field_id( $field_id ),
 							\checked( $value, true, false ),
-							( $args['disabled'] ? 'disabled' : '' ),
+							( $args['disabled'] ? ' disabled' : '' ),
 							HTML::make_data_attributes( $args['data'] ),
 							$args['label'],
 						]

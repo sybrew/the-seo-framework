@@ -67,6 +67,8 @@ final class Args extends Factory {
 				$qubit = (int) $tsf->get_term_meta_item( $type, $args['id'] );
 			} elseif ( $args['id'] ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type", $args['id'] );
+			} elseif ( $args['pta'] ) {
+				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type, $args['pta'] );
 			}
 
 			switch ( isset( $qubit ) ) :
@@ -104,6 +106,8 @@ final class Args extends Factory {
 
 				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+			} elseif ( $args['pta'] ) {
+				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $args['pta'] );
 			} else {
 				// $args['id'] can be empty, pointing to a plausible homepage query.
 				if ( $tsf->is_real_front_page_by_id( $args['id'] ) )

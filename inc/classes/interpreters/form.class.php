@@ -111,11 +111,11 @@ final class Form {
 					false
 				) : '',
 				vsprintf(
-					'<select id="%s" name="%s" %s %s>%s</select>',
+					'<select id="%s" name="%s"%s %s>%s</select>',
 					[
 						$tsf->s_field_id( $args['id'] ),
 						\esc_attr( $args['name'] ),
-						$args['required'] ? 'required' : '',
+						$args['required'] ? ' required' : '',
 						HTML::make_data_attributes( $args['data'] ),
 						implode( $html_options ),
 					]

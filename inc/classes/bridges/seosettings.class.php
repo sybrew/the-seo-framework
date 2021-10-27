@@ -60,7 +60,7 @@ final class SeoSettings {
 		$description       = (bool) \apply_filters( 'the_seo_framework_description_metabox', true );
 		$robots            = (bool) \apply_filters( 'the_seo_framework_robots_metabox', true );
 		$home              = (bool) \apply_filters( 'the_seo_framework_home_metabox', true );
-		$post_type_archive = (bool) \apply_filters( 'the_seo_framework_post_type_archive_metabox', false );
+		$post_type_archive = (bool) \apply_filters( 'the_seo_framework_post_type_archive_metabox', true );
 		$social            = (bool) \apply_filters( 'the_seo_framework_social_metabox', true );
 		$schema            = (bool) \apply_filters( 'the_seo_framework_schema_metabox', true );
 		$webmaster         = (bool) \apply_filters( 'the_seo_framework_webmaster_metabox', true );

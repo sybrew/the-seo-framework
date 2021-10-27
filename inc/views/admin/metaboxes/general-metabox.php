@@ -20,27 +20,27 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		$tabs = [
 			'layout'      => [
 				'name'     => __( 'Layout', 'autodescription' ),
-				'callback' => "$_settings_class::_general_metabox_layout_tab",
+				'callback' => [ $_settings_class, '_general_metabox_layout_tab' ],
 				'dashicon' => 'screenoptions',
 			],
 			'performance' => [
 				'name'     => __( 'Performance', 'autodescription' ),
-				'callback' => "$_settings_class::_general_metabox_performance_tab",
+				'callback' => [ $_settings_class, '_general_metabox_performance_tab' ],
 				'dashicon' => 'performance',
 			],
 			'canonical'   => [
 				'name'     => __( 'Canonical', 'autodescription' ),
-				'callback' => "$_settings_class::_general_metabox_canonical_tab",
+				'callback' => [ $_settings_class, '_general_metabox_canonical_tab' ],
 				'dashicon' => 'external',
 			],
 			'timestamps'  => [
 				'name'     => __( 'Timestamps', 'autodescription' ),
-				'callback' => "$_settings_class::_general_metabox_timestamps_tab",
+				'callback' => [ $_settings_class, '_general_metabox_timestamps_tab' ],
 				'dashicon' => 'clock',
 			],
 			'exclusions'  => [
 				'name'     => __( 'Exclusions', 'autodescription' ),
-				'callback' => "$_settings_class::_general_metabox_exclusions_tab",
+				'callback' => [ $_settings_class, '_general_metabox_exclusions_tab' ],
 				'dashicon' => 'editor-unlink',
 			],
 		];

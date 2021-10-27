@@ -95,10 +95,10 @@ class Generate extends User_Data {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
 	 * }
 	 * @param int <bit>  $options The options level. {
-	 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
+	 *    0 = 0b000: Ignore nothing. Collect no assertions. (Default front-end.)
 	 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
 	 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    4 = 0b100: Collect assertions.
+	 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
 	 * }
 	 * @return array Only values actualized for display: {
 	 *    string index : string value
@@ -534,13 +534,17 @@ class Generate extends User_Data {
 				$url = $this->get_post_meta_item( 'redirect' ) ?: '';
 			} elseif ( $this->is_term_meta_capable() ) {
 				$url = $this->get_term_meta_item( 'redirect' ) ?: '';
+			} elseif ( \is_post_type_archive() ) {
+				$url = $this->get_post_type_archive_meta_item( 'redirect' ) ?: '';
 			}
 		} else {
 			$this->fix_generation_args( $args );
-			if ( ! $args['taxonomy'] ) {
-				$url = $this->get_post_meta_item( 'redirect', $args['id'] ) ?: '';
-			} else {
+			if ( $args['taxonomy'] ) {
 				$url = $this->get_term_meta_item( 'redirect', $args['id'] ) ?: '';
+			} elseif ( $args['pta'] ) {
+				$url = $this->get_post_type_archive_meta_item( 'redirect', $args['pta'] ) ?: '';
+			} else {
+				$url = $this->get_post_meta_item( 'redirect', $args['id'] ) ?: '';
 			}
 		}
 

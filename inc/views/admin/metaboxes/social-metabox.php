@@ -21,27 +21,27 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		$tabs = [
 			'general'   => [
 				'name'     => __( 'General', 'autodescription' ),
-				'callback' => "$_settings_class::_social_metabox_general_tab",
+				'callback' => [ $_settings_class, '_social_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
 			'facebook'  => [
 				'name'     => 'Facebook',
-				'callback' => "$_settings_class::_social_metabox_facebook_tab",
+				'callback' => [ $_settings_class, '_social_metabox_facebook_tab' ],
 				'dashicon' => 'facebook-alt',
 			],
 			'twitter'   => [
 				'name'     => 'Twitter',
-				'callback' => "$_settings_class::_social_metabox_twitter_tab",
+				'callback' => [ $_settings_class, '_social_metabox_twitter_tab' ],
 				'dashicon' => 'twitter',
 			],
 			'oembed'    => [
 				'name'     => 'oEmbed',
-				'callback' => "$_settings_class::_social_metabox_oembed_tab",
+				'callback' => [ $_settings_class, '_social_metabox_oembed_tab' ],
 				'dashicon' => 'share-alt2',
 			],
 			'postdates' => [
 				'name'     => __( 'Post Dates', 'autodescription' ),
-				'callback' => "$_settings_class::_social_metabox_postdates_tab",
+				'callback' => [ $_settings_class, '_social_metabox_postdates_tab' ],
 				'dashicon' => 'backup',
 			],
 		];
