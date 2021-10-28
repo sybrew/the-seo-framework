@@ -477,10 +477,7 @@ class Base extends Main {
 
 			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
 				$_values = [
-					'loc' => static::$tsf->create_canonical_url( [
-						'id'       => $post_id,
-						'taxonomy' => '',
-					] ),
+					'loc' => static::$tsf->create_canonical_url( [ 'id' => $post_id ] ),
 				];
 
 				if ( $args['show_modified'] )

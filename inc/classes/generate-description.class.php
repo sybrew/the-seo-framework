@@ -610,10 +610,7 @@ class Generate_Description extends Generate {
 	 * @return string
 	 */
 	protected function get_blog_page_description_excerpt() {
-		return $this->get_description_additions( [
-			'id'       => (int) \get_option( 'page_for_posts' ),
-			'taxonomy' => '',
-		] );
+		return $this->get_description_additions( [ 'id' => (int) \get_option( 'page_for_posts' ) ] );
 	}
 
 	/**
@@ -628,10 +625,7 @@ class Generate_Description extends Generate {
 		$id = $this->get_the_front_page_ID();
 
 		$excerpt = ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
-			?: $this->get_description_additions( [
-				'id'       => $id,
-				'taxonomy' => '',
-			] );
+			?: $this->get_description_additions( [ 'id' => $id ] );
 
 		return $excerpt;
 	}

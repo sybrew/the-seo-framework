@@ -16,10 +16,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 // Setup default vars.
 $post_id = $this->get_the_real_ID(); // We also have access to object $post at the main call...
 
-$_generator_args = [
-	'id'       => $post_id,
-	'taxonomy' => '',
-];
+$_generator_args = [ 'id' => $post_id ];
 
 $_is_static_frontpage = $this->is_static_frontpage( $post_id );
 
@@ -546,10 +543,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class="large-text" name="autodescription[_twitter_description]" id="autodescription_twitter_description" rows="3" cols="4" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
-
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
 					echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_description' ) );
-
 				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
 				?></textarea>
 			</div>

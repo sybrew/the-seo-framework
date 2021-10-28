@@ -393,10 +393,7 @@ class Generate_Ldjson extends Generate_Image {
 		foreach ( $parents as $parent_id ) {
 			++$position;
 
-			$_generator_args = [
-				'id'       => $parent_id,
-				'taxonomy' => '',
-			];
+			$_generator_args = [ 'id' => $parent_id ];
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 				$parent_name = $this->get_filtered_raw_custom_field_title( $_generator_args )
@@ -687,10 +684,7 @@ class Generate_Ldjson extends Generate_Image {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$_generator_args = [
-			'id'       => $this->get_the_front_page_ID(),
-			'taxonomy' => '',
-		];
+		$_generator_args = [ 'id' => $this->get_the_front_page_ID() ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$title = $this->get_filtered_raw_custom_field_title( $_generator_args ) ?: $this->get_blogname();
@@ -731,10 +725,7 @@ class Generate_Ldjson extends Generate_Image {
 		}
 
 		$post_id         = $this->get_the_real_ID();
-		$_generator_args = [
-			'id'       => $post_id,
-			'taxonomy' => '',
-		];
+		$_generator_args = [ 'id' => $post_id ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$name = $this->get_filtered_raw_custom_field_title( $_generator_args )

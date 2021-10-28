@@ -1129,20 +1129,12 @@ class Init extends Query {
 
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_og_title', false ) ) {
-			$data['title'] = $this->get_open_graph_title(
-				[
-					'id'       => $post->ID,
-					'taxonomy' => '',
-				]
-			) ?: $data['title'];
+			$data['title'] = $this->get_open_graph_title( [ 'id' => $post->ID ] ) ?: $data['title'];
 		}
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
 			$image_details = current( $this->get_image_details(
-				[
-					'id'       => $post->ID,
-					'taxonomy' => '',
-				],
+				[ 'id' => $post->ID ],
 				true,
 				'oembed',
 				true

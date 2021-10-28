@@ -38,11 +38,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<div id=tsf-post-type-archive-selector-wrap class="tsf-fields tsf-hide-if-no-js"></div>
 		<?php
 		foreach ( $post_types as $post_type ) {
-			$_generator_args = [
-				'id'       => '',
-				'taxonomy' => '',
-				'pta'      => $post_type,
-			];
+			$_generator_args = [ 'pta' => $post_type ];
 
 			// Create `[ 'doctitle' => [ 'pta', $post_type ] ];`
 			$_option_map = array_fill_keys(

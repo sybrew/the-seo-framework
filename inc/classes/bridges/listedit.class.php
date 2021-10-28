@@ -165,10 +165,7 @@ final class ListEdit extends ListTable {
 
 		$tsf = \tsf();
 
-		$query = [
-			'id'       => $post_id,
-			'taxonomy' => '',
-		];
+		$query = [ 'id' => $post_id ];
 
 		$r_defaults = $tsf->generate_robots_meta(
 			$query,
@@ -222,7 +219,7 @@ final class ListEdit extends ListTable {
 		 *       @param string $default  Optional. Only works when $isSelect is true. The default value to be set in select index 0.
 		 *    }
 		 * }
-		 * @param array $query The query data. Contains 'id' and 'taxonomy'.
+		 * @param array $query The query data. Contains 'id' or 'taxonomy'.
 		 */
 		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $query ] );
 

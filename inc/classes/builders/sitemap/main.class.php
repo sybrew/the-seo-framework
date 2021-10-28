@@ -179,10 +179,7 @@ abstract class Main {
 		$included = ! isset( $excluded[ $post_id ] );
 
 		while ( $included ) :
-			$_args = [
-				'id'       => $post_id,
-				'taxonomy' => '',
-			];
+			$_args = [ 'id' => $post_id ];
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
 			$included = 'noindex'

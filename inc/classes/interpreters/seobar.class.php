@@ -90,21 +90,22 @@ final class SEOBar {
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
 	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
+	 *   string $pta       : Not implemented. Do not populate.
 	 *   string $post_type : Optional. If not set, this will be automatically filled.
 	 *                                 This parameter is ignored for taxonomies.
+	 *                                 This parameter will become obsolete once WP fixes its post cache.
+	 *                                 <https://core.trac.wordpress.org/ticket/50567>
 	 * }
 	 * @return string The SEO Bar.
 	 */
 	public static function generate_bar( $query ) {
 
-		static::$query = array_merge(
-			[
-				'id'        => 0,
-				'taxonomy'  => '',
-				'post_type' => '',
-			],
-			$query
-		);
+		static::$query = $query + [
+			'id'        => 0,
+			'taxonomy'  => '',
+			'pta'       => '',
+			'post_type' => '',
+		];
 
 		if ( ! static::$query['id'] ) return '';
 

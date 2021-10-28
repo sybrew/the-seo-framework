@@ -277,10 +277,7 @@ final class AJAX {
 			)
 		);
 
-		$_generator_args = [
-			'id'       => $post_id,
-			'taxonomy' => '',
-		];
+		$_generator_args = [ 'id' => $post_id ];
 
 		$data = [];
 

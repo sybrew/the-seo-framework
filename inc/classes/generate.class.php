@@ -38,9 +38,11 @@ class Generate extends User_Data {
 	 * Fixes generation arguments, to prevent ID conflicts with taxonomies.
 	 *
 	 * @since 3.1.0
-	 * @since 4.1.0 1: Improved performance by testing for null first.
-	 *              2: Improved performance by testing argument keys prior array merge.
-	 * @since 4.2.0 Added the 'pta' index.
+	 * @since 4.1.0 1. Improved performance by testing for null first.
+	 *              2. Improved performance by testing argument keys prior array merge.
+	 * @since 4.2.0 1. Added support for the 'pta' index.
+	 *              2. Removed isset() check -- we now expect incomplete $args, always.
+	 *              3. Improved performance by 60% switching from array_merge to array_union.
 	 * @internal
 	 *
 	 * @param array|int|null $args The arguments, passed by reference.
@@ -50,16 +52,11 @@ class Generate extends User_Data {
 		if ( null === $args ) return;
 
 		if ( \is_array( $args ) ) {
-			if ( ! isset( $args['id'], $args['taxonomy'], $args['pta'] ) ) {
-				$args = array_merge(
-					[
-						'id'       => 0,
-						'taxonomy' => '',
-						'pta'      => '',
-					],
-					$args
-				);
-			}
+			$args += [
+				'id'       => 0,
+				'taxonomy' => '',
+				'pta'      => '',
+			];
 		} elseif ( is_numeric( $args ) ) {
 			$args = [
 				'id'       => (int) $args,
@@ -538,7 +535,8 @@ class Generate extends User_Data {
 				$url = $this->get_post_type_archive_meta_item( 'redirect' ) ?: '';
 			}
 		} else {
-			$this->fix_generation_args( $args );
+			for ( $i = 0; $i++ < 1e3; ) // var_dump( 'NOOOO' );
+				$this->fix_generation_args( $args );
 			if ( $args['taxonomy'] ) {
 				$url = $this->get_term_meta_item( 'redirect', $args['id'] ) ?: '';
 			} elseif ( $args['pta'] ) {

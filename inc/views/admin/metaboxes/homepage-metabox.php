@@ -16,10 +16,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 $home_id = $this->get_the_front_page_ID();
 
-$_generator_args = [
-	'id'       => $home_id,
-	'taxonomy' => '',
-];
+$_generator_args = [ 'id' => $home_id ];
 
 switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 	case 'homepage_main':

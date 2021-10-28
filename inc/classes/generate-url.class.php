@@ -116,10 +116,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_homepage_permalink() {
 		return memo() ?? memo(
-			$this->create_canonical_url( [
-				'id'       => $this->get_the_front_page_ID(),
-				'taxonomy' => '',
-			] )
+			$this->create_canonical_url( [ 'id' => $this->get_the_front_page_ID() ] )
 		);
 	}
 
@@ -141,16 +138,14 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function create_canonical_url( $args = [] ) {
 
-		$this->fix_generation_args( $args );
-
-		$defaults = [
+		$args += [
 			'id'               => 0,
 			'taxonomy'         => '',
 			'pta'              => '',
 			'get_custom_field' => false,
 		];
 
-		return $this->get_canonical_url( array_merge( $defaults, (array) $args ) );
+		return $this->get_canonical_url( $args );
 	}
 
 	/**

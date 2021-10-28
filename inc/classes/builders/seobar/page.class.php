@@ -104,10 +104,7 @@ final class Page extends Main {
 						'noarchive' => false,
 					],
 					static::$tsf->generate_robots_meta(
-						[
-							'id'       => static::$query['id'],
-							'taxonomy' => '',
-						],
+						[ 'id' => static::$query['id'] ],
 						[ 'noindex', 'nofollow', 'noarchive' ],
 						\The_SEO_Framework\ROBOTS_ASSERT
 					)
@@ -203,10 +200,7 @@ final class Page extends Main {
 			]
 		);
 
-		$title_args = [
-			'id'       => static::$query['id'],
-			'taxonomy' => '',
-		];
+		$title_args = [ 'id' => static::$query['id'] ];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
@@ -424,10 +418,7 @@ final class Page extends Main {
 			]
 		);
 
-		$desc_args = [
-			'id'       => static::$query['id'],
-			'taxonomy' => '',
-		];
+		$desc_args = [ 'id' => static::$query['id'] ];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
