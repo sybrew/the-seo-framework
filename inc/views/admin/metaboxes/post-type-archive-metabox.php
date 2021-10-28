@@ -23,7 +23,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		$post_types_data = [];
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
-				'label' => $this->get_generated_post_type_archive_title( $post_type ),
+				'label' => $this->get_post_type_label( $post_type ),
 				'url'   => $this->create_canonical_url( [ 'pta' => $post_type ] ),
 			];
 		}
@@ -35,7 +35,12 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		);
 
 		?>
-		<div id=tsf-post-type-archive-selector-wrap class="tsf-fields tsf-hide-if-no-js"></div>
+		<div id=tsf-post-type-archive-header-wrap class=tsf-fields style=display:none>
+			<div id=tsf-post-type-archive-select-wrap>
+				<label for=tsf-post-type-archive-selector><?php esc_html_e( 'Select post type:', 'autodescription' ); ?></label>
+				<select id=tsf-post-type-archive-selector></select>
+			</div>
+		</div>
 		<?php
 		foreach ( $post_types as $post_type ) {
 			$_generator_args = [ 'pta' => $post_type ];
@@ -92,7 +97,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			printf(
 				'<div class=tsf-post-type-archive-wrap %s>',
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
-				HTML::make_data_attributes( [ 'post_type' => $post_type ] )
+				HTML::make_data_attributes( [ 'postType' => $post_type ] )
 			);
 			?>
 				<div class=tsf-post-type-archive-if-excluded style=display:none>
@@ -103,23 +108,34 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 					?>
 				</div>
 				<div class=tsf-post-type-archive-if-not-excluded>
+					<div class=tsf-post-type-header>
+						<?php
+						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
+						echo HTML::get_header_title(
+							$this->convert_markdown(
+								vsprintf(
+									/* translators: 1 = Post Type Archive name, Markdown. 2 = Post Type code, also markdown! 3 = Post Type Archive linl. Preserve the Markdown as-is! */
+									esc_html__( 'Archive of %1$s &ndash; `%2$s` %3$s', 'autodescription' ),
+									[
+										esc_html( $post_types_data[ $post_type ]['label'] ),
+										esc_html( $post_type ),
+										sprintf(
+											'<span class=tsf-post-type-archive-link>%s</span>',
+											sprintf(
+												/* translators: %s = Post Type Archive link. Markdown. Preserve [](%s) as-is. */
+												esc_html__( '([View archive](%s))', 'autodescription' ),
+												esc_url( $post_types_data[ $post_type ]['url'] )
+											)
+										),
+									]
+								),
+								[ 'code', 'a' ],
+								[ 'a_internal' => false ] // open in new window.
+							)
+						);
+						?>
+					</div>
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
-					echo HTML::get_header_title(
-						$this->convert_markdown(
-							vsprintf(
-								/* translators: 1 = Post Type Archive name, Markdown. 2 = Post Type code, also markdown! 3 = Post Type Archive link, also markdown. Preserve the Markdown as-is! */
-								esc_html__( 'Archive of %1$s &ndash; `%2$s` ([View archive](%3$s))', 'autodescription' ),
-								[
-									$post_types_data[ $post_type ]['label'],
-									$post_type,
-									$post_types_data[ $post_type ]['url'],
-								]
-							),
-							[ 'code', 'a' ],
-							[ 'a_internal' => false ] // open in new window.
-						)
-					);
 					SeoSettings::_nav_tab_wrapper(
 						"post_type_archive_{$post_type}",
 						/**
@@ -191,7 +207,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'     => $_option_map['title_no_blog_name'],
-					'label'  => esc_html__( 'Remove the site title?', 'autodescription' ) . ' ' . $info,
+					'label'  => esc_html__( 'Remove the site title?', 'autodescription' ) . " $info",
 					'escape' => false,
 				] ),
 				true
