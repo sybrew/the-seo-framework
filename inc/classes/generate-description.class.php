@@ -964,16 +964,10 @@ class Generate_Description extends Generate {
 	 *                         Leave null to autodetermine query.
 	 * @return bool
 	 */
-	public function is_auto_description_enabled( $args ) {
+	public function is_auto_description_enabled( $args = null ) {
 
-		if ( \is_null( $args ) ) {
-			$args = [
-				'id'       => $this->get_the_real_ID(),
-				'taxonomy' => $this->get_current_taxonomy(),
-			];
-		} else {
+		if ( null !== $args )
 			$this->fix_generation_args( $args );
-		}
 
 		/**
 		 * @since 2.5.0

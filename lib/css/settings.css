@@ -119,11 +119,10 @@ body.rtl .tsf-bottom-buttons {
 	justify-content: space-between;
 	align-items: center;
 	vertical-align: top;
-	gap: 1.625em;
+	gap: 1.625em 4ch;
 }
 
 #tsf-post-type-archive-select-wrap {
-	grid-area: "select";
 	display: flex;
 	flex-flow: row wrap;
 	gap: 1em;
@@ -135,7 +134,6 @@ body.rtl .tsf-bottom-buttons {
 }
 
 #tsf-post-type-archive-header-wrap h4 {
-	grid-area: "header";
 	margin: 0;
 }
 
@@ -143,14 +141,15 @@ body.rtl .tsf-bottom-buttons {
 	display: inline-block;
 }
 
-.tsf-post-type-archive-link {
-	display: inline-block;
+/** @overrides tsf.css */
+.tsf-select-block > select:last-of-type {
+	margin-bottom: 14px;
 }
 
 /**
  * Start Tabs.
  */
-.tsf-tab-no-js,
+.tsf-nav-tab-no-js,
 .tsf-nav-tab-wrapper {
 	position: relative;
 	clear: both;
@@ -162,21 +161,20 @@ body.rtl .tsf-bottom-buttons {
 	margin: -4px -12px;
 }
 
-.tsf-nav-tab {
+.tsf-nav-tab-label {
 	float: left;
 	border: 1px solid #ccc;
 	margin-left: .5em;
 	margin-bottom: -1px;
-	padding: 5px 14px;
+	padding: 1ch 2ch;
 	font-size: 12px;
-	line-height: 16px;
 	background: #f1f1f1;
 	color: #555;
 	font-weight: 600;
 	border-radius: 3px 3px 0 0;
 }
 
-body.rtl .tsf-nav-tab {
+body.rtl .tsf-nav-tab-label {
 	float: right;
 	margin-left: 0;
 	margin-right: .5em;
@@ -192,7 +190,7 @@ body.rtl .tsf-nav-tab {
 	vertical-align: text-bottom;
 }
 
-input.tsf-tabs-radio {
+input.tsf-nav-tab-radio {
 	position: absolute;
 	width: 0;
 	height: 0;
@@ -206,40 +204,40 @@ input.tsf-tabs-radio {
 	appearance: none;
 }
 
-.tsf-tabs-radio:checked + label,
-.tsf-active-tab {
+.tsf-nav-tab-radio:checked + label,
+.tsf-nav-tab-active {
 	background-color: inherit;
 	border-bottom-color: #fff;
 	color: #000;
 }
 
 /* make all border colors #fff, so it doesn't look skewed */
-.tsf-tabs-radio:focus + label:not(.tsf-no-focus-ring) {
+.tsf-nav-tab-radio:focus + label:not(.tsf-no-focus-ring) {
 	box-shadow:
 		0 0 0 1px #5b9dd9,
 		0 0 2px 1px rgba(30, 140, 190, .8);
 	border-color: #fff;
 }
 
-.tsf-tabs-content {
+.tsf-nav-tab-content {
 	margin: 1.33em auto 0;
 }
 
-.tsf-tabs-content select {
+.tsf-nav-tab-content select {
 	width: 100%;
 	max-width: max-content;
 	text-overflow: ellipsis;
 }
 
-.tsf-content-no-js {
+.tsf-nav-tab-content-no-js {
 	margin: 1.33em auto;
 }
 
-body.js .tsf-tabs-content {
+body.js .tsf-nav-tab-content {
 	display: none;
 }
 
-body.js .tsf-tabs-content.tsf-active-tab-content {
+body.js .tsf-nav-tab-content.tsf-nav-tab-content-active {
 	display: block;
 }
 

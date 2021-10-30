@@ -28,6 +28,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				'i18n'     => __( 'Search pages', 'autodescription' ),
 				'i18ntype' => 'plural',
 			],
+			// Must be last for proper <hr> styling!
 			'site'   => [
 				'i18n'     => _x( 'the entire site', '...for the entire site', 'autodescription' ),
 				'i18ntype' => 'singular',
@@ -393,8 +394,12 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 
 			$checkboxes .= Input::make_checkbox( [
 				'id'     => $id,
+				'class'  => 'site' === $type ? 'tsf-robots-site' : 'tsf-robots-globals',
 				'label'  => $label,
 				'escape' => false,
+				'data'   => [
+					'robots' => $ro_value,
+				],
 			] );
 		}
 

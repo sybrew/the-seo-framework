@@ -29,7 +29,7 @@ if ( $use_tabs ) :
 			printf(
 				'<div class=tsf-tab>%s</div>',
 				vsprintf(
-					'<input type=radio class="tsf-tabs-radio tsf-input-not-saved" id=%1$s name="%2$s" %3$s><label for=%1$s class=tsf-nav-tab>%4$s</label>',
+					'<input type=radio class="tsf-nav-tab-radio tsf-input-not-saved" id=%1$s name="%2$s" %3$s><label for=%1$s class=tsf-nav-tab-label>%4$s</label>',
 					[
 						esc_attr( "tsf-$id-tab-$tab" ),
 						esc_attr( "tsf-$id-tabs" ),

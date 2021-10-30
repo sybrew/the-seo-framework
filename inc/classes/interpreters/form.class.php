@@ -62,15 +62,16 @@ final class Form {
 	public static function make_single_select_form( $args ) {
 
 		$defaults = [
-			'id'       => '',
-			'class'    => '',
-			'name'     => '',
-			'default'  => '',
-			'options'  => [],
-			'label'    => '',
-			'required' => false,
-			'data'     => [],
-			'info'     => [],
+			'id'          => '',
+			'class'       => '',
+			'name'        => '',
+			'default'     => '',
+			'options'     => [],
+			'label'       => '',
+			'labelstrong' => false,
+			'required'    => false,
+			'data'        => [],
+			'info'        => [],
 		];
 
 		$args = array_merge( $defaults, $args );
@@ -103,13 +104,16 @@ final class Form {
 				$args['label'] ? sprintf(
 					'<label for="%s">%s</label> ', // NOTE: extra space!
 					$tsf->s_field_id( $args['id'] ),
-					\esc_html( $args['label'] )
+					sprintf(
+						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
+						\esc_html( $args['label'] )
+					)
 				) : '',
-				$args['info'] ? ' ' . HTML::make_info(
+				$args['info'] ? HTML::make_info(
 					$args['info'][0],
 					$args['info'][1] ?? '',
 					false
-				) : '',
+				) . ' ' : '',
 				vsprintf(
 					'<select id="%s" name="%s"%s %s>%s</select>',
 					[

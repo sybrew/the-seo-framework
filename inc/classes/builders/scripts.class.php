@@ -114,8 +114,8 @@ final class Scripts {
 		\add_filter( 'admin_body_class', [ $this, '_add_body_class' ] );
 		\add_action( 'in_admin_header', [ $this, '_print_tsfjs_script' ] );
 
-		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
-		\add_action( 'admin_footer', [ $this, '_output_templates' ], 999 );
+		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 ); // Magic number: likely 1 after this is called.
+		\add_action( 'admin_footer', [ $this, '_output_templates' ], 999 ); // Magic number: later is less likely to collide?
 	}
 
 	/**
@@ -129,8 +129,8 @@ final class Scripts {
 	 * @return string
 	 */
 	public function _add_body_class( $classes ) {
-		// Add spaces at both sides, because who knows what others do.
-		return ' tsf-no-js ' . $classes;
+		// Add spaces on both sides, because who knows what others do.
+		return " tsf-no-js $classes";
 	}
 
 	/**
@@ -193,7 +193,7 @@ final class Scripts {
 
 		if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
 
-		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 );
+		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}
 
 	/**

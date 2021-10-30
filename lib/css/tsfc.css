@@ -10,8 +10,6 @@
 	color: #666;
 	cursor: pointer;
 	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none; /* Remove me 2022 */
 	user-select: none;
 	will-change: contents;
 }
@@ -32,8 +30,8 @@
 .tsf-counter-one {
 	color: #fff;
 	border-radius: 4em;
-	padding: 0 0.5em;
-	min-width: 2em;
+	padding: 0 1ch;
+	min-width: 3ch;
 	display: inline-block;
 	text-align: center;
 	vertical-align: baseline;
@@ -56,11 +54,11 @@
 /* START Pixel Counters */
 
 /* Temporarily fix for SEO settings page. */
-.tsf-tabs-content .tsf-pixel-counter-wrap {
+.tsf-nav-tab-content .tsf-pixel-counter-wrap {
 	margin-left: 1px;
 	max-width: 99%;
 }
-body.rtl .tsf-tabs-content .tsf-pixel-counter-wrap {
+body.rtl .tsf-nav-tab-content .tsf-pixel-counter-wrap {
 	margin-left: 0;
 	margin-right: 1px;
 }

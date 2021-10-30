@@ -262,9 +262,9 @@ final class ListEdit extends ListTable {
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
-			'defaultTitle'      => $default_title,
+			'defaultTitle'      => $tsf->s_title( $default_title ),
 			'addAdditions'      => $tsf->use_title_branding( $query ),
-			'additionValue'     => $tsf->s_title_raw( $addition ),
+			'additionValue'     => $tsf->s_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
 		$desc_data  = [
@@ -401,9 +401,9 @@ final class ListEdit extends ListTable {
 
 		$title_data = [
 			'refTitleLocked'    => false,
-			'defaultTitle'      => $tsf->get_filtered_raw_generated_title( $query ),
+			'defaultTitle'      => $tsf->s_title( $tsf->get_filtered_raw_generated_title( $query ) ),
 			'addAdditions'      => $tsf->use_title_branding( $query ),
-			'additionValue'     => $tsf->s_title_raw( $tsf->get_blogname() ),
+			'additionValue'     => $tsf->s_title( $tsf->get_blogname() ),
 			'additionPlacement' => 'left' === $tsf->get_title_seplocation() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];

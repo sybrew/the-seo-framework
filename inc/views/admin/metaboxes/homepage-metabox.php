@@ -35,7 +35,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
 				'callback' => [ $_settings_class, '_homepage_metabox_additions_tab' ],
-				'dashicon' => 'plus',
+				'dashicon' => 'plus-alt2',
 			],
 			'social'    => [
 				'name'     => __( 'Social', 'autodescription' ),
@@ -87,12 +87,13 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 				[
 					'state' => [
 						'refTitleLocked'    => false,
-						'defaultTitle'      =>
-							( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
-							?: $this->get_filtered_raw_generated_title( $_generator_args ),
+						'defaultTitle'      => $this->s_title(
+								( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
+								?: $this->get_filtered_raw_generated_title( $_generator_args )
+							),
 						'addAdditions'      => $this->use_title_branding( $_generator_args ),
 						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-						'additionValue'     => $this->get_home_title_additions(),
+						'additionValue'     => $this->s_title( $this->get_home_title_additions() ),
 						'additionPlacement' => 'left' === $this->get_home_title_seplocation() ? 'before' : 'after',
 						'hasLegacy'         => true,
 					],

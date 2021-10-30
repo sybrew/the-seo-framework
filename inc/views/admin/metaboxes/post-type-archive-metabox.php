@@ -42,6 +42,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</div>
 		</div>
 		<?php
+		$i = 0;
 		foreach ( $post_types as $post_type ) {
 			$_generator_args = [ 'pta' => $post_type ];
 
@@ -112,25 +113,21 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
 						echo HTML::get_header_title(
-							$this->convert_markdown(
-								vsprintf(
-									/* translators: 1 = Post Type Archive name, Markdown. 2 = Post Type code, also markdown! 3 = Post Type Archive linl. Preserve the Markdown as-is! */
-									esc_html__( 'Archive of %1$s &ndash; `%2$s` %3$s', 'autodescription' ),
-									[
-										esc_html( $post_types_data[ $post_type ]['label'] ),
-										esc_html( $post_type ),
-										sprintf(
-											'<span class=tsf-post-type-archive-link>%s</span>',
-											sprintf(
-												/* translators: %s = Post Type Archive link. Markdown. Preserve [](%s) as-is. */
-												esc_html__( '([View archive](%s))', 'autodescription' ),
-												esc_url( $post_types_data[ $post_type ]['url'] )
-											)
-										),
-									]
-								),
-								[ 'code', 'a' ],
-								[ 'a_internal' => false ] // open in new window.
+							vsprintf(
+								'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
+								[
+									sprintf(
+										/* translators: 1 = Post Type Archive name */
+										esc_html__( 'Archive of %s', 'autodescription' ),
+										esc_html( $post_types_data[ $post_type ]['label'] )
+									),
+									esc_html( $post_type ),
+									sprintf(
+										'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
+										esc_url( $post_types_data[ $post_type ]['url'] ),
+										esc_html__( 'View archive', 'autodescription' )
+									),
+								]
 							)
 						);
 						?>
@@ -154,9 +151,8 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 					?>
 				</div>
 			</div>
-
-			<hr class=hide-if-tsf-js>
 			<?php
+			$i++ or print( '<hr class=hide-if-tsf-js>' );
 		}
 		break;
 
@@ -186,9 +182,10 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				Input::get_field_id( $_option_map['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => $this->get_filtered_raw_generated_title( $_generator_args ),
+						'defaultTitle'      => $this->s_title( $this->get_filtered_raw_generated_title( $_generator_args ) ),
 						'addAdditions'      => $this->use_title_branding( $_generator_args ),
 						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
+						'additionValue'     => $this->s_title( $this->get_blogname() ),
 						'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
 					],
 				]
@@ -325,10 +322,9 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<p>
 			<textarea name="<?php Input::field_name( $_option_map['tw_description'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['tw_description'] ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=<?php echo esc_attr( "pta_social_settings_{$post_type}" ); ?> data-tsf-social-type=twDesc><?php echo esc_attr( $this->get_option( $_option_map['tw_description'] ) ); ?></textarea>
 		</p>
+
 		<hr>
-		<?php
-		HTML::header_title( __( 'Social Image Settings', 'autodescription' ) );
-		?>
+
 		<p>
 			<label for="<?php echo esc_attr( "tsf_pta_socialimage_{$post_type}" ); ?>-url">
 				<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
@@ -374,70 +370,83 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<?php
 		$robots_settings = [
 			'noindex'   => [
-				'id'        => Input::get_field_name( $_option_map['noindex'] ),
-				'name'      => Input::get_field_id( $_option_map['noindex'] ),
-				'force_on'  => 'index',
-				'force_off' => 'noindex',
-				'label'     => __( 'Indexing', 'autodescription' ),
-				'_default'  => empty( $robots_defaults['noindex'] ) ? 'index' : 'noindex',
-				'_value'    => $this->get_option( $_option_map['noindex'] ),
-				'_info'     => [
+				'force_on'    => 'index',
+				'force_off'   => 'noindex',
+				'label'       => __( 'Indexing', 'autodescription' ),
+				'_defaultOn'  => 'index',
+				'_defaultOff' => 'noindex',
+				'_value'      => $this->get_option( $_option_map['noindex'] ),
+				'_info'       => [
 					__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
 				],
 			],
 			'nofollow'  => [
-				'id'        => Input::get_field_name( $_option_map['nofollow'] ),
-				'name'      => Input::get_field_id( $_option_map['nofollow'] ),
-				'force_on'  => 'follow',
-				'force_off' => 'nofollow',
-				'label'     => __( 'Link following', 'autodescription' ),
-				'_default'  => empty( $robots_defaults['nofollow'] ) ? 'follow' : 'nofollow',
-				'_value'    => $this->get_option( $_option_map['nofollow'] ),
-				'_info'     => [
+				'force_on'    => 'follow',
+				'force_off'   => 'nofollow',
+				'label'       => __( 'Link following', 'autodescription' ),
+				'_defaultOn'  => 'follow',
+				'_defaultOff' => 'nofollow',
+				'_value'      => $this->get_option( $_option_map['nofollow'] ),
+				'_info'       => [
 					__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
 				],
 			],
 			'noarchive' => [
-				'id'        => Input::get_field_name( $_option_map['noarchive'] ),
-				'name'      => Input::get_field_id( $_option_map['noarchive'] ),
-				'force_on'  => 'archive',
-				'force_off' => 'noarchive',
-				'label'     => __( 'Archiving', 'autodescription' ),
-				'_default'  => empty( $robots_defaults['noarchive'] ) ? 'archive' : 'noarchive',
-				'_value'    => $this->get_option( $_option_map['noarchive'] ),
-				'_info'     => [
+				'force_on'    => 'archive',
+				'force_off'   => 'noarchive',
+				'label'       => __( 'Archiving', 'autodescription' ),
+				'_defaultOn'  => 'archive',
+				'_defaultOff' => 'noarchive',
+				'_value'      => $this->get_option( $_option_map['noarchive'] ),
+				'_info'       => [
 					__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 				],
 			],
 		];
 
-		HTML::header_title( __( 'Robots Meta Settings', 'autodescription' ) );
-		foreach ( $robots_settings as $_s ) :
+		foreach ( $robots_settings as $_r_type => $_rs ) :
+			// phpcs:enable, WordPress.Security.EscapeOutput
+			HTML::wrap_fields(
+				vsprintf(
+					'<p><label for="%1$s"><strong>%2$s</strong> %3$s</label></p>',
+					[
+						Input::get_field_id( $_option_map[ $_r_type ] ),
+						esc_html( $_rs['label'] ),
+						HTML::make_info(
+							$_rs['_info'][0],
+							$_rs['_info'][1] ?? '',
+							false
+						),
+					]
+				),
+				true
+			);
 			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 			echo Form::make_single_select_form( [
-				'id'      => $_s['id'],
-				'class'   => 'tsf-toblock tsf-pta-robots-meta',
-				'name'    => $_s['name'],
-				'label'   => $_s['label'],
+				'id'      => Input::get_field_id( $_option_map[ $_r_type ] ),
+				'class'   => 'tsf-select-block',
+				'name'    => Input::get_field_name( $_option_map[ $_r_type ] ),
+				'label'   => '',
 				'options' => [
 					0  => __( 'Default (unknown)', 'autodescription' ),
-					-1 => $_s['force_on'],
-					1  => $_s['force_off'],
+					-1 => $_rs['force_on'],
+					1  => $_rs['force_off'],
 				],
-				'default' => $_s['_value'],
-				'info'    => $_s['_info'],
+				'default' => $_rs['_value'],
 				'data'    => [
-					'defaultUnprotected' => $_s['_default'],
 					/* translators: %s = default option value */
-					'defaultI18n'        => __( 'Default (%s)', 'autodescription' ),
+					'defaultI18n' => __( 'Default (%s)', 'autodescription' ),
+					'defaultOn'   => $_rs['_defaultOn'],
+					'defaultOff'  => $_rs['_defaultOff'],
 				],
 			] );
-			// phpcs:enable, WordPress.Security.EscapeOutput
 		endforeach;
 		?>
+		<hr>
+
 		<p>
 			<label for="<?php Input::field_id( $_option_map['redirect'] ); ?>" class="tsf-toblock">
 				<strong><?php esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>

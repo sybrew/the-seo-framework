@@ -762,7 +762,8 @@ class Generate_Title extends Generate_Description {
 	 *              2: The first parameter now accepts `\WP_User` objects.
 	 * @since 4.1.2 Now supports WP 5.5 archive titles.
 	 *
-	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error. Leave null to autodetermine query.
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
+	 *                                                               Leave null to autodetermine query.
 	 * @return string The generated archive title, not escaped.
 	 */
 	public function get_generated_archive_title( $object = null ) {
@@ -770,17 +771,19 @@ class Generate_Title extends Generate_Description {
 		if ( $object && \is_wp_error( $object ) )
 			return '';
 
+		$filterobject = $object ?? \get_queried_object();
+
 		/**
 		 * @since 2.6.0
 		 *
-		 * @param string                          $title The short circuit title.
-		 * @param \WP_Term|\WP_User|\WP_Post_Type $term  The Term object.
+		 * @param string                          $title  The short circuit title.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $object The archive object.
 		 */
 		$title = (string) \apply_filters_ref_array(
 			'the_seo_framework_the_archive_title',
 			[
 				'',
-				$object ?: \get_queried_object(),
+				$filterobject,
 			]
 		);
 
@@ -802,10 +805,16 @@ class Generate_Title extends Generate_Description {
 			 *
 			 * @since 4.2.0
 			 *
-			 * @param string $prefix Archive title prefix.
-			 * @param \WP_Term|\WP_User|\WP_Post_Type $term  The Term object.
+			 * @param string                          $prefix  Archive title prefix.
+			 * @param \WP_Term|\WP_User|\WP_Post_Type $object The archive object.
 			 */
-			$prefix = \apply_filters( 'the_seo_framework_generated_archive_title_prefix', $prefix, $object );
+			$prefix = \apply_filters_ref_array(
+				'the_seo_framework_generated_archive_title_prefix',
+				[
+					$prefix,
+					$filterobject,
+				]
+			);
 
 			if ( $prefix ) {
 				$title = sprintf(
@@ -826,7 +835,7 @@ class Generate_Title extends Generate_Description {
 		 * @since 4.2.0 Added the `$prefix` and `$original_title` parameters.
 		 *
 		 * @param string                          $title          Archive title to be displayed.
-		 * @param \WP_Term|\WP_User|\WP_Post_Type $object         The term object.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $object         The archive object.
 		 * @param string                          $original_title Archive title without prefix.
 		 * @param string                          $prefix         Archive title prefix.
 		 */
@@ -834,7 +843,7 @@ class Generate_Title extends Generate_Description {
 			'the_seo_framework_generated_archive_title',
 			[
 				$title,
-				$object,
+				$filterobject,
 				$original_title,
 				$prefix,
 			]
@@ -948,6 +957,9 @@ class Generate_Title extends Generate_Description {
 		} elseif ( $term instanceof \WP_User && isset( $term->display_name ) ) {
 			$title  = $term->display_name;
 			$prefix = \_x( 'Author:', 'author archive title prefix', 'default' );
+		} elseif ( $term instanceof \WP_Post_Type && isset( $term->name ) ) {
+			$title  = $this->get_generated_post_type_archive_title( $term->name );
+			$prefix = \_x( 'Archives:', 'post type archive title prefix', 'default' );
 		}
 
 		return [ $title, $prefix ];

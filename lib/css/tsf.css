@@ -111,8 +111,6 @@ body.rtl .tsf-notice .tsf-dismiss {
 	text-decoration: none;
 	font-size: 13px;
 	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none; /* Remove me 2022 */
 	user-select: none;
 }
 
@@ -144,8 +142,6 @@ body.rtl .tsf-title-offset {
 	position: absolute;
 	color: #777;
 	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none; /* Remove me 2022 */
 	user-select: none;
 	box-sizing: content-box;
 	top: 0;
@@ -195,7 +191,7 @@ body.rtl .tsf-title-placeholder-prefix {
 	color: #fff;
 	text-align: center;
 	border: 1px solid rgba(0,0,0,.1);
-	text-shadow: 0 0 3px rgba(0,0,0,0.5);
+	text-shadow: 0 0 3px rgba(0,0,0,.5);
 }
 
 .tsf-seo-bar-item:focus {

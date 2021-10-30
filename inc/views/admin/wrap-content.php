@@ -24,10 +24,10 @@ foreach ( $tabs as $tab => $params ) :
 	$radio_class = "tsf-{$id}-tabs-content";
 
 	// Current tab for JS.
-	$current_class = 1 === $count ? ' tsf-active-tab-content' : '';
+	$current_class = 1 === $count ? ' tsf-nav-tab-content-active' : '';
 
 	?>
-	<div class="tsf-tabs-content <?php echo esc_attr( $radio_class . $current_class ); ?>" id="<?php echo esc_attr( $radio_id ); ?>" >
+	<div class="tsf-nav-tab-content <?php echo esc_attr( $radio_class . $current_class ); ?>" id="<?php echo esc_attr( $radio_id ); ?>" >
 		<?php
 		// No-JS tabs.
 		if ( $use_tabs ) :
@@ -35,9 +35,9 @@ foreach ( $tabs as $tab => $params ) :
 			$name     = $params['name'] ?? '';
 
 			?>
-			<div class="hide-if-tsf-js tsf-content-no-js">
-				<div class="tsf-tab tsf-tab-no-js">
-					<span class="tsf-nav-tab tsf-active-tab">
+			<div class="hide-if-tsf-js tsf-nav-tab-content-no-js">
+				<div class="tsf-tab tsf-nav-tab-no-js">
+					<span class="tsf-nav-tab-label tsf-nav-tab-active">
 						<?php echo $dashicon ? '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : ''; ?>
 						<?php echo $name ? '<span>' . esc_html( $name ) . '</span>' : ''; ?>
 					</span>

@@ -535,8 +535,7 @@ class Generate extends User_Data {
 				$url = $this->get_post_type_archive_meta_item( 'redirect' ) ?: '';
 			}
 		} else {
-			for ( $i = 0; $i++ < 1e3; ) // var_dump( 'NOOOO' );
-				$this->fix_generation_args( $args );
+			$this->fix_generation_args( $args );
 			if ( $args['taxonomy'] ) {
 				$url = $this->get_term_meta_item( 'redirect', $args['id'] ) ?: '';
 			} elseif ( $args['pta'] ) {

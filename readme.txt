@@ -359,6 +359,10 @@ TODO was this an issue? -> PTA canonical URLs always point to the main page.
 
 TODO in get_archival_description_excerpt(), assert object filters in non-query??
 
+TODO hide canonical URL when noindex in PTA settings?
+TODO disable selection/display of PTA when disabled.
+TODO tsf-disabled-title-additions-help doesn't work...
+
 **For everyone:**
 
 * **Upgrade notes:**
@@ -371,6 +375,9 @@ TODO in get_archival_description_excerpt(), assert object filters in non-query??
 		* Core Sitemaps brought a new escaping method, `esc_xml()`, which will ensure future security.
 		* Support for newer (less buggy) admin styles, such as a proper "default" button for the color-picker in WP 5.5 or later.
 		* We no longer need to support WordPress and PHP environment testing, of which the burden was shifted to WP 5.2.
+* **Added:**
+	* You can now set a custom Site Title at "SEO Settings > Title Settings > Additions."
+		* This new option only affects titles outputted by The SEO Framework.
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.

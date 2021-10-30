@@ -125,7 +125,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			'additions' => [
 				'name'     => __( 'Additions', 'autodescription' ),
 				'callback' => [ $_settings_class, '_title_metabox_additions_tab' ],
-				'dashicon' => 'plus',
+				'dashicon' => 'plus-alt2',
 				'args'     => [
 					'examples' => [
 						'left'  => $example_post_left,
