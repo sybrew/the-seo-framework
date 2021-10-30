@@ -88,9 +88,9 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					'state' => [
 						'refTitleLocked'    => false,
 						'defaultTitle'      => $this->s_title(
-								( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
-								?: $this->get_filtered_raw_generated_title( $_generator_args )
-							),
+							( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
+							?: $this->get_filtered_raw_generated_title( $_generator_args )
+						),
 						'addAdditions'      => $this->use_title_branding( $_generator_args ),
 						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
 						'additionValue'     => $this->s_title( $this->get_home_title_additions() ),

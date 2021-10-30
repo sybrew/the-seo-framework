@@ -17,7 +17,6 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 	case 'title_main':
 		$blogname = esc_html( $this->get_blogname() );
 		$sep      = esc_html( $this->get_separator( 'title' ) );
-		$showleft = 'left' === $this->get_option( 'title_location' );
 
 		$additions_left  = "<span class=tsf-title-additions-js><span class=tsf-site-title-js>$blogname</span><span class=tsf-sep-js> $sep </span></span>";
 		$additions_right = "<span class=tsf-title-additions-js><span class=tsf-sep-js> $sep </span><span class=tsf-site-title-js>$blogname</span></span>";
@@ -29,60 +28,78 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$post_name  = strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' );
 		$post_title = $this->s_title( $this->hellip_if_over( $post_name, 60 ) );
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
-		$cat_name   = strip_tags( get_cat_name( $latest_cat_id ) ?: __( 'Example Category', 'autodescription' ) );
 		$cat_prefix = $this->s_title( _x( 'Category:', 'category archive title prefix', 'default' ) );
-		$tax_title  = sprintf(
+		$cat_title  = $this->s_title( $this->hellip_if_over(
+			// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
+			strip_tags( get_cat_name( $latest_cat_id ) ?: __( 'Example Category', 'autodescription' ) ),
+			60 - strlen( $cat_prefix )
+		) );
+		$cat_title_full = sprintf(
 			/* translators: 1: Title prefix. 2: Title. */
 			_x( '%1$s %2$s', 'archive title', 'default' ),
-			sprintf(
-				'<span class=tsf-title-prefix-example style=display:%s>%s</span>',
-				$this->get_option( 'title_rem_prefixes' ) ? 'none' : 'inline',
-				$cat_prefix
-			),
-			$this->s_title( $this->hellip_if_over( $cat_name, 60 - strlen( $cat_prefix ) ) )
+			$cat_prefix,
+			$cat_title
 		);
 
-		$example_post_left  = "<em>{$additions_left}{$post_name}</em>";
-		$example_post_right = "<em>{$post_name}{$additions_right}</em>";
-		$example_tax_left   = "<em>{$additions_left}{$tax_title}</em>";
-		$example_tax_right  = "<em>{$tax_title}{$additions_right}</em>";
+		$example_post_left      = "<em>{$additions_left}{$post_name}</em>";
+		$example_post_right     = "<em>{$post_name}{$additions_right}</em>";
+		$example_tax_left_full  = "<em>{$additions_left}{$cat_title_full}</em>";
+		$example_tax_right_full = "<em>{$cat_title_full}{$additions_right}</em>";
+		$example_tax_left       = "<em>{$additions_left}{$cat_title}</em>";
+		$example_tax_right      = "<em>{$cat_title}{$additions_right}</em>";
 
 		HTML::header_title( __( 'Automated Title Settings', 'autodescription' ) );
 		HTML::description( __( 'The page title is prominently shown within the browser tab as well as within the search engine results pages.', 'autodescription' ) );
 
-		HTML::header_title( __( 'Example Page Title Output', 'autodescription' ) );
+		// Yes, this is a mess. But, we cannot circumvent this because we do not control the translations.
 		?>
-		<p>
-			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>">
-				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-				echo HTML::code_wrap_noesc( $example_post_left );
-				?>
-			</span>
-			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>">
-				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-				echo HTML::code_wrap_noesc( $example_post_right );
-				?>
-			</span>
-		</p>
+		<div class=hide-if-no-tsf-js>
+			<?php
+			HTML::header_title( __( 'Example Page Title Output', 'autodescription' ) );
+			?>
+			<p>
+				<span class="tsf-title-additions-example-left hidden">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					echo HTML::code_wrap_noesc( $example_post_left );
+					?>
+				</span>
+				<span class="tsf-title-additions-example-right hidden">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					echo HTML::code_wrap_noesc( $example_post_right );
+					?>
+				</span>
+			</p>
 
-		<?php HTML::header_title( __( 'Example Archive Title Output', 'autodescription' ) ); ?>
-		<p>
-			<span class="tsf-title-additions-example-left" style="display:<?php echo $showleft ? 'inline' : 'none'; ?>">
-				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-				echo HTML::code_wrap_noesc( $example_tax_left );
-				?>
-			</span>
-			<span class="tsf-title-additions-example-right" style="display:<?php echo $showleft ? 'none' : 'inline'; ?>">
-				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-				echo HTML::code_wrap_noesc( $example_tax_right );
-				?>
-			</span>
-		</p>
+			<?php HTML::header_title( __( 'Example Archive Title Output', 'autodescription' ) ); ?>
+			<p>
+				<span class="tsf-title-additions-example-left tsf-title-tax-prefix hidden">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					echo HTML::code_wrap_noesc( $example_tax_left_full );
+					?>
+				</span>
+				<span class="tsf-title-additions-example-right tsf-title-tax-prefix hidden">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					echo HTML::code_wrap_noesc( $example_tax_right_full );
+					?>
+				</span>
+				<span class="tsf-title-additions-example-left tsf-title-tax-noprefix hidden">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					echo HTML::code_wrap_noesc( $example_tax_left );
+					?>
+				</span>
+				<span class="tsf-title-additions-example-right tsf-title-tax-noprefix hidden">
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					echo HTML::code_wrap_noesc( $example_tax_right );
+					?>
+				</span>
+			</p>
+		</div>
 
 		<hr>
 		<?php
@@ -137,9 +154,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 				'name'     => __( 'Prefixes', 'autodescription' ),
 				'callback' => [ $_settings_class, '_title_metabox_prefixes_tab' ],
 				'dashicon' => 'plus-alt',
-				'args'     => [
-					'showleft' => $showleft,
-				],
+				'args'     => [],
 			],
 		];
 

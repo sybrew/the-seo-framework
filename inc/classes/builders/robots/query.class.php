@@ -119,14 +119,18 @@ final class Query extends Factory {
 
 			// is_real_front_page() can still be singular or archive. Thus, this conditional block is split up.
 			if ( $tsf->is_archive() ) {
-				yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $tsf->get_current_taxonomy() );
+				if ( $tsf->is_category() || $tsf->is_tag() || $tsf->is_tax() ) {
+					yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $tsf->get_current_taxonomy() );
 
-				// Store values from each post type bound to the taxonomy.
-				foreach ( $tsf->get_post_types_from_taxonomy() as $post_type )
-					$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+					// Store values from each post type bound to the taxonomy.
+					foreach ( $tsf->get_post_types_from_taxonomy() as $post_type )
+						$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
 
-				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
-				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
+					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+				} elseif ( \is_post_type_archive() ) {
+					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
+				}
 			} elseif ( $tsf->is_singular() ) {
 				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
 			}

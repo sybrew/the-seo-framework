@@ -764,9 +764,11 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
 	 *                                                               Leave null to autodetermine query.
-	 * @return string The generated archive title, not escaped.
+	 * @param null|string                                    $get    Alters the return value. Accepts null and 'admin'.
+	 * @return string|string[] The generated archive title, not escaped.
+	 *                         When $get is 'admin', it returns an map of [prefix,title].
 	 */
-	public function get_generated_archive_title( $object = null ) {
+	public function get_generated_archive_title( $object = null, $get = null ) { // FIXME: var_dump() this $get is EXACTLY what I must avoid. -> Split method.
 
 		if ( $object && \is_wp_error( $object ) )
 			return '';
@@ -779,16 +781,18 @@ class Generate_Title extends Generate_Description {
 		 * @param string                          $title  The short circuit title.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type $object The archive object.
 		 */
-		$title = (string) \apply_filters_ref_array(
+		$title = (string) \apply_filters_deprecated(
 			'the_seo_framework_the_archive_title',
 			[
 				'',
 				$filterobject,
-			]
+			],
+			'4.2.0 of The SEO Framework',
+			'the_seo_framework_generated_archive_title_prefix and the_seo_framework_generated_archive_title'
 		);
 
 		if ( $title )
-			return $title;
+			return 'admin' === $get ? [ '', $title ] : $title;
 
 		[ $title, $prefix ] = $object
 			? $this->get_generate_archive_title_from_term( $object )
@@ -796,7 +800,7 @@ class Generate_Title extends Generate_Description {
 
 		$original_title = $title;
 
-		if ( $this->use_generated_archive_prefix( $object ) ) {
+		if ( 'admin' === $get || $this->use_generated_archive_prefix( $object ) ) {
 			/**
 			 * Filters the archive title prefix.
 			 * This is a sibling of WordPress's `get_the_archive_title_prefix`,
@@ -825,6 +829,9 @@ class Generate_Title extends Generate_Description {
 				);
 			}
 		}
+
+		if ( 'admin' === $get )
+			return [ $prefix, $original_title ];
 
 		/**
 		 * Filters the archive title.

@@ -113,6 +113,11 @@ body.rtl .tsf-bottom-buttons {
 	white-space: pre-wrap;
 }
 
+.tsf-title-additions-location-hidden,
+.tsf-title-tax-prefix-hidden {
+	display: none;
+}
+
 #tsf-post-type-archive-header-wrap {
 	display: flex;
 	flex-flow: row wrap;

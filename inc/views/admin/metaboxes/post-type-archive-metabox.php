@@ -178,15 +178,18 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<p class=tsf-title-wrap>
 			<input type="text" name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'doctitle', $post_type ) ); ?>" autocomplete=off />
 			<?php
+			[ $prefix_value, $default_title ] = $this->get_generated_archive_title( get_post_type_object( $post_type ), 'admin' );
 			$this->output_js_title_data(
 				Input::get_field_id( $_option_map['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => $this->s_title( $this->get_filtered_raw_generated_title( $_generator_args ) ),
+						'defaultTitle'      => $this->s_title( $default_title ),
 						'addAdditions'      => $this->use_title_branding( $_generator_args ),
 						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
 						'additionValue'     => $this->s_title( $this->get_blogname() ),
 						'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
+						'prefixValue'       => $this->s_title( $prefix_value ),
+						'showPrefix'        => $this->use_generated_archive_prefix( get_post_type_object( $post_type ) ),
 					],
 				]
 			);
