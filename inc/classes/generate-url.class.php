@@ -471,10 +471,8 @@ class Generate_Url extends Generate_Title {
 		}
 
 		if ( ! $post_type ) {
-			$post_type = \get_query_var( 'post_type' );
-			$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
-
-			$is_query = true;
+			$post_type = $this->get_current_post_type();
+			$is_query  = true;
 		} else {
 			$is_query = false;
 		}

@@ -853,7 +853,7 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_post_type_archive_meta_item( $item, $post_type = '', $use_cache = true ) {
 		return $this->get_post_type_archive_meta(
-			$post_type ?: $this->get_post_type_real_ID(),
+			$post_type ?: $this->get_current_post_type(),
 			$use_cache
 		)[ $item ] ?? null;
 	}
@@ -894,7 +894,7 @@ class Site_Options extends Sanitize {
 			'the_seo_framework_get_post_type_archive_meta_defaults',
 			[
 				$this->get_unfiltered_post_type_archive_meta_defaults(),
-				$post_type ?: $this->get_post_type_real_ID(),
+				$post_type ?: $this->get_current_post_type(),
 			]
 		);
 	}

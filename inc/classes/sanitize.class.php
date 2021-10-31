@@ -540,7 +540,7 @@ class Sanitize extends Admin_Pages {
 
 		// Memoize whether a filter has been set for the option already. Should only run once internally.
 		if ( ! isset( $registered[ $option ] ) ) {
-			\add_filter( 'sanitize_option_' . $option, [ $this, 'sanitize' ], 10, 2 );
+			\add_filter( "sanitize_option_{$option}", [ $this, 'sanitize' ], 10, 2 );
 			$registered[ $option ] = true;
 		}
 

@@ -11,17 +11,20 @@ use The_SEO_Framework\Internal\Debug;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$id       = $this->get_the_real_ID();
-$mdash    = ' &mdash; ';
-$taxonomy = $this->get_current_taxonomy();
+$id        = $this->get_the_real_ID();
+$mdash     = ' &mdash; ';
+$taxonomy  = $this->get_current_taxonomy();
+$post_type = $this->get_current_post_type();
 
 // This will return 'Page' on all non-archive types (except the homepage)
 if ( $this->is_real_front_page() ) {
 	$type = 'Front Page';
 } elseif ( $taxonomy ) {
 	$type = $this->get_tax_type_label( $taxonomy );
+} elseif ( $post_type ) {
+	$type = $this->get_post_type_label( $post_type );
 } else {
-	$type = $this->get_post_type_label( $this->get_post_type_real_ID() );
+	$type = 'Unknown'.
 }
 
 $cache_key = $this->generate_cache_key( $id, $taxonomy );
@@ -37,7 +40,7 @@ if ( is_admin() ) {
 			<?php
 			if ( $this->is_post_edit() || $this->is_term_edit() ) :
 				echo ' :: ';
-				echo esc_html( 'Type: ' . $type );
+				echo esc_html( "Type: $type" );
 				echo esc_html( $mdash . 'ID: ' . $id );
 				echo esc_html( $mdash . 'Cache key: ' . ( $cache_key ?: 'N/A' ) );
 				echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );

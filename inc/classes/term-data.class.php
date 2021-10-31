@@ -254,7 +254,7 @@ class Term_Data extends Post_Data {
 		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
 		if ( ! \current_user_can( 'edit_term', $term->term_id ) ) return;
 		if ( ! isset( $_POST['_wpnonce'] ) ) return;
-		if ( ! \wp_verify_nonce( $_POST['_wpnonce'], 'update-tag_' . $term->term_id ) ) return;
+		if ( ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" ) ) return;
 
 		$data = (array) $_POST['autodescription-meta'];
 
@@ -451,7 +451,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_post_type_real_ID();
+		$post_type = $post_type ?: $this->get_current_post_type();
 
 		if ( ! $post_type )
 			return [];

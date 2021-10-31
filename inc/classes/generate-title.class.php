@@ -764,14 +764,33 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
 	 *                                                               Leave null to autodetermine query.
-	 * @param null|string                                    $get    Alters the return value. Accepts null and 'admin'.
 	 * @return string|string[] The generated archive title, not escaped.
 	 *                         When $get is 'admin', it returns an map of [prefix,title].
 	 */
-	public function get_generated_archive_title( $object = null, $get = null ) { // FIXME: var_dump() this $get is EXACTLY what I must avoid. -> Split method.
+	public function get_generated_archive_title( $object = null ) {
 
 		if ( $object && \is_wp_error( $object ) )
 			return '';
+
+		[ $title ] = $this->get_raw_generated_archive_title_items( $object );
+
+		return $title;
+	}
+
+	/**
+	 * Returns the archive title items. Also works in admin.
+	 *
+	 * @NOTE Taken from WordPress core. Altered to work for metadata.
+	 * @see WP Core get_the_archive_title()
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The Term object.
+	 *                                                     Leave null to autodetermine query.
+	 * @return string|string[] The generated archive title, not escaped.
+	 *                         When $get is 'admin', it returns an map of [prefix,title].
+	 */
+	public function get_raw_generated_archive_title_items( $object = null ) {
 
 		$filterobject = $object ?? \get_queried_object();
 
@@ -792,15 +811,15 @@ class Generate_Title extends Generate_Description {
 		);
 
 		if ( $title )
-			return 'admin' === $get ? [ '', $title ] : $title;
+			return [ $title, '', $title ];
 
 		[ $title, $prefix ] = $object
 			? $this->get_generate_archive_title_from_term( $object )
 			: $this->get_generate_archive_title_from_query();
 
-		$original_title = $title;
+		$title_without_prefix = $title;
 
-		if ( 'admin' === $get || $this->use_generated_archive_prefix( $object ) ) {
+		if ( $this->use_generated_archive_prefix( $object ) ) {
 			/**
 			 * Filters the archive title prefix.
 			 * This is a sibling of WordPress's `get_the_archive_title_prefix`,
@@ -830,31 +849,30 @@ class Generate_Title extends Generate_Description {
 			}
 		}
 
-		if ( 'admin' === $get )
-			return [ $prefix, $original_title ];
-
 		/**
 		 * Filters the archive title.
 		 * This is a sibling of WordPress's `get_the_archive_title`,
 		 * but then without the HTML.
 		 *
 		 * @since 3.0.4
-		 * @since 4.2.0 Added the `$prefix` and `$original_title` parameters.
+		 * @since 4.2.0 Added the `$prefix` and `$origintitle_without_prefixal_title` parameters.
 		 *
-		 * @param string                          $title          Archive title to be displayed.
-		 * @param \WP_Term|\WP_User|\WP_Post_Type $object         The archive object.
-		 * @param string                          $original_title Archive title without prefix.
-		 * @param string                          $prefix         Archive title prefix.
+		 * @param string                          $title                Archive title to be displayed.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $object               The archive object.
+		 * @param string                          $title_without_prefix Archive title without prefix.
+		 * @param string                          $prefix               Archive title prefix.
 		 */
-		return \apply_filters_ref_array(
+		$title = \apply_filters_ref_array(
 			'the_seo_framework_generated_archive_title',
 			[
 				$title,
 				$filterobject,
-				$original_title,
+				$title_without_prefix,
 				$prefix,
 			]
 		);
+
+		return [ $title, $prefix, $title_without_prefix ];
 	}
 
 	/**
@@ -1080,7 +1098,7 @@ class Generate_Title extends Generate_Description {
 		if ( ! $post_type && ! \is_post_type_archive() )
 			return '';
 
-		$post_type = $post_type ?: \get_query_var( 'post_type' );
+		$post_type = $post_type ?: $this->get_current_post_type();
 
 		if ( \is_array( $post_type ) )
 			$post_type = reset( $post_type );

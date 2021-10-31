@@ -265,7 +265,10 @@ TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports
 TODO introduce a settings generator, even if high-level?
 TODO s_...$new_value -> $something_else?
 
-= 4.2.0 =
+TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
+	-> Will this work with quick/bulk-edit?
+
+= 4.2.0 = // I added the real header at the end.
 
 TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
 	-> What's there to clean? Well, we could move the constants around... and we could add namespacing... yay.
@@ -331,8 +334,6 @@ Accepts 'id', 'taxonomy', and 'pta'.
 
 tsfTitle.useSocialTagline -> tsfSocial.addAdditions
 
-TODO modernize getStateOf. => ?.
-
 TODO data-social-group -> add subgroup -> utilize -> automate.
 	-> This way, we need not register the element IDs. Instead, it can automatically retrieve them by "social-group"
 
@@ -347,8 +348,6 @@ TODO add "padlock" to the counters on the homepage "page edit screen" if it's lo
 
 TODO process changelog https://github.com/sybrew/the-seo-framework/compare/64b64e28e534304ee7e1bea65b25e8ec46241f85...master
 
-TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
-	-> Will this work with quick/bulk-edit?
 
 TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
 
@@ -362,6 +361,8 @@ TODO in get_archival_description_excerpt(), assert object filters in non-query??
 TODO hide canonical URL when noindex in PTA settings?
 TODO disable selection/display of PTA when disabled.
 TODO tsf-disabled-title-additions-help doesn't work...
+
+TODO deJquery-fy the floating titles...
 
 **For everyone:**
 
@@ -381,7 +382,7 @@ TODO tsf-disabled-title-additions-help doesn't work...
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.
-	* TSF no longer tests for the correct PHP or WordPress version -- we now rely on WordPress handling this.
+	* TSF no longer tests for the compatible PHP or WordPress versions -- we now rely on WordPress handling this.
 		* WordPress isn't as gracious as we were: WP doesn't deactivate the plugin if you upload an incompatible version via FTP, which TSF did. However, we consider this an edge case beyond corners.
 * **Improved:**
 	* **Sitemaps:**
@@ -428,6 +429,7 @@ TODO tsf-disabled-title-additions-help doesn't work...
 		* "Duplicated words" is now "repeated words."
 		* The Optimized Sitemap's settings now explain there might be multiple sitemaps when Polylang or WPML is detected.
 		* The Title Settings their examples now better reflect real-world usage in certain corner cases.
+		* The Pixel Counter now moves instantly as you type, instead of easing in, making it more reactive yet less distractive.
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 		* We did Elementor's developer's job by marking the post types `elementor_library` and `e-landing-page` as "not-publicly-queryable" -- but only for The SEO Framework.
@@ -447,6 +449,7 @@ TODO tsf-disabled-title-additions-help doesn't work...
 	* Addressed a regression where a part of the HTML comments was not fully translatable.
 	* Addressed layout issues where the site title might be smaller than 60px, making the examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
 	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
+	* Addressed an issue where empty post type archives' post types weren't detected, causing TSF to abandon processing.
 
 **For developers:**
 
@@ -469,6 +472,8 @@ TODO tsf-disabled-title-additions-help doesn't work...
 * **Fixed:**
 	* Addressed output-deprecation notice in the meta-debugger from TSF v4.1.4.
 * **Option notes:**
+	* Option `the_seo_framework_tested_upgrade_version` will be deleted on upgrade because TSF no longer tests for the compatible PHP or WordPress versions.
+		* This will be reinstated automatically on downgrade.
 	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* Index `show_priority` is no longer used nor sanitized.
 			* Updating the options will purge this index. Then, it'll be rendered as disabled on downgrade.
@@ -674,35 +679,7 @@ TODO tsf-disabled-title-additions-help doesn't work...
 	* You can now autoload The SEO Framework's classes using the wrong case for the first "chunk" of namespace: `\ThE_sEo_FrAmEwOrK\`.
 		* Pro tip: Don't. We 'implemented' it only in the spirit of PHP's case-handling.
 
-= 4.1.5.1 =
-
-This patch addresses an oversight whence primary terms could no longer get fetched.
-
-= 4.1.5 =
-
-This minor update adds support for Gutenberg 11.3.0 and [fixes a few bugs](https://theseoframework.com/?p=3756#detailed).
-
-= 4.1.4 =
-
-This minor update packs a major punch. TSF now supports [headless mode](https://kb.theseoframework.com/?p=136), cementing itself as a turnkey solution. We defenestrated the pernicious object caching mechanism, and we updated some options' defaults effective only on new sites. We improved performance iterably, fixed about 12 bugs, and enjoyed the weather. Lastly, we introduced a new API for user meta handling, among other things --- developers that wrote software interfacing with TSF are employed well reading the [detailed changelog](https://theseoframework.com/?p=3727#detailed).
-
-= 4.1.3 =
-
-Before heading into 2021, we wanted to [set free four bugs](https://theseoframework.com/?p=3660#detailed).
-
-Pro tip: If you can no longer switch TSF's settings tabs, try hitting 'CMD+OPTION+R' (Safari Mac), 'CMD+SHIFT+R' (Chrome/Firefox Mac), or 'CTRL+SHIFT+R' (Windows); these keyboard shortcuts will force-fetch the latest scripts from your server.
-
-= 4.1.2 =
-
-In this minor update, we ensured compatibility with PHP 8 and WP 5.6. TSF now also fully integrates with WordPress Core Sitemaps, which you can configure via the SEO settings. If you decide to keep using TSF's optimized sitemap, you can now enjoy prerendering, DoS protection, and full Polylang integration. Lastly, you'll find various accessibility improvements, and we fixed [about a dozen bugs](https://theseoframework.com/?p=3650#detailed).
-
-We included a single-line self-destructing notification about our [Cyber Monday sale](https://theseoframework.com/?p=3527). We hope you'll opt to support our continuous efforts. But we're also kindly asking you to understand we must promote our premium extensions to make TSF possible. We are apprehensive about any embedded advertising and self-promotion in the plugin, so we must rely on notifications until a better system is available in WordPress.
-
-= 4.1.1 =
-
-In this major-minor update, we improved browser performance by up to 99% (not a typo) by exchanging over 300 jQuery calls for vanilla JS ones. We also added two new options for oEmbed, freed a dozen bugs that got stuck in the UI and generators, and [improved accessibility](https://theseoframework.com/?p=3623#detailed).
-
-= 4.1.0 - Grace =
+= 4.2.0 - TODO =
 
 *A related quote of a book I just read or film I just saw - [Author]()*
 

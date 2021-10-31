@@ -111,12 +111,32 @@ class Query extends Core {
 	 * Returns the post type name from query input or real ID.
 	 *
 	 * @since 4.0.5
+	 * @since 4.2.0 Now supports common archives without relying on the first post.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return string|false Post type on success, false on failure.
 	 */
 	public function get_post_type_real_ID( $post = null ) {
-		return \get_post_type( $post ?? $this->get_the_real_ID() );
+
+		if ( isset( $post ) )
+			return \get_post_type( $post );
+
+		if ( $this->is_archive() ) {
+			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+				$post_type = $this->get_post_types_from_taxonomy();
+				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
+			} elseif ( \is_post_type_archive() ) {
+				$post_type = \get_query_var( 'post_type' );
+				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
+			} else {
+				// Let WP guess for us. This works reliable (enough) on non-404 queries.
+				$post_type = \get_post_type();
+			}
+		} else {
+			$post_type = \get_post_type( $this->get_the_real_ID() );
+		}
+
+		return $post_type;
 	}
 
 	/**
@@ -729,7 +749,7 @@ class Query extends Core {
 			&& \is_singular()
 			&& \current_user_can( 'edit_post', \get_the_ID() )
 			&& isset( $_GET['preview_id'], $_GET['preview_nonce'] )
-			&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] ) // WP doesn't check for unslash either; who would've guessed.
+			&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] )
 		) {
 			$is_preview = true;
 		}

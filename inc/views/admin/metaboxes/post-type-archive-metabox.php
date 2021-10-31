@@ -23,8 +23,9 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		$post_types_data = [];
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
-				'label' => $this->get_post_type_label( $post_type ),
-				'url'   => $this->create_canonical_url( [ 'pta' => $post_type ] ),
+				'label'    => $this->get_post_type_label( $post_type ),
+				'url'      => $this->create_canonical_url( [ 'pta' => $post_type ] ),
+				'hasPosts' => $this->has_posts_in_post_type_archive( $post_type ),
 			];
 		}
 
@@ -172,23 +173,32 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['doctitle'] ), (bool) $this->get_option( 'display_character_counter' ) );
-		Form::output_pixel_counter_wrap( Input::get_field_id( $_option_map['doctitle'] ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
+		Form::output_character_counter_wrap(
+			Input::get_field_id( $_option_map['doctitle'] ),
+			(bool) $this->get_option( 'display_character_counter' )
+		);
+		Form::output_pixel_counter_wrap(
+			Input::get_field_id( $_option_map['doctitle'] ),
+			'title',
+			(bool) $this->get_option( 'display_pixel_counter' )
+		);
 		?>
 		<p class=tsf-title-wrap>
 			<input type="text" name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'doctitle', $post_type ) ); ?>" autocomplete=off />
 			<?php
-			[ $prefix_value, $default_title ] = $this->get_generated_archive_title( get_post_type_object( $post_type ), 'admin' );
+			[ $_full_title, $_prefix_value, $_default_title ] =
+				$this->get_raw_generated_archive_title_items( get_post_type_object( $post_type ), 'admin' );
+
 			$this->output_js_title_data(
 				Input::get_field_id( $_option_map['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => $this->s_title( $default_title ),
+						'defaultTitle'      => $this->s_title( $_default_title ),
 						'addAdditions'      => $this->use_title_branding( $_generator_args ),
 						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
 						'additionValue'     => $this->s_title( $this->get_blogname() ),
 						'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
-						'prefixValue'       => $this->s_title( $prefix_value ),
+						'prefixValue'       => $this->s_title( $_prefix_value ),
 						'showPrefix'        => $this->use_generated_archive_prefix( get_post_type_object( $post_type ) ),
 					],
 				]
