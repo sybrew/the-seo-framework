@@ -286,7 +286,7 @@ class Cache extends Site_Options {
 	 */
 	public function get_exclusion_transient_name() {
 		$exclude_revision = '1'; // WARNING: SEE NOTE
-		return $this->add_cache_key_suffix( 'tsf_exclude_' . $exclude_revision );
+		return $this->add_cache_key_suffix( "tsf_exclude_{$exclude_revision}" );
 	}
 
 	/**
@@ -298,7 +298,7 @@ class Cache extends Site_Options {
 	 */
 	public function get_sitemap_transient_name() {
 		$sitemap_revision = '5';
-		return $this->get_option( 'cache_sitemap' ) ? $this->add_cache_key_suffix( 'tsf_sitemap_' . $sitemap_revision ) : '';
+		return $this->get_option( 'cache_sitemap' ) ? $this->add_cache_key_suffix( "tsf_sitemap_{$sitemap_revision}" ) : '';
 	}
 
 	/**
@@ -348,7 +348,7 @@ class Cache extends Site_Options {
 				return $this->add_cache_key_suffix( 'tsf_sitemap_lock' );
 			default:
 				$this->_doing_it_wrong( __METHOD__, 'Third parameter must be a known type.', '2.6.5' );
-				return $this->add_cache_key_suffix( \esc_sql( $type . '_' . $page_id . '_' . $taxonomy ) );
+				return $this->add_cache_key_suffix( \esc_sql( "{$type}_{$page_id}_{$taxonomy}" ) );
 		endswitch;
 	}
 
@@ -365,7 +365,8 @@ class Cache extends Site_Options {
 	 * @return string
 	 */
 	protected function add_cache_key_suffix( $key = '' ) {
-		return $key . '_' . $GLOBALS['blog_id'] . '_' . strtolower( \get_locale() );
+		$locale = strtolower( \get_locale() );
+		return "{$key}_{$GLOBALS['blog_id']}_{$locale}";
 	}
 
 	/**

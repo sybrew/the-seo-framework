@@ -568,6 +568,7 @@ final class Debug {
 		$get_post_type_real_ID  = $tsf->get_post_type_real_ID();
 		$admin_post_type        = $tsf->get_admin_post_type();
 		$current_taxonomy       = $tsf->get_current_taxonomy();
+		$current_post_type      = $tsf->get_current_post_type();
 		$is_taxonomy_disabled   = $tsf->is_taxonomy_disabled();
 		$is_post_type_archive   = \is_post_type_archive();
 		$is_protected           = $tsf->is_protected( $page_id );

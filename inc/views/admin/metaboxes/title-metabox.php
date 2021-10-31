@@ -185,7 +185,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 					'<input type=radio name="%1$s" id="%2$s" value="%3$s" %4$s %5$s /><label for="%2$s">%6$s</label>',
 					[
 						esc_attr( Input::get_field_name( 'title_separator' ) ),
-						esc_attr( Input::get_field_id( 'title_separator_' . $name ) ),
+						esc_attr( Input::get_field_id( "title_separator_{$name}" ) ),
 						esc_attr( $name ),
 						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- make_data_attributes() escapes.
 						HTML::make_data_attributes( [ 'entity' => esc_html( $html ) ] ), // This will double escape, but we found no issues.

@@ -765,7 +765,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		static $it = 0;
 
-		$key = 'breadcrumbs_' . $it;
+		$key = "breadcrumbs_{$it}";
 
 		$data = [
 			'@context'        => 'https://schema.org',

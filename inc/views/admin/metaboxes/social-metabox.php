@@ -280,8 +280,8 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			foreach ( $twitter_card as $type => $name ) {
 				?>
 				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'twitter_card' ); ?>" id="<?php Input::field_id( 'twitter_card_' . $type ); ?>" value="<?php echo esc_attr( $type ); ?>" <?php checked( $this->get_option( 'twitter_card' ), $type ); ?> />
-					<label for="<?php Input::field_id( 'twitter_card_' . $type ); ?>">
+					<input type="radio" name="<?php Input::field_name( 'twitter_card' ); ?>" id="<?php Input::field_id( "twitter_card_{$type}" ); ?>" value="<?php echo esc_attr( $type ); ?>" <?php checked( $this->get_option( 'twitter_card' ), $type ); ?> />
+					<label for="<?php Input::field_id( "twitter_card_{$type}" ); ?>">
 						<span>
 							<?php
 							echo HTML::code_wrap( $name ); // phpcs:ignore, WordPress.Security.EscapeOutput

@@ -806,7 +806,6 @@ function _do_upgrade_4110() {
 function _do_upgrade_4120() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' ) {
 		$tsf = \tsf();
-
 		$tsf->update_option( 'ping_use_cron_prerender', 0 );
 	}
 }
@@ -821,7 +820,5 @@ function _do_upgrade_4200() {
 		$tsf = \tsf();
 
 		\delete_option( 'the_seo_framework_tested_upgrade_version' );
-
-		$tsf->update_option( 'ping_use_cron_prerender', 0 );
 	}
 }

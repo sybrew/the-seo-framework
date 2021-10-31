@@ -530,10 +530,10 @@ class Post_Data extends Detect {
 		if ( ! $post_type ) return;
 
 		foreach ( $this->get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
-			$_post_key = '_primary_term_' . $_taxonomy;
+			$_post_key = "_primary_term_{$_taxonomy}";
 
 			if ( \wp_verify_nonce(
-				$_POST[ $this->inpost_nonce_name . '_pt_' . $_taxonomy ] ?? '', // If empty, wp_verify_nonce will return false.
+				$_POST[ "{$this->inpost_nonce_name}_pt_{$_taxonomy}" ] ?? '', // If empty, wp_verify_nonce will return false.
 				$this->inpost_nonce_field . '_pt'
 			) ) { // Redundant. Fortified.
 				$this->update_primary_term_id(
@@ -557,10 +557,8 @@ class Post_Data extends Detect {
 	 */
 	public function get_latest_post_id() {
 
-		static $post_id = null;
-
-		if ( null !== $post_id )
-			return $post_id;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$query = new \WP_Query( [
 			'posts_per_page'   => 1,
@@ -574,7 +572,7 @@ class Post_Data extends Detect {
 			'no_found_rows'    => true,
 		] );
 
-		return $post_id = reset( $query->posts );
+		return memo( reset( $query->posts ) );
 	}
 
 	/**
@@ -748,7 +746,7 @@ class Post_Data extends Detect {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
 
-		$primary_id = (int) \get_post_meta( $post_id, '_primary_term_' . $taxonomy, true ) ?: 0;
+		$primary_id = (int) \get_post_meta( $post_id, "_primary_term_{$taxonomy}", true ) ?: 0;
 
 		if ( ! $primary_id ) return memo( false, $post_id, $taxonomy );
 
@@ -800,9 +798,9 @@ class Post_Data extends Detect {
 	 */
 	public function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
 		if ( ! $value ) {
-			$success = \delete_post_meta( $post_id, '_primary_term_' . $taxonomy );
+			$success = \delete_post_meta( $post_id, "_primary_term_{$taxonomy}" );
 		} else {
-			$success = \update_post_meta( $post_id, '_primary_term_' . $taxonomy, $value );
+			$success = \update_post_meta( $post_id, "_primary_term_{$taxonomy}", $value );
 		}
 		return $success;
 	}

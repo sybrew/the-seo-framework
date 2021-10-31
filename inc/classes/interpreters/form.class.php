@@ -162,7 +162,7 @@ final class Form {
 	 *
 	 * @param string $for  The input ID it's for.
 	 * @param string $type Whether it's a 'title' or 'description' counter.
-	 * @param bool   $display Whether to display the counter. (options page gimmick)
+	 * @param bool   $display Whether to display the counter. (Used as options page gimmick)
 	 */
 	public static function output_pixel_counter_wrap( $for, $type, $display = true ) {
 		vprintf(

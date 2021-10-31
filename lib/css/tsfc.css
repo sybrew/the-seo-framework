@@ -1,4 +1,3 @@
-
 /* START Character Counters */
 
 .tsf-counter-wrap {
@@ -53,7 +52,7 @@
 
 /* START Pixel Counters */
 
-/* Temporarily fix for SEO settings page. */
+/* Temporarily fix for SEO settings page. Remove me TSF 5.0 */
 .tsf-nav-tab-content .tsf-pixel-counter-wrap {
 	margin-left: 1px;
 	max-width: 99%;
@@ -90,7 +89,7 @@ body.rtl .tsf-nav-tab-content .tsf-pixel-counter-wrap {
 	max-width: 100%;
 	background: #007bd2;
 	box-shadow: 0px 1px 3px 0px #ccc;
-	transition: width .15s cubic-bezier(0.4, 0, 0.75, 1);
+	transition: width .15s cubic-bezier(0, 0, .75, 1);
 }
 
 .tsf-pixel-counter-bad .tsf-pixel-counter-fluid {

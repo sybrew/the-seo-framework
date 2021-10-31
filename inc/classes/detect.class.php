@@ -184,33 +184,25 @@ class Detect extends Render {
 	 *
 	 * @since 2.5.2
 	 * @since 4.1.4 Fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
+	 * @since 4.2.0 Rewrote sorting algorithm; now, it's actually good.
 	 * @uses $this->detect_plugin_multi()
 	 *
-	 * @param array $plugins   Array of array for globals, constants, classes
+	 * @param array[] $plugins   Array of array for globals, constants, classes
 	 *                         and/or functions to check for plugin existence.
-	 * @param bool  $use_cache Bypasses cache if false
+	 * @param bool    $use_cache Bypasses cache if false
 	 */
 	public function can_i_use( $plugins = [], $use_cache = true ) {
 
 		if ( ! $use_cache )
 			return $this->detect_plugin_multi( $plugins );
 
-		$mapped = [];
+		ksort( $plugins );
 
-		// Prepare multidimensional array for cache.
-		foreach ( $plugins as $type => $func ) {
-			if ( ! \is_array( $func ) )
-				return false; // doing it wrong...
+		foreach ( $plugins as &$test )
+			sort( $test );
 
-			sort( $func );
-
-			// Glue with underscore and space for debugging purposes.
-			$mapped[ $type ] = $type . '_' . implode( ' ', $func );
-		}
-
-		ksort( $mapped );
 		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
-		$key = serialize( $mapped );
+		$key = serialize( $test );
 
 		return memo( null, $key ) ?? memo( $this->detect_plugin_multi( $plugins ), $key );
 	}
@@ -226,8 +218,10 @@ class Detect extends Render {
 	 * This method is only used by can_i_use(), and is only effective in the Ultimate Member compat file...
 	 * @TODO deprecate?
 	 *
-	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
-	 * @return bool True if ALL functions classes and constants exists or false if plugin constant, class or function not detected.
+	 * @param array[] $plugins Array of array for constants, classes
+	 *                         and / or functions to check for plugin existence.
+	 * @return bool True if ALL functions classes and constants exists
+	 *              or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin_multi( $plugins ) {
 
@@ -731,7 +725,7 @@ class Detect extends Render {
 
 		foreach ( $exploitables as $type => $qvs ) :
 			foreach ( $qvs as $qv ) :
-				// Don't guess "empty" nor null-coalesce, because falsey or empty-array is also empty.
+				// Only test isset, because falsey or empty-array is what we need to test against.
 				if ( ! isset( $query[ $qv ] ) ) continue;
 
 				switch ( $type ) :
@@ -762,6 +756,35 @@ class Detect extends Render {
 		endforeach;
 
 		return memo( false );
+	}
+
+	/**
+	 * Tests if the post type archive of said post type has public posts.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param string $post_type The post type to test.
+	 * @return bool True if a post is found in the archive, false otherwise.
+	 */
+	public function has_posts_in_post_type_archive( $post_type ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
+
+		$query = new \WP_Query( [
+			'posts_per_page' => 1,
+			'post_type'      => [ $post_type ],
+			'orderby'        => 'date',
+			'order'          => 'ASC',
+			'post_status'    => 'publish',
+			'has_password'   => false,
+			'fields'         => 'ids',
+			'cache_results'  => false,
+			'no_found_rows'  => true,
+		] );
+
+		return memo( ! empty( $query->posts ), $post_type );
 	}
 
 	/**

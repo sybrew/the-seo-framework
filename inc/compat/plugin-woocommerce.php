@@ -24,7 +24,7 @@ namespace The_SEO_Framework;
 function _init_wc_compat() {
 	\add_action(
 		'the_seo_framework_do_before_output',
-		function() {
+		static function() {
 			/**
 			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
 			 */
@@ -51,6 +51,30 @@ function _init_wc_compat() {
 	\remove_filter( 'wp_robots', 'wc_page_no_robots' );
 }
 
+/**
+ * Sets the correct shop ID on the shop page.
+ *
+ * @since 4.2.0
+ * @access private
+ *
+ * @param int|WP_Post|null $post Post ID or post object.
+ * @return bool
+ */
+function _is_shop( $post = null ) {
+
+	if ( isset( $post ) ) {
+		$id = \is_int( $post )
+			? $post
+			: ( \get_post( $post )->ID ?? 0 );
+
+		$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
+	} else {
+		$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
+	}
+
+	return $is_shop;
+}
+
 \add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
 /**
  * Sets the correct shop ID on the shop page.
@@ -63,7 +87,8 @@ function _init_wc_compat() {
  */
 function _set_real_id_wc_shop( $id ) {
 
-	if ( \tsf()->is_wc_shop() )
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
+	if ( _is_shop() )
 		$id = (int) \get_option( 'woocommerce_shop_page_id' );
 
 	return $id;
@@ -81,7 +106,8 @@ function _set_real_id_wc_shop( $id ) {
  * @return bool
  */
 function _set_shop_singular_archive( $is_singular_archive, $id ) {
-	return $is_singular_archive || \tsf()->is_wc_shop( $id );
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
+	return $is_singular_archive || _is_shop( $id );
 }
 
 \add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
@@ -98,20 +124,8 @@ function _set_shop_singular_archive( $is_singular_archive, $id ) {
  * @return bool
  */
 function _set_wc_is_shop( $is_shop, $post ) {
-
-	if ( $is_shop ) return $is_shop;
-
-	if ( isset( $post ) ) {
-		$id = \is_int( $post )
-			? $post
-			: \get_post( $post )->ID ?? 0;
-
-		$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
-	} else {
-		$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
-	}
-
-	return $is_shop;
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
+	return $is_shop || _is_shop( $post );
 }
 
 \add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
@@ -281,7 +295,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 	$is_product_category = false;
 
 	if ( null === $args ) {
-		$is_product          = \tsf()->is_wc_product();
+		$is_product          = \tsf()->is_product();
 		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
 	} else {
 		if ( $args['taxonomy'] ) {
@@ -292,7 +306,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 		} elseif ( $args['pta'] ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement.DetectedElseif
 			// TODO ? Which public non-page-PTA does WC have, actually?
 		} else {
-			$is_product = \tsf()->is_wc_product( $args['id'] );
+			$is_product = \tsf()->is_product( $args['id'] );
 		}
 	}
 
