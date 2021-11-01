@@ -24,7 +24,7 @@ if ( $this->is_real_front_page() ) {
 } elseif ( $post_type ) {
 	$type = $this->get_post_type_label( $post_type );
 } else {
-	$type = 'Unknown'.
+	$type = 'Unknown';
 }
 
 $cache_key = $this->generate_cache_key( $id, $taxonomy );
