@@ -155,7 +155,7 @@ function _autoload_classes( $class ) {
 	$file = str_replace( '_', '-', end( $_chunks ) );
 
 	// The extension is deemed to be ".class.php" always. We may wish to alter this for traits?
-	require THE_SEO_FRAMEWORK_DIR_PATH_CLASS . $rel_dir . $file . '.class.php';
+	require THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
 		_bootstrap_timer( microtime( true ) - $_bootstrap_timer );

@@ -269,11 +269,10 @@ final class Scripts {
 
 		static::forward_known_script( $id, $type );
 
-		if ( static::get_status_of( $id, $type ) & static::REGISTERED ) {
-			if ( ! ( static::get_status_of( $id, $type ) & static::LOADED ) ) {
-				static::load_script( $id, $type );
-			}
-		}
+		$status = static::get_status_of( $id, $type );
+
+		if ( ( $status & static::REGISTERED ) && ! ( $status & static::LOADED ) )
+			static::load_script( $id, $type );
 	}
 
 	/**
@@ -363,7 +362,7 @@ final class Scripts {
 		if ( $registered ) {
 			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
 				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
-				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED; // phpcs:ignore, WordPress.WhiteSpace
+				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED;
 		}
 	}
 
@@ -394,7 +393,7 @@ final class Scripts {
 		if ( $loaded ) {
 			isset( static::$queue[ $type ][ $id ] )
 				and static::$queue[ $type ][ $id ] |= static::LOADED
-				 or static::$queue[ $type ][ $id ]  = static::LOADED; // phpcs:ignore, WordPress.WhiteSpace
+				 or static::$queue[ $type ][ $id ]  = static::LOADED;
 		}
 	}
 
@@ -486,7 +485,7 @@ final class Scripts {
 			$tsf = \tsf();
 
 			if (
-			   ! isset( $_colors[ $_scheme ]->colors ) // phpcs:ignore, WordPress.WhiteSpace
+			   ! isset( $_colors[ $_scheme ]->colors )
 			|| ! \is_array( $_colors[ $_scheme ]->colors )
 			|| \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
 			) {
