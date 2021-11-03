@@ -96,43 +96,46 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				],
 			];
 
+			// Hide subsequent wraps to prevent layout shifts (bounce) during load: They get hidden by JS anyway.
 			printf(
-				'<div class=tsf-post-type-archive-wrap %s>',
+				'<div class="tsf-post-type-archive-wrap%s" %s>',
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Shut it, noob.
+				$i ? ' hide-if-tsf-js' : '',
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
 				HTML::make_data_attributes( [ 'postType' => $post_type ] )
 			);
 			?>
-				<div class=tsf-post-type-archive-if-excluded style=display:none>
+				<div class=tsf-post-type-header>
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
+					echo HTML::get_header_title(
+						vsprintf(
+							'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
+							[
+								sprintf(
+									/* translators: 1 = Post Type Archive name */
+									esc_html__( 'Archive of %s', 'autodescription' ),
+									esc_html( $post_types_data[ $post_type ]['label'] )
+								),
+								esc_html( $post_type ),
+								sprintf(
+									'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
+									esc_url( $post_types_data[ $post_type ]['url'] ),
+									esc_html__( 'View archive', 'autodescription' )
+								),
+							]
+						)
+					);
+					?>
+				</div>
+				<div class="tsf-post-type-archive-if-excluded hidden">
 					<?php
 					HTML::attention_description(
-						__( "This post type is excluded, so these settings won't have any effect.", 'autodescription' )
+						__( "This post type is excluded, so settings won't have any effect.", 'autodescription' )
 					)
 					?>
 				</div>
 				<div class=tsf-post-type-archive-if-not-excluded>
-					<div class=tsf-post-type-header>
-						<?php
-						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
-						echo HTML::get_header_title(
-							vsprintf(
-								'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
-								[
-									sprintf(
-										/* translators: 1 = Post Type Archive name */
-										esc_html__( 'Archive of %s', 'autodescription' ),
-										esc_html( $post_types_data[ $post_type ]['label'] )
-									),
-									esc_html( $post_type ),
-									sprintf(
-										'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
-										esc_url( $post_types_data[ $post_type ]['url'] ),
-										esc_html__( 'View archive', 'autodescription' )
-									),
-								]
-							)
-						);
-						?>
-					</div>
 					<?php
 					SeoSettings::_nav_tab_wrapper(
 						"post_type_archive_{$post_type}",

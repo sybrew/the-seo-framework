@@ -363,6 +363,8 @@ TODO disable selection/display of PTA when disabled.
 TODO tsf-disabled-title-additions-help doesn't work...
 
 TODO deJquery-fy the floating titles...
+TODO remove noopener from our links.
+	-> Except for the feed source link.
 
 **For everyone:**
 
@@ -679,14 +681,17 @@ TODO deJquery-fy the floating titles...
 	* You can now autoload The SEO Framework's classes using the wrong case for the first "chunk" of namespace: `\ThE_sEo_FrAmEwOrK\`.
 		* Pro tip: Don't. We 'implemented' it only in the spirit of PHP's case-handling.
 
-= 4.2.0 - TODO =
+= 4.2.0 - Perfect =
 
 *A related quote of a book I just read or film I just saw - [Author]()*
+
+Finally, TSF is what I always envisioned it to become when I gave it a name: PHP 7+, full site support, best in class, and without any hindrances.
 
 **Release highlights**
 
 * TODO Cool stuff
 * TODO More stuff
+* TODO Lights off sale on. <https://theseoframework.com/wp-admin/post.php?post=3648&action=edit>
 
 **Environment upgrade notes**
 

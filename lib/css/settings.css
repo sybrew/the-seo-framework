@@ -146,6 +146,10 @@ body.rtl .tsf-bottom-buttons {
 	display: inline-block;
 }
 
+.tsf-post-type-archive-if-excluded p:last-of-type {
+	margin-bottom: 0;
+}
+
 /** @overrides tsf.css */
 .tsf-select-block > select:last-of-type {
 	margin-bottom: 14px;
