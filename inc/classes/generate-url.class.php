@@ -218,9 +218,9 @@ class Generate_Url extends Generate_Title {
 					$args['get_custom_field']
 						? $this->get_singular_custom_canonical_url( $args['id'] )
 						: ''
-					) ?: $this->get_home_canonical_url();
+					) ?: $this->get_raw_home_canonical_url();
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$url = $this->get_home_canonical_url();
+				$url = $this->get_raw_home_canonical_url();
 			} elseif ( $args['id'] ) {
 				$url = (
 					$args['get_custom_field']
@@ -312,7 +312,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_home_canonical_url() {
 
-		$url = $this->set_preferred_url_scheme( $this->get_home_url() );
+		$url = $this->get_raw_home_canonical_url();
 
 		if ( ! $url ) return '';
 
@@ -339,6 +339,17 @@ class Generate_Url extends Generate_Title {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Returns home canonical URL without pagination or slashing.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return string The home canonical URL without pagination.
+	 */
+	public function get_raw_home_canonical_url() {
+		return $this->set_preferred_url_scheme( $this->get_home_url() );
 	}
 
 	/**

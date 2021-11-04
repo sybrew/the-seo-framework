@@ -257,44 +257,43 @@ TODO deprecate _do_settings_page_notices(), and use the new persistent notice sy
 				-> Show 3x. Delete if detected conflict is gone (hook at plugin_activated). -> Test show 10x to make sure it works as intended (activate/deactivate, etc.).
 TODO Move notice handlers to new class.
 TODO overthrow the structured data. Clean-room Yoast's/WPSSO/AIOSEO implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
-
 TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
 	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
 	-> This is actually why we set up a custom `_deprecation_function()`.
-
 TODO introduce a settings generator, even if high-level?
 TODO s_...$new_value -> $something_else?
-
 TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
 	-> Will this work with quick/bulk-edit?
-
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
-
 TODO https://github.com/sybrew/the-seo-framework/issues/185
 	-> This will allow bigger sitemaps, for we won't accidentally call redundant post meta.
 	-> This forces us to implement a migrator, which we should...
 	-> This will cause all sorts of issues we cannot help our users with.
 		-> Although this will help speed up queries, especially those of large sites, it will hinder large sites for they might use special queries to test against TSF.
 			-> Then again, you should assert in PHP more than the database. TSF's "qubit" system is a poster child for that.
-
 TODO allow custom robots generators?
-
 TODO add "padlock" to the counters on the homepage "page edit screen" if it's locked via the homepage SEO settings?
+TODO regex to find non-breaking HTML attributes: class=example.
+	-> input type="text" -> input type=text
+	-> This can introduce security issues, so it requires deep code scanning. Let's do it at v5.0
+TODO remove noopener from our links.
+	-> Except for the feed source link.
+	-> 5.0.
+TODO add maxlength to title/description input fields?
+	-> Also enforce it in the back-end?
+	-> This will prevent overloading the database with large blobs. However, users can do this anywhere in WP, regardless.
+	-> 5.0
 
-= 4.2.0 = // I added the real header at the end.
+==== End punted.
 
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
 
-TODO get_home_canonical_url() needs an admin-friendly-non-pagination-test version.
 TODO further optimize get_word_count(), array flips and whatnot...
 
 TODO translation POT file.
 
 TODO _suggest_temp... :)
-TODO implement WP Fix for sitemaps and use get_posts()?
-	-> This would explode the RAM usage, but reduce the number of expensive get_post() calls in is_private/get_permalink
-		-> However, the way we do it now, the cache is properly instigated... Needs investigation.
 
 TODO add CSS templating colors?
 	-> Also from Core, and their "relative" friends? I don't think WP uses "var" in production?
@@ -318,26 +317,10 @@ TODO reset the metabox order of the SEO Settings page?
 TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );` in `get_generate_archive_title_from_query()`, which will probably cause issues with "The Events Calendar"'s broken query.
 	-> Should we add a compat file auto-excluding their non-WP coherent "post type"?
 
-TODO regex to find non-breaking HTML attributes: class=example.
-	-> input type="text" -> input type=text
-
-TODO data-social-group -> add subgroup -> utilize -> automate.
-	-> This way, we need not register the element IDs. Instead, it can automatically retrieve them by "social-group"
-
 TODO add debouncer in tsf.js?
 	-> tsf.debounce( () => { }, timeout, key || void 0 );
 
-TODO add maxlength to title/description input fields?
-	-> Also enforce it in the back-end?
-	-> This will prevent overloading the database with large blobs. However, users can do this anywhere in WP, regardless.
-
-TODO hide canonical URL when noindex in PTA settings?
-TODO disable selection/display of PTA when disabled.
-
-
 TODO deJquery-fy the floating titles...
-TODO remove noopener from our links.
-	-> Except for the feed source link.
 TODO fix TODO in is_query_adjustment_blocked..
 TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
 	* We already created method `has_posts_in_post_type_archive()` -> NOT DOCUMENTED (yet)!
@@ -545,6 +528,7 @@ TODO sequential unclosed `<` still "render" in TSF-js, but will not output on th
 			* `get_post_type_archive_meta_item()` returns a single post type archive item's value.
 			* `get_all_post_type_archive_meta_defaults()` returns an array of all public post type archive option defaults.
 			* `get_post_type_archive_meta_defaults()` returns an array of default post type archive meta.
+			* `get_raw_home_canonical_url()`, returns the canonical home URL.
 		* **Methods changed:**
 			* `can_i_use()` rewrote sorting algorithm; now, it's actually good.
 			* `do_meta_output()`
