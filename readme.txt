@@ -315,10 +315,6 @@ TODO reset the metabox order of the SEO Settings page?
 		-> Should we annotate this in https://tsf.fyi/kb/a/108?
 	-> We'll reset it again (purging the option completely) in TSF 5.0...
 
-TODO replace -metabox' -> '
-	-> Then replace -metabox.php -> .php
-	-> The folder name already tells it contains metaboxes.
-
 TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );` in `get_generate_archive_title_from_query()`, which will probably cause issues with "The Events Calendar"'s broken query.
 	-> Should we add a compat file auto-excluding their non-WP coherent "post type"?
 
