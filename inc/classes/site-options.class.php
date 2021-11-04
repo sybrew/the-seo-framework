@@ -289,7 +289,7 @@ class Site_Options extends Sanitize {
 	 * @since 3.1.0 Now applies the "the_seo_framework_warned_site_options" filter.
 	 * @since 4.1.0 Added robots' post type setting warnings.
 	 * @since 4.1.2 Added `ping_use_cron_prerender`.
-	 * @since 4.2.0 Added caching.
+	 * @since 4.2.0 Now memoizes its return value.
 	 *
 	 * @return array $options.
 	 */
@@ -335,7 +335,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.2.2
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
-	 * @since 4.2.0 Now supports an option index forf $key.
+	 * @since 4.2.0 Now supports an option index as a $key.
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string|string[] $key       Option name, or a map of indexes therefor.
@@ -422,7 +422,7 @@ class Site_Options extends Sanitize {
 	 * Return Default SEO options from the SEO options array.
 	 *
 	 * @since 2.2.5
-	 * @since 4.2.0 1. The first parameter can now fetch deeper option indexes.
+	 * @since 4.2.0 1. Now supports an option index as `$key`.
 	 *              2. Removed second parameter (`$use_cache`).
 	 *              3. Now always memoizes.
 	 * @uses $this->get_default_settings() Return option from the options table and cache result.
@@ -808,7 +808,7 @@ class Site_Options extends Sanitize {
 		 * However, it may contain more keys than we anticipated. Merge them.
 		 */
 		$defaults = array_merge(
-			$this->get_unfiltered_term_meta_defaults(),
+			$this->get_unfiltered_post_type_archive_meta_defaults(),
 			$this->get_post_type_archive_meta_defaults( $post_type )
 		);
 
@@ -824,7 +824,7 @@ class Site_Options extends Sanitize {
 		/**
 		 * @since 4.2.0
 		 * @note Do not delete/unset/add indexes! It'll cause errors.
-		 * @param array $meta      The current term meta.
+		 * @param array $meta      The current post type archive meta.
 		 * @param int   $post_type The post type.
 		 * @param bool  $headless  Whether the meta are headless.
 		 */
@@ -842,7 +842,7 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
-	 * Returns a single post type archive item's value
+	 * Returns a single post type archive item's value.
 	 *
 	 * @since 4.2.0
 	 *

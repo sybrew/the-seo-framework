@@ -39,10 +39,11 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.0.6
 	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_description_from_custom_field()
 	 * @uses $this->get_generated_description()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real description output.
@@ -61,10 +62,11 @@ class Generate_Description extends Generate {
 	 * @since 3.0.4
 	 * @since 3.1.0 : 1. Now tries to get the homepage social descriptions.
 	 *                2. The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_open_graph_description_from_custom_field()
 	 * @uses $this->get_generated_open_graph_description()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Open Graph description output.
@@ -84,7 +86,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @see $this->get_open_graph_description()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string TwOpen Graphitter description.
@@ -108,7 +110,8 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.2.0 No longer returns an escaped custom field description.
+	 * @since 4.2.0 1. No longer returns an escaped custom field description.
+	 *              2. Now returns custom descriptions for post type archives.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -148,11 +151,12 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.2.0 No longer returns an escaped custom field description.
+	 * @since 4.2.0 1. No longer returns an escaped custom field description.
+	 *              2. Now supports the `$args['pta']` index.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @return string Open Graph description.
 	 */
 	protected function get_custom_open_graph_description_from_args( $args ) {
@@ -188,10 +192,11 @@ class Generate_Description extends Generate {
 	 * @since 3.0.4
 	 * @since 3.1.0 : 1. Now tries to get the homepage social descriptions.
 	 *                2. The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_twitter_description_from_custom_field()
 	 * @uses $this->get_generated_twitter_description()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Twitter description output.
@@ -211,7 +216,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @see $this->get_twitter_description()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string Twitter description.
@@ -236,7 +241,8 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.2.0 No longer returns an escaped custom field description.
+	 * @since 4.2.0 1. No longer returns an escaped custom field description.
+	 *              2. Now returns custom descriptions for post type archives.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -287,11 +293,12 @@ class Generate_Description extends Generate {
 	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
 	 *                2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
-	 * @since 4.2.0 No longer returns an escaped custom field description.
+	 * @since 4.2.0 1. No longer returns an escaped custom field description.
+	 *              2. Now supports the `$args['pta']` index.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @return string Twitter description.
 	 */
 	protected function get_custom_twitter_description_from_args( $args ) {
@@ -335,8 +342,9 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.0.6
 	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The custom field description.
@@ -345,12 +353,6 @@ class Generate_Description extends Generate {
 
 		if ( null === $args ) {
 			$desc = $this->get_custom_description_from_query();
-
-			// Generated as backward compat for the filter...
-			$args = [
-				'id'       => $this->get_the_real_ID(),
-				'taxonomy' => $this->get_current_taxonomy(),
-			];
 		} else {
 			$this->fix_generation_args( $args );
 			$desc = $this->get_custom_description_from_args( $args );
@@ -360,11 +362,19 @@ class Generate_Description extends Generate {
 		 * @since 2.9.0
 		 * @since 3.0.6 1. Duplicated from $this->generate_description() (deprecated)
 		 *              2. Removed all arguments but the 'id' argument.
+		 * @since 4.2.0 1. No longer gets supplied custom query arguments when in the loop.
+		 *              2. Now supports the `$args['pta']` index.
 		 * @param string     $desc The custom-field description.
-		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                         Is null when query is autodetermined.
 		 */
-		$desc = (string) \apply_filters( 'the_seo_framework_custom_field_description', $desc, $args );
+		$desc = (string) \apply_filters_ref_array(
+			'the_seo_framework_custom_field_description',
+			[
+				$desc,
+				$args,
+			]
+		);
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -374,6 +384,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 4.2.0 Now returns custom descriptions for post type archives.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *
@@ -417,6 +428,7 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *
@@ -455,12 +467,13 @@ class Generate_Description extends Generate {
 	 * @since 3.1.2 1. Now omits additions when the description will be deemed too short.
 	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
 	 * @since 3.2.2 Now converts HTML characters prior trimming.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->generate_description()
 	 * @TODO Should we enforce a minimum description length, where this result is ignored? e.g., use the input
 	 *       guidelines' 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
 	 *       This isn't truly helpful, since then search engines can truly fetch whatever with zero guidance.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
@@ -485,12 +498,20 @@ class Generate_Description extends Generate {
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
 		 * @since 4.0.0 1. Deprecated second parameter.
 		 *              2. Added third parameter: $args.
+		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
-		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                         Is null when query is autodetermined.
 		 */
-		$excerpt = (string) \apply_filters( 'the_seo_framework_fetched_description_excerpt', $excerpt, 0, $args );
+		$excerpt = (string) \apply_filters_ref_array(
+			'the_seo_framework_fetched_description_excerpt',
+			[
+				$excerpt,
+				0,
+				$args,
+			]
+		);
 
 		// This page has a generated description that's far too short: https://theseoframework.com/em-changelog/1-0-0-amplified-seo/.
 		// A direct directory-'site:' query will accept the description outputted--anything else will ignore it...
@@ -504,11 +525,18 @@ class Generate_Description extends Generate {
 		/**
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
+		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $desc The generated description.
-		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                         Is null when query is autodetermined.
 		 */
-		$desc = (string) \apply_filters( 'the_seo_framework_generated_description', $excerpt, $args );
+		$desc = (string) \apply_filters_ref_array(
+			'the_seo_framework_generated_description',
+			[
+				$excerpt,
+				$args,
+			]
+		);
 
 		return $escape ? $this->escape_description( $desc ) : $desc;
 	}
@@ -517,8 +545,9 @@ class Generate_Description extends Generate {
 	 * Returns the autogenerated Twitter meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Twitter description output.
@@ -531,9 +560,10 @@ class Generate_Description extends Generate {
 	 * Returns the autogenerated Open Graph meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->generate_description()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Open Graph description output.
@@ -577,8 +607,9 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.2 Fixed front-page as blog logic.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @return string
 	 */
 	protected function get_description_excerpt_from_args( $args ) {
@@ -635,7 +666,8 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Now processes HTML tags via s_excerpt_raw() for the author descriptions.
-	 * @TODO fixme: why don't we parse filters?
+	 * @since 4.2.0 Now uses post type archive descriptions to prefill meta descriptions.
+	 * @TODO fixme: why don't we parse filters? -> What did I mean when I wrote this?
 	 *
 	 * @param null|\WP_Term|\WP_Post_Type $object The term or post type object.
 	 * @return string
@@ -658,7 +690,13 @@ class Generate_Description extends Generate {
 		 * @param string                 $excerpt The short circuit excerpt.
 		 * @param \WP_Term|\WP_Post_Type $object  The Term object or post type object.
 		 */
-		$excerpt = (string) \apply_filters( 'the_seo_framework_generated_archive_excerpt', '', $object );
+		$excerpt = (string) \apply_filters_ref_array(
+			'the_seo_framework_generated_archive_excerpt',
+			[
+				'',
+				$object,
+			]
+		);
 
 		if ( $excerpt ) return $excerpt;
 
@@ -679,7 +717,13 @@ class Generate_Description extends Generate {
 				 * @param string $excerpt The archive description excerpt.
 				 * @param \WP_Term|\WP_Post_Type $object The post type object.
 				 */
-				$excerpt = (string) \apply_filters( 'the_seo_framework_pta_description_excerpt', $excerpt, $object );
+				$excerpt = (string) \apply_filters_ref_array(
+					'the_seo_framework_pta_description_excerpt',
+					[
+						$excerpt,
+						$object,
+					]
+				);
 			} else {
 				/**
 				 * @since 4.0.6
@@ -687,7 +731,13 @@ class Generate_Description extends Generate {
 				 * @param string $excerpt The fallback archive description excerpt.
 				 * @param \WP_Term $object    The Term object.
 				 */
-				$excerpt = (string) \apply_filters( 'the_seo_framework_fallback_archive_description_excerpt', '', $object );
+				$excerpt = (string) \apply_filters_ref_array(
+					'the_seo_framework_fallback_archive_description_excerpt',
+					[
+						'',
+						$object,
+					]
+				);
 			}
 		} else {
 			$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
@@ -724,7 +774,7 @@ class Generate_Description extends Generate {
 	 * @since 4.2.0 No longer adds "on Blogname".
 	 * @see $this->get_generated_description()
 	 *
-	 * @param array $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                    This method should always have 'taxonomy' set to ''.
 	 * @return string The description additions.
 	 */
@@ -955,12 +1005,13 @@ class Generate_Description extends Generate {
 	 * Determines whether automated descriptions are enabled.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.0 Now fixes the input arguments.
+	 * @since 4.2.0 1. Now fixes the input arguments.
+	 *              2. Now supports the `$args['pta']` index.
 	 * @access private
 	 * @see $this->get_the_real_ID()
 	 * @see $this->get_current_taxonomy()
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool
 	 */
@@ -973,8 +1024,9 @@ class Generate_Description extends Generate {
 		 * @since 2.5.0
 		 * @since 3.0.0 Now passes $args as the second parameter.
 		 * @since 3.1.0 Now listens to option.
+		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param bool       $autodescription Enable or disable the automated descriptions.
-		 * @param array|null $args            The query arguments. Contains 'id' and 'taxonomy'.
+		 * @param array|null $args            The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                                    Is null when query is autodetermined.
 		 */
 		return (bool) \apply_filters_ref_array(

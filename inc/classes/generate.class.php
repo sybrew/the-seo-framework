@@ -86,8 +86,10 @@ class Generate extends User_Data {
 	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 1. Now offloads metadata generation to an actual generator.
+	 *              2. Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
 	 * }
@@ -126,6 +128,7 @@ class Generate extends User_Data {
 		 * @since 4.0.0 Added two parameters ($args and $ignore).
 		 * @since 4.0.2 Now contains the copyright diretive values.
 		 * @since 4.0.3 Changed `$meta` key `max_snippet_length` to `max_snippet`
+		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *
 		 * @param array      $meta The current robots meta. {
 		 *     'noindex'           : 'noindex'|''
@@ -135,7 +138,7 @@ class Generate extends User_Data {
 		 *     'max_image_preview' : 'max-image-preview:<string>'|''
 		 *     'max_video_preview' : 'max-video-preview:<string>'|''
 		 * }
-		 * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                         Is null when query is autodetermined.
 		 * @param int <bit>  $options The ignore level. {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
@@ -515,6 +518,8 @@ class Generate extends User_Data {
 	 * Returns the redirect URL, if any.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
+	 *              2. Now redirects post type archives.
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.

@@ -62,8 +62,9 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 The output is now filterable.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -93,6 +94,7 @@ class Generate_Image extends Generate_Url {
 
 		/**
 		 * @since 4.0.5
+		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param array      $details The image details array, sequential: int => {
 		 *    string url:    The image URL,
 		 *    int    id:     The image ID,
@@ -100,7 +102,7 @@ class Generate_Image extends Generate_Url {
 		 *    int    height: The image height in pixels,
 		 *    string alt:    The image alt tag,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 		 *                            Is null when query is autodetermined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
@@ -122,8 +124,9 @@ class Generate_Image extends Generate_Url {
 	 * Returns single custom field image details.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single Whether to fetch one image, or multiple. Unused, reserved.
 	 * @param bool       $clean  Whether to clean the image, like stripping duplicates and erroneous items.
@@ -152,8 +155,9 @@ class Generate_Image extends Generate_Url {
 	 * Returns single or multiple generates image details.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -183,6 +187,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns single custom field image details from query.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 Can now return post type archive images from settings.
 	 *
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,
@@ -250,6 +255,7 @@ class Generate_Image extends Generate_Url {
 	 * Returns single custom field image details from arguments.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
 	 * @param array $args The query arguments. Must have 'id' and 'taxonomy'.
 	 * @return array The image details array, sequential: int => {
@@ -314,8 +320,9 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.1 Now only the 'social' context will fetch images from the content.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
@@ -386,13 +393,14 @@ class Generate_Image extends Generate_Url {
 
 		/**
 		 * @since 4.0.0
+		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param array      $params  : [
 		 *    string  size:     The image size to use.
 		 *    boolean multi:    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
 		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
-		 * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
+		 * @param array|null $args    The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                            Is null when query is autodetermined.
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
@@ -417,7 +425,7 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The context of the image generation, albeit 'social', 'schema', etc.
@@ -446,7 +454,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 4.0.0
 	 *
 	 * @param array      $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param string     $size   The image size to use.
 	 * @param bool       $single Whether to fetch one image, or multiple.

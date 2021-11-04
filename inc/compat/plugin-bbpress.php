@@ -278,7 +278,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  *
  * @param string     $excerpt The excerpt to use.
  * @param int        $page_id Deprecated.
- * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
  *                         Is null when query is autodetermined.
  * @return string The excerpt.
  */
@@ -310,7 +310,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
  * @access private
  *
  * @param string     $desc The custom-field description.
- * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
  *                         Is null when query is autodetermined.
  * @return string The custom description.
  */

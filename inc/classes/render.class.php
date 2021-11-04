@@ -1256,12 +1256,13 @@ class Render extends Admin_Init {
 	 *              2. Is now a protected function.
 	 * @access private
 	 *
-	 * @param string $where  Determines the position of the indicator.
-	 *                       Accepts 'before' for before, anything else for after.
-	 * @param int    $timing Determines when the output started.
+	 * @param string $where                 Determines the position of the indicator.
+	 *                                      Accepts 'before' for before, anything else for after.
+	 * @param int    $meta_timer            Total meta time.
+	 * @param int    $bootstrap_timer       Total bootstrap time.
 	 * @return string The SEO Framework's HTML plugin indicator.
 	 */
-	protected function get_plugin_indicator( $where = 'before', $timing = 0 ) {
+	protected function get_plugin_indicator( $where = 'before', $meta_timer = 0, $bootstrap_timer = 0 ) {
 
 		$cache = memo() ?? memo( [
 			/**
@@ -1292,29 +1293,23 @@ class Render extends Admin_Init {
 
 		if ( ! $cache['run'] ) return '';
 
-		static $_bootstrap_timer = null;
-		// The bootstrap timer keeps adding when metadata is strapping. This causes both timers to increase simultaneously.
-		// We cache the bootstrap here, and let the meta-timer take over.
-		if ( ! isset( $_bootstrap_timer ) )
-			$_bootstrap_timer = _bootstrap_timer();
-
 		switch ( $where ) :
 			case 'before':
 				return "<!-- {$cache['annotation']} -->\n";
 
 			case 'after':
 			default:
-				if ( $cache['show_timer'] && $timing ) {
+				if ( $cache['show_timer'] && $meta_timer && $bootstrap_timer ) {
 					$timers = sprintf(
 						' | %s meta | %s boot',
-						number_format( ( microtime( true ) - $timing ) * 1e3, 2, null, '' ) . 'ms',
-						number_format( $_bootstrap_timer * 1e3, 2, null, '' ) . 'ms'
+						number_format( $meta_timer * 1e3, 2, null, '' ) . 'ms',
+						number_format( $bootstrap_timer * 1e3, 2, null, '' ) . 'ms'
 					);
 				} else {
 					$timers = '';
 				}
 
-				return "<!-- {$cache['annotation']}{$timers} -->\n";
+				return "<!-- / {$cache['annotation']}{$timers} -->\n";
 		endswitch;
 	}
 

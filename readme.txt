@@ -268,15 +268,6 @@ TODO s_...$new_value -> $something_else?
 TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
 	-> Will this work with quick/bulk-edit?
 
-= 4.2.0 = // I added the real header at the end.
-
-TODO clean up autodescription.php, now we can finally make it PHP 5.6+.
-	-> What's there to clean? Well, we could move the constants around... and we could add namespacing... yay.
-	-> We can remove the envtest file and in place put headers in autodescription.php
-	-> also delete option the_seo_framework_tested_upgrade_version
-
-TODO this is no longer 'minor'... In this update, we polished the final rough bits we found.
-
 TODO fix js lint warnings about the l10n const being unavailable.
 	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
 
@@ -288,6 +279,9 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 			-> Then again, you should assert in PHP more than the database. TSF's "qubit" system is a poster child for that.
 
 TODO allow custom robots generators?
+
+= 4.2.0 = // I added the real header at the end.
+
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
 
 TODO get_home_canonical_url() needs an admin-friendly-non-pagination-test version.
@@ -329,11 +323,6 @@ TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?
 TODO regex to find non-breaking HTML attributes: class=example.
 	-> input type="text" -> input type=text
 
-Accepts 'id' and 'taxonomy'.
-Accepts 'id', 'taxonomy', and 'pta'.
-
-tsfTitle.useSocialTagline -> tsfSocial.addAdditions
-
 TODO data-social-group -> add subgroup -> utilize -> automate.
 	-> This way, we need not register the element IDs. Instead, it can automatically retrieve them by "social-group"
 
@@ -349,22 +338,28 @@ TODO add "padlock" to the counters on the homepage "page edit screen" if it's lo
 TODO process changelog https://github.com/sybrew/the-seo-framework/compare/64b64e28e534304ee7e1bea65b25e8ec46241f85...master
 
 
-TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
-
 TODO /(@since [0-9\.]+\s):\s/ -> $1\s
-
-TODO was this an issue? -> PTA canonical URLs always point to the main page.
-	* ref method (flipped is_query conditional): get_post_type_archive_canonical_url()
 
 TODO in get_archival_description_excerpt(), assert object filters in non-query??
 
 TODO hide canonical URL when noindex in PTA settings?
 TODO disable selection/display of PTA when disabled.
-TODO tsf-disabled-title-additions-help doesn't work...
+
 
 TODO deJquery-fy the floating titles...
 TODO remove noopener from our links.
 	-> Except for the feed source link.
+TODO fix TODO in is_query_adjustment_blocked..
+TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
+	* We already created method `has_posts_in_post_type_archive()` -> NOT DOCUMENTED (yet)!
+
+TODO FIXME: Newly registered post type archives do not get their defaults populated in the back-end, but are seemingly working on the front-end??
+	-> Test with strings, just to be sure.
+
+TODO sequential unclosed `<` still "render" in TSF-js, but will not output on the front-end after 'proper' escaping.
+	-> We should keep those displayed on the front-end...
+
+*Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
 **For everyone:**
 
@@ -432,11 +427,14 @@ TODO remove noopener from our links.
 		* The Optimized Sitemap's settings now explain there might be multiple sitemaps when Polylang or WPML is detected.
 		* The Title Settings their examples now better reflect real-world usage in certain corner cases.
 		* The Pixel Counter now moves instantly as you type, instead of easing in, making it more reactive yet less distractive.
+		* Default titles are now pre-texturized before they are displayed in the title-editor, making for more accurate front-end output predictions.
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 		* We did Elementor's developer's job by marking the post types `elementor_library` and `e-landing-page` as "not-publicly-queryable" -- but only for The SEO Framework.
 			* If we'd mark it as "not-publicly-queryable" for all of WordPress, some functionality in Elementor might break. We do not care for that.
 			* Elementor's devs had to mark it conditionally-public instead of conditionally-not-public. Thinking backwardly poses some difficulty for the average mind. Nevertheless, that'd remove about 2000 support inquiries for/about them yearly.
+		* Link now protects your site from hackers.
+			* Disclaimer: he does not, he can barely safe Hyrule without Farore.
 * **Removed:**
 	* Toggled off by default three years ago, hidden for almost all users one year ago, and now removed entirely: The Optimized Sitemap's priority-meta feature. This feature hasn't been used by any popular search engine for a long time.
 	* Older browsers no longer support window-resize support for the tabs of the "inpost SEO meta box."
@@ -452,6 +450,7 @@ TODO remove noopener from our links.
 	* Addressed layout issues where the site title might be smaller than 60px, making the examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
 	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
 	* Addressed an issue where empty post type archives' post types weren't detected, causing TSF to abandon processing.
+	* Addressed an issue where paginated post type archives have had their canonical URL always point to the first page.
 
 **For developers:**
 
@@ -477,11 +476,14 @@ TODO remove noopener from our links.
 	* Option `the_seo_framework_tested_upgrade_version` will be deleted on upgrade because TSF no longer tests for the compatible PHP or WordPress versions.
 		* This will be reinstated automatically on downgrade.
 	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
-		* Index `show_priority` is no longer used nor sanitized.
-			* Updating the options will purge this index. Then, it'll be rendered as disabled on downgrade.
-		* Index `knowledge_name` is no longer 'sanitized and escaped' on-save, but now only 'sanitized'.
-		* Index `site_title` is new, and overrides WordPress's `\get_bloginfo( 'name' )` value used within The SEO Framework.
-			* This affects all titles, including those of Structured Data (which can be superseded by `knowledge_name`).
+		* **Added:**
+			* Index `site_title` is new, and overrides WordPress's `\get_bloginfo( 'name' )` value used within The SEO Framework.
+				* This affects all titles, including those of Structured Data (which can be superseded by `knowledge_name`).
+			* Index `pta` is new, it contains an array of all post-type meta, indexed by post type names as keys. View method `tsf()->get_unfiltered_post_type_archive_meta_defaults()` to see an array of post type keys.
+		* **Changed:**
+			* Index `show_priority` is no longer used nor sanitized.
+				* Updating the options will purge this index. Then, it'll be rendered as disabled on downgrade.
+			* Index `knowledge_name` is no longer 'sanitized and escaped' on-save, but now only 'sanitized'.
 	* Global option `the_seo_framework_tested_upgrade_version` is now removed. We let WordPress test for us now (WP5.2+ feature).
 * **Function notes:**
 	* **Added:**
@@ -502,6 +504,10 @@ TODO remove noopener from our links.
 	* For object `\The_SEO_Framework\Bridges\Ping`:
 		* **Methods added:**
 			* `get_ping_url()`
+	* For object `\The_SEO_Framework\Bridges\Scripts`:
+		* **Methods changed:**
+			* `get_social_scripts()` no longer registers data for the script.
+			* `get_term_edit_scripts()` now properly populates `use_generated_archive_prefix()` with a `\WP_Term` object.
 	* For object `\The_SEO_Framework\Builders\SEOBar\<Page|Term>`:
 		* **Method changed:**
 			* `get_query_cache()` no longer returns the robots-copyright data at `['states']['robotsmeta']`. Use the options API instead.
@@ -515,20 +521,35 @@ TODO remove noopener from our links.
 		* Object `\The_SEO_Framework\Builders\Sitemap_Base` is now `\The_SEO_Framework\Builders\Sitemap\Base`.
 		* Object `\The_SEO_Framework\Debug` is now `\The_SEO_Framework\Internal\Debug`.
 		* Object `\The_SEO_Framework\Deprecated` is now `\The_SEO_Framework\Internal\Deprecated`.
+		* Object `\The_SEO_Framework\Interpreters\Settings_Input` is new.
 		* Object `\The_SEO_Framework\Interpreters\Sitemap_XSL` is new.
 	* Object `\The_SEO_Framework\Builders\Sitemap` is now `\The_SEO_Framework\Builders\Sitemap\Main`.
 		* A class alias is made Just-in-Time to smoothen deprecation.
 	* For object `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 		* **Methods added:**
-			* `get_home_url()`, a memoized version of WordPress Core's `get_home_url()`.
-			* `retrieve_robots_meta_assertions()`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
-			* `is_home_as_page()`, detects the non-front blog page.
 			* `get_filtered_raw_blogname()` fetches the filtered blogname without considering TSF's `site_title` option.
+			* `get_home_url()`, a memoized version of WordPress Core's `get_home_url()`.
+			* `get_supported_post_type_archives()`, returns a list of all supported post types with archives.
+			* `get_supported_taxonomies()`, returns a list of all supported taxonomies.
+			* `get_post_type_archive_custom_canonical_url()`, returns the canonical url for the provided PTA, if any exists.
+			* `get_public_post_type_archives()`, returns a list of all public post types with archives.
+			* `is_home_as_page()`, detects the non-front blog page.
+			* `output_js_social_data`, outputs reference social data for your input elements.
+			* `retrieve_robots_meta_assertions()`, returns the last cycle's robots-assertions. Only returns data when asserting is enabled.
+			* `s_all_post_type_archive_meta()`, sanitizes all post type archive metadata.
+			* `s_post_type_archive_meta()`, sanitizes post type archive metadata.
+			* `use_post_type_archive_title_branding()`, tells whether branding is enabled for post type archives.
+			* `get_warned_option()` returns whether an option is warned.
+			* `get_post_type_archive_meta()` returns all post type archive meta.
+			* `get_post_type_archive_meta_item()` returns a single post type archive item's value.
+			* `get_all_post_type_archive_meta_defaults()` returns an array of all public post type archive option defaults.
+			* `get_post_type_archive_meta_defaults()` returns an array of default post type archive meta.
 		* **Methods changed:**
+			* `can_i_use()` rewrote sorting algorithm; now, it's actually good.
 			* `do_meta_output()`
 				1. Now invokes two actions before and after output.
 				1. No longer rectifies timezones.
-			* `generate_robots_meta()` only returns what you want it to generate now (by default, nothing changes).
+			* `generate_robots_meta()` now offloads metadata generation to an actual generator (coroutine).
 			* `get_author_canonical_url()`
 				1. The first parameter is now optional.
 				2. When the $id isn't set, the URL won't get tested for pagination issues.
@@ -540,7 +561,7 @@ TODO remove noopener from our links.
 			* `get_relative_fontcolor` optimized code, but it now has some rounding changes at the end. This could offset the returned values by 1/255th.
 			* `get_robots_post_type_option_id` no longer sanitizes the input parameter.
 			* `get_robots_taxonomy_option_id` no longer sanitizes the input parameter.
-			* `get_static_front_page_title()` &amp; alias `get_blogname()`
+			* `get_static_front_page_title()` &amp; its alias `get_blogname()`:
 				1. Now listens to the new `site_title` option.
 				2. Now applies filters.
 			* `get_taxonomical_canonical_url()`:
@@ -548,17 +569,69 @@ TODO remove noopener from our links.
 				1. The parameters are now optional.
 			* `get_taxonomical_custom_canonical_url()`, the first parameter is now optional.
 			* `get_term_meta_item()` no longer accidentally returns an empty array on failure, but `null` (as intended) instead.
+			* `get_post_type_archive_canonical_url()`:
+				1. Now correctly adds pagination to the URL.
+				2. Removed argument type deprecation doing it wrong warning.
+			* `get_post_type_real_ID()`, now supports common archives without relying on the first post.
+			* `get_raw_generated_archive_title_items` returns the archive title items, also works in admin.
 			* `get_singular_canonical_url()`
 				1. Added memoization.
 				1. When the `$id` isn't set, the URL won't get tested for pagination issues.
 			* `get_singular_custom_canonical_url()`, the first parameter is now optional.
-			* `has_custom_canonical_url()` now also detects canonical URLs for taxonomies.
+			* `has_custom_canonical_url()`
+				1. Now also detects canonical URLs for taxonomies.
+				1. Now also detects canonical URLs for post type archives.
 			* `hellip_if_over()` no longer prepends a space before the hellip.
 			* `init_cron_actions()` is now a protected method, and can no longer be accessed.
 			* `is_home()`, added the first parameter to allow custom query testing.
 			* `is_theme()` no longer "loads" the theme; instead, simply compares input to active theme options.
-			* **The following methods now support the `$args = [ 'pta' => $post_type ]` parameter:**
-				*
+			* `trim_excerpt()` now enforces at least a character length of 1. This prevents needless processing.
+			* `get_filtered_raw_custom_field_title()`
+				1. The first parameter can now be voided.
+				1. The first parameter is now rectified, so you can leave out indexes.
+			* `get_filtered_raw_generated_title()`
+				1. The first parameter can now be voided.
+				1. The first parameter is now rectified, so you can leave out indexes.
+			* `get_warned_site_options()` now memoizes its return value.
+			* `get_option()` now supports an option index (sequential array of strings) as `$key`.
+			* `get_default_option()`:
+				1. Now supports an option index (sequential array of strings) as `$key`.
+				1. Removed second parameter (`$use_cache`).
+				1. Now always memoizes the unslashed options.
+			* **The following methods now support the `$args = [ 'pta' => $post_type ]` parameter, and might do something new and useful for post type archives:**
+				* `get_description()`
+				* `get_open_graph_description()`
+				* `get_twitter_description()`
+				* `get_description_from_custom_field()`
+				* `get_generated_description()`
+				* `get_generated_twitter_description()`
+				* `get_generated_open_graph_description()`
+				* `is_auto_description_enabled()`
+				* `get_image_details()`
+				* `get_custom_field_image_details()`
+				* `get_generated_image_details()`
+				* `get_image_generation_params()`
+				* `get_safe_schema_image()`
+				* `get_title()`
+				* `get_custom_field_title()`
+				* `get_generated_title()`
+				* `get_filtered_raw_custom_field_title()`
+				* `get_filtered_raw_generated_title()`
+				* `get_twitter_title()`
+				* `get_generated_twitter_title()`
+				* `get_open_graph_title()`
+				* `get_raw_custom_field_title()`
+				* `get_raw_generated_title()`
+				* `merge_title_branding()`
+				* `get_title_branding_from_args()`
+				* `merge_title_protection()`
+				* `use_title_protection()`
+				* `use_title_pagination()`
+				* `use_title_branding()`
+				* `create_canonical_url()`
+				* `get_canonical_url()`, but you should use `create_canonical_url()` instead.
+				* `generate_robots_meta()`
+				* `get_redirect_url()`
 		* **Methods deprecated:**
 			* `append_php_query()`, use `tsf()->append_url_query()` instead.
 			* `get_html_output()`, with no alternative available.
@@ -618,6 +691,8 @@ TODO remove noopener from our links.
 			* `get_current_term_meta()`, use `tsf()->get_term_meta()` instead.
 			* `prepend_tax_label_prefix`, with no alternative available.
 			* `check_the_real_ID()`, use `tsf()->get_the_real_ID()` instead.
+			* `get_default_settings()`, use `tsf()->get_default_option()` instead.
+			* `get_warned_settings()`, use `tsf()->get_warned_option()` instead.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.
@@ -636,15 +711,19 @@ TODO remove noopener from our links.
 		* `ROBOTS_IGNORE_PROTECTION` now also prevents tests against archive pagination. This to make the constant in line with homepage pagination.
 * **Filter notes:**
 	* **Added:**
-		* `the_seo_framework_tell_multilingual_sitemap`, whether to tell about multilingual sitemaps on the setting pages.
 		* `the_seo_framework_generated_archive_title_prefix`, filters the archive title prefix.
 		* These should never be used. If I find you use these filters in the wild, I'll call you out for being a dumb developer. Properly annotate your post types and taxonomies before thinking about touching these filters!
 			* `the_seo_framework_public_post_types`, filters public post types.
 			* `the_seo_framework_public_taxonomies`, filters public taxonomies.this filter!
+		* `the_seo_framework_post_type_archive_meta` filters all post type meta.
+		* `the_seo_framework_get_post_type_archive_meta_defaults` filters all post type meta defaults.
+		* `the_seo_framework_post_type_archive_metabox`, enables or disables the post type archive metabox.
+		* `the_seo_framework_tell_multilingual_sitemap`, whether to tell about multilingual sitemaps on the setting pages.
 	* **Changed:**
-		* `the_seo_framework_sitemap_extend`, no longer forwards the 'show_priority' index in the second ($args) parameter.
-		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the 'show_priority' index in the second ($args) parameter.
+		* `the_seo_framework_sitemap_extend`, no longer forwards the `show_priority` index in the second (`$args`) parameter.
+		* `the_seo_framework_sitemap_additional_urls`, no longer forwards the `show_priority` index in the second (`$args`) parameter.
 		* `the_seo_framework_generated_archive_title`, added the `$prefix` and `$original_title` parameters, akin to WordPress Core's `get_the_archive_title`, albeit shifted by one parameter.
+		* `the_seo_framework_custom_field_description`, no longer gets supplied custom query arguments when in the loop.
 		* **The following filters have had their needless second parameter (`$args`) removed:**
 			* `the_seo_framework_general_settings_tabs`
 			* `the_seo_framework_homepage_settings_tabs`
@@ -654,28 +733,63 @@ TODO remove noopener from our links.
 			* `the_seo_framework_social_settings_tabs`
 			* `the_seo_framework_title_settings_tabs`
 		* **The following filters may now receive the `$args = [ 'pta' => $post_type ]` argument:**
-			*
+			* `the_seo_framework_custom_field_description`
+			* `the_seo_framework_enable_auto_description`
+			* `the_seo_framework_fetched_description_excerpt`
+			* `the_seo_framework_generated_description`
+			* `the_seo_framework_image_details`
+			* `the_seo_framework_image_generation_params`
+			* `the_seo_framework_robots_meta_array`
+			* `the_seo_framework_title_from_custom_field`
+			* `the_seo_framework_title_from_generation`
+			* `the_seo_framework_use_title_branding`
+			* `the_seo_framework_generated_archive_title`
 	* **Deprecated:**
 		* `the_seo_framework_settings_capability`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 		* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.
 		* `the_seo_framework_pro`, use action `the_seo_framework_after_meta_output` instead.
 		* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta_output` instead.
 		* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta_output` instead.
+		* `the_seo_framework_pta_title`, use the options API instead.
+		* `the_seo_framework_the_archive_title`, use `the_seo_framework_generated_archive_title_prefix` and `the_seo_framework_generated_archive_title` instead.
 	* **Fixed:**
 		* `the_seo_framework_use_archive_prefix` now gets a proper term object when (quick-)editing terms, instead of the taxonomy object.
 	* **Removed:**
 		* `the_seo_framework_inpost_seo_save_defaults`, was deprecated. Use `the_seo_framework_post_meta_defaults` instead.
+	* **Other:**
+		* We exchanged various static `'class::method'` callbacks for `[ 'class', 'method' ]` ones. This does not affect the behavior of `remove_filter`. It's only easier to read.
 * **Action notes:**
 	* **Added:**
-		* `the_seo_framework_before_meta_output`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`
 		* `the_seo_framework_after_meta_output`, this replaces filters `the_seo_framework_pro` and `the_seo_framework_after_output`
+		* `the_seo_framework_before_meta_output`, this replaces filters `the_seo_framework_pre` and `the_seo_framework_before_output`
+		* `the_seo_framework_post_type_archive_before`, runs before the post type archive metabox's contents.
+		* `the_seo_framework_post_type_archive_after`, runs after the post type archive metabox's contents.
+	* **Other:**
+		* We exchanged various static `'class::method'` callbacks for `[ 'class', 'method' ]` ones. This does not affect the behavior of `remove_action`. It's only easier to read.
 * **JavaScript notes:**
+	* Object `window.tsf`:
+		* **Added:**
+			* `sDoubleSpace`
+			* `sSingleLine`
+			* `sTabs`
+			* `disPatchAtInteractive`
 	* Object `window.tsfTT`:
 		* **Changed:**
 			* `doTooltip`
 				1. Can now work asynchronously.
 				1. Now returns boolean whether the tooltip was entered successfully.
 			* `getTooltip` now returns a `HTMLElement` instead of a `jQuery.Element`.
+			* `triggerReset` now debounces by 100ms.
+	* Object `window.tsfSocial`:
+		* **Added:**
+			* `getStateOf`
+			* `updateStateOf`
+			* `updateStateAll`
+			* `setInputInstance`
+			* `getInputInstance`
+		* **Removed:**
+			* `updateState`, without deprecation.
+			* `getState`, without deprecation.
 * **Other:**
 	* Removed workarounds for [PHP bug 75771](https://bugs.php.net/bug.php?id=75771).
 	* You can now autoload The SEO Framework's classes using the wrong case for the first "chunk" of namespace: `\ThE_sEo_FrAmEwOrK\`.

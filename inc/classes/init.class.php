@@ -489,20 +489,27 @@ class Init extends Query {
 		\do_action( 'the_seo_framework_do_before_output' );
 
 		/**
-		 * Start the timer here. I know it doesn't calculate the initiation of
-		 * the plugin, but it will make the code smelly if I were to do so.
-		 * A static array cache counter function would make it possible, but meh.
-		 * This function presumably takes the most time anyway.
+		 * The bootstrap timer keeps adding when metadata is strapping.
+		 * This causes both timers to increase simultaneously.
+		 * We catch the bootstrap here, and let the meta-timer take over.
+		 */
+		$bootstrap_timer = _bootstrap_timer();
+		/**
+		 * Start the meta timer here. This also catches file inclusions,
+		 * which is also caught by the _bootstrap_timer().
 		 */
 		$init_start = microtime( true );
 
 		// phpcs:disable, WordPress.Security.EscapeOutput -- Output is escaped.
-		// phpcs:ignore Squiz.WhiteSpace.LanguageConstructSpacing -- We're fancy here.
 		echo PHP_EOL, $this->get_plugin_indicator( 'before' );
 
 		$this->do_meta_output();
 
-		echo $this->get_plugin_indicator( 'after', $init_start ), PHP_EOL;
+		echo $this->get_plugin_indicator(
+			'after',
+			microtime( true ) - $init_start,
+			$bootstrap_timer
+		), PHP_EOL;
 		// phpcs:enable, WordPress.Security.EscapeOutput
 
 		/**
@@ -1062,9 +1069,9 @@ class Init extends Query {
 
 		static $has_filter = null;
 
-		if ( null === $has_filter ) {
+		if ( null === $has_filter )
 			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
-		}
+
 		if ( $has_filter ) {
 			/**
 			 * This filter affects both 'search-"archives"' and terms/taxonomies.
@@ -1097,7 +1104,9 @@ class Init extends Query {
 		if ( ! empty( $wp_query->tax_query->queries ) ) :
 			$unsupported = [];
 
-			// TODO use `$has_supported_taxonomy = array_intersect( array_column( $wp_query->tax_query->queries, 'taxonomy' ), $this->get_supported_taxonomies() )`?
+			// TODO use:
+			// $tax_seq = array_column( $wp_query->tax_query->queries, 'taxonomy' );
+			// `return empty( $tax_seq ) || array_intersect( $tax_seq, $this->get_supported_taxonomies() )`?
 			foreach ( $wp_query->tax_query->queries as $_query ) {
 				if ( isset( $_query['taxonomy'] ) )
 					$unsupported[] = ! $this->is_taxonomy_supported( $_query['taxonomy'] );

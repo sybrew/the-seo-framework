@@ -40,6 +40,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.2.4
 	 * @since 4.2.0 1. Now also detects canonical URLs for taxonomies.
 	 *              2. Now also detects canonical URLs for PTAs.
+	 *              3. Now supports the `$args['pta']` index.
 	 *
 	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -126,6 +127,7 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Now preemptively fixes the generation arguments, for easier implementation.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_canonical_url()
 	 *
 	 * @param array $args The canonical URL arguments : {
@@ -153,9 +155,10 @@ class Generate_Url extends Generate_Title {
 	 * Removes pagination if the URL isn't obtained via the query.
 	 *
 	 * @since 3.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @see $this->create_canonical_url()
 	 *
-	 * @param array|null $args : Private variable. Use $this->create_canonical_url() instead.
+	 * @param array|null $args Private variable! Use `$this->create_canonical_url()` instead.
 	 * @return string The canonical URL, if any.
 	 */
 	public function get_canonical_url( $args = null ) {
@@ -172,12 +175,11 @@ class Generate_Url extends Generate_Title {
 		if ( ! $canonical_url )
 			return '';
 
-		if ( ! $query && $args['id'] === $this->get_the_real_ID() ) {
+		if ( ! $query && $args['id'] === $this->get_the_real_ID() )
 			$canonical_url = $this->remove_pagination_from_url( $canonical_url );
-		}
-		if ( $this->matches_this_domain( $canonical_url ) ) {
+
+		if ( $this->matches_this_domain( $canonical_url ) )
 			$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
-		}
 
 		return $this->clean_canonical_url( $canonical_url );
 	}
@@ -188,6 +190,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @see $this->create_canonical_url()
 	 *
 	 * @param array $args Required. Use $this->create_canonical_url().
@@ -235,7 +238,8 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
-	 * @since 4.2.0 No longer relies on passing through the page ID.
+	 * @since 4.2.0 1. No longer relies on passing through the page ID.
+	 *              2. Can now return custom canonical URLs for post type archives.
 	 * @see $this->get_canonical_url()
 	 *
 	 * @return string The canonical URL.
@@ -457,18 +461,14 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 4.0.0 1. Deprecated first parameter as integer. Use strings or null.
 	 *              2. Now forwards post type object calling to WordPress's function.
-	 * @since 4.2.0 Now correctly adds pagination to the URL.
+	 * @since 4.2.0 1. Now correctly adds pagination to the URL.
+	 *              2. Removed argument type deprecation doing it wrong warning.
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                               Leave null to use query, and allow pagination.
 	 * @return string The post type archive canonical URL, if any.
 	 */
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
-
-		if ( \is_int( $post_type ) ) {
-			$this->_doing_it_wrong( __METHOD__, 'Only send strings or null to the first parameter.', '4.0.0' );
-			$post_type = '';
-		}
 
 		if ( ! $post_type ) {
 			$post_type = $this->get_current_post_type();
@@ -647,8 +647,9 @@ class Generate_Url extends Generate_Title {
 		return strtolower( parse_url(
 			$this->get_home_url(),
 			PHP_URL_SCHEME
-		) )
-			?: ( $this->is_ssl() ? 'https' : 'http' );
+		) ) ?: (
+			$this->is_ssl() ? 'https' : 'http'
+		);
 	}
 
 	/**

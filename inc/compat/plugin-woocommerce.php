@@ -276,7 +276,8 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 /**
  * Adjusts image generation parameters.
  *
- * @since 4.0.5 (introduced @ 4.0.0, renamed to prevent conflict)
+ * @since 4.0.5 (introduced @ 4.0.0, renamed to prevent conflict).
+ * @since 4.2.0 Now supports the `$args['pta']` index.
  * @access private
  *
  * @param array      $params : [
@@ -285,7 +286,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
  *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
  *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
- * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
  *                         Is null when query is autodetermined.
  * @return array $params
  */
@@ -325,10 +326,11 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  * Generates image URLs and IDs from the WooCommerce product gallary entries.
  *
  * @since 4.0.0
+ * @since 4.2.0 Now supports the `$args['pta']` index.
  * @access private
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
  * @yield array : {
@@ -342,9 +344,15 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 	$attachment_ids = [];
 
 	if ( $post_id && \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
-		$product_image_gallery = \get_post_meta( $post_id, '_product_image_gallery', true );
-
-		$attachment_ids = array_map( 'absint', array_filter( explode( ',', $product_image_gallery ) ) );
+		$attachment_ids = array_map(
+			'absint',
+			array_filter(
+				explode(
+					',',
+					\get_post_meta( $post_id, '_product_image_gallery', true )
+				)
+			)
+		);
 	}
 
 	if ( $attachment_ids ) {
@@ -369,7 +377,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  * @access private
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
  * @yield array : {

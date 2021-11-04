@@ -212,10 +212,11 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.1.0 Now uses the new taxonomy robots settings.
 	 * @since 4.1.4 Soft deprecated. Use 'robots_meta' instead.
-	 * @since 4.2.0 Hard deprecation.
+	 * @since 4.2.0 1. Hard deprecation.
+	 *              2. Now supports the `$args['pta']` index. (inferred)
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
 	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
@@ -253,9 +254,11 @@ final class Deprecated {
 	 * @since 4.0.5 : 1. Removed copyright directive bug workaround. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
 	 *                2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
 	 * @since 4.1.4 Deprecated silently. Use generate_robots_meta() instead.
-	 * @since 4.2.0 Hard deprecation.
+	 * @since 4.2.0 1. Hard deprecation.
+	 *              2. Now supports the `$args['pta']` index. (inferred)
+	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id' and 'taxonomy'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @param int <bit>  $ignore The ignore level. {
 	 *    0 = 0b00: Ignore nothing.
 	 *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
@@ -421,7 +424,8 @@ final class Deprecated {
 	 * @ignore Unused. The relying methods were yeeted off in 4.0.0.
 	 *                 "We no longer automatically resize images when they’re deemed too large."
 	 * @since 4.1.4 Deprecated silently. Marked for quick deletion.
-	 * @TODO delete me, bypass deprecation? This method makes no sense to the outsider, anyway. -> 4.2.0
+	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param int $i  The dimension to resize.
 	 * @param int $r1 The dimension that determines the ratio.
@@ -429,6 +433,8 @@ final class Deprecated {
 	 * @return int The proportional dimension, rounded.
 	 */
 	public function proportionate_dimensions( $i, $r1, $r2 ) {
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->proportionate_dimensions()', '4.2.0' );
 		return round( $i / ( $r1 / $r2 ) );
 	}
 
@@ -454,6 +460,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.1.4 Deprecated silently. Use `get_user_meta_defaults()` instead.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @return array The default user meta index and values.
 	 */
@@ -476,6 +483,7 @@ final class Deprecated {
 	 *              3. Added not-found cache.
 	 * @since 4.1.4 Deprecated silently. Use `get_user_meta()` instead.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param int    $user_id The user ID. When empty, it will try to fetch the current user.
 	 * @param string $option  The option name.
@@ -494,6 +502,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.1.4 Silently deprecated. use `get_current_post_author_id()` instead.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param int    $author_id The author ID. When empty, it will return $default.
 	 * @param string $option    The option name. When empty, it will return $default.
@@ -512,6 +521,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.1.4 Silently deprecated. Use `get_current_post_author_meta_item()` instead.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $option  The option name.
 	 * @param mixed  $default The default value to return when the data doesn't exist.
@@ -619,6 +629,7 @@ final class Deprecated {
 	 * @since 2.8.0 New users now get a new array assigned.
 	 * @since 4.1.4 Deprecated silently. Use `update_single_user_meta_item()` instead.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param int    $user_id The user ID.
 	 * @param string $option  The user's SEO metadata option.
@@ -676,6 +687,7 @@ final class Deprecated {
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 * @uses $this->get_field_name() Construct name attributes for use in form fields.
 	 *
 	 * @param string $name Field name base
@@ -691,6 +703,7 @@ final class Deprecated {
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $id Field id base
 	 * @return string Full field id
@@ -706,6 +719,7 @@ final class Deprecated {
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string  $id Field id base.
@@ -729,6 +743,7 @@ final class Deprecated {
 	 * @since 2.0.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in code tags.
 	 * @return string Content wrapped in code tags.
@@ -745,6 +760,7 @@ final class Deprecated {
 	 * @since 2.2.2
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in code tags.
 	 * @return string Content wrapped in code tags.
@@ -761,6 +777,7 @@ final class Deprecated {
 	 * @since 2.7.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in the description wrap.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
@@ -776,6 +793,7 @@ final class Deprecated {
 	 * @since 2.7.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in the description wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
@@ -792,6 +810,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in the attention wrap.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
@@ -807,6 +826,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in the attention wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
@@ -823,6 +843,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
@@ -838,6 +859,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $content Content to be wrapped in the wrap. Expected to be escaped.
 	 * @param bool   $block Whether to wrap the content in <p> tags.
@@ -855,6 +877,7 @@ final class Deprecated {
 	 * @since 2.6.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $input The input to wrap. Should already be escaped.
 	 * @param bool   $echo  Whether to escape echo or just return.
@@ -873,6 +896,7 @@ final class Deprecated {
 	 * @since 4.0.0 Now adds a tabindex to the span tag, so you can focus it using keyboard navigation.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $description The descriptive on-hover title.
 	 * @param string $link        The non-escaped link.
@@ -892,6 +916,7 @@ final class Deprecated {
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
 	 * @internal
+	 * @deprecated
 	 *
 	 * @param array $data : {
 	 *    string $k => mixed $v
@@ -911,6 +936,7 @@ final class Deprecated {
 	 * @since 3.0.3 Added $disabled parameter. Defaults to false.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $field_id    The option ID. Must be within the Autodescription settings.
 	 * @param string $label       The checkbox description label.
@@ -938,6 +964,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param array $args : {
 	 *    string     $id       The select field ID.
@@ -968,6 +995,7 @@ final class Deprecated {
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 1. Hard deprecation.
 	 *              2. Now always returns an empty string.
+	 * @deprecated
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $depr Deprecated
@@ -975,7 +1003,7 @@ final class Deprecated {
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) {
+	public function is_default_checked( $key, $depr = '', $wrap = true, $echo = true ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis
 		\tsf()->_deprecated_function( 'tsf()->is_default_checked()', '4.2.0' );
 		return '';
 	}
@@ -988,6 +1016,7 @@ final class Deprecated {
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 10 Hard deprecation.
 	 *              2. Now always returns an empty string.
+	 * @deprecated
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param string $deprecated Deprecated.
@@ -995,7 +1024,7 @@ final class Deprecated {
 	 * @param bool   $echo Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
+	public function is_warning_checked( $key, $deprecated = '', $wrap = true, $echo = true ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis
 		\tsf()->_deprecated_function( 'tsf()->is_warning_checked()', '4.2.0' );
 		return '';
 	}
@@ -1008,11 +1037,12 @@ final class Deprecated {
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 1. Hard deprecation.
 	 *              2. Now always returns false.
+	 * @deprecated
 	 *
 	 * @param string $key  The option name which returns boolean.
 	 * @param bool   $wrap Whether to wrap the class name in `class="%s"`
 	 */
-	public function get_is_conditional_checked( $key, $wrap = true ) {
+	public function get_is_conditional_checked( $key, $wrap = true ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis
 		\tsf()->_deprecated_function( 'tsf()->get_is_conditional_checked()', '4.2.0' );
 		return false;
 	}
@@ -1025,6 +1055,7 @@ final class Deprecated {
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 1. Hard deprecation.
 	 *              2. Now always returns false.
+	 * @deprecated
 	 *
 	 * @param string $key        The option name which returns boolean.
 	 * @param string $deprecated Deprecated. Used to be the settings field.
@@ -1032,7 +1063,7 @@ final class Deprecated {
 	 * @param bool   $echo       Whether to echo or return the output.
 	 * @return string Empty on echo or the class name with an optional wrapper.
 	 */
-	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) {
+	public function is_conditional_checked( $key, $deprecated = '', $wrap = true, $echo = true ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis
 		\tsf()->_deprecated_function( 'tsf()->is_conditional_checked()', '4.2.0' );
 		return false;
 	}
@@ -1047,6 +1078,7 @@ final class Deprecated {
 	 * @since 4.1.0 No longer marks up the counter with the `description` HTML class.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $for     The input ID it's for.
 	 * @param string $depr    The initial value for no-JS. Deprecated.
@@ -1063,6 +1095,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
+	 * @deprecated
 	 *
 	 * @param string $for  The input ID it's for.
 	 * @param string $type Whether it's a 'title' or 'description' counter.

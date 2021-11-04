@@ -709,7 +709,7 @@ final class Scripts {
 	 * Returns Social scripts params.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.0 No longer outputs data.
+	 * @since 4.2.0 No longer registers data for the script
 	 *
 	 * @return array The script params.
 	 */

@@ -41,9 +41,6 @@ final class Form {
 	 * Returns a HTML select form elements for qubit options: -1, 0, or 1.
 	 * Does not support "multiple" field selections.
 	 *
-	 * @FIXME: Discrepancy... this is the only INPUT function used that DOES NOT pertain
-	 *        to the SEO Settings page: The `$id` argument is fluid, and DOES NOT
-	 *        relate to the settings page.
 	 * @since 4.1.4
 	 *
 	 * @param array $args : {
@@ -102,7 +99,7 @@ final class Form {
 			),
 			[
 				$args['label'] ? sprintf(
-					'<label for="%s">%s</label> ', // NOTE: extra space!
+					'<label for="%s">%s</label> ', // superfluous space!
 					$tsf->s_field_id( $args['id'] ),
 					sprintf(
 						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
