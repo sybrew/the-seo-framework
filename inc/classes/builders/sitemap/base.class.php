@@ -528,8 +528,8 @@ class Base extends Main {
 	 * Retrieves additional URLs and builds items from them.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.1 : 1. Converted to generator and iterator. Therefore, renamed function.
-	 *                2. Now actually does something.
+	 * @since 4.0.1 1. Converted to generator and iterator. Therefore, renamed function.
+	 *              2. Now actually does something.
 	 * @generator
 	 * @iterator
 	 *
@@ -545,7 +545,6 @@ class Base extends Main {
 	 * }
 	 */
 	protected function generate_additional_base_urls( $args, &$count = 0 ) {
-
 		/**
 		 * @since 2.5.2
 		 * @since 3.2.2 Invalid URLs are now skipped.

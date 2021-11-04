@@ -283,8 +283,8 @@ class User_Data extends Term_Data {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.2 : 1. Now no longer returns the latest post author ID on home-as-blog pages.
-	 *                2. Now always returns an integer.
+	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *              2. Now always returns an integer.
 	 *
 	 * @return int Post author ID on success, 0 on failure.
 	 */

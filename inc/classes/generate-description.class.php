@@ -60,8 +60,8 @@ class Generate_Description extends Generate {
 	 * Returns the Open Graph meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 : 1. Now tries to get the homepage social descriptions.
-	 *                2. The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.
+	 *              2. The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_open_graph_description_from_custom_field()
 	 * @uses $this->get_generated_open_graph_description()
@@ -148,8 +148,8 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
-	 *                2. Now obtains custom field data for terms.
+	 * @since 3.2.2 1. Now tests for the homepage as page prior getting custom field data.
+	 *              2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
@@ -190,8 +190,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 : 1. Now tries to get the homepage social descriptions.
-	 *                2. The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.
+	 *              2. The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_twitter_description_from_custom_field()
 	 * @uses $this->get_generated_twitter_description()
@@ -238,8 +238,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
-	 *                2. Now obtains custom field data for terms.
+	 * @since 3.2.2 1. Now tests for the homepage as page prior getting custom field data.
+	 *              2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now returns custom descriptions for post type archives.
@@ -290,8 +290,8 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 : 1. Now tests for the homepage as page prior getting custom field data.
-	 *                2. Now obtains custom field data for terms.
+	 * @since 3.2.2 1. Now tests for the homepage as page prior getting custom field data.
+	 *              2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
@@ -706,11 +706,10 @@ class Generate_Description extends Generate {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
 				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
-				$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
+				$excerpt = $this->s_description_raw( $object->description ?? '' );
 			} elseif ( $this->is_author() ) {
 				$excerpt = $this->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} elseif ( \is_post_type_archive() ) {
-				$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
 				/**
 				 * @since 4.0.6
 				 * @since 4.2.0 Now provides the post type object description, if assigned.
@@ -720,7 +719,7 @@ class Generate_Description extends Generate {
 				$excerpt = (string) \apply_filters_ref_array(
 					'the_seo_framework_pta_description_excerpt',
 					[
-						$excerpt,
+						$this->s_description_raw( $object->description ?? '' ),
 						$object,
 					]
 				);
@@ -740,7 +739,7 @@ class Generate_Description extends Generate {
 				);
 			}
 		} else {
-			$excerpt = ! empty( $object->description ) ? $this->s_description_raw( $object->description ) : '';
+			$excerpt = $this->s_description_raw( $object->description ?? '' );
 		}
 
 		return $excerpt;
@@ -768,8 +767,8 @@ class Generate_Description extends Generate {
 	 * Returns additions for "Title on Site Title".
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.0 : 1. Now no longer listens to options.
-	 *                2. Now only works for the front and blog pages.
+	 * @since 3.2.0 1. Now no longer listens to options.
+	 *              2. Now only works for the front and blog pages.
 	 * @since 3.2.2 Now works for homepages from external requests.
 	 * @since 4.2.0 No longer adds "on Blogname".
 	 * @see $this->get_generated_description()
@@ -798,8 +797,8 @@ class Generate_Description extends Generate {
 	 *
 	 * @since 1.0.0
 	 * @since 2.8.2 Added 4th parameter for escaping.
-	 * @since 3.1.0 : 1. No longer returns anything for terms.
-	 *                2. Now strips plausible embeds URLs.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
 	 *
 	 * @param string $excerpt    The Excerpt.
@@ -866,33 +865,33 @@ class Generate_Description extends Generate {
 	 * Warning: Returns with entities encoded. The output is not safe for printing.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 : 1. Now uses smarter trimming.
-	 *                2. Deprecated 2nd parameter.
-	 *                3. Now has unicode support for sentence closing.
-	 *                4. Now strips last three words when preceded by a sentence closing separator.
-	 *                5. Now always leads with (inviting) dots, even if the excerpt is shorter than $max_char_length.
-	 * @since 4.0.0 : 1. Now stops parsing earlier on failure.
-	 *                2. Now performs faster queries.
-	 *                3. Now maintains last sentence with closing punctuations.
-	 * @since 4.0.5 : 1. Now decodes the excerpt input, improving accuracy, and so that HTML entities at
-	 *                   the end won't be transformed into gibberish.
-	 * @since 4.1.0 : 1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
-	 *                2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11).
-	 *                   Mind you, this method probably boots PCRE and wptexturize; so, it'll be slower than what we noted--it's
-	 *                   overhead that otherwise WP, the theme, or other plugin would cause anyway. So, deduct that.
-	 *                3. Now recognizes connector and final punctuations for preliminary sentence bounding.
-	 *                4. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes,
-	 *                   and marks used in some latin languages like ¡¿.
-	 *                5. Is now able to always strip leading punctuation.
-	 *                6. It will now strip leading colon characters.
-	 *                7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
-	 *                8. Now returns encoded entities once more. So that the return value can be treated the same as anything else
-	 *                   revolving around descriptions--preventing double transcoding like `&amp;amp; > &amp; > &` instead of `&amp;`.
-	 * @since 4.1.5 : 1. The second parameter now accepts values again. From "current description length" to minimum accepted char length.
-	 *                2. Can now return an empty string when the input string doesn't satisfy the minimum character length.
-	 *                3. The third parameter now defaults to 4096, so no longer unexpected results are created.
-	 *                4. Resolved some backtracking issues.
-	 *                5. Resolved an issue where a character followed by punctuation would cause the match to fail.
+	 * @since 3.1.0 1. Now uses smarter trimming.
+	 *              2. Deprecated 2nd parameter.
+	 *              3. Now has unicode support for sentence closing.
+	 *              4. Now strips last three words when preceded by a sentence closing separator.
+	 *              5. Now always leads with (inviting) dots, even if the excerpt is shorter than $max_char_length.
+	 * @since 4.0.0 1. Now stops parsing earlier on failure.
+	 *              2. Now performs faster queries.
+	 *              3. Now maintains last sentence with closing punctuations.
+	 * @since 4.0.5 1. Now decodes the excerpt input, improving accuracy, and so that HTML entities at
+	 *                 the end won't be transformed into gibberish.
+	 * @since 4.1.0 1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
+	 *              2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11).
+	 *                 Mind you, this method probably boots PCRE and wptexturize; so, it'll be slower than what we noted--it's
+	 *                 overhead that otherwise WP, the theme, or other plugin would cause anyway. So, deduct that.
+	 *              3. Now recognizes connector and final punctuations for preliminary sentence bounding.
+	 *              4. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes,
+	 *                 and marks used in some latin languages like ¡¿.
+	 *              5. Is now able to always strip leading punctuation.
+	 *              6. It will now strip leading colon characters.
+	 *              7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
+	 *              8. Now returns encoded entities once more. So that the return value can be treated the same as anything else
+	 *                 revolving around descriptions--preventing double transcoding like `&amp;amp; > &amp; > &` instead of `&amp;`.
+	 * @since 4.1.5 1. The second parameter now accepts values again. From "current description length" to minimum accepted char length.
+	 *              2. Can now return an empty string when the input string doesn't satisfy the minimum character length.
+	 *              3. The third parameter now defaults to 4096, so no longer unexpected results are created.
+	 *              4. Resolved some backtracking issues.
+	 *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
 	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *

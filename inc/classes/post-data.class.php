@@ -550,8 +550,8 @@ class Post_Data extends Detect {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.4.3
-	 * @since 2.9.3 : 1. Removed object caching.
-	 *              : 2. It now uses WP_Query, instead of wpdb.
+	 * @since 2.9.3 1. Removed object caching.
+	 *              2. It now uses WP_Query, instead of wpdb.
 	 *
 	 * @return int Latest Post ID.
 	 */

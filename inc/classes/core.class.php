@@ -422,8 +422,8 @@ class Core {
 	 * Returns timestamp format based on timestamp settings.
 	 *
 	 * @since 3.0.0
-	 * @since 4.1.4: 1. Added options-override parameter.
-	 *               1. Added return value filter.
+	 * @since 4.1.4 1. Added options-override parameter.
+	 *              2. Added return value filter.
 	 * @link https://www.w3.org/TR/NOTE-datetime
 	 *
 	 * @param null|bool $override_get_time Whether to override the $get_time from option value.

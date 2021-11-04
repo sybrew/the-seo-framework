@@ -308,8 +308,8 @@ class Cache extends Site_Options {
 	 *
 	 * @since 2.3.3
 	 * @since 2.6.0 Refactored.
-	 * @since 2.9.1 : 1. Added early singular type detection.
-	 *                2. Moved generation into another method (v4.1.4: removed method).
+	 * @since 2.9.1 1. Added early singular type detection.
+	 *              2. Moved generation into another method (v4.1.4: removed method).
 	 * @since 3.1.1 The first parameter is now optional.
 	 * @since 4.1.4 No longer generates a cache key when no `$type` is supplied.
 	 * @TODO since we only support by type, it'd be best to rework this into something simple.

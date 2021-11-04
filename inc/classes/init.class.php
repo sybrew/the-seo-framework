@@ -522,8 +522,8 @@ class Init extends Query {
 	 * Outputs all meta tags for the current query.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.0 : 1. Now invokes two actions before and after output.
-	 *                2. No longer rectifies timezones.
+	 * @since 4.2.0 1. Now invokes two actions before and after output.
+	 *              2. No longer rectifies timezones.
 	 */
 	public function do_meta_output() {
 
@@ -622,11 +622,11 @@ class Init extends Query {
 	 * Redirects singular page to an alternate URL.
 	 *
 	 * @since 2.9.0
-	 * @since 3.1.0 : 1. Now no longer redirects on preview.
-	 *                2. Now listens to post type settings.
-	 * @since 4.0.0 : 1. No longer tries to redirect on "search".
-	 *                2. Added term redirect support.
-	 *                3. No longer redirects on Customizer.
+	 * @since 3.1.0 1. Now no longer redirects on preview.
+	 *              2. Now listens to post type settings.
+	 * @since 4.0.0 1. No longer tries to redirect on "search".
+	 *              2. Added term redirect support.
+	 *              3. No longer redirects on Customizer.
 	 * @access private
 	 *
 	 * @return void early on non-singular pages.
@@ -741,10 +741,10 @@ class Init extends Query {
 	 *
 	 * @since 2.2.9
 	 * @since 2.9.3 Casts $public to string for check.
-	 * @since 4.0.5 : 1. The output is now filterable.
-	 *                2. Improved invalid location test.
-	 *                3. No longer shortcircuits on non-public sites.
-	 *                4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
+	 * @since 4.0.5 1. The output is now filterable.
+	 *              2. Improved invalid location test.
+	 *              3. No longer shortcircuits on non-public sites.
+	 *              4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
 	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
 	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
 	 * @since 4.1.4 Removed object caching support.

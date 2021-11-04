@@ -366,8 +366,8 @@ class Admin_Init extends Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.9.2 Added user-friendly exception handling.
-	 * @since 2.9.3 : 1. Query arguments work again (regression 2.9.2).
-	 *                2. Now only accepts http and https protocols.
+	 * @since 2.9.3 1. Query arguments work again (regression 2.9.2).
+	 *              2. Now only accepts http and https protocols.
 	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
 	 *
 	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.

@@ -145,8 +145,8 @@ class Detect extends Render {
 	 * Note: Class check is 3 times as slow as defined check. Function check is 2 times as slow.
 	 *
 	 * @since 1.3.0
-	 * @since 2.8.0 : 1. Can now check for globals.
-	 *                2. Switched detection order from FAST to SLOW.
+	 * @since 2.8.0 1. Can now check for globals.
+	 *              2. Switched detection order from FAST to SLOW.
 	 * @since 4.0.6 Can no longer autoload classes.
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
@@ -212,9 +212,9 @@ class Detect extends Render {
 	 * All parameters must match and return true.
 	 *
 	 * @since 2.5.2
-	 * @since 4.0.6 : 1. Can now check for globals.
-	 *                2. Switched detection order from FAST to SLOW.
-	 *                3. Can no longer autoload classes.
+	 * @since 4.0.6 1. Can now check for globals.
+	 *              2. Switched detection order from FAST to SLOW.
+	 *              3. Can no longer autoload classes.
 	 * This method is only used by can_i_use(), and is only effective in the Ultimate Member compat file...
 	 * @TODO deprecate?
 	 *
@@ -1158,8 +1158,8 @@ class Detect extends Render {
 	 * Detects if we're on a Gutenberg page.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.0 : 1. Now detects the WP 5.0 block editor.
-	 *                2. Method is now public.
+	 * @since 3.2.0 1. Now detects the WP 5.0 block editor.
+	 *              2. Method is now public.
 	 *
 	 * @return bool
 	 */

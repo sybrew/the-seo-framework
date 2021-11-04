@@ -814,9 +814,9 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0 : 1. Now checks for 0000 timestamps.
-	 *                2. Now uses timestamp formats.
-	 *                3. Now uses GMT time.
+	 * @since 3.0.0 1. Now checks for 0000 timestamps.
+	 *              2. Now uses timestamp formats.
+	 *              3. Now uses GMT time.
 	 *
 	 * @return string The Article Publishing Time meta tag.
 	 */
@@ -858,8 +858,8 @@ class Render extends Admin_Init {
 	 * @since 2.2.2
 	 * @since 2.7.0 Listens to $this->get_the_real_ID() instead of WordPress Core ID determination.
 	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0 : 1. Now checks for 0000 timestamps.
-	 *                2. Now uses timestamp formats.
+	 * @since 3.0.0 1. Now checks for 0000 timestamps.
+	 *              2. Now uses timestamp formats.
 	 * @since 4.1.4 No longer renders the Open Graph Updated Time meta tag.
 	 * @see og_updated_time()
 	 *
@@ -1351,8 +1351,8 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
-	 * @since 3.1.4 : 1. Added filter.
-	 *                2. Reintroduced cache because of filter.
+	 * @since 3.1.4 1. Added filter.
+	 *              2. Reintroduced cache because of filter.
 	 * @TODO add facebook validation? -> Not all services that use OG tags are called Facebook.
 	 *       And not all of those services require the same standards as Facebook.
 	 *
@@ -1377,8 +1377,8 @@ class Render extends Admin_Init {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
-	 * @since 3.1.4 : 1. Added filter.
-	 *                2. Reintroduced cache because of filter.
+	 * @since 3.1.4 1. Added filter.
+	 *              2. Reintroduced cache because of filter.
 	 *
 	 * @return bool
 	 */

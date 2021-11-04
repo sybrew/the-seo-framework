@@ -109,8 +109,8 @@ The SEO Framework works on many things without notifying you, because the best s
 
 **The SEO Framework supports:**
 
-* PHP 5.6 and higher.
-* WordPress 5.1 and higher.
+* PHP 7.2 and higher.
+* WordPress 5.5 and higher.
 * Internationalization through WordPress.org.
 * Unicode (UTF-8) character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
 * Right to Left (RTL) languages (Arabic, Hebrew, Farsi, et al.), through its interface and metatag generation.
@@ -280,6 +280,8 @@ TODO https://github.com/sybrew/the-seo-framework/issues/185
 
 TODO allow custom robots generators?
 
+TODO add "padlock" to the counters on the homepage "page edit screen" if it's locked via the homepage SEO settings?
+
 = 4.2.0 = // I added the real header at the end.
 
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
@@ -333,15 +335,6 @@ TODO add maxlength to title/description input fields?
 	-> Also enforce it in the back-end?
 	-> This will prevent overloading the database with large blobs. However, users can do this anywhere in WP, regardless.
 
-TODO add "padlock" to the counters on the homepage "page edit screen" if it's locked via the homepage SEO settings?
-
-TODO process changelog https://github.com/sybrew/the-seo-framework/compare/64b64e28e534304ee7e1bea65b25e8ec46241f85...master
-
-
-TODO /(@since [0-9\.]+\s):\s/ -> $1\s
-
-TODO in get_archival_description_excerpt(), assert object filters in non-query??
-
 TODO hide canonical URL when noindex in PTA settings?
 TODO disable selection/display of PTA when disabled.
 
@@ -355,6 +348,7 @@ TODO PTA robots: default noindex when set for post type or when no posts are fou
 
 TODO FIXME: Newly registered post type archives do not get their defaults populated in the back-end, but are seemingly working on the front-end??
 	-> Test with strings, just to be sure.
+TODO list remainder of deprecated methods...
 
 TODO sequential unclosed `<` still "render" in TSF-js, but will not output on the front-end after 'proper' escaping.
 	-> We should keep those displayed on the front-end...
@@ -376,6 +370,17 @@ TODO sequential unclosed `<` still "render" in TSF-js, but will not output on th
 * **Added:**
 	* You can now set a custom Site Title at "SEO Settings > Title Settings > Additions."
 		* This new option only affects titles outputted by The SEO Framework.
+	* You can now manage post type archives at "SEO Settings > Post Type Archive Settings".
+		* You can set all metadata for these as you can with terms:
+			1. Meta Title (and removal of blog name);
+			1. Meta Description;
+			1. Open Graph Title/Description;
+			1. Twitter Title/Description;
+			1. Twitter Title/Description;
+			1. Social image URL (or file upload);
+			1. Canonical URL.
+			1. Qubit robots settings: indexing, link following, and archiving.
+			1. Redirect URL.
 * **Changed:**
 	* The styled optimized sitemap now has its content centered, and is fully responsive.
 	* TSF no longer outputs metatags on Ultimate Memmber's user-pages. Now, it lets that plugin take over fully.

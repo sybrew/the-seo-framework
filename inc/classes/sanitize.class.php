@@ -139,8 +139,8 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Emptied and is no longer enqueued.
-	 * @since 4.1.0 : 1. Added taxonomical robots options backward compat.
-	 *                2. Added the first two parameters.
+	 * @since 4.1.0 1. Added taxonomical robots options backward compat.
+	 *              2. Added the first two parameters.
 	 * @access private
 	 *
 	 * @param mixed $new_value The new, unserialized, and filtered option value.
@@ -1038,8 +1038,8 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes input excerpt.
 	 *
 	 * @since 2.8.0
-	 * @since 2.8.2 : 1. Added $allow_shortcodes parameter.
-	 *                2. Added $escape parameter.
+	 * @since 2.8.2 1. Added $allow_shortcodes parameter.
+	 *              2. Added $escape parameter.
 	 * @since 3.2.4 Now selectively clears tags.
 	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
 	 * @see `$this->strip_tags_cs()`
@@ -1505,10 +1505,10 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 3.0.0 : 1. Now removes '@' from the URL path.
-	 *                2. Now removes spaces and tabs.
-	 * @since 4.0.0 : 1. Now returns empty on lone `@` entries.
-	 *                2. Now returns empty when using only spaces and tabs.
+	 * @since 3.0.0 1. Now removes '@' from the URL path.
+	 *              2. Now removes spaces and tabs.
+	 * @since 4.0.0 1. Now returns empty on lone `@` entries.
+	 *              2. Now returns empty when using only spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
@@ -1540,8 +1540,8 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
-	 * @since 4.0.0 : 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
-	 *                2. Now returns empty when using only spaces and tabs.
+	 * @since 4.0.0 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+	 *              2. Now returns empty when using only spaces and tabs.
 	 *
 	 * @param string $new_value String with potentially wrong Facebook profile URL.
 	 * @return string String with 'correct' Facebook profile URL.
@@ -1627,11 +1627,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.4
 	 * @since 2.8.0 Method is now public.
 	 * @since 3.0.6 Noqueries is now disabled by default.
-	 * @since 4.0.0 : 1. Removed rudimentary relative URL testing.
-	 *                2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
-	 *                3. Now allows all protocols. Enjoy!
-	 *                4. Now no longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`)
-	 *                   when filter `the_seo_framework_allow_external_redirect` is set to false.
+	 * @since 4.0.0 1. Removed rudimentary relative URL testing.
+	 *              2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
+	 *              3. Now allows all protocols. Enjoy!
+	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`)
+	 *                 when filter `the_seo_framework_allow_external_redirect` is set to false.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL

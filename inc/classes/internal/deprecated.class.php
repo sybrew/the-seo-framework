@@ -239,20 +239,20 @@ final class Deprecated {
 	 * @since 2.2.4 Added robots SEO settings check.
 	 * @since 2.2.8 Added check for empty archives.
 	 * @since 2.8.0 Added check for protected/private posts.
-	 * @since 3.0.0 : 1. Removed noodp.
-	 *                2. Improved efficiency by grouping if statements.
-	 * @since 3.1.0 : 1. Simplified statements, often (not always) speeding things up.
-	 *                2. Now checks for wc_shop and blog types for pagination.
-	 *                3. Removed noydir.
-	 * @since 4.0.0 : 1. Now tests for qubit metadata.
-	 *                2. Added custom query support.
-	 *                3. Added two parameters.
-	 * @since 4.0.2 : 1. Added new copyright directive tags.
-	 *                2. Now strictly parses the validity of robots directives via a boolean check.
-	 * @since 4.0.3 : 1. Changed `max_snippet_length` to `max_snippet`
-	 *                2. Changed the copyright directive's spacer from `=` to `:`.
-	 * @since 4.0.5 : 1. Removed copyright directive bug workaround. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
-	 *                2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
+	 * @since 3.0.0 1. Removed noodp.
+	 *              2. Improved efficiency by grouping if statements.
+	 * @since 3.1.0 1. Simplified statements, often (not always) speeding things up.
+	 *              2. Now checks for wc_shop and blog types for pagination.
+	 *              3. Removed noydir.
+	 * @since 4.0.0 1. Now tests for qubit metadata.
+	 *              2. Added custom query support.
+	 *              3. Added two parameters.
+	 * @since 4.0.2 1. Added new copyright directive tags.
+	 *              2. Now strictly parses the validity of robots directives via a boolean check.
+	 * @since 4.0.3 1. Changed `max_snippet_length` to `max_snippet`
+	 *              2. Changed the copyright directive's spacer from `=` to `:`.
+	 * @since 4.0.5 1. Removed copyright directive bug workaround. <https://kb.theseoframework.com/kb/why-is-max-image-preview-none-purged/>
+	 *              2. Now sets noindex and nofollow when queries are exploited (requires option enabled).
 	 * @since 4.1.4 Deprecated silently. Use generate_robots_meta() instead.
 	 * @since 4.2.0 1. Hard deprecation.
 	 *              2. Now supports the `$args['pta']` index. (inferred)
@@ -284,8 +284,8 @@ final class Deprecated {
 	 * @since 2.9.2 Now also checks for permalinks.
 	 * @since 2.9.3 Now also checks for sitemap_robots option.
 	 * @since 3.1.0 Removed Jetpack's sitemap check -- it's no longer valid.
-	 * @since 4.0.0 : 1. Now uses has_robots_txt()
-	 *              : 2. Now uses the get_robots_txt_url() to determine validity.
+	 * @since 4.0.0 1. Now uses has_robots_txt()
+	 *              2. Now uses the get_robots_txt_url() to determine validity.
 	 * @since 4.1.4 Soft deprecated.
 	 * @since 4.2.0 Hard deprecation.
 	 * @deprecated
@@ -572,8 +572,8 @@ final class Deprecated {
 	 * Determines if the page is the WooCommerce plugin Product page.
 	 *
 	 * @since 2.5.2
-	 * @since 4.0.0 : 1. Added admin support.
-	 *                2. Added parameter for the Post ID or post to test.
+	 * @since 4.0.0 1. Added admin support.
+	 *              2. Added parameter for the Post ID or post to test.
 	 * @since 4.0.5 Soft deprecated.
 	 * @since 4.1.4 1. Another silent deprecation. Use `is_product()` instead.
 	 *              2. Removed output memoization.
@@ -1072,9 +1072,9 @@ final class Deprecated {
 	 * Outputs character counter wrap for both JavaScript and no-Javascript.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 : 1. Added an "what if you click" onhover-title.
-	 *                2. Removed second parameter's usage. For passing the expected string.
-	 *                3. The whole output is now hidden from no-js.
+	 * @since 3.1.0 1. Added an "what if you click" onhover-title.
+	 *              2. Removed second parameter's usage. For passing the expected string.
+	 *              3. The whole output is now hidden from no-js.
 	 * @since 4.1.0 No longer marks up the counter with the `description` HTML class.
 	 * @since 4.1.4 Deprecated silently. Alternative marked for deletion.
 	 * @since 4.2.0 Hard deprecation.
@@ -1244,8 +1244,8 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.6
-		 * @since 3.1.0 : 1. Now defaults to `null`
-		 *                2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
+		 * @since 3.1.0 1. Now defaults to `null`
+		 *              2. Now, when a boolean (either true or false) is defined, it'll short-circuit this function.
 		 * @param boolean|null $detected Whether a builder should be detected.
 		 * @param int          $post_id The current Post ID.
 		 * @param array        $meta The current post meta.
@@ -1601,10 +1601,10 @@ final class Deprecated {
 	 *
 	 * @since 2.2.4
 	 * @since 2.8.2 No longer decodes entities on request.
-	 * @since 3.1.0 : 1. Now returns null if the option doesn't exist, instead of -1.
-	 *                2. Is now influenced by filters.
-	 *                3. Now also strips slashes when using cache.
-	 *                4. The second parameter is deprecated.
+	 * @since 3.1.0 1. Now returns null if the option doesn't exist, instead of -1.
+	 *              2. Is now influenced by filters.
+	 *              3. Now also strips slashes when using cache.
+	 *              4. The second parameter is deprecated.
 	 * @since 4.2.0 Deprecated
 	 * @deprecated
 	 * @uses $this->get_default_site_options()

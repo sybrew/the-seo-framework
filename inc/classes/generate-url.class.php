@@ -564,9 +564,9 @@ class Generate_Url extends Generate_Title {
 	 * Automatically adds pagination if the input matches the query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 : 1. The first parameter now defaults to null.
-	 *                2. The search term is now matched with the input query if not set,
-	 *                   instead of it being empty.
+	 * @since 3.1.0 1. The first parameter now defaults to null.
+	 *              2. The search term is now matched with the input query if not set,
+	 *                 instead of it being empty.
 	 *
 	 * @param string $query The search query. Mustn't be escaped.
 	 *                      When left empty, the current query will be used.
@@ -1010,8 +1010,8 @@ class Generate_Url extends Generate_Title {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.7.0
-	 * @since 2.9.2 : 1. Now considers port too.
-	 *                2. Now uses get_home_url(), rather than get_option('home').
+	 * @since 2.9.2 1. Now considers port too.
+	 *              2. Now uses get_home_url(), rather than get_option('home').
 	 *
 	 * @return string The home URL host.
 	 */

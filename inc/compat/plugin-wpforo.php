@@ -13,8 +13,8 @@ namespace The_SEO_Framework;
  * Initializes wpForo page fixes.
  *
  * @since 2.9.2
- * @since 3.1.2 : 1. Now disables HTML output when wpForo SEO is enabled.
- *                2. Now disables title override when wpForo Title SEO is enabled.
+ * @since 3.1.2 1. Now disables HTML output when wpForo SEO is enabled.
+ *              2. Now disables title override when wpForo Title SEO is enabled.
  */
 function _wpforo_fix_page() {
 

@@ -207,8 +207,8 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 : 1. The first parameter now expects an array.
-	 *                2. Now tries to get the homepage social titles.
+	 * @since 3.1.0 1. The first parameter now expects an array.
+	 *              2. Now tries to get the homepage social titles.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -362,8 +362,8 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 : 1. The first parameter now expects an array.
-	 *                2. Now tries to get the homepage social title.
+	 * @since 3.1.0 1. The first parameter now expects an array.
+	 *              2. Now tries to get the homepage social title.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @uses $this->get_generated_open_graph_title()
 	 *
@@ -1470,8 +1470,8 @@ class Generate_Title extends Generate_Description {
 	 * Determines whether to add or remove title branding additions.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 : 1. Added filter.
-	 *                2. Added strict taxonomical check.
+	 * @since 3.1.2 1. Added filter.
+	 *              2. Added strict taxonomical check.
 	 * @since 3.2.2 Now differentiates from query and parameter input.
 	 * @since 4.1.0 Added the second $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
