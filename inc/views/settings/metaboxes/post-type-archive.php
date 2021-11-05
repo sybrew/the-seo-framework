@@ -309,7 +309,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_title'] ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'tw_title', $post_type )); ?>" autocomplete=off data-tsf-social-group=<?php echo esc_attr( "pta_social_settings_{$post_type}" ); ?> data-tsf-social-type=twTitle />
+			<input type="text" name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'tw_title', $post_type ) ); ?>" autocomplete=off data-tsf-social-group=<?php echo esc_attr( "pta_social_settings_{$post_type}" ); ?> data-tsf-social-type=twTitle />
 		</p>
 
 		<p>

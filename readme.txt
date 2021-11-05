@@ -300,19 +300,14 @@ TODO add debouncer in tsf.js?
 
 TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
 
-TODO further optimize get_word_count(), array flips and whatnot...
-
 TODO translation POT file.
 
 TODO _suggest_temp... :)
 
 TODO deJquery-fy the floating titles...
-TODO FIXME: Newly registered post type archives do not get their defaults populated in the back-end, but are seemingly working on the front-end??
-	-> Test with strings, just to be sure.
-
-TODO rename folder 'admin' to 'settings'...
-	-> 'seo-settings-wrap' -> 'wrap'
-	-> 'seo-settings-columns' -> 'columns' (never truly utilized)
+TODO use constant "The_SEO_Framework\NOT_ESCAPED" to clearly signify we DO NOT ESCAPE when calling a method?
+	-> $clean = used 3x (NOT_CLEANED?)
+	-> $escape = used 19x
 
 *Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
@@ -393,6 +388,8 @@ TODO rename folder 'admin' to 'settings'...
 		* The Title Settings their examples now better reflect real-world usage in certain corner cases.
 		* The Pixel Counter now moves instantly as you type, instead of easing in, making it more reactive yet less distractive.
 		* Default titles are now pre-texturized before they are displayed in the title-editor, making for more accurate front-end output predictions.
+	* **SEO Bar:**
+		* The description word counter now recognizes connector-dashes, connector-punctuation, and closing quotes. This means that `we're` is seen as a single word, instead of two.
 	* **Other:**
 		* Shortened Optimized Sitemap's stylesheet's trimmed URL length from 96 to 93 characters, with the maximum decreased from 99 to 95 characters.
 		* We did Elementor's developer's job by marking the post types `elementor_library` and `e-landing-page` as "not-publicly-queryable" -- but only for The SEO Framework.
@@ -550,6 +547,7 @@ TODO rename folder 'admin' to 'settings'...
 				1. Added memoization.
 				1. When the `$id` isn't set, the URL won't get tested for pagination issues.
 			* `get_singular_custom_canonical_url()`, the first parameter is now optional.
+			* `get_word_count()` now supports detection of connector-dashes, connector-punctuation, and closing quotes, and recognizes those as whole words.
 			* `has_custom_canonical_url()`
 				1. Now also detects canonical URLs for taxonomies.
 				1. Now also detects canonical URLs for post type archives.

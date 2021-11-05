@@ -515,14 +515,16 @@ class Core {
 	 * @since 4.0.0 1. Now expects PCRE UTF-8 encoding support.
 	 *              2. Moved input-parameter alterting filters outside of this function.
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
+	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
+	 *              and recognizes those as whole words.
 	 *
 	 * @param string $string Required. The string to count words in.
-	 * @param int    $dupe_count Minimum amount of words to encounter in the string.
-	 *                      Set to 0 to count all words longer than $short_length.
-	 * @param int    $dupe_short Minimum amount of words to encounter in the string that fall under the
-	 *                           $short_length. Set to 0 to consider all words with $amount.
-	 * @param int    $short_length The maximum string length of a word to pass for $dupe_short
-	 *                             instead of $count. Set to 0 to ignore $count, and use $dupe_short only.
+	 * @param int    $dupe_count       Minimum amount of words to encounter in the string.
+	 *                                 Set to 0 to count all words longer than $short_length.
+	 * @param int    $dupe_short       Minimum amount of words to encounter in the string that fall under the
+	 *                                 $short_length. Set to 0 to consider all words with $amount.
+	 * @param int    $short_length     The maximum string length of a word to pass for $dupe_short
+	 *                                 instead of $count. Set to 0 to ignore $count, and use $dupe_short only.
 	 * @return array Containing arrays of words with their count.
 	 */
 	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
@@ -533,45 +535,45 @@ class Core {
 
 		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
 
-		// TODO does this test well for "we're"? We haven't had any reports, though.
 		$word_list = preg_split(
-			'/[^\p{L}\p{M}\p{N}\p{Pc}\p{Cc}]+/mu',
+			'/[^\p{Cc}\p{L}\p{N}\p{Pc}\p{Pd}\p{Pf}\'"]+/mu',
 			$use_mb ? mb_strtolower( $string ) : strtolower( $string ),
 			-1,
 			PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
 		);
 
-		if ( \count( $word_list ) ) :
-			$words = [];
+		if ( ! \count( $word_list ) ) goto end;
 
-			foreach ( $word_list as [ $_word, $_offset ] )
-				$words[ $_offset ] = $_word;
+		$words = [];
 
-			// We're going to fetch words based on position, and then flip it to become the key.
-			$word_keys = array_flip( array_reverse( $words, true ) );
+		foreach ( $word_list as [ $_word, $_position ] )
+			$words[ $_position ] = $_word;
 
-			foreach ( array_count_values( $words ) as $word => $count ) {
-				if ( ( $use_mb ? mb_strlen( $word ) : \strlen( $word ) ) <= $short_length ) {
-					$run = $count >= $dupe_short;
-				} else {
-					$run = $count >= $dupe_count;
-				}
+		// We're going to fetch words based on position, and then flip it to become the key.
+		$word_keys = array_flip( array_reverse( $words, true ) );
 
-				if ( $run ) {
-					//! Don't use mb_* here. preg_split's offset is in bytes, NOT multibytes.
-					$args = [
-						'pos' => $word_keys[ $word ],
-						'len' => \strlen( $word ),
-					];
-
-					$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
-
-					// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You need more PHP7.
-					$words_too_many[] = [ $first_encountered_word => $count ];
-				}
+		foreach ( array_count_values( $words ) as $word => $count ) {
+			if ( ( $use_mb ? mb_strlen( $word ) : \strlen( $word ) ) <= $short_length ) {
+				$assert = $count >= $dupe_short;
+			} else {
+				$assert = $count >= $dupe_count;
 			}
-		endif;
 
+			if ( $assert ) {
+				//! Don't use mb_* here. preg_split's offset is in bytes, NOT multibytes.
+				$args = [
+					'pos' => $word_keys[ $word ],
+					'len' => \strlen( $word ),
+				];
+
+				$first_encountered_word = substr( $string, $args['pos'], $args['len'] );
+
+				// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You need more PHP7.
+				$words_too_many[] = [ $first_encountered_word => $count ];
+			}
+		}
+
+		end:;
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
 		return $words_too_many ?? [];
 	}

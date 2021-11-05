@@ -1001,10 +1001,10 @@ class Generate_Url extends Generate_Title {
 		// See if-statements below.
 		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) goto end;
 
-		$canonical_url = umemo( __METHOD__ . '/canonical' )
-			?? umemo(
-				__METHOD__ . '/canonical',
-				$this->remove_pagination_from_url( $this->get_current_canonical_url() )
+		$canonical_url = memo( null, 'canonical' )
+			?? memo(
+				$this->remove_pagination_from_url( $this->get_current_canonical_url() ),
+				'canonical'
 			);
 
 		// If this page is not the last, create a next-URL.

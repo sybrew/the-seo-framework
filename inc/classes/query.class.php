@@ -1272,7 +1272,6 @@ class Query extends Core {
 			}
 		}
 
-		// Prepend unique ID to caller to prevent conflicts.
-		return umemo( __METHOD__ . "/$caller", $value_to_set, ...$args );
+		return umemo( __METHOD__, $value_to_set, $caller, ...$args );
 	}
 }
