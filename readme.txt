@@ -306,19 +306,13 @@ TODO translation POT file.
 
 TODO _suggest_temp... :)
 
-TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );` in `get_generate_archive_title_from_query()`, which will probably cause issues with "The Events Calendar"'s broken query.
-	-> Should we add a compat file auto-excluding their non-WP coherent "post type"?
-
 TODO deJquery-fy the floating titles...
-TODO fix TODO in is_query_adjustment_blocked..
-TODO PTA robots: default noindex when set for post type or when no posts are found for the type.
-	* We already created method `has_posts_in_post_type_archive()` -> NOT DOCUMENTED (yet)!
-
 TODO FIXME: Newly registered post type archives do not get their defaults populated in the back-end, but are seemingly working on the front-end??
 	-> Test with strings, just to be sure.
-TODO list remainder of deprecated methods...
 
-TODO nextpage for search doesn't work!?
+TODO rename folder 'admin' to 'settings'...
+	-> 'seo-settings-wrap' -> 'wrap'
+	-> 'seo-settings-columns' -> 'columns' (never truly utilized)
 
 *Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
@@ -519,6 +513,7 @@ TODO nextpage for search doesn't work!?
 			* `get_all_post_type_archive_meta_defaults()` returns an array of all public post type archive option defaults.
 			* `get_post_type_archive_meta_defaults()` returns an array of default post type archive meta.
 			* `get_raw_home_canonical_url()`, returns the canonical home URL.
+			* `has_posts_in_post_type_archive()`, tests if the post type archive of said post type contains public posts.
 		* **Methods changed:**
 			* `add_url_pagination()` now properly adds pagination to search links.
 			* `remove_pagination_from_url()` Now properly removes pagination from search links.
@@ -611,7 +606,9 @@ TODO nextpage for search doesn't work!?
 				* `get_redirect_url()`
 		* **Methods deprecated:**
 			* `append_php_query()`, use `tsf()->append_url_query()` instead.
+			* `get_legacy_header_filters_output()`, with no alternative available.
 			* `get_html_output()`, with no alternative available.
+			* `proportionate_dimensions()`, with no alternative available.
 			* `is_blog_page()`, use `tsf()->is_home_as_page()` instead.
 			* `is_blog_page_by_id()`, use `tsf()->is_home()` instead.
 			* `is_front_page_by_id()`, use `tsf()->is_real_front_page_by_id()` instead.

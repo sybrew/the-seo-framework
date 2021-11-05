@@ -1140,9 +1140,9 @@ class Init extends Query {
 	public function _alter_oembed_response_data( $data = [], $post = null, $width = 0, $height = 0 ) {
 
 		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_use_og_title', false ) ) {
+		if ( $this->get_option( 'oembed_use_og_title', false ) )
 			$data['title'] = $this->get_open_graph_title( [ 'id' => $post->ID ] ) ?: $data['title'];
-		}
+
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
 			$image_details = current( $this->get_image_details(
@@ -1159,10 +1159,10 @@ class Init extends Query {
 				$data['thumbnail_height'] = $image_details['height'];
 			}
 		}
+
 		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_remove_author', false ) ) {
+		if ( $this->get_option( 'oembed_remove_author', false ) )
 			unset( $data['author_url'], $data['author_name'] );
-		}
 
 		return $data;
 	}

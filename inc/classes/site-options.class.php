@@ -375,9 +375,12 @@ class Site_Options extends Sanitize {
 	 * Return current option array.
 	 * Memoizes the return value, can be bypassed and reset with second parameter.
 	 *
+	 * This method does NOT merge the default post options.
+	 *
 	 * @TODO Should we fall back to default options when one isn't registered (correctly)?
 	 *       See get_term_meta(), which falls back to default term meta.
 	 *       We'd need our fancy in-house array_merge_recursive_distinct() though.
+	 *       BLOCKER: This method always runs BEFORE 'pta' can be filled by other plugins.
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.2 Added $use_current parameter.
@@ -782,6 +785,10 @@ class Site_Options extends Sanitize {
 	/**
 	 * Returns all post type archive meta.
 	 *
+	 * We do not test whether a post type is supported, for it'll conflict with data-fills on the
+	 * SEO settings page. This meta should never get called on the front-end if the post type is
+	 * disabled, anyway, for we never query post types externally, aside from the SEO settings page.
+	 *
 	 * @since 4.2.0
 	 *
 	 * @param string $post_type The post type.
@@ -794,16 +801,6 @@ class Site_Options extends Sanitize {
 		if ( $use_cache && ( $memo = memo( null, $post_type ) ) ) return $memo;
 
 		/**
-		 * This check should not be here, for it'll conflict on data-fills on the SEO settings page.
-		 * This meta should never get called on the front-end if the post type is disabled, anyway,
-		 * for we never query post types externally, aside from the SEO settings page.
-		 */
-		// if ( ! $this->is_post_type_supported( $post_type ) ) {
-		// // Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-		// return $use_cache ? umemo( __METHOD__, [], $post_type ) : [];
-		// }
-
-		/**
 		 * We can't trust the filter to always contain the expected keys.
 		 * However, it may contain more keys than we anticipated. Merge them.
 		 */
@@ -812,13 +809,13 @@ class Site_Options extends Sanitize {
 			$this->get_post_type_archive_meta_defaults( $post_type )
 		);
 
-		// Yes, we abide by the "settings". WordPress never gave us Post Type Archive settings-pages.
+		// Yes, we abide by "settings". WordPress never gave us Post Type Archive settings-pages.
 		if ( $this->is_headless['settings'] ) {
 			$meta = [];
 		} else {
 			// Unlike get_post_meta(), we need not filter here.
 			// See: <https://github.com/sybrew/the-seo-framework/issues/185>
-			$meta = ( $this->get_option( 'pta', $use_cache )[ $post_type ] ?? null ) ?: [];
+			$meta = $this->get_option( [ 'pta', $post_type ], $use_cache ) ?: [];
 		}
 
 		/**

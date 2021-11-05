@@ -115,6 +115,7 @@ final class Settings_Input {
 	 *    string|map $id          The option index or map of indexes therefor, used as field ID.
 	 *    string     $class       The checkbox class.
 	 *    string     $label       The checkbox label description, placed inline of the checkbox.
+	 *    null|mixed $value       The option value. If not set, it'll try to retrieve the value based on $id.
 	 *    string     $description The checkbox additional description, placed underneat.
 	 *    array      $data        The checkbox field data. Sub-items are expected to be escaped if they're not an array.
 	 *    bool       $escape      Whether to enable escaping of the $label and $description.
@@ -129,6 +130,7 @@ final class Settings_Input {
 				'id'          => '',
 				'class'       => '',
 				'label'       => '',
+				'value'       => null,
 				'description' => '',
 				'data'        => [],
 				'escape'      => true,
@@ -145,7 +147,7 @@ final class Settings_Input {
 		$tsf = \tsf();
 
 		$field_id = $field_name = static::get_field_id( $args['id'] );
-		$value    = $tsf->get_option( $args['id'] );
+		$value    = $args['value'] ?? $tsf->get_option( $args['id'] );
 
 		$cb_classes = [];
 

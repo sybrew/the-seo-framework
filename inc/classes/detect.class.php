@@ -52,11 +52,11 @@ class Detect extends Render {
 
 		if ( \is_multisite() ) {
 			// Due to legacy code, active_sitewide_plugins stores them in the keys,
-			// whereas active_plugins stores them in the values.
+			// whereas active_plugins stores them in the values. array_keys() resolves the disparity.
 			$network_plugins = array_keys( \get_site_option( 'active_sitewide_plugins', [] ) );
-			if ( $network_plugins ) {
+
+			if ( $network_plugins )
 				$active_plugins = array_merge( $active_plugins, $network_plugins );
-			}
 		}
 
 		sort( $active_plugins );
@@ -759,7 +759,7 @@ class Detect extends Render {
 	}
 
 	/**
-	 * Tests if the post type archive of said post type has public posts.
+	 * Tests if the post type archive of said post type contains public posts.
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
