@@ -284,6 +284,17 @@ TODO add maxlength to title/description input fields?
 	-> Also enforce it in the back-end?
 	-> This will prevent overloading the database with large blobs. However, users can do this anywhere in WP, regardless.
 	-> 5.0
+TODO add CSS templating colors?
+	-> Also from Core, and their "relative" friends? I don't think WP uses "var" in production?
+	-> This should speed up some stuff, and makes the plugin easier to maintain.
+	-> 5.0
+TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenberg_page()"?
+	-> Users will face issues moving back the metabox.
+		-> This PR will fix that, though... https://github.com/WordPress/gutenberg/pull/25187, eventually.
+	-> 5.0? We need to wait for Gutenberg 11.9 merger into Core... which might be earliest June 2022.
+TODO add debouncer in tsf.js?
+	-> tsf.debounce( () => { }, timeout, key || void 0 );
+	-> 4.3? / 4.2.1?
 
 ==== End punted.
 
@@ -295,30 +306,8 @@ TODO translation POT file.
 
 TODO _suggest_temp... :)
 
-TODO add CSS templating colors?
-	-> Also from Core, and their "relative" friends? I don't think WP uses "var" in production?
-	-> This should speed up some stuff, and makes the plugin easier to maintain.
-
-TODO test title trimming..?
-
-TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenberg_page()"?
-	-> Users will face issues moving back the metabox.
-		-> This PR will fix that, though... https://github.com/WordPress/gutenberg/pull/25187, eventually.
-
-TODO reset the metabox order of the SEO Settings page?
-	-> Should we delete user settings, keeping things tidy?
-		-> toplevel_page_theseoframework-settings / tsf()->seo_settings_page_hook
-		-> see core wp_ajax_meta_box_order()
-			-> update_user_meta( $user->ID, "meta-box-order_$page", $order );
-				-> `delete_user_meta( 0, 'meta-box-order_' . tsf()->seo_settings_page_hook, false, true );`
-		-> Should we annotate this in https://tsf.fyi/kb/a/108?
-	-> We'll reset it again (purging the option completely) in TSF 5.0...
-
 TODO we removed `?: $this->get_tax_type_label( \get_queried_object()->taxonomy ?? '', false );` in `get_generate_archive_title_from_query()`, which will probably cause issues with "The Events Calendar"'s broken query.
 	-> Should we add a compat file auto-excluding their non-WP coherent "post type"?
-
-TODO add debouncer in tsf.js?
-	-> tsf.debounce( () => { }, timeout, key || void 0 );
 
 TODO deJquery-fy the floating titles...
 TODO fix TODO in is_query_adjustment_blocked..
@@ -329,8 +318,7 @@ TODO FIXME: Newly registered post type archives do not get their defaults popula
 	-> Test with strings, just to be sure.
 TODO list remainder of deprecated methods...
 
-TODO sequential unclosed `<` still "render" in TSF-js, but will not output on the front-end after 'proper' escaping.
-	-> We should keep those displayed on the front-end...
+TODO nextpage for search doesn't work!?
 
 *Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
@@ -369,7 +357,7 @@ TODO sequential unclosed `<` still "render" in TSF-js, but will not output on th
 	* **Sitemaps:**
 		* Aside from the optimized sitemap being centered and responsive, it now also fully embraces RTL languages (Arabic, Hebrew, Farsi, et al.).
 	* **Performance:**
-		* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.).
+		* TODO The plugin is now TODO% faster (PHP/JS/CSS/etc.) compared to TSF v4.1.5.1.
 			* JS: 1.5x fewer style-recalc per second.
 		* Images are now fetched faster from the content.
 		* The SEO Bar now parses the title item faster.
@@ -377,7 +365,6 @@ TODO sequential unclosed `<` still "render" in TSF-js, but will not output on th
 		* Open Graph, Twitter, and meta titles are now regenerated faster.
 		* The canonical URL of the current page is now stored in memory, so it won't get fetched multiple times.
 		* The robots-meta is now generated on-demand only, meaning sitemaps generate much faster once more.
-			-> TODO this isn't really faster now...? Further code enhancements did help somewhat.
 		* Large sitemaps are now rendered more quickly by the browser.
 		* Tooltips despawn 25% quicker now.
 		* Tapping the tooltip no longer conjures tooltip animations, potentially saving battery-life.
@@ -435,6 +422,9 @@ TODO sequential unclosed `<` still "render" in TSF-js, but will not output on th
 	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
 	* Addressed an issue where empty post type archives' post types weren't detected, causing TSF to abandon processing.
 	* Addressed an issue where paginated post type archives have had their canonical URL always point to the first page.
+	* Addressed an issue where WordPress's blocking robots-meta was still being outputted on search pages.
+	* Addressed an issue where the first page of paginated search pages received an 'page-type-paged' `rel=next` URL, instead of an 'archive-type-paged' one.
+		* This also resolves an issue where the second page linked back to a non-existing first page via `rel=prev`.
 
 **For developers:**
 
@@ -530,6 +520,8 @@ TODO sequential unclosed `<` still "render" in TSF-js, but will not output on th
 			* `get_post_type_archive_meta_defaults()` returns an array of default post type archive meta.
 			* `get_raw_home_canonical_url()`, returns the canonical home URL.
 		* **Methods changed:**
+			* `add_url_pagination()` now properly adds pagination to search links.
+			* `remove_pagination_from_url()` Now properly removes pagination from search links.
 			* `can_i_use()` rewrote sorting algorithm; now, it's actually good.
 			* `do_meta_output()`
 				1. Now invokes two actions before and after output.

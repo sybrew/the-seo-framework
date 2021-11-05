@@ -1074,12 +1074,14 @@ class Query extends Core {
 	}
 
 	/**
-	 * Fetches the amount of pages on the screen.
-	 * Fetches global $page through Query Var to prevent conflicts.
+	 * Returns the current page number.
+	 * Fetches global `$page` from `WP_Query` to prevent conflicts.
 	 *
 	 * @since 2.6.0
 	 * @since 3.2.4 1. Added overflow protection.
 	 *              2. Now always returns 1 on the admin screens.
+	 * @TODO Add better protection? This can get filled by users when is_paged() is true.
+	 *       WordPress has no protection/test for this, either.
 	 *
 	 * @return int (R>0) $page Always a positive number.
 	 */
@@ -1104,8 +1106,8 @@ class Query extends Core {
 	}
 
 	/**
-	 * Fetches the number of the current page.
-	 * Fetches global $paged through Query var to prevent conflicts.
+	 * Returns the current page number.
+	 * Fetches global `$paged` from `WP_Query` to prevent conflicts.
 	 *
 	 * @since 2.6.0
 	 * @since 3.2.4 1. Added overflow protection.

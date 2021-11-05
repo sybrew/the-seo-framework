@@ -432,8 +432,8 @@ final class SEOBar {
 	 */
 	private function interpret_status_to_symbol( $item ) {
 
-		$symbols = umemo( __METHOD__ . '\use_symbols' )
-				?? umemo( __METHOD__ . '\use_symbols', (bool) \tsf()->get_option( 'seo_bar_symbols' ) );
+		$symbols = umemo( __METHOD__ . '/use_symbols' )
+				?? umemo( __METHOD__ . '/use_symbols', (bool) \tsf()->get_option( 'seo_bar_symbols' ) );
 
 		if ( $symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) :

@@ -1199,9 +1199,8 @@ class Render extends Admin_Init {
 	 */
 	public function paged_urls() {
 
-		$id = $this->get_the_real_ID();
-
 		$paged_urls = $this->get_paged_urls();
+		$id         = $this->get_the_real_ID();
 
 		/**
 		 * @since 2.6.0

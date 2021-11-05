@@ -213,8 +213,18 @@ class Init extends Query {
 		}
 
 		// Add plugin links to the plugin activation page.
-		\add_filter( 'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_action_links', 10, 2 );
-		\add_filter( 'plugin_row_meta', '\The_SEO_Framework\Bridges\PluginTable::_add_plugin_row_meta', 10, 2 );
+		\add_filter(
+			'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
+			[ '\The_SEO_Framework\Bridges\PluginTable', '_add_plugin_action_links' ],
+			10,
+			2
+		);
+		\add_filter(
+			'plugin_row_meta',
+			[ '\The_SEO_Framework\Bridges\PluginTable', '_add_plugin_row_meta' ],
+			10,
+			2
+		);
 
 		/**
 		 * @since 2.9.4
@@ -337,6 +347,8 @@ class Init extends Query {
 		 */
 		if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) ) {
 			\remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' );
+			// Reconsider readding this to "supported" queries only?
+			\remove_filter( 'wp_robots', 'wp_robots_noindex_search' );
 		}
 
 		if ( $this->get_option( 'og_tags' ) ) { // independent from filter at use_og_tags--let that be deciding later.
@@ -472,16 +484,6 @@ class Init extends Query {
 	public function html_output() {
 
 		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
-
-		/**
-		 * We added this filter a second time, for this method is conditional (see two lines above).
-		 * When the query doesn't support TSF's SEO, we want default behavior to ensue.
-		 *
-		 * @since 4.1.4
-		 * @param bool $kill_core_robots Whether you feel sympathy for rocks tricked to think.
-		 */
-		if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) )
-			\remove_filter( 'wp_robots', 'wp_robots_noindex_search' );
 
 		/**
 		 * @since 2.6.0
@@ -1061,6 +1063,7 @@ class Init extends Query {
 	 * @since 4.1.4 1. Renamed from `is_archive_query_adjustment_blocked()`
 	 *              2. Added taxonomy-supported lookups.
 	 *              3. Added WP Rest checks for the Block Editor.
+	 * @since 4.2.0 Improved supported taxonomy loop.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool
@@ -1102,18 +1105,17 @@ class Init extends Query {
 
 		// This primarily affects 'terms'.
 		if ( ! empty( $wp_query->tax_query->queries ) ) :
-			$unsupported = [];
+			$supported = true;
 
-			// TODO use:
-			// $tax_seq = array_column( $wp_query->tax_query->queries, 'taxonomy' );
-			// `return empty( $tax_seq ) || array_intersect( $tax_seq, $this->get_supported_taxonomies() )`?
 			foreach ( $wp_query->tax_query->queries as $_query ) {
-				if ( isset( $_query['taxonomy'] ) )
-					$unsupported[] = ! $this->is_taxonomy_supported( $_query['taxonomy'] );
+				if ( isset( $_query['taxonomy'] ) ) {
+					$supported = $this->is_taxonomy_supported( $_query['taxonomy'] );
+					// If just one tax is supported for this query, greenlight it: all must be blocking.
+					if ( $supported ) break;
+				}
 			}
 
-			// Only block when taxonomies were found and all of them are unsupported.
-			if ( $unsupported && ! \in_array( false, $unsupported, true ) )
+			if ( ! $supported )
 				return true;
 		endif;
 

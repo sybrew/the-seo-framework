@@ -719,6 +719,8 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 3.2.4 1. Now considers query arguments when using pretty permalinks.
 	 *              2. The second and third parameters are now optional.
+	 * @since 4.2.0 Now properly adds pagination to search links.
+	 * @TODO call this add_pagination_to_url()? Or call remove_pagination_from_url() remove_url_pagination()?
 	 *
 	 * @param string $url      The fully qualified URL.
 	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
@@ -736,7 +738,7 @@ class Generate_Url extends Generate_Title {
 			return $url;
 
 		$_use_base = $use_base ?? (
-			$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive()
+			$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
 		);
 
 		if ( $this->pretty_permalinks ) {
@@ -779,6 +781,7 @@ class Generate_Url extends Generate_Title {
 	 *              4. Now supports pretty permalinks with query parameters.
 	 *              5. Is now public.
 	 * @since 4.1.2 Now correctly reappends query when pagination isn't removed.
+	 * @since 4.2.0 Now properly removes pagination from search links.
 	 *
 	 * @param string    $url  The fully qualified URL to remove pagination from.
 	 * @param int|null  $page The page number to remove. If null, it will get number from query.
@@ -798,7 +801,7 @@ class Generate_Url extends Generate_Title {
 				$_url = $url;
 
 				$_use_base = $use_base ?? (
-					$this->is_archive() || $this->is_real_front_page() || $this->is_singular_archive()
+					$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
 				);
 
 				$user_slash = ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
@@ -966,9 +969,8 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_paged_urls() {
 
-		static $prev, $next;
-
-		if ( isset( $prev, $next ) ) goto end;
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		$prev = $next = '';
 
@@ -999,20 +1001,23 @@ class Generate_Url extends Generate_Title {
 		// See if-statements below.
 		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) goto end;
 
-		$canonical_url = memo() ?? memo( $this->remove_pagination_from_url( $this->get_current_canonical_url() ) );
+		$canonical_url = umemo( __METHOD__ . '/canonical' )
+			?? umemo(
+				__METHOD__ . '/canonical',
+				$this->remove_pagination_from_url( $this->get_current_canonical_url() )
+			);
 
 		// If this page is not the last, create a next-URL.
-		if ( $page + 1 <= $_numpages ) {
+		if ( $page + 1 <= $_numpages )
 			$next = $this->add_url_pagination( $canonical_url, $page + 1 );
-		}
+
 		// If this page is not the first, create a prev-URL.
-		if ( $page > 1 ) {
+		if ( $page > 1 )
 			$prev = $this->add_url_pagination( $canonical_url, $page - 1 );
-		}
 
 		end:;
 
-		return compact( 'next', 'prev' );
+		return memo( compact( 'next', 'prev' ) );
 	}
 
 	/**
