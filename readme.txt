@@ -296,18 +296,17 @@ TODO add debouncer in tsf.js?
 	-> tsf.debounce( () => { }, timeout, key || void 0 );
 	-> 4.3? / 4.2.1?
 
-==== End punted.
-
-TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
-
-TODO translation POT file.
-
-TODO _suggest_temp... :)
-
-TODO deJquery-fy the floating titles...
 TODO use constant "The_SEO_Framework\NOT_ESCAPED" to clearly signify we DO NOT ESCAPE when calling a method?
 	-> $clean = used 3x (NOT_CLEANED?)
 	-> $escape = used 19x
+	-> 5.0?
+	-> We should've used stuff like this from the start, making function calls much more readable. Do not use booleans!
+
+==== End punted.
+
+TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
+TODO translation POT file.
+TODO _suggest_temp... :)
 
 *Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
@@ -369,6 +368,7 @@ TODO use constant "The_SEO_Framework\NOT_ESCAPED" to clearly signify we DO NOT E
 			* Only the trained eye can spot a minor delay on low response time monitors, but only whilst holding a repeat-key, which isn't realistic.
 		* Image previews now get loaded only after the "slowest" typist is done typing the image URL.
 		* When no excerpt of the content can be fetched, needless trimming no longer happens.
+		* The floating title prefixes and additions helpers no longer rely on jQuery.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -416,6 +416,7 @@ TODO use constant "The_SEO_Framework\NOT_ESCAPED" to clearly signify we DO NOT E
 	* Addressed an issue where WordPress's blocking robots-meta was still being outputted on search pages.
 	* Addressed an issue where the first page of paginated search pages received an 'page-type-paged' `rel=next` URL, instead of an 'archive-type-paged' one.
 		* This also resolves an issue where the second page linked back to a non-existing first page via `rel=prev`.
+	* The floating title additions and prefixes now more accurately align themselves. For instance, when the padding of the input element is larger at the top than bottom, it'll no longer float too high.
 
 **For developers:**
 
@@ -745,11 +746,20 @@ TODO use constant "The_SEO_Framework\NOT_ESCAPED" to clearly signify we DO NOT E
 			* `sSingleLine`
 			* `sTabs`
 			* `disPatchAtInteractive`
+	* Object `window.tsfDescription`:
+		* **Changed:**
+			* `updateStateOf` now remains intert on a non-change.
+			* `updateStateAll`, added a 3rd parameter, allowing you to exclude updates for certain elements.
+	* Object `window.tsfTitle`:
+		* **Changed:**
+			* `updateStateOf` now remains intert on a non-change.
+			* `updateStateAll`, added a 3rd parameter, allowing you to exclude updates for certain elements.
 	* Object `window.tsfTT`:
 		* **Changed:**
 			* `doTooltip`
 				1. Can now work asynchronously.
 				1. Now returns boolean whether the tooltip was entered successfully.
+				1. Now removes all other tooltips. Only one may prevail!
 			* `getTooltip` now returns a `HTMLElement` instead of a `jQuery.Element`.
 			* `triggerReset` now debounces by 100ms.
 	* Object `window.tsfSocial`:
