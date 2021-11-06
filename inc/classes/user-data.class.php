@@ -202,6 +202,7 @@ class User_Data extends Term_Data {
 	 * Saves user profile fields.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 Now repopulates not-posted user metadata.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.
@@ -217,13 +218,16 @@ class User_Data extends Term_Data {
 
 		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
-		$data = (array) $_POST['tsf-user-meta'];
+		$data = \wp_parse_args(
+			(array) $_POST['tsf-user-meta'],
+			$this->get_user_meta( $user_id )
+		);
 
 		$this->save_user_meta( $user_id, $data );
 	}
 
 	/**
-	 * Updates user SEO option.
+	 * Updates user TSF-meta option.
 	 *
 	 * @since 4.1.4
 	 *
@@ -248,6 +252,7 @@ class User_Data extends Term_Data {
 	 * Updates users meta from input.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 No longer returns the update success state.
 	 *
 	 * @param int   $user_id The user ID.
 	 * @param array $data    The data to save.
@@ -275,7 +280,7 @@ class User_Data extends Term_Data {
 			]
 		);
 
-		return \update_user_meta( $user->ID, THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+		\update_user_meta( $user->ID, THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
 	}
 
 	/**

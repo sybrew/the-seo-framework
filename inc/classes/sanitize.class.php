@@ -869,6 +869,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes user meta.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.0 Now accepts and sanitizes the 'counter_type' index.
 	 *
 	 * @param array $data The user meta to sanitize.
 	 * @return array The sanitized user meta.
@@ -883,6 +884,13 @@ class Sanitize extends Admin_Pages {
 
 				case 'twitter_page':
 					$value = $this->s_twitter_name( $value );
+					continue 2;
+
+				case 'counter_type':
+					$value = \absint( $value );
+
+					if ( $value > 3 )
+						$value = 0;
 					continue 2;
 
 				default:

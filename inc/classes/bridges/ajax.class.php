@@ -76,7 +76,8 @@ final class AJAX {
 	 *
 	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
 	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
-	 * @since 4.2.0 Now uses wp.ajax instead of $.ajax.
+	 * @since 4.2.0 1. Now uses wp.ajax instead of $.ajax.
+	 *              2. No longer tests if settings-saving was successful.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
@@ -107,14 +108,13 @@ final class AJAX {
 			$value = 0;
 
 		// Update the option and get results of action.
-		$type = $tsf->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
+		$tsf->update_single_user_meta_item( $tsf->get_user_id(), 'counter_type', $value );
 
 		// Encode and echo results. Requires JSON decode within JS.
 		\wp_send_json_success( [
-			'type'  => $type,
+			'type'  => 'success',
 			'value' => $value,
 		] );
-
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 

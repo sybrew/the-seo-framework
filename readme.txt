@@ -392,6 +392,7 @@ can_i_use -> use more often?
 		* The Title Settings their examples now better reflect real-world usage in certain corner cases.
 		* The Pixel Counter now moves instantly as you type, instead of easing in, making it more reactive yet less distractive.
 		* Default titles are now pre-texturized before they are displayed in the title-editor, making for more accurate front-end output predictions.
+		* The floating title additions and prefixes now more accurately align themselves. For instance, when the padding of the input element is larger at the top than bottom, it'll no longer float too high.
 	* **SEO Bar:**
 		* The description word counter now recognizes connector-dashes, connector-punctuation, and closing quotes. This means that `we're` is seen as a single word, instead of two.
 	* **Other:**
@@ -420,7 +421,7 @@ can_i_use -> use more often?
 	* Addressed an issue where WordPress's blocking robots-meta was still being outputted on search pages.
 	* Addressed an issue where the first page of paginated search pages received an 'page-type-paged' `rel=next` URL, instead of an 'archive-type-paged' one.
 		* This also resolves an issue where the second page linked back to a non-existing first page via `rel=prev`.
-	* The floating title additions and prefixes now more accurately align themselves. For instance, when the padding of the input element is larger at the top than bottom, it'll no longer float too high.
+	* Addressed an issue where the user's preferred counter type got reset after updating a user.
 
 **For developers:**
 
@@ -582,6 +583,8 @@ can_i_use -> use more often?
 				1. Now supports an option index (sequential array of strings) as `$key`.
 				1. Removed second parameter (`$use_cache`).
 				1. Now always memoizes the unslashed options.
+			* `save_user_meta()` no longer returns the update success state.
+			* `s_user_meta()` now accepts and sanitizes the 'counter_type' index.
 			* **The following methods now support the `$args = [ 'pta' => $post_type ]` parameter, and might do something new and useful for post type archives:**
 				* `get_description()`
 				* `get_open_graph_description()`
