@@ -960,12 +960,12 @@ class Generate_Description extends Generate {
 		);
 
 		if ( isset( $matches[5] ) ) {
-			$excerpt = $matches[1] . $matches[3] . $matches[4] . $matches[5];
+			$excerpt = "$matches[1]$matches[3]$matches[4]$matches[5]";
 			// Skip 4. It's useless content without 5.
 		} elseif ( isset( $matches[3] ) ) {
-			$excerpt = $matches[1] . $matches[3];
+			$excerpt = "$matches[1]$matches[3]";
 		} elseif ( isset( $matches[2] ) ) {
-			$excerpt = $matches[1] . $matches[2];
+			$excerpt = "$matches[1]$matches[2]";
 		} elseif ( isset( $matches[1] ) ) {
 			$excerpt = $matches[1];
 		}
@@ -986,10 +986,10 @@ class Generate_Description extends Generate {
 		);
 		// Why can $matches[2] still be populated with 3 set? Does it populate empty results upward to last, always???
 		if ( isset( $matches[2] ) && \strlen( $matches[2] ) ) {
-			$excerpt = $matches[1] . $matches[2];
+			$excerpt = "$matches[1]$matches[2]";
 		} elseif ( isset( $matches[1] ) && \strlen( $matches[1] ) ) {
 			// Ignore useless [3], there's no [2], [1] is open-ended; so, add hellip.
-			$excerpt = $matches[1] . '...'; // This should be texturized later to &hellip;.
+			$excerpt = "$matches[1]..."; // This should be texturized later to &hellip;.
 		} else {
 			// If there's no matches[1], only some form of non-closing-leading punctuation was left in $excerpt. Empty it.
 			$excerpt = '';

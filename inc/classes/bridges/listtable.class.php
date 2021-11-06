@@ -237,7 +237,7 @@ abstract class ListTable {
 			 * Action "inline-save-tax" does not POST 'screen'.
 			 *
 			 * @see WP Core wp_ajax_inline_save_tax():
-			 *    `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => 'edit-' . $taxonomy ) );`
+			 *    `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => "edit-$taxonomy" ) );`
 			 */
 			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, '_add_column' ], 1, 1 );
 		}

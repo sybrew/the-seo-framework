@@ -75,7 +75,7 @@ class Core {
 		/**
 		 * For now, no deprecation is being handled; as no properties have been deprecated. Just removed.
 		 */
-		$this->_inaccessible_p_or_m( 'tsf()->' . $name, 'unknown' );
+		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 
 		// Invoke default behavior: Write variable if it's not protected.
 		if ( ! isset( $this->$name ) )
@@ -101,7 +101,7 @@ class Core {
 			return ! $this->is_headless['settings'];
 		}
 
-		$this->_inaccessible_p_or_m( 'tsf()->' . $name, 'unknown' );
+		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 	}
 
 	/**
@@ -123,7 +123,7 @@ class Core {
 		if ( \is_callable( [ $depr_class, $name ] ) )
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
 
-		$this->_inaccessible_p_or_m( 'tsf()->' . $name . '()' );
+		$this->_inaccessible_p_or_m( "tsf()->$name()" );
 	}
 
 	/**
@@ -662,8 +662,8 @@ class Core {
 			$accent = $this->s_color_hex( $this->get_option( 'sitemap_color_accent' ) );
 
 			$options = [
-				'main'   => $main ? '#' . $main : '',
-				'accent' => $accent ? '#' . $accent : '',
+				'main'   => $main ? "#$main" : '',
+				'accent' => $accent ? "#$accent" : '',
 			];
 
 			$options = array_filter( $options );

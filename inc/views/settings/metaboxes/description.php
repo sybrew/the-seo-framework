@@ -39,7 +39,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'auto_description',
-				'label'  => esc_html__( 'Automatically generate descriptions?', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html__( 'Automatically generate descriptions?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true

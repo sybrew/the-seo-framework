@@ -86,8 +86,8 @@ class Admin_Pages extends Generate_Ldjson {
 		);
 
 		// Enqueue scripts
-		\add_action( 'admin_print_scripts-' . $this->seo_settings_page_hook, [ $this, '_init_admin_scripts' ], 11 );
-		\add_action( 'load-' . $this->seo_settings_page_hook, [ $this, '_register_seo_settings_meta_boxes' ] );
+		\add_action( "admin_print_scripts-{$this->seo_settings_page_hook}", [ $this, '_init_admin_scripts' ], 11 );
+		\add_action( "load-{$this->seo_settings_page_hook}", [ $this, '_register_seo_settings_meta_boxes' ] );
 	}
 
 	/**

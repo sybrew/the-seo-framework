@@ -216,7 +216,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'title_strip_tags',
-				'label'  => esc_html__( 'Strip HTML tags from generated titles?', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html__( 'Strip HTML tags from generated titles?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -287,7 +287,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'     => 'title_rem_additions',
-					'label'  => esc_html__( 'Remove site title from the title?', 'autodescription' ) . ' ' . $info,
+					'label'  => esc_html__( 'Remove site title from the title?', 'autodescription' ) . " $info",
 					'escape' => false,
 				] ),
 				true
@@ -318,7 +318,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'     => 'title_rem_prefixes',
-					'label'  => esc_html__( 'Remove term type prefixes from generated archive titles?', 'autodescription' ) . ' ' . $info,
+					'label'  => esc_html__( 'Remove term type prefixes from generated archive titles?', 'autodescription' ) . " $info",
 					'escape' => false,
 				] ),
 				true

@@ -357,7 +357,7 @@ class Admin_Init extends Init {
 	 *                   valid and generated between 12-24 hours ago.
 	 */
 	public function _check_tsf_ajax_referer( $capability ) {
-		return \check_ajax_referer( 'tsf-ajax-' . $capability, 'nonce', true );
+		return \check_ajax_referer( "tsf-ajax-$capability", 'nonce', true );
 	}
 
 	/**

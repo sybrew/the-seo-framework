@@ -68,7 +68,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'ld_json_breadcrumbs',
-				'label'  => esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -88,7 +88,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'ld_json_searchbox',
-				'label'  => esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -107,7 +107,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'knowledge_output',
-				'label'  => esc_html__( 'Output Authorized Presence?', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html__( 'Output Authorized Presence?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -154,7 +154,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'knowledge_logo',
-				'label'  => esc_html__( 'Enable logo?', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html__( 'Enable logo?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 		true );
@@ -202,14 +202,14 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
 				'desc'        => __( 'Facebook Page', 'autodescription' ),
-				'placeholder' => 'https://www.facebook.com/' . $connectedi18n,
+				'placeholder' => "https://www.facebook.com/$connectedi18n",
 				'examplelink' => 'https://www.facebook.com/me',
 			],
 			'twitter'    => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
 				'desc'        => __( 'Twitter Profile', 'autodescription' ),
-				'placeholder' => 'https://twitter.com/' . $connectedi18n,
+				'placeholder' => "https://twitter.com/$connectedi18n",
 				'examplelink' => 'https://twitter.com/home', // No example link available.
 			],
 			'gplus'      => [
@@ -223,14 +223,14 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
 				'desc'        => __( 'Instagram Profile', 'autodescription' ),
-				'placeholder' => 'https://instagram.com/' . $connectedi18n,
+				'placeholder' => "https://instagram.com/$connectedi18n",
 				'examplelink' => 'https://instagram.com/', // No example link available.
 			],
 			'youtube'    => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
 				'desc'        => __( 'Youtube Profile', 'autodescription' ),
-				'placeholder' => 'https://www.youtube.com/channel/' . $connectedi18n,
+				'placeholder' => "https://www.youtube.com/channel/$connectedi18n",
 				'examplelink' => 'https://www.youtube.com/user/%2f', // Yes a double slash.
 			],
 			'linkedin'   => [
@@ -241,28 +241,28 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				 * TODO switch to /in/ insteadof /company/ when knowledge-type is personal?
 				 * Note that this feature is DEPRECATED. https://developers.google.com/search/docs/data-types/social-profile
 				 */
-				'placeholder' => 'https://www.linkedin.com/company/' . $connectedi18n . '/',
+				'placeholder' => "https://www.linkedin.com/company/$connectedi18n/",
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
 			'pinterest'  => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
 				'desc'        => __( 'Pinterest Profile', 'autodescription' ),
-				'placeholder' => 'https://www.pinterest.com/' . $connectedi18n . '/',
+				'placeholder' => "https://www.pinterest.com/$connectedi18n/",
 				'examplelink' => 'https://www.pinterest.com/me/',
 			],
 			'soundcloud' => [
 				'option'      => 'knowledge_soundcloud',
 				'dashicon'    => 'genericon-cloud', // I know, it's not the real one. D:
 				'desc'        => __( 'SoundCloud Profile', 'autodescription' ),
-				'placeholder' => 'https://soundcloud.com/' . $connectedi18n,
+				'placeholder' => "https://soundcloud.com/$connectedi18n",
 				'examplelink' => 'https://soundcloud.com/you',
 			],
 			'tumblr'     => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
 				'desc'        => __( 'Tumblr Blog', 'autodescription' ),
-				'placeholder' => 'https://www.tumblr.com/blog/' . $connectedi18n,
+				'placeholder' => "https://www.tumblr.com/blog/$connectedi18n",
 				'examplelink' => 'https://www.tumblr.com/dashboard',  // No example link available.
 			],
 		];

@@ -428,6 +428,6 @@ final class ListEdit extends ListTable {
 		if ( $this->doing_ajax )
 			$container .= $this->get_ajax_dispatch_updated_event();
 
-		return $string . $container;
+		return "$string$container";
 	}
 }

@@ -824,7 +824,7 @@ class Init extends Query {
 				'# This is an invalid robots.txt location.',
 				'# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' )
 			);
-			$output = $error . $output;
+			$output = "$error$output";
 		}
 
 		/**

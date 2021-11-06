@@ -181,7 +181,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [homepage](%s).', 'autodescription' ),
-						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
+						esc_url( admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) )
 					),
 					[ 'a' ],
 					[ 'a_internal' => false ] // opens in new tab.
@@ -431,7 +431,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 				vsprintf(
 					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
 					[
-						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) ),
+						esc_url( admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),
 						esc_attr_x( 'Edit homepage page settings', 'Bear with me: the homepage can be edited globally, or via its page. Thus "homepage page".', 'autodescription' ),
 						esc_html__( 'Overwritten by page settings', 'autodescription' ),
 					]
@@ -518,7 +518,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						esc_html__( 'Note: These options may be overwritten by the [page settings](%s).', 'autodescription' ),
-						esc_url( admin_url( 'post.php?post=' . $home_id . '&action=edit#tsf-inpost-box' ) )
+						esc_url( admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) )
 					),
 					[ 'a' ],
 					[ 'a_internal' => false ]

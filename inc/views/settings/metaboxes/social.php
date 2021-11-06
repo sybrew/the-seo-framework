@@ -122,7 +122,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'social_title_rem_additions',
-				'label'  => esc_html__( 'Remove site title from generated social titles?', 'autodescription' ) . ' ' . $info,
+				'label'  => esc_html__( 'Remove site title from generated social titles?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -288,7 +288,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 							echo ' ';
 							HTML::make_info(
 								__( 'Learn more about this card.', 'autodescription' ),
-								'https://dev.twitter.com/cards/types/' . $name
+								"https://dev.twitter.com/cards/types/$name"
 							);
 							?>
 						</span>
@@ -367,7 +367,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'oembed_use_social_image',
-				'label'       => esc_html__( 'Use social image?', 'autodescription' ) . ' ' . $_info,
+				'label'       => esc_html__( 'Use social image?', 'autodescription' ) . " $_info",
 				'description' => esc_html__( "LinkedIn displays the post's featured image in embeds. Check this option if you want to replace it with the social image.", 'autodescription' ),
 				'escape'      => false,
 			] ),

@@ -1529,7 +1529,7 @@ class Sanitize extends Admin_Pages {
 		if ( '@' === $profile ) return '';
 
 		if ( '@' !== substr( $profile, 0, 1 ) )
-			$profile = '@' . $profile;
+			$profile = "@$profile";
 
 		return str_replace( [ ' ', "\t" ], '', $profile );
 	}

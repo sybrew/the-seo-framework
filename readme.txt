@@ -308,6 +308,10 @@ TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Frame
 TODO translation POT file.
 TODO _suggest_temp... :)
 
+can_i_use -> use more often?
+	WooCommerce and bbPress noindexing comes to mind...
+		-> _set_real_id_wc_shop?
+
 *Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
 **For everyone:**

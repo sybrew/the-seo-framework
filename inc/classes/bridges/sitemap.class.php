@@ -452,20 +452,15 @@ final class Sitemap {
 		 */
 		$schemas = (array) \apply_filters( 'the_seo_framework_sitemap_schemas', $schemas );
 
-		$urlset = '<urlset';
-		foreach ( $schemas as $type => $values ) {
-			$urlset .= ' ' . $type . '="';
-			if ( \is_array( $values ) ) {
-				$urlset .= implode( ' ', $values );
-			} else {
-				$urlset .= $values;
+		array_walk(
+			$schemas,
+			static function( &$schema, $key ) {
+				$schema = sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
 			}
-			$urlset .= '"';
-		}
-		$urlset .= '>';
+		);
 
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- Output is static from filter.
-		echo $urlset . "\n";
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- Output is expected to be escaped.
+		printf( "<urlset %s>\n", implode( ' ', $schemas ) );
 	}
 
 	/**

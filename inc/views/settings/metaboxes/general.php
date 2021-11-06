@@ -109,12 +109,12 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			[
 				Input::make_checkbox( [
 					'id'     => 'display_pixel_counter',
-					'label'  => esc_html__( 'Display pixel counters?', 'autodescription' ) . ' ' . $pixel_info,
+					'label'  => esc_html__( 'Display pixel counters?', 'autodescription' ) . " $pixel_info",
 					'escape' => false,
 				] ),
 				Input::make_checkbox( [
 					'id'     => 'display_character_counter',
-					'label'  => esc_html__( 'Display character counters?', 'autodescription' ) . ' ' . $character_info,
+					'label'  => esc_html__( 'Display character counters?', 'autodescription' ) . " $character_info",
 					'escape' => false,
 				] ),
 			],

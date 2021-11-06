@@ -91,8 +91,8 @@ class Query extends Core {
 
 		$trace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 4 );
 		if ( ! empty( $trace[3] ) ) {
-			$message .= ' - In file: ' . $trace[3]['file'];
-			$message .= ' - On line: ' . $trace[3]['line'];
+			$message .= " - In file: {$trace[3]['file']}";
+			$message .= " - On line: {$trace[3]['line']}";
 		}
 
 		$this->_doing_it_wrong( \esc_html( $method ), \esc_html( $message ), '2.9.0' );

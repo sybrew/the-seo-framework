@@ -752,7 +752,7 @@ class Generate_Url extends Generate_Title {
 			$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
 
 			if ( $_use_base ) {
-				$url = \user_trailingslashit( \trailingslashit( $url ) . $base . '/' . $_page, 'paged' );
+				$url = \user_trailingslashit( \trailingslashit( $url ) . "$base/$_page", 'paged' );
 			} else {
 				$url = \user_trailingslashit( \trailingslashit( $url ) . $_page, 'single_paged' );
 			}
@@ -1043,7 +1043,7 @@ class Generate_Url extends Generate_Title {
 		$host = $parsed_url['host'] ?? '';
 
 		if ( $host && isset( $parsed_url['port'] ) )
-			$host .= ':' . $parsed_url['port'];
+			$host .= ":{$parsed_url['port']}";
 
 		return memo( $host );
 	}
@@ -1090,9 +1090,9 @@ class Generate_Url extends Generate_Title {
 	public function make_fully_qualified_url( $url ) {
 
 		if ( '//' === substr( $url, 0, 2 ) ) {
-			$url = 'http:' . $url;
+			$url = "http:$url";
 		} elseif ( 'http' !== substr( $url, 0, 4 ) ) {
-			$url = 'http://' . $url;
+			$url = "http://{$url}";
 		}
 
 		return $url;
@@ -1140,7 +1140,7 @@ class Generate_Url extends Generate_Title {
 			$url = \add_query_arg( $results, $url );
 
 		if ( $_fragment )
-			$url .= '#' . $_fragment;
+			$url .= "#$_fragment";
 
 		return $url;
 	}
