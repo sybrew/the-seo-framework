@@ -39,11 +39,23 @@ use function \The_SEO_Framework\umemo;
  */
 final class SEOBar {
 
-	const STATE_UNDEFINED = 0b0000;
-	const STATE_UNKNOWN   = 0b0001;
-	const STATE_BAD       = 0b0010;
-	const STATE_OKAY      = 0b0100;
-	const STATE_GOOD      = 0b1000;
+	/**
+	 * The recognized SEO Bar item states.
+	 * Mixed types will fall back to 'undefined'.
+	 *
+	 * @since 4.1.0
+	 * @access public
+	 * @var int <bit    0> STATE_UNDEFINED
+	 * @var int <bit    1> STATE_UNKNOWN
+	 * @var int <bit   10> STATE_BAD
+	 * @var int <bit  100> STATE_OKAY
+	 * @var int <bit 1000> STATE_GOOD
+	 */
+	public const STATE_UNDEFINED = 0b0000;
+	public const STATE_UNKNOWN   = 0b0001;
+	public const STATE_BAD       = 0b0010;
+	public const STATE_OKAY      = 0b0100;
+	public const STATE_GOOD      = 0b1000;
 
 	/**
 	 * @since 4.0.0

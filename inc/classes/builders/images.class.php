@@ -37,7 +37,7 @@ final class Images {
 	 * @internal
 	 * @var int MAX_CONTENT_IMAGES The maximum number of images to get from the content.
 	 */
-	const MAX_CONTENT_IMAGES = 5;
+	private const MAX_CONTENT_IMAGES = 5;
 
 	/**
 	 * The constructor. Or rather, the lack thereof.

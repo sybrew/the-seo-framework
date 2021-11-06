@@ -53,8 +53,8 @@ final class Scripts {
 	 * @var int <bit 01>  REGISTERED
 	 * @var int <bit 10>  LOADED     (rather, enqueued)
 	 */
-	const REGISTERED = 0b01;
-	const LOADED     = 0b10;
+	private const REGISTERED = 0b01;
+	private const LOADED     = 0b10;
 
 	/**
 	 * @since 3.1.0

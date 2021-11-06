@@ -462,9 +462,13 @@ can_i_use -> use more often?
 			* This function is neat because you can use it without specifying a caching key; it knows who invokes it: `return memo() ?? memo( expensive_call() );`.
 				* This neatness is limited to methods, not files or lines. Yet, this allows you to call `memo()` multiple times per method.
 			* The second and later parameters can be used to forward arguments.
-			* We found it impossible to further optimize this method. If you inspect its source, you find it does things in reverse, assigns variables unnecessarily, etc. This all leads to PHP performing it quickest; both during set and fetch.
+			* We found it impossible to further optimize this method. If you inspect its source, you find it does things unconventionally. This all leads to PHP performing it quickest; both during set and fetch.
 		* `\The_SEO_Framework\umemo()` stores and returns memoized values for the caller using a user-defined key.
 			* This function is roughly 10 times faster than `\The_SEO_Framework\memo()`, but requires from you a unique identifier `$key`. Example: `return umemo( __METHOD__ ) ?? umemo( __METHOD__, expensive_call() );`
+		* `\The_SEO_Framework\fmemo()` stores and returns memoized values for the Closure caller.
+			* This function is the slower than `\The_SEO_Framework\memo()` and `\The_SEO_Framework\umemo()`, but it can store the result of a whole function call at once, and it can prevent the function from running more than once.
+			* Quirk: Memoization can be busted immediately by another caller by supplying a random (unused) argument.
+			* We did not use this method for it's difficult to work with pre-PHP7.4.
 	* **Removed:**
 		* `the_seo_framework_boot()`
 			* This function was marked as "private," and should've never been used publicly.
