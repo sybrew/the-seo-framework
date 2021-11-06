@@ -36,7 +36,6 @@ namespace The_SEO_Framework\Bridges;
  * @since 4.0.0
  * @see \The_SEO_Framework\Builders\Scripts
  * @access protected
- *         Use static calls The_SEO_Framework\Bridges\Scripts::funcname()
  * @final Can't be extended.
  */
 final class Scripts {
@@ -224,7 +223,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf',
 				'type'     => 'css',
-				'deps'     => [ 'tsf-tt' ],
+				'deps'     => [],
 				'autoload' => true,
 				'hasrtl'   => false,
 				'name'     => 'tsf',
@@ -234,7 +233,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-tt', 'wp-util' ],
+				'deps'     => [ 'jquery', 'wp-util' ],
 				'autoload' => true,
 				'name'     => 'tsf',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -253,7 +252,6 @@ final class Scripts {
 							'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 						],
 						'states' => [
-							'isRTL' => (bool) \is_rtl(),
 							'debug' => \tsf()->script_debug,
 						],
 					],
@@ -299,7 +297,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-tt',
 				'type'     => 'js',
-				'deps'     => [ 'jquery' ],
+				'deps'     => [ 'tsf' ],
 				'autoload' => true,
 				'name'     => 'tt',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -320,7 +318,7 @@ final class Scripts {
 			[
 				'id'       => 'tsf-ays',
 				'type'     => 'js',
-				'deps'     => [ 'jquery' ],
+				'deps'     => [ 'tsf' ],
 				'autoload' => true,
 				'name'     => 'ays',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -342,6 +340,7 @@ final class Scripts {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now depends on title and description scripts.
+	 * @since 4.2.0 No longer registers l10n (data).
 	 *
 	 * @return array The script params.
 	 */
@@ -360,15 +359,11 @@ final class Scripts {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-title', 'tsf-description', 'tsf' ],
+				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
-				'l10n'     => [
-					'name' => 'tsfLeL10n',
-					'data' => [],
-				],
 			],
 		];
 	}
@@ -390,8 +385,18 @@ final class Scripts {
 		return [
 			[
 				'id'       => 'tsf-settings',
+				'type'     => 'css',
+				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'settings',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-settings',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util' ],
+				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util' ],
 				'autoload' => true,
 				'name'     => 'settings',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -408,16 +413,6 @@ final class Scripts {
 				'tmpl'     => [
 					'file' => $tsf->get_view_location( 'templates/settings/settings' ),
 				],
-			],
-			[
-				'id'       => 'tsf-settings',
-				'type'     => 'css',
-				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker' ],
-				'autoload' => true,
-				'hasrtl'   => false,
-				'name'     => 'settings',
-				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 			],
 		];
 	}
@@ -448,6 +443,24 @@ final class Scripts {
 		return [
 			[
 				'id'       => 'tsf-post',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'post',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'inline'   => [
+					'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
+						'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 0 {{$color_accent}} inset',
+					],
+					'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring)' => [
+						'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 1px {{$color_accent}} inset',
+					],
+				],
+			],
+			[
+				'id'       => 'tsf-post',
 				'type'     => 'js',
 				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tabs', 'tsf-tt', 'tsf' ],
 				'autoload' => true,
@@ -468,24 +481,6 @@ final class Scripts {
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,
 						],
-					],
-				],
-			],
-			[
-				'id'       => 'tsf-post',
-				'type'     => 'css',
-				'deps'     => [ 'tsf-tt', 'tsf' ],
-				'autoload' => true,
-				'hasrtl'   => false,
-				'name'     => 'post',
-				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-				'ver'      => THE_SEO_FRAMEWORK_VERSION,
-				'inline'   => [
-					'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label' => [
-						'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 0 {{$color_accent}} inset',
-					],
-					'.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring)' => [
-						'box-shadow:0 -2px 0 0 {{$color_accent}} inset, 0 0 0 1px {{$color_accent}} inset',
 					],
 				],
 			],
@@ -520,8 +515,18 @@ final class Scripts {
 		return [
 			[
 				'id'       => 'tsf-term',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'term',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-term',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tt', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'term',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -536,16 +541,6 @@ final class Scripts {
 					],
 				],
 			],
-			[
-				'id'       => 'tsf-term',
-				'type'     => 'css',
-				'deps'     => [ 'tsf-tt', 'tsf' ],
-				'autoload' => true,
-				'hasrtl'   => false,
-				'name'     => 'term',
-				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-				'ver'      => THE_SEO_FRAMEWORK_VERSION,
-			],
 		];
 	}
 
@@ -553,6 +548,7 @@ final class Scripts {
 	 * Returns Gutenberg compatibility scripts params.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.0 No longer registers l10n (data).
 	 *
 	 * @return array The script params.
 	 */
@@ -561,15 +557,11 @@ final class Scripts {
 			[
 				'id'       => 'tsf-gbc',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf', 'tsf-post', 'wp-editor', 'wp-data', 'lodash', 'react' ],
+				'deps'     => [ 'jquery', 'tsf', 'wp-editor', 'wp-data', 'lodash', 'react' ],
 				'autoload' => true,
 				'name'     => 'gbc',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => THE_SEO_FRAMEWORK_VERSION,
-				'l10n'     => [
-					'name' => 'tsfGBCL10n',
-					'data' => [],
-				],
 			],
 		];
 	}
@@ -578,6 +570,7 @@ final class Scripts {
 	 * Returns Tabs scripts params.
 	 *
 	 * @since 4.1.3
+	 * @since 4.2.0 No longer registers l10n (data).
 	 *
 	 * @return array The script params.
 	 */
@@ -590,10 +583,6 @@ final class Scripts {
 			'name'     => 'tabs',
 			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 			'ver'      => THE_SEO_FRAMEWORK_VERSION,
-			'l10n'     => [
-				'name' => 'tsfTabsL10n',
-				'data' => [],
-			],
 		];
 	}
 
@@ -658,7 +647,7 @@ final class Scripts {
 		return [
 			'id'       => 'tsf-title',
 			'type'     => 'js',
-			'deps'     => [ 'jquery', 'tsf' ],
+			'deps'     => [ 'tsf' ],
 			'autoload' => true,
 			'name'     => 'title',
 			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -689,7 +678,7 @@ final class Scripts {
 	 * Returns Description scripts params.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 No longer outputs l10n (data).
+	 * @since 4.2.0 No longer registers l10n (data).
 	 *
 	 * @return array The script params.
 	 */
@@ -697,7 +686,7 @@ final class Scripts {
 		return [
 			'id'       => 'tsf-description',
 			'type'     => 'js',
-			'deps'     => [ 'jquery', 'tsf' ],
+			'deps'     => [ 'tsf' ],
 			'autoload' => true,
 			'name'     => 'description',
 			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -709,7 +698,7 @@ final class Scripts {
 	 * Returns Social scripts params.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.0 No longer registers data for the script
+	 * @since 4.2.0 No longer registers l10n (data).
 	 *
 	 * @return array The script params.
 	 */
@@ -717,15 +706,11 @@ final class Scripts {
 		return [
 			'id'       => 'tsf-social',
 			'type'     => 'js',
-			'deps'     => [ 'jquery', 'tsf' ],
+			'deps'     => [ 'tsf' ],
 			'autoload' => true,
 			'name'     => 'social',
 			'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 			'ver'      => THE_SEO_FRAMEWORK_VERSION,
-			'l10n'     => [
-				'name' => 'tsfSocialL10n',
-				'data' => [],
-			],
 		];
 	}
 
@@ -807,7 +792,7 @@ final class Scripts {
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',
 			];
-			$deps = [ 'jquery', 'tsf', 'tsf-post', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react', 'wp-util' ];
+			$deps = [ 'tsf', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'lodash', 'react', 'wp-util' ];
 		} else {
 			$vars = [
 				'id'   => 'tsf-pt',
@@ -817,6 +802,17 @@ final class Scripts {
 		}
 
 		return [
+			[
+				'id'       => 'tsf-pt',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'pt',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+				'inline'   => $inline_css,
+			],
 			[
 				'id'       => $vars['id'],
 				'type'     => 'js',
@@ -835,17 +831,6 @@ final class Scripts {
 					'file' => $tsf->get_view_location( 'templates/inpost/primary-term-selector' ),
 				],
 			],
-			[
-				'id'       => 'tsf-pt',
-				'type'     => 'css',
-				'deps'     => [ 'tsf-tt' ],
-				'autoload' => true,
-				'hasrtl'   => false,
-				'name'     => 'pt',
-				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-				'ver'      => THE_SEO_FRAMEWORK_VERSION,
-				'inline'   => $inline_css,
-			],
 		];
 	}
 
@@ -863,8 +848,18 @@ final class Scripts {
 		return [
 			[
 				'id'       => 'tsf-c',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'tsfc',
+				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-c',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'tsf-tt', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'c',
 				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -881,16 +876,6 @@ final class Scripts {
 						],
 					],
 				],
-			],
-			[
-				'id'       => 'tsf-c',
-				'type'     => 'css',
-				'deps'     => [ 'tsf-tt' ],
-				'autoload' => true,
-				'hasrtl'   => false,
-				'name'     => 'tsfc',
-				'base'     => THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
-				'ver'      => THE_SEO_FRAMEWORK_VERSION,
 			],
 		];
 	}

@@ -42,18 +42,20 @@ final class AJAX {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
+	 * @since 4.2.0 Now cleans response header.
 	 * Security check OK.
 	 * @access private
 	 */
 	public static function _wp_ajax_dismiss_notice() {
+
+		$tsf = \tsf();
+		$tsf->clean_response_header();
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = $_POST['tsf_dismiss_key'] ?? '';
 
 		if ( ! $key )
 			\wp_send_json_error( null, 400 );
-
-		$tsf = \tsf();
 
 		$notices = $tsf->get_static_cache( 'persistent_notices', [] );
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) {
@@ -74,27 +76,21 @@ final class AJAX {
 	 *
 	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
 	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
+	 * @since 4.2.0 Now uses wp.ajax instead of $.ajax.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public static function _wp_ajax_update_counter_type() {
 
 		$tsf = \tsf();
+		$tsf->clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$tsf->_check_tsf_ajax_referer( 'edit_posts' );
 
-		// Remove output buffer. TODO why don't we do this consistently??
-		$tsf->clean_response_header();
-
 		// If current user isn't allowed to edit posts, don't do anything and kill PHP.
-		if ( ! \current_user_can( 'edit_posts' ) ) {
-			// Encode and echo results. Requires JSON decode within JS.
-			\wp_send_json( [
-				'type'  => 'failure',
-				'value' => '',
-			] );
-		}
+		if ( ! \current_user_can( 'edit_posts' ) )
+			\wp_send_json_error();
 
 		/**
 		 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
@@ -113,13 +109,11 @@ final class AJAX {
 		// Update the option and get results of action.
 		$type = $tsf->update_user_option( 0, 'counter_type', $value ) ? 'success' : 'error';
 
-		$results = [
+		// Encode and echo results. Requires JSON decode within JS.
+		\wp_send_json_success( [
 			'type'  => $type,
 			'value' => $value,
-		];
-
-		// Encode and echo results. Requires JSON decode within JS.
-		\wp_send_json( $results );
+		] );
 
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
@@ -142,13 +136,17 @@ final class AJAX {
 	 *
 	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
 	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
+	 * @since 4.2.0 Now cleans response header.
 	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public static function _wp_ajax_crop_image() {
 
+		$tsf = \tsf();
+		$tsf->clean_response_header();
+
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
-		\tsf()->_check_tsf_ajax_referer( 'upload_files' );
+		$tsf->_check_tsf_ajax_referer( 'upload_files' );
 
 		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
@@ -235,26 +233,21 @@ final class AJAX {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
+	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
 	 * @access private
 	 */
 	public static function _wp_ajax_get_post_data() {
 
 		$tsf = \tsf();
+		$tsf->clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		$tsf->_check_tsf_ajax_referer( 'edit_posts' );
 
-		// Clear output buffer.
-		$tsf->clean_response_header();
-
 		$post_id = \absint( $_POST['post_id'] );
 
-		if ( ! $post_id || ! \current_user_can( 'edit_post', $post_id ) ) {
-			\wp_send_json( [
-				'type' => 'failure',
-				'data' => [],
-			] );
-		}
+		if ( ! $post_id || ! \current_user_can( 'edit_post', $post_id ) )
+			\wp_send_json_error();
 
 		$_get_defaults = [
 			'seobar'          => false,
@@ -333,12 +326,10 @@ final class AJAX {
 			}
 		endforeach;
 
-		\wp_send_json( [
-			'type'      => 'success',
+		\wp_send_json_success( [
 			'data'      => $data,
 			'processed' => $get,
 		] );
-
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }

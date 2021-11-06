@@ -372,7 +372,7 @@ can_i_use -> use more often?
 			* Only the trained eye can spot a minor delay on low response time monitors, but only whilst holding a repeat-key, which isn't realistic.
 		* Image previews now get loaded only after the "slowest" typist is done typing the image URL.
 		* When no excerpt of the content can be fetched, needless trimming no longer happens.
-		* The floating title prefixes and additions helpers no longer rely on jQuery.
+		* The floating title prefixes and additions helpers, resize listeners, and various other elements no longer rely on jQuery.
 	* **Timestamps:**
 		* The plugin no longer rectifies the timezones for its timestamps in the sitemap or for Facebook/Open Graph meta data, for it now relies on WP 5.3's patches.
 	* **Notices:**
@@ -476,7 +476,12 @@ can_i_use -> use more often?
 			* `get_ping_url()`
 	* For object `\The_SEO_Framework\Bridges\Scripts`:
 		* **Methods changed:**
-			* `get_social_scripts()` no longer registers data for the script.
+			* **The following no longer register l10n (data):**
+				* `get_list_edit_scripts()`
+				* `get_gutenberg_compat_scripts()`
+				* `get_tabs_scripts()`
+				* `get_description_scripts()`
+				* `get_social_scripts()`
 			* `get_term_edit_scripts()` now properly populates `use_generated_archive_prefix()` with a `\WP_Term` object.
 	* For object `\The_SEO_Framework\Builders\SEOBar\<Page|Term>`:
 		* **Method changed:**
@@ -744,12 +749,28 @@ can_i_use -> use more often?
 	* **Other:**
 		* We exchanged various static `'class::method'` callbacks for `[ 'class', 'method' ]` ones. This does not affect the behavior of `remove_action`. It's only easier to read.
 * **JavaScript notes:**
+	* **Note:**
+		* The dependencies have shifted around. If you require TSF scripts, be sure to register the dependencies of all the scripts you require -- don't depend on chained dependencies.
+	* **Removed:**
+		* **Various localization strings used as data holders:**
+			* `window.tsfDescription.l10n` & `window.tsfDescriptionL10n`.
+			* `window.tsfGBC.l10n` & `window.tsfGBCL10n`.
+			* `window.tsfLe.l10n` & `window.tsfLeL10n`.
+			* `window.tsfSocial.l10n` & `window.tsfSocialL10n`.
+			* `window.tsfTabs.l10n` & `window.tsfTabsL10n`.
+	* **Events:**
+		* **Added:**
+			* On `window`, TSF now dispatches `tsf-resize`. This is both throttled and debounced:
+				1. It invokes immediately to help paint quickly after a mobile device rotates.
+				1. It debounces by 100ms if a chain of resizes take place (border of window is dragged, device is slow with resizing, etc.). After this is done debouncing, another `tsf-resize` may be invoked immediately.
 	* Object `window.tsf`:
 		* **Added:**
 			* `sDoubleSpace`
 			* `sSingleLine`
 			* `sTabs`
 			* `disPatchAtInteractive`
+		* **Removed:**
+			* `tsf.l10n.states.isRTL` & `window.tsfL10n.isRTL`, use `window.isRtl` instead.
 	* Object `window.tsfDescription`:
 		* **Changed:**
 			* `updateStateOf` now remains intert on a non-change.

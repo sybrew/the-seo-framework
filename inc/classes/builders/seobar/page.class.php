@@ -173,7 +173,7 @@ final class Page extends Main {
 				],
 				'reason'   => [
 					'incomplete' => \__( 'Incomplete.', 'autodescription' ),
-					'duplicated' => \__( 'The branding is duplicated.', 'autodescription' ),
+					'duplicated' => \__( 'The branding is repeated.', 'autodescription' ),
 					'notbranded' => \__( 'Not branded.', 'autodescription' ),
 					'syntax'     => \__( 'Found markup syntax.', 'autodescription' ),
 				],
