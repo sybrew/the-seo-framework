@@ -326,34 +326,6 @@ class Generate_Ldjson extends Generate_Image {
 	}
 
 	/**
-	 * Returns image URL suitable for Schema items.
-	 *
-	 * These are images that are strictly assigned to the Post or Page, fallbacks are omitted.
-	 * Themes should compliment these. If not, then Open Graph should at least compliment these.
-	 * If that's not even true, then I don't know what happens. But then you're in a grey area...
-	 *
-	 * @since 4.0.0
-	 * @since 4.2.0 1. Now gets correctly separated results when $args changes.
-	 *              2. Now supports the `$args['pta']` index.
-	 * @TODO $details is a dumb parameter. Especially since we support PHP 7.2+ now... deprecate?
-	 * @TODO $args gets used for memo immediately without sorting -- means ['id'=>1,'pta'=>''] may bust ['id'=>1].
-	 * @TODO rewrite. This method makes no sense.
-	 * @uses $this->get_image_details()
-	 * @api Not used internally, only externally.
-	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-	 *                            Leave null to autodetermine query.
-	 * @param bool       $details Whether to return all details, or just a simple URL.
-	 * @return string|array $url The Schema.org safe image.
-	 */
-	public function get_safe_schema_image( $args = null, $details = false ) {
-
-		$image_details = memo( null, $args ) ?? memo( current( $this->get_image_details( $args, true, 'schema' ), $args ) );
-
-		return $details ? $image_details : ( $image_details['url'] ?? '' );
-	}
-
-	/**
 	 * Generates LD+JSON Breadcrumbs script.
 	 *
 	 * @since 2.9.3

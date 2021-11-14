@@ -949,8 +949,9 @@ class Init extends Query {
 			$post__not_in = $wp_query->get( 'post__not_in' );
 
 			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_merge( (array) $post__not_in, $excluded );
-				$excluded = array_unique( $excluded );
+				$excluded = array_unique(
+					array_merge( (array) $post__not_in, $excluded )
+				);
 			}
 
 			$wp_query->set( 'post__not_in', $excluded );
@@ -982,8 +983,9 @@ class Init extends Query {
 			$post__not_in = $wp_query->get( 'post__not_in' );
 
 			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_merge( (array) $post__not_in, $excluded );
-				$excluded = array_unique( $excluded );
+				$excluded = array_unique(
+					array_merge( (array) $post__not_in, $excluded )
+				);
 			}
 
 			$wp_query->set( 'post__not_in', $excluded );

@@ -129,8 +129,10 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  */
 function _autoload_classes( $class ) {
 
+	$class = strtolower( $class );
+
 	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't gotten any friends.
-	if ( 0 !== strpos( strtolower( $class ), 'the_seo_framework\\', 0 ) ) return;
+	if ( 0 !== strpos( $class, 'the_seo_framework\\', 0 ) ) return;
 
 	static $_timenow = true;
 	// Lock $_timenow to prevent stacking timers during class extending. This is released when the class stack loaded.
@@ -141,7 +143,7 @@ function _autoload_classes( $class ) {
 		$_bootstrap_timer = 0;
 	}
 
-	$_chunks       = explode( '\\', strtolower( $class ) );
+	$_chunks       = explode( '\\', $class );
 	$_chunck_count = \count( $_chunks );
 
 	if ( $_chunck_count > 2 ) {

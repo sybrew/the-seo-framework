@@ -247,70 +247,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-PUNTED -- not important for 4.2.0:
-
-TODO deprecate _do_settings_page_notices(), and use the new persistent notice system instead.
-	-> Rename set_plugin_check_caches() to `notify_user_of_conflicting_plugin( 'seo' )`.
-	-> In effect, do_dismissible_notice()?
-		-> The notice called at `_output_notices()` can be used with persistent notices as well.
-			-> In fact, we can make it Multisite compatible that way. Sub site has SEO plugin->main site activates conflicting SEO plugin->notice on sub-site.
-				-> Show 3x. Delete if detected conflict is gone (hook at plugin_activated). -> Test show 10x to make sure it works as intended (activate/deactivate, etc.).
-TODO Move notice handlers to new class.
-TODO overthrow the structured data. Clean-room Yoast's/WPSSO/AIOSEO implementation? It's not necessarily better or more useful to users, but it eases interfacing via extensions and filters.
-TODO `apply_filters_deprecated` feeds us a junk caller-line. Copy so it supports classes?
-	-> Is this not a WP bug? I'd assume they test for class-scopes, but I also assumed Gutenberg wouldn't get imposed on us in such a bad state.
-	-> This is actually why we set up a custom `_deprecation_function()`.
-TODO introduce a settings generator, even if high-level?
-TODO s_...$new_value -> $something_else?
-TODO make output_pixel_counter_wrap et alia auto-bind to inputs?
-	-> Will this work with quick/bulk-edit?
-TODO fix js lint warnings about the l10n const being unavailable.
-	-> This probably affects all files. Addressing this with modern JS could prevent unforeseen bugs with future FSE.
-TODO https://github.com/sybrew/the-seo-framework/issues/185
-	-> This will allow bigger sitemaps, for we won't accidentally call redundant post meta.
-	-> This forces us to implement a migrator, which we should...
-	-> This will cause all sorts of issues we cannot help our users with.
-		-> Although this will help speed up queries, especially those of large sites, it will hinder large sites for they might use special queries to test against TSF.
-			-> Then again, you should assert in PHP more than the database. TSF's "qubit" system is a poster child for that.
-TODO allow custom robots generators?
-TODO add "padlock" to the counters on the homepage "page edit screen" if it's locked via the homepage SEO settings?
-TODO regex to find non-breaking HTML attributes: class=example.
-	-> input type="text" -> input type=text
-	-> This can introduce security issues, so it requires deep code scanning. Let's do it at v5.0
-TODO remove noopener from our links.
-	-> Except for the feed source link.
-	-> 5.0.
-TODO add maxlength to title/description input fields?
-	-> Also enforce it in the back-end?
-	-> This will prevent overloading the database with large blobs. However, users can do this anywhere in WP, regardless.
-	-> 5.0
-TODO add CSS templating colors?
-	-> Also from Core, and their "relative" friends? I don't think WP uses "var" in production?
-	-> This should speed up some stuff, and makes the plugin easier to maintain.
-	-> 5.0
-TODO Default the metabox in the far-too-tiny sidebar of Gutenberg on "is_gutenberg_page()"?
-	-> Users will face issues moving back the metabox.
-		-> This PR will fix that, though... https://github.com/WordPress/gutenberg/pull/25187, eventually.
-	-> 5.0? We need to wait for Gutenberg 11.9 merger into Core... which might be earliest June 2022.
-TODO add debouncer in tsf.js?
-	-> tsf.debounce( () => { }, timeout, key || void 0 );
-	-> 4.3? / 4.2.1?
-
-TODO use constant "The_SEO_Framework\NOT_ESCAPED" to clearly signify we DO NOT ESCAPE when calling a method?
-	-> $clean = used 3x (NOT_CLEANED?)
-	-> $escape = used 19x
-	-> 5.0?
-	-> We should've used stuff like this from the start, making function calls much more readable. Do not use booleans!
-
-==== End punted.
-
-TODO update https://theseoframework.com/docs/api/constants/ with `\The_SEO_Framework\ROBOTS_ASSERT`
 TODO translation POT file.
-TODO _suggest_temp... :)
-
-can_i_use -> use more often?
-	WooCommerce and bbPress noindexing comes to mind...
-		-> _set_real_id_wc_shop?
 
 *Not every change is recorded. Some changes might affect your code, but come from deeply-nested, inaccessible parts. We do not record privately marked method/file changes.*
 
@@ -414,7 +351,7 @@ can_i_use -> use more often?
 	* Addressed an off-by-one error causing the first content-image to be skipped for social sharing. [Props daxelrod](https://wordpress.org/support/topic/content-social-image-skips-first-image/).
 		* This fix also addresses that "only" 'four' images got taken from the content, instead of the intended 'five'.
 	* Addressed a regression where a part of the HTML comments was not fully translatable.
-	* Addressed layout issues where the site title might be smaller than 60px, making the examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
+	* Addressed layout issues where the site title smaller than 60px will have their examples have too much surrounding space. This also fixed an edge-case issue that caused text to overflow the meta boxes.
 	* Addressed several edge-case instances where placeholders didn't properly reflect the actual output.
 	* Addressed an issue where empty post type archives' post types weren't detected, causing TSF to abandon processing.
 	* Addressed an issue where paginated post type archives have had their canonical URL always point to the first page.
@@ -422,10 +359,30 @@ can_i_use -> use more often?
 	* Addressed an issue where the first page of paginated search pages received an 'page-type-paged' `rel=next` URL, instead of an 'archive-type-paged' one.
 		* This also resolves an issue where the second page linked back to a non-existing first page via `rel=prev`.
 	* Addressed an issue where the user's preferred counter type got reset after updating a user.
+* **Other:**
+	* The following plugins are no longer recognized as "conflicting":
+		* **SEO:**
+			* Gregs High Performance SEO, `gregs-high-performance-seo` - Plugin got sold and eventually abandoned.
+		* **Sitemaps**:
+			* Better WordPress Google XML Sitemaps, `bwp-google-xml-sitemaps` - Plugin is abandoned and doesn't work with WordPress 5.5 or later.
+			* Google XML Sitemaps for qTranslate, `google-xml-sitemaps-v3-for-qtranslate` - Plugin's userbase is tiny, plugin also got delisted due to a guideline violation.
+			* XML Sitemaps, `xml-sitemaps` - Plugin's userbase is small and the plugin seems abandoned.
+		* **Open Graph:**
+			* Facebook Thumb Fixer, `facebook-thumb-fixer` - Plugin got delisted by author.
+			* NextGEN Facebook OG, `nextgen-facebook` - Plugin got delisted by author.
+			* Social Sharing Toolkit, `social-sharing-toolkit` - Plugin seems abandoned and doesn't work on PHP 7 anyway.
+			* WP Facebook Open Graph protocol, `wp-facebook-open-graph-protocol` - Plugin got abandoned and delisted due to trademark violation.
+
+**For translators:**
+
+* **Added:**
+	* New sentences are available for translation.
+* **Updated:**
+	* Translation POT file.
 
 **For developers:**
 
-* **Plugin database version is now at `4200` (TODO)**.
+* **Plugin database version is now at `4200`**.
 * **Added:**
 	* We introduce function `tsf()`, an alias of `the_seo_framework()`.
 * **Changed:**
@@ -598,7 +555,6 @@ can_i_use -> use more often?
 				* `get_custom_field_image_details()`
 				* `get_generated_image_details()`
 				* `get_image_generation_params()`
-				* `get_safe_schema_image()`
 				* `get_title()`
 				* `get_custom_field_title()`
 				* `get_generated_title()`
@@ -682,6 +638,7 @@ can_i_use -> use more often?
 			* `check_the_real_ID()`, use `tsf()->get_the_real_ID()` instead.
 			* `get_default_settings()`, use `tsf()->get_default_option()` instead.
 			* `get_warned_settings()`, use `tsf()->get_warned_option()` instead.
+			* `get_safe_schema_image()`, use `tsf()->get_image_details()` instead.
 		* **Methods removed:**
 			* `is_post_type_page()`, was deprecated since 4.1.0.
 			* `is_taxonomy_public()`, was deprecated since 4.1.0.

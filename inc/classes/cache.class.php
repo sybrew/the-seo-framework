@@ -365,7 +365,9 @@ class Cache extends Site_Options {
 	 * @return string
 	 */
 	protected function add_cache_key_suffix( $key = '' ) {
+
 		$locale = strtolower( \get_locale() );
+
 		return "{$key}_{$GLOBALS['blog_id']}_{$locale}";
 	}
 

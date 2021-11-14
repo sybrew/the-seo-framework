@@ -1673,4 +1673,33 @@ final class Deprecated {
 
 		return $tsf->s_one_zero( ! empty( $cache[ $key ] ) );
 	}
+
+	/**
+	 * Returns image URL suitable for Schema items.
+	 *
+	 * These are images that are strictly assigned to the Post or Page, fallbacks are omitted.
+	 * Themes should compliment these. If not, then Open Graph should at least compliment these.
+	 * If that's not even true, then I don't know what happens. But then you're in a grey area...
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 1. Now gets correctly separated results when $args changes.
+	 *              2. Now supports the `$args['pta']` index.
+	 *              3. Deprecated.
+	 * @uses $this->get_image_details()
+	 * @deprecated
+	 *
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                            Leave null to autodetermine query.
+	 * @param bool       $details Whether to return all details, or just a simple URL.
+	 * @return string|array $url The Schema.org safe image.
+	 */
+	public function get_safe_schema_image( $args = null, $details = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_safe_schema_image()', '4.2.0', 'tsf()->get_image_details()' );
+
+		$image_details = memo( null, $args ) ?? memo( current( $tsf->get_image_details( $args, true, 'schema' ), $args ) );
+
+		return $details ? $image_details : ( $image_details['url'] ?? '' );
+	}
 }

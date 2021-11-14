@@ -717,7 +717,7 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Sanitizes post type archjive meta.
+	 * Sanitizes post type archive meta.
 	 *
 	 * @since 4.2.0
 	 *
@@ -728,6 +728,9 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_all_post_type_archive_meta( $data ) {
 
+		if ( ! $data )
+			return [];
+
 		// Do NOT test for post type's existence -- it might be registered incorrectly.
 		// If the metadata yields empty -- do not unset key! It'll override "defaults" that way.
 		foreach ( $data as $_post_type => &$meta )
@@ -737,7 +740,7 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Sanitizes post type archjive meta.
+	 * Sanitizes post type archive meta.
 	 *
 	 * @since 4.2.0
 	 *

@@ -39,7 +39,7 @@ class Detect extends Render {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.1
-	 * @credits Jetpack for most code.
+	 * @credits Jetpack for some code.
 	 *
 	 * @return array List of active plugins.
 	 */
@@ -61,7 +61,7 @@ class Detect extends Render {
 
 		sort( $active_plugins );
 
-		return memo( array_unique( $active_plugins ) );
+		return memo( $active_plugins );
 	}
 
 	/**
@@ -76,34 +76,26 @@ class Detect extends Render {
 
 		$conflicting_plugins = [
 			'seo_tools'    => [
-				'Yoast SEO'                  => 'wordpress-seo/wp-seo.php',
-				'Yoast SEO Premium'          => 'wordpress-seo-premium/wp-seo-premium.php',
-				'All in One SEO Pack'        => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
-				'SEO Ultimate'               => 'seo-ultimate/seo-ultimate.php',
-				'Gregs High Performance SEO' => 'gregs-high-performance-seo/ghpseo.php',
-				'SEOPress'                   => 'wp-seopress/seopress.php',
-				'Rank Math'                  => 'seo-by-rank-math/rank-math.php',
-				'Smart Crawl'                => 'smartcrawl-seo/wpmu-dev-seo.php',
+				'Yoast SEO'           => 'wordpress-seo/wp-seo.php',
+				'Yoast SEO Premium'   => 'wordpress-seo-premium/wp-seo-premium.php',
+				'All in One SEO Pack' => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
+				'SEO Ultimate'        => 'seo-ultimate/seo-ultimate.php',
+				'SEOPress'            => 'wp-seopress/seopress.php',
+				'Rank Math'           => 'seo-by-rank-math/rank-math.php',
+				'Smart Crawl'         => 'smartcrawl-seo/wpmu-dev-seo.php',
 			],
 			'sitemaps'     => [
-				'Google XML Sitemaps'                  => 'google-sitemap-generator/sitemap.php',
-				'Better WordPress Google XML Sitemaps' => 'bwp-google-xml-sitemaps/bwp-simple-gxs.php', // Remove?
-				'Google XML Sitemaps for qTranslate'   => 'google-xml-sitemaps-v3-for-qtranslate/sitemap.php', // Remove?
-				'XML Sitemap & Google News feeds'      => 'xml-sitemap-feed/xml-sitemap.php',
-				'Google Sitemap by BestWebSoft'        => 'google-sitemap-plugin/google-sitemap-plugin.php',
-				'Simple Wp Sitemap'                    => 'simple-wp-sitemap/simple-wp-sitemap.php',
-				'XML Sitemaps'                         => 'xml-sitemaps/xml-sitemaps.php',
+				'Google XML Sitemaps'             => 'google-sitemap-generator/sitemap.php',
+				'XML Sitemap & Google News feeds' => 'xml-sitemap-feed/xml-sitemap.php',
+				'Google Sitemap by BestWebSoft'   => 'google-sitemap-plugin/google-sitemap-plugin.php',
+				'Simple Wp Sitemap'               => 'simple-wp-sitemap/simple-wp-sitemap.php', // Remove?
 			],
 			'open_graph'   => [
 				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',
-				'Facebook Thumb Fixer'                  => 'facebook-thumb-fixer/_facebook-thumb-fixer.php',
-				'NextGEN Facebook OG'                   => 'nextgen-facebook/nextgen-facebook.php',
-				'Open Graph'                            => 'opengraph/opengraph.php',
-				'Open Graph Protocol Framework'         => 'open-graph-protocol-framework/open-graph-protocol-framework.php',
+				'Open Graph'                            => 'opengraph/opengraph.php', // Redundant.
+				'Open Graph Protocol Framework'         => 'open-graph-protocol-framework/open-graph-protocol-framework.php', // Redundant.
 				'Shareaholic2'                          => 'shareaholic/sexy-bookmarks.php',
-				'Social Sharing Toolkit'                => 'social-sharing-toolkit/social_sharing_toolkit.php',
 				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
-				'WP Facebook Open Graph protocol'       => 'wp-facebook-open-graph-protocol/wp-facebook-ogp.php',
 			],
 			'twitter_card' => [],
 		];
