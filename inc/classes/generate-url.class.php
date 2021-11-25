@@ -456,7 +456,7 @@ class Generate_Url extends Generate_Title {
 		if ( \is_wp_error( $url ) )
 			return umemo( __METHOD__, '', $term_id, $taxonomy );
 
-		if ( null !== $term_id ) {
+		if ( null === $term_id ) {
 			$paged = $this->paged();
 
 			if ( $paged > 1 )
@@ -732,17 +732,16 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function add_url_pagination( $url, $page = null, $use_base = null ) {
 
-		$_page = $page ?? max( $this->paged(), $this->page() );
+		$page = $page ?? max( $this->paged(), $this->page() );
 
-		if ( $_page < 2 )
+		if ( $page < 2 )
 			return $url;
 
-		$_use_base = $use_base ?? (
+		$use_base = $use_base ?? (
 			$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
 		);
 
 		if ( $this->pretty_permalinks ) {
-
 			$_query = parse_url( $url, PHP_URL_QUERY );
 			// Remove queries, add them back later.
 			if ( $_query )
@@ -751,19 +750,19 @@ class Generate_Url extends Generate_Title {
 			static $base;
 			$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
 
-			if ( $_use_base ) {
-				$url = \user_trailingslashit( \trailingslashit( $url ) . "$base/$_page", 'paged' );
+			if ( $use_base ) {
+				$url = \user_trailingslashit( \trailingslashit( $url ) . "$base/$page", 'paged' );
 			} else {
-				$url = \user_trailingslashit( \trailingslashit( $url ) . $_page, 'single_paged' );
+				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );
 			}
 
 			if ( $_query )
 				$url = $this->append_url_query( $url, $_query );
 		} else {
-			if ( $_use_base ) {
-				$url = \add_query_arg( 'paged', $_page, $url );
+			if ( $use_base ) {
+				$url = \add_query_arg( 'paged', $page, $url );
 			} else {
-				$url = \add_query_arg( 'page', $_page, $url );
+				$url = \add_query_arg( 'page', $page, $url );
 			}
 		}
 

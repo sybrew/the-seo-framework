@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.5.0
 Tested up to: 5.8
 Requires PHP: 7.2.0
-Stable tag: 4.1.5.1
+Stable tag: 4.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -247,6 +247,24 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.2.1 =
+
+This update addresses a few regressions brought in 4.2.0; it fixes the canonical URL for [paginated categories, TODO, and TODO](TODO).
+
+**For everyone:**
+
+* **Fixed:**
+	* The paginated canonical URL now works as intended again for taxonomies (categories, tags, etc.).
+	* TODO The time limit is no longer decreased on upgrade, which may cause issues in some corner cases.
+
+* **For developers:**
+
+* **Changed:**
+	* TODO `tsf.disPatch` is now `tsf.dispatch` without deprecation handling (note the capital P, dang it).
+		* This is a change early after its introduction to the world, so the impact should remain minimal for this (yet) undocumented method. Sorry about that!
+* **Fixed:**
+	* TODO Fixed a PHP Warning on the SEO settings page when `the_seo_framework_sitemap_post_limit` is used.
+
 = 4.2.0 - Perfect =
 
 *Come with me, and you'll be in a world of pure imagination. - [Gene Wilder, Anthony Newley, Leslie Bricusse](https://www.youtube.com/watch?v=SVi3-PrQ0pY)*
@@ -257,7 +275,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 * Fancy a custom site title for SEO purposes only? Check out the new title settings.
 * You will find that the sitemap's stylesheet now has its URLs centered; it also supports mobile devices.
 * Developers can now enjoy using the new `tsf()` function -- an alias of `the_seo_framework()`.
-* If you're a developer, you should also check out our perfectly tuned `memo()`. `umemo()`, and `fmemo()` functions, which help make TSF so performant.
+* If you're a developer, you should also check out our perfectly tuned `memo()`. `umemo()`, and `fmemo()` [functions](https://github.com/sybrew/the-seo-framework/blob/4.2.0/inc/functions/api.php#L155-L335), which help make TSF so performant.
 
 *Psst: Check out our [Cyber Sale](https://theseoframework.com/?p=3527).*
 
@@ -275,9 +293,15 @@ This update comes with updated browser styles and scripts. Not all browsers get 
 
 WordPress 5.1 through 5.4 are no longer supported. Here's why:
 
-* [Over 66% of all WordPress sites](https://wordpress.org/about/stats/) are using version 5.5 or later.
+* [Over 66% of all WordPress sites](https://wordpress.org/about/stats/) are using WordPress v5.5 or later.
 * Newer versions of WordPress are faster, more reliable, and easier to work with; for both you and us.
 * Supporting past versions takes time away that's better used implementing new features.
+
+PHP 5.6 through 7.1 are no longer supported. Here's why:
+
+* [Almost 80% of all WordPress sites](https://wordpress.org/about/stats/) are using PHP v7.2 or later.
+* Newer versions of PHP are faster and more secure. For us, they're also easier to work with.
+* Again, supporting past versions takes time away that's better used implementing new features.
 
 **Support the development**
 
