@@ -1214,7 +1214,13 @@ class Detect extends Render {
 	public function is_subdirectory_installation() {
 		return memo() ?? memo(
 			(bool) \strlen(
-				ltrim( parse_url( \get_option( 'home' ), PHP_URL_PATH ), ' \\/' )
+				ltrim(
+					parse_url(
+						\get_option( 'home' ),
+						PHP_URL_PATH
+					) ?? '',
+					' \\/'
+				)
 			)
 		);
 	}

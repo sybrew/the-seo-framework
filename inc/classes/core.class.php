@@ -625,14 +625,14 @@ class Core {
 			+ ( 0.7152 * $get_relative_luminance( $g ) )
 			+ ( 0.0722 * $get_relative_luminance( $b ) );
 
-		// Build light greyscale.
-		$gr = ( $r * 0.2989 / 8 ) * $rl;
-		$gg = ( $g * 0.5870 / 8 ) * $rl;
-		$gb = ( $b * 0.1140 / 8 ) * $rl;
+		// Build light greyscale. Rounding is required for bitwise operation (PHP8.1+).
+		$gr = round( ( $r * 0.2989 / 8 ) * $rl );
+		$gg = round( ( $g * 0.5870 / 8 ) * $rl );
+		$gb = round( ( $b * 0.1140 / 8 ) * $rl );
 
 		// Invert colors if they hit this luminance boundary.
 		if ( $rl < 0.5 ) {
-			// Build dark greyscale. bitwise operators round...
+			// Build dark greyscale. bitwise operators...
 			$gr ^= 0xFF;
 			$gg ^= 0xFF;
 			$gb ^= 0xFF;

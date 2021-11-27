@@ -253,6 +253,8 @@ This update addresses a few regressions brought in 4.2.0; it fixes the canonical
 
 **For everyone:**
 
+* **Added:**
+	* TSF is now fully compatible with PHP 8.1.
 * **Fixed:**
 	* The paginated canonical URL now works as intended again for taxonomies (categories, tags, etc.).
 	* TODO The time limit is no longer decreased on upgrade, which may cause issues in some corner cases.

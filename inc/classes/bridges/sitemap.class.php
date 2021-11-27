@@ -491,7 +491,7 @@ final class Sitemap {
 				parse_url(
 					static::$tsf->get_home_url(),
 					PHP_URL_PATH
-				),
+				) ?? '',
 				'/'
 			)
 		);

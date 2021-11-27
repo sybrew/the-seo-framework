@@ -34,7 +34,13 @@ function _polylang_fix_sitemap_base_bath( $path ) {
 				// Polylang determines language sporadically from content: can't be trusted.
 				// NOTE: Thanks to '_polylang_blocklist_tsf_urls', this yields a different value albeit the same code.
 				// That's Polylang for you: can't trust your own code.
-				$path = rtrim( parse_url( \get_home_url(), PHP_URL_PATH ), '/' );
+				$path = rtrim(
+					parse_url(
+						\get_home_url(),
+						PHP_URL_PATH
+					) ?? '',
+					'/'
+				);
 				break;
 			default:
 				// Polylang can differentiate languages by (sub)domain/directory name early. No need to interfere.
