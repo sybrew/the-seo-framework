@@ -249,7 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.1 =
 
-This update addresses a few regressions brought in 4.2.0; it fixes the canonical URL for [paginated categories, TODO, and TODO](TODO).
+This update addresses a few regressions brought in 4.2.0; it fixes the canonical URL for paginated categories, corrects an API misnomer, and [rectifies a few edge cases](TODO). TSF now also supports PHP 8.1.
 
 **For everyone:**
 
@@ -262,7 +262,7 @@ This update addresses a few regressions brought in 4.2.0; it fixes the canonical
 * **For developers:**
 
 * **Changed:**
-	* TODO `tsf.disPatch` is now `tsf.dispatch` without deprecation handling (note the capital P, dang it).
+	* `tsf.disPatch` is now `tsf.dispatch` without deprecation handling (note the capital P, dang it).
 		* This is a change early after its introduction to the world, so the impact should remain minimal for this (yet) undocumented method. Sorry about that!
 * **Fixed:**
 	* TODO Fixed a PHP Warning on the SEO settings page when `the_seo_framework_sitemap_post_limit` is used.
