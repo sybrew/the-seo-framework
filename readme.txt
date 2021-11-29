@@ -257,7 +257,8 @@ This update addresses a few regressions brought in 4.2.0; it fixes the canonical
 	* TSF is now fully compatible with PHP 8.1.
 * **Fixed:**
 	* The paginated canonical URL now works as intended again for taxonomies (categories, tags, etc.).
-	* TODO The time limit is no longer decreased on upgrade, which may cause issues in some corner cases.
+	* When the PHP execution time limit is set to unlimited (`0`), the sitemap can be locked for at most 3 minutes now, instead of never.
+	* The PHP execution time limit is no longer decreased during plugin upgrade, which may cause issues in some corner cases.
 
 * **For developers:**
 

@@ -98,6 +98,7 @@ function _previous_db_version() {
  *              4. Added an upgrading lock. Preventing upgrades running simultaneously.
  *                 While this lock is active, the SEO Settings can't be accessed, either.
  * @since 4.1.0 Now checks whether the lock is successfully set before proceeding. Preventing race conditions.
+ * @since 4.2.1 No longer lowers the PHP execution time limit -- only increases it.
  */
 function _do_upgrade() {
 
@@ -112,7 +113,7 @@ function _do_upgrade() {
 		exit;
 	}
 
-	$timeout = 5 * MINUTE_IN_SECONDS;
+	$timeout = 5 * MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
 
 	$lock = _set_upgrade_lock( $timeout );
 	// Lock failed to create--probably because it was already locked (or the database failed us).
@@ -124,8 +125,10 @@ function _do_upgrade() {
 	register_shutdown_function( __NAMESPACE__ . '\\_release_upgrade_lock' );
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
-	// This may lower the default timeout--which is good. Prevents overlap.
-	set_time_limit( $timeout );
+
+	$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
+	if ( 0 !== $ini_max_execution_time )
+		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
 	/**
 	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.

@@ -294,6 +294,7 @@ final class Sitemap {
 	 * at least as long as PHP is allowed to run.
 	 *
 	 * @since 4.1.2
+	 * @since 4.2.1 Now considers "unlimited" execution time (0) that'd've prevented locks altogether.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on succes, false on failure.
@@ -303,8 +304,14 @@ final class Sitemap {
 		$lock_key = $this->get_lock_key( $sitemap_id );
 		if ( ! $lock_key ) return false;
 
-		// This is rather at most as PHP will run. However, 3 minutes to generate a sitemap is already ludicrous.
-		$timeout = (int) min( ini_get( 'max_execution_time' ), 3 * MINUTE_IN_SECONDS );
+		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
+
+		if ( 0 === $ini_max_execution_time ) { // Unlimited. Let's still put a limit on the lock.
+			$timeout = 3 * MINUTE_IN_SECONDS;
+		} else {
+			// This is rather at most as PHP will run. However, 3 minutes to generate a sitemap is already ludicrous.
+			$timeout = (int) min( $ini_max_execution_time, 3 * MINUTE_IN_SECONDS );
+		}
 
 		return \set_transient(
 			$lock_key,

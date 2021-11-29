@@ -68,6 +68,7 @@ class Base extends Main {
 	 * TODO consider expanding this feature for multilingual sites?
 	 *
 	 * @since 4.1.2
+	 * @since 4.2.1 Now no longer lowers the PHP execution time limit from unlimited to 3 minutes.
 	 */
 	public function prerender_sitemap() {
 
@@ -78,7 +79,9 @@ class Base extends Main {
 		// Don't prerender if the sitemap is already generated.
 		if ( false !== static::$tsf->get_transient( $this->base_get_sitemap_store_key() ) ) return;
 
-		set_time_limit( (int) max( ini_get( 'max_execution_time' ), 3 * MINUTE_IN_SECONDS ) );
+		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
+		if ( 0 !== $ini_max_execution_time )
+			set_time_limit( max( $ini_max_execution_time, 3 * MINUTE_IN_SECONDS ) );
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
 		if ( ! $bridge->lock_sitemap( 'base' ) ) return;
