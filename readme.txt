@@ -265,7 +265,8 @@ This update addresses a few regressions brought in 4.2.0; it fixes the canonical
 	* `tsf.disPatch` is now `tsf.dispatch` without deprecation handling (note the capital P, dang it).
 		* This is a change early after its introduction to the world, so the impact should remain minimal for this (yet) undocumented method. Sorry about that!
 * **Fixed:**
-	* TODO Fixed a PHP Warning on the SEO settings page when `the_seo_framework_sitemap_post_limit` is used.
+	* Fixed a warning on the SEO settings page when `the_seo_framework_sitemap_post_limit` is used.
+		* This filter no longer affects the display of option field `sitemap_query_limit`.
 
 = 4.2.0 - Perfect =
 

@@ -156,20 +156,11 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		<?php
 		HTML::description( __( 'This setting affects how many pages are requested from the database per query.', 'autodescription' ) );
 
-		if ( has_filter( 'the_seo_framework_sitemap_post_limit' ) ) :
-			?>
-			<input type=hidden name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>">
-			<p>
-				<input type="number" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" value="<?php echo absint( $this->get_sitemap_post_limit() ); ?>" disabled />
-			</p>
-			<?php
-		else :
-			?>
-			<p>
-				<input type="number" min=1 max=50000 name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo absint( $this->get_default_option( 'sitemap_query_limit' ) ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
-			</p>
-			<?php
-		endif;
+		?>
+		<p>
+			<input type="number" min=1 max=50000 name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" placeholder="<?php echo absint( $this->get_default_option( 'sitemap_query_limit' ) ); ?>" value="<?php echo absint( $this->get_option( 'sitemap_query_limit' ) ); ?>" />
+		</p>
+		<?php
 		HTML::description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
 		break;
 
