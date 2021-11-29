@@ -249,25 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.1 =
 
-This update addresses a few regressions brought in 4.2.0; it fixes the canonical URL for paginated categories, corrects an API misnomer, and [rectifies a few edge cases](TODO). TSF now also supports PHP 8.1.
-
-**For everyone:**
-
-* **Added:**
-	* TSF is now fully compatible with PHP 8.1.
-* **Fixed:**
-	* The paginated canonical URL now works as intended again for taxonomies (categories, tags, etc.).
-	* When the PHP execution time limit is set to unlimited (`0`), the sitemap can be locked for at most 3 minutes now, instead of never.
-	* The PHP execution time limit is no longer decreased during plugin upgrade, which may cause issues in some corner cases.
-
-* **For developers:**
-
-* **Changed:**
-	* `tsf.disPatch` is now `tsf.dispatch` without deprecation handling (note the capital P, dang it).
-		* This is a change early after its introduction to the world, so the impact should remain minimal for this (yet) undocumented method. Sorry about that!
-* **Fixed:**
-	* Fixed a warning on the SEO settings page when `the_seo_framework_sitemap_post_limit` is used.
-		* This filter no longer affects the display of option field `sitemap_query_limit`.
+This minor update addresses a few regressions brought in v4.2.0; it fixes the canonical URL for paginated categories, corrects an API typo, and [rectifies a few edge cases](https://theseoframework.com/?p=3836). TSF now also supports PHP 8.1.
 
 = 4.2.0 - Perfect =
 
