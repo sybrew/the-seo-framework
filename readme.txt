@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.5.0
 Tested up to: 5.8
 Requires PHP: 7.2.0
-Stable tag: 4.2.0
+Stable tag: 4.2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -246,6 +246,10 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.2.2 =
+
+This minor update addresses a regression where the homepage canonical URL was [missing a trailing slash](https://theseoframework.com/?p=3841).
 
 = 4.2.1 =
 

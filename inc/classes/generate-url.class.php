@@ -327,29 +327,19 @@ class Generate_Url extends Generate_Title {
 			$url = $this->add_url_pagination( $url, $this->paged(), true );
 		}
 
-		$parsed = parse_url( $url );
-
-		// Don't slash the home URL if it's been modified by a (translation) plugin.
-		if ( ! isset( $parsed['query'] ) ) {
-			if ( isset( $parsed['path'] ) && '/' !== $parsed['path'] ) {
-				$url = \user_trailingslashit( $url, 'home' );
-			} else {
-				$url = \trailingslashit( $url );
-			}
-		}
-
-		return $url;
+		return $this->slash_root_url( $url );
 	}
 
 	/**
-	 * Returns home canonical URL without pagination or slashing.
+	 * Returns home canonical URL without query considerations.
 	 *
 	 * @since 4.2.0
+	 * @since 4.2.2 Now adds a trailing slash if the URL is a root URL.
 	 *
-	 * @return string The home canonical URL without pagination.
+	 * @return string The home canonical URL without query considerations.
 	 */
 	public function get_raw_home_canonical_url() {
-		return $this->set_preferred_url_scheme( $this->get_home_url() );
+		return $this->slash_root_url( $this->set_preferred_url_scheme( $this->get_home_url() ) );
 	}
 
 	/**
@@ -1190,5 +1180,30 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_home_url() {
 		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_home_url() );
+	}
+
+	/**
+	 * Slashes the root (home) URL.
+	 *
+	 * @since 4.2.2
+	 *
+	 * @param string $url The root URL.
+	 * @return string The root URL plausibly with added slashes.
+	 */
+	protected function slash_root_url( $url ) {
+
+		$parsed = parse_url( $url );
+
+		// Don't slash the home URL if it's been modified by a (translation) plugin.
+		if ( ! isset( $parsed['query'] ) ) {
+			if ( isset( $parsed['path'] ) && '/' !== $parsed['path'] ) {
+				// Paginated URL or subdirectory.
+				$url = \user_trailingslashit( $url, 'home' );
+			} else {
+				$url = \trailingslashit( $url );
+			}
+		}
+
+		return $url;
 	}
 }
