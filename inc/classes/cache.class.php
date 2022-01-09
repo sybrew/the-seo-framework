@@ -64,7 +64,7 @@ class Cache extends Site_Options {
 	 */
 	public function init_post_cache_actions() {
 
-		if ( _has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) return;
 
 		// Can-be cron actions.
 		\add_action( 'publish_post', [ $this, 'delete_post_cache' ] );
@@ -405,7 +405,7 @@ class Cache extends Site_Options {
 	 */
 	public function delete_sitemap_transient() {
 
-		if ( _has_run( __METHOD__ ) ) return false;
+		if ( has_run( __METHOD__ ) ) return false;
 
 		$transient = $this->get_sitemap_transient_name();
 		$transient and \delete_transient( $transient );

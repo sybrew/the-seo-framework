@@ -34,6 +34,7 @@ namespace {
 	 *
 	 * @since 4.2.0
 	 * @see `the_seo_framework()` alias.
+	 * @api
 	 *
 	 * @return null|object The plugin class object.
 	 */
@@ -50,6 +51,7 @@ namespace {
 	 *
 	 * @since 2.2.5
 	 * @see `tsf()` alias.
+	 * @api
 	 *
 	 * @return null|object The plugin class object.
 	 */
@@ -62,6 +64,7 @@ namespace {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.2 Now casts to string.
+	 * @api
 	 *
 	 * @return string The database version. '0' if version isn't found.
 	 */
@@ -75,6 +78,7 @@ namespace {
 	 * @since 2.7.0
 	 * @since 2.8.0 Added `did_action()` check.
 	 * @since 4.2.0 Removed memoization.
+	 * @api
 	 *
 	 * @return string|bool The SEO Framework class name. False if The SEO Framework isn't loaded (yet).
 	 */
@@ -90,66 +94,18 @@ namespace {
 
 namespace The_SEO_Framework {
 	/**
-	 * Determines whether this plugin should load.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.8.0
-	 * @access private
-	 * @action plugins_loaded
-	 *
-	 * @return bool Whether to allow loading of plugin.
-	 */
-	function _can_load() {
-		static $load = null;
-		/**
-		 * @since 2.3.7
-		 * @param bool $load
-		 */
-		return $load = $load ?? (bool) \apply_filters( 'the_seo_framework_load', true );
-	}
-
-	/**
-	 * Requires trait files, only once per request.
-	 *
-	 * @since 3.1.0
-	 * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
-	 * @access private
-	 *
-	 * @param string $file Where the trait is for. Must be lowercase.
-	 * @return bool True if loaded, false otherwise.
-	 */
-	function _load_trait( $file ) {
-		static $loaded          = [];
-		return $loaded[ $file ] = $loaded[ $file ]
-			?? (bool) require THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . str_replace( '/', DIRECTORY_SEPARATOR, $file ) . '.trait.php';
-	}
-
-	/**
 	 * Determines if the method or function has already run.
 	 *
-	 * @since 3.1.0
-	 * @access private
+	 * @since 4.2.3
+	 * @api
+	 * @todo make $caller optional and use debug_backtrace()?
 	 *
 	 * @param string $caller The method or function that calls this.
 	 * @return bool True if already called, false otherwise.
 	 */
-	function _has_run( $caller ) {
-		static $runners = [];
-		return $runners[ $caller ] ?? ! ( $runners[ $caller ] = true );
-	}
-
-	/**
-	 * Adds and returns-to the memoized bootstrap timer.
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 *
-	 * @param int $add The time to add.
-	 * @return int The accumulated time, roughly.
-	 */
-	function _bootstrap_timer( $add = 0 ) {
-		static $time  = 0;
-		return $time += $add;
+	function has_run( $caller ) {
+		static $ran = [];
+		return $ran[ $caller ] ?? ! ( $ran[ $caller ] = true );
 	}
 
 	/**
@@ -194,6 +150,7 @@ namespace The_SEO_Framework {
 	 * @since 4.2.0
 	 * @see umemo() -- sacrifices cleanliness for performance.
 	 * @see fmemo() -- sacrifices everything for readability.
+	 * @api
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty callbacks.
@@ -238,7 +195,7 @@ namespace The_SEO_Framework {
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
-	 *    return umemo( 'something', null, $arg );
+	 *    return umemo( __METHOD__, null, $arg );
 	 *        ?? umemo( __METHOD__, expensive_call( $arg ), $arg );
 	 * }
 	 * my_function( 1 ); // prints "expensive 1!", returns 2.
@@ -249,8 +206,10 @@ namespace The_SEO_Framework {
 	 * @since 4.2.0
 	 * @see memo() -- sacrifices performance for cleanliness.
 	 * @see fmemo() -- sacrifices everything for readability.
+	 * @api
 	 *
 	 * @param string $key          The key you want to use to memoize. It's best to use the method name.
+	 *                             You can share a unique key between various functions.
 	 * @param mixed  $value_to_set The value to set.
 	 * @param mixed  ...$args      Extra arguments, that are used to differentiate callbacks.
 	 *                             Arguments may not contain \Closure()s.
@@ -300,6 +259,7 @@ namespace The_SEO_Framework {
 	 * @see memo() -- sacrifices performance for cleanliness.
 	 * @see umemo() -- sacrifices cleanliness for performance.
 	 * @ignore We couldn't find a use for this... yet. Probably once we support only PHP7.4+
+	 * @api
 	 *
 	 * @param \Closure $fn The Closure or function to memoize.
 	 * @return mixed : {
@@ -312,7 +272,7 @@ namespace The_SEO_Framework {
 
 		static $memo = [];
 
-		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- This is ever unserialized.
+		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- This is never unserialized.
 		$hash = serialize(
 			[
 				'file' => '',

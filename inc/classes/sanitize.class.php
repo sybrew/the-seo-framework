@@ -176,7 +176,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function init_sanitizer_filters() {
 
-		if ( _has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) return;
 
 		$this->add_option_filter(
 			's_title_separator',
@@ -2132,5 +2132,24 @@ class Sanitize extends Admin_Pages {
 		}
 
 		return \strlen( $var = trim( $value ) );
+	}
+
+	/**
+	 * Sets string value if current variable has no content. Returns boolean value if it has any length.
+	 *
+	 * Can be used to loop via or statements -- here, $title will be set to 'two' if $usertitle is empty:
+	 * e.g. strlen_or_set( $title, trim( $usertitle ) ) || strlen_or_set( $title, 'two' );
+	 *
+	 * @since 4.2.3
+	 * @ignore unused. untested. Creates super-smelly code, but fixes bugs revolving around input '0' or ' '.
+	 *         We'd prefer a native PHP "string has length" comparison operator.
+	 *         I don't believe any language has this. Then again, many languages don't see '0' as false.
+	 *
+	 * @param variable $var   The variable to set. Passed by reference.
+	 * @param string   $value The value to set if $var has no string length.
+	 * @return bool True if content has any length.
+	 */
+	protected function strlen_or_set( &$var, $value ) {
+		return (bool) ( \strlen( $var ) ?: \strlen( $var = $value ) );
 	}
 }

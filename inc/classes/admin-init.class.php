@@ -147,7 +147,7 @@ class Admin_Init extends Init {
 	 */
 	public function init_admin_scripts() {
 
-		if ( _has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) return;
 
 		Bridges\Scripts::_init();
 	}

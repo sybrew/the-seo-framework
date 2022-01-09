@@ -84,7 +84,7 @@ final class Load extends Cache {
 	 */
 	public function __construct() {
 
-		if ( _has_run( __METHOD__ ) ) {
+		if ( has_run( __METHOD__ ) ) {
 			// Don't construct twice, warn developer.
 			$this->_doing_it_wrong( __METHOD__, 'Do not instance this class. Use function <code>tsf()</code> instead.', '3.1.0' );
 			return null;

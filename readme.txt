@@ -141,7 +141,7 @@ If you wish to learn more, please refer to the [EU commission on copyright](http
 = This plugin requires: =
 
 * PHP 7.2 or higher.
-* WordPress 5.1 or higher.
+* WordPress 5.5 or higher.
 * Any modern browser for administration.
 
 = Installation instructions: =
@@ -246,6 +246,16 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.2.3 =
+
+**For developers**
+
+* **Added:**
+	* Function `\The_SEO_Framework\has_run()` is now part of the public API.
+		* It helps test whether the caller function was already called before.
+* **Removed:**
+	* Privately-marked function `\The_SEO_Framework\_load_trait()` has been removed. We do not need traits in TSF (yet).
 
 = 4.2.2 =
 

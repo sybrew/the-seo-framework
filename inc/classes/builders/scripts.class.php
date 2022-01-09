@@ -191,7 +191,7 @@ final class Scripts {
 	 */
 	public static function footer_enqueue() {
 
-		if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
 
 		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}

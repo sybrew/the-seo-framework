@@ -492,7 +492,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
 	if ( ! $previous_version ) return;
 
 	// Can this even run twice? Let's play it safe to prevent crashes.
-	if ( \The_SEO_Framework\_has_run( __METHOD__ ) ) return;
+	if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
 
 	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
 }

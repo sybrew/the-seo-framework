@@ -50,7 +50,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function add_menu_link() {
 
-		if ( _has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) return;
 
 		$menu = [
 			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),

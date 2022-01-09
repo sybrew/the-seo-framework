@@ -376,10 +376,8 @@ class Generate extends User_Data {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$id = $this->get_the_real_ID();
-
-		$post              = \get_post( $id );
-		$post_modified_gmt = $post->post_modified_gmt;
+		$id                = $this->get_the_real_ID();
+		$post_modified_gmt = \get_post( $id )->post_modified_gmt;
 
 		return memo(
 			'0000-00-00 00:00:00' === $post_modified_gmt
