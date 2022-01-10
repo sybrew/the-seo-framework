@@ -14,4 +14,4 @@ $sep      = $this->get_title_separator();
 $addition = $this->get_blogname();
 
 ?>
-<title><?php echo esc_xml( $this->s_title_raw( "$title $sep $addition" ) ); ?></title>
+<title><?= esc_xml( $this->s_title_raw( "$title $sep $addition" ) ) ?></title>

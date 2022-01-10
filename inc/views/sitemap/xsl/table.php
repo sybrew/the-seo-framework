@@ -35,16 +35,16 @@ if ( $this->get_option( 'sitemaps_modified' ) ) {
 <table>
 	<thead>
 		<tr>
-			<?php echo $url['th']; ?>
-			<?php echo $last_updated['th']; ?>
+			<?= $url['th'] ?>
+			<?= $last_updated['th'] ?>
 		</tr>
 	</thead>
 	<tbody>
 	<xsl:for-each select="sitemap:urlset/sitemap:url">
-		<?php echo implode( $vars ); ?>
+		<?= implode( $vars ) ?>
 		<tr>
-			<?php echo $url['td']; ?>
-			<?php echo $last_updated['td']; ?>
+			<?= $url['td'] ?>
+			<?= $last_updated['td'] ?>
 		</tr>
 	</xsl:for-each>
 	</tbody>

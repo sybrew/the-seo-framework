@@ -11,7 +11,7 @@
 
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
-			<property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,memo,umemo,fmemo,Load,Silencer"/>
+			<property name="userNoopChecks" type="array" value="_can_load,has_run,_bootstrap_timer,memo,umemo,fmemo,Load,Silencer"/>
 		</properties>
 	</rule>
 

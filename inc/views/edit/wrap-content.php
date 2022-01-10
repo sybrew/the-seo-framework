@@ -27,7 +27,7 @@ foreach ( $tabs as $tab => $params ) :
 	$current_class = 1 === $count ? ' tsf-flex-tab-content-active' : '';
 
 	?>
-	<div class="tsf-flex tsf-flex-tab-content <?php echo esc_attr( $radio_class . $current_class ); ?>" id="<?php echo esc_attr( $radio_id ); ?>" >
+	<div class="tsf-flex tsf-flex-tab-content <?= esc_attr( $radio_class . $current_class ) ?>" id="<?= esc_attr( $radio_id ) ?>" >
 		<?php
 		// No-JS tabs.
 		if ( $use_tabs ) :
@@ -38,8 +38,8 @@ foreach ( $tabs as $tab => $params ) :
 			<div class="tsf-flex tsf-flex-hide-if-js tsf-flex-tabs-content-no-js">
 				<div class="tsf-flex tsf-flex-nav-tab tsf-flex-tab-no-js">
 					<span class="tsf-flex tsf-flex-nav-tab">
-						<?php echo $dashicon ? '<span class="tsf-flex dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-flex-nav-dashicon"></span>' : ''; ?>
-						<?php echo $label_name ? '<span class="tsf-flex tsf-flex-nav-name">' . esc_html( $label_name ) . '</span>' : ''; ?>
+						<?= $dashicon ? '<span class="tsf-flex dashicons dashicons-' . esc_attr( $dashicon ) . ' tsf-flex-nav-dashicon"></span>' : '' ?>
+						<?= $label_name ? '<span class="tsf-flex tsf-flex-nav-name">' . esc_html( $label_name ) . '</span>' : '' ?>
 					</span>
 				</div>
 			</div>

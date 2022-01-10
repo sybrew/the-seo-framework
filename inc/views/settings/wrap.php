@@ -40,7 +40,7 @@ $_reset_button = get_submit_button(
 		<?php settings_fields( THE_SEO_FRAMEWORK_SITE_OPTIONS ); ?>
 
 		<div class=tsf-top-wrap>
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+			<h1><?= esc_html( get_admin_page_title() ) ?></h1>
 			<p class=tsf-top-buttons>
 				<?php
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
@@ -75,7 +75,7 @@ $_reset_button = get_submit_button(
 		// close postboxes that should be closed
 		$( '.if-js-closed' ).removeClass( 'if-js-closed' ).addClass( 'closed' );
 		// postboxes setup
-		postboxes.add_postbox_toggles('<?php echo esc_js( $this->seo_settings_page_hook ); ?>');
+		postboxes.add_postbox_toggles('<?= esc_js( $this->seo_settings_page_hook ) ?>');
 	} );
 	//]]>
 </script>

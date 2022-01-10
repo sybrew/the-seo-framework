@@ -20,7 +20,7 @@ $count    = 1;
  */
 if ( $use_tabs ) :
 	?>
-	<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?php echo esc_attr( $id . '-tabs-wrapper' ); ?>">
+	<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?= esc_attr( $id . '-tabs-wrapper' ) ?>">
 		<?php
 		foreach ( $tabs as $tab => $value ) :
 			$dashicon = $value['dashicon'] ?? '';

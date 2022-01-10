@@ -109,10 +109,13 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			&& ! defined( 'TSFEM_E_TITLE_FIX' )
 			&& current_user_can( 'install_plugins' )
 		) {
-			/* translators: %s = title-tag */
-			$_h4 = sprintf( esc_html__( 'Theme %s Support Missing', 'autodescription' ), '<code>title-tag</code>' );
 			?>
-			<h4 class=attention><?php echo $_h4; // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped ?></h4>
+			<h4>
+			<?php
+			/* translators: %s = title-tag */
+			printf( esc_html__( 'Theme %s Support Missing', 'autodescription' ), '<code>title-tag</code>' );
+			?>
+			</h4>
 			<?php
 			HTML::description_noesc(
 				$this->convert_markdown(
@@ -233,7 +236,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type="text" name="<?php Input::field_name( 'site_title' ); ?>" class="large-text" id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?php echo esc_attr( $this->s_title_raw( $this->get_filtered_raw_blogname() ) ); ?>" value="<?php echo $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Input::field_name( 'site_title' ); ?>" class="large-text" id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( $this->get_filtered_raw_blogname() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( __( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );

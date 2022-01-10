@@ -1418,7 +1418,6 @@ class Sanitize extends Admin_Pages {
 	 * of entities in HTML input value attributes.
 	 *
 	 * @since 4.0.0
-	 * TODO a better name would've been "esc_attr_revert_amp"...?
 	 *
 	 * @param string $new_value String with possibly ampersands.
 	 * @return string

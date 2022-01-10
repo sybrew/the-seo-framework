@@ -20,7 +20,7 @@ $count    = 1;
  */
 if ( $use_tabs ) :
 	?>
-	<div class="tsf-flex tsf-flex-nav-tab-wrapper tsf-flex-hide-if-no-js" id="<?php echo esc_attr( "tsf-flex-{$id}-tabs-wrapper" ); ?>">
+	<div class="tsf-flex tsf-flex-nav-tab-wrapper tsf-flex-hide-if-no-js" id="<?= esc_attr( "tsf-flex-{$id}-tabs-wrapper" ) ?>">
 		<div class="tsf-flex tsf-flex-nav-tab-inner">
 			<?php
 			foreach ( $tabs as $tab => $value ) :

@@ -76,7 +76,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		?>
 		<hr>
-		<h4><?php echo esc_html( _x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ); ?></h4>
+		<h4><?= esc_html( _x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ) ?></h4>
 		<?php
 		HTML::description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the search results.', 'autodescription' ) );
 
@@ -117,7 +117,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		<?php HTML::header_title( __( 'About this website', 'autodescription' ) ); ?>
 		<p>
-			<label for="<?php Input::field_id( 'knowledge_type' ); ?>"><?php echo esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ); ?></label>
+			<label for="<?php Input::field_id( 'knowledge_type' ); ?>"><?= esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ) ?></label>
 			<select name="<?php Input::field_name( 'knowledge_type' ); ?>" id="<?php Input::field_id( 'knowledge_type' ); ?>">
 				<?php
 				$knowledge_type = (array) apply_filters(
@@ -140,7 +140,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?php echo esc_attr( $this->get_blogname() ); ?>" value="<?php echo esc_attr( $this->get_option( 'knowledge_name' ) ); ?>" autocomplete=off />
+			<input type="text" name="<?php Input::field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= esc_attr( $this->get_blogname() ) ?>" value="<?= esc_attr( $this->get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
 		</p>
 		<hr>
 		<?php
@@ -168,8 +168,8 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?php echo esc_url( $logo_placeholder ); ?>" value="<?php echo esc_url( $this->get_option( 'knowledge_logo_url' ) ); ?>" />
-			<input type="hidden" name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?php echo absint( $this->get_option( 'knowledge_logo_id' ) ); ?>" />
+			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'knowledge_logo_url' ) ) ?>" />
+			<input type="hidden" name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?= absint( $this->get_option( 'knowledge_logo_id' ) ) ?>" />
 		</p>
 		<p class="hide-if-no-tsf-js">
 			<?php
@@ -303,7 +303,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				?>
 				<p>
 					<label for="<?php Input::field_id( $v['option'] ); ?>">
-						<strong><?php echo esc_html( $v['desc'] ); ?></strong>
+						<strong><?= esc_html( $v['desc'] ) ?></strong>
 						<?php
 						if ( $v['examplelink'] ) {
 							HTML::make_info(
@@ -315,7 +315,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 					</label>
 				</p>
 				<p>
-					<input type="url" name="<?php Input::field_name( $v['option'] ); ?>" class="large-text" id="<?php Input::field_id( $v['option'] ); ?>" placeholder="<?php echo esc_attr( $v['placeholder'] ); ?>" value="<?php echo esc_attr( $this->get_option( $v['option'] ) ); ?>" autocomplete=off />
+					<input type="url" name="<?php Input::field_name( $v['option'] ); ?>" class="large-text" id="<?php Input::field_id( $v['option'] ); ?>" placeholder="<?= esc_attr( $v['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $v['option'] ) ) ?>" autocomplete=off />
 				</p>
 				<?php
 			}

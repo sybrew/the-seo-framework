@@ -134,7 +134,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ); ?>" autocomplete=off />
+					<input class="large-text" type="text" name="autodescription[_genesis_title]" id="autodescription_title" value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ) ?>" autocomplete=off />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -203,7 +203,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" rows="4" cols="4" autocomplete=off><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_genesis_description]" id="autodescription_description" rows="4" cols="4" autocomplete=off><?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_description' ) ) ?></textarea>
 				<?php
 				$this->output_js_description_elements(); // legacy
 				$this->output_js_description_data(
@@ -277,7 +277,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?php echo esc_url( $canonical_placeholder ); ?>" value="<?php echo esc_url( $this->get_post_meta_item( '_genesis_canonical_uri' ) ); ?>" autocomplete=off />
+				<input class="large-text" type="url" name="autodescription[_genesis_canonical_uri]" id="autodescription_canonical" placeholder="<?= esc_url( $canonical_placeholder ) ?>" value="<?= esc_url( $this->get_post_meta_item( '_genesis_canonical_uri' ) ) ?>" autocomplete=off />
 			</div>
 		</div>
 
@@ -316,8 +316,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 					<div class="tsf-flex-setting tsf-flex">
 						<div class="tsf-flex-setting-label tsf-flex">
 							<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-								<label for="<?php echo esc_attr( $_s['id'] ); ?>" class="tsf-flex-setting-label-item tsf-flex">
-									<div><strong><?php echo esc_html( $_s['label'] ); ?></strong></div>
+								<label for="<?= esc_attr( $_s['id'] ) ?>" class="tsf-flex-setting-label-item tsf-flex">
+									<div><strong><?= esc_html( $_s['label'] ) ?></strong></div>
 								</label>
 							</div>
 						</div>
@@ -408,7 +408,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[redirect]" id="autodescription_redirect" value="<?php echo esc_url( $this->get_post_meta_item( 'redirect' ) ); ?>" autocomplete=off />
+				<input class="large-text" type="url" name="autodescription[redirect]" id="autodescription_redirect" value="<?= esc_url( $this->get_post_meta_item( 'redirect' ) ) ?>" autocomplete=off />
 			</div>
 		</div>
 		<?php
@@ -474,7 +474,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		);
 
 		?>
-		<div class="tsf-flex-setting tsf-flex" <?php echo $show_og ? '' : 'style=display:none'; ?>>
+		<div class="tsf-flex-setting tsf-flex" <?= $show_og ? '' : 'style=display:none' ?>>
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_og_title" class="tsf-flex-setting-label-item tsf-flex">
@@ -488,12 +488,12 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-og-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ); ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class="large-text" type="text" name="autodescription[_open_graph_title]" id="autodescription_og_title" value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ) ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
 				</div>
 			</div>
 		</div>
 
-		<div class="tsf-flex-setting tsf-flex" <?php echo $show_og ? '' : 'style=display:none'; ?>>
+		<div class="tsf-flex-setting tsf-flex" <?= $show_og ? '' : 'style=display:none' ?>>
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_og_description" class="tsf-flex-setting-label-item tsf-flex">
@@ -506,11 +506,11 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" rows="3" cols="4" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ); ?></textarea>
+				<textarea class="large-text" name="autodescription[_open_graph_description]" id="autodescription_og_description" rows="3" cols="4" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_description' ) ) ?></textarea>
 			</div>
 		</div>
 
-		<div class="tsf-flex-setting tsf-flex" <?php echo $show_tw ? '' : 'style=display:none'; ?>>
+		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_twitter_title" class="tsf-flex-setting-label-item tsf-flex">
@@ -524,12 +524,12 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id="tsf-twitter-title-wrap">
-					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" value="<?php echo $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ); ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class="large-text" type="text" name="autodescription[_twitter_title]" id="autodescription_twitter_title" value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ) ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
 				</div>
 			</div>
 		</div>
 
-		<div class="tsf-flex-setting tsf-flex" <?php echo $show_tw ? '' : 'style=display:none'; ?>>
+		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for="autodescription_twitter_description" class="tsf-flex-setting-label-item tsf-flex">
@@ -576,8 +576,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?php echo esc_url( $image_placeholder ); ?>" value="<?php echo esc_url( $this->get_post_meta_item( '_social_image_url' ) ); ?>" autocomplete=off />
-				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?php echo absint( $this->get_post_meta_item( '_social_image_id' ) ); ?>" disabled class="tsf-enable-media-if-js" />
+				<input class="large-text" type="url" name="autodescription[_social_image_url]" id="autodescription_socialimage-url" placeholder="<?= esc_url( $image_placeholder ) ?>" value="<?= esc_url( $this->get_post_meta_item( '_social_image_url' ) ) ?>" autocomplete=off />
+				<input type="hidden" name="autodescription[_social_image_id]" id="autodescription_socialimage-id" value="<?= absint( $this->get_post_meta_item( '_social_image_id' ) ) ?>" disabled class="tsf-enable-media-if-js" />
 				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
 					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped. (phpcs is broken here?)

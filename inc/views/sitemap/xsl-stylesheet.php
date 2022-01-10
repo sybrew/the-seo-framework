@@ -30,7 +30,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 				do_action( 'the_seo_framework_xsl_head', $this );
 				?>
 			</head>
-			<body class="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
+			<body class="<?= is_rtl() ? 'rtl' : 'ltr' ?>">
 				<div id="description">
 					<div class="wrap">
 						<?php

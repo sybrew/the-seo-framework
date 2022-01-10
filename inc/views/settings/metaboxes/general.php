@@ -252,7 +252,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		HTML::header_title( __( 'Scheme Settings', 'autodescription' ) );
 		HTML::description( __( 'If your website is accessible via both HTTP as HTTPS, you may want to set this to HTTPS if not detected automatically. Secure connections are preferred by search engines.', 'autodescription' ) );
 		?>
-		<label for="<?php Input::field_id( 'canonical_scheme' ); ?>"><?php echo esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ); ?></label>
+		<label for="<?php Input::field_id( 'canonical_scheme' ); ?>"><?= esc_html_x( 'Preferred canonical URL scheme:', '= Detect Automatically, HTTPS, HTTP', 'autodescription' ) ?></label>
 		<select name="<?php Input::field_name( 'canonical_scheme' ); ?>" id="<?php Input::field_id( 'canonical_scheme' ); ?>">
 			<?php
 			$scheme_types = (array) apply_filters(
