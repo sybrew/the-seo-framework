@@ -674,12 +674,12 @@ final class Page extends Main {
 		}
 
 		if ( $this->query_cache['meta']['_genesis_canonical_uri'] ) {
-			$permalink = static::$tsf->create_canonical_url( [
+			$permalink = static::$tsf->get_canonical_url( [
 				'id'               => static::$query['id'],
 				'get_custom_field' => false,
 			] );
 			// We create it because filters may apply.
-			$canonical = static::$tsf->create_canonical_url( [
+			$canonical = static::$tsf->get_canonical_url( [
 				'id'               => static::$query['id'],
 				'get_custom_field' => true,
 			] );

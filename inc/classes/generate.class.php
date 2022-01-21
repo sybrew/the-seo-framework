@@ -44,6 +44,7 @@ class Generate extends User_Data {
 	 *              2. Removed isset() check -- we now expect incomplete $args, always.
 	 *              3. Improved performance by 60% switching from array_merge to array_union.
 	 * @internal
+	 * @todo Remove support for non-array input. Integers' been silently deprecated since 2018. Announce deprecation first?
 	 *
 	 * @param array|int|null $args The arguments, passed by reference.
 	 */

@@ -224,7 +224,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 
 	case 'inpost_visibility_tab':
 		$canonical             = $this->get_post_meta_item( '_genesis_canonical_uri' );
-		$canonical_placeholder = $this->create_canonical_url( $_generator_args );
+		$canonical_placeholder = $this->get_canonical_url( $_generator_args );
 
 		// Get robots defaults.
 		$r_defaults = $this->generate_robots_meta(

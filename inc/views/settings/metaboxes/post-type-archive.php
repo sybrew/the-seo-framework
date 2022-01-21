@@ -24,7 +24,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
 				'label'    => $this->get_post_type_label( $post_type ),
-				'url'      => $this->create_canonical_url( [ 'pta' => $post_type ] ),
+				'url'      => $this->get_canonical_url( [ 'pta' => $post_type ] ),
 				'hasPosts' => $this->has_posts_in_post_type_archive( $post_type ),
 			];
 		}
@@ -365,7 +365,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="url" name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= esc_url( $this->create_canonical_url( $_generator_args ) ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
+			<input type="url" name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= esc_url( $this->get_canonical_url( $_generator_args ) ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
 		</p>
 
 		<hr>

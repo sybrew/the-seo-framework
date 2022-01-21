@@ -632,13 +632,13 @@ final class Term extends Main {
 		}
 
 		if ( $this->query_cache['meta']['canonical'] ) {
-			$permalink = static::$tsf->create_canonical_url( [
+			$permalink = static::$tsf->get_canonical_url( [
 				'id'               => static::$query['id'],
 				'taxonomy'         => static::$query['taxonomy'],
 				'get_custom_field' => false,
 			] );
 			// We create it because filters may apply.
-			$canonical = static::$tsf->create_canonical_url( [
+			$canonical = static::$tsf->get_canonical_url( [
 				'id'               => static::$query['id'],
 				'taxonomy'         => static::$query['taxonomy'],
 				'get_custom_field' => true,

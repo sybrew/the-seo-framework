@@ -784,7 +784,7 @@ class Generate_Ldjson extends Generate_Image {
 				break;
 
 			case 'create':
-				$url = $this->create_canonical_url( $args );
+				$url = $this->get_canonical_url( $args );
 				break;
 
 			default:

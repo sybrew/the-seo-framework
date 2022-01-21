@@ -45,7 +45,7 @@ $show_tw = (bool) $this->get_option( 'twitter_tags' );
 $image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
 $image_placeholder = $image_details['url'] ?? '';
 
-$canonical_placeholder = $this->create_canonical_url( $_generator_args ); // implies get_custom_field = false
+$canonical_placeholder = $this->get_canonical_url( $_generator_args ); // implies get_custom_field = false
 $robots_defaults       = $this->generate_robots_meta(
 	$_generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],

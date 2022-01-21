@@ -249,11 +249,24 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.3 =
 
+This minor update addresses a regression where the blog page canonical URL always [pointed to the first page](TODO).
+
+**For everyone:**
+
+* **Improved:**
+	* Canonical URLs now generate quicker.
+* **Fixed:**
+	* The blog page's canonical URL now points to the current page.
+
 **For developers**
 
 * **Added:**
 	* Function `\The_SEO_Framework\has_run()` is now part of the public API.
 		* It helps test whether the caller function was already called before.
+	* Method `tsf()->add_pagination_to_url()`, replacement for `tsf()->add_url_pagination()` which is now marked for deprecation.
+* **Changed:**
+	* Method `tsf()->get_canonical_url()` may now have its first argument populated.
+		* Method `tsf()->create_canonical_url()` is now marked for deprecation. You can exchange the method name to `get_canonical_url()` without any other changes. This change is backward compatible but may cause (ignorable) PHP notices.
 * **Removed:**
 	* Privately-marked function `\The_SEO_Framework\_load_trait()` has been removed. We do not need traits in TSF (yet).
 * **Other:**

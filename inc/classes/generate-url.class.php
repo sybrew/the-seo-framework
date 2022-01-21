@@ -100,7 +100,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_current_permalink() {
 		return memo() ?? memo(
-			$this->create_canonical_url( [
+			$this->get_canonical_url( [
 				'id'       => $this->get_the_real_ID(),
 				'taxonomy' => $this->get_current_taxonomy(),
 			] )
@@ -117,7 +117,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_homepage_permalink() {
 		return memo() ?? memo(
-			$this->create_canonical_url( [ 'id' => $this->get_the_front_page_ID() ] )
+			$this->get_canonical_url( [ 'id' => $this->get_the_front_page_ID() ] )
 		);
 	}
 
@@ -128,6 +128,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 4.0.0 Now preemptively fixes the generation arguments, for easier implementation.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @todo deprecate me.
 	 * @uses $this->get_canonical_url()
 	 *
 	 * @param array $args The canonical URL arguments : {
@@ -139,14 +140,6 @@ class Generate_Url extends Generate_Title {
 	 * @return string The canonical URL, if any.
 	 */
 	public function create_canonical_url( $args = [] ) {
-
-		$args += [
-			'id'               => 0,
-			'taxonomy'         => '',
-			'pta'              => '',
-			'get_custom_field' => false,
-		];
-
 		return $this->get_canonical_url( $args );
 	}
 
@@ -156,32 +149,42 @@ class Generate_Url extends Generate_Title {
 	 *
 	 * @since 3.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @see $this->create_canonical_url()
+	 * @since 4.2.3 Now accepts arguments publicly.
 	 *
-	 * @param array|null $args Private variable! Use `$this->create_canonical_url()` instead.
+	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
+	 *    int    $id               The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy         The taxonomy.
+	 *    string $pta              The pta.
+	 *    bool   $get_custom_field Whether to get custom canonical URLs from user settings.
+	 * }
 	 * @return string The canonical URL, if any.
 	 */
 	public function get_canonical_url( $args = null ) {
 
 		if ( $args ) {
-			// See and use `$this->create_canonical_url()` instead.
-			$canonical_url = $this->build_canonical_url( $args );
-			$query         = false;
+			$args += [
+				'id'               => 0,
+				'taxonomy'         => '',
+				'pta'              => '',
+				'get_custom_field' => false,
+			];
+
+			// See and use `$this->get_canonical_url()` instead.
+			$url = $this->build_canonical_url( $args );
+
+			if ( $args['id'] === $this->get_the_real_ID() )
+				$url = $this->remove_pagination_from_url( $url );
 		} else {
-			$canonical_url = $this->generate_canonical_url();
-			$query         = true;
+			$url = $this->generate_canonical_url();
 		}
 
-		if ( ! $canonical_url )
+		if ( ! $url )
 			return '';
 
-		if ( ! $query && $args['id'] === $this->get_the_real_ID() )
-			$canonical_url = $this->remove_pagination_from_url( $canonical_url );
+		if ( $this->matches_this_domain( $url ) )
+			$url = $this->set_preferred_url_scheme( $url );
 
-		if ( $this->matches_this_domain( $canonical_url ) )
-			$canonical_url = $this->set_preferred_url_scheme( $canonical_url );
-
-		return $this->clean_canonical_url( $canonical_url );
+		return $this->clean_canonical_url( $url );
 	}
 
 	/**
@@ -191,9 +194,9 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @see $this->create_canonical_url()
+	 * @see $this->get_canonical_url()
 	 *
-	 * @param array $args Required. Use $this->create_canonical_url().
+	 * @param array $args Required. Use $this->get_canonical_url().
 	 * @return string The canonical URL.
 	 */
 	protected function build_canonical_url( $args ) {
@@ -321,10 +324,10 @@ class Generate_Url extends Generate_Title {
 		if ( $this->has_page_on_front() ) {
 			if ( $this->is_static_frontpage( $query_id ) ) {
 				// Yes, use the pagination base for the homepage-as-page!
-				$url = $this->add_url_pagination( $url, $this->page(), true );
+				$url = $this->add_pagination_to_url( $url, $this->page(), true );
 			}
 		} elseif ( (int) \get_option( 'page_for_posts' ) === $query_id ) {
-			$url = $this->add_url_pagination( $url, $this->paged(), true );
+			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
 		}
 
 		return $this->slash_root_url( $url );
@@ -386,10 +389,10 @@ class Generate_Url extends Generate_Title {
 				/** @link https://core.trac.wordpress.org/ticket/37505 */
 				$url = $this->remove_pagination_from_url( $url, $_page, false );
 			}
-
+		} else {
 			if ( $this->is_singular_archive( $id ) ) {
 				// Singular archives, like blog pages and shop pages, use the pagination base with paged.
-				$url = $this->add_url_pagination( $url, $this->paged(), true );
+				$url = $this->add_pagination_to_url( $url, $this->paged(), true );
 			}
 		}
 
@@ -446,12 +449,8 @@ class Generate_Url extends Generate_Title {
 		if ( \is_wp_error( $url ) )
 			return umemo( __METHOD__, '', $term_id, $taxonomy );
 
-		if ( null === $term_id ) {
-			$paged = $this->paged();
-
-			if ( $paged > 1 )
-				$url = $this->add_url_pagination( $url, $paged, true );
-		}
+		if ( null === $term_id )
+			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
 
 		return umemo( __METHOD__, $url, $term_id, $taxonomy );
 	}
@@ -466,24 +465,18 @@ class Generate_Url extends Generate_Title {
 	 *              2. Removed argument type deprecation doing it wrong warning.
 	 *
 	 * @param null|string $post_type The post type archive's post type.
-	 *                               Leave null to use query, and allow pagination.
+	 *                               Leave null to autodetermine query and allow pagination.
 	 * @return string The post type archive canonical URL, if any.
 	 */
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
-		if ( ! $post_type ) {
-			$post_type = $this->get_current_post_type();
-			$is_query  = true;
-		} else {
-			$is_query = false;
-		}
+		$url = \get_post_type_archive_link( $post_type ?? $this->get_current_post_type() );
 
-		$url = \get_post_type_archive_link( $post_type ) ?: '';
+		if ( ! $url ) return '';
 
-		if ( $is_query && $url )
-			$url = $this->add_url_pagination( $url, $this->paged(), true );
-
-		return $url;
+		return null === $post_type
+			? $this->add_pagination_to_url( $url, $this->paged(), true )
+			: $url;
 	}
 
 	/**
@@ -504,7 +497,7 @@ class Generate_Url extends Generate_Title {
 		if ( ! $url ) return '';
 
 		return null === $id
-			? $this->add_url_pagination( $url, $this->paged(), true )
+			? $this->add_pagination_to_url( $url, $this->paged(), true )
 			: $url;
 	}
 
@@ -539,12 +532,12 @@ class Generate_Url extends Generate_Title {
 			case 'day':
 				$_day      = \get_query_var( 'day' );
 				$_paginate = $_paginate && $_day == $day; // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
-				// No break. Get month too.
+				// No break. Test month too.
 
 			case 'month':
 				$_month    = \get_query_var( 'monthnum' );
 				$_paginate = $_paginate && $_month == $month; // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
-				// No break. Get year too.
+				// No break. Test year too.
 
 			case 'year':
 				$_year     = \get_query_var( 'year' );
@@ -554,7 +547,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( $_paginate ) {
 			// Adds pagination if input matches query.
-			$link = $this->add_url_pagination( $link, $this->paged(), true );
+			$link = $this->add_pagination_to_url( $link, $this->paged(), true );
 		}
 
 		return $link;
@@ -575,21 +568,13 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_search_canonical_url( $query = null ) {
 
-		$_paginate = false;
+		$url = \get_search_link( $query ?? \get_search_query( false ) );
 
-		if ( ! isset( $query ) ) {
-			$query     = \get_search_query( false );
-			$_paginate = true;
-		}
+		if ( ! $url ) return '';
 
-		$link = \get_search_link( $query );
-
-		if ( $_paginate ) {
-			// Adds pagination if input query isn't null.
-			$link = $this->add_url_pagination( $link, $this->paged(), true );
-		}
-
-		return $link;
+		return null === $query
+			? $this->add_pagination_to_url( $url, $this->paged(), true )
+			: $url;
 	}
 
 	/**
@@ -607,13 +592,11 @@ class Generate_Url extends Generate_Title {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		switch ( $this->get_option( 'canonical_scheme' ) ) :
-			case 'https':
-				$scheme = 'https';
-				break;
+		$scheme = $this->get_option( 'canonical_scheme' );
 
+		switch ( $scheme ) :
+			case 'https':
 			case 'http':
-				$scheme = 'http';
 				break;
 
 			default:
@@ -706,11 +689,7 @@ class Generate_Url extends Generate_Title {
 	/**
 	 * Adds pagination to input URL.
 	 *
-	 * @since 3.0.0
-	 * @since 3.2.4 1. Now considers query arguments when using pretty permalinks.
-	 *              2. The second and third parameters are now optional.
-	 * @since 4.2.0 Now properly adds pagination to search links.
-	 * @TODO call this add_pagination_to_url()? Or call remove_pagination_from_url() remove_url_pagination()?
+	 * @since 4.2.3
 	 *
 	 * @param string $url      The fully qualified URL.
 	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
@@ -720,7 +699,7 @@ class Generate_Url extends Generate_Title {
 	 *                         False on singular post types.
 	 * @return string The fully qualified URL with pagination.
 	 */
-	public function add_url_pagination( $url, $page = null, $use_base = null ) {
+	public function add_pagination_to_url( $url, $page = null, $use_base = null ) {
 
 		$page = $page ?? max( $this->paged(), $this->page() );
 
@@ -760,6 +739,27 @@ class Generate_Url extends Generate_Title {
 	}
 
 	/**
+	 * Adds pagination to input URL.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.4 1. Now considers query arguments when using pretty permalinks.
+	 *              2. The second and third parameters are now optional.
+	 * @since 4.2.0 Now properly adds pagination to search links.
+	 * @todo deprecate
+	 *
+	 * @param string $url      The fully qualified URL.
+	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
+	 * @param bool   $use_base Whether to use pagination base.
+	 *                         If null, it will autodetermine.
+	 *                         Should be true on archives and the homepage (blog and static!).
+	 *                         False on singular post types.
+	 * @return string The fully qualified URL with pagination.
+	 */
+	public function add_url_pagination( $url, $page = null, $use_base = null ) {
+		return $this->add_pagination_to_url( $url, $page, $use_base );
+	}
+
+	/**
 	 * Removes pagination from input URL.
 	 * The URL must match this query if no second parameter is provided.
 	 *
@@ -784,11 +784,9 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->pretty_permalinks ) {
 
-			$_page = $page ?? max( $this->paged(), $this->page() );
+			$page = $page ?? max( $this->paged(), $this->page() );
 
-			if ( $_page > 1 ) {
-				$_url = $url;
-
+			if ( $page > 1 ) {
 				$_use_base = $use_base ?? (
 					$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
 				);
@@ -796,30 +794,26 @@ class Generate_Url extends Generate_Title {
 				$user_slash = ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
 
 				if ( $_use_base ) {
-					$find = "/{$GLOBALS['wp_rewrite']->pagination_base}/{$_page}{$user_slash}";
+					$find = "/{$GLOBALS['wp_rewrite']->pagination_base}/{$page}{$user_slash}";
 				} else {
-					$find = "/{$_page}{$user_slash}";
+					$find = "/{$page}{$user_slash}";
 				}
 
-				$_query = parse_url( $_url, PHP_URL_QUERY );
+				$_query = parse_url( $url, PHP_URL_QUERY );
 				// Remove queries, add them back later.
 				if ( $_query )
-					$_url = $this->s_url( $_url );
+					$url = $this->s_url( $url );
 
-				$pos = strrpos( $_url, $find );
+				$pos = strrpos( $url, $find );
 				// Defensive programming, only remove if $find matches the stack length, without query arguments.
-				$continue = $pos && $pos + \strlen( $find ) === \strlen( $_url );
-
-				if ( $continue ) {
-					$_url = substr( $_url, 0, $pos );
-					$_url = \user_trailingslashit( $_url );
+				if ( $pos && $pos + \strlen( $find ) === \strlen( $url ) ) {
+					$url = substr( $url, 0, $pos );
+					$url = \user_trailingslashit( $url );
 
 					// Add back the query.
 					if ( $_query )
-						$_url = $this->append_url_query( $_url, $_query );
+						$url = $this->append_url_query( $url, $_query );
 				}
-
-				$url = $_url;
 			}
 		} else {
 			$url = \remove_query_arg( [ 'page', 'paged', 'cpage' ], $url );
@@ -841,11 +835,10 @@ class Generate_Url extends Generate_Title {
 	 * @return \WP_Term The primary term.
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
-
-		if ( null === $post )
-			$post = \get_post( $this->get_the_real_ID() );
-
-		return $this->get_primary_term( $post->ID, $term->taxonomy ) ?: $term;
+		return $this->get_primary_term(
+			( $post ?? \get_post( $this->get_the_real_ID() ) )->ID,
+			$term->taxonomy
+		) ?: $term;
 	}
 
 	/**
@@ -998,11 +991,11 @@ class Generate_Url extends Generate_Title {
 
 		// If this page is not the last, create a next-URL.
 		if ( $page + 1 <= $_numpages )
-			$next = $this->add_url_pagination( $canonical_url, $page + 1 );
+			$next = $this->add_pagination_to_url( $canonical_url, $page + 1 );
 
 		// If this page is not the first, create a prev-URL.
 		if ( $page > 1 )
-			$prev = $this->add_url_pagination( $canonical_url, $page - 1 );
+			$prev = $this->add_pagination_to_url( $canonical_url, $page - 1 );
 
 		end:;
 
