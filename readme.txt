@@ -256,6 +256,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* It helps test whether the caller function was already called before.
 * **Removed:**
 	* Privately-marked function `\The_SEO_Framework\_load_trait()` has been removed. We do not need traits in TSF (yet).
+* **Other:**
+	* Made the code a little more procedural.
 
 = 4.2.2 =
 

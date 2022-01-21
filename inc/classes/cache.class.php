@@ -171,7 +171,32 @@ class Cache extends Site_Options {
 	 */
 	public function delete_cache( $type, $id = 0, $args = [] ) {
 
-		$this->parse_delete_cache_keys( $type, $id, $args );
+		$args = array_merge(
+			[
+				'type' => $type,
+				// Don't use cache when fetching ID.
+				'id'   => $id ?: $this->get_the_real_ID( false ),
+				'term' => '',
+			],
+			/**
+			 * @since 2.8.0
+			 * @NOTE Careful: Altering this might infinitely loop method delete_cache() if not done strictly.
+			 *       Don't blindly overwrite index key 'type'.
+			 * @param array  $args All caching arguments, with indexes 'type', 'id', and 'term'.
+			 * @param string $type The cache type.
+			 * @param int    $id   The post or term ID.
+			 */
+			(array) \apply_filters_ref_array(
+				'the_seo_framework_delete_cache_args',
+				[
+					$args,
+					$type,
+					$id,
+				]
+			)
+		);
+		$type = $args['type'];
+		$id   = $args['id'];
 
 		$success = false;
 
@@ -199,41 +224,6 @@ class Cache extends Site_Options {
 		\do_action( "the_seo_framework_delete_cache_{$type}", $type, $id, $args, $success );
 
 		return $success;
-	}
-
-	/**
-	 * Parses input keys for method delete_cache.
-	 *
-	 * @since 2.8.0
-	 *
-	 * @param string $type The cache type. Passed by reference.
-	 * @param int    $id The post, page or TT ID. Defaults to $this->get_the_real_ID(). Passed by reference.
-	 * @param array  $args Additional arguments. They can overwrite $type and $id. Passed by reference.
-	 */
-	protected function parse_delete_cache_keys( &$type, &$id, &$args ) {
-
-		// Don't use cache on fetching ID.
-		$id = $id ?: $this->get_the_real_ID( false );
-
-		$defaults = [
-			'type' => $type,
-			'id'   => $id,
-			'term' => '',
-		];
-
-		/**
-		 * @since 2.8.0
-		 * @NOTE Careful: Altering this might infinitely loop method delete_cache() if not done strictly.
-		 *       Don't blindly overwrite 'type'.
-		 * @param array  $args All caching arguments
-		 * @param string $type The cache type.
-		 * @param int    $id   The post or term ID.
-		 */
-		$args = (array) \apply_filters( 'the_seo_framework_delete_cache_args', $args, $type, $id );
-		$args = \wp_parse_args( $args, $defaults );
-
-		$type = $args['type'];
-		$id   = $args['id'];
 	}
 
 	/**

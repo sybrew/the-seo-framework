@@ -376,38 +376,6 @@ final class Debug {
 	}
 
 	/**
-	 * Wrap debug key in a colored span.
-	 *
-	 * @since 2.3.9
-	 * @since 3.1.0 1. Removed second parameter.
-	 *              2. Now is protected.
-	 *
-	 * @param string $key The debug key.
-	 * @return string
-	 */
-	protected function debug_key_wrapper( $key ) {
-		return '<font color="chucknorris">' . \esc_html( $key ) . '</font>';
-	}
-
-	/**
-	 * Wrap debug value in a colored span.
-	 *
-	 * @since 2.3.9
-	 * @since 3.1.0 1. Removed second parameter.
-	 *              2. Now is protected.
-	 *
-	 * @param string $value The debug value.
-	 * @return string
-	 */
-	protected function debug_value_wrapper( $value ) {
-
-		if ( ! is_scalar( $value ) )
-			return '<em>Debug message: not scalar</em>';
-
-		return '<span class="wp-ui-notification">' . \esc_html( trim( $value ) ) . '</span>';
-	}
-
-	/**
 	 * Outputs the debug header.
 	 *
 	 * @since 2.8.0
@@ -445,17 +413,17 @@ final class Debug {
 		$tsf->html_output();
 		$output = ob_get_clean();
 
-		$timer = '<div style="display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $t, 5 ) . ' seconds</div>';
+		$timer = '<div style="font-family:unset;display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $t, 5 ) . ' seconds</div>';
 
 		$title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
-		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
+		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="font-family:unset;color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		// Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
 		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, \esc_html( str_replace( str_repeat( ' ', 4 ), str_repeat( '&nbsp;', 4 ), $output ) ) );
 		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<font color="arnoldschwarzenegger">$1</font> ', $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
-		$output = '<div style="display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
+		$output = '<div style="font-family:unset;display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
 
 		return $output;
 	}
