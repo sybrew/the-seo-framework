@@ -306,7 +306,7 @@ class Detect extends Render {
 			}
 		}
 
-		return memo( (bool) ( $detected ?? false ) );
+		return memo( $detected ?? false );
 	}
 
 	/**
@@ -355,7 +355,7 @@ class Detect extends Render {
 			}
 		}
 
-		return memo( (bool) ( $detected ?? false ) );
+		return memo( $detected ?? false );
 	}
 
 	/**
@@ -402,7 +402,7 @@ class Detect extends Render {
 			}
 		}
 
-		return memo( (bool) ( $detected ?? false ) );
+		return memo( $detected ?? false );
 	}
 
 	/**
@@ -466,7 +466,7 @@ class Detect extends Render {
 			}
 		}
 
-		return memo( (bool) ( $detected ?? false ) );
+		return memo( $detected ?? false );
 	}
 
 	/**

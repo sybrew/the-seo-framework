@@ -128,6 +128,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 4.0.0 Now preemptively fixes the generation arguments, for easier implementation.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.3 Marked for deprecation.
 	 * @todo deprecate me.
 	 * @uses $this->get_canonical_url()
 	 *
@@ -367,7 +368,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
 	 * @since 4.2.0 1. Added memoization.
 	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
-	 * @since 4.2.4 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
+	 * @since 4.2.3 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
 	 *
 	 * @param int|null $post_id The page ID. Leave null to autodetermine.
 	 * @return string The custom canonical URL, if any.

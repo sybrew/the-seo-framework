@@ -184,7 +184,7 @@ final class ListEdit extends ListTable {
 				'value' => $meta['_genesis_description'],
 			],
 			'canonical'   => [
-				'value'       => $meta['_genesis_canonical_uri'],
+				'value' => $meta['_genesis_canonical_uri'],
 				// TODO figure out how to make it work seamlessly with noindex.
 				// 'placeholder' => $tsf->get_canonical_url( $_generator_args + [ 'get_custom_field' => false ] ),
 			],
@@ -214,11 +214,13 @@ final class ListEdit extends ListTable {
 		 *
 		 * @since 4.0.5
 		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
+		 * @since 4.2.3 Now supports the `placeholder` index for $data.
 		 * @param array $data            The current data : {
 		 *    string Index => @param array : {
-		 *       @param mixed  $value    The current value.
-		 *       @param bool   $isSelect Optional. Whether the field is a select field.
-		 *       @param string $default  Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *       @param mixed  $value       The current value.
+		 *       @param bool   $isSelect    Optional. Whether the field is a select field.
+		 *       @param string $default     Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 *    }
 		 * }
 		 * @param array $_generator_args The query data. Contains 'id' or 'taxonomy'.
@@ -345,7 +347,7 @@ final class ListEdit extends ListTable {
 				'value' => $meta['description'],
 			],
 			'canonical'   => [
-				'value'       => $meta['canonical'],
+				'value' => $meta['canonical'],
 				// TODO figure out how to make it work seamlessly with noindex.
 				// 'placeholder' => $tsf->get_canonical_url( $_generator_args + [ 'get_custom_field' => false ] ),
 			],
@@ -375,11 +377,13 @@ final class ListEdit extends ListTable {
 		 *
 		 * @since 4.0.5
 		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
+		 * @since 4.2.3 Now supports the `placeholder` index for $data.
 		 * @param array $data            The current data : {
 		 *    string Index => @param array : {
-		 *       @param mixed  $value    The current value.
-		 *       @param bool   $isSelect Optional. Whether the field is a select field.
-		 *       @param string $default  Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *       @param mixed  $value       The current value.
+		 *       @param bool   $isSelect    Optional. Whether the field is a select field.
+		 *       @param string $default     Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 *    }
 		 * }
 		 * @param array $_generator_args The query data. Contains 'id' and 'taxonomy'.

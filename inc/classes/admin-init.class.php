@@ -397,45 +397,31 @@ class Admin_Init extends Init {
 		\wp_safe_redirect( $target, 302 );
 
 		// White screen of death for non-debugging users. Let's make it friendlier.
-		if ( $headers_sent )
+		if ( $headers_sent && $target ) {
 			$this->handle_admin_redirect_error( $target );
 
+			$headers_list = headers_list();
+			$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
+
+			// Test if WordPress's redirect header is sent. Bail if true.
+			if ( \in_array( $location, $headers_list, true ) ) exit;
+
+			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
+			printf(
+				'<p><strong>%s</strong></p>',
+				$this->convert_markdown(
+					sprintf(
+						/* translators: %s = Redirect URL markdown */
+						\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
+						\esc_url( $target )
+					),
+					[ 'a' ],
+					[ 'a_internal' => true ]
+				)
+			);
+		}
+
 		exit;
-	}
-
-	/**
-	 * Provides an accessible error for when redirecting fails.
-	 *
-	 * @since 2.9.2
-	 * @see https://developer.wordpress.org/reference/functions/wp_redirect/
-	 *
-	 * @param string $target The redirect target location. Should be escaped.
-	 * @return void
-	 */
-	protected function handle_admin_redirect_error( $target = '' ) {
-
-		if ( ! $target ) return;
-
-		$headers_list = headers_list();
-		$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
-
-		// Test if WordPress's redirect header is sent. Bail if true.
-		if ( \in_array( $location, $headers_list, true ) )
-			return;
-
-		// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
-		printf( '<p><strong>%s</strong></p>',
-			$this->convert_markdown(
-				sprintf(
-					/* translators: %s = Redirect URL markdown */
-					\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
-					\esc_url( $target )
-				),
-				[ 'a' ],
-				[ 'a_internal' => true ]
-			)
-		);
-		// phpcs:enable, WordPress.Security.EscapeOutput
 	}
 
 	/**

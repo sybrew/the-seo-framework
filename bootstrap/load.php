@@ -70,7 +70,7 @@ function _init_tsf() {
 	 * @since 2.3.7
 	 * @param bool $load
 	 */
-	if ( (bool) \apply_filters( 'the_seo_framework_load', true ) ) {
+	if ( \apply_filters( 'the_seo_framework_load', true ) ) {
 		if ( \is_admin() ) {
 			//! TODO: admin-only loader?
 			$tsf         = new Load();

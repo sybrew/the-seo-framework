@@ -1,11 +1,11 @@
-=== The SEO Framework ===
+=== The SEO Framework – Automated, clean, fast. ===
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.5.0
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.2.0
-Stable tag: 4.2.2
+Stable tag: 4.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -249,14 +249,16 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.3 =
 
-This minor update addresses a regression where the blog page canonical URL always [pointed to the first page](TODO).
+This minor update addresses a regression where the singular-archive canonical URLs always [pointed to the first page](TODO).
 
 **For everyone:**
 
 * **Improved:**
 	* Canonical URLs now generate quicker.
 * **Fixed:**
-	* The blog page's canonical URL now points to the current page.
+	* The singular archive (blog/shop) page's canonical URL now points to the current page.
+* **Other:**
+	* TODO It is 2022 now... so, we extended the plugin's copyright year notes.
 
 **For developers**
 
@@ -267,6 +269,7 @@ This minor update addresses a regression where the blog page canonical URL alway
 * **Changed:**
 	* Method `tsf()->get_canonical_url()` may now have its first argument populated.
 		* Method `tsf()->create_canonical_url()` is now marked for deprecation. You can exchange the method name to `get_canonical_url()` without any other changes. This change is backward compatible but may cause (ignorable) PHP notices.
+	* Filter `the_seo_framework_list_table_data` now supports index key `placeholder` for `$data`.
 * **Removed:**
 	* Privately-marked function `\The_SEO_Framework\_load_trait()` has been removed. We do not need traits in TSF (yet).
 * **Other:**
