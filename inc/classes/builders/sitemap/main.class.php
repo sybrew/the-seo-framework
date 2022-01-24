@@ -179,18 +179,18 @@ abstract class Main {
 		$included = ! isset( $excluded[ $post_id ] );
 
 		while ( $included ) :
-			$_args = [ 'id' => $post_id ];
+			$_generator_args = [ 'id' => $post_id ];
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
 			$included = 'noindex'
 				!== (
-					static::$tsf->generate_robots_meta( $_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					static::$tsf->generate_robots_meta( $_generator_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
 						?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
 			if ( ! $included ) break;
 
-			$included = ! static::$tsf->get_redirect_url( $_args );
+			$included = ! static::$tsf->get_redirect_url( $_generator_args );
 			break;
 		endwhile;
 
@@ -231,7 +231,7 @@ abstract class Main {
 		// Yes, 90% of this code code isn't DRY. However, terms !== posts. terms == posts, though :).
 		// Really: <https://core.trac.wordpress.org/ticket/50568>
 		while ( $included ) :
-			$_args = [
+			$_generator_args = [
 				'id'       => $term_id,
 				'taxonomy' => $taxonomy,
 			];
@@ -239,13 +239,13 @@ abstract class Main {
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
 			$included = 'noindex'
 				!== (
-					static::$tsf->generate_robots_meta( $_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
+					static::$tsf->generate_robots_meta( $_generator_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
 						?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
 			if ( ! $included ) break;
 
-			$included = ! static::$tsf->get_redirect_url( $_args );
+			$included = ! static::$tsf->get_redirect_url( $_generator_args );
 			break;
 		endwhile;
 

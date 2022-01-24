@@ -367,36 +367,33 @@ class Generate_Url extends Generate_Title {
 	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
 	 * @since 4.2.0 1. Added memoization.
 	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
+	 * @since 4.2.4 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
 	 *
-	 * @param int|null $id The page ID. Leave null to autodetermine.
+	 * @param int|null $post_id The page ID. Leave null to autodetermine.
 	 * @return string The custom canonical URL, if any.
 	 */
-	public function get_singular_canonical_url( $id = null ) {
+	public function get_singular_canonical_url( $post_id = null ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = umemo( __METHOD__, null, $id ) ) return $memo;
+		if ( null !== $memo = umemo( __METHOD__, null, $post_id ) ) return $memo;
 
 		$url = \wp_get_canonical_url(
-			$id ?? $this->get_the_real_ID()
+			$post_id ?? $this->get_the_real_ID()
 		) ?: '';
 
 		if ( ! $url ) return '';
 
-		if ( null !== $id ) {
-			$_page = \get_query_var( 'page', 1 ) ?: 1;
+		$_page = \get_query_var( 'page', 1 ) ?: 1;
+		// Remove undesired/fake pagination. See: <https://core.trac.wordpress.org/ticket/37505>
+		if ( $_page > 1 && $_page !== $this->page() )
+			$url = $this->remove_pagination_from_url( $url, $_page, false );
 
-			if ( $_page > 1 && $_page !== $this->page() ) {
-				/** @link https://core.trac.wordpress.org/ticket/37505 */
-				$url = $this->remove_pagination_from_url( $url, $_page, false );
-			}
-		} else {
-			if ( $this->is_singular_archive( $id ) ) {
-				// Singular archives, like blog pages and shop pages, use the pagination base with paged.
-				$url = $this->add_pagination_to_url( $url, $this->paged(), true );
-			}
-		}
+		// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
+		// wp_get_canonical_url() only tests 'page'. Fix that:
+		if ( null === $post_id && $this->is_singular_archive() )
+			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
 
-		return umemo( __METHOD__, $url, $id );
+		return umemo( __METHOD__, $url, $post_id );
 	}
 
 	/**
@@ -562,17 +559,17 @@ class Generate_Url extends Generate_Title {
 	 *              2. The search term is now matched with the input query if not set,
 	 *                 instead of it being empty.
 	 *
-	 * @param string $query The search query. Mustn't be escaped.
-	 *                      When left empty, the current query will be used.
+	 * @param string $search_query The search query. Mustn't be escaped.
+	 *                             When left empty, the current query will be used.
 	 * @return string The search link.
 	 */
-	public function get_search_canonical_url( $query = null ) {
+	public function get_search_canonical_url( $search_query = null ) {
 
-		$url = \get_search_link( $query ?? \get_search_query( false ) );
+		$url = \get_search_link( $search_query ?? \get_search_query( false ) );
 
 		if ( ! $url ) return '';
 
-		return null === $query
+		return null === $search_query
 			? $this->add_pagination_to_url( $url, $this->paged(), true )
 			: $url;
 	}
@@ -1059,7 +1056,7 @@ class Generate_Url extends Generate_Title {
 	 * Always adds http prefix, not https.
 	 *
 	 * NOTE: Expects the URL to have either a scheme, or a relative scheme set.
-	 *       Domain-relative URLs aren't parsed correctly.
+	 *       Domain-relative URLs will not be parsed correctly.
 	 *       '/path/to/folder/` will become `http:///path/to/folder/`
 	 *
 	 * @since 2.6.5

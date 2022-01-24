@@ -212,14 +212,14 @@ final class Term extends Main {
 			]
 		);
 
-		$title_args = [
+		$_generator_args = [
 			'id'       => static::$query['id'],
 			'taxonomy' => static::$query['taxonomy'],
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $title_args );
+		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $_generator_args );
 
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
@@ -239,7 +239,7 @@ final class Term extends Main {
 				$item['assess']['prefixed'] = $cache['assess']['prefixed'];
 			}
 
-			$title_part = static::$tsf->get_filtered_raw_generated_title( $title_args );
+			$title_part = static::$tsf->get_filtered_raw_generated_title( $_generator_args );
 		}
 
 		if ( ! $title_part ) {
@@ -260,9 +260,9 @@ final class Term extends Main {
 
 		$title = $title_part;
 
-		if ( static::$tsf->use_title_branding( $title_args ) ) {
+		if ( static::$tsf->use_title_branding( $_generator_args ) ) {
 			$_title_before = $title;
-			static::$tsf->merge_title_branding( $title, $title_args );
+			static::$tsf->merge_title_branding( $title, $_generator_args );
 
 			// Absence assertion is done after this.
 			if ( $title === $_title_before ) {
@@ -405,14 +405,14 @@ final class Term extends Main {
 			]
 		);
 
-		$desc_args = [
+		$_generator_args = [
 			'id'       => static::$query['id'],
 			'taxonomy' => static::$query['taxonomy'],
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$desc = static::$tsf->get_description_from_custom_field( $desc_args, false );
+		$desc = static::$tsf->get_description_from_custom_field( $_generator_args, false );
 
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
@@ -425,7 +425,7 @@ final class Term extends Main {
 				// Further assessments must be made later. Halt assertion here to prevent confusion.
 				return $item;
 			}
-		} elseif ( ! static::$tsf->is_auto_description_enabled( $desc_args ) ) {
+		} elseif ( ! static::$tsf->is_auto_description_enabled( $_generator_args ) ) {
 			$item = $cache['defaults']['emptynoauto'];
 
 			// No description is found. There's no need to continue parsing.
@@ -433,7 +433,7 @@ final class Term extends Main {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			$desc = static::$tsf->get_generated_description( $desc_args, false );
+			$desc = static::$tsf->get_generated_description( $_generator_args, false );
 
 			if ( ! \strlen( $desc ) ) {
 				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNDEFINED;
