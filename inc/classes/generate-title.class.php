@@ -713,6 +713,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Flipped order of query tests.
+	 * @since 4.3.0 Added failover filter for failed queries.
 	 * @internal
 	 * @see $this->get_raw_generated_title()
 	 *
@@ -720,9 +721,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function generate_title_from_query() {
 
-		$title = '';
-
-		if ( $this->is_404() ) {
+		if ( \is_404() ) {
 			$title = $this->get_static_404_title();
 		} elseif ( $this->is_search() ) {
 			$title = $this->get_generated_search_query_title();
@@ -734,7 +733,7 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_generated_archive_title();
 		}
 
-		return $title;
+		return $title ?? '';
 	}
 
 	/**
@@ -749,8 +748,6 @@ class Generate_Title extends Generate_Description {
 	 * @return string The generated title. Empty if query can't be replicated.
 	 */
 	protected function generate_title_from_args( $args ) {
-
-		$title = '';
 
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_generated_archive_title( \get_term( $args['id'], $args['taxonomy'] ) );
@@ -930,14 +927,14 @@ class Generate_Title extends Generate_Description {
 		} elseif ( $this->is_author() ) {
 			$title  = \get_queried_object()->display_name ?? '';
 			$prefix = \_x( 'Author:', 'author archive title prefix', 'default' );
-		} elseif ( $this->is_date() ) {
-			if ( $this->is_year() ) {
+		} elseif ( \is_date() ) {
+			if ( \is_year() ) {
 				$title  = \get_the_date( \_x( 'Y', 'yearly archives date format', 'default' ) );
 				$prefix = \_x( 'Year:', 'date archive title prefix', 'default' );
-			} elseif ( $this->is_month() ) {
+			} elseif ( \is_month() ) {
 				$title  = \get_the_date( \_x( 'F Y', 'monthly archives date format', 'default' ) );
 				$prefix = \_x( 'Month:', 'date archive title prefix', 'default' );
-			} elseif ( $this->is_day() ) {
+			} elseif ( \is_day() ) {
 				$title  = \get_the_date( \_x( 'F j, Y', 'daily archives date format', 'default' ) );
 				$prefix = \_x( 'Day:', 'date archive title prefix', 'default' );
 			}
@@ -1165,6 +1162,7 @@ class Generate_Title extends Generate_Description {
 	 * @return string The untitled title.
 	 */
 	public function get_static_untitled_title() {
+		// FIXME: WordPress no longer outputs 'Untitled' for the title. It still actively holds this translation, but other context (Widget).
 		return \__( 'Untitled', 'default' );
 	}
 
@@ -1454,7 +1452,7 @@ class Generate_Title extends Generate_Description {
 
 		//? Only add pagination if the query is autodetermined, and on a real page.
 		if ( null === $args ) {
-			if ( $this->is_404() || \is_admin() ) {
+			if ( \is_404() || \is_admin() ) {
 				$use = false;
 			} else {
 				$use = true;

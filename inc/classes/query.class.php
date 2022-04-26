@@ -195,7 +195,7 @@ class Query extends Core {
 			 */
 			$id = \apply_filters(
 				'the_seo_framework_real_id',
-				$this->is_feed() ? \get_the_ID() : 0
+				\is_feed() ? \get_the_ID() : 0
 			);
 		}
 
@@ -309,6 +309,8 @@ class Query extends Core {
 	 * Detects 404.
 	 *
 	 * @since 2.6.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -320,6 +322,8 @@ class Query extends Core {
 	 * Detects admin screen.
 	 *
 	 * @since 2.6.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -590,6 +594,8 @@ class Query extends Core {
 	 * in `\WP_Customize_Manager::setup_theme()`.
 	 *
 	 * @since 4.0.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -601,6 +607,8 @@ class Query extends Core {
 	 * Detects date archives.
 	 *
 	 * @since 2.6.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -612,7 +620,8 @@ class Query extends Core {
 	 * Detects day archives.
 	 *
 	 * @since 2.6.0
-	 * @uses $this->is_date()
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -624,6 +633,8 @@ class Query extends Core {
 	 * Detects feed.
 	 *
 	 * @since 2.6.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @param string|array $feeds Optional feed types to check.
 	 * @return bool
@@ -679,6 +690,8 @@ class Query extends Core {
 	 * Detects month archives.
 	 *
 	 * @since 2.6.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -815,17 +828,13 @@ class Query extends Core {
 	 * @since 2.5.2
 	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
 	 * @since 4.0.0 No longer processes integers as input.
+	 * @since 4.2.4 No longer tests type of $post_types.
 	 * @uses $this->is_singular_admin()
 	 *
-	 * @param string|array $post_types Optional. Post type or array of post types. Default empty string.
+	 * @param string|string[] $post_types Optional. Post type or array of post types. Default empty string.
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $post_types = '' ) {
-
-		if ( \is_int( $post_types ) ) {
-			// Integers are no longer accepted.
-			$post_types = '';
-		}
 
 		// WP_Query functions require loop, do alternative check.
 		if ( \is_admin() )
@@ -993,6 +1002,8 @@ class Query extends Core {
 	 * Detects year archives.
 	 *
 	 * @since 2.6.0
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */
@@ -1235,6 +1246,8 @@ class Query extends Core {
 	 * Determines whether we're on the robots.txt file output.
 	 *
 	 * @since 2.9.2
+	 * @ignore unused.
+	 * @todo deprecate
 	 *
 	 * @return bool
 	 */

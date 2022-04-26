@@ -1,4 +1,4 @@
-=== The SEO Framework – Automated, clean, fast. ===
+=== The SEO Framework – Fast, Automated, Effortless. ===
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
@@ -246,6 +246,37 @@ The SEO Framework does not provide the display of breadcrumbs. This is theme-ter
 If you wish to display breadcrumbs, then your theme should provide this. Alternatively, there are [other plugins](https://wordpress.org/plugins/search/breadcrumbs/) that help you do this.
 
 == Changelog ==
+
+= 4.2.4 =
+
+TODO: Sitelinks Searchbox should expand to the whole EntryPoint object for best compatibility. (wait for 4.3.0?)
+TODO add filesize detection, which should now be possible?
+TODO add user-definable cap for meta settings?
+
+**For everyone**
+
+* **Improved:**
+	* The SEO query detection now faults when detecting AJAX, WordPress cron, a JSON, or REST request.
+		* This mitigates some issues where plugins try to parse data from WordPress using query-reliant functions (like `wp_get_document_title()`), and then filtering those because the query cannot be resolved (like Events Calendar does for `document_title_parts`), and then strip the parts, instead of just fetching data internally... which all makes no sense.
+* **Changed:**
+	* Robots' copyright setting for `max-image-preview` now defaults to `large`, from `standard`, matching WordPress's default.
+		* This affects new sites only.
+
+**For developers**
+
+* **Option notes (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, name `autodescription-site-settings`):**
+	* `max_image_preview` now defaults to `large`, from `standard`.
+* **Method notes:**
+	* The following methods are no longer used internally, and are marked for deprecation. They devolved (evolved?) to becoming aliases of WordPress's identically titled functions.
+		* `tsf()->is_404()`
+		* `tsf()->is_admin()`
+		* `tsf()->is_customize_preview()`
+		* `tsf()->is_date()`
+		* `tsf()->is_day()`
+		* `tsf()->is_month()`
+		* `tsf()->is_year()`
+		* `tsf()->is_feed()`
+		* `tsf()->is_robots()`
 
 = 4.2.3 =
 

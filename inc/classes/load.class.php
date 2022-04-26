@@ -61,7 +61,7 @@ final class Load extends Cache {
 	/**
 	 * @since 4.1.4
 	 * @access protected
-	 *         DO NOT OVERWRITE.
+	 *         DO NOT OVERWRITE, it should be 'immutable'. <https://wiki.php.net/rfc/immutability>
 	 *         Feel free to read.
 	 *         Use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
 	 * @var bool|array $is_headless Whether headless TSF is enabled.

@@ -453,7 +453,7 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param array      $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
+	 * @param callable[] $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param string     $size   The image size to use.

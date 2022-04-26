@@ -180,7 +180,7 @@ class Detect extends Render {
 	 * @uses $this->detect_plugin_multi()
 	 *
 	 * @param array[] $plugins   Array of array for globals, constants, classes
-	 *                         and/or functions to check for plugin existence.
+	 *                           and/or functions to check for plugin existence.
 	 * @param bool    $use_cache Bypasses cache if false
 	 */
 	public function can_i_use( $plugins = [], $use_cache = true ) {
@@ -576,6 +576,7 @@ class Detect extends Render {
 	 * @since 4.0.0
 	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
 	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
+	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
 	 *
 	 * @return bool
 	 */
@@ -585,7 +586,11 @@ class Detect extends Render {
 		if ( null !== $memo = memo() ) return $memo;
 
 		switch ( true ) :
-			case $this->is_feed():
+			case \is_feed():
+			case \wp_doing_ajax():
+			case \wp_doing_cron():
+			case \wp_is_json_request():
+			case \defined( 'REST_REQUEST' ) && REST_REQUEST:
 				$supported = false;
 				break;
 
@@ -604,10 +609,22 @@ class Detect extends Render {
 				$supported = $this->is_taxonomy_supported() && $this->get_the_real_ID();
 				break;
 
-			// Including 404.
+			// This includes 404.
 			default:
 				$supported = true;
 				break;
+
+			// TODO consider this instead of the current default? (it'd make the AJAX through REST test obsolete)
+			// Every recognized query (aside from $this->is_singular()/is_post_type_archive for we already covered those in full)
+			// case \is_404():
+			// case $this->is_search():
+			// case $this->is_real_front_page():
+			// case $this->is_archive():
+			// $supported = true;
+			// break;
+			// default:
+			// $supported = false;
+			// break;
 		endswitch;
 
 		/**

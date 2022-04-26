@@ -50,6 +50,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.6.0
 	 * @since 3.1.0 Now applies filters 'the_seo_framework_default_site_options'
 	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
+	 * @since 4.2.4 `max_image_preview` now defaults to `large`, from `standard`, matching WordPress's default.
 	 *
 	 * @return array Default site options.
 	 */
@@ -147,7 +148,7 @@ class Site_Options extends Sanitize {
 				// Robots copyright.
 				'set_copyright_directives' => 1,          // Allow copyright directive settings.
 				'max_snippet_length'       => -1,         // Max text-snippet length. -1 = unlimited, 0 = disabled, R>0 = characters.
-				'max_image_preview'        => 'standard', // Max image-preview size. 'none', 'standard', 'large'.
+				'max_image_preview'        => 'large',    // Max image-preview size. 'none', 'standard', 'large'.
 				'max_video_preview'        => -1,         // Max video-preview size. -1 = unlimited, 0 = disabled, R>0 = seconds.
 
 				// Robots home.

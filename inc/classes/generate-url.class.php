@@ -269,12 +269,12 @@ class Generate_Url extends Generate_Title {
 					?: $this->get_post_type_archive_canonical_url();
 			} elseif ( $this->is_author() ) {
 				$url = $this->get_author_canonical_url();
-			} elseif ( $this->is_date() ) {
-				if ( $this->is_day() ) {
+			} elseif ( \is_date() ) {
+				if ( \is_day() ) {
 					$url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ), \get_query_var( 'day' ) );
-				} elseif ( $this->is_month() ) {
+				} elseif ( \is_month() ) {
 					$url = $this->get_date_canonical_url( \get_query_var( 'year' ), \get_query_var( 'monthnum' ) );
-				} elseif ( $this->is_year() ) {
+				} elseif ( \is_year() ) {
 					$url = $this->get_date_canonical_url( \get_query_var( 'year' ) );
 				}
 			}
@@ -866,7 +866,7 @@ class Generate_Url extends Generate_Title {
 				$url = \add_query_arg( [ 'cat' => $id ], $home );
 			} elseif ( $this->is_tag() ) {
 				$url = \add_query_arg( [ 'post_tag' => $id ], $home );
-			} elseif ( $this->is_date() && isset( $GLOBALS['wp_query']->query ) ) {
+			} elseif ( \is_date() && isset( $GLOBALS['wp_query']->query ) ) {
 				// FIXME: Core Report: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
 				$_query = $GLOBALS['wp_query']->query;
 				$_date  = [

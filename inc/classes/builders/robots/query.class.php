@@ -55,10 +55,8 @@ final class Query extends Factory {
 
 		$asserting_noindex = 'noindex' === $type;
 
-		meta_settings: {
-			// We assert options here for a jump to meta_settings might be unaware.
-			if ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS )
-				goto after_meta_settings;
+		// We assert options here for a jump to meta_settings might be unaware.
+		meta_settings: if ( ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) ) {
 
 			$qubit = null;
 
@@ -89,9 +87,8 @@ final class Query extends Factory {
 					yield 'meta_qubit_default' => false;
 			endswitch;
 		}
-		after_meta_settings:;
 
-		globals: {
+		globals:
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
 			if ( $tsf->is_real_front_page() ) {
@@ -109,7 +106,7 @@ final class Query extends Factory {
 				if ( $tsf->is_archive() ) {
 					if ( $tsf->is_author() ) {
 						yield 'globals_author' => (bool) $tsf->get_option( "author_$type" );
-					} elseif ( $tsf->is_date() ) {
+					} elseif ( \is_date() ) {
 						yield 'globals_date' => (bool) $tsf->get_option( "date_$type" );
 					}
 				} elseif ( $tsf->is_search() ) {
@@ -134,13 +131,9 @@ final class Query extends Factory {
 			} elseif ( $tsf->is_singular() ) {
 				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
 			}
-		}
 
-		index_protection: if ( $asserting_noindex ) {
-			// We assert options here for a jump to index_protection might be unaware.
-			if ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )
-				goto after_index_protection;
-
+		// We assert options here for a jump to index_protection might be unaware.
+		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
 			if ( $tsf->is_singular() ) {
 				// A reiteration of the very same code as above... but, homepage may not always be singular.
 				// The conditions below MUST overwrite this, too. So, this is the perfect placement.
@@ -158,13 +151,11 @@ final class Query extends Factory {
 					yield from static::assert_noindex_query_pass( 'cpage' );
 			}
 		}
-		after_index_protection:;
 
 		exploit_protection: if ( $tsf->is_query_exploited() ) {
 			if ( \in_array( $type, [ 'noindex', 'nofollow' ], true ) )
 				yield 'query_protection' => true;
 		}
-		after_exploit_protection:;
 
 		end:;
 	}
@@ -201,7 +192,7 @@ final class Query extends Factory {
 					 * the first page indexable via user-intent only. Concordingly, too
 					 * because we cannot assert this via the administrative dashboard.
 					 */
-					yield '404' => $tsf->is_404();
+					yield '404' => \is_404();
 				else :
 					/**
 					 * Check for 404, or if archive is empty: set noindex for those.

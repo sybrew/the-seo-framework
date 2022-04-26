@@ -329,7 +329,7 @@ class Init extends Query {
 			 * @since 2.4.1
 			 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
 			 *
-			 * TODO remove this block? -- it's been 6 years...
+			 * TODO remove this block? -- it's been 7 years...
 			 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
 			 */
 			if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
@@ -483,7 +483,7 @@ class Init extends Query {
 	 */
 	public function html_output() {
 
-		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
+		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
 
 		/**
 		 * @since 2.6.0
@@ -557,7 +557,7 @@ class Init extends Query {
 					'pint_site_output',
 				]
 			);
-		elseif ( $this->is_404() ) :
+		elseif ( \is_404() ) :
 			array_push(
 				$get,
 				...[
@@ -635,7 +635,7 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_preview() || $this->is_customize_preview() || ! $this->query_supports_seo() ) return;
+		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
 
 		$url = $this->get_redirect_url();
 
@@ -860,7 +860,7 @@ class Init extends Query {
 	 */
 	public function _init_robots_headers() {
 
-		$noindex = $this->is_robots() || ( ! $this->get_option( 'index_the_feed' ) && $this->is_feed() );
+		$noindex = \is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() );
 
 		/**
 		 * @since 4.0.5

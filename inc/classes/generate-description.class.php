@@ -655,10 +655,8 @@ class Generate_Description extends Generate {
 
 		$id = $this->get_the_front_page_ID();
 
-		$excerpt = ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
-			?: $this->get_description_additions( [ 'id' => $id ] );
-
-		return $excerpt;
+		return ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
+			   ?: $this->get_description_additions( [ 'id' => $id ] );
 	}
 
 	/**
@@ -851,11 +849,9 @@ class Generate_Description extends Generate {
 				$excerpt = $this->strip_newline_urls( $excerpt );
 				$excerpt = $this->strip_paragraph_urls( $excerpt );
 			}
-		} else {
-			$excerpt = '';
 		}
 
-		return $excerpt;
+		return $excerpt ?? '';
 	}
 
 	/**

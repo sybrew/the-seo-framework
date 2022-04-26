@@ -415,7 +415,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$post_id    = $this->get_the_real_ID();
 		$post_type  = \get_post_type( $post_id );
-		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', \get_post_type( $post_id ) );
+		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**
 		 * @since 3.0.0
@@ -543,7 +543,6 @@ class Generate_Ldjson extends Generate_Image {
 						 ?: $this->get_static_untitled_title();
 			}
 
-			// Store in cache.
 			$items[] = [
 				'@type'    => 'ListItem',
 				'position' => $position,

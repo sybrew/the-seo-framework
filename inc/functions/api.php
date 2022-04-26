@@ -282,14 +282,12 @@ namespace The_SEO_Framework {
 			+ debug_backtrace( 0, 2 )[1]
 		);
 
-		// If the hash is stored, return null back to the caller.
-		if ( isset( $memo[ $hash ] ) )
-			return $memo[ $hash ] === $hash ? null : $memo[ $hash ];
+		// Normally, I try to avoid NOTs for they add (tiny) overhead. Here, I chose readability over performance.
+		if ( ! isset( $memo[ $hash ] ) ) {
+			// Store the result of the function. If that's null/void, store hash.
+			$memo[ $hash ] = \call_user_func( $fn ) ?? $hash;
+		}
 
-		// Store the result of the function. If that's null/void, store hash.
-		$memo[ $hash ] = \call_user_func( $fn ) ?? $hash;
-
-		// If the hash is stored, return null back to the caller.
 		return $memo[ $hash ] === $hash ? null : $memo[ $hash ];
 	}
 }

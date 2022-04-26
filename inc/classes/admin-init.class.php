@@ -369,6 +369,8 @@ class Admin_Init extends Init {
 	 * @since 2.9.3 1. Query arguments work again (regression 2.9.2).
 	 *              2. Now only accepts http and https protocols.
 	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
+	 * @TODO Remove failsafe? WP 5.2/5.4 broke it (this method can never run on failure...)
+	 *       Maybe we should investigate the cause and remove WP's blockade. This is a corner-case, however.
 	 *
 	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.
 	 * @param array  $query_args Optional. Associative array of query string arguments
@@ -398,8 +400,6 @@ class Admin_Init extends Init {
 
 		// White screen of death for non-debugging users. Let's make it friendlier.
 		if ( $headers_sent && $target ) {
-			$this->handle_admin_redirect_error( $target );
-
 			$headers_list = headers_list();
 			$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
@@ -539,7 +539,7 @@ class Admin_Init extends Init {
 	 * @return bool True on success, false on failure.
 	 */
 	public function clear_persistent_notice( $key ) {
-
+		// TODO We could make a oneliner using array_diff_key?: array_diff_key( cache, [ $key ] )
 		$notices = $this->get_static_cache( 'persistent_notices', [] );
 		unset( $notices[ $key ] );
 

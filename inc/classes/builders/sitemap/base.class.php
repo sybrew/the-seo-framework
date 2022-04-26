@@ -312,6 +312,10 @@ class Base extends Main {
 			$content .= $this->build_url_item( $_values );
 		}
 
+		/**
+		 * NOTE to devs: Use this filter if you want to let the generator build the string (lower memory usage).
+		 * This filter also keeps track toward the sitemap limit via $count.
+		 */
 		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) ) {
 			foreach ( $this->generate_additional_base_urls(
 				compact( 'show_modified', 'count' ),
@@ -322,8 +326,7 @@ class Base extends Main {
 		}
 
 		/**
-		 * NOTE: This filter is slower than `the_seo_framework_sitemap_additional_urls`, because it's not a generator.
-		 * If you only need to add a few URLs (fewer than 500), then you can safely use this.
+		 * This filter accepts a simple string, which may strain the memory usage if not generated (via co-routine).
 		 *
 		 * @since 2.5.2
 		 * @since 4.0.0 Added $args parameter.
@@ -331,7 +334,7 @@ class Base extends Main {
 		 * @param string $extend Custom sitemap extension. Must be escaped.
 		 * @param array $args : {
 		 *   bool $show_modified : Whether to display modified date.
-		 *   int  $total_itemns  : Estimate: The total sitemap items before adding additional URLs.
+		 *   int  $count         : The total sitemap items before adding additional URLs.
 		 * }
 		 */
 		$extend = (string) \apply_filters_ref_array(

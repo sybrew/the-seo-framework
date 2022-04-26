@@ -56,11 +56,8 @@ final class Args extends Factory {
 
 		$asserting_noindex = 'noindex' === $type;
 
-		meta_settings: {
-			// We assert options here for a jump to meta_settings might be unaware.
-			if ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS )
-				goto after_meta_settings;
-
+		// We assert options here for a jump to meta_settings might be unaware.
+		meta_settings: if ( ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) ) {
 			$qubit = null;
 
 			if ( $args['taxonomy'] ) {
@@ -90,9 +87,8 @@ final class Args extends Factory {
 					yield 'meta_qubit_default' => false;
 			endswitch;
 		}
-		after_meta_settings:;
 
-		globals: {
+		globals:
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
 			if ( $args['taxonomy'] ) {
@@ -116,7 +112,6 @@ final class Args extends Factory {
 				if ( $args['id'] )
 					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
 			}
-		}
 
 		index_protection: if ( $asserting_noindex ) {
 			// We assert options here for a jump to index_protection might be unaware.

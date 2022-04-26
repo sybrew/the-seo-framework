@@ -75,7 +75,7 @@ class Render extends Admin_Init {
 	 * @since 4.0.0 Removed extraneous, unused parameters.
 	 * @see $this->get_title()
 	 *
-	 * @param string $title       The filterable title.
+	 * @param string $title The filterable title.
 	 * @return string $title
 	 */
 	public function get_wp_title( $title = '' ) {

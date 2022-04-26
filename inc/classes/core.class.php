@@ -579,7 +579,7 @@ class Core {
 	}
 
 	/**
-	 * Calculates the relative font color according to the background.
+	 * Calculates the relative font color according to the background, grayscale.
 	 *
 	 * @since 2.8.0
 	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
@@ -609,7 +609,7 @@ class Core {
 		);
 
 		$get_relative_luminance = static function( $v ) {
-			// Convert to 0~1 value.
+			// Convert hex to 0~1 float.
 			$v /= 0xFF;
 
 			if ( $v > .03928 ) {
@@ -620,19 +620,20 @@ class Core {
 			return $lum;
 		};
 
-		// Create Relative Luminance via sRGB.
-		$rl = ( 0.2126 * $get_relative_luminance( $r ) )
-			+ ( 0.7152 * $get_relative_luminance( $g ) )
-			+ ( 0.0722 * $get_relative_luminance( $b ) );
+		// Calc relative Luminance using sRGB.
+		$rl = .2126 * $get_relative_luminance( $r )
+			+ .7152 * $get_relative_luminance( $g )
+			+ .0722 * $get_relative_luminance( $b );
 
-		// Build light greyscale. Rounding is required for bitwise operation (PHP8.1+).
-		$gr = round( ( $r * 0.2989 / 8 ) * $rl );
-		$gg = round( ( $g * 0.5870 / 8 ) * $rl );
-		$gb = round( ( $b * 0.1140 / 8 ) * $rl );
+		// Build light greyscale using relative constrast.
+		// Rounding is required for bitwise operation (PHP8.1+).
+		// printf will round anyway when floats are detected. Diff in #opcodes should be minimal.
+		$gr = round( $r * .2989 / 8 * $rl );
+		$gg = round( $g * .5870 / 8 * $rl );
+		$gb = round( $b * .1140 / 8 * $rl );
 
-		// Invert colors if they hit this luminance boundary.
-		if ( $rl < 0.5 ) {
-			// Build dark greyscale. bitwise operators...
+		// Invert grayscela if they hit the relative luminance middle.
+		if ( $rl < .5 ) {
 			$gr ^= 0xFF;
 			$gg ^= 0xFF;
 			$gb ^= 0xFF;
