@@ -166,6 +166,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * @since 2.9.3
 	 * @since 3.0.0 This whole functions now only listens to the searchbox option.
 	 * @since 4.1.2 Now properly slashes the search URL.
+	 * @since 4.2.4 Added EntryPoint definition (from implied to implicit)
 	 *
 	 * @return string escaped LD+JSON Search and Sitename script.
 	 */
@@ -210,7 +211,10 @@ class Generate_Ldjson extends Generate_Image {
 			'potentialAction' => [
 				'@type'       => 'SearchAction',
 				// not properly sanitized; however, search_term_string is inert.
-				'target'      => sprintf( $pattern, \esc_url( $search_url ), $action_name ),
+				'target'      => [
+					'@type'       => 'EntryPoint',
+					'urlTemplate' => sprintf( $pattern, \esc_url( $search_url ), $action_name ),
+				],
 				'query-input' => sprintf( 'required name=%s', $action_name ),
 			],
 		];
@@ -329,6 +333,7 @@ class Generate_Ldjson extends Generate_Image {
 	 * Generates LD+JSON Breadcrumbs script.
 	 *
 	 * @since 2.9.3
+	 * @since 4.2.4 Exchanged "is_single" test for "is_post_type_hierarchical".
 	 *
 	 * @return string LD+JSON Breadcrumbs script.
 	 */
@@ -340,11 +345,10 @@ class Generate_Ldjson extends Generate_Image {
 		$output = '';
 
 		if ( $this->is_singular() && ! $this->is_real_front_page() ) {
-			// TODO Shouldn't this be is_post_type_hierarchical()?
-			if ( $this->is_single() ) {
-				$output = $this->get_ld_json_breadcrumbs_post();
-			} else {
+			if ( \is_post_type_hierarchical( $this->get_post_type_real_ID() ) ) {
 				$output = $this->get_ld_json_breadcrumbs_page();
+			} else {
+				$output = $this->get_ld_json_breadcrumbs_post();
 			}
 		}
 

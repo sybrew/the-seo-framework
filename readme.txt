@@ -249,10 +249,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.4 =
 
-TODO: Sitelinks Searchbox should expand to the whole EntryPoint object for best compatibility. (wait for 4.3.0?)
-TODO add filesize detection, which should now be possible?
-TODO add user-definable cap for meta settings?
-
 **For everyone**
 
 * **Updated:**
@@ -260,6 +256,7 @@ TODO add user-definable cap for meta settings?
 * **Improved:**
 	* The SEO query detection now faults when detecting AJAX, WordPress cron, a JSON, or REST request.
 		* This mitigates some issues where plugins try to parse data from WordPress using query-reliant functions (like `wp_get_document_title()`), and then filtering those because the query cannot be resolved (like Events Calendar does for `document_title_parts`), and then strip the parts, instead of just fetching data internally... which all makes no sense.
+	* Updated the Sitelinks Searchbox Schema.org output to be more in line with Schema.org (from Google's old "implied" to "implicit" recommendations). This change offers more widespread support for other platforms.
 * **Changed:**
 	* Robots' copyright setting for `max-image-preview` now defaults to `large`, from `standard`, matching WordPress's default.
 		* This affects new sites only.
@@ -279,6 +276,7 @@ TODO add user-definable cap for meta settings?
 		* `tsf()->is_year()`
 		* `tsf()->is_feed()`
 		* `tsf()->is_robots()`
+	* `tsf()->get_ld_json_breadcrumbs()` now uses `is_post_type_hierarchical()` instead of `is_single()`
 
 = 4.2.3 =
 
