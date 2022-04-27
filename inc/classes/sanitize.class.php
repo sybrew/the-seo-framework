@@ -1640,7 +1640,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0 1. Removed rudimentary relative URL testing.
 	 *              2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
 	 *              3. Now allows all protocols. Enjoy!
-	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://google.com/https://google.com/path/to/file/`)
+	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://example.com/https://example.com/path/to/file/`)
 	 *                 when filter `the_seo_framework_allow_external_redirect` is set to false.
 	 *
 	 * @param string $new_value String with potentially unwanted redirect URL.

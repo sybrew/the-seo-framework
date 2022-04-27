@@ -119,7 +119,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						<?php
 						HTML::make_info(
 							__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-							'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles'
+							'https://developers.google.com/search/docs/advanced/appearance/title-link'
 						);
 						?>
 						</div>
@@ -189,7 +189,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						<?php
 						HTML::make_info(
 							__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-							'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#meta-descriptions'
+							'https://developers.google.com/search/docs/advanced/appearance/snippet'
 						);
 						?>
 						</div>

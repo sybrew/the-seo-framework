@@ -62,7 +62,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		$info = HTML::make_info(
 			__( 'Learn how this data is used.', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/breadcrumb',
+			'https://developers.google.com/search/docs/advanced/structured-data/breadcrumb',
 			false
 		);
 		HTML::wrap_fields(
@@ -82,7 +82,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		$info = HTML::make_info(
 			__( 'Learn how this data is used.', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/sitelinks-searchbox',
+			'https://developers.google.com/search/docs/advanced/structured-data/sitelinks-searchbox',
 			false
 		);
 		HTML::wrap_fields(
@@ -101,7 +101,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		$info = HTML::make_info(
 			__( 'Learn how this data is used.', 'autodescription' ),
-			'https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links',
+			'https://developers.google.com/search/docs/beginner/establish-business-details',
 			false
 		);
 		HTML::wrap_fields(
@@ -148,7 +148,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		HTML::description( esc_html__( 'These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere.', 'autodescription' ) );
 		$info = HTML::make_info(
 			__( 'Learn how this data is used.', 'autodescription' ),
-			'https://developers.google.com/search/docs/data-types/logo',
+			'https://developers.google.com/search/docs/advanced/structured-data/logo',
 			false
 		);
 		HTML::wrap_fields(
@@ -289,7 +289,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 					sprintf(
 						/* translators: %s = Learn more URL. Markdown! */
 						esc_html__( 'These settings are marked for removal. When you clear a field, it will be hidden forever. [Learn more](%s).', 'autodescription' ),
-						'https://developers.google.com/search/docs/data-types/social-profile'
+						'https://support.google.com/knowledgepanel/answer/7534842'
 					),
 					[ 'a' ],
 					[ 'a_internal' => false ]

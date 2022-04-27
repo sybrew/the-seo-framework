@@ -283,7 +283,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			<?php
 			$info = HTML::make_info(
 				__( 'Always brand your titles. Search engines may ignore your titles with this feature enabled.', 'autodescription' ),
-				'https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets#page-titles',
+				'https://developers.google.com/search/docs/advanced/appearance/title-link',
 				false
 			);
 

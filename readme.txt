@@ -255,6 +255,8 @@ TODO add user-definable cap for meta settings?
 
 **For everyone**
 
+* **Updated:**
+	* Helpful links are now more helpful: We've updated outdated links so they point to more actual information.
 * **Improved:**
 	* The SEO query detection now faults when detecting AJAX, WordPress cron, a JSON, or REST request.
 		* This mitigates some issues where plugins try to parse data from WordPress using query-reliant functions (like `wp_get_document_title()`), and then filtering those because the query cannot be resolved (like Events Calendar does for `document_title_parts`), and then strip the parts, instead of just fetching data internally... which all makes no sense.
