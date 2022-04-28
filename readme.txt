@@ -284,8 +284,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* `tsf()->is_robots()`
 	* `tsf()->get_ld_json_breadcrumbs()` now uses `is_post_type_hierarchical()` instead of `is_single()`
 * **Other:**
-	* Cleaned up code, it got dusty.
-		* TODO Also replaced all instances of outputting `\r\n` for simply `\n`. Reading/transforming functions still consider `\r`.
+	* Cleaned up code, it got rusty and dusty.
+		* Also replaced all instances of outputting `\r\n` for simply `\n`. Reading/transforming functions still consider `\r`.
 		* And replaced all instances of `PHP_EOL` for `\n` as well. `PHP_EOL` is archaic since `\n` achieves the same on most modern Windows applications.
 
 = 4.2.3 =

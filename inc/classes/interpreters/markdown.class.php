@@ -58,11 +58,11 @@ final class Markdown {
 	public static function convert( $text, $convert = [], $args = [] ) {
 
 		// preprocess
-		$text = str_replace( "\r\n", "\n", $text );
+		$text = str_replace( [ "\r\n", "\r" ], "\n", $text );
 		$text = str_replace( "\t", ' ', $text );
 		$text = trim( $text );
 
-		// You need 3 chars to make a markdown: *m*
+		// You need at least 3 chars to make a markdown: *m*
 		if ( \strlen( $text ) < 3 )
 			return '';
 

@@ -4,6 +4,11 @@
 	padding-bottom: 20px;
 }
 
+.tsf-top-wrap {
+	/* About half of notification height */
+	margin-bottom: 8px;
+}
+
 .tsf-top-wrap,
 .tsf-bottom-wrap {
 	width: 100%;

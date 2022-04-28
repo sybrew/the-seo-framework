@@ -127,9 +127,16 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 						'person'       => __( 'A Person', 'autodescription' ),
 					]
 				);
-				foreach ( $knowledge_type as $value => $name ) {
-					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_option( 'knowledge_type' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
-				}
+				$_current       = $this->get_option( 'knowledge_type' );
+				foreach ( $knowledge_type as $value => $name )
+					vprintf(
+						'<option value="%s" %s>%s</option>',
+						[
+							esc_attr( $value ),
+							selected( $_current, esc_attr( $value ), false ),
+							esc_html( $name ),
+						]
+					);
 				?>
 			</select>
 		</p>

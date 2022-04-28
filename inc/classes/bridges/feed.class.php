@@ -128,7 +128,7 @@ final class Feed {
 		}
 
 		if ( static::$tsf->get_option( 'source_the_feed' ) ) {
-			$content .= PHP_EOL . $this->get_feed_entry_source_link();
+			$content .= "\n" . $this->get_feed_entry_source_link();
 		}
 
 		return $content;

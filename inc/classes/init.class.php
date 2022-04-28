@@ -503,7 +503,7 @@ class Init extends Query {
 		$init_start = microtime( true );
 
 		// phpcs:disable, WordPress.Security.EscapeOutput -- Output is escaped.
-		echo PHP_EOL, $this->get_plugin_indicator( 'before' );
+		echo "\n", $this->get_plugin_indicator( 'before' );
 
 		$this->do_meta_output();
 
@@ -511,7 +511,7 @@ class Init extends Query {
 			'after',
 			microtime( true ) - $init_start,
 			$bootstrap_timer
-		), PHP_EOL;
+		), "\n";
 		// phpcs:enable, WordPress.Security.EscapeOutput
 
 		/**
@@ -767,26 +767,26 @@ class Init extends Query {
 		/**
 		 * @since 2.5.0
 		 * @param string $pre The output before this plugin's output.
-		 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
+		 *                    Don't forget to add line breaks ( "\n" )!
 		 */
 		$output = (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' );
 
 		// Output defaults
-		$output .= "User-agent: *\r\n";
-		$output .= "Disallow: $site_path/wp-admin/\r\n";
-		$output .= "Allow: $site_path/wp-admin/admin-ajax.php\r\n";
+		$output .= "User-agent: *\n";
+		$output .= "Disallow: $site_path/wp-admin/\n";
+		$output .= "Allow: $site_path/wp-admin/admin-ajax.php\n";
 
 		/**
 		 * @since 2.5.0
 		 * @param bool $disallow Whether to disallow robots queries.
 		 */
 		if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) )
-			$output .= "Disallow: /*?*\r\n";
+			$output .= "Disallow: /*?*\n";
 
 		/**
 		 * @since 2.5.0
 		 * @param string $pro The output after this plugin's output.
-		 *                    Don't forget to add line breaks ( "\r\n" || PHP_EOL )!
+		 *                    Don't forget to add line breaks ( "\n" )!
 		 */
 		$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
@@ -797,9 +797,9 @@ class Init extends Query {
 
 				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
-						$output .= sprintf( "\r\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
+						$output .= sprintf( "\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
 
-				$output .= "\r\n";
+				$output .= "\n";
 			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
 				if ( $this->use_core_sitemaps() ) {
 					$wp_sitemaps_server = \wp_sitemaps_get_server();
@@ -820,7 +820,7 @@ class Init extends Query {
 		// Simple test for invalid directory depth. Even //robots.txt is an invalid location.
 		if ( strrpos( $raw_uri, '/' ) > 0 ) {
 			$error  = sprintf(
-				"%s\r\n%s\r\n\r\n",
+				"%s\n%s\n\n",
 				'# This is an invalid robots.txt location.',
 				'# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' )
 			);

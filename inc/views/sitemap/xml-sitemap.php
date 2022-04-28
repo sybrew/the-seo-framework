@@ -34,7 +34,7 @@ if ( $sitemap_base->base_is_regenerated ) {
 	echo "\n" . '<!-- ' . esc_html__( 'Sitemap is served from cache', 'autodescription' ) . ' -->';
 }
 
-// Destroy class.
+// Destruct class.
 $sitemap_base = null;
 
 if ( $this->the_seo_framework_debug ) {

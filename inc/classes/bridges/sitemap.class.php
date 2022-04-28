@@ -267,7 +267,7 @@ final class Sitemap {
 			echo 'Sitemap is locked temporarily. Try again later.';
 		}
 
-		echo PHP_EOL;
+		echo "\n";
 		exit;
 	}
 
@@ -425,7 +425,7 @@ final class Sitemap {
 	 */
 	public function output_sitemap_header() {
 
-		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 
 		if ( static::$tsf->get_option( 'sitemap_styles' ) ) {
 			printf(

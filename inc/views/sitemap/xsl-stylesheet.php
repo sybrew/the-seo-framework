@@ -10,7 +10,7 @@
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // echo here, otherwise XML closes PHP...
-echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
+echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 
 ?>
 <xsl:stylesheet version="2.0"

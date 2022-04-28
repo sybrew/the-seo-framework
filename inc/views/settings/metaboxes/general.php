@@ -267,8 +267,16 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 					'https'     => 'HTTPS',
 				]
 			);
+			$_current     = $this->get_option( 'canonical_scheme' );
 			foreach ( $scheme_types as $value => $name )
-				echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->get_option( 'canonical_scheme' ), esc_attr( $value ), false ) . '>' . esc_html( $name ) . '</option>' . "\n";
+				vprintf(
+					'<option value="%s" %s>%s</option>',
+					[
+						esc_attr( $value ),
+						selected( $_current, esc_attr( $value ), false ),
+						esc_html( $name ),
+					]
+				);
 			?>
 		</select>
 

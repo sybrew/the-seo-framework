@@ -188,7 +188,7 @@ final class HTML {
 	public static function wrap_fields( $input = '', $echo = false ) {
 
 		if ( \is_array( $input ) )
-			$input = implode( PHP_EOL, $input );
+			$input = implode( "\n", $input );
 
 		$output = "<div class=tsf-fields>$input</div>";
 

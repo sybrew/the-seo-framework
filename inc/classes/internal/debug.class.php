@@ -359,7 +359,7 @@ final class Debug {
 		$_message  = "'<span><strong>$type:</strong> $message";
 		$_message .= $file ? " In $file" : '';
 		$_message .= $line ? " on line $line" : '';
-		$_message .= '</span><br>' . PHP_EOL;
+		$_message .= "</span><br>\n";
 
 		return $_message;
 	}
@@ -419,7 +419,7 @@ final class Debug {
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="font-family:unset;color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		// Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
-		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, \esc_html( str_replace( str_repeat( ' ', 4 ), str_repeat( '&nbsp;', 4 ), $output ) ) );
+		$output = str_replace( [ "\r\n", "\r", "\n" ], "<br>\n", \esc_html( str_replace( str_repeat( ' ', 4 ), str_repeat( '&nbsp;', 4 ), $output ) ) );
 		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<font color="arnoldschwarzenegger">$1</font> ', $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
@@ -569,7 +569,7 @@ final class Debug {
 
 			$value   = '<font color="harrisonford">' . "$type $value" . '</font>';
 			$out     = \esc_html( $name ) . ' => ' . $value;
-			$output .= '<span style="background:#dadada">' . $out . '</span>' . PHP_EOL;
+			$output .= "<span style=background:#dadada>$out</span>\n";
 		}
 
 		foreach ( $not_current as $name => $value ) {
@@ -584,7 +584,7 @@ final class Debug {
 			$value = '<font color="harrisonford">' . "$type $value" . '</font>';
 			$out   = \esc_html( $name ) . ' => ' . $value;
 
-			$output .= $out . PHP_EOL;
+			$output .= "$out\n";
 		}
 
 		if ( 'yup' === $cache_version ) {
@@ -593,7 +593,7 @@ final class Debug {
 			$title = \is_admin() ? 'Expected Front-end WordPress Query' : 'Current WordPress Query';
 		}
 
-		$output = str_replace( PHP_EOL, '<br>' . PHP_EOL, $output );
+		$output = str_replace( [ "\r\n", "\r", "\n" ], "<br>\n", $output );
 		$output = sprintf(
 			'<div style="display:block;width:100%%;background:#fafafa;color:#333;border-bottom:1px solid #666">%s%s%s</div>',
 			sprintf(

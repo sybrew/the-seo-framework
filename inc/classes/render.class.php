@@ -212,7 +212,7 @@ class Render extends Admin_Init {
 			);
 		}
 
-		return $el . ( $new_line ? PHP_EOL : '' );
+		return $el . ( $new_line ? "\n" : '' );
 	}
 
 	/**

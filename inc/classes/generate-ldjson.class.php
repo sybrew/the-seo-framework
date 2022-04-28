@@ -225,7 +225,7 @@ class Generate_Ldjson extends Generate_Image {
 		$json = $this->receive_json_data( $key );
 
 		if ( $json )
-			return '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
+			return '<script type="application/ld+json">' . $json . '</script>' . "\n";
 
 		return '';
 	}
@@ -298,7 +298,7 @@ class Generate_Ldjson extends Generate_Image {
 		$json = $this->receive_json_data( $key );
 
 		if ( $json )
-			return '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
+			return '<script type="application/ld+json">' . $json . '</script>' . "\n";
 
 		return '';
 	}
@@ -760,7 +760,7 @@ class Generate_Ldjson extends Generate_Image {
 		$it++;
 
 		if ( $json )
-			return '<script type="application/ld+json">' . $json . '</script>' . "\r\n";
+			return '<script type="application/ld+json">' . $json . '</script>' . "\n";
 
 		return '';
 	}
