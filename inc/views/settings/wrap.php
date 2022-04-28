@@ -12,18 +12,38 @@ use The_SEO_Framework\Interpreters\HTML,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$_ays_reset = esc_js( __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ) );
+if ( function_exists( 'tsf_extension_manager' )
+	&& in_array(
+		tsf_extension_manager()->seo_extensions_page_slug ?? null,
+		array_column( $GLOBALS['submenu'][ $this->seo_settings_page_slug ] ?? [], 2 ),
+		true
+	)
+) {
+	$_extensions_button = sprintf(
+		'<a href="%s" class="button">%s</a>',
+		menu_page_url( tsf_extension_manager()->seo_extensions_page_slug, false ),
+		esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+	);
+} else {
+	$_extensions_button = $this->_display_extension_suggestions() ? sprintf(
+		'<a href="%s" class="button" rel="noreferrer noopener" target=_blank>%s</a>',
+		'https://theseoframework.com/?p=3599',
+		esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+	) : '';
+}
 
-$_save_button  = get_submit_button(
+$_save_button = get_submit_button(
 	__( 'Save Settings', 'autodescription' ),
-	'primary',
+	[ 'primary' ],
 	'submit',
 	false,
 	[ 'id' => '' ] // we ouput this twice, don't set ID.
 );
+
+$_ays_reset    = esc_js( __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ) );
 $_reset_button = get_submit_button(
 	__( 'Reset Settings', 'autodescription' ),
-	'secondary',
+	[ 'secondary' ],
 	Input::get_field_name( 'tsf-settings-reset' ),
 	false,
 	[
@@ -41,12 +61,12 @@ $_reset_button = get_submit_button(
 
 		<div class=tsf-top-wrap>
 			<h1><?= esc_html( get_admin_page_title() ) ?></h1>
-			<p class=tsf-top-buttons>
+			<div class="tsf-top-buttons tsf-end">
 				<?php
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
-				echo $_save_button, $_reset_button;
+				echo $_save_button, $_reset_button, $_extensions_button;
 				?>
-			</p>
+			</div>
 		</div>
 
 		<hr class=wp-header-end>
@@ -61,11 +81,19 @@ $_reset_button = get_submit_button(
 		do_action( "{$this->seo_settings_page_hook}_settings_page_boxes", $this->seo_settings_page_hook );
 		?>
 
-		<div class=tsf-bottom-buttons>
-			<?php
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
-			echo $_save_button, $_reset_button;
-			?>
+		<div class=tsf-bottom-wrap>
+			<div class="tsf-bottom-buttons tsf-start">
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+				echo $_extensions_button;
+				?>
+			</div>
+			<div class="tsf-bottom-buttons tsf-end">
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+				echo $_save_button;
+				?>
+			</div>
 		</div>
 	</form>
 </div>

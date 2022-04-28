@@ -251,6 +251,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For everyone**
 
+* **Added:**
+	* Added a quick extensions overview link to the settings page.
+		* We figured that when $1&nbsp;400 phones and $8&nbsp;000 TVs add links to related services, we too should whilst asking you $0 and a "thanks."
+			* No, this is not a slippery slope. We'll explain our intentions in a blog post soon&trade;.
 * **Updated:**
 	* Helpful links are now more helpful: We've updated outdated links so they point to more actual information.
 * **Improved:**
@@ -260,6 +264,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 * **Changed:**
 	* Robots' copyright setting for `max-image-preview` now defaults to `large`, from `standard`, matching WordPress's default.
 		* This affects new sites only.
+	* Removed the "Reset Settings" button at the bottom of the settings page.
+		* If someone scrolls all the way to the bottom, they probably have painstakenly adjusted some settings. It would be a waste to accidentally reset them.
 
 **For developers**
 
@@ -277,6 +283,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* `tsf()->is_feed()`
 		* `tsf()->is_robots()`
 	* `tsf()->get_ld_json_breadcrumbs()` now uses `is_post_type_hierarchical()` instead of `is_single()`
+* **Other:**
+	* Cleaned up code, it got dusty.
+		* TODO Also replaced all instances of outputting `\r\n` for simply `\n`. Reading/transforming functions still consider `\r`.
+		* And replaced all instances of `PHP_EOL` for `\n` as well. `PHP_EOL` is archaic since `\n` achieves the same on most modern Windows applications.
 
 = 4.2.3 =
 

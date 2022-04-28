@@ -697,4 +697,16 @@ class Core {
 	public function convert_markdown( $text, $convert = [], $args = [] ) {
 		return Interpreters\Markdown::convert( $text, $convert, $args );
 	}
+
+	/**
+	 * Whether to display Extension Manager suggestions to the user based on several conditions.
+	 *
+	 * @since 4.2.4
+	 * @uses TSF_DISABLE_SUGGESTIONS Set that to true if you don't like us.
+	 *
+	 * @return bool
+	 */
+	public function _display_extension_suggestions() {
+		return \current_user_can( 'install_plugins' ) && ! ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS );
+	}
 }

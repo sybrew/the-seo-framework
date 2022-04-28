@@ -104,10 +104,9 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		<hr>
 		<?php
 		if (
-			! ( defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS )
+			$this->_display_extension_suggestions()
 			&& ! current_theme_supports( 'title-tag' )
 			&& ! defined( 'TSFEM_E_TITLE_FIX' )
-			&& current_user_can( 'install_plugins' )
 		) {
 			?>
 			<h4>

@@ -4,7 +4,8 @@
 	padding-bottom: 20px;
 }
 
-.tsf-top-wrap {
+.tsf-top-wrap,
+.tsf-bottom-wrap {
 	width: 100%;
 	display: inline-block;
 	vertical-align: top;
@@ -13,7 +14,6 @@
 .tsf-top-wrap > h1 {
 	float: left;
 }
-
 body.rtl .tsf-top-wrap > h1 {
 	float: right;
 }
@@ -22,25 +22,37 @@ body.rtl .tsf-top-wrap > h1 {
 	clear: both;
 }
 
+/* Matches .wrap h1 */
 .tsf-top-buttons {
+	padding: 9px 0 4px;
+}
+
+.tsf-top-buttons.tsf-start,
+.tsf-bottom-buttons.tsf-start {
+	float: left;
+}
+body.rtl .tsf-top-buttons.tsf-start,
+body.rtl .tsf-bottom-buttons.tsf-start {
 	float: right;
 }
 
-body.rtl .tsf-top-buttons {
+.tsf-top-buttons.tsf-end,
+.tsf-bottom-buttons.tsf-end {
+	float: right;
+}
+body.rtl .tsf-top-buttons.tsf-end,
+body.rtl .tsf-bottom-buttons.tsf-end {
 	float: left;
 }
 
-.tsf-bottom-buttons {
-	text-align: right;
-}
-
-body.rtl .tsf-bottom-buttons {
-	text-align: left;
-}
-
-.tsf-metaboxes .tsf-top-buttons input,
-.tsf-metaboxes .tsf-bottom-buttons input {
+.tsf-metaboxes .tsf-top-buttons > *:nth-child(n+2),
+.tsf-metaboxes .tsf-bottom-buttons > *:nth-child(n+2) {
 	margin-left: 10px;
+}
+body.rtl .tsf-metaboxes .tsf-top-buttons > *:nth-child(n+2),
+body.rtl .tsf-metaboxes .tsf-bottom-buttons > *:nth-child(n+2) {
+	margin-left: initial;
+	margin-right: 10px;
 }
 
 #tsf-title-separator {
@@ -182,7 +194,6 @@ body.rtl .tsf-bottom-buttons {
 	font-weight: 600;
 	border-radius: 3px 3px 0 0;
 }
-
 body.rtl .tsf-nav-tab-label {
 	float: right;
 	margin-left: 0;

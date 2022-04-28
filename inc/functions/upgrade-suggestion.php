@@ -72,14 +72,16 @@ function _prepare( $previous_version, $current_version ) {
 	//? 2
 	if ( ! \is_main_site() ) return;
 
-	$show_sale = true;
-	if ( \function_exists( '\\tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
-		$show_sale = ! \tsf_extension_manager()->is_connected_user();
-	}
-	if ( $show_sale ) {
-		// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-		_suggest_temp_sale( $previous_version, $current_version );
-	}
+	// phpcs:disable -- There is no sale, leftover code.
+	// $show_sale = true;
+	// if ( \function_exists( '\\tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
+	// 	$show_sale = ! \tsf_extension_manager()->is_connected_user();
+	// }
+	// if ( $show_sale ) {
+	// 	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
+	// 	_suggest_temp_sale( $previous_version, $current_version );
+	// }
+	// phpcs:enable
 
 	//? 3a
 	if ( \defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;
