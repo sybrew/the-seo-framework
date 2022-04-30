@@ -162,8 +162,8 @@ abstract class Main {
 	 */
 	final public function is_post_included_in_sitemap( $post_id ) {
 
-		static $excluded = null;
-		if ( null === $excluded ) {
+		static $excluded;
+		if ( ! isset( $excluded ) ) {
 			/**
 			 * @since 2.5.2
 			 * @since 2.8.0 No longer accepts '0' as entry.
@@ -214,8 +214,8 @@ abstract class Main {
 	 */
 	final public function is_term_included_in_sitemap( $term_id, $taxonomy ) {
 
-		static $excluded = null;
-		if ( null === $excluded ) {
+		static $excluded;
+		if ( ! isset( $excluded ) ) {
 			/**
 			 * @since 4.0.0
 			 * @param int[] $excluded Sequential list of excluded IDs: [ int ...term_id ]

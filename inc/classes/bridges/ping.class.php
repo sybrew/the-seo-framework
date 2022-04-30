@@ -80,7 +80,12 @@ final class Ping {
 	}
 
 	/**
-	 * Retries pinging the search engines.
+	 * Retries pinging the search engines for the base sitemap only.
+	 *
+	 * Devs: If you need to retry pinging another sitemap, please engage a custom scheduler,
+	 *       first call `engage_pinging_retry_cron( [ 'id' => 'my_sitemap_id' ] )`, then hook
+	 *       into action `tsf_sitemap_cron_hook_retry` and test `$args['id']` like below.
+	 *       Alternatively, hitch with `the_seo_framework_ping_search_engines`.
 	 *
 	 * @since 4.1.2
 	 * @see static::engage_pinging_retry_cron()
@@ -96,7 +101,7 @@ final class Ping {
 	}
 
 	/**
-	 * Pings search engines.
+	 * Pings search engines the base sitemap.
 	 *
 	 * @since 2.2.9
 	 * @since 2.8.0 Only worked when the blog was not public...

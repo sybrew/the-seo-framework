@@ -266,6 +266,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* This affects new sites only.
 	* Removed the "Reset Settings" button at the bottom of the settings page.
 		* If someone scrolls all the way to the bottom, they probably have painstakenly adjusted some settings. It would be a waste to accidentally reset them.
+* **Fixed:**
+	* Resolved a regression where rendering the sitemap flushed all caches of WP Super Cache or Comet Cache (among some other caching plugins untested).
 
 **For developers**
 

@@ -466,9 +466,9 @@ class Base extends Main {
 	 * @generator
 	 * @iterator
 	 *
-	 * @param iterable $post_ids The post IDs to go over.
-	 * @param array    $args    The generator arguments.
-	 * @param int      $count   The iteration count. Passed by reference.
+	 * @param int[] $post_ids The post IDs to go over.
+	 * @param array $args    The generator arguments.
+	 * @param int   $count   The iteration count. Passed by reference.
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
@@ -493,8 +493,8 @@ class Base extends Main {
 				yield $_values;
 			}
 
-			// Only clean post cache when NOT using an external object caching plugin.
-			\wp_using_ext_object_cache() or \clean_post_cache( $post );
+			// Only clean post cache when NOT using a caching plugin.
+			WP_CACHE or \clean_post_cache( $post );
 		}
 	}
 

@@ -187,7 +187,6 @@ function _do_upgrade() {
  * @return string $current_version The current database version.
  */
 function _downgrade( $previous_version ) { // phpcs:ignore,VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-
 	// We aren't (currently) expecting issues where downgrading causes mayem. 4051 did cause some, though. This was added later; just set to current.
 	return _set_to_current_version();
 }
