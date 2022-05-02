@@ -1291,7 +1291,7 @@ class Generate_Title extends Generate_Description {
 		if ( $paged >= 2 || $page >= 2 ) {
 			$sep = $this->get_title_separator();
 
-			// phpcs:ignore, WordPress.WP.I18n -- WP didn't add translator code either.
+			/* translators: %s: Page number. */
 			$paging = sprintf( \__( 'Page %s', 'default' ), max( $paged, $page ) );
 
 			if ( \is_rtl() ) {
@@ -1309,6 +1309,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.2 Added strict taxonomical checks for title protection.
 	 * @since 3.1.3 Fixed conditional logic.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.4 Resolved regression where $run-test was reversed (renamed to $merge).
 	 * @see $this->merge_title_prefixes()
 	 *
 	 * @param string     $title The title. Passed by reference.
@@ -1319,19 +1320,23 @@ class Generate_Title extends Generate_Description {
 	public function merge_title_protection( &$title, $args = null ) {
 
 		if ( null === $args ) {
-			$id  = $this->get_the_real_ID();
-			$run = $this->is_singular();
+			$id    = $this->get_the_real_ID();
+			$merge = $this->is_singular();
 		} else {
 			$this->fix_generation_args( $args );
-			$id  = $args['id'];
-			$run = ! $args['taxonomy'] && ! $args['pta'];
+			$id    = $args['id'];
+			$merge = ! $args['taxonomy'] && ! $args['pta'];
 		}
 
-		if ( $run ) return;
+		if ( ! $merge ) return;
 
 		$post = $id ? \get_post( $id ) : null;
 
-		if ( isset( $post->post_password ) && '' !== $post->post_password ) {
+		if ( ! empty( $post->post_password ) ) {
+
+			/* translators: %s: Protected post title. */
+			$prepend = \__( 'Protected: %s', 'default' );
+
 			/**
 			 * Filters the text prepended to the post title of private posts.
 			 *
@@ -1343,10 +1348,13 @@ class Generate_Title extends Generate_Description {
 			 *                         Default 'Private: %s'.
 			 * @param WP_Post $post    Current post object.
 			 */
-			// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-			$protected_title_format = (string) \apply_filters( 'protected_title_format', \__( 'Protected: %s', 'default' ), $post );
+			$protected_title_format = (string) \apply_filters( 'protected_title_format', $prepend, $post );
 			$title                  = sprintf( $protected_title_format, $title );
 		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
+
+			/* translators: %s: Private post title. */
+			$prepend = \__( 'Private: %s', 'default' );
+
 			/**
 			 * Filters the text prepended to the post title of private posts.
 			 *
@@ -1358,8 +1366,8 @@ class Generate_Title extends Generate_Description {
 			 *                         Default 'Private: %s'.
 			 * @param WP_Post $post    Current post object.
 			 */
-			// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-			$private_title_format = (string) \apply_filters( 'private_title_format', \__( 'Private: %s', 'default' ), $post );
+			/* translators: %s: Private post title. */
+			$private_title_format = (string) \apply_filters( 'private_title_format', $prepend, $post );
 			$title                = sprintf( $private_title_format, $title );
 		}
 	}
