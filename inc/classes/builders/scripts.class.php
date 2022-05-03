@@ -114,7 +114,7 @@ final class Scripts {
 		\add_filter( 'admin_body_class', [ $this, '_add_body_class' ] );
 		\add_action( 'in_admin_header', [ $this, '_print_tsfjs_script' ] );
 
-		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 ); // Magic number: likely 1 after this is called.
+		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 ); // Magic number: we likely run at priority 0. Add 1.
 		\add_action( 'admin_footer', [ $this, '_output_templates' ], 999 ); // Magic number: later is less likely to collide?
 	}
 

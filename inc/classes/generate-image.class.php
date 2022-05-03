@@ -188,13 +188,15 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Can now return post type archive images from settings.
+	 * @since 4.2.4 Now returns filesizes under index `filesize`.
 	 *
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	protected function get_custom_field_image_details_from_query() {
@@ -256,14 +258,16 @@ class Generate_Image extends Generate_Url {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.4 Now returns filesizes under index `filesize`.
 	 *
 	 * @param array $args The query arguments. Must have 'id' and 'taxonomy'.
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	protected function get_custom_field_image_details_from_args( $args ) {
@@ -327,7 +331,7 @@ class Generate_Image extends Generate_Url {
 	 * @param string     $context The filter context. Default 'social'.
 	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
 	 * @return array The image generation parameters, associative: {
-	 *    string  size:     The image size,
+	 *    string  size:     The image size by name,
 	 *    boolean multi:    Whether multiple images may be returned,
 	 *    array   cbs:      An array of image generation callbacks, in order of most important to least.
 	 *                      When 'multi' (or $single input) parameter is "false", it will use the first found.
@@ -424,17 +428,19 @@ class Generate_Image extends Generate_Url {
 	 * Generates image details.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.4 Now returns filesizes under index `filesize`.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The context of the image generation, albeit 'social', 'schema', etc.
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	protected function generate_image_details( $args, $single = true, $context = 'social' ) {
@@ -452,6 +458,7 @@ class Generate_Image extends Generate_Url {
 	 * Processes image detail callbacks.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.4 Now returns filesizes under index `filesize`.
 	 *
 	 * @param callable[] $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -459,11 +466,12 @@ class Generate_Image extends Generate_Url {
 	 * @param string     $size   The image size to use.
 	 * @param bool       $single Whether to fetch one image, or multiple.
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	protected function process_image_cbs( $cbs, $args, $size, $single ) {
@@ -489,6 +497,8 @@ class Generate_Image extends Generate_Url {
 	 * Adds image dimension and alt parameters to the input details, if any.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.4 1. Now returns filesizes under index `filesize`.
+	 *              2. No longer processes details when no `id` is given in `$details`.
 	 *
 	 * @param array  $details The image details array, associative: {
 	 *    string url:    The image URL,
@@ -501,57 +511,66 @@ class Generate_Image extends Generate_Url {
 	 *    int    width:  The image width in pixels,
 	 *    int    height: The image height in pixels,
 	 *    string alt:    The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public function merge_extra_image_details( $details, $size = 'full' ) {
 
-		$details += $this->get_image_dimensions( $details['id'], $details['url'], $size );
-		$details += [ 'alt' => $this->get_image_alt_tag( $details['id'] ) ];
+		if ( $details['id'] ) {
+			$details += $this->get_image_dimensions( $details['id'], $details['url'], $size );
+			$details += [ 'alt' => $this->get_image_alt_tag( $details['id'] ) ];
+			$details += [ 'filesize' => $this->get_image_filesize( $details['id'], $details['url'], $size ) ];
+		} else {
+			$details += [
+				'width'    => 0,
+				'height'   => 0,
+				'url'      => '',
+				'filesize' => 0,
+			];
+		}
 
 		return $details;
 	}
 
 	/**
-	 * Generates image dimensions.
+	 * Fetches image dimensions.
 	 *
+	 * @TODO shift parametes and deprecate using the third one.
 	 * @since 4.0.0
+	 * @since 4.2.4 1. No longer relies on `$url` to fetch the correct dimensions, improving performance significantly.
+	 *              2. Renamed `$url` to `$depr`, without a deprecation notice added.
 	 *
 	 * @param int    $src_id The source ID of the image.
-	 * @param string $url    The source URL of the image. Ideally related to the $src_id.
+	 * @param string $depr   Deprecated. Used to be the source URL of the image.
 	 * @param string $size   The size of the image used.
 	 * @return array The image dimensions, associative: {
 	 *    int width:  The image width in pixels,
 	 *    int height: The image height in pixels,
 	 * }
 	 */
-	public function get_image_dimensions( $src_id, $url, $size ) {
+	public function get_image_dimensions( $src_id, $depr, $size ) {
 
-		$image = \wp_get_attachment_image_src( $src_id, $size );
+		// PHP 7.4+, major version API change.
+		// $size ??= $depr;
+
+		$data = \wp_get_attachment_metadata( $src_id ) ?? [];
+		$data = $data['sizes'][ $size ] ?? $data;
 
 		$dimensions = [
 			'width'  => 0,
 			'height' => 0,
 		];
 
-		if ( $image ) {
-			[ $src, $width, $height ] = $image;
-
-			$test_src = \esc_url_raw( $this->set_url_scheme( $src, 'https' ), [ 'https', 'http' ] );
-			$test_url = \esc_url_raw( $this->set_url_scheme( $url, 'https' ), [ 'https', 'http' ] );
-
-			if ( $test_src === $test_url ) {
-				$dimensions = [
-					'width'  => $width,
-					'height' => $height,
-				];
-			}
+		if ( isset( $data['width'], $data['height'] ) ) {
+			$dimensions['width']  = $data['width'];
+			$dimensions['height'] = $data['height'];
 		}
 
 		return $dimensions;
 	}
 
 	/**
-	 * Generates image dimensions.
+	 * Fetches image dimensions.
 	 *
 	 * @since 4.0.0
 	 *
@@ -564,25 +583,46 @@ class Generate_Image extends Generate_Url {
 	}
 
 	/**
+	 * Fetches image filesize in bytes. Requires an image (re)generated in WP 6.0 or later.
+	 *
+	 * @since 4.2.4
+	 *
+	 * @param int    $src_id The source ID of the image.
+	 * @param string $size   The size of the image used.
+	 * @return int The image filesize in bytes. Returns 0 for unprocessed/unprocessable image.
+	 */
+	public function get_image_filesize( $src_id, $size ) {
+
+		$data = \wp_get_attachment_metadata( $src_id ) ?? [];
+
+		return ( $data['sizes'][ $size ]['filesize'] ?? $data['filesize'] ?? 0 ) ?: 0;
+	}
+
+	/**
 	 * Returns the largest acceptable image size's details.
+	 * Skips the original image, which may also be acceptable.
 	 *
 	 * @since 4.0.2
+	 * @since 4.2.4 Added parameter `$max_filesize` that filters images larger than it.
 	 *
-	 * @param int $id       The image ID.
-	 * @param int $max_size The largest acceptable size in pixels. Accounts for both width and height.
+	 * @param int $id           The image ID.
+	 * @param int $max_size     The largest acceptable dimension in pixels. Accounts for both width and height.
+	 * @param int $max_filesize The largest acceptable filesize in bytes. Default 5MB (5242880).
 	 * @return false|array Returns an array (url, width, height, is_intermediate), or false, if no image is available.
 	 */
-	public function get_largest_acceptable_image_src( $id, $max_size = 4096 ) {
+	public function get_largest_acceptable_image_src( $id, $max_size = 4096, $max_filesize = 5242880 ) {
 
 		// Imply there's a correct ID set. When there's not, the loop won't run.
-		$meta  = \wp_get_attachment_metadata( $id );
-		$sizes = ! empty( $meta['sizes'] ) && \is_array( $meta['sizes'] ) ? $meta['sizes'] : [];
+		$sizes = \wp_get_attachment_metadata( $id )['sizes'] ?? [];
 
 		// law = largest accepted width.
 		$law  = 0;
 		$size = '';
 
 		foreach ( $sizes as $_s => $_d ) {
+			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize )
+				continue;
+
 			if ( isset( $_d['width'], $_d['height'] ) ) {
 				if ( $_d['width'] <= $max_size && $_d['height'] <= $max_size && $_d['width'] > $law ) {
 					$law  = $_d['width'];

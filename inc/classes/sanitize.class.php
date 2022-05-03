@@ -1994,15 +1994,17 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.5 Now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
 	 * @since 4.1.4 Fixed theoretical issue where a different image could be set when width
 	 *              and height are supplied and either over 4K, but no ID is given.
+	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
 	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
 	 *
 	 * @param array $details The image details, either associative (see $defaults) or sequential.
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public function s_image_details( $details ) {
@@ -2011,14 +2013,15 @@ class Sanitize extends Admin_Pages {
 			return $this->s_image_details_deep( $details );
 
 		$defaults = [
-			'url'    => '',
-			'id'     => 0,
-			'width'  => 0,
-			'height' => 0,
-			'alt'    => '',
+			'url'      => '',
+			'id'       => 0,
+			'width'    => 0,
+			'height'   => 0,
+			'alt'      => '',
+			'filesize' => 0,
 		];
 
-		[ $url, $id, $width, $height, $alt ] = array_values( array_merge( $defaults, $details ) );
+		[ $url, $id, $width, $height, $alt, $filesize ] = array_values( array_merge( $defaults, $details ) );
 
 		if ( ! $url ) return $defaults;
 
@@ -2036,7 +2039,7 @@ class Sanitize extends Admin_Pages {
 		 *
 		 * Tested with Facebook; they ignore them too. There's no documentation available.
 		 * TODO Should we even test for this here, or at the image generators' type?
-		 * It seems, however, that all services we want to communicate with ignore these types, anyway.
+		 * It seems, however, that _all_ services we want to communicate with ignore these types, anyway.
 		 */
 		if ( \in_array(
 			strtolower( strtok( pathinfo( $url, PATHINFO_EXTENSION ), '?' ) ),
@@ -2050,8 +2053,8 @@ class Sanitize extends Admin_Pages {
 		if ( ! $width || ! $height )
 			$width = $height = 0;
 
-		if ( $id && ( $width > 4096 || $height > 4096 ) ) {
-			$new_image = $this->get_largest_acceptable_image_src( $id, 4096 );
+		if ( $id && ( $width > 4096 || $height > 4096 || $filesize > 5 * MB_IN_BYTES ) ) {
+			$new_image = $this->get_largest_acceptable_image_src( $id, 4096, 5 * MB_IN_BYTES );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 
 			if ( ! $url ) return $defaults;
@@ -2068,21 +2071,23 @@ class Sanitize extends Admin_Pages {
 			$alt = \strlen( $alt ) > 420 ? $this->trim_excerpt( $alt, 0, 420 ) : $alt;
 		}
 
-		return compact( 'url', 'id', 'width', 'height', 'alt' );
+		return compact( 'url', 'id', 'width', 'height', 'alt', 'filesize' );
 	}
 
 	/**
 	 * Iterates over and cleans known parameters from image details. Also strips out duplicates.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
 	 *
 	 * @param array $details_array The image details, preferably sequential.
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public function s_image_details_deep( $details_array ) {
