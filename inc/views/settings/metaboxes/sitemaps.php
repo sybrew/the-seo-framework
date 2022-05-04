@@ -361,7 +361,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		);
 
 		$ph_id  = get_theme_mod( 'custom_logo' ) ?: 0;
-		$ph_src = $ph_id ? wp_get_attachment_image_src( $ph_id, [ 29, 29 ] ) : [];
+		$ph_src = $ph_id ? wp_get_attachment_image_src( $ph_id, [ 29, 29 ] ) : []; // TODO magic number "SITEMAP_LOGO_PX"
 
 		$logo_placeholder = ! empty( $ph_src[0] ) ? $ph_src[0] : '';
 		?>
@@ -383,10 +383,10 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				'id'   => 'sitemap_logo',
 				'data' => [
 					'inputType' => 'logo',
-					'width'     => 512,
-					'height'    => 512,
-					'minWidth'  => 64,
-					'minHeight' => 64,
+					'width'     => 512, // Magic number "CUSTOMIZER_LOGO_MAX" (should be defined in WP?)
+					'height'    => 512, // Magic number
+					'minWidth'  => 64, // Magic number "CUSTOMIZER_LOGO_MIN" (should be defined in WP?)
+					'minHeight' => 64, // Magic number
 					'flex'      => true,
 				],
 				'i18n' => [

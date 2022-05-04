@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.5.0
 Tested up to: 6.0
 Requires PHP: 7.2.0
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -249,70 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.4 =
 
-This minor update improves image processing, improving TSF's performance by roughly 20% when generating metadata. We also added WordPress 6.0 support for image filesizes, making social sharing [even more robust]().
-
-**For everyone**
-
-* **Added:**
-	* Added a quick extensions overview link to the settings page.
-		* We figured that when $1&nbsp;400 phones and $8&nbsp;000 TVs add links to related services, we too can add one whilst asking you $0 and a "thanks."
-			* No, this is not a slippery slope; we're not testing waters. We'll explain our intentions in a blog post soon&trade;.
-			* Several conditions must be met before the link is displayed.
-			* Add `define( 'TSF_DISABLE_SUGGESTIONS', false );` to `wp-config.php` to permanently block all (current and future) hints that help us sustain this project.
-	* Image filesize support (brought in WordPress 6.0). When a processable image is found to be larger than 5MB, a smaller version will be considered for social sharing.
-* **Updated:**
-	* Helpful links are now more helpful: We've updated outdated links so they point to more actual information.
-* **Improved:**
-	* The SEO query detection now faults when detecting AJAX, WordPress cron, a JSON, or REST request.
-		* This mitigates some issues where plugins try to parse data from WordPress using query-reliant functions (like `wp_get_document_title()`), and then filtering those because the query cannot be resolved (like Events Calendar does for `document_title_parts`), and then strip the parts, instead of just fetching data internally... which all makes no sense.
-	* Updated the Sitelinks Searchbox Schema.org output to be more in line with Schema.org (from Google's old "implied" to "implicit" recommendations). This change offers more widespread support for other platforms.
-	* Image dimension calculations are now processed far more rapidly (60 to 110x improvement on SATA SSD, 5~9x improvement when processing the same image repeatedly).
-* **Changed:**
-	* Robots' copyright setting for `max-image-preview` now defaults to `large`, from `standard`, matching WordPress's default.
-		* This affects new sites only.
-	* Removed the "Reset Settings" button at the bottom of the settings page.
-		* If someone scrolls all the way to the bottom, they probably have painstakenly adjusted some settings. It would be a waste to accidentally reset them.
-* **Fixed:**
-	* Resolved a regression where rendering the sitemap flushed all caches of WP Super Cache or Comet Cache (among some other caching plugins untested).
-	* Resolved a regression where title prefixes weren't rendered on the front-end for protected content (`Protected: Post Title` and `Private: Post Title`).
-
-**For developers**
-
-* **Option notes (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, name `autodescription-site-settings`):**
-	* `max_image_preview` now defaults to `large`, from `standard`.
-* **Object notes:**
-	* For object `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
-		* The following methods are no longer used internally, and are marked for deprecation. They devolved (evolved?) to becoming aliases of WordPress's identically titled functions.
-			* `is_404()`
-			* `is_admin()`
-			* `is_customize_preview()`
-			* `is_date()`
-			* `is_day()`
-			* `is_month()`
-			* `is_year()`
-			* `is_feed()`
-			* `is_robots()`
-		* **Methods added:**
-			* `get_image_filesize()`, allows you to get the filesize for an image given a registered image size name.
-				* This method requires WP 6.0+ to return useful data.
-		* **Methods changed:**
-			* `get_ld_json_breadcrumbs()` now uses `is_post_type_hierarchical()` instead of `is_single()`
-			* `query_supports_seo()` now returns `false` when detecting AJAX, WordPress cron, or REST request.
-			* `merge_title_protection()` now actually works.
-			* `merge_extra_image_details()`
-				1. Now returns filesizes under index `filesize`.
-				1. No longer processes details when no `id` is given in `$details`.
-			* `get_image_dimensions()`
-				1. No longer relies on `$url` to fetch the correct dimesions, improving performance significantly.
-				1. Renamed `$url` to `$depr`, without a deprecation notice added (because this is a minor update).
-			* `get_largest_acceptable_image_src()` added parameter `$max_filesize` that filters images larger than it.
-			* `s_image_details()` and `s_image_details_deep()` now accept, process, and return filesizes under index `filesize`.
-* **Filter notes:**
-	* `the_seo_framework_receive_json_data` `$data` (first) parameter for `$key == 'website'` (second parameter) `['potentialAction']['target']` is now an array by default instead of a string (either type are still valid and accepted).
-* **Other:**
-	* Cleaned up code, it got rusty and dusty.
-		* Also replaced all instances of outputting `\r\n` for simply `\n`. Reading/transforming functions still consider `\r`.
-		* And replaced all instances of `PHP_EOL` for `\n` as well. `PHP_EOL` is archaic since `\n` achieves the same on most modern Windows applications.
+This minor update improves image processing, reducing TSF's load impact by roughly 20% when generating metadata. We also added WordPress 6.0 support for image filesizes, making social sharing [even more robust](https://theseoframework.com/?p=3903).
 
 = 4.2.3 =
 

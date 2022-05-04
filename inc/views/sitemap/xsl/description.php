@@ -13,12 +13,12 @@ $logo = '';
 if ( $this->get_option( 'sitemap_logo' ) ) {
 
 	$id   = $this->get_option( 'sitemap_logo_id' ) ?: 0;
-	$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : [];
+	$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
 
 	// Fallback to theme mod.
 	if ( ! $_src ) {
 		$id   = get_theme_mod( 'custom_logo' ) ?: 0;
-		$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : [];
+		$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
 	}
 
 	/**

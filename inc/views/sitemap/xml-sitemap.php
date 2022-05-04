@@ -16,8 +16,8 @@ $sitemap_bridge = The_SEO_Framework\Bridges\Sitemap::get_instance();
 $sitemap_bridge->output_sitemap_header();
 
 if ( $this->the_seo_framework_debug ) {
-	echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->' . "\n";
-	echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->' . "\n";
+	echo '<!-- Site estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage() / MB_IN_BYTES, 3 ) . ' MB -->' . "\n";
+	echo '<!-- System estimated peak usage prior to generation: ' . number_format( memory_get_peak_usage( true ) / MB_IN_BYTES, 3 ) . ' MB -->' . "\n";
 }
 
 $sitemap_bridge->output_sitemap_urlset_open_tag();
@@ -38,11 +38,11 @@ if ( $sitemap_base->base_is_regenerated ) {
 $sitemap_base = null;
 
 if ( $this->the_seo_framework_debug ) {
-	echo "\n" . '<!-- Site estimated current usage: ' . number_format( memory_get_usage() / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- System estimated current usage: ' . number_format( memory_get_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $sitemap_bridge->get_freed_memory( true ) / 1024, 3 ) . ' kB -->';
+	echo "\n" . '<!-- Site estimated current usage: ' . number_format( memory_get_usage() / MB_IN_BYTES, 3 ) . ' MB -->';
+	echo "\n" . '<!-- System estimated current usage: ' . number_format( memory_get_usage( true ) / MB_IN_BYTES, 3 ) . ' MB -->';
+	echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / MB_IN_BYTES, 3 ) . ' MB -->';
+	echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / MB_IN_BYTES, 3 ) . ' MB -->';
+	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $sitemap_bridge->get_freed_memory( true ) / KB_IN_BYTES, 3 ) . ' kB -->';
 	echo "\n" . '<!-- Sitemap generation time: ' . number_format( microtime( true ) - $timer_start, 6 ) . ' seconds -->';
 	echo "\n" . '<!-- Sitemap caching enabled: ' . ( $this->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ) . ' -->';
 	echo "\n" . '<!-- Sitemap transient key: ' . esc_html( $this->get_sitemap_transient_name() ) . ' -->';

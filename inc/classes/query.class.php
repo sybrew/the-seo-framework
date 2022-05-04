@@ -872,6 +872,7 @@ class Query extends Core {
 	 */
 	public function is_static_frontpage( $id = 0 ) {
 
+		// Memo this slow part seperately; memo_query() would cache the whole method, which isn't necessary.
 		$front_id = umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,

@@ -185,10 +185,10 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				'id'   => 'knowledge_logo',
 				'data' => [
 					'inputType' => 'logo',
-					'width'     => 512,
-					'height'    => 512,
-					'minWidth'  => 112,
-					'minHeight' => 112,
+					'width'     => 512, // Magic number -> Google requirement? "MAGIC::GOOGLE->LOGO_MAX"?
+					'height'    => 512, // Magic number
+					'minWidth'  => 112, // Magic number -> Google requirement? "MAGIC::GOOGLE->LOGO_MIN"?
+					'minHeight' => 112, // Magic number
 					'flex'      => true,
 				],
 				'i18n' => [
