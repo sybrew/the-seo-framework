@@ -33,7 +33,7 @@
 }
 .tsf-top-buttons.tsf-end,
 .tsf-bottom-buttons.tsf-end {
-	justify-content: end;
+	justify-content: flex-end;
 }
 
 @media screen and (max-width: 782px) {
