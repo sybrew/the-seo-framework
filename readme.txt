@@ -247,6 +247,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.?.? =
+
+* **Fixed:** The Core Sitemaps term inclusion test will no longer cause a fatal error on PHP 8.0 or higher.
+
 = 4.2.4 =
 
 This minor update improves image processing, reducing TSF's load impact by roughly 20% when generating metadata. We also added WordPress 6.0 support for image filesizes, making social sharing [even more robust](https://theseoframework.com/?p=3903).
