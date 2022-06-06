@@ -249,7 +249,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.?.? =
 
-* **Fixed:** The Core Sitemaps term inclusion test will no longer cause a fatal error on PHP 8.0 or higher.
+TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
+	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
+
+* **Fixed:** The Core Sitemaps term inclusion test will no longer cause a fatal error on PHP 8.0 and higher when using WordPress 6.0 or higher.
+	* An [undocumented change to WordPress 6.0](https://github.com/WordPress/wordpress-develop/commit/dcb118ef8f2ba1405f18bd52e431963fe30f3f57) caused this issue.
 
 = 4.2.4 =
 

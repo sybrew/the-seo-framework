@@ -40,6 +40,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 	 * @since 4.1.2
 	 * @since 4.2.0 Renamed `$taxonomy` to `$object_subtype` to match parent class
 	 *              for PHP 8 named parameter support. (Backport WP 5.9)
+	 * @since 4.2.5 Added 'all' fields to the query, allowing caching of terms (Backport WP 6.0).
 	 * @source \WP_Sitemaps_Taxonomies\get_url_list()
 	 * @TEMP https://wordpress.slack.com/archives/CTKTGNJJW/p1604995479019700
 	 * @link <https://core.trac.wordpress.org/ticket/51860>
@@ -82,15 +83,16 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 
 		$url_list = [];
 
-		$main = Main::get_instance();
-
 		// Offset by how many terms should be included in previous pages.
 		$offset = ( $page_num - 1 ) * \wp_sitemaps_get_max_urls( $this->object_type );
 
 		$args           = $this->get_taxonomies_query_args( $taxonomy );
+		$args['fields'] = 'all'; // On WP<6.0 this is 'ids'; overwrite it. This line is a mirror of WPv6.0, too.
 		$args['offset'] = $offset;
 
 		$taxonomy_terms = new \WP_Term_Query( $args );
+
+		$main = Main::get_instance();
 
 		foreach ( $taxonomy_terms->terms ?? [] as $term ) :
 			/**
@@ -112,12 +114,14 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			 * Filters the sitemap entry for an individual term.
 			 *
 			 * @since WP Core 5.5.0
+			 * @since WP Core 6.0.0 Added `$term` argument containing the term object.
 			 *
 			 * @param array   $sitemap_entry Sitemap entry for the term.
-			 * @param WP_Term $term          Term object.
+			 * @param int     $term_id       Term ID.
 			 * @param string  $taxonomy      Taxonomy name.
+			 * @param WP_Term $term          Term object.
 			 */
-			$sitemap_entry = \apply_filters( 'wp_sitemaps_taxonomies_entry', $sitemap_entry, $term, $taxonomy );
+			$sitemap_entry = \apply_filters( 'wp_sitemaps_taxonomies_entry', $sitemap_entry, $term->term_id, $taxonomy, $term );
 			$url_list[]    = $sitemap_entry;
 		endforeach;
 
