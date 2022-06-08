@@ -249,7 +249,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.5 =
 
-This minor update addresses a change in WordPress 6.0 that causes taxonomy sitemaps to crash, and improves image cropping by [preserving metadata](https://theseoframework.com/?p=3929).
+This minor update addresses a change in WordPress 6.0 that causes taxonomy sitemaps to crash, allows paginated deindexing to supersede forced indexing, and improves image cropping by [preserving metadata](https://theseoframework.com/?p=3929).
 
 = 4.2.4 =
 
