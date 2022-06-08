@@ -44,6 +44,8 @@ final class Query extends Factory {
 	 * Yields true when "noindex/noarchive/nofollow", yields false when "index/archive/follow".
 	 *
 	 * @since 4.2.0
+	 * @since 4.2.5 1. Removed needlessly duplicate homepage test.
+	 *              2. Moved archive pagination check to index_protection.
 	 * @generator
 	 *
 	 * @param string $type The robots generator type (noindex, nofollow...).
@@ -93,15 +95,8 @@ final class Query extends Factory {
 
 			if ( $tsf->is_real_front_page() ) {
 				yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
-
-				if ( ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) )
-					$asserting_noindex and yield from static::assert_noindex_query_pass( 'paged_home' );
 			} else {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
-
-				if ( ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) )
-					if ( $asserting_noindex && ( $tsf->is_archive() || $tsf->is_singular_archive() ) )
-						yield from static::assert_noindex_query_pass( 'paged' );
 
 				if ( $tsf->is_archive() ) {
 					if ( $tsf->is_author() ) {
@@ -134,21 +129,22 @@ final class Query extends Factory {
 
 		// We assert options here for a jump to index_protection might be unaware.
 		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
-			if ( $tsf->is_singular() ) {
-				// A reiteration of the very same code as above... but, homepage may not always be singular.
-				// The conditions below MUST overwrite this, too. So, this is the perfect placement.
-				if ( $tsf->is_real_front_page() )
-					yield from static::assert_noindex_query_pass( 'paged_home' );
+			if ( $tsf->is_real_front_page() ) {
+				yield from static::assert_noindex_query_pass( 'paged_home' );
+			} else {
+				if ( $tsf->is_archive() || $tsf->is_singular_archive() ) {
+					yield from static::assert_noindex_query_pass( 'paged' );
+				} elseif ( $tsf->is_singular() ) {
+					yield from static::assert_noindex_query_pass( 'protected' );
 
-				yield from static::assert_noindex_query_pass( 'protected' );
-
-				/**
-				 * N.B. WordPress protects this query variable with options 'page_comments'
-				 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
-				 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
-				 */
-				if ( (int) \get_query_var( 'cpage', 0 ) > 0 )
-					yield from static::assert_noindex_query_pass( 'cpage' );
+					/**
+					 * N.B. WordPress protects this query variable with options 'page_comments'
+					 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
+					 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
+					 */
+					if ( (int) \get_query_var( 'cpage', 0 ) > 0 )
+						yield from static::assert_noindex_query_pass( 'cpage' );
+				}
 			}
 		}
 
