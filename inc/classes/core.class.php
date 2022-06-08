@@ -188,7 +188,7 @@ class Core {
 	 */
 	public function get_view( $view, $__args = [], $instance = 'main' ) {
 
-		//? A faster extract().
+		// A faster extract().
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
 		unset( $__k, $__v, $__args );
 
@@ -201,9 +201,11 @@ class Core {
 	/**
 	 * Stores and returns view secret.
 	 *
-	 * This is not cryptographically secure, but it's enough to fend others off including our files where they shouldn't.
-	 * Our view-files have a certain expectation of inputs to meet. If they don't meet that, we could expose our users to security issues.
-	 * We could not measure any meaningful performance impact by using this (0.02% of 54x get_view() runtime).
+	 * This is not cryptographically secure, but it's enough to fend others off
+	 * including our files where they shouldn't. Our view-files have a certain
+	 * expectation of inputs to meet. When they don't meet that, we could expose
+	 * our users to security issues. We could not measure any meaningful
+	 * performance impact by using this (0.02% of 54x get_view() runtime).
 	 *
 	 * @since 4.1.1
 	 *
@@ -632,7 +634,7 @@ class Core {
 		$gg = round( $g * .5870 / 8 * $rl );
 		$gb = round( $b * .1140 / 8 * $rl );
 
-		// Invert grayscela if they hit the relative luminance middle.
+		// Invert grayscela if they pass the relative luminance midpoint.
 		if ( $rl < .5 ) {
 			$gr ^= 0xFF;
 			$gg ^= 0xFF;

@@ -2,10 +2,10 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
-Requires at least: 5.5.0
+Requires at least: 5.5
 Tested up to: 6.0
 Requires PHP: 7.2.0
-Stable tag: 4.2.4
+Stable tag: 4.2.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -247,13 +247,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.?.? =
+= 4.2.5 =
 
-TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
-	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
-
-* **Fixed:** The Core Sitemaps term inclusion test will no longer cause a fatal error on PHP 8.0 and higher when using WordPress 6.0 or higher.
-	* An [undocumented change to WordPress 6.0](https://github.com/WordPress/wordpress-develop/commit/dcb118ef8f2ba1405f18bd52e431963fe30f3f57) caused this issue.
+This minor update addresses a change in WordPress 6.0 that causes taxonomy sitemaps to crash, and improves image cropping by [preserving metadata](https://theseoframework.com/?p=3929).
 
 = 4.2.4 =
 

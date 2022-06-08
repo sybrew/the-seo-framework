@@ -69,7 +69,7 @@ function _is_shop( $post = null ) {
 
 		$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
 	} else {
-		$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
+		$is_shop = ! \is_admin() && \function_exists( '\\is_shop' ) && \is_shop();
 	}
 
 	return $is_shop;
@@ -146,7 +146,7 @@ function _set_wc_is_product( $is_product, $post ) {
 	if ( $post ) {
 		$is_product = 'product' === \get_post_type( $post );
 	} else {
-		$is_product = \function_exists( 'is_product' ) && \is_product();
+		$is_product = \function_exists( '\\is_product' ) && \is_product();
 	}
 
 	return $is_product;

@@ -200,7 +200,7 @@ abstract class ListTable {
 		$taxonomy  = isset( $_POST['taxonomy'] ) ? stripslashes( $_POST['taxonomy'] ) : '';
 		$post_type = isset( $_POST['post_type'] ) ? stripslashes( $_POST['post_type'] ) : '';
 
-		//? /wp-admin/js/inline-edit-tax.js doesn't send post_type, instead, it sends tax_type, which is the same.
+		// /wp-admin/js/inline-edit-tax.js doesn't send post_type, instead, it sends tax_type, which is the same.
 		$post_type = $post_type
 				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 

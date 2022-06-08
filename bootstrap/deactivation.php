@@ -52,7 +52,7 @@ function _deactivation_unset_options_autoload() {
 		\remove_all_filters( "sanitize_option_{$setting}" );
 
 		$temp_options = $options;
-		//? Write a small difference, so the change will be forwarded to the database.
+		// Write a small difference, so the change will be forwarded to the database.
 		if ( \is_array( $temp_options ) )
 			$temp_options['update_buster'] = (int) time();
 

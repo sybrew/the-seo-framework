@@ -64,7 +64,7 @@ function _polylang_fix_sitemap_base_bath( $path ) {
  */
 function _polylang_set_sitemap_language() {
 
-	if ( ! \function_exists( 'PLL' ) ) return;
+	if ( ! \function_exists( '\\PLL' ) ) return;
 	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return;
 
 	// phpcs:ignore, WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
@@ -175,7 +175,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * @return string
  */
 function pll__( $string ) {
-	if ( \function_exists( 'PLL' ) && \function_exists( '\\pll__' ) )
+	if ( \function_exists( '\\PLL' ) && \function_exists( '\\pll__' ) )
 		if ( \PLL() instanceof \PLL_Frontend )
 			return \pll__( $string );
 
@@ -265,8 +265,8 @@ function _polylang_flush_sitemap( $type, $id, $args, $success ) {
 			)
 		); // No cache OK. DB call ok.
 
-		//? We didn't use a wildcard after "_transient_" to reduce scans.
-		//? A second query is faster on saturated sites.
+		// We didn't use a wildcard after "_transient_" to reduce scans.
+		// A second query is faster on saturated sites.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",

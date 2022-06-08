@@ -99,7 +99,7 @@ class Sanitize extends Admin_Pages {
 		$this->delete_main_cache();
 
 		// Set backward compatibility. This runs after the sanitization.
-		\add_filter( 'pre_update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 10 );
+		// \add_filter( 'pre_update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 10 );
 
 		// Sets that the options are unchanged, preemptively.
 		$this->update_static_cache( 'settings_notice', 'unchanged' );
@@ -141,29 +141,15 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0 Emptied and is no longer enqueued.
 	 * @since 4.1.0 1. Added taxonomical robots options backward compat.
 	 *              2. Added the first two parameters.
+	 * @since 4.2.5 Emptied and is no longer enqueued.
 	 * @access private
 	 *
 	 * @param mixed $new_value The new, unserialized, and filtered option value.
 	 * @return mixed $new_value The updated option.
 	 */
 	public function _set_backward_compatibility( $new_value ) {
-
-		db_4103:
-		// Category and Tag robots backward compat.
-		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) :
-			$robots_option_id   = $this->get_robots_taxonomy_option_id( $r );
-			$new_robots_options = $new_value[ $robots_option_id ] ?? [];
-
-			$new_category_option = $new_robots_options['category'] ?? 0;
-			$new_tag_option      = $new_robots_options['post_tag'] ?? 0;
-
-			// Don't compare to old option--it's never reliably set; it might skip otherwise, although it's always correct.
-			// Do not resanitize. Others might've overwritten that, let's keep their value.
-			$new_value[ "category_$r" ] = $new_category_option;
-			$new_value[ "tag_$r" ]      = $new_tag_option;
-		endforeach;
-
-		end:;
+		// db_4103:
+		// end:;
 		return $new_value;
 	}
 

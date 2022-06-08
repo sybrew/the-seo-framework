@@ -208,9 +208,9 @@ function _upgrade( $previous_version ) {
 	$current_version = $previous_version;
 
 	//! From update 3103 henceforth, the upgrade procedures should be backward compatible.
-	//? This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
-	//? We must manually delete settings that are no longer used; we merge them otherwise.
-	//? When a user upgrades beyond this scope, they aren't expected to roll back.
+	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
+	// We must manually delete settings that are no longer used; we merge them otherwise.
+	// When a user upgrades beyond this scope, they aren't expected to roll back.
 	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200' ];
 
 	foreach ( $versions as $_version ) {

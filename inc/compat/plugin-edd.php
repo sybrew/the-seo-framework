@@ -22,7 +22,7 @@ namespace The_SEO_Framework;
 function _set_edd_is_product( $is_product, $post ) {
 
 	if ( ! $is_product ) {
-		if ( \function_exists( 'edd_get_download' ) ) {
+		if ( \function_exists( '\\edd_get_download' ) ) {
 			$download = \edd_get_download(
 				$post ? \get_post( $post ) : \tsf()->get_the_real_ID()
 			);

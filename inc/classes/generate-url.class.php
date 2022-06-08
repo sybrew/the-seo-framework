@@ -902,7 +902,7 @@ class Generate_Url extends Generate_Title {
 			$url  = \add_query_arg( [ 'page' => $page ], $url );
 		}
 
-		//? Append queries other plugins might've filtered.
+		// Append queries other plugins might've filtered.
 		if ( $this->is_singular() ) {
 			$url = $this->append_url_query(
 				$url,

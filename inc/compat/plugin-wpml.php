@@ -78,8 +78,8 @@ function _wpml_flush_sitemap( $type, $id, $args, $success ) {
 			)
 		); // No cache OK. DB call ok.
 
-		//? We didn't use a wildcard after "_transient_" to reduce scans.
-		//? A second query is faster on saturated sites.
+		// We didn't use a wildcard after "_transient_" to reduce scans.
+		// A second query is faster on saturated sites.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",

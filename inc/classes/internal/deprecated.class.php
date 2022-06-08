@@ -562,7 +562,7 @@ final class Deprecated {
 		if ( isset( $id ) ) {
 			$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
 		} else {
-			$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
+			$is_shop = ! \is_admin() && \function_exists( '\\is_shop' ) && \is_shop();
 		}
 
 		return $is_shop;
@@ -595,7 +595,7 @@ final class Deprecated {
 		if ( $post ) {
 			$is_product = 'product' === \get_post_type( $post );
 		} else {
-			$is_product = \function_exists( 'is_product' ) && \is_product();
+			$is_product = \function_exists( '\\is_product' ) && \is_product();
 		}
 
 		return $is_product;

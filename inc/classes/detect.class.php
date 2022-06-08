@@ -772,6 +772,9 @@ class Detect extends Render {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
+	 * @slow The queried result is not stored in WP Post's cache, which would allow
+	 *       direct access to all values of the post (if requested). This is because
+	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
 	 *
 	 * @param string $post_type The post type to test.
 	 * @return bool True if a post is found in the archive, false otherwise.
@@ -965,7 +968,7 @@ class Detect extends Render {
 							array_unique(
 								array_merge(
 									$this->get_forced_supported_post_types(),
-									//? array_values() because get_post_types() gives a sequential array.
+									// array_values() because get_post_types() gives a sequential array.
 									array_keys( (array) \get_post_types( [ 'public' => true ] ) )
 								)
 							),
@@ -1039,7 +1042,7 @@ class Detect extends Render {
 						array_unique(
 							array_merge(
 								$this->get_forced_supported_taxonomies(),
-								//? array_values() because get_taxonomies() gives a sequential array.
+								// array_values() because get_taxonomies() gives a sequential array.
 								array_values( \get_taxonomies( [
 									'public'   => true,
 									'_builtin' => false,

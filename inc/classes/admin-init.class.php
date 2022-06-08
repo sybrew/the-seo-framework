@@ -391,11 +391,6 @@ class Admin_Init extends Init {
 		// Predict white screen:
 		$headers_sent = headers_sent();
 
-		/**
-		 * Dev debug:
-		 * 1. Change 302 to 500 if you wish to test headers.
-		 * 2. Also force handle_admin_redirect_error() to run.
-		 */
 		\wp_safe_redirect( $target, 302 );
 
 		// White screen of death for non-debugging users. Let's make it friendlier.
@@ -581,7 +576,7 @@ class Admin_Init extends Init {
 	public function _dismiss_notice() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		$key = $_POST['tsf-notice-submit'] ?? '';
+		$key = \sanitize_key( $_POST['tsf-notice-submit'] ?? '' );
 
 		if ( ! $key ) return;
 

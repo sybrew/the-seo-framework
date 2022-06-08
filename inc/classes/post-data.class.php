@@ -202,7 +202,7 @@ class Post_Data extends Detect {
 	protected function get_unfiltered_post_meta_defaults() {
 		return [
 			'_genesis_title'          => '',
-			'_tsf_title_no_blogname'  => 0, //? The prefix I should've used from the start...
+			'_tsf_title_no_blogname'  => 0, // The prefix I should've used from the start...
 			'_genesis_description'    => '',
 			'_genesis_canonical_uri'  => '',
 			'redirect'                => '', //! Will be displayed in custom fields when set...
@@ -552,6 +552,9 @@ class Post_Data extends Detect {
 	 * @since 2.4.3
 	 * @since 2.9.3 1. Removed object caching.
 	 *              2. It now uses WP_Query, instead of wpdb.
+	 * @slow The queried result is not stored in WP Post's cache, which would allow
+	 *       direct access to all values of the post (if requested). This is because
+	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
 	 *
 	 * @return int Latest Post ID.
 	 */

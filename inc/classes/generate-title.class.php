@@ -1033,7 +1033,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_single_post_title( $id = 0 ) {
 
-		//? Home queries can be tricky. Use get_the_real_ID to be certain.
+		// Home queries can be tricky. Use get_the_real_ID to be certain.
 		$_post = \get_post( $id ?: $this->get_the_real_ID() );
 
 		if ( isset( $_post->post_title ) ) {
@@ -1458,7 +1458,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function use_title_pagination( $args = null ) {
 
-		//? Only add pagination if the query is autodetermined, and on a real page.
+		// Only add pagination if the query is autodetermined, and on a real page.
 		if ( null === $args ) {
 			if ( \is_404() || \is_admin() ) {
 				$use = false;

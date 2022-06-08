@@ -402,6 +402,9 @@ class Term_Data extends Post_Data {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
+	 * @slow The queried result is not stored in WP Term's cache, which would allow
+	 *       direct access to all values of the term (if requested). This is because
+	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
 	 *
 	 * @return int Latest Category ID.
 	 */

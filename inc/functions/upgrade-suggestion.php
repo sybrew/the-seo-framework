@@ -64,12 +64,12 @@ _prepare( $previous_version, $current_version );
  */
 function _prepare( $previous_version, $current_version ) {
 
-	//? 0
+	// 0
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version == $current_version ) return;
-	//? 1
+	// 1
 	if ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS ) return;
-	//? 2
+	// 2
 	if ( ! \is_main_site() ) return;
 
 	// phpcs:disable -- There is no sale, leftover code.
@@ -83,13 +83,13 @@ function _prepare( $previous_version, $current_version ) {
 	// }
 	// phpcs:enable
 
-	//? 3a
+	// 3a
 	if ( \defined( 'TSF_EXTENSION_MANAGER_VERSION' ) ) return;
 
 	if ( ! \function_exists( '\\get_plugins' ) )
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-	//? 3b
+	// 3b
 	if ( ! empty( \get_plugins()['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] ) ) return;
 
 	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape

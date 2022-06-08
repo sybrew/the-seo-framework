@@ -25,7 +25,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$latest_cat_id  = $this->get_latest_category_id();
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
-		$post_name  = strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' );
+		$post_name  = esc_html( strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' ) );
 		$post_title = $this->s_title( $this->hellip_if_over( $post_name, 60 ) );
 
 		$cat_prefix = $this->s_title( _x( 'Category:', 'category archive title prefix', 'default' ) );
@@ -36,7 +36,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		) );
 		$cat_title_full = sprintf(
 			/* translators: 1: Title prefix. 2: Title. */
-			_x( '%1$s %2$s', 'archive title', 'default' ),
+			esc_html_x( '%1$s %2$s', 'archive title', 'default' ),
 			$cat_prefix,
 			$cat_title
 		);

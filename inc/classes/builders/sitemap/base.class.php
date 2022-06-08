@@ -153,6 +153,11 @@ class Base extends Main {
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".
 	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap\Base
 	 * @abstract
+	 * @slow The queried results are not stored in WP Post's cache, which would allow direct access
+	 *       to all values of the post (if requested). This is because we're using
+	 *       `'fields' => 'ids'` instead of `'fields' => 'all'`. However, this would fill RAM
+	 *       linearly: at 1000 posts, we'd hit 28MB already, 10 000 would be ~280MB, exceeding max.
+	 * @link <https://w.org/support/topic/sitemap-and-memory-exhaustion/#post-13331896>
 	 *
 	 * @return string The sitemap content.
 	 */
@@ -223,6 +228,7 @@ class Base extends Main {
 			/**
 			 * @since 4.0.0
 			 * @param array $args The query arguments.
+			 * @link <https://w.org/support/topic/sitemap-and-memory-exhaustion/#post-13331896>
 			 */
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_hpt_query_args',
