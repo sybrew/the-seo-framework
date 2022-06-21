@@ -247,6 +247,25 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.3.0  =
+
+**For developers**
+
+* **Changed:**
+	* Method `get_current_post_author_meta()` no longer applies memoization.
+	* Filter `the_seo_framework_input_guidelines` added two more paramters (`$c_adjust` and `$locale`).
+	* Method `strip_tags_cs()`:
+		1. Now correctly captures nested elements, improving performance.
+		1. Added `map` to clear.
+	* Method `array_merge_recursive_distinct()`:
+		1. Now supports a single array entry without causing issues.
+		1. Reduced number of opcodes by roughly 30% by introducing goto.
+
+* TODO Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
+* TODO Moved aside/blockquote from space to clear: TODO update KB.
+
+TODO `/?search=` is indexable, but only `search`, not something else. Why?
+
 = 4.2.5 =
 
 This minor update addresses a change in WordPress 6.0 that causes taxonomy sitemaps to crash, allows paginated deindexing to supersede forced indexing, and improves image cropping by [preserving metadata](https://theseoframework.com/?p=3929).

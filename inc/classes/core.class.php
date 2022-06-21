@@ -463,22 +463,26 @@ class Core {
 	 * TODO instead of calling thyself, would a goto not be better?
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 1. Now supports a single array entry without causing issues.
+	 *              2. Reduced number of opcodes by roughly 30% by introducing goto.
 	 *
 	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
 	 * @return array The merged arrays.
 	 */
-	public function array_merge_recursive_distinct( array ...$arrays ) {
+	public function array_merge_recursive_distinct( ...$arrays ) {
 
 		$i = \count( $arrays );
 
-		if ( 2 === $i ) foreach ( $arrays[1] as $key => $value ) {
+		if ( $i < 2 ) return $arrays[0];
+
+		remerge:;
+
+		foreach ( $arrays[ --$i ] as $key => $value )
 			$arrays[0][ $key ] = \is_array( $arrays[0][ $key ] ?? null )
 				? $this->array_merge_recursive_distinct( $arrays[0][ $key ], $value )
 				: $value;
-		} else do {
-			// phpcs:ignore -- Imagine assigning from right to left, but also left to right. Yes:
-			$arrays[ --$i - 1 ] = $this->array_merge_recursive_distinct( $arrays[ $i - 1 ], $arrays[ $i ] );
-		} while ( $i > 1 );
+
+		if ( $i ) goto remerge;
 
 		return $arrays[0];
 	}

@@ -76,12 +76,13 @@ class User_Data extends Term_Data {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Removed memoization.
 	 * @TODO Throw this away? We do not use it... never have.
 	 *
 	 * @return array The current author meta.
 	 */
 	public function get_current_post_author_meta() {
-		return memo() ?? memo( $this->get_user_meta( $this->get_current_post_author_id() ) );
+		return $this->get_user_meta( $this->get_current_post_author_id() );
 	}
 
 	/**

@@ -483,15 +483,15 @@ class Generate_Description extends Generate {
 
 		if ( ! $this->is_auto_description_enabled( $args ) ) return '';
 
+		if ( ! \in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
+			$type = 'search';
+
 		if ( null === $args ) {
 			$excerpt = $this->get_description_excerpt_from_query();
 		} else {
 			$this->fix_generation_args( $args );
 			$excerpt = $this->get_description_excerpt_from_args( $args );
 		}
-
-		if ( ! \in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
-			$type = 'search';
 
 		/**
 		 * @since 2.9.0
@@ -797,6 +797,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0 1. No longer returns anything for terms.
 	 *              2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
+	 * TODO deprecate and simplify (remove $excerpt and $deprecated).
 	 *
 	 * @param string $excerpt    The Excerpt.
 	 * @param int    $id         The Post ID.

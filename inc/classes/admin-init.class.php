@@ -218,81 +218,88 @@ class Admin_Init extends Init {
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
 		 * @since 3.1.0
-		 * @param array $guidelines The title and description guidelines.
-		 *              Don't alter the format. Only change the numeric values.
+		 * @since 4.3.0 Added two more paramters (`$c_adjust` and `$locale`)
+		 * @param array                    $guidelines The title and description guidelines.
+		 *                                 Don't alter the format. Only change the numeric values.
+		 * @param map[$c_adjust,$p_adjust] The guideline calibration (Character and Pixels respectively).
+		 * @param string                   $locale The current locale.
 		 */
 		return memo(
-			(array) \apply_filters(
+			(array) \apply_filters_ref_array(
 				'the_seo_framework_input_guidelines',
 				[
-					'title' => [
-						'search' => [
-							'chars'  => [
-								'lower'     => (int) ( 25 * $c_adjust ),
-								'goodLower' => (int) ( 35 * $c_adjust ),
-								'goodUpper' => (int) ( 65 * $c_adjust ),
-								'upper'     => (int) ( 75 * $c_adjust ),
+					[
+						'title' => [
+							'search' => [
+								'chars'  => [
+									'lower'     => (int) ( 25 * $c_adjust ),
+									'goodLower' => (int) ( 35 * $c_adjust ),
+									'goodUpper' => (int) ( 65 * $c_adjust ),
+									'upper'     => (int) ( 75 * $c_adjust ),
+								],
+								'pixels' => [
+									'lower'     => (int) ( 200 * $p_adjust ),
+									'goodLower' => (int) ( 280 * $p_adjust ),
+									'goodUpper' => (int) ( 520 * $p_adjust ),
+									'upper'     => (int) ( 600 * $p_adjust ),
+								],
 							],
-							'pixels' => [
-								'lower'     => (int) ( 200 * $p_adjust ),
-								'goodLower' => (int) ( 280 * $p_adjust ),
-								'goodUpper' => (int) ( 520 * $p_adjust ),
-								'upper'     => (int) ( 600 * $p_adjust ),
+							'opengraph' => [
+								'chars'  => [
+									'lower'     => 15,
+									'goodLower' => 25,
+									'goodUpper' => 88,
+									'upper'     => 100,
+								],
+								'pixels' => [],
+							],
+							'twitter' => [
+								'chars'  => [
+									'lower'     => 15,
+									'goodLower' => 25,
+									'goodUpper' => 69,
+									'upper'     => 70,
+								],
+								'pixels' => [],
 							],
 						],
-						'opengraph' => [
-							'chars'  => [
-								'lower'     => 15,
-								'goodLower' => 25,
-								'goodUpper' => 88,
-								'upper'     => 100,
+						'description' => [
+							'search' => [
+								'chars'  => [
+									'lower'     => (int) ( 45 * $c_adjust ),
+									'goodLower' => (int) ( 80 * $c_adjust ),
+									'goodUpper' => (int) ( 160 * $c_adjust ),
+									'upper'     => (int) ( 320 * $c_adjust ),
+								],
+								'pixels' => [
+									'lower'     => (int) ( 256 * $p_adjust ),
+									'goodLower' => (int) ( 455 * $p_adjust ),
+									'goodUpper' => (int) ( 910 * $p_adjust ),
+									'upper'     => (int) ( 1820 * $p_adjust ),
+								],
 							],
-							'pixels' => [],
-						],
-						'twitter' => [
-							'chars'  => [
-								'lower'     => 15,
-								'goodLower' => 25,
-								'goodUpper' => 69,
-								'upper'     => 70,
+							'opengraph' => [
+								'chars'  => [
+									'lower'     => 45,
+									'goodLower' => 80,
+									'goodUpper' => 200,
+									'upper'     => 300,
+								],
+								'pixels' => [],
 							],
-							'pixels' => [],
+							'twitter' => [
+								'chars'  => [
+									'lower'     => 45,
+									'goodLower' => 80,
+									'goodUpper' => 200,
+									'upper'     => 200,
+								],
+								'pixels' => [],
+							],
 						],
 					],
-					'description' => [
-						'search' => [
-							'chars'  => [
-								'lower'     => (int) ( 45 * $c_adjust ),
-								'goodLower' => (int) ( 80 * $c_adjust ),
-								'goodUpper' => (int) ( 160 * $c_adjust ),
-								'upper'     => (int) ( 320 * $c_adjust ),
-							],
-							'pixels' => [
-								'lower'     => (int) ( 256 * $p_adjust ),
-								'goodLower' => (int) ( 455 * $p_adjust ),
-								'goodUpper' => (int) ( 910 * $p_adjust ),
-								'upper'     => (int) ( 1820 * $p_adjust ),
-							],
-						],
-						'opengraph' => [
-							'chars'  => [
-								'lower'     => 45,
-								'goodLower' => 80,
-								'goodUpper' => 200,
-								'upper'     => 300,
-							],
-							'pixels' => [],
-						],
-						'twitter' => [
-							'chars'  => [
-								'lower'     => 45,
-								'goodLower' => 80,
-								'goodUpper' => 200,
-								'upper'     => 200,
-							],
-							'pixels' => [],
-						],
-					],
+					[ $c_adjust, $p_adjust ],
+					$locale,
 				]
 			),
 			$locale

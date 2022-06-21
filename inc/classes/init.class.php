@@ -479,7 +479,7 @@ class Init extends Query {
 	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 *              2. Now always sets timezone regardless of settings, because, again, bug.
 	 * @since 4.2.0 No longer sets timezone.
-	 * @access private
+	 * @since 4.3.0 No longer marked as private.
 	 */
 	public function html_output() {
 

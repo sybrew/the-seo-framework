@@ -215,16 +215,14 @@ final class AJAX {
 				];
 
 				// Copy the image caption attribute (post_excerpt field) from the original image.
-				if ( \strlen( trim( $original_attachment->post_excerpt ) ) ) {
+				if ( \strlen( trim( $original_attachment->post_excerpt ) ) )
 					$attachment['post_excerpt'] = $original_attachment->post_excerpt;
-				}
 
 				// Copy the image alt text attribute from the original image.
-				if ( \strlen( trim( $original_attachment->_wp_attachment_image_alt ) ) ) {
+				if ( \strlen( trim( $original_attachment->_wp_attachment_image_alt ) ) )
 					$attachment['meta_input'] = [
 						'_wp_attachment_image_alt' => \wp_slash( $original_attachment->_wp_attachment_image_alt ),
 					];
-				}
 
 				$attachment_id = \wp_insert_attachment( $attachment, $cropped );
 				$metadata      = \wp_generate_attachment_metadata( $attachment_id, $cropped );

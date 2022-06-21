@@ -1039,6 +1039,8 @@ class Sanitize extends Admin_Pages {
 	 *              2. Added $escape parameter.
 	 * @since 3.2.4 Now selectively clears tags.
 	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
+	 * @since 4.3.0 Moved `aside` and `blockquote` from `space` to `clear`.
+	 * TODO should we move ol/ul/li,dd/dl/dt from space to clear as well?
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1053,9 +1055,9 @@ class Sanitize extends Admin_Pages {
 
 		$strip_args = [
 			'space' =>
-				[ 'article', 'aside', 'blockquote', 'br', 'dd', 'div', 'dl', 'dt', 'li', 'main', 'ol', 'p', 'section', 'ul' ],
+				[ 'article', 'br', 'dd', 'div', 'dl', 'dt', 'li', 'main', 'ol', 'p', 'section', 'ul' ],
 			'clear' =>
-				[ 'address', 'bdo', 'button', 'canvas', 'code', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'tfoot', 'var', 'video' ],
+				[ 'address', 'aside', 'bdo', 'blockquote', 'button', 'canvas', 'code', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'map', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'tfoot', 'var', 'video' ],
 		];
 
 		/**
@@ -1905,11 +1907,13 @@ class Sanitize extends Admin_Pages {
 	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
 	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
+	 * @since 4.3.0 1. Now correctly captures nested elements, improving performance.
+	 *              2. Added `map` to clear.
 	 * @link https://www.w3schools.com/html/html_blocks.asp
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 	 *
 	 * @param string $input The input text that needs its tags stripped.
-	 * @param array  $args  The input arguments: {
+	 * @param array  $args  The input arguments. Tags not included are ignored. {
 	 *                         'space'   : @param array|null HTML elements that should have a space added around it.
 	 *                                                       If not set or null, skip check.
 	 *                                                       If empty array, skips stripping; otherwise, use input.
@@ -1931,23 +1935,25 @@ class Sanitize extends Admin_Pages {
 			'space' =>
 				[ 'address', 'article', 'aside', 'blockquote', 'br', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
 			'clear' =>
-				[ 'bdo', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
+				[ 'bdo', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'map', 'meta', 'noscript', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
 			'strip' => true,
 		];
 
 		$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' ];
 
+		// We're missing em, strong, sub, q, marquee, blink, i, b, sup, time, tt, map, kbd, big ---- These are all inline text.
+
 		if ( ! $args ) {
 			$args = $default_args;
 		} else {
-			foreach ( [ 'space', 'clear' ] as $type ) {
+			foreach ( [ 'clear', 'space' ] as $type ) {
 				if ( isset( $args[ $type ] ) )
 					$args[ $type ] = $args[ $type ] ? (array) $args[ $type ] : [];
 			}
 			$args['strip'] = $args['strip'] ?? $default_args['strip'];
 		}
 
-		// Clear first, so there's less to process; then add spaces.
+		// Clear first, so there's less to process, and sub-elements are cleared. Then, add spaces.
 		foreach ( [ 'clear', 'space' ] as $type ) {
 			if ( empty( $args[ $type ] ) ) continue;
 
@@ -1957,14 +1963,22 @@ class Sanitize extends Admin_Pages {
 			$fill_query = array_diff( $args[ $type ], $void );
 
 			if ( $void_query ) {
-				$_regex   = sprintf( '<(%s)\b[^>]*?>', implode( '|', $void_query ) );
+				$_regex   = sprintf( '<%s\b[^>]*?>', implode( '|', $void_query ) );
 				$_replace = 'space' === $type ? ' ' : '';
-				$input    = preg_replace( "/$_regex/si", $_replace, $input );
+				$input    = preg_replace( "/$_regex/i", $_replace, $input );
 			}
 			if ( $fill_query ) {
-				$_regex   = sprintf( '<(%s)\b[^>]*>([^<]*)(<\/\1>)?|(<\/?(?1)>)', implode( '|', $fill_query ) );
+				/**
+				 * `(*ACCEPT)` will grab all HTML for following the tag if it's not closed properly, for it halts all backtracking.
+				 * Otherwise, we'd face catastrophic backtracing. We can mitigate this (somewhat) by using `<` instead of `(*ACCEPT)`
+				 * However, that skyrocket the amount recursive backtracking, plus it'll not close HTML neatly according to W3 ref.
+				 *
+				 * Play with it here: https://regex101.com/r/tBCb4Q/2.
+				 * In that, our tag-controlled `(%s)` is replaced with a catch-all `[a-z][a-z0-9]*`, not simulating unrecognized tags.
+				 */
+				$_regex   = sprintf( '<(%s)\b[^<]*?>((?:[^<]*(?:<(?!\/?\1\b)[^<]*)*|(?R)|(*ACCEPT))*?)<\/\1>', implode( '|', $fill_query ) );
 				$_replace = 'space' === $type ? ' $2 ' : ' ';
-				$input    = preg_replace( "/$_regex/si", $_replace, $input );
+				$input    = preg_replace( "/$_regex/i", $_replace, $input );
 			}
 		}
 
