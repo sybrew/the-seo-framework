@@ -212,7 +212,7 @@ class Generate extends User_Data {
 	 * @return string The separator.
 	 */
 	public function get_separator( $type = 'title' ) {
-		return $this->get_separator_list()[ $this->get_option( $type . '_separator' ) ] ?? '&#x2d;';
+		return $this->get_separator_list()[ $this->get_option( "{$type}_separator" ) ] ?? '&#x2d;';
 	}
 
 	/**

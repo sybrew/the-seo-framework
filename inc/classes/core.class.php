@@ -417,7 +417,7 @@ class Core {
 	 * @return string The converted time. Empty string if no $time is given.
 	 */
 	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
-		return $time ? gmdate( $format, strtotime( $time . ' GMT' ) ) : '';
+		return $time ? gmdate( $format, strtotime( "$time GMT" ) ) : '';
 	}
 
 	/**
@@ -459,12 +459,13 @@ class Core {
 	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
 	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
 	 *
-	 * A do-while is faster than while. Sorry for the legibility.
-	 * TODO instead of calling thyself, would a goto not be better?
+	 * @link <https://3v4l.org/9pnW1#v8.1.8> Test it here.
 	 *
 	 * @since 4.1.4
 	 * @since 4.3.0 1. Now supports a single array entry without causing issues.
-	 *              2. Reduced number of opcodes by roughly 30% by introducing goto.
+	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
+	 *              3. Now no longer throws warnings with qubed+ arrays.
+	 *              4. Now no longer ignores scalar values merzging over arrays.
 	 *
 	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
 	 * @return array The merged arrays.
@@ -473,16 +474,14 @@ class Core {
 
 		$i = \count( $arrays );
 
-		if ( $i < 2 ) return $arrays[0];
+		while ( --$i ) {
+			$p = $i - 1;
 
-		remerge:;
-
-		foreach ( $arrays[ --$i ] as $key => $value )
-			$arrays[0][ $key ] = \is_array( $arrays[0][ $key ] ?? null )
-				? $this->array_merge_recursive_distinct( $arrays[0][ $key ], $value )
-				: $value;
-
-		if ( $i ) goto remerge;
+			foreach ( $arrays[ $i ] as $key => $value )
+				$arrays[ $p ][ $key ] = isset( $arrays[ $p ][ $key ] ) && \is_array( $value )
+					? $this->array_merge_recursive_distinct( $arrays[ $p ][ $key ], $value )
+					: $value;
+		}
 
 		return $arrays[0];
 	}

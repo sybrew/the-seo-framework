@@ -672,6 +672,7 @@ class Detect extends Render {
 	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query.
 	 *
 	 * @since 4.0.5
+	 * @since 4.3.0 Added detection `not_home_as_page`, specifically for query variable `search`.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -701,11 +702,12 @@ class Detect extends Render {
 		/**
 		 * @since 4.0.5
 		 * @param array $exploitables The exploitable endpoints by type.
+		 * @since 4.3.0 Added index `not_home_as_page` with value `search`.
 		 */
 		$exploitables = \apply_filters(
 			'the_seo_framework_exploitable_query_endpoints',
 			[
-				'numeric'       => [
+				'numeric'           => [
 					'page_id',
 					'attachment_id',
 					'year',
@@ -720,12 +722,17 @@ class Detect extends Render {
 					'second',
 					'subpost_id',
 				],
-				'numeric_array' => [
+				'numeric_array'    => [
 					'cat',
 					'author',
 				],
-				'requires_s'    => [
+				'requires_s'       => [
 					'sentence',
+				],
+				'not_home_as_page' => [
+					// No public application registered in WP for this, yet it is a public variable.
+					// Having any other valid query mitigates.
+					'search',
 				],
 			]
 		);
@@ -755,6 +762,13 @@ class Detect extends Render {
 
 					case 'requires_s':
 						if ( ! isset( $query['s'] ) )
+							return memo( true );
+						break;
+
+					case 'not_home_as_page':
+						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
+						// If home but as page but no page ID is found, query got exploited successfully.
+						if ( $this->is_home_as_page() && ! $this->get_the_real_ID() )
 							return memo( true );
 						break;
 
@@ -1249,6 +1263,9 @@ class Detect extends Render {
 	 * Determines if the input text has transformative Yoast SEO syntax.
 	 *
 	 * @since 4.0.5
+	 * @since 4.3.0 1. Added wildcard `ct_` and `cf_` detection.
+	 *              2. Added detection for various other types
+	 *              2. Removed wildcard `cs_` detection.
 	 * @link <https://yoast.com/help/list-available-snippet-variables-yoast-seo/>
 	 *
 	 * @param string $text The text to evaluate.
@@ -1258,13 +1275,13 @@ class Detect extends Render {
 
 		if ( false === strpos( $text, '%%' ) ) return false;
 
-		$tags_simple = [ 'date', 'title', 'parent_title', 'archive_title', 'sitename', 'sitedesc', 'excerpt', 'excerpt_only', 'tag', 'category', 'primary_category', 'category_description', 'tag_description', 'term_description', 'term_title', 'searchphrase', 'sep', 'pt_single', 'pt_plural', 'modified', 'id', 'name', 'user_description', 'page', 'pagetotal', 'pagenumber', 'caption', 'focuskw', 'term404', 'ct_product_cat', 'ct_product_tag', 'wc_shortdesc', 'wc_sku', 'wc_brand', 'wc_price' ];
+		$tags_simple = [ 'archive_title', 'author_first_name', 'author_last_name', 'caption', 'category', 'category_description', 'category_title', 'currentdate', 'currentday', 'currentmonth', 'currentyear', 'date', 'excerpt', 'excerpt_only', 'focuskw', 'id', 'modified', 'name', 'page', 'pagenumber', 'pagetotal', 'parent_title', 'permalink', 'post_content', 'post_day', 'post_month', 'post_year', 'primary_category', 'pt_plural', 'pt_single', 'searchphrase', 'sep', 'sitedesc', 'sitename', 'tag', 'tag_description', 'term404', 'term_description', 'term_title', 'title', 'user_description', 'wc_brand', 'wc_price', 'wc_shortdesc', 'wc_sku' ];
 		$_regex      = sprintf( '%%%s%%', implode( '|', $tags_simple ) );
 
-		if ( preg_match( "/$_regex/i", $text ) ) return true;
+		if ( preg_match( "/$_regex/", $text ) ) return true;
 
-		$tags_wildcard_end = [ 'cs_', 'ct_desc_', 'ct_pa_' ];
-		$_regex            = sprintf( '%%(%s)[^\s]*?%%', implode( '|', $tags_wildcard_end ) );
+		$tags_wildcard_end = [ 'ct_', 'cf_' ];
+		$_regex            = sprintf( '%%(%s)[^%]*?%%', implode( '|', $tags_wildcard_end ) );
 
 		if ( preg_match( "/$_regex/", $text ) ) return true;
 

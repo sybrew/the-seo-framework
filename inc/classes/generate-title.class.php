@@ -783,7 +783,7 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Returns the archive title. Also works in admin.
 	 *
-	 * @NOTE Taken from WordPress core. Altered to work for metadata.
+	 * @NOTE Taken from WordPress core. Altered to work for metadata and in admin.
 	 * @see WP Core get_the_archive_title()
 	 *
 	 * @since 3.1.0
@@ -795,8 +795,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
 	 *                                                               Leave null to autodetermine query.
-	 * @return string|string[] The generated archive title, not escaped.
-	 *                         When $get is 'admin', it returns an map of [prefix,title].
+	 * @return string The generated archive title, not escaped.
 	 */
 	public function get_generated_archive_title( $object = null ) {
 
@@ -1063,6 +1062,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.0
 	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
 	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
+	 * @since 4.3.0 Now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	 *
 	 * @param null|\WP_Term $term The term name, required in the admin area.
 	 * @return string The generated single term title.
@@ -1074,7 +1074,7 @@ class Generate_Title extends Generate_Description {
 
 		if ( ! isset( $term->name ) ) return '';
 
-		switch ( $term->category ) :
+		switch ( $term->taxonomy ) :
 			case 'category':
 				/**
 				 * Filter the category archive page title.

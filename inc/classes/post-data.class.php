@@ -534,7 +534,7 @@ class Post_Data extends Detect {
 
 			if ( \wp_verify_nonce(
 				$_POST[ "{$this->inpost_nonce_name}_pt_{$_taxonomy}" ] ?? '', // If empty, wp_verify_nonce will return false.
-				$this->inpost_nonce_field . '_pt'
+				"{$this->inpost_nonce_field}_pt"
 			) ) { // Redundant. Fortified.
 				$this->update_primary_term_id(
 					$post->ID,

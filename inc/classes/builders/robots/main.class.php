@@ -128,7 +128,7 @@ final class Main {
 		// Remit FETCH_OBJ_R opcode calls every time we'd otherwise use $this->options hereinafter.
 		$options = $this->options;
 
-		$assert = $options & \The_SEO_Framework\ROBOTS_ASSERT;
+		$assert = (bool) ( $options & \The_SEO_Framework\ROBOTS_ASSERT );
 
 		$assert
 			and $this->reset_assertions();

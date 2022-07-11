@@ -465,7 +465,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( empty( $terms ) )
 			return '';
 
-		$terms = \wp_list_pluck( $terms, 'parent', 'term_id' );
+		$terms = \wp_list_pluck( $terms, 'parent', 'term_id' ); // use array_column()?
 
 		$parents      = [];
 		$assigned_ids = [];
@@ -483,7 +483,7 @@ class Generate_Ldjson extends Generate_Image {
 				$parents[ $term_id ] = [];
 			}
 		endforeach;
-		// Circle of life...
+
 		unset( $terms );
 
 		if ( ! $parents )

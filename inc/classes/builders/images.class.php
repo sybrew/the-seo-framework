@@ -117,6 +117,7 @@ final class Images {
 	 *              2. Now only yields at most 5 images.
 	 * @since 4.2.0 1. Fixed OB1 error causing the first image to be ignored.
 	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 No longer accidentally matches `<imganything`, and cannot find images in `map`.
 	 * @generator
 	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *       Combine query, instead of using WP API? Only do that for the first image, instead?
@@ -148,19 +149,20 @@ final class Images {
 		$matches = [];
 
 		// \strlen( '<img src=a>' ) === 11; yes, that's a valid self-closing tag with a relative source.
-		if ( \strlen( $content ) > 10 && false !== stripos( $content, '<img' ) ) {
+		if ( \strlen( $content ) > 10 && false !== stripos( $content, '<img ' ) ) {
 			$content = $tsf->strip_tags_cs(
 				$content,
 				[
 					'space' => [],
 					'clear' =>
-						[ 'address', 'aside', 'blockquote', 'dd', 'dl', 'dt', 'fieldset', 'figcaption', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'nav', 'ol', 'pre', 'table', 'tfoot', 'ul', 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
+						[ 'address', 'aside', 'blockquote', 'dd', 'dl', 'dt', 'fieldset', 'figcaption', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'nav', 'ol', 'pre', 'table', 'tfoot', 'ul', 'bdo', 'br', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'noscript', 'map', 'meta', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
 					'strip' => false,
 				]
 			);
+
 			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match(), but the opcodes won't help.
 			preg_match_all(
-				'/<img[^>]+?src=(\"|\')?([^\"\'>\s]+)\1?[^>]*?>/mi',
+				'/<img\b[^>]+?\bsrc=(\"|\')?([^\"\'>\s]+)\1?[^>]*?>/mi',
 				$content,
 				$matches,
 				PREG_SET_ORDER

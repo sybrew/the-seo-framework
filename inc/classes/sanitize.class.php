@@ -964,14 +964,15 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.2
 	 * @since 4.0.5 Now normalized `-` entities.
+	 * @since 4.3.0 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
 	 */
 	public function s_description_raw( $new_value ) {
 
-		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_tabs( $new_value );
 		$new_value = $this->s_hyphen( $new_value );
 		$new_value = $this->s_bsol( $new_value );
@@ -1012,6 +1013,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string The input string without duplicated spaces.
 	 */
 	public function s_dupe_space( $new_value ) {
+		// TODO consider returning the original unicode space? Test if necessary.
 		return preg_replace( '/\p{Zs}{2,}/u', ' ', $new_value );
 	}
 
@@ -1050,7 +1052,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
 
-		// No need to parse an empty excerpt.
+		// No need to parse an empty excerpt. TODO consider not parsing '0' as well?
 		if ( '' === $excerpt ) return '';
 
 		$strip_args = [
@@ -1134,14 +1136,15 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 * @since 4.0.0 Now normalizes `&` entities.
 	 * @since 4.0.5 Now normalized `-` entities.
+	 * @since 4.3.0 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
 	 */
 	public function s_title_raw( $new_value ) {
 
-		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_nbsp( $new_value );
+		$new_value = $this->s_singleline( $new_value );
 		$new_value = $this->s_tabs( $new_value );
 		$new_value = $this->s_hyphen( $new_value );
 		$new_value = $this->s_bsol( $new_value );
@@ -1897,7 +1900,7 @@ class Sanitize extends Admin_Pages {
 	 * It essentially strips all tags, and replaces block-type tags' endings with spaces.
 	 * When done, it performs a sanity-cleanup via `strip_tags()`.
 	 *
-	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated spaces afterward.
+	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated/repeated spaces afterward.
 	 *
 	 * @since 3.2.4
 	 * @since 4.0.0 Now allows emptying the indexes `space` and `clear`.
@@ -1948,13 +1951,13 @@ class Sanitize extends Admin_Pages {
 		} else {
 			foreach ( [ 'clear', 'space' ] as $type ) {
 				if ( isset( $args[ $type ] ) )
-					$args[ $type ] = $args[ $type ] ? (array) $args[ $type ] : [];
+					$args[ $type ] = (array) ( $args[ $type ] ?: [] );
 			}
 			$args['strip'] = $args['strip'] ?? $default_args['strip'];
 		}
 
 		// Clear first, so there's less to process, and sub-elements are cleared. Then, add spaces.
-		foreach ( [ 'clear', 'space' ] as $type ) {
+		if ( false !== strpos( $input, '<' ) ) foreach ( [ 'clear', 'space' ] as $type ) {
 			if ( empty( $args[ $type ] ) ) continue;
 
 			// void = element without content.
@@ -1963,22 +1966,28 @@ class Sanitize extends Admin_Pages {
 			$fill_query = array_diff( $args[ $type ], $void );
 
 			if ( $void_query ) {
-				$_regex   = sprintf( '<%s\b[^>]*?>', implode( '|', $void_query ) );
-				$_replace = 'space' === $type ? ' ' : '';
-				$input    = preg_replace( "/$_regex/i", $_replace, $input );
+				$_regex = sprintf( '<%s\b[^>]*?>', implode( '|', $void_query ) );
+				$input  = preg_replace(
+					"/$_regex/i",
+					'space' === $type ? ' ' : '',
+					$input
+				);
 			}
 			if ( $fill_query ) {
 				/**
 				 * `(*ACCEPT)` will grab all HTML for following the tag if it's not closed properly, for it halts all backtracking.
 				 * Otherwise, we'd face catastrophic backtracing. We can mitigate this (somewhat) by using `<` instead of `(*ACCEPT)`
-				 * However, that skyrocket the amount recursive backtracking, plus it'll not close HTML neatly according to W3 ref.
+				 * However, that'd skyrocket the amount recursive backtracking, plus it'll not close HTML neatly according to W3 ref.
 				 *
 				 * Play with it here: https://regex101.com/r/tBCb4Q/2.
 				 * In that, our tag-controlled `(%s)` is replaced with a catch-all `[a-z][a-z0-9]*`, not simulating unrecognized tags.
 				 */
-				$_regex   = sprintf( '<(%s)\b[^<]*?>((?:[^<]*(?:<(?!\/?\1\b)[^<]*)*|(?R)|(*ACCEPT))*?)<\/\1>', implode( '|', $fill_query ) );
-				$_replace = 'space' === $type ? ' $2 ' : ' ';
-				$input    = preg_replace( "/$_regex/i", $_replace, $input );
+				$_regex = sprintf( '<(%s)\b[^<]*?>((?:[^<]*(?:<(?!\/?\1\b)[^<]*)*|(?R)|(*ACCEPT))*?)<\/\1>', implode( '|', $fill_query ) );
+				$input  = preg_replace(
+					"/$_regex/i",
+					'space' === $type ? ' $2 ' : ' ',
+					$input
+				);
 			}
 		}
 

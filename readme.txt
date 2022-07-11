@@ -249,6 +249,13 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.3.0  =
 
+**For everyone**
+
+* **Improved:**
+	* Advanced Query Protection now detects more rogue requests, specifically `example.com/?search=1` when the homepage is static.
+	* Now detects more types of Yoast SEO's title and description variable syntax.
+	* Now trims non-breaking spaces from the end and start of sentences more robustly.
+
 **For developers**
 
 * **Changed:**
@@ -257,14 +264,38 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* Method `strip_tags_cs()`:
 		1. Now correctly captures nested elements, improving performance.
 		1. Added `map` to clear.
+		1. Improved performance considerably by ignoring non-HTML text.
 	* Method `array_merge_recursive_distinct()`:
 		1. Now supports a single array entry without causing issues.
-		1. Reduced number of opcodes by roughly 30% by introducing goto.
+		1. Reduced number of opcodes by roughly 27% by reworking it.
+		1. Now no longer throws warnings with qubed+ arrays.
+		1. Now no longer ignores scalar values merzging over arrays.
+	* Method `is_query_exploited()`:
+		1. Added detection `not_home_as_page`, specifically for query variable `search`.
+	* Methods `s_description_raw()` and `s_title_raw()` now converts nbsp before singleline, because singleline must also trim old nbsp.
+* **Fixed:**
+	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
 
+/* TODO
+public function has_unprocessed_syntax( $text ) {
+	foreach ( [ 'extension', 'yoast', 'aioseo', 'rankmath', 'seopress' ] as $type )
+		if ( $this->{"has_{$type}_syntax"}( $text ) ) return true;
+	return false;
+}
+public function has_aioseo_syntax( $text ) {}
+public function has_rankmath_syntax( $text ) {}
+public function has_seopress_syntax( $text ) {}
+public function has_extension_syntax( $text ) {}
+*/
+
+* TODO implement hrtime for timing, fallback to microtime().
+	-> Or move straight to PHP 7.3? Mind it's nanoseconds (/1e6).
+		-> 4% of active TSF users are on 7.2, less than 1% on 7.3, the rest is 7.4/8.0+
 * TODO Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
 * TODO Moved aside/blockquote from space to clear: TODO update KB.
-
-TODO `/?search=` is indexable, but only `search`, not something else. Why?
+* TODO description generator can end in numeric split "We also added WordPress 6."... <https://tsf.fyi/p/3903>, we should consider "6.0" a "word".
+* TODO fit-content on post SEO settings tabs to mitigate wrap (try Dutch)
+* TODO ? should we move ol/ul/li,dd/dl/dt from space to clear as well in strip_tags_cs()
 
 = 4.2.5 =
 
