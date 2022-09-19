@@ -241,7 +241,7 @@ class Core {
 	 * @return string The view location.
 	 */
 	public function get_view_location( $file ) {
-		return THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . $file . '.php';
+		return THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . "$file.php";
 	}
 
 	/**
@@ -465,7 +465,7 @@ class Core {
 	 * @since 4.3.0 1. Now supports a single array entry without causing issues.
 	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
 	 *              3. Now no longer throws warnings with qubed+ arrays.
-	 *              4. Now no longer ignores scalar values merzging over arrays.
+	 *              4. Now no longer prevents scalar values overwriting arrays.
 	 *
 	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
 	 * @return array The merged arrays.
@@ -538,6 +538,7 @@ class Core {
 
 		if ( ! $string ) return [];
 
+		// Not if-function-exists; we're going for speed over accuracy. Hosts must do their job correctly.
 		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
 
 		$word_list = preg_split(

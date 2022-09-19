@@ -269,12 +269,18 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		1. Now supports a single array entry without causing issues.
 		1. Reduced number of opcodes by roughly 27% by reworking it.
 		1. Now no longer throws warnings with qubed+ arrays.
-		1. Now no longer ignores scalar values merzging over arrays.
+		1. Now no longer prevents scalar values overwriting arrays.
 	* Method `is_query_exploited()`:
 		1. Added detection `not_home_as_page`, specifically for query variable `search`.
-	* Methods `s_description_raw()` and `s_title_raw()` now converts nbsp before singleline, because singleline must also trim old nbsp.
+	* Methods `s_description_raw()` and `s_title_raw()` now convert `nbsp` before `singleline`, because `singleline` also uses `trim()` on old `nbsp`.
+		* Basically, this prevents leftover spaces at the start or end of the description.
 * **Fixed:**
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
+
+
+TODO set quote `\the-seo-framework\inc\classes\builders\sitemap\index.php`
+TODO terms that have no SEO data still get an array stored by TSF, full of empty entries. Is this necessary, can we collapse/purge?
+	-> array_filter the store at least?
 
 /* TODO
 public function has_unprocessed_syntax( $text ) {

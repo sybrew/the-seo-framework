@@ -1944,7 +1944,7 @@ class Sanitize extends Admin_Pages {
 
 		$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' ];
 
-		// We're missing em, strong, sub, q, marquee, blink, i, b, sup, time, tt, map, kbd, big ---- These are all inline text.
+		// We're missing a, em, strong, sub, q, marquee, blink, i, b, sup, time, tt, map, kbd, big ---- These are all inline text.
 
 		if ( ! $args ) {
 			$args = $default_args;
@@ -1966,33 +1966,39 @@ class Sanitize extends Admin_Pages {
 			$fill_query = array_diff( $args[ $type ], $void );
 
 			if ( $void_query ) {
-				$_regex = sprintf( '<%s\b[^>]*?>', implode( '|', $void_query ) );
-				$input  = preg_replace(
-					"/$_regex/i",
+				$input = preg_replace(
+					/**
+					 * This one grabs opening elements only.
+					 * Basically, the content and closing tag reader is split from $fill_query's regex.
+					 */
+					sprintf(
+						'/<(?:%s)\b([^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>/i',
+						implode( '|', $void_query )
+					),
 					'space' === $type ? ' ' : '',
 					$input
 				);
 			}
 			if ( $fill_query ) {
 				/**
-				 * `(*ACCEPT)` will grab all HTML for following the tag if it's not closed properly, for it halts all backtracking.
-				 * Otherwise, we'd face catastrophic backtracing. We can mitigate this (somewhat) by using `<` instead of `(*ACCEPT)`
-				 * However, that'd skyrocket the amount recursive backtracking, plus it'll not close HTML neatly according to W3 ref.
+				 * Play with it here: https://regex101.com/r/ml2iBW/6.
+				 * This regex also supports void elements by design.
 				 *
-				 * Play with it here: https://regex101.com/r/tBCb4Q/2.
-				 * In that, our tag-controlled `(%s)` is replaced with a catch-all `[a-z][a-z0-9]*`, not simulating unrecognized tags.
+				 * In that, our tag-controlled `(%s)` is replaced with some random stuff, such as h1|h2...
 				 */
-				$_regex = sprintf( '<(%s)\b[^<]*?>((?:[^<]*(?:<(?!\/?\1\b)[^<]*)*|(?R)|(*ACCEPT))*?)<\/\1>', implode( '|', $fill_query ) );
-				$input  = preg_replace(
-					"/$_regex/i",
-					'space' === $type ? ' $2 ' : ' ',
-					$input
+				$input = preg_replace(
+					sprintf(
+						'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))*|[^<]*(*ACCEPT))<\/\1[^>]*>)/i',
+						implode( '|', $fill_query )
+					),
+					'space' === $type ? ' %4 ' : ' ',
+					$input,
 				);
 			}
 		}
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
-		return $args['strip'] ? strip_tags( $input ) : $input;
+		return $args['strip'] ? \strip_tags( $input ) : $input;
 	}
 
 	/**

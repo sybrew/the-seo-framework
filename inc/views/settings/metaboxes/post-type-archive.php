@@ -175,7 +175,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			<input type="text" name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class="large-text" id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'doctitle', $post_type ) ) ?>" autocomplete=off />
 			<?php
 			[ $_full_title, $_prefix_value, $_default_title ] =
-				$this->get_raw_generated_archive_title_items( get_post_type_object( $post_type ), 'admin' );
+				$this->get_raw_generated_archive_title_items( get_post_type_object( $post_type ) );
 
 			$this->output_js_title_data(
 				Input::get_field_id( $_option_map['doctitle'] ),

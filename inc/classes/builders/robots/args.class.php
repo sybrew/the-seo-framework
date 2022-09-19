@@ -113,15 +113,10 @@ final class Args extends Factory {
 					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
 			}
 
-		index_protection: if ( $asserting_noindex ) {
-			// We assert options here for a jump to index_protection might be unaware.
-			if ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )
-				goto after_index_protection;
-
+		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
 			if ( ! $args['taxonomy'] )
 				yield from static::assert_noindex_query_pass( 'protected' );
 		}
-		after_index_protection:;
 
 		end:;
 	}
