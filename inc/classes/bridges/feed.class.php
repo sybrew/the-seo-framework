@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Bridges;
  * Prepares feed mofifications.
  *
  * @since 4.1.0
- * @access protected
+ * @access private
  * @final Can't be extended.
  */
 final class Feed {
@@ -37,18 +37,16 @@ final class Feed {
 	/**
 	 * @since 4.1.0
 	 * @var \The_SEO_Framework\Bridges\Feed
+	 * @ignore
 	 */
 	private static $instance;
-
-	/**
-	 * @var null|\The_SEO_Framework\Load
-	 */
-	private static $tsf = null;
 
 	/**
 	 * Returns this instance.
 	 *
 	 * @since 4.1.0
+	 * @TODO deprecate. Use constructor instead.
+	 * @ignore
 	 *
 	 * @return \The_SEO_Framework\Bridges\Feed $instance
 	 */
@@ -63,27 +61,21 @@ final class Feed {
 	 * this class is needed yet.
 	 *
 	 * @since 4.1.0
+	 * @TODO deprecate. Use constructor instead.
+	 * @ignore
 	 */
 	public static function prepare() {
 		static::get_instance();
 	}
 
 	/**
-	 * The constructor. Can't be instantiated externally from this file.
-	 * Kills PHP on subsequent duplicated request. Enforces singleton.
+	 * Initialized feed modifications.
 	 *
-	 * This probably autoloads at action "template_redirect", priority "1".
-	 *
-	 * @since 4.1.0
+	 * @since 4.2.6
 	 * @access private
-	 * @internal
 	 */
 	public function __construct() {
-
-		static $count = 0;
-		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-
-		static::$tsf = \tsf();
+		$this->_init();
 	}
 
 	/**
@@ -91,8 +83,11 @@ final class Feed {
 	 *
 	 * @since 4.1.0
 	 * @access private
+	 * @TODO deprecate. Use constructor instead.
 	 */
 	public function _init() {
+
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
 
 		// Alter the content feed.
 		\add_filter( 'the_content_feed', [ $this, '_modify_the_content_feed' ], 10, 2 );
@@ -117,73 +112,48 @@ final class Feed {
 	 */
 	public function _modify_the_content_feed( $content = '', $feed_type = null ) {
 
+		// When there's no content, there's nothing to modify or quote.
 		if ( ! $content ) return '';
+
+		$tsf = \tsf();
 
 		/**
 		 * Don't alter already-excerpts or descriptions.
 		 * $feed_type is only set on 'the_content_feed' filter.
 		 */
-		if ( isset( $feed_type ) && static::$tsf->get_option( 'excerpt_the_feed' ) ) {
-			$content = $this->convert_feed_entry_to_excerpt( $content );
+		if ( isset( $feed_type ) && $tsf->get_option( 'excerpt_the_feed' ) ) {
+			// Strip all code and lines, and AI-trim it.
+			$excerpt = $tsf->trim_excerpt(
+				$tsf->s_excerpt_raw( $content, false ),
+				0,
+				/**
+				 * @since 2.5.2
+				 * @param int $max_len The maximum feed (multibyte) string length.
+				 */
+				\apply_filters( 'the_seo_framework_max_content_feed_length', 400 )
+			);
+
+			$content = "<p>$excerpt</p>";
 		}
 
-		if ( static::$tsf->get_option( 'source_the_feed' ) ) {
-			$content .= "\n" . $this->get_feed_entry_source_link();
+		if ( $tsf->get_option( 'source_the_feed' ) ) {
+			$content .= sprintf(
+				"\n" . '<p><a href="%s" rel="nofollow">%s</a></p>', // Keep XHTML valid!
+				\esc_url( \get_permalink() ),
+				\esc_html(
+					/**
+					 * @since 2.6.0
+					 * @since 2.7.2 or 2.7.3: Escaped output.
+					 * @param string $source The source indication string.
+					 */
+					\apply_filters(
+						'the_seo_framework_feed_source_link_text',
+						\_x( 'Source', 'The content source', 'autodescription' )
+					)
+				)
+			);
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Converts feed content to excerpt.
-	 *
-	 * @since 4.1.0
-	 *
-	 * @param string $content The full feed entry content.
-	 * @return string The excerpted feed.
-	 */
-	protected function convert_feed_entry_to_excerpt( $content = '' ) {
-
-		if ( ! $content ) return '';
-
-		/**
-		 * @since 2.5.2
-		 * @param int $max_len The maximum feed (multibyte) string length.
-		 */
-		$max_len = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
-
-		// Strip all code and lines, and AI-trim it.
-		$excerpt = static::$tsf->trim_excerpt(
-			static::$tsf->s_excerpt_raw( $content, false ),
-			0,
-			$max_len
-		);
-
-		return "<p>$excerpt</p>";
-	}
-
-	/**
-	 * Generates and returns feed source link.
-	 *
-	 * @since 4.1.0
-	 *
-	 * @return string The translatable feed entry source link.
-	 */
-	protected function get_feed_entry_source_link() {
-		/**
-		 * @since 2.6.0
-		 * @since 2.7.2 or 2.7.3 : Escaped output.
-		 * @param string $source The source indication string.
-		 */
-		$source_i18n = (string) \apply_filters(
-			'the_seo_framework_feed_source_link_text',
-			\_x( 'Source', 'The content source', 'autodescription' )
-		);
-
-		return sprintf(
-			'<p><a href="%s" rel="nofollow">%s</a></p>', // Keep XHTML
-			\esc_url( \get_permalink() ),
-			\esc_html( $source_i18n )
-		);
 	}
 }

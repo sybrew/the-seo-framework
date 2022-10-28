@@ -43,6 +43,7 @@ function _disable_genesis_seo( $plugins ) {
  *
  * @since 2.8.0
  * @since 3.1.0 Now filters empty fields.
+ * @TODO remove or shift this, so that we can reduce what's stored in the database via s_term_meta?
  *
  * @param array $data    The current term meta.
  * @param int   $term_id The current term ID.

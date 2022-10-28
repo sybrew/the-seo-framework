@@ -964,7 +964,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.2
 	 * @since 4.0.5 Now normalized `-` entities.
-	 * @since 4.3.0 Now converts nbsp before singleline, because singleline must also trim old nbsp.
+	 * @since 4.2.6 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -1041,7 +1041,7 @@ class Sanitize extends Admin_Pages {
 	 *              2. Added $escape parameter.
 	 * @since 3.2.4 Now selectively clears tags.
 	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
-	 * @since 4.3.0 Moved `aside` and `blockquote` from `space` to `clear`.
+	 * @since 4.2.6 Moved `aside` and `blockquote` from `space` to `clear`.
 	 * TODO should we move ol/ul/li,dd/dl/dt from space to clear as well?
 	 * @see `$this->strip_tags_cs()`
 	 *
@@ -1136,7 +1136,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 * @since 4.0.0 Now normalizes `&` entities.
 	 * @since 4.0.5 Now normalized `-` entities.
-	 * @since 4.3.0 Now converts nbsp before singleline, because singleline must also trim old nbsp.
+	 * @since 4.2.6 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
@@ -1910,7 +1910,7 @@ class Sanitize extends Admin_Pages {
 	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
 	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-	 * @since 4.3.0 1. Now correctly captures nested elements, improving performance.
+	 * @since 4.2.6 1. Now correctly captures nested elements, improving performance.
 	 *              2. Added `map` to clear.
 	 * @link https://www.w3schools.com/html/html_blocks.asp
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
@@ -1942,6 +1942,7 @@ class Sanitize extends Admin_Pages {
 			'strip' => true,
 		];
 
+		// Void elements never have content.
 		$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' ];
 
 		// We're missing a, em, strong, sub, q, marquee, blink, i, b, sup, time, tt, map, kbd, big ---- These are all inline text.
@@ -1968,7 +1969,7 @@ class Sanitize extends Admin_Pages {
 			if ( $void_query ) {
 				$input = preg_replace(
 					/**
-					 * This one grabs opening elements only.
+					 * This one grabs opening tags only, and no content.
 					 * Basically, the content and closing tag reader is split from $fill_query's regex.
 					 */
 					sprintf(
@@ -1980,20 +1981,30 @@ class Sanitize extends Admin_Pages {
 				);
 			}
 			if ( $fill_query ) {
-				/**
-				 * Play with it here: https://regex101.com/r/ml2iBW/6.
-				 * This regex also supports void elements by design.
-				 *
-				 * In that, our tag-controlled `(%s)` is replaced with some random stuff, such as h1|h2...
-				 */
-				$input = preg_replace(
-					sprintf(
-						'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))*|[^<]*(*ACCEPT))<\/\1[^>]*>)/i',
-						implode( '|', $fill_query )
-					),
-					'space' === $type ? ' %4 ' : ' ',
-					$input,
-				);
+				// If the HTML is valid, the sequences below respond alike.
+				// Non-void elements should have instant-closing tags ignored; however,
+				// every browser acts differently autocompleting this error. As do we now.
+				if ( 'clear' === $type ) {
+					// This one grabs all after unclosed HTML. Akin to https://regex101.com/r/ml2iBW/7.
+					$input = preg_replace(
+						sprintf(
+							'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))*|(?:[^$]+(?:<\/?\1\b>)|[^$]+)(*ACCEPT))<\/\1[^>]*>)/i',
+							implode( '|', $fill_query )
+						),
+						' ',
+						$input,
+					);
+				} else {
+					// This one stops at first < after unclosed HTML. Akin to https://regex101.com/r/ml2iBW/6.
+					$input = preg_replace(
+						sprintf(
+							'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))*|[^<]*(*ACCEPT))<\/\1[^>]*>)/i',
+							implode( '|', $fill_query )
+						),
+						' $4 ',
+						$input,
+					);
+				}
 			}
 		}
 
@@ -2024,6 +2035,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_image_details( $details ) {
 
+		// This is 350x faster than a polyfill for `array_is_list()`.
 		if ( array_values( $details ) === $details )
 			return $this->s_image_details_deep( $details );
 

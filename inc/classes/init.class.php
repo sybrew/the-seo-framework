@@ -479,7 +479,7 @@ class Init extends Query {
 	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 *              2. Now always sets timezone regardless of settings, because, again, bug.
 	 * @since 4.2.0 No longer sets timezone.
-	 * @since 4.3.0 No longer marked as private.
+	 * @since 4.2.6 No longer marked as private.
 	 */
 	public function html_output() {
 
@@ -728,7 +728,7 @@ class Init extends Query {
 	 * @access private
 	 */
 	public function _init_feed() {
-		\is_feed() and Bridges\Feed::get_instance()->_init();
+		\is_feed() and new Bridges\Feed;
 	}
 
 	/**
@@ -1134,12 +1134,12 @@ class Init extends Query {
 	 * @access private
 	 *
 	 * @param array    $data   The response data.
-	 * @param \WP_Post $post   The post object. May not be its placeholder `null`.
+	 * @param \WP_Post $post   The post object.
 	 * @param int      $width  The requested width.
 	 * @param int      $height The calculated height.
 	 * @return array Possibly altered $data.
 	 */
-	public function _alter_oembed_response_data( $data = [], $post = null, $width = 0, $height = 0 ) {
+	public function _alter_oembed_response_data( $data, $post, $width, $height ) {
 
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_og_title', false ) )

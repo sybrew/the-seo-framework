@@ -456,13 +456,49 @@ class Core {
 	}
 
 	/**
+	 * Flattens multidimensional lists into a single dimensional list.
+	 * Deeply nested lists are merged as well. Won't dig associative arrays.
+	 *
+	 * E.g., this [ [ 'one' => 1 ], [ [ 'two' => 2 ], [ 'three' => [ 3, 4 ] ] ] ]
+	 * becomes    [ [ 'one' => 1 ], [ 'two', => 2 ], [ 'three' => [ 3, 4 ] ] ];
+	 *
+	 * @link <https://3v4l.org/XBSFa>, test it here.
+	 *
+	 * @since 4.2.6
+	 * @access private
+	 * @ignore This will move to new "helper" classes in a future update, becoming public then.
+	 *
+	 * @param array $array The array to flatten. If input is not an array, it'll be casted.
+	 * @return array The flattened array.
+	 */
+	public function array_flatten_list( $array ) {
+
+		// We can later use `!array_is_list()`.
+		// This is 350x faster than a polyfill for `!array_is_list()`.
+		if ( [] === $array || array_values( $array ) !== $array ) return $array;
+
+		$ret = [];
+
+		foreach ( $array as $key => $value ) {
+			// We can later use `array_is_list()`.
+			if ( \is_array( $value ) && [] !== $value && array_values( $value ) === $value ) {
+				$ret = array_merge( $ret, $this->array_flatten_list( $value ) );
+			} else {
+				array_push( $ret, $value );
+			}
+		}
+
+		return $ret;
+	}
+
+	/**
 	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
 	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
 	 *
 	 * @link <https://3v4l.org/9pnW1#v8.1.8> Test it here.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Now supports a single array entry without causing issues.
+	 * @since 4.2.6 1. Now supports a single array entry without causing issues.
 	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
 	 *              3. Now no longer throws warnings with qubed+ arrays.
 	 *              4. Now no longer prevents scalar values overwriting arrays.
@@ -596,19 +632,21 @@ class Core {
 	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
 	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
 	 *
-	 * @param string $hex The 3 to 6 character RGB hex. The '#' prefix may be added.
-	 *                    RRGGBBAA is supported, but the Alpha channels won't be returned.
+	 * @param string $hex The 3 to 6+ character RGB hex. The '#' prefix may be added.
+	 *                    RGBA/RRGGBBAA is supported, but the Alpha channels won't be returned.
 	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
 	 */
 	public function get_relative_fontcolor( $hex = '' ) {
 
+		// TODO: To support RGBA, we must fill to 4 or 8 via sprintf `%0{1,2}x`
+		// But doing this will add processing requirements for something we do not need... yet.
 		$hex = ltrim( $hex, '#' );
 
 		// Convert hex to usable numerics.
 		[ $r, $g, $b ] = array_map(
 			'hexdec',
 			str_split(
-				// rgb == rrggbb.
+				// rgb[..] == rrggbb[..].
 				\strlen( $hex ) >= 6 ? $hex : "$hex[0]$hex[0]$hex[1]$hex[1]$hex[2]$hex[2]",
 				2
 			)

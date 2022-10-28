@@ -247,20 +247,31 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.3.0  =
+= 4.2.6 =
 
 **For everyone**
 
 * **Improved:**
-	* Advanced Query Protection now detects more rogue requests, specifically `example.com/?search=1` when the homepage is static.
+	* Advanced Query Protection now detects more rogue requests, specifically:
+		* `example.com/?search=text` when the homepage is static, where `a` can be anything.
+		* `example.com/?cat=text%2C2147483647%2C1text`, where `2147483647` is a category ID that doesn't exist, and the final `1` is a category that does exist, where `text` is anything non-numeric.
+		* Put online a link to any site with these rogue requests, and once Googlebot spots those links, their site will be taken off from Google within a matter of days. The more links you add, the faster this processes. Our protection is genuine technical SEO, unique to TSF.
 	* Now detects more types of Yoast SEO's title and description variable syntax.
 	* Now trims non-breaking spaces from the end and start of sentences more robustly.
+* **Fixed:**
+	* Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
+		* This was a non-issue because TSF never created canonical URLs for comment pages, it only increased crawling time.
 
 **For developers**
 
+* **Added:**
+	* Filter `the_seo_framework_build_sitemap_base` now runs whenever the base sitemap is being generated.
 * **Changed:**
+	* Method `s_term_meta()` now clears indexes with empty values.
 	* Method `get_current_post_author_meta()` no longer applies memoization.
 	* Filter `the_seo_framework_input_guidelines` added two more paramters (`$c_adjust` and `$locale`).
+	* Filter `the_seo_framework_scripts` now returns a sequential array of scripts, instead of a multidimension array of sequential arrays of scripts.
+		* `[ 0 => [ 0 => scriptA, 1 => scriptB ], 1 => scriptC ]` is now `[ 0 => scriptA, 1 => scriptB, 2 => scriptC ]`
 	* Method `strip_tags_cs()`:
 		1. Now correctly captures nested elements, improving performance.
 		1. Added `map` to clear.
@@ -272,12 +283,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		1. Now no longer prevents scalar values overwriting arrays.
 	* Method `is_query_exploited()`:
 		1. Added detection `not_home_as_page`, specifically for query variable `search`.
+		2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	* Methods `s_description_raw()` and `s_title_raw()` now convert `nbsp` before `singleline`, because `singleline` also uses `trim()` on old `nbsp`.
 		* Basically, this prevents leftover spaces at the start or end of the description.
 * **Fixed:**
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
+	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
 
-
+TODO set check for RM and Yoast metadata.
+TODO acknowledge Transport in readme.txt
 TODO set quote `\the-seo-framework\inc\classes\builders\sitemap\index.php`
 TODO terms that have no SEO data still get an array stored by TSF, full of empty entries. Is this necessary, can we collapse/purge?
 	-> array_filter the store at least?
@@ -294,10 +308,14 @@ public function has_seopress_syntax( $text ) {}
 public function has_extension_syntax( $text ) {}
 */
 
+TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-authors-plus/#post-16083066
+	^ that link explains a bug where tsf-le crashes when no tag can be found via:
+	add_action( 'the_seo_framework_after_admin_init', function() {
+		remove_action( 'admin_init', [ tsf(), '_init_list_edit' ] );
+	} );
 * TODO implement hrtime for timing, fallback to microtime().
 	-> Or move straight to PHP 7.3? Mind it's nanoseconds (/1e6).
 		-> 4% of active TSF users are on 7.2, less than 1% on 7.3, the rest is 7.4/8.0+
-* TODO Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
 * TODO Moved aside/blockquote from space to clear: TODO update KB.
 * TODO description generator can end in numeric split "We also added WordPress 6."... <https://tsf.fyi/p/3903>, we should consider "6.0" a "word".
 * TODO fit-content on post SEO settings tabs to mitigate wrap (try Dutch)

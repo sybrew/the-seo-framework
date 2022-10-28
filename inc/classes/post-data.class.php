@@ -695,6 +695,7 @@ class Post_Data extends Detect {
 	 * Returns list of post IDs that are excluded from search.
 	 *
 	 * @since 3.0.0
+	 * @TODO deprecate and require procedural API? This is needless function overhead.
 	 *
 	 * @return array The excluded post IDs.
 	 */
@@ -706,6 +707,7 @@ class Post_Data extends Detect {
 	 * Returns list of post IDs that are excluded from archive.
 	 *
 	 * @since 3.0.0
+	 * @TODO deprecate and require procedural API? This is needless function overhead.
 	 *
 	 * @return array The excluded post IDs.
 	 */
@@ -737,14 +739,13 @@ class Post_Data extends Detect {
 	 *                2. The first and second parameters are now required.
 	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
 	 *                2. This method now converts the post meta to an integer, making the comparison work again.
+	 * @since 4.2.6 Fixed memoization for when no terms for a post can be found.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
 	 * @return \WP_Term|false The primary term. False if not set.
 	 */
 	public function get_primary_term( $post_id, $taxonomy ) {
-
-		static $primary_terms = [];
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
@@ -762,7 +763,7 @@ class Post_Data extends Detect {
 		$primary_term = false;
 
 		// Test for otherwise foreach emits a PHP warning in the unlikely event a post's taxonomy is gone.
-		if ( ! \is_array( $terms ) ) return $primary_terms[ $post_id ][ $taxonomy ] = false;
+		if ( ! \is_array( $terms ) ) memo( false, $post_id, $taxonomy );
 
 		foreach ( $terms as $term ) {
 			if ( $primary_id === (int) $term->term_id ) {

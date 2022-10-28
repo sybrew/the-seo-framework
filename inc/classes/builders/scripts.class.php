@@ -209,7 +209,7 @@ final class Scripts {
 	 * @NOTE If the script is associative, it'll be registered as-is.
 	 *       If the script is sequential, it'll be iterated over, and then registered.
 	 *
-	 * @param array $script The script : {
+	 * @param array|array[] $script The script or sequential array of scripts : {
 	 *   'id'   => string The script ID,
 	 *   'type' => string 'css|js',
 	 *   'autoload' => boolean If true, the script will be loaded directly.
@@ -231,6 +231,7 @@ final class Scripts {
 	 * }
 	 */
 	public static function register( $script ) {
+		// This is 350x faster than a polyfill for `array_is_list()`.
 		if ( array_values( $script ) === $script ) {
 			foreach ( $script as $s ) static::register( $s );
 			return;
@@ -470,6 +471,8 @@ final class Scripts {
 	 * Converts color CSS.
 	 *
 	 * @since 3.1.0
+	 * @TODO WordPress will one day normalize this correctly.
+	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>
 	 *
 	 * @param array $css The CSS to convert.
 	 * @return array $css
@@ -484,10 +487,8 @@ final class Scripts {
 
 			$tsf = \tsf();
 
-			if (
-			   ! isset( $_colors[ $_scheme ]->colors )
-			|| ! \is_array( $_colors[ $_scheme ]->colors )
-			|| \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
+			if ( ! \is_array( $_colors[ $_scheme ]->colors ?? null )
+			  || \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
 			) {
 				$_colors = [
 					'#222',
@@ -499,25 +500,15 @@ final class Scripts {
 				$_colors = $_colors[ $_scheme ]->colors;
 			}
 
-			$_bg           = $_colors[0];
-			$_bg_accent    = $_colors[1];
-			$_color        = $_colors[2];
-			$_color_accent = $_colors[3];
-
-			$_rel_bg           = '#' . $tsf->get_relative_fontcolor( $_colors[0] );
-			$_rel_bg_accent    = '#' . $tsf->get_relative_fontcolor( $_colors[1] );
-			$_rel_color        = '#' . $tsf->get_relative_fontcolor( $_colors[2] );
-			$_rel_color_accent = '#' . $tsf->get_relative_fontcolor( $_colors[3] );
-
 			$_table = [
-				'{{$bg}}'               => $_bg,
-				'{{$rel_bg}}'           => $_rel_bg,
-				'{{$bg_accent}}'        => $_bg_accent,
-				'{{$rel_bg_accent}}'    => $_rel_bg_accent,
-				'{{$color}}'            => $_color,
-				'{{$rel_color}}'        => $_rel_color,
-				'{{$color_accent}}'     => $_color_accent,
-				'{{$rel_color_accent}}' => $_rel_color_accent,
+				'{{$bg}}'               => $_colors[0],
+				'{{$rel_bg}}'           => "#{$tsf->get_relative_fontcolor( $_colors[0] )}",
+				'{{$bg_accent}}'        => $_colors[1],
+				'{{$rel_bg_accent}}'    => "#{$tsf->get_relative_fontcolor( $_colors[1] )}",
+				'{{$color}}'            => $_colors[2],
+				'{{$rel_color}}'        => "#{$tsf->get_relative_fontcolor( $_colors[2] )}",
+				'{{$color_accent}}'     => $_colors[3],
+				'{{$rel_color_accent}}' => "#{$tsf->get_relative_fontcolor( $_colors[3] )}",
 			];
 
 			$c_ck = array_keys( $_table );

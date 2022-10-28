@@ -247,14 +247,14 @@ class Term_Data extends Post_Data {
 
 		$term = \get_term( $term_id, $taxonomy );
 
-		// We could test for is_wp_error( $term ), but this is more to the point.
-		if ( empty( $term->term_id ) ) return;
-
 		// Check again against ambiguous injection...
 		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
-		if ( ! \current_user_can( 'edit_term', $term->term_id ) ) return;
-		if ( ! isset( $_POST['_wpnonce'] ) ) return;
-		if ( ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" ) ) return;
+		if (
+			empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
+			|| ! \current_user_can( 'edit_term', $term->term_id )
+			|| ! isset( $_POST['_wpnonce'] )
+			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
+		) return;
 
 		$data = (array) $_POST['autodescription-meta'];
 
@@ -278,13 +278,13 @@ class Term_Data extends Post_Data {
 
 		$term = \get_term( $term_id, $taxonomy );
 
-		// We could test for is_wp_error( $term ), but this is more to the point.
-		if ( empty( $term->term_id ) ) return;
-
 		// Check again against ambiguous injection...
 		// Note, however: function wp_ajax_inline_save_tax() already performs all these checks for us before firing this callback's action.
-		if ( ! \current_user_can( 'edit_term', $term->term_id ) ) return;
-		if ( ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false ) ) return;
+		if (
+			empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
+			|| ! \current_user_can( 'edit_term', $term->term_id )
+			|| ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
+		) return;
 
 		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.

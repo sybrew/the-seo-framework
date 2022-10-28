@@ -73,9 +73,10 @@ final class Scripts {
 	 */
 	public static function _init() {
 
+		$a = hrtime(true);
 		$tsf = \tsf();
 
-		$_scripts = [
+		$scripts = [
 			static::get_tsf_scripts(),
 			static::get_tt_scripts(),
 		];
@@ -83,73 +84,74 @@ final class Scripts {
 		if ( $tsf->is_post_edit() ) {
 			static::prepare_media_scripts();
 
-			$_scripts[] = static::get_post_edit_scripts();
-			$_scripts[] = static::get_tabs_scripts();
-			$_scripts[] = static::get_media_scripts();
-			$_scripts[] = static::get_title_scripts();
-			$_scripts[] = static::get_description_scripts();
-			$_scripts[] = static::get_social_scripts();
-			$_scripts[] = static::get_primaryterm_scripts();
-			$_scripts[] = static::get_ays_scripts();
+			$scripts[] = static::get_post_edit_scripts();
+			$scripts[] = static::get_tabs_scripts();
+			$scripts[] = static::get_media_scripts();
+			$scripts[] = static::get_title_scripts();
+			$scripts[] = static::get_description_scripts();
+			$scripts[] = static::get_social_scripts();
+			$scripts[] = static::get_primaryterm_scripts();
+			$scripts[] = static::get_ays_scripts();
 
 			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
-				$_scripts[] = static::get_counter_scripts();
+				$scripts[] = static::get_counter_scripts();
 
 			if ( $tsf->is_gutenberg_page() )
-				$_scripts[] = static::get_gutenberg_compat_scripts();
+				$scripts[] = static::get_gutenberg_compat_scripts();
 		} elseif ( $tsf->is_term_edit() ) {
 			static::prepare_media_scripts();
 
-			$_scripts[] = static::get_term_edit_scripts();
-			$_scripts[] = static::get_media_scripts();
-			$_scripts[] = static::get_title_scripts();
-			$_scripts[] = static::get_description_scripts();
-			$_scripts[] = static::get_social_scripts();
-			$_scripts[] = static::get_ays_scripts();
+			$scripts[] = static::get_term_edit_scripts();
+			$scripts[] = static::get_media_scripts();
+			$scripts[] = static::get_title_scripts();
+			$scripts[] = static::get_description_scripts();
+			$scripts[] = static::get_social_scripts();
+			$scripts[] = static::get_ays_scripts();
 
 			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
-				$_scripts[] = static::get_counter_scripts();
+				$scripts[] = static::get_counter_scripts();
 		} elseif ( $tsf->is_wp_lists_edit() ) {
-			$_scripts[] = static::get_list_edit_scripts();
-			$_scripts[] = static::get_title_scripts();
-			$_scripts[] = static::get_description_scripts();
+			$scripts[] = static::get_list_edit_scripts();
+			$scripts[] = static::get_title_scripts();
+			$scripts[] = static::get_description_scripts();
 
 			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
-				$_scripts[] = static::get_counter_scripts();
+				$scripts[] = static::get_counter_scripts();
 		} elseif ( $tsf->is_seo_settings_page() ) {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();
 
-			$_scripts[] = static::get_seo_settings_scripts();
-			$_scripts[] = static::get_tabs_scripts();
-			$_scripts[] = static::get_media_scripts();
-			$_scripts[] = static::get_title_scripts();
-			$_scripts[] = static::get_description_scripts();
-			$_scripts[] = static::get_social_scripts();
-			$_scripts[] = static::get_ays_scripts();
+			$scripts[] = static::get_seo_settings_scripts();
+			$scripts[] = static::get_tabs_scripts();
+			$scripts[] = static::get_media_scripts();
+			$scripts[] = static::get_title_scripts();
+			$scripts[] = static::get_description_scripts();
+			$scripts[] = static::get_social_scripts();
+			$scripts[] = static::get_ays_scripts();
 
 			// Always load unconditionally, options may enable the counters dynamically.
-			$_scripts[] = static::get_counter_scripts();
+			$scripts[] = static::get_counter_scripts();
 		}
 
 		/**
 		 * @since 3.1.0
 		 * @since 4.0.0 1. Now holds all scripts.
 		 *              2. Added $loader parameter.
+		 * @since 4.2.6 Consolidated all input scripts into a list.
 		 * @param array  $scripts The default CSS and JS loader settings.
 		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
 		 * @param string $loader  The \The_SEO_Framework\Bridges\Scripts loader class name.
 		 */
-		$_scripts = \apply_filters_ref_array(
+		$scripts = \apply_filters_ref_array(
 			'the_seo_framework_scripts',
 			[
-				$_scripts,
+				$tsf->array_flatten_list( $scripts ), // Flattening is 3% of this method's total time.
 				\The_SEO_Framework\Builders\Scripts::class,
 				static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
 			]
 		);
 
-		\The_SEO_Framework\Builders\Scripts::register( $_scripts );
+		\The_SEO_Framework\Builders\Scripts::register( $scripts );
 	}
 
 	/**

@@ -131,20 +131,19 @@ final class Query extends Factory {
 		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
 			if ( $tsf->is_real_front_page() ) {
 				yield from static::assert_noindex_query_pass( 'paged_home' );
-			} else {
-				if ( $tsf->is_archive() || $tsf->is_singular_archive() ) {
-					yield from static::assert_noindex_query_pass( 'paged' );
-				} elseif ( $tsf->is_singular() ) {
-					yield from static::assert_noindex_query_pass( 'protected' );
+			} elseif ( $tsf->is_archive() || $tsf->is_singular_archive() ) {
+				yield from static::assert_noindex_query_pass( 'paged' );
+			}
+			if ( $tsf->is_singular() ) {
+				yield from static::assert_noindex_query_pass( 'protected' );
 
-					/**
-					 * N.B. WordPress protects this query variable with options 'page_comments'
-					 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
-					 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
-					 */
-					if ( (int) \get_query_var( 'cpage', 0 ) > 0 )
-						yield from static::assert_noindex_query_pass( 'cpage' );
-				}
+				/**
+				 * N.B. WordPress protects this query variable with options 'page_comments'
+				 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
+				 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
+				 */
+				if ( (int) \get_query_var( 'cpage', 0 ) > 0 )
+					yield from static::assert_noindex_query_pass( 'cpage' );
 			}
 		}
 

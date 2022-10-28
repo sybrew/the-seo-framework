@@ -672,7 +672,8 @@ class Detect extends Render {
 	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Added detection `not_home_as_page`, specifically for query variable `search`.
+	 * @since 4.2.6 1. Added detection `not_home_as_page`, specifically for query variable `search`.
+	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -702,12 +703,12 @@ class Detect extends Render {
 		/**
 		 * @since 4.0.5
 		 * @param array $exploitables The exploitable endpoints by type.
-		 * @since 4.3.0 Added index `not_home_as_page` with value `search`.
+		 * @since 4.2.6 Added index `not_home_as_page` with value `search`.
 		 */
 		$exploitables = \apply_filters(
 			'the_seo_framework_exploitable_query_endpoints',
 			[
-				'numeric'           => [
+				'numeric'          => [
 					'page_id',
 					'attachment_id',
 					'year',
@@ -756,7 +757,7 @@ class Detect extends Render {
 
 						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
 						// WordPress mitigates this via a 404 query when a numeric value is found.
-						if ( ! preg_match( '/[0-9]/', $query[ $qv ] ) )
+						if ( ! preg_match( '/^[1-9][0-9]*$/', $query[ $qv ] ) )
 							return memo( true );
 						break;
 
@@ -1263,7 +1264,7 @@ class Detect extends Render {
 	 * Determines if the input text has transformative Yoast SEO syntax.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 1. Added wildcard `ct_` and `cf_` detection.
+	 * @since 4.2.6 1. Added wildcard `ct_` and `cf_` detection.
 	 *              2. Added detection for various other types
 	 *              2. Removed wildcard `cs_` detection.
 	 * @link <https://yoast.com/help/list-available-snippet-variables-yoast-seo/>

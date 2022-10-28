@@ -76,7 +76,7 @@ class User_Data extends Term_Data {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Removed memoization.
+	 * @since 4.2.6 Removed memoization.
 	 * @TODO Throw this away? We do not use it... never have.
 	 *
 	 * @return array The current author meta.
@@ -94,7 +94,7 @@ class User_Data extends Term_Data {
 	 * @since 4.1.4 1. Now returns default values when custom values are missing.
 	 *              2. Now listens to headlessness.
 	 *              3. Deprecated the third argument, and moved it to the second.
-	 * @todo Send deprecation warning for 3rd parameter
+	 * @todo deprecate: Send deprecation warning for 3rd parameter -> Does anybody actually use this??
 	 *
 	 * @param int  $user_id   The user ID.
 	 * @param bool $use_cache Whether to store and use options from cache, or bypass it.

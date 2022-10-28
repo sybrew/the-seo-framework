@@ -117,7 +117,7 @@ final class Images {
 	 *              2. Now only yields at most 5 images.
 	 * @since 4.2.0 1. Fixed OB1 error causing the first image to be ignored.
 	 *              2. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 No longer accidentally matches `<imganything`, and cannot find images in `map`.
+	 * @since 4.2.6 No longer accidentally matches `<imganything`, and cannot find images in `map`.
 	 * @generator
 	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *       Combine query, instead of using WP API? Only do that for the first image, instead?

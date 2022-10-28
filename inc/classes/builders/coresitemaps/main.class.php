@@ -57,6 +57,7 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 * @since 4.1.2
 	 * @abstract
 	 * @ignore
+	 * @override
 	 *
 	 * @return string The sitemap content.
 	 */

@@ -131,7 +131,7 @@ abstract class Main {
 			$tabs = str_repeat( "\t", $level );
 
 			if ( \is_array( $value ) )
-				$value = "\n" . $this->create_xml_entry( $value, $level + 1 ) . $tabs;
+				$value = "\n{$this->create_xml_entry( $value, $level + 1 )}$tabs";
 
 			$out .= "$tabs<$key>$value</$key>\n";
 		}

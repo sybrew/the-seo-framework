@@ -841,10 +841,10 @@ class Generate_Description extends Generate {
 		 */
 		if ( ! empty( $post->post_excerpt ) ) {
 			$excerpt = $post->post_excerpt;
-		} elseif ( isset( $post->post_content ) ) {
+		} elseif ( isset( $post->post_content, $post->ID ) && ! $this->uses_non_html_page_builder( $post->ID ) ) {
 			// We should actually get the parsed content here... but that can be heavy on the server.
 			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
-			$excerpt = $this->uses_non_html_page_builder( $post->ID ) ? '' : $post->post_content;
+			$excerpt = $post->post_content;
 
 			if ( $excerpt ) {
 				$excerpt = $this->strip_newline_urls( $excerpt );
@@ -965,6 +965,7 @@ class Generate_Description extends Generate {
 		} elseif ( isset( $matches[1] ) ) {
 			$excerpt = $matches[1];
 		}
+		// else { TODO Should we empty excerpt here? Can we even reach this? }
 
 		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 

@@ -25,8 +25,6 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\umemo;
-
 /**
  * Generates the base sitemap.
  *
@@ -152,7 +150,7 @@ class Base extends Main {
 	 *              2. Improved performance by a factor of two+.
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".
 	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap\Base
-	 * @abstract
+	 * @override
 	 * @slow The queried results are not stored in WP Post's cache, which would allow direct access
 	 *       to all values of the post (if requested). This is because we're using
 	 *       `'fields' => 'ids'` instead of `'fields' => 'all'`. However, this would fill RAM
@@ -162,6 +160,12 @@ class Base extends Main {
 	 * @return string The sitemap content.
 	 */
 	public function build_sitemap() {
+
+		/**
+		 * @since 4.2.6
+		 * @param \The_SEO_Framework\Builders\Sitemap\Base
+		 */
+		\do_action( 'the_seo_framework_build_sitemap_base', $this );
 
 		$content = '';
 		$count   = 0;
@@ -351,9 +355,8 @@ class Base extends Main {
 			]
 		);
 
-		if ( $extend ) {
-			$content .= "\t" . $extend . "\n";
-		}
+		if ( $extend )
+			$content .= "\t$extend\n";
 
 		return $content;
 	}

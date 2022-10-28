@@ -202,7 +202,7 @@ class Generate_Ldjson extends Generate_Image {
 		 */
 		$search_url = (string) \apply_filters( 'the_seo_framework_ld_json_search_url', $search_link );
 
-		if ( ! empty( $GLOBALS['wp_rewrite']->get_search_permastruct() ) ) {
+		if ( $GLOBALS['wp_rewrite']->get_search_permastruct() ) {
 			$pattern    = \user_trailingslashit( '%s{%s}', 'search' );
 			$search_url = \trailingslashit( $search_url );
 		}
@@ -465,7 +465,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( empty( $terms ) )
 			return '';
 
-		$terms = \wp_list_pluck( $terms, 'parent', 'term_id' ); // use array_column()?
+		$terms = \array_column( $terms, 'parent', 'term_id' );
 
 		$parents      = [];
 		$assigned_ids = [];
