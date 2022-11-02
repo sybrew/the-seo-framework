@@ -3,21 +3,21 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.5
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 7.2.0
 Stable tag: 4.2.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Purely professional, feature-complete, and the ad-free WordPress SEO plugin. Secure, fast, automated, and white-hat SEO. Do less; get better results.
+The fastest feature-complete SEO plugin for professional WordPress websites. Secure, fast, automated, and ethical SEO. Do less; get better results.
 
 == Description ==
 
-**The only feature-complete SEO plugin that follows the white-hat guidelines and rules imposed by WordPress and search engines.**
+**The fastest and only feature-complete SEO plugin that follows the guidelines and rules imposed by WordPress and search engines.**
 
 Start using proven methods to optimize your website for SEO. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
 
-To top it off, this is the fastest full-featured SEO plugin, and it blends right into your WordPress website, without leaving you in the dark.
+To top it off, this is the [fastest full-featured SEO plugin](https://twitter.com/TheSEOFramework/status/1493352649445580804/photo/1), and it blends right into your WordPress website, without leaving you in the dark.
 
 It's easy to get started. Activate this plugin, and your site's instantly protected against prominent SEO attacks. The SEO Framework will also prefill all critical meta tags for you. A real time-saver. Ingenious.
 
@@ -79,6 +79,7 @@ For additional functionality, check out our free companion plugin [Extension Man
 
 * [Focus](https://theseoframework.com/?p=2305) guides you through the process of writing targeted content that ranks with **focus keywords and synonyms**.
 * [Articles](https://theseoframework.com/?p=2303) **enhances your published posts** by automatically adding important Structured Data.
+* [Transport](https://theseoframework.com/?p=3962) **migrates and transforms metadata** from Rank Math and Yoast SEO to this plugin.
 * [Honeypot](https://theseoframework.com/?p=2300) **catches comment spammers** through four lightweight yet powerful ways.
 * [Cord](https://theseoframework.com/?p=3404) helps you connect your website to **Google Analytics and Facebook Pixel**.
 * [Local](https://theseoframework.com/?p=2306) lets you set up **important local business information** for search engines to consume.
@@ -251,16 +252,28 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 **For everyone**
 
+* **Added:**
+	* For first-time installers only, we test if leftover metadata exists of Yoast SEO and Rank Math. When found, we output a notice that suggests reading our data migration guide. This notice is conditional, this notice is shown when all these conditions are met:
+		1. The user can install plugins;
+		1. Admin screens `/index.php`, `/edit.php`, `/edit-tags.php`, or `admin.php?page=theseoframework-settings` is visited;
+		1. Seven days haven't passed since installation;
+		1. Up to 100 times accumulating all users (we want this to be there for the user to ponder, but not forever);
+		1. The notice hasn't been dismissed.
 * **Improved:**
 	* Advanced Query Protection now detects more rogue requests, specifically:
 		* `example.com/?search=text` when the homepage is static, where `a` can be anything.
 		* `example.com/?cat=text%2C2147483647%2C1text`, where `2147483647` is a category ID that doesn't exist, and the final `1` is a category that does exist, where `text` is anything non-numeric.
 		* Put online a link to any site with these rogue requests, and once Googlebot spots those links, their site will be taken off from Google within a matter of days. The more links you add, the faster this processes. Our protection is genuine technical SEO, unique to TSF.
-	* Now detects more types of Yoast SEO's title and description variable syntax.
-	* Now trims non-breaking spaces from the end and start of sentences more robustly.
+	* SEO Bar now detects more types of Yoast SEO's title and description variable syntax.
+	* Description and title sanitization now trim non-breaking spaces from sentences more robustly when multiline input is processed.
 * **Fixed:**
 	* Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
 		* This was a non-issue because TSF never created canonical URLs for comment pages, it only increased crawling time.
+* **Other:**
+	* We reenabled our yearly sale notification. The [WP Notify project](https://github.com/WordPress/wp-feature-notifications) is underway, helping us to make this less annoying.
+		* Again, no, this is not a slippery slope; we're not testing waters. Last year we received a negative review because the reviewer was foreboding the worst; still, we cannot sustain this project well without reminding our users we're operating a full-time business.
+		* Several conditions must be met before the link is displayed.
+		* Add `define( 'TSF_DISABLE_SUGGESTIONS', true );` to `wp-config.php` to permanently block all (current and future) hints that help us sustain this project.
 
 **For developers**
 
@@ -290,9 +303,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
 
-TODO set check for RM and Yoast metadata.
-TODO acknowledge Transport in readme.txt
-TODO set quote `\the-seo-framework\inc\classes\builders\sitemap\index.php`
+TODO https://github.com/sybrew/the-seo-framework/issues/610
+TODO PUNT below to 4.2.7?
+
 TODO terms that have no SEO data still get an array stored by TSF, full of empty entries. Is this necessary, can we collapse/purge?
 	-> array_filter the store at least?
 
@@ -316,10 +329,8 @@ TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-author
 * TODO implement hrtime for timing, fallback to microtime().
 	-> Or move straight to PHP 7.3? Mind it's nanoseconds (/1e6).
 		-> 4% of active TSF users are on 7.2, less than 1% on 7.3, the rest is 7.4/8.0+
-* TODO Moved aside/blockquote from space to clear: TODO update KB.
 * TODO description generator can end in numeric split "We also added WordPress 6."... <https://tsf.fyi/p/3903>, we should consider "6.0" a "word".
 * TODO fit-content on post SEO settings tabs to mitigate wrap (try Dutch)
-* TODO ? should we move ol/ul/li,dd/dl/dt from space to clear as well in strip_tags_cs()
 
 = 4.2.5 =
 

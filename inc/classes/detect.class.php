@@ -768,8 +768,8 @@ class Detect extends Render {
 
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
-						// If home but as page but no page ID is found, query got exploited successfully.
-						if ( $this->is_home_as_page() && ! $this->get_the_real_ID() )
+						// !$this->get_the_real_ID() is already executed. Just test if home is a page.
+						if ( $this->is_home_as_page() )
 							return memo( true );
 						break;
 

@@ -534,12 +534,10 @@ class Query extends Core {
 				? $post
 				: ( \get_post( $post )->ID ?? 0 );
 
-			$is_pfp = (int) \get_option( 'page_for_posts' ) === $id;
-		} else {
-			$is_pfp = \is_home();
+			return (int) \get_option( 'page_for_posts' ) === $id;
 		}
 
-		return $is_pfp;
+		return \is_home();
 	}
 
 	/**
