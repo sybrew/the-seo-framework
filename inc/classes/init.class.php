@@ -719,6 +719,8 @@ class Init extends Query {
 		// It's not a bridge, don't treat it like one: So, submit hooks here... But, clean me up?
 		\add_filter( 'wp_sitemaps_add_provider', [ Builders\CoreSitemaps\Main::class, '_filter_add_provider' ], 9, 2 );
 		\add_filter( 'wp_sitemaps_max_urls', [ Builders\CoreSitemaps\Main::class, '_filter_max_urls' ], 9 );
+		// We miss the proper hooks. https://github.com/sybrew/the-seo-framework/issues/610#issuecomment-1300191500
+		\add_filter( 'wp_sitemaps_posts_query_args', [ Builders\CoreSitemaps\Main::class, '_trick_filter_doing_sitemap' ], 11 );
 	}
 
 	/**
@@ -1105,7 +1107,11 @@ class Init extends Query {
 			}
 		}
 
-		// This primarily affects 'terms'.
+		// If doing sitemap, don't adjust query via query settings.
+		if ( $this->is_sitemap() )
+			return true;
+
+		// This should primarily affect 'terms'. Test if TSF is blocked from supporting said terms.
 		if ( ! empty( $wp_query->tax_query->queries ) ) :
 			$supported = true;
 

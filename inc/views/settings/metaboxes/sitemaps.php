@@ -59,7 +59,6 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 	case 'sitemaps_general_tab':
 		$sitemap_url        = The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
-		$use_core_sitemaps  = $this->use_core_sitemaps();
 		$sitemap_detected   = $this->has_sitemap_xml();
 
 		HTML::header_title( __( 'Sitemap Integration Settings', 'autodescription' ) );
@@ -114,7 +113,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				);
 				// TODO In settings generator (TSF 5.0): Overwite this section for Polylang/WPML and output each sitemap language link respectively.
 				// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
-			} elseif ( $use_core_sitemaps ) {
+			} elseif ( $this->use_core_sitemaps() ) {
 				$_index_url = get_sitemap_url( 'index' );
 				if ( $_index_url )
 					HTML::description_noesc(

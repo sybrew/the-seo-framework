@@ -515,7 +515,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				$tsf->convert_markdown(
 					sprintf(
 						/* translators: 1: SEO plugin name(s), 2: link to guide, in Markdown! */
-						\esc_html__( 'The SEO Framework found metadata from %1$s. Whenever you are set, read our [migration guide](%2$s).', 'autodescription' ),
+						\esc_html__( 'The SEO Framework detected metadata from %1$s. Whenever you are set, read our [migration guide](%2$s).', 'autodescription' ),
 						\esc_html(
 							count( $found_titles ) > 1 ? wp_sprintf_l( '%l', $found_titles ) : current( $found_titles )
 						),

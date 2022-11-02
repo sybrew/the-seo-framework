@@ -66,6 +66,32 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 	}
 
 	/**
+	 * Sets "doing sitemap" in TSF if preliminary conditions pass.
+	 * We do this via a filter, which is unconventional but a bypass.
+	 *
+	 * @link <https://core.trac.wordpress.org/ticket/56954>
+	 * @since 4.2.6
+	 * @access private
+	 * @global \WP_Query $wp_query We test against the main query here.
+	 *
+	 * @param array $args Array of proposed WP_Query arguments.
+	 * @return array $args The WP_Query arguments, unaltered.
+	 */
+	public static function _trick_filter_doing_sitemap( $args ) {
+		global $wp_query;
+
+		// If doing Core sitemaps, verify if is actual sitemap, and block if so.
+		if ( isset( $wp_query->query_vars['sitemap'] ) ) {
+			// Didn't we request a simple API function for this? Anyway, null safe operators would also be nice here.
+			// For now, let's assume this API won't change. Test periodically.
+			if ( \wp_sitemaps_get_server()->registry->get_provider( $wp_query->query_vars['sitemap'] ) )
+				\tsf()->is_sitemap( true );
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Filters Core sitemap provider.
 	 *
 	 * @since 4.1.2
