@@ -266,6 +266,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* Put online a link to any site with these rogue requests, and once Googlebot spots those links, their site will be taken off from Google within a matter of days. The more links you add, the faster this processes. Our protection is genuine technical SEO, unique to TSF.
 	* SEO Bar now detects more types of Yoast SEO's title and description variable syntax.
 	* Description and title sanitization now trim non-breaking spaces from sentences more robustly when multiline input is processed.
+	* Descriptions are no longer cut off after decimal pointers. Before, "WordPress 6.1.0 is out" would cut off with "WordPress 6."; now, "6.1.0" is recognized as a single digit.
 * **Fixed:**
 	* Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
 		* This was a non-issue because TSF never created canonical URLs for comment pages, it only increased crawling time.
@@ -303,7 +304,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
 
-TODO https://github.com/sybrew/the-seo-framework/issues/610
 TODO PUNT below to 4.2.7?
 
 TODO terms that have no SEO data still get an array stored by TSF, full of empty entries. Is this necessary, can we collapse/purge?
@@ -329,7 +329,6 @@ TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-author
 * TODO implement hrtime for timing, fallback to microtime().
 	-> Or move straight to PHP 7.3? Mind it's nanoseconds (/1e6).
 		-> 4% of active TSF users are on 7.2, less than 1% on 7.3, the rest is 7.4/8.0+
-* TODO description generator can end in numeric split "We also added WordPress 6."... <https://tsf.fyi/p/3903>, we should consider "6.0" a "word".
 * TODO fit-content on post SEO settings tabs to mitigate wrap (try Dutch)
 
 = 4.2.5 =
