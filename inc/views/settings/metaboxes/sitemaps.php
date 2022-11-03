@@ -161,6 +161,21 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		</p>
 		<?php
 		HTML::description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
+		?>
+		<hr>
+		<?php
+		HTML::header_title( __( 'Transient Cache Settings', 'autodescription' ) );
+		HTML::description( __( 'To improve performance, generated output can be stored in the database as transient cache.', 'autodescription' ) );
+
+		HTML::wrap_fields(
+			Input::make_checkbox( [
+				'id'     => 'cache_sitemap',
+				'label'  => esc_html__( 'Enable optimized sitemap generation cache?', 'autodescription' )
+					. ' ' . HTML::make_info( __( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
+				'escape' => false,
+			] ),
+			true
+		);
 		break;
 
 	case 'sitemaps_robots_tab':

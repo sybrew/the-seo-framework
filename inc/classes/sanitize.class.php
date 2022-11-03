@@ -229,6 +229,14 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
+			's_description_html_method',
+			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[
+				'auto_descripton_html_method',
+			]
+		);
+
+		$this->add_option_filter(
 			's_one_zero',
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
@@ -678,6 +686,7 @@ class Sanitize extends Admin_Pages {
 				's_title_raw'                  => [ $this, 's_title_raw' ],
 				's_knowledge_type'             => [ $this, 's_knowledge_type' ],
 				's_alter_query_type'           => [ $this, 's_alter_query_type' ],
+				's_description_html_method'    => [ $this, 's_description_html_method' ],
 				's_one_zero'                   => [ $this, 's_one_zero' ],
 				's_disabled_post_types'        => [ $this, 's_disabled_post_types' ],
 				's_disabled_taxonomies'        => [ $this, 's_disabled_taxonomies' ],
@@ -1041,8 +1050,12 @@ class Sanitize extends Admin_Pages {
 	 *              2. Added $escape parameter.
 	 * @since 3.2.4 Now selectively clears tags.
 	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
-	 * @since 4.2.6 Moved `aside` and `blockquote` from `space` to `clear`.
-	 * TODO should we move ol/ul/li,dd/dl/dt from space to clear as well?
+	 * @since 4.2.6 1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
+	 *              2. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`,
+	 *                 `object`, `output`, `progress`, `s`, `template`, and `ul`.
+	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
+	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
+	 *              5. Now processed the `auto_descripton_html_method` option for stripping tags.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1055,11 +1068,26 @@ class Sanitize extends Admin_Pages {
 		// No need to parse an empty excerpt. TODO consider not parsing '0' as well?
 		if ( '' === $excerpt ) return '';
 
+		switch ( $this->get_option( 'auto_descripton_html_method' ) ) {
+			case 'thorough':
+				$passes = 12;
+				break;
+			case 'accurate':
+				$passes = 6;
+				break;
+			default:
+			case 'fast':
+				$passes = 2;
+				break;
+		}
+
+		// Missing 'dl', 'dt', 'figcaption', 'li' -- these are obligatory subelements of what's already cleared.
 		$strip_args = [
-			'space' =>
-				[ 'article', 'br', 'dd', 'div', 'dl', 'dt', 'li', 'main', 'ol', 'p', 'section', 'ul' ],
-			'clear' =>
-				[ 'address', 'aside', 'bdo', 'blockquote', 'button', 'canvas', 'code', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'iframe', 'input', 'label', 'link', 'map', 'meta', 'nav', 'noscript', 'option', 'pre', 'samp', 'script', 'select', 'style', 'svg', 'table', 'textarea', 'tfoot', 'var', 'video' ],
+			'space'  =>
+				[ 'article', 'br', 'blockquote', 'details', 'div', 'hr', 'p', 'section' ],
+			'clear'  =>
+				[ 'address', 'area', 'aside', 'audio', 'bdo', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'del', 'dialog', 'dl', 'fieldset', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'meter', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'progress', 's', 'samp', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'var', 'video' ],
+			'passes' => $passes,
 		];
 
 		/**
@@ -1235,6 +1263,22 @@ class Sanitize extends Admin_Pages {
 			return $new_value;
 
 		return 'in_query';
+	}
+
+	/**
+	 * Sanitizes the html method value.
+	 *
+	 * @since 4.2.6
+	 *
+	 * @param mixed $new_value Should ideally be a string 'fast', 'accurate', or 'thorough' passed in.
+	 * @return string 'fast', 'accurate', or 'thorough'.
+	 */
+	public function s_description_html_method( $new_value ) {
+
+		if ( \in_array( $new_value, [ 'fast', 'accurate', 'thorough' ], true ) )
+			return $new_value;
+
+		return 'fast';
 	}
 
 	/**
@@ -1910,9 +1954,19 @@ class Sanitize extends Admin_Pages {
 	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
 	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-	 * @since 4.2.6 1. Now correctly captures nested elements, improving performance.
+	 * @since 4.2.6 1. Addded `fieldset`, `figure`, `form`, `main`, `nav`, `pre`, `table`, and `tfoot` from clear.
+	 *              2. Removed `details`, `hgroup`, and `hr` from 'clear'.
+	 *              3.
+	 *
+	 * @since 4.2.6 1. Now correctly captures nesting elements, improving performance.
 	 *              2. Added `map` to clear.
-	 * @link https://www.w3schools.com/html/html_blocks.asp
+	 *              3. Removed `ol`, `ul`, `figcaption`, `header`, `div`, `dl`, `table`, `main`, `tfoot` from 'space':
+	 *                 These are wrapper elements that must have a sub element already in 'space'.
+	 *              4. Moved `table`, `figure`, `fieldset` from 'space' to 'clear'.
+	 *              5. Now treats all elements replaced as blocks, adding surrounding spaces.
+	 *                 For void elements, you'd want to omit it from '$args' so it falls through to `strip_tags()`.
+	 *              6. Added 'passes' parameter. This indicates the maximum passes 'space' may process.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 	 *
 	 * @param string $input The input text that needs its tags stripped.
@@ -1925,37 +1979,62 @@ class Sanitize extends Admin_Pages {
 	 *                                                       If empty array, skips stripping; otherwise, use input.
 	 *                         'strip'   : @param bool       If set, strip_tags() is performed before returning the output.
 	 *                                                       Recommended always true, since Regex doesn't understand XML.
+	 *                         'passes'  : @param int        The maximum number of passes 'space' may conduct. More is slower,
+	 *                                                       but more accurate.
 	 *                      }
 	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization/quoting.
 	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`. (togglable via `$args['strip']`)
 	 *                            Also note that their contents are maintained as-is, without added spaces.
-	 *                            It is why you should always list `style` and `script` in the `clear` array.
-	 * @return string The output string without tags.
+	 *                            It is why you should always list `style` and `script` in the `clear` array, never in 'space'.
+	 * @return string The output string without tags. May have many stray and repeated spaces.
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
 
+		/**
+		 * Find the optimized version in `s_excerpt()`. The defaults here treats HTML for a18y reading, not description generation.
+		 *
+		 * Contains HTML5 supported elements only, even though browsers might behave differently.
+		 *
+		 * Missing phrasing elements: 'a', 'abbr', 'b', 'bdo', 'bdi', 'cite', 'data', 'dfn', 'em', 'embed', 'i', 'img', 'ins', 'kbd',
+		 * 'mark', 'math', 'picture', 'q', 'ruby', 'samp', 'small', 'span', 'strong', 'sub', 'sup', 'time', 'u', 'var', and 'wbr'.
+		 * There's no need to add these, for they're cleared plainly by `strip_tags()`.
+		 *
+		 * Missing flow elements: 'figure', 'link', 'meta'
+		 * There's no need to add these, for they have no content.
+		 *
+		 * Missing 'html', 'head', and 'body'.
+		 * These aren't part of the parsable content... for now.
+		 *
+		 * Contains all form elements. Obviously.
+		 *
+		 * TODO: 'canvas', 'svg', 'noscript', 'select', 'textarea' are phrasing elements that we want cleared without spaces added.
+		 *       This is a non-issue, for it's beyond unlikely users put these in their content manually.
+		 */
 		$default_args = [
-			'space' =>
-				[ 'address', 'article', 'aside', 'blockquote', 'br', 'dd', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul' ],
-			'clear' =>
-				[ 'bdo', 'button', 'canvas', 'code', 'hr', 'iframe', 'input', 'label', 'link', 'map', 'meta', 'noscript', 'option', 'samp', 'script', 'select', 'style', 'svg', 'textarea', 'var', 'video' ],
-			'strip' => true,
+			'space'  =>
+				[ 'address', 'article', 'aside', 'br', 'blockquote', 'details', 'dd', 'div', 'dl', 'dt', 'figcaption', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'li', 'ol', 'p', 'section', 'ul' ],
+			'clear'  =>
+				[ 'area', 'audio', 'button', 'canvas', 'code', 'datalist', 'del', 'dialog', 'fieldset', 'form', 'iframe', 'input', 'label', 'map', 'menu', 'meter', 'nav', 'noscript', 'object', 'output', 'pre', 'progress', 's', 'script', 'select', 'svg', 'table', 'template', 'textarea', 'video' ],
+			'strip'  => true,
+			'passes' => 1,
 		];
 
 		// Void elements never have content.
 		$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' ];
 
-		// We're missing a, em, strong, sub, q, marquee, blink, i, b, sup, time, tt, map, kbd, big ---- These are all inline text.
-
 		if ( ! $args ) {
 			$args = $default_args;
 		} else {
+			// We don't use array_merge() here because we want to default these to [] when $args is given.
 			foreach ( [ 'clear', 'space' ] as $type ) {
 				if ( isset( $args[ $type ] ) )
 					$args[ $type ] = (array) ( $args[ $type ] ?: [] );
 			}
-			$args['strip'] = $args['strip'] ?? $default_args['strip'];
+			$args['strip']  = $args['strip'] ?? $default_args['strip'];
+			$args['passes'] = $args['passes'] ?? $default_args['passes'];
 		}
+
+		$args['passes'] *= 20;
 
 		// Clear first, so there's less to process, and sub-elements are cleared. Then, add spaces.
 		if ( false !== strpos( $input, '<' ) ) foreach ( [ 'clear', 'space' ] as $type ) {
@@ -1973,43 +2052,54 @@ class Sanitize extends Admin_Pages {
 					 * Basically, the content and closing tag reader is split from $fill_query's regex.
 					 */
 					sprintf(
-						'/<(?:%s)\b([^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>/i',
+						'/<(?:%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])(?(-1).+\g{-1}))|(?:[^"\'<>\s]*(?!\/>))+))*?(\/)?>/i',
 						implode( '|', $void_query )
 					),
-					'space' === $type ? ' ' : '',
+					' ',
 					$input
-				);
+				) ?? '';
 			}
+
 			if ( $fill_query ) {
 				// If the HTML is valid, the sequences below respond alike.
 				// Non-void elements should have instant-closing tags ignored; however,
 				// every browser acts differently autocompleting this error. As do we now.
 				if ( 'clear' === $type ) {
-					// This one grabs all after unclosed HTML. Akin to https://regex101.com/r/ml2iBW/7.
+					// This one grabs all after unclosed HTML.
+					// Akin to https://regex101.com/r/ml2iBW/13. (This might be outdated, copy work!)
 					$input = preg_replace(
 						sprintf(
-							'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))*|(?:[^$]+(?:<\/?\1\b>)|[^$]+)(*ACCEPT))<\/\1[^>]*>)/i',
+							'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])(?(-1).+\g{-1}))|(?:[^"\'<>\s]*(?!\/>))+))*(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))+?|(?:[^$]+(?:<\/?\1\b>)|[^$]+)(*ACCEPT))<\/\1[^>]*>)/i',
 							implode( '|', $fill_query )
 						),
 						' ',
 						$input,
-					);
+					) ?? '';
 				} else {
-					// This one stops at first < after unclosed HTML. Akin to https://regex101.com/r/ml2iBW/6.
-					$input = preg_replace(
-						sprintf(
-							'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])?(?(-1).+?\g{-1}))|(?:[^"\'<>\s](?!\/>))+))*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))*|[^<]*(*ACCEPT))<\/\1[^>]*>)/i',
-							implode( '|', $fill_query )
-						),
-						' $4 ',
-						$input,
-					);
+					$i = 0;
+					// To be most accurate, we should parse 'space' $type at least twice, up to 6 times. This is a performance hog.
+					// This is because we process the tags from the outer layer to the most inner. Each pass goes deeper.
+					while ( $i++ < $args['passes'] && \strlen( $input ) ) {
+						$pre_pass_input = $input;
+						// This one stops at first < after unclosed HTML.
+						// Akin to https://regex101.com/r/ml2iBW/14. (This might be outdated, copy work!)
+						$input = preg_replace(
+							sprintf(
+								'/<(%s)\b(?:[^=>\/]*+|(?>[^=>\/]*+(?:=([\'"])(?(-1).+\g{-1}))|(?:[^"\'<>\s]*(?!\/>))+))*(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*+|(?R))+?|[^<]*(*ACCEPT))<\/\1[^>]*>)/i',
+								implode( '|', $fill_query )
+							),
+							' $4 ',
+							$input
+						) ?? '';
+						// If nothing changed, or an error occurred, we're done.
+						if ( $pre_pass_input === $input ) break;
+					}
 				}
 			}
 		}
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
-		return $args['strip'] ? \strip_tags( $input ) : $input;
+		return ( $args['strip'] ? \strip_tags( $input ) : $input ) ?? '';
 	}
 
 	/**

@@ -48,7 +48,6 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$example_tax_left       = "<em>{$additions_left}{$cat_title}</em>";
 		$example_tax_right      = "<em>{$cat_title}{$additions_right}</em>";
 
-		HTML::header_title( __( 'Automated Title Settings', 'autodescription' ) );
 		HTML::description( __( 'The page title is prominently shown within the browser tab as well as within the search engine results pages.', 'autodescription' ) );
 
 		// Yes, this is a mess. But, we cannot circumvent this because we do not control the translations.

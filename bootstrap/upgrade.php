@@ -211,7 +211,7 @@ function _upgrade( $previous_version ) {
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
 	// When a user upgrades beyond this scope, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4261' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -876,8 +876,7 @@ function _do_upgrade_4110() {
  */
 function _do_upgrade_4120() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' ) {
-		$tsf = \tsf();
-		$tsf->update_option( 'ping_use_cron_prerender', 0 );
+		\tsf()->update_option( 'ping_use_cron_prerender', 0 );
 	}
 }
 
@@ -889,5 +888,16 @@ function _do_upgrade_4120() {
 function _do_upgrade_4200() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4200' ) {
 		\delete_option( 'the_seo_framework_tested_upgrade_version' );
+	}
+}
+
+/**
+ * Registers the `auto_descripton_html_method` option, string.
+ *
+ * @since 4.2.6
+ */
+function _do_upgrade_4261() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4261' ) {
+		\tsf()->update_option( 'auto_descripton_html_method', 'fast' );
 	}
 }

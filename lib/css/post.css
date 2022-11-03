@@ -146,7 +146,6 @@ input.tsf-flex-nav-tab-radio {
 
 .tsf-flex-nav-tab {
 	flex-direction: row;
-	flex: 1 1 auto;
 	max-width: 125px;
 }
 

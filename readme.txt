@@ -253,13 +253,18 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 **For everyone**
 
 * **Added:**
+	* Added Advanced Generation Settings: HTML parsing methods.
+		* When you find that the description generator is inaccurate in selecting content, or sticks two words together without spacing, considering upping the method. If this doesn't do anything, you should put it back on the fastest method.
 	* For first-time installers only, we test if leftover metadata exists of Yoast SEO and Rank Math. When found, we output a notice that suggests reading our data migration guide. This notice is conditional, this notice is shown when all these conditions are met:
 		1. The user can install plugins;
 		1. Admin screens `/index.php`, `/edit.php`, `/edit-tags.php`, or `admin.php?page=theseoframework-settings` is visited;
 		1. Seven days haven't passed since installation;
 		1. Up to 100 times accumulating all users (we want this to be there for the user to ponder, but not forever);
 		1. The notice hasn't been dismissed.
+* **Changed:**
+	* The sitemap transient settings have been moved from "General > Performance" to "Sitemap > General".
 * **Improved:**
+	* Description generation now parses your page HTML twice by default.
 	* Advanced Query Protection now detects more rogue requests, specifically:
 		* `example.com/?search=text` when the homepage is static, where `a` can be anything.
 		* `example.com/?cat=text%2C2147483647%2C1text`, where `2147483647` is a category ID that doesn't exist, and the final `1` is a category that does exist, where `text` is anything non-numeric.
@@ -276,10 +281,16 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		* Several conditions must be met before the link is displayed.
 		* Add `define( 'TSF_DISABLE_SUGGESTIONS', true );` to `wp-config.php` to permanently block all (current and future) hints that help us sustain this project.
 
+**For translators:**
+	* **Added:** New translations are available.
+	* **Updated:** TODO The POT file contains new translations.
+
 **For developers**
 
 * **Added:**
+	* Option `auto_descripton_html_method`, accepts values `fast`, `accurate`, and `thorough`. Defaults to `fast`.
 	* Filter `the_seo_framework_build_sitemap_base` now runs whenever the base sitemap is being generated.
+	* Method `s_description_html_method`, for sanitizating option `auto_descripton_html_method`.
 * **Changed:**
 	* Method `s_term_meta()` now clears indexes with empty values.
 	* Method `get_current_post_author_meta()` no longer applies memoization.
@@ -287,9 +298,11 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* Filter `the_seo_framework_scripts` now returns a sequential array of scripts, instead of a multidimension array of sequential arrays of scripts.
 		* `[ 0 => [ 0 => scriptA, 1 => scriptB ], 1 => scriptC ]` is now `[ 0 => scriptA, 1 => scriptB, 2 => scriptC ]`
 	* Method `strip_tags_cs()`:
-		1. Now correctly captures nested elements, improving performance.
-		1. Added `map` to clear.
-		1. Improved performance considerably by ignoring non-HTML text.
+		1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
+		1. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`, `object`, `output`, `progress`, `s`, `template`, and `ul`.
+		1. Now adds spaces around `blockquote`, `details`, and `hr`.
+		1. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
+		1. Now processed the `auto_descripton_html_method` option for stripping tags.
 	* Method `array_merge_recursive_distinct()`:
 		1. Now supports a single array entry without causing issues.
 		1. Reduced number of opcodes by roughly 27% by reworking it.
@@ -297,9 +310,14 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 		1. Now no longer prevents scalar values overwriting arrays.
 	* Method `is_query_exploited()`:
 		1. Added detection `not_home_as_page`, specifically for query variable `search`.
-		2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
+		1. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	* Methods `s_description_raw()` and `s_title_raw()` now convert `nbsp` before `singleline`, because `singleline` also uses `trim()` on old `nbsp`.
 		* Basically, this prevents leftover spaces at the start or end of the description.
+	* Method `The_SEO_Framework\Builders\Images::get_content_image_details()`:
+		1. No longer accidentally matches `<imganything`
+		1. Can no longer use images from `datalist`, `dialog`, `hgroup`, `menu`, `ol`, `object`, `output`, and `template` elements.
+		1. No longer expect images from `dd`, `dt`, `figcaption`, `li`, `tfoot`, `br`, `hr`, `link`, `meta`, `option`, `samp`.
+	* Added method `auto_descripton_html_method()`. I now see that this method has method in its name. Tough luck.
 * **Fixed:**
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
@@ -326,10 +344,6 @@ TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-author
 	add_action( 'the_seo_framework_after_admin_init', function() {
 		remove_action( 'admin_init', [ tsf(), '_init_list_edit' ] );
 	} );
-* TODO implement hrtime for timing, fallback to microtime().
-	-> Or move straight to PHP 7.3? Mind it's nanoseconds (/1e6).
-		-> 4% of active TSF users are on 7.2, less than 1% on 7.3, the rest is 7.4/8.0+
-* TODO fit-content on post SEO settings tabs to mitigate wrap (try Dutch)
 
 = 4.2.5 =
 

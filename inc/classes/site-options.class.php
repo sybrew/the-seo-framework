@@ -51,6 +51,7 @@ class Site_Options extends Sanitize {
 	 * @since 3.1.0 Now applies filters 'the_seo_framework_default_site_options'
 	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
 	 * @since 4.2.4 `max_image_preview` now defaults to `large`, from `standard`, matching WordPress's default.
+	 * @since 4.2.6 Added `auto_descripton_html_method`, defaults to `fast`.
 	 *
 	 * @return array Default site options.
 	 */
@@ -108,7 +109,8 @@ class Site_Options extends Sanitize {
 				'title_strip_tags'    => 1,         // Apply 'strip tags' on titles.
 
 				// Description.
-				'auto_description' => 1, // Enables auto description.
+				'auto_description'            => 1, // Enables auto description.
+				'auto_descripton_html_method' => 'fast', // Auto description HTML passes.
 
 				// Robots index.
 				'author_noindex' => 0, // Author Archive robots noindex

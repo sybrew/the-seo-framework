@@ -73,7 +73,6 @@ final class Scripts {
 	 */
 	public static function _init() {
 
-		$a = hrtime(true);
 		$tsf = \tsf();
 
 		$scripts = [
@@ -145,7 +144,8 @@ final class Scripts {
 		$scripts = \apply_filters_ref_array(
 			'the_seo_framework_scripts',
 			[
-				$tsf->array_flatten_list( $scripts ), // Flattening is 3% of this method's total time.
+				// Flattening is 3% of this method's total time, we can improve by simplifying the getters above like do_meta_output().
+				$tsf->array_flatten_list( $scripts ),
 				\The_SEO_Framework\Builders\Scripts::class,
 				static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
 			]
