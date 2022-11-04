@@ -158,7 +158,7 @@ final class Images {
 				[
 					'space' => [],
 					'clear' =>
-						[ 'address', 'aside', 'bdo', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'dialog', 'dl', 'fieldset', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'var', 'video' ],
+						[ 'address', 'aside', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'dialog', 'dl', 'fieldset', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'var', 'video' ],
 					'strip' => false,
 				]
 			);

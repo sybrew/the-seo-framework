@@ -250,6 +250,16 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.6 =
 
+We revamped the HTML parser... etc. etc.
+TODO update description generator, here's an example for "Passes", where "Fast" will fail, but "Accurate" won't:
+<div>                            <!-- pass 1 -->
+	<div>                        <!-- pass 2 -->
+		<p>Hello</p><p>World</p> <!-- pass 3 -->
+	</div>                       <!-- pass 2 -->
+</div>                           <!-- pass 1 -->
+
+TODO add link explaining passes.
+
 **For everyone**
 
 * **Added:**
@@ -298,8 +308,16 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 	* Filter `the_seo_framework_scripts` now returns a sequential array of scripts, instead of a multidimension array of sequential arrays of scripts.
 		* `[ 0 => [ 0 => scriptA, 1 => scriptB ], 1 => scriptC ]` is now `[ 0 => scriptA, 1 => scriptB, 2 => scriptC ]`
 	* Method `strip_tags_cs()`:
+		1. Revamped the HTML lookup: it now (more) accurately processes HTML, and is less likely to be fooled by HTML tags in attributes.
+		1. The 'space' index no longer has default `fieldset`, `figcaption`, `form`, `main`, `nav`, `pre`, `table`, and `tfoot`.
+		1. The space index now has added to default `details`, `hgroup`, and `hr`.
+		1. The 'clear' index no longer has default `bdo`, `hr`, `link`, `meta`, `option`, `samp`, `style`, and `var`.
+		1. The 'clear' index now has added to default `area`, `audio`, `datalist`, `del`, `dialog`, `fieldset`, `form`, `map`, `menu`, `meter`, `nav`, `object`, `output`, `pre`, `progress`, `s`, `table`, and `template`.
+		1. Added the 'passes' index to `$args`. This tells the maximum passes 'space' may process. Read TSF option `auto_descripton_html_method` to use the user-defined method.
+		1. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit those from '$args' so it falls through to `strip_tags()`.
+	* Method `s_excerpt()`:
 		1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
-		1. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`, `object`, `output`, `progress`, `s`, `template`, and `ul`.
+	 	1. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`, `object`, `output`, `progress`, `s`, `template`, and `ul`.
 		1. Now adds spaces around `blockquote`, `details`, and `hr`.
 		1. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
 		1. Now processed the `auto_descripton_html_method` option for stripping tags.

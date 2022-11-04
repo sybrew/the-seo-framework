@@ -582,12 +582,8 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_description_excerpt_from_query() {
 
-		static $excerpt;
-
-		if ( isset( $excerpt ) )
-			return $excerpt;
-
-		$excerpt = '';
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
 
 		if ( $this->is_real_front_page() ) {
 			$excerpt = $this->get_front_page_description_excerpt();
@@ -599,7 +595,7 @@ class Generate_Description extends Generate {
 			$excerpt = $this->get_archival_description_excerpt();
 		}
 
-		return $excerpt;
+		return memo( $excerpt ?? '' );
 	}
 
 	/**
@@ -746,6 +742,9 @@ class Generate_Description extends Generate {
 	 * Returns a description excerpt for singular post types.
 	 *
 	 * @since 3.1.0
+	 * NOTE: Don't add memo; large memory heaps can occur.
+	 *       It only runs twice on the post edit screen (post.php).
+	 *       Front-end caller get_description_excerpt_from_query() uses memo.
 	 *
 	 * @param int $id The singular ID.
 	 * @return string
