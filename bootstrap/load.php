@@ -71,23 +71,18 @@ function _init_tsf() {
 	 * @param bool $load
 	 */
 	if ( \apply_filters( 'the_seo_framework_load', true ) ) {
+		$tsf         = new Load();
+		$tsf->loaded = true;
+
+		$tsf->_load_early_compat_files();
+
 		if ( \is_admin() ) {
 			//! TODO: admin-only loader?
-			$tsf         = new Load();
-			$tsf->loaded = true;
-
-			$tsf->_load_early_compat_files();
-
 			/**
 			 * @since 3.1.0
 			 * Runs after TSF is loaded in the admin.
 			 */
 			\do_action( 'the_seo_framework_admin_loaded' );
-		} else {
-			$tsf         = new Load();
-			$tsf->loaded = true;
-
-			$tsf->_load_early_compat_files();
 		}
 
 		/**

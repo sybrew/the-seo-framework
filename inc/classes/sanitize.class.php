@@ -2074,7 +2074,7 @@ class Sanitize extends Admin_Pages {
 							 * Basically, the content and closing tag reader is split from clear_query/flow_query's regex.
 							 */
 							sprintf(
-								'/<(?:%s)\b(?:[^=>\/]+|(?>[^=>\/]*+(?:=([\'"])[^\'"]*\g{-1})|(?:[^>]+(?!\/>))+))*?(\/)?>/i',
+								'/<(?:%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+?)+)*?\/?>/i',
 								implode( '|', $elements )
 							),
 							'phrase' === $flow_type ? '' : ' ', // Add space if block, otherwise clear.
@@ -2084,7 +2084,7 @@ class Sanitize extends Admin_Pages {
 
 					case 'space_query':
 						$passes      = $args['passes'];
-						$replacement = ' $4 ';
+						$replacement = ' $3 ';
 						// Fall through;
 					case 'clear_query':
 						$passes      = $passes ?? 1;
@@ -2098,7 +2098,7 @@ class Sanitize extends Admin_Pages {
 							// Akin to https://regex101.com/r/ml2iBW/16. (This might be outdated, copy work!)
 							$input = preg_replace(
 								sprintf(
-									'/<(%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+)+)*?(\/)?>(?(-1)(*ACCEPT)|((?:[^<]*+(?:<(?!\/?\1)[^<]+)*|(?R)|$(*ACCEPT))+?)<\/\1[^>]*>)/i',
+									'/<(%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+?)+)*?(?:\/>(*ACCEPT))?>((?:[^<]*+(?:<(?!\/?\1)[^<]+)*|(?R)|$(*ACCEPT))+?)<\/\1[^>]*>/i',
 									implode( '|', $elements )
 								),
 								$replacement,
