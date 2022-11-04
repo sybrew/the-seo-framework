@@ -1068,6 +1068,7 @@ class Init extends Query {
 	 *              2. Added taxonomy-supported lookups.
 	 *              3. Added WP Rest checks for the Block Editor.
 	 * @since 4.2.0 Improved supported taxonomy loop.
+	 * @since 4.2.6 Added check for `did_action( 'wp_loaded' )`.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool
@@ -1090,6 +1091,9 @@ class Init extends Query {
 			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
 				return true;
 		}
+
+		if ( ! \did_action( 'wp_loaded' ) )
+			return true;
 
 		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 			$referer = \wp_get_referer();
