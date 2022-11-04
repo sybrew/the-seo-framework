@@ -71,7 +71,7 @@ final class Feed {
 	/**
 	 * Initialized feed modifications.
 	 *
-	 * @since 4.2.6
+	 * @since 4.2.7
 	 * @access private
 	 */
 	public function __construct() {

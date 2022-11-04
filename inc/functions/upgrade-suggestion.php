@@ -52,7 +52,7 @@ _prepare( $previous_version, $current_version );
  * @since 4.1.2 Can now communicate with Extension Manager for the edge-case sale.
  * @since 4.1.3 Commented out sale notification conditions, as those can't be met anyway.
  * @since 4.2.1 No longer tests WP and PHP requirements for Extension Manager.
- * @since 4.2.6 Removed test for Extension Manager upgrade.
+ * @since 4.2.7 Removed test for Extension Manager upgrade.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -93,7 +93,7 @@ function _prepare( $previous_version, $current_version ) {
  */
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
-	if ( $previous_version < '4260' && $current_version < '4270' ) {
+	if ( $previous_version < '4270' && $current_version < '4280' ) {
 		$tsf = \tsf();
 
 		$tsf->register_dismissible_persistent_notice(

@@ -479,7 +479,7 @@ class Init extends Query {
 	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 *              2. Now always sets timezone regardless of settings, because, again, bug.
 	 * @since 4.2.0 No longer sets timezone.
-	 * @since 4.2.6 No longer marked as private.
+	 * @since 4.2.7 No longer marked as private.
 	 */
 	public function html_output() {
 
@@ -1068,7 +1068,7 @@ class Init extends Query {
 	 *              2. Added taxonomy-supported lookups.
 	 *              3. Added WP Rest checks for the Block Editor.
 	 * @since 4.2.0 Improved supported taxonomy loop.
-	 * @since 4.2.6 Added check for `did_action( 'wp_loaded' )`.
+	 * @since 4.2.6 Added check for `did_action( 'wp_loaded' )` early, before queries are tested and cached.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool

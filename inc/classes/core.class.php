@@ -464,7 +464,7 @@ class Core {
 	 *
 	 * @link <https://3v4l.org/XBSFa>, test it here.
 	 *
-	 * @since 4.2.6
+	 * @since 4.2.7
 	 * @access private
 	 * @ignore This will move to new "helper" classes in a future update, becoming public then.
 	 *
@@ -498,7 +498,7 @@ class Core {
 	 * @link <https://3v4l.org/9pnW1#v8.1.8> Test it here.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.6 1. Now supports a single array entry without causing issues.
+	 * @since 4.2.7 1. Now supports a single array entry without causing issues.
 	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
 	 *              3. Now no longer throws warnings with qubed+ arrays.
 	 *              4. Now no longer prevents scalar values overwriting arrays.

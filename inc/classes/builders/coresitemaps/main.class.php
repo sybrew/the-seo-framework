@@ -70,7 +70,7 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 * We do this via a filter, which is unconventional but a bypass.
 	 *
 	 * @link <https://core.trac.wordpress.org/ticket/56954>
-	 * @since 4.2.6
+	 * @since 4.2.7
 	 * @access private
 	 * @global \WP_Query $wp_query We test against the main query here.
 	 *

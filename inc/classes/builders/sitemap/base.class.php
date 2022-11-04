@@ -162,7 +162,7 @@ class Base extends Main {
 	public function build_sitemap() {
 
 		/**
-		 * @since 4.2.6
+		 * @since 4.2.7
 		 * @param \The_SEO_Framework\Builders\Sitemap\Base
 		 */
 		\do_action( 'the_seo_framework_build_sitemap_base', $this );

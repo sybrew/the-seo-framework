@@ -211,7 +211,7 @@ function _upgrade( $previous_version ) {
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
 	// When a user upgrades beyond this scope, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4261' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -396,7 +396,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
  *              2. Now registers persistent notice for the update version.
  * @since 4.1.2 No longer can accidentally show the install notice after stale upgrade.
  * @since 4.2.0 The installation notice is now persistent, shown twice, to users with activate_plugins capability, on the main site.
- * @since 4.2.6 Added data checker directing users to the Transport extension.
+ * @since 4.2.7 Added data checker directing users to the Transport extension.
  * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
  *       Users that remove query strings (thanks to YSlow) are to blame, though.
  *       The authors of the plugin that allowed this to happen are even more to blame.
@@ -894,10 +894,10 @@ function _do_upgrade_4200() {
 /**
  * Registers the `auto_descripton_html_method` option, string.
  *
- * @since 4.2.6
+ * @since 4.2.7
  */
-function _do_upgrade_4261() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4261' ) {
+function _do_upgrade_4270() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' ) {
 		\tsf()->update_option( 'auto_descripton_html_method', 'fast' );
 	}
 }

@@ -136,7 +136,7 @@ final class Scripts {
 		 * @since 3.1.0
 		 * @since 4.0.0 1. Now holds all scripts.
 		 *              2. Added $loader parameter.
-		 * @since 4.2.6 Consolidated all input scripts into a list.
+		 * @since 4.2.7 Consolidated all input scripts into a list.
 		 * @param array  $scripts The default CSS and JS loader settings.
 		 * @param string $builder The \The_SEO_Framework\Builders\Scripts builder class name.
 		 * @param string $loader  The \The_SEO_Framework\Bridges\Scripts loader class name.

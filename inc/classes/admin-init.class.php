@@ -218,7 +218,7 @@ class Admin_Init extends Init {
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
 		 * @since 3.1.0
-		 * @since 4.2.6 Added two more paramters (`$c_adjust` and `$locale`)
+		 * @since 4.2.7 Added two more paramters (`$c_adjust` and `$locale`)
 		 * @param array                      $guidelines The title and description guidelines.
 		 *                                   Don't alter the format. Only change the numeric values.
 		 * @param array[$c_adjust,$p_adjust] The guideline calibration (Character and Pixels respectively).

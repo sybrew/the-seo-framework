@@ -713,7 +713,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Flipped order of query tests.
-	 * @since 4.2.6 Added failover filter for failed queries.
+	 * @since 4.2.7 Added failover filter for failed queries.
 	 * @internal
 	 * @see $this->get_raw_generated_title()
 	 *
@@ -1062,7 +1062,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.0
 	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
 	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
-	 * @since 4.2.6 Now invokes proper filters when 'category' or 'tag' taxonomies are used.
+	 * @since 4.2.7 Now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	 *
 	 * @param null|\WP_Term $term The term name, required in the admin area.
 	 * @return string The generated single term title.

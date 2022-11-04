@@ -76,7 +76,7 @@ class User_Data extends Term_Data {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.6 Removed memoization.
+	 * @since 4.2.7 Removed memoization.
 	 * @TODO Throw this away? We do not use it... never have.
 	 *
 	 * @return array The current author meta.

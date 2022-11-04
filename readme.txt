@@ -248,7 +248,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.2.6 =
+= 4.2.7 =
 
 We revamped the HTML parser... etc. etc.
 TODO update description generator, here's an example for "Passes", where "Fast" will fail, but "Accurate" won't:
@@ -362,6 +362,10 @@ TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-author
 	add_action( 'the_seo_framework_after_admin_init', function() {
 		remove_action( 'admin_init', [ tsf(), '_init_list_edit' ] );
 	} );
+
+= 4.2.6 =
+
+This patch resolves an issue with WordPress 6.1, where it queries template parts before posts are requested. This premature query causes TSF to fail in recognizing support for Custom Post Types, [stopping all meta output](https://theseoframework.com/?p=4015).
 
 = 4.2.5 =
 

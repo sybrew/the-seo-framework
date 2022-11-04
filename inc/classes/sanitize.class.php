@@ -973,7 +973,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.2
 	 * @since 4.0.5 Now normalized `-` entities.
-	 * @since 4.2.6 Now converts nbsp before singleline, because singleline must also trim old nbsp.
+	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
 	 * @param string $new_value The Description.
 	 * @return string One line sanitized description.
@@ -1050,7 +1050,7 @@ class Sanitize extends Admin_Pages {
 	 *              2. Added $escape parameter.
 	 * @since 3.2.4 Now selectively clears tags.
 	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
-	 * @since 4.2.6 1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
+	 * @since 4.2.7 1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
 	 *              2. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`,
 	 *                 `object`, `output`, `progress`, `s`, `template`, and `ul`.
 	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
@@ -1165,7 +1165,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 * @since 4.0.0 Now normalizes `&` entities.
 	 * @since 4.0.5 Now normalized `-` entities.
-	 * @since 4.2.6 Now converts nbsp before singleline, because singleline must also trim old nbsp.
+	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
 	 * @param string $new_value The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
@@ -1269,7 +1269,7 @@ class Sanitize extends Admin_Pages {
 	/**
 	 * Sanitizes the html method value.
 	 *
-	 * @since 4.2.6
+	 * @since 4.2.7
 	 *
 	 * @param mixed $new_value Should ideally be a string 'fast', 'accurate', or 'thorough' passed in.
 	 * @return string 'fast', 'accurate', or 'thorough'.
@@ -1955,7 +1955,7 @@ class Sanitize extends Admin_Pages {
 	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
 	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
 	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-	 * @since 4.2.6 1. Revamped the HTML lookup: it now (more) accurately processes HTML, and is less likely to be fooled by HTML tags
+	 * @since 4.2.7 1. Revamped the HTML lookup: it now (more) accurately processes HTML, and is less likely to be fooled by HTML tags
 	 *                 in attributes.
 	 *              2. The 'space' index no longer has default `fieldset`, `figcaption`, `form`, `main`, `nav`, `pre`, `table`, and `tfoot`.
 	 *              3. The space index now has added to default `details`, `hgroup`, and `hr`.
