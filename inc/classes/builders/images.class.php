@@ -117,7 +117,7 @@ final class Images {
 	 *              2. Now only yields at most 5 images.
 	 * @since 4.2.0 1. Fixed OB1 error causing the first image to be ignored.
 	 *              2. Now supports the `$args['pta']` index.
-	 * @since 4.2.7 1. No longer accidentally matches `<imganything`
+	 * @since 4.2.7 1. No longer accidentally matches `<imganything` or `<img notsrc="source">`.
 	 *              2. Can no longer use images from `datalist`, `dialog`, `hgroup`, `menu`, `ol`, `object`, `output`, and `template` elements.
 	 *              3. No longer expect images from `dd`, `dt`, `figcaption`, `li`, `tfoot`, `br`, `hr`, `link`, `meta`, `option`, `samp`.
 	 * @generator

@@ -357,16 +357,17 @@ class Post_Data extends Detect {
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
-		if ( \wp_is_post_autosave( $post ) ) return;
-		if ( \wp_is_post_revision( $post ) ) return;
+		if ( \wp_is_post_autosave( $post ) || \wp_is_post_revision( $post ) ) return;
 
 		$nonce_name   = $this->inpost_nonce_name;
 		$nonce_action = $this->inpost_nonce_field;
 
 		// Check that the user is allowed to edit the post
-		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
-		if ( ! isset( $_POST[ $nonce_name ] ) ) return;
-		if ( ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) ) return;
+		if (
+			   ! \current_user_can( 'edit_post', $post->ID )
+			|| ! isset( $_POST[ $nonce_name ] )
+			|| ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action )
+		) return;
 
 		$data = (array) $_POST['autodescription'];
 
@@ -392,8 +393,10 @@ class Post_Data extends Detect {
 
 		// Check again against ambiguous injection...
 		// Note, however: function wp_ajax_inline_save() already performs all these checks for us before firing this callback's action.
-		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
-		if ( ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) return;
+		if (
+			   ! \current_user_can( 'edit_post', $post->ID )
+			|| ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
+		) return;
 
 		$new_data = [];
 
@@ -446,7 +449,7 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( empty( $post->ID ) ) return;
+		if ( ! $post ) return;
 
 		// Check again against ambiguous injection...
 		// Note, however: function bulk_edit_posts() already performs all these checks for us before firing this callback's action.
@@ -510,7 +513,7 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( empty( $post->ID ) ) return;
+		if ( ! $post ) return;
 
 		/**
 		 * Don't try to save the data prior autosave, or revision post (is_preview).
@@ -519,8 +522,7 @@ class Post_Data extends Detect {
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
-		if ( \wp_is_post_autosave( $post ) ) return;
-		if ( \wp_is_post_revision( $post ) ) return;
+		if ( \wp_is_post_autosave( $post ) || \wp_is_post_revision( $post ) ) return;
 
 		// Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
 		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;

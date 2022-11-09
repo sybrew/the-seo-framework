@@ -888,6 +888,7 @@ class Generate_Description extends Generate {
 	 *              4. Resolved some backtracking issues.
 	 *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
 	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
+	 * @since 4.2.7 Now considers floating numerics as one word.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.

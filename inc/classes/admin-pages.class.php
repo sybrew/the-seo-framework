@@ -362,10 +362,12 @@ class Admin_Pages extends Generate_Ldjson {
 		foreach ( $notices as $key => $notice ) {
 			$cond = $notice['conditions'];
 
-			if ( ! \current_user_can( $cond['capability'] ) ) continue;
-			if ( $cond['user'] && $cond['user'] !== $this->get_user_id() ) continue;
-			if ( $cond['screens'] && ! \in_array( $screenbase, $cond['screens'], true ) ) continue;
-			if ( $cond['excl_screens'] && \in_array( $screenbase, $cond['excl_screens'], true ) ) continue;
+			if (
+				! \current_user_can( $cond['capability'] )
+				|| ( $cond['user'] && $cond['user'] !== $this->get_user_id() )
+				|| ( $cond['screens'] && ! \in_array( $screenbase, $cond['screens'], true ) )
+				|| ( $cond['excl_screens'] && \in_array( $screenbase, $cond['excl_screens'], true ) )
+			) continue;
 
 			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
 				$this->clear_persistent_notice( $key );

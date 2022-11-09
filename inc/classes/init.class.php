@@ -1069,6 +1069,7 @@ class Init extends Query {
 	 *              3. Added WP Rest checks for the Block Editor.
 	 * @since 4.2.0 Improved supported taxonomy loop.
 	 * @since 4.2.6 Added check for `did_action( 'wp_loaded' )` early, before queries are tested and cached.
+	 * @since 4.2.7 No longer affects the sitemap query.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool

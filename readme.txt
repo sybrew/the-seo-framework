@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.5
 Tested up to: 6.1
 Requires PHP: 7.2.0
-Stable tag: 4.2.5
+Stable tag: 4.2.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -250,8 +250,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.7 =
 
+TODO has_yoast_syntax & clear_query need rechecking. has_rank_math_syntax needs adding.
+
 We revamped the HTML parser... etc. etc.
-TODO update description generator, here's an example for "Passes", where "Fast" will fail, but "Accurate" won't:
+(DONE) updated description generator, here's an example for "Passes", where "Fast" will fail, but "Accurate" won't:
 <div>                            <!-- pass 1 -->
 	<div>                        <!-- pass 2 -->
 		<p>Hello</p><p>World</p> <!-- pass 3 -->
@@ -271,9 +273,11 @@ TODO add link explaining passes.
 		1. Seven days haven't passed since installation;
 		1. Up to 100 times accumulating all users (we want this to be there for the user to ponder, but not forever);
 		1. The notice hasn't been dismissed.
+	* Added title and description leftover syntax checks to the SEO Bar for Rank Math.
 * **Changed:**
 	* The sitemap transient settings have been moved from "General > Performance" to "Sitemap > General".
 * **Improved:**
+	* The SEO Bar now checks for more leftover syntax of Yoast SEO in titles and descriptions.
 	* Description generation now parses your page HTML twice by default.
 	* Advanced Query Protection now detects more rogue requests, specifically:
 		* `example.com/?search=text` when the homepage is static, where `a` can be anything.
@@ -285,6 +289,7 @@ TODO add link explaining passes.
 * **Fixed:**
 	* Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
 		* This was a non-issue because TSF never created canonical URLs for comment pages, it only increased crawling time.
+	* Posts are no longer removed from the sitemap when they're excluded from archives.
 * **Other:**
 	* We reenabled our yearly sale notification. The [WP Notify project](https://github.com/WordPress/wp-feature-notifications) is underway, helping us to make this less annoying.
 		* Again, no, this is not a slippery slope; we're not testing waters. Last year we received a negative review because the reviewer was foreboding the worst; still, we cannot sustain this project well without reminding our users we're operating a full-time business.
@@ -300,7 +305,9 @@ TODO add link explaining passes.
 * **Added:**
 	* Option `auto_descripton_html_method`, accepts values `fast`, `accurate`, and `thorough`. Defaults to `fast`.
 	* Filter `the_seo_framework_build_sitemap_base` now runs whenever the base sitemap is being generated.
-	* Method `s_description_html_method`, for sanitizating option `auto_descripton_html_method`.
+	* Method `s_description_html_method()`, for sanitizating option `auto_descripton_html_method`.
+	* Method `has_unprocessed_syntax()`, which detects any valid syntax in text from Yoast SEO and Rank Math.
+	* Method `has_rankmath_syntax()`, used by `has_unprocessed_syntax()`.
 * **Changed:**
 	* Method `s_term_meta()` now clears indexes with empty values.
 	* Method `get_current_post_author_meta()` no longer applies memoization.
@@ -315,6 +322,7 @@ TODO add link explaining passes.
 		1. The 'clear' index now has added to default `area`, `audio`, `datalist`, `del`, `dialog`, `fieldset`, `form`, `map`, `menu`, `meter`, `nav`, `object`, `output`, `pre`, `progress`, `s`, `table`, and `template`.
 		1. Added the 'passes' index to `$args`. This tells the maximum passes 'space' may process. Read TSF option `auto_descripton_html_method` to use the user-defined method.
 		1. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit those from '$args' so it falls through to `strip_tags()`.
+		1. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
 	* Method `s_excerpt()`:
 		1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
 	 	1. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`, `object`, `output`, `progress`, `s`, `template`, and `ul`.
@@ -332,10 +340,11 @@ TODO add link explaining passes.
 	* Methods `s_description_raw()` and `s_title_raw()` now convert `nbsp` before `singleline`, because `singleline` also uses `trim()` on old `nbsp`.
 		* Basically, this prevents leftover spaces at the start or end of the description.
 	* Method `The_SEO_Framework\Builders\Images::get_content_image_details()`:
-		1. No longer accidentally matches `<imganything`
+		1. No longer accidentally matches `<imganything` or `<img notsrc="source">`.
 		1. Can no longer use images from `datalist`, `dialog`, `hgroup`, `menu`, `ol`, `object`, `output`, and `template` elements.
 		1. No longer expect images from `dd`, `dt`, `figcaption`, `li`, `tfoot`, `br`, `hr`, `link`, `meta`, `option`, `samp`.
 	* Added method `auto_descripton_html_method()`. I now see that this method has method in its name. Tough luck.
+	* `Method `trim_excerpt()` now considers floating numerics as one word.
 * **Fixed:**
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
@@ -345,18 +354,6 @@ TODO PUNT below to 4.2.7?
 TODO terms that have no SEO data still get an array stored by TSF, full of empty entries. Is this necessary, can we collapse/purge?
 	-> array_filter the store at least?
 
-/* TODO
-public function has_unprocessed_syntax( $text ) {
-	foreach ( [ 'extension', 'yoast', 'aioseo', 'rankmath', 'seopress' ] as $type )
-		if ( $this->{"has_{$type}_syntax"}( $text ) ) return true;
-	return false;
-}
-public function has_aioseo_syntax( $text ) {}
-public function has_rankmath_syntax( $text ) {}
-public function has_seopress_syntax( $text ) {}
-public function has_extension_syntax( $text ) {}
-*/
-
 TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-authors-plus/#post-16083066
 	^ that link explains a bug where tsf-le crashes when no tag can be found via:
 	add_action( 'the_seo_framework_after_admin_init', function() {
@@ -365,7 +362,7 @@ TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-author
 
 = 4.2.6 =
 
-This patch resolves an issue with WordPress 6.1, where it queries template parts before posts are requested. This premature query causes TSF to fail in recognizing support for Custom Post Types, [stopping all meta output](https://theseoframework.com/?p=4015).
+This patch resolves an issue with WordPress 6.1, which queries template parts before posts are requested. This premature query causes TSF to fail in recognizing support for Custom Post Types, [preventing all meta output](https://theseoframework.com/?p=4015).
 
 = 4.2.5 =
 

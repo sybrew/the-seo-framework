@@ -224,7 +224,7 @@ final class Term extends Main {
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
 
-			if ( static::$tsf->has_yoast_syntax( $title_part, false ) ) {
+			if ( static::$tsf->has_unprocessed_syntax( $title_part, false ) ) {
 				$item['status']           = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
@@ -417,7 +417,7 @@ final class Term extends Main {
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
 
-			if ( static::$tsf->has_yoast_syntax( $desc ) ) {
+			if ( static::$tsf->has_unprocessed_syntax( $desc ) ) {
 				$item['status']           = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];

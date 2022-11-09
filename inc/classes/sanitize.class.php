@@ -1936,6 +1936,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string $content Without the paragraphs containing simple URLs.
 	 */
 	public function strip_paragraph_urls( $content ) {
+		// TODO maybe later, this would be faster: '/<p\b[^>]*>\s*https?:\/\/[^\s<>"]+\s*<\/p>/i'
 		return preg_replace( '/(<p(?: [^>]*)?>\s*)(https?:\/\/[^\s<>"]+)(\s*<\/p>)/i', '', $content );
 	}
 
@@ -1966,30 +1967,31 @@ class Sanitize extends Admin_Pages {
 	 *                 Read TSF option `auto_descripton_html_method` to use the user-defined method.
 	 *              7. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit
 	 *                 those from '$args' so it falls through to `strip_tags()`.
+	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 	 *
 	 * @param string $input The input text that needs its tags stripped.
 	 * @param array  $args  The input arguments. Tags not included are ignored. {
-	 *                         'space'   : @param array|null HTML elements that should be processed for spacing. If the space
-	 *                                                       element is of void element type, it'll be treated as 'clear'.
-	 *                                                       If not set or null, skip check.
-	 *                                                       If empty array, skips stripping; otherwise, use input.
-	 *                         'clear'   : @param array|null HTML elements that should be emptied and replaced with a space.
-	 *                                                       If not set or null, skip check.
-	 *                                                       If empty array, skips stripping; otherwise, use input.
-	 *                         'strip'   : @param bool       If set, strip_tags() is performed before returning the output.
-	 *                                                       Recommended always true, since Regex doesn't understand XML.
-	 *                         'passes'  : @param int        The maximum number of passes 'space' may conduct. More is slower,
-	 *                                                       but more accurate.
+	 *                         'space'   : @param ?string[] HTML elements that should be processed for spacing. If the space
+	 *                                                      element is of void element type, it'll be treated as 'clear'.
+	 *                                                      If not set or null, skip check.
+	 *                                                      If empty array, skips stripping; otherwise, use input.
+	 *                         'clear'   : @param ?string[] HTML elements that should be emptied and replaced with a space.
+	 *                                                      If not set or null, skip check.
+	 *                                                      If empty array, skips stripping; otherwise, use input.
+	 *                         'strip'   : @param bool      If set, strip_tags() is performed before returning the output.
+	 *                                                      Recommended always true, since Regex doesn't understand XML.
+	 *                         'passes'  : @param int       The maximum number of passes 'space' may conduct. More is slower,
+	 *                                                      but more accurate.
 	 *                      }
 	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization/quoting.
 	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`. (togglable via `$args['strip']`)
 	 *                            Also note that their contents are maintained as-is, without added spaces.
 	 *                            It is why you should always list `style` and `script` in the `clear` array, never in 'space'.
 	 * @return string The output string without tags. May have many stray and repeated spaces.
-	 *                Not secure for display! Use esc_* functionality instead.
+	 *                Not secure for display! Don't trust this method. Always use esc_* functionality.
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
 
@@ -2009,9 +2011,6 @@ class Sanitize extends Admin_Pages {
 		 * There's no need to add these, for they are void content.
 		 *
 		 * Contains all form elements. Those must be stripped in almost any context.
-		 *
-		 * TODO: 'canvas', 'svg', 'noscript', 'select', 'textarea' are phrasing elements that we want cleared without spaces added.
-		 *       This is a non-issue, for it's beyond unlikely users put these in their content manually, let alone inline.
 		 */
 		$default_args = [
 			'space'  =>
@@ -2022,45 +2021,55 @@ class Sanitize extends Admin_Pages {
 			'passes' => 1,
 		];
 
-		// Void elements never have content. 'param', 'source', 'track',
-		$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'wbr' ];
-		// Phrase elements should be replaced without spacing. There are more phrasing (54) than block elements (39)...
-		// Blocks: address, area, article, aside, audio, blockquote, br, button, canvas, dd, details, dialog, div, dl, dt, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, li, ol, pre, table, td, template, textarea, th, tr, ul, video
-		// 'br' is a phrase element, but also a struct whitespace -- let's omit it so we can substitute it with a space as block.
-		$phrase = [ 'a', 'area', 'abbr', 'audio', 'b', 'bdo', 'bdi', 'button', 'canvas', 'cite', 'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img', 'input', 'ins', 'link', 'kbd', 'label', 'map', 'mark', 'meta', 'math', 'meter', 'noscript', 'object', 'output', 'picture', 'progress', 'q', 'ruby', 's', 'samp', 'script', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'svg', 'textarea', 'time', 'u', 'var', 'video', 'wbr' ];
-
 		if ( ! $args ) {
 			$args = $default_args;
 		} else {
 			// We don't use array_merge() here because we want to default these to [] when $args is given.
-			foreach ( [ 'clear', 'space' ] as $type ) {
-				if ( isset( $args[ $type ] ) )
-					$args[ $type ] = (array) ( $args[ $type ] ?: [] );
-			}
+			foreach ( [ 'clear', 'space' ] as $type )
+				$args[ $type ] = (array) ( $args[ $type ] ?? [] );
+
 			$args['strip']  = $args['strip'] ?? $default_args['strip'];
 			$args['passes'] = $args['passes'] ?? $default_args['passes'];
 		}
 
-		$marked_for_parsing = array_merge( $args['space'], $args['clear'] );
+		$parse = umemo( __METHOD__ . '/parse', null, $args['space'], $args['clear'] );
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( ! $parse ) {
+			// Void elements never have content. 'param', 'source', 'track',
+			$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'wbr' ];
+			// Phrase elements should be replaced without spacing. There are more phrasing (54) than block elements (39)...
+			// Blocks: address, area, article, aside, audio, blockquote, br, button, canvas, dd, details, dialog, div, dl, dt, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, li, ol, pre, table, td, template, textarea, th, tr, ul, video
+			// 'br' is a phrase element, but also a struct whitespace -- let's omit it so we can substitute it with a space as block.
+			$phrase = [ 'a', 'area', 'abbr', 'audio', 'b', 'bdo', 'bdi', 'button', 'canvas', 'cite', 'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img', 'input', 'ins', 'link', 'kbd', 'label', 'map', 'mark', 'meta', 'math', 'meter', 'noscript', 'object', 'output', 'picture', 'progress', 'q', 'ruby', 's', 'samp', 'script', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'svg', 'textarea', 'time', 'u', 'var', 'video', 'wbr' ];
 
-		$void_elements = array_intersect( $marked_for_parsing, $void );
-		$flow_elements = array_diff( $marked_for_parsing, $void );
+			$marked_for_parsing = array_merge( $args['space'], $args['clear'] );
 
-		$parse = [
-			// void = element without content.
-			'void_query'  => [
-				'phrase' => array_intersect( $void_elements, $phrase ),
-				'block'  => array_diff( $void_elements, $phrase ),
-			],
-			// fill = <normal | template | raw text | escapable text | foreign> element.
-			'clear_query' => [
-				'phrase' => array_intersect( $args['clear'], $phrase ),
-				'block'  => array_diff( $args['clear'], $phrase ),
-			],
-			'space_query' => [
-				'phrase' => array_intersect( $flow_elements, $args['space'] ),
-			],
-		];
+			$void_elements = array_intersect( $marked_for_parsing, $void );
+			$flow_elements = array_diff( $marked_for_parsing, $void );
+
+			$clear_elements = array_intersect( $flow_elements, $args['clear'] );
+
+			$parse = umemo(
+				__METHOD__ . '/parse',
+				[
+					// void = element without content.
+					'void_query'  => [
+						'phrase' => array_intersect( $void_elements, $phrase ),
+						'block'  => array_diff( $void_elements, $phrase ),
+					],
+					// fill = <normal | template | raw text | escapable text | foreign> element.
+					'clear_query' => [
+						'phrase' => array_intersect( $clear_elements, $phrase ),
+						'block'  => array_diff( $clear_elements, $phrase ),
+					],
+					'space_query' => [
+						'phrase' => array_intersect( $flow_elements, $args['space'] ),
+					],
+				],
+				$args['space'],
+				$args['clear']
+			);
+		}
 
 		foreach ( $parse as $query_type => $handles ) {
 			foreach ( $handles as $flow_type => $elements ) {
@@ -2114,7 +2123,7 @@ class Sanitize extends Admin_Pages {
 		}
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
-		return ( $args['strip'] ? \strip_tags( $input ) : $input ) ?? '';
+		return $args['strip'] ? \strip_tags( $input ) : $input;
 	}
 
 	/**

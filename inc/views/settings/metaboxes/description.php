@@ -46,7 +46,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		HTML::header_title( __( 'Advanced Generation Settings', 'autodescription' ) );
 
 		HTML::description(
-			__( 'The HTML content of your pages can be used to generate descriptions. The generator processes this HTML in passing layers to understand the layout. If the HTML is complex, not all layers may be processed, and you might find missing spaces between sentences. Increasing the maximum number of passes reduces the chance of this happening, but at the cost of performance.', 'autodescription' )
+			__( 'The HTML content of your pages can be used to generate descriptions. The generator processes this HTML in passing layers to understand the layout. If the HTML is complex, not all layers may be processed, and you might find spaces missing between sentences. Increasing the maximum number of passes reduces the chance of this happening, but at the cost of performance.', 'autodescription' )
 		);
 
 		/**
