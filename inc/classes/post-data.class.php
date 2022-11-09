@@ -741,7 +741,7 @@ class Post_Data extends Detect {
 	 *                2. The first and second parameters are now required.
 	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
 	 *                2. This method now converts the post meta to an integer, making the comparison work again.
-	 * @since 4.2.7 Fixed memoization for when no terms for a post can be found.
+	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.

@@ -250,101 +250,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.7 =
 
-We revamped the HTML parser... etc. etc.
-(DONE) updated description generator, here's an example for "Passes", where "Fast" will fail, but "Accurate" won't:
-<div>                            <!-- pass 1 -->
-	<div>                        <!-- pass 2 -->
-		<p>Hello</p><p>World</p> <!-- pass 3 -->
-	</div>                       <!-- pass 2 -->
-</div>                           <!-- pass 1 -->
+This minor update brings you a revamped HTML parser and a new option for tuning its accuracy for descriptions. First-time installers are now notified when metadata can be transported from other SEO plugins, the SEO Bar recognizes syntax from Rank Math, and Advanced Query Protection blocks new SEO attacks that could tank your rankings. We also [fixed a couple of bugs](https://theseoframework.com/?p=4021).
 
-**For everyone**
-
-* **Added:**
-	* Added Advanced Generation Settings: HTML parsing methods.
-		* When you find that the description generator is inaccurate in selecting content, or sticks two words together without spacing, considering upping the method. If this doesn't do anything, you should put it back on the fastest method.
-	* For first-time installers only, we test if leftover metadata exists of Yoast SEO and Rank Math. When found, we output a notice that suggests reading our data migration guide. This notice is conditional, this notice is shown when all these conditions are met:
-		1. The user can install plugins;
-		1. Admin screens `/index.php`, `/edit.php`, `/edit-tags.php`, or `admin.php?page=theseoframework-settings` is visited;
-		1. Seven days haven't passed since installation;
-		1. Up to 100 times accumulating all users (we want this to be there for the user to ponder, but not forever);
-		1. The notice hasn't been dismissed.
-	* Added title and description leftover syntax checks to the SEO Bar for Rank Math.
-* **Changed:**
-	* The sitemap transient settings have been moved from "General > Performance" to "Sitemap > General".
-* **Improved:**
-	* The SEO Bar now checks for more leftover syntax of Yoast SEO in titles and descriptions.
-	* Description generation now parses your page HTML twice by default.
-	* Advanced Query Protection now detects more rogue requests, specifically:
-		* `example.com/?search=text` when the homepage is static, where `a` can be anything.
-		* `example.com/?cat=text%2C2147483647%2C1text`, where `2147483647` is a category ID that doesn't exist, and the final `1` is a category that does exist, where `text` is anything non-numeric.
-		* Put online a link to any site with these rogue requests, and once Googlebot spots those links, their site will be taken off from Google within a matter of days. The more links you add, the faster this processes. Our protection is genuine technical SEO, unique to TSF.
-	* SEO Bar now detects more types of Yoast SEO's title and description variable syntax.
-	* Description and title sanitization now trim non-breaking spaces from sentences more robustly when multiline input is processed.
-	* Descriptions are no longer cut off after decimal pointers. Before, "WordPress 6.1.0 is out" would cut off with "WordPress 6."; now, "6.1.0" is recognized as a single digit.
-* **Fixed:**
-	* Fixed a regression where the homepage-as-page comment pagination and protection (private/password protected) index protection was ignored.
-		* This was a non-issue because TSF never created canonical URLs for comment pages, it only increased crawling time.
-	* Posts are no longer removed from the sitemap when they're excluded from archives.
-* **Other:**
-	* We reenabled our yearly sale notification. The [WP Notify project](https://github.com/WordPress/wp-feature-notifications) is underway, helping us to make this less annoying.
-		* Again, no, this is not a slippery slope; we're not testing waters. Last year we received a negative review because the reviewer was foreboding the worst; still, we cannot sustain this project well without reminding our users we're operating a full-time business.
-		* Several conditions must be met before the link is displayed.
-		* Add `define( 'TSF_DISABLE_SUGGESTIONS', true );` to `wp-config.php` to permanently block all (current and future) hints that help us sustain this project.
-
-**For translators:**
-	* **Added:** New translations are available.
-	* **Updated:** TODO The POT file contains new translations.
-
-**For developers**
-
-* **Added:**
-	* Option `auto_descripton_html_method`, accepts values `fast`, `accurate`, and `thorough`. Defaults to `fast`.
-	* Filter `the_seo_framework_build_sitemap_base` now runs whenever the base sitemap is being generated.
-	* Method `s_description_html_method()`, for sanitizating option `auto_descripton_html_method`.
-	* Method `has_unprocessed_syntax()`, which detects any valid syntax in text from Yoast SEO and Rank Math.
-	* Method `has_rankmath_syntax()`, used by `has_unprocessed_syntax()`.
-* **Changed:**
-	* Method `s_term_meta()` now clears indexes with empty values.
-	* Method `get_current_post_author_meta()` no longer applies memoization.
-	* Filter `the_seo_framework_input_guidelines` added two more paramters (`$c_adjust` and `$locale`).
-	* Filter `the_seo_framework_scripts` now returns a sequential array of scripts, instead of a multidimension array of sequential arrays of scripts.
-		* `[ 0 => [ 0 => scriptA, 1 => scriptB ], 1 => scriptC ]` is now `[ 0 => scriptA, 1 => scriptB, 2 => scriptC ]`
-	* Method `strip_tags_cs()`:
-		1. Revamped the HTML lookup: it now (more) accurately processes HTML, and is less likely to be fooled by HTML tags in attributes.
-		1. The 'space' index no longer has default `fieldset`, `figcaption`, `form`, `main`, `nav`, `pre`, `table`, and `tfoot`.
-		1. The space index now has added to default `details`, `hgroup`, and `hr`.
-		1. The 'clear' index no longer has default `bdo`, `hr`, `link`, `meta`, `option`, `samp`, `style`, and `var`.
-		1. The 'clear' index now has added to default `area`, `audio`, `datalist`, `del`, `dialog`, `fieldset`, `form`, `map`, `menu`, `meter`, `nav`, `object`, `output`, `pre`, `progress`, `s`, `table`, and `template`.
-		1. Added the 'passes' index to `$args`. This tells the maximum passes 'space' may process. Read TSF option `auto_descripton_html_method` to use the user-defined method.
-		1. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit those from '$args' so it falls through to `strip_tags()`.
-		1. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
-	* Method `s_excerpt()`:
-		1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
-	 	1. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`, `object`, `output`, `progress`, `s`, `template`, and `ul`.
-		1. Now adds spaces around `blockquote`, `details`, and `hr`.
-		1. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
-		1. Now processed the `auto_descripton_html_method` option for stripping tags.
-	* Method `array_merge_recursive_distinct()`:
-		1. Now supports a single array entry without causing issues.
-		1. Reduced number of opcodes by roughly 27% by reworking it.
-		1. Now no longer throws warnings with qubed+ arrays.
-		1. Now no longer prevents scalar values overwriting arrays.
-	* Method `is_query_exploited()`:
-		1. Added detection `not_home_as_page`, specifically for query variable `search`.
-		1. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
-	* Methods `s_description_raw()` and `s_title_raw()` now convert `nbsp` before `singleline`, because `singleline` also uses `trim()` on old `nbsp`.
-		* Basically, this prevents leftover spaces at the start or end of the description.
-	* Method `The_SEO_Framework\Builders\Images::get_content_image_details()`:
-		1. No longer accidentally matches `<imganything` or `<img notsrc="source">`.
-		1. Can no longer use images from `datalist`, `dialog`, `hgroup`, `menu`, `ol`, `object`, `output`, and `template` elements.
-		1. No longer expect images from `dd`, `dt`, `figcaption`, `li`, `tfoot`, `br`, `hr`, `link`, `meta`, `option`, `samp`.
-	* Added method `auto_descripton_html_method()`. I now see that this method has method in its name. Tough luck.
-	* `Method `trim_excerpt()` now considers floating numerics as one word.
-* **Fixed:**
-	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
-	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
-	* Addressed an issue where TSF's description and title input lookups were strictly depending on their presence, causing JS errors when List Edit or metaboxes were unloaded programmatically.
+*Psst: Check out our [Cyber Sale](https://theseoframework.com/?p=3527).*
 
 = 4.2.6 =
 
@@ -381,8 +289,6 @@ This minor update addresses a few regressions brought in v4.2.0; it fixes the ca
 * You will find that the sitemap's stylesheet now has its URLs centered; it also supports mobile devices.
 * Developers can now enjoy using the new `tsf()` function -- an alias of `the_seo_framework()`.
 * If you're a developer, you should also check out our perfectly tuned `memo()`. `umemo()`, and `fmemo()` [functions](https://github.com/sybrew/the-seo-framework/blob/4.2.0/inc/functions/api.php#L155-L335), which help make TSF so performant.
-
-*Psst: Check out our [Cyber Sale](https://theseoframework.com/?p=3527).*
 
 **Perfect**
 
