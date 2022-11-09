@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.5
 Tested up to: 6.1
 Requires PHP: 7.2.0
-Stable tag: 4.2.7
+Stable tag: 4.2.7.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -253,6 +253,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 This minor update brings you a revamped HTML parser and a new option for tuning its accuracy for descriptions. First-time installers are now notified when metadata can be transported from other SEO plugins, the SEO Bar recognizes syntax from Rank Math, and Advanced Query Protection blocks new SEO attacks that could tank your rankings. We also [fixed a couple of bugs](https://theseoframework.com/?p=4021).
 
 *Psst: Check out our [Cyber Sale](https://theseoframework.com/?p=3527).*
+
+*v4.7.2.1: Fixed syntax for PHP 7.2. Props [opicron](https://wordpress.org/support/topic/syntax-error-226/#post-16183422).*
 
 = 4.2.6 =
 

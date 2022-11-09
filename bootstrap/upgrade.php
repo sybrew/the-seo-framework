@@ -503,7 +503,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 			if ( $wpdb->get_var(
 				// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table/$indexes are escaped.
-				"SELECT 1 FROM `$table` WHERE meta_key IN ('$indexes') LIMIT 1",
+				"SELECT 1 FROM `$table` WHERE meta_key IN ('$indexes') LIMIT 1"
 			) ) {
 				$found_titles[] = $data['title'];
 			}
