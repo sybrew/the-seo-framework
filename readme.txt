@@ -250,8 +250,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.7 =
 
-TODO has_yoast_syntax & clear_query need rechecking. has_rank_math_syntax needs adding.
-
 We revamped the HTML parser... etc. etc.
 (DONE) updated description generator, here's an example for "Passes", where "Fast" will fail, but "Accurate" won't:
 <div>                            <!-- pass 1 -->
@@ -259,8 +257,6 @@ We revamped the HTML parser... etc. etc.
 		<p>Hello</p><p>World</p> <!-- pass 3 -->
 	</div>                       <!-- pass 2 -->
 </div>                           <!-- pass 1 -->
-
-TODO add link explaining passes.
 
 **For everyone**
 
@@ -348,17 +344,7 @@ TODO add link explaining passes.
 * **Fixed:**
 	* Method `get_generated_single_term_title()` now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	* Method `get_primary_term()`, fixed memoization for when no terms for a post can be found.
-
-TODO PUNT below to 4.2.7?
-
-TODO terms that have no SEO data still get an array stored by TSF, full of empty entries. Is this necessary, can we collapse/purge?
-	-> array_filter the store at least?
-
-TODO https://wordpress.org/support/topic/quick-edit-bulk-conflict-with-co-authors-plus/#post-16083066
-	^ that link explains a bug where tsf-le crashes when no tag can be found via:
-	add_action( 'the_seo_framework_after_admin_init', function() {
-		remove_action( 'admin_init', [ tsf(), '_init_list_edit' ] );
-	} );
+	* Addressed an issue where TSF's description and title input lookups were strictly depending on their presence, causing JS errors when List Edit or metaboxes were unloaded programmatically.
 
 = 4.2.6 =
 
