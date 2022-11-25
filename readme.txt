@@ -248,6 +248,24 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+= 4.2.8
+
+**For everyone**
+
+* **Fixed:**
+	* When stripping tags, elements with that start with exactly the same text as others won't be preemptively closed. Listing all faults:
+		* `a` elements can no longer be closed by `abbr`, `address`, `aside`, and `audio` (but not `area`, since that is a void element).
+		* `b` elements can no longer be closed by `bdo`, `bdi`, `blockquote`, and `button` (but not `br`, since that is a void element).
+		* `i` elements can no longer be cloased by `iframe` and `ins` (but not `input` and `img`, since those are void elements).
+		* This bug was not replicable on anyone's site, since we do not AI-strip `a`, `b`, nor `i` elements in our contexts (we leave those as inline text). So, eh... why did we write this out? Ah, yes. Open Source means sharing information.
+	* Rank Math variable syntax is now updated to reflect the real world, instead of the world Yoast SEO lives in.
+
+**For developers**
+
+* **Updated:**
+	* `tsf()->has_rankmath_syntax()`, actualized the variable list.
+	* `tsf()->strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
+
 = 4.2.7 =
 
 This minor update brings you a revamped HTML parser and a new option for tuning its accuracy for descriptions. First-time installers are now notified when metadata can be transported from other SEO plugins, the SEO Bar recognizes syntax from Rank Math, and Advanced Query Protection blocks new SEO attacks that could tank your rankings. We also [fixed a couple of bugs](https://theseoframework.com/?p=4021).

@@ -1968,6 +1968,7 @@ class Sanitize extends Admin_Pages {
 	 *              7. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit
 	 *                 those from '$args' so it falls through to `strip_tags()`.
 	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
+	 * @since 4.2.8 Elements with that start with exactly the same text as others won't be preemptively closed.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
@@ -2104,10 +2105,10 @@ class Sanitize extends Admin_Pages {
 						// This is because we process the tags from the outer layer to the most inner. Each pass goes deeper.
 						while ( $i++ < $passes ) {
 							$pre_pass_input = $input;
-							// Akin to https://regex101.com/r/ml2iBW/16. (This might be outdated, copy work!)
+							// Akin to https://regex101.com/r/mOWqoL/1. (This might be outdated, copy work!)
 							$input = preg_replace(
 								sprintf(
-									'/<(%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+?)+)*?(?:\/>(*ACCEPT))?>((?:[^<]*+(?:<(?!\/?\1)[^<]+)*|(?R)|$(*ACCEPT))+?)<\/\1[^>]*>/i',
+									'/<(%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+?)+)*?(?:\/>(*ACCEPT))?>((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*|(?R)|$(*ACCEPT))+?)<\/\1\b[^>]*>/i',
 									implode( '|', $elements )
 								),
 								$replacement,

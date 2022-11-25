@@ -1374,8 +1374,9 @@ class Detect extends Render {
 	 * Determines if the input text has transformative Rank Math syntax.
 	 *
 	 * @since 4.2.7
+	 * @since 4.2.8 Actualized the variable list.
 	 * @link <https://theseoframework.com/extensions/transport/#faq/what-data-is-transformed>
-	 *       Rank Math has no documentation on this list.
+	 *       Rank Math has no documentation on this list, but we sampled their code.
 	 *
 	 * @param string $text The text to evaluate.
 	 * @return bool
@@ -1399,28 +1400,28 @@ class Detect extends Render {
 							'currenttime', // Rank Math has two currenttime, this one is simple.
 							'filename',
 							'focuskw',
+							'group_desc',
+							'group_name',
+							'keywords',
 							'org_name',
 							'org_logo',
 							'org_url',
 							'page',
 							'pagenumber',
 							'pagetotal',
+							'post_thumbnail',
 							'primary_category',
-							'searchphrase',
-							'term404',
+							'primary_taxonomy_terms',
+							'url',
 							'wc_brand',
 							'wc_price',
 							'wc_shortdesc',
 							'wc_sku',
+							'currenttime', // Rank Math has two currenttime, this one is simple.
 
 							// These are transformed by Transport
-							'archive_title',
-							'author_first_name',
-							'author_last_name',
-							'caption',
 							'category',
-							'category_description',
-							'category_title',
+							'categories',
 							'currentdate',
 							'currentday',
 							'currentmonth',
@@ -1432,27 +1433,38 @@ class Detect extends Render {
 							'modified',
 							'name',
 							'parent_title',
-							'permalink',
-							'post_content',
-							'post_year',
-							'post_month',
-							'post_day',
+							'post_author',
 							'pt_plural',
 							'pt_single',
+							'seo_title',
+							'seo_description',
 							'sep',
 							'sitedesc',
 							'sitename',
 							'tag',
-							'tag_description',
-							'term_description',
+							'tags',
 							'term',
+							'term_description',
 							'title',
 							'user_description',
 							'userid',
 						]
 					),
 					// See RankMath\Replace_Variables\Replacer::set_up_replacements();
-					'wildcard_end' => implode( '|', [ 'count', 'currenttime', 'customfield', 'customterm' ] ),
+					'wildcard_end' => implode(
+						'|',
+						[
+							'categories',
+							'count',
+							'currenttime',
+							'customfield',
+							'customterm',
+							'customterm_desc',
+							'date',
+							'modified',
+							'tags',
+						]
+					),
 				]
 			);
 		}
