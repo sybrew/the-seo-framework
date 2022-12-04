@@ -252,7 +252,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Can now return custom post type archive titles.
 	 * @see $this->get_twitter_title()
@@ -298,7 +298,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to Open Graph title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @see $this->get_twitter_title()
@@ -408,7 +408,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Can now return custom post type archive titles.
 	 * @see $this->get_open_graph_title()
@@ -443,7 +443,7 @@ class Generate_Title extends Generate_Description {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @see $this->get_open_graph_title()
@@ -524,7 +524,7 @@ class Generate_Title extends Generate_Description {
 	 * Gets a custom title, based on current query, without additions or prefixes.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Can now return custom post type archive titles.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
@@ -569,7 +569,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 3.1.4 Now uses the 'id' to get custom singular title.
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()

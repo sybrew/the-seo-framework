@@ -674,6 +674,7 @@ class Detect extends Render {
 	 * @since 4.0.5
 	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
 	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
+	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -730,11 +731,11 @@ class Detect extends Render {
 				'requires_s'       => [
 					'sentence',
 				],
-				'not_home_as_page' => [
-					// No public application registered in WP for this, yet it is a public variable.
-					// Having any other valid query mitigates.
-					'search',
-				],
+				// When the blog (home) is a page then these requests to any registered query variable will cause issues,
+				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_ID() )` above).
+				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
+				// TODO: We only need one to pass this test. We could use array_key_first()... (PHP7.3+) -> Might be mixed.
+				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
 			]
 		);
 

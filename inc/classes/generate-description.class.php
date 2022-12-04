@@ -108,7 +108,7 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now returns custom descriptions for post type archives.
@@ -148,7 +148,7 @@ class Generate_Description extends Generate {
 	 * Falls back to meta description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 1. Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 1. Now tests for the static frontpage metadata prior getting fallback data.
 	 *              2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
@@ -238,7 +238,7 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 1. Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 1. Now tests for the static frontpage metadata prior getting fallback data.
 	 *              2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
@@ -290,7 +290,7 @@ class Generate_Description extends Generate {
 	 * Falls back to Open Graph description.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 1. Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 1. Now tests for the static frontpage metadata prior getting fallback data.
 	 *              2. Now obtains custom field data for terms.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
@@ -383,7 +383,7 @@ class Generate_Description extends Generate {
 	 * Gets a custom description, based on expected or current query, without escaping.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now returns custom descriptions for post type archives.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
@@ -427,7 +427,7 @@ class Generate_Description extends Generate {
 	 * Gets a custom description, based on input arguments query, without escaping.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()

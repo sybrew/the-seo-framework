@@ -192,7 +192,7 @@ class Generate_Url extends Generate_Title {
 	 * Builds canonical URL from input arguments.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.2 Now tests for the homepage as page prior getting custom field data.
+	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Can now fetch custom canonical URL for terms.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @see $this->get_canonical_url()
@@ -324,7 +324,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->has_page_on_front() ) {
 			if ( $this->is_static_frontpage( $query_id ) ) {
-				// Yes, use the pagination base for the homepage-as-page!
+				// Yes, we use the pagination base for the static frontpage.
 				$url = $this->add_pagination_to_url( $url, $this->page(), true );
 			}
 		} elseif ( (int) \get_option( 'page_for_posts' ) === $query_id ) {

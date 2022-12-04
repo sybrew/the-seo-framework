@@ -1090,8 +1090,8 @@ class Query extends Core {
 	 * @since 2.6.0
 	 * @since 3.2.4 1. Added overflow protection.
 	 *              2. Now always returns 1 on the admin screens.
-	 * @TODO Add better protection? This can get filled by users when is_paged() is true.
-	 *       WordPress has no protection/test for this, either.
+	 * @since 4.2.8 Now returns the last page on pagination overflow,
+	 *              but only when we're on a paginated static frontpage.
 	 *
 	 * @return int (R>0) $page Always a positive number.
 	 */
@@ -1102,17 +1102,23 @@ class Query extends Core {
 			return $memo;
 
 		if ( $this->is_multipage() ) {
-			$page = (int) \get_query_var( 'page' );
+			$page = ( (int) \get_query_var( 'page' ) ) ?: 1;
+			$max  = $this->numpages();
 
-			if ( $page > $this->numpages() ) {
+			if ( $page > $max ) {
 				// On overflow, WP returns the first page.
-				$page = 1;
+				// Exception: When we are on a paginated static frontpage, WP returns the last page...
+				if ( $this->is_static_frontpage() ) {
+					$page = $max;
+				} else {
+					$page = 1;
+				}
 			}
 		} else {
 			$page = 1;
 		}
 
-		return $this->memo_query( $page ?: 1 );
+		return $this->memo_query( $page );
 	}
 
 	/**
@@ -1132,7 +1138,7 @@ class Query extends Core {
 			return $memo;
 
 		if ( $this->is_multipage() ) {
-			$paged = (int) \get_query_var( 'paged' );
+			$paged = ( (int) \get_query_var( 'paged' ) ) ?: 1;
 			$max   = $this->numpages();
 
 			if ( $paged > $max ) {
@@ -1143,7 +1149,7 @@ class Query extends Core {
 			$paged = 1;
 		}
 
-		return $this->memo_query( $paged ?: 1 );
+		return $this->memo_query( $paged );
 	}
 
 	/**

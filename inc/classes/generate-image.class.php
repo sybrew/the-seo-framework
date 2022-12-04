@@ -45,7 +45,7 @@ class Generate_Image extends Generate_Url {
 	 * TODO yield from and memoize deeper? Iterators calling this method currently do not affect the generators.
 	 *
 	 * @param bool $single Whether to return at most a single array item.
-	 * @return array The image details array, sequential: int => {
+	 * @return array[] The image details array, sequential: int => {
 	 *    string url:    The image URL,
 	 *    int    id:     The image ID,
 	 *    int    width:  The image width in pixels,
@@ -70,7 +70,7 @@ class Generate_Image extends Generate_Url {
 	 * @param string     $context The filter context. Default 'social'.
 	 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
 	 *                            It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
-	 * @return array The image details array, sequential: int => {
+	 * @return array[] The image details array, sequential: int => {
 	 *    string url:    The image URL,
 	 *    int    id:     The image ID,
 	 *    int    width:  The image width in pixels,

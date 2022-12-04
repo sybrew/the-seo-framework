@@ -531,6 +531,7 @@ final class Debug {
 		$is_singular_archive    = $tsf->is_singular_archive();
 		$is_term_meta_capable   = $tsf->is_term_meta_capable();
 		$is_post_type_supported = $tsf->is_post_type_supported();
+		$has_page_on_front      = $tsf->has_page_on_front();
 		$is_taxonomy_supported  = $tsf->is_taxonomy_supported();
 		$get_post_type          = \get_post_type();
 		$get_post_type_real_ID  = $tsf->get_post_type_real_ID();
@@ -540,6 +541,10 @@ final class Debug {
 		$is_taxonomy_disabled   = $tsf->is_taxonomy_disabled();
 		$is_post_type_archive   = \is_post_type_archive();
 		$is_protected           = $tsf->is_protected( $page_id );
+		$wp_doing_ajax          = \wp_doing_ajax();
+		$wp_doing_cron          = \wp_doing_cron();
+		$wp_is_json_request     = \wp_is_json_request();
+		$wp_is_rest             = \defined( 'REST_REQUEST' ) && REST_REQUEST;
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
