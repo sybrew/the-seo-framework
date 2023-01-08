@@ -20,13 +20,13 @@ if ( function_exists( 'tsf_extension_manager' )
 	)
 ) {
 	$_extensions_button = sprintf(
-		'<a href="%s" class="button">%s</a>',
+		'<a href="%s" class=button>%s</a>',
 		menu_page_url( tsf_extension_manager()->seo_extensions_page_slug, false ),
 		esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
 	);
 } else {
 	$_extensions_button = $this->_display_extension_suggestions() ? sprintf(
-		'<a href="%s" class="button" rel="noreferrer noopener" target=_blank>%s</a>',
+		'<a href="%s" class=button rel="noreferrer noopener" target=_blank>%s</a>',
 		'https://theseoframework.com/?p=3599',
 		esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
 	) : '';

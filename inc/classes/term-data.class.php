@@ -450,7 +450,7 @@ class Term_Data extends Post_Data {
 	 *
 	 * @param string $get       Whether to get the names or objects.
 	 * @param string $post_type The post type. Will default to current post type.
-	 * @return array The post type objects or names.
+	 * @return object[]|string[] The post type taxonomy objects or names.
 	 */
 	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
 
@@ -467,16 +467,7 @@ class Term_Data extends Post_Data {
 			}
 		);
 
-		switch ( $get ) {
-			case 'names':
-				$taxonomies = array_keys( $taxonomies );
-				break;
-
-			default:
-			case 'objects':
-				break;
-		}
-
-		return $taxonomies;
+		// If names isn't $get, assume objects.
+		return 'names' === $get ? array_keys( $taxonomies ) : $taxonomies;
 	}
 }

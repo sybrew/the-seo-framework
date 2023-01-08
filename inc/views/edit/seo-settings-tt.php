@@ -101,8 +101,8 @@ $robots_settings = [
 <table class="form-table tsf-term-meta">
 	<tbody>
 		<?php if ( $this->get_option( 'display_seo_bar_metabox' ) ) : ?>
-		<tr class="form-field">
-			<th scope="row" valign="top"><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
+		<tr class=form-field>
+			<th scope=row valign=top><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 			<td>
 				<?php
 				// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
@@ -112,8 +112,8 @@ $robots_settings = [
 		</tr>
 		<?php endif; ?>
 
-		<tr class="form-field">
-			<th scope="row" valign="top">
+		<tr class=form-field>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[doctitle]">
 					<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
 					<?php
@@ -133,7 +133,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type="text" name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size="40" autocomplete=off />
+					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size=40 autocomplete=off />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -152,8 +152,8 @@ $robots_settings = [
 					);
 					?>
 				</div>
-				<label for="autodescription-meta[title_no_blog_name]" class="tsf-term-checkbox-wrap">
-					<input type="checkbox" name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value="1" <?php checked( $this->get_term_meta_item( 'title_no_blog_name' ) ); ?> />
+				<label for="autodescription-meta[title_no_blog_name]" class=tsf-term-checkbox-wrap>
+					<input type=checkbox name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value=1 <?php checked( $this->get_term_meta_item( 'title_no_blog_name' ) ); ?> />
 					<?php
 					esc_html_e( 'Remove the site title?', 'autodescription' );
 					echo ' ';
@@ -163,8 +163,8 @@ $robots_settings = [
 			</td>
 		</tr>
 
-		<tr class="form-field">
-			<th scope="row" valign="top">
+		<tr class=form-field>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[description]">
 					<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
 					<?php
@@ -183,7 +183,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows="4" cols="50" class="large-text" autocomplete=off><?= $this->esc_attr_preserve_amp( $description ) ?></textarea>
+				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= $this->esc_attr_preserve_amp( $description ) ?></textarea>
 				<?php
 				$this->output_js_description_elements(); // legacy
 				$this->output_js_description_data(
@@ -227,8 +227,8 @@ $this->output_js_social_data(
 
 <table class="form-table tsf-term-meta">
 	<tbody>
-		<tr class="form-field" <?= $show_og ? '' : 'style=display:none' ?>>
-			<th scope="row" valign="top">
+		<tr class=form-field <?= $show_og ? '' : 'style=display:none' ?>>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[og_title]">
 					<strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong>
 				</label>
@@ -238,14 +238,14 @@ $this->output_js_social_data(
 				?>
 			</th>
 			<td>
-				<div id="tsf-og-title-wrap">
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type="text" value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size="40" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
+				<div id=tsf-og-title-wrap>
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size=40 autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
 				</div>
 			</td>
 		</tr>
 
-		<tr class="form-field" <?= $show_og ? '' : 'style=display:none' ?>>
-			<th scope="row" valign="top">
+		<tr class=form-field <?= $show_og ? '' : 'style=display:none' ?>>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[og_description]">
 					<strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong>
 				</label>
@@ -255,12 +255,12 @@ $this->output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows="4" cols="50" class="large-text" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?= $this->esc_attr_preserve_amp( $og_description ) ?></textarea>
+				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?= $this->esc_attr_preserve_amp( $og_description ) ?></textarea>
 			</td>
 		</tr>
 
-		<tr class="form-field" <?= $show_tw ? '' : 'style=display:none' ?>>
-			<th scope="row" valign="top">
+		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[tw_title]">
 					<strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
 				</label>
@@ -270,14 +270,14 @@ $this->output_js_social_data(
 				?>
 			</th>
 			<td>
-				<div id="tsf-tw-title-wrap">
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type="text" value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size="40" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
+				<div id=tsf-tw-title-wrap>
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size=40 autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
 				</div>
 			</td>
 		</tr>
 
-		<tr class="form-field" <?= $show_tw ? '' : 'style=display:none' ?>>
-			<th scope="row" valign="top">
+		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[tw_description]">
 					<strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
 				</label>
@@ -287,13 +287,13 @@ $this->output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows="4" cols="50" class="large-text" autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?= $this->esc_attr_preserve_amp( $tw_description ) ?></textarea>
+				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?= $this->esc_attr_preserve_amp( $tw_description ) ?></textarea>
 			</td>
 		</tr>
 
-		<tr class="form-field">
-			<th scope="row" valign="top">
-				<label for="autodescription_meta_socialimage-url">
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for=autodescription_meta_socialimage-url>
 					<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 					<?php
 					echo ' ';
@@ -305,8 +305,8 @@ $this->output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type="url" name="autodescription-meta[social_image_url]" id="autodescription_meta_socialimage-url" placeholder="<?= esc_attr( $image_placeholder ) ?>" value="<?= esc_attr( $social_image_url ) ?>" size="40" autocomplete=off />
-				<input type="hidden" name="autodescription-meta[social_image_id]" id="autodescription_meta_socialimage-id" value="<?= absint( $social_image_id ) ?>" disabled class="tsf-enable-media-if-js" />
+				<input type=url name="autodescription-meta[social_image_url]" id=autodescription_meta_socialimage-url placeholder="<?= esc_attr( $image_placeholder ) ?>" value="<?= esc_attr( $social_image_url ) ?>" size=40 autocomplete=off />
+				<input type=hidden name="autodescription-meta[social_image_id]" id=autodescription_meta_socialimage-id value="<?= absint( $social_image_id ) ?>" disabled class=tsf-enable-media-if-js />
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php
 					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
@@ -322,8 +322,8 @@ $this->output_js_social_data(
 
 <table class="form-table tsf-term-meta">
 	<tbody>
-		<tr class="form-field">
-			<th scope="row" valign="top">
+		<tr class=form-field>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[canonical]">
 					<strong><?php esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong>
 					<?php
@@ -336,12 +336,12 @@ $this->output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= esc_attr( $canonical_placeholder ) ?>" value="<?= esc_attr( $canonical ) ?>" size="40" autocomplete=off />
+				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= esc_attr( $canonical_placeholder ) ?>" value="<?= esc_attr( $canonical ) ?>" size=40 autocomplete=off />
 			</td>
 		</tr>
 
-		<tr class="form-field">
-			<th scope="row" valign="top">
+		<tr class=form-field>
+			<th scope=row valign=top>
 				<?php
 				esc_html_e( 'Robots Meta Settings', 'autodescription' );
 				echo ' ';
@@ -380,8 +380,8 @@ $this->output_js_social_data(
 			</td>
 		</tr>
 
-		<tr class="form-field">
-			<th scope="row" valign="top">
+		<tr class=form-field>
+			<th scope=row valign=top>
 				<label for="autodescription-meta[redirect]">
 					<strong><?php esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
 					<?php
@@ -394,7 +394,7 @@ $this->output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" value="<?= esc_attr( $redirect ) ?>" size="40" autocomplete=off />
+				<input type=url name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" value="<?= esc_attr( $redirect ) ?>" size=40 autocomplete=off />
 			</td>
 		</tr>
 	</tbody>

@@ -143,16 +143,16 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		);
 		?>
 		<p>
-			<label for="tsf_fb_socialimage-url">
+			<label for=tsf_fb_socialimage-url>
 				<strong><?php esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
 				<?php HTML::make_info( __( 'When no image is available from the page or term, this fallback image will be used instead.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="url" name="<?php Input::field_name( 'social_image_fb_url' ); ?>" id="tsf_fb_socialimage-url" value="<?= esc_url( $this->get_option( 'social_image_fb_url' ) ) ?>" />
-			<input type="hidden" name="<?php Input::field_name( 'social_image_fb_id' ); ?>" id="tsf_fb_socialimage-id" value="<?= absint( $this->get_option( 'social_image_fb_id' ) ) ?>" disabled class="tsf-enable-media-if-js" />
+			<input class=large-text type=url name="<?php Input::field_name( 'social_image_fb_url' ); ?>" id=tsf_fb_socialimage-url value="<?= esc_url( $this->get_option( 'social_image_fb_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'social_image_fb_id' ); ?>" id=tsf_fb_socialimage-id value="<?= absint( $this->get_option( 'social_image_fb_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
-		<p class="hide-if-no-tsf-js">
+		<p class=hide-if-no-tsf-js>
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo Form::get_image_uploader_form( [ 'id' => 'tsf_fb_socialimage' ] );
@@ -169,7 +169,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'theme_color' ); ?>" class="tsf-color-picker" id="<?php Input::field_id( 'theme_color' ); ?>" value="<?= esc_attr( $this->get_option( 'theme_color' ) ) ?>" data-tsf-default-color="" />
+			<input type=text name="<?php Input::field_name( 'theme_color' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'theme_color' ); ?>" value="<?= esc_attr( $this->get_option( 'theme_color' ) ) ?>" data-tsf-default-color="" />
 		</p>
 		<hr>
 		<?php
@@ -214,7 +214,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'facebook_appid' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'facebook_appid' ); ?>" placeholder="<?= esc_attr( $fb_appid_placeholder ) ?>" value="<?= esc_attr( $fb_appid ) ?>" />
+			<input type=text name="<?php Input::field_name( 'facebook_appid' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'facebook_appid' ); ?>" placeholder="<?= esc_attr( $fb_appid_placeholder ) ?>" value="<?= esc_attr( $fb_appid ) ?>" />
 		</p>
 
 		<p>
@@ -230,7 +230,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="url" name="<?php Input::field_name( 'facebook_publisher' ); ?>" class="large-text" id="<?php Input::field_id( 'facebook_publisher' ); ?>" placeholder="<?= esc_attr( $fb_publisher_placeholder ) ?>" value="<?= esc_attr( $fb_publisher ) ?>" />
+			<input type=url name="<?php Input::field_name( 'facebook_publisher' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_publisher' ); ?>" placeholder="<?= esc_attr( $fb_publisher_placeholder ) ?>" value="<?= esc_attr( $fb_publisher ) ?>" />
 		</p>
 
 		<p>
@@ -247,7 +247,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		</p>
 		<?php HTML::description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type="url" name="<?php Input::field_name( 'facebook_author' ); ?>" class="large-text" id="<?php Input::field_id( 'facebook_author' ); ?>" placeholder="<?= esc_attr( $fb_author_placeholder ) ?>" value="<?= esc_attr( $fb_author ) ?>" />
+			<input type=url name="<?php Input::field_name( 'facebook_author' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_author' ); ?>" placeholder="<?= esc_attr( $fb_author_placeholder ) ?>" value="<?= esc_attr( $fb_author ) ?>" />
 		</p>
 		<?php
 		break;
@@ -267,7 +267,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		?>
 		<hr>
 
-		<fieldset id="tsf-twitter-cards">
+		<fieldset id=tsf-twitter-cards>
 			<legend><?php HTML::header_title( __( 'Twitter Card Type', 'autodescription' ) ); ?></legend>
 			<?php
 			HTML::description(
@@ -275,12 +275,12 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			);
 			?>
 
-			<p class="tsf-fields">
+			<p class=tsf-fields>
 			<?php
 			foreach ( $twitter_card as $type => $name ) {
 				?>
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'twitter_card' ); ?>" id="<?php Input::field_id( "twitter_card_{$type}" ); ?>" value="<?= esc_attr( $type ) ?>" <?php checked( $this->get_option( 'twitter_card' ), $type ); ?> />
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'twitter_card' ); ?>" id="<?php Input::field_id( "twitter_card_{$type}" ); ?>" value="<?= esc_attr( $type ) ?>" <?php checked( $this->get_option( 'twitter_card' ), $type ); ?> />
 					<label for="<?php Input::field_id( "twitter_card_{$type}" ); ?>">
 						<span>
 							<?php
@@ -309,7 +309,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		?>
 
 		<p>
-			<label for="<?php Input::field_id( 'twitter_site' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'twitter_site' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Website Twitter Profile', 'autodescription' ); ?></strong>
 				<?php
 				echo ' ';
@@ -321,11 +321,11 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'twitter_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_site' ); ?>" placeholder="<?= esc_attr( $tw_site_placeholder ) ?>" value="<?= esc_attr( $tw_site ) ?>" />
+			<input type=text name="<?php Input::field_name( 'twitter_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_site' ); ?>" placeholder="<?= esc_attr( $tw_site_placeholder ) ?>" value="<?= esc_attr( $tw_site ) ?>" />
 		</p>
 
 		<p>
-			<label for="<?php Input::field_id( 'twitter_creator' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'twitter_creator' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Twitter Author Fallback Profile', 'autodescription' ); ?></strong>
 				<?php
 				echo ' ';
@@ -338,7 +338,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		</p>
 		<?php HTML::description( __( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'twitter_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_creator' ); ?>" placeholder="<?= esc_attr( $tw_creator_placeholder ) ?>" value="<?= esc_attr( $tw_creator ) ?>" />
+			<input type=text name="<?php Input::field_name( 'twitter_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_creator' ); ?>" placeholder="<?= esc_attr( $tw_creator_placeholder ) ?>" value="<?= esc_attr( $tw_creator ) ?>" />
 		</p>
 		<?php
 		break;

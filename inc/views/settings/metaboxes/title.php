@@ -179,7 +179,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			<?php
 			HTML::description( __( 'If the title consists of multiple parts, then the separator will go in-between them.', 'autodescription' ) );
 			?>
-			<p id="tsf-title-separator" class="tsf-fields">
+			<p id=tsf-title-separator class=tsf-fields>
 			<?php
 			foreach ( $title_separator as $name => $html ) {
 				vprintf(
@@ -229,12 +229,12 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 	case 'title_additions_tab':
 		?>
 		<p>
-			<label for="<?php Input::field_id( 'site_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'site_title' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Site Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type="text" name="<?php Input::field_name( 'site_title' ); ?>" class="large-text" id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( $this->get_filtered_raw_blogname() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( $this->get_filtered_raw_blogname() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( __( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );
@@ -249,9 +249,9 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		?>
 		<fieldset>
 			<legend><?php HTML::header_title( __( 'Site Title Location', 'autodescription' ) ); ?></legend>
-			<p id="tsf-title-location" class="tsf-fields">
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_left' ); ?>" value="left" <?php checked( $this->get_option( 'title_location' ), 'left' ); ?> />
+			<p id=tsf-title-location class=tsf-fields>
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_left' ); ?>" value=left <?php checked( $this->get_option( 'title_location' ), 'left' ); ?> />
 					<label for="<?php Input::field_id( 'title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
@@ -260,8 +260,8 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 						?>
 					</label>
 				</span>
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_right' ); ?>" value="right" <?php checked( $this->get_option( 'title_location' ), 'right' ); ?> />
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_right' ); ?>" value=right <?php checked( $this->get_option( 'title_location' ), 'right' ); ?> />
 					<label for="<?php Input::field_id( 'title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
@@ -277,7 +277,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		<hr>
 
 		<?php HTML::header_title( __( 'Site Title Removal', 'autodescription' ) ); ?>
-		<div id="tsf-title-additions-toggle">
+		<div id=tsf-title-additions-toggle>
 			<?php
 			$info = HTML::make_info(
 				__( 'Always brand your titles. Search engines may ignore your titles with this feature enabled.', 'autodescription' ),
@@ -309,7 +309,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		<hr>
 
 		<?php HTML::header_title( __( 'Archive Title Prefixes', 'autodescription' ) ); ?>
-		<div id="tsf-title-prefixes-toggle">
+		<div id=tsf-title-prefixes-toggle>
 			<?php
 			$info = HTML::make_info(
 				__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),

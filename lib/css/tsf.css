@@ -383,53 +383,53 @@ body.rtl .tsf-remove-image-button.button {
 	vertical-align: text-bottom;
 }
 
-#tsf-inpost-box input[type="text"]::-webkit-input-placeholder,
+#tsf-inpost-box input[type=text]::-webkit-input-placeholder,
 #tsf-inpost-box textarea::-webkit-input-placeholder,
-.tsf-metaboxes input[type="text"]::-webkit-input-placeholder,
+.tsf-metaboxes input[type=text]::-webkit-input-placeholder,
 .tsf-metaboxes textarea::-webkit-input-placeholder {
 	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
 /* Doesn't fire appropriate events, also seems deprecated. Hide it. */
-#tsf-inpost-box input[type="text"]::-ms-clear,
-.tsf-metaboxes input[type="text"]::-ms-clear,
-.tsf-quick-edit-columns input[type="text"]::-ms-clear {
+#tsf-inpost-box input[type=text]::-ms-clear,
+.tsf-metaboxes input[type=text]::-ms-clear,
+.tsf-quick-edit-columns input[type=text]::-ms-clear {
 	display: none;
 }
 
-#tsf-inpost-box input[type="text"]::-moz-placeholder,
+#tsf-inpost-box input[type=text]::-moz-placeholder,
 #tsf-inpost-box textarea::-moz-placeholder,
-.tsf-metaboxes input[type="text"]::-moz-placeholder,
+.tsf-metaboxes input[type=text]::-moz-placeholder,
 .tsf-metaboxes textarea::-moz-placeholder {
 	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
-#tsf-inpost-box input[type="text"]:-ms-input-placeholder,
+#tsf-inpost-box input[type=text]:-ms-input-placeholder,
 #tsf-inpost-box textarea:-ms-input-placeholder,
-.tsf-metaboxes input[type="text"]:-ms-input-placeholder,
+.tsf-metaboxes input[type=text]:-ms-input-placeholder,
 .tsf-metaboxes textarea:-ms-input-placeholder {
 	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
 }
 
-#tsf-inpost-box input[type="text"]:focus::-webkit-input-placeholder,
+#tsf-inpost-box input[type=text]:focus::-webkit-input-placeholder,
 #tsf-inpost-box textarea:focus::-webkit-input-placeholder,
-.tsf-metaboxes input[type="text"]:focus::-webkit-input-placeholder,
+.tsf-metaboxes input[type=text]:focus::-webkit-input-placeholder,
 .tsf-metaboxes textarea:focus::-webkit-input-placeholder {
 	color: transparent;
 	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);
 }
 
-#tsf-inpost-box input[type="text"]:focus::-moz-placeholder,
+#tsf-inpost-box input[type=text]:focus::-moz-placeholder,
 #tsf-inpost-box textarea:focus::-moz-placeholder,
-.tsf-metaboxes input[type="text"]:focus::-moz-placeholder,
+.tsf-metaboxes input[type=text]:focus::-moz-placeholder,
 .tsf-metaboxe textarea:focus::-moz-placeholder {
 	color: transparent;
 	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);
 }
 
-#tsf-inpost-box input[type="text"]:focus:-ms-input-placeholder,
+#tsf-inpost-box input[type=text]:focus:-ms-input-placeholder,
 #tsf-inpost-box textarea:focus:-ms-input-placeholder,
-.tsf-metaboxes input[type="text"]:focus:-ms-input-placeholder,
+.tsf-metaboxes input[type=text]:focus:-ms-input-placeholder,
 .tsf-metaboxes textarea:focus:-ms-input-placeholder {
 	color: transparent;
 	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);

@@ -93,47 +93,22 @@ class Admin_Init extends Init {
 	 * @since 4.1.2 Now autoenqueues on edit.php and edit-tags.php regardless of SEO Bar output (for quick/bulk-edit support).
 	 * @since 4.1.4 Now considers headlessness.
 	 * @access private
-	 *
-	 * @param string|null $hook The current page hook.
 	 */
-	public function _init_admin_scripts( $hook = null ) {
+	public function _init_admin_scripts() {
 
-		$autoenqueue = false;
-
-		if ( $this->is_seo_settings_page() ) {
-			$autoenqueue = true;
-		} elseif ( $hook ) {
-
-			$enqueue_hooks = [];
-
-			$prepare_edit_screen = false;
-
-			if ( ! $this->is_headless['meta'] ) {
-				if ( $this->is_archive_admin() ) {
-					$prepare_edit_screen = $this->is_taxonomy_supported();
-				} elseif ( $this->is_singular_admin() ) {
-					$prepare_edit_screen = $this->is_post_type_supported( $this->get_admin_post_type() );
-				}
-			}
-
-			if ( $prepare_edit_screen ) {
-				$enqueue_hooks = [
-					'edit.php',
-					'post.php',
-					'post-new.php',
-					'edit-tags.php',
-					'term.php',
-				];
-			}
-
-			if ( \in_array( $hook, $enqueue_hooks, true ) )
-				$autoenqueue = true;
-
-			if ( $this->get_static_cache( 'persistent_notices', [] ) )
-				$autoenqueue = true;
+		if (
+			$this->is_seo_settings_page()
+			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
+			|| $this->get_static_cache( 'persistent_notices', [] )
+			|| (
+				! $this->is_headless['meta'] && (
+					   ( $this->is_archive_admin() && $this->is_taxonomy_supported() )
+					|| ( $this->is_singular_admin() && $this->is_post_type_supported( $this->get_admin_post_type() ) )
+				)
+			)
+		) {
+			$this->init_admin_scripts();
 		}
-
-		$autoenqueue and $this->init_admin_scripts();
 	}
 
 	/**

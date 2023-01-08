@@ -147,7 +147,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'knowledge_name' ); ?>" class="large-text" id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= esc_attr( $this->get_blogname() ) ?>" value="<?= esc_attr( $this->get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'knowledge_name' ); ?>" class=large-text id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= esc_attr( $this->get_blogname() ) ?>" value="<?= esc_attr( $this->get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
 		</p>
 		<hr>
 		<?php
@@ -169,16 +169,16 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		$logo_placeholder = $this->get_knowledge_logo( false );
 		?>
 		<p>
-			<label for="knowledge_logo-url">
+			<label for=knowledge_logo-url>
 				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id="knowledge_logo-url" placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'knowledge_logo_url' ) ) ?>" />
-			<input type="hidden" name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id="knowledge_logo-id" value="<?= absint( $this->get_option( 'knowledge_logo_id' ) ) ?>" />
+			<input class=large-text type=url readonly data-readonly=1 name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'knowledge_logo_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id=knowledge_logo-id value="<?= absint( $this->get_option( 'knowledge_logo_id' ) ) ?>" />
 		</p>
-		<p class="hide-if-no-tsf-js">
+		<p class=hide-if-no-tsf-js>
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo Form::get_image_uploader_form( [
@@ -322,7 +322,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 					</label>
 				</p>
 				<p>
-					<input type="url" name="<?php Input::field_name( $v['option'] ); ?>" class="large-text" id="<?php Input::field_id( $v['option'] ); ?>" placeholder="<?= esc_attr( $v['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $v['option'] ) ) ?>" autocomplete=off />
+					<input type=url name="<?php Input::field_name( $v['option'] ); ?>" class=large-text id="<?php Input::field_id( $v['option'] ); ?>" placeholder="<?= esc_attr( $v['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $v['option'] ) ) ?>" autocomplete=off />
 				</p>
 				<?php
 			}

@@ -317,9 +317,9 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			<legend><?php HTML::header_title( __( 'Timestamp Format Settings', 'autodescription' ) ); ?></legend>
 			<?php HTML::description( __( 'This setting determines how specific the timestamp is.', 'autodescription' ) ); ?>
 
-			<p id="sitemaps-timestamp-format" class="tsf-fields">
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value="0" <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
+			<p id=sitemaps-timestamp-format class=tsf-fields>
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value=0 <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
 					<label for="<?php Input::field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
@@ -329,8 +329,8 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 						?>
 					</label>
 				</span>
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value="1" <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value=1 <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
 					<label for="<?php Input::field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.

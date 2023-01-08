@@ -43,7 +43,7 @@ if ( $use_tabs ) :
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- All output below is escaped.
 				echo <<<HTML
 				<div class="tsf-flex tsf-flex-nav-tab tsf-flex $wrapper_active" id="$wrapper_id">
-					<input type="radio" class="tsf-flex-nav-tab-radio tsf-input-not-saved" id="$input_id" name="$input_name" $input_checked>
+					<input type=radio class="tsf-flex-nav-tab-radio tsf-input-not-saved" id="$input_id" name="$input_name" $input_checked>
 					<label for="$input_id" class="tsf-flex tsf-flex-nav-tab-label">
 						$dashicon
 						$label_name

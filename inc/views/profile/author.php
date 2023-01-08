@@ -28,7 +28,7 @@ $fields = [
 
 ?>
 <h2><?php esc_html_e( 'Authorial Info', 'autodescription' ); ?></h2>
-<table class="form-table">
+<table class=form-table>
 <?php
 foreach ( $fields as $field => $labels ) :
 	?>
@@ -44,7 +44,7 @@ foreach ( $fields as $field => $labels ) :
 				value="<?= esc_attr( $labels['value'] ) ?>"
 				placeholder="<?= esc_attr( $labels['placeholder'] ) ?>"
 				class="regular-text <?= esc_attr( $labels['class'] ) ?>" />
-			<p class="description"><?php esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+			<p class=description><?php esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 		</td>
 	</tr>
 	<?php

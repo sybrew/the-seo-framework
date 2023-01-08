@@ -397,6 +397,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
  * @since 4.1.2 No longer can accidentally show the install notice after stale upgrade.
  * @since 4.2.0 The installation notice is now persistent, shown twice, to users with activate_plugins capability, on the main site.
  * @since 4.2.7 Added data checker directing users to the Transport extension.
+ * @since 4.2.8 Now displays the installation notice 3 times.
  * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
  *       Users that remove query strings (thanks to YSlow) are to blame, though.
  *       The authors of the plugin that allowed this to happen are even more to blame.
@@ -465,7 +466,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 					'excl_screens' => [ 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes' ],
 					'capability'   => 'activate_plugins',
 					'user'         => 0,
-					'count'        => 1,
+					'count'        => 3,
 					'timeout'      => 2 * MINUTE_IN_SECONDS,
 				]
 			);

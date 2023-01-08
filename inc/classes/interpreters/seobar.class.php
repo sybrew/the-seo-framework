@@ -275,7 +275,7 @@ final class SEOBar {
 
 		// Always return the wrap, may it be filled in via JS in the future.
 		return sprintf(
-			'<span class="tsf-seo-bar clearfix"><span class="tsf-seo-bar-inner-wrap">%s</span></span>',
+			'<span class="tsf-seo-bar clearfix"><span class=tsf-seo-bar-inner-wrap>%s</span></span>',
 			implode( $blocks )
 		);
 	}

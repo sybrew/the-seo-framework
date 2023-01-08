@@ -62,7 +62,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 	case 'homepage_general_tab':
 		?>
 		<p>
-			<label for="<?php Input::field_id( 'homepage_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_title' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
@@ -79,7 +79,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_pixel_counter_wrap( Input::get_field_id( 'homepage_title' ), 'title', (bool) $this->get_option( 'display_pixel_counter' ) );
 		?>
 		<p class=tsf-title-wrap>
-			<input type="text" name="<?php Input::field_name( 'homepage_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ) ?>" autocomplete=off />
 			<?php
 			$this->output_js_title_elements(); // legacy
 			$this->output_js_title_data(
@@ -129,7 +129,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Input::field_id( 'homepage_description' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_description' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
@@ -146,7 +146,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_pixel_counter_wrap( Input::get_field_id( 'homepage_description' ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_description' ); ?>" rows="3" cols="70"><?= esc_attr( $this->get_option( 'homepage_description' ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_description' ); ?>" rows=3 cols=70><?= esc_attr( $this->get_option( 'homepage_description' ) ) ?></textarea>
 			<?php
 			$this->output_js_description_elements(); // legacy
 			$this->output_js_description_data(
@@ -210,12 +210,12 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		?>
 		<p>
-			<label for="<?php Input::field_id( 'homepage_title_tagline' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_title_tagline' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Meta Title Additions', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( $this->get_blogdescription() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( $this->get_blogdescription() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title_tagline' ) ) ?>" autocomplete=off />
 		</p>
 
 		<div class=tsf-title-tagline-toggle>
@@ -235,9 +235,9 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<fieldset>
 			<legend><?php HTML::header_title( __( 'Meta Title Additions Location', 'autodescription' ) ); ?></legend>
 
-			<p id="tsf-home-title-location" class="tsf-fields">
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'home_title_location' ); ?>" id="<?php Input::field_id( 'home_title_location_left' ); ?>" value="left" <?php checked( $this->get_option( 'home_title_location' ), 'left' ); ?> />
+			<p id=tsf-home-title-location class=tsf-fields>
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'home_title_location' ); ?>" id="<?php Input::field_id( 'home_title_location_left' ); ?>" value=left <?php checked( $this->get_option( 'home_title_location' ), 'left' ); ?> />
 					<label for="<?php Input::field_id( 'home_title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
@@ -246,8 +246,8 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 						?>
 					</label>
 				</span>
-				<span class="tsf-toblock">
-					<input type="radio" name="<?php Input::field_name( 'home_title_location' ); ?>" id="<?php Input::field_id( 'home_title_location_right' ); ?>" value="right" <?php checked( $this->get_option( 'home_title_location' ), 'right' ); ?> />
+				<span class=tsf-toblock>
+					<input type=radio name="<?php Input::field_name( 'home_title_location' ); ?>" id="<?php Input::field_id( 'home_title_location_right' ); ?>" value=right <?php checked( $this->get_option( 'home_title_location' ), 'right' ); ?> />
 					<label for="<?php Input::field_id( 'home_title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
@@ -305,7 +305,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		?>
 		<p>
-			<label for="<?php Input::field_id( 'homepage_og_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_og_title' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
@@ -314,7 +314,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'homepage_og_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_title ) {
@@ -325,7 +325,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		?>
 
 		<p>
-			<label for="<?php Input::field_id( 'homepage_og_description' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_og_description' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
@@ -334,7 +334,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?= esc_attr( $this->get_option( 'homepage_og_description' ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?= esc_attr( $this->get_option( 'homepage_og_description' ) ) ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && $custom_og_desc ) {
@@ -346,7 +346,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Input::field_id( 'homepage_twitter_title' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_twitter_title' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
@@ -355,7 +355,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_twitter_title' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
@@ -366,7 +366,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		?>
 
 		<p>
-			<label for="<?php Input::field_id( 'homepage_twitter_description' ); ?>" class="tsf-toblock">
+			<label for="<?php Input::field_id( 'homepage_twitter_description' ); ?>" class=tsf-toblock>
 				<strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
@@ -375,7 +375,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_twitter_description' ), (bool) $this->get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class="large-text" id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows="3" cols="70" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?= esc_attr( $this->get_option( 'homepage_twitter_description' ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?= esc_attr( $this->get_option( 'homepage_twitter_description' ) ) ?></textarea>
 		</p>
 		<?php
 		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
@@ -390,7 +390,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		HTML::description( __( 'A social image can be displayed when your homepage is shared. It is a great way to grab attention.', 'autodescription' ) );
 		?>
 		<p>
-			<label for="tsf_homepage_socialimage-url">
+			<label for=tsf_homepage_socialimage-url>
 				<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 				<?php
 				HTML::make_info(
@@ -401,10 +401,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class="large-text" type="url" name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id="tsf_homepage_socialimage-url" placeholder="<?= esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ) ?>" value="<?= esc_url( $this->get_option( 'homepage_social_image_url' ) ) ?>" />
-			<input type="hidden" name="<?php Input::field_name( 'homepage_social_image_id' ); ?>" id="tsf_homepage_socialimage-id" value="<?= absint( $this->get_option( 'homepage_social_image_id' ) ) ?>" disabled class="tsf-enable-media-if-js" />
+			<input class=large-text type=url name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id=tsf_homepage_socialimage-url placeholder="<?= esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ) ?>" value="<?= esc_url( $this->get_option( 'homepage_social_image_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'homepage_social_image_id' ); ?>" id=tsf_homepage_socialimage-id value="<?= absint( $this->get_option( 'homepage_social_image_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
-		<p class="hide-if-no-tsf-js">
+		<p class=hide-if-no-tsf-js>
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo Form::get_image_uploader_form( [ 'id' => 'tsf_homepage_socialimage' ] );

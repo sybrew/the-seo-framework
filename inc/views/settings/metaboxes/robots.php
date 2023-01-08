@@ -383,7 +383,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 
 			// Add warning if it's 'site'.
 			if ( 'site' === $type ) {
-				$checkboxes .= '<hr class="tsf-option-spacer">';
+				$checkboxes .= '<hr class=tsf-option-spacer>';
 
 				if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
 					$checkboxes .= sprintf(

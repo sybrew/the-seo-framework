@@ -153,7 +153,7 @@ final class Deprecated {
 					. $tsf->pint_site_output();
 		elseif ( $tsf->is_query_exploited() ) :
 			// aqp = advanced query protection
-			$output = '<meta name="tsf:aqp" value="1" />' . "\n";
+			$output = '<meta name="tsf:aqp" value="1" />' . "\n"; // Keep XHTML valid!
 		else :
 			// Inefficient concatenation is inefficient. Improve this?
 			$output = $tsf->the_description()

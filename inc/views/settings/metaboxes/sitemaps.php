@@ -157,7 +157,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 
 		?>
 		<p>
-			<input type="number" min=1 max=50000 name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" placeholder="<?= absint( $this->get_default_option( 'sitemap_query_limit' ) ) ?>" value="<?= absint( $this->get_option( 'sitemap_query_limit' ) ) ?>" />
+			<input type=number min=1 max=50000 name="<?php Input::field_name( 'sitemap_query_limit' ); ?>" id="<?php Input::field_id( 'sitemap_query_limit' ); ?>" placeholder="<?= absint( $this->get_default_option( 'sitemap_query_limit' ) ) ?>" value="<?= absint( $this->get_option( 'sitemap_query_limit' ) ) ?>" />
 		</p>
 		<?php
 		HTML::description( __( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
@@ -350,7 +350,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'sitemap_color_main' ); ?>" class="tsf-color-picker" id="<?php Input::field_id( 'sitemap_color_main' ); ?>" placeholder="<?= esc_attr( $default_colors['main'] ) ?>" value="<?= esc_attr( $current_colors['main'] ) ?>" data-tsf-default-color="<?= esc_attr( $default_colors['main'] ) ?>" />
+			<input type=text name="<?php Input::field_name( 'sitemap_color_main' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'sitemap_color_main' ); ?>" placeholder="<?= esc_attr( $default_colors['main'] ) ?>" value="<?= esc_attr( $current_colors['main'] ) ?>" data-tsf-default-color="<?= esc_attr( $default_colors['main'] ) ?>" />
 		</p>
 
 		<p>
@@ -359,7 +359,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type="text" name="<?php Input::field_name( 'sitemap_color_accent' ); ?>" class="tsf-color-picker" id="<?php Input::field_id( 'sitemap_color_accent' ); ?>" placeholder="<?= esc_attr( $default_colors['accent'] ) ?>" value="<?= esc_attr( $current_colors['accent'] ) ?>" data-tsf-default-color="<?= esc_attr( $default_colors['accent'] ) ?>" />
+			<input type=text name="<?php Input::field_name( 'sitemap_color_accent' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'sitemap_color_accent' ); ?>" placeholder="<?= esc_attr( $default_colors['accent'] ) ?>" value="<?= esc_attr( $current_colors['accent'] ) ?>" data-tsf-default-color="<?= esc_attr( $default_colors['accent'] ) ?>" />
 		</p>
 
 		<hr>
@@ -381,16 +381,16 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		?>
 
 		<p>
-			<label for="sitemap_logo-url">
+			<label for=sitemap_logo-url>
 				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class="large-text" type="url" readonly="readonly" data-readonly="1" name="<?php Input::field_name( 'sitemap_logo_url' ); ?>" id="sitemap_logo-url" placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'sitemap_logo_url' ) ) ?>" />
-			<input type="hidden" name="<?php Input::field_name( 'sitemap_logo_id' ); ?>" id="sitemap_logo-id" value="<?= absint( $this->get_option( 'sitemap_logo_id' ) ) ?>" />
+			<input class=large-text type=url readonly data-readonly=1 name="<?php Input::field_name( 'sitemap_logo_url' ); ?>" id=sitemap_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'sitemap_logo_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'sitemap_logo_id' ); ?>" id=sitemap_logo-id value="<?= absint( $this->get_option( 'sitemap_logo_id' ) ) ?>" />
 		</p>
-		<p class="hide-if-no-tsf-js">
+		<p class=hide-if-no-tsf-js>
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 			echo Form::get_image_uploader_form( [

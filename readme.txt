@@ -251,12 +251,14 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 = 4.2.8
 
 TODO consider using Website Icon (favicon) image for Sitemap image? (see Tobi's email) -> It ought to be large enough (512px at least recommended)
-
+TODO s_no_html_space -> s_verification_id (strip content="code" => code, then strip HTML, then strip spaces)
 
 **For everyone**
 
 * **Added:**
 	* Advanced Query Protection now detects all plugin-injected query variables.
+* **Changed:**
+	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
 * **Fixed:**
 	* When a pagination overflow is requested for the paginated static frontpage, TSF now properly detects WordPress's intention (it provides the last page instead of the first).
 	* When stripping tags, elements with that start with exactly the same text as others won't be preemptively closed. Listing all faults:
@@ -264,7 +266,7 @@ TODO consider using Website Icon (favicon) image for Sitemap image? (see Tobi's 
 		* `b` elements can no longer be closed by `bdo`, `bdi`, `blockquote`, and `button` (but not `br`, since that is a void element).
 		* `i` elements can no longer be cloased by `iframe` and `ins` (but not `input` and `img`, since those are void elements).
 		* This bug was not replicable on anyone's site, since we do not AI-strip `a`, `b`, nor `i` elements in our contexts (we leave those as inline text). So, eh... why did we write this out? Ah, yes. Open Source means sharing information.
-	* Rank Math variable syntax is now updated to reflect the real world, instead of the world Yoast SEO lives in.
+	* Rank Math variable syntax is now updated to reflect the real world, instead of the buggy world Yoast SEO lives in.
 
 **For developers**
 
@@ -273,6 +275,8 @@ TODO consider using Website Icon (favicon) image for Sitemap image? (see Tobi's 
 	* `tsf()->strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
 	* `tsf()->page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
 	* `tsf()->is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
+* **Other:**
+	* Condensed code, such as removing needless quotes from administrative HTML="attributes".
 
 = 4.2.7 =
 

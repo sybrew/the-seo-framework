@@ -395,9 +395,7 @@ class Sanitize extends Admin_Pages {
 			]
 		);
 
-		/**
-		 * @todo create content="code" stripper in PHP (redundant from JS's)
-		 */
+		// TODO create content="code" -> "code" stripper in PHP (redundant from JS's)
 		$this->add_option_filter(
 			's_no_html_space',
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,

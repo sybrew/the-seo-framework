@@ -167,12 +167,12 @@ final class Form {
 			[
 				( $display ? '' : 'style="display:none;"' ),
 				sprintf(
-					'<div id="%s" class="tsf-tooltip-wrap">%s</div>',
+					'<div id="%s" class=tsf-tooltip-wrap>%s</div>',
 					\esc_attr( "{$for}_pixels" ),
-					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label="" data-desc="" tabindex=0><span class="tsf-pixel-counter-fluid"></span></span>'
+					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label data-desc tabindex=0><span class=tsf-pixel-counter-fluid></span></span>'
 				),
 				sprintf(
-					'<div class="tsf-pixel-shadow-wrap"><span class="tsf-pixel-counter-shadow %s"></span></div>',
+					'<div class=tsf-pixel-shadow-wrap><span class="tsf-pixel-counter-shadow %s"></span></div>',
 					\esc_attr( "tsf-{$type}-pixel-counter-shadow" )
 				),
 			]
@@ -248,7 +248,7 @@ final class Form {
 		);
 
 		$content .= sprintf(
-			'<span class="tsf-tooltip-wrap"><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
+			'<span class=tsf-tooltip-wrap><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
 			\esc_attr( $args['id'] )
 		);
 

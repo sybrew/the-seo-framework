@@ -262,7 +262,7 @@ final class Markdown {
 		$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
 
 		// Keep this XHTML compatible!
-		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
+		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>'; // Keep XHTML valid!
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
