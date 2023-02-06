@@ -538,7 +538,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'capability'   => 'activate_plugins',
 				'user'         => 0,
 				'count'        => 69,
-				'timeout'      => 7 * DAY_IN_SECONDS,
+				'timeout'      => WEEK_IN_SECONDS,
 			]
 		);
 	}

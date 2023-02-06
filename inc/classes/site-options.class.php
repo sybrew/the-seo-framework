@@ -342,7 +342,8 @@ class Site_Options extends Sanitize {
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string|string[] $key       Option name, or a map of indexes therefor.
-	 *                                   If you send an empty array, you'll get all options. Don't.
+	 *                                   If you send an empty array, you'll get all options.
+	 *                                   Don't do that; use get_all_options() instead.
 	 * @param boolean         $use_cache Optional. Whether to use the cache value or not. Defaults to true.
 	 * @return mixed The value of this $key in the database. Empty string when not set.
 	 */

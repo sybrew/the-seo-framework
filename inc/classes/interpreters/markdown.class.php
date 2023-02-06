@@ -47,6 +47,7 @@ final class Markdown {
 	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text    The text that might contain markdown. Expected to be escaped.
@@ -130,13 +131,15 @@ final class Markdown {
 	 * We do this separately because em and strong use the same operators.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
 	 *
 	 * @param string $text The input text.
 	 * @return string
 	 */
 	private static function strong_em( $text ) {
 
-		$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
+		// Discrepancy with strong OR em: we exclude * here, we only want to capture full blocks.
+		$count = preg_match_all( '/\*{3}([^\*]+)\*{3}/', $text, $matches, PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -153,13 +156,14 @@ final class Markdown {
 	 * Makes strong elements.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
 	 *
 	 * @param string $text The input text.
 	 * @return string
 	 */
 	private static function strong( $text ) {
 
-		$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\*{2}(.+?)\*{2}/', $text, $matches, PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -176,13 +180,14 @@ final class Markdown {
 	 * Makes em elements.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
 	 *
 	 * @param string $text The input text.
 	 * @return string
 	 */
 	private static function em( $text ) {
 
-		$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\*([^\*]+)\*/', $text, $matches, PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -199,13 +204,14 @@ final class Markdown {
 	 * Makes code elements.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
 	 *
 	 * @param string $text The input text.
 	 * @return string
 	 */
 	private static function code( $text ) {
 
-		$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/`([^`]+)`/', $text, $matches, PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -230,7 +236,7 @@ final class Markdown {
 
 		// Considers word non-boundary. @TODO consider removing that?
 		$expression = sprintf(
-			'/(?:\={%1$d})\B([^\={\%1$s}]+)\B(?:\={%1$d})/',
+			'/\={%1$d}\s(.+)\s\={%1$d}/',
 			filter_var( $type, FILTER_SANITIZE_NUMBER_INT )
 		);
 
@@ -251,6 +257,8 @@ final class Markdown {
 	 * Makes a elements.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 1. No longer blocks text with either { or } from being parsed.
+	 *              2. No longer blocks URLs with either ( or ) from being parsed.
 	 *
 	 * @param string $text     The input text.
 	 * @param bool   $internal Whether the link is internal (_self) or external (_blank).
@@ -259,7 +267,7 @@ final class Markdown {
 	 */
 	private static function a( $text, $internal = true ) {
 
-		$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, PREG_PATTERN_ORDER );
 
 		// Keep this XHTML compatible!
 		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>'; // Keep XHTML valid!

@@ -299,57 +299,55 @@ final class AJAX {
 
 		$data = [];
 
-		foreach ( $get as $g ) :
-			switch ( $g ) {
-				case 'seobar':
-					$data[ $g ] = $tsf->get_generated_seo_bar( $_generator_args );
-					break;
+		foreach ( $get as $g ) switch ( $g ) {
+			case 'seobar':
+				$data[ $g ] = $tsf->get_generated_seo_bar( $_generator_args );
+				break;
 
-				case 'metadescription':
-				case 'ogdescription':
-				case 'twdescription':
-					switch ( $g ) {
-						case 'metadescription':
-							if ( $tsf->is_static_frontpage( $post_id ) ) {
-								$data[ $g ] = $tsf->get_option( 'homepage_description' )
-										   ?: $tsf->get_generated_description( $_generator_args, false );
-							} else {
-								$data[ $g ] = $tsf->get_generated_description( $_generator_args, false );
-							}
-							break;
-						case 'ogdescription':
-							if ( $tsf->is_static_frontpage( $post_id ) ) {
-								$data[ $g ] = $tsf->get_option( 'homepage_description' )
-										   ?: $tsf->get_generated_open_graph_description( $_generator_args, false );
-							} else {
-								$data[ $g ] = $tsf->get_generated_open_graph_description( $_generator_args, false );
-							}
-							break;
-						case 'twdescription':
-							if ( $tsf->is_static_frontpage( $post_id ) ) {
-								$data[ $g ] = $tsf->get_option( 'homepage_description' )
-										   ?: $tsf->get_generated_twitter_description( $_generator_args, false );
-							} else {
-								$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
-							}
-							break;
-					}
+			case 'metadescription':
+			case 'ogdescription':
+			case 'twdescription':
+				switch ( $g ) {
+					case 'metadescription':
+						if ( $tsf->is_static_frontpage( $post_id ) ) {
+							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+										?: $tsf->get_generated_description( $_generator_args, false );
+						} else {
+							$data[ $g ] = $tsf->get_generated_description( $_generator_args, false );
+						}
+						break;
+					case 'ogdescription':
+						if ( $tsf->is_static_frontpage( $post_id ) ) {
+							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+										?: $tsf->get_generated_open_graph_description( $_generator_args, false );
+						} else {
+							$data[ $g ] = $tsf->get_generated_open_graph_description( $_generator_args, false );
+						}
+						break;
+					case 'twdescription':
+						if ( $tsf->is_static_frontpage( $post_id ) ) {
+							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+										?: $tsf->get_generated_twitter_description( $_generator_args, false );
+						} else {
+							$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
+						}
+						break;
+				}
 
-					$data[ $g ] = $tsf->s_description( $data[ $g ] );
-					break;
+				$data[ $g ] = $tsf->s_description( $data[ $g ] );
+				break;
 
-				case 'imageurl':
-					if ( $tsf->is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
-						$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
-					} else {
-						$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
-					}
-					break;
+			case 'imageurl':
+				if ( $tsf->is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
+					$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+				} else {
+					$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+				}
+				break;
 
-				default:
-					break;
-			}
-		endforeach;
+			default:
+				break;
+		}
 
 		\wp_send_json_success( [
 			'data'      => $data,

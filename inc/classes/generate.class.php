@@ -145,7 +145,7 @@ class Generate extends User_Data {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
 		 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
 		 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-		 *    4 = 0b100: Collect assertions.
+		 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
 		 * }
 		 */
 		return array_filter(

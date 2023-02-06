@@ -253,6 +253,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 TODO consider using Website Icon (favicon) image for Sitemap image? (see Tobi's email) -> It ought to be large enough (512px at least recommended)
 TODO s_no_html_space -> s_verification_id (strip content="code" => code, then strip HTML, then strip spaces)
 
+TODO wpforo 2.0 support https://wordpress.org/support/topic/wpforo-2-compatibility/
+
+TODO for get_image_uploader_form(), allow custom classes -- for both the add/change and remove button separately.
+	-> Then we can remove the TEMP css in TSFEM.
+
+TODO bbPress's hidden forum topics are still displayed in the sitemap.
+
+TODO the markdown conversion Regex is jank.
+
 **For everyone**
 
 * **Added:**
@@ -267,6 +276,7 @@ TODO s_no_html_space -> s_verification_id (strip content="code" => code, then st
 		* `i` elements can no longer be cloased by `iframe` and `ins` (but not `input` and `img`, since those are void elements).
 		* This bug was not replicable on anyone's site, since we do not AI-strip `a`, `b`, nor `i` elements in our contexts (we leave those as inline text). So, eh... why did we write this out? Ah, yes. Open Source means sharing information.
 	* Rank Math variable syntax is now updated to reflect the real world, instead of the buggy world Yoast SEO lives in.
+	* TODO Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
 
 **For developers**
 
@@ -275,6 +285,9 @@ TODO s_no_html_space -> s_verification_id (strip content="code" => code, then st
 	* `tsf()->strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
 	* `tsf()->page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
 	* `tsf()->is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
+	* (JS) `tsf-resize` now fires once every 50ms, instead of 100ms.
+	* `tsf()->convert_markdown()` can now process with either `{` or `}` within Markdown blocks.
+		* The regex used is also vastly optimized.
 * **Other:**
 	* Condensed code, such as removing needless quotes from administrative HTML="attributes".
 
