@@ -79,7 +79,7 @@ For additional functionality, check out our free companion plugin [Extension Man
 
 * [Focus](https://theseoframework.com/?p=2305) guides you through the process of writing targeted content that ranks with **focus keywords and synonyms**.
 * [Articles](https://theseoframework.com/?p=2303) **enhances your published posts** by automatically adding important Structured Data.
-* [Transport](https://theseoframework.com/?p=3962) **migrates and transforms metadata** from Rank Math and Yoast SEO to this plugin.
+* [Transport](https://theseoframework.com/?p=3962) **migrates and transforms metadata** from Rank Math, Yoast SEO, and SEOPress to this plugin.
 * [Honeypot](https://theseoframework.com/?p=2300) **catches comment spammers** through four lightweight yet powerful ways.
 * [Cord](https://theseoframework.com/?p=3404) helps you connect your website to **Google Analytics and Facebook Pixel**.
 * [Local](https://theseoframework.com/?p=2306) lets you set up **important local business information** for search engines to consume.
@@ -264,6 +264,8 @@ TODO the markdown conversion Regex is jank.
 
 TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts from Extension Manager.
 
+TODO 2023
+
 **For everyone**
 
 * **Added:**
@@ -280,6 +282,8 @@ TODO add filter for custom title handling of the menu. Primarily to spawn notifi
 	* Rank Math variable syntax is now updated to reflect the real world, instead of the buggy world Yoast SEO lives in.
 	* Post types that lost support of a feature will no longer have data used from the missing feature.
 		* For example, if a post type doesn't support title, you will always get "Untitled" as an SEO title, unless overwritten. If a post type no longer supports the "excerpt" field, it won't be used for description generation anymore.
+	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
+		* This also affects quick-edit and the SEO Bar.
 	* TODO Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
 		* Didn't we already fix this?
 
@@ -287,7 +291,9 @@ TODO add filter for custom title handling of the menu. Primarily to spawn notifi
 
 * Methods in object `The_SEO_Framework\Load` (callable via `tsf()` and `theseoframework()`):
 	* **Added:**
-		* TODO `has_seopress_syntax()` determines if the input text has transformative SEOPress syntax.
+		* `is_term_populated()` tests whether the term returns any post on the front-end.
+		* `has_seopress_syntax()` determines if the input text has transformative SEOPress syntax.
+			* This is used to determine leftover syntax after using [Transport](https://theseoframework.com/extensions/transport/).
 	* **Changed:**
 		* `has_rankmath_syntax()`, actualized the variable list.
 		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.

@@ -140,7 +140,7 @@ final class Args extends Factory {
 
 		switch ( $pass ) :
 			case '404':
-				yield '404' => empty( \get_term( $args['id'], $args['taxonomy'] )->count );
+				yield '404' => ! static::$tsf->is_term_populated( $args['id'], $args['taxonomy'] );
 				break;
 
 			case 'protected':

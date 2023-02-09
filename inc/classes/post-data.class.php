@@ -590,13 +590,13 @@ class Post_Data extends Detect {
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
 	 * @return string The post content.
 	 */
-	public function get_post_content( $post = 0 ) {
+	public function get_post_content( $post = null ) {
 
 		$post = \get_post( $post ?: $this->get_the_real_ID() );
 
 		// '0' is not deemed content. Return empty string for it's a slippery slope.
-		return isset( $post->post_content ) && \post_type_supports( $post->post_type, 'editor' )
-			? ( $post->post_content ?: '' )
+		return ! empty( $post->post_content ) && \post_type_supports( $post->post_type, 'editor' )
+			? $post->post_content
 			: '';
 	}
 

@@ -426,6 +426,36 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
+	 * Tests whether term is populated. Also tests the child terms.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @param int    $term_id The term ID.
+	 * @param string $taxonomy The term taxonomy.
+	 * @return bool True when term or child terms are populated, false otherwise.
+	 */
+	public function is_term_populated( $term_id, $taxonomy ) {
+		return memo( null, $term_id, $taxonomy ) ?? memo(
+			! empty( \get_term( $term_id, $taxonomy )->count )
+			|| array_filter( // Filter count => 0 -- if all are 0, we get an empty array, boolean false.
+				array_column(
+					\get_terms( [
+						'taxonomy'   => $taxonomy,
+						'child_of'   => $term_id, // Get children of current term.
+						'childless'  => false,
+						'pad_counts' => false, // If true, this gives us the value we seek, but we can get it faster via column.
+						'get'        => '',
+					] ),
+					'count'
+				)
+			),
+			$term_id,
+			$taxonomy
+		);
+	}
+
+	/**
 	 * Returns the taxonomy type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0
