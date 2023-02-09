@@ -270,6 +270,7 @@ TODO 2023
 
 * **Added:**
 	* Advanced Query Protection now detects all plugin-injected query variables.
+	* SEOPress syntax is now detected for titles and descriptions. The SEO Bar will warn you about leftover syntax.
 * **Changed:**
 	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
 * **Fixed:**

@@ -1264,17 +1264,19 @@ class Detect extends Render {
 	/**
 	 * Determines whether the text has recognizable transformative syntax.
 	 *
-	 * It tests Yoast SEO before Rank Math because
+	 * It tests Yoast SEO before Rank Math because that one is more popular, thus more
+	 * likely to yield a result.
 	 *
 	 * @todo test all [ 'extension', 'yoast', 'aioseo', 'rankmath', 'seopress' ]
 	 * @since 4.2.7
+	 * @since 4.2.8 Added SEOPress support.
 	 *
 	 * @param string $text The text to evaluate
 	 * @return bool
 	 */
 	public function has_unprocessed_syntax( $text ) {
 
-		foreach ( [ 'yoast', 'rankmath' ] as $type )
+		foreach ( [ 'yoast', 'rankmath', 'seopress' ] as $type )
 			if ( $this->{"has_{$type}_syntax"}( $text ) ) return true;
 
 		return false;
@@ -1289,6 +1291,7 @@ class Detect extends Render {
 	 * @since 4.2.7 1. Added wildcard `ct_`, and `cf_` detection.
 	 *              2. Added detection for various other types
 	 *              2. Removed wildcard `cs_` detection.
+	 * @see $this->has_unprocessed_syntax(), the caller.
 	 * @link <https://yoast.com/help/list-available-snippet-variables-yoast-seo/> (This list containts false information)
 	 * @link <https://theseoframework.com/extensions/transport/#faq/what-data-is-transformed>
 	 *
@@ -1366,9 +1369,8 @@ class Detect extends Render {
 			);
 		}
 
-		// https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome... crap.
-		return preg_match( sprintf( '/%%%%(?:%s)%%%%/', $tags['simple'] ), $text )
-			|| preg_match( sprintf( '/%%%%(?:%s)[^%%]+?%%%%/', $tags['wildcard_end'] ), $text );
+		return preg_match( "/%%(?:{$tags['simple']})%%/", $text )
+			|| preg_match( "/%%(?:{$tags['wildcard_end']})[^%]+?%%/", $text );
 	}
 
 	/**
@@ -1378,6 +1380,7 @@ class Detect extends Render {
 	 * @since 4.2.8 Actualized the variable list.
 	 * @link <https://theseoframework.com/extensions/transport/#faq/what-data-is-transformed>
 	 *       Rank Math has no documentation on this list, but we sampled their code.
+	 * @see $this->has_unprocessed_syntax(), the caller.
 	 *
 	 * @param string $text The text to evaluate.
 	 * @return bool
@@ -1451,7 +1454,7 @@ class Detect extends Render {
 							'userid',
 						]
 					),
-					// See RankMath\Replace_Variables\Replacer::set_up_replacements();
+					// Check out for ref RankMath\Replace_Variables\Replacer::set_up_replacements();
 					'wildcard_end' => implode(
 						'|',
 						[
@@ -1470,8 +1473,99 @@ class Detect extends Render {
 			);
 		}
 
-		// https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome... crap.
-		return preg_match( sprintf( '/%%(?:%s)%%/', $tags['simple'] ), $text )
-			|| preg_match( sprintf( '/%%(?:%s)\([^\)]+?\)%%/', $tags['wildcard_end'] ), $text );
+		return preg_match( "/%(?:{$tags['simple']})%/", $text )
+			|| preg_match( "/%(?:{$tags['wildcard_end']})\([^\)]+?\)%/", $text );
+	}
+
+	/**
+	 * Determines if the input text has transformative SEOPress syntax.
+	 *
+	 * @since 4.2.8
+	 * @link <https://theseoframework.com/extensions/transport/#faq/what-data-is-transformed>
+	 *       SEOPress has no documentation on this list, but we sampled their code.
+	 * @see $this->has_unprocessed_syntax(), the caller.
+	 *
+	 * @param string $text The text to evaluate.
+	 * @return bool
+	 */
+	public function has_seopress_syntax( $text ) {
+
+		// %%sep%% is the shortest valid tag... ish. Let's stop at 7.
+		if ( \strlen( $text ) < 7 || false === strpos( $text, '%%' ) )
+			return false;
+
+		$tags = umemo( __METHOD__ . '/tags' );
+
+		if ( ! $tags ) {
+			$tags = umemo(
+				__METHOD__ . '/tags',
+				[
+					'simple'       => implode(
+						'|',
+						[
+							// These are Preserved by Transport. Test first, for they are more likely in text.
+							'author_website',
+							'current_pagination',
+							'currenttime',
+							'post_thumbnail_url',
+							'post_url',
+							'target_keyword',
+							'wc_single_price',
+							'wc_single_price_exc_tax',
+							'wc_sku',
+
+							// These are transformed by Transport
+							'_category_description',
+							'_category_title',
+							'archive_title',
+							'author_bio',
+							'author_first_name',
+							'author_last_name',
+							'author_nickname',
+							'currentday',
+							'currentmonth',
+							'currentmonth_num',
+							'currentmonth_short',
+							'currentyear',
+							'date',
+							'excerpt',
+							'post_author',
+							'post_category',
+							'post_content',
+							'post_date',
+							'post_excerpt',
+							'post_modified_date',
+							'post_tag',
+							'post_title',
+							'sep',
+							'sitedesc',
+							'sitename',
+							'sitetitle',
+							'tag_description',
+							'tag_title',
+							'tagline',
+							'term_description',
+							'term_title',
+							'title',
+							'wc_single_cat',
+							'wc_single_short_desc',
+							'wc_single_tag',
+						]
+					),
+					// Check out for ref somewhere in SEOPress, seopress_get_dyn_variables() is one I guess.
+					'wildcard_end' => implode(
+						'|',
+						[
+							'_cf_',
+							'_ct_',
+							'_ucf_',
+						]
+					),
+				]
+			);
+		}
+
+		return preg_match( "/%%(?:{$tags['simple']})%%/", $text )
+			|| preg_match( "/%%(?:{$tags['wildcard_end']})[^%]+?%%/", $text );
 	}
 }
