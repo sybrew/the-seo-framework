@@ -262,6 +262,8 @@ TODO bbPress's hidden forum topics are still displayed in the sitemap.
 
 TODO the markdown conversion Regex is jank.
 
+TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts from Extension Manager.
+
 **For everyone**
 
 * **Added:**
@@ -276,18 +278,31 @@ TODO the markdown conversion Regex is jank.
 		* `i` elements can no longer be cloased by `iframe` and `ins` (but not `input` and `img`, since those are void elements).
 		* This bug was not replicable on anyone's site, since we do not AI-strip `a`, `b`, nor `i` elements in our contexts (we leave those as inline text). So, eh... why did we write this out? Ah, yes. Open Source means sharing information.
 	* Rank Math variable syntax is now updated to reflect the real world, instead of the buggy world Yoast SEO lives in.
+	* Post types that lost support of a feature will no longer have data used from the missing feature.
+		* For example, if a post type doesn't support title, you will always get "Untitled" as an SEO title, unless overwritten. If a post type no longer supports the "excerpt" field, it won't be used for description generation anymore.
 	* TODO Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
+		* Didn't we already fix this?
 
 **For developers**
 
-* **Updated:**
-	* `tsf()->has_rankmath_syntax()`, actualized the variable list.
-	* `tsf()->strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
-	* `tsf()->page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
-	* `tsf()->is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
+* Methods in object `The_SEO_Framework\Load` (callable via `tsf()` and `theseoframework()`):
+	* **Added:**
+		* TODO `has_seopress_syntax()` determines if the input text has transformative SEOPress syntax.
+	* **Changed:**
+		* `has_rankmath_syntax()`, actualized the variable list.
+		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
+		* `page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
+		* `is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
+		* `convert_markdown()` can now process with either `{` or `}` within Markdown blocks.
+			* The regex used is also vastly optimized.
+		* The following methods now test for post type support. All methods that rely on post type data are affected.
+			* `fetch_excerpt()`, `'excerpt'` for excerpt parsing, and `'editor'` for content parsing.
+			* `get_generated_single_post_title()`, `'title'` for title parsing.
+			* `get_post_content()`, `'editor'` for content parsing.
+			* `get_current_post_author_id()`, `'author'` for user ID parsing.
+		* `get_current_post_author_meta()` now returns null when no post author can be established.
+* **Changed:**
 	* (JS) `tsf-resize` now fires once every 50ms, instead of 100ms.
-	* `tsf()->convert_markdown()` can now process with either `{` or `}` within Markdown blocks.
-		* The regex used is also vastly optimized.
 * **Other:**
 	* Condensed code, such as removing needless quotes from administrative HTML="attributes".
 

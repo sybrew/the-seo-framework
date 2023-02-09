@@ -1180,8 +1180,9 @@ class Query extends Core {
 		if ( $this->is_singular() && ! $this->is_singular_archive() )
 			$post = \get_post( $this->get_the_real_ID() );
 
-		if ( isset( $post ) && $post instanceof \WP_Post ) {
-			$content = $post->post_content;
+		if ( ( $post ?? null ) instanceof \WP_Post ) {
+			$content = $this->get_post_content( $post );
+
 			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
 
@@ -1189,9 +1190,9 @@ class Query extends Core {
 				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
 					$content = substr( $content, 15 );
 
-				$_pages = explode( '<!--nextpage-->', $content );
+				$pages = explode( '<!--nextpage-->', $content );
 			} else {
-				$_pages = [ $content ];
+				$pages = [ $content ];
 			}
 
 			/**
@@ -1202,13 +1203,13 @@ class Query extends Core {
 			 *
 			 * @since 4.4.0 WordPress core
 			 *
-			 * @param array $_pages Array of "pages" derived from the post content.
-			 *              of `<!-- nextpage -->` tags..
-			 * @param WP_Post $post  Current post object.
+			 * @param array    $pages Array of "pages" derived from the post content.
+			 *                 of `<!-- nextpage -->` tags..
+			 * @param \WP_Post $post  Current post object.
 			 */
-			$_pages = \apply_filters( 'content_pagination', $_pages, $post );
+			$pages = \apply_filters( 'content_pagination', $pages, $post );
 
-			$numpages = \count( $_pages );
+			$numpages = \count( $pages );
 		} elseif ( isset( $wp_query->max_num_pages ) ) {
 			$numpages = (int) $wp_query->max_num_pages;
 		} else {

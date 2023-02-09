@@ -826,6 +826,8 @@ class Generate_Description extends Generate {
 	 *              2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 Now fetches the real ID when no post is supplied.
 	 *              Internally, this was never an issue. @see `$this->get_singular_description_excerpt()`
+	 * @since 4.2.8 1. Now tests for post type support of 'excerpt' before parsing the excerpt.
+	 *              2. Now tests for post type support of 'editor' before parsing the content.
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
 	 * @return string The excerpt.
@@ -838,12 +840,12 @@ class Generate_Description extends Generate {
 		 * @since 2.5.2
 		 * Fetch custom excerpt, if not empty, from the post_excerpt field.
 		 */
-		if ( ! empty( $post->post_excerpt ) ) {
+		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) ) {
 			$excerpt = $post->post_excerpt;
-		} elseif ( isset( $post->post_content, $post->ID ) && ! $this->uses_non_html_page_builder( $post->ID ) ) {
+		} elseif ( $post instanceof \WP_Post && ! $this->uses_non_html_page_builder( $post->ID ) ) {
 			// We should actually get the parsed content here... but that can be heavy on the server.
 			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
-			$excerpt = $post->post_content;
+			$excerpt = $this->get_post_content( $post );
 
 			if ( $excerpt ) {
 				$excerpt = $this->strip_newline_urls( $excerpt );

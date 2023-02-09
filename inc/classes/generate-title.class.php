@@ -1026,6 +1026,7 @@ class Generate_Title extends Generate_Description {
 	 * @see WP Core single_post_title()
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.8 Now tests for post type support of 'title' before parsing the title.
 	 *
 	 * @param int|\WP_Post $id The Post ID or post object.
 	 * @return string The generated post title.
@@ -1033,9 +1034,9 @@ class Generate_Title extends Generate_Description {
 	public function get_generated_single_post_title( $id = 0 ) {
 
 		// Home queries can be tricky. Use get_the_real_ID to be certain.
-		$_post = \get_post( $id ?: $this->get_the_real_ID() );
+		$post = \get_post( $id ?: $this->get_the_real_ID() );
 
-		if ( isset( $_post->post_title ) ) {
+		if ( isset( $post->post_title ) && \post_type_supports( $post->post_type, 'title' ) ) {
 			/**
 			 * Filters the page title for a single post.
 			 *
@@ -1044,7 +1045,7 @@ class Generate_Title extends Generate_Description {
 			 * @param string   $_post_title The single post page title.
 			 * @param \WP_Post $_post       The current queried object as returned by get_queried_object().
 			 */
-			$title = \apply_filters( 'single_post_title', $_post->post_title, $_post );
+			$title = \apply_filters( 'single_post_title', $post->post_title, $post );
 		}
 
 		return $title ?? '';
