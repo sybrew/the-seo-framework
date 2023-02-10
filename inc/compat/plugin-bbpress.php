@@ -356,3 +356,110 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
 
 	return $do;
 }
+
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 3 );
+/**
+ * Filters bbPress hidden forums.
+ *
+ * This should actually only consider non-loop queries, for hidden forums can't be reached anyway.
+ *
+ * @since 4.2.8
+ * @access private
+ *
+ * @param array      $meta The parsed robots meta. {
+ *    string 'noindex', ideally be empty or 'noindex'
+ *    string 'nofollow', ideally be empty or 'nofollow'
+ *    string 'noarchive', ideally be empty or 'noarchive'
+ *    string 'max_snippet', ideally be empty or 'max-snippet:<R>=-1>'
+ *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
+ *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
+ * }
+ * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
+ *                            Is null when query is autodetermined.
+ * @param int <bit>  $options The generator settings. {
+ *    0 = 0b00: Ignore nothing.
+ *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+ *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+ *    3 = 0b11: Ignore protection and post/term setting.
+ * }
+ * @return array
+ */
+function _bbpress_filter_robots( $meta, $args, $options ) {
+
+	if ( null === $args ) {
+		// Front-end
+		if ( \bbp_is_single_forum() ) {
+			$forum_id = \tsf()->get_the_real_ID();
+		} elseif ( \bbp_is_single_topic() ) {
+			$forum_id = \get_post_meta( \tsf()->get_the_real_ID(), '_bbp_forum_id', true );
+		} elseif ( \bbp_is_single_reply() ) {
+			$forum_id = \get_post_meta( \tsf()->get_the_real_ID(), '_bbp_forum_id', true );
+		}
+	} else {
+		// Custom query, back-end or sitemap.
+		if ( empty( $args['pta'] ) && empty( $args['taxonomy'] ) ) {
+			switch ( \get_post_type( $args['id'] ) ) {
+				case \bbp_get_forum_post_type():
+					$forum_id = $args['id'];
+					break;
+				case \bbp_get_topic_post_type():
+				case \bbp_get_reply_post_type():
+					$forum_id = \get_post_meta( $args['id'], '_bbp_forum_id', true );
+					break;
+			}
+		}
+	}
+
+	if ( ! empty( $forum_id ) && ! \bbp_is_forum_public( $forum_id ) )
+		$meta['noindex'] = 'noindex';
+
+	return $meta;
+}
+
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar' );
+/**
+ * Appends noindex default checks to the noindex item of the SEO Bar for pages.
+ *
+ * @since 4.2.8
+ * @access private
+ *
+ * @param string $interpreter The interpreter class name.
+ */
+function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
+
+	if ( $interpreter::$query['taxonomy'] ) return;
+
+	$items = $interpreter::collect_seo_bar_items();
+
+	// Don't do anything if there's a blocking redirect.
+	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
+
+	switch ( $interpreter::$query['post_type'] ) {
+		case \bbp_get_forum_post_type():
+			$forum_id = $interpreter::$query['id'];
+			break;
+		case \bbp_get_topic_post_type():
+		case \bbp_get_reply_post_type():
+			$forum_id = \get_post_meta( $interpreter::$query['id'], '_bbp_forum_id', true );
+			break;
+	}
+
+	if ( empty( $forum_id ) || \bbp_is_forum_public( $forum_id ) ) return;
+
+	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
+	$index_item['status'] =
+		0 !== \tsf()->s_qubit(
+			\The_SEO_Framework\Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
+		)
+			? $interpreter::STATE_OKAY
+			: $interpreter::STATE_UNKNOWN;
+
+	if ( 'forum' === $interpreter::$query['post_type'] ) {
+		$index_item['assess']['notpublic'] = \__( 'This is not a public forum.', 'autodescription' );
+	} else {
+		$index_item['assess']['notpublic'] = \__( 'This page is not part of a public forum.', 'autodescription' );
+	}
+
+	// No amount of overriding will fix this -- the forum/topic/reply is publicly unreachable.
+	unset( $index_item['override'] );
+}

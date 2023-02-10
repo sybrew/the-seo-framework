@@ -81,8 +81,7 @@ final class PostSettings {
 				$title = \esc_html__( 'Homepage SEO Settings', 'autodescription' );
 			}
 		} else {
-			/* translators: %s = Post Type label */
-			$title = sprintf( \esc_html__( '%s SEO Settings', 'autodescription' ), $label );
+			$title = \esc_html__( 'SEO Settings', 'autodescription' );
 		}
 
 		$box_id = 'tsf-inpost-box';
