@@ -125,7 +125,8 @@ The SEO Framework works on many things without notifying you, because the best s
 * Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO tools to help you switch graciously.
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
-* E-commerce plugins, like WooCommerce and Easy Digital Downloads.
+* E-commerce plugins like WooCommerce and Easy Digital Downloads.
+* Forum plugins like bbPress and wpForo.
 * Editing posts and terms via WordPress's native bulk-and-quick-edit interfaces.
 * Headless mode via a single [constant definition](https://kb.theseoframework.com/?p=136).
 
@@ -275,6 +276,8 @@ TODO 2023
 		* The default colors are accessible to people with any type color-vision deficiency, but they may be too harsh on the eyes for some.
 * **Changed:**
 	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
+	* Added support for wpForo v2.0 and later, but dropped support for earlier versions.
+		* They had no deprecation route for us to follow, plus we cannot support both versions indefinitely. We also have no data on how many users use the latest version of TSF with wpForo v1.x.
 * **Fixed:**
 	* When a pagination overflow is requested for the paginated static frontpage, TSF now properly detects WordPress's intention (it provides the last page instead of the first).
 	* When stripping tags, elements with that start with exactly the same text as others won't be preemptively closed. Listing all faults:
