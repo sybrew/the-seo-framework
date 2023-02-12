@@ -259,8 +259,6 @@ TODO wpforo 2.0 support https://wordpress.org/support/topic/seo-framework-and-wp
 TODO for get_image_uploader_form(), allow custom classes -- for both the add/change and remove button separately.
 	-> Then we can remove the TEMP css in TSFEM.
 
-TODO the markdown conversion Regex is jank.
-
 TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts from Extension Manager.
 
 TODO 2023
@@ -272,8 +270,9 @@ TODO 2023
 	* SEOPress syntax is now detected for titles and descriptions. The SEO Bar will warn you about leftover syntax.
 	* Hidden forums of bbPress now have their forums, topics, and replies removed from the sitemap by forcing "noindex" to them.
 		* The SEO Bar will also explain this. No amount of overriding will make the hidden forum public; so, indexing overrides are ignored.
-	* TODO added a setting to soften the SEO Bar colors.
-		* The default colors are accessible to people with any type color-vision deficiency, but they may be too harsh on the eyes for some.
+* **Improved:**
+	* After two years of fiddling, we finally found a way to round the edges of the SEO Bar. Finally some peace on your eyes.
+		* The problem was that we're using flexbox, which doesn't yield information about wrapping; so, we must rely on hiding the overflow. But relatively positioned tooltips still need to overflow beyond its parent, otherwise we cannot see the tooltip. We figured that making the tooltip relative to a grandparent, we could still work with hiding overflows. So what was left to do is calculate relative positioning between the grandparent and parent.
 * **Changed:**
 	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
 	* Added support for wpForo v2.0 and later, but dropped support for earlier versions.
@@ -290,8 +289,7 @@ TODO 2023
 		* For example, if a post type doesn't support title, you will always get "Untitled" as an SEO title, unless overwritten. If a post type no longer supports the "excerpt" field, it won't be used for description generation anymore.
 	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
 		* This also affects quick-edit and the SEO Bar.
-	* TODO Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
-		* Didn't we already fix this?
+	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
 
 **For developers**
 

@@ -1,5 +1,10 @@
+.tsf-tooltip-super-wrap,
 .tsf-tooltip-wrap {
 	position: relative;
+}
+
+.tsf-tooltip-super-wrap .tsf-tooltip-wrap {
+	position: static;
 }
 
 .tsf-tooltip-item {

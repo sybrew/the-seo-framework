@@ -262,6 +262,8 @@ final class SEOBar {
 	 * Converts registered items to a full HTML SEO Bar.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.8 1. Now returns a div wrap instead of a span, so we can bypass lack of display-inside browser support.
+	 *              2. Added tsf-tooltip-super-wrap said div wrap.
 	 *
 	 * @param iterable $items The SEO Bar items.
 	 * @return string The SEO Bar
@@ -275,7 +277,7 @@ final class SEOBar {
 
 		// Always return the wrap, may it be filled in via JS in the future.
 		return sprintf(
-			'<span class="tsf-seo-bar clearfix"><span class=tsf-seo-bar-inner-wrap>%s</span></span>',
+			'<div class="tsf-seo-bar tsf-tooltip-super-wrap"><span class=tsf-seo-bar-inner-wrap>%s</span></div>',
 			implode( $blocks )
 		);
 	}
@@ -337,7 +339,7 @@ final class SEOBar {
 		} else {
 			$assess = '<ol>';
 			foreach ( $item['assess'] as $_a ) {
-				$assess .= sprintf( '<li>%s</li>', $_a );
+				$assess .= "<li>$_a</li>";
 			}
 			$assess .= '</ol>';
 
@@ -363,23 +365,27 @@ final class SEOBar {
 		$count       = \count( $item['assess'] );
 		$assessments = [];
 
-		static $gettext = null;
-		if ( null === $gettext ) {
-			$gettext = [
-				/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
-				'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
-				/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
-				'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
-				'assessment'  => \__( 'Assessment', 'autodescription' ),
-				'assessments' => \__( 'Assessments', 'autodescription' ),
-			];
+		$gettext = umemo( __METHOD__ . '/text' );
+
+		if ( ! $gettext ) {
+			$gettext = umemo(
+				__METHOD__ . '/text',
+				[
+					/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
+					'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
+					/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
+					'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
+					'assessment'  => \__( 'Assessment', 'autodescription' ),
+					'assessments' => \__( 'Assessments', 'autodescription' ),
+				]
+			);
 		}
 
 		if ( $count < 2 ) {
 			$assessments[] = reset( $item['assess'] );
 		} else {
 			$i = 0;
-			foreach ( $item['assess'] as $key => $text ) {
+			foreach ( $item['assess'] as $text ) {
 				$assessments[] = sprintf( $gettext['enum'], ++$i, $text );
 			}
 		}

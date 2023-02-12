@@ -167,13 +167,15 @@ body.rtl .tsf-title-placeholder-prefix {
 }
 
 .tsf-seo-bar {
-	display: block;
+	display: flow-root;
 	width: 95%;
 	max-width: 190px;
 	padding: 0;
 }
 
 .tsf-seo-bar-inner-wrap {
+	border-radius: 3px;
+	overflow: hidden;
 	display: flex;
 	flex-direction: row;
 	flex: 1 1 auto;
