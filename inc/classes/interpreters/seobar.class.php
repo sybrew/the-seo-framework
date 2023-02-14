@@ -25,8 +25,6 @@ namespace The_SEO_Framework\Interpreters;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\umemo;
-
 /**
  * Interprets the SEO Bar into an HTML item.
  *
@@ -365,20 +363,17 @@ final class SEOBar {
 		$count       = \count( $item['assess'] );
 		$assessments = [];
 
-		$gettext = umemo( __METHOD__ . '/text' );
+		static $gettext = null;
 
-		if ( ! $gettext ) {
-			$gettext = umemo(
-				__METHOD__ . '/text',
-				[
-					/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
-					'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
-					/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
-					'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
-					'assessment'  => \__( 'Assessment', 'autodescription' ),
-					'assessments' => \__( 'Assessments', 'autodescription' ),
-				]
-			);
+		if ( null === $gettext ) {
+			$gettext = [
+				/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
+				'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
+				/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
+				'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
+				'assessment'  => \__( 'Assessment', 'autodescription' ),
+				'assessments' => \__( 'Assessments', 'autodescription' ),
+			];
 		}
 
 		if ( $count < 2 ) {
@@ -450,10 +445,11 @@ final class SEOBar {
 	 */
 	private function interpret_status_to_symbol( $item ) {
 
-		$symbols = umemo( __METHOD__ . '/use_symbols' )
-				?? umemo( __METHOD__ . '/use_symbols', (bool) \tsf()->get_option( 'seo_bar_symbols' ) );
+		static $use_symbols;
 
-		if ( $symbols && $item['status'] ^ static::STATE_GOOD ) {
+		$use_symbols = $use_symbols ?? (bool) \tsf()->get_option( 'seo_bar_symbols' );
+
+		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) :
 				case static::STATE_OKAY:
 					$symbol = '!?';

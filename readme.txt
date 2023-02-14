@@ -254,8 +254,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 TODO consider using Website Icon (favicon) image for Sitemap image? (see Tobi's email) -> It ought to be large enough (512px at least recommended)
 TODO s_no_html_space -> s_verification_id (strip content="code" => code, then strip HTML, then strip spaces)
 
-TODO wpforo 2.0 support https://wordpress.org/support/topic/seo-framework-and-wpforo-2/
-
 TODO for get_image_uploader_form(), allow custom classes -- for both the add/change and remove button separately.
 	-> Then we can remove the TEMP css in TSFEM.
 
@@ -272,6 +270,7 @@ TODO regression within this update? SEO Bar tooltip overflows sidebar in Gutenbe
 	* SEOPress syntax is now detected for titles and descriptions. The SEO Bar will warn you about leftover syntax.
 	* Hidden forums of bbPress now have their forums, topics, and replies removed from the sitemap by forcing "noindex" to them.
 		* The SEO Bar will also explain this. No amount of overriding will make the hidden forum public; so, indexing overrides are ignored.
+	* The wpForo page can now be detected by the SEO Bar, and will exclaim some or all assertions aren't possible when wpForo's SEO is enabled.
 * **Improved:**
 	* After two years of fiddling, we finally found a way to round the edges of the SEO Bar. Finally some peace on your eyes.
 		* The problem was that we're using flexbox, which doesn't yield information about wrapping; so, we must rely on hiding the overflow. But relatively positioned tooltips still need to overflow beyond its parent, otherwise we cannot see the tooltip. We figured that making the tooltip relative to a grandparent, we could still work with hiding overflows. So what was left to do is calculate relative positioning between the grandparent and parent.
