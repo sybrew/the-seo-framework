@@ -286,8 +286,12 @@ class Admin_Pages extends Generate_Ldjson {
 			\The_SEO_Framework\Builders\Scripts::footer_enqueue();
 		}
 
-		if ( \in_array( $type, [ 'warning', 'info' ], true ) )
-			$type = "notice-$type";
+		switch ( $type ) {
+			case 'warning':
+			case 'info':
+				$type = "notice-$type";
+				break;
+		}
 
 		return vsprintf(
 			'<div class="notice %s tsf-notice %s %s">%s%s</div>',

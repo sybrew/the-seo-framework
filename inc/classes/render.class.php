@@ -160,10 +160,16 @@ class Render extends Admin_Init {
 		$attr = '';
 
 		foreach ( $attributes as $_name => $_value ) {
-			if ( \in_array( $_name, [ 'href', 'xlink:href', 'src' ], true ) ) {
-				$_secure_attr_value = \esc_url_raw( $_value );
-			} else {
-				$_secure_attr_value = \esc_attr( $_value );
+
+			switch ( $_name ) {
+				case 'href':
+				case 'xlink:href':
+				case 'src':
+					$_secure_attr_value = \esc_url_raw( $_value );
+					break;
+				default:
+					$_secure_attr_value = \esc_attr( $_value );
+					break;
 			}
 
 			// phpcs:disable -- Security hint for later, left code intact; Redundant, internal... for now.

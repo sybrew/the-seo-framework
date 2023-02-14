@@ -146,18 +146,12 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function render_ld_json_scripts() {
 
-		if ( $this->is_real_front_page() ) {
-			// Homepage Schema.
-			$output = '';
+		// Homepage Schema.org
+		if ( $this->is_real_front_page() )
+			return $this->get_ld_json_website() . $this->get_ld_json_links();
 
-			$output .= $this->get_ld_json_website() ?: '';
-			$output .= $this->get_ld_json_links() ?: '';
-		} else {
-			// All other pages' Schema.
-			$output = $this->get_ld_json_breadcrumbs() ?: '';
-		}
-
-		return $output;
+		// All other pages' Schema.org
+		return $this->get_ld_json_breadcrumbs();
 	}
 
 	/**
@@ -281,7 +275,7 @@ class Generate_Ldjson extends Generate_Image {
 		$sameurls = [];
 		foreach ( $sameurls_options as $_o ) {
 
-			$_ov = $this->get_option( $_o ) ?: '';
+			$_ov = $this->get_option( $_o );
 
 			if ( $_ov )
 				$sameurls[] = \esc_url_raw( $_ov, [ 'https', 'http' ] );
@@ -490,13 +484,9 @@ class Generate_Ldjson extends Generate_Image {
 			return '';
 
 		// Seed out parents that have multiple assigned children.
-		foreach ( $parents as $pa_id => $child_id ) :
-			foreach ( $child_id as $ckey => $cid ) :
-				if ( isset( $parents[ $cid ] ) ) {
-					unset( $parents[ $cid ] );
-				}
-			endforeach;
-		endforeach;
+		foreach ( $parents as $child_id )
+			foreach ( $child_id as $cid )
+				unset( $parents[ $cid ] );
 
 		// Merge tree list.
 		$tree_ids = $this->build_ld_json_breadcrumb_trees( $parents );
@@ -504,8 +494,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( ! $tree_ids )
 			return '';
 
-		$primary_term    = $this->get_primary_term( $post_id, $taxonomy );
-		$primary_term_id = $primary_term ? (int) $primary_term->term_id : 0;
+		$primary_term_id = $this->get_primary_term_id( $post_id, $taxonomy );
 
 		$filtered = false;
 		/**
@@ -595,7 +584,7 @@ class Generate_Ldjson extends Generate_Image {
 					// Nested categories.
 					$add = [];
 
-					foreach ( $kitten as $kit_id => $child_id ) {
+					foreach ( $kitten as $child_id ) {
 						// Only add if non-existent in $trees.
 						if ( ! \in_array( $child_id, $trees, true ) )
 							$add[] = $child_id;

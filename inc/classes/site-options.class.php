@@ -850,7 +850,7 @@ class Site_Options extends Sanitize {
 	 * @param string $item      The item to get.
 	 * @param string $post_type The post type.
 	 * @param bool   $use_cache Whether to use caching.
-	 * @return array|null The post type archive's meta item's value. Null when item isn't registered.
+	 * @return ?mixed The post type archive's meta item value. Null when item isn't registered.
 	 */
 	public function get_post_type_archive_meta_item( $item, $post_type = '', $use_cache = true ) {
 		return $this->get_post_type_archive_meta(

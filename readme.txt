@@ -263,6 +263,8 @@ TODO add filter for custom title handling of the menu. Primarily to spawn notifi
 
 TODO 2023
 
+TODO regression within this update? SEO Bar tooltip overflows sidebar in Gutenberg.
+
 **For everyone**
 
 * **Added:**
@@ -273,6 +275,7 @@ TODO 2023
 * **Improved:**
 	* After two years of fiddling, we finally found a way to round the edges of the SEO Bar. Finally some peace on your eyes.
 		* The problem was that we're using flexbox, which doesn't yield information about wrapping; so, we must rely on hiding the overflow. But relatively positioned tooltips still need to overflow beyond its parent, otherwise we cannot see the tooltip. We figured that making the tooltip relative to a grandparent, we could still work with hiding overflows. So what was left to do is calculate relative positioning between the grandparent and parent.
+	* Improved performance by refactoring several code operations once again: less work, same result.
 * **Changed:**
 	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
 	* Added support for wpForo v2.0 and later, but dropped support for earlier versions.

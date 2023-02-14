@@ -528,27 +528,25 @@ class Generate extends User_Data {
 	 */
 	public function get_redirect_url( $args = null ) {
 
-		$url = '';
-
 		if ( null === $args ) {
 			if ( $this->is_singular() ) {
-				$url = $this->get_post_meta_item( 'redirect' ) ?: '';
+				$url = $this->get_post_meta_item( 'redirect' );
 			} elseif ( $this->is_term_meta_capable() ) {
-				$url = $this->get_term_meta_item( 'redirect' ) ?: '';
+				$url = $this->get_term_meta_item( 'redirect' );
 			} elseif ( \is_post_type_archive() ) {
-				$url = $this->get_post_type_archive_meta_item( 'redirect' ) ?: '';
+				$url = $this->get_post_type_archive_meta_item( 'redirect' );
 			}
 		} else {
 			$this->fix_generation_args( $args );
 			if ( $args['taxonomy'] ) {
-				$url = $this->get_term_meta_item( 'redirect', $args['id'] ) ?: '';
+				$url = $this->get_term_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {
-				$url = $this->get_post_type_archive_meta_item( 'redirect', $args['pta'] ) ?: '';
+				$url = $this->get_post_type_archive_meta_item( 'redirect', $args['pta'] );
 			} else {
-				$url = $this->get_post_meta_item( 'redirect', $args['id'] ) ?: '';
+				$url = $this->get_post_meta_item( 'redirect', $args['id'] );
 			}
 		}
 
-		return $url;
+		return $url ?? '' ?: '';
 	}
 }

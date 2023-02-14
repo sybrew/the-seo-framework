@@ -726,7 +726,7 @@ class Sanitize extends Admin_Pages {
 
 		// Do NOT test for post type's existence -- it might be registered incorrectly.
 		// If the metadata yields empty -- do not unset key! It'll override "defaults" that way.
-		foreach ( $data as $_post_type => &$meta )
+		foreach ( $data as &$meta )
 			$meta = $this->s_post_type_archive_meta( $meta );
 
 		return $data;
@@ -1192,8 +1192,11 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_knowledge_type( $new_value ) {
 
-		if ( \in_array( $new_value, [ 'person', 'organization' ], true ) )
-			return $new_value;
+		switch ( $new_value ) {
+			case 'person':
+			case 'organization':
+				return $new_value;
+		}
 
 		return 'organization';
 	}
@@ -1211,16 +1214,16 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_left_right( $new_value ) {
 
-		if ( \in_array( $new_value, [ 'left', 'right' ], true ) )
-			return $new_value;
+		switch ( $new_value ) {
+			case 'left':
+			case 'right':
+				return $new_value;
+		}
 
-		$previous = $this->get_option( 'title_location' );
-
-		// Fallback if previous is also empty.
-		if ( ! $previous )
-			$previous = $this->get_default_option( 'title_location' );
-
-		return (string) $previous;
+		return (string) (
+			   $this->get_option( 'title_location' )
+			?: $this->get_default_option( 'title_location' )
+		);
 	}
 
 	/**
@@ -1236,16 +1239,16 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_left_right_home( $new_value ) {
 
-		if ( \in_array( $new_value, [ 'left', 'right' ], true ) )
-			return $new_value;
+		switch ( $new_value ) {
+			case 'left':
+			case 'right':
+				return $new_value;
+		}
 
-		$previous = $this->get_option( 'home_title_location' );
-
-		// Fallback if previous is also empty.
-		if ( ! $previous )
-			$previous = $this->get_default_option( 'home_title_location' );
-
-		return (string) $previous;
+		return (string) (
+			   $this->get_option( 'home_title_location' )
+			?: $this->get_default_option( 'home_title_location' )
+		);
 	}
 
 	/**
@@ -1258,8 +1261,11 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_alter_query_type( $new_value ) {
 
-		if ( \in_array( $new_value, [ 'in_query', 'post_query' ], true ) )
-			return $new_value;
+		switch ( $new_value ) {
+			case 'in_query':
+			case 'post_query':
+				return $new_value;
+		}
 
 		return 'in_query';
 	}
@@ -1274,8 +1280,12 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_description_html_method( $new_value ) {
 
-		if ( \in_array( $new_value, [ 'fast', 'accurate', 'thorough' ], true ) )
-			return $new_value;
+		switch ( $new_value ) {
+			case 'fast':
+			case 'accurate':
+			case 'thorough':
+				return $new_value;
+		}
 
 		return 'fast';
 	}
@@ -1350,7 +1360,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $new_values ) ) return [];
 
-		foreach ( $new_values as $index => &$value )
+		foreach ( $new_values as &$value )
 			$value = $this->s_one_zero( $value );
 
 		return $new_values;
@@ -1845,10 +1855,9 @@ class Sanitize extends Admin_Pages {
 		if ( ! $new_value ) {
 			// We assume something's wrong. Return default value.
 			$new_value = $this->get_default_option( 'sitemap_query_limit' );
-		} elseif ( $new_value < 1 ) {
-			$new_value = 1;
-		} elseif ( $new_value > 50000 ) {
-			$new_value = 50000;
+		} else {
+			// At least 1, at most 50000.
+			$new_value = max( 1, min( 50000, $new_value ) );
 		}
 
 		return $new_value;
@@ -1864,10 +1873,14 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_image_preview( $new_value ) {
 
-		if ( ! \in_array( $new_value, [ 'none', 'standard', 'large' ], true ) )
-			$new_value = 'standard';
+		switch ( $new_value ) {
+			case 'none':
+			case 'standard':
+			case 'large':
+				return $new_value;
+		}
 
-		return $new_value;
+		return 'standard';
 	}
 
 	/**
@@ -1879,16 +1892,8 @@ class Sanitize extends Admin_Pages {
 	 * @return int The robots video and snippet preview directive value.
 	 */
 	public function s_snippet_length( $new_value ) {
-
-		$new_value = (int) $new_value;
-
-		if ( $new_value < 0 ) {
-			$new_value = -1;
-		} elseif ( $new_value > 600 ) {
-			$new_value = 600;
-		}
-
-		return $new_value;
+		// At least -1, at most 600.
+		return max( -1, min( 600, (int) $new_value ) );
 	}
 
 	/**

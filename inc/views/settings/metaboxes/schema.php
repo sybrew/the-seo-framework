@@ -276,7 +276,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		$output_social_presence = false;
 
-		foreach ( $socialsites as $key => $v ) {
+		foreach ( $socialsites as $v ) {
 			if ( strlen( $this->get_option( $v['option'] ) ) ) {
 				$output_social_presence = true;
 				break;

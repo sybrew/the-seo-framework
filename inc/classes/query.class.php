@@ -448,7 +448,14 @@ class Query extends Core {
 	 * @return bool Post Type is archive
 	 */
 	public function is_archive_admin() {
-		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'edit-tags', 'term' ], true );
+
+		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'edit-tags':
+			case 'term':
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -484,7 +491,14 @@ class Query extends Core {
 	 * @return bool We're on the edit screen.
 	 */
 	public function is_wp_lists_edit() {
-		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'edit-tags', 'edit' ], true );
+
+		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'edit-tags':
+			case 'edit':
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -496,7 +510,14 @@ class Query extends Core {
 	 * @return bool True if on Profile Edit screen. False otherwise.
 	 */
 	public function is_profile_edit() {
-		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'profile', 'user-edit' ], true );
+
+		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'profile':
+			case 'user-edit':
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -856,7 +877,14 @@ class Query extends Core {
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular_admin() {
-		return \in_array( $GLOBALS['current_screen']->base ?? '', [ 'edit', 'post' ], true );
+
+		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'edit':
+			case 'post':
+				return true;
+		}
+
+		return false;
 	}
 
 	/**

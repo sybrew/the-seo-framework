@@ -380,14 +380,14 @@ class Generate_Url extends Generate_Title {
 
 		$url = \wp_get_canonical_url(
 			$post_id ?? $this->get_the_real_ID()
-		) ?: '';
+		);
 
 		if ( ! $url ) return '';
 
-		$_page = \get_query_var( 'page', 1 ) ?: 1;
+		$page = \get_query_var( 'page', 1 ) ?: 1;
 		// Remove undesired/fake pagination. See: <https://core.trac.wordpress.org/ticket/37505>
-		if ( $_page > 1 && $_page !== $this->page() )
-			$url = $this->remove_pagination_from_url( $url, $_page, false );
+		if ( $page > 1 && $page !== $this->page() )
+			$url = $this->remove_pagination_from_url( $url, $page, false );
 
 		// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
 		// wp_get_canonical_url() only tests 'page'. Fix that:

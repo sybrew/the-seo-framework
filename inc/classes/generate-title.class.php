@@ -262,35 +262,28 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_twitter_title_from_query() {
 
-		$title = '';
-
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_post_meta_item( '_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_post_meta_item( '_open_graph_title' )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_open_graph_title' );
 			} else {
 				$title = $this->get_option( 'homepage_twitter_title' )
-					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: '';
+					  ?: $this->get_option( 'homepage_og_title' );
 			}
 		} elseif ( $this->is_singular() ) {
 			$title = $this->get_post_meta_item( '_twitter_title' )
-				  ?: $this->get_post_meta_item( '_open_graph_title' )
-				  ?: '';
+				  ?: $this->get_post_meta_item( '_open_graph_title' );
 		} elseif ( $this->is_term_meta_capable() ) {
 			$title = $this->get_term_meta_item( 'tw_title' )
-				  ?: $this->get_term_meta_item( 'og_title' )
-				  ?: '';
+				  ?: $this->get_term_meta_item( 'og_title' );
 		} elseif ( \is_post_type_archive() ) {
 			$title = $this->get_post_type_archive_meta_item( 'tw_title' )
-				  ?: $this->get_post_type_archive_meta_item( 'og_title' )
-				  ?: '';
+				  ?: $this->get_post_type_archive_meta_item( 'og_title' );
 		}
 
-		return $title;
+		return $title ?? '' ?: '';
 	}
 
 	/**
@@ -311,31 +304,26 @@ class Generate_Title extends Generate_Description {
 
 		if ( $args['taxonomy'] ) {
 			$title = $this->get_term_meta_item( 'tw_title', $args['id'] )
-				  ?: $this->get_term_meta_item( 'og_title', $args['id'] )
-				  ?: '';
+				  ?: $this->get_term_meta_item( 'og_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = $this->get_post_type_archive_meta_item( 'tw_title', $args['pta'] )
-				  ?: $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] )
-				  ?: '';
+				  ?: $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_post_meta_item( '_twitter_title', $args['id'] )
 					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
-					  ?: $this->get_option( 'homepage_og_title' )
-					  ?: '';
+					  ?: $this->get_option( 'homepage_og_title' );
 			} else {
 				$title = $this->get_post_meta_item( '_twitter_title', $args['id'] )
-					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 			}
 		}
 
-		return $title;
+		return $title ?: '';
 	}
 
 	/**
@@ -418,24 +406,22 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_open_graph_title_from_query() {
 
-		$title = '';
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_post_meta_item( '_open_graph_title' )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_open_graph_title' );
 			} else {
-				$title = $this->get_option( 'homepage_og_title' ) ?: '';
+				$title = $this->get_option( 'homepage_og_title' );
 			}
 		} elseif ( $this->is_singular() ) {
-			$title = $this->get_post_meta_item( '_open_graph_title' ) ?: '';
+			$title = $this->get_post_meta_item( '_open_graph_title' );
 		} elseif ( $this->is_term_meta_capable() ) {
-			$title = $this->get_term_meta_item( 'og_title' ) ?: '';
+			$title = $this->get_term_meta_item( 'og_title' );
 		} elseif ( \is_post_type_archive() ) {
-			$title = $this->get_post_type_archive_meta_item( 'og_title' ) ?: '';
+			$title = $this->get_post_type_archive_meta_item( 'og_title' );
 		}
 
-		return $title;
+		return $title ?? '' ?: '';
 	}
 
 	/**
@@ -455,22 +441,21 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_open_graph_title_from_args( $args ) {
 
 		if ( $args['taxonomy'] ) {
-			$title = $this->get_term_meta_item( 'og_title', $args['id'] ) ?: '';
+			$title = $this->get_term_meta_item( 'og_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$title = $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] ) ?: '';
+			$title = $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_og_title' )
-					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$title = $this->get_option( 'homepage_og_title' ) ?: '';
+				$title = $this->get_option( 'homepage_og_title' );
 			} else {
-				$title = $this->get_post_meta_item( '_open_graph_title', $args['id'] ) ?: '';
+				$title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 			}
 		}
 
-		return $title;
+		return $title ?: '';
 	}
 
 	/**
@@ -508,8 +493,6 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_raw_custom_field_title( $args = null ) {
 
-		$title = '';
-
 		if ( null === $args ) {
 			$title = $this->get_custom_field_title_from_query();
 		} else {
@@ -517,7 +500,7 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_custom_field_title_from_args( $args );
 		}
 
-		return $title;
+		return $title ?: '';
 	}
 
 	/**
@@ -533,20 +516,17 @@ class Generate_Title extends Generate_Description {
 	 */
 	protected function get_custom_field_title_from_query() {
 
-		$title = '';
-
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$title = $this->get_option( 'homepage_title' )
-					  ?: $this->get_post_meta_item( '_genesis_title' )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_genesis_title' );
 			} else {
-				$title = $this->get_option( 'homepage_title' ) ?: '';
+				$title = $this->get_option( 'homepage_title' );
 			}
 		} elseif ( $this->is_singular() ) {
-			$title = $this->get_post_meta_item( '_genesis_title' ) ?: '';
+			$title = $this->get_post_meta_item( '_genesis_title' );
 		} elseif ( $this->is_term_meta_capable() ) {
-			$title = $this->get_term_meta_item( 'doctitle' ) ?: '';
+			$title = $this->get_term_meta_item( 'doctitle' );
 		} elseif ( \is_post_type_archive() ) {
 			/**
 			 * @since 4.0.6
@@ -558,10 +538,10 @@ class Generate_Title extends Generate_Description {
 				'the_seo_framework_pta_title',
 				[ $this->get_post_type_archive_meta_item( 'doctitle' ) ],
 				'4.2.0 of The SEO Framework'
-			) ?: '';
+			);
 		}
 
-		return $title;
+		return $title ?? '' ?: '';
 	}
 
 	/**
@@ -580,22 +560,21 @@ class Generate_Title extends Generate_Description {
 	protected function get_custom_field_title_from_args( $args ) {
 
 		if ( $args['taxonomy'] ) {
-			$title = $this->get_term_meta_item( 'doctitle', $args['id'] ) ?: '';
+			$title = $this->get_term_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$title = $this->get_post_type_archive_meta_item( 'doctitle', $args['pta'] ) ?: '';
+			$title = $this->get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$title = $this->get_option( 'homepage_title' )
-					  ?: $this->get_post_meta_item( '_genesis_title', $args['id'] )
-					  ?: '';
+					  ?: $this->get_post_meta_item( '_genesis_title', $args['id'] );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$title = $this->get_option( 'homepage_title' ) ?: '';
+				$title = $this->get_option( 'homepage_title' );
 			} else {
-				$title = $this->get_post_meta_item( '_genesis_title', $args['id'] ) ?: '';
+				$title = $this->get_post_meta_item( '_genesis_title', $args['id'] );
 			}
 		}
 
-		return $title;
+		return $title ?: '';
 	}
 
 	/**
@@ -631,7 +610,7 @@ class Generate_Title extends Generate_Description {
 	}
 
 	/**
-	 * Removes default title filters, for consistent output and sanitation.
+	 * Removes default title filters, for consistent output and sanitization.
 	 * Memoizes the filters removed, so it can add them back on reset.
 	 *
 	 * Performance test: 0.007ms per remove+reset on PHP 8.0, single core VPN.
@@ -1042,13 +1021,13 @@ class Generate_Title extends Generate_Description {
 			 *
 			 * @since WP Core 0.71
 			 *
-			 * @param string   $_post_title The single post page title.
-			 * @param \WP_Post $_post       The current queried object as returned by get_queried_object().
+			 * @param string   $post_title The single post page title.
+			 * @param \WP_Post $post       The current queried object as returned by get_queried_object().
 			 */
 			$title = \apply_filters( 'single_post_title', $post->post_title, $post );
 		}
 
-		return $title ?? '';
+		return $title ?? '' ?: '';
 	}
 
 	/**

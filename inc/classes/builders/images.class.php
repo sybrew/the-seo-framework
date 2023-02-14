@@ -126,7 +126,7 @@ final class Images {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 * @param string     $size The size of the image to get. Unused.
 	 * @yield array : {
 	 *    string url: The image URL location,
 	 *    int    id:  The image ID,
@@ -178,7 +178,7 @@ final class Images {
 				if ( ! isset( $matches[ $i ][2] ) ) break;
 
 				// Assume every URL to be correct? Yes. WordPress assumes that too.
-				$url = $matches[ $i ][2] ?: '';
+				$url = $matches[ $i ][2];
 
 				// false-esque matches, like '0', are so uncommon it's not worth dealing with them.
 				if ( ! $url ) continue;
@@ -203,8 +203,8 @@ final class Images {
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 *                         Leave null to autodetermine query. Unused.
+	 * @param string     $size The size of the image to get. Unused.
 	 * @yield array : {
 	 *    string url: The image URL location,
 	 *    int    id:  The image ID,

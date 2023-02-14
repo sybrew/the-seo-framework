@@ -286,11 +286,8 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
 
 	if ( null === $args && \is_bbpress() ) {
 		if ( \bbp_is_topic_tag() ) {
-			$term        = \get_queried_object();
-			$description = $term->description ?: '';
-
 			// Always overwrite, even when none is found.
-			$excerpt = \tsf()->s_description_raw( $description );
+			$excerpt = \tsf()->s_description_raw( \get_queried_object()->description ?? '' );
 		}
 	}
 

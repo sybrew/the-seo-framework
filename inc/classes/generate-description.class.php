@@ -119,7 +119,6 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_open_graph_description_from_query() {
 
-		$desc = '';
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
@@ -140,7 +139,7 @@ class Generate_Description extends Generate {
 				 ?: $this->get_description_from_custom_field( null, false );
 		}
 
-		return $desc;
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -161,7 +160,6 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_open_graph_description_from_args( $args ) {
 
-		$desc = '';
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'og_description', $args['id'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
@@ -182,7 +180,7 @@ class Generate_Description extends Generate {
 			}
 		}
 
-		return $desc;
+		return $desc ?: '';
 	}
 
 	/**
@@ -250,39 +248,33 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_twitter_description_from_query() {
 
-		$desc = '';
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_post_meta_item( '_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description' )
-					 ?: $this->get_description_from_custom_field( null, false )
-					 ?: '';
+					 ?: $this->get_description_from_custom_field( null, false );
 			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					?: $this->get_option( 'homepage_og_description' )
-					?: $this->get_description_from_custom_field( null, false )
-					?: '';
+					?: $this->get_description_from_custom_field( null, false );
 			}
 		} elseif ( $this->is_singular() ) {
 			$desc = $this->get_post_meta_item( '_twitter_description' )
 				 ?: $this->get_post_meta_item( '_open_graph_description' )
-				 ?: $this->get_description_from_custom_field( null, false )
-				 ?: '';
+				 ?: $this->get_description_from_custom_field( null, false );
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'tw_description' )
 				 ?: $this->get_term_meta_item( 'og_description' )
-				 ?: $this->get_description_from_custom_field( null, false )
-				 ?: '';
+				 ?: $this->get_description_from_custom_field( null, false );
 		} elseif ( \is_post_type_archive() ) {
 			$desc = $this->get_post_type_archive_meta_item( 'tw_description' )
 				 ?: $this->get_post_type_archive_meta_item( 'og_description' )
-				 ?: $this->get_description_from_custom_field( null, false )
-				 ?: '';
+				 ?: $this->get_description_from_custom_field( null, false );
 		}
 
-		return $desc;
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -306,35 +298,30 @@ class Generate_Description extends Generate {
 		if ( $args['taxonomy'] ) {
 			$desc = $this->get_term_meta_item( 'tw_description', $args['id'] )
 				 ?: $this->get_term_meta_item( 'og_description', $args['id'] )
-				 ?: $this->get_description_from_custom_field( $args, false )
-				 ?: '';
+				 ?: $this->get_description_from_custom_field( $args, false );
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'tw_description', $args['pta'] )
 				 ?: $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
-				 ?: $this->get_description_from_custom_field( $args, false )
-				 ?: '';
+				 ?: $this->get_description_from_custom_field( $args, false );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args, false )
-					 ?: '';
+					 ?: $this->get_description_from_custom_field( $args, false );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_description_from_custom_field( $args, false )
-					 ?: '';
+					 ?: $this->get_description_from_custom_field( $args, false );
 			} else {
 				$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args, false )
-					 ?: '';
+					 ?: $this->get_description_from_custom_field( $args, false );
 			}
 		}
 
-		return $desc;
+		return $desc ?: '';
 	}
 
 	/**
@@ -392,20 +379,17 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_description_from_query() {
 
-		$desc = '';
-
 		if ( $this->is_real_front_page() ) {
 			if ( $this->is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_description' )
-					 ?: $this->get_post_meta_item( '_genesis_description' )
-					 ?: '';
+					 ?: $this->get_post_meta_item( '_genesis_description' );
 			} else {
-				$desc = $this->get_option( 'homepage_description' ) ?: '';
+				$desc = $this->get_option( 'homepage_description' );
 			}
 		} elseif ( $this->is_singular() ) {
-			$desc = $this->get_post_meta_item( '_genesis_description' ) ?: '';
+			$desc = $this->get_post_meta_item( '_genesis_description' );
 		} elseif ( $this->is_term_meta_capable() ) {
-			$desc = $this->get_term_meta_item( 'description' ) ?: '';
+			$desc = $this->get_term_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
 			/**
 			 * @since 4.0.6
@@ -417,10 +401,10 @@ class Generate_Description extends Generate {
 				'the_seo_framework_pta_description',
 				[ $this->get_post_type_archive_meta_item( 'description' ) ?: '' ],
 				'4.2.0 of The SEO Framework'
-			) ?: '';
+			);
 		}
 
-		return $desc;
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -438,22 +422,21 @@ class Generate_Description extends Generate {
 	protected function get_custom_description_from_args( $args ) {
 
 		if ( $args['taxonomy'] ) {
-			$desc = $this->get_term_meta_item( 'description', $args['id'] ) ?: '';
+			$desc = $this->get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$desc = $this->get_post_type_archive_meta_item( 'description', $args['pta'] ) ?: '';
+			$desc = $this->get_post_type_archive_meta_item( 'description', $args['pta'] );
 		} else {
 			if ( $this->is_static_frontpage( $args['id'] ) ) {
 				$desc = $this->get_option( 'homepage_description' )
-					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] )
-					 ?: '';
+					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] );
 			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$desc = $this->get_option( 'homepage_description' ) ?: '';
+				$desc = $this->get_option( 'homepage_description' );
 			} else {
-				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] ) ?: '';
+				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] );
 			}
 		}
 
-		return $desc;
+		return $desc ?: '';
 	}
 
 	/**
@@ -595,7 +578,7 @@ class Generate_Description extends Generate {
 			$excerpt = $this->get_archival_description_excerpt();
 		}
 
-		return memo( $excerpt ?? '' );
+		return memo( $excerpt ?? '' ?: '' );
 	}
 
 	/**
@@ -609,8 +592,6 @@ class Generate_Description extends Generate {
 	 * @return string
 	 */
 	protected function get_description_excerpt_from_args( $args ) {
-
-		$excerpt = '';
 
 		if ( $args['taxonomy'] ) {
 			$excerpt = $this->get_archival_description_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
@@ -626,7 +607,7 @@ class Generate_Description extends Generate {
 			}
 		}
 
-		return $excerpt;
+		return $excerpt ?? '' ?: '';
 	}
 
 	/**
@@ -692,8 +673,6 @@ class Generate_Description extends Generate {
 		);
 
 		if ( $excerpt ) return $excerpt;
-
-		$excerpt = '';
 
 		if ( $in_the_loop ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
@@ -785,7 +764,7 @@ class Generate_Description extends Generate {
 			);
 		}
 
-		return ( $title ?? '' ) ?: '';
+		return $title ?? '' ?: '';
 	}
 
 	/**
@@ -901,7 +880,7 @@ class Generate_Description extends Generate {
 	public function trim_excerpt( $excerpt, $min_char_length = 1, $max_char_length = 4096 ) {
 
 		// At least 1.
-		$min_char_length = $min_char_length < 1 ? 1 : $min_char_length;
+		$min_char_length = max( 1, $min_char_length );
 
 		// We should _actually_ use mb_strlen, but that's wasteful on resources for something benign.
 		// We'll rectify that later, somewhat, where characters are transformed.
@@ -914,16 +893,21 @@ class Generate_Description extends Generate {
 
 		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
 		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su', $max_char_length ), trim( $excerpt ), $matches );
-		$excerpt = trim( ( $matches[0] ?? '' ) ?: '' );
 
-		$excerpt = trim( $excerpt );
+		$excerpt = trim( $matches[0] ?? '' ?: '' );
 
 		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
-		$excerpt = htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' );
-		$excerpt = \wptexturize( $excerpt );
-		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
+		$excerpt = html_entity_decode(
+			\wptexturize( htmlentities(
+				$excerpt,
+				ENT_QUOTES,
+				'UTF-8'
+			) ),
+			ENT_QUOTES,
+			'UTF-8'
+		);
 		/**
 		 * Play with it here: https://regex101.com/r/u0DIgx/5/ (old) https://regex101.com/r/G92lUt/5 (new)
 		 *

@@ -1555,7 +1555,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		\tsf()->_deprecated_function( 'tsf()->prepend_tax_label_prefix()', '4.2.0' );
 
-		$prefix = $tsf->get_tax_type_label( $taxonomy ) ?: '';
+		$prefix = $tsf->get_tax_type_label( $taxonomy );
 
 		if ( $prefix ) {
 			$title = sprintf(

@@ -696,7 +696,15 @@ class Post_Data extends Detect {
 	 * @return bool True if draft, false otherwise.
 	 */
 	public function is_draft( $post = null ) {
-		return \in_array( \get_post( $post )->post_status ?? '', [ 'draft', 'auto-draft', 'pending' ], true );
+
+		switch ( \get_post( $post )->post_status ?? '' ) {
+			case 'draft':
+			case 'auto-draft':
+			case 'pending':
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
