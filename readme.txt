@@ -257,11 +257,22 @@ TODO s_no_html_space -> s_verification_id (strip content="code" => code, then st
 TODO for get_image_uploader_form(), allow custom classes -- for both the add/change and remove button separately.
 	-> Then we can remove the TEMP css in TSFEM.
 
-TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts from Extension Manager.
+TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts via Extension Manager.
 
 TODO 2023
 
 TODO regression within this update? SEO Bar tooltip overflows sidebar in Gutenberg.
+	+ Also on WooCommerce pages... specifically the product category pages
+		-> There, the arrow is misaligned, but that's probably because the page width changes after overflowing and displaying a bar.
+			-> Probably because there's no tsf-tooltip-boundary. Why?
+	-> is_product_category() doesn't work in admin because we sent a term object??
+
+TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
+	-> It actually does, but the data is amended in real-time by the term name/post title inputs.
+		-> This is what we'll address when we add %syntax%.
+
+TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn't recognize it as a PTA, but as a is_shop()...
+	-> This means that none of the PTA settings work. No matter how we configure WC. Let's filter it.
 
 **For everyone**
 
@@ -292,6 +303,8 @@ TODO regression within this update? SEO Bar tooltip overflows sidebar in Gutenbe
 	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
 		* This also affects quick-edit and the SEO Bar.
 	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
+	* Addressed a visual bug where the homepage title location was incorrectly assigned for "left" on-load.
+	* Addressed an issue where the Thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
 
 **For developers**
 

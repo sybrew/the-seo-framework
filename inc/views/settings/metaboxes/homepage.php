@@ -81,21 +81,23 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<p class=tsf-title-wrap>
 			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_title' ) ) ?>" autocomplete=off />
 			<?php
+			$_post_meta_title = ( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' );
+
 			$this->output_js_title_elements(); // legacy
 			$this->output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
 				[
 					'state' => [
-						'refTitleLocked'    => false,
-						'defaultTitle'      => $this->s_title(
-							( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' )
-							?: $this->get_filtered_raw_generated_title( $_generator_args )
+						'refTitleLocked'      => false, // This field is the mother of all references.
+						'defaultTitle'        => $this->s_title(
+							$_post_meta_title ?: $this->get_filtered_raw_generated_title( $_generator_args )
 						),
-						'addAdditions'      => $this->use_title_branding( $_generator_args ),
-						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-						'additionValue'     => $this->s_title( $this->get_home_title_additions() ),
-						'additionPlacement' => 'left' === $this->get_home_title_seplocation() ? 'before' : 'after',
-						'hasLegacy'         => true,
+						'_defaultTitleLocked' => (bool) $_post_meta_title, // Underscore because it's non-standard API.
+						'addAdditions'        => $this->use_title_branding( $_generator_args ),
+						'useSocialTagline'    => $this->use_title_branding( $_generator_args, true ),
+						'additionValue'       => $this->s_title( $this->get_home_title_additions() ),
+						'additionPlacement'   => 'left' === $this->get_home_title_seplocation() ? 'before' : 'after',
+						'hasLegacy'           => true,
 					],
 				]
 			);

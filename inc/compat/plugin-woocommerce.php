@@ -278,6 +278,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
  *
  * @since 4.0.5 (introduced @ 4.0.0, renamed to prevent conflict).
  * @since 4.2.0 Now supports the `$args['pta']` index.
+ * @since 4.2.8 Fixed the taxonomy query for the admin area.
  * @access private
  *
  * @param array      $params : [
@@ -300,10 +301,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
 	} else {
 		if ( $args['taxonomy'] ) {
-			if ( \function_exists( '\\is_product_category' ) ) {
-				$term                = \get_term( $args['id'], $args['taxonomy'] );
-				$is_product_category = $term && \is_product_category( $term );
-			}
+			$is_product_category = 'product_cat' === $args['taxonomy'];
 		} elseif ( $args['pta'] ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement.DetectedElseif
 			// TODO ? Which public non-page-PTA does WC have, actually?
 		} else {
@@ -311,13 +309,11 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 		}
 	}
 
-	if ( $is_product ) {
+	if ( $is_product )
 		$params['cbs']['wc_gallery'] = __NAMESPACE__ . '\\_get_product_gallery_image_details';
-	}
 
-	if ( $is_product_category ) {
+	if ( $is_product_category )
 		$params['cbs']['wc_thumbnail'] = __NAMESPACE__ . '\\_get_product_category_thumbnail_image_details';
-	}
 
 	return $params;
 }
