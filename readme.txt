@@ -303,8 +303,12 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
 		* This also affects quick-edit and the SEO Bar.
 	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
+		* TODO this doesn't always work, but why? Is it only an issue in the sidebar?
 	* Addressed a visual bug where the homepage title location was incorrectly assigned for "left" on-load.
+	* Addressed a visual bug where the homepage's default title was overwritten by the Site Title setting when a custom home-as-page meta title was set via post metadata.
 	* Addressed an issue where the Thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
+	* Addressed an issue where WooCommerce's shop page was recognized as an editable Post Type Archive.
+		* It is recognized by TSF as a page and shop, not a PTA; so, those settings had no effect. TSF now filters this PTA from its settings.
 
 **For developers**
 
@@ -313,6 +317,7 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 		* `is_term_populated()` tests whether the term returns any post on the front-end.
 		* `has_seopress_syntax()` determines if the input text has transformative SEOPress syntax.
 			* This is used to determine leftover syntax after using [Transport](https://theseoframework.com/extensions/transport/).
+		* `is_post_type_archive_supported()`, detects if the current or inputted post type's archive is supported and not disabled.
 	* **Changed:**
 		* `has_rankmath_syntax()`, actualized the variable list.
 		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
@@ -326,6 +331,11 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 			* `get_post_content()`, `'editor'` for content parsing.
 			* `get_current_post_author_id()`, `'author'` for user ID parsing.
 		* `get_current_post_author_meta()` now returns null when no post author can be established.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_supported_post_type_archive`, boolean.
+			* The value passed also read the value from filter `the_seo_framework_supported_post_type`.
+		* `the_seo_framework_public_post_type_archives`, boolean. Do not use; fix your post type instead.
 * **Changed:**
 	* (JS) `tsf-resize` now fires once every 50ms, instead of 100ms.
 * **Other:**

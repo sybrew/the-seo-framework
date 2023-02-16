@@ -103,7 +103,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		<hr>
 		<?php
 		if (
-			$this->_display_extension_suggestions()
+			   $this->_display_extension_suggestions()
 			&& ! current_theme_supports( 'title-tag' )
 			&& ! defined( 'TSFEM_E_TITLE_FIX' )
 		) {

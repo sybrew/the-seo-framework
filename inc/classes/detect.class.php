@@ -599,7 +599,7 @@ class Detect extends Render {
 				break;
 
 			case \is_post_type_archive():
-				$supported = $this->is_post_type_supported();
+				$supported = $this->is_post_type_archive_supported();
 				break;
 
 			case $this->is_term_meta_capable():
@@ -847,6 +847,35 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Detects if the current or inputted post type's archive is supported and not disabled.
+	 *
+	 * @since 4.2.8
+	 * @uses `tsf()->is_post_type_supported()`
+	 *
+	 * @param string $post_type Optional. The post type's archive to check.
+	 * @return bool
+	 */
+	public function is_post_type_archive_supported( $post_type = '' ) {
+
+		$post_type = $post_type ?: $this->get_current_post_type();
+
+		/**
+		 * @since 4.2.8
+		 * @param bool   $supported           Whether the post type archive is supported.
+		 * @param string $post_type_evaluated The evaluated post type.
+		 */
+		return (bool) \apply_filters_ref_array(
+			'the_seo_framework_supported_post_type_archive',
+			[
+				$post_type
+					&& $this->is_post_type_supported( $post_type )
+					&& \in_array( $post_type, $this->get_public_post_type_archives(), true ),
+				$post_type,
+			]
+		);
+	}
+
+	/**
 	 * Determines if the taxonomy supports The SEO Framework.
 	 *
 	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
@@ -906,6 +935,7 @@ class Detect extends Render {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
+	 * @since 4.2.8 Now filters via `tsf()->is_post_type_archive_supported()`.
 	 *
 	 * @return string[] Supported post types with post type archive support.
 	 */
@@ -913,10 +943,8 @@ class Detect extends Render {
 		return memo() ?? memo(
 			array_values(
 				array_filter(
-					$this->get_supported_post_types(),
-					static function( $post_type ) {
-						return \get_post_type_object( $post_type )->has_archive ?? false;
-					}
+					$this->get_public_post_type_archives(),
+					[ $this, 'is_post_type_archive_supported' ],
 				)
 			)
 		);
@@ -927,20 +955,32 @@ class Detect extends Render {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
+	 * @since 4.2.8 Added filter `the_seo_framework_public_post_type_archives`.
 	 *
 	 * @return string[] Public post types with post type archive support.
 	 */
 	public function get_public_post_type_archives() {
-		return memo() ?? memo(
-			array_values(
-				array_filter(
-					$this->get_public_post_types(),
-					static function( $post_type ) {
-						return \get_post_type_object( $post_type )->has_archive ?? false;
-					}
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				/**
+				 * Do not consider using this filter. Properly register your post type, noob.
+				 *
+				 * @since 4.2.8
+				 * @param string[] $post_types The public post types.
+				 */
+				\apply_filters(
+					'the_seo_framework_public_post_type_archives',
+					array_values(
+						array_filter(
+							$this->get_public_post_types(),
+							static function( $post_type ) {
+								return \get_post_type_object( $post_type )->has_archive ?? false;
+							}
+						)
+					)
 				)
-			)
-		);
+			);
 	}
 
 	/**
@@ -953,7 +993,10 @@ class Detect extends Render {
 	public function get_supported_post_types() {
 		return memo() ?? memo(
 			array_values(
-				array_filter( $this->get_public_post_types(), [ $this, 'is_post_type_supported' ] )
+				array_filter(
+					$this->get_public_post_types(),
+					[ $this, 'is_post_type_supported' ]
+				)
 			)
 		);
 	}
@@ -984,7 +1027,7 @@ class Detect extends Render {
 							array_unique(
 								array_merge(
 									$this->get_forced_supported_post_types(),
-									// array_values() because get_post_types() gives a sequential array.
+									// array_keys() because get_post_types() gives a sequential array.
 									array_keys( (array) \get_post_types( [ 'public' => true ] ) )
 								)
 							),

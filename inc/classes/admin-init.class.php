@@ -97,7 +97,7 @@ class Admin_Init extends Init {
 	public function _init_admin_scripts() {
 
 		if (
-			$this->is_seo_settings_page()
+			   $this->is_seo_settings_page()
 			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
 			|| $this->get_static_cache( 'persistent_notices', [] )
 			|| (

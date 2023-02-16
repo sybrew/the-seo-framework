@@ -367,7 +367,7 @@ class Admin_Pages extends Generate_Ldjson {
 			$cond = $notice['conditions'];
 
 			if (
-				! \current_user_can( $cond['capability'] )
+				   ! \current_user_can( $cond['capability'] )
 				|| ( $cond['user'] && $cond['user'] !== $this->get_user_id() )
 				|| ( $cond['screens'] && ! \in_array( $screenbase, $cond['screens'], true ) )
 				|| ( $cond['excl_screens'] && \in_array( $screenbase, $cond['excl_screens'], true ) )

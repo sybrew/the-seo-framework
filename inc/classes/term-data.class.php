@@ -250,7 +250,7 @@ class Term_Data extends Post_Data {
 		// Check again against ambiguous injection...
 		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
 		if (
-			empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
+			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
 			|| ! \current_user_can( 'edit_term', $term->term_id )
 			|| ! isset( $_POST['_wpnonce'] )
 			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
@@ -281,7 +281,7 @@ class Term_Data extends Post_Data {
 		// Check again against ambiguous injection...
 		// Note, however: function wp_ajax_inline_save_tax() already performs all these checks for us before firing this callback's action.
 		if (
-			empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
+			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
 			|| ! \current_user_can( 'edit_term', $term->term_id )
 			|| ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
 		) return;

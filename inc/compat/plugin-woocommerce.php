@@ -178,6 +178,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  * Sets 'noindex' default values for WooCommerce's restrictive pages.
  *
  * @since 4.1.4
+ * @since 4.2.8 Now uses `tsf()->is_singular()` instead of `is_singular()` (for debug support).
  * @access private
  *
  * @param array      $meta The parsed robots meta. {
@@ -206,7 +207,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	$tsf = \tsf();
 
 	if ( null === $args ) {
-		if ( \is_singular() )
+		if ( $tsf->is_singular() )
 			$page_id = $tsf->get_the_real_ID();
 	} else {
 		if ( '' === $args['taxonomy'] )
@@ -227,10 +228,11 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// This current page isn't a WC cart/checkout/myaccount page.
 	if ( ! \in_array( $page_id, $page_ids, true ) ) return $meta;
 
-	// Set the default.
-	if ( $options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) {
-		$meta['noindex'] = 'noindex';
-	} elseif ( 0 === $tsf->s_qubit( $tsf->get_post_meta_item( '_genesis_noindex', $page_id ) ) ) {
+	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
+	if (
+		   $options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
+		|| 0 === $tsf->s_qubit( $tsf->get_post_meta_item( '_genesis_noindex', $page_id ) )
+	) {
 		$meta['noindex'] = 'noindex';
 	}
 
@@ -397,4 +399,22 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
 			'id'  => 0,
 		];
 	}
+}
+
+\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
+/**
+ * Filters WC product PTA from TSF's recognized public post type archives.
+ *
+ * We only filter the admin area to prevent any unforseeable issues on the front-end.
+ * This is because the shop page is singular, singular_archive, shop, and post_type_archive,
+ * and can even be is_static_frontpage (but not is_real_front_page if queried /shop/ instead of /).
+ *
+ * @since 4.2.8
+ * @access private
+ *
+ * @param string[] $post_types The public post type archive names.
+ * @return string[] The filtered post type archive names.
+ */
+function _filter_public_wc_post_type_archives( $post_types ) {
+	return \is_admin() ? array_diff( $post_types, [ 'product' ] ) : $post_types;
 }

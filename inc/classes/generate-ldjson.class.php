@@ -412,7 +412,7 @@ class Generate_Ldjson extends Generate_Image {
 		$output = '';
 
 		$post_id    = $this->get_the_real_ID();
-		$post_type  = \get_post_type( $post_id );
+		$post_type  = $this->get_post_type_real_ID( $post_id );
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**

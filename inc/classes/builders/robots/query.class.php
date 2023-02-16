@@ -197,6 +197,8 @@ final class Query extends Factory {
 					 *
 					 * Don't use empty(), null is regarded as indexable; it's why we coalesce to true whence null.
 					 *
+					 * @FIXME? In admin, this always yields "true" when trying query instead of args; ergo, noindex is set.
+					 *
 					 * post_count can be 0,    which is false -> thus yield true  -> noindex.
 					 * post_count can be null, which is true  -> thus yield false -> index.
 					 * post count can be 5,    which is true  => thus yield false -> index.
