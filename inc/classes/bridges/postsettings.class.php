@@ -88,10 +88,8 @@ final class PostSettings {
 		// Implies `\get_current_screen()->id`. Is always 'post'.
 		$screen_id = 'post';
 
-		$class = static::class;
-
-		\add_meta_box( $box_id, $title, "$class::_meta_box", $post_type, $context, $priority, [] );
-		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", "$class::_add_postbox_class" );
+		\add_meta_box( $box_id, $title, [ static::class, '_meta_box' ], $post_type, $context, $priority, [] );
+		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, '_add_postbox_class' ] );
 	}
 
 	/**
@@ -124,9 +122,9 @@ final class PostSettings {
 	 */
 	public static function _meta_box() {
 
-		static::output_nonce_field();
-
 		$tsf = \tsf();
+
+		\wp_nonce_field( $tsf->inpost_nonce_field, $tsf->inpost_nonce_name );
 
 		/**
 		 * @since 2.9.0
@@ -147,7 +145,6 @@ final class PostSettings {
 	 * Adds a Gutenberg/Block-editor box class.
 	 *
 	 * @since 4.0.5
-	 * @since 4.2.8 Added boundary to box on Gutenberg, for they mess with z-indexing.
 	 * @access private
 	 *
 	 * @param array $classes The registered postbox classes.
@@ -155,23 +152,10 @@ final class PostSettings {
 	 */
 	public static function _add_postbox_class( $classes = [] ) {
 
-		if ( \tsf()->is_gutenberg_page() ) {
+		if ( \tsf()->is_gutenberg_page() )
 			$classes[] = 'tsf-is-block-editor';
-			$classes[] = 'tsf-tooltip-boundary';
-		}
 
 		return $classes;
-	}
-
-	/**
-	 * Outputs nonce fields for the post settings.
-	 * Redundant, but added for sanity.
-	 *
-	 * @since 4.0.0
-	 */
-	private static function output_nonce_field() {
-		$tsf = \tsf();
-		\wp_nonce_field( $tsf->inpost_nonce_field, $tsf->inpost_nonce_name );
 	}
 
 	/**

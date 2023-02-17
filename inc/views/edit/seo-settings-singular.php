@@ -71,12 +71,10 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 					</div>
 				</div>
 				<div class="tsf-flex-setting-input tsf-flex">
-					<div>
-						<?php
-						// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
-						echo $this->get_generated_seo_bar( $_generator_args );
-						?>
-					</div>
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
+					echo $this->get_generated_seo_bar( $_generator_args );
+					?>
 				</div>
 			</div>
 			<?php

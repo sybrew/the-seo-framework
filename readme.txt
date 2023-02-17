@@ -286,6 +286,8 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 	* After two years of fiddling, we finally found a way to round the edges of the SEO Bar. Finally some peace on your eyes.
 		* The problem was that we're using flexbox, which doesn't yield information about wrapping; so, we must rely on hiding the overflow. But relatively positioned tooltips still need to overflow beyond its parent, otherwise we cannot see the tooltip. We figured that making the tooltip relative to a grandparent, we could still work with hiding overflows. So what was left to do is calculate relative positioning between the grandparent and parent.
 	* Improved performance by refactoring several code operations once again: less work, same result.
+	* Tooltips are now more naturally aligned relative to the container, and now support relativity towards super containers (applied to the SEO Bar) to be more easy on your eyes.
+	* Tooltips render faster once more: On our workstation, our scripts can now spawn 450 of them every second, and the arrow below the tooltip polls up to 700hz.
 * **Changed:**
 	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
 	* Added support for wpForo v2.0 and later, but dropped support for earlier versions.
@@ -303,7 +305,6 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
 		* This also affects quick-edit and the SEO Bar.
 	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
-		* TODO this doesn't always work, but why? Is it only an issue in the sidebar?
 	* Addressed a visual bug where the homepage title location was incorrectly assigned for "left" on-load.
 	* Addressed a visual bug where the homepage's default title was overwritten by the Site Title setting when a custom home-as-page meta title was set via post metadata.
 	* Addressed an issue where the Thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
