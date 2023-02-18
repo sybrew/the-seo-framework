@@ -261,18 +261,9 @@ TODO add filter for custom title handling of the menu. Primarily to spawn notifi
 
 TODO 2023
 
-TODO regression within this update? SEO Bar tooltip overflows sidebar in Gutenberg.
-	+ Also on WooCommerce pages... specifically the product category pages
-		-> There, the arrow is misaligned, but that's probably because the page width changes after overflowing and displaying a bar.
-			-> Probably because there's no tsf-tooltip-boundary. Why?
-	-> is_product_category() doesn't work in admin because we sent a term object??
-
 TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 	-> It actually does, but the data is amended in real-time by the term name/post title inputs.
 		-> This is what we'll address when we add %syntax%.
-
-TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn't recognize it as a PTA, but as a is_shop()...
-	-> This means that none of the PTA settings work. No matter how we configure WC. Let's filter it.
 
 **For everyone**
 
@@ -282,6 +273,8 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 	* Hidden forums of bbPress now have their forums, topics, and replies removed from the sitemap by forcing "noindex" to them.
 		* The SEO Bar will also explain this. No amount of overriding will make the hidden forum public; so, indexing overrides are ignored.
 	* The wpForo page can now be detected by the SEO Bar, and will exclaim some or all assertions aren't possible when wpForo's SEO is enabled.
+	* The Site Icon (set at "Customizer > Site Identity") is now also considered as a sitemap stylesheet fallback logo.
+		* If you do not like this change, go to "SEO Settings > Sitemap Settings > Style," and deselect the checkbox under "Header Title Logo."
 * **Improved:**
 	* After two years of fiddling, we finally found a way to round the edges of the SEO Bar. Finally some peace on your eyes.
 		* The problem was that we're using flexbox, which doesn't yield information about wrapping; so, we must rely on hiding the overflow. But relatively positioned tooltips still need to overflow beyond its parent, otherwise we cannot see the tooltip. We figured that making the tooltip relative to a grandparent, we could still work with hiding overflows. So what was left to do is calculate relative positioning between the grandparent and parent.
@@ -292,6 +285,7 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
 	* Added support for wpForo v2.0 and later, but dropped support for earlier versions.
 		* They had no deprecation route for us to follow, plus we cannot support both versions indefinitely. We also have no data on how many users use the latest version of TSF with wpForo v1.x.
+	* When the sitemap logo set in the SEO settings is deleted, it will no longer try to fall back to other methods logos. You should restore the image instead, clear the selected image option, or pick a new one.
 * **Fixed:**
 	* When a pagination overflow is requested for the paginated static frontpage, TSF now properly detects WordPress's intention (it provides the last page instead of the first).
 	* When stripping tags, elements with that start with exactly the same text as others won't be preemptively closed. Listing all faults:
@@ -307,9 +301,10 @@ TODO WC's product page can be spawned as both a PTA and a page -- but TSF doesn'
 	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
 	* Addressed a visual bug where the homepage title location was incorrectly assigned for "left" on-load.
 	* Addressed a visual bug where the homepage's default title was overwritten by the Site Title setting when a custom home-as-page meta title was set via post metadata.
-	* Addressed an issue where the Thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
+	* Addressed an issue where the thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
 	* Addressed an issue where WooCommerce's shop page was recognized as an editable Post Type Archive.
 		* It is recognized by TSF as a page and shop, not a PTA; so, those settings had no effect. TSF now filters this PTA from its settings.
+		* We understand this is set up this way by WooCommerce because setting up a page as a shop isn't foolproof. Still, their workaround causes issues for development.
 
 **For developers**
 

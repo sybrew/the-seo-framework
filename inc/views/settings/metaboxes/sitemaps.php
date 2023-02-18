@@ -374,7 +374,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 			true
 		);
 
-		$ph_id  = get_theme_mod( 'custom_logo' ) ?: 0;
+		$ph_id  = get_theme_mod( 'custom_logo' ) ?: get_option( 'site_icon' ) ?: 0;
 		$ph_src = $ph_id ? wp_get_attachment_image_src( $ph_id, [ 29, 29 ] ) : []; // TODO magic number "SITEMAP_LOGO_PX"
 
 		$logo_placeholder = ! empty( $ph_src[0] ) ? $ph_src[0] : '';

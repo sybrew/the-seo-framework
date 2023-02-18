@@ -12,31 +12,25 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 $logo = '';
 if ( $this->get_option( 'sitemap_logo' ) ) {
 
-	$id   = $this->get_option( 'sitemap_logo_id' ) ?: 0;
+	$id   = $this->get_option( 'sitemap_logo_id' ) ?: get_theme_mod( 'custom_logo' ) ?: get_option( 'site_icon' );
 	$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
 
-	// Fallback to theme mod.
-	if ( ! $_src ) {
-		$id   = get_theme_mod( 'custom_logo' ) ?: 0;
-		$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
-	}
-
 	/**
-		* @since 2.8.0
-		* @param array $_src An empty array, or the logo details: {
-		*    0 => The image URL,
-		*    1 => The width in px,
-		*    2 => The height in px,
-		* }
-		*/
+	 * @since 2.8.0
+	 * @param array $_src An empty array, or the logo details: {
+	 *    0 => string The image URL,
+	 *    1 => int    The width in px,
+	 *    2 => int    The height in px,
+	 * }
+	 */
 	$_src = (array) apply_filters( 'the_seo_framework_sitemap_logo', $_src );
 
 	if ( ! empty( $_src[0] ) ) {
 		$logo = sprintf(
 			'<img src="%s" width="%s" height="%s" />',
 			esc_url( $_src[0] ),
-			esc_attr( $_src[1] ),
-			esc_attr( $_src[2] )
+			esc_attr( $_src[1] ?? '' ),
+			esc_attr( $_src[2] ?? '' )
 		);
 	}
 }
