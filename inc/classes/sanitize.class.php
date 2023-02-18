@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2022 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -396,6 +396,7 @@ class Sanitize extends Admin_Pages {
 		);
 
 		// TODO create content="code" -> "code" stripper in PHP (redundant from JS's)
+		// We should add new method 's_verification_id' for that.
 		$this->add_option_filter(
 			's_no_html_space',
 			THE_SEO_FRAMEWORK_SITE_OPTIONS,

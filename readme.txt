@@ -251,15 +251,10 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.8
 
-TODO consider using Website Icon (favicon) image for Sitemap image? (see Tobi's email) -> It ought to be large enough (512px at least recommended)
-TODO s_no_html_space -> s_verification_id (strip content="code" => code, then strip HTML, then strip spaces)
-
 TODO for get_image_uploader_form(), allow custom classes -- for both the add/change and remove button separately.
 	-> Then we can remove the TEMP css in TSFEM.
 
 TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts via Extension Manager.
-
-TODO 2023
 
 TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 	-> It actually does, but the data is amended in real-time by the term name/post title inputs.
