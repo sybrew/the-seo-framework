@@ -134,7 +134,7 @@ class Admin_Pages extends Generate_Ldjson {
 		$notice_i18n = \number_format_i18n( $issue_count );
 
 		return ' ' . sprintf(
-			'<span class="tsf-menu-issue menu-counter count-%d"><span class=tsf-issue-count aria-hidden=true>%s</span><span class="tsf-error-count-text screen-reader-text">%s</span></span>',
+			'<span class="tsf-menu-issue menu-counter count-%d"><span class=tsf-menu-issue-text aria-hidden=true>%s</span><span class=screen-reader-text>%s</span></span>',
 			$issue_count,
 			$notice_i18n,
 			sprintf(

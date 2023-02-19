@@ -293,7 +293,7 @@ TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 	* Addressed a visual bug where the homepage's default title was overwritten by the Site Title setting when a custom home-as-page meta title was set via post metadata.
 	* Addressed an issue where the thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
 	* Addressed an issue where WooCommerce's shop page was recognized as an editable Post Type Archive.
-		* It is recognized by TSF as a page and shop, not a PTA; so, those settings had no effect. TSF now filters this PTA from its settings.
+		* It is recognized by TSF as a page and shop, not a PTA; so, TSF's Post Type Archive settings had no effect. TSF now filters this PTA from its settings.
 		* We understand this is set up this way by WooCommerce because setting up a page as a shop isn't foolproof. Still, their workaround causes issues for development.
 
 **For developers**
@@ -315,6 +315,7 @@ TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 		* `is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
 		* `page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
 		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
+		* `twitter_image()`, removed support for the long deprecated `twitter:image:height` and `twitter:image:width`.
 		* The following methods now test for post type support. All methods that rely on post type data are affected.
 			* `fetch_excerpt()`, `'excerpt'` for excerpt parsing, and `'editor'` for content parsing.
 			* `get_generated_single_post_title()`, `'title'` for title parsing.

@@ -658,6 +658,7 @@ class Render extends Admin_Init {
 	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
 	 *              it'll always use just one image, we read this option so we'll only
 	 *              use a single cache instance internally with the generator.
+	 * @since 4.2.8 Removed support for the long deprecated `twitter:image:height` and `twitter:image:width`.
 	 *
 	 * @return string The Twitter Image meta tag.
 	 */
@@ -672,17 +673,6 @@ class Render extends Admin_Init {
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
 			] );
-
-			if ( $image['height'] && $image['width'] ) {
-				$output .= $this->render_element( [
-					'name'    => 'twitter:image:width',
-					'content' => $image['width'],
-				] );
-				$output .= $this->render_element( [
-					'name'    => 'twitter:image:height',
-					'content' => $image['height'],
-				] );
-			}
 
 			if ( $image['alt'] ) {
 				$output .= $this->render_element( [
