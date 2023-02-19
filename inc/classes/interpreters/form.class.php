@@ -95,7 +95,7 @@ final class Form {
 		return vsprintf(
 			sprintf( '<div class="%s">%s</div>',
 				\esc_attr( $args['class'] ),
-				( \is_rtl() ? '%1$s%1$s%3$s' : '%1$s%1$s%3$s' )
+				( \is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s' )
 			),
 			[
 				$args['label'] ? sprintf(
