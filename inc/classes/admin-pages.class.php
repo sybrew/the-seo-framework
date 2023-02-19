@@ -52,15 +52,27 @@ class Admin_Pages extends Generate_Ldjson {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		$menu = [
-			'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
-			'menu_title' => \esc_html__( 'SEO', 'autodescription' ),
-			'capability' => $this->get_settings_capability(),
-			'menu_slug'  => $this->seo_settings_page_slug,
-			'callback'   => [ $this, '_output_settings_wrap' ],
-			'icon'       => 'dashicons-search',
-			'position'   => '90.9001',
-		];
+		$issue_count = $this->get_admin_issue_count();
+
+		if ( $issue_count )
+			$issue_badge = $this->get_admin_menu_issue_badge( $issue_count );
+
+		/**
+		 * @since 4.2.8
+		 * @param array $args The menu arguments. All indexes must be maintained.
+		 */
+		$menu = \apply_filters(
+			'the_seo_framework_top_menu_args',
+			[
+				'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
+				'menu_title' => \esc_html__( 'SEO', 'autodescription' ) . ( $issue_badge ?? '' ),
+				'capability' => $this->get_settings_capability(),
+				'menu_slug'  => $this->seo_settings_page_slug,
+				'callback'   => [ $this, '_output_settings_wrap' ],
+				'icon'       => 'dashicons-search',
+				'position'   => '90.9001',
+			]
+		);
 
 		$this->seo_settings_page_hook = \add_menu_page(
 			$menu['page_title'],
@@ -88,6 +100,49 @@ class Admin_Pages extends Generate_Ldjson {
 		// Enqueue scripts
 		\add_action( "admin_print_scripts-{$this->seo_settings_page_hook}", [ $this, '_init_admin_scripts' ], 11 );
 		\add_action( "load-{$this->seo_settings_page_hook}", [ $this, '_register_seo_settings_meta_boxes' ] );
+	}
+
+	/**
+	 * Returns the number of issues registered.
+	 * Always returns 0 when the settings are headless.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @return int The registered issue count.
+	 */
+	public function get_admin_issue_count() {
+
+		if ( $this->is_headless['settings'] ) return 0;
+
+		/**
+		 * @since 4.2.8
+		 * @param int The issue count. Don't overwrite, but increment it!
+		 */
+		return memo() ?? memo( \absint( \apply_filters( 'the_seo_framework_top_menu_issue_count', 0 ) ) );
+	}
+
+	/**
+	 * Returns formatted text for the notice count to be displayed in the admin menu as a number.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @param int $issue_count The issue count.
+	 * @return string The issue count badge.
+	 */
+	public function get_admin_menu_issue_badge( $issue_count ) {
+
+		$notice_i18n = \number_format_i18n( $issue_count );
+
+		return ' ' . sprintf(
+			'<span class="tsf-menu-issue menu-counter count-%d"><span class=tsf-issue-count aria-hidden=true>%s</span><span class="tsf-error-count-text screen-reader-text">%s</span></span>',
+			$issue_count,
+			$notice_i18n,
+			sprintf(
+				/* translators: %s: number of issues waiting */
+				\_n( '%s issue waiting', '%s issues waiting', $issue_count, 'autodescription' ),
+				$notice_i18n
+			)
+		);
 	}
 
 	/**

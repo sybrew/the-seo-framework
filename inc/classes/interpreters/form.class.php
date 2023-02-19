@@ -95,7 +95,7 @@ final class Form {
 		return vsprintf(
 			sprintf( '<div class="%s">%s</div>',
 				\esc_attr( $args['class'] ),
-				( \is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s' )
+				( \is_rtl() ? '%1$s%1$s%3$s' : '%1$s%1$s%3$s' )
 			),
 			[
 				$args['label'] ? sprintf(
@@ -186,11 +186,12 @@ final class Form {
 	 * The default arguments conform to Facebook and Twitter image sharing.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.8 Added 'button_class' as a supported index for `$args`.
 	 *
 	 * @param array $args Required. The image uploader arguments : {
-	 *   'id'      => string Required. The HTML input id to pass URL into.
-	 *   'post_id' => int    Optional. The Post ID to bind the uploaded file to. Default current post ID.
-	 *   'data'    => [
+	 *   'id'         => string          Required. The HTML input id to pass URL into.
+	 *   'post_id'    => int             Optional. The Post ID to bind the uploaded file to. Default current post ID.
+	 *   'data'       => [
 	 *      'inputType' => string Optional. Whether the upload type is 'social' or 'logo' for i18n. Default 'social'.
 	 *      'width'     => int    Optional. The suggested image width. Default 1200.
 	 *      'height'    => int    Optional. The suggested image height. Default 630.
@@ -198,10 +199,14 @@ final class Form {
 	 *      'minHeight' => int    Optional. The minimum image height. Default 200.
 	 *      'flex'      => bool   Optional. Whether the image W:H ratio may be changed. Default true.
 	 *   ],
-	 *   'i18n'    => [
+	 *   'i18n'       => [
 	 *      'button_title' => string Optional. The image-select button on-hover title for accessibility. Default ''.
 	 *                                         Tip: Only fill if 'button_text' is ambiguous.
 	 *      'button_text'  => string Optional. The image-select button title. Defaults l10n 'Select Image',
+	 *   ],
+	 *   'button_class' => [
+	 *      'set'    => array Optional. The image set button classes.
+	 *      'remove' => array Optional. The imag eremoval button classes.
 	 *   ],
 	 * }
 	 * @return string The image uploader button.
@@ -215,9 +220,9 @@ final class Form {
 
 		$args = $tsf->array_merge_recursive_distinct(
 			[
-				'id'      => '',
-				'post_id' => $tsf->get_the_real_ID(), // TODO why? Introduced <https://github.com/sybrew/the-seo-framework/commit/6ca4425abf3edafd75d7d47e60e54eb8bca91cc2>
-				'data'    => [
+				'id'           => '',
+				'post_id'      => $tsf->get_the_real_ID(), // This will bind the uploade file to the current post.
+				'data'         => [
 					'inputType' => 'social',
 					'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.
 					'height'    => 630,  // TODO make  640 - 80px overflow margin? It'd be better for mixed platforms.
@@ -225,23 +230,36 @@ final class Form {
 					'minHeight' => 200,
 					'flex'      => true,
 				],
-				'i18n'    => [
+				'i18n'         => [
 					'button_title' => '', // Redundant.
 					'button_text'  => \__( 'Select Image', 'autodescription' ),
+				],
+				'button_class' => [
+					'set'    => [
+						'button',
+						'button-primary',
+						'button-small',
+					],
+					'remove' => [
+						'button',
+						'button-small',
+					],
 				],
 			],
 			$args
 		);
 
 		$content = vsprintf(
-			'<button type=button data-href="%s" class="tsf-set-image-button button button-primary button-small" title="%s" id="%s-select" %s>%s</button>',
+			'<button type=button data-href="%s" class="tsf-set-image-button %s" title="%s" id="%s-select" %s>%s</button>',
 			[
 				\esc_url( \get_upload_iframe_src( 'image', $args['post_id'] ) ),
+				\esc_attr( implode( ' ', (array) $args['button_class']['set'] ) ),
 				\esc_attr( $args['i18n']['button_title'] ),
 				\esc_attr( $args['id'] ),
 				HTML::make_data_attributes(
 					[ 'inputId' => $args['id'] ]
 					+ $args['data']
+					+ [ 'buttonClass' => $args['button_class'] ]
 				),
 				\esc_html( $args['i18n']['button_text'] ),
 			]

@@ -479,7 +479,7 @@ class Core {
 
 		$ret = [];
 
-		foreach ( $array as $key => $value ) {
+		foreach ( $array as $value ) {
 			// We can later use `array_is_list()`.
 			if ( \is_array( $value ) && [] !== $value && array_values( $value ) === $value ) {
 				$ret = array_merge( $ret, $this->array_flatten_list( $value ) );

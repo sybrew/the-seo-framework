@@ -251,11 +251,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.8
 
-TODO for get_image_uploader_form(), allow custom classes -- for both the add/change and remove button separately.
-	-> Then we can remove the TEMP css in TSFEM.
-
-TODO add filter for custom title handling of the menu. Primarily to spawn notification alerts via Extension Manager.
-
 TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 	-> It actually does, but the data is amended in real-time by the term name/post title inputs.
 		-> This is what we'll address when we add %syntax%.
@@ -305,28 +300,35 @@ TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 
 * Methods in object `The_SEO_Framework\Load` (callable via `tsf()` and `theseoframework()`):
 	* **Added:**
-		* `is_term_populated()` tests whether the term returns any post on the front-end.
 		* `has_seopress_syntax()` determines if the input text has transformative SEOPress syntax.
 			* This is used to determine leftover syntax after using [Transport](https://theseoframework.com/extensions/transport/).
 		* `is_post_type_archive_supported()`, detects if the current or inputted post type's archive is supported and not disabled.
+		* `is_term_populated()` tests whether the term returns any post on the front-end.
+		* `get_admin_issue_count()` returns the number of issues registered.
+		* `get_admin_menu_issue_badge()` returns formatted text for the notice count to be displayed in the admin menu as a number.
 	* **Changed:**
-		* `has_rankmath_syntax()`, actualized the variable list.
-		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
-		* `page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
-		* `is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
 		* `convert_markdown()` can now process with either `{` or `}` within Markdown blocks.
 			* The regex used is also vastly optimized.
+		* `get_current_post_author_meta()` now returns null when no post author can be established.
+		* `get_image_uploader_form()`, added 'button_class' as a supported index for `$args`.
+		* `has_rankmath_syntax()`, actualized the variable list.
+		* `is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
+		* `page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
+		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
 		* The following methods now test for post type support. All methods that rely on post type data are affected.
 			* `fetch_excerpt()`, `'excerpt'` for excerpt parsing, and `'editor'` for content parsing.
 			* `get_generated_single_post_title()`, `'title'` for title parsing.
 			* `get_post_content()`, `'editor'` for content parsing.
 			* `get_current_post_author_id()`, `'author'` for user ID parsing.
-		* `get_current_post_author_meta()` now returns null when no post author can be established.
 * **Filter notes:**
 	* **Added:**
+		* `the_seo_framework_public_post_type_archives`, boolean. Do not use; fix your post type instead.
 		* `the_seo_framework_supported_post_type_archive`, boolean.
 			* The value passed also read the value from filter `the_seo_framework_supported_post_type`.
-		* `the_seo_framework_public_post_type_archives`, boolean. Do not use; fix your post type instead.
+		* `the_seo_framework_top_menu_args`, array. Allows adjusting the menu name, icon, etc.
+		* `the_seo_framework_top_menu_issue_count`, int. Allows adjusting the issue count number. Don't overwrite, but increment it!
+			* Set to `0` at `PHP_INT_MAX` to disable this feature.
+			* If set above 0, necessary styles are loaded.
 * **Changed:**
 	* (JS) `tsf-resize` now fires once every 50ms, instead of 100ms.
 * **Other:**
