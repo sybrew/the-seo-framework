@@ -72,7 +72,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 				] ),
 				Input::make_checkbox( [
 					'id'     => 'display_seo_bar_metabox',
-					'label'  => esc_html__( 'Display the SEO Bar in the SEO Settings metabox?', 'autodescription' ),
+					'label'  => esc_html__( 'Display the SEO Bar in the SEO Settings meta box?', 'autodescription' ),
 					'escape' => false,
 				] ),
 				Input::make_checkbox( [
@@ -398,8 +398,6 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		$forced_tax = $this->get_forced_supported_taxonomies();
 		$boxes      = [];
 
-		$tax_option_id = 'disabled_taxonomies';
-
 		foreach ( $this->get_public_taxonomies() as $taxonomy ) {
 			$_label = $this->get_tax_type_label( $taxonomy, false );
 			if ( ! strlen( $_label ) ) continue;
@@ -411,7 +409,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 			);
 
 			$boxes[] = Input::make_checkbox( [
-				'id'       => [ 'disabled_taxonomies', $taxonomy ],
+				'id'       => [ 'disabled_taxonomies', $taxonomy ], // disabled_taxonomies is the option name.
 				'class'    => 'tsf-excluded-taxonomies',
 				'label'    => $_label,
 				'escape'   => false,

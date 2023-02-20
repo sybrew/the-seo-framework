@@ -178,12 +178,11 @@ class Admin_Pages extends Generate_Ldjson {
 	 * @since 4.0.0
 	 *
 	 * @param string   $post_type The current post type.
-	 * @param \WP_Post $post      The Post object.
+	 * @param \WP_Post $post      The Post object. Unused.
 	 */
 	public function _init_post_edit_view( $post_type, $post ) {
 
-		if ( ! $this->is_post_edit() ) return;
-		if ( ! $this->is_post_type_supported( $post_type ) ) return;
+		if ( ! $this->is_post_edit() || ! $this->is_post_type_supported( $post_type ) ) return;
 
 		/**
 		 * @since 2.0.0
@@ -213,7 +212,7 @@ class Admin_Pages extends Generate_Ldjson {
 
 		/**
 		 * @since 2.6.0
-		 * @param int $priority The metabox term priority.
+		 * @param int $priority The meta box term priority.
 		 *                      Defaults to a high priority, this box is seen soon below the default edit inputs.
 		 */
 		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );

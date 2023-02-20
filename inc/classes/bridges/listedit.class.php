@@ -160,8 +160,10 @@ final class ListEdit extends ListTable {
 	 */
 	public function _output_column_contents_for_post( $column_name, $post_id ) {
 
-		if ( $this->column_name !== $column_name )          return;
-		if ( ! \current_user_can( 'edit_post', $post_id ) ) return;
+		if (
+			   $this->column_name !== $column_name
+			|| ! \current_user_can( 'edit_post', $post_id )
+		) return;
 
 		$tsf = \tsf();
 

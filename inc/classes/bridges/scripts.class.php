@@ -203,7 +203,7 @@ final class Scripts {
 	}
 
 	/**
-	 * Prepares WordPress metabox scripts.
+	 * Prepares WordPress meta box scripts.
 	 *
 	 * @since 4.0.0
 	 */

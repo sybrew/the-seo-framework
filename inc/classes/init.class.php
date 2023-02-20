@@ -862,14 +862,14 @@ class Init extends Query {
 	 */
 	public function _init_robots_headers() {
 
-		$noindex = \is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() );
-
 		/**
 		 * @since 4.0.5
 		 * @param bool $noindex Whether a noindex header must be set.
 		 */
-		if ( \apply_filters( 'the_seo_framework_set_noindex_header', $noindex ) )
-			$this->_output_robots_noindex_headers();
+		if ( \apply_filters(
+			'the_seo_framework_set_noindex_header',
+			\is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() )
+		) ) $this->_output_robots_noindex_headers();
 	}
 
 	/**
@@ -879,10 +879,7 @@ class Init extends Query {
 	 * @access private
 	 */
 	public function _output_robots_noindex_headers() {
-
-		if ( ! headers_sent() ) {
-			header( 'X-Robots-Tag: noindex', true );
-		}
+		headers_sent() or header( 'X-Robots-Tag: noindex', true );
 	}
 
 	/**
@@ -1146,8 +1143,8 @@ class Init extends Query {
 	 *
 	 * @param array    $data   The response data.
 	 * @param \WP_Post $post   The post object.
-	 * @param int      $width  The requested width.
-	 * @param int      $height The calculated height.
+	 * @param int      $width  The requested width. Unused.
+	 * @param int      $height The calculated height. Unused.
 	 * @return array Possibly altered $data.
 	 */
 	public function _alter_oembed_response_data( $data, $post, $width, $height ) {

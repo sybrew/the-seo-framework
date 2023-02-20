@@ -206,12 +206,12 @@ final class SEOBar {
 		 */
 		static $_void = [];
 
-		if ( isset( static::$items[ $key ] ) ) :
+		if ( isset( static::$items[ $key ] ) ) { // Do not write to referenced var before this is tested!
 			$_item = &static::$items[ $key ];
-		else :
+		} else {
 			$_void = [];
 			$_item = &$_void;
-		endif;
+		}
 
 		return $_item;
 	}

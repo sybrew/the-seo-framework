@@ -286,6 +286,7 @@ TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 	* Rank Math variable syntax is now updated to reflect the real world, instead of the buggy world Yoast SEO lives in.
 	* Post types that lost support of a feature will no longer have data used from the missing feature.
 		* For example, if a post type doesn't support title, you will always get "Untitled" as an SEO title, unless overwritten. If a post type no longer supports the "excerpt" field, it won't be used for description generation anymore.
+		* This is a long-standing bug present in WordPress, and probably 99% of other plugins. We decided to fix our part in TSF.
 	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
 		* This also affects quick-edit and the SEO Bar.
 	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
@@ -295,6 +296,12 @@ TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
 	* Addressed an issue where WooCommerce's shop page was recognized as an editable Post Type Archive.
 		* It is recognized by TSF as a page and shop, not a PTA; so, TSF's Post Type Archive settings had no effect. TSF now filters this PTA from its settings.
 		* We understand this is set up this way by WooCommerce because setting up a page as a shop isn't foolproof. Still, their workaround causes issues for development.
+	* Addressed a regression where the post title example on the SEO Settings page wasn't trimmed when over 60 characters.
+
+**For translators**
+
+* **Updated:** New translations are available.
+* **Changed:** Removed the post type name from the SEO Settings tab.
 
 **For developers**
 

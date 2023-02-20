@@ -487,8 +487,9 @@ final class Scripts {
 
 			$tsf = \tsf();
 
-			if ( ! \is_array( $_colors[ $_scheme ]->colors ?? null )
-			  || \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
+			if (
+				   ! \is_array( $_colors[ $_scheme ]->colors ?? null )
+				|| \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
 			) {
 				$_colors = [
 					'#222',

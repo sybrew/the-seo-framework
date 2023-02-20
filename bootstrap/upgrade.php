@@ -104,8 +104,7 @@ function _do_upgrade() {
 
 	$tsf = \tsf();
 
-	if ( ! $tsf->loaded ) return;
-	if ( \wp_doing_ajax() ) return;
+	if ( ! $tsf->loaded || \wp_doing_ajax() ) return;
 
 	if ( $tsf->is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
@@ -496,7 +495,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 		$found_titles = [];
 
-		foreach ( $meta_types as $type => $data ) {
+		foreach ( $meta_types as $data ) {
 			// in WP 6.2 we can use %i and whatnot. <https://core.trac.wordpress.org/ticket/52506>
 			// <https://make.wordpress.org/core/2022/10/08/escaping-table-and-field-names-with-wpdbprepare-in-wordpress-6-1/>
 			$indexes = implode( "', '", $esc_sql_in( $data['in'] ) );

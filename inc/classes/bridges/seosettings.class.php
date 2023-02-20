@@ -48,7 +48,7 @@ final class SeoSettings {
 		$tsf = \tsf();
 
 		/**
-		 * Various metabox filters.
+		 * Various meta box filters.
 		 * Set any to false if you wish the meta box to be removed.
 		 *
 		 * @since 2.2.4
@@ -354,7 +354,7 @@ final class SeoSettings {
 	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 *
-	 * @param array $args The variables to pass to the metabox tab.
+	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _title_metabox_additions_tab( $args ) {
 		\tsf()->get_view( 'settings/metaboxes/title', $args, 'additions_tab' );
@@ -367,7 +367,7 @@ final class SeoSettings {
 	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 *
-	 * @param array $args The variables to pass to the metabox tab.
+	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _title_metabox_prefixes_tab( $args ) {
 		\tsf()->get_view( 'settings/metaboxes/title', $args, 'prefixes_tab' );
@@ -427,7 +427,7 @@ final class SeoSettings {
 	 * @access private
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 *
-	 * @param array $args The variables to pass to the metabox tab.
+	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _robots_metabox_no_tab( $args ) {
 		\tsf()->get_view( 'settings/metaboxes/robots', $args, 'no_tab' );
@@ -519,7 +519,7 @@ final class SeoSettings {
 	 * @since 4.2.0
 	 * @access private
 	 *
-	 * @param array $args The variables to pass to the metabox tab.
+	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _post_type_archive_metabox_general_tab( $args ) {
 		\tsf()->get_view( 'settings/metaboxes/post-type-archive', $args, 'general_tab' );
@@ -531,7 +531,7 @@ final class SeoSettings {
 	 * @since 4.2.0
 	 * @access private
 	 *
-	 * @param array $args The variables to pass to the metabox tab.
+	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _post_type_archive_metabox_social_tab( $args ) {
 		\tsf()->get_view( 'settings/metaboxes/post-type-archive', $args, 'social_tab' );
@@ -543,7 +543,7 @@ final class SeoSettings {
 	 * @since 4.2.0
 	 * @access private
 	 *
-	 * @param array $args The variables to pass to the metabox tab.
+	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _post_type_archive_metabox_visibility_tab( $args ) {
 		\tsf()->get_view( 'settings/metaboxes/post-type-archive', $args, 'visibility_tab' );

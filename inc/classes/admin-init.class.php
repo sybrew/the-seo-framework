@@ -566,9 +566,10 @@ class Admin_Init extends Init {
 		// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;
 
-		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
-		|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'] ?? '', $this->_get_dismiss_notice_nonce_action( $key ) ) ) {
+		if (
+			   ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
+			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'] ?? '', $this->_get_dismiss_notice_nonce_action( $key ) )
+		) {
 			\wp_die( -1, 403 );
 		}
 

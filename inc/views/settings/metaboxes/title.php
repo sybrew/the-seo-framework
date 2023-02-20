@@ -24,9 +24,11 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$latest_post_id = $this->get_latest_post_id();
 		$latest_cat_id  = $this->get_latest_category_id();
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
-		$post_name  = esc_html( strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' ) );
-		$post_title = $this->s_title( $this->hellip_if_over( $post_name, 60 ) );
+		$post_title = $this->s_title( $this->hellip_if_over(
+			// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
+			esc_html( strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' ) ),
+			60
+		) );
 
 		$cat_prefix = $this->s_title( _x( 'Category:', 'category archive title prefix', 'default' ) );
 		$cat_title  = $this->s_title( $this->hellip_if_over(
@@ -41,8 +43,8 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			$cat_title
 		);
 
-		$example_post_left      = "<em>{$additions_left}{$post_name}</em>";
-		$example_post_right     = "<em>{$post_name}{$additions_right}</em>";
+		$example_post_left      = "<em>{$additions_left}{$post_title}</em>";
+		$example_post_right     = "<em>{$post_title}{$additions_right}</em>";
 		$example_tax_left_full  = "<em>{$additions_left}{$cat_title_full}</em>";
 		$example_tax_right_full = "<em>{$cat_title_full}{$additions_right}</em>";
 		$example_tax_left       = "<em>{$additions_left}{$cat_title}</em>";

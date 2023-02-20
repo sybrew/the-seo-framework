@@ -276,8 +276,8 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		$output_social_presence = false;
 
-		foreach ( $socialsites as $v ) {
-			if ( strlen( $this->get_option( $v['option'] ) ) ) {
+		foreach ( $socialsites as $sc ) {
+			if ( strlen( $this->get_option( $sc['option'] ) ) ) {
 				$output_social_presence = true;
 				break;
 			}
@@ -303,26 +303,26 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				)
 			);
 
-			foreach ( $socialsites as $key => $v ) {
+			foreach ( $socialsites as $sc ) {
 
-				if ( ! strlen( $this->get_option( $v['option'] ) ) ) continue;
+				if ( ! strlen( $this->get_option( $sc['option'] ) ) ) continue;
 
 				?>
 				<p>
-					<label for="<?php Input::field_id( $v['option'] ); ?>">
-						<strong><?= esc_html( $v['desc'] ) ?></strong>
+					<label for="<?php Input::field_id( $sc['option'] ); ?>">
+						<strong><?= esc_html( $sc['desc'] ) ?></strong>
 						<?php
-						if ( $v['examplelink'] ) {
+						if ( $sc['examplelink'] ) {
 							HTML::make_info(
 								__( 'View your profile.', 'autodescription' ),
-								$v['examplelink']
+								$sc['examplelink']
 							);
 						}
 						?>
 					</label>
 				</p>
 				<p>
-					<input type=url name="<?php Input::field_name( $v['option'] ); ?>" class=large-text id="<?php Input::field_id( $v['option'] ); ?>" placeholder="<?= esc_attr( $v['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $v['option'] ) ) ?>" autocomplete=off />
+					<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= esc_attr( $sc['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $sc['option'] ) ) ?>" autocomplete=off />
 				</p>
 				<?php
 			}

@@ -384,8 +384,6 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 
 		break;
 	case 'social_postdates_tab':
-		$posts_i18n = esc_html__( 'Posts', 'autodescription' );
-
 		HTML::header_title( __( 'Post Date Settings', 'autodescription' ) );
 		HTML::description( __( "Some social sites output the shared post's publishing and modified data in the sharing snippet.", 'autodescription' ) );
 		?>

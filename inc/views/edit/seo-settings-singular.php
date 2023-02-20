@@ -43,7 +43,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		];
 
 		/**
-		 * Allows for altering the inpost SEO settings metabox tabs.
+		 * Allows for altering the inpost SEO settings meta box tabs.
 		 *
 		 * @since 2.9.0
 		 * @since 4.0.0 Removed the second parameter (post type label)
@@ -221,7 +221,6 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_visibility_tab':
-		$canonical             = $this->get_post_meta_item( '_genesis_canonical_uri' );
 		$canonical_placeholder = $this->get_canonical_url( $_generator_args );
 
 		// Get robots defaults.

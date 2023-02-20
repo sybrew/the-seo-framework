@@ -956,7 +956,11 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->has_custom_canonical_url() ) goto end;
 
-		if ( $this->is_singular() && ! $this->is_singular_archive() && $this->is_multipage() ) {
+		if (
+			   $this->is_singular()
+			&& ! $this->is_singular_archive()
+			&& $this->is_multipage()
+		) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_posts' );
@@ -965,7 +969,12 @@ class Generate_Url extends Generate_Title {
 
 			$page      = $this->page();
 			$_numpages = $this->numpages();
-		} elseif ( $this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
+		} elseif (
+			   $this->is_real_front_page()
+			|| $this->is_archive()
+			|| $this->is_singular_archive()
+			|| $this->is_search()
+		) {
 			$_run = $this->is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_archives' );

@@ -657,7 +657,10 @@ class Post_Data extends Detect {
 	 * @return bool True if protected or private, false otherwise.
 	 */
 	public function is_protected( $post = null ) {
-		$post = \get_post( $post ); // This is here so we don't have to create another instance hereinafter.
+
+		// This is here so we don't have to create another instance hereinafter.
+		$post = \get_post( $post );
+
 		return $this->is_password_protected( $post ) || $this->is_private( $post );
 	}
 

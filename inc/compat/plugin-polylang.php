@@ -64,8 +64,7 @@ function _polylang_fix_sitemap_base_bath( $path ) {
  */
 function _polylang_set_sitemap_language() {
 
-	if ( ! \function_exists( '\\PLL' ) ) return;
-	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return;
+	if ( ! \function_exists( '\\PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
 
 	// phpcs:ignore, WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
 	$lang = $_GET['lang'] ?? '';

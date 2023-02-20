@@ -42,6 +42,7 @@ final class PostSettings {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 Now registers custom postbox classes.
+	 * @since 4.2.8 No longer uses the post type label for the meta box title.
 	 * @access private
 	 *
 	 * @param string $post_type The current Post Type.
@@ -49,8 +50,6 @@ final class PostSettings {
 	public static function _prepare_meta_box( $post_type ) {
 
 		$tsf = \tsf();
-
-		$label = $tsf->get_post_type_label( $post_type );
 
 		/**
 		 * @since 2.9.0

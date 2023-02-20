@@ -57,7 +57,6 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		break;
 
 	case 'sitemaps_general_tab':
-		$sitemap_url        = The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url();
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
 		$sitemap_detected   = $this->has_sitemap_xml();
 

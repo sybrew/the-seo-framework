@@ -61,9 +61,10 @@ class Sanitize extends Admin_Pages {
 		 *
 		 * @since 2.2.9
 		 */
-		if ( empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
-		|| ! \is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] ) )
-			return memo( false );
+		if (
+			   empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
+			|| ! \is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
+		) return memo( false );
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		if ( ! \current_user_can( $this->get_settings_capability() ) )

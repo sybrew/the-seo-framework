@@ -16,11 +16,6 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 	case 'webmaster_main':
 		$site_url = $this->get_homepage_permalink();
 
-		$bing_site_url   = 'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url );
-		$google_site_url = 'https://www.google.com/webmasters/verification/verification?siteUrl=' . rawurlencode( $site_url ) . '&tid=alternate&vtype=vmeta';
-		$pint_site_url   = 'https://analytics.pinterest.com/';
-		$yandex_site_url = 'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url );
-
 		$settings = [
 			'google'    => [
 				'setting'     => 'google_verification',
@@ -82,7 +77,7 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		foreach ( $settings as $key => $setting ) :
+		foreach ( $settings as $setting ) :
 			vprintf(
 				'<p><label for=%s><strong>%s</strong> %s</label></p>',
 				[

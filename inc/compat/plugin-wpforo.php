@@ -109,7 +109,7 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 
 	if ( $interpreter::$query['taxonomy'] ) return;
 
-	$meta_enabled = _wpforo_seo_meta_enabled();   // phpcs:ignore, TSF.Performance.Opcodes -- is local.
+	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 
 	if ( ! $meta_enabled && ! $title_enabled ) return;

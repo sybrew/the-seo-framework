@@ -299,8 +299,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->can_do_sitemap_robots()', '4.2.0' );
 
 		if ( $check_option ) {
-			if ( ! $tsf->get_option( 'sitemaps_output' )
-			|| ! $tsf->get_option( 'sitemaps_robots' ) )
+			if ( ! $tsf->get_option( 'sitemaps_output' ) || ! $tsf->get_option( 'sitemaps_robots' ) )
 				return false;
 		}
 
