@@ -944,7 +944,7 @@ class Detect extends Render {
 			array_values(
 				array_filter(
 					$this->get_public_post_type_archives(),
-					[ $this, 'is_post_type_archive_supported' ],
+					[ $this, 'is_post_type_archive_supported' ]
 				)
 			)
 		);
