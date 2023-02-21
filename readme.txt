@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.5
 Tested up to: 6.1
 Requires PHP: 7.2.0
-Stable tag: 4.2.7.1
+Stable tag: 4.2.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -251,96 +251,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 = 4.2.8
 
-TODO the_seo_framework_title_from_generation doesn't affect quick-edit.
-	-> It actually does, but the data is amended in real-time by the term name/post title inputs.
-		-> This is what we'll address when we add %syntax%.
-
-**For everyone**
-
-* **Added:**
-	* Advanced Query Protection now detects all plugin-injected query variables.
-	* SEOPress syntax is now detected for titles and descriptions. The SEO Bar will warn you about leftover syntax.
-	* Hidden forums of bbPress now have their forums, topics, and replies removed from the sitemap by forcing "noindex" to them.
-		* The SEO Bar will also explain this. No amount of overriding will make the hidden forum public; so, indexing overrides are ignored.
-	* The wpForo page can now be detected by the SEO Bar, and will exclaim some or all assertions aren't possible when wpForo's SEO is enabled.
-	* The Site Icon (set at "Customizer > Site Identity") is now also considered as a sitemap stylesheet fallback logo.
-		* If you do not like this change, go to "SEO Settings > Sitemap Settings > Style," and deselect the checkbox under "Header Title Logo."
-* **Improved:**
-	* After two years of fiddling, we finally found a way to round the edges of the SEO Bar. Finally some peace on your eyes.
-		* The problem was that we're using flexbox, which doesn't yield information about wrapping; so, we must rely on hiding the overflow. But relatively positioned tooltips still need to overflow beyond its parent, otherwise we cannot see the tooltip. We figured that making the tooltip relative to a grandparent, we could still work with hiding overflows. So what was left to do is calculate relative positioning between the grandparent and parent.
-	* Improved performance by refactoring several code operations once again: less work, same result.
-	* Tooltips are now more naturally aligned relative to the container, and now support relativity towards super containers (applied to the SEO Bar) to be more easy on your eyes.
-	* Tooltips render faster once more: On our workstation, our scripts can now spawn 450 of them every second, and the arrow below the tooltip polls up to 700hz.
-* **Changed:**
-	* The first-time installation notice is now displayed thrice instead of once within a 2-minute timeframe (whichever comes first), whereafter it disappears forever.
-	* Added support for wpForo v2.0 and later, but dropped support for earlier versions.
-		* They had no deprecation route for us to follow, plus we cannot support both versions indefinitely. We also have no data on how many users use the latest version of TSF with wpForo v1.x.
-	* When the sitemap logo set in the SEO settings is deleted, it will no longer try to fall back to other methods logos. You should restore the image instead, clear the selected image option, or pick a new one.
-* **Fixed:**
-	* When a pagination overflow is requested for the paginated static frontpage, TSF now properly detects WordPress's intention (it provides the last page instead of the first).
-	* When stripping tags, elements with that start with exactly the same text as others won't be preemptively closed. Listing all faults:
-		* `a` elements can no longer be closed by `abbr`, `address`, `aside`, and `audio` (but not `area`, since that is a void element).
-		* `b` elements can no longer be closed by `bdo`, `bdi`, `blockquote`, and `button` (but not `br`, since that is a void element).
-		* `i` elements can no longer be cloased by `iframe` and `ins` (but not `input` and `img`, since those are void elements).
-		* This bug was not replicable on anyone's site, since we do not AI-strip `a`, `b`, nor `i` elements in our contexts (we leave those as inline text). So, eh... why did we write this out? Ah, yes. Open Source means sharing information.
-	* Rank Math variable syntax is now updated to reflect the real world, instead of the buggy world Yoast SEO lives in.
-	* Post types that lost support of a feature will no longer have data used from the missing feature.
-		* For example, if a post type doesn't support title, you will always get "Untitled" as an SEO title, unless overwritten. If a post type no longer supports the "excerpt" field, it won't be used for description generation anymore.
-		* This is a long-standing bug present in WordPress, and probably 99% of other plugins. We decided to fix our part in TSF.
-	* Terms that have child terms with posts no longer have their SEO meta settings erroneously indicate `noindex` is the default state.
-		* This also affects quick-edit and the SEO Bar.
-	* Addressed a regression in the Block Editor where TSF's tooltips were rendered behind other elements.
-	* Addressed a visual bug where the homepage title location was incorrectly assigned for "left" on-load.
-	* Addressed a visual bug where the homepage's default title was overwritten by the Site Title setting when a custom home-as-page meta title was set via post metadata.
-	* Addressed an issue where the thumbnail wasn't set as a potential Social Image placeholder for WooCommerce product categories.
-	* Addressed an issue where WooCommerce's shop page was recognized as an editable Post Type Archive.
-		* It is recognized by TSF as a page and shop, not a PTA; so, TSF's Post Type Archive settings had no effect. TSF now filters this PTA from its settings.
-		* We understand this is set up this way by WooCommerce because setting up a page as a shop isn't foolproof. Still, their workaround causes issues for development.
-	* Addressed a regression where the post title example on the SEO Settings page wasn't trimmed when over 60 characters.
-
-**For translators**
-
-* **Updated:** New translations are available.
-* **Changed:** Removed the post type name from the SEO Settings tab.
-
-**For developers**
-
-* Methods in object `The_SEO_Framework\Load` (callable via `tsf()` and `theseoframework()`):
-	* **Added:**
-		* `has_seopress_syntax()` determines if the input text has transformative SEOPress syntax.
-			* This is used to determine leftover syntax after using [Transport](https://theseoframework.com/extensions/transport/).
-		* `is_post_type_archive_supported()`, detects if the current or inputted post type's archive is supported and not disabled.
-		* `is_term_populated()` tests whether the term returns any post on the front-end.
-		* `get_admin_issue_count()` returns the number of issues registered.
-		* `get_admin_menu_issue_badge()` returns formatted text for the notice count to be displayed in the admin menu as a number.
-	* **Changed:**
-		* `convert_markdown()` can now process with either `{` or `}` within Markdown blocks.
-			* The regex used is also vastly optimized.
-		* `get_current_post_author_meta()` now returns null when no post author can be established.
-		* `get_image_uploader_form()`, added 'button_class' as a supported index for `$args`.
-		* `has_rankmath_syntax()`, actualized the variable list.
-		* `is_query_exploited()` now blocks any publicly registered variable requested to the home-as-page.
-		* `page()` now returns the last page on pagination overflow, but only when we're on a paginated home-as-page.
-		* `strip_tags_cs()`, elements with that start with exactly the same text as others won't be preemptively closed.
-		* `twitter_image()`, removed support for the long deprecated `twitter:image:height` and `twitter:image:width`.
-		* The following methods now test for post type support. All methods that rely on post type data are affected.
-			* `fetch_excerpt()`, `'excerpt'` for excerpt parsing, and `'editor'` for content parsing.
-			* `get_generated_single_post_title()`, `'title'` for title parsing.
-			* `get_post_content()`, `'editor'` for content parsing.
-			* `get_current_post_author_id()`, `'author'` for user ID parsing.
-* **Filter notes:**
-	* **Added:**
-		* `the_seo_framework_public_post_type_archives`, boolean. Do not use; fix your post type instead.
-		* `the_seo_framework_supported_post_type_archive`, boolean.
-			* The value passed also read the value from filter `the_seo_framework_supported_post_type`.
-		* `the_seo_framework_top_menu_args`, array. Allows adjusting the menu name, icon, etc.
-		* `the_seo_framework_top_menu_issue_count`, int. Allows adjusting the issue count number. Don't overwrite, but increment it!
-			* Set to `0` at `PHP_INT_MAX` to disable this feature.
-			* If set above 0, necessary styles are loaded.
-* **Changed:**
-	* (JS) `tsf-resize` now fires once every 50ms, instead of 100ms.
-* **Other:**
-	* Condensed code, such as removing needless quotes from administrative HTML="attributes".
+This minor update makes the SEO Bar easier on the eyes. We also improved compatibility with bbPress, wpForo, and WooCommerce, and added compatibility with another thousand plugins via Advanced Query Protection’s new plugin query variable detection. We also fixed a couple of bugs, added and improved syntax detection of SEOPress and Rank Math, introduced new APIs, dusted off some code, refined tooltip placement, added Site Icon as a fallback for the sitemap title logo, and perfected support for Custom Post Types by detecting [their changed arguments](https://theseoframework.com/?p=4059).
 
 = 4.2.7 =
 
