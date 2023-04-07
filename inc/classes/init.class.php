@@ -161,10 +161,12 @@ class Init extends Query {
 
 		if ( ! $this->is_headless['meta'] ) {
 			// Initialize term meta filters and actions.
-			$this->init_term_meta();
+			\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
 
 			// Initialize term meta filters and actions.
-			$this->init_post_meta();
+			\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
+			\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
+			\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
 
 			// Enqueue Post meta boxes.
 			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 2 );
@@ -195,7 +197,8 @@ class Init extends Query {
 
 		if ( ! $this->is_headless['user'] ) {
 			// Initialize user meta filters and actions.
-			$this->init_user_meta();
+			\add_action( 'personal_options_update', [ $this, '_update_user_meta' ], 10, 1 );
+			\add_action( 'edit_user_profile_update', [ $this, '_update_user_meta' ], 10, 1 );
 
 			// Enqueue user meta output.
 			\add_action( 'current_screen', [ $this, '_init_user_edit_view' ] );
@@ -268,7 +271,11 @@ class Init extends Query {
 			\add_filter( 'wp_sitemaps_enabled', '__return_false' );
 		} else {
 			// Augment Core sitemaps. Can't hook into `wp_sitemaps_init` as we're augmenting the providers before that.
-			$this->_init_core_sitemap();
+			// It's not a bridge, don't treat it like one: clean me up?
+			\add_filter( 'wp_sitemaps_add_provider', [ Builders\CoreSitemaps\Main::class, '_filter_add_provider' ], 9, 2 );
+			\add_filter( 'wp_sitemaps_max_urls', [ Builders\CoreSitemaps\Main::class, '_filter_max_urls' ], 9 );
+			// We miss the proper hooks. https://github.com/sybrew/the-seo-framework/issues/610#issuecomment-1300191500
+			\add_filter( 'wp_sitemaps_posts_query_args', [ Builders\CoreSitemaps\Main::class, '_trick_filter_doing_sitemap' ], 11 );
 		}
 
 		// Initialize 301 redirects.
@@ -707,20 +714,6 @@ class Init extends Query {
 	 */
 	public function _init_sitemap() {
 		Bridges\Sitemap::get_instance()->_init();
-	}
-
-	/**
-	 * Prepares core sitemap output.
-	 *
-	 * @since 4.1.2
-	 * @access private
-	 */
-	public function _init_core_sitemap() {
-		// It's not a bridge, don't treat it like one: So, submit hooks here... But, clean me up?
-		\add_filter( 'wp_sitemaps_add_provider', [ Builders\CoreSitemaps\Main::class, '_filter_add_provider' ], 9, 2 );
-		\add_filter( 'wp_sitemaps_max_urls', [ Builders\CoreSitemaps\Main::class, '_filter_max_urls' ], 9 );
-		// We miss the proper hooks. https://github.com/sybrew/the-seo-framework/issues/610#issuecomment-1300191500
-		\add_filter( 'wp_sitemaps_posts_query_args', [ Builders\CoreSitemaps\Main::class, '_trick_filter_doing_sitemap' ], 11 );
 	}
 
 	/**

@@ -269,6 +269,7 @@ final class Images {
 	 */
 	public static function get_site_logo_image_details( $args = null, $size = 'full' ) {
 
+		// WP's _override_custom_logo_theme_mod() sets this to get_option( 'site_icon' ) instead.
 		$id = \get_theme_mod( 'custom_logo' );
 
 		if ( $id ) {

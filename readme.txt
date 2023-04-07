@@ -249,7 +249,33 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-= 4.2.8
+TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
+TODO umemo conflicting_plugins()
+TODO remove Yoast SEO Premium from conflicting plugins? Doesn't it require Yoast SEO?
+
+FIXME: https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
+	Also notify Nik via email?
+
+TODO remove support for get_theme_mod( 'custom_logo' )?
+	-> WP's _override_custom_logo_theme_mod() sets it to get_option( 'site_icon' ) instead.
+	-> WP's _delete_site_logo_on_remove_custom_logo suggests that get_theme_mod( 'custom_logo' ) is deprecated.
+		-> This doesn't appear loaded in the backend. However, thanks to Gutenberg's asinine devs, the entire codebase is unreadable.
+TODO when you add a custom title (homepage also?) to wpForo's page, the SEO Bar should exclaim it's being overwritten (and be marked STATE_BAD).
+TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
+	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
+	-> Does this affect the title as well? Test this.
+TODO add user meta fields in multisite network (when user is author or higher on any site? We can test caps via user_meta globally)
+
+**Detailed log**
+
+**For developers:**
+	* **Fixed:**
+		* Resolved PHP warning when editing a post type with altered term type availability.
+		* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
+	* **Other:**
+		* Cleaned up code. Reduced function call overhead.
+
+= 4.2.8 =
 
 This minor update makes the SEO Bar easier on the eyes. We also improved compatibility with bbPress, wpForo, and WooCommerce, and added compatibility with another thousand plugins via Advanced Query Protection’s new plugin query variable detection. We also fixed a couple of bugs, added and improved syntax detection of SEOPress and Rank Math, introduced new APIs, dusted off some code, refined tooltip placement, added Site Icon as a fallback for the sitemap title logo, and perfected support for Custom Post Types by detecting [their changed arguments](https://theseoframework.com/?p=4059).
 

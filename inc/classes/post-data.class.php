@@ -48,18 +48,6 @@ class Post_Data extends Detect {
 	public $inpost_nonce_field = 'tsf_inpost_nonce';
 
 	/**
-	 * Initializes post meta data handlers.
-	 *
-	 * @since 4.1.4
-	 */
-	protected function init_post_meta() {
-		// Save post data.
-		\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
-		\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
-		\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
-	}
-
-	/**
 	 * Returns a post SEO meta item by key.
 	 *
 	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
@@ -759,6 +747,7 @@ class Post_Data extends Detect {
 	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
 	 *                2. This method now converts the post meta to an integer, making the comparison work again.
 	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
+	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -781,10 +770,8 @@ class Post_Data extends Detect {
 		$terms        = \get_the_terms( $post_id, $taxonomy );
 		$primary_term = false;
 
-		// Test for otherwise foreach emits a PHP warning in the unlikely event a post's taxonomy is gone.
-		if ( ! \is_array( $terms ) ) memo( false, $post_id, $taxonomy );
-
-		foreach ( $terms as $term ) {
+		// Test for is_array in the unlikely event a post's taxonomy is gone ($terms = WP_Error)
+		if ( \is_array( $terms ) ) foreach ( $terms as $term ) {
 			if ( $primary_id === (int) $term->term_id ) {
 				$primary_term = $term;
 				break;

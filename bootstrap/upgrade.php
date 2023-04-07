@@ -478,7 +478,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 			'wordpress-seo'    => [
 				'title' => 'Yoast SEO',
 				'from'  => $wpdb->postmeta,
-				'in'    => [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc', '_yoast_wpseo_opengraph-title', '_yoast_wpseo_opengraph-description', '_yoast_wpseo_twitter-title', '_yoast_wpseo_twitter-description', '_yoast_wpseo_meta-robots-noindex', '_yoast_wpseo_meta-robots-nofollow', '_yoast_wpseo_canonical', '_yoast_wpseo_redirect' ],
+				'in'    => [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc', '_yoast_wpseo_opengraph-title', '_yoast_wpseo_opengraph-description', '_yoast_wpseo_twitter-title', '_yoast_wpseo_twitter-description', '_yoast_wpseo_meta-robots-noindex', '_yoast_wpseo_meta-robots-nofollow', '_yoast_wpseo_canonical' ],
 			],
 			'seo-by-rank-math' => [
 				'title' => 'Rank Math',

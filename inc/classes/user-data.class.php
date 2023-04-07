@@ -35,16 +35,6 @@ namespace The_SEO_Framework;
 class User_Data extends Term_Data {
 
 	/**
-	 * Initializes user meta data handlers.
-	 *
-	 * @since 4.1.4 Now protected.
-	 */
-	protected function init_user_meta() {
-		\add_action( 'personal_options_update', [ $this, '_update_user_meta' ], 10, 1 );
-		\add_action( 'edit_user_profile_update', [ $this, '_update_user_meta' ], 10, 1 );
-	}
-
-	/**
 	 * Returns the user meta item by key.
 	 *
 	 * @since 4.1.4
@@ -229,9 +219,11 @@ class User_Data extends Term_Data {
 
 		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
-		$data = \wp_parse_args(
-			(array) $_POST['tsf-user-meta'],
-			$this->get_user_meta( $user_id )
+		// We won't reset the data, just overwrite what's given.
+		// This is because we only update a portion of the meta.
+		$data = array_merge(
+			$this->get_user_meta( $user_id ),
+			(array) ( $_POST['tsf-user-meta'] ?? [] )
 		);
 
 		$this->save_user_meta( $user_id, $data );

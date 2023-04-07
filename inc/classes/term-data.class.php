@@ -35,16 +35,6 @@ namespace The_SEO_Framework;
 class Term_Data extends Post_Data {
 
 	/**
-	 * Initializes term meta data handlers.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.4 Now protected.
-	 */
-	protected function init_term_meta() {
-		\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
-	}
-
-	/**
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
