@@ -729,7 +729,7 @@ class Site_Options extends Sanitize {
 			'mt_MT' => 'mt',  // Maltese
 			'my_MM' => 'my',  // Burmese
 			'nb_NO' => 'nb',  // Norwegian (bokmal)
-			'and_ZW' => 'and',  // Ndebele
+			'nd_ZW' => 'nd',  // Ndebele
 			'ne_NP' => 'ne',  // Nepali
 			'nl_BE' => 'nl',  // Dutch (België)
 			'nl_NL' => 'nl',  // Dutch
