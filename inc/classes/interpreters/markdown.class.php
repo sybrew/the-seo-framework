@@ -41,7 +41,7 @@ namespace The_SEO_Framework\Interpreters;
 final class Markdown {
 
 	/**
-	 * Converts markdown text into HMTL.
+	 * Converts markdown text into HTML.
 	 * Does not support list or block elements. Only inline statements.
 	 *
 	 * Note: This code has been rightfully stolen from the Extension Manager plugin (sorry Sybre!).

@@ -74,7 +74,7 @@ abstract class Main {
 
 	/**
 	 * @since 4.0.0
-	 * @var arrray The current query cache.
+	 * @var array The current query cache.
 	 */
 	protected $query_cache = [];
 

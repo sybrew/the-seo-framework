@@ -452,7 +452,7 @@ class Term_Data extends Post_Data {
 	 * @see $this->get_post_type_label() For the singular alternative.
 	 *
 	 * @param string $tax_type The taxonomy type. Required.
-	 * @param bool   $singular Wether to get the singlural or plural name.
+	 * @param bool   $singular Whether to get the singlural or plural name.
 	 * @return string The Taxonomy Type name/label, if found.
 	 */
 	public function get_tax_type_label( $tax_type, $singular = true ) {

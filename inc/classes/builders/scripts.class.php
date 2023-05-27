@@ -183,7 +183,7 @@ final class Scripts {
 	}
 
 	/**
-	 * Enqueues all known registeres scripts, styles, and templates,
+	 * Enqueues all known registers scripts, styles, and templates,
 	 * in the footer, right before WordPress's last script-outputting call.
 	 *
 	 * @since 4.1.2
@@ -301,7 +301,7 @@ final class Scripts {
 	 * @uses static::egister_script()
 	 */
 	private function forward_known_scripts() {
-		// Register them first to accomodate for dependencies.
+		// Register them first to accommodate for dependencies.
 		foreach ( static::$scripts as $s ) {
 			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
 			static::forward_script( $s );

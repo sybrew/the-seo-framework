@@ -297,7 +297,7 @@ final class Sitemap {
 	 * @since 4.2.1 Now considers "unlimited" execution time (0) that'd've prevented locks altogether.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool True on succes, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
 	public function lock_sitemap( $sitemap_id = 'base' ) {
 
@@ -326,7 +326,7 @@ final class Sitemap {
 	 * @since 4.1.2
 	 *
 	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool True on succes, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
 	public function unlock_sitemap( $sitemap_id = 'base' ) {
 

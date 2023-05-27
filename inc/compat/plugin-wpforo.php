@@ -29,7 +29,7 @@ function _wpforo_fix_page() {
 	}
 
 	if ( _wpforo_seo_meta_enabled() ) { // phpcs:ignore, TSF.Performance.Opcodes -- is local.
-		// Remove TSF's output: Twofold, may they change the order of operation in a future upate.
+		// Remove TSF's output: Twofold, may they change the order of operation in a future update.
 		_wpforo_disable_tsf_html_output(); // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 
 		// This won't run on wpForo at the time of writing (2.1.6), because action the_seo_framework_after_init already happened.

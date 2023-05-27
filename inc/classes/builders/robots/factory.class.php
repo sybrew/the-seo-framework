@@ -68,7 +68,7 @@ class Factory {
 	protected static $options;
 
 	/**
-	 * Contructor, does nothing but instigate TSF.
+	 * Constructor, does nothing but instigate TSF.
 	 *
 	 * @since 4.2.0
 	 */

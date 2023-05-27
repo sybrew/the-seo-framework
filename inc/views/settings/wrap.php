@@ -37,7 +37,7 @@ $_save_button = get_submit_button(
 	[ 'primary' ],
 	'submit',
 	false,
-	[ 'id' => '' ] // we ouput this twice, don't set ID.
+	[ 'id' => '' ] // we output this twice, don't set ID.
 );
 
 $_ays_reset    = esc_js( __( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ) );
@@ -47,7 +47,7 @@ $_reset_button = get_submit_button(
 	Input::get_field_name( 'tsf-settings-reset' ),
 	false,
 	[
-		'id'      => '', // we ouput this twice, don't set ID.
+		'id'      => '', // we output this twice, don't set ID.
 		'onclick' => "return confirm(`{$_ays_reset}`)", // this passes through esc_attr() unscathed.
 	]
 );

@@ -696,7 +696,7 @@ final class Page extends Main {
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
+			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
 			unset(
 				$item['assess']['posttype'],
 				$item['assess']['homepage'],
@@ -820,7 +820,7 @@ final class Page extends Main {
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
+			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
 			unset(
 				$item['assess']['posttype'],
 				$item['assess']['homepage'],
@@ -951,7 +951,7 @@ final class Page extends Main {
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype, homepage, nor site as "blocking" if there's an overide.
+			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
 			unset(
 				$item['assess']['posttype'],
 				$item['assess']['homepage'],
