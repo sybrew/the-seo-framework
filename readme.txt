@@ -261,19 +261,61 @@ TODO remove support for get_theme_mod( 'custom_logo' )?
 	-> WP's _delete_site_logo_on_remove_custom_logo suggests that get_theme_mod( 'custom_logo' ) is deprecated.
 		-> This doesn't appear loaded in the backend. However, thanks to Gutenberg's asinine devs, the entire codebase is unreadable.
 TODO when you add a custom title (homepage also?) to wpForo's page, the SEO Bar should exclaim it's being overwritten (and be marked STATE_BAD).
+	* wpForo's settings aren't read correctly? Retest.
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
 TODO add user meta fields in multisite network (when user is author or higher on any site? We can test caps via user_meta globally)
+TODO make color in tooltip strict, EM's admin theme makes it unreadable, others probably too.
+TODO add warning to PTA settings when translation plugin is detected.
+
+TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
+	-> This requires probably a whole lot more work than I'd have hoped.
+	-> This can go wrong if the default language changes, or disappears.
+
+TODO why is base_get_sitemap_store_key() used instead of one inferred from the $sitemap_id?
+	-> Move that to the sitemap bridge; so we could also a transient for Google News?
+		-> This may speed up rendering the news sitemap and reduce overhead when plugins are activate that manipulate the query.
+TODO with changes set to the sitemap, test whether plugins Polylang/WPML still work as intended -> Have their languages been initialized?
+	-> Also test other translation plugins.
+
+TODO <font> tag element is deprecated. So is the meme.
+
+TODO use 0==strcasecmp() instead of strtolower==strtolower? It might be slower... or faster. Test?
+	Use strncmp for the first X chars? Do we use this here? Only in TSFEM, no?
+
+TODO in _prepare_upgrade_notice(), test for most recent metadata?
+	-> So we combine ALL metadata entries, take rows from the top of the table first (highest ID) and then filter the results by plugin.
+
+TODO in remove_default_title_filters, has_filter can return 0. It will return false on failure, though.
+
+TODO investigate &shy; issue with News sitemap entries. (reply to user in Bremer about this issue)
+
+TODO check mail Dean about WPML config
 
 **Detailed log**
 
+**For everyone:**
+
+* **Improved:**
+	* The plugin is faster now due to improved coding standards.
+* **Fixed:**
+	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it will return JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
+		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
+		* We consider the following WordPress API functions dangerous, and we advise security researchers investigating plugins utilizing these:
+			- `wp_is_json_request()`
+			- `wp_is_jsonp_request()`
+			- `wp_is_xml_request()`
+
 **For developers:**
-	* **Fixed:**
-		* Resolved PHP warning when editing a post type with altered term type availability.
-		* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
-	* **Other:**
-		* Cleaned up code. Reduced function call overhead.
+
+* **Changed:**
+	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
+* **Fixed:**
+	* Resolved PHP warning when editing a post type with altered term type availability.
+	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
+* **Other:**
+	* Cleaned up code. Reduced function call overhead.
 
 = 4.2.8 =
 

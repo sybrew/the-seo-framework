@@ -3,14 +3,14 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.2.9-dev-1
+ * Version: 4.2.9-dev-2
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
  * Requires at least: 5.5
- * Requires PHP: 7.2.0
+ * Requires PHP: 7.3.0
  *
  * @package The_SEO_Framework\Bootstrap
  */
@@ -96,11 +96,11 @@ require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 // #        ;,iiiii:LL:,,:iiiii;ii;ttttt.              ;::iii0..
 // #        ,,...,,;;;,.....,ii;ii;...ll.            :::OO,GG.
 // # , L...........,::O::.00Gii;ii;ll.11.           .,,G,,0..
-// # , L..0000LL000LLL0::.00Gii,;;l..lll.  ...    ..,00,00.
-// # , L..L;;;..1LLLLLLLL1iiiii,ll;ttt11t..:::.  .,,0,,0..
-// # , L..O;;i;;;;;LLLLLLiiiiii,;;L;;t11t..:ii.;;,0i:0;,
+// # , L..000LLL00LLLL0::.00Gii,;;l..lll.  ...    ..,00,00.
+// # , L..L;;;..11LLLLLLL1iiiii,ll;ttt11t..:::.  .,,0,,0..
+// # , L..O;;i;;;LLLLLLLLiiiiii,;;L;;t11t..:ii.;;,0i:0;,
 // # , L..Oiii;;;;;LLL1iiiii,::t,,t111::1:::00.,,,00L..
-// # , L..Oiiiii:::t.........::tttt11tttttt:::.OOiii.
+// # , L..Oiiiii::t..........::tttt11tttttt:::.OOiii.
 // # , L..Oiit00tttLlll11lttt;;tll1llllltttt..GGGO:::..
 // # , L..L..;00tttOii...:tt;;;tll::::::lttttt.OO::::::.
 // # , L..O;;L00:::011;..l::;tttll:..   ;::lll...:::0ii.

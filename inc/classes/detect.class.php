@@ -577,6 +577,7 @@ class Detect extends Render {
 	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
 	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
 	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
+	 * @since 4.2.9 Removed detection for JSON type requests, because these cannot be verified as legitimate.
 	 *
 	 * @return bool
 	 */
@@ -589,7 +590,6 @@ class Detect extends Render {
 			case \is_feed():
 			case \wp_doing_ajax():
 			case \wp_doing_cron():
-			case \wp_is_json_request():
 			case \defined( 'REST_REQUEST' ) && REST_REQUEST:
 				$supported = false;
 				break;
@@ -1231,6 +1231,7 @@ class Detect extends Render {
 	 * @since 3.1.0
 	 * @since 3.2.0 1. Now detects the WP 5.0 block editor.
 	 *              2. Method is now public.
+	 * @TODO use the WP 5.0+ current_screen()->is_block_editor()?
 	 *
 	 * @return bool
 	 */
