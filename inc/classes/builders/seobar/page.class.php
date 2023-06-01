@@ -309,8 +309,8 @@ final class Page extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				\wp_specialchars_decode( static::$tsf->s_title_raw( $title ), ENT_QUOTES ),
-				ENT_NOQUOTES
+				\wp_specialchars_decode( static::$tsf->s_title_raw( $title ), \ENT_QUOTES ),
+				\ENT_NOQUOTES
 			)
 		);
 
@@ -522,8 +522,8 @@ final class Page extends Main {
 		// TODO FIXME: Use s_description() instead of s_description_raw()? E.g, hellip gets converted to dot dot dot..
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				\wp_specialchars_decode( static::$tsf->s_description_raw( $desc ), ENT_QUOTES ),
-				ENT_NOQUOTES
+				\wp_specialchars_decode( static::$tsf->s_description_raw( $desc ), \ENT_QUOTES ),
+				\ENT_NOQUOTES
 			)
 		);
 

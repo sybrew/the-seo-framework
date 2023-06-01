@@ -173,7 +173,7 @@ namespace The_SEO_Framework {
 				'line' => 0,
 			]
 			// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
-			+ debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]
+			+ debug_backtrace( \DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]
 		);
 
 		if ( isset( $value_to_set ) )

@@ -217,7 +217,7 @@ class Init extends Query {
 
 		// Add plugin links to the plugin activation page.
 		\add_filter(
-			'plugin_action_links_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
+			'plugin_action_links_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
 			[ '\The_SEO_Framework\Bridges\PluginTable', '_add_plugin_action_links' ],
 			10,
 			2
@@ -757,7 +757,7 @@ class Init extends Query {
 	 */
 	public function robots_txt( $robots_txt = '', $public = '' ) {
 
-		$site_path = \esc_attr( parse_url( \site_url(), PHP_URL_PATH ) ) ?: '';
+		$site_path = \esc_attr( parse_url( \site_url(), \PHP_URL_PATH ) ) ?: '';
 
 		/**
 		 * @since 2.5.0
@@ -842,7 +842,7 @@ class Init extends Query {
 		\add_action( 'the_seo_framework_sitemap_header', [ $this, '_output_robots_noindex_headers' ] );
 
 		// This is not necessarily a WordPress query. Test it inline.
-		if ( \defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
+		if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST )
 			$this->_output_robots_noindex_headers();
 	}
 
@@ -1086,7 +1086,7 @@ class Init extends Query {
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;
 
-		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
 			$referer = \wp_get_referer();
 			if ( false !== strpos( $referer, 'post.php' ) || false !== strpos( $referer, 'post-new.php' ) ) {
 				/**

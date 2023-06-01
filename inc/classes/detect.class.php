@@ -539,7 +539,7 @@ class Detect extends Render {
 
 		// Ensure get_home_path() is declared.
 		if ( ! \function_exists( '\\get_home_path' ) )
-			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once \ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'robots.txt';
 
@@ -562,7 +562,7 @@ class Detect extends Render {
 
 		// Ensure get_home_path() is declared.
 		if ( ! \function_exists( '\\get_home_path' ) )
-			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once \ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'sitemap.xml';
 
@@ -590,7 +590,7 @@ class Detect extends Render {
 			case \is_feed():
 			case \wp_doing_ajax():
 			case \wp_doing_cron():
-			case \defined( 'REST_REQUEST' ) && REST_REQUEST:
+			case \defined( 'REST_REQUEST' ) && \REST_REQUEST:
 				$supported = false;
 				break;
 
@@ -1297,7 +1297,7 @@ class Detect extends Render {
 				ltrim(
 					parse_url(
 						\get_option( 'home' ),
-						PHP_URL_PATH
+						\PHP_URL_PATH
 					) ?? '',
 					' \\/'
 				)

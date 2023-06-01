@@ -79,7 +79,7 @@ class Base extends Main {
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 		if ( 0 !== $ini_max_execution_time )
-			set_time_limit( max( $ini_max_execution_time, 3 * MINUTE_IN_SECONDS ) );
+			set_time_limit( max( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS ) );
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
 		if ( ! $bridge->lock_sitemap( 'base' ) ) return;
@@ -90,7 +90,7 @@ class Base extends Main {
 		static::$tsf->set_transient(
 			$this->base_get_sitemap_store_key(),
 			$this->build_sitemap(),
-			WEEK_IN_SECONDS
+			\WEEK_IN_SECONDS
 		);
 
 		$bridge->unlock_sitemap( 'base' );
@@ -128,7 +128,7 @@ class Base extends Main {
 				static::$tsf->set_transient(
 					$this->base_get_sitemap_store_key(),
 					$sitemap_content,
-					WEEK_IN_SECONDS
+					\WEEK_IN_SECONDS
 				);
 				$bridge->unlock_sitemap( $sitemap_id );
 			}
@@ -253,6 +253,8 @@ class Base extends Main {
 				$wp_query->query = $wp_query->query_vars = $_args;
 
 				$hierarchical_post_ids = array_diff( $wp_query->get_posts(), $_exclude_ids );
+
+				var_dump( 'LOOK MA', $wp_query, 'END LOOK MA' );
 
 				// Stop confusion: trim query to set value (by one or two, depending on whether the homepage and blog are included).
 				// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
@@ -406,7 +408,7 @@ class Base extends Main {
 								'order'        => 'DESC',
 								'offset'       => 0,
 							],
-							OBJECT
+							\OBJECT
 						);
 						$_publish_post = $latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00';
 						$_lastmod_blog = $_values['lastmod']; // Inferred from generator generate_url_item_values()
@@ -446,7 +448,7 @@ class Base extends Main {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						OBJECT
+						\OBJECT
 					);
 
 					/**

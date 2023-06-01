@@ -9,7 +9,7 @@ namespace The_SEO_Framework\Bootstrap;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -112,7 +112,7 @@ function _do_upgrade() {
 		exit;
 	}
 
-	$timeout = 5 * MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
+	$timeout = 5 * \MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
 
 	$lock = _set_upgrade_lock( $timeout );
 	// Lock failed to create--probably because it was already locked (or the database failed us).
@@ -142,14 +142,14 @@ function _do_upgrade() {
 	$previous_version = _previous_db_version();
 
 	if ( ! \get_option( 'the_seo_framework_initial_db_version' ) ) {
-		// Sets to previous if previous is known. This is a late addition. New sites default to THE_SEO_FRAMEWORK_DB_VERSION.
-		\update_option( 'the_seo_framework_initial_db_version', $previous_version ?: THE_SEO_FRAMEWORK_DB_VERSION, 'no' );
+		// Sets to previous if previous is known. This is a late addition. New sites default to \THE_SEO_FRAMEWORK_DB_VERSION.
+		\update_option( 'the_seo_framework_initial_db_version', $previous_version ?: \THE_SEO_FRAMEWORK_DB_VERSION, 'no' );
 	}
 
 	// Don't run the upgrade cycle if the user downgraded. Downgrade, instead.
-	if ( $previous_version > THE_SEO_FRAMEWORK_DB_VERSION ) {
+	if ( $previous_version > \THE_SEO_FRAMEWORK_DB_VERSION ) {
 		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
-		// \do_action( 'the_seo_framework_do_downgrade', $previous_version, THE_SEO_FRAMEWORK_DB_VERSION );
+		// \do_action( 'the_seo_framework_do_downgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
 		$current_version = _downgrade( $previous_version );
 
@@ -162,7 +162,7 @@ function _do_upgrade() {
 		\do_action( 'the_seo_framework_downgraded', (string) $previous_version, (string) $current_version );
 	} else {
 		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
-		// \do_action( 'the_seo_framework_do_upgrade', $previous_version, THE_SEO_FRAMEWORK_DB_VERSION );
+		// \do_action( 'the_seo_framework_do_upgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
 		$current_version = _upgrade( $previous_version );
 
@@ -301,7 +301,7 @@ function _release_upgrade_lock() {
  * @param string|int $version The actual datbase version.
  * @return string The actual database version.
  */
-function _set_version( $version = THE_SEO_FRAMEWORK_DB_VERSION ) {
+function _set_version( $version = \THE_SEO_FRAMEWORK_DB_VERSION ) {
 
 	\update_option( 'the_seo_framework_upgraded_db_version', (string) $version );
 
@@ -381,7 +381,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 				'capability'   => 'update_plugins',
 				'user'         => 0,
 				'count'        => 1,
-				'timeout'      => DAY_IN_SECONDS,
+				'timeout'      => \DAY_IN_SECONDS,
 			]
 		);
 	}
@@ -432,11 +432,11 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'capability'   => 'update_plugins',
 				'user'         => 0,
 				'count'        => 1,
-				'timeout'      => DAY_IN_SECONDS,
+				'timeout'      => \DAY_IN_SECONDS,
 			]
 		);
 	} elseif ( ! $previous_version && $current_version ) { // User successfully installed.
-		$network_mode = (bool) ( \get_site_option( 'active_sitewide_plugins' )[ THE_SEO_FRAMEWORK_PLUGIN_BASENAME ] ?? false );
+		$network_mode = (bool) ( \get_site_option( 'active_sitewide_plugins' )[ \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ] ?? false );
 
 		// Only show notices when not in network mode, or on main site otherwise.
 		if ( ! $network_mode || \is_main_site() ) {
@@ -466,7 +466,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 					'capability'   => 'activate_plugins',
 					'user'         => 0,
 					'count'        => 3,
-					'timeout'      => 2 * MINUTE_IN_SECONDS,
+					'timeout'      => 2 * \MINUTE_IN_SECONDS,
 				]
 			);
 		}
@@ -537,7 +537,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'capability'   => 'activate_plugins',
 				'user'         => 0,
 				'count'        => 69,
-				'timeout'      => WEEK_IN_SECONDS,
+				'timeout'      => \WEEK_IN_SECONDS,
 			]
 		);
 	}
@@ -562,7 +562,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
 	// Can this even run twice? Let's play it safe to prevent crashes.
 	if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
 
-	require THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
+	require \THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
 }
 
 /**
@@ -613,9 +613,9 @@ function _do_upgrade_2701() {
 	$term_meta = \get_option( 'autodescription-term-meta' );
 
 	if ( $term_meta ) {
-		foreach ( (array) $term_meta as $term_id => $meta ) {
-			\add_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
-		}
+
+		foreach ( (array) $term_meta as $term_id => $meta )
+			\add_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
 
 		// Rudimentary test for remaining ~300 users of earlier versions passed, set initial version to 2600.
 		\update_option( 'the_seo_framework_initial_db_version', '2600', 'no' );
@@ -701,7 +701,7 @@ function _do_upgrade_3001() {
 function _do_upgrade_3103() {
 
 	// Prevent database lookups when checking for cache.
-	\add_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] );
+	\add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
 		$tsf = \tsf();

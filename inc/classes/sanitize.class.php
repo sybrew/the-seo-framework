@@ -62,8 +62,8 @@ class Sanitize extends Admin_Pages {
 		 * @since 2.2.9
 		 */
 		if (
-			   empty( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
-			|| ! \is_array( $_POST[ THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
+			   empty( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
+			|| ! \is_array( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
 		) return memo( false );
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
@@ -72,7 +72,7 @@ class Sanitize extends Admin_Pages {
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		// This also checks the nonce: `_wpnonce`.
-		\check_admin_referer( THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options' );
+		\check_admin_referer( \THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options' );
 
 		return memo( true );
 	}
@@ -100,16 +100,16 @@ class Sanitize extends Admin_Pages {
 		$this->delete_main_cache();
 
 		// Set backward compatibility. This runs after the sanitization.
-		// \add_filter( 'pre_update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 10 );
+		// \add_filter( 'pre_update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 10 );
 
 		// Sets that the options are unchanged, preemptively.
 		$this->update_static_cache( 'settings_notice', 'unchanged' );
 		// But, if this action fires, we can assure that the settings have been changed (according to WP).
-		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_option_updated_notice' ], 0 );
+		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_option_updated_notice' ], 0 );
 
 		// Flush transients again after options have changed.
-		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
-		\add_action( 'update_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
+		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
+		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
 	}
 
 	/**
@@ -131,7 +131,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.0.6
 	 */
 	public function update_db_version() {
-		\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
+		\update_option( 'the_seo_framework_upgraded_db_version', \THE_SEO_FRAMEWORK_DB_VERSION );
 	}
 
 	/**
@@ -167,7 +167,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_title_separator',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'title_separator',
 			]
@@ -175,7 +175,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_description_raw',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'homepage_description',
 				'homepage_og_description',
@@ -185,7 +185,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_title_raw',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'site_title',
 				'knowledge_name',
@@ -198,7 +198,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_knowledge_type',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_type',
 			]
@@ -206,7 +206,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_left_right',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'title_location',
 			]
@@ -214,7 +214,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_left_right_home',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'home_title_location',
 			]
@@ -222,7 +222,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_alter_query_type',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'alter_archive_query_type',
 				'alter_search_query_type',
@@ -231,7 +231,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_description_html_method',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'auto_descripton_html_method',
 			]
@@ -239,7 +239,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_one_zero',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'alter_search_query',
 				'alter_archive_query',
@@ -335,7 +335,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_absint',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'social_image_fb_id',
 				'homepage_social_image_id',
@@ -346,7 +346,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_numeric_string',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'timestamps_format',
 			]
@@ -354,7 +354,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_disabled_post_types',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'disabled_post_types',
 			]
@@ -362,7 +362,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_disabled_taxonomies',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'disabled_taxonomies',
 			]
@@ -370,7 +370,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_post_types',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				$this->get_robots_post_type_option_id( 'noindex' ),
 				$this->get_robots_post_type_option_id( 'nofollow' ),
@@ -380,7 +380,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_taxonomies',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				$this->get_robots_taxonomy_option_id( 'noindex' ),
 				$this->get_robots_taxonomy_option_id( 'nofollow' ),
@@ -390,7 +390,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_all_post_type_archive_meta',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'pta',
 			]
@@ -400,7 +400,7 @@ class Sanitize extends Admin_Pages {
 		// We should add new method 's_verification_id' for that.
 		$this->add_option_filter(
 			's_no_html_space',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'facebook_appid',
 
@@ -414,7 +414,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_url',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_facebook',
 				'knowledge_twitter',
@@ -429,7 +429,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_url_query',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'knowledge_linkedin',
 				'social_image_fb_url',
@@ -441,7 +441,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_facebook_profile',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'facebook_publisher',
 				'facebook_author',
@@ -450,7 +450,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_twitter_name',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'twitter_site',
 				'twitter_creator',
@@ -459,7 +459,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_twitter_card',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'twitter_card',
 			]
@@ -467,7 +467,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_canonical_scheme',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'canonical_scheme',
 			]
@@ -475,7 +475,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_color_hex',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'sitemap_color_main',
 				'sitemap_color_accent',
@@ -485,7 +485,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_min_max_sitemap',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'sitemap_query_limit',
 			]
@@ -493,7 +493,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_image_preview',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'max_image_preview',
 			]
@@ -501,7 +501,7 @@ class Sanitize extends Admin_Pages {
 
 		$this->add_option_filter(
 			's_snippet_length',
-			THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'max_snippet_length',
 				'max_video_preview',
@@ -1621,7 +1621,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( strpos( $link, 'profile.php' ) ) {
 			// Gets query parameters.
-			parse_str( parse_url( $link, PHP_URL_QUERY ), $r );
+			parse_str( parse_url( $link, \PHP_URL_QUERY ), $r );
 			if ( isset( $r['id'] ) ) {
 				$link = 'https://www.facebook.com/profile.php?id=' . \absint( $r['id'] );
 				$link = $this->s_url_query( $link );
@@ -2189,7 +2189,7 @@ class Sanitize extends Admin_Pages {
 		 * It seems, however, that _all_ services we want to communicate with ignore these types, anyway.
 		 */
 		if ( \in_array(
-			strtolower( strtok( pathinfo( $url, PATHINFO_EXTENSION ), '?' ) ),
+			strtolower( strtok( pathinfo( $url, \PATHINFO_EXTENSION ), '?' ) ),
 			[ 'apng', 'bmp', 'ico', 'cur', 'svg', 'tif', 'tiff' ],
 			true
 		) ) return $defaults;
@@ -2200,9 +2200,9 @@ class Sanitize extends Admin_Pages {
 		if ( ! $width || ! $height )
 			$width = $height = 0;
 
-		// TODO add filter for 5 * MB_IN_BYTES; Facebook allows 8MB; Twitter 5MB (Q4 2022).
-		if ( $id && ( $width > 4096 || $height > 4096 || $filesize > 5 * MB_IN_BYTES ) ) {
-			$new_image = $this->get_largest_acceptable_image_src( $id, 4096, 5 * MB_IN_BYTES );
+		// TODO add filter for 5 * \MB_IN_BYTES; Facebook allows 8MB; Twitter 5MB (Q4 2022).
+		if ( $id && ( $width > 4096 || $height > 4096 || $filesize > 5 * \MB_IN_BYTES ) ) {
+			$new_image = $this->get_largest_acceptable_image_src( $id, 4096, 5 * \MB_IN_BYTES );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 
 			if ( ! $url ) return $defaults;

@@ -121,9 +121,6 @@ final class Sitemap {
 
 		if ( ! $sitemap_id ) return;
 
-		// Don't let WordPress think this is 404.
-		$GLOBALS['wp_query']->is_404 = false;
-
 		static::$tsf->is_sitemap( true );
 
 		/**
@@ -307,10 +304,10 @@ final class Sitemap {
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 
 		if ( 0 === $ini_max_execution_time ) { // Unlimited. Let's still put a limit on the lock.
-			$timeout = 3 * MINUTE_IN_SECONDS;
+			$timeout = 3 * \MINUTE_IN_SECONDS;
 		} else {
 			// This is rather at most as PHP will run. However, 3 minutes to generate a sitemap is already ludicrous.
-			$timeout = (int) min( $ini_max_execution_time, 3 * MINUTE_IN_SECONDS );
+			$timeout = (int) min( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS );
 		}
 
 		return \set_transient(
@@ -497,7 +494,7 @@ final class Sitemap {
 			rtrim(
 				parse_url(
 					static::$tsf->get_home_url(),
-					PHP_URL_PATH
+					\PHP_URL_PATH
 				) ?? '',
 				'/'
 			)

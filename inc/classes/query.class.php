@@ -66,8 +66,9 @@ class Query extends Core {
 
 		if ( isset( $memo ) ) return $memo;
 
-		if ( \defined( 'WP_CLI' ) && WP_CLI )
+		if ( \defined( 'WP_CLI' ) && \WP_CLI )
 			return $memo = false;
+
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $memo = true;
 
@@ -89,7 +90,7 @@ class Query extends Core {
 
 		$message = "You've initiated a method that uses queries too early.";
 
-		$trace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 4 );
+		$trace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 4 );
 		if ( ! empty( $trace[3] ) ) {
 			$message .= " - In file: {$trace[3]['file']}";
 			$message .= " - On line: {$trace[3]['line']}";
@@ -101,7 +102,7 @@ class Query extends Core {
 		$depth = 10;
 		static $_more = true;
 		if ( $_more ) {
-			error_log( var_export( debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
+			error_log( var_export( debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 			$_more = false;
 		}
 	}
@@ -1309,7 +1310,7 @@ class Query extends Core {
 		static $can_cache_query = null;
 
 		// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
-		$caller = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]['function'] ?? '';
+		$caller = debug_backtrace( \DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]['function'] ?? '';
 
 		if ( null === $can_cache_query ) {
 			if ( $this->can_cache_query( $caller ) ) {

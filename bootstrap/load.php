@@ -39,7 +39,7 @@ function _init_locale() {
 	\load_plugin_textdomain(
 		'autodescription',
 		false,
-		\dirname( THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . DIRECTORY_SEPARATOR . 'language'
+		\dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language'
 	);
 }
 
@@ -144,7 +144,7 @@ function _autoload_classes( $class ) {
 
 	if ( $_chunck_count > 2 ) {
 		// directory position = $_chunck_count - ( 2 = (The_SEO_Framework)\ + (Bridges/Builders/Interpreters)\ )
-		$rel_dir = implode( DIRECTORY_SEPARATOR, array_splice( $_chunks, 1, $_chunck_count - 2 ) ) . DIRECTORY_SEPARATOR;
+		$rel_dir = implode( \DIRECTORY_SEPARATOR, array_splice( $_chunks, 1, $_chunck_count - 2 ) ) . \DIRECTORY_SEPARATOR;
 	} else {
 		$rel_dir = '';
 	}
@@ -153,7 +153,7 @@ function _autoload_classes( $class ) {
 	$file = str_replace( '_', '-', end( $_chunks ) );
 
 	// The extension is deemed to be ".class.php" always. We may wish to alter this for traits?
-	require THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
+	require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
 		_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
@@ -161,7 +161,7 @@ function _autoload_classes( $class ) {
 	}
 }
 
-\add_action( 'activate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
+\add_action( 'activate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
 /**
  * Performs plugin activation actions.
  *
@@ -169,10 +169,10 @@ function _autoload_classes( $class ) {
  * @access private
  */
 function _do_plugin_activation() {
-	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'activation.php';
+	require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'activation.php';
 }
 
-\add_action( 'deactivate_' . THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_deactivation' );
+\add_action( 'deactivate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_deactivation' );
 /**
  * Performs plugin deactivation actions.
  *
@@ -180,7 +180,7 @@ function _do_plugin_activation() {
  * @access private
  */
 function _do_plugin_deactivation() {
-	require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'deactivation.php';
+	require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'deactivation.php';
 }
 
 /**

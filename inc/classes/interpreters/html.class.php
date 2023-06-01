@@ -261,7 +261,7 @@ final class HTML {
 					'-$1',
 					preg_replace( '/[^a-z0-9_\-]/i', '', $k )
 				) ), // dash case.
-				is_scalar( $v ) ? \esc_attr( $v ) : htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
+				is_scalar( $v ) ? \esc_attr( $v ) : htmlspecialchars( json_encode( $v, \JSON_UNESCAPED_SLASHES ), \ENT_COMPAT, 'UTF-8' )
 			);
 		}
 

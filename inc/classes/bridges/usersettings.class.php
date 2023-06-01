@@ -45,7 +45,7 @@ final class UserSettings {
 	 */
 	public static function _prepare_setting_fields( $user ) {
 
-		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+		if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
 		static::add_user_author_fields( $user );
 	}

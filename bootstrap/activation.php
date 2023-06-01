@@ -64,7 +64,7 @@ function _activation_set_options_autoload() {
 
 	if ( $tsf->loaded ) {
 		$options = $tsf->get_all_options();
-		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+		$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 		\remove_all_filters( "pre_update_option_{$setting}" );
 		\remove_all_actions( "update_option_{$setting}" );

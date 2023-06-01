@@ -37,7 +37,7 @@ function _polylang_fix_sitemap_base_bath( $path ) {
 				$path = rtrim(
 					parse_url(
 						\get_home_url(),
-						PHP_URL_PATH
+						\PHP_URL_PATH
 					) ?? '',
 					'/'
 				);
@@ -126,7 +126,6 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 
 	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return $args;
 
-	// Redundantly prefixed \, OBJECT is actually a constant; however, the linter derps out, thinking it's a cast.
 	$default_lang = \pll_default_language( \OBJECT );
 
 	if ( ! isset( $default_lang->slug, $default_lang->term_id ) ) return $args;

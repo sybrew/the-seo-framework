@@ -139,7 +139,7 @@ final class Markdown {
 	private static function strong_em( $text ) {
 
 		// Discrepancy with strong OR em: we exclude * here, we only want to capture full blocks.
-		$count = preg_match_all( '/\*{3}([^\*]+)\*{3}/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\*{3}([^\*]+)\*{3}/', $text, $matches, \PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -163,7 +163,7 @@ final class Markdown {
 	 */
 	private static function strong( $text ) {
 
-		$count = preg_match_all( '/\*{2}(.+?)\*{2}/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\*{2}(.+?)\*{2}/', $text, $matches, \PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -187,7 +187,7 @@ final class Markdown {
 	 */
 	private static function em( $text ) {
 
-		$count = preg_match_all( '/\*([^\*]+)\*/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\*([^\*]+)\*/', $text, $matches, \PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -211,7 +211,7 @@ final class Markdown {
 	 */
 	private static function code( $text ) {
 
-		$count = preg_match_all( '/`([^`]+)`/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/`([^`]+)`/', $text, $matches, \PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -237,10 +237,10 @@ final class Markdown {
 		// Considers word non-boundary. @TODO consider removing that?
 		$expression = sprintf(
 			'/\={%1$d}\s(.+)\s\={%1$d}/',
-			filter_var( $type, FILTER_SANITIZE_NUMBER_INT )
+			filter_var( $type, \FILTER_SANITIZE_NUMBER_INT )
 		);
 
-		$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( $expression, $text, $matches, \PREG_PATTERN_ORDER );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(
@@ -267,7 +267,7 @@ final class Markdown {
 	 */
 	private static function a( $text, $internal = true ) {
 
-		$count = preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, PREG_PATTERN_ORDER );
+		$count = preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, \PREG_PATTERN_ORDER );
 
 		// Keep this XHTML compatible!
 		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>'; // Keep XHTML valid!

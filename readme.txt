@@ -298,7 +298,7 @@ TODO check mail Dean about WPML config
 **For everyone:**
 
 * **Improved:**
-	* The plugin is faster now due to improved coding standards.
+	* The plugin is faster now due to [new coding standards](https://twitter.com/SybreWaaijer/status/1654101713714831361).
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it will return JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.

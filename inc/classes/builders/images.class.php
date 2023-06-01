@@ -168,7 +168,7 @@ final class Images {
 				'/<img\b[^>]+?\bsrc=(["\'])?([^"\'>\s]+)\1?[^>]*?>/mi',
 				$content,
 				$matches,
-				PREG_SET_ORDER
+				\PREG_SET_ORDER
 			);
 		}
 

@@ -126,7 +126,7 @@ class Posts extends \WP_Sitemaps_Posts {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						OBJECT
+						\OBJECT
 					);
 
 					/**

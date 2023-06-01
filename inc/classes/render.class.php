@@ -187,10 +187,12 @@ class Render extends Admin_Init {
 			$attr .= sprintf(
 				' %s="%s"',
 				/**
-				 * @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#attributes-0>
-				 * This will strip "safe" characters outside of the alphabet, 0-9, and :_-.
+				 * This will also strip "safe" characters outside of the alphabet, 0-9, and :_-.
 				 * I don't want angry parents ringing me at home for their site didn't
 				 * support proper UTF. We can afford empty tags in rare situations -- not here.
+				 * So, we'll only allow ASCII 45~95 except 46, 47, 59~64, and 91~94.
+				 *
+				 * @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#attributes-0>
 				 */
 				preg_replace( '/[^a-zA-Z0-9:_-]+/', '', $_name ),
 				$_secure_attr_value
