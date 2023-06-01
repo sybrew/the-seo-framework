@@ -254,8 +254,6 @@ class Base extends Main {
 
 				$hierarchical_post_ids = array_diff( $wp_query->get_posts(), $_exclude_ids );
 
-				var_dump( 'LOOK MA', $wp_query, 'END LOOK MA' );
-
 				// Stop confusion: trim query to set value (by one or two, depending on whether the homepage and blog are included).
 				// This is ultimately redundant, but it'll stop support requests by making the input value more accurate.
 				if ( \count( $hierarchical_post_ids ) > $_hierarchical_posts_limit ) {

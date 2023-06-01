@@ -65,9 +65,27 @@ abstract class Main {
 	 * @since 4.0.0
 	 * @since 4.0.4 Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 * @since 4.2.0 No longer sets timezone.
+	 * @since 4.2.9 Now filters `pre_get_posts` to prevent setting `is_home`.
 	 */
 	final public function prepare_generation() {
 		\wp_raise_memory_limit( 'sitemap' );
+		\add_action( 'pre_get_posts', [ static::class, '_set_is_home_false' ] );
+	}
+
+	/**
+	 * Sets `is_home` to false for the sitemap.
+	 *
+	 * @link https://core.trac.wordpress.org/ticket/51542
+	 * @link https://core.trac.wordpress.org/ticket/51117
+	 * @since 4.2.9
+	 * @access private
+	 *
+	 * @param \WP_Query $wp_query The WordPress WC_Query instance.
+	 */
+	final public static function _set_is_home_false( $wp_query ) {
+		$wp_query->is_home = false;
+		// $wp_query allows dynamic properties. This one is proposed in https://core.trac.wordpress.org/ticket/51117#comment:7
+		$wp_query->is_sitemap = true;
 	}
 
 	/**
@@ -190,6 +208,7 @@ abstract class Main {
 
 			if ( ! $included ) break;
 
+			// This is less likely than a "noindex," even though it's faster to process, we put it later.
 			$included = ! static::$tsf->get_redirect_url( $_generator_args );
 			break;
 		endwhile;
@@ -245,6 +264,7 @@ abstract class Main {
 
 			if ( ! $included ) break;
 
+			// This is less likely than a "noindex," even though it's faster to process, we put it later.
 			$included = ! static::$tsf->get_redirect_url( $_generator_args );
 			break;
 		endwhile;

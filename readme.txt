@@ -299,8 +299,12 @@ TODO check mail Dean about WPML config
 
 * **Improved:**
 	* The plugin is faster now due to [new coding standards](https://twitter.com/SybreWaaijer/status/1654101713714831361).
+	* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
+		* Related Core ticket is [51117](https://core.trac.wordpress.org/ticket/51117).
+	* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
+		* Related Core ticket is [51542](https://core.trac.wordpress.org/ticket/51542).
 * **Fixed:**
-	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it will return JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
+	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
 		* We consider the following WordPress API functions dangerous, and we advise security researchers investigating plugins utilizing these:
 			- `wp_is_json_request()`
@@ -311,6 +315,8 @@ TODO check mail Dean about WPML config
 
 * **Changed:**
 	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
+	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
+		* This makes loading the sitemap anywhere from barely noticable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.

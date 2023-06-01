@@ -2122,6 +2122,7 @@ class Sanitize extends Admin_Pages {
 							// If nothing changed, or no more HTML is present, we're done.
 							if ( $pre_pass_input === $input || false === strpos( $input, '<' ) ) break;
 						}
+						// Reset for next fall-through null-coalescing.
 						unset( $passes, $replacement );
 						break;
 				}

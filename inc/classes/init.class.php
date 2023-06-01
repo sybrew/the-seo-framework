@@ -267,7 +267,7 @@ class Init extends Query {
 
 		// Prepares sitemap or stylesheet output.
 		if ( $this->can_run_sitemap() ) {
-			\add_action( 'template_redirect', [ $this, '_init_sitemap' ], 1 );
+			\add_action( 'parse_request', [ $this, '_init_sitemap' ], 15 );
 			\add_filter( 'wp_sitemaps_enabled', '__return_false' );
 		} else {
 			// Augment Core sitemaps. Can't hook into `wp_sitemaps_init` as we're augmenting the providers before that.
