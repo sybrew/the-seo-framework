@@ -152,7 +152,7 @@ final class Ping {
 			 * @since 2.5.1
 			 * @param int $expiration The minimum time between two pings.
 			 */
-			$expiration = (int) \apply_filters( 'the_seo_framework_sitemap_throttle_s', HOUR_IN_SECONDS );
+			$expiration = (int) \apply_filters( 'the_seo_framework_sitemap_throttle_s', \HOUR_IN_SECONDS );
 
 			// Uses legacy set_transient to bypass TSF's transient filters and prevent ping spam.
 			\set_transient( $transient, 1, $expiration );

@@ -79,7 +79,7 @@ class Base extends Main {
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 		if ( 0 !== $ini_max_execution_time )
-			set_time_limit( max( $ini_max_execution_time, 3 * MINUTE_IN_SECONDS ) );
+			set_time_limit( max( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS ) );
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
 		if ( ! $bridge->lock_sitemap( 'base' ) ) return;
@@ -90,7 +90,7 @@ class Base extends Main {
 		static::$tsf->set_transient(
 			$this->base_get_sitemap_store_key(),
 			$this->build_sitemap(),
-			WEEK_IN_SECONDS
+			\WEEK_IN_SECONDS
 		);
 
 		$bridge->unlock_sitemap( 'base' );
@@ -128,7 +128,7 @@ class Base extends Main {
 				static::$tsf->set_transient(
 					$this->base_get_sitemap_store_key(),
 					$sitemap_content,
-					WEEK_IN_SECONDS
+					\WEEK_IN_SECONDS
 				);
 				$bridge->unlock_sitemap( $sitemap_id );
 			}
@@ -406,7 +406,7 @@ class Base extends Main {
 								'order'        => 'DESC',
 								'offset'       => 0,
 							],
-							OBJECT
+							\OBJECT
 						);
 						$_publish_post = $latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00';
 						$_lastmod_blog = $_values['lastmod']; // Inferred from generator generate_url_item_values()
@@ -446,7 +446,7 @@ class Base extends Main {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						OBJECT
+						\OBJECT
 					);
 
 					/**

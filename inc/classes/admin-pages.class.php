@@ -236,7 +236,7 @@ class Admin_Pages extends Generate_Ldjson {
 		if ( ! $this->is_profile_edit() ) return;
 
 		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
-		// if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+		// if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
 		\add_action( 'show_user_profile', [ Bridges\UserSettings::class, '_prepare_setting_fields' ], 0, 1 );
 		\add_action( 'edit_user_profile', [ Bridges\UserSettings::class, '_prepare_setting_fields' ], 0, 1 );

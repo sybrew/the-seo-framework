@@ -87,7 +87,7 @@ final class PluginTable {
 	 */
 	public static function _add_plugin_row_meta( $plugin_meta, $plugin_file ) {
 
-		if ( THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
+		if ( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
 			return $plugin_meta;
 
 		$plugins = \get_plugins();

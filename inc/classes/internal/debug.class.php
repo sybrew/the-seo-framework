@@ -125,7 +125,7 @@ final class Debug {
 		 *
 		 * @param bool $trigger Whether to trigger the error for deprecated functions. Default true.
 		 */
-		if ( WP_DEBUG && \apply_filters( 'deprecated_function_trigger_error', true ) ) {
+		if ( \WP_DEBUG && \apply_filters( 'deprecated_function_trigger_error', true ) ) {
 
 			if ( isset( $replacement ) ) {
 				$message = sprintf(
@@ -148,8 +148,8 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error( E_USER_DEPRECATED ), $message, E_USER_DEPRECATED ),
-				E_USER_DEPRECATED
+				$this->combobulate_error_message( $this->get_error( \E_USER_DEPRECATED ), $message, \E_USER_DEPRECATED ),
+				\E_USER_DEPRECATED
 			);
 		}
 	}
@@ -189,7 +189,7 @@ final class Debug {
 		 *
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
-		if ( WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
+		if ( \WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
 
 			/* translators: 1: plugin version */
 			$version = $version ? sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version ) : '';
@@ -205,8 +205,8 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error( E_USER_NOTICE ), $message, E_USER_NOTICE ),
-				E_USER_NOTICE
+				$this->combobulate_error_message( $this->get_error( \E_USER_NOTICE ), $message, \E_USER_NOTICE ),
+				\E_USER_NOTICE
 			);
 		}
 	}
@@ -243,7 +243,7 @@ final class Debug {
 		 *
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
-		if ( WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
+		if ( \WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
 			$message = sprintf(
 				/* translators: 1: Method or Property name, 2: The SEO Framework class. 3: Message */
 				\esc_html__( '%1$s is not accessible in %2$s. %3$s', 'autodescription' ),
@@ -254,8 +254,8 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error( E_USER_WARNING ), $message, E_USER_WARNING ),
-				E_USER_WARNING
+				$this->combobulate_error_message( $this->get_error( \E_USER_WARNING ), $message, \E_USER_WARNING ),
+				\E_USER_WARNING
 			);
 		}
 	}
@@ -277,11 +277,11 @@ final class Debug {
 	 */
 	protected function get_error( $type = null ) {
 
-		$backtrace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
+		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
 
 		if ( ! $backtrace ) return [];
 
-		if ( $type & E_USER_DEPRECATED ) {
+		if ( $type & \E_USER_DEPRECATED ) {
 			/**
 			 * 0 = This function.
 			 * 1 = Error handler (This class).
@@ -335,19 +335,19 @@ final class Debug {
 	protected function combobulate_error_message( $error, $message, $code ) {
 
 		switch ( $code ) :
-			case E_USER_ERROR:
+			case \E_USER_ERROR:
 				$type = 'Error';
 				break;
 
-			case E_USER_DEPRECATED:
+			case \E_USER_DEPRECATED:
 				$type = 'Deprecated';
 				break;
 
-			case E_USER_WARNING:
+			case \E_USER_WARNING:
 				$type = 'Warning';
 				break;
 
-			case E_USER_NOTICE:
+			case \E_USER_NOTICE:
 			default:
 				$type = 'Notice';
 				break;
@@ -544,8 +544,7 @@ final class Debug {
 		$is_protected                   = $tsf->is_protected( $page_id );
 		$wp_doing_ajax                  = \wp_doing_ajax();
 		$wp_doing_cron                  = \wp_doing_cron();
-		$wp_is_json_request             = \wp_is_json_request();
-		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && REST_REQUEST;
+		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST;
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 

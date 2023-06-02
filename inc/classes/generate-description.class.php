@@ -889,7 +889,7 @@ class Generate_Description extends Generate {
 		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
 		// Decode to get a more accurate character length in Unicode.
-		$excerpt = html_entity_decode( $excerpt, ENT_QUOTES, 'UTF-8' );
+		$excerpt = html_entity_decode( $excerpt, \ENT_QUOTES, 'UTF-8' );
 
 		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
 		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su', $max_char_length ), trim( $excerpt ), $matches );
@@ -902,10 +902,10 @@ class Generate_Description extends Generate {
 		$excerpt = html_entity_decode(
 			\wptexturize( htmlentities(
 				$excerpt,
-				ENT_QUOTES,
+				\ENT_QUOTES,
 				'UTF-8'
 			) ),
-			ENT_QUOTES,
+			\ENT_QUOTES,
 			'UTF-8'
 		);
 		/**
@@ -976,7 +976,7 @@ class Generate_Description extends Generate {
 
 		if ( \strlen( $excerpt ) < $min_char_length ) return '';
 
-		return trim( htmlentities( $excerpt, ENT_QUOTES, 'UTF-8' ) );
+		return trim( htmlentities( $excerpt, \ENT_QUOTES, 'UTF-8' ) );
 	}
 
 	/**

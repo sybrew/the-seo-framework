@@ -296,8 +296,8 @@ final class Term extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				\wp_specialchars_decode( static::$tsf->s_title_raw( $title ), ENT_QUOTES ),
-				ENT_NOQUOTES
+				\wp_specialchars_decode( static::$tsf->s_title_raw( $title ), \ENT_QUOTES ),
+				\ENT_NOQUOTES
 			)
 		);
 
@@ -486,8 +486,8 @@ final class Term extends Main {
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				\wp_specialchars_decode( static::$tsf->s_description_raw( $desc ), ENT_QUOTES ),
-				ENT_NOQUOTES
+				\wp_specialchars_decode( static::$tsf->s_description_raw( $desc ), \ENT_QUOTES ),
+				\ENT_NOQUOTES
 			)
 		);
 

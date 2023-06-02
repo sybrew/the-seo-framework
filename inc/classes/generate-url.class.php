@@ -628,7 +628,7 @@ class Generate_Url extends Generate_Title {
 	public function detect_site_url_scheme() {
 		return strtolower( parse_url(
 			$this->get_home_url(),
-			PHP_URL_SCHEME
+			\PHP_URL_SCHEME
 		) ) ?: (
 			$this->is_ssl() ? 'https' : 'http'
 		);
@@ -709,7 +709,7 @@ class Generate_Url extends Generate_Title {
 		);
 
 		if ( $this->pretty_permalinks ) {
-			$_query = parse_url( $url, PHP_URL_QUERY );
+			$_query = parse_url( $url, \PHP_URL_QUERY );
 			// Remove queries, add them back later.
 			if ( $_query )
 				$url = $this->s_url( $url );
@@ -797,7 +797,7 @@ class Generate_Url extends Generate_Title {
 					$find = "/{$page}{$user_slash}";
 				}
 
-				$_query = parse_url( $url, PHP_URL_QUERY );
+				$_query = parse_url( $url, \PHP_URL_QUERY );
 				// Remove queries, add them back later.
 				if ( $_query )
 					$url = $this->s_url( $url );
@@ -906,7 +906,7 @@ class Generate_Url extends Generate_Title {
 		if ( $this->is_singular() ) {
 			$url = $this->append_url_query(
 				$url,
-				parse_url( \get_permalink( $id ), PHP_URL_QUERY )
+				parse_url( \get_permalink( $id ), \PHP_URL_QUERY )
 			);
 		}
 
@@ -1110,7 +1110,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 4.1.4
 	 *
 	 * @param string $url   A fully qualified URL.
-	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
+	 * @param string $query A fully qualified query taken from parse_url( $url, \PHP_URL_QUERY );
 	 * @return string A fully qualified URL with appended $query.
 	 */
 	public function append_url_query( $url, $query = '' ) {
@@ -1118,7 +1118,7 @@ class Generate_Url extends Generate_Title {
 		if ( ! $query )
 			return $url;
 
-		$_fragment = parse_url( $url, PHP_URL_FRAGMENT );
+		$_fragment = parse_url( $url, \PHP_URL_FRAGMENT );
 
 		if ( $_fragment )
 			$url = str_replace( "#$_fragment", '', $url );

@@ -617,6 +617,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.0 Added a second parameter, $args, to help soften the burden of this method.
+	 * @since 4.2.9 Now handles filters with a priority of 0. Only a theoretical bug, so not in changelog.
 	 * @internal Only to be used within $this->get_raw_generated_title()
 	 *
 	 * @param bool       $reset Whether to reset the removed filters.
@@ -628,14 +629,13 @@ class Generate_Title extends Generate_Description {
 		static $filtered = [];
 
 		if ( $reset ) {
-			foreach ( $filtered as $tag => $functions )
-				foreach ( $functions as $function => $priorities )
-					foreach ( $priorities as $priority )
-						\add_filter( $tag, $function, $priority );
+			foreach ( $filtered as [ $filter, $function, $priority ] )
+				\add_filter( $filter, $function, $priority );
 
 			// Reset filters.
 			$filtered = [];
 		} else {
+
 			if ( null === $args ) {
 				$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
 			} else {
@@ -659,15 +659,15 @@ class Generate_Title extends Generate_Description {
 			if ( ! $this->get_option( 'title_strip_tags' ) )
 				$functions[] = 'strip_tags';
 
-			foreach ( $filters as $tag ) {
+			foreach ( $filters as $filter ) {
 				foreach ( $functions as $function ) {
 					// Only grab 10 of these. Yes, one might transform still on the 11th.
 					$it = 10;
 					$i  = 0;
 					// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-					while ( $priority = \has_filter( $tag, $function ) ) {
-						$filtered[ $tag ][ $function ][] = $priority;
-						\remove_filter( $tag, $function, $priority );
+					while ( false !== ( $priority = \has_filter( $filter, $function ) ) ) {
+						$filtered[] = [ $filter, $function, $priority ];
+						\remove_filter( $filter, $function, $priority );
 						// Some noob might've destroyed \WP_Hook. Safeguard.
 						if ( ++$i > $it ) break 1;
 					}

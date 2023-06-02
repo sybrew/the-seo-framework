@@ -45,7 +45,7 @@ function _deactivation_unset_options_autoload() {
 
 	if ( $the_seo_framework->loaded ) {
 		$options = $the_seo_framework->get_all_options();
-		$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+		$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 		\remove_all_filters( "pre_update_option_{$setting}" );
 		\remove_all_actions( "update_option_{$setting}" );

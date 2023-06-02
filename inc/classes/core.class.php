@@ -167,7 +167,7 @@ class Core {
 		$_secret = $this->create_view_secret( uniqid( '', true ) );
 
 		return memo(
-			(bool) require THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . "$type-$what.php",
+			(bool) require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . "$type-$what.php",
 			$what,
 			$type
 		);
@@ -241,7 +241,7 @@ class Core {
 	 * @return string The view location.
 	 */
 	public function get_view_location( $file ) {
-		return THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . "$file.php";
+		return \THE_SEO_FRAMEWORK_DIR_PATH_VIEWS . "$file.php";
 	}
 
 	/**
@@ -370,7 +370,7 @@ class Core {
 		 */
 		return (string) \apply_filters_deprecated(
 			'the_seo_framework_settings_capability',
-			[ THE_SEO_FRAMEWORK_SETTINGS_CAP ],
+			[ \THE_SEO_FRAMEWORK_SETTINGS_CAP ],
 			'4.2.0 of The SEO Framework',
 			'constant THE_SEO_FRAMEWORK_SETTINGS_CAP'
 		);
@@ -581,7 +581,7 @@ class Core {
 			'/[^\p{Cc}\p{L}\p{N}\p{Pc}\p{Pd}\p{Pf}\'"]+/mu',
 			$use_mb ? mb_strtolower( $string ) : strtolower( $string ),
 			-1,
-			PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+			\PREG_SPLIT_OFFSET_CAPTURE | \PREG_SPLIT_NO_EMPTY
 		);
 
 		if ( ! \count( $word_list ) ) goto end;
@@ -751,6 +751,6 @@ class Core {
 	 * @return bool
 	 */
 	public function _display_extension_suggestions() {
-		return \current_user_can( 'install_plugins' ) && ! ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && TSF_DISABLE_SUGGESTIONS );
+		return \current_user_can( 'install_plugins' ) && ! ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && \TSF_DISABLE_SUGGESTIONS );
 	}
 }

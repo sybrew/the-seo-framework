@@ -89,8 +89,8 @@ class Generate_Ldjson extends Generate_Image {
 
 		if ( $encode ) {
 			$options  = 0;
-			$options |= JSON_UNESCAPED_SLASHES;
-			$options |= $this->script_debug ? JSON_PRETTY_PRINT : 0;
+			$options |= \JSON_UNESCAPED_SLASHES;
+			$options |= $this->script_debug ? \JSON_PRETTY_PRINT : 0;
 
 			return $data ? (string) json_encode( $data, $options ) : '';
 		}
@@ -510,7 +510,7 @@ class Generate_Ldjson extends Generate_Image {
 		}
 		if ( ! $filtered ) {
 			// Only get the first tree through numeric ordering.
-			ksort( $assigned_ids, SORT_NUMERIC );
+			ksort( $assigned_ids, \SORT_NUMERIC );
 			$tree_ids = $this->filter_ld_json_breadcrumb_trees( $tree_ids, key( $assigned_ids ) );
 		}
 

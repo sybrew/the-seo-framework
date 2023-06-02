@@ -55,7 +55,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param string $url   A fully qualified URL.
-	 * @param string $query A fully qualified query taken from parse_url( $url, PHP_URL_QUERY );
+	 * @param string $query A fully qualified query taken from parse_url( $url, \PHP_URL_QUERY );
 	 * @return string A fully qualified URL with appended $query.
 	 */
 	public function append_php_query( $url, $query = '' ) {
@@ -658,7 +658,7 @@ final class Deprecated {
 
 		$meta[ $option ] = $value;
 
-		return \update_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
+		return \update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $meta );
 	}
 
 	/**
@@ -1342,7 +1342,7 @@ final class Deprecated {
 			$tzstring = '';
 
 		if ( $guess && empty( $tzstring ) ) {
-			$tzstring = timezone_name_from_abbr( '', round( \get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ), 1 );
+			$tzstring = timezone_name_from_abbr( '', round( \get_option( 'gmt_offset' ) * \HOUR_IN_SECONDS ), 1 );
 		}
 
 		return $tzstring;
@@ -1648,7 +1648,7 @@ final class Deprecated {
 	 * @since 3.1.0 Now returns 0 if the option doesn't exist, instead of -1.
 	 * @since 4.2.0 Deprecated
 	 * @deprecated
-	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 * @uses $this->get_warned_site_options()
 	 *
 	 * @param string $key       Required. The option name.

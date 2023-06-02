@@ -339,7 +339,7 @@ class Site_Options extends Sanitize {
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
 	 * @since 4.2.0 Now supports an option index as a $key.
-	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string|string[] $key       Option name, or a map of indexes therefor.
 	 *                                   If you send an empty array, you'll get all options.
@@ -351,7 +351,7 @@ class Site_Options extends Sanitize {
 
 		if ( ! $use_cache ) {
 			// Preassign all options to $val so we can loop through it.
-			$val = $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS, true );
+			$val = $this->get_all_options( \THE_SEO_FRAMEWORK_SITE_OPTIONS, true );
 
 			// This loop digs through itself: $val[ $index ][ $index ]... etc.
 			foreach ( (array) $key as $k )
@@ -364,7 +364,7 @@ class Site_Options extends Sanitize {
 
 		// PHP 7.4: null coalesce equal operator: ??=
 		if ( ! isset( $cache ) )
-			$cache = \stripslashes_deep( $this->get_all_options( THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
+			$cache = \stripslashes_deep( $this->get_all_options( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
 
 		$val = $cache;
 
@@ -399,7 +399,7 @@ class Site_Options extends Sanitize {
 		static $cache = [];
 
 		if ( ! $setting )
-			$setting = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+			$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 		if ( ! $reset && isset( $cache[ $setting ] ) )
 			return $cache[ $setting ];
@@ -416,7 +416,7 @@ class Site_Options extends Sanitize {
 		return $cache[ $setting ] = \apply_filters_ref_array(
 			'the_seo_framework_get_options',
 			[
-				$this->is_headless['settings'] && THE_SEO_FRAMEWORK_SITE_OPTIONS === $setting
+				$this->is_headless['settings'] && \THE_SEO_FRAMEWORK_SITE_OPTIONS === $setting
 					? $this->get_default_site_options()
 					: \get_option( $setting ),
 				$setting,
@@ -485,9 +485,9 @@ class Site_Options extends Sanitize {
 	 */
 	public function register_settings() {
 
-		\register_setting( THE_SEO_FRAMEWORK_SITE_OPTIONS, THE_SEO_FRAMEWORK_SITE_OPTIONS );
-		\get_option( THE_SEO_FRAMEWORK_SITE_OPTIONS )
-			or \add_option( THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() );
+		\register_setting( \THE_SEO_FRAMEWORK_SITE_OPTIONS, \THE_SEO_FRAMEWORK_SITE_OPTIONS );
+		\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS )
+			or \add_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() );
 
 		// Check whether the Options Reset initialization has been added.
 		$this->check_options_reset();
@@ -507,7 +507,7 @@ class Site_Options extends Sanitize {
 	 * @return mixed Cache value on success, $default if non-existent.
 	 */
 	public function get_static_cache( $key, $default = false ) {
-		return \get_option( THE_SEO_FRAMEWORK_SITE_CACHE, [] )[ $key ] ?? $default;
+		return \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] )[ $key ] ?? $default;
 	}
 
 	/**
@@ -528,7 +528,7 @@ class Site_Options extends Sanitize {
 			return false;
 		}
 
-		return $this->update_settings( [ $key => $value ], THE_SEO_FRAMEWORK_SITE_CACHE );
+		return $this->update_settings( [ $key => $value ], \THE_SEO_FRAMEWORK_SITE_CACHE );
 	}
 
 	/**
@@ -545,7 +545,7 @@ class Site_Options extends Sanitize {
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
-			if ( \update_option( THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() ) ) {
+			if ( \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() ) ) {
 				$this->update_static_cache( 'settings_notice', 'reset' );
 			} else {
 				$this->update_static_cache( 'settings_notice', 'error' );
@@ -596,7 +596,7 @@ class Site_Options extends Sanitize {
 	public function update_settings( $new_option = '', $settings_field = '' ) {
 
 		if ( ! $settings_field ) {
-			$settings_field = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+			$settings_field = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 			$this->init_sanitizer_filters();
 		}
 

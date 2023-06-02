@@ -108,7 +108,7 @@ class Term_Data extends Post_Data {
 		} else {
 			// Unlike get_post_meta(), we need not filter here.
 			// See: <https://github.com/sybrew/the-seo-framework/issues/185>
-			$meta = \get_term_meta( $term->term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
+			$meta = \get_term_meta( $term->term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
 		}
 
 		/**
@@ -357,7 +357,7 @@ class Term_Data extends Post_Data {
 		);
 
 		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
-		\update_term_meta( $term->term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+		\update_term_meta( $term->term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 	}
 
 	/**
@@ -372,7 +372,7 @@ class Term_Data extends Post_Data {
 	public function delete_term_meta( $term_id ) {
 
 		// If this results in an empty data string, all data has already been removed by WP core.
-		$data = \get_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
+		$data = \get_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		if ( \is_array( $data ) ) {
 			foreach ( $this->get_term_meta_defaults( $term_id ) as $key => $value )
@@ -381,9 +381,9 @@ class Term_Data extends Post_Data {
 
 		// Only delete when no values are left, because someone else might've filtered it.
 		if ( empty( $data ) ) {
-			\delete_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS );
+			\delete_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS );
 		} else {
-			\update_term_meta( $term_id, THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+			\update_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
 		}
 	}
 

@@ -126,7 +126,7 @@ class User_Data extends Term_Data {
 			if ( \in_array( false, $this->is_headless, true ) ) {
 				// Some data is still used for the interface elsewhere. Let's retrieve that at least.
 				// We filter out the rest because that's 'not supported' or otherwise 'immutable' in headless-mode.
-				$_meta = \get_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
+				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
 
 				foreach ( $this->get_headless_user_meta_support() as $meta_key => $supports ) {
 					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
@@ -138,7 +138,7 @@ class User_Data extends Term_Data {
 				}
 			}
 		} else {
-			$meta = \get_user_meta( $user_id, THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
+			$meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
 		}
 
 		/**
@@ -217,7 +217,7 @@ class User_Data extends Term_Data {
 
 		$user = \get_userdata( $user_id );
 
-		if ( ! $user->has_cap( THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+		if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
 		// We won't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -283,7 +283,7 @@ class User_Data extends Term_Data {
 			]
 		);
 
-		\update_user_meta( $user->ID, THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+		\update_user_meta( $user->ID, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
 	}
 
 	/**

@@ -202,7 +202,7 @@ final class AJAX {
 					 * meaning the image had a title when originally uploaded or its title was edited.
 					 */
 					( $parent_basename !== $sanitized_post_title ) &&
-					( pathinfo( $parent_basename, PATHINFO_FILENAME ) !== $sanitized_post_title )
+					( pathinfo( $parent_basename, \PATHINFO_FILENAME ) !== $sanitized_post_title )
 				);
 				$use_original_description = \strlen( trim( $original_attachment->post_content ) );
 

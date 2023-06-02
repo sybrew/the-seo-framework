@@ -42,7 +42,7 @@ final class Settings_Input {
 	 * Helper function that constructs id attributes for use in form fields.
 	 *
 	 * One-liner I forwent:
-	 * return THE_SEO_FRAMEWORK_SITE_OPTIONS . '['. implode( '][', $id ) . ']';
+	 * return \THE_SEO_FRAMEWORK_SITE_OPTIONS . '['. implode( '][', $id ) . ']';
 	 *
 	 * @since 4.2.0
 	 *
@@ -51,7 +51,7 @@ final class Settings_Input {
 	 */
 	public static function get_field_id( $id ) {
 
-		$field_id = THE_SEO_FRAMEWORK_SITE_OPTIONS;
+		$field_id = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 		foreach ( (array) $id as $subid )
 			$field_id .= "[$subid]";

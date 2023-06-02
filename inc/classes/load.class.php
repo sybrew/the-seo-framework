@@ -102,7 +102,7 @@ final class Load extends Cache {
 		}
 
 		// Register the capabilities early.
-		\add_filter( 'option_page_capability_' . THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
+		\add_filter( 'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
 
 		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
 
@@ -130,10 +130,10 @@ final class Load extends Cache {
 				'user'     => true,
 			];
 
-			\is_array( THE_SEO_FRAMEWORK_HEADLESS )
+			\is_array( \THE_SEO_FRAMEWORK_HEADLESS )
 				and $this->is_headless = array_map(
 					'wp_validate_boolean',
-					array_merge( $this->is_headless, THE_SEO_FRAMEWORK_HEADLESS )
+					array_merge( $this->is_headless, \THE_SEO_FRAMEWORK_HEADLESS )
 				);
 		}
 	}
@@ -145,14 +145,14 @@ final class Load extends Cache {
 	 */
 	public function init_debug_vars() {
 
-		$this->the_seo_framework_debug = \defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
+		$this->the_seo_framework_debug = \defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && \THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
 		if ( $this->the_seo_framework_debug )
 			Internal\Debug::_set_instance( $this->the_seo_framework_debug );
 
-		$this->the_seo_framework_use_transients = \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
+		$this->the_seo_framework_use_transients = \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && \THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
 
 		// WP Core definition.
-		$this->script_debug = \defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ?: $this->script_debug;
+		$this->script_debug = \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG ?: $this->script_debug;
 	}
 
 	/**
