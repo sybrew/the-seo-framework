@@ -110,8 +110,9 @@ class Init extends Query {
 	 * @access protected
 	 */
 	protected function init_cron_actions() {
+
 		// Init post update/delete caching actions which may occur during cronjobs.
-		$this->init_post_cache_actions();
+		$this->init_post_caching_actions();
 
 		// Ping searchengines.
 		if ( $this->get_option( 'ping_use_cron' ) ) {
@@ -157,7 +158,16 @@ class Init extends Query {
 		\do_action( 'the_seo_framework_admin_init' );
 
 		// Initialize caching actions.
-		$this->init_admin_caching_actions();
+		$this->init_post_caching_actions();
+
+		// Delete Sitemap transient on permalink structure change.
+		\add_action(
+			'load-options-permalink.php',
+			[ Bridges\Sitemap::class, '_refresh_sitemap_transient_permalink_updated' ],
+			20
+		);
+
+		\add_action( 'activated_plugin', [ $this, 'reset_check_plugin_conflicts' ] );
 
 		if ( ! $this->is_headless['meta'] ) {
 			// Initialize term meta filters and actions.
@@ -707,6 +717,39 @@ class Init extends Query {
 	}
 
 	/**
+	 * Initializes various callbacks on post-status changing actions to flush caches.
+	 *
+	 * @see WP Core wp_transition_post_status()
+	 * @since 4.2.9
+	 * @see $this->init_admin_actions();
+	 * @see $this->init_cron_actions();
+	 *
+	 * @return void Early if already called.
+	 */
+	protected function init_post_caching_actions() {
+
+		if ( has_run( __METHOD__ ) ) return;
+
+		$refresh_sitemap_callback = [ Bridges\Cache::class, '_refresh_sitemap_on_post_change' ];
+
+		// Can-be cron actions.
+		\add_action( 'publish_post', $refresh_sitemap_callback );
+		\add_action( 'publish_page', $refresh_sitemap_callback );
+
+		// Other actions.
+		\add_action( 'deleted_post', $refresh_sitemap_callback );
+		\add_action( 'deleted_page', $refresh_sitemap_callback );
+		\add_action( 'post_updated', $refresh_sitemap_callback );
+		\add_action( 'page_updated', $refresh_sitemap_callback );
+
+		$clear_excluded_callback = [ Bridges\Cache::class, 'clear_excluded_post_ids_cache' ];
+
+		// Excluded IDs cache.
+		\add_action( 'save_post', $clear_excluded_callback );
+		\add_action( 'edit_attachment', $clear_excluded_callback );
+	}
+
+	/**
 	 * Prepares sitemap output.
 	 *
 	 * @since 4.0.0
@@ -933,7 +976,7 @@ class Init extends Query {
 			if ( $this->is_query_adjustment_blocked( $wp_query ) )
 				return;
 
-			$excluded = $this->get_ids_excluded_from_search();
+			$excluded = $this->get_excluded_ids_from_cache()['search'];
 
 			if ( ! $excluded )
 				return;
@@ -967,7 +1010,7 @@ class Init extends Query {
 			if ( $this->is_query_adjustment_blocked( $wp_query ) )
 				return;
 
-			$excluded = $this->get_ids_excluded_from_archive();
+			$excluded = $this->get_excluded_ids_from_cache()['archive'];
 
 			if ( ! $excluded )
 				return;

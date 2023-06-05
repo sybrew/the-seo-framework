@@ -1706,4 +1706,49 @@ final class Deprecated {
 
 		return $details ? $image_details : ( $image_details['url'] ?? '' );
 	}
+
+	/**
+	 * Set the value of the transient.
+	 *
+	 * Prevents setting of transients when they're disabled.
+	 *
+	 * @since 2.6.0
+	 * @since 4.2.9 Soft deprecated
+	 * @todo 4.3.0 Deprecate!
+	 * @deprecated
+	 * @uses $this->the_seo_framework_use_transients
+	 *
+	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
+	 * @param string $value      Transient value. Expected to not be SQL-escaped.
+	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
+	 */
+	public function set_transient( $transient, $value, $expiration = 0 ) {
+		\The_SEO_Framework\Bridges\Cache::$use_transients and \set_transient( $transient, $value, $expiration );
+	}
+
+	/**
+	 * Get the value of the transient.
+	 *
+	 * If the transient does not exists, does not have a value or has expired,
+	 * or transients have been disabled through a constant, then the transient
+	 * will be false.
+	 *
+	 * N.B. not all transient settings make use of this function, bypassing the constant check.
+	 *
+	 * @since 2.6.0
+	 * @since 4.2.9 Soft deprecated
+	 * @todo 4.3.0 Deprecate!
+	 * @deprecated
+	 * @uses $this->the_seo_framework_use_transients
+	 *
+	 * @param string $transient Transient name. Expected to not be SQL-escaped.
+	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
+	 */
+	public function get_transient( $transient ) {
+
+		if ( \The_SEO_Framework\Bridges\Cache::$use_transients )
+			return \get_transient( $transient );
+
+		return false;
+	}
 }

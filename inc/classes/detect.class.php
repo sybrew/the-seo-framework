@@ -1306,6 +1306,15 @@ class Detect extends Render {
 	}
 
 	/**
+	 * Registers plugin cache checks on plugin activation.
+	 *
+	 * @since 4.2.9
+	 */
+	public function reset_check_plugin_conflicts() {
+		$this->update_static_cache( 'check_seo_plugin_conflicts', 1 );
+	}
+
+	/**
 	 * Determines whether the text has recognizable transformative syntax.
 	 *
 	 * It tests Yoast SEO before Rank Math because that one is more popular, thus more

@@ -518,7 +518,7 @@ class Site_Options extends Sanitize {
 	 * @since 3.1.0
 	 *
 	 * @param string $key   The cache key. Required.
-	 * @param string $value The cache value.
+	 * @param string $value The cache value. Expected to be sanitized.
 	 * @return bool True on success, false on failure.
 	 */
 	public function update_static_cache( $key, $value = '' ) {
