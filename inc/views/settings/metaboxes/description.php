@@ -50,7 +50,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		);
 
 		/**
-		 * @since 4.2.7
+		 * @since 4.2.9
 		 * @param array $html_passes_method The HTML pass option by [ 'option_value' => 'Name' ]
 		 */
 		$html_passes_methods = (array) apply_filters(

@@ -139,7 +139,7 @@ function _autoload_classes( $class ) {
 		$_bootstrap_timer = 0;
 	}
 
-	$_chunks       = explode( '\\', $class );
+	$_chunks      = explode( '\\', $class );
 	$_chunk_count = \count( $_chunks );
 
 	if ( $_chunk_count > 2 ) {

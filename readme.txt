@@ -327,6 +327,10 @@ TODO db version 4270 -> 4290+
 * **Added:**
 	* `The_SEO_Framework\Bridges\Cache`, provides a collection of static caching interface methods.
 	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
+	* Filter `the_seo_framework_auto_description_html_method_methods`.
+		* This used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
+	* Setting `auto_description_html_method` for `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
+		* This used to be `auto_descripton_html_method` (typo).
 * **Changed:**
 	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
@@ -367,8 +371,14 @@ TODO db version 4270 -> 4290+
 	* Filter `the_seo_framework_delete_cache_args` is gone.
 	* Filter `the_seo_framework_delete_cache_{$type}` is gone. This includes `the_seo_framework_delete_cache_sitemap` and `the_seo_framework_delete_cache_excluded_post_ids`.
 		* We kept `the_seo_framework_delete_cache_sitemap` for now, but we'll deprecate it later.
+	* Filter `the_seo_framework_auto_descripton_html_method_methods`.
+		* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").
+		* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this still affects your site.
+	* Setting `auto_descripton_html_method` from `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
+		* It is now `auto_description_html_method`.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
+	* Fixed typos in code. Props [Viktor Szépe](https://github.com/szepeviktor).
 
 = 4.2.8 =
 

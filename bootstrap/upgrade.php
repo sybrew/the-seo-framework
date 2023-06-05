@@ -707,7 +707,10 @@ function _do_upgrade_3103() {
 		$tsf = \tsf();
 
 		// Transport title separator (option name typo).
-		$tsf->update_option( 'title_separator', $tsf->get_option( 'title_separator', false ) ?: 'hyphen' );
+		$tsf->update_option(
+			'title_separator',
+			$tsf->get_option( 'title_seperator', false ) ?: 'hyphen' // Typo intended.
+		);
 
 		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -904,13 +907,20 @@ function _do_upgrade_4270() {
 
 /**
  * Deletes the static cache for exclusions.
+ * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
  * TODO registers default for static placeholder editing.
- * TODO change `auto_descripton_html_method` to `auto_description_html_method`
  *
  * @since 4.2.9
  */
 function _do_upgrade_4290() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4290' ) {
+		$tsf = \tsf();
+
+		$tsf->update_option(
+			'auto_description_html_method',
+			$tsf->get_option( 'auto_descripton_html_method' ) ?: 'fast' // Typo intended
+		);
+
 		// Don't use API to clear this transient; the API may use different entropics.
 		$locale = strtolower( \get_locale() );
 		\delete_transient( "tsf_exclude_1_{$GLOBALS['blog_id']}_{$locale}" );

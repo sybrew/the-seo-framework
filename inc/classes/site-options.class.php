@@ -109,7 +109,7 @@ class Site_Options extends Sanitize {
 				'title_strip_tags'    => 1,         // Apply 'strip tags' on titles.
 
 				// Description.
-				'auto_description'            => 1, // Enables auto description.
+				'auto_description'             => 1, // Enables auto description.
 				'auto_description_html_method' => 'fast', // Auto description HTML passes.
 
 				// Robots index.

@@ -659,7 +659,7 @@ class Detect extends Render {
 	 *
 	 * Example 2: `/page/2/?p=nonnumeric` will cause a bigger issue. What happens is that `is_home` will again be true,
 	 * but so will `is_paged`. `paged` will be set to `2` (as per example URL). The page ID will again be set to `0`,
-	 * which is completely false. The canonical URL will be malformed. Even more, Google can ignore the canonical URL,
+	 * which is completely false. The canonical URL will be malformed. Even more so, Google can ignore the canonical URL,
 	 * so we MUST output noindex.
 	 *
 	 * Example 3: `/page/2/?X=nonnumeric` will also cause the same issues as in example 2. Where X can be:
