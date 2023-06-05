@@ -688,7 +688,7 @@ function _do_upgrade_3001() {
 /**
  * Adds global cache option.
  * Sets `auto_description` option.
- * Migrates `title_separator` option to `title_separator`.
+ * Migrates `title_seperator` option to `title_separator`.
  * Sets `sitemap_query_limit` option.
  * Sets `title_strip_tags` option to known behavior.
  * Migrates `attachment_noindex` option to post type settings.
@@ -918,7 +918,7 @@ function _do_upgrade_4290() {
 
 		$tsf->update_option(
 			'auto_description_html_method',
-			$tsf->get_option( 'auto_descripton_html_method' ) ?: 'fast' // Typo intended
+			$tsf->get_option( 'auto_descripton_html_method', false ) ?: 'fast' // Typo intended
 		);
 
 		// Don't use API to clear this transient; the API may use different entropics.
