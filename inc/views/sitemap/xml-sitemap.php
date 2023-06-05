@@ -45,5 +45,5 @@ if ( $this->the_seo_framework_debug ) {
 	echo "\n<!-- Freed memory prior to generation: ", number_format( $sitemap_bridge->get_freed_memory( true ) / KB_IN_BYTES, 3 ), ' kB -->';
 	echo "\n<!-- Sitemap generation time: ", number_format( microtime( true ) - $timer_start, 6 ), ' seconds -->';
 	echo "\n<!-- Sitemap caching enabled: ", ( $this->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ), ' -->';
-	echo "\n<!-- Sitemap transient key: ", esc_html( $this->get_sitemap_transient_name() ), ' -->';
+	echo "\n<!-- Sitemap transient key: ", esc_html( $sitemap_bridge->get_transient_key() ), ' -->';
 }

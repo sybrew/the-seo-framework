@@ -106,7 +106,7 @@ final class Ping {
 	 * @since 2.2.9
 	 * @since 2.8.0 Only worked when the blog was not public...
 	 * @since 3.1.0 Now allows one ping per language.
-	 *              @uses $this->add_cache_key_suffix()
+	 *              @uses \The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix()
 	 * @since 3.2.3 1. Now works as intended again.
 	 *              2. Removed Easter egg.
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
@@ -126,7 +126,7 @@ final class Ping {
 			static::engage_pinging_retry_cron( [ 'id' => 'base' ] );
 			return;
 		}
-		$transient = $tsf->generate_cache_key( 0, '', 'ping' );
+		$transient = \The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix( 'tsf_throttle_ping' );
 
 		// Uses legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {

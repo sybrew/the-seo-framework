@@ -96,8 +96,9 @@ class Sanitize extends Admin_Pages {
 		// Initialize sanitation filters parsed on each option update.
 		$this->init_sanitizer_filters();
 
-		// Delete main cache now. For when the options don't change.
-		$this->delete_main_cache();
+		// Delete main cache directly, for when the options don't change. Don't invoke actions.
+		Bridges\Cache::clear_sitemap_transients();
+		Bridges\Cache::clear_excluded_post_ids_cache();
 
 		// Set backward compatibility. This runs after the sanitization.
 		// \add_filter( 'pre_update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 10 );
@@ -107,8 +108,16 @@ class Sanitize extends Admin_Pages {
 		// But, if this action fires, we can assure that the settings have been changed (according to WP).
 		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_option_updated_notice' ], 0 );
 
-		// Flush transients again after options have changed.
-		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'delete_main_cache' ] );
+		\add_action(
+			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[ Bridges\Sitemap::class, 'refresh_sitemaps' ]
+		);
+		// Mitigate race condition. If options change affecting the "excluded post", repopulate it.
+		\add_action(
+			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[ Bridges\Cache::class, 'clear_excluded_post_ids_cache' ]
+		);
+
 		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
 	}
 

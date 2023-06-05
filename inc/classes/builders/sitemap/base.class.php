@@ -48,17 +48,6 @@ class Base extends Main {
 	public $base_is_prerendering = false;
 
 	/**
-	 * Returns the base sitemap's storage transient name.
-	 *
-	 * @since 4.1.2
-	 *
-	 * @return string.
-	 */
-	public function base_get_sitemap_store_key() {
-		return static::$tsf->get_sitemap_transient_name();
-	}
-
-	/**
 	 * Generates the sitemap, and stores the generated content in the database.
 	 *
 	 * Note that this will work sporadically with translation plugins; however,
@@ -67,33 +56,33 @@ class Base extends Main {
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now no longer lowers the PHP execution time limit from unlimited to 3 minutes.
+	 * @since 4.2.9 Can now prerender sitemap on a $sitemap_id basis.
+	 *
+	 * @param string $sitemap_id The sitemap ID to prerender.
+	 * @return void Early if the sitemap's already generated.
 	 */
-	public function prerender_sitemap() {
+	public function prerender_sitemap( $sitemap_id = 'base' ) {
 
 		$bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 
 		if ( ! $bridge->sitemap_cache_enabled() ) return;
 
 		// Don't prerender if the sitemap is already generated.
-		if ( false !== static::$tsf->get_transient( $this->base_get_sitemap_store_key() ) ) return;
+		if ( false !== $bridge->get_cached_sitemap( $sitemap_id ) ) return;
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 		if ( 0 !== $ini_max_execution_time )
 			set_time_limit( max( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS ) );
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
-		if ( ! $bridge->lock_sitemap( 'base' ) ) return;
+		if ( ! $bridge->lock_sitemap( $sitemap_id ) ) return;
 
 		$this->prepare_generation();
 		$this->base_is_prerendering = true;
 
-		static::$tsf->set_transient(
-			$this->base_get_sitemap_store_key(),
-			$this->build_sitemap(),
-			\WEEK_IN_SECONDS
-		);
+		$bridge->cache_sitemap( $this->build_sitemap(), $sitemap_id );
 
-		$bridge->unlock_sitemap( 'base' );
+		$bridge->unlock_sitemap( $sitemap_id );
 
 		$this->shutdown_generation();
 		$this->base_is_regenerated = true;
@@ -103,6 +92,7 @@ class Base extends Main {
 	 * Returns the generated sitemap. Also stores it in the database when caching is enabled.
 	 *
 	 * @since 4.1.2
+	 * @since 4.2.9 Can now generate cache on a $sitemap_id basis.
 	 * @abstract
 	 *
 	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwriten via the API.
@@ -113,7 +103,9 @@ class Base extends Main {
 		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 		$_caching_enabled = $bridge->sitemap_cache_enabled();
 
-		$sitemap_content = $_caching_enabled ? static::$tsf->get_transient( $this->base_get_sitemap_store_key() ) : false;
+		$sitemap_content = $_caching_enabled
+			? $bridge->get_cached_sitemap( $sitemap_id )
+			: false;
 
 		if ( false === $sitemap_content ) {
 			$this->prepare_generation();
@@ -125,11 +117,7 @@ class Base extends Main {
 			$this->base_is_regenerated = true;
 
 			if ( $_caching_enabled ) {
-				static::$tsf->set_transient(
-					$this->base_get_sitemap_store_key(),
-					$sitemap_content,
-					\WEEK_IN_SECONDS
-				);
+				$bridge->cache_sitemap( $sitemap_content, $sitemap_id );
 				$bridge->unlock_sitemap( $sitemap_id );
 			}
 		}

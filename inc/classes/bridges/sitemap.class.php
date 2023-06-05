@@ -46,9 +46,16 @@ final class Sitemap {
 	private static $instance;
 
 	/**
+	 * @since 4.0.0
 	 * @var null|\The_SEO_Framework\Load
 	 */
 	private static $tsf = null;
+
+	/**
+	 * @since 4.2.9
+	 * @var string The sitemap ID.
+	 */
+	public $sitemap_id = '';
 
 	/**
 	 * Returns this instance.
@@ -117,25 +124,74 @@ final class Sitemap {
 		// Probably home page.
 		if ( '/' === $raw_uri ) return;
 
-		$sitemap_id = $this->get_sitemap_id_from_uri( $raw_uri );
+		// The path+query where sitemaps are served.
+		$path_info = static::get_sitemap_base_path_info();
 
-		if ( ! $sitemap_id ) return;
+		// A regex which detects $sitemap_path at the beginning of a string.
+		$path_regex = '/^' . preg_quote( rawurldecode( $path_info['path'] ), '/' ) . '/ui';
+
+		// See if the base matches the endpoint. This is crucial for query-based endpoints.
+		if ( ! preg_match( $path_regex, $raw_uri ) ) return;
+
+		$stripped_uri = preg_replace( $path_regex, '', rtrim( $raw_uri, '/' ) );
+
+		// Strip the base URI. If nothing's left, stop assessing.
+		if ( ! $stripped_uri ) return;
+
+		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
+		if ( $path_info['use_query_var'] ) {
+			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
+				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
+				// Yes, we know. It's not really checking for standardized query-variables.
+				if ( preg_match( $_regex, $stripped_uri ) ) {
+					$this->sitemap_id = $_id;
+					break;
+				}
+			}
+		} else {
+			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
+				if ( preg_match( $_data['regex'], $stripped_uri ) ) {
+					$this->sitemap_id = $_id;
+					break;
+				}
+			}
+		}
+
+		if ( ! $this->sitemap_id ) return;
 
 		static::$tsf->is_sitemap( true );
+		\add_action( 'pre_get_posts', [ static::class, '_override_query_parameters' ] );
 
 		/**
 		 * Set at least 2000 variables free.
 		 * Freeing 0.15MB on a clean WordPress installation on PHP 7.
 		 */
-		$this->clean_up_globals();
+		static::clean_up_globals();
 
 		/**
 		 * @since 4.0.0
 		 * @param string $sitemap_id The sitemap ID. See `static::get_sitemap_endpoint_list()`.
 		 */
-		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
+		\do_action( 'the_seo_framework_sitemap_header', $this->sitemap_id );
 
-		\call_user_func( $this->get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
+		\call_user_func( $this->get_sitemap_endpoint_list()[ $this->sitemap_id ]['callback'], $this->sitemap_id );
+	}
+
+	/**
+	 * Sets `is_home` to false for the sitemap.
+	 * Also sets proposed `is_sitemap` to true, effectively achieving the same.
+	 *
+	 * @link https://core.trac.wordpress.org/ticket/51542
+	 * @link https://core.trac.wordpress.org/ticket/51117
+	 * @since 4.2.9
+	 * @access private
+	 *
+	 * @param \WP_Query $wp_query The WordPress WC_Query instance.
+	 */
+	public static function _override_query_parameters( $wp_query ) {
+		$wp_query->is_home = false;
+		// $wp_query allows dynamic properties. This one is proposed in https://core.trac.wordpress.org/ticket/51117#comment:7
+		$wp_query->is_sitemap = true;
 	}
 
 	/**
@@ -159,15 +215,13 @@ final class Sitemap {
 		if ( ! isset( $list[ $id ] ) ) return false;
 
 		$host      = static::$tsf->set_preferred_url_scheme( static::$tsf->get_home_host() );
-		$path_info = $this->get_sitemap_base_path_info();
+		$path_info = static::get_sitemap_base_path_info();
 
-		if ( $path_info['use_query_var'] ) {
-			$url = "$host{$path_info['path']}$id";
-		} else {
-			$url = "$host{$path_info['path']}{$list[ $id ]['endpoint']}";
-		}
-
-		return \esc_url_raw( $url );
+		return \esc_url_raw(
+			$path_info['use_query_var']
+				? "$host{$path_info['path']}$id"
+				: "$host{$path_info['path']}{$list[ $id ]['endpoint']}"
+		);
 	}
 
 	/**
@@ -176,7 +230,7 @@ final class Sitemap {
 	 * @since 4.0.0
 	 * @static array $list
 	 *
-	 * @return array The sitemap endpoints with their callbacks.
+	 * @return array[] The sitemap endpoints with their callbacks.
 	 */
 	public function get_sitemap_endpoint_list() {
 		return memo() ?? memo(
@@ -184,20 +238,23 @@ final class Sitemap {
 			 * @since 4.0.0
 			 * @since 4.0.2 Made the endpoints' regex case-insensitive.
 			 * @link Example: https://github.com/sybrew/tsf-term-sitemap
-			 * @param array $list The endpoints: {
+			 * @param array[] $list The endpoints: {
 			 *   'id' => array: {
-			 *      'cache_id' => string   Optional. The cache key to use for locking. Defaults to index 'id'.
-			 *      'endpoint' => string   The expected "pretty" endpoint, meant for administrative display.
-			 *      'epregex'  => string   The endpoint regex, following the home path regex.
-			 *                             N.B. Be wary of case sensitivity. Append the i-flag.
-			 *                             N.B. Trailing slashes will cause the match to fail.
-			 *                             N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
-			 *      'callback' => callable The callback for the sitemap output.
-			 *                             Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
-			 *                             Tip: In the callback, use
-			 *                                  `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
-			 *                                  It returns the arguments you've passed in this filter; including your arbitrary indexes.
-			 *      'robots'   => bool     Whether the endpoint should be mentioned in the robots.txt file.
+			 *      'lock_id'  => string|false Optional. The cache key to use for locking. Defaults to index 'id'.
+			 *                                           Set to false to disable locking.
+			 *      'cache_id' => string|false Optional. The cache key to use for storing. Defaults to index 'id'.
+			 *                                           Set to false to disable caching.
+			 *      'endpoint' => string       The expected "pretty" endpoint, meant for administrative display.
+			 *      'epregex'  => string       The endpoint regex, following the home path regex.
+			 *                                 N.B. Be wary of case sensitivity. Append the i-flag.
+			 *                                 N.B. Trailing slashes will cause the match to fail.
+			 *                                 N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
+			 *      'callback' => callable     The callback for the sitemap output.
+			 *                                 Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
+			 *                                 Tip: In the callback, use
+			 *                                      `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
+			 *                                      It returns the arguments you've passed in this filter; including your arbitrary indexes.
+			 *      'robots'   => bool         Whether the endpoint should be mentioned in the robots.txt file.
 			 *   }
 			 * }
 			 */
@@ -205,7 +262,8 @@ final class Sitemap {
 				'the_seo_framework_sitemap_endpoint_list',
 				[
 					'base'           => [
-						'lock_id'  => 'base',
+						'lock_id'  => 'base', // Example, real usage is with "index" using base.
+						'cache_id' => 'base', // Example, real usage is with "index" using base.
 						'endpoint' => 'sitemap.xml',
 						'regex'    => '/^sitemap\.xml/i',
 						'callback' => [ static::class, 'output_base_sitemap' ],
@@ -213,12 +271,15 @@ final class Sitemap {
 					],
 					'index'          => [
 						'lock_id'  => 'base',
+						'cache_id' => 'base',
 						'endpoint' => 'sitemap_index.xml',
 						'regex'    => '/^sitemap_index\.xml/i',
 						'callback' => [ static::class, 'output_base_sitemap' ],
 						'robots'   => false,
 					],
 					'xsl-stylesheet' => [
+						'lock_id'  => false,
+						'cache_id' => false,
 						'endpoint' => 'sitemap.xsl',
 						'regex'    => '/^sitemap\.xsl/i',
 						'callback' => [ static::class, 'output_stylesheet' ],
@@ -233,6 +294,7 @@ final class Sitemap {
 	 * Tells whether sitemap caching is enabled by user.
 	 *
 	 * @since 4.1.2
+	 * @todo convert this to "is_" and make static.
 	 *
 	 * @return bool
 	 */
@@ -241,10 +303,133 @@ final class Sitemap {
 	}
 
 	/**
+	 * Deletes transients for sitemaps. Also engages pings for or pings search engines.
+	 *
+	 * Can only run once per request.
+	 *
+	 * @since 4.2.9
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public static function refresh_sitemaps() {
+
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return false;
+
+		Cache::clear_sitemap_transients();
+
+		$tsf = \tsf();
+
+		$ping_use_cron           = $tsf->get_option( 'ping_use_cron' );
+		$ping_use_cron_prerender = $tsf->get_option( 'ping_use_cron_prerender' );
+
+		/**
+		 * @since 4.1.1
+		 * @since 4.1.2 Added index `ping_use_cron_prerender` to the first parameter.
+		 * @param array $params Any useful environment parameters.
+		 */
+		\do_action(
+			'the_seo_framework_sitemap_transient_cleared',
+			[
+				'ping_use_cron'           => $ping_use_cron,
+				'ping_use_cron_prerender' => $ping_use_cron_prerender, // TODO migrate this so it can run regardless of pinging?
+			]
+		);
+
+		if ( $ping_use_cron ) {
+			// This name is wrong. It's not exclusively used for pinging.
+			Ping::engage_pinging_cron();
+		} else {
+			Ping::ping_search_engines();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns the sitemap's storage transient name.
+	 *
+	 * @since 4.2.9
+	 * @uses \The_SEO_Framework\Bridges\Cache
+	 *
+	 * @param string $sitemap_id The sitemap ID.
+	 * @return string|false The sitemap transient store key.
+	 */
+	public function get_transient_key( $sitemap_id = '' ) {
+
+		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
+		$ep_list    = $this->get_sitemap_endpoint_list();
+
+		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
+
+		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
+
+		return Cache::build_unique_cache_key_suffix( "tsf_sitemap_{$cache_key}" );
+	}
+
+	/**
+	 * Stores the sitemap in transient cache.
+	 *
+	 * @since 4.2.9
+	 * @uses \The_SEO_Framework\Bridges\Cache
+	 *
+	 * @param string $content    The sitemap content
+	 * @param string $sitemap_id The sitemap ID.
+	 * @param int    $expiration The sitemap's cache timeout.
+	 * @return bool True on succes, false on failure.
+	 */
+	public function cache_sitemap( $content, $sitemap_id = '', $expiration = \WEEK_IN_SECONDS ) {
+
+		$transient_key = $this->get_transient_key( $sitemap_id );
+
+		if ( ! $transient_key ) return false;
+
+		return Cache::set_transient( $transient_key, $content, $expiration );
+	}
+
+	/**
+	 * Returns the sitemap from transient cache.
+	 *
+	 * @since 4.2.9
+	 * @uses \The_SEO_Framework\Bridges\Cache
+	 *
+	 * @param string $sitemap_id The sitemap ID.
+	 * @return string|false The sitemap from cache. False is not set.
+	 */
+	public function get_cached_sitemap( $sitemap_id = '' ) {
+
+		$transient_key = $this->get_transient_key( $sitemap_id );
+
+		if ( ! $transient_key ) return false;
+
+		return Cache::get_transient( $transient_key );
+	}
+
+	/**
+	 * Returns the sitemap's lock cache ID.
+	 *
+	 * @since 4.1.2
+	 * @since 4.2.9 The first parameter is now optional.
+	 *
+	 * @param string $sitemap_id The sitemap ID.
+	 * @return string|false The sitemap lock key. False when key is invalid.
+	 */
+	public function get_lock_key( $sitemap_id = '' ) {
+
+		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
+		$ep_list    = $this->get_sitemap_endpoint_list();
+
+		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
+
+		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
+
+		return Cache::build_unique_cache_key_suffix( 'tsf_sitemap_lock' ) . "_{$lock_id}";
+	}
+
+	/**
 	 * Outputs a '503: Service Unavailable' header and no-cache headers.
 	 *
 	 * @since 4.1.2
-	 * TODO consider instead of sending me, output the previous sitemap from cache, instead? Spaghetti.
+	 * TODO consider instead of using this, output the previous sitemap from cache, instead? Spaghetti.
 	 *
 	 * @param int $timeout How many seconds the user has to wait. Optional. Leave 0 to send a generic message.
 	 */
@@ -269,36 +454,20 @@ final class Sitemap {
 	}
 
 	/**
-	 * Returns the sitemap's lock cache ID.
-	 *
-	 * @since 4.1.2
-	 *
-	 * @param string|false $sitemap_id The sitemap ID to test. False when key is invalid.
-	 */
-	public function get_lock_key( $sitemap_id = 'base' ) {
-
-		$ep_list = $this->get_sitemap_endpoint_list();
-
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
-
-		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
-
-		return static::$tsf->generate_cache_key( 0, '', 'sitemap_lock' ) . "_{$lock_id}";
-	}
-
-	/**
 	 * Locks a sitemap for the current blog & locale and $sitemap_id, preferably
 	 * at least as long as PHP is allowed to run.
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now considers "unlimited" execution time (0) that'd've prevented locks altogether.
+	 * @since 4.2.9 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on succes, false on failure.
 	 */
-	public function lock_sitemap( $sitemap_id = 'base' ) {
+	public function lock_sitemap( $sitemap_id = '' ) {
 
-		$lock_key = $this->get_lock_key( $sitemap_id );
+		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
+
 		if ( ! $lock_key ) return false;
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
@@ -321,32 +490,32 @@ final class Sitemap {
 	 * Unlocks a sitemap for the current blog & locale and $sitemap_id.
 	 *
 	 * @since 4.1.2
+	 * @since 4.2.9 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on succes, false on failure.
 	 */
-	public function unlock_sitemap( $sitemap_id = 'base' ) {
+	public function unlock_sitemap( $sitemap_id = '' ) {
 
-		$lock_key = $this->get_lock_key( $sitemap_id );
-		if ( ! $lock_key ) return false;
+		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
 
-		return \delete_transient( $lock_key );
+		return $lock_key ? \delete_transient( $lock_key ) : false;
 	}
 
 	/**
 	 * Tells whether a sitemap is locked for the current blog & locale and $sitemap_id.
 	 *
 	 * @since 4.1.2
+	 * @since 4.2.9 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool|int False if not locked, the lock UNIX release time otherwise.
 	 */
-	public function is_sitemap_locked( $sitemap_id = 'base' ) {
+	public function is_sitemap_locked( $sitemap_id = '' ) {
 
-		$lock_key = $this->get_lock_key( $sitemap_id );
-		if ( ! $lock_key ) return false;
+		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
 
-		return \get_transient( $lock_key );
+		return $lock_key ? \get_transient( $lock_key ) : false;
 	}
 
 	/**
@@ -481,10 +650,11 @@ final class Sitemap {
 	 * Useful when the path is non-standard, like notoriously in Polylang.
 	 *
 	 * @since 4.1.2
+	 * @since 4.2.9 Is now static.
 	 *
 	 * @return string The path.
 	 */
-	private function get_sitemap_base_path() {
+	private static function get_sitemap_base_path() {
 		/**
 		 * @since 4.1.2
 		 * @param string $path The home path.
@@ -506,10 +676,11 @@ final class Sitemap {
 	 * Useful when the prefix path is non-standard, like notoriously in Polylang.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.9 Is now static.
 	 *
 	 * @return string The path prefix.
 	 */
-	private function get_sitemap_path_prefix() {
+	private static function get_sitemap_path_prefix() {
 		/**
 		 * Ignore RFC2616 slashlessness by adding a slash;
 		 * this makes life easier when trailing and testing the URL, as well.
@@ -522,58 +693,10 @@ final class Sitemap {
 	}
 
 	/**
-	 * Gets the sitemap ID based on the current request URI.
-	 *
-	 * @since 4.0.0
-	 * @since 4.0.2 Can now parse Unicode-encoded URLs.
-	 *
-	 * @param string $raw_uri The raw request URI. Unsafe.
-	 * @return string|false The endpoint ID on success, false on failure.
-	 */
-	private function get_sitemap_id_from_uri( $raw_uri ) {
-
-		// The path+query where sitemaps are served.
-		$path_info = $this->get_sitemap_base_path_info();
-
-		// A regex which detects $sitemap_path at the beginning of a string.
-		$path_regex = '/^' . preg_quote( rawurldecode( $path_info['path'] ), '/' ) . '/ui';
-
-		// See if the base matches the endpoint. This is crucial for query-based endpoints.
-		if ( ! preg_match( $path_regex, $raw_uri ) ) return false;
-
-		$stripped_uri = preg_replace( $path_regex, '', rtrim( $raw_uri, '/' ) );
-
-		// Strip the base URI. If nothing's left, stop assimilating.
-		if ( ! $stripped_uri ) return false;
-
-		$sitemap_id = '';
-
-		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
-		if ( $path_info['use_query_var'] ) {
-			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
-				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
-				// Yes, we know. It's not really checking for standardized query-variables.
-				if ( preg_match( $_regex, $stripped_uri ) ) {
-					$sitemap_id = $_id;
-					break;
-				}
-			}
-		} else {
-			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
-				if ( preg_match( $_data['regex'], $stripped_uri ) ) {
-					$sitemap_id = $_id;
-					break;
-				}
-			}
-		}
-
-		return $sitemap_id ?: false;
-	}
-
-	/**
 	 * Returns the base path information for the sitemap.
 	 *
 	 * @since 4.0.0
+	 * @since 4.2.9 Is now static.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return array : {
@@ -581,11 +704,11 @@ final class Sitemap {
 	 *    bool   use_query_var : Whether to use the query var.
 	 * }
 	 */
-	private function get_sitemap_base_path_info() {
+	private static function get_sitemap_base_path_info() {
 		global $wp_rewrite;
 
-		$base_path = $this->get_sitemap_base_path();
-		$prefix    = $this->get_sitemap_path_prefix();
+		$base_path = static::get_sitemap_base_path();
+		$prefix    = static::get_sitemap_path_prefix();
 
 		$use_query_var = false;
 
@@ -610,11 +733,12 @@ final class Sitemap {
 	 * This method is to be used after outputting the sitemap.
 	 *
 	 * @since 4.1.1
+	 * @since 4.2.9 Is now static.
 	 *
 	 * @return int bytes freed.
 	 */
-	public function get_freed_memory() {
-		return $this->clean_up_globals( true );
+	public static function get_freed_memory() {
+		return static::clean_up_globals( true );
 	}
 
 	/**
@@ -627,11 +751,12 @@ final class Sitemap {
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from clean_up_globals_for_sitemap()
 	 * @since 4.2.0 Now always returns the freed memory.
+	 * @since 4.2.9 Is now static.
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory in bytes
 	 */
-	private function clean_up_globals( $get_freed_memory = false ) {
+	private static function clean_up_globals( $get_freed_memory = false ) {
 
 		if ( $get_freed_memory ) return memo() ?? 0;
 

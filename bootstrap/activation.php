@@ -24,59 +24,27 @@ namespace The_SEO_Framework\Bootstrap;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @since 3.2.4 Applied namspacing to this file. All method names have changed.
- */
+$tsf = \tsf();
 
-//! @php7+ convert to IIFE
-// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-_activation_set_options_autoload();
-// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-_activation_set_plugin_check_caches();
+if ( ! $tsf->loaded ) return;
 
-/**
- * Nudges the plugin to check for conflicting SEO plugins.
- *
- * When found, it'll output a single dismissible notification.
- *
- * @since 3.1.0
- * @access private
- */
-function _activation_set_plugin_check_caches() {
+$tsf->reset_check_plugin_conflicts();
 
-	$tsf = \tsf();
+turn_on_autoloading: {
+	// Turns on auto loading for The SEO Framework's main options.
+	$options = $tsf->get_all_options();
+	$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-	if ( $tsf->loaded ) {
-		$tsf->set_plugin_check_caches();
-	}
-}
+	\remove_all_filters( "pre_update_option_{$setting}" );
+	\remove_all_actions( "update_option_{$setting}" );
+	\remove_all_filters( "sanitize_option_{$setting}" );
 
-/**
- * Turns on auto loading for The SEO Framework's main options.
- *
- * @since 2.9.2
- * @since 3.1.0 No longer deletes the whole option array, trying to reactivate auto loading.
- * @access private
- */
-function _activation_set_options_autoload() {
+	$temp_options = $options;
+	// Write a small difference, so the change will be forwarded to the database.
+	if ( \is_array( $temp_options ) )
+		$temp_options['update_buster'] = (int) time();
 
-	$tsf = \tsf();
-
-	if ( $tsf->loaded ) {
-		$options = $tsf->get_all_options();
-		$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-		\remove_all_filters( "pre_update_option_{$setting}" );
-		\remove_all_actions( "update_option_{$setting}" );
-		\remove_all_filters( "sanitize_option_{$setting}" );
-
-		$temp_options = $options;
-		// Write a small difference, so the change will be forwarded to the database.
-		if ( \is_array( $temp_options ) )
-			$temp_options['update_buster'] = (int) time();
-
-		$_success = \update_option( $setting, $temp_options, 'yes' );
-		if ( $_success )
-			\update_option( $setting, $options, 'yes' );
-	}
+	$_success = \update_option( $setting, $temp_options, 'yes' );
+	if ( $_success )
+		\update_option( $setting, $options, 'yes' );
 }

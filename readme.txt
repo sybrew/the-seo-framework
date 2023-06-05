@@ -293,10 +293,18 @@ TODO investigate &shy; issue with News sitemap entries. (reply to user in Bremer
 
 TODO check mail Dean about WPML config
 
+TODO change autodescription-updates-cache to autodescription-persistent-cache?
+	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
+		-> However, this may cause a notification pop up for those who use two or more SEO plugins simultaneously. Though this may be helpful.
+
+TODO db version 4270 -> 4290+
+
 **Detailed log**
 
 **For everyone:**
 
+* **Changed:**
+	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 * **Improved:**
 	* The plugin is faster now due to [new coding standards](https://twitter.com/SybreWaaijer/status/1654101713714831361).
 	* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
@@ -310,16 +318,55 @@ TODO check mail Dean about WPML config
 			- `wp_is_json_request()`
 			- `wp_is_jsonp_request()`
 			- `wp_is_xml_request()`
+* **Note:**
+	* Transient `tsf_sitemap_5_%`, where % changes per blog, is no longer used. This transient should clear automatically.
+	* Transient `tsf_exclude_1_%`, where % changes per blog, is no longer used. This transient will be deleted on upgrade.
 
 **For developers:**
 
+* **Added:**
+	* `The_SEO_Framework\Bridges\Cache`, provides a collection of static caching interface methods.
+	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
 * **Changed:**
 	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
 		* This makes loading the sitemap anywhere from barely noticable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
+	* Filter `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
+* **Removed:**
+	* We dropped class `\The_SEO_Framework\Cache` from the god object `tsf()`. The following methods have been removed, because they weren't useful for the public APIs:
+		* `init_admin_caching_actions`
+		* `init_post_cache_actions`
+		* `set_plugin_check_caches`
+			* This is now `tsf()->reset_check_plugin_conflicts()`.
+		* `delete_main_cache`
+		* `delete_post_cache`
+		* `delete_excluded_ids_cache`
+			* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_excluded_post_ids_cache()`.
+		* `delete_excluded_post_ids_transient`
+		* `delete_cache`
+		* `set_transient`
+			* This has been moved to `The_SEO_Framework\Bridges\Cache::set_transient()`.
+			* This method will emit a deprecation warning from TSF v4.3.0.
+		* `get_transient`
+			* This has been moved to `The_SEO_Framework\Bridges\Cache::get_transient()`.
+			* This method will emit a deprecation warning from TSF v4.3.0.
+		* `get_exclusion_transient_name`
+		* `get_sitemap_transient_name`
+			* This has been moved to `The_SEO_Framework\Bridges\Sitemap::get_transient_key()`.
+		* `generate_cache_key`
+		* `generate_cache_key_by_type`
+		* `add_cache_key_suffix`
+			* This has been moved to `The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix()`.
+		* `delete_sitemap_transient_permalink_updated`
+			* This has been moved to `The_SEO_Framework\Bridges\Cache::_refresh_sitemap_transient_permalink_updated()`, but not part of the public API.
+		* `delete_sitemap_transient`
+			* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_sitemap_transients()`.
+	* Filter `the_seo_framework_delete_cache_args` is gone.
+	* Filter `the_seo_framework_delete_cache_{$type}` is gone. This includes `the_seo_framework_delete_cache_sitemap` and `the_seo_framework_delete_cache_excluded_post_ids`.
+		* We kept `the_seo_framework_delete_cache_sitemap` for now, but we'll deprecate it later.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 

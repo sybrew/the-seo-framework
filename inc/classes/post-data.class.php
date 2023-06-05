@@ -699,27 +699,75 @@ class Post_Data extends Detect {
 	}
 
 	/**
-	 * Returns list of post IDs that are excluded from search.
+	 * Builds and returns the excluded post IDs.
+	 *
+	 * Memoizes the database request.
 	 *
 	 * @since 3.0.0
-	 * @TODO deprecate and require procedural API? This is needless function overhead.
+	 * @since 3.1.0 Now no longer crashes on database errors.
+	 * @since 4.1.4 1. Now tests against post type exclusions.
+	 *              2. Now considers headlessness. This method runs only on the front-end.
+	 * @since 4.2.9 Now uses the static cache methods instead of non-expiring-transients.
 	 *
-	 * @return array The excluded post IDs.
+	 * @return array : { 'archive', 'search' }
 	 */
-	public function get_ids_excluded_from_search() {
-		return $this->get_excluded_ids_from_cache()['search'] ?: [];
-	}
+	public function get_excluded_ids_from_cache() {
 
-	/**
-	 * Returns list of post IDs that are excluded from archive.
-	 *
-	 * @since 3.0.0
-	 * @TODO deprecate and require procedural API? This is needless function overhead.
-	 *
-	 * @return array The excluded post IDs.
-	 */
-	public function get_ids_excluded_from_archive() {
-		return $this->get_excluded_ids_from_cache()['archive'] ?: [];
+		if ( $this->is_headless['meta'] )
+			return [
+				'archive' => '',
+				'search'  => '',
+			];
+
+		$cache = $this->get_static_cache( 'excluded_ids' );
+
+		if ( isset( $cache['archive'], $cache['search'] ) ) return $cache;
+
+		global $wpdb;
+
+		$supported_post_types = $this->get_supported_post_types();
+		$public_post_types    = $this->get_public_post_types();
+
+		$join  = '';
+		$where = '';
+		if ( $supported_post_types !== $public_post_types ) {
+			// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
+			$post_type__in = "'" . implode( "','", array_map( 'esc_sql', $supported_post_types ) ) . "'";
+
+			// This is as fast as I could make it. Yes, it uses IN, but only on a (tiny) subset of data.
+			$join  = "LEFT JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID";
+			$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
+		}
+
+		// Two separated equals queries are faster than a single IN with 'meta_key'.
+		// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
+		$cache = [
+			'archive' => $wpdb->get_results(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where"
+			),
+			'search'  => $wpdb->get_results(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where"
+			),
+		];
+		// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		foreach ( [ 'archive', 'search' ] as $type ) {
+			array_walk(
+				$cache[ $type ],
+				static function( &$v ) {
+					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
+						$v = (int) $v->post_id;
+					} else {
+						$v = false;
+					}
+				}
+			);
+			$cache[ $type ] = array_filter( $cache[ $type ] );
+		}
+
+		$this->update_static_cache( 'excluded_ids', $cache );
+
+		return $cache;
 	}
 
 	/**

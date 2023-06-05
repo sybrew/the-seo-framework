@@ -36,7 +36,7 @@ namespace The_SEO_Framework;
  * @since 4.1.0 Now extends `Cache` instead of `Feed`.
  * @since 4.1.4 Removed protected property $use_object_cache.
  */
-final class Load extends Cache {
+final class Load extends Site_Options {
 
 	/**
 	 * @since 2.2.9
@@ -47,7 +47,7 @@ final class Load extends Cache {
 
 	/**
 	 * @since 2.2.9
-	 * @TODO make this just 'cache_transients'
+	 * @TODO deprecate this. Use Bridges\Cache::$use_transients instead.
 	 * @var bool $the_seo_framework_debug Whether TSF-specific transients are used.
 	 */
 	public $the_seo_framework_use_transients = true;
@@ -149,7 +149,8 @@ final class Load extends Cache {
 		if ( $this->the_seo_framework_debug )
 			Internal\Debug::_set_instance( $this->the_seo_framework_debug );
 
-		$this->the_seo_framework_use_transients = \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && \THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ? false : $this->the_seo_framework_use_transients;
+		if ( \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && \THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS )
+			\The_SEO_Framework\Bridges\Cache::$use_transients = false;
 
 		// WP Core definition.
 		$this->script_debug = \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG ?: $this->script_debug;

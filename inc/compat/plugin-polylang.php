@@ -237,9 +237,9 @@ function _polylang_fix_home_url( $url ) {
 \add_action( 'the_seo_framework_delete_cache_sitemap', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10, 4 );
 /**
  * Deletes all sitemap transients, instead of just one.
- * Can only clear once per request.
  *
  * @since 4.0.5
+ * @since 4.2.9 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
  *
@@ -250,28 +250,23 @@ function _polylang_fix_home_url( $url ) {
  */
 function _polylang_flush_sitemap( $type, $id, $args, $success ) {
 
-	static $cleared = false;
-	if ( $cleared ) return;
+	if ( ! $success ) return;
 
-	if ( $success ) {
-		global $wpdb;
+	global $wpdb;
 
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
-			)
-		); // No cache OK. DB call ok.
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
+		)
+	); // No cache OK. DB call ok.
 
-		// We didn't use a wildcard after "_transient_" to reduce scans.
-		// A second query is faster on saturated sites.
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
-			)
-		); // No cache OK. DB call ok.
-
-		$cleared = true;
-	}
+	// We didn't use a wildcard after "_transient_" to reduce scans.
+	// A second query is faster on saturated sites.
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
+		)
+	); // No cache OK. DB call ok.
 }

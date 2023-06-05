@@ -27,8 +27,6 @@ if ( $this->is_real_front_page() ) {
 	$type = 'Unknown';
 }
 
-$cache_key = $this->generate_cache_key( $id, $taxonomy );
-
 if ( is_admin() ) {
 	$bstyle = is_rtl()
 		? 'direction:ltr;color:#444;font-family:Georgio,sans-serif;font-size:14px;clear:both;float:left;position:relative;width:calc( 100% - 200px );min-height:700px;padding:0;margin:20px 180px 40px 20px;overflow:hidden;border:1px solid #ccc;border-radius:3px;line-height:18pxfont-feature-settings:normal;font-variant:normal'
@@ -42,7 +40,6 @@ if ( is_admin() ) {
 				echo ' :: ';
 				echo esc_html( "Type: $type" );
 				echo esc_html( $mdash . 'ID: ' . $id );
-				echo esc_html( $mdash . 'Cache key: ' . ( $cache_key ?: 'N/A' ) );
 				echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
 				echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
 			endif;
@@ -66,7 +63,6 @@ if ( is_admin() ) {
 			echo ' :: ';
 			echo 'Type: ' . esc_html( $type );
 			echo esc_html( $mdash . 'ID: ' . $id );
-			echo esc_html( $mdash . 'Cache key: ' . ( $cache_key ?: 'N/A' ) );
 			echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
 			echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
 			?>
