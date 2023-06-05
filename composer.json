@@ -22,10 +22,10 @@
 		"composer/installers": "^1.0 || ^2.0"
 	},
 	"require-dev": {
-		"dealerdirect/phpcodesniffer-composer-installer": "0.5.0",
-		"theseoframework/wpcs-tsf": "1.0.0",
-		"sirbrillig/phpcs-variable-analysis": "2.6.4",
-		"phpcompatibility/phpcompatibility-wp": "2.0.0"
+		"dealerdirect/phpcodesniffer-composer-installer": "1.0.0",
+		"theseoframework/wpcs-tsf": "1.2.0",
+		"sirbrillig/phpcs-variable-analysis": "2.11.16",
+		"phpcompatibility/phpcompatibility-wp": "2.1.4"
 	},
 	"scripts": {
 		"php:compatibility": "composer install && vendor/bin/phpcs -p -s --runtime-set testVersion '5.2-' --standard=PHPCompatibilityWP --ignore=docker,tools,tests,node_modules,vendor --extensions=php",
@@ -39,5 +39,11 @@
 		"wiki": "https://github.com/sybrew/the-seo-framework/wiki"
 	},
 	"minimum-stability": "dev",
-	"prefer-stable": true
+	"prefer-stable": true,
+	"config": {
+		"allow-plugins": {
+			"composer/installers": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
 }
