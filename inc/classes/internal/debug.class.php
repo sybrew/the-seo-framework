@@ -453,7 +453,7 @@ final class Debug {
 	/**
 	 * Sets debug query cache.
 	 *
-	 * @since 3.1.0 Introducted in 2.8.0, but the name changed.
+	 * @since 3.1.0 Introduced in 2.8.0, but the name changed.
 	 * @access private
 	 */
 	public function _set_debug_query_output_cache() {

@@ -242,7 +242,7 @@ class Sanitize extends Admin_Pages {
 			's_description_html_method',
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
-				'auto_descripton_html_method',
+				'auto_description_html_method',
 			]
 		);
 
@@ -1064,7 +1064,7 @@ class Sanitize extends Admin_Pages {
 	 *                 `object`, `output`, `progress`, `s`, `template`, and `ul`.
 	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
 	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
-	 *              5. Now processed the `auto_descripton_html_method` option for stripping tags.
+	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1078,7 +1078,7 @@ class Sanitize extends Admin_Pages {
 		if ( '' === $excerpt ) return '';
 
 		// Oh, how I'd like PHP 8's match()...
-		switch ( $this->get_option( 'auto_descripton_html_method' ) ) {
+		switch ( $this->get_option( 'auto_description_html_method' ) ) {
 			case 'thorough':
 				$passes = 12;
 				break;
@@ -1680,7 +1680,7 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0 No longer strips the prepended / path.
 	 *
 	 * @param string $url Full Path URL or relative URL.
-	 * @return string Abolute path.
+	 * @return string Absolute path.
 	 */
 	public function s_relative_url( $url ) {
 		return preg_replace( '/^(https?:)?\/\/[^\/]+(\/.*)/i', '$2', $url );
@@ -1955,7 +1955,7 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Strips tags with HTML Context-Sensitivity and ouputs its breakdown.
+	 * Strips tags with HTML Context-Sensitivity and outputs its breakdown.
 	 *
 	 * It essentially strips all tags, and replaces block-type tags' endings with spaces.
 	 * When done, it performs a sanity-cleanup via `strip_tags()`.
@@ -1978,7 +1978,7 @@ class Sanitize extends Admin_Pages {
 	 *              5. The 'clear' index now has added to default `area`, `audio`, `datalist`, `del`, `dialog`, `fieldset`, `form`, `map`,
 	 *                 `menu`, `meter`, `nav`, `object`, `output`, `pre`, `progress`, `s`, `table`, and `template`.
 	 *              6. Added the 'passes' index to `$args`. This tells the maximum passes 'space' may process.
-	 *                 Read TSF option `auto_descripton_html_method` to use the user-defined method.
+	 *                 Read TSF option `auto_description_html_method` to use the user-defined method.
 	 *              7. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit
 	 *                 those from '$args' so it falls through to `strip_tags()`.
 	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.

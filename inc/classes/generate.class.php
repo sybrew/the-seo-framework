@@ -127,7 +127,7 @@ class Generate extends User_Data {
 		 *
 		 * @since 2.6.0
 		 * @since 4.0.0 Added two parameters ($args and $ignore).
-		 * @since 4.0.2 Now contains the copyright diretive values.
+		 * @since 4.0.2 Now contains the copyright directive values.
 		 * @since 4.0.3 Changed `$meta` key `max_snippet_length` to `max_snippet`
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *

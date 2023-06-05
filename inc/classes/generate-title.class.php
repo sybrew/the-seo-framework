@@ -832,7 +832,7 @@ class Generate_Title extends Generate_Description {
 			 * Filters the archive title prefix.
 			 * This is a sibling of WordPress's `get_the_archive_title_prefix`,
 			 * but then without the HTML, and runs optionally, based on site-settings,
-			 * and then with the second paramter: `$object`.
+			 * and then with the second parameter: `$object`.
 			 *
 			 * @since 4.2.0
 			 *
@@ -959,7 +959,7 @@ class Generate_Title extends Generate_Description {
 	 * Returns the generated archive title by evaluating the input Term only.
 	 *
 	 * @since 4.2.0
-	 * @see $this->get_generate_archive_title_from_query() which evalutates the query only.
+	 * @see $this->get_generate_archive_title_from_query() which evaluates the query only.
 	 *
 	 * @param \WP_Term|\WP_User $term The Term object.
 	 * @return string[$title,$prefix] The title and prefix.

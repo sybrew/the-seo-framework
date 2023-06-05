@@ -462,7 +462,7 @@ final class Sitemap {
 	 * @since 4.2.9 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool True on succes, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
 	public function lock_sitemap( $sitemap_id = '' ) {
 
@@ -493,7 +493,7 @@ final class Sitemap {
 	 * @since 4.2.9 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool True on succes, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
 	public function unlock_sitemap( $sitemap_id = '' ) {
 

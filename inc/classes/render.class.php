@@ -627,7 +627,7 @@ class Render extends Admin_Init {
 	 * @since 3.0.4 No longer uses $this->description_from_cache()
 	 * @uses $this->get_twitter_description()
 	 *
-	 * @return string The Twitter Descritpion meta tag.
+	 * @return string The Twitter Description meta tag.
 	 */
 	public function twitter_description() {
 

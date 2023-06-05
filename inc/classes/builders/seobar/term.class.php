@@ -622,7 +622,7 @@ final class Term extends Main {
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noindex'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype nor site as "blocking" if there's an overide.
+			// Don't assert posttype nor site as "blocking" if there's an override.
 			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
 
 			$item['assess']['override'] = $cache['assess']['override'];
@@ -768,7 +768,7 @@ final class Term extends Main {
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['nofollow'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype nor site as "blocking" if there's an overide.
+			// Don't assert posttype nor site as "blocking" if there's an override.
 			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
 
 			$item['assess']['override'] = $cache['assess']['override'];
@@ -885,7 +885,7 @@ final class Term extends Main {
 		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noarchive'] ) ) {
 			// Status is already set.
 
-			// Don't assert posttype nor site as "blocking" if there's an overide.
+			// Don't assert posttype nor site as "blocking" if there's an override.
 			unset( $item['assess']['site'], $item['assess']['posttypes'], $item['assess']['taxonomy'] );
 
 			$item['assess']['override'] = $cache['assess']['override'];

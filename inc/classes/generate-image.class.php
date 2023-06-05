@@ -534,7 +534,7 @@ class Generate_Image extends Generate_Url {
 	/**
 	 * Fetches image dimensions.
 	 *
-	 * @TODO shift parametes and deprecate using the third one.
+	 * @TODO shift parameters and deprecate using the third one.
 	 * @since 4.0.0
 	 * @since 4.2.4 1. No longer relies on `$url` to fetch the correct dimensions, improving performance significantly.
 	 *              2. Renamed `$url` to `$depr`, without a deprecation notice added.

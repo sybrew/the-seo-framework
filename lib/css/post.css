@@ -22,7 +22,7 @@
 	border: 1px solid #ddd;
 }
 
-/* .edit-post-sidebar is Gutenberg-only. .tsf-is-block-editor is used to override specifity  */
+/* .edit-post-sidebar is Gutenberg-only. .tsf-is-block-editor is used to override specificity  */
 .edit-post-sidebar .tsf-is-block-editor .tsf-flex-inside-wrap {
 	border: 0;
 }

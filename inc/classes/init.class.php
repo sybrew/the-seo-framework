@@ -269,7 +269,7 @@ class Init extends Query {
 		// Remove shortlink.
 		\remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 
-		// Remove adjecent rel tags.
+		// Remove adjacent rel tags.
 		\remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
 
 		// Earlier removal of the generator tag. Doesn't require filter.

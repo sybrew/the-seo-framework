@@ -321,7 +321,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 }
 
 /**
- * Generates image URLs and IDs from the WooCommerce product gallary entries.
+ * Generates image URLs and IDs from the WooCommerce product gallery entries.
  *
  * @since 4.0.0
  * @since 4.2.0 Now supports the `$args['pta']` index.

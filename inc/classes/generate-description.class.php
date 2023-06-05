@@ -916,7 +916,7 @@ class Generate_Description extends Generate {
 		 * TODO .+[\p{Pe}\p{Pf}](*THEN)\Z              still backtracks; it should just find \Z and see if one char is in front of it.
 		 *   -> [^\p{Pe}\p{Pf}]++.*?[\p{Pe}\p{Pf}]+?\Z would solve it... but I don't trust it; it's populating 4 and 5 in edge-cases.
 		 *
-		 * TODO we can futher optimize this by capturing the last 4 words and refer to that. Of thence more than 3 words
+		 * TODO we can further optimize this by capturing the last 4 words and refer to that. Of thence more than 3 words
 		 * found, we could simply end the query, mitigating all forms of backtracking. For now, backtracking cannot
 		 * exceed step-count=($max_char_length*2+56) = 160*2+56 = 376, which is perfectly acceptable as a 'worst case'.
 		 *
@@ -926,7 +926,7 @@ class Generate_Description extends Generate {
 		 *    0 : Full excerpt.
 		 *    1 : Sentence after leading punctuation (if any), but including opening punctuation, marks, and ¡¿, before first punctuation (if any).
 		 *    2 : First one character following [1], always some form of punctuation. Won't be set if [3] is set.
-		 *    3 : Following [1] until last punctuation that isn't some sort of connecting punctiation that's leading a word-boundary.
+		 *    3 : Following [1] until last punctuation that isn't some sort of connecting punctuation that's leading a word-boundary.
 		 *    4 : First three words leading [3]. Connecting punctuations that splits words are included as non-countable.
 		 *    5 : All extraneous characters leading [3] and/or [4]. If this isn't set, forgo including 4--it won't be meaningful.
 		 * }

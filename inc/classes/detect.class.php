@@ -659,7 +659,7 @@ class Detect extends Render {
 	 *
 	 * Example 2: `/page/2/?p=nonnumeric` will cause a bigger issue. What happens is that `is_home` will again be true,
 	 * but so will `is_paged`. `paged` will be set to `2` (as per example URL). The page ID will again be set to `0`,
-	 * which is completely false. The canonical URL will be malformed. Even moreso, Google can ignore the canonical URL,
+	 * which is completely false. The canonical URL will be malformed. Even more so, Google can ignore the canonical URL,
 	 * so we MUST output noindex.
 	 *
 	 * Example 3: `/page/2/?X=nonnumeric` will also cause the same issues as in example 2. Where X can be:
@@ -879,7 +879,7 @@ class Detect extends Render {
 	 * Determines if the taxonomy supports The SEO Framework.
 	 *
 	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
-	 * and wether the taxonomy is public and rewritable.
+	 * and whether the taxonomy is public and rewritable.
 	 *
 	 * @since 4.0.0
 	 *
@@ -1345,7 +1345,7 @@ class Detect extends Render {
 	 *              2. Added detection for various other types
 	 *              2. Removed wildcard `cs_` detection.
 	 * @see $this->has_unprocessed_syntax(), the caller.
-	 * @link <https://yoast.com/help/list-available-snippet-variables-yoast-seo/> (This list containts false information)
+	 * @link <https://yoast.com/help/list-available-snippet-variables-yoast-seo/> (This list contains false information)
 	 * @link <https://theseoframework.com/extensions/transport/#faq/what-data-is-transformed>
 	 *
 	 * @param string $text The text to evaluate.

@@ -153,7 +153,7 @@ class Core {
 	 * @since 2.8.0
 	 * @access private
 	 *
-	 * @param string $what The vendor/plugin/theme name for the compatibilty.
+	 * @param string $what The vendor/plugin/theme name for the compatibility.
 	 * @param string $type The compatibility type. Be it 'plugin' or 'theme'.
 	 * @return bool True on success, false on failure. Files are expected not to return any values.
 	 */
@@ -669,7 +669,7 @@ class Core {
 			+ .7152 * $get_relative_luminance( $g )
 			+ .0722 * $get_relative_luminance( $b );
 
-		// Build light greyscale using relative constrast.
+		// Build light greyscale using relative contrast.
 		// Rounding is required for bitwise operation (PHP8.1+).
 		// printf will round anyway when floats are detected. Diff in #opcodes should be minimal.
 		$gr = round( $r * .2989 / 8 * $rl );
@@ -720,7 +720,7 @@ class Core {
 	}
 
 	/**
-	 * Converts markdown text into HMTL.
+	 * Converts markdown text into HTML.
 	 * Does not support list or block elements. Only inline statements.
 	 *
 	 * @since 2.8.0

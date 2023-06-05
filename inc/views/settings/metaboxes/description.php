@@ -50,11 +50,11 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		);
 
 		/**
-		 * @since 4.2.7
+		 * @since 4.2.9
 		 * @param array $html_passes_method The HTML pass option by [ 'option_value' => 'Name' ]
 		 */
 		$html_passes_methods = (array) apply_filters(
-			'the_seo_framework_auto_descripton_html_method_methods',
+			'the_seo_framework_auto_description_html_method_methods',
 			[
 				'fast'     => __( 'Fast (max. 2 passes)', 'autodescription' ),
 				'accurate' => __( 'Accurate (max. 6 passes)', 'autodescription' ),
@@ -63,7 +63,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		);
 
 		$html_passes_select_options = '';
-		$_current                   = $this->get_option( 'auto_descripton_html_method' );
+		$_current                   = $this->get_option( 'auto_description_html_method' );
 		foreach ( $html_passes_methods as $value => $name ) {
 			$html_passes_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -80,9 +80,9 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 				'<label for="%1$s">%2$s</label>
 				<select name="%3$s" id="%1$s">%4$s</select>',
 				[
-					Input::get_field_id( 'auto_descripton_html_method' ),
+					Input::get_field_id( 'auto_description_html_method' ),
 					esc_html__( 'HTML parsing method:', 'autodescription' ),
-					Input::get_field_name( 'auto_descripton_html_method' ),
+					Input::get_field_name( 'auto_description_html_method' ),
 					$html_passes_select_options,
 				]
 			),

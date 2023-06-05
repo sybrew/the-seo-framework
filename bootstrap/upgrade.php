@@ -298,7 +298,7 @@ function _release_upgrade_lock() {
  *
  * @since 4.1.1
  *
- * @param string|int $version The actual datbase version.
+ * @param string|int $version The actual database version.
  * @return string The actual database version.
  */
 function _set_version( $version = \THE_SEO_FRAMEWORK_DB_VERSION ) {
@@ -688,7 +688,7 @@ function _do_upgrade_3001() {
 /**
  * Adds global cache option.
  * Sets `auto_description` option.
- * Migrates `title_seperator` option to `title_separator`.
+ * Migrates `title_separator` option to `title_separator`.
  * Sets `sitemap_query_limit` option.
  * Sets `title_strip_tags` option to known behavior.
  * Migrates `attachment_noindex` option to post type settings.
@@ -707,7 +707,10 @@ function _do_upgrade_3103() {
 		$tsf = \tsf();
 
 		// Transport title separator (option name typo).
-		$tsf->update_option( 'title_separator', $tsf->get_option( 'title_seperator', false ) ?: 'hyphen' );
+		$tsf->update_option(
+			'title_separator',
+			$tsf->get_option( 'title_seperator', false ) ?: 'hyphen' // Typo intended.
+		);
 
 		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
@@ -892,25 +895,32 @@ function _do_upgrade_4200() {
 }
 
 /**
- * Registers the `auto_descripton_html_method` option, string.
+ * Registers the `auto_description_html_method` option, string.
  *
  * @since 4.2.7
  */
 function _do_upgrade_4270() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' ) {
-		\tsf()->update_option( 'auto_descripton_html_method', 'fast' );
+		\tsf()->update_option( 'auto_description_html_method', 'fast' );
 	}
 }
 
 /**
  * Deletes the static cache for exclusions.
+ * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
  * TODO registers default for static placeholder editing.
- * TODO change `auto_descripton_html_method` to `auto_description_html_method`
  *
  * @since 4.2.9
  */
 function _do_upgrade_4290() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4290' ) {
+		$tsf = \tsf();
+
+		$tsf->update_option(
+			'auto_description_html_method',
+			$tsf->get_option( 'auto_descripton_html_method' ) ?: 'fast' // Typo intended
+		);
+
 		// Don't use API to clear this transient; the API may use different entropics.
 		$locale = strtolower( \get_locale() );
 		\delete_transient( "tsf_exclude_1_{$GLOBALS['blog_id']}_{$locale}" );

@@ -95,7 +95,7 @@ class Base extends Main {
 	 * @since 4.2.9 Can now generate cache on a $sitemap_id basis.
 	 * @abstract
 	 *
-	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwriten via the API.
+	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwritten via the API.
 	 * @return string The sitemap content.
 	 */
 	public function generate_sitemap( $sitemap_id = 'base' ) {
