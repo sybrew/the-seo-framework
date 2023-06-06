@@ -117,15 +117,10 @@ final class Cache {
 	 */
 	public static function _refresh_sitemap_on_post_change( $post_id ) {
 
-		if ( ! $post_id ) return false;
-
-		$success = false;
-
 		// Don't refresh sitemap on revision.
-		if ( ! \wp_is_post_revision( $post_id ) )
-			$success = Sitemap::refresh_sitemaps();
+		if ( ! $post_id || \wp_is_post_revision( $post_id ) ) return false;
 
-		return $success;
+		return Sitemap::refresh_sitemaps();
 	}
 
 	/**
