@@ -92,30 +92,34 @@ final class Args extends Factory {
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
 			if ( $args['taxonomy'] ) {
-				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
+			$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $args['taxonomy'] );
+			yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $args['taxonomy'] );
 
-				// Store values from each post type bound to the taxonomy.
-				foreach ( $tsf->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
-					$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+			// Store values from each post type bound to the taxonomy.
+			foreach ( $tsf->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type ) {
+				$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+				}
 
-				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
-				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+			// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
+			yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 			} elseif ( $args['pta'] ) {
-				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $args['pta'] );
+			yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $args['pta'] );
 			} else {
-				// $args['id'] can be empty, pointing to a plausible homepage query.
-				if ( $tsf->is_real_front_page_by_id( $args['id'] ) )
-					yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
+			// $args['id'] can be empty, pointing to a plausible homepage query.
+			if ( $tsf->is_real_front_page_by_id( $args['id'] ) ) {
+				yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
+				}
 
-				if ( $args['id'] )
-					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+			if ( $args['id'] ) {
+				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+				}
 			}
 
 		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
-			if ( ! $args['taxonomy'] )
+			if ( ! $args['taxonomy'] ) {
 				yield from static::assert_noindex_query_pass( 'protected' );
+			}
 		}
 
 		end:;

@@ -18,8 +18,9 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 	case 'schema_main':
 		HTML::header_title( __( 'Schema.org Output Settings', 'autodescription' ) );
 
-		if ( $this->has_json_ld_plugin() )
+		if ( $this->has_json_ld_plugin() ) {
 			HTML::attention_description( __( 'Another Schema.org plugin has been detected. These markup settings might conflict.', 'autodescription' ) );
+		}
 
 		HTML::description( __( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
 		HTML::description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
@@ -128,7 +129,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 					]
 				);
 				$_current       = $this->get_option( 'knowledge_type' );
-				foreach ( $knowledge_type as $value => $name )
+				foreach ( $knowledge_type as $value => $name ) {
 					vprintf(
 						'<option value="%s" %s>%s</option>',
 						[
@@ -137,6 +138,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 							esc_html( $name ),
 						]
 					);
+				}
 				?>
 			</select>
 		</p>
@@ -305,7 +307,9 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 			foreach ( $socialsites as $sc ) {
 
-				if ( ! strlen( $this->get_option( $sc['option'] ) ) ) continue;
+				if ( ! strlen( $this->get_option( $sc['option'] ) ) ) {
+					continue;
+				}
 
 				?>
 				<p>

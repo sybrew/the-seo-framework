@@ -191,7 +191,9 @@ final class Scripts {
 	 */
 	public static function footer_enqueue() {
 
-		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) {
+			return;
+		}
 
 		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}
@@ -233,7 +235,9 @@ final class Scripts {
 	public static function register( $script ) {
 		// This is 350x faster than a polyfill for `array_is_list()`.
 		if ( array_values( $script ) === $script ) {
-			foreach ( $script as $s ) static::register( $s );
+			foreach ( $script as $s ) {
+				static::register( $s );
+			}
 			return;
 		}
 
@@ -251,8 +255,9 @@ final class Scripts {
 	public static function forward_known_script( $id, $type ) {
 		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) {
 			foreach ( static::$scripts as $s ) {
-				if ( $s['id'] === $id && $s['type'] === $type )
+				if ( $s['id'] === $id && $s['type'] === $type ) {
 					static::forward_script( $s );
+				}
 			}
 		}
 	}
@@ -272,8 +277,9 @@ final class Scripts {
 
 		$status = static::get_status_of( $id, $type );
 
-		if ( ( $status & static::REGISTERED ) && ! ( $status & static::LOADED ) )
+		if ( ( $status & static::REGISTERED ) && ! ( $status & static::LOADED ) ) {
 			static::load_script( $id, $type );
+		}
 	}
 
 	/**
@@ -303,7 +309,9 @@ final class Scripts {
 	private function forward_known_scripts() {
 		// Register them first to accommodate for dependencies.
 		foreach ( static::$scripts as $s ) {
-			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
+			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) {
+				continue;
+			}
 			static::forward_script( $s );
 		}
 	}
@@ -318,7 +326,9 @@ final class Scripts {
 	private function autoload_known_scripts() {
 		foreach ( static::$scripts as $s ) {
 			if ( $s['autoload'] ) {
-				if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) continue;
+				if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) {
+					continue;
+				}
 				static::load_script( $s['id'], $s['type'] );
 			}
 		}
@@ -377,7 +387,9 @@ final class Scripts {
 	 */
 	private static function load_script( $id, $type ) {
 
-		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) return;
+		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) {
+			return;
+		}
 
 		$loaded = false;
 
@@ -461,8 +473,9 @@ final class Scripts {
 
 		$out = '';
 
-		foreach ( $scripts as $script )
+		foreach ( $scripts as $script ) {
 			$out .= ";$script";
+		}
 
 		return $out;
 	}
@@ -534,8 +547,9 @@ final class Scripts {
 	 */
 	private function register_template( $id, $templates ) {
 		// Wrap template if it's only one on the base.
-		if ( isset( $templates['file'] ) )
+		if ( isset( $templates['file'] ) ) {
 			$templates = [ $templates ];
+		}
 
 		foreach ( $templates as $t ) {
 			static::$templates[ $id ][] = [
@@ -566,8 +580,9 @@ final class Scripts {
 				// Unset template before the loop, to prevent an infinite loop.
 				unset( static::$templates[ $id ] );
 
-				foreach ( $templates as $t )
+				foreach ( $templates as $t ) {
 					$this->output_view( $t[0], $t[1] );
+				}
 			}
 		}
 	}
@@ -589,8 +604,9 @@ final class Scripts {
 	 */
 	private function output_view( $file, $args ) {
 
-		foreach ( $args as $_key => $_val )
+		foreach ( $args as $_key => $_val ) {
 			$$_key = $_val;
+		}
 		unset( $_key, $_val, $args );
 
 		// Prevents private-includes hijacking.

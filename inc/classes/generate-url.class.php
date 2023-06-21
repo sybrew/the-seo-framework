@@ -173,17 +173,20 @@ class Generate_Url extends Generate_Title {
 			// See and use `$this->get_canonical_url()` instead.
 			$url = $this->build_canonical_url( $args );
 
-			if ( $args['id'] === $this->get_the_real_ID() )
+			if ( $args['id'] === $this->get_the_real_ID() ) {
 				$url = $this->remove_pagination_from_url( $url );
+			}
 		} else {
 			$url = $this->generate_canonical_url();
 		}
 
-		if ( ! $url )
+		if ( ! $url ) {
 			return '';
+		}
 
-		if ( $this->matches_this_domain( $url ) )
+		if ( $this->matches_this_domain( $url ) ) {
 			$url = $this->set_preferred_url_scheme( $url );
+		}
 
 		return $this->clean_canonical_url( $url );
 	}
@@ -296,8 +299,9 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function clean_canonical_url( $url ) {
 
-		if ( $this->pretty_permalinks )
+		if ( $this->pretty_permalinks ) {
 			return \esc_url( $url, [ 'https', 'http' ] );
+		}
 
 		// Keep the &'s more readable when using query-parameters.
 		return \esc_url_raw( $url, [ 'https', 'http' ] );
@@ -318,7 +322,9 @@ class Generate_Url extends Generate_Title {
 
 		$url = $this->get_raw_home_canonical_url();
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		$query_id = $this->get_the_real_ID();
 
@@ -376,23 +382,29 @@ class Generate_Url extends Generate_Title {
 	public function get_singular_canonical_url( $post_id = null ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = umemo( __METHOD__, null, $post_id ) ) return $memo;
+		if ( null !== $memo = umemo( __METHOD__, null, $post_id ) ) {
+			return $memo;
+		}
 
 		$url = \wp_get_canonical_url(
 			$post_id ?? $this->get_the_real_ID()
 		);
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		$page = \get_query_var( 'page', 1 ) ?: 1;
 		// Remove undesired/fake pagination. See: <https://core.trac.wordpress.org/ticket/37505>
-		if ( $page > 1 && $page !== $this->page() )
+		if ( $page > 1 && $page !== $this->page() ) {
 			$url = $this->remove_pagination_from_url( $url, $page, false );
+		}
 
 		// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
 		// wp_get_canonical_url() only tests 'page'. Fix that:
-		if ( null === $post_id && $this->is_singular_archive() )
+		if ( null === $post_id && $this->is_singular_archive() ) {
 			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
+		}
 
 		return umemo( __METHOD__, $url, $post_id );
 	}
@@ -439,16 +451,19 @@ class Generate_Url extends Generate_Title {
 	public function get_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = umemo( __METHOD__, null, $term_id, $taxonomy ) )
+		if ( null !== $memo = umemo( __METHOD__, null, $term_id, $taxonomy ) ) {
 			return $memo;
+		}
 
 		$url = \get_term_link( $term_id ?: $this->get_the_real_ID(), $taxonomy );
 
-		if ( \is_wp_error( $url ) )
+		if ( \is_wp_error( $url ) ) {
 			return umemo( __METHOD__, '', $term_id, $taxonomy );
+		}
 
-		if ( null === $term_id )
+		if ( null === $term_id ) {
 			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
+		}
 
 		return umemo( __METHOD__, $url, $term_id, $taxonomy );
 	}
@@ -470,7 +485,9 @@ class Generate_Url extends Generate_Title {
 
 		$url = \get_post_type_archive_link( $post_type ?? $this->get_current_post_type() );
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		return null === $post_type
 			? $this->add_pagination_to_url( $url, $this->paged(), true )
@@ -492,7 +509,9 @@ class Generate_Url extends Generate_Title {
 
 		$url = \get_author_posts_url( $id ?? $this->get_the_real_ID() );
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		return null === $id
 			? $this->add_pagination_to_url( $url, $this->paged(), true )
@@ -568,7 +587,9 @@ class Generate_Url extends Generate_Title {
 
 		$url = \get_search_link( $search_query ?? \get_search_query( false ) );
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		return null === $search_query
 			? $this->add_pagination_to_url( $url, $this->paged(), true )
@@ -588,7 +609,9 @@ class Generate_Url extends Generate_Title {
 	public function get_preferred_scheme() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$scheme = $this->get_option( 'canonical_scheme' );
 
@@ -675,8 +698,9 @@ class Generate_Url extends Generate_Title {
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '/^\w+:\/\/[^\/]*/', '', $url ) );
 
-			if ( '/' === ( $url[0] ?? '' ) )
+			if ( '/' === ( $url[0] ?? '' ) ) {
 				$url = '/' . ltrim( $url, "/ \t\n\r\0\x0B" );
+			}
 		} else {
 			$url = preg_replace( '#^\w+://#', $scheme . '://', $url );
 		}
@@ -701,8 +725,9 @@ class Generate_Url extends Generate_Title {
 
 		$page = $page ?? max( $this->paged(), $this->page() );
 
-		if ( $page < 2 )
+		if ( $page < 2 ) {
 			return $url;
+		}
 
 		$use_base = $use_base ?? (
 			$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
@@ -711,8 +736,9 @@ class Generate_Url extends Generate_Title {
 		if ( $this->pretty_permalinks ) {
 			$_query = parse_url( $url, \PHP_URL_QUERY );
 			// Remove queries, add them back later.
-			if ( $_query )
+			if ( $_query ) {
 				$url = $this->s_url( $url );
+			}
 
 			static $base;
 			$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
@@ -723,8 +749,9 @@ class Generate_Url extends Generate_Title {
 				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );
 			}
 
-			if ( $_query )
+			if ( $_query ) {
 				$url = $this->append_url_query( $url, $_query );
+			}
 		} else {
 			if ( $use_base ) {
 				$url = \add_query_arg( 'paged', $page, $url );
@@ -799,8 +826,9 @@ class Generate_Url extends Generate_Title {
 
 				$_query = parse_url( $url, \PHP_URL_QUERY );
 				// Remove queries, add them back later.
-				if ( $_query )
+				if ( $_query ) {
 					$url = $this->s_url( $url );
+				}
 
 				$pos = strrpos( $url, $find );
 				// Defensive programming, only remove if $find matches the stack length, without query arguments.
@@ -809,8 +837,9 @@ class Generate_Url extends Generate_Title {
 					$url = \user_trailingslashit( $url );
 
 					// Add back the query.
-					if ( $_query )
+					if ( $_query ) {
 						$url = $this->append_url_query( $url, $_query );
+					}
 				}
 			}
 		} else {
@@ -851,8 +880,12 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_shortlink() {
 
-		if ( ! $this->get_option( 'shortlink_tag' ) ) return '';
-		if ( $this->is_real_front_page() ) return '';
+		if ( ! $this->get_option( 'shortlink_tag' ) ) {
+			return '';
+		}
+		if ( $this->is_real_front_page() ) {
+			return '';
+		}
 
 		// We slash it because plain permalinks do that too, for consistency.
 		$home = \trailingslashit( $this->get_homepage_permalink() );
@@ -885,14 +918,17 @@ class Generate_Url extends Generate_Title {
 				$tax  = $object->taxonomy ?? '';
 				$slug = $object->slug ?? '';
 
-				if ( $tax && $slug )
+				if ( $tax && $slug ) {
 					$url = \add_query_arg( [ $tax => $slug ], $home );
+				}
 			}
 		} elseif ( $this->is_search() ) {
 			$url = \add_query_arg( [ 's' => \get_search_query( false ) ], $home );
 		}
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		if ( $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
 			$paged = $this->maybe_get_paged( $this->paged(), false, true );
@@ -950,11 +986,15 @@ class Generate_Url extends Generate_Title {
 	public function get_paged_urls() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$prev = $next = '';
 
-		if ( $this->has_custom_canonical_url() ) goto end;
+		if ( $this->has_custom_canonical_url() ) {
+			goto end;
+		}
 
 		if (
 			   $this->is_singular()
@@ -965,7 +1005,9 @@ class Generate_Url extends Generate_Title {
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_posts' );
 
-			if ( ! $_run ) goto end;
+			if ( ! $_run ) {
+				goto end;
+			}
 
 			$page      = $this->page();
 			$_numpages = $this->numpages();
@@ -979,7 +1021,9 @@ class Generate_Url extends Generate_Title {
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_archives' );
 
-			if ( ! $_run ) goto end;
+			if ( ! $_run ) {
+				goto end;
+			}
 
 			$page      = $this->paged();
 			$_numpages = $this->numpages();
@@ -988,7 +1032,9 @@ class Generate_Url extends Generate_Title {
 		}
 
 		// See if-statements below.
-		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) goto end;
+		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) {
+			goto end;
+		}
 
 		$canonical_url = memo( null, 'canonical' )
 			?? memo(
@@ -997,12 +1043,14 @@ class Generate_Url extends Generate_Title {
 			);
 
 		// If this page is not the last, create a next-URL.
-		if ( $page + 1 <= $_numpages )
+		if ( $page + 1 <= $_numpages ) {
 			$next = $this->add_pagination_to_url( $canonical_url, $page + 1 );
+		}
 
 		// If this page is not the first, create a prev-URL.
-		if ( $page > 1 )
+		if ( $page > 1 ) {
 			$prev = $this->add_pagination_to_url( $canonical_url, $page - 1 );
+		}
 
 		end:;
 
@@ -1023,7 +1071,9 @@ class Generate_Url extends Generate_Title {
 	public function get_home_host() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$parsed_url = parse_url(
 			$this->get_home_url()
@@ -1031,8 +1081,9 @@ class Generate_Url extends Generate_Title {
 
 		$host = $parsed_url['host'] ?? '';
 
-		if ( $host && isset( $parsed_url['port'] ) )
+		if ( $host && isset( $parsed_url['port'] ) ) {
 			$host .= ":{$parsed_url['port']}";
+		}
 
 		return memo( $host );
 	}
@@ -1051,11 +1102,13 @@ class Generate_Url extends Generate_Title {
 	protected function maybe_get_paged( $paged = 0, $singular = false, $plural = true ) {
 
 		if ( $paged ) {
-			if ( $singular )
+			if ( $singular ) {
 				return $paged;
+			}
 
-			if ( $plural && $paged >= 2 )
+			if ( $plural && $paged >= 2 ) {
 				return $paged;
+			}
 		}
 
 		return false;
@@ -1115,21 +1168,25 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function append_url_query( $url, $query = '' ) {
 
-		if ( ! $query )
+		if ( ! $query ) {
 			return $url;
+		}
 
 		$_fragment = parse_url( $url, \PHP_URL_FRAGMENT );
 
-		if ( $_fragment )
+		if ( $_fragment ) {
 			$url = str_replace( "#$_fragment", '', $url );
+		}
 
 		parse_str( $query, $results );
 
-		if ( $results )
+		if ( $results ) {
 			$url = \add_query_arg( $results, $url );
+		}
 
-		if ( $_fragment )
+		if ( $_fragment ) {
 			$url .= "#$_fragment";
+		}
 
 		return $url;
 	}
@@ -1145,8 +1202,9 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function matches_this_domain( $url ) {
 
-		if ( ! $url )
+		if ( ! $url ) {
 			return false;
+		}
 
 		$home_domain = memo() ?? memo(
 			$this->set_url_scheme( \esc_url_raw(
@@ -1156,8 +1214,9 @@ class Generate_Url extends Generate_Title {
 		);
 
 		// Test for likely match early, before transforming.
-		if ( 0 === stripos( $url, $home_domain ) )
+		if ( 0 === stripos( $url, $home_domain ) ) {
 			return true;
+		}
 
 		$url = $this->set_url_scheme( \esc_url_raw(
 			$url,

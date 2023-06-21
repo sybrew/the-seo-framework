@@ -17,8 +17,9 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 		do_meta_boxes( $this->seo_settings_page_hook, 'main', null );
 
-		if ( isset( $GLOBALS['wp_meta_boxes'][ $this->seo_settings_page_hook ]['main_extra'] ) )
+		if ( isset( $GLOBALS['wp_meta_boxes'][ $this->seo_settings_page_hook ]['main_extra'] ) ) {
 			do_meta_boxes( $this->seo_settings_page_hook, 'main_extra', null );
+		}
 
 		do_action( 'the_seo_framework_after_siteadmin_metaboxes', $this->seo_settings_page_hook );
 		?>

@@ -46,8 +46,9 @@ foreach ( $tabs as $tab => $params ) :
 			<?php
 		endif;
 
-		if ( ! empty( $params['callback'] ) )
+		if ( ! empty( $params['callback'] ) ) {
 			call_user_func_array( $params['callback'], [ ( $params['args'] ?? [] ) ] );
+		}
 
 		/**
 		 * @since 4.2.0

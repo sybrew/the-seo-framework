@@ -27,6 +27,9 @@
 		</properties>
 	</rule>
 
+	<rule ref="Generic.ControlStructures.InlineControlStructure"/>
+	<rule ref="Squiz.ControlStructures.ControlSignature"/>
+
 	<!-- Exclude minified scripts. -->
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>*.min.css</exclude-pattern>

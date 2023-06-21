@@ -36,7 +36,9 @@ namespace The_SEO_Framework;
  */
 function _bbpress_filter_title( $title, $args ) {
 
-	if ( null !== $args || ! \is_bbpress() ) return $title;
+	if ( null !== $args || ! \is_bbpress() ) {
+		return $title;
+	}
 
 	// phpcs:disable, Squiz.Commenting.BlockComment, Generic.WhiteSpace.ScopeIndent, WordPress.WP.I18n, Generic.Formatting.MultipleStatementAlignment -- Not my code.
 
@@ -407,8 +409,9 @@ function _bbpress_filter_robots( $meta, $args, $options ) {
 		}
 	}
 
-	if ( ! empty( $forum_id ) && ! \bbp_is_forum_public( $forum_id ) )
+	if ( ! empty( $forum_id ) && ! \bbp_is_forum_public( $forum_id ) ) {
 		$meta['noindex'] = 'noindex';
+	}
 
 	return $meta;
 }
@@ -424,12 +427,16 @@ function _bbpress_filter_robots( $meta, $args, $options ) {
  */
 function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
 
-	if ( $interpreter::$query['taxonomy'] ) return;
+	if ( $interpreter::$query['taxonomy'] ) {
+		return;
+	}
 
 	$items = $interpreter::collect_seo_bar_items();
 
 	// Don't do anything if there's a blocking redirect.
-	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
+	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) {
+		return;
+	}
 
 	switch ( $interpreter::$query['post_type'] ) {
 		case \bbp_get_forum_post_type():
@@ -441,7 +448,9 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
 			break;
 	}
 
-	if ( empty( $forum_id ) || \bbp_is_forum_public( $forum_id ) ) return;
+	if ( empty( $forum_id ) || \bbp_is_forum_public( $forum_id ) ) {
+		return;
+	}
 
 	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status'] =

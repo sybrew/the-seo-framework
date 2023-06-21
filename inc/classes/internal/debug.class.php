@@ -67,11 +67,13 @@ final class Debug {
 	 */
 	public static function _set_instance( $debug = null ) {
 
-		if ( \is_null( static::$instance ) )
+		if ( \is_null( static::$instance ) ) {
 			static::$instance = new static();
+		}
 
-		if ( isset( $debug ) )
+		if ( isset( $debug ) ) {
 			static::$instance->the_seo_framework_debug = (bool) $debug;
+		}
 	}
 
 	/**
@@ -83,8 +85,9 @@ final class Debug {
 	 */
 	public static function get_instance() {
 
-		if ( \is_null( static::$instance ) )
+		if ( \is_null( static::$instance ) ) {
 			static::_set_instance();
+		}
 
 		return static::$instance;
 	}
@@ -279,7 +282,9 @@ final class Debug {
 
 		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
 
-		if ( ! $backtrace ) return [];
+		if ( ! $backtrace ) {
+			return [];
+		}
 
 		if ( $type & \E_USER_DEPRECATED ) {
 			/**
@@ -399,11 +404,13 @@ final class Debug {
 
 		$tsf = \tsf();
 
-		if ( \is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) )
+		if ( \is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) ) {
 			return;
+		}
 
-		if ( $tsf->is_seo_settings_page( true ) )
+		if ( $tsf->is_seo_settings_page( true ) ) {
 			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_ID' ] );
+		}
 
 		// Start timer.
 		$t = microtime( true );

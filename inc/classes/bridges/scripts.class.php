@@ -92,11 +92,13 @@ final class Scripts {
 			$scripts[] = static::get_primaryterm_scripts();
 			$scripts[] = static::get_ays_scripts();
 
-			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) ) {
 				$scripts[] = static::get_counter_scripts();
+			}
 
-			if ( $tsf->is_gutenberg_page() )
+			if ( $tsf->is_gutenberg_page() ) {
 				$scripts[] = static::get_gutenberg_compat_scripts();
+			}
 		} elseif ( $tsf->is_term_edit() ) {
 			static::prepare_media_scripts();
 
@@ -107,15 +109,17 @@ final class Scripts {
 			$scripts[] = static::get_social_scripts();
 			$scripts[] = static::get_ays_scripts();
 
-			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) ) {
 				$scripts[] = static::get_counter_scripts();
+			}
 		} elseif ( $tsf->is_wp_lists_edit() ) {
 			$scripts[] = static::get_list_edit_scripts();
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 
-			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) ) {
 				$scripts[] = static::get_counter_scripts();
+			}
 		} elseif ( $tsf->is_seo_settings_page() ) {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();
@@ -177,11 +181,13 @@ final class Scripts {
 	 */
 	public static function decode_all_entities( $values ) {
 
-		if ( is_scalar( $values ) )
+		if ( is_scalar( $values ) ) {
 			return static::decode_entities( $values );
+		}
 
-		foreach ( $values as &$v )
+		foreach ( $values as &$v ) {
 			$v = static::decode_entities( $v );
+		}
 
 		return $values;
 	}
@@ -196,8 +202,9 @@ final class Scripts {
 		$tsf  = \tsf();
 		$args = [];
 
-		if ( $tsf->is_post_edit() )
+		if ( $tsf->is_post_edit() ) {
 			$args['post'] = $tsf->get_the_real_admin_ID();
+		}
 
 		\wp_enqueue_media( $args );
 	}
@@ -737,7 +744,9 @@ final class Scripts {
 		$gutenberg = $tsf->is_gutenberg_page();
 
 		foreach ( $_taxonomies as $_t ) {
-			if ( ! $tsf->is_taxonomy_supported( $_t->name ) ) continue;
+			if ( ! $tsf->is_taxonomy_supported( $_t->name ) ) {
+				continue;
+			}
 
 			$singular_name   = $tsf->get_tax_type_label( $_t->name );
 			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name ) ?: 0;

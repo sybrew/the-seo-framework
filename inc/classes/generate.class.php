@@ -50,7 +50,9 @@ class Generate extends User_Data {
 	 */
 	protected function fix_generation_args( &$args ) {
 
-		if ( null === $args ) return;
+		if ( null === $args ) {
+			return;
+		}
 
 		if ( \is_array( $args ) ) {
 			$args += [
@@ -114,13 +116,17 @@ class Generate extends User_Data {
 		foreach (
 			array_intersect_key( $meta, array_flip( [ 'noindex', 'nofollow', 'noarchive' ] ) )
 			as $k => $v
-		) $v and $meta[ $k ] = $k;
+		) {
+			$v and $meta[ $k ] = $k;
+		}
 
 		// Convert the [ 'max_snippet' => x ] to [ 'max-snippet' => 'max-snippet:x' ]
 		foreach (
 			array_intersect_key( $meta, array_flip( [ 'max_snippet', 'max_image_preview', 'max_video_preview' ] ) )
 			as $k => $v
-		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
+		) {
+			false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
+		}
 
 		/**
 		 * Filters the front-end robots array, and strips empty indexes thereafter.
@@ -282,8 +288,9 @@ class Generate extends User_Data {
 	 */
 	public function fetch_locale( $match = '' ) {
 
-		if ( ! $match )
+		if ( ! $match ) {
 			$match = \get_locale();
+		}
 
 		$match_len     = \strlen( $match );
 		$valid_locales = $this->supported_social_locales(); // [ ll_LL => ll ]
@@ -296,8 +303,9 @@ class Generate extends User_Data {
 
 		if ( 5 === $match_len ) {
 			// Full locale is used. See if it's valid and return it.
-			if ( isset( $valid_locales[ $match ] ) )
+			if ( isset( $valid_locales[ $match ] ) ) {
 				return $match;
+			}
 
 			// Convert to only language portion.
 			$match_len = 2;
@@ -308,8 +316,9 @@ class Generate extends User_Data {
 			// Only two letters of the lang are provided. Find first match and return it.
 			$key = array_search( $match, $valid_locales, true );
 
-			if ( $key )
+			if ( $key ) {
 				return $key;
+			}
 		}
 
 		// Return default WordPress locale.
@@ -375,7 +384,9 @@ class Generate extends User_Data {
 	public function get_modified_time() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$id                = $this->get_the_real_ID();
 		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
@@ -414,7 +425,9 @@ class Generate extends User_Data {
 
 		$available_cards = $this->get_available_twitter_cards();
 
-		if ( ! $available_cards ) return '';
+		if ( ! $available_cards ) {
+			return '';
+		}
 
 		$option = $this->get_option( 'twitter_card' );
 

@@ -259,8 +259,9 @@ final class Page extends Main {
 		if ( static::$tsf->use_title_protection( $_generator_args ) ) {
 			$_title_before = $title;
 			static::$tsf->merge_title_protection( $title, $_generator_args );
-			if ( $title !== $_title_before )
+			if ( $title !== $_title_before ) {
 				$item['assess']['protected'] = $cache['assess']['protected'];
+			}
 		}
 
 		if ( static::$tsf->use_title_branding( $_generator_args ) ) {
@@ -1003,8 +1004,9 @@ final class Page extends Main {
 				]
 			);
 
-			if ( $this->query_cache['states']['isdraft'] )
+			if ( $this->query_cache['states']['isdraft'] ) {
 				$default['assess']['redirect'] = \__( 'Visitors and crawlers may view this page once published.', 'autodescription' );
+			}
 
 			return $default;
 		} else {

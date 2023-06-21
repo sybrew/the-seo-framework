@@ -175,13 +175,17 @@ final class Images {
 		if ( $matches ) {
 			for ( $i = 0; $i < static::MAX_CONTENT_IMAGES; $i++ ) {
 				// Fewer than MAX_CONTENT_IMAGES matched.
-				if ( ! isset( $matches[ $i ][2] ) ) break;
+				if ( ! isset( $matches[ $i ][2] ) ) {
+					break;
+				}
 
 				// Assume every URL to be correct? Yes. WordPress assumes that too.
 				$url = $matches[ $i ][2];
 
 				// false-esque matches, like '0', are so uncommon it's not worth dealing with them.
-				if ( ! $url ) continue;
+				if ( ! $url ) {
+					continue;
+				}
 
 				yield [
 					'url' => $url,

@@ -26,7 +26,9 @@ namespace The_SEO_Framework\Bootstrap;
 
 $tsf = \tsf();
 
-if ( ! $tsf->loaded ) return;
+if ( ! $tsf->loaded ) {
+	return;
+}
 
 $tsf->reset_check_plugin_conflicts();
 
@@ -41,10 +43,12 @@ turn_on_autoloading: {
 
 	$temp_options = $options;
 	// Write a small difference, so the change will be forwarded to the database.
-	if ( \is_array( $temp_options ) )
+	if ( \is_array( $temp_options ) ) {
 		$temp_options['update_buster'] = (int) time();
+	}
 
 	$_success = \update_option( $setting, $temp_options, 'yes' );
-	if ( $_success )
+	if ( $_success ) {
 		\update_option( $setting, $options, 'yes' );
+	}
 }

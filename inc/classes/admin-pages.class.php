@@ -50,12 +50,15 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function add_menu_link() {
 
-		if ( has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) {
+			return;
+		}
 
 		$issue_count = $this->get_admin_issue_count();
 
-		if ( $issue_count )
+		if ( $issue_count ) {
 			$issue_badge = $this->get_admin_menu_issue_badge( $issue_count );
+		}
 
 		/**
 		 * @since 4.2.8
@@ -112,7 +115,9 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function get_admin_issue_count() {
 
-		if ( $this->is_headless['settings'] ) return 0;
+		if ( $this->is_headless['settings'] ) {
+			return 0;
+		}
 
 		/**
 		 * @since 4.2.8
@@ -182,7 +187,9 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_post_edit_view( $post_type, $post ) {
 
-		if ( ! $this->is_post_edit() || ! $this->is_post_type_supported( $post_type ) ) return;
+		if ( ! $this->is_post_edit() || ! $this->is_post_type_supported( $post_type ) ) {
+			return;
+		}
 
 		/**
 		 * @since 2.0.0
@@ -190,11 +197,12 @@ class Admin_Pages extends Generate_Ldjson {
 		 */
 		$show_seobox = (bool) \apply_filters( 'the_seo_framework_seobox_output', true );
 
-		if ( $show_seobox )
+		if ( $show_seobox ) {
 			\add_action(
 				'add_meta_boxes',
 				[ Bridges\PostSettings::class, '_prepare_meta_box' ]
 			);
+		}
 	}
 
 	/**
@@ -204,11 +212,15 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_term_edit_view() {
 
-		if ( ! $this->is_term_edit() ) return;
+		if ( ! $this->is_term_edit() ) {
+			return;
+		}
 
 		$taxonomy = $this->get_current_taxonomy();
 
-		if ( ! $this->is_taxonomy_supported( $taxonomy ) ) return;
+		if ( ! $this->is_taxonomy_supported( $taxonomy ) ) {
+			return;
+		}
 
 		/**
 		 * @since 2.6.0
@@ -233,7 +245,9 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_user_edit_view() {
 
-		if ( ! $this->is_profile_edit() ) return;
+		if ( ! $this->is_profile_edit() ) {
+			return;
+		}
 
 		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
 		// if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
@@ -253,7 +267,9 @@ class Admin_Pages extends Generate_Ldjson {
 
 		$notice = $this->get_static_cache( 'settings_notice' );
 
-		if ( ! $notice ) return;
+		if ( ! $notice ) {
+			return;
+		}
 
 		$message = '';
 		$type    = '';
@@ -425,7 +441,9 @@ class Admin_Pages extends Generate_Ldjson {
 				|| ( $cond['user'] && $cond['user'] !== $this->get_user_id() )
 				|| ( $cond['screens'] && ! \in_array( $screenbase, $cond['screens'], true ) )
 				|| ( $cond['excl_screens'] && \in_array( $screenbase, $cond['excl_screens'], true ) )
-			) continue;
+			) {
+				continue;
+			}
 
 			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
 				$this->clear_persistent_notice( $key );

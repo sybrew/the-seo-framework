@@ -26,7 +26,9 @@ namespace The_SEO_Framework\Bootstrap;
 
 $tsf = \tsf();
 
-if ( ! $tsf->loaded ) return;
+if ( ! $tsf->loaded ) {
+	return;
+}
 
 turn_off_autoloading: {
 	$options = $tsf->get_all_options();
@@ -38,10 +40,12 @@ turn_off_autoloading: {
 
 	$temp_options = $options;
 	// Write a small difference, so the change will be forwarded to the database.
-	if ( \is_array( $temp_options ) )
+	if ( \is_array( $temp_options ) ) {
 		$temp_options['update_buster'] = (int) time();
+	}
 
 	$_success = \update_option( $setting, $temp_options, 'no' );
-	if ( $_success )
+	if ( $_success ) {
 		\update_option( $setting, $options, 'no' );
+	}
 }

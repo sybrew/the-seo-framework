@@ -63,8 +63,9 @@ function _init_tsf() {
 	// Memoize the class. Do not run constructors more than once.
 	static $tsf = null;
 
-	if ( $tsf )
+	if ( $tsf ) {
 		return $tsf;
+	}
 
 	/**
 	 * @since 2.3.7
@@ -96,8 +97,9 @@ function _init_tsf() {
 	}
 
 	// did_action() checks for current action too.
-	if ( ! \did_action( 'plugins_loaded' ) )
+	if ( ! \did_action( 'plugins_loaded' ) ) {
 		$tsf->_doing_it_wrong( 'tsf(), the_seo_framework(), or ' . __FUNCTION__, 'Use <code>tsf()</code> after action <code>plugins_loaded</code> priority 5.', '3.1' );
+	}
 
 	return $tsf;
 }
@@ -128,7 +130,9 @@ function _autoload_classes( $class ) {
 	$class = strtolower( $class );
 
 	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't gotten any friends.
-	if ( 0 !== strpos( $class, 'the_seo_framework\\', 0 ) ) return;
+	if ( 0 !== strpos( $class, 'the_seo_framework\\', 0 ) ) {
+		return;
+	}
 
 	static $_timenow = true;
 	// Lock $_timenow to prevent stacking timers during class extending. This is released when the class stack loaded.

@@ -83,8 +83,9 @@ class Generate_Image extends Generate_Url {
 		if ( $single ) {
 			$details = $this->get_custom_field_image_details( $args, $single, false );
 
-			if ( empty( $details[0]['url'] ) )
+			if ( empty( $details[0]['url'] ) ) {
 				$details = $this->get_generated_image_details( $args, $single, $context, false );
+			}
 		} else {
 			$details = array_merge(
 				$this->get_custom_field_image_details( $args, $single, false ),
@@ -483,7 +484,9 @@ class Generate_Image extends Generate_Url {
 			foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
 				if ( $details['url'] && $this->s_url_query( $details['url'] ) ) {
 					$items[ $i ] = $this->merge_extra_image_details( $details, $size );
-					if ( $single ) break 2;
+					if ( $single ) {
+						break 2;
+					}
 					$i++;
 				}
 			}
@@ -619,8 +622,9 @@ class Generate_Image extends Generate_Url {
 		$size = '';
 
 		foreach ( $sizes as $_s => $_d ) {
-			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize )
+			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize ) {
 				continue;
+			}
 
 			if ( isset( $_d['width'], $_d['height'] ) ) {
 				if ( $_d['width'] <= $max_size && $_d['height'] <= $max_size && $_d['width'] > $law ) {

@@ -120,7 +120,9 @@ final class Load extends Site_Options {
 			[ true ],
 			'4.1.4 of The SEO Framework',
 			'constant THE_SEO_FRAMEWORK_HEADLESS'
-		) ) \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) or \define( 'THE_SEO_FRAMEWORK_HEADLESS', true );
+		) ) {
+			\defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) or \define( 'THE_SEO_FRAMEWORK_HEADLESS', true );
+		}
 
 		// A headless boi is a good boi. Far less annoying, they are.
 		if ( \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) ) {
@@ -146,11 +148,13 @@ final class Load extends Site_Options {
 	public function init_debug_vars() {
 
 		$this->the_seo_framework_debug = \defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && \THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
-		if ( $this->the_seo_framework_debug )
+		if ( $this->the_seo_framework_debug ) {
 			Internal\Debug::_set_instance( $this->the_seo_framework_debug );
+		}
 
-		if ( \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && \THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS )
+		if ( \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && \THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS ) {
 			\The_SEO_Framework\Bridges\Cache::$use_transients = false;
+		}
 
 		// WP Core definition.
 		$this->script_debug = \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG ?: $this->script_debug;

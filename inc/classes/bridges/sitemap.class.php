@@ -122,7 +122,9 @@ final class Sitemap {
 		}
 
 		// Probably home page.
-		if ( '/' === $raw_uri ) return;
+		if ( '/' === $raw_uri ) {
+			return;
+		}
 
 		// The path+query where sitemaps are served.
 		$path_info = static::get_sitemap_base_path_info();
@@ -131,12 +133,16 @@ final class Sitemap {
 		$path_regex = '/^' . preg_quote( rawurldecode( $path_info['path'] ), '/' ) . '/ui';
 
 		// See if the base matches the endpoint. This is crucial for query-based endpoints.
-		if ( ! preg_match( $path_regex, $raw_uri ) ) return;
+		if ( ! preg_match( $path_regex, $raw_uri ) ) {
+			return;
+		}
 
 		$stripped_uri = preg_replace( $path_regex, '', rtrim( $raw_uri, '/' ) );
 
 		// Strip the base URI. If nothing's left, stop assessing.
-		if ( ! $stripped_uri ) return;
+		if ( ! $stripped_uri ) {
+			return;
+		}
 
 		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
 		if ( $path_info['use_query_var'] ) {
@@ -157,7 +163,9 @@ final class Sitemap {
 			}
 		}
 
-		if ( ! $this->sitemap_id ) return;
+		if ( ! $this->sitemap_id ) {
+			return;
+		}
 
 		static::$tsf->is_sitemap( true );
 		\add_action( 'pre_get_posts', [ static::class, '_override_query_parameters' ] );
@@ -212,7 +220,9 @@ final class Sitemap {
 
 		$list = $this->get_sitemap_endpoint_list();
 
-		if ( ! isset( $list[ $id ] ) ) return false;
+		if ( ! isset( $list[ $id ] ) ) {
+			return false;
+		}
 
 		$host      = static::$tsf->set_preferred_url_scheme( static::$tsf->get_home_host() );
 		$path_info = static::get_sitemap_base_path_info();
@@ -313,7 +323,9 @@ final class Sitemap {
 	 */
 	public static function refresh_sitemaps() {
 
-		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return false;
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) {
+			return false;
+		}
 
 		Cache::clear_sitemap_transients();
 
@@ -359,7 +371,9 @@ final class Sitemap {
 		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
 		$ep_list    = $this->get_sitemap_endpoint_list();
 
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
+		if ( ! isset( $ep_list[ $sitemap_id ] ) ) {
+			return false;
+		}
 
 		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
 
@@ -381,7 +395,9 @@ final class Sitemap {
 
 		$transient_key = $this->get_transient_key( $sitemap_id );
 
-		if ( ! $transient_key ) return false;
+		if ( ! $transient_key ) {
+			return false;
+		}
 
 		return Cache::set_transient( $transient_key, $content, $expiration );
 	}
@@ -399,7 +415,9 @@ final class Sitemap {
 
 		$transient_key = $this->get_transient_key( $sitemap_id );
 
-		if ( ! $transient_key ) return false;
+		if ( ! $transient_key ) {
+			return false;
+		}
 
 		return Cache::get_transient( $transient_key );
 	}
@@ -418,7 +436,9 @@ final class Sitemap {
 		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
 		$ep_list    = $this->get_sitemap_endpoint_list();
 
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
+		if ( ! isset( $ep_list[ $sitemap_id ] ) ) {
+			return false;
+		}
 
 		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
 
@@ -468,7 +488,9 @@ final class Sitemap {
 
 		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
 
-		if ( ! $lock_key ) return false;
+		if ( ! $lock_key ) {
+			return false;
+		}
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 
@@ -758,7 +780,9 @@ final class Sitemap {
 	 */
 	private static function clean_up_globals( $get_freed_memory = false ) {
 
-		if ( $get_freed_memory ) return memo() ?? 0;
+		if ( $get_freed_memory ) {
+			return memo() ?? 0;
+		}
 
 		$memory = memory_get_usage();
 
@@ -782,8 +806,9 @@ final class Sitemap {
 
 		foreach ( $remove as $key => $value ) {
 			if ( \is_array( $value ) ) {
-				foreach ( $value as $v )
+				foreach ( $value as $v ) {
 					unset( $GLOBALS[ $key ][ $v ] );
+				}
 			} else {
 				unset( $GLOBALS[ $value ] );
 			}

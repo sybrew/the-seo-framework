@@ -64,8 +64,9 @@ final class Markdown {
 		$text = trim( $text );
 
 		// You need at least 3 chars to make a markdown: *m*
-		if ( \strlen( $text ) < 3 )
+		if ( \strlen( $text ) < 3 ) {
 			return '';
+		}
 
 		// Merge defaults with $args.
 		$args = array_merge( [ 'a_internal' => false ], $args );
@@ -88,8 +89,9 @@ final class Markdown {
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
-		if ( isset( $md_types['*'], $md_types['**'] ) )
+		if ( isset( $md_types['*'], $md_types['**'] ) ) {
 			$text = static::strong_em( $text );
+		}
 
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :

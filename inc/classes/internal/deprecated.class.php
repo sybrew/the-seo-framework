@@ -299,8 +299,9 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->can_do_sitemap_robots()', '4.2.0' );
 
 		if ( $check_option ) {
-			if ( ! $tsf->get_option( 'sitemaps_output' ) || ! $tsf->get_option( 'sitemaps_robots' ) )
+			if ( ! $tsf->get_option( 'sitemaps_output' ) || ! $tsf->get_option( 'sitemaps_robots' ) ) {
 				return false;
+			}
 		}
 
 		return ! $tsf->has_robots_txt() && \strlen( $tsf->get_robots_txt_url() );
@@ -588,8 +589,9 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->is_wc_product()', '4.2.0', 'tsf()->is_product()' );
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $tsf->is_wc_product_admin();
+		}
 
 		if ( $post ) {
 			$is_product = 'product' === \get_post_type( $post );
@@ -640,14 +642,17 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->update_user_option()', '4.2.0', 'tsf()->update_single_user_meta_item()' );
 
-		if ( ! $option )
+		if ( ! $option ) {
 			return false;
+		}
 
-		if ( empty( $user_id ) )
+		if ( empty( $user_id ) ) {
 			$user_id = $tsf->get_user_id();
+		}
 
-		if ( empty( $user_id ) )
+		if ( empty( $user_id ) ) {
 			return false;
+		}
 
 		$meta = $tsf->get_user_meta( $user_id, false );
 
@@ -1131,8 +1136,9 @@ final class Deprecated {
 		 * Does consider 4.xx, which will become 4.xx.0.
 		 * Does not consider 4.xx-dev, which will become 4.xx-dev.0. Oh well.
 		 */
-		if ( 1 === substr_count( $wp_version, '.' ) )
+		if ( 1 === substr_count( $wp_version, '.' ) ) {
 			$wp_version .= '.0';
+		}
 
 		return (bool) version_compare( $wp_version, $version, $compare );
 	}
@@ -1189,7 +1195,9 @@ final class Deprecated {
 
 		static $detected = null;
 
-		if ( isset( $detected ) ) return $detected;
+		if ( isset( $detected ) ) {
+			return $detected;
+		}
 
 		/**
 		 * @since 4.0.6
@@ -1251,14 +1259,17 @@ final class Deprecated {
 		 */
 		$detected = \apply_filters( 'the_seo_framework_detect_page_builder', null, $post_id, $meta );
 
-		if ( \is_bool( $detected ) )
+		if ( \is_bool( $detected ) ) {
 			return $detected;
+		}
 
-		if ( ! $tsf->detect_page_builder() )
+		if ( ! $tsf->detect_page_builder() ) {
 			return false;
+		}
 
-		if ( empty( $meta ) )
+		if ( empty( $meta ) ) {
 			return false;
+		}
 
 		if ( isset( $meta['_elementor_edit_mode'][0] ) && '' !== $meta['_elementor_edit_mode'][0] && \defined( 'ELEMENTOR_VERSION' ) ) :
 			// Elementor by Elementor LTD
@@ -1338,8 +1349,9 @@ final class Deprecated {
 
 		$tzstring = \get_option( 'timezone_string' );
 
-		if ( false !== strpos( $tzstring, 'Etc/GMT' ) )
+		if ( false !== strpos( $tzstring, 'Etc/GMT' ) ) {
 			$tzstring = '';
+		}
 
 		if ( $guess && empty( $tzstring ) ) {
 			$tzstring = timezone_name_from_abbr( '', round( \get_option( 'gmt_offset' ) * \HOUR_IN_SECONDS ), 1 );
@@ -1386,8 +1398,9 @@ final class Deprecated {
 			return date_default_timezone_set( $_revert_tz );
 		}
 
-		if ( empty( $tzstring ) )
+		if ( empty( $tzstring ) ) {
 			$tzstring = $tsf->get_timezone_string( true ) ?: $old_tz;
+		}
 
 		// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		return date_default_timezone_set( $tzstring );
@@ -1426,8 +1439,9 @@ final class Deprecated {
 
 		static $cache;
 
-		if ( isset( $cache ) )
+		if ( isset( $cache ) ) {
 			return $cache;
+		}
 
 		if ( $tsf->is_term_meta_capable() ) {
 			$cache = $tsf->get_term_meta( $tsf->get_the_real_ID() ) ?: [];
@@ -1455,8 +1469,9 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->is_blog_page()', '4.2.0', 'tsf()->is_home_as_page()' );
 
 		// When the blog page is the front page, treat it as front instead of blog.
-		if ( ! $tsf->has_page_on_front() )
+		if ( ! $tsf->has_page_on_front() ) {
 			return false;
+		}
 
 		$id = $id ?: $tsf->get_the_real_ID();
 
@@ -1485,7 +1500,9 @@ final class Deprecated {
 		\tsf()->_deprecated_function( 'tsf()->is_blog_page()', '4.2.0', 'tsf()->is_home()' );
 
 		// ID 0 cannot be a blog page.
-		if ( ! $id ) return false;
+		if ( ! $id ) {
+			return false;
+		}
 
 		return (int) \get_option( 'page_for_posts' ) === $id;
 	}
@@ -1624,10 +1641,13 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_default_settings()', '4.2.0', 'tsf()->get_default_option()' );
 
-		if ( ! $key ) return false;
+		if ( ! $key ) {
+			return false;
+		}
 
-		if ( $depr )
+		if ( $depr ) {
 			$tsf->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
+		}
 
 		if ( ! $use_cache ) {
 			$defaults = $tsf->get_default_site_options();
@@ -1661,19 +1681,23 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_warned_settings()', '4.2.0', 'tsf()->get_warned_option()' );
 
-		if ( empty( $key ) )
+		if ( empty( $key ) ) {
 			return false;
+		}
 
-		if ( $depr )
+		if ( $depr ) {
 			$tsf->_doing_it_wrong( __METHOD__, 'The second parameter is deprecated.', '3.1.0' );
+		}
 
-		if ( ! $use_cache )
+		if ( ! $use_cache ) {
 			return $tsf->s_one_zero( ! empty( $tsf->get_warned_site_options()[ $key ] ) );
+		}
 
 		static $cache;
 
-		if ( ! isset( $cache ) )
+		if ( ! isset( $cache ) ) {
 			$cache = $tsf->get_warned_site_options();
+		}
 
 		return $tsf->s_one_zero( ! empty( $cache[ $key ] ) );
 	}
@@ -1746,8 +1770,9 @@ final class Deprecated {
 	 */
 	public function get_transient( $transient ) {
 
-		if ( \The_SEO_Framework\Bridges\Cache::$use_transients )
+		if ( \The_SEO_Framework\Bridges\Cache::$use_transients ) {
 			return \get_transient( $transient );
+		}
 
 		return false;
 	}

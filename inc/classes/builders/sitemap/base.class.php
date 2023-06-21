@@ -65,17 +65,24 @@ class Base extends Main {
 
 		$bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 
-		if ( ! $bridge->sitemap_cache_enabled() ) return;
+		if ( ! $bridge->sitemap_cache_enabled() ) {
+			return;
+		}
 
 		// Don't prerender if the sitemap is already generated.
-		if ( false !== $bridge->get_cached_sitemap( $sitemap_id ) ) return;
+		if ( false !== $bridge->get_cached_sitemap( $sitemap_id ) ) {
+			return;
+		}
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
-		if ( 0 !== $ini_max_execution_time )
+		if ( 0 !== $ini_max_execution_time ) {
 			set_time_limit( max( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS ) );
+		}
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
-		if ( ! $bridge->lock_sitemap( $sitemap_id ) ) return;
+		if ( ! $bridge->lock_sitemap( $sitemap_id ) ) {
+			return;
+		}
 
 		$this->prepare_generation();
 		$this->base_is_prerendering = true;
@@ -166,7 +173,7 @@ class Base extends Main {
 		 */
 		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
-		if ( $timestamp )
+		if ( $timestamp ) {
 			$content .= sprintf(
 				'<!-- %s -->',
 				sprintf(
@@ -178,6 +185,7 @@ class Base extends Main {
 					\current_time( 'Y-m-d H:i:s \G\M\T' )
 				)
 			) . "\n";
+		}
 
 		foreach ( $this->generate_front_and_blog_url_items(
 			compact( 'show_modified' ),
@@ -298,7 +306,9 @@ class Base extends Main {
 		$total_items = \count( $_items );
 
 		// 49998 = 50000-2 (home+blog), max sitemap items.
-		if ( $total_items > 49998 ) array_splice( $_items, 49998 );
+		if ( $total_items > 49998 ) {
+			array_splice( $_items, 49998 );
+		}
 		// We could also calculate the sitemap length (may not be above 10 MB)...
 		// ...but that'd mean each entry must be at least 200 chars long on avg. Good luck with that.
 
@@ -343,8 +353,9 @@ class Base extends Main {
 			]
 		);
 
-		if ( $extend )
+		if ( $extend ) {
 			$content .= "\t$extend\n";
+		}
 
 		return $content;
 	}
@@ -483,8 +494,9 @@ class Base extends Main {
 					'loc' => static::$tsf->get_canonical_url( [ 'id' => $post_id ] ),
 				];
 
-				if ( $args['show_modified'] )
+				if ( $args['show_modified'] ) {
 					$_values['lastmod'] = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
+				}
 
 				++$count;
 				yield $_values;
@@ -510,7 +522,9 @@ class Base extends Main {
 	 */
 	protected function build_url_item( $args ) {
 
-		if ( empty( $args['loc'] ) ) return '';
+		if ( empty( $args['loc'] ) ) {
+			return '';
+		}
 
 		$xml = [
 			'loc' => $args['loc'], // Already escaped.
@@ -574,14 +588,17 @@ class Base extends Main {
 			}
 
 			// Test if URL is valid.
-			if ( ! \esc_url_raw( $url, [ 'https', 'http' ] ) ) continue;
+			if ( ! \esc_url_raw( $url, [ 'https', 'http' ] ) ) {
+				continue;
+			}
 
 			// Reset.
 			$_values        = [];
 			$_values['loc'] = $url;
 
-			if ( $args['show_modified'] )
+			if ( $args['show_modified'] ) {
 				$_values['lastmod'] = ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00';
+			}
 
 			++$count;
 			yield $_values;

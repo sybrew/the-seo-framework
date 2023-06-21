@@ -64,13 +64,17 @@ class Query extends Core {
 		// Don't use method memo() here for this method is called over 85 times per page.
 		static $memo;
 
-		if ( isset( $memo ) ) return $memo;
+		if ( isset( $memo ) ) {
+			return $memo;
+		}
 
-		if ( \defined( 'WP_CLI' ) && \WP_CLI )
+		if ( \defined( 'WP_CLI' ) && \WP_CLI ) {
 			return $memo = false;
+		}
 
-		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
+		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) ) {
 			return $memo = true;
+		}
 
 		$this->the_seo_framework_debug
 			and $this->do_query_error_notice( $method );
@@ -119,8 +123,9 @@ class Query extends Core {
 	 */
 	public function get_post_type_real_ID( $post = null ) {
 
-		if ( isset( $post ) )
+		if ( isset( $post ) ) {
 			return \get_post_type( $post );
+		}
 
 		if ( $this->is_archive() ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
@@ -180,11 +185,14 @@ class Query extends Core {
 	 */
 	public function get_the_real_ID( $use_cache = true ) { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->get_the_real_admin_ID();
+		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && null !== $memo = umemo( __METHOD__ ) ) return $memo;
+		if ( $use_cache && null !== $memo = umemo( __METHOD__ ) ) {
+			return $memo;
+		}
 
 		$use_cache = $use_cache && $this->can_cache_query( __METHOD__ );
 
@@ -232,8 +240,9 @@ class Query extends Core {
 		$id = \get_the_ID();
 
 		// Current term ID (outside loop).
-		if ( ! $id && $this->is_archive_admin() )
+		if ( ! $id && $this->is_archive_admin() ) {
 			$id = $this->get_admin_term_id();
+		}
 
 		return (int) \apply_filters( 'the_seo_framework_current_admin_id', $id );
 	}
@@ -268,8 +277,9 @@ class Query extends Core {
 	 */
 	public function get_admin_term_id() {
 
-		if ( false === $this->is_archive_admin() )
+		if ( false === $this->is_archive_admin() ) {
 			return 0;
+		}
 
 		return \absint(
 			! empty( $GLOBALS['tag_ID'] ) ? $GLOBALS['tag_ID'] : 0
@@ -343,11 +353,13 @@ class Query extends Core {
 	 */
 	public function is_attachment( $attachment = '' ) {
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_attachment_admin();
+		}
 
-		if ( ! $attachment )
+		if ( ! $attachment ) {
 			return \is_attachment();
+		}
 
 		return $this->memo_query( null, $attachment )
 			?? $this->memo_query( \is_attachment( $attachment ), $attachment );
@@ -418,23 +430,28 @@ class Query extends Core {
 	 */
 	public function is_archive() {
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_archive_admin();
+		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = $this->memo_query() ) return $memo;
+		if ( null !== $memo = $this->memo_query() ) {
+			return $memo;
+		}
 
 		$can_cache = $this->can_cache_query( __METHOD__ );
 
-		if ( \is_archive() && false === $this->is_singular() )
+		if ( \is_archive() && false === $this->is_singular() ) {
 			return $can_cache ? $this->memo_query( true ) : true;
+		}
 
 		// The $can_cache check is used here because it asserted $wp_query is valid on the front-end.
 		if ( $can_cache && false === $this->is_singular() ) {
 			global $wp_query;
 
-			if ( $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax || $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author )
+			if ( $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax || $wp_query->is_post_type_archive || $wp_query->is_date || $wp_query->is_author ) {
 				return $this->memo_query( true );
+			}
 		}
 
 		return $can_cache ? $this->memo_query( false ) : false;
@@ -532,8 +549,9 @@ class Query extends Core {
 	 */
 	public function is_author( $author = '' ) {
 
-		if ( ! $author )
+		if ( ! $author ) {
 			return \is_author();
+		}
 
 		return $this->memo_query( null, $author )
 			?? $this->memo_query( \is_author( $author ), $author );
@@ -587,8 +605,9 @@ class Query extends Core {
 	 */
 	public function is_category( $category = '' ) {
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_category_admin();
+		}
 
 		return $this->memo_query( null, $category )
 			?? $this->memo_query( \is_category( $category ), $category );
@@ -673,8 +692,9 @@ class Query extends Core {
 	public function is_real_front_page() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = $this->memo_query() )
+		if ( null !== $cache = $this->memo_query() ) {
 			return $cache;
+		}
 
 		$is_front_page = \is_front_page();
 
@@ -733,11 +753,13 @@ class Query extends Core {
 	 */
 	public function is_page( $page = '' ) {
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_page_admin();
+		}
 
-		if ( empty( $page ) )
+		if ( empty( $page ) ) {
 			return \is_page();
+		}
 
 		return $this->memo_query( null, $page )
 			?? $this->memo_query(
@@ -815,8 +837,9 @@ class Query extends Core {
 	 */
 	public function is_single( $post = '' ) {
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_single_admin();
+		}
 
 		return $this->memo_query( null, $post )
 			?? $this->memo_query(
@@ -857,11 +880,13 @@ class Query extends Core {
 	public function is_singular( $post_types = '' ) {
 
 		// WP_Query functions require loop, do alternative check.
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_singular_admin();
+		}
 
-		if ( $post_types )
+		if ( $post_types ) {
 			return \is_singular( $post_types );
+		}
 
 		return $this->memo_query()
 			?? $this->memo_query( \is_singular() || $this->is_singular_archive() );
@@ -921,8 +946,9 @@ class Query extends Core {
 	public function is_tag( $tag = '' ) {
 
 		// Admin requires another check.
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_tag_admin();
+		}
 
 		return $this->memo_query( null, $tag )
 			?? $this->memo_query( \is_tag( $tag ), $tag );
@@ -990,8 +1016,9 @@ class Query extends Core {
 	 */
 	public function is_product( $post = null ) {
 
-		if ( \is_admin() )
+		if ( \is_admin() ) {
 			return $this->is_product_admin();
+		}
 
 		return $this->memo_query( null, $post )
 			?? $this->memo_query(
@@ -1066,11 +1093,13 @@ class Query extends Core {
 	 */
 	public function is_seo_settings_page( $secure = true ) {
 
-		if ( ! \is_admin() )
+		if ( ! \is_admin() ) {
 			return false;
+		}
 
-		if ( ! $secure )
+		if ( ! $secure ) {
 			return $this->is_menu_page( $this->seo_settings_page_hook, $this->seo_settings_page_slug );
+		}
 
 		return $this->memo_query()
 			?? $this->memo_query( $this->is_menu_page( $this->seo_settings_page_hook ) );
@@ -1127,8 +1156,9 @@ class Query extends Core {
 	public function page() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $memo = $this->memo_query() )
+		if ( null !== $memo = $this->memo_query() ) {
 			return $memo;
+		}
 
 		if ( $this->is_multipage() ) {
 			$page = ( (int) \get_query_var( 'page' ) ) ?: 1;
@@ -1163,8 +1193,9 @@ class Query extends Core {
 	public function paged() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $memo = $this->memo_query() )
+		if ( null !== $memo = $this->memo_query() ) {
 			return $memo;
+		}
 
 		if ( $this->is_multipage() ) {
 			$paged = ( (int) \get_query_var( 'paged' ) ) ?: 1;
@@ -1196,8 +1227,9 @@ class Query extends Core {
 	public function numpages() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $memo = $this->memo_query() )
+		if ( null !== $memo = $this->memo_query() ) {
 			return $memo;
+		}
 
 		if ( \is_admin() ) {
 			// Disable pagination detection in admin: Always on page 1.
@@ -1206,8 +1238,9 @@ class Query extends Core {
 
 		global $wp_query;
 
-		if ( $this->is_singular() && ! $this->is_singular_archive() )
+		if ( $this->is_singular() && ! $this->is_singular_archive() ) {
 			$post = \get_post( $this->get_the_real_ID() );
+		}
 
 		if ( ( $post ?? null ) instanceof \WP_Post ) {
 			$content = $this->get_post_content( $post );
@@ -1216,8 +1249,9 @@ class Query extends Core {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
 
 				// Ignore nextpage at the beginning of the content.
-				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
+				if ( 0 === strpos( $content, '<!--nextpage-->' ) ) {
 					$content = substr( $content, 15 );
+				}
 
 				$pages = explode( '<!--nextpage-->', $content );
 			} else {

@@ -90,7 +90,9 @@ class Post_Data extends Detect {
 	public function get_post_meta( $post_id, $use_cache = true ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && ( $memo = umemo( __METHOD__, null, $post_id ) ) ) return $memo;
+		if ( $use_cache && ( $memo = umemo( __METHOD__, null, $post_id ) ) ) {
+			return $memo;
+		}
 
 		// get_post_meta() requires a valid post ID. Make sure that post exists.
 		$post = \get_post( $post_id );
@@ -121,8 +123,9 @@ class Post_Data extends Detect {
 			);
 
 			// WP converts all entries to arrays, because we got ALL entries. Disarray!
-			foreach ( $meta as &$value )
+			foreach ( $meta as &$value ) {
 				$value = $value[0];
+			}
 		}
 
 		/**
@@ -225,7 +228,9 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( ! $post ) return;
+		if ( ! $post ) {
+			return;
+		}
 
 		$meta          = $this->get_post_meta( $post->ID, false );
 		$meta[ $item ] = $value;
@@ -246,7 +251,9 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( ! $post ) return;
+		if ( ! $post ) {
+			return;
+		}
 
 		$data = (array) \wp_parse_args( $data, $this->get_post_meta_defaults( $post->ID ) );
 
@@ -336,7 +343,9 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( ! $post ) return;
+		if ( ! $post ) {
+			return;
+		}
 
 		/**
 		 * Don't try to save the data prior autosave, or revision post (is_preview).
@@ -345,7 +354,9 @@ class Post_Data extends Detect {
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
-		if ( \wp_is_post_autosave( $post ) || \wp_is_post_revision( $post ) ) return;
+		if ( \wp_is_post_autosave( $post ) || \wp_is_post_revision( $post ) ) {
+			return;
+		}
 
 		$nonce_name   = $this->inpost_nonce_name;
 		$nonce_action = $this->inpost_nonce_field;
@@ -355,7 +366,9 @@ class Post_Data extends Detect {
 			   ! \current_user_can( 'edit_post', $post->ID )
 			|| ! isset( $_POST[ $nonce_name ] )
 			|| ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action )
-		) return;
+		) {
+			return;
+		}
 
 		$data = (array) $_POST['autodescription'];
 
@@ -377,14 +390,18 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( empty( $post->ID ) ) return;
+		if ( empty( $post->ID ) ) {
+			return;
+		}
 
 		// Check again against ambiguous injection...
 		// Note, however: function wp_ajax_inline_save() already performs all these checks for us before firing this callback's action.
 		if (
 			   ! \current_user_can( 'edit_post', $post->ID )
 			|| ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
-		) return;
+		) {
+			return;
+		}
 
 		$new_data = [];
 
@@ -437,11 +454,15 @@ class Post_Data extends Detect {
 
 		$post = \get_post( $post );
 
-		if ( ! $post ) return;
+		if ( ! $post ) {
+			return;
+		}
 
 		// Check again against ambiguous injection...
 		// Note, however: function bulk_edit_posts() already performs all these checks for us before firing this callback's action.
-		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) {
+			return;
+		}
 
 		static $verified_referer = false;
 		// Memoize the referer check--if it passes (and doesn't exit/die PHP), we're good to execute subsequently.
@@ -461,7 +482,9 @@ class Post_Data extends Detect {
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
-						if ( 'nochange' === $value ) continue 2;
+						if ( 'nochange' === $value ) {
+							continue 2;
+						}
 						$new_data[ "_genesis_$key" ] = $value;
 						break;
 
@@ -497,11 +520,15 @@ class Post_Data extends Detect {
 
 		// The 'autodescription' index should only be used when using the editor.
 		// Quick and bulk-edit should be halted here.
-		if ( empty( $_POST['autodescription'] ) ) return;
+		if ( empty( $_POST['autodescription'] ) ) {
+			return;
+		}
 
 		$post = \get_post( $post );
 
-		if ( ! $post ) return;
+		if ( ! $post ) {
+			return;
+		}
 
 		/**
 		 * Don't try to save the data prior autosave, or revision post (is_preview).
@@ -510,14 +537,20 @@ class Post_Data extends Detect {
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
 		 */
-		if ( \wp_is_post_autosave( $post ) || \wp_is_post_revision( $post ) ) return;
+		if ( \wp_is_post_autosave( $post ) || \wp_is_post_revision( $post ) ) {
+			return;
+		}
 
 		// Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
-		if ( ! \current_user_can( 'edit_post', $post->ID ) ) return;
+		if ( ! \current_user_can( 'edit_post', $post->ID ) ) {
+			return;
+		}
 
 		$post_type = \get_post_type( $post ) ?: false;
 		// Can this even fail?
-		if ( ! $post_type ) return;
+		if ( ! $post_type ) {
+			return;
+		}
 
 		foreach ( $this->get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
 			$_post_key = "_primary_term_{$_taxonomy}";
@@ -551,7 +584,9 @@ class Post_Data extends Detect {
 	public function get_latest_post_id() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$query = new \WP_Query( [
 			'posts_per_page'   => 1,
@@ -613,12 +648,14 @@ class Post_Data extends Detect {
 		 */
 		$detected = \apply_filters( 'the_seo_framework_detect_non_html_page_builder', null, $post_id, $meta );
 
-		if ( \is_bool( $detected ) )
+		if ( \is_bool( $detected ) ) {
 			return $detected;
+		}
 
 		// If there's no meta, or no builder active, it doesn't use a builder.
-		if ( empty( $meta ) || ! $this->detect_non_html_page_builder() )
+		if ( empty( $meta ) || ! $this->detect_non_html_page_builder() ) {
 			return false;
+		}
 
 		if ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) ) :
 			// Divi Builder by Elegant Themes
@@ -713,15 +750,18 @@ class Post_Data extends Detect {
 	 */
 	public function get_excluded_ids_from_cache() {
 
-		if ( $this->is_headless['meta'] )
+		if ( $this->is_headless['meta'] ) {
 			return [
 				'archive' => '',
 				'search'  => '',
 			];
+		}
 
 		$cache = $this->get_static_cache( 'excluded_ids' );
 
-		if ( isset( $cache['archive'], $cache['search'] ) ) return $cache;
+		if ( isset( $cache['archive'], $cache['search'] ) ) {
+			return $cache;
+		}
 
 		global $wpdb;
 
@@ -804,11 +844,15 @@ class Post_Data extends Detect {
 	public function get_primary_term( $post_id, $taxonomy ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
+		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) {
+			return $memo;
+		}
 
 		$primary_id = (int) \get_post_meta( $post_id, "_primary_term_{$taxonomy}", true ) ?: 0;
 
-		if ( ! $primary_id ) return memo( false, $post_id, $taxonomy );
+		if ( ! $primary_id ) {
+			return memo( false, $post_id, $taxonomy );
+		}
 
 		// Users can alter the term list via quick/bulk edit, but cannot set a primary term that way.
 		// Users can also delete a term from the site that was previously assigned as primary.
@@ -819,10 +863,12 @@ class Post_Data extends Detect {
 		$primary_term = false;
 
 		// Test for is_array in the unlikely event a post's taxonomy is gone ($terms = WP_Error)
-		if ( \is_array( $terms ) ) foreach ( $terms as $term ) {
-			if ( $primary_id === (int) $term->term_id ) {
-				$primary_term = $term;
-				break;
+		if ( \is_array( $terms ) ) {
+			foreach ( $terms as $term ) {
+				if ( $primary_id === (int) $term->term_id ) {
+					$primary_term = $term;
+					break;
+				}
 			}
 		}
 

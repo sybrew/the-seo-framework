@@ -46,7 +46,9 @@ class Detect extends Render {
 	public function active_plugins() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$active_plugins = (array) \get_option( 'active_plugins', [] );
 
@@ -55,8 +57,9 @@ class Detect extends Render {
 			// whereas active_plugins stores them in the values. array_keys() resolves the disparity.
 			$network_plugins = array_keys( \get_site_option( 'active_sitewide_plugins', [] ) );
 
-			if ( $network_plugins )
+			if ( $network_plugins ) {
 				$active_plugins = array_merge( $active_plugins, $network_plugins );
+			}
 		}
 
 		sort( $active_plugins );
@@ -146,24 +149,32 @@ class Detect extends Render {
 	 */
 	public function detect_plugin( $plugins ) {
 
-		foreach ( $plugins['globals'] ?? [] as $name )
-			if ( isset( $GLOBALS[ $name ] ) )
+		foreach ( $plugins['globals'] ?? [] as $name ) {
+			if ( isset( $GLOBALS[ $name ] ) ) {
 				return true;
+			}
+		}
 
 		// Check for constants
-		foreach ( $plugins['constants'] ?? [] as $name )
-			if ( \defined( $name ) )
+		foreach ( $plugins['constants'] ?? [] as $name ) {
+			if ( \defined( $name ) ) {
 				return true;
+			}
+		}
 
 		// Check for functions
-		foreach ( $plugins['functions'] ?? [] as $name )
-			if ( \function_exists( $name ) )
+		foreach ( $plugins['functions'] ?? [] as $name ) {
+			if ( \function_exists( $name ) ) {
 				return true;
+			}
+		}
 
 		// Check for classes
-		foreach ( $plugins['classes'] ?? [] as $name )
-			if ( class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+		foreach ( $plugins['classes'] ?? [] as $name ) {
+			if ( class_exists( $name, false ) ) { // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
 				return true;
+			}
+		}
 
 		// No globals, constant, function, or class found to exist
 		return false;
@@ -185,13 +196,15 @@ class Detect extends Render {
 	 */
 	public function can_i_use( $plugins = [], $use_cache = true ) {
 
-		if ( ! $use_cache )
+		if ( ! $use_cache ) {
 			return $this->detect_plugin_multi( $plugins );
+		}
 
 		ksort( $plugins );
 
-		foreach ( $plugins as &$test )
+		foreach ( $plugins as &$test ) {
 			sort( $test );
+		}
 
 		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$key = serialize( $test );
@@ -218,24 +231,32 @@ class Detect extends Render {
 	public function detect_plugin_multi( $plugins ) {
 
 		// Check for globals
-		foreach ( $plugins['globals'] ?? [] as $name )
-			if ( ! isset( $GLOBALS[ $name ] ) )
+		foreach ( $plugins['globals'] ?? [] as $name ) {
+			if ( ! isset( $GLOBALS[ $name ] ) ) {
 				return false;
+			}
+		}
 
 		// Check for constants
-		foreach ( $plugins['constants'] ?? [] as $name )
-			if ( ! \defined( $name ) )
+		foreach ( $plugins['constants'] ?? [] as $name ) {
+			if ( ! \defined( $name ) ) {
 				return false;
+			}
+		}
 
 		// Check for functions
-		foreach ( $plugins['functions'] ?? [] as $name )
-			if ( ! \function_exists( $name ) )
+		foreach ( $plugins['functions'] ?? [] as $name ) {
+			if ( ! \function_exists( $name ) ) {
 				return false;
+			}
+		}
 
 		// Check for classes
-		foreach ( $plugins['classes'] ?? [] as $name )
-			if ( ! class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+		foreach ( $plugins['classes'] ?? [] as $name ) {
+			if ( ! class_exists( $name, false ) ) { // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
 				return false;
+			}
+		}
 
 		// All classes, functions and constant have been found to exist
 		return true;
@@ -257,9 +278,11 @@ class Detect extends Render {
 			strtolower( \get_option( 'template' ) ),   // Child
 		];
 
-		foreach ( (array) $themes as $theme )
-			if ( \in_array( strtolower( $theme ), $active_theme, true ) )
+		foreach ( (array) $themes as $theme ) {
+			if ( \in_array( strtolower( $theme ), $active_theme, true ) ) {
 				return true;
+			}
+		}
 
 		return false;
 	}
@@ -277,11 +300,15 @@ class Detect extends Render {
 	public function detect_seo_plugins() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! $active_plugins ) return memo( false );
+		if ( ! $active_plugins ) {
+			return memo( false );
+		}
 
 		foreach ( $this->get_conflicting_plugins( 'seo_tools' ) as $plugin_name => $plugin ) {
 			if ( \in_array( $plugin, $active_plugins, true ) ) {
@@ -322,15 +349,20 @@ class Detect extends Render {
 	public function detect_og_plugin() {
 
 		// Detect SEO plugins beforehand.
-		if ( $this->detect_seo_plugins() )
+		if ( $this->detect_seo_plugins() ) {
 			return true;
+		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! $active_plugins ) return memo( false );
+		if ( ! $active_plugins ) {
+			return memo( false );
+		}
 
 		foreach ( $this->get_conflicting_plugins( 'open_graph' ) as $plugin_name => $plugin ) {
 			if ( \in_array( $plugin, $active_plugins, true ) ) {
@@ -370,15 +402,20 @@ class Detect extends Render {
 	public function detect_twitter_card_plugin() {
 
 		// Detect SEO plugins beforehand.
-		if ( $this->detect_seo_plugins() )
+		if ( $this->detect_seo_plugins() ) {
 			return true;
+		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! $active_plugins ) return memo( false );
+		if ( ! $active_plugins ) {
+			return memo( false );
+		}
 
 		foreach ( $this->get_conflicting_plugins( 'twitter_card' ) as $plugin_name => $plugin ) {
 			if ( \in_array( $plugin, $active_plugins, true ) ) {
@@ -434,15 +471,20 @@ class Detect extends Render {
 	public function detect_sitemap_plugin() {
 
 		// Detect SEO plugins beforehand.
-		if ( $this->detect_seo_plugins() )
+		if ( $this->detect_seo_plugins() ) {
 			return true;
+		}
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$active_plugins = $this->active_plugins();
 
-		if ( ! $active_plugins ) return memo( false );
+		if ( ! $active_plugins ) {
+			return memo( false );
+		}
 
 		foreach ( $this->get_conflicting_plugins( 'sitemaps' ) as $plugin_name => $plugin ) {
 			if ( \in_array( $plugin, $active_plugins, true ) ) {
@@ -480,10 +522,13 @@ class Detect extends Render {
 	public function use_core_sitemaps() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
-		if ( $this->get_option( 'sitemaps_output' ) )
+		if ( $this->get_option( 'sitemaps_output' ) ) {
 			return memo( false );
+		}
 
 		$wp_sitemaps_server = \wp_sitemaps_get_server();
 
@@ -535,11 +580,14 @@ class Detect extends Render {
 	 */
 	public function has_robots_txt() {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		// Ensure get_home_path() is declared.
-		if ( ! \function_exists( '\\get_home_path' ) )
+		if ( ! \function_exists( '\\get_home_path' ) ) {
 			require_once \ABSPATH . 'wp-admin/includes/file.php';
+		}
 
 		$path = \get_home_path() . 'robots.txt';
 
@@ -558,11 +606,14 @@ class Detect extends Render {
 	 */
 	public function has_sitemap_xml() {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		// Ensure get_home_path() is declared.
-		if ( ! \function_exists( '\\get_home_path' ) )
+		if ( ! \function_exists( '\\get_home_path' ) ) {
 			require_once \ABSPATH . 'wp-admin/includes/file.php';
+		}
 
 		$path = \get_home_path() . 'sitemap.xml';
 
@@ -584,7 +635,9 @@ class Detect extends Render {
 	public function query_supports_seo() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		switch ( true ) :
 			case \is_feed():
@@ -633,8 +686,9 @@ class Detect extends Render {
 		 * This protects against (accidental) negative-SEO bombarding.
 		 * Support broken queries, so we can noindex them.
 		 */
-		if ( ! $supported && $this->is_query_exploited() )
+		if ( ! $supported && $this->is_query_exploited() ) {
 			$supported = true;
+		}
 
 		/**
 		 * @since 4.0.0
@@ -686,20 +740,25 @@ class Detect extends Render {
 	public function is_query_exploited() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
-		if ( ! $this->get_option( 'advanced_query_protection' ) )
+		if ( ! $this->get_option( 'advanced_query_protection' ) ) {
 			return memo( false );
+		}
 
 		// When the page ID is not 0, a real page will always be returned.
-		if ( $this->get_the_real_ID() )
+		if ( $this->get_the_real_ID() ) {
 			return memo( false );
+		}
 
 		global $wp_query;
 
 		// When no special query data is registered, ignore this. Don't set cache.
-		if ( ! isset( $wp_query->query ) )
+		if ( ! isset( $wp_query->query ) ) {
 			return false;
+		}
 
 		/**
 		 * @since 4.0.5
@@ -744,34 +803,42 @@ class Detect extends Render {
 		foreach ( $exploitables as $type => $qvs ) :
 			foreach ( $qvs as $qv ) :
 				// Only test isset, because falsey or empty-array is what we need to test against.
-				if ( ! isset( $query[ $qv ] ) ) continue;
+				if ( ! isset( $query[ $qv ] ) ) {
+					continue;
+				}
 
 				switch ( $type ) :
 					case 'numeric':
-						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) )
+						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) ) {
 							return memo( true );
+						}
 						break;
 
 					case 'numeric_array':
 						// We can't protect non-pretty permalinks.
-						if ( ! $this->pretty_permalinks ) break;
+						if ( ! $this->pretty_permalinks ) {
+							break;
+						}
 
 						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
 						// WordPress mitigates this via a 404 query when a numeric value is found.
-						if ( ! preg_match( '/^[1-9][0-9]*$/', $query[ $qv ] ) )
+						if ( ! preg_match( '/^[1-9][0-9]*$/', $query[ $qv ] ) ) {
 							return memo( true );
+						}
 						break;
 
 					case 'requires_s':
-						if ( ! isset( $query['s'] ) )
+						if ( ! isset( $query['s'] ) ) {
 							return memo( true );
+						}
 						break;
 
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
 						// !$this->get_the_real_ID() is already executed. Just test if home is a page.
-						if ( $this->is_home_as_page() )
+						if ( $this->is_home_as_page() ) {
 							return memo( true );
+						}
 						break;
 
 					default:
@@ -798,7 +865,9 @@ class Detect extends Render {
 	public function has_posts_in_post_type_archive( $post_type ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
+		if ( null !== $memo = memo( null, $post_type ) ) {
+			return $memo;
+		}
 
 		$query = new \WP_Query( [
 			'posts_per_page' => 1,
@@ -922,7 +991,9 @@ class Detect extends Render {
 	public function post_type_supports_taxonomies( $post_type = '' ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
+		if ( null !== $memo = memo( null, $post_type ) ) {
+			return $memo;
+		}
 
 		$post_type = $post_type ?: $this->get_current_post_type();
 
@@ -1236,11 +1307,13 @@ class Detect extends Render {
 	 * @return bool
 	 */
 	public function is_gutenberg_page() {
-		if ( \function_exists( '\\use_block_editor_for_post' ) )
+		if ( \function_exists( '\\use_block_editor_for_post' ) ) {
 			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
+		}
 
-		if ( \function_exists( '\\is_gutenberg_page' ) )
+		if ( \function_exists( '\\is_gutenberg_page' ) ) {
 			return \is_gutenberg_page();
+		}
 
 		return false;
 	}
@@ -1329,8 +1402,11 @@ class Detect extends Render {
 	 */
 	public function has_unprocessed_syntax( $text ) {
 
-		foreach ( [ 'yoast', 'rankmath', 'seopress' ] as $type )
-			if ( $this->{"has_{$type}_syntax"}( $text ) ) return true;
+		foreach ( [ 'yoast', 'rankmath', 'seopress' ] as $type ) {
+			if ( $this->{"has_{$type}_syntax"}( $text ) ) {
+				return true;
+			}
+		}
 
 		return false;
 	}
@@ -1354,8 +1430,9 @@ class Detect extends Render {
 	public function has_yoast_syntax( $text ) {
 
 		// %%id%% is the shortest valid tag... ish. Let's stop at 6.
-		if ( \strlen( $text ) < 6 || false === strpos( $text, '%%' ) )
+		if ( \strlen( $text ) < 6 || false === strpos( $text, '%%' ) ) {
 			return false;
+		}
 
 		$tags = umemo( __METHOD__ . '/tags' );
 
@@ -1441,8 +1518,9 @@ class Detect extends Render {
 	public function has_rankmath_syntax( $text ) {
 
 		// %id% is the shortest valid tag... ish. Let's stop at 4.
-		if ( \strlen( $text ) < 4 || false === strpos( $text, '%' ) )
+		if ( \strlen( $text ) < 4 || false === strpos( $text, '%' ) ) {
 			return false;
+		}
 
 		$tags = umemo( __METHOD__ . '/tags' );
 
@@ -1544,8 +1622,9 @@ class Detect extends Render {
 	public function has_seopress_syntax( $text ) {
 
 		// %%sep%% is the shortest valid tag... ish. Let's stop at 7.
-		if ( \strlen( $text ) < 7 || false === strpos( $text, '%%' ) )
+		if ( \strlen( $text ) < 7 || false === strpos( $text, '%%' ) ) {
 			return false;
+		}
 
 		$tags = umemo( __METHOD__ . '/tags' );
 

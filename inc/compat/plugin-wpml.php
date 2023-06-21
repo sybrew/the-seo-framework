@@ -65,7 +65,9 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  */
 function _wpml_flush_sitemap( $type, $id, $args, $success ) {
 
-	if ( ! $success ) return;
+	if ( ! $success ) {
+		return;
+	}
 
 	global $wpdb;
 
@@ -118,10 +120,13 @@ function _wpml_sitemap_filter_non_translatables( $args ) {
 	if ( empty( $sitepress )
 	|| ! method_exists( $sitepress, 'get_default_language' )
 	|| ! method_exists( $sitepress, 'get_current_language' )
-	|| ! method_exists( $sitepress, 'is_translated_post_type' ) )
+	|| ! method_exists( $sitepress, 'is_translated_post_type' ) ) {
 		return $args;
+	}
 
-	if ( $sitepress->get_default_language() === $sitepress->get_current_language() ) return $args;
+	if ( $sitepress->get_default_language() === $sitepress->get_current_language() ) {
+		return $args;
+	}
 
 	// Filter out only 'Not translatable'.
 	$args['post_type'] = array_filter( (array) $args['post_type'], [ $sitepress, 'is_translated_post_type' ] );

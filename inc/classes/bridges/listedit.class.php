@@ -117,7 +117,9 @@ final class ListEdit extends ListTable {
 	 */
 	public function _display_bulk_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
 
-		if ( $this->column_name !== $column_name ) return;
+		if ( $this->column_name !== $column_name ) {
+			return;
+		}
 
 		// phpcs:ignore, Generic.CodeAnalysis.EmptyStatement -- For the future, when WordPress Core decides.
 		if ( $taxonomy ) {
@@ -139,7 +141,9 @@ final class ListEdit extends ListTable {
 	 */
 	public function _display_quick_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
 
-		if ( $this->column_name !== $column_name ) return;
+		if ( $this->column_name !== $column_name ) {
+			return;
+		}
 
 		if ( $taxonomy ) {
 			\tsf()->get_view( 'list/quick-term', get_defined_vars() );
@@ -163,7 +167,9 @@ final class ListEdit extends ListTable {
 		if (
 			   $this->column_name !== $column_name
 			|| ! \current_user_can( 'edit_post', $post_id )
-		) return;
+		) {
+			return;
+		}
 
 		$tsf = \tsf();
 
@@ -300,9 +306,9 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'leDescription' => $desc_data ] )
 		);
 
-		if ( $this->doing_ajax )
+		if ( $this->doing_ajax ) {
 			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore, WordPress.Security.EscapeOutput
-	}
+		}	}
 
 	/**
 	 * Returns the quick edit data for terms.
@@ -322,8 +328,12 @@ final class ListEdit extends ListTable {
 	 */
 	public function _output_column_contents_for_term( $string, $column_name, $term_id ) {
 
-		if ( $this->column_name !== $column_name )          return $string;
-		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;
+		if ( $this->column_name !== $column_name ) {
+			return $string;
+		}
+		if ( ! \current_user_can( 'edit_term', $term_id ) ) {
+			return $string;
+		}
 
 		$tsf = \tsf();
 
@@ -435,8 +445,9 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'leDescription' => $desc_data ] )
 		);
 
-		if ( $this->doing_ajax )
+		if ( $this->doing_ajax ) {
 			$container .= $this->get_ajax_dispatch_updated_event();
+		}
 
 		return "$string$container";
 	}

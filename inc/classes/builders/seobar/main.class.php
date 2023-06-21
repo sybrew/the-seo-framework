@@ -183,11 +183,13 @@ abstract class Main {
 
 		$this->prime_query_cache( $this->query_cache );
 
-		if ( \in_array( 'redirect', $tests, true ) && $this->has_blocking_redirect() )
+		if ( \in_array( 'redirect', $tests, true ) && $this->has_blocking_redirect() ) {
 			$tests = [ 'redirect' ];
+		}
 
-		foreach ( $tests as $test )
+		foreach ( $tests as $test ) {
 			yield $test => $this->{"test_$test"}();
+		}
 	}
 
 	/**

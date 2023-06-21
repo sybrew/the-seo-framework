@@ -83,11 +83,13 @@ class Init extends Query {
 	 */
 	public function init_global_actions() {
 
-		if ( \wp_doing_cron() )
+		if ( \wp_doing_cron() ) {
 			$this->init_cron_actions();
+		}
 
-		if ( \wp_doing_ajax() )
+		if ( \wp_doing_ajax() ) {
 			$this->init_ajax_actions();
+		}
 	}
 
 	/**
@@ -116,8 +118,9 @@ class Init extends Query {
 
 		// Ping searchengines.
 		if ( $this->get_option( 'ping_use_cron' ) ) {
-			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) )
+			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) ) {
 				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap\Base, 'prerender_sitemap' ] );
+			}
 
 			\add_action( 'tsf_sitemap_cron_hook', [ Bridges\Ping::class, 'ping_search_engines' ] );
 			\add_action( 'tsf_sitemap_cron_hook_retry', [ Bridges\Ping::class, 'retry_ping_search_engines' ] );
@@ -300,11 +303,13 @@ class Init extends Query {
 		// Output meta tags.
 		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
 
-		if ( $this->get_option( 'alter_archive_query' ) )
+		if ( $this->get_option( 'alter_archive_query' ) ) {
 			$this->init_alter_archive_query();
+		}
 
-		if ( $this->get_option( 'alter_search_query' ) )
+		if ( $this->get_option( 'alter_search_query' ) ) {
 			$this->init_alter_search_query();
+		}
 
 		// Modify the feed.
 		if ( $this->get_option( 'excerpt_the_feed' ) || $this->get_option( 'source_the_feed' ) ) {
@@ -435,8 +440,9 @@ class Init extends Query {
 		);
 
 		foreach ( $functions as $function ) {
-			if ( ! empty( $function['callback'] ) )
+			if ( ! empty( $function['callback'] ) ) {
 				echo \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
+			}
 		}
 		// phpcs:enable, WordPress.Security.EscapeOutput
 	}
@@ -466,8 +472,9 @@ class Init extends Query {
 		);
 
 		foreach ( $functions as $function ) {
-			if ( ! empty( $function['callback'] ) )
+			if ( ! empty( $function['callback'] ) ) {
 				echo \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
+			}
 		}
 
 		/**
@@ -500,7 +507,9 @@ class Init extends Query {
 	 */
 	public function html_output() {
 
-		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
+		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) {
+			return;
+		}
 
 		/**
 		 * @since 2.6.0
@@ -629,7 +638,9 @@ class Init extends Query {
 		// TODO add filter to $get? It won't last a few major updates though...
 		// But that's why I created this method like so... anyway... tough luck.
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
-		foreach ( $get as $method ) echo $this->{$method}();
+		foreach ( $get as $method ) {
+			echo $this->{$method}();
+		}
 
 		/**
 		 * @since 4.2.0
@@ -652,7 +663,9 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
+		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) {
+			return;
+		}
 
 		$url = $this->get_redirect_url();
 
@@ -696,8 +709,9 @@ class Init extends Query {
 		 */
 		$redirect_type = \absint( \apply_filters( 'the_seo_framework_redirect_status_code', 301 ) );
 
-		if ( $redirect_type > 399 || $redirect_type < 300 )
+		if ( $redirect_type > 399 || $redirect_type < 300 ) {
 			$this->_doing_it_wrong( __METHOD__, 'You should use 3xx HTTP Status Codes. Recommended 301 and 302.', '2.8.0' );
+		}
 
 		if ( ! $this->allow_external_redirect() ) {
 			// Only HTTP/HTTPS and home URLs are allowed.
@@ -728,7 +742,9 @@ class Init extends Query {
 	 */
 	protected function init_post_caching_actions() {
 
-		if ( has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) {
+			return;
+		}
 
 		$refresh_sitemap_callback = [ Bridges\Cache::class, '_refresh_sitemap_on_post_change' ];
 
@@ -818,8 +834,9 @@ class Init extends Query {
 		 * @since 2.5.0
 		 * @param bool $disallow Whether to disallow robots queries.
 		 */
-		if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) )
+		if ( \apply_filters( 'the_seo_framework_robots_disallow_queries', false ) ) {
 			$output .= "Disallow: /*?*\n";
+		}
 
 		/**
 		 * @since 2.5.0
@@ -833,9 +850,11 @@ class Init extends Query {
 			if ( $this->get_option( 'sitemaps_output' ) ) {
 				$sitemaps = Bridges\Sitemap::get_instance();
 
-				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data )
-					if ( ! empty( $data['robots'] ) )
+				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data ) {
+					if ( ! empty( $data['robots'] ) ) {
 						$output .= sprintf( "\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
+					}
+				}
 
 				$output .= "\n";
 			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
@@ -885,8 +904,9 @@ class Init extends Query {
 		\add_action( 'the_seo_framework_sitemap_header', [ $this, '_output_robots_noindex_headers' ] );
 
 		// This is not necessarily a WordPress query. Test it inline.
-		if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST )
+		if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST ) {
 			$this->_output_robots_noindex_headers();
+		}
 	}
 
 	/**
@@ -905,7 +925,9 @@ class Init extends Query {
 		if ( \apply_filters(
 			'the_seo_framework_set_noindex_header',
 			\is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() )
-		) ) $this->_output_robots_noindex_headers();
+		) ) {
+			$this->_output_robots_noindex_headers();
+		}
 	}
 
 	/**
@@ -970,16 +992,19 @@ class Init extends Query {
 		// Don't exclude pages in wp-admin.
 		if ( $wp_query->is_search ) {
 			// Only interact with an actual Search Query.
-			if ( ! isset( $wp_query->query['s'] ) )
+			if ( ! isset( $wp_query->query['s'] ) ) {
 				return;
+			}
 
-			if ( $this->is_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) ) {
 				return;
+			}
 
 			$excluded = $this->get_excluded_ids_from_cache()['search'];
 
-			if ( ! $excluded )
+			if ( ! $excluded ) {
 				return;
+			}
 
 			$post__not_in = $wp_query->get( 'post__not_in' );
 
@@ -1007,13 +1032,15 @@ class Init extends Query {
 	public function _alter_archive_query_in( $wp_query ) {
 
 		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( $this->is_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) ) {
 				return;
+			}
 
 			$excluded = $this->get_excluded_ids_from_cache()['archive'];
 
-			if ( ! $excluded )
+			if ( ! $excluded ) {
 				return;
+			}
 
 			$post__not_in = $wp_query->get( 'post__not_in' );
 
@@ -1040,12 +1067,14 @@ class Init extends Query {
 	public function _alter_search_query_post( $posts, $wp_query ) {
 
 		if ( $wp_query->is_search ) {
-			if ( $this->is_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) ) {
 				return $posts;
+			}
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) )
+				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) ) {
 					unset( $posts[ $n ] );
+				}
 			}
 			// Reset numeric index.
 			$posts = array_values( $posts );
@@ -1067,12 +1096,14 @@ class Init extends Query {
 	public function _alter_archive_query_post( $posts, $wp_query ) {
 
 		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( $this->is_query_adjustment_blocked( $wp_query ) )
+			if ( $this->is_query_adjustment_blocked( $wp_query ) ) {
 				return $posts;
+			}
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) )
+				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) ) {
 					unset( $posts[ $n ] );
+				}
 			}
 			// Reset numeric index.
 			$posts = array_values( $posts );
@@ -1111,8 +1142,9 @@ class Init extends Query {
 
 		static $has_filter = null;
 
-		if ( null === $has_filter )
+		if ( null === $has_filter ) {
 			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
+		}
 
 		if ( $has_filter ) {
 			/**
@@ -1122,12 +1154,14 @@ class Init extends Query {
 			 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
 			 * @param \WP_Query $wp_query The current query.
 			 */
-			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
+			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) ) {
 				return true;
+			}
 		}
 
-		if ( ! \did_action( 'wp_loaded' ) )
+		if ( ! \did_action( 'wp_loaded' ) ) {
 			return true;
+		}
 
 		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
 			$referer = \wp_get_referer();
@@ -1140,14 +1174,16 @@ class Init extends Query {
 				 * If it returns false, the user may still be logged in, but the request isn't sent via
 				 * WordPress's API with the proper nonces supplied. This is as perfect as it can be.
 				 */
-				if ( \current_user_can( 'edit_posts' ) )
+				if ( \current_user_can( 'edit_posts' ) ) {
 					return true;
+				}
 			}
 		}
 
 		// If doing sitemap, don't adjust query via query settings.
-		if ( $this->is_sitemap() )
+		if ( $this->is_sitemap() ) {
 			return true;
+		}
 
 		// This should primarily affect 'terms'. Test if TSF is blocked from supporting said terms.
 		if ( ! empty( $wp_query->tax_query->queries ) ) :
@@ -1157,12 +1193,15 @@ class Init extends Query {
 				if ( isset( $_query['taxonomy'] ) ) {
 					$supported = $this->is_taxonomy_supported( $_query['taxonomy'] );
 					// If just one tax is supported for this query, greenlight it: all must be blocking.
-					if ( $supported ) break;
+					if ( $supported ) {
+						break;
+					}
 				}
 			}
 
-			if ( ! $supported )
+			if ( ! $supported ) {
 				return true;
+			}
 		endif;
 
 		return false;
@@ -1186,8 +1225,9 @@ class Init extends Query {
 	public function _alter_oembed_response_data( $data, $post, $width, $height ) {
 
 		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_use_og_title', false ) )
+		if ( $this->get_option( 'oembed_use_og_title', false ) ) {
 			$data['title'] = $this->get_open_graph_title( [ 'id' => $post->ID ] ) ?: $data['title'];
+		}
 
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
@@ -1207,8 +1247,9 @@ class Init extends Query {
 		}
 
 		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_remove_author', false ) )
+		if ( $this->get_option( 'oembed_remove_author', false ) ) {
 			unset( $data['author_url'], $data['author_name'] );
+		}
 
 		return $data;
 	}

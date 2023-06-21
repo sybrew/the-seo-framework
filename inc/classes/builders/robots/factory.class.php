@@ -104,35 +104,37 @@ class Factory {
 	 */
 	public static function generator() {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
-		while ( true ) switch ( $sender = yield static::START ) :
-			case 'noindex':
-			case 'nofollow':
-			case 'noarchive':
-				foreach ( static::assert_no( $sender ) as $key => $value ) {
-					yield $key => $value;
-					if ( $value ) {
-						yield static::HALT;
-						break;
+		while ( true ) {
+			switch ( $sender = yield static::START ) :
+				case 'noindex':
+				case 'nofollow':
+				case 'noarchive':
+					foreach ( static::assert_no( $sender ) as $key => $value ) {
+						yield $key => $value;
+						if ( $value ) {
+							yield static::HALT;
+							break;
+						}
 					}
-				}
-				break;
+							break;
 
-			case 'max_snippet':
-			case 'max_image_preview':
-			case 'max_video_preview':
-				yield from static::assert_copyright( $sender );
-				yield static::HALT;
-				break;
+				case 'max_snippet':
+				case 'max_image_preview':
+				case 'max_video_preview':
+					yield from static::assert_copyright( $sender );
+					yield static::HALT;
+							break;
 
-			default:
-				static::$tsf->_doing_it_wrong(
+				default:
+					static::$tsf->_doing_it_wrong(
 					__METHOD__,
 					sprintf( 'Unregistered robots-generator getter provided: <code>%s</code>.', \esc_html( $sender ) ),
 					'4.2.0'
-				);
-				yield static::HALT;
-				break;
-		endswitch;
+					);
+					yield static::HALT;
+							break;
+		endswitch; 
+		};
 	}
 
 	/**
@@ -151,8 +153,9 @@ class Factory {
 
 		$option = $type;
 
-		if ( 'max_snippet' === $type )
+		if ( 'max_snippet' === $type ) {
 			$option = 'max_snippet_length';
+		}
 
 		$tsf->get_option( 'set_copyright_directives' )
 			and yield 'globals_copyright' => $tsf->get_option( $option );

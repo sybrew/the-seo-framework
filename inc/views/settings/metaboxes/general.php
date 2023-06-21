@@ -253,7 +253,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 				]
 			);
 			$_current     = $this->get_option( 'canonical_scheme' );
-			foreach ( $scheme_types as $value => $name )
+			foreach ( $scheme_types as $value => $name ) {
 				vprintf(
 					'<option value="%s" %s>%s</option>',
 					[
@@ -262,6 +262,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 						esc_html( $name ),
 					]
 				);
+			}
 			?>
 		</select>
 
@@ -369,7 +370,9 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 		foreach ( $this->get_public_post_types() as $post_type ) {
 			$_label = $this->get_post_type_label( $post_type, false );
-			if ( ! strlen( $_label ) ) continue;
+			if ( ! strlen( $_label ) ) {
+				continue;
+			}
 
 			$_label = sprintf(
 				'%s &ndash; <code>%s</code>',
@@ -400,7 +403,9 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 		foreach ( $this->get_public_taxonomies() as $taxonomy ) {
 			$_label = $this->get_tax_type_label( $taxonomy, false );
-			if ( ! strlen( $_label ) ) continue;
+			if ( ! strlen( $_label ) ) {
+				continue;
+			}
 
 			$_label = sprintf(
 				'%s &ndash; <code>%s</code>',

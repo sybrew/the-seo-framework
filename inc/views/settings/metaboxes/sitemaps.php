@@ -114,7 +114,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
 			} elseif ( $this->use_core_sitemaps() ) {
 				$_index_url = get_sitemap_url( 'index' );
-				if ( $_index_url )
+				if ( $_index_url ) {
 					HTML::description_noesc(
 						sprintf(
 							'<a href="%s" target=_blank rel=noopener>%s</a>',
@@ -122,6 +122,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 							esc_html__( 'View the sitemap index.', 'autodescription' )
 						)
 					);
+				}
 			}
 
 			/**

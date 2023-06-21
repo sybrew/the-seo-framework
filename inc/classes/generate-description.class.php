@@ -464,10 +464,13 @@ class Generate_Description extends Generate {
 	 */
 	public function get_generated_description( $args = null, $escape = true, $type = 'search' ) {
 
-		if ( ! $this->is_auto_description_enabled( $args ) ) return '';
+		if ( ! $this->is_auto_description_enabled( $args ) ) {
+			return '';
+		}
 
-		if ( ! \in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
+		if ( ! \in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) ) {
 			$type = 'search';
+		}
 
 		if ( null === $args ) {
 			$excerpt = $this->get_description_excerpt_from_query();
@@ -566,7 +569,9 @@ class Generate_Description extends Generate {
 	protected function get_description_excerpt_from_query() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		if ( $this->is_real_front_page() ) {
 			$excerpt = $this->get_front_page_description_excerpt();
@@ -648,8 +653,9 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_archival_description_excerpt( $object = null ) {
 
-		if ( $object && \is_wp_error( $object ) )
+		if ( $object && \is_wp_error( $object ) ) {
 			return '';
+		}
 
 		if ( \is_null( $object ) ) {
 			$in_the_loop = true;
@@ -672,7 +678,9 @@ class Generate_Description extends Generate {
 			]
 		);
 
-		if ( $excerpt ) return $excerpt;
+		if ( $excerpt ) {
+			return $excerpt;
+		}
 
 		if ( $in_the_loop ) {
 			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
@@ -733,7 +741,9 @@ class Generate_Description extends Generate {
 		$id = $id ?? $this->get_the_real_ID();
 
 		// If the post is protected, don't generate a description.
-		if ( $this->is_protected( $id ) ) return '';
+		if ( $this->is_protected( $id ) ) {
+			return '';
+		}
 
 		return $this->get_excerpt_by_id( '', $id, null, false );
 	}
@@ -785,11 +795,14 @@ class Generate_Description extends Generate {
 	 */
 	public function get_excerpt_by_id( $excerpt = '', $id = 0, $deprecated = null, $escape = true ) {
 
-		if ( empty( $excerpt ) )
+		if ( empty( $excerpt ) ) {
 			$excerpt = $this->fetch_excerpt( $id );
+		}
 
 		// No need to parse an empty excerpt.
-		if ( ! $excerpt ) return '';
+		if ( ! $excerpt ) {
+			return '';
+		}
 
 		return $escape ? $this->s_excerpt( $excerpt ) : $this->s_excerpt_raw( $excerpt );
 	}
@@ -886,7 +899,9 @@ class Generate_Description extends Generate {
 		// We'll rectify that later, somewhat, where characters are transformed.
 		// We could also use preg_match_all( '/./u' ); or count( preg_split( '/./u', $excerpt, $min_char_length ) );
 		// But, again, that'll eat CPU cycles.
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length ) {
+			return '';
+		}
 
 		// Decode to get a more accurate character length in Unicode.
 		$excerpt = html_entity_decode( $excerpt, \ENT_QUOTES, 'UTF-8' );
@@ -896,7 +911,9 @@ class Generate_Description extends Generate {
 
 		$excerpt = trim( $matches[0] ?? '' ?: '' );
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length ) {
+			return '';
+		}
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
 		$excerpt = html_entity_decode(
@@ -949,7 +966,9 @@ class Generate_Description extends Generate {
 		}
 		// else { TODO Should we empty excerpt here? Can we even reach this? }
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length ) {
+			return '';
+		}
 
 		/**
 		 * @param array $matches: {
@@ -974,7 +993,9 @@ class Generate_Description extends Generate {
 			$excerpt = '';
 		}
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length ) {
+			return '';
+		}
 
 		return trim( htmlentities( $excerpt, \ENT_QUOTES, 'UTF-8' ) );
 	}
@@ -995,8 +1016,9 @@ class Generate_Description extends Generate {
 	 */
 	public function is_auto_description_enabled( $args = null ) {
 
-		if ( null !== $args )
+		if ( null !== $args ) {
 			$this->fix_generation_args( $args );
+		}
 
 		/**
 		 * @since 2.5.0

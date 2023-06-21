@@ -52,7 +52,9 @@ class Sanitize extends Admin_Pages {
 	protected function verify_seo_settings_nonce() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		/**
 		 * If this page doesn't parse the site options,
@@ -64,11 +66,14 @@ class Sanitize extends Admin_Pages {
 		if (
 			   empty( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
 			|| ! \is_array( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
-		) return memo( false );
+		) {
+			return memo( false );
+		}
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
-		if ( ! \current_user_can( $this->get_settings_capability() ) )
+		if ( ! \current_user_can( $this->get_settings_capability() ) ) {
 			return memo( false );
+		}
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		// This also checks the nonce: `_wpnonce`.
@@ -91,7 +96,9 @@ class Sanitize extends Admin_Pages {
 	protected function process_settings_submission() {
 
 		// Verify update headers.
-		if ( ! $this->verify_seo_settings_nonce() ) return;
+		if ( ! $this->verify_seo_settings_nonce() ) {
+			return;
+		}
 
 		// Initialize sanitation filters parsed on each option update.
 		$this->init_sanitizer_filters();
@@ -172,7 +179,9 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function init_sanitizer_filters() {
 
-		if ( has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) {
+			return;
+		}
 
 		$this->add_option_filter(
 			's_title_separator',
@@ -572,8 +581,9 @@ class Sanitize extends Admin_Pages {
 
 		static $options = [];
 
-		if ( $get )
+		if ( $get ) {
 			return $options;
+		}
 
 		if ( \is_array( $suboption ) ) {
 			foreach ( $suboption as $so ) {
@@ -650,8 +660,9 @@ class Sanitize extends Admin_Pages {
 
 		$available_filters = $this->get_available_filters();
 
-		if ( ! \in_array( $filter, array_keys( $available_filters ), true ) )
+		if ( ! \in_array( $filter, array_keys( $available_filters ), true ) ) {
 			return $new_value;
+		}
 
 		return \call_user_func_array(
 			$available_filters[ $filter ],
@@ -732,13 +743,15 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_all_post_type_archive_meta( $data ) {
 
-		if ( ! $data )
+		if ( ! $data ) {
 			return [];
+		}
 
 		// Do NOT test for post type's existence -- it might be registered incorrectly.
 		// If the metadata yields empty -- do not unset key! It'll override "defaults" that way.
-		foreach ( $data as &$meta )
+		foreach ( $data as &$meta ) {
 			$meta = $this->s_post_type_archive_meta( $meta );
+		}
 
 		return $data;
 	}
@@ -896,8 +909,9 @@ class Sanitize extends Admin_Pages {
 				case 'counter_type':
 					$value = \absint( $value );
 
-					if ( $value > 3 )
+					if ( $value > 3 ) {
 						$value = 0;
+					}
 					continue 2;
 
 				default:
@@ -923,14 +937,16 @@ class Sanitize extends Admin_Pages {
 
 		$key = \array_key_exists( $new_value, $title_separator );
 
-		if ( $key )
+		if ( $key ) {
 			return (string) $new_value;
+		}
 
 		$previous = $this->get_option( 'title_separator' );
 
 		// Fallback to default if empty.
-		if ( empty( $previous ) )
+		if ( empty( $previous ) ) {
 			$previous = $this->get_default_option( 'title_separator' );
+		}
 
 		return (string) $previous;
 	}
@@ -1075,7 +1091,9 @@ class Sanitize extends Admin_Pages {
 	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
 
 		// No need to parse an empty excerpt. TODO consider not parsing '0' as well?
-		if ( '' === $excerpt ) return '';
+		if ( '' === $excerpt ) {
+			return '';
+		}
 
 		// Oh, how I'd like PHP 8's match()...
 		switch ( $this->get_option( 'auto_description_html_method' ) ) {
@@ -1110,8 +1128,9 @@ class Sanitize extends Admin_Pages {
 			$excerpt = $this->strip_tags_cs( \strip_shortcodes( $excerpt ), $strip_args );
 		}
 
-		if ( $escape )
+		if ( $escape ) {
 			return $this->s_description( $excerpt );
+		}
 
 		return $this->s_description_raw( $excerpt );
 	}
@@ -1349,10 +1368,13 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_disabled_post_types( $new_values ) {
 
-		if ( ! \is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) {
+			return [];
+		}
 
-		foreach ( $this->get_forced_supported_post_types() as $forced )
+		foreach ( $this->get_forced_supported_post_types() as $forced ) {
 			unset( $new_values[ $forced ] );
+		}
 
 		return $this->s_post_types( $new_values );
 	}
@@ -1369,10 +1391,13 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_post_types( $new_values ) {
 
-		if ( ! \is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) {
+			return [];
+		}
 
-		foreach ( $new_values as &$value )
+		foreach ( $new_values as &$value ) {
 			$value = $this->s_one_zero( $value );
+		}
 
 		return $new_values;
 	}
@@ -1389,10 +1414,13 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_disabled_taxonomies( $new_values ) {
 
-		if ( ! \is_array( $new_values ) ) return [];
+		if ( ! \is_array( $new_values ) ) {
+			return [];
+		}
 
-		foreach ( $this->get_forced_supported_taxonomies() as $forced )
+		foreach ( $this->get_forced_supported_taxonomies() as $forced ) {
 			unset( $new_values[ $forced ] );
+		}
 
 		return $this->s_taxonomies( $new_values );
 	}
@@ -1587,14 +1615,19 @@ class Sanitize extends Admin_Pages {
 		$new_value = $this->s_tabs( $new_value );
 		$new_value = trim( $new_value );
 
-		if ( empty( $new_value ) ) return '';
+		if ( empty( $new_value ) ) {
+			return '';
+		}
 
 		$profile = trim( $this->s_relative_url( $new_value ), ' /' );
 
-		if ( '@' === $profile ) return '';
+		if ( '@' === $profile ) {
+			return '';
+		}
 
-		if ( '@' !== substr( $profile, 0, 1 ) )
+		if ( '@' !== substr( $profile, 0, 1 ) ) {
 			$profile = "@$profile";
+		}
 
 		return str_replace( [ ' ', "\t" ], '', $profile );
 	}
@@ -1620,11 +1653,15 @@ class Sanitize extends Admin_Pages {
 		$new_value = $this->s_tabs( $new_value );
 		$new_value = trim( $new_value );
 
-		if ( empty( $new_value ) ) return '';
+		if ( empty( $new_value ) ) {
+			return '';
+		}
 
 		$path = trim( $this->s_relative_url( $new_value ), ' /' );
 
-		if ( ! $path ) return '';
+		if ( ! $path ) {
+			return '';
+		}
 
 		$link = "https://www.facebook.com/{$path}";
 
@@ -1661,12 +1698,15 @@ class Sanitize extends Admin_Pages {
 
 		$key = \array_key_exists( $new_value, $card );
 
-		if ( $key ) return (string) $new_value;
+		if ( $key ) {
+			return (string) $new_value;
+		}
 
 		$previous = $this->get_option( 'twitter_card' );
 
-		if ( empty( $previous ) )
+		if ( empty( $previous ) ) {
 			$previous = $this->get_default_option( 'twitter_card' );
+		}
 
 		return (string) $previous;
 	}
@@ -1706,11 +1746,14 @@ class Sanitize extends Admin_Pages {
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple, performant sanity.
 		$url = strip_tags( $new_value );
 
-		if ( ! $url ) return '';
+		if ( ! $url ) {
+			return '';
+		}
 
 		// This is also checked when performing a redirect.
-		if ( ! $this->allow_external_redirect() )
+		if ( ! $this->allow_external_redirect() ) {
 			$url = $this->set_url_scheme( $url, 'relative' );
+		}
 
 		// Only adjust scheme if it used to be relative. Do not use `s_url_relative_to_current_scheme()`.
 		$url = $this->convert_to_url_if_path( $url );
@@ -1758,11 +1801,13 @@ class Sanitize extends Admin_Pages {
 
 		$color = trim( $new_value, '# ' );
 
-		if ( '' === $color )
+		if ( '' === $color ) {
 			return '';
+		}
 
-		if ( preg_match( '/^([A-Fa-f0-9]{3}){1,2}$/', $color ) )
+		if ( preg_match( '/^([A-Fa-f0-9]{3}){1,2}$/', $color ) ) {
 			return $color;
+		}
 
 		return '';
 	}
@@ -1845,8 +1890,9 @@ class Sanitize extends Admin_Pages {
 			'http',
 		];
 
-		if ( \in_array( $new_value, $accepted_values, true ) )
+		if ( \in_array( $new_value, $accepted_values, true ) ) {
 			return (string) $new_value;
+		}
 
 		return 'automatic';
 	}
@@ -2010,7 +2056,9 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
 
-		if ( false === strpos( $input, '<' ) ) return $input;
+		if ( false === strpos( $input, '<' ) ) {
+			return $input;
+		}
 
 		/**
 		 * Find the optimized version in `s_excerpt()`. The defaults here treats HTML for a18y reading, not description generation.
@@ -2040,8 +2088,9 @@ class Sanitize extends Admin_Pages {
 			$args = $default_args;
 		} else {
 			// We don't use array_merge() here because we want to default these to [] when $args is given.
-			foreach ( [ 'clear', 'space' ] as $type )
+			foreach ( [ 'clear', 'space' ] as $type ) {
 				$args[ $type ] = (array) ( $args[ $type ] ?? [] );
+			}
 
 			$args['strip']  = $args['strip'] ?? $default_args['strip'];
 			$args['passes'] = $args['passes'] ?? $default_args['passes'];
@@ -2088,7 +2137,9 @@ class Sanitize extends Admin_Pages {
 
 		foreach ( $parse as $query_type => $handles ) {
 			foreach ( $handles as $flow_type => $elements ) {
-				if ( false === strpos( $input, '<' ) || ! $elements ) break 2;
+				if ( false === strpos( $input, '<' ) || ! $elements ) {
+					break 2;
+				}
 
 				switch ( $query_type ) {
 					case 'void_query':
@@ -2129,7 +2180,9 @@ class Sanitize extends Admin_Pages {
 								$input
 							) ?? '';
 							// If nothing changed, or no more HTML is present, we're done.
-							if ( $pre_pass_input === $input || false === strpos( $input, '<' ) ) break;
+							if ( $pre_pass_input === $input || false === strpos( $input, '<' ) ) {
+								break;
+							}
 						}
 						// Reset for next fall-through null-coalescing.
 						unset( $passes, $replacement );
@@ -2166,8 +2219,9 @@ class Sanitize extends Admin_Pages {
 	public function s_image_details( $details ) {
 
 		// This is 350x faster than a polyfill for `array_is_list()`.
-		if ( array_values( $details ) === $details )
+		if ( array_values( $details ) === $details ) {
 			return $this->s_image_details_deep( $details );
+		}
 
 		$defaults = [
 			'url'      => '',
@@ -2180,11 +2234,15 @@ class Sanitize extends Admin_Pages {
 
 		[ $url, $id, $width, $height, $alt, $filesize ] = array_values( array_merge( $defaults, $details ) );
 
-		if ( ! $url ) return $defaults;
+		if ( ! $url ) {
+			return $defaults;
+		}
 
 		$url = $this->s_url_relative_to_current_scheme( $url );
 
-		if ( ! $url ) return $defaults;
+		if ( ! $url ) {
+			return $defaults;
+		}
 
 		/**
 		 * Skip APNG, BMP, ICO, TIFF, and SVG.
@@ -2202,20 +2260,25 @@ class Sanitize extends Admin_Pages {
 			strtolower( strtok( pathinfo( $url, \PATHINFO_EXTENSION ), '?' ) ),
 			[ 'apng', 'bmp', 'ico', 'cur', 'svg', 'tif', 'tiff' ],
 			true
-		) ) return $defaults;
+		) ) {
+			return $defaults;
+		}
 
 		$width  = \absint( $width );
 		$height = \absint( $height );
 
-		if ( ! $width || ! $height )
+		if ( ! $width || ! $height ) {
 			$width = $height = 0;
+		}
 
 		// TODO add filter for 5 * \MB_IN_BYTES; Facebook allows 8MB; Twitter 5MB (Q4 2022).
 		if ( $id && ( $width > 4096 || $height > 4096 || $filesize > 5 * \MB_IN_BYTES ) ) {
 			$new_image = $this->get_largest_acceptable_image_src( $id, 4096, 5 * \MB_IN_BYTES );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 
-			if ( ! $url ) return $defaults;
+			if ( ! $url ) {
+				return $defaults;
+			}
 
 			// No sanitization needed. PHP's getimagesize() returns the correct values.
 			$width  = $new_image[1];
@@ -2253,11 +2316,13 @@ class Sanitize extends Admin_Pages {
 		$cleaned_details = [];
 
 		// Failsafe. Convert associative details to a multidimensional sequential array.
-		if ( isset( $details_array['url'] ) )
+		if ( isset( $details_array['url'] ) ) {
 			$details_array = [ $details_array ];
+		}
 
-		foreach ( $details_array as $details )
+		foreach ( $details_array as $details ) {
 			$cleaned_details[] = $this->s_image_details( $details );
+		}
 
 		return array_values(
 			array_intersect_key(
@@ -2287,8 +2352,9 @@ class Sanitize extends Admin_Pages {
 
 		if ( \is_array( $value ) ) {
 			foreach ( $value as $v ) {
-				if ( $this->set_and_strlen( $var, $v ) )
+				if ( $this->set_and_strlen( $var, $v ) ) {
 					return true;
+				}
 			}
 			return false;
 		}

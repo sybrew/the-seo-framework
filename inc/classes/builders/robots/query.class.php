@@ -94,37 +94,38 @@ final class Query extends Factory {
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
 			if ( $tsf->is_real_front_page() ) {
-				yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
+			yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
 			} else {
-				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
+			$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				if ( $tsf->is_archive() ) {
-					if ( $tsf->is_author() ) {
-						yield 'globals_author' => (bool) $tsf->get_option( "author_$type" );
+			if ( $tsf->is_archive() ) {
+				if ( $tsf->is_author() ) {
+					yield 'globals_author' => (bool) $tsf->get_option( "author_$type" );
 					} elseif ( \is_date() ) {
-						yield 'globals_date' => (bool) $tsf->get_option( "date_$type" );
+					yield 'globals_date' => (bool) $tsf->get_option( "date_$type" );
 					}
 				} elseif ( $tsf->is_search() ) {
-					yield 'globals_search' => (bool) $tsf->get_option( "search_$type" );
+				yield 'globals_search' => (bool) $tsf->get_option( "search_$type" );
 				}
 			}
 
 			// is_real_front_page() can still be singular or archive. Thus, this conditional block is split up.
 			if ( $tsf->is_archive() ) {
-				if ( $tsf->is_category() || $tsf->is_tag() || $tsf->is_tax() ) {
-					yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $tsf->get_current_taxonomy() );
+			if ( $tsf->is_category() || $tsf->is_tag() || $tsf->is_tax() ) {
+				yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $tsf->get_current_taxonomy() );
 
-					// Store values from each post type bound to the taxonomy.
-					foreach ( $tsf->get_post_types_from_taxonomy() as $post_type )
-						$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+				// Store values from each post type bound to the taxonomy.
+				foreach ( $tsf->get_post_types_from_taxonomy() as $post_type ) {
+					$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+					}
 
-					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
-					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
+				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 				} elseif ( \is_post_type_archive() ) {
-					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
+				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
 				}
 			} elseif ( $tsf->is_singular() ) {
-				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
+			yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
 			}
 
 		// We assert options here for a jump to index_protection might be unaware.
@@ -142,14 +143,16 @@ final class Query extends Factory {
 				 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
 				 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
 				 */
-				if ( (int) \get_query_var( 'cpage', 0 ) > 0 )
+				if ( (int) \get_query_var( 'cpage', 0 ) > 0 ) {
 					yield from static::assert_noindex_query_pass( 'cpage' );
+				}
 			}
 		}
 
 		exploit_protection: if ( $tsf->is_query_exploited() ) {
-			if ( \in_array( $type, [ 'noindex', 'nofollow' ], true ) )
+			if ( \in_array( $type, [ 'noindex', 'nofollow' ], true ) ) {
 				yield 'query_protection' => true;
+			}
 		}
 
 		end:;

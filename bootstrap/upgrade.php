@@ -104,7 +104,9 @@ function _do_upgrade() {
 
 	$tsf = \tsf();
 
-	if ( ! $tsf->loaded || \wp_doing_ajax() ) return;
+	if ( ! $tsf->loaded || \wp_doing_ajax() ) {
+		return;
+	}
 
 	if ( $tsf->is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
@@ -116,7 +118,9 @@ function _do_upgrade() {
 
 	$lock = _set_upgrade_lock( $timeout );
 	// Lock failed to create--probably because it was already locked (or the database failed us).
-	if ( ! $lock ) return;
+	if ( ! $lock ) {
+		return;
+	}
 
 	// Register this AFTER the lock is set. Otherwise, it may clear the lock in another thread.
 	// This releases the lock when the upgrade crashes or when we forget to unlock it...
@@ -126,8 +130,9 @@ function _do_upgrade() {
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
 	$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
-	if ( 0 !== $ini_max_execution_time )
+	if ( 0 !== $ini_max_execution_time ) {
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
+	}
 
 	/**
 	 * Clear the cache to prevent an update_option() from saving a stale database version to the cache.
@@ -261,12 +266,14 @@ function _set_upgrade_lock( $release_timeout ) {
 		$lock_result = \get_option( $lock_option );
 
 		// If a lock couldn't be created, and there isn't a lock, bail.
-		if ( ! $lock_result )
+		if ( ! $lock_result ) {
 			return false;
+		}
 
 		// Check to see if the lock is still valid. If it is, bail.
-		if ( $lock_result > ( time() - $release_timeout ) )
+		if ( $lock_result > ( time() - $release_timeout ) ) {
 			return false;
+		}
 
 		// There must exist an expired lock, clear it...
 		_release_upgrade_lock();
@@ -488,8 +495,9 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 		];
 
 		$esc_sql_in = function( $var ) {
-			if ( ! is_scalar( $var ) )
+			if ( ! is_scalar( $var ) ) {
 				$var = array_filter( (array) $var, 'is_scalar' );
+			}
 			return \esc_sql( $var );
 		};
 
@@ -557,10 +565,14 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
  */
 function _prepare_upgrade_suggestion( $previous_version, $current_version ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
 	// Don't invoke if the user didn't upgrade.
-	if ( ! $previous_version ) return;
+	if ( ! $previous_version ) {
+		return;
+	}
 
 	// Can this even run twice? Let's play it safe to prevent crashes.
-	if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
+	if ( \The_SEO_Framework\has_run( __METHOD__ ) ) {
+		return;
+	}
 
 	require \THE_SEO_FRAMEWORK_DIR_PATH_FUNCT . 'upgrade-suggestion.php';
 }
@@ -614,8 +626,9 @@ function _do_upgrade_2701() {
 
 	if ( $term_meta ) {
 
-		foreach ( (array) $term_meta as $term_id => $meta )
+		foreach ( (array) $term_meta as $term_id => $meta ) {
 			\add_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $meta, true );
+		}
 
 		// Rudimentary test for remaining ~300 users of earlier versions passed, set initial version to 2600.
 		\update_option( 'the_seo_framework_initial_db_version', '2600', 'no' );
@@ -629,8 +642,9 @@ function _do_upgrade_2701() {
  */
 function _do_upgrade_2802() {
 	// Delete old values from database. Removes backwards compatibility.
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2701' ) {
 		\delete_option( 'autodescription-term-meta' );
+	}
 }
 
 /**
@@ -719,8 +733,9 @@ function _do_upgrade_3103() {
 			$_value = [];
 
 			// Only populate when set. An empty array is fine.
-			if ( $_attachment_option )
+			if ( $_attachment_option ) {
 				$_value['attachment'] = $_attachment_option;
+			}
 
 			$tsf->update_option( $tsf->get_robots_post_type_option_id( $r ), $_value );
 		}
@@ -761,8 +776,9 @@ function _do_upgrade_3300() {
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 
 		// Convert 'dash' title option to 'hyphen', silently. Nothing notably changes for the user.
-		if ( 'dash' === $tsf->get_option( 'title_separator', false ) )
+		if ( 'dash' === $tsf->get_option( 'title_separator', false ) ) {
 			$tsf->update_option( 'title_separator', 'hyphen' );
+		}
 
 		// Add default cron pinging option.
 		$tsf->update_option( 'ping_use_cron', 1 );
@@ -844,10 +860,12 @@ function _do_upgrade_4103() {
 			$_category_option = (int) (bool) $tsf->get_option( "category_$r", false );
 			$_post_tag_option = (int) (bool) $tsf->get_option( "tag_$r", false );
 
-			if ( $_category_option )
+			if ( $_category_option ) {
 				$_value['category'] = $_category_option;
-			if ( $_post_tag_option )
+			}
+			if ( $_post_tag_option ) {
 				$_value['post_tag'] = $_post_tag_option;
+			}
 
 			$tsf->update_option( $tsf->get_robots_taxonomy_option_id( $r ), $_value );
 		}

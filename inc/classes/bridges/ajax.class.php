@@ -54,8 +54,9 @@ final class AJAX {
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = $_POST['tsf_dismiss_key'] ?? '';
 
-		if ( ! $key )
+		if ( ! $key ) {
 			\wp_send_json_error( null, 400 );
+		}
 
 		$notices = $tsf->get_static_cache( 'persistent_notices', [] );
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) {
@@ -64,8 +65,9 @@ final class AJAX {
 		}
 
 		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-		|| ! \check_ajax_referer( $tsf->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false ) )
+		|| ! \check_ajax_referer( $tsf->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false ) ) {
 			\wp_die( -1, 403 );
+		}
 
 		$tsf->clear_persistent_notice( $key );
 		\wp_send_json_success( null, 200 );
@@ -90,8 +92,9 @@ final class AJAX {
 		$tsf->_check_tsf_ajax_referer( 'edit_posts' );
 
 		// If current user isn't allowed to edit posts, don't do anything and kill PHP.
-		if ( ! \current_user_can( 'edit_posts' ) )
+		if ( ! \current_user_can( 'edit_posts' ) ) {
 			\wp_send_json_error();
+		}
 
 		/**
 		 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
@@ -104,8 +107,9 @@ final class AJAX {
 		}
 		$value = \absint( $value );
 
-		if ( $value > 3 )
+		if ( $value > 3 ) {
 			$value = 0;
+		}
 
 		// Update the option and get results of action.
 		$tsf->update_single_user_meta_item( $tsf->get_user_id(), 'counter_type', $value );
@@ -150,20 +154,23 @@ final class AJAX {
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
 		$tsf->_check_tsf_ajax_referer( 'upload_files' );
 
-		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
+		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) ) {
 			\wp_send_json_error();
+		}
 
 		$attachment_id = \absint( $_POST['id'] );
 
-		if ( ! $attachment_id || 'attachment' !== \get_post_type( $attachment_id ) || ! \wp_attachment_is_image( $attachment_id ) )
+		if ( ! $attachment_id || 'attachment' !== \get_post_type( $attachment_id ) || ! \wp_attachment_is_image( $attachment_id ) ) {
 			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
+		}
 
 		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) );
 		$data    = array_map( 'absint', $_POST['cropDetails'] );
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
-		if ( ! $cropped || \is_wp_error( $cropped ) )
+		if ( ! $cropped || \is_wp_error( $cropped ) ) {
 			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
+		}
 
 		switch ( $context ) :
 			case 'tsf-image':
@@ -215,14 +222,16 @@ final class AJAX {
 				];
 
 				// Copy the image caption attribute (post_excerpt field) from the original image.
-				if ( \strlen( trim( $original_attachment->post_excerpt ) ) )
+				if ( \strlen( trim( $original_attachment->post_excerpt ) ) ) {
 					$attachment['post_excerpt'] = $original_attachment->post_excerpt;
+				}
 
 				// Copy the image alt text attribute from the original image.
-				if ( \strlen( trim( $original_attachment->_wp_attachment_image_alt ) ) )
+				if ( \strlen( trim( $original_attachment->_wp_attachment_image_alt ) ) ) {
 					$attachment['meta_input'] = [
 						'_wp_attachment_image_alt' => \wp_slash( $original_attachment->_wp_attachment_image_alt ),
 					];
+				}
 
 				$attachment_id = \wp_insert_attachment( $attachment, $cropped );
 				$metadata      = \wp_generate_attachment_metadata( $attachment_id, $cropped );
@@ -271,8 +280,9 @@ final class AJAX {
 
 		$post_id = \absint( $_POST['post_id'] );
 
-		if ( ! $post_id || ! \current_user_can( 'edit_post', $post_id ) )
+		if ( ! $post_id || ! \current_user_can( 'edit_post', $post_id ) ) {
 			\wp_send_json_error();
+		}
 
 		$_get_defaults = [
 			'seobar'          => false,
@@ -299,54 +309,56 @@ final class AJAX {
 
 		$data = [];
 
-		foreach ( $get as $g ) switch ( $g ) {
-			case 'seobar':
-				$data[ $g ] = $tsf->get_generated_seo_bar( $_generator_args );
-				break;
+		foreach ( $get as $g ) {
+			switch ( $g ) {
+				case 'seobar':
+					$data[ $g ] = $tsf->get_generated_seo_bar( $_generator_args );
+							break;
 
-			case 'metadescription':
-			case 'ogdescription':
-			case 'twdescription':
-				switch ( $g ) {
-					case 'metadescription':
-						if ( $tsf->is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+				case 'metadescription':
+				case 'ogdescription':
+				case 'twdescription':
+					switch ( $g ) {
+						case 'metadescription':
+							if ( $tsf->is_static_frontpage( $post_id ) ) {
+								$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										?: $tsf->get_generated_description( $_generator_args, false );
-						} else {
-							$data[ $g ] = $tsf->get_generated_description( $_generator_args, false );
-						}
-						break;
-					case 'ogdescription':
-						if ( $tsf->is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+							} else {
+								$data[ $g ] = $tsf->get_generated_description( $_generator_args, false );
+							}
+							break;
+						case 'ogdescription':
+							if ( $tsf->is_static_frontpage( $post_id ) ) {
+								$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										?: $tsf->get_generated_open_graph_description( $_generator_args, false );
-						} else {
-							$data[ $g ] = $tsf->get_generated_open_graph_description( $_generator_args, false );
-						}
-						break;
-					case 'twdescription':
-						if ( $tsf->is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+							} else {
+								$data[ $g ] = $tsf->get_generated_open_graph_description( $_generator_args, false );
+							}
+							break;
+						case 'twdescription':
+							if ( $tsf->is_static_frontpage( $post_id ) ) {
+								$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										?: $tsf->get_generated_twitter_description( $_generator_args, false );
-						} else {
-							$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
-						}
-						break;
-				}
+							} else {
+								$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
+							}
+							break;
+					}
 
-				$data[ $g ] = $tsf->s_description( $data[ $g ] );
-				break;
+					$data[ $g ] = $tsf->s_description( $data[ $g ] );
+							break;
 
-			case 'imageurl':
-				if ( $tsf->is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
-					$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
-				} else {
-					$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
-				}
-				break;
+				case 'imageurl':
+					if ( $tsf->is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
+						$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+					} else {
+						$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+					}
+							break;
 
-			default:
-				break;
+				default:
+							break;
+			}
 		}
 
 		\wp_send_json_success( [

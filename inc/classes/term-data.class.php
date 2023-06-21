@@ -84,7 +84,9 @@ class Term_Data extends Post_Data {
 	public function get_term_meta( $term_id, $use_cache = true ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && ( $memo = memo( null, $term_id ) ) ) return $memo;
+		if ( $use_cache && ( $memo = memo( null, $term_id ) ) ) {
+			return $memo;
+		}
 
 		$term = \get_term( $term_id );
 
@@ -244,7 +246,9 @@ class Term_Data extends Post_Data {
 			|| ! \current_user_can( 'edit_term', $term->term_id )
 			|| ! isset( $_POST['_wpnonce'] )
 			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
-		) return;
+		) {
+			return;
+		}
 
 		$data = (array) $_POST['autodescription-meta'];
 
@@ -274,7 +278,9 @@ class Term_Data extends Post_Data {
 			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
 			|| ! \current_user_can( 'edit_term', $term->term_id )
 			|| ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
-		) return;
+		) {
+			return;
+		}
 
 		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -309,7 +315,9 @@ class Term_Data extends Post_Data {
 		$term = \get_term( $term_id, $taxonomy );
 
 		// We could test for is_wp_error( $term ), but this is more to the point.
-		if ( empty( $term->term_id ) ) return;
+		if ( empty( $term->term_id ) ) {
+			return;
+		}
 
 		$meta          = $this->get_term_meta( $term->term_id, false );
 		$meta[ $item ] = $value;
@@ -334,7 +342,9 @@ class Term_Data extends Post_Data {
 		$term = \get_term( $term_id, $taxonomy );
 
 		// We could test for is_wp_error( $term ), but this is more to the point.
-		if ( empty( $term->term_id ) ) return;
+		if ( empty( $term->term_id ) ) {
+			return;
+		}
 
 		$data = (array) \wp_parse_args( $data, $this->get_term_meta_defaults( $term->term_id ) );
 		$data = $this->s_term_meta( $data );
@@ -375,8 +385,9 @@ class Term_Data extends Post_Data {
 		$data = \get_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		if ( \is_array( $data ) ) {
-			foreach ( $this->get_term_meta_defaults( $term_id ) as $key => $value )
+			foreach ( $this->get_term_meta_defaults( $term_id ) as $key => $value ) {
 				unset( $data[ $key ] );
+			}
 		}
 
 		// Only delete when no values are left, because someone else might've filtered it.
@@ -401,7 +412,9 @@ class Term_Data extends Post_Data {
 	public function get_latest_category_id() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$cats = \get_terms( [
 			'taxonomy'   => 'category',
@@ -476,8 +489,9 @@ class Term_Data extends Post_Data {
 
 		$post_type = $post_type ?: $this->get_current_post_type();
 
-		if ( ! $post_type )
+		if ( ! $post_type ) {
 			return [];
+		}
 
 		$taxonomies = \get_object_taxonomies( $post_type, 'objects' );
 		$taxonomies = array_filter(

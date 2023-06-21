@@ -21,7 +21,9 @@ namespace The_SEO_Framework;
  */
 function _wpforo_fix_page() {
 
-	if ( \is_admin() || ! \function_exists( '\\is_wpforo_page' ) || ! \is_wpforo_page() ) return;
+	if ( \is_admin() || ! \function_exists( '\\is_wpforo_page' ) || ! \is_wpforo_page() ) {
+		return;
+	}
 
 	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
@@ -107,20 +109,28 @@ function _wpforo_filter_pre_title( $title = '', $args = null ) {
  */
 function _assert_wpforo_page_seo_bar( $interpreter ) {
 
-	if ( $interpreter::$query['taxonomy'] ) return;
+	if ( $interpreter::$query['taxonomy'] ) {
+		return;
+	}
 
 	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 
-	if ( ! $meta_enabled && ! $title_enabled ) return;
+	if ( ! $meta_enabled && ! $title_enabled ) {
+		return;
+	}
 
 	$items = &$interpreter::collect_seo_bar_items();
 
 	// Don't do anything if there's a blocking redirect.
-	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
+	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) {
+		return;
+	}
 
 	// Skip if we're not dealing with the wpForo page.
-	if ( ! \has_shortcode( \tsf()->get_post_content( $interpreter::$query['id'] ), 'wpforo' ) ) return;
+	if ( ! \has_shortcode( \tsf()->get_post_content( $interpreter::$query['id'] ), 'wpforo' ) ) {
+		return;
+	}
 
 	foreach ( $items as $id => &$item ) {
 		switch ( $id ) {
@@ -128,10 +138,14 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 				// Preserve redirect, for TSF still manages that.
 				continue 2;
 			case 'title':
-				if ( ! $title_enabled ) continue 2;
+				if ( ! $title_enabled ) {
+					continue 2;
+				}
 				break;
 			default:
-				if ( ! $meta_enabled ) continue 2;
+				if ( ! $meta_enabled ) {
+					continue 2;
+				}
 				break;
 		}
 

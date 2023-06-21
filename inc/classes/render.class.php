@@ -48,8 +48,9 @@ class Render extends Admin_Init {
 	 */
 	public function get_document_title( $title = '' ) {
 
-		if ( ! $this->query_supports_seo() )
+		if ( ! $this->query_supports_seo() ) {
 			return $title;
+		}
 
 		/**
 		 * @since 3.1.0
@@ -80,8 +81,9 @@ class Render extends Admin_Init {
 	 */
 	public function get_wp_title( $title = '' ) {
 
-		if ( ! $this->query_supports_seo() )
+		if ( ! $this->query_supports_seo() ) {
 			return $title;
+		}
 
 		/**
 		 * @since 3.1.0
@@ -114,7 +116,9 @@ class Render extends Admin_Init {
 
 		foreach ( $this->get_image_details_from_cache( ! $this->get_option( 'multi_og_image' ) ) as $image ) {
 			$url = $image['url'];
-			if ( $url ) break;
+			if ( $url ) {
+				break;
+			}
 		}
 
 		return $url ?? '';
@@ -279,8 +283,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_description() {
 
-		if ( ! $this->use_og_tags() )
+		if ( ! $this->use_og_tags() ) {
 			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -311,8 +316,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_locale() {
 
-		if ( ! $this->use_og_tags() )
+		if ( ! $this->use_og_tags() ) {
 			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -345,8 +351,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_title() {
 
-		if ( ! $this->use_og_tags() )
+		if ( ! $this->use_og_tags() ) {
 			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -377,8 +384,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_type() {
 
-		if ( ! $this->use_og_tags() )
+		if ( ! $this->use_og_tags() ) {
 			return '';
+		}
 
 		$type = $this->get_og_type();
 
@@ -401,7 +409,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_image() {
 
-		if ( ! $this->use_og_tags() ) return '';
+		if ( ! $this->use_og_tags() ) {
+			return '';
+		}
 
 		$output = '';
 
@@ -432,7 +442,9 @@ class Render extends Admin_Init {
 			}
 
 			// Redundant?
-			if ( ! $multi ) break;
+			if ( ! $multi ) {
+				break;
+			}
 		}
 
 		return $output;
@@ -448,7 +460,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_sitename() {
 
-		if ( ! $this->use_og_tags() ) return '';
+		if ( ! $this->use_og_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -482,7 +496,9 @@ class Render extends Admin_Init {
 	 */
 	public function og_url() {
 
-		if ( ! $this->use_og_tags() ) return '';
+		if ( ! $this->use_og_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.9.3
@@ -512,7 +528,9 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_card() {
 
-		if ( ! $this->use_twitter_tags() ) return '';
+		if ( ! $this->use_twitter_tags() ) {
+			return '';
+		}
 
 		$card = $this->get_current_twitter_card_type();
 
@@ -531,7 +549,9 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_site() {
 
-		if ( ! $this->use_twitter_tags() ) return '';
+		if ( ! $this->use_twitter_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -565,7 +585,9 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_creator() {
 
-		if ( ! $this->use_twitter_tags() ) return '';
+		if ( ! $this->use_twitter_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -598,7 +620,9 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_title() {
 
-		if ( ! $this->use_twitter_tags() ) return '';
+		if ( ! $this->use_twitter_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -631,7 +655,9 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_description() {
 
-		if ( ! $this->use_twitter_tags() ) return '';
+		if ( ! $this->use_twitter_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -666,7 +692,9 @@ class Render extends Admin_Init {
 	 */
 	public function twitter_image() {
 
-		if ( ! $this->use_twitter_tags() ) return '';
+		if ( ! $this->use_twitter_tags() ) {
+			return '';
+		}
 
 		$output = '';
 
@@ -718,8 +746,12 @@ class Render extends Admin_Init {
 	 */
 	public function facebook_author() {
 
-		if ( ! $this->use_facebook_tags() ) return '';
-		if ( 'article' !== $this->get_og_type() ) return '';
+		if ( ! $this->use_facebook_tags() ) {
+			return '';
+		}
+		if ( 'article' !== $this->get_og_type() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -751,8 +783,12 @@ class Render extends Admin_Init {
 	 */
 	public function facebook_publisher() {
 
-		if ( ! $this->use_facebook_tags() ) return '';
-		if ( 'article' !== $this->get_og_type() ) return '';
+		if ( ! $this->use_facebook_tags() ) {
+			return '';
+		}
+		if ( 'article' !== $this->get_og_type() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -783,7 +819,9 @@ class Render extends Admin_Init {
 	 */
 	public function facebook_app_id() {
 
-		if ( ! $this->use_facebook_tags() ) return '';
+		if ( ! $this->use_facebook_tags() ) {
+			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -818,13 +856,16 @@ class Render extends Admin_Init {
 	 */
 	public function article_published_time() {
 
-		if ( ! $this->output_published_time() ) return '';
+		if ( ! $this->output_published_time() ) {
+			return '';
+		}
 
 		$id            = $this->get_the_real_ID();
 		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
 
-		if ( '0000-00-00 00:00:00' === $post_date_gmt )
+		if ( '0000-00-00 00:00:00' === $post_date_gmt ) {
 			return '';
+		}
 
 		/**
 		 * @since 2.3.0
@@ -861,7 +902,9 @@ class Render extends Admin_Init {
 	 */
 	public function article_modified_time() {
 
-		if ( ! $this->output_modified_time() ) return '';
+		if ( ! $this->output_modified_time() ) {
+			return '';
+		}
 
 		$time = $this->get_modified_time();
 
@@ -880,8 +923,12 @@ class Render extends Admin_Init {
 	 */
 	public function og_updated_time() {
 
-		if ( ! $this->use_og_tags() ) return '';
-		if ( ! $this->output_published_time() ) return '';
+		if ( ! $this->use_og_tags() ) {
+			return '';
+		}
+		if ( ! $this->output_published_time() ) {
+			return '';
+		}
 
 		$time = $this->get_modified_time();
 
@@ -1109,7 +1156,9 @@ class Render extends Admin_Init {
 	public function robots() {
 
 		// Don't do anything if the blog isn't set to public.
-		if ( false === $this->is_blog_public() ) return '';
+		if ( false === $this->is_blog_public() ) {
+			return '';
+		}
 
 		$meta = $this->get_robots_meta();
 
@@ -1278,7 +1327,9 @@ class Render extends Admin_Init {
 			) ) ),
 		] );
 
-		if ( ! $cache['run'] ) return '';
+		if ( ! $cache['run'] ) {
+			return '';
+		}
 
 		switch ( $where ) :
 			case 'before':
@@ -1310,8 +1361,9 @@ class Render extends Admin_Init {
 	 */
 	public function output_modified_time() {
 
-		if ( 'article' !== $this->get_og_type() )
+		if ( 'article' !== $this->get_og_type() ) {
 			return false;
+		}
 
 		return (bool) $this->get_option( 'post_modify_time' );
 	}
@@ -1326,8 +1378,9 @@ class Render extends Admin_Init {
 	 */
 	public function output_published_time() {
 
-		if ( 'article' !== $this->get_og_type() )
+		if ( 'article' !== $this->get_og_type() ) {
 			return false;
+		}
 
 		return (bool) $this->get_option( 'post_publish_time' );
 	}

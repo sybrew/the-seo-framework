@@ -53,8 +53,9 @@ final class Settings_Input {
 
 		$field_id = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-		foreach ( (array) $id as $subid )
+		foreach ( (array) $id as $subid ) {
 			$field_id .= "[$subid]";
+		}
 
 		return $field_id;
 	}
@@ -151,8 +152,9 @@ final class Settings_Input {
 
 		$cb_classes = [];
 
-		if ( $args['class'] )
+		if ( $args['class'] ) {
 			$cb_classes[] = $args['class'];
+		}
 
 		if ( $args['disabled'] ) {
 			$cb_classes[] = 'tsf-disabled';

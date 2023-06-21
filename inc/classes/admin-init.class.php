@@ -42,8 +42,9 @@ class Admin_Init extends Init {
 	 * @access private
 	 */
 	public function _init_seo_bar_tables() {
-		if ( $this->get_option( 'display_seo_bar_tables' ) )
+		if ( $this->get_option( 'display_seo_bar_tables' ) ) {
 			new Bridges\SEOBar;
+		}
 	}
 
 	/**
@@ -74,11 +75,13 @@ class Admin_Init extends Init {
 			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_post_meta_item( 'exclude_local_search', $post_id );
 			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_post_meta_item( 'exclude_from_archive', $post_id );
 
-			if ( $search_exclude )
+			if ( $search_exclude ) {
 				$states[] = \esc_html__( 'No Search', 'autodescription' );
+			}
 
-			if ( $archive_exclude )
+			if ( $archive_exclude ) {
 				$states[] = \esc_html__( 'No Archive', 'autodescription' );
+			}
 		}
 
 		return $states;
@@ -122,7 +125,9 @@ class Admin_Init extends Init {
 	 */
 	public function init_admin_scripts() {
 
-		if ( has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) {
+			return;
+		}
 
 		Bridges\Scripts::_init();
 	}
@@ -158,7 +163,9 @@ class Admin_Init extends Init {
 		$locale = substr( $locale, 0, 5 );
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $locale ) ) return $memo;
+		if ( null !== $memo = memo( null, $locale ) ) {
+			return $memo;
+		}
 
 		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		$character_adjustments = [
@@ -361,7 +368,9 @@ class Admin_Init extends Init {
 	 */
 	public function admin_redirect( $page, $query_args = [] ) {
 
-		if ( empty( $page ) ) return;
+		if ( empty( $page ) ) {
+			return;
+		}
 
 		// This can be empty... so $target will be empty. TODO test for $success and bail?
 		// Might cause security issues... we _must_ exit, always? Show warning?
@@ -381,7 +390,9 @@ class Admin_Init extends Init {
 			$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
 
 			// Test if WordPress's redirect header is sent. Bail if true.
-			if ( \in_array( $location, $headers_list, true ) ) exit;
+			if ( \in_array( $location, $headers_list, true ) ) {
+				exit;
+			}
 
 			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
 			printf(
@@ -434,7 +445,9 @@ class Admin_Init extends Init {
 
 		// We made this mistake ourselves. Let's test against it.
 		// We can't type $key to scalar, for PHP is dumb with that type.
-		if ( ! is_scalar( $key ) || ! \strlen( $key ) ) return;
+		if ( ! is_scalar( $key ) || ! \strlen( $key ) ) {
+			return;
+		}
 
 		// Sanitize the key so that HTML, JS, and PHP can communicate easily via it.
 		$key = \sanitize_key( $key );
@@ -461,14 +474,19 @@ class Admin_Init extends Init {
 		);
 
 		// Required key for security.
-		if ( ! $conditions['capability'] ) return;
+		if ( ! $conditions['capability'] ) {
+			return;
+		}
 
 		// Timeout already expired. Let's not register it.
-		if ( $conditions['timeout'] < -1 ) return;
+		if ( $conditions['timeout'] < -1 ) {
+			return;
+		}
 
 		// Add current time to timeout, so we can compare against it later.
-		if ( $conditions['timeout'] > -1 )
+		if ( $conditions['timeout'] > -1 ) {
 			$conditions['timeout'] += time();
+		}
 
 		$notices         = $this->get_static_cache( 'persistent_notices', [] );
 		$notices[ $key ] = compact( 'message', 'args', 'conditions' );
@@ -490,8 +508,9 @@ class Admin_Init extends Init {
 
 		$_count_before = $count;
 
-		if ( $count > 0 )
+		if ( $count > 0 ) {
 			--$count;
+		}
 
 		if ( ! $count ) {
 			$this->clear_persistent_notice( $key );
@@ -560,11 +579,15 @@ class Admin_Init extends Init {
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = \sanitize_key( $_POST['tsf-notice-submit'] ?? '' );
 
-		if ( ! $key ) return;
+		if ( ! $key ) {
+			return;
+		}
 
 		$notices = $this->get_static_cache( 'persistent_notices', [] );
 		// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
-		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;
+		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) {
+			return;
+		}
 
 		if (
 			   ! \current_user_can( $notices[ $key ]['conditions']['capability'] )

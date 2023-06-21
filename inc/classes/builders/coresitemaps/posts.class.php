@@ -58,8 +58,9 @@ class Posts extends \WP_Sitemaps_Posts {
 		// Bail early if the queried post type is not supported.
 		$supported_types = $this->get_object_subtypes();
 
-		if ( ! isset( $supported_types[ $post_type ] ) )
+		if ( ! isset( $supported_types[ $post_type ] ) ) {
 			return [];
+		}
 
 		/**
 		 * Filters the posts URL list before it is generated.
@@ -80,8 +81,9 @@ class Posts extends \WP_Sitemaps_Posts {
 			$page_num
 		);
 
-		if ( null !== $url_list )
+		if ( null !== $url_list ) {
 			return $url_list;
+		}
 
 		$args          = $this->get_posts_query_args( $post_type );
 		$args['paged'] = $page_num;
@@ -157,8 +159,9 @@ class Posts extends \WP_Sitemaps_Posts {
 			/**
 			 * @augmented This if-statement prevents including the post in the sitemap when conditions apply.
 			 */
-			if ( ! $main->is_post_included_in_sitemap( $post->ID ) )
+			if ( ! $main->is_post_included_in_sitemap( $post->ID ) ) {
 				continue;
+			}
 
 			$sitemap_entry = [
 				'loc' => \get_permalink( $post ),
@@ -170,8 +173,9 @@ class Posts extends \WP_Sitemaps_Posts {
 			if ( $show_modified ) {
 				$lastmod = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
-				if ( '0000-00-00 00:00:00' !== $lastmod )
+				if ( '0000-00-00 00:00:00' !== $lastmod ) {
 					$sitemap_entry['lastmod'] = $tsf->gmt2date( $timestamp_format, $lastmod );
+				}
 			}
 
 			/**

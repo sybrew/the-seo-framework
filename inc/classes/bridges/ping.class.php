@@ -95,7 +95,9 @@ final class Ping {
 	 */
 	public static function retry_ping_search_engines( $args = [] ) {
 
-		if ( empty( $args['id'] ) || 'base' !== $args['id'] ) return;
+		if ( empty( $args['id'] ) || 'base' !== $args['id'] ) {
+			return;
+		}
 
 		static::ping_search_engines();
 	}
@@ -119,7 +121,9 @@ final class Ping {
 
 		$tsf = \tsf();
 
-		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
+		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) {
+			return;
+		}
 
 		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
 		if ( \The_SEO_Framework\Bridges\Sitemap::get_instance()->is_sitemap_locked() ) {
@@ -136,11 +140,13 @@ final class Ping {
 			 */
 			\do_action( 'the_seo_framework_before_ping_search_engines', static::class );
 
-			if ( $tsf->get_option( 'ping_google' ) )
+			if ( $tsf->get_option( 'ping_google' ) ) {
 				static::ping_google();
+			}
 
-			if ( $tsf->get_option( 'ping_bing' ) )
+			if ( $tsf->get_option( 'ping_bing' ) ) {
 				static::ping_bing();
+			}
 
 			/**
 			 * @since 4.0.2
@@ -173,7 +179,9 @@ final class Ping {
 
 		$url = static::get_ping_url();
 
-		if ( ! $url ) return;
+		if ( ! $url ) {
+			return;
+		}
 
 		\wp_safe_remote_get(
 			'https://www.google.com/ping?sitemap=' . rawurlencode( $url ),
@@ -195,7 +203,9 @@ final class Ping {
 
 		$url = static::get_ping_url();
 
-		if ( ! $url ) return;
+		if ( ! $url ) {
+			return;
+		}
 
 		\wp_safe_remote_get(
 			'https://www.bing.com/ping?sitemap=' . rawurlencode( $url ),

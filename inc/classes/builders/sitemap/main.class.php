@@ -131,8 +131,9 @@ abstract class Main {
 		foreach ( $data as $key => $value ) {
 			$tabs = str_repeat( "\t", $level );
 
-			if ( \is_array( $value ) )
+			if ( \is_array( $value ) ) {
 				$value = "\n{$this->create_xml_entry( $value, $level + 1 )}$tabs";
+			}
 
 			$out .= "$tabs<$key>$value</$key>\n";
 		}
@@ -189,7 +190,9 @@ abstract class Main {
 						?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
-			if ( ! $included ) break;
+			if ( ! $included ) {
+				break;
+			}
 
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
 			$included = ! static::$tsf->get_redirect_url( $_generator_args );
@@ -245,7 +248,9 @@ abstract class Main {
 						?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
-			if ( ! $included ) break;
+			if ( ! $included ) {
+				break;
+			}
 
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
 			$included = ! static::$tsf->get_redirect_url( $_generator_args );

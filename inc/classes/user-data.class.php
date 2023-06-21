@@ -103,13 +103,16 @@ class User_Data extends Term_Data {
 	 */
 	public function get_user_meta( $user_id = 0, $use_cache = true, $depr = true ) {
 
-		if ( false === $depr ) $use_cache = false;
+		if ( false === $depr ) {
+			$use_cache = false;
+		}
 
 		$user_id = $user_id ?: $this->get_user_id();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && null !== $memo = memo( null, $user_id ) )
+		if ( $use_cache && null !== $memo = memo( null, $user_id ) ) {
 			return $memo;
+		}
 
 		/**
 		 * We can't trust the filter to always contain the expected keys.
@@ -129,9 +132,13 @@ class User_Data extends Term_Data {
 				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
 
 				foreach ( $this->get_headless_user_meta_support() as $meta_key => $supports ) {
-					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
+					if ( ! isset( $_meta[ $meta_key ] ) ) {
+						continue;
+					}
 					foreach ( $supports as $support_type ) {
-						if ( $this->is_headless[ $support_type ] ) continue;
+						if ( $this->is_headless[ $support_type ] ) {
+							continue;
+						}
 						$meta[ $meta_key ] = $_meta[ $meta_key ];
 						continue 2;
 					}
@@ -210,14 +217,20 @@ class User_Data extends Term_Data {
 	 */
 	public function _update_user_meta( $user_id ) {
 
-		if ( empty( $_POST ) ) return;
+		if ( empty( $_POST ) ) {
+			return;
+		}
 
 		\check_admin_referer( "update-user_{$user_id}" );
-		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
+		if ( ! \current_user_can( 'edit_user', $user_id ) ) {
+			return;
+		}
 
 		$user = \get_userdata( $user_id );
 
-		if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+		if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) {
+			return;
+		}
 
 		// We won't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -243,7 +256,9 @@ class User_Data extends Term_Data {
 		$user = \get_userdata( $user_id );
 
 		// We could test for !$user, but this is more to the point.
-		if ( empty( $user->ID ) ) return;
+		if ( empty( $user->ID ) ) {
+			return;
+		}
 
 		$meta            = $this->get_user_meta( $user_id, false );
 		$meta[ $option ] = $value;
@@ -265,7 +280,9 @@ class User_Data extends Term_Data {
 		$user = \get_userdata( $user_id );
 
 		// We could test for !$user, but this is more to the point.
-		if ( empty( $user->ID ) ) return;
+		if ( empty( $user->ID ) ) {
+			return;
+		}
 
 		/**
 		 * @since 4.1.4
@@ -299,7 +316,9 @@ class User_Data extends Term_Data {
 	public function get_current_post_author_id() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		if ( $this->is_singular() ) {
 			$post      = \get_post( $this->get_the_real_ID() );
@@ -322,7 +341,9 @@ class User_Data extends Term_Data {
 	public function get_user_id() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$user = \wp_get_current_user();
 

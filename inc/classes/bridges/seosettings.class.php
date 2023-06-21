@@ -72,7 +72,7 @@ final class SeoSettings {
 		$class = static::class;
 
 		// General Meta Box
-		if ( $general )
+		if ( $general ) {
 			\add_meta_box(
 				'autodescription-general-settings',
 				\esc_html__( 'General Settings', 'autodescription' ),
@@ -80,9 +80,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Title Meta Box
-		if ( $title )
+		if ( $title ) {
 			\add_meta_box(
 				'autodescription-title-settings',
 				\esc_html__( 'Title Settings', 'autodescription' ),
@@ -90,9 +91,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Description Meta Box
-		if ( $description )
+		if ( $description ) {
 			\add_meta_box(
 				'autodescription-description-settings',
 				\esc_html__( 'Description Meta Settings', 'autodescription' ),
@@ -100,9 +102,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Homepage Meta Box
-		if ( $home )
+		if ( $home ) {
 			\add_meta_box(
 				'autodescription-homepage-settings',
 				\esc_html__( 'Homepage Settings', 'autodescription' ),
@@ -110,8 +113,9 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
-		if ( $post_type_archive && $tsf->get_public_post_type_archives() )
+		if ( $post_type_archive && $tsf->get_public_post_type_archives() ) {
 			\add_meta_box(
 				'autodescription-post-type-archive-settings',
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),
@@ -119,9 +123,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Social Meta Box
-		if ( $social )
+		if ( $social ) {
 			\add_meta_box(
 				'autodescription-social-settings',
 				\esc_html__( 'Social Meta Settings', 'autodescription' ),
@@ -129,9 +134,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Schema Meta Box
-		if ( $schema )
+		if ( $schema ) {
 			\add_meta_box(
 				'autodescription-schema-settings',
 				\esc_html__( 'Schema.org Settings', 'autodescription' ),
@@ -139,9 +145,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Robots Meta Box
-		if ( $robots )
+		if ( $robots ) {
 			\add_meta_box(
 				'autodescription-robots-settings',
 				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
@@ -149,9 +156,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Webmaster Meta Box
-		if ( $webmaster )
+		if ( $webmaster ) {
 			\add_meta_box(
 				'autodescription-webmaster-settings',
 				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
@@ -159,9 +167,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Sitemaps Meta Box
-		if ( $sitemap )
+		if ( $sitemap ) {
 			\add_meta_box(
 				'autodescription-sitemap-settings',
 				\esc_html__( 'Sitemap Settings', 'autodescription' ),
@@ -169,9 +178,10 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 
 		// Feed Meta Box
-		if ( $feed )
+		if ( $feed ) {
 			\add_meta_box(
 				'autodescription-feed-settings',
 				\esc_html__( 'Feed Settings', 'autodescription' ),
@@ -179,6 +189,7 @@ final class SeoSettings {
 				$settings_page_hook,
 				'main'
 			);
+		}
 	}
 
 	/**

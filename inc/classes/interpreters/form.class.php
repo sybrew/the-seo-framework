@@ -214,7 +214,9 @@ final class Form {
 	public static function get_image_uploader_form( $args ) {
 
 		// Required.
-		if ( empty( $args['id'] ) ) return '';
+		if ( empty( $args['id'] ) ) {
+			return '';
+		}
 
 		$tsf = \tsf();
 

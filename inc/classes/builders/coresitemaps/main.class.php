@@ -84,8 +84,9 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 		if ( isset( $wp_query->query_vars['sitemap'] ) ) {
 			// Didn't we request a simple API function for this? Anyway, null safe operators would also be nice here.
 			// For now, let's assume this API won't change. Test periodically.
-			if ( \wp_sitemaps_get_server()->registry->get_provider( $wp_query->query_vars['sitemap'] ) )
+			if ( \wp_sitemaps_get_server()->registry->get_provider( $wp_query->query_vars['sitemap'] ) ) {
 				\tsf()->is_sitemap( true );
+			}
 		}
 
 		return $args;
@@ -104,8 +105,9 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 */
 	public static function _filter_add_provider( $provider, $name ) {
 
-		if ( ! $provider instanceof \WP_Sitemaps_Provider )
+		if ( ! $provider instanceof \WP_Sitemaps_Provider ) {
 			return $provider;
+		}
 
 		switch ( $name ) {
 			case 'posts':
@@ -117,8 +119,9 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 			case 'users':
 				// This option is not reversible through means other than filters.
 				// static::$tsf isn't set, because static doesn't require instantiation here.
-				if ( \tsf()->get_option( 'author_noindex' ) )
+				if ( \tsf()->get_option( 'author_noindex' ) ) {
 					$provider = null;
+				}
 				break;
 			default:
 				break;

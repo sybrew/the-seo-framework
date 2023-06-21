@@ -148,7 +148,9 @@ final class Main {
 
 			do {
 				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK. I'm a professional.
-				if ( ( $r = $generator->current() ) === $halt ) continue; // goto while() -- motivating generator.
+				if ( ( $r = $generator->current() ) === $halt ) {
+					continue; // goto while() -- motivating generator.
+				}
 
 				$results[ $g ] = $r;
 

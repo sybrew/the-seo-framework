@@ -106,8 +106,9 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<?php
 		HTML::description( __( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
 
-		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) )
+		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) ) {
 			HTML::description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
+		}
 
 		/**
 		 * @since 2.8.0

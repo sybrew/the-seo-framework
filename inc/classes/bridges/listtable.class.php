@@ -100,13 +100,16 @@ abstract class ListTable {
 		if (
 			   ! \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false )
 			|| empty( $_POST['taxonomy'] )
-		) return;
+		) {
+			return;
+		}
 
 		$taxonomy   = stripslashes( $_POST['taxonomy'] );
 		$tax_object = $taxonomy ? \get_taxonomy( $taxonomy ) : false;
 
-		if ( $tax_object && \current_user_can( $tax_object->cap->edit_terms ) )
+		if ( $tax_object && \current_user_can( $tax_object->cap->edit_terms ) ) {
 			$this->init_columns_ajax();
+		}
 	}
 
 	/**
@@ -121,14 +124,17 @@ abstract class ListTable {
 			   ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
 			|| empty( $_POST['post_ID'] )
 			|| empty( $_POST['post_type'] )
-		) return;
+		) {
+			return;
+		}
 
 		$post_type = stripslashes( $_POST['post_type'] );
 		$pto       = $post_type ? \get_post_type_object( $post_type ) : false;
 
 		// TODO shouldn't we just use `edit_post`? See _output_column_contents_for_post && get_post_type_capabilities
-		if ( $pto && \current_user_can( "edit_{$pto->capability_type}", (int) $_POST['post_ID'] ) )
+		if ( $pto && \current_user_can( "edit_{$pto->capability_type}", (int) $_POST['post_ID'] ) ) {
 			$this->init_columns_ajax();
+		}
 	}
 
 	/**
@@ -143,10 +149,13 @@ abstract class ListTable {
 		if (
 			   ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
 			|| empty( $_POST['tax_ID'] )
-		) return;
+		) {
+			return;
+		}
 
-		if ( \current_user_can( 'edit_term', (int) $_POST['tax_ID'] ) )
+		if ( \current_user_can( 'edit_term', (int) $_POST['tax_ID'] ) ) {
 			$this->init_columns_ajax();
+		}
 	}
 
 	/**
@@ -161,24 +170,29 @@ abstract class ListTable {
 		if (
 			   ! \tsf()->is_wp_lists_edit()
 			|| empty( $screen->id )
-		) return;
+		) {
+			return;
+		}
 
 		$post_type = $screen->post_type ?? '';
 		$taxonomy  = $screen->taxonomy ?? '';
 
 		if ( $taxonomy ) {
-			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) )
+			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) ) {
 				return;
+			}
 		} else {
-			if ( ! \tsf()->is_post_type_supported( $post_type ) )
+			if ( ! \tsf()->is_post_type_supported( $post_type ) ) {
 				return;
+			}
 		}
 
 		$this->post_type = $post_type;
 		$this->taxonomy  = $taxonomy;
 
-		if ( $taxonomy )
+		if ( $taxonomy ) {
 			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, '_output_column_contents_for_term' ], 1, 3 );
+		}
 
 		\add_filter( "manage_{$screen->id}_columns", [ $this, '_add_column' ], 10, 1 );
 		/**
@@ -209,11 +223,13 @@ abstract class ListTable {
 				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 
 		if ( $taxonomy ) {
-			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) )
+			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) ) {
 				return;
+			}
 		} else {
-			if ( ! \tsf()->is_post_type_supported( $post_type ) )
+			if ( ! \tsf()->is_post_type_supported( $post_type ) ) {
 				return;
+			}
 		}
 
 		$this->doing_ajax = true;
@@ -223,8 +239,9 @@ abstract class ListTable {
 		$screen_id = isset( $_POST['screen'] ) ? stripslashes( $_POST['screen'] ) : '';
 
 		// Not elseif; either request.
-		if ( $taxonomy )
+		if ( $taxonomy ) {
 			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, '_output_column_contents_for_term' ], 1, 3 );
+		}
 
 		if ( $screen_id ) {
 			// Everything but inline-save-tax action.

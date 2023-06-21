@@ -117,10 +117,13 @@ final class SEOBar {
 			'post_type' => '',
 		];
 
-		if ( ! static::$query['id'] ) return '';
+		if ( ! static::$query['id'] ) {
+			return '';
+		}
 
-		if ( ! static::$query['taxonomy'] )
+		if ( ! static::$query['taxonomy'] ) {
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
+		}
 
 		if ( static::$query['taxonomy'] ) {
 			$builder = \The_SEO_Framework\Builders\SEOBar\Term::get_instance();
@@ -252,8 +255,9 @@ final class SEOBar {
 
 		$items = &$this->collect_seo_bar_items();
 
-		foreach ( $builder->_run_all_tests( static::$query ) as $key => $data )
+		foreach ( $builder->_run_all_tests( static::$query ) as $key => $data ) {
 			$items[ $key ] = $data;
+		}
 	}
 
 	/**
@@ -270,8 +274,9 @@ final class SEOBar {
 
 		$blocks = [];
 
-		foreach ( $this->generate_seo_bar_blocks( $items ) as $block )
+		foreach ( $this->generate_seo_bar_blocks( $items ) as $block ) {
 			$blocks[] = $block;
+		}
 
 		// Always return the wrap, may it be filled in via JS in the future.
 		return sprintf(
@@ -295,7 +300,7 @@ final class SEOBar {
 	 * @yield The SEO Bar HTML item.
 	 */
 	private function generate_seo_bar_blocks( $items ) {
-		foreach ( $items as $item )
+		foreach ( $items as $item ) {
 			yield vsprintf(
 				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
 				[
@@ -305,6 +310,7 @@ final class SEOBar {
 					\esc_html( $this->interpret_status_to_symbol( $item ) ),
 				]
 			);
+		}
 	}
 
 	/**

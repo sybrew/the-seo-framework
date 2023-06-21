@@ -64,7 +64,9 @@ function _polylang_fix_sitemap_base_bath( $path ) {
  */
 function _polylang_set_sitemap_language() {
 
-	if ( ! \function_exists( '\\PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
+	if ( ! \function_exists( '\\PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) {
+		return;
+	}
 
 	// phpcs:ignore, WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
 	$lang = $_GET['lang'] ?? '';
@@ -89,8 +91,9 @@ function _polylang_set_sitemap_language() {
 	// This will default to the default language when $lang is invalid or unregistered. This is fine.
 	$new_lang = \PLL()->model->get_language( $lang );
 
-	if ( $new_lang )
+	if ( $new_lang ) {
 		\PLL()->curlang = $new_lang;
+	}
 }
 
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
@@ -122,13 +125,19 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 			'pll_languages_list',
 			'pll_default_language',
 		],
-	] ) ) return $args;
+	] ) ) {
+		return $args;
+	}
 
-	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return $args;
+	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) {
+		return $args;
+	}
 
 	$default_lang = \pll_default_language( \OBJECT );
 
-	if ( ! isset( $default_lang->slug, $default_lang->term_id ) ) return $args;
+	if ( ! isset( $default_lang->slug, $default_lang->term_id ) ) {
+		return $args;
+	}
 
 	if ( ( \PLL()->curlang->slug ?? null ) === $default_lang->slug ) {
 		$args['lang']      = ''; // Select all lang, so that Polylang doesn't affect the query below with an AND (we need OR).
@@ -173,9 +182,11 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * @return string
  */
 function pll__( $string ) {
-	if ( \function_exists( '\\PLL' ) && \function_exists( '\\pll__' ) )
-		if ( \PLL() instanceof \PLL_Frontend )
+	if ( \function_exists( '\\PLL' ) && \function_exists( '\\pll__' ) ) {
+		if ( \PLL() instanceof \PLL_Frontend ) {
 			return \pll__( $string );
+		}
+	}
 
 	return $string;
 }
@@ -250,7 +261,9 @@ function _polylang_fix_home_url( $url ) {
  */
 function _polylang_flush_sitemap( $type, $id, $args, $success ) {
 
-	if ( ! $success ) return;
+	if ( ! $success ) {
+		return;
+	}
 
 	global $wpdb;
 

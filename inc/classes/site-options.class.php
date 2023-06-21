@@ -354,8 +354,9 @@ class Site_Options extends Sanitize {
 			$val = $this->get_all_options( \THE_SEO_FRAMEWORK_SITE_OPTIONS, true );
 
 			// This loop digs through itself: $val[ $index ][ $index ]... etc.
-			foreach ( (array) $key as $k )
+			foreach ( (array) $key as $k ) {
 				$val = $val[ $k ] ?? '';
+			}
 
 			return ! empty( $val ) ? \stripslashes_deep( $val ) : '';
 		}
@@ -363,14 +364,16 @@ class Site_Options extends Sanitize {
 		static $cache;
 
 		// PHP 7.4: null coalesce equal operator: ??=
-		if ( ! isset( $cache ) )
+		if ( ! isset( $cache ) ) {
 			$cache = \stripslashes_deep( $this->get_all_options( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
+		}
 
 		$val = $cache;
 
 		// This loop digs through itself: $val[ $index ][ $index ]... etc.
-		foreach ( (array) $key as $k )
+		foreach ( (array) $key as $k ) {
 			$val = $val[ $k ] ?? '';
+		}
 
 		return $val;
 	}
@@ -398,11 +401,13 @@ class Site_Options extends Sanitize {
 
 		static $cache = [];
 
-		if ( ! $setting )
+		if ( ! $setting ) {
 			$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+		}
 
-		if ( ! $reset && isset( $cache[ $setting ] ) )
+		if ( ! $reset && isset( $cache[ $setting ] ) ) {
 			return $cache[ $setting ];
+		}
 
 		/**
 		 * @since 2.0.0
@@ -444,8 +449,9 @@ class Site_Options extends Sanitize {
 			?? umemo( __METHOD__, \stripslashes_deep( $this->get_default_site_options() ) );
 
 		// This loop digs through itself: $val[ $index ][ $index ]... etc.
-		foreach ( (array) $key as $k )
+		foreach ( (array) $key as $k ) {
 			$val = $val[ $k ] ?? null;
+		}
 
 		return $val ?? null;
 	}
@@ -466,8 +472,9 @@ class Site_Options extends Sanitize {
 			?? umemo( __METHOD__, \stripslashes_deep( $this->get_warned_site_options() ) );
 
 		// This loop digs through itself: $val[ $index ][ $index ]... etc.
-		foreach ( (array) $key as $k )
+		foreach ( (array) $key as $k ) {
 			$val = $val[ $k ] ?? null;
+		}
 
 		return (bool) ( $val ?? false );
 	}
@@ -493,8 +500,9 @@ class Site_Options extends Sanitize {
 		$this->check_options_reset();
 
 		// Handle post-update actions. Must be initialized on admin_init and is initialized on options.php.
-		if ( 'options.php' === $GLOBALS['pagenow'] )
+		if ( 'options.php' === $GLOBALS['pagenow'] ) {
 			$this->process_settings_submission();
+		}
 	}
 
 	/**
@@ -541,8 +549,9 @@ class Site_Options extends Sanitize {
 	protected function check_options_reset() {
 
 		// Check if we're already dealing with the settings. Buggy cache might interfere, otherwise.
-		if ( ! $this->is_seo_settings_page( false ) || ! $this->can_access_settings() )
+		if ( ! $this->is_seo_settings_page( false ) || ! $this->can_access_settings() ) {
 			return;
+		}
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
 			if ( \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() ) ) {
@@ -802,7 +811,9 @@ class Site_Options extends Sanitize {
 	public function get_post_type_archive_meta( $post_type, $use_cache = true ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && ( $memo = memo( null, $post_type ) ) ) return $memo;
+		if ( $use_cache && ( $memo = memo( null, $post_type ) ) ) {
+			return $memo;
+		}
 
 		/**
 		 * We can't trust the filter to always contain the expected keys.
@@ -870,8 +881,9 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_all_post_type_archive_meta_defaults() {
 
-		foreach ( $this->get_public_post_type_archives() as $pta )
+		foreach ( $this->get_public_post_type_archives() as $pta ) {
 			$defaults[ $pta ] = $this->get_post_type_archive_meta_defaults( $pta );
+		}
 
 		return $defaults ?? [];
 	}

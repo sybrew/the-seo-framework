@@ -78,8 +78,9 @@ class Core {
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 
 		// Invoke default behavior: Write variable if it's not protected.
-		if ( ! isset( $this->$name ) )
+		if ( ! isset( $this->$name ) ) {
 			$this->$name = $value;
+		}
 	}
 
 	/**
@@ -117,11 +118,13 @@ class Core {
 
 		static $depr_class = null;
 
-		if ( \is_null( $depr_class ) )
+		if ( \is_null( $depr_class ) ) {
 			$depr_class = new Internal\Deprecated;
+		}
 
-		if ( \is_callable( [ $depr_class, $name ] ) )
+		if ( \is_callable( [ $depr_class, $name ] ) ) {
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
+		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name()" );
 	}
@@ -140,7 +143,9 @@ class Core {
 		$level = ob_get_level();
 
 		if ( $level ) {
-			while ( $level-- ) ob_end_clean();
+			while ( $level-- ) {
+				ob_end_clean();
+			}
 			return true;
 		}
 
@@ -160,7 +165,9 @@ class Core {
 	public function _include_compat( $what, $type = 'plugin' ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $what, $type ) ) return $memo;
+		if ( null !== $memo = memo( null, $what, $type ) ) {
+			return $memo;
+		}
 		unset( $memo );
 
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
@@ -189,7 +196,9 @@ class Core {
 	public function get_view( $view, $__args = [], $instance = 'main' ) {
 
 		// A faster extract().
-		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		foreach ( $__args as $__k => $__v ) {
+			$$__k = $__v;
+		}
 		unset( $__k, $__v, $__args );
 
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
@@ -341,13 +350,15 @@ class Core {
 	 */
 	public function current_blog_is_spam_or_deleted() {
 
-		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() )
+		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() ) {
 			return false;
+		}
 
 		$site = \get_site();
 
-		if ( $site instanceof \WP_Site && ( '1' === $site->spam || '1' === $site->deleted ) )
+		if ( $site instanceof \WP_Site && ( '1' === $site->spam || '1' === $site->deleted ) ) {
 			return true;
+		}
 
 		return false;
 	}
@@ -475,7 +486,9 @@ class Core {
 
 		// We can later use `!array_is_list()`.
 		// This is 350x faster than a polyfill for `!array_is_list()`.
-		if ( [] === $array || array_values( $array ) !== $array ) return $array;
+		if ( [] === $array || array_values( $array ) !== $array ) {
+			return $array;
+		}
 
 		$ret = [];
 
@@ -513,10 +526,11 @@ class Core {
 		while ( --$i ) {
 			$p = $i - 1;
 
-			foreach ( $arrays[ $i ] as $key => $value )
+			foreach ( $arrays[ $i ] as $key => $value ) {
 				$arrays[ $p ][ $key ] = isset( $arrays[ $p ][ $key ] ) && \is_array( $value )
 					? $this->array_merge_recursive_distinct( $arrays[ $p ][ $key ], $value )
 					: $value;
+			}
 		}
 
 		return $arrays[0];
@@ -536,8 +550,9 @@ class Core {
 	 */
 	public function hellip_if_over( $string, $over = 0 ) {
 
-		if ( $over > 0 && \strlen( $string ) > $over )
+		if ( $over > 0 && \strlen( $string ) > $over ) {
 			$string = substr( $string, 0, abs( $over - 2 ) ) . '&hellip;';
+		}
 
 		return $string;
 	}
@@ -572,7 +587,9 @@ class Core {
 
 		$string = \wp_check_invalid_utf8( html_entity_decode( $string ) );
 
-		if ( ! $string ) return [];
+		if ( ! $string ) {
+			return [];
+		}
 
 		// Not if-function-exists; we're going for speed over accuracy. Hosts must do their job correctly.
 		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
@@ -584,12 +601,15 @@ class Core {
 			\PREG_SPLIT_OFFSET_CAPTURE | \PREG_SPLIT_NO_EMPTY
 		);
 
-		if ( ! \count( $word_list ) ) goto end;
+		if ( ! \count( $word_list ) ) {
+			goto end;
+		}
 
 		$words = [];
 
-		foreach ( $word_list as [ $_word, $_position ] )
+		foreach ( $word_list as [ $_word, $_position ] ) {
 			$words[ $_position ] = $_word;
+		}
 
 		// We're going to fetch words based on position, and then flip it to become the key.
 		$word_keys = array_flip( array_reverse( $words, true ) );

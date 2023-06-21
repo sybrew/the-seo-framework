@@ -73,8 +73,9 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			] ),
 			true
 		);
-		if ( $this->detect_og_plugin() )
+		if ( $this->detect_og_plugin() ) {
 			HTML::attention_description( __( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
+		}
 
 		// Echo Facebook Tags checkbox.
 		HTML::wrap_fields(
@@ -95,8 +96,9 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			] ),
 			true
 		);
-		if ( $this->detect_twitter_card_plugin() )
+		if ( $this->detect_twitter_card_plugin() ) {
 			HTML::attention_description( __( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
+		}
 
 		// Echo oEmbed scripts checkboxes.
 		HTML::wrap_fields(

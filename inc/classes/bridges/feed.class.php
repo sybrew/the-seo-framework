@@ -87,14 +87,17 @@ final class Feed {
 	 */
 	public function _init() {
 
-		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) {
+			return;
+		}
 
 		// Alter the content feed.
 		\add_filter( 'the_content_feed', [ $this, '_modify_the_content_feed' ], 10, 2 );
 
 		// Only add the feed link to the excerpt if we're only building excerpts.
-		if ( \get_option( 'rss_use_excerpt' ) )
+		if ( \get_option( 'rss_use_excerpt' ) ) {
 			\add_filter( 'the_excerpt_rss', [ $this, '_modify_the_content_feed' ], 10, 1 );
+		}
 	}
 
 	/**
@@ -113,7 +116,9 @@ final class Feed {
 	public function _modify_the_content_feed( $content = '', $feed_type = null ) {
 
 		// When there's no content, there's nothing to modify or quote.
-		if ( ! $content ) return '';
+		if ( ! $content ) {
+			return '';
+		}
 
 		$tsf = \tsf();
 

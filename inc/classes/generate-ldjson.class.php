@@ -127,8 +127,9 @@ class Generate_Ldjson extends Generate_Image {
 
 		static $data = [];
 
-		if ( $get )
+		if ( $get ) {
 			return $data[ $key ];
+		}
 
 		$data[ $key ][ key( $entry ) ] = reset( $entry );
 
@@ -147,8 +148,9 @@ class Generate_Ldjson extends Generate_Image {
 	public function render_ld_json_scripts() {
 
 		// Homepage Schema.org
-		if ( $this->is_real_front_page() )
+		if ( $this->is_real_front_page() ) {
 			return $this->get_ld_json_website() . $this->get_ld_json_links();
+		}
 
 		// All other pages' Schema.org
 		return $this->get_ld_json_breadcrumbs();
@@ -166,8 +168,9 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_website() {
 
-		if ( ! $this->enable_ld_json_searchbox() )
+		if ( ! $this->enable_ld_json_searchbox() ) {
 			return '';
+		}
 
 		$data = [
 			'@context' => 'https://schema.org',
@@ -218,8 +221,9 @@ class Generate_Ldjson extends Generate_Image {
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );
 
-		if ( $json )
+		if ( $json ) {
 			return '<script type="application/ld+json">' . $json . '</script>' . "\n"; // Keep XHTML valid!
+		}
 
 		return '';
 	}
@@ -233,8 +237,9 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_links() {
 
-		if ( ! $this->enable_ld_json_knowledge() )
+		if ( ! $this->enable_ld_json_knowledge() ) {
 			return '';
+		}
 
 		$knowledge_type = $this->get_option( 'knowledge_type' );
 		$knowledge_name = $this->get_option( 'knowledge_name' ) ?: $this->get_blogname();
@@ -277,8 +282,9 @@ class Generate_Ldjson extends Generate_Image {
 
 			$_ov = $this->get_option( $_o );
 
-			if ( $_ov )
+			if ( $_ov ) {
 				$sameurls[] = \esc_url_raw( $_ov, [ 'https', 'http' ] );
+			}
 		}
 
 		if ( $sameurls ) {
@@ -291,8 +297,9 @@ class Generate_Ldjson extends Generate_Image {
 		$this->build_json_data( $key, $data );
 		$json = $this->receive_json_data( $key );
 
-		if ( $json )
+		if ( $json ) {
 			return '<script type="application/ld+json">' . $json . '</script>' . "\n"; // Keep XHTML valid!
+		}
 
 		return '';
 	}
@@ -333,8 +340,9 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	public function get_ld_json_breadcrumbs() {
 
-		if ( ! $this->enable_ld_json_breadcrumbs() )
+		if ( ! $this->enable_ld_json_breadcrumbs() ) {
 			return '';
+		}
 
 		$output = '';
 
@@ -438,8 +446,9 @@ class Generate_Ldjson extends Generate_Image {
 
 		// Test categories.
 		$r = \is_object_in_term( $post_id, $taxonomy, '' );
-		if ( ! $r || \is_wp_error( $r ) )
+		if ( ! $r || \is_wp_error( $r ) ) {
 			return '';
+		}
 
 		/**
 		 * @since 2.8.0
@@ -456,8 +465,9 @@ class Generate_Ldjson extends Generate_Image {
 			]
 		);
 
-		if ( empty( $terms ) )
+		if ( empty( $terms ) ) {
 			return '';
+		}
 
 		$terms = \array_column( $terms, 'parent', 'term_id' );
 
@@ -480,19 +490,23 @@ class Generate_Ldjson extends Generate_Image {
 
 		unset( $terms );
 
-		if ( ! $parents )
+		if ( ! $parents ) {
 			return '';
+		}
 
 		// Seed out parents that have multiple assigned children.
-		foreach ( $parents as $child_id )
-			foreach ( $child_id as $cid )
+		foreach ( $parents as $child_id ) {
+			foreach ( $child_id as $cid ) {
 				unset( $parents[ $cid ] );
+			}
+		}
 
 		// Merge tree list.
 		$tree_ids = $this->build_ld_json_breadcrumb_trees( $parents );
 
-		if ( ! $tree_ids )
+		if ( ! $tree_ids ) {
 			return '';
+		}
 
 		$primary_term_id = $this->get_primary_term_id( $post_id, $taxonomy );
 
@@ -514,8 +528,9 @@ class Generate_Ldjson extends Generate_Image {
 			$tree_ids = $this->filter_ld_json_breadcrumb_trees( $tree_ids, key( $assigned_ids ) );
 		}
 
-		if ( is_scalar( $tree_ids ) )
+		if ( is_scalar( $tree_ids ) ) {
 			$tree_ids = [ $tree_ids ];
+		}
 
 		$items = [];
 
@@ -586,8 +601,9 @@ class Generate_Ldjson extends Generate_Image {
 
 					foreach ( $kitten as $child_id ) {
 						// Only add if non-existent in $trees.
-						if ( ! \in_array( $child_id, $trees, true ) )
+						if ( ! \in_array( $child_id, $trees, true ) ) {
 							$add[] = $child_id;
+						}
 					}
 
 					// Put children in right order.
@@ -650,7 +666,9 @@ class Generate_Ldjson extends Generate_Image {
 	public function get_ld_json_breadcrumb_home_crumb() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() ) {
+			return $memo;
+		}
 
 		$_generator_args = [ 'id' => $this->get_the_front_page_ID() ];
 
@@ -730,8 +748,9 @@ class Generate_Ldjson extends Generate_Image {
 	 */
 	protected function make_breadcrumb_script( $items ) {
 
-		if ( ! $items )
+		if ( ! $items ) {
 			return '';
+		}
 
 		static $it = 0;
 
@@ -748,8 +767,9 @@ class Generate_Ldjson extends Generate_Image {
 
 		$it++;
 
-		if ( $json )
+		if ( $json ) {
 			return '<script type="application/ld+json">' . $json . '</script>' . "\n"; // Keep XHTML valid!
+		}
 
 		return '';
 	}

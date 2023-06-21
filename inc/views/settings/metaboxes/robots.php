@@ -306,8 +306,9 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		HTML::description( __( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 
 		// When the post OR page post types are available, show this warning.
-		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) && array_intersect( $post_types, [ 'post', 'page' ] ) )
+		if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) && array_intersect( $post_types, [ 'post', 'page' ] ) ) {
 			HTML::attention_description( __( 'Warning: No site should enable these options for Posts and Pages.', 'autodescription' ) );
+		}
 
 		$checkboxes = [];
 
@@ -385,11 +386,12 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 			if ( 'site' === $type ) {
 				$checkboxes .= '<hr class=tsf-option-spacer>';
 
-				if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
+				if ( in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) ) {
 					$checkboxes .= sprintf(
 						'<p><span class="description attention">%s</span></p>',
 						esc_html__( 'Warning: No public site should ever enable this option.', 'autodescription' )
 					);
+				}
 			}
 
 			$checkboxes .= Input::make_checkbox( [

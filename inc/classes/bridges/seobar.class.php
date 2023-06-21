@@ -79,8 +79,9 @@ final class SEOBar extends ListTable {
 		foreach ( $order_keys as $key ) {
 			// Put value in $offset, if not false, break loop.
 			$offset = array_search( $key, $column_keys, true );
-			if ( false !== $offset )
+			if ( false !== $offset ) {
 				break;
+			}
 		}
 
 		// It tried but found nothing
@@ -115,7 +116,9 @@ final class SEOBar extends ListTable {
 	 */
 	public function _output_column_contents_for_post( $column_name, $post_id ) {
 
-		if ( $this->column_name !== $column_name ) return;
+		if ( $this->column_name !== $column_name ) {
+			return;
+		}
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput
 		echo \The_SEO_Framework\Interpreters\SEOBar::generate_bar( [
@@ -123,9 +126,9 @@ final class SEOBar extends ListTable {
 			'post_type' => $this->post_type,
 		] );
 
-		if ( $this->doing_ajax )
+		if ( $this->doing_ajax ) {
 			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore, WordPress.Security.EscapeOutput
-	}
+		}	}
 
 	/**
 	 * Returns the SEO Bar for terms.
@@ -145,10 +148,13 @@ final class SEOBar extends ListTable {
 	 */
 	public function _output_column_contents_for_term( $string, $column_name, $term_id ) {
 
-		if ( $this->column_name !== $column_name ) return $string;
+		if ( $this->column_name !== $column_name ) {
+			return $string;
+		}
 
-		if ( $this->doing_ajax )
+		if ( $this->doing_ajax ) {
 			$string .= $this->get_ajax_dispatch_updated_event();
+		}
 
 		return \The_SEO_Framework\Interpreters\SEOBar::generate_bar( [
 			'id'       => $term_id,

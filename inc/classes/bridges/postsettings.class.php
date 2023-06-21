@@ -151,8 +151,9 @@ final class PostSettings {
 	 */
 	public static function _add_postbox_class( $classes = [] ) {
 
-		if ( \tsf()->is_gutenberg_page() )
+		if ( \tsf()->is_gutenberg_page() ) {
 			$classes[] = 'tsf-is-block-editor';
+		}
 
 		return $classes;
 	}

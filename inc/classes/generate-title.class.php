@@ -80,14 +80,17 @@ class Generate_Title extends Generate_Description {
 		$title = $this->get_filtered_raw_custom_field_title( $args );
 
 		if ( $title ) {
-			if ( $this->use_title_protection( $args ) )
+			if ( $this->use_title_protection( $args ) ) {
 				$this->merge_title_protection( $title, $args );
+			}
 
-			if ( $this->use_title_pagination( $args ) )
+			if ( $this->use_title_pagination( $args ) ) {
 				$this->merge_title_pagination( $title );
+			}
 
-			if ( $this->use_title_branding( $args, $social ) )
+			if ( $this->use_title_branding( $args, $social ) ) {
 				$this->merge_title_branding( $title, $args );
+			}
 		}
 
 		return $escape ? $this->escape_title( $title ) : $title;
@@ -115,14 +118,17 @@ class Generate_Title extends Generate_Description {
 
 		$title = $this->get_filtered_raw_generated_title( $args );
 
-		if ( $this->use_title_protection( $args ) )
+		if ( $this->use_title_protection( $args ) ) {
 			$this->merge_title_protection( $title, $args );
+		}
 
-		if ( $this->use_title_pagination( $args ) )
+		if ( $this->use_title_pagination( $args ) ) {
 			$this->merge_title_pagination( $title );
+		}
 
-		if ( $this->use_title_branding( $args, $social ) )
+		if ( $this->use_title_branding( $args, $social ) ) {
 			$this->merge_title_branding( $title, $args );
+		}
 
 		$title = $this->s_title_raw( $title );
 
@@ -143,8 +149,9 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_filtered_raw_custom_field_title( $args = null ) {
 
-		if ( null !== $args )
+		if ( null !== $args ) {
 			$this->fix_generation_args( $args );
+		}
 
 		/**
 		 * Filters the title from custom field, if any.
@@ -179,8 +186,9 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_filtered_raw_generated_title( $args = null ) {
 
-		if ( null !== $args )
+		if ( null !== $args ) {
 			$this->fix_generation_args( $args );
+		}
 
 		/**
 		 * Filters the title from query.
@@ -593,7 +601,9 @@ class Generate_Title extends Generate_Description {
 	public function get_raw_generated_title( $args = null ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $args ) ) return $memo;
+		if ( null !== $memo = memo( null, $args ) ) {
+			return $memo;
+		}
 
 		$this->remove_default_title_filters( false, $args );
 
@@ -629,8 +639,9 @@ class Generate_Title extends Generate_Description {
 		static $filtered = [];
 
 		if ( $reset ) {
-			foreach ( $filtered as [ $filter, $function, $priority ] )
+			foreach ( $filtered as [ $filter, $function, $priority ] ) {
 				\add_filter( $filter, $function, $priority );
+			}
 
 			// Reset filters.
 			$filtered = [];
@@ -656,8 +667,9 @@ class Generate_Title extends Generate_Description {
 			 */
 			$functions = [ 'wptexturize' ];
 
-			if ( ! $this->get_option( 'title_strip_tags' ) )
+			if ( ! $this->get_option( 'title_strip_tags' ) ) {
 				$functions[] = 'strip_tags';
+			}
 
 			foreach ( $filters as $filter ) {
 				foreach ( $functions as $function ) {
@@ -669,7 +681,9 @@ class Generate_Title extends Generate_Description {
 						$filtered[] = [ $filter, $function, $priority ];
 						\remove_filter( $filter, $function, $priority );
 						// Some noob might've destroyed \WP_Hook. Safeguard.
-						if ( ++$i > $it ) break 1;
+						if ( ++$i > $it ) {
+							break 1;
+						}
 					}
 				}
 			}
@@ -778,8 +792,9 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_archive_title( $object = null ) {
 
-		if ( $object && \is_wp_error( $object ) )
+		if ( $object && \is_wp_error( $object ) ) {
 			return '';
+		}
 
 		[ $title ] = $this->get_raw_generated_archive_title_items( $object );
 
@@ -818,8 +833,9 @@ class Generate_Title extends Generate_Description {
 			'the_seo_framework_generated_archive_title_prefix and the_seo_framework_generated_archive_title'
 		);
 
-		if ( $title )
+		if ( $title ) {
 			return [ $title, '', $title ];
+		}
 
 		[ $title, $prefix ] = $object
 			? $this->get_generate_archive_title_from_term( $object )
@@ -1049,10 +1065,13 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_single_term_title( $term = null ) {
 
-		if ( \is_null( $term ) )
+		if ( \is_null( $term ) ) {
 			$term = \get_queried_object();
+		}
 
-		if ( ! isset( $term->name ) ) return '';
+		if ( ! isset( $term->name ) ) {
+			return '';
+		}
 
 		switch ( $term->taxonomy ) :
 			case 'category':
@@ -1104,16 +1123,19 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_post_type_archive_title( $post_type = '' ) {
 
-		if ( ! $post_type && ! \is_post_type_archive() )
+		if ( ! $post_type && ! \is_post_type_archive() ) {
 			return '';
+		}
 
 		$post_type = $post_type ?: $this->get_current_post_type();
 
-		if ( \is_array( $post_type ) )
+		if ( \is_array( $post_type ) ) {
 			$post_type = reset( $post_type );
+		}
 
-		if ( ! \in_array( $post_type, $this->get_public_post_type_archives(), true ) )
+		if ( ! \in_array( $post_type, $this->get_public_post_type_archives(), true ) ) {
 			return '';
+		}
 
 		/**
 		 * Filters the post type archive title.
@@ -1308,7 +1330,9 @@ class Generate_Title extends Generate_Description {
 			$merge = ! $args['taxonomy'] && ! $args['pta'];
 		}
 
-		if ( ! $merge ) return;
+		if ( ! $merge ) {
+			return;
+		}
 
 		$post = $id ? \get_post( $id ) : null;
 

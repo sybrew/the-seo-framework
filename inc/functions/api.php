@@ -85,8 +85,9 @@ namespace {
 	function the_seo_framework_class() {
 
 		// did_action() returns true for current action match, too.
-		if ( ! did_action( 'plugins_loaded' ) )
+		if ( ! did_action( 'plugins_loaded' ) ) {
 			return false;
+		}
 
 		return get_class( tsf() );
 	}
@@ -176,8 +177,9 @@ namespace The_SEO_Framework {
 			+ debug_backtrace( \DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]
 		);
 
-		if ( isset( $value_to_set ) )
+		if ( isset( $value_to_set ) ) {
 			return $memo[ $hash ] = $value_to_set;
+		}
 
 		return $memo[ $hash ] ?? null;
 	}
@@ -226,8 +228,9 @@ namespace The_SEO_Framework {
 		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$hash = serialize( [ $key, $args ] );
 
-		if ( isset( $value_to_set ) )
+		if ( isset( $value_to_set ) ) {
 			return $memo[ $hash ] = $value_to_set;
+		}
 
 		return $memo[ $hash ] ?? null;
 	}

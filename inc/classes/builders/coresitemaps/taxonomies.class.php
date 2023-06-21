@@ -56,8 +56,9 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 		$supported_types = $this->get_object_subtypes();
 
 		// Bail early if the queried taxonomy is not supported.
-		if ( ! isset( $supported_types[ $taxonomy ] ) )
+		if ( ! isset( $supported_types[ $taxonomy ] ) ) {
 			return [];
+		}
 
 		/**
 		 * Filters the taxonomies URL list before it is generated.
@@ -78,8 +79,9 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			$page_num
 		);
 
-		if ( null !== $url_list )
+		if ( null !== $url_list ) {
 			return $url_list;
+		}
 
 		$url_list = [];
 
@@ -98,13 +100,15 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			/**
 			 * @augmented This if-statement prevents including the term in the sitemap when conditions apply.
 			 */
-			if ( ! $main->is_term_included_in_sitemap( $term->term_id, $taxonomy ) )
+			if ( ! $main->is_term_included_in_sitemap( $term->term_id, $taxonomy ) ) {
 				continue;
+			}
 
 			$term_link = \get_term_link( $term, $taxonomy );
 
-			if ( \is_wp_error( $term_link ) )
+			if ( \is_wp_error( $term_link ) ) {
 				continue;
+			}
 
 			$sitemap_entry = [
 				'loc' => $term_link,

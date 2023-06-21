@@ -88,8 +88,9 @@ function _is_shop( $post = null ) {
 function _set_real_id_wc_shop( $id ) {
 
 	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
-	if ( _is_shop() )
+	if ( _is_shop() ) {
 		$id = (int) \get_option( 'woocommerce_shop_page_id' );
+	}
 
 	return $id;
 }
@@ -141,7 +142,9 @@ function _set_wc_is_shop( $is_shop, $post ) {
  */
 function _set_wc_is_product( $is_product, $post ) {
 
-	if ( $is_product ) return $is_product;
+	if ( $is_product ) {
+		return $is_product;
+	}
 
 	if ( $post ) {
 		$is_product = 'product' === \get_post_type( $post );
@@ -166,7 +169,9 @@ function _set_wc_is_product( $is_product, $post ) {
  */
 function _set_wc_is_product_admin( $is_product_admin ) {
 
-	if ( $is_product_admin ) return $is_product_admin;
+	if ( $is_product_admin ) {
+		return $is_product_admin;
+	}
 
 	$tsf = \tsf();
 
@@ -202,31 +207,41 @@ function _set_wc_is_product_admin( $is_product_admin ) {
 function _set_wc_noindex_defaults( $meta, $args, $options ) {
 
 	// Nothing to do here...
-	if ( 'noindex' === $meta['noindex'] ) return $meta;
+	if ( 'noindex' === $meta['noindex'] ) {
+		return $meta;
+	}
 
 	$tsf = \tsf();
 
 	if ( null === $args ) {
-		if ( $tsf->is_singular() )
+		if ( $tsf->is_singular() ) {
 			$page_id = $tsf->get_the_real_ID();
+		}
 	} else {
-		if ( '' === $args['taxonomy'] )
+		if ( '' === $args['taxonomy'] ) {
 			$page_id = $args['id'];
+		}
 	}
 
 	// No page_id was found: unsupported query.
-	if ( empty( $page_id ) ) return $meta;
+	if ( empty( $page_id ) ) {
+		return $meta;
+	}
 
 	static $page_ids;
 
 	if ( ! isset( $page_ids ) ) {
-		if ( ! \function_exists( '\\wc_get_page_id' ) ) return $meta;
+		if ( ! \function_exists( '\\wc_get_page_id' ) ) {
+			return $meta;
+		}
 
 		$page_ids = array_filter( [ \wc_get_page_id( 'cart' ), \wc_get_page_id( 'checkout' ), \wc_get_page_id( 'myaccount' ) ] );
 	}
 
 	// This current page isn't a WC cart/checkout/myaccount page.
-	if ( ! \in_array( $page_id, $page_ids, true ) ) return $meta;
+	if ( ! \in_array( $page_id, $page_ids, true ) ) {
+		return $meta;
+	}
 
 	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
 	if (
@@ -250,19 +265,26 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
  */
 function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 
-	if ( $interpreter::$query['taxonomy'] ) return;
+	if ( $interpreter::$query['taxonomy'] ) {
+		return;
+	}
 
 	static $page_ids;
 
-	if ( ! isset( $page_ids ) )
+	if ( ! isset( $page_ids ) ) {
 		$page_ids = array_filter( [ \wc_get_page_id( 'cart' ), \wc_get_page_id( 'checkout' ), \wc_get_page_id( 'myaccount' ) ] );
+	}
 
-	if ( ! \in_array( $interpreter::$query['id'], $page_ids, true ) ) return;
+	if ( ! \in_array( $interpreter::$query['id'], $page_ids, true ) ) {
+		return;
+	}
 
 	$items = $interpreter::collect_seo_bar_items();
 
 	// Don't do anything if there's a blocking redirect.
-	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
+	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) {
+		return;
+	}
 
 	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status']               =
@@ -311,11 +333,13 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 		}
 	}
 
-	if ( $is_product )
+	if ( $is_product ) {
 		$params['cbs']['wc_gallery'] = __NAMESPACE__ . '\\_get_product_gallery_image_details';
+	}
 
-	if ( $is_product_category )
+	if ( $is_product_category ) {
 		$params['cbs']['wc_thumbnail'] = __NAMESPACE__ . '\\_get_product_category_thumbnail_image_details';
+	}
 
 	return $params;
 }
