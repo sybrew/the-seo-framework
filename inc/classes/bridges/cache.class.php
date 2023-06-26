@@ -147,33 +147,43 @@ final class Cache {
 	 * Clears sitemap transients.
 	 *
 	 * @since 4.2.9
-	 *
-	 * @return bool True on success, false on failure.
 	 */
 	public static function clear_sitemap_transients() {
 
 		$sitemap = Sitemap::get_instance();
-		$success = [];
 
 		foreach ( $sitemap->get_sitemap_endpoint_list() as $id => $data ) {
 			$transient = $sitemap->get_transient_key( $id );
 
 			if ( $transient )
-				$success[] = \delete_transient( $transient );
+				\delete_transient( $transient );
 		}
 
 		/**
+		 * @since 4.2.9
+		 */
+		\do_action( 'the_seo_framework_cleared_sitemap_transients' );
+
+		/**
 		 * @since 3.1.0
-		 * @ignore Legacy
-		 * @todo DEPRECATE and remove? Use action 'delete_transient_{$transient}' instead.
+		 * @since 4.2.9 Soft deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
+		 * @todo 4.3.0 deprecate, use do_action_deprecated.
 		 *
 		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
 		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_ID().
 		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
-		 * @param bool   $success Whether the action cleared.
+		 * @param array  $success Whether the action cleared. Set to always be true since deprecation.
 		 */
-		\do_action( 'the_seo_framework_delete_cache_sitemap', 'sitemap', 0, [ 'type' => 'sitemap' ], $success );
-
-		return $success && ! \in_array( false, $success, true );
+		\do_action(
+			'the_seo_framework_delete_cache_sitemap',
+			[
+				'sitemap',
+				0,
+				[ 'type' => 'sitemap' ],
+				[ true ],
+			],
+			'4.2.9 of The SEO Framework',
+			'the_seo_framework_cleared_sitemap_transients'
+		);
 	}
 }
