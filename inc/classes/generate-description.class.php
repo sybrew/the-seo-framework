@@ -466,8 +466,14 @@ class Generate_Description extends Generate {
 
 		if ( ! $this->is_auto_description_enabled( $args ) ) return '';
 
-		if ( ! \in_array( $type, [ 'opengraph', 'twitter', 'search' ], true ) )
-			$type = 'search';
+		switch ( $type ) {
+			case 'opengraph':
+			case 'twitter':
+			case 'search':
+				break;
+			default:
+				$type = 'search';
+		}
 
 		if ( null === $args ) {
 			$excerpt = $this->get_description_excerpt_from_query();

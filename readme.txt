@@ -302,6 +302,10 @@ TODO db version 4270 -> 4290+
 TODO lower ID capitalization and their ignores
 TODO use memo() in convert_color_css?
 
+TODO A tagline with a ' will be trimmed if the final two words don't end with a dot.
+	-> Consider only trimming the words if limit isn't met with ENTIRE content set.
+		-> e.g. "The story you aren't told" -- the ' will split the sentence (but why?)
+
 **Detailed log**
 
 **For everyone:**

@@ -119,6 +119,8 @@ class Sanitize extends Admin_Pages {
 		);
 
 		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'update_db_version' ], 12 );
+
+		// TODO add flush permalinks when sitemap options change? https://wordpress.org/support/topic/sitemap-xml-reverts-to-wp-sitemap-xml/
 	}
 
 	/**

@@ -228,14 +228,19 @@ class Query extends Core {
 	 * @return int The admin ID.
 	 */
 	public function get_the_real_admin_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
-
-		$id = \get_the_ID();
-
-		// Current term ID (outside loop).
-		if ( ! $id && $this->is_archive_admin() )
-			$id = $this->get_admin_term_id();
-
-		return (int) \apply_filters( 'the_seo_framework_current_admin_id', $id );
+		/**
+		 * @since 2.9.0
+		 * @param int $id
+		 */
+		return (int) \apply_filters(
+			'the_seo_framework_current_admin_id',
+			\get_the_ID() ?: (
+				// Get current term ID (outside loop).
+				$this->is_archive_admin()
+					? $this->get_admin_term_id()
+					: 0
+			)
+		);
 	}
 
 	/**
