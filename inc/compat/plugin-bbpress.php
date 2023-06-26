@@ -313,15 +313,9 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
  */
 function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
 
-	if ( null === $args && \is_bbpress() ) {
-		if ( \bbp_is_topic_tag() ) {
-			$data = \tsf()->get_term_meta( \get_queried_object_id() );
-			if ( ! empty( $data['description'] ) ) {
-				$desc = $data['description'];
-			} else {
-				$desc = '';
-			}
-		}
+	if ( null === $args && \is_bbpress() && \bbp_is_topic_tag() ) {
+		// Ovewrite $desc.
+		return \tsf()->get_term_meta( \get_queried_object_id() )['description'] ?? '';
 	}
 
 	return $desc;
@@ -381,7 +375,7 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
  * }
  * @return array
  */
-function _bbpress_filter_robots( $meta, $args, $options ) {
+function _bbpress_filter_robots( $meta, $args, $options ) { // phpcs:ignore, unused $options variable -- this also serves as API example code.
 
 	if ( null === $args ) {
 		// Front-end

@@ -299,6 +299,9 @@ TODO change autodescription-updates-cache to autodescription-persistent-cache?
 
 TODO db version 4270 -> 4290+
 
+TODO lower ID capitalization and their ignores
+TODO use memo() in convert_color_css?
+
 **Detailed log**
 
 **For everyone:**
