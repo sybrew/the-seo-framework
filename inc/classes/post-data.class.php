@@ -855,11 +855,10 @@ class Post_Data extends Detect {
 	 * @return bool True on success, false on failure.
 	 */
 	public function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
-		if ( ! $value ) {
-			$success = \delete_post_meta( $post_id, "_primary_term_{$taxonomy}" );
-		} else {
-			$success = \update_post_meta( $post_id, "_primary_term_{$taxonomy}", $value );
-		}
-		return $success;
+
+		if ( ! $value )
+			return \delete_post_meta( $post_id, "_primary_term_{$taxonomy}" );
+
+		return \update_post_meta( $post_id, "_primary_term_{$taxonomy}", $value );
 	}
 }

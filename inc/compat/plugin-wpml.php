@@ -49,7 +49,7 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
 	return $languages_links;
 }
 
-\add_action( 'the_seo_framework_delete_cache_sitemap', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10, 4 );
+\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
 /**
  * Deletes all sitemap transients, instead of just one.
  *
@@ -57,16 +57,8 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  * @since 4.2.9 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
- *
- * @param string $type    The flush type. Comes in handy when you use a catch-all function.
- * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_ID().
- * @param array  $args    Additional arguments. They can overwrite $type and $id.
- * @param bool   $success Whether the action cleared.
  */
-function _wpml_flush_sitemap( $type, $id, $args, $success ) {
-
-	if ( ! $success ) return;
-
+function _wpml_flush_sitemap() {
 	global $wpdb;
 
 	$wpdb->query(

@@ -143,13 +143,10 @@ function _set_wc_is_product( $is_product, $post ) {
 
 	if ( $is_product ) return $is_product;
 
-	if ( $post ) {
-		$is_product = 'product' === \get_post_type( $post );
-	} else {
-		$is_product = \function_exists( '\\is_product' ) && \is_product();
-	}
+	if ( $post )
+		return 'product' === \get_post_type( $post );
 
-	return $is_product;
+	return \function_exists( '\\is_product' ) && \is_product();
 }
 
 \add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );

@@ -299,6 +299,9 @@ TODO change autodescription-updates-cache to autodescription-persistent-cache?
 
 TODO db version 4270 -> 4290+
 
+TODO lower ID capitalization and their ignores
+TODO use memo() in convert_color_css?
+
 **Detailed log**
 
 **For everyone:**
@@ -331,6 +334,7 @@ TODO db version 4270 -> 4290+
 		* This used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
 	* Setting `auto_description_html_method` for `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
 		* This used to be `auto_descripton_html_method` (typo).
+	* New action, `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
 * **Changed:**
 	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
@@ -339,6 +343,9 @@ TODO db version 4270 -> 4290+
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
+* **Deprecated:**
+	* Action `the_seo_framework_delete_cache_sitemap` is now soft deprecated (i.e., without warning). Use `the_seo_framework_cleared_sitemap_transients` instead.
+		* Full deprecation with notice will start from TSF v4.3.0.
 * **Removed:**
 	* We dropped class `\The_SEO_Framework\Cache` from the god object `tsf()`. The following methods have been removed, because they weren't useful for the public APIs:
 		* `init_admin_caching_actions`
@@ -379,6 +386,8 @@ TODO db version 4270 -> 4290+
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 	* Fixed typos in code. Props [Viktor Szépe](https://github.com/szepeviktor).
+	* Refreshed `composer.json`. Props [Viktor Szépe](https://github.com/szepeviktor).
+	* Improved needless defense clauses. Props [Viktor Szépe](https://github.com/szepeviktor).
 
 = 4.2.8 =
 
