@@ -137,7 +137,7 @@ final class Cache {
 			   ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) )
 			&& \check_admin_referer( 'update-permalink' )
 		) {
-				return static::refresh_sitemaps();
+				return Sitemap::refresh_sitemaps();
 		}
 
 		return false;
