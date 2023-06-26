@@ -815,20 +815,21 @@ class Generate_Description extends Generate {
 
 		$post = \get_post( $post ?: $this->get_the_real_ID() );
 
-		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) ) {
-			$excerpt = $post->post_excerpt;
-		} elseif ( ! empty( $post->post_content ) && ! $this->uses_non_html_page_builder( $post->ID ) ) {
+		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) )
+			return $post->post_excerpt;
+
+		if ( ! empty( $post->post_content ) && ! $this->uses_non_html_page_builder( $post->ID ) ) {
 			// We should actually get the parsed content here... but that can be heavy on the server.
 			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
 			$excerpt = $this->get_post_content( $post );
 
-			if ( $excerpt ) {
-				$excerpt = $this->strip_newline_urls( $excerpt );
-				$excerpt = $this->strip_paragraph_urls( $excerpt );
-			}
+			if ( $excerpt )
+				$excerpt = $this->strip_paragraph_urls( $this->strip_newline_urls( $excerpt ) );
+
+			return $excerpt;
 		}
 
-		return $excerpt ?? '';
+		return '';
 	}
 
 	/**
