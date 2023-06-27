@@ -177,7 +177,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param string   $post_type The current post type.
+	 * @param string $post_type The current post type.
 	 */
 	public function _init_post_edit_view( $post_type ) {
 
