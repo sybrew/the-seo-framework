@@ -348,7 +348,7 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
 	return $do;
 }
 
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 3 );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 2 );
 /**
  * Filters bbPress hidden forums.
  *
@@ -367,15 +367,9 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
  * }
  * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
  *                            Is null when query is autodetermined.
- * @param int <bit>  $options The generator settings. {
- *    0 = 0b00: Ignore nothing.
- *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
- *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
- *    3 = 0b11: Ignore protection and post/term setting.
- * }
  * @return array
  */
-function _bbpress_filter_robots( $meta, $args, $options ) { // phpcs:ignore, unused $options variable -- this also serves as API example code.
+function _bbpress_filter_robots( $meta, $args ) {
 
 	if ( null === $args ) {
 		// Front-end

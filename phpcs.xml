@@ -27,6 +27,14 @@
 		</properties>
 	</rule>
 
+	<rule ref="WordPress.Security.EscapeOutput">
+		<properties>
+			<property name="customEscapingFunctions" type="array">
+				<element value="esc_xml"/>
+			</property>
+		</properties>
+	</rule>
+
 	<!-- Exclude minified scripts. -->
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>*.min.css</exclude-pattern>
