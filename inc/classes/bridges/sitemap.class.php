@@ -375,7 +375,7 @@ final class Sitemap {
 	 * @param string $content    The sitemap content
 	 * @param string $sitemap_id The sitemap ID.
 	 * @param int    $expiration The sitemap's cache timeout.
-	 * @return bool True on succes, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
 	public function cache_sitemap( $content, $sitemap_id = '', $expiration = \WEEK_IN_SECONDS ) {
 

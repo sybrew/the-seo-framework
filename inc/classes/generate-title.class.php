@@ -480,7 +480,7 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Returns the custom user-inputted title.
 	 *
-	 * This doesn't use the taxonomy arguments, because, wonderously, WordPress
+	 * This doesn't use the taxonomy arguments, because, wondrously, WordPress
 	 * finally admits through their code that terms can be queried using only IDs.
 	 *
 	 * @since 3.1.0

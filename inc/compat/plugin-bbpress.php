@@ -314,7 +314,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
 function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
 
 	if ( null === $args && \is_bbpress() && \bbp_is_topic_tag() ) {
-		// Ovewrite $desc.
+		// Overwrite $desc.
 		return \tsf()->get_term_meta( \get_queried_object_id() )['description'] ?? '';
 	}
 

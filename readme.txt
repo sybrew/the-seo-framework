@@ -342,7 +342,7 @@ TODO A tagline with a ' will be trimmed if the final two words don't end with a 
 * **Changed:**
 	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
-		* This makes loading the sitemap anywhere from barely noticable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
+		* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
 	* Filter `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.

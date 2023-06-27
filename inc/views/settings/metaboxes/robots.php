@@ -153,7 +153,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 
 		$_text_snippet_types['default'] = [
 			-1 => __( 'Unlimited', 'autodescription' ),
-			0  => _x( 'None, disallow snippet', 'quanity: zero', 'autodescription' ),
+			0  => _x( 'None, disallow snippet', 'quantity: zero', 'autodescription' ),
 		];
 		foreach ( range( 1, 600, 1 ) as $_n ) {
 			/* translators: %d = number */
@@ -204,7 +204,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		$image_preview_options = '';
 		$_current              = $this->get_option( 'max_image_preview' );
 		$_image_preview_types  = [
-			'none'     => _x( 'None, disallow preview', 'quanity: zero', 'autodescription' ),
+			'none'     => _x( 'None, disallow preview', 'quantity: zero', 'autodescription' ),
 			'standard' => __( 'Thumbnail or standard size', 'autodescription' ),
 			'large'    => __( 'Large or full size', 'autodescription' ),
 		];
@@ -239,7 +239,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 
 		$_video_snippet_types['default'] = [
 			-1 => __( 'Full video preview', 'autodescription' ),
-			0  => _x( 'None, still image only', 'quanity: zero', 'autodescription' ),
+			0  => _x( 'None, still image only', 'quantity: zero', 'autodescription' ),
 		];
 		foreach ( range( 1, 600, 1 ) as $_n ) {
 			/* translators: %d = number */
