@@ -1930,7 +1930,7 @@ msgid "Unlimited"
 msgstr ""
 
 #: inc/views/settings/metaboxes/robots.php:156
-msgctxt "quanity: zero"
+msgctxt "quantity: zero"
 msgid "None, disallow snippet"
 msgstr ""
 
@@ -1964,7 +1964,7 @@ msgid "This directive also imposes a limit on meta descriptions and structured d
 msgstr ""
 
 #: inc/views/settings/metaboxes/robots.php:207
-msgctxt "quanity: zero"
+msgctxt "quantity: zero"
 msgid "None, disallow preview"
 msgstr ""
 
@@ -1989,7 +1989,7 @@ msgid "Full video preview"
 msgstr ""
 
 #: inc/views/settings/metaboxes/robots.php:242
-msgctxt "quanity: zero"
+msgctxt "quantity: zero"
 msgid "None, still image only"
 msgstr ""
 
