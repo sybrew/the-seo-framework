@@ -265,7 +265,6 @@ TODO When filling in the Meta Description for the homepage as page, the generate
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
 TODO add user meta fields in multisite network (when user is author or higher on any site? We can test caps via user_meta globally)
-TODO make color in tooltip strict, EM's admin theme makes it unreadable, others probably too.
 TODO add warning to PTA settings when translation plugin is detected.
 
 TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
@@ -305,6 +304,9 @@ TODO A tagline with a ' will be trimmed if the final two words don't end with a 
 	-> Consider only trimming the words if limit isn't met with ENTIRE content set.
 		-> e.g. "The story you aren't told" -- the ' will split the sentence (but why?)
 
+TODO highlight in large changes:
+	* Color scheme works again for tooltips.
+
 **Detailed log**
 
 **For everyone:**
@@ -324,6 +326,10 @@ TODO A tagline with a ' will be trimmed if the final two words don't end with a 
 			- `wp_is_json_request()`
 			- `wp_is_jsonp_request()`
 			- `wp_is_xml_request()`
+	* Tooltip text is now more specifically colored white, making text legible again with some custom admin themes.
+	* Addressed a regression from TSF v4.2.0 where WordPress admin color schemes stopped affecting TSF's color scheme. Affected are:
+		* Tooltip background and text color.
+		* Post/Page SEO Settings active-tab border color.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
@@ -391,6 +397,7 @@ TODO A tagline with a ' will be trimmed if the final two words don't end with a 
 		* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this still affects your site.
 	* Setting `auto_descripton_html_method` from `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
 		* It is now `auto_description_html_method`.
+	* Removed inline Right-To-Left CSS registration from `tsf-pt`, this is handled in its file now.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 	* Fixed typos in code. Props [Viktor Szépe](https://github.com/szepeviktor).

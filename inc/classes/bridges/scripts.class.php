@@ -285,6 +285,9 @@ final class Scripts {
 						'background-color:{{$bg_accent}}',
 						'color:{{$rel_bg_accent}}',
 					],
+					'.tsf-tooltip-text-wrap *' => [
+						'color:{{$rel_bg_accent}}',
+					],
 					'.tsf-tooltip-arrow:after' => [
 						'border-top-color:{{$bg_accent}}',
 					],
@@ -776,19 +779,6 @@ final class Scripts {
 			);
 		}
 
-		$inline_css = [];
-		if ( \is_rtl() ) {
-			$inline_css = [
-				'.tsf-primary-term-selector'           => [
-					'float:left;',
-				],
-				'.tsf-primary-term-selector-help-wrap' => [
-					'left:25px;',
-					'right:initial;',
-				],
-			];
-		}
-
 		if ( $gutenberg ) {
 			$vars = [
 				'id'   => 'tsf-pt-gb',
@@ -813,7 +803,6 @@ final class Scripts {
 				'name'     => 'pt',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
-				'inline'   => $inline_css,
 			],
 			[
 				'id'       => $vars['id'],

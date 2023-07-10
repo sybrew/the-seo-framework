@@ -442,8 +442,11 @@ final class Scripts {
 		$out = '';
 
 		foreach ( $styles as $selector => $css ) {
-			$css  = implode( ';', $this->convert_color_css( $css ) );
-			$out .= "$selector{$css}";
+			$out .= sprintf(
+				'%s{%s}',
+				$selector,
+				implode( ';', $this->convert_color_css( $css ) )
+			);
 		}
 
 		return $out;

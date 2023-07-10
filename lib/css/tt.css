@@ -60,6 +60,10 @@ a.tsf-tooltip-item {
 	justify-content: flex-start;
 }
 
+.tsf-tooltip-text-wrap * {
+	color: #fbf7fd;
+}
+
 .tsf-tooltip-text span {
 	text-decoration: underline;
 }
