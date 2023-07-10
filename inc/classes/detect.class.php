@@ -77,7 +77,6 @@ class Detect extends Render {
 		$conflicting_plugins = [
 			'seo_tools'    => [
 				'Yoast SEO'           => 'wordpress-seo/wp-seo.php',
-				'Yoast SEO Premium'   => 'wordpress-seo-premium/wp-seo-premium.php',
 				'All in One SEO Pack' => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
 				'SEO Ultimate'        => 'seo-ultimate/seo-ultimate.php',
 				'SEOPress'            => 'wp-seopress/seopress.php',
@@ -88,7 +87,6 @@ class Detect extends Render {
 				'Google XML Sitemaps'             => 'google-sitemap-generator/sitemap.php',
 				'XML Sitemap & Google News feeds' => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'   => 'google-sitemap-plugin/google-sitemap-plugin.php',
-				'Simple Wp Sitemap'               => 'simple-wp-sitemap/simple-wp-sitemap.php', // Remove?
 			],
 			'open_graph'   => [
 				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',

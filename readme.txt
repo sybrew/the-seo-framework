@@ -251,7 +251,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
 TODO umemo conflicting_plugins()
-TODO remove Yoast SEO Premium from conflicting plugins? Doesn't it require Yoast SEO?
 
 FIXME: https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
 	Also notify Nik via email?
@@ -325,6 +324,11 @@ TODO A tagline with a ' will be trimmed if the final two words don't end with a 
 			- `wp_is_json_request()`
 			- `wp_is_jsonp_request()`
 			- `wp_is_xml_request()`
+* **Removed:**
+	* The following plugins are no longer recognized as conflicting plugins:
+		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
+			* Yoast SEO is still checked against.
+		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
 * **Note:**
 	* Transient `tsf_sitemap_5_%`, where % changes per blog, is no longer used. This transient should clear automatically.
 	* Transient `tsf_exclude_1_%`, where % changes per blog, is no longer used. This transient will be deleted on upgrade.
