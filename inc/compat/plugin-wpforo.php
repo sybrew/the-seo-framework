@@ -132,7 +132,6 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 				break;
 			default:
 				if ( ! $meta_enabled ) continue 2;
-				break;
 		}
 
 		$item['status'] = $interpreter::STATE_UNDEFINED;

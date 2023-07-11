@@ -358,8 +358,8 @@ final class Scripts {
 				isset( $s['inline'] )
 					and \wp_add_inline_script( $s['id'], $instance->create_inline_js( $s['inline'] ) );
 				$registered = true;
-				break;
 		}
+
 		if ( $registered ) {
 			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
 				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
@@ -389,8 +389,8 @@ final class Scripts {
 			case 'js':
 				\wp_enqueue_script( $id );
 				$loaded = true;
-				break;
 		}
+
 		if ( $loaded ) {
 			isset( static::$queue[ $type ][ $id ] )
 				and static::$queue[ $type ][ $id ] |= static::LOADED

@@ -77,7 +77,7 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		foreach ( $settings as $setting ) :
+		foreach ( $settings as $setting ) {
 			vprintf(
 				'<p><label for=%s><strong>%s</strong> %s</label></p>',
 				[
@@ -96,9 +96,5 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 					esc_attr( $this->get_option( $setting['setting'] ) ),
 				]
 			);
-		endforeach;
-		break;
-
-	default:
-		break;
+		}
 endswitch;

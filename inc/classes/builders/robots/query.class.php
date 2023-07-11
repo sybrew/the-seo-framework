@@ -70,7 +70,7 @@ final class Query extends Factory {
 				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type );
 			}
 
-			switch ( isset( $qubit ) ) :
+			switch ( isset( $qubit ) ) {
 				case false:
 					// Page doesn't support metadata.
 					break;
@@ -87,7 +87,7 @@ final class Query extends Factory {
 				default:
 					// qubit is (closer to) 0. Assert we use _default, albeit false.
 					yield 'meta_qubit_default' => false;
-			endswitch;
+			}
 		}
 
 		globals:
@@ -170,13 +170,13 @@ final class Query extends Factory {
 		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf hereinafter.
 		$tsf = static::$tsf;
 
-		switch ( $pass ) :
+		switch ( $pass ) {
 			case 'paged_home':
 				yield 'paged_home' => ( $tsf->get_option( 'home_paged_noindex' ) && ( $tsf->page() > 1 || $tsf->paged() > 1 ) );
 				break;
 
 			case '404':
-				if ( $tsf->is_singular_archive() ) :
+				if ( $tsf->is_singular_archive() ) {
 					/**
 					 * Pagination overflow protection via 404 test.
 					 *
@@ -188,7 +188,7 @@ final class Query extends Factory {
 					 * because we cannot assert this via the administrative dashboard.
 					 */
 					yield '404' => \is_404();
-				else :
+				} else {
 					/**
 					 * Check for 404, or if archive is empty: set noindex for those.
 					 *
@@ -218,7 +218,7 @@ final class Query extends Factory {
 						 */
 						yield '404' => (bool) \apply_filters( 'the_seo_framework_enable_noindex_no_posts', true );
 					}
-				endif;
+				}
 				break;
 
 			case 'paged':
@@ -242,7 +242,6 @@ final class Query extends Factory {
 				 * @param bool $noindex Whether to enable comment pagination protection.
 				 */
 				yield 'cpage' => \apply_filters( 'the_seo_framework_enable_noindex_comment_pagination', true );
-				break;
-		endswitch;
+		}
 	}
 }

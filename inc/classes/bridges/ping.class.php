@@ -38,11 +38,6 @@ use function \The_SEO_Framework\memo;
 final class Ping {
 
 	/**
-	 * The constructor, can't be initialized.
-	 */
-	private function __construct() { }
-
-	/**
 	 * Prepares a cronjob-based ping within 30 seconds of calling this.
 	 *
 	 * @since 4.0.0

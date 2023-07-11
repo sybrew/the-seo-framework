@@ -452,7 +452,7 @@ final class Term extends Main {
 
 		if ( $repeated_words ) {
 			$dupes = [];
-			foreach ( $repeated_words as $_dw ) :
+			foreach ( $repeated_words as $_dw ) {
 				// Keep abbreviations... WordPress, make multibyte support mandatory already.
 				// $_word = ctype_upper( reset( $_dw ) ) ? reset( $_dw ) : mb_strtolower( reset( $_dw ) );
 
@@ -462,7 +462,7 @@ final class Term extends Main {
 					\esc_attr( key( $_dw ) ),
 					reset( $_dw )
 				);
-			endforeach;
+			}
 
 			$item['assess']['dupe'] = implode( ' ', $dupes );
 

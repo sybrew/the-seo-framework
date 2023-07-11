@@ -421,8 +421,4 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		}
 
 		HTML::wrap_fields( $boxes, true );
-		break;
-
-	default:
-		break;
 endswitch;

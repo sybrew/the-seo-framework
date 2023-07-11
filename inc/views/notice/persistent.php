@@ -23,7 +23,6 @@ switch ( $args['type'] ) {
 	case 'warning':
 	case 'info':
 		$args['type'] = "notice-{$args['type']}";
-		break;
 }
 
 $dismiss_title = __( 'Dismiss this notice', 'default' );

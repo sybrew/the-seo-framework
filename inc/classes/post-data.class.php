@@ -388,8 +388,8 @@ class Post_Data extends Detect {
 
 		$new_data = [];
 
-		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) :
-			switch ( $key ) :
+		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) {
+			switch ( $key ) {
 				case 'doctitle':
 					$new_data['_genesis_title'] = $value;
 					break;
@@ -407,12 +407,8 @@ class Post_Data extends Detect {
 
 				case 'canonical':
 					$new_data['_genesis_canonical_uri'] = $value;
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -456,19 +452,15 @@ class Post_Data extends Detect {
 			$new_data = [];
 
 			// This is sent via GET. Keep using $_REQUEST for future-compatibility.
-			foreach ( (array) $_REQUEST['autodescription-bulk'] as $key => $value ) :
-				switch ( $key ) :
+			foreach ( (array) $_REQUEST['autodescription-bulk'] as $key => $value ) {
+				switch ( $key ) {
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
 						if ( 'nochange' === $value ) continue 2;
 						$new_data[ "_genesis_$key" ] = $value;
-						break;
-
-					default:
-						break;
-				endswitch;
-			endforeach;
+				}
+			}
 		}
 
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
@@ -620,15 +612,10 @@ class Post_Data extends Detect {
 		if ( empty( $meta ) || ! $this->detect_non_html_page_builder() )
 			return false;
 
-		if ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) ) :
-			// Divi Builder by Elegant Themes
-			return true;
-		elseif ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) ) :
-			// Visual Composer by WPBakery
-			return true;
-		endif;
-
-		return false;
+		// Divi Builder by Elegant Themes
+		// || Visual Composer by WPBakery
+		return ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) )
+			|| ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) );
 	}
 
 	/**

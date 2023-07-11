@@ -1517,7 +1517,7 @@ final class Deprecated {
 
 		$pof = (int) \get_option( 'page_on_front' );
 
-		switch ( \get_option( 'show_on_front' ) ) :
+		switch ( \get_option( 'show_on_front' ) ) {
 			case 'page':
 				$is_front_page = $pof === $id;
 				break;
@@ -1531,8 +1531,7 @@ final class Deprecated {
 			default:
 				// Elegant Themes's Extra support
 				$is_front_page = 0 === $id && $tsf->is_home();
-				break;
-		endswitch;
+		}
 
 		return $is_front_page;
 	}
@@ -1716,7 +1715,6 @@ final class Deprecated {
 	 * @since 4.2.9 Soft deprecated
 	 * @todo 4.3.0 Deprecate!
 	 * @deprecated
-	 * @uses $this->the_seo_framework_use_transients
 	 *
 	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
 	 * @param string $value      Transient value. Expected to not be SQL-escaped.
@@ -1739,7 +1737,6 @@ final class Deprecated {
 	 * @since 4.2.9 Soft deprecated
 	 * @todo 4.3.0 Deprecate!
 	 * @deprecated
-	 * @uses $this->the_seo_framework_use_transients
 	 *
 	 * @param string $transient Transient name. Expected to not be SQL-escaped.
 	 * @return mixed|bool Value of the transient. False on failure or non existing transient.

@@ -53,18 +53,6 @@ final class Scripts {
 	public static function prepare() {}
 
 	/**
-	 * The constructor. Can't be instantiated.
-	 * Kills PHP. Enforces singleton.
-	 *
-	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 * @internal
-	 */
-	private function __construct() {}
-
-	/**
 	 * Initializes scripts based on admin query.
 	 *
 	 * @since 4.0.0

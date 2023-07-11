@@ -104,7 +104,7 @@ class Factory {
 	 */
 	public static function generator() {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
-		while ( true ) switch ( $sender = yield static::START ) :
+		while ( true ) switch ( $sender = yield static::START ) {
 			case 'noindex':
 			case 'nofollow':
 			case 'noarchive':
@@ -131,8 +131,7 @@ class Factory {
 					'4.2.0'
 				);
 				yield static::HALT;
-				break;
-		endswitch;
+		}
 	}
 
 	/**

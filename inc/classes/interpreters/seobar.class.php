@@ -407,7 +407,7 @@ final class SEOBar {
 	 */
 	private function interpret_status_to_class_suffix( $item ) {
 
-		switch ( $item['status'] ) :
+		switch ( $item['status'] ) {
 			case static::STATE_GOOD:
 				$status = 'good';
 				break;
@@ -424,11 +424,10 @@ final class SEOBar {
 				$status = 'unknown';
 				break;
 
-			default:
 			case static::STATE_UNDEFINED:
+			default:
 				$status = 'undefined';
-				break;
-		endswitch;
+		}
 
 		return $status;
 	}
@@ -450,7 +449,7 @@ final class SEOBar {
 		$use_symbols = $use_symbols ?? (bool) \tsf()->get_option( 'seo_bar_symbols' );
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
-			switch ( $item['status'] ) :
+			switch ( $item['status'] ) {
 				case static::STATE_OKAY:
 					$symbol = '!?';
 					break;
@@ -463,11 +462,10 @@ final class SEOBar {
 					$symbol = '??';
 					break;
 
-				default:
 				case static::STATE_UNDEFINED:
+				default:
 					$symbol = '--';
-					break;
-			endswitch;
+			}
 
 			return $symbol;
 		}

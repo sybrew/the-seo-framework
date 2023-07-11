@@ -334,7 +334,7 @@ final class Debug {
 	 */
 	protected function combobulate_error_message( $error, $message, $code ) {
 
-		switch ( $code ) :
+		switch ( $code ) {
 			case \E_USER_ERROR:
 				$type = 'Error';
 				break;
@@ -350,8 +350,7 @@ final class Debug {
 			case \E_USER_NOTICE:
 			default:
 				$type = 'Notice';
-				break;
-		endswitch;
+		}
 
 		$file = \esc_html( $error['file'] ?? '' );
 		$line = \esc_html( $error['line'] ?? '' );

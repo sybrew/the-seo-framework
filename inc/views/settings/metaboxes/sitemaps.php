@@ -75,13 +75,13 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 			)
 		);
 
-		if ( $has_sitemap_plugin ) :
+		if ( $has_sitemap_plugin ) {
 			echo '<hr>';
 			HTML::attention_description( __( 'Note: Another active sitemap plugin has been detected. This means that the sitemap functionality has been superseded and these settings have no effect.', 'autodescription' ) );
-		elseif ( $sitemap_detected ) :
+		} elseif ( $sitemap_detected ) {
 			echo '<hr>';
 			HTML::attention_description( __( 'Note: A sitemap has been detected in the root folder of your website. This means that these settings have no effect.', 'autodescription' ) );
-		endif;
+		}
 		?>
 		<hr>
 		<?php
@@ -183,12 +183,12 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 
 		HTML::header_title( __( 'Robots.txt Settings', 'autodescription' ) );
 
-		if ( $this->has_robots_txt() ) :
+		if ( $this->has_robots_txt() ) {
 			HTML::attention_description(
 				__( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' )
 			);
 			echo '<hr>';
-		elseif ( ! $robots_url ) :
+		} elseif ( ! $robots_url ) {
 			if ( $this->is_subdirectory_installation() ) {
 				HTML::attention_description(
 					__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
@@ -212,14 +212,14 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				);
 				echo '<hr>';
 			}
-		endif;
+		}
 
 		HTML::description( __( 'The robots.txt output is the first thing search engines look for before crawling your site. If you add the sitemap location in that output, then search engines may automatically access and index the sitemap.', 'autodescription' ) );
 		HTML::description( __( 'If you do not add the sitemap location to the robots.txt output, you should notify search engines manually through webmaster-interfaces provided by the search engines.', 'autodescription' ) );
 
 		echo '<hr>';
 
-		if ( $show_settings ) :
+		if ( $show_settings ) {
 			HTML::header_title( __( 'Sitemap Hinting', 'autodescription' ) );
 			HTML::wrap_fields(
 				Input::make_checkbox( [
@@ -228,7 +228,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				] ),
 				true
 			);
-		endif;
+		}
 
 		$robots_url = $this->get_robots_txt_url();
 
@@ -410,8 +410,4 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 			?>
 		</p>
 		<?php
-		break;
-
-	default:
-		break;
 endswitch;

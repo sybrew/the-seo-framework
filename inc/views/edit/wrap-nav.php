@@ -11,19 +11,20 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 // Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;
-$count    = 1;
 
 /**
  * Start navigational tabs.
  *
  * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
  */
-if ( $use_tabs ) :
+if ( $use_tabs ) {
 	?>
 	<div class="tsf-flex tsf-flex-nav-tab-wrapper tsf-flex-hide-if-no-js" id="<?= esc_attr( "tsf-flex-{$id}-tabs-wrapper" ) ?>">
 		<div class="tsf-flex tsf-flex-nav-tab-inner">
 			<?php
-			foreach ( $tabs as $tab => $value ) :
+			$count = 1;
+
+			foreach ( $tabs as $tab => $value ) {
 				$dashicon   = $value['dashicon'] ?? '';
 				$label_name = $value['name'] ?? '';
 
@@ -53,9 +54,9 @@ HTML;
 				// ^ At PHP 7.3+ we can indent this.
 
 				$count++;
-			endforeach;
+			}
 			?>
 		</div>
 	</div>
 	<?php
-endif;
+}

@@ -28,24 +28,19 @@ function _polylang_fix_sitemap_base_bath( $path ) {
 
 	$_options = \get_option( 'polylang' );
 
-	if ( isset( $_options['force_lang'] ) ) {
-		switch ( $_options['force_lang'] ) {
-			case 0:
-				// Polylang determines language sporadically from content: can't be trusted.
-				// NOTE: Thanks to '_polylang_blocklist_tsf_urls', this yields a different value albeit the same code.
-				// That's Polylang for you: can't trust your own code.
-				$path = rtrim(
-					parse_url(
-						\get_home_url(),
-						\PHP_URL_PATH
-					) ?? '',
-					'/'
-				);
-				break;
-			default:
-				// Polylang can differentiate languages by (sub)domain/directory name early. No need to interfere.
-				break;
-		}
+	// If not 0, Polylang can differentiate languages by (sub)domain/directory name early.
+	// There's no need to interfere in those cases.
+	if ( isset( $_options['force_lang'] ) && 0 == $_options['force_lang'] ) { // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
+		// Polylang determines language sporadically from content: can't be trusted.
+		// NOTE: Thanks to '_polylang_blocklist_tsf_urls', this yields a different value albeit the same code.
+		// That's Polylang for you: can't trust your own code.
+		$path = rtrim(
+			parse_url(
+				\get_home_url(),
+				\PHP_URL_PATH
+			) ?? '',
+			'/'
+		);
 	}
 
 	return $path;

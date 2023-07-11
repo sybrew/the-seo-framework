@@ -129,9 +129,12 @@ class User_Data extends Term_Data {
 				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
 
 				foreach ( $this->get_headless_user_meta_support() as $meta_key => $supports ) {
+
 					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
+
 					foreach ( $supports as $support_type ) {
 						if ( $this->is_headless[ $support_type ] ) continue;
+
 						$meta[ $meta_key ] = $_meta[ $meta_key ];
 						continue 2;
 					}

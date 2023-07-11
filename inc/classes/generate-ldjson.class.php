@@ -465,7 +465,7 @@ class Generate_Ldjson extends Generate_Image {
 		$assigned_ids = [];
 
 		// Fetch cats children id's, if any.
-		foreach ( $terms as $term_id => $parent_id ) :
+		foreach ( $terms as $term_id => $parent_id ) {
 			$assigned_ids[ $term_id ] = $parent_id;
 			// Check if they have parents (gets them all).
 			$ancestors = \get_ancestors( $term_id, $taxonomy );
@@ -476,7 +476,7 @@ class Generate_Ldjson extends Generate_Image {
 				// Save current only with empty parent id..
 				$parents[ $term_id ] = [];
 			}
-		endforeach;
+		}
 
 		unset( $terms );
 
@@ -519,7 +519,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$items = [];
 
-		foreach ( $tree_ids as $pos => $child_id ) :
+		foreach ( $tree_ids as $pos => $child_id ) {
 			$position = $pos + 2;
 
 			$_generator_args = [
@@ -548,7 +548,7 @@ class Generate_Ldjson extends Generate_Image {
 					'name' => $this->escape_title( $cat_name ),
 				],
 			];
-		endforeach;
+		}
 
 		if ( $items ) {
 			array_unshift( $items, $this->get_ld_json_breadcrumb_home_crumb() );
@@ -781,7 +781,6 @@ class Generate_Ldjson extends Generate_Image {
 
 			default:
 				$url = '';
-				break;
 		}
 
 		return $url;

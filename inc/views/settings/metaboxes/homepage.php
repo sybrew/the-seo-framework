@@ -546,8 +546,4 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			] ),
 			true
 		);
-		break;
-
-	default:
-		break;
 endswitch;

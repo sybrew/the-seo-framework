@@ -96,8 +96,4 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 				esc_html__( 'Learn how this works.', 'autodescription' )
 			)
 		);
-		break;
-
-	default:
-		break;
 endswitch;

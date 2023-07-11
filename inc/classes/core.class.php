@@ -99,6 +99,9 @@ class Core {
 		if ( 'load_options' === $name ) {
 			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
 			return ! $this->is_headless['settings'];
+		} elseif ( 'the_seo_framework_use_transients' === $name ) {
+			// $this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_use_transients', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ); // TODO 4.3.0
+			return \The_SEO_Framework\Bridges\Cache::$use_transients;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );

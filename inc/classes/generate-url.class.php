@@ -540,7 +540,6 @@ class Generate_Url extends Generate_Title {
 			case 'year':
 				$_year     = \get_query_var( 'year' );
 				$_paginate = $_paginate && $_year == $year; // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
-				break;
 		}
 
 		if ( $_paginate ) {
@@ -590,18 +589,18 @@ class Generate_Url extends Generate_Title {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$scheme = $this->get_option( 'canonical_scheme' );
-
-		switch ( $scheme ) :
+		// May be 'https', 'http', or 'automatic'.
+		switch ( $this->get_option( 'canonical_scheme' ) ) {
 			case 'https':
+				$scheme = 'https';
+				break;
 			case 'http':
+				$scheme = 'http';
 				break;
-
-			default:
 			case 'automatic':
+			default:
 				$scheme = $this->detect_site_url_scheme();
-				break;
-		endswitch;
+		}
 
 		/**
 		 * @since 2.8.0

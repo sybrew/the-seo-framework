@@ -404,8 +404,4 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		}
 
 		HTML::wrap_fields( $checkboxes, true );
-		break;
-
-	default:
-		break;
 endswitch;

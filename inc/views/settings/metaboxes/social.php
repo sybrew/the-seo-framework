@@ -413,8 +413,4 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			],
 			true
 		);
-		break;
-
-	default:
-		break;
 endswitch;

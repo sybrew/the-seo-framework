@@ -250,15 +250,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 == Changelog ==
 
 TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
-TODO umemo conflicting_plugins()
 
-FIXME: https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
-	Also notify Nik via email?
-
-TODO remove support for get_theme_mod( 'custom_logo' )?
-	-> WP's _override_custom_logo_theme_mod() sets it to get_option( 'site_icon' ) instead.
-	-> WP's _delete_site_logo_on_remove_custom_logo suggests that get_theme_mod( 'custom_logo' ) is deprecated.
-		-> This doesn't appear loaded in the backend. However, thanks to Gutenberg's asinine devs, the entire codebase is unreadable.
 TODO when you add a custom title (homepage also?) to wpForo's page, the SEO Bar should exclaim it's being overwritten (and be marked STATE_BAD).
 	* wpForo's settings aren't read correctly? Retest.
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
@@ -304,8 +296,28 @@ TODO A tagline with a ' will be trimmed if the final two words don't end with a 
 	-> Consider only trimming the words if limit isn't met with ENTIRE content set.
 		-> e.g. "The story you aren't told" -- the ' will split the sentence (but why?)
 
+TODO add bespoke support for Events Calendar?
+	-> Basically, we need to overwrite the separator
+		-> We can do this via WordPress document title filters.
+	-> We need to recognize that their "archives" isn't an archive, so we should remove the prefix.
+		-> Simple.
+
+TODO implement "@hook wp_action" in every function with a callback.
+	-> If something is a callback of a hook AND something else, we may want to depict that differently?
+		E.g.: @hook ~ wp_action
+
+TODO move THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS and THE_SEO_FRAMEWORK_DEBUG to define.php
+	-> Deprecate 4.3.0 tsf()->the_seo_framework_debug
+TODO Deprecate tsf()->script_debug, use NEW constant instead (Defaults to \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG )
+
 TODO highlight in large changes:
 	* Color scheme works again for tooltips.
+	* Issue with caching plugins and WordPress Core vulnerability yet unresolved?
+		* https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
+		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
+		* Also notify Nik via email?
+
+
 
 **Detailed log**
 
@@ -314,7 +326,7 @@ TODO highlight in large changes:
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 * **Improved:**
-	* The plugin is faster now due to [new coding standards](https://twitter.com/SybreWaaijer/status/1654101713714831361).
+	* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
 	* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
 		* Related Core ticket is [51117](https://core.trac.wordpress.org/ticket/51117).
 	* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
@@ -350,7 +362,7 @@ TODO highlight in large changes:
 		* This used to be `auto_descripton_html_method` (typo).
 	* New action, `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
 * **Changed:**
-	* Method `tsf()->query_supports_seo()` removed detection for JSON type requests, because these cannot be verified as legitimate.
+	* Method `tsf()->query_supports_seo()` removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
 		* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
 	* Filter `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.

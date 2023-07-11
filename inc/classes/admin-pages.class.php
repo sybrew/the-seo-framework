@@ -277,7 +277,6 @@ class Admin_Pages extends Generate_Ldjson {
 			case 'error':
 				$message = \__( 'An unknown error occurred saving SEO settings.', 'autodescription' );
 				$type    = 'error';
-				break;
 		}
 
 		$this->update_static_cache( 'settings_notice', '' );
@@ -344,7 +343,6 @@ class Admin_Pages extends Generate_Ldjson {
 			case 'warning':
 			case 'info':
 				$type = "notice-$type";
-				break;
 		}
 
 		return vsprintf(

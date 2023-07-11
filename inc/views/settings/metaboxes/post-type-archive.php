@@ -412,7 +412,11 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			],
 		];
 
-		foreach ( $robots_settings as $_r_type => $_rs ) :
+		/* translators: %s = default option value */
+		$_default_i18n         = __( 'Default (%s)', 'autodescription' );
+		$_default_unknown_i18n = __( 'Default (unknown)', 'autodescription' );
+
+		foreach ( $robots_settings as $_r_type => $_rs ) {
 			// phpcs:enable, WordPress.Security.EscapeOutput
 			HTML::wrap_fields(
 				vsprintf(
@@ -436,19 +440,18 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				'name'    => Input::get_field_name( $_option_map[ $_r_type ] ),
 				'label'   => '',
 				'options' => [
-					0  => __( 'Default (unknown)', 'autodescription' ),
+					0  => $_default_unknown_i18n,
 					-1 => $_rs['force_on'],
 					1  => $_rs['force_off'],
 				],
 				'default' => $_rs['_value'],
 				'data'    => [
-					/* translators: %s = default option value */
-					'defaultI18n' => __( 'Default (%s)', 'autodescription' ),
+					'defaultI18n' => $_default_i18n,
 					'defaultOn'   => $_rs['_defaultOn'],
 					'defaultOff'  => $_rs['_defaultOff'],
 				],
 			] );
-		endforeach;
+		}
 		?>
 		<hr>
 
@@ -468,5 +471,4 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			<input type=url name="<?php Input::field_name( $_option_map['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['redirect'] ); ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'redirect', $post_type ) ) ?>" autocomplete=off />
 		</p>
 		<?php
-		break;
 endswitch;

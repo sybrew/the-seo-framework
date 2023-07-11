@@ -972,7 +972,7 @@ class Generate_Title extends Generate_Description {
 		if ( ! empty( $term->taxonomy ) ) {
 			$title = $this->get_generated_single_term_title( $term );
 
-			switch ( $term->taxonomy ) :
+			switch ( $term->taxonomy ) {
 				case 'category':
 					$prefix = \_x( 'Category:', 'category archive title prefix', 'default' );
 					break;
@@ -985,8 +985,7 @@ class Generate_Title extends Generate_Description {
 						\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
 						$this->get_tax_type_label( $term->taxonomy )
 					);
-					break;
-			endswitch;
+			}
 		} elseif ( $term instanceof \WP_User && isset( $term->display_name ) ) {
 			$title  = $term->display_name;
 			$prefix = \_x( 'Author:', 'author archive title prefix', 'default' );
@@ -1054,7 +1053,7 @@ class Generate_Title extends Generate_Description {
 
 		if ( ! isset( $term->name ) ) return '';
 
-		switch ( $term->taxonomy ) :
+		switch ( $term->taxonomy ) {
 			case 'category':
 				/**
 				 * Filter the category archive page title.
@@ -1084,8 +1083,7 @@ class Generate_Title extends Generate_Description {
 				 * @param string $term_name Term name for archive being displayed.
 				 */
 				$term_name = \apply_filters( 'single_term_title', $term->name );
-				break;
-		endswitch;
+		}
 
 		return $term_name;
 	}

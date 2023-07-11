@@ -327,8 +327,4 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				<?php
 			}
 		endif; /* end $output_social_presence */
-		break;
-
-	default:
-		break;
 endswitch;

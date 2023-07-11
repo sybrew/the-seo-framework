@@ -47,13 +47,6 @@ final class Load extends Site_Options {
 
 	/**
 	 * @since 2.2.9
-	 * @TODO deprecate this. Use Bridges\Cache::$use_transients instead.
-	 * @var bool $the_seo_framework_debug Whether TSF-specific transients are used.
-	 */
-	public $the_seo_framework_use_transients = true;
-
-	/**
-	 * @since 2.2.9
 	 * @var bool $script_debug Whether WP script debugging is enabled.
 	 */
 	public $script_debug = false;

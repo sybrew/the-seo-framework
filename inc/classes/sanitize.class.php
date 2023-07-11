@@ -767,8 +767,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_term_meta( $data ) {
 
-		foreach ( $data as $key => &$value ) :
-			switch ( $key ) :
+		foreach ( $data as $key => &$value ) {
+			switch ( $key ) {
 				case 'doctitle':
 				case 'og_title':
 				case 'tw_title':
@@ -807,9 +807,8 @@ class Sanitize extends Admin_Pages {
 
 				default:
 					unset( $data[ $key ] );
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return $data;
 	}
@@ -824,8 +823,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_post_meta( $data ) {
 
-		foreach ( $data as $key => &$value ) :
-			switch ( $key ) :
+		foreach ( $data as $key => &$value ) {
+			switch ( $key ) {
 				case '_genesis_title':
 				case '_open_graph_title':
 				case '_twitter_title':
@@ -867,9 +866,8 @@ class Sanitize extends Admin_Pages {
 
 				default:
 					unset( $data[ $key ] );
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return $data;
 	}
@@ -885,8 +883,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_user_meta( $data ) {
 
-		foreach ( $data as $key => &$value ) :
-			switch ( $key ) :
+		foreach ( $data as $key => &$value ) {
+			switch ( $key ) {
 				case 'facebook_page':
 					$value = $this->s_facebook_profile( $value );
 					continue 2;
@@ -904,9 +902,8 @@ class Sanitize extends Admin_Pages {
 
 				default:
 					unset( $data[ $key ] );
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return $data;
 	}
@@ -1087,10 +1084,9 @@ class Sanitize extends Admin_Pages {
 			case 'accurate':
 				$passes = 6;
 				break;
-			default:
 			case 'fast':
+			default:
 				$passes = 2;
-				break;
 		}
 
 		// Missing 'dd', 'dt', and 'li' -- these are obligatory subelements of what's already cleared.
@@ -2133,9 +2129,9 @@ class Sanitize extends Admin_Pages {
 							// If nothing changed, or no more HTML is present, we're done.
 							if ( $pre_pass_input === $input || false === strpos( $input, '<' ) ) break;
 						}
+
 						// Reset for next fall-through null-coalescing.
 						unset( $passes, $replacement );
-						break;
 				}
 			}
 		}

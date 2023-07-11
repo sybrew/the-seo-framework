@@ -396,7 +396,6 @@ function _bbpress_filter_robots( $meta, $args, $options ) { // phpcs:ignore, unu
 				case \bbp_get_topic_post_type():
 				case \bbp_get_reply_post_type():
 					$forum_id = \get_post_meta( $args['id'], '_bbp_forum_id', true );
-					break;
 			}
 		}
 	}
@@ -432,7 +431,6 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
 		case \bbp_get_topic_post_type():
 		case \bbp_get_reply_post_type():
 			$forum_id = \get_post_meta( $interpreter::$query['id'], '_bbp_forum_id', true );
-			break;
 	}
 
 	if ( empty( $forum_id ) || \bbp_is_forum_public( $forum_id ) ) return;

@@ -575,7 +575,7 @@ class Detect extends Render {
 	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
 	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
 	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
-	 * @since 4.2.9 Removed detection for JSON type requests, because these cannot be verified as legitimate.
+	 * @since 4.2.9 Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	 *
 	 * @return bool
 	 */
@@ -584,46 +584,30 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		switch ( true ) :
+		switch ( true ) {
 			case \is_feed():
 			case \wp_doing_ajax():
 			case \wp_doing_cron():
 			case \defined( 'REST_REQUEST' ) && \REST_REQUEST:
 				$supported = false;
 				break;
-
 			case $this->is_singular():
+				// This is the most likely scenario, but may collide with is_feed() et al.
 				$supported = $this->is_post_type_supported() && $this->get_the_real_ID();
 				break;
-
 			case \is_post_type_archive():
 				$supported = $this->is_post_type_archive_supported();
 				break;
-
 			case $this->is_term_meta_capable():
 				// When a term has no posts attached, it'll not return a post type, and it returns a 404 late in the loop.
 				// This is because get_post_type() tries to assert the first post in the loop here.
 				// Thus, we test for is_taxonomy_supported() instead.
 				$supported = $this->is_taxonomy_supported() && $this->get_the_real_ID();
 				break;
-
-			// This includes 404.
 			default:
+				// Everything else: homepage, 404, search, edge-cases.
 				$supported = true;
-				break;
-
-			// TODO consider this instead of the current default? (it'd make the AJAX through REST test obsolete)
-			// Every recognized query (aside from $this->is_singular()/is_post_type_archive for we already covered those in full)
-			// case \is_404():
-			// case $this->is_search():
-			// case $this->is_real_front_page():
-			// case $this->is_archive():
-			// $supported = true;
-			// break;
-			// default:
-			// $supported = false;
-			// break;
-		endswitch;
+		}
 
 		/**
 		 * Override false negatives on exploit.
@@ -739,12 +723,12 @@ class Detect extends Render {
 
 		$query = $wp_query->query;
 
-		foreach ( $exploitables as $type => $qvs ) :
-			foreach ( $qvs as $qv ) :
+		foreach ( $exploitables as $type => $qvs ) {
+			foreach ( $qvs as $qv ) {
 				// Only test isset, because falsey or empty-array is what we need to test against.
 				if ( ! isset( $query[ $qv ] ) ) continue;
 
-				switch ( $type ) :
+				switch ( $type ) {
 					case 'numeric':
 						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) )
 							return memo( true );
@@ -770,13 +754,9 @@ class Detect extends Render {
 						// !$this->get_the_real_ID() is already executed. Just test if home is a page.
 						if ( $this->is_home_as_page() )
 							return memo( true );
-						break;
-
-					default:
-						break;
-				endswitch;
-			endforeach;
-		endforeach;
+				}
+			}
+		}
 
 		return memo( false );
 	}

@@ -169,7 +169,6 @@ class Render extends Admin_Init {
 					break;
 				default:
 					$_secure_attr_value = \esc_attr( $_value );
-					break;
 			}
 
 			// phpcs:disable -- Security hint for later, left code intact; Redundant, internal... for now.
@@ -1280,7 +1279,7 @@ class Render extends Admin_Init {
 
 		if ( ! $cache['run'] ) return '';
 
-		switch ( $where ) :
+		switch ( $where ) {
 			case 'before':
 				return "<!-- {$cache['annotation']} -->\n";
 
@@ -1297,7 +1296,7 @@ class Render extends Admin_Init {
 				}
 
 				return "<!-- / {$cache['annotation']}{$timers} -->\n";
-		endswitch;
+		}
 	}
 
 	/**

@@ -44,7 +44,7 @@ final class Images {
 	 *
 	 * @since 4.0.0
 	 */
-	private function __construct() { }
+	private function __construct() {}
 
 	/**
 	 * Generates image URLs and IDs from the attachment page entry.

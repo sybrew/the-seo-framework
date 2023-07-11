@@ -37,7 +37,7 @@ final class Cache {
 	/**
 	 * @since 4.2.9
 	 * @access private
-	 *         Use constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` instead.
+	 *         Immutable! Use constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` instead.
 	 * @see tsf()->init_debug_vars() which can set this to 'false'.
 	 * @var bool Whether transients are enabled.
 	 */
@@ -49,7 +49,6 @@ final class Cache {
 	 * Prevents setting of transients when they're disabled.
 	 *
 	 * @since 4.2.9
-	 * @uses $this->the_seo_framework_use_transients
 	 *
 	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
 	 * @param string $value      Transient value. Expected to not be SQL-escaped.
@@ -70,7 +69,6 @@ final class Cache {
 	 * N.B. not all transient settings make use of this function, bypassing the constant check.
 	 *
 	 * @since 4.2.9
-	 * @uses $this->the_seo_framework_use_transients
 	 *
 	 * @param string $transient Transient name. Expected to not be SQL-escaped.
 	 * @return mixed|bool Value of the transient. False on failure or non existing transient.

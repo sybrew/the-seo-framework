@@ -18,7 +18,7 @@ $count    = 1;
  *
  * The content is relative to the navigation and outputs navigational tabs too, but uses CSS to become invisible on JS.
  */
-foreach ( $tabs as $tab => $params ) :
+foreach ( $tabs as $tab => $params ) {
 
 	$radio_id    = "tsf-{$id}-tab-{$tab}-content";
 	$radio_class = "tsf-{$id}-tabs-content";
@@ -30,7 +30,7 @@ foreach ( $tabs as $tab => $params ) :
 	<div class="tsf-nav-tab-content <?= esc_attr( $radio_class . $current_class ) ?>" id="<?= esc_attr( $radio_id ) ?>" >
 		<?php
 		// No-JS tabs.
-		if ( $use_tabs ) :
+		if ( $use_tabs ) {
 			$dashicon = $params['dashicon'] ?? '';
 			$name     = $params['name'] ?? '';
 
@@ -44,7 +44,7 @@ foreach ( $tabs as $tab => $params ) :
 				</div>
 			</div>
 			<?php
-		endif;
+		}
 
 		if ( ! empty( $params['callback'] ) )
 			call_user_func_array( $params['callback'], [ ( $params['args'] ?? [] ) ] );
@@ -70,4 +70,4 @@ foreach ( $tabs as $tab => $params ) :
 	<?php
 
 	$count++;
-endforeach;
+}

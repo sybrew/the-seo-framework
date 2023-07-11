@@ -91,8 +91,8 @@ final class Markdown {
 		if ( isset( $md_types['*'], $md_types['**'] ) )
 			$text = static::strong_em( $text );
 
-		foreach ( $md_types as $type ) :
-			switch ( $type ) :
+		foreach ( $md_types as $type ) {
+			switch ( $type ) {
 				case 'strong':
 					$text = static::strong( $text );
 					break;
@@ -116,12 +116,8 @@ final class Markdown {
 
 				case 'a':
 					$text = static::a( $text, $args['a_internal'] );
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return $text;
 	}

@@ -36,13 +36,13 @@ if ( is_admin() ) {
 		<h3 style="font-family:unset;font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:9002;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
 			SEO Debug Information
 			<?php
-			if ( $this->is_post_edit() || $this->is_term_edit() ) :
+			if ( $this->is_post_edit() || $this->is_term_edit() ) {
 				echo ' :: ';
 				echo esc_html( "Type: $type" );
 				echo esc_html( $mdash . 'ID: ' . $id );
 				echo esc_html( $mdash . 'Plugin version: ' . THE_SEO_FRAMEWORK_VERSION );
 				echo esc_html( $mdash . 'Plugin DB version: c' . get_option( 'the_seo_framework_upgraded_db_version' ) . ' | e' . THE_SEO_FRAMEWORK_DB_VERSION );
-			endif;
+			}
 			?>
 		</h3>
 		<div style="position:absolute;bottom:0;right:0;left:0;top:39px;margin:0;padding:0;background:#fff;border-radius:3px;overflow-x:hidden;z-index:9001">
