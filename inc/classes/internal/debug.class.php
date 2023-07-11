@@ -419,7 +419,7 @@ final class Debug {
 
 		// Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
 		$output = str_replace( [ "\r\n", "\r", "\n" ], "<br>\n", \esc_html( str_replace( str_repeat( ' ', 4 ), str_repeat( '&nbsp;', 4 ), $output ) ) );
-		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<font color=arnoldschwarzenegger>$1</font> ', $output );
+		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<span style=color:#8bc34a>$1</span> ', $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
 		$output = '<div style="font-family:unset;display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
@@ -571,7 +571,7 @@ final class Debug {
 				$value = \esc_html( var_export( $value, true ) );
 			}
 
-			$value   = '<font color=harrisonford>' . "$type $value" . '</font>';
+			$value   = "<span style=color:#0a00f0>$type $value</span>";
 			$out     = \esc_html( $name ) . ' => ' . $value;
 			$output .= "<span style=background:#dadada>$out</span>\n";
 		}
@@ -585,7 +585,7 @@ final class Debug {
 				$value = \esc_html( var_export( $value, true ) );
 			}
 
-			$value = '<font color=harrisonford>' . "$type $value" . '</font>';
+			$value = "<span style=color:#0a00f0>$type $value</span>";
 			$out   = \esc_html( $name ) . ' => ' . $value;
 
 			$output .= "$out\n";

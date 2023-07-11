@@ -269,8 +269,6 @@ TODO why is base_get_sitemap_store_key() used instead of one inferred from the $
 TODO with changes set to the sitemap, test whether plugins Polylang/WPML still work as intended -> Have their languages been initialized?
 	-> Also test other translation plugins.
 
-TODO <font> tag element is deprecated. So is the meme.
-
 TODO use 0==strcasecmp() instead of strtolower==strtolower? It might be slower... or faster. Test?
 	Use strncmp for the first X chars? Do we use this here? Only in TSFEM, no?
 
@@ -369,6 +367,7 @@ TODO highlight in large changes:
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
+	* The `<font>` tag is deprecated, so we updated the tag to `<span>` in the debug panels.
 * **Deprecated:**
 	* Action `the_seo_framework_delete_cache_sitemap` is now soft deprecated (i.e., without warning). Use `the_seo_framework_cleared_sitemap_transients` instead.
 		* Full deprecation with notice will start from TSF v4.3.0.
