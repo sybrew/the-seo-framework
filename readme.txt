@@ -262,6 +262,9 @@ TODO add warning to PTA settings when translation plugin is detected.
 TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
 	-> This requires probably a whole lot more work than I'd have hoped.
 	-> This can go wrong if the default language changes, or disappears.
+		-> But, this is effectively the same issue we have with Custom Post Type Archives.
+			-> Speaking of which, we should also have such a switcher for those... ugh.
+TODO check mail Dean about WPML config
 
 TODO why is base_get_sitemap_store_key() used instead of one inferred from the $sitemap_id?
 	-> Move that to the sitemap bridge; so we could also a transient for Google News?
@@ -272,15 +275,6 @@ TODO with changes set to the sitemap, test whether plugins Polylang/WPML still w
 TODO use 0==strcasecmp() instead of strtolower==strtolower? It might be slower... or faster. Test?
 	Use strncmp for the first X chars? Do we use this here? Only in TSFEM, no?
 
-TODO in _prepare_upgrade_notice(), test for most recent metadata?
-	-> So we combine ALL metadata entries, take rows from the top of the table first (highest ID) and then filter the results by plugin.
-
-TODO in remove_default_title_filters, has_filter can return 0. It will return false on failure, though.
-
-TODO investigate &shy; issue with News sitemap entries. (reply to user in Bremer about this issue)
-
-TODO check mail Dean about WPML config
-
 TODO change autodescription-updates-cache to autodescription-persistent-cache?
 	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
 		-> However, this may cause a notification pop up for those who use two or more SEO plugins simultaneously. Though this may be helpful.
@@ -288,7 +282,6 @@ TODO change autodescription-updates-cache to autodescription-persistent-cache?
 TODO db version 4270 -> 4290+
 
 TODO lower ID capitalization and their ignores
-TODO use memo() in convert_color_css?
 
 TODO A tagline with a ' will be trimmed if the final two words don't end with a dot.
 	-> Consider only trimming the words if limit isn't met with ENTIRE content set.
@@ -321,6 +314,8 @@ TODO highlight in large changes:
 
 **For everyone:**
 
+* **Added:**
+	* SEOPress metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 * **Improved:**
@@ -411,6 +406,7 @@ TODO highlight in large changes:
 	* Removed inline Right-To-Left CSS registration from `tsf-pt`, this is handled in its file now.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
+	* Removed capitalization in PHP methods; mainly, `_ID`. Since PHP methods are case-insensitive at runtime, this should not matter nearly any case.
 	* Fixed typos in code. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* Refreshed `composer.json`. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* Improved needless defense clauses. Props [Viktor Szépe](https://github.com/szepeviktor).

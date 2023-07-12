@@ -25,6 +25,8 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\umemo;
+
 Scripts::prepare();
 
 /**
@@ -482,9 +484,9 @@ final class Scripts {
 	 */
 	private function convert_color_css( $css ) {
 
-		static $c_ck, $c_cv;
-		// Memoize the conversion types.
-		if ( ! isset( $c_ck, $c_cv ) ) {
+		$conversions = umemo( __METHOD__ . '/conversions' );
+
+		if ( ! $conversions ) {
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
@@ -504,7 +506,7 @@ final class Scripts {
 				$_colors = $_colors[ $_scheme ]->colors;
 			}
 
-			$_table = [
+			$_conversion_table = [
 				'{{$bg}}'               => $_colors[0],
 				'{{$rel_bg}}'           => "#{$tsf->get_relative_fontcolor( $_colors[0] )}",
 				'{{$bg_accent}}'        => $_colors[1],
@@ -515,11 +517,16 @@ final class Scripts {
 				'{{$rel_color_accent}}' => "#{$tsf->get_relative_fontcolor( $_colors[3] )}",
 			];
 
-			$c_ck = array_keys( $_table );
-			$c_cv = array_values( $_table );
+			$conversions = umemo(
+				__METHOD__ . '/conversions',
+				[
+					'search'  => array_keys( $_conversion_table ),
+					'replace' => array_values( $_conversion_table ),
+				]
+			);
 		}
 
-		return str_replace( $c_ck, $c_cv, $css );
+		return str_replace( $conversions['search'], $conversions['replace'], $css );
 	}
 
 	/**
