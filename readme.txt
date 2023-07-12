@@ -281,8 +281,6 @@ TODO change autodescription-updates-cache to autodescription-persistent-cache?
 
 TODO db version 4270 -> 4290+
 
-TODO lower ID capitalization and their ignores
-
 TODO A tagline with a ' will be trimmed if the final two words don't end with a dot.
 	-> Consider only trimming the words if limit isn't met with ENTIRE content set.
 		-> e.g. "The story you aren't told" -- the ' will split the sentence (but why?)
@@ -296,6 +294,7 @@ TODO add bespoke support for Events Calendar?
 TODO implement "@hook wp_action" in every function with a callback.
 	-> If something is a callback of a hook AND something else, we may want to depict that differently?
 		E.g.: @hook ~ wp_action
+	-> Then, we can remove unused variables (often tagged with "Unused.").
 
 TODO move THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS and THE_SEO_FRAMEWORK_DEBUG to define.php
 	-> Deprecate 4.3.0 tsf()->the_seo_framework_debug
@@ -308,7 +307,7 @@ TODO highlight in large changes:
 		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
 		* Also notify Nik via email?
 
-
+TODO "2.6.2" article for Extension Manager doesn't follow our description generation cutoff rules: "FULL STOP. Also..."
 
 **Detailed log**
 
@@ -320,6 +319,7 @@ TODO highlight in large changes:
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 * **Improved:**
 	* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
+	* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
 	* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
 		* Related Core ticket is [51117](https://core.trac.wordpress.org/ticket/51117).
 	* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.

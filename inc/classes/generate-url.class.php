@@ -151,6 +151,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.3 Now accepts arguments publicly.
+	 * @since 4.2.9 No longer calls the query in the sitemap to remove pagination.
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id               The Post, Page or Term ID to generate the URL for.
@@ -173,7 +174,11 @@ class Generate_Url extends Generate_Title {
 			// See and use `$this->get_canonical_url()` instead.
 			$url = $this->build_canonical_url( $args );
 
-			if ( $args['id'] === $this->get_the_real_id() )
+			static $real_id;
+			// In the sitemap, do not use queries; plus pagination shouldn't be inserted here.
+			$real_id = $real_id ?? ( $this->is_sitemap() ? -1 : $this->get_the_real_id() );
+
+			if ( $args['id'] === $real_id )
 				$url = $this->remove_pagination_from_url( $url );
 		} else {
 			$url = $this->generate_canonical_url();

@@ -152,6 +152,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.2.9 Now expects an ID before getting a post meta item.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -166,21 +167,21 @@ class Generate_Description extends Generate {
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			} else {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} else {
-				$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args, false );
 			}
+		} elseif ( $args['id'] ) {
+			$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
+					?: $this->get_description_from_custom_field( $args, false );
 		}
 
-		return $desc ?: '';
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -287,6 +288,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.2.9 Now expects an ID before getting a post meta item.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -303,25 +305,25 @@ class Generate_Description extends Generate {
 			$desc = $this->get_post_type_archive_meta_item( 'tw_description', $args['pta'] )
 				 ?: $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} else {
-				$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
-					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args, false );
 			}
+		} elseif ( $args['id'] ) {
+			$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
+				 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
+				 ?: $this->get_description_from_custom_field( $args, false );
 		}
 
-		return $desc ?: '';
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -413,6 +415,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.9 Now expects an ID before getting a post meta item.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *
@@ -425,18 +428,18 @@ class Generate_Description extends Generate {
 			$desc = $this->get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'description', $args['pta'] );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$desc = $this->get_option( 'homepage_description' );
 			} else {
-				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] );
+				$desc = $this->get_option( 'homepage_description' );
 			}
+		} elseif ( $args['id'] ) {
+			$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] );
 		}
 
-		return $desc ?: '';
+		return $desc ?? '' ?: '';
 	}
 
 	/**

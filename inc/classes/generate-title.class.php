@@ -294,6 +294,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.9 Now expects an ID before getting a post meta item.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -308,22 +309,22 @@ class Generate_Title extends Generate_Description {
 		} elseif ( $args['pta'] ) {
 			$title = $this->get_post_type_archive_meta_item( 'tw_title', $args['pta'] )
 				  ?: $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_post_meta_item( '_twitter_title', $args['id'] )
 					  ?: $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			} else {
 				$title = $this->get_option( 'homepage_twitter_title' )
 					  ?: $this->get_option( 'homepage_og_title' );
-			} else {
-				$title = $this->get_post_meta_item( '_twitter_title', $args['id'] )
-					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 			}
+		} elseif ( $args['id'] ) {
+			$title = $this->get_post_meta_item( '_twitter_title', $args['id'] )
+				  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 		}
 
-		return $title ?: '';
+		return $title ?? '' ?: '';
 	}
 
 	/**
@@ -432,6 +433,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.9 Now expects an ID before getting a post meta item.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -444,18 +446,18 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_term_meta_item( 'og_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = $this->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$title = $this->get_option( 'homepage_og_title' )
 					  ?: $this->get_post_meta_item( '_open_graph_title', $args['id'] );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$title = $this->get_option( 'homepage_og_title' );
 			} else {
-				$title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
+				$title = $this->get_option( 'homepage_og_title' );
 			}
+		} elseif ( $args['id'] ) {
+			$title = $this->get_post_meta_item( '_open_graph_title', $args['id'] );
 		}
 
-		return $title ?: '';
+		return $title ?? '' ?: '';
 	}
 
 	/**
@@ -551,6 +553,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.4 Now uses the 'id' to get custom singular title.
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.9 Now expects an ID before getting a post meta item.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -563,18 +566,18 @@ class Generate_Title extends Generate_Description {
 			$title = $this->get_term_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = $this->get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$title = $this->get_option( 'homepage_title' )
 					  ?: $this->get_post_meta_item( '_genesis_title', $args['id'] );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$title = $this->get_option( 'homepage_title' );
 			} else {
-				$title = $this->get_post_meta_item( '_genesis_title', $args['id'] );
+				$title = $this->get_option( 'homepage_title' );
 			}
+		} elseif ( $args['id'] ) {
+			$title = $this->get_post_meta_item( '_genesis_title', $args['id'] );
 		}
 
-		return $title ?: '';
+		return $title ?? '' ?: '';
 	}
 
 	/**
