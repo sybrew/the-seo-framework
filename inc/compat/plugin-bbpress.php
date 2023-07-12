@@ -380,11 +380,11 @@ function _bbpress_filter_robots( $meta, $args, $options ) { // phpcs:ignore, unu
 	if ( null === $args ) {
 		// Front-end
 		if ( \bbp_is_single_forum() ) {
-			$forum_id = \tsf()->get_the_real_ID();
+			$forum_id = \tsf()->get_the_real_id();
 		} elseif ( \bbp_is_single_topic() ) {
-			$forum_id = \get_post_meta( \tsf()->get_the_real_ID(), '_bbp_forum_id', true );
+			$forum_id = \get_post_meta( \tsf()->get_the_real_id(), '_bbp_forum_id', true );
 		} elseif ( \bbp_is_single_reply() ) {
-			$forum_id = \get_post_meta( \tsf()->get_the_real_ID(), '_bbp_forum_id', true );
+			$forum_id = \get_post_meta( \tsf()->get_the_real_id(), '_bbp_forum_id', true );
 		}
 	} else {
 		// Custom query, back-end or sitemap.

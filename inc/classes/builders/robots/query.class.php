@@ -228,7 +228,7 @@ final class Query extends Factory {
 
 			case 'protected':
 				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
-				yield 'protected' => $tsf->is_protected( $tsf->get_the_real_ID() );
+				yield 'protected' => $tsf->is_protected( $tsf->get_the_real_id() );
 				break;
 
 			case 'cpage':

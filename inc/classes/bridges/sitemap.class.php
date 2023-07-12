@@ -771,6 +771,7 @@ final class Sitemap {
 				'the_excerpt_rss',
 				'wp_footer',
 				'admin_footer',
+				'widgets_init',
 			],
 			'wp_registered_widgets',
 			'wp_registered_sidebars',

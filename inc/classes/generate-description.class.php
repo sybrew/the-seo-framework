@@ -636,7 +636,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_front_page_description_excerpt() {
 
-		$id = $this->get_the_front_page_ID();
+		$id = $this->get_the_front_page_id();
 
 		return ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
 			   ?: $this->get_description_additions( [ 'id' => $id ] );
@@ -736,7 +736,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_singular_description_excerpt( $id = null ) {
 
-		$id = $id ?? $this->get_the_real_ID();
+		$id = $id ?? $this->get_the_real_id();
 
 		// If the post is protected, don't generate a description.
 		if ( $this->is_protected( $id ) ) return '';
@@ -819,7 +819,7 @@ class Generate_Description extends Generate {
 	 */
 	public function fetch_excerpt( $post = null ) {
 
-		$post = \get_post( $post ?: $this->get_the_real_ID() );
+		$post = \get_post( $post ?: $this->get_the_real_id() );
 
 		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) )
 			return $post->post_excerpt;
@@ -993,7 +993,7 @@ class Generate_Description extends Generate {
 	 * @since 4.2.0 1. Now fixes the input arguments.
 	 *              2. Now supports the `$args['pta']` index.
 	 * @access private
-	 * @see $this->get_the_real_ID()
+	 * @see $this->get_the_real_id()
 	 * @see $this->get_current_taxonomy()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.

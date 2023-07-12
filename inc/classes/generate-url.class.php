@@ -101,7 +101,7 @@ class Generate_Url extends Generate_Title {
 	public function get_current_permalink() {
 		return memo() ?? memo(
 			$this->get_canonical_url( [
-				'id'       => $this->get_the_real_ID(),
+				'id'       => $this->get_the_real_id(),
 				'taxonomy' => $this->get_current_taxonomy(),
 			] )
 		);
@@ -117,7 +117,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_homepage_permalink() {
 		return memo() ?? memo(
-			$this->get_canonical_url( [ 'id' => $this->get_the_front_page_ID() ] )
+			$this->get_canonical_url( [ 'id' => $this->get_the_front_page_id() ] )
 		);
 	}
 
@@ -173,7 +173,7 @@ class Generate_Url extends Generate_Title {
 			// See and use `$this->get_canonical_url()` instead.
 			$url = $this->build_canonical_url( $args );
 
-			if ( $args['id'] === $this->get_the_real_ID() )
+			if ( $args['id'] === $this->get_the_real_id() )
 				$url = $this->remove_pagination_from_url( $url );
 		} else {
 			$url = $this->generate_canonical_url();
@@ -320,7 +320,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( ! $url ) return '';
 
-		$query_id = $this->get_the_real_ID();
+		$query_id = $this->get_the_real_id();
 
 		if ( $this->has_page_on_front() ) {
 			if ( $this->is_static_frontpage( $query_id ) ) {
@@ -379,7 +379,7 @@ class Generate_Url extends Generate_Title {
 		if ( null !== $memo = umemo( __METHOD__, null, $post_id ) ) return $memo;
 
 		$url = \wp_get_canonical_url(
-			$post_id ?? $this->get_the_real_ID()
+			$post_id ?? $this->get_the_real_id()
 		);
 
 		if ( ! $url ) return '';
@@ -442,7 +442,7 @@ class Generate_Url extends Generate_Title {
 		if ( null !== $memo = umemo( __METHOD__, null, $term_id, $taxonomy ) )
 			return $memo;
 
-		$url = \get_term_link( $term_id ?: $this->get_the_real_ID(), $taxonomy );
+		$url = \get_term_link( $term_id ?: $this->get_the_real_id(), $taxonomy );
 
 		if ( \is_wp_error( $url ) )
 			return umemo( __METHOD__, '', $term_id, $taxonomy );
@@ -490,7 +490,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_author_canonical_url( $id = null ) {
 
-		$url = \get_author_posts_url( $id ?? $this->get_the_real_ID() );
+		$url = \get_author_posts_url( $id ?? $this->get_the_real_id() );
 
 		if ( ! $url ) return '';
 
@@ -833,7 +833,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
 		return $this->get_primary_term(
-			( $post ?? \get_post( $this->get_the_real_ID() ) )->ID,
+			( $post ?? \get_post( $this->get_the_real_id() ) )->ID,
 			$term->taxonomy
 		) ?: $term;
 	}
@@ -855,7 +855,7 @@ class Generate_Url extends Generate_Title {
 
 		// We slash it because plain permalinks do that too, for consistency.
 		$home = \trailingslashit( $this->get_homepage_permalink() );
-		$id   = $this->get_the_real_ID();
+		$id   = $this->get_the_real_id();
 		$url  = '';
 
 		if ( $this->is_singular() ) {

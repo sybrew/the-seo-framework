@@ -485,7 +485,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'from'  => $wpdb->postmeta,
 				'in'    => [ 'rank_math_title', 'rank_math_description', 'rank_math_facebook_title', 'rank_math_facebook_description', 'rank_math_twitter_title', 'rank_math_twitter_description', 'rank_math_canonical_url', 'rank_math_robots' ],
 			],
-			'wp-seopress' => [
+			'wp-seopress'      => [
 				'title' => 'SEOPress',
 				'from'  => $wpdb->postmeta,
 				'in'    => [ '_seopress_titles_title', '_seopress_titles_desc', '_seopress_social_fb_title', '_seopress_social_fb_desc', '_seopress_social_twitter_title', '_seopress_social_twitter_desc', '_seopress_robots_canonical', '_seopress_robots_index' ],

@@ -221,7 +221,7 @@ final class Form {
 		$args = $tsf->array_merge_recursive_distinct(
 			[
 				'id'           => '',
-				'post_id'      => $tsf->get_the_real_ID(), // This will bind the uploade file to the current post.
+				'post_id'      => $tsf->get_the_real_id(), // This will bind the uploade file to the current post.
 				'data'         => [
 					'inputType' => 'social',
 					'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.

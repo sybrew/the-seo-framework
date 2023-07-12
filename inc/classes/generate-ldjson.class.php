@@ -339,7 +339,7 @@ class Generate_Ldjson extends Generate_Image {
 		$output = '';
 
 		if ( $this->is_singular() && ! $this->is_real_front_page() ) {
-			if ( \is_post_type_hierarchical( $this->get_post_type_real_ID() ) ) {
+			if ( \is_post_type_hierarchical( $this->get_post_type_real_id() ) ) {
 				$output = $this->get_ld_json_breadcrumbs_page();
 			} else {
 				$output = $this->get_ld_json_breadcrumbs_post();
@@ -361,7 +361,7 @@ class Generate_Ldjson extends Generate_Image {
 	public function get_ld_json_breadcrumbs_page() {
 
 		$items   = [];
-		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_ID() ) );
+		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_id() ) );
 
 		$position = 1; // 0 is the homepage.
 		foreach ( $parents as $parent_id ) {
@@ -411,8 +411,8 @@ class Generate_Ldjson extends Generate_Image {
 
 		$output = '';
 
-		$post_id    = $this->get_the_real_ID();
-		$post_type  = $this->get_post_type_real_ID( $post_id );
+		$post_id    = $this->get_the_real_id();
+		$post_type  = $this->get_post_type_real_id( $post_id );
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**
@@ -652,7 +652,7 @@ class Generate_Ldjson extends Generate_Image {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$_generator_args = [ 'id' => $this->get_the_front_page_ID() ];
+		$_generator_args = [ 'id' => $this->get_the_front_page_id() ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$title = $this->get_filtered_raw_custom_field_title( $_generator_args )
@@ -694,7 +694,7 @@ class Generate_Ldjson extends Generate_Image {
 			return $crumb;
 		}
 
-		$post_id         = $this->get_the_real_ID();
+		$post_id         = $this->get_the_real_id();
 		$_generator_args = [ 'id' => $post_id ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {

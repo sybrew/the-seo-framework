@@ -1413,7 +1413,7 @@ final class Deprecated {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.1 Now uses the filterable `get_the_real_ID()`
+	 * @since 4.0.1 Now uses the filterable `get_the_real_id()`
 	 * @since 4.2.0 Deprecated. Use get_term_meta() or get_term_meta_item() instead.
 	 * @deprecated
 	 *
@@ -1430,7 +1430,7 @@ final class Deprecated {
 			return $cache;
 
 		if ( $tsf->is_term_meta_capable() ) {
-			$cache = $tsf->get_term_meta( $tsf->get_the_real_ID() ) ?: [];
+			$cache = $tsf->get_term_meta( $tsf->get_the_real_id() ) ?: [];
 		} else {
 			$cache = [];
 		}
@@ -1458,7 +1458,7 @@ final class Deprecated {
 		if ( ! $tsf->has_page_on_front() )
 			return false;
 
-		$id = $id ?: $tsf->get_the_real_ID();
+		$id = $id ?: $tsf->get_the_real_id();
 
 		static $pfp;
 
@@ -1585,9 +1585,9 @@ final class Deprecated {
 	 *
 	 * @return int The admin ID.
 	 */
-	public function check_the_real_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
+	public function check_the_real_id() {
 
-		\tsf()->_deprecated_function( 'tsf()->check_the_real_ID()', '4.2.0', 'tsf()->get_the_real_ID()' );
+		\tsf()->_deprecated_function( 'tsf()->check_the_real_id()', '4.2.0', 'tsf()->get_the_real_id()' );
 
 		/**
 		 * @since 2.5.0

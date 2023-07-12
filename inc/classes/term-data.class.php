@@ -58,7 +58,7 @@ class Term_Data extends Post_Data {
 	 * @return mixed The term meta item. Null when not found.
 	 */
 	public function get_term_meta_item( $item, $term_id = 0, $use_cache = true ) {
-		return $this->get_term_meta( $term_id ?: $this->get_the_real_ID(), $use_cache )[ $item ] ?? null;
+		return $this->get_term_meta( $term_id ?: $this->get_the_real_id(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Term_Data extends Post_Data {
 			'the_seo_framework_term_meta_defaults',
 			[
 				$this->get_unfiltered_term_meta_defaults(),
-				$term_id ?: $this->get_the_real_ID(),
+				$term_id ?: $this->get_the_real_id(),
 			]
 		);
 	}

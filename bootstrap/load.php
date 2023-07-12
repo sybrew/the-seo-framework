@@ -193,6 +193,9 @@ function _do_plugin_deactivation() {
  * @return int The accumulated time, roughly.
  */
 function _bootstrap_timer( $add = 0 ) {
-	static $time  = 0;
-	return $time += $add;
+
+	static $time = 0;
+
+	$time += $add;
+	return $time;
 }

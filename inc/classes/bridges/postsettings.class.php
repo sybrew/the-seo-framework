@@ -64,7 +64,7 @@ final class PostSettings {
 		 */
 		$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
 
-		if ( $tsf->is_real_front_page_by_id( $tsf->get_the_real_ID() ) ) {
+		if ( $tsf->is_real_front_page_by_id( $tsf->get_the_real_id() ) ) {
 			if ( $tsf->can_access_settings() ) {
 				$schema = \is_rtl() ? '%2$s - %1$s' : '%1$s - %2$s';
 				$title  = sprintf(

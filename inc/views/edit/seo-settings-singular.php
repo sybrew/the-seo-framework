@@ -14,7 +14,7 @@ use The_SEO_Framework\Bridges\PostSettings,
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Setup default vars.
-$post_id = $this->get_the_real_ID(); // We also have access to object $post at the main call...
+$post_id = $this->get_the_real_id(); // We also have access to object $post at the main call...
 
 $_generator_args = [ 'id' => $post_id ];
 

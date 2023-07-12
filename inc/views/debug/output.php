@@ -11,7 +11,7 @@ use The_SEO_Framework\Internal\Debug;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$id        = $this->get_the_real_ID();
+$id        = $this->get_the_real_id();
 $mdash     = ' &mdash; ';
 $taxonomy  = $this->get_current_taxonomy();
 $post_type = $this->get_current_post_type();

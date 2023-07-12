@@ -205,7 +205,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 
 	if ( null === $args ) {
 		if ( $tsf->is_singular() )
-			$page_id = $tsf->get_the_real_ID();
+			$page_id = $tsf->get_the_real_id();
 	} else {
 		if ( '' === $args['taxonomy'] )
 			$page_id = $args['id'];
@@ -335,7 +335,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  */
 function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 
-	$post_id        = $args['id'] ?? \tsf()->get_the_real_ID();
+	$post_id        = $args['id'] ?? \tsf()->get_the_real_id();
 	$attachment_ids = [];
 
 	if ( $post_id && \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
@@ -382,7 +382,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  */
 function _get_product_category_thumbnail_image_details( $args = null, $size = 'full' ) {
 
-	$term_id      = $args['id'] ?? \tsf()->get_the_real_ID();
+	$term_id      = $args['id'] ?? \tsf()->get_the_real_id();
 	$thumbnail_id = \get_term_meta( $term_id, 'thumbnail_id', true ) ?: 0;
 
 	if ( $thumbnail_id ) {

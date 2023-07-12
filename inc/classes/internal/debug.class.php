@@ -402,7 +402,7 @@ final class Debug {
 			return;
 
 		if ( $tsf->is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_ID' ] );
+			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_id' ] );
 
 		// Start timer.
 		$t = microtime( true );
@@ -491,7 +491,7 @@ final class Debug {
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
-		$page_id                        = $tsf->get_the_real_ID();
+		$page_id                        = $tsf->get_the_real_id();
 		$is_query_exploited             = $tsf->is_query_exploited();
 		$query_supports_seo             = $tsf->query_supports_seo() ? 'yes' : 'no';
 		$is_404                         = $tsf->is_404();
@@ -534,7 +534,7 @@ final class Debug {
 		$has_page_on_front              = $tsf->has_page_on_front();
 		$is_taxonomy_supported          = $tsf->is_taxonomy_supported();
 		$get_post_type                  = \get_post_type();
-		$get_post_type_real_ID          = $tsf->get_post_type_real_ID();
+		$get_post_type_real_id          = $tsf->get_post_type_real_id();
 		$admin_post_type                = $tsf->get_admin_post_type();
 		$current_taxonomy               = $tsf->get_current_taxonomy();
 		$current_post_type              = $tsf->get_current_post_type();

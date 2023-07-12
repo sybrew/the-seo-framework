@@ -65,7 +65,7 @@ class Post_Data extends Detect {
 	 * @return mixed The post meta item's value. Null when item isn't registered.
 	 */
 	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
-		return $this->get_post_meta( $post_id ?: $this->get_the_real_ID(), $use_cache )[ $item ] ?? null;
+		return $this->get_post_meta( $post_id ?: $this->get_the_real_id(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -175,7 +175,7 @@ class Post_Data extends Detect {
 			'the_seo_framework_post_meta_defaults',
 			[
 				$this->get_unfiltered_post_meta_defaults(),
-				$post_id ?: $this->get_the_real_ID(),
+				$post_id ?: $this->get_the_real_id(),
 			]
 		);
 	}
@@ -572,7 +572,7 @@ class Post_Data extends Detect {
 	 */
 	public function get_post_content( $post = null ) {
 
-		$post = \get_post( $post ?: $this->get_the_real_ID() );
+		$post = \get_post( $post ?: $this->get_the_real_id() );
 
 		// '0' is not deemed content. Return empty string for it's a slippery slope.
 		return ! empty( $post->post_content ) && \post_type_supports( $post->post_type, 'editor' )

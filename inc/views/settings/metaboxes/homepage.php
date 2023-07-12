@@ -14,7 +14,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$home_id = $this->get_the_front_page_ID();
+$home_id = $this->get_the_front_page_id();
 
 $_generator_args = [ 'id' => $home_id ];
 

@@ -1011,8 +1011,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_single_post_title( $id = 0 ) {
 
-		// Home queries can be tricky. Use get_the_real_ID to be certain.
-		$post = \get_post( $id ?: $this->get_the_real_ID() );
+		// Home queries can be tricky. Use get_the_real_id to be certain.
+		$post = \get_post( $id ?: $this->get_the_real_id() );
 
 		if ( isset( $post->post_title ) && \post_type_supports( $post->post_type, 'title' ) ) {
 			/**
@@ -1298,7 +1298,7 @@ class Generate_Title extends Generate_Description {
 	public function merge_title_protection( &$title, $args = null ) {
 
 		if ( null === $args ) {
-			$id    = $this->get_the_real_ID();
+			$id    = $this->get_the_real_id();
 			$merge = $this->is_singular();
 		} else {
 			$this->fix_generation_args( $args );

@@ -358,7 +358,7 @@ class Generate extends User_Data {
 				'the_seo_framework_ogtype_output',
 				[
 					$this->generate_og_type(),
-					$this->get_the_real_ID(),
+					$this->get_the_real_id(),
 				]
 			)
 		);
@@ -377,7 +377,7 @@ class Generate extends User_Data {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$id                = $this->get_the_real_ID();
+		$id                = $this->get_the_real_id();
 		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 		return memo(
@@ -431,7 +431,7 @@ class Generate extends User_Data {
 			'the_seo_framework_twittercard_output',
 			[
 				$type,
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 	}

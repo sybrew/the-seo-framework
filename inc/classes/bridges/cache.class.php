@@ -168,7 +168,7 @@ final class Cache {
 		 * @todo 4.3.0 deprecate, use do_action_deprecated.
 		 *
 		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
-		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_ID().
+		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_id().
 		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
 		 * @param array  $success Whether the action cleared. Set to always be true since deprecation.
 		 */

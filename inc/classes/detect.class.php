@@ -593,7 +593,7 @@ class Detect extends Render {
 				break;
 			case $this->is_singular():
 				// This is the most likely scenario, but may collide with is_feed() et al.
-				$supported = $this->is_post_type_supported() && $this->get_the_real_ID();
+				$supported = $this->is_post_type_supported() && $this->get_the_real_id();
 				break;
 			case \is_post_type_archive():
 				$supported = $this->is_post_type_archive_supported();
@@ -602,7 +602,7 @@ class Detect extends Render {
 				// When a term has no posts attached, it'll not return a post type, and it returns a 404 late in the loop.
 				// This is because get_post_type() tries to assert the first post in the loop here.
 				// Thus, we test for is_taxonomy_supported() instead.
-				$supported = $this->is_taxonomy_supported() && $this->get_the_real_ID();
+				$supported = $this->is_taxonomy_supported() && $this->get_the_real_id();
 				break;
 			default:
 				// Everything else: homepage, 404, search, edge-cases.
@@ -674,7 +674,7 @@ class Detect extends Render {
 			return memo( false );
 
 		// When the page ID is not 0, a real page will always be returned.
-		if ( $this->get_the_real_ID() )
+		if ( $this->get_the_real_id() )
 			return memo( false );
 
 		global $wp_query;
@@ -714,7 +714,7 @@ class Detect extends Render {
 					'sentence',
 				],
 				// When the blog (home) is a page then these requests to any registered query variable will cause issues,
-				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_ID() )` above).
+				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_id() )` above).
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
 				// TODO: We only need one to pass this test. We could use array_key_first()... (PHP7.3+) -> Might be mixed.
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
@@ -751,7 +751,7 @@ class Detect extends Render {
 
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
-						// !$this->get_the_real_ID() is already executed. Just test if home is a page.
+						// !$this->get_the_real_id() is already executed. Just test if home is a page.
 						if ( $this->is_home_as_page() )
 							return memo( true );
 				}
