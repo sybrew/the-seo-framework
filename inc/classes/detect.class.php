@@ -1332,7 +1332,7 @@ class Detect extends Render {
 	public function has_yoast_syntax( $text ) {
 
 		// %%id%% is the shortest valid tag... ish. Let's stop at 6.
-		if ( \strlen( $text ) < 6 || false === strpos( $text, '%%' ) )
+		if ( \strlen( $text ) < 6 || ! str_contains( $text, '%%' ) )
 			return false;
 
 		$tags = umemo( __METHOD__ . '/tags' );
@@ -1419,7 +1419,7 @@ class Detect extends Render {
 	public function has_rankmath_syntax( $text ) {
 
 		// %id% is the shortest valid tag... ish. Let's stop at 4.
-		if ( \strlen( $text ) < 4 || false === strpos( $text, '%' ) )
+		if ( \strlen( $text ) < 4 || ! str_contains( $text, '%' ) )
 			return false;
 
 		$tags = umemo( __METHOD__ . '/tags' );
@@ -1522,7 +1522,7 @@ class Detect extends Render {
 	public function has_seopress_syntax( $text ) {
 
 		// %%sep%% is the shortest valid tag... ish. Let's stop at 7.
-		if ( \strlen( $text ) < 7 || false === strpos( $text, '%%' ) )
+		if ( \strlen( $text ) < 7 || ! str_contains( $text, '%%' ) )
 			return false;
 
 		$tags = umemo( __METHOD__ . '/tags' );

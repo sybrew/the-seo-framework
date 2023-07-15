@@ -1217,11 +1217,11 @@ class Query extends Core {
 		if ( ( $post ?? null ) instanceof \WP_Post ) {
 			$content = $this->get_post_content( $post );
 
-			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
+			if ( str_contains( $content, '<!--nextpage-->' ) ) {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
 
 				// Ignore nextpage at the beginning of the content.
-				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
+				if ( str_starts_with( $content, '<!--nextpage-->' ) )
 					$content = substr( $content, 15 );
 
 				$pages = explode( '<!--nextpage-->', $content );

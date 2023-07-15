@@ -1643,7 +1643,7 @@ class Sanitize extends Admin_Pages {
 
 		$link = "https://www.facebook.com/{$path}";
 
-		if ( strpos( $link, 'profile.php' ) ) {
+		if ( str_contains( $link, 'profile.php' ) ) {
 			// Gets query parameters.
 			parse_str( parse_url( $link, \PHP_URL_QUERY ), $r );
 			if ( isset( $r['id'] ) ) {
@@ -2004,7 +2004,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
 
-		if ( false === strpos( $input, '<' ) )
+		if ( ! str_contains( $input, '<' ) )
 			return $input;
 
 		/**
@@ -2083,7 +2083,8 @@ class Sanitize extends Admin_Pages {
 
 		foreach ( $parse as $query_type => $handles ) {
 			foreach ( $handles as $flow_type => $elements ) {
-				if ( false === strpos( $input, '<' ) || ! $elements ) break 2;
+				// Test $input again as it's overwritten in loop.
+				if ( ! str_contains( $input, '<' ) || ! $elements ) break 2;
 
 				switch ( $query_type ) {
 					case 'void_query':
@@ -2124,7 +2125,7 @@ class Sanitize extends Admin_Pages {
 								$input
 							) ?? '';
 							// If nothing changed, or no more HTML is present, we're done.
-							if ( $pre_pass_input === $input || false === strpos( $input, '<' ) ) break;
+							if ( $pre_pass_input === $input || ! str_contains( $input, '<' ) ) break;
 						}
 
 						// Reset for next fall-through null-coalescing.

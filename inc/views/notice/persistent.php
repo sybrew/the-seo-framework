@@ -71,7 +71,7 @@ vprintf(
 		( $args['icon'] ? 'tsf-show-icon' : '' ),
 		sprintf(
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- conditionals bug.
-			( ! $args['escape'] && 0 === strpos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
+			( ! $args['escape'] && 0 === stripos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- the invoker should be mindful.
 			( $args['escape'] ? esc_html( $message ) : $message )
 		),

@@ -1129,7 +1129,7 @@ class Init extends Query {
 
 		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
 			$referer = \wp_get_referer();
-			if ( false !== strpos( $referer, 'post.php' ) || false !== strpos( $referer, 'post-new.php' ) ) {
+			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
 				/**
 				 * WordPress should've authenthicated the user at
 				 * WP_REST_Server::check_authentication() -> rest_cookie_check_errors() -> wp_nonce et al.
