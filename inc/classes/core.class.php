@@ -563,6 +563,7 @@ class Core {
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
 	 *              and recognizes those as whole words.
+	 * @since 4.2.9 Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int    $dupe_count       Minimum amount of words to encounter in the string.
@@ -575,9 +576,11 @@ class Core {
 	 */
 	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
 
-		$string = \wp_check_invalid_utf8( html_entity_decode( $string ) );
+		// Why not blog_charset? Because blog_charset is there only to onboard non-UTF-8 to UTF-8.
+		$string = \wp_check_invalid_utf8( html_entity_decode( $string, \ENT_QUOTES, 'UTF-8' ) );
 
-		if ( ! $string ) return [];
+		if ( ! $string )
+			return [];
 
 		// Not if-function-exists; we're going for speed over accuracy. Hosts must do their job correctly.
 		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
@@ -589,7 +592,8 @@ class Core {
 			\PREG_SPLIT_OFFSET_CAPTURE | \PREG_SPLIT_NO_EMPTY
 		);
 
-		if ( ! \count( $word_list ) ) goto end;
+		if ( ! \count( $word_list ) )
+			return [];
 
 		$words = [];
 
@@ -620,7 +624,6 @@ class Core {
 			}
 		}
 
-		end:;
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
 		return $words_too_many ?? [];
 	}

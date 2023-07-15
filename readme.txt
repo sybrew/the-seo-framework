@@ -341,6 +341,9 @@ TODO Four new classes:
 		3. Post_Data
 		4. Term_Data
 
+TODO add summary_large_image/summary toggle on a per-page basis
+	- Namely this affects how the image is displayed in both Twitter AND Discord.
+
 **Detailed log**
 
 **For everyone:**
@@ -368,6 +371,8 @@ TODO Four new classes:
 	* Addressed a regression from TSF v4.2.0 where WordPress admin color schemes stopped affecting TSF's color scheme. Affected are:
 		* Tooltip background and text color.
 		* Post/Page SEO Settings active-tab border color.
+	* Words with attached quote marks (d'Anglais) now get tested correctly for repeated words.
+	* Title and description lengths are now calculated more quickly and more accurately for the SEO Bar.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).

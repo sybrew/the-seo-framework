@@ -296,8 +296,9 @@ final class Term extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				\wp_specialchars_decode( static::$tsf->s_title_raw( $title ), \ENT_QUOTES ),
-				\ENT_NOQUOTES
+				static::$tsf->s_title( $title ),
+				\ENT_NOQUOTES,
+				'UTF-8'
 			)
 		);
 
@@ -452,15 +453,15 @@ final class Term extends Main {
 
 		if ( $repeated_words ) {
 			$dupes = [];
-			foreach ( $repeated_words as $_dw ) {
+			foreach ( $repeated_words as $_repeated_word ) {
 				// Keep abbreviations... WordPress, make multibyte support mandatory already.
-				// $_word = ctype_upper( reset( $_dw ) ) ? reset( $_dw ) : mb_strtolower( reset( $_dw ) );
+				// $_word = ctype_upper( reset( $_repeated_word ) ) ? reset( $_repeated_word ) : mb_strtolower( reset( $_repeated_word ) );
 
 				$dupes[] = sprintf(
 					/* translators: 1: Word found, 2: Occurrences */
 					\esc_attr__( '&#8220;%1$s&#8221; is used %2$d times.', 'autodescription' ),
-					\esc_attr( key( $_dw ) ),
-					reset( $_dw )
+					\esc_attr( key( $_repeated_word ) ),
+					reset( $_repeated_word )
 				);
 			}
 
@@ -486,8 +487,9 @@ final class Term extends Main {
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				\wp_specialchars_decode( static::$tsf->s_description_raw( $desc ), \ENT_QUOTES ),
-				\ENT_NOQUOTES
+				static::$tsf->s_description( $desc ),
+				\ENT_NOQUOTES,
+				'UTF-8'
 			)
 		);
 
