@@ -192,7 +192,9 @@ class Core {
 	public function get_view( $view, $__args = [], $instance = 'main' ) {
 
 		// A faster extract().
-		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		foreach ( $__args as $__k => $__v )
+			$$__k = $__v;
+
 		unset( $__k, $__v, $__args );
 
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...

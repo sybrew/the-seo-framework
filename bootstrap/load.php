@@ -127,7 +127,7 @@ function _autoload_classes( $class ) {
 
 	$class = strtolower( $class );
 
-	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't gotten any friends.
+	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't got any friends.
 	if ( 0 !== strpos( $class, 'the_seo_framework\\', 0 ) ) return;
 
 	static $_timenow = true;

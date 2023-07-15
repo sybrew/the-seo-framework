@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
-Requires at least: 5.5
+Requires at least: 5.9
 Tested up to: 6.1
 Requires PHP: 7.2.0
 Stable tag: 4.2.8
@@ -81,7 +81,7 @@ For additional functionality, check out our free companion plugin [Extension Man
 * [Articles](https://theseoframework.com/?p=2303) **enhances your published posts** by automatically adding important Structured Data.
 * [Transport](https://theseoframework.com/?p=3962) **migrates and transforms metadata** from Rank Math, Yoast SEO, and SEOPress to this plugin.
 * [Honeypot](https://theseoframework.com/?p=2300) **catches comment spammers** through four lightweight yet powerful ways.
-* [Cord](https://theseoframework.com/?p=3404) helps you connect your website to **Google Analytics and Facebook Pixel**.
+* [Cord](https://theseoframework.com/?p=3404) helps you connect your website to **Google Analytics and Meta Pixel**.
 * [Local](https://theseoframework.com/?p=2306) lets you set up **important local business information** for search engines to consume.
 * [AMP](https://theseoframework.com/?p=2304) **binds The SEO Framework to the AMP plugin** for AMP supported articles and pages.
 * [Monitor](https://theseoframework.com/?p=2302) **keeps track of your website's SEO** optimizations and statistics.
@@ -309,6 +309,38 @@ TODO highlight in large changes:
 
 TODO "2.6.2" article for Extension Manager doesn't follow our description generation cutoff rules: "FULL STOP. Also..."
 
+TODO all "s_" methods are a mixed bag of:
+	1. Option filters without default fallback.
+	2. Option filters with default fallback. (get_default_option)
+	3. Option filters with current AND default fallback. (get_option, get_default_option)
+	4. Non-option filters.
+-> We should overhaul this in a major update?
+	-> Or, do it now? We're the only ones making thorough use of this, and assume a default only for selectable options.
+		-> Therefore, we can safely assume no one falls back to the default for "text"-based options, which is often what users filter.
+
+TODO make 4.3.0 instead of 4.2.9?
+	-> This way we can push through large API changes, clean up soon-to-be-deprecations, sanitizations, etc.
+	-> We can also add Twitter Card type to every post
+	-> We can also justify major change for Title/Description output.
+	-> And we can justify jumping to PHP 7.3, so we can start using hrtime instead of microtime.
+
+TODO two new classes:
+	1. Option_Filter (See below "Four new classes")
+		-> Maintain index of all options to be sanitized.
+			-> Load early, so we can sanitize whatever tries to update the option.
+		-> Should work with class "Option"?
+			-> Falls back to default on failure for every option?
+				-> How do we determine failure? Out of range?
+		-> Relays to Sanitize
+	2. Sanitize
+TODO Four new classes:
+	0. The_SEO_Framework\Data\
+		1. Options
+			x. \Filter
+		2. User_Options
+		3. Post_Data
+		4. Term_Data
+
 **Detailed log**
 
 **For everyone:**
@@ -317,13 +349,14 @@ TODO "2.6.2" article for Extension Manager doesn't follow our description genera
 	* SEOPress metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
+	* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
 * **Improved:**
 	* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
 	* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
 	* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
-		* Related Core ticket is [51117](https://core.trac.wordpress.org/ticket/51117).
+		* Related Core ticket is [#51117](https://core.trac.wordpress.org/ticket/51117).
 	* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
-		* Related Core ticket is [51542](https://core.trac.wordpress.org/ticket/51542).
+		* Related Core ticket is [#51542](https://core.trac.wordpress.org/ticket/51542).
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
@@ -338,11 +371,16 @@ TODO "2.6.2" article for Extension Manager doesn't follow our description genera
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
-			* Yoast SEO is still checked against.
+			* Yoast SEO is still checked for.
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
 * **Note:**
 	* Transient `tsf_sitemap_5_%`, where % changes per blog, is no longer used. This transient should clear automatically.
 	* Transient `tsf_exclude_1_%`, where % changes per blog, is no longer used. This transient will be deleted on upgrade.
+
+**For translators:**
+
+* **Added:** New translation strings are available.
+* **Updated:** TODO A new POT file is available.
 
 **For developers:**
 
@@ -359,6 +397,17 @@ TODO "2.6.2" article for Extension Manager doesn't follow our description genera
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
 		* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
 	* Filter `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
+	* Method `tsf()->escape_description()` now requires a first parameter.
+	* Method `tsf()->s_excerpt()` now requires a first parameter.
+	* Method `tsf()->s_excerpt_raw()` now requires a first parameter.
+	* Method `tsf()->escape_title()` now requires a first parameter.
+	* Method `tsf()->s_min_max_sitemap()`
+		1. Now also sanitizes the default fallback value.
+		2. No longer falls back to the default option, but 1000 instead.
+	* Method `tsf()->s_image_preview()` now falls back to `'large'` instead of `'standard'`.
+	* Method `tsf()->s_left_right()` no longer falls back to option or default option, but a language-based default instead.
+	* Method `tsf()->s_left_right_home()` no longer falls back to option or default option, but a language-based default instead.
+	* Method `tsf()->s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.

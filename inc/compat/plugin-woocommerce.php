@@ -45,9 +45,6 @@ function _init_wc_compat() {
 	// Adjust the widget's tree primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
 	\add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 
-	// WP <5.7
-	\remove_action( 'wp_head', 'wc_page_noindex' );
-	// WP 5.7+
 	\remove_filter( 'wp_robots', 'wc_page_no_robots' );
 }
 

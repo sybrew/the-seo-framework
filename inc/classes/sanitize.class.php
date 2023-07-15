@@ -155,14 +155,15 @@ class Sanitize extends Admin_Pages {
 	 *              2. Added the first two parameters.
 	 * @since 4.2.5 Emptied and is no longer enqueued.
 	 * @access private
+	 * @ignore
 	 *
-	 * @param mixed $new_value The new, unserialized, and filtered option value.
-	 * @return mixed $new_value The updated option.
+	 * @param mixed $options The new, unserialized option values.
+	 * @return mixed $options The new, unserialized option values.
 	 */
-	public function _set_backward_compatibility( $new_value ) {
+	public function _set_backward_compatibility( $options ) {
 		// db_4103:
 		// end:;
-		return $new_value;
+		return $options;
 	}
 
 	/**
@@ -564,10 +565,10 @@ class Sanitize extends Admin_Pages {
 	 * @see $this->get_option_filters()
 	 * @TODO allow for multiple filters per option? That'd speed up backward compat migration.
 	 *
-	 * @param string       $filter    Sanitization filter type
-	 * @param string       $option    Option key
-	 * @param array|string $suboption Optional. Suboption key(s).
-	 * @param bool         $get       Whether to retrieve cache.
+	 * @param string          $filter    Sanitization filter type
+	 * @param string          $option    Option key
+	 * @param ?<array|string> $suboption Optional. Suboption key(s).
+	 * @param bool            $get       Whether to retrieve cache.
 	 * @return array When $get is true, it will return the option filters.
 	 */
 	protected function set_option_filter( $filter, $option, $suboption = null, $get = false ) {
@@ -603,8 +604,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitize a value, via the sanitization filter type associated with an option.
 	 *
 	 * @since 2.2.2
-	 *
-	 * @thanks StudioPress (http://www.studiopress.com/) for some code.
+	 * @props StudioPress (http://www.studiopress.com/) for some code.
 	 *
 	 * @param mixed  $new_value New value
 	 * @param string $option    Name of the option
@@ -619,14 +619,23 @@ class Sanitize extends Admin_Pages {
 			return $new_value;
 		} elseif ( \is_string( $filters[ $option ] ) ) {
 			// Single option value
-			return $this->do_filter( $filters[ $option ], $new_value, \get_option( $option ), $option );
+			return $this->do_filter(
+				$filters[ $option ],
+				$new_value,
+				\get_option( $option ),
+				$option
+			);
 		} elseif ( \is_array( $filters[ $option ] ) ) {
 			// Array of suboption values to loop through
 			$old_value = \get_option( $option, [] );
 			foreach ( $filters[ $option ] as $suboption => $filter ) {
-				$old_value[ $suboption ] = $old_value[ $suboption ] ?? '';
-				$new_value[ $suboption ] = $new_value[ $suboption ] ?? '';
-				$new_value[ $suboption ] = $this->do_filter( $filter, $new_value[ $suboption ], $old_value[ $suboption ], $option, $suboption );
+				$new_value[ $suboption ] = $this->do_filter(
+					$filter,
+					$new_value[ $suboption ] ?? '',
+					$old_value[ $suboption ] ?? '',
+					$option,
+					$suboption
+				);
 			}
 			return $new_value;
 		}
@@ -887,18 +896,18 @@ class Sanitize extends Admin_Pages {
 			switch ( $key ) {
 				case 'facebook_page':
 					$value = $this->s_facebook_profile( $value );
-					continue 2;
+					break;
 
 				case 'twitter_page':
 					$value = $this->s_twitter_name( $value );
-					continue 2;
+					break;
 
 				case 'counter_type':
 					$value = \absint( $value );
 
 					if ( $value > 3 )
 						$value = 0;
-					continue 2;
+					break;
 
 				default:
 					unset( $data[ $key ] );
@@ -913,44 +922,38 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param mixed $new_value Should be identical to any of the $this->get_separator_list() values
+	 * @param mixed $sep A valid separator.
 	 * @return string Title separator option
 	 */
-	public function s_title_separator( $new_value ) {
+	public function s_title_separator( $sep ) {
 
-		$title_separator = $this->get_separator_list();
+		if ( \array_key_exists( $sep, $this->get_separator_list() ) )
+			return (string) $sep;
 
-		$key = \array_key_exists( $new_value, $title_separator );
-
-		if ( $key )
-			return (string) $new_value;
-
-		$previous = $this->get_option( 'title_separator' );
-
-		// Fallback to default if empty.
-		if ( empty( $previous ) )
-			$previous = $this->get_default_option( 'title_separator' );
-
-		return (string) $previous;
+		return (string) array_key_first( $this->get_separator_list() );
 	}
 
 	/**
 	 * Escapes and beautifies description.
 	 *
 	 * @since 2.5.2
+	 * @since 4.2.9 The first parameter is now required.
 	 *
 	 * @param string $description The description to escape and beautify.
 	 * @return string Escaped and beautified description.
 	 */
-	public function escape_description( $description = '' ) {
-
-		$description = \wptexturize( $description );
-		$description = \convert_chars( $description );
-		$description = \esc_html( $description );
-		$description = \capital_P_dangit( $description );
-		$description = trim( $description );
-
-		return $description;
+	public function escape_description( $description ) {
+		return trim(
+			\capital_P_dangit(
+				\esc_html(
+					\convert_chars(
+						\wptexturize(
+							$description
+						)
+					)
+				)
+			)
+		);
 	}
 
 	/**
@@ -963,15 +966,15 @@ class Sanitize extends Admin_Pages {
 	 * @uses $this->s_description_raw().
 	 * @uses $this->escape_description().
 	 *
-	 * @param string $new_value The Description.
+	 * @param string $description The Description.
 	 * @return string One line sanitized description.
 	 */
-	public function s_description( $new_value ) {
-
-		$new_value = $this->s_description_raw( $new_value );
-		$new_value = $this->escape_description( $new_value );
-
-		return $new_value;
+	public function s_description( $description ) {
+		return $this->escape_description(
+			$this->s_description_raw(
+				$description
+			)
+		);
 	}
 
 	/**
@@ -983,19 +986,23 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.5 Now normalized `-` entities.
 	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
-	 * @param string $new_value The Description.
+	 * @param string $description The Description.
 	 * @return string One line sanitized description.
 	 */
-	public function s_description_raw( $new_value ) {
-
-		$new_value = $this->s_nbsp( $new_value );
-		$new_value = $this->s_singleline( $new_value );
-		$new_value = $this->s_tabs( $new_value );
-		$new_value = $this->s_hyphen( $new_value );
-		$new_value = $this->s_bsol( $new_value );
-		$new_value = $this->s_dupe_space( $new_value );
-
-		return $new_value;
+	public function s_description_raw( $description ) {
+		return $this->s_dupe_space(
+			$this->s_bsol(
+				$this->s_hyphen(
+					$this->s_tabs(
+						$this->s_singleline(
+							$this->s_nbsp(
+								$description
+							)
+						)
+					)
+				)
+			)
+		);
 	}
 
 	/**
@@ -1010,12 +1017,14 @@ class Sanitize extends Admin_Pages {
 	 *              2. No longer transforms horizontal tabs. Use `s_tabs()` instead.
 	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
-	 * @param string $new_value The input value with possible multiline.
+	 * @param string $text The input value with possible multiline.
 	 * @return string The input string without multiple lines.
 	 */
-	public function s_singleline( $new_value ) {
+	public function s_singleline( $text ) {
 		// Use x20 because it's a human-visible real space.
-		return trim( strtr( $new_value, "\x0A\x0B\x0C\x0D", "\x20\x20\x20\x20" ) );
+		return trim(
+			strtr( $text, "\x0A\x0B\x0C\x0D", "\x20\x20\x20\x20" )
+		);
 	}
 
 	/**
@@ -1026,12 +1035,12 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.1.0 1. Now also catches non-breaking spaces.
 	 *              2. Now uses a regex pattern.
 	 *
-	 * @param string $new_value The input value with possible multispaces.
+	 * @param string $text The input value with possible multispaces.
 	 * @return string The input string without duplicated spaces.
 	 */
-	public function s_dupe_space( $new_value ) {
+	public function s_dupe_space( $text ) {
 		// TODO consider returning the original unicode space? Test if necessary.
-		return preg_replace( '/\p{Zs}{2,}/u', ' ', $new_value );
+		return preg_replace( '/\p{Zs}{2,}/u', ' ', $text );
 	}
 
 	/**
@@ -1042,12 +1051,12 @@ class Sanitize extends Admin_Pages {
 	 * @see $this->s_dupe_space() For removing duplicates spaces.
 	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
-	 * @param string $new_value The input value with possible tabs.
+	 * @param string $text The input value with possible tabs.
 	 * @return string The input string without tabs.
 	 */
-	public function s_tabs( $new_value ) {
+	public function s_tabs( $text ) {
 		// Use x20 because it's a human-visible real space.
-		return strtr( $new_value, "\x09", "\x20" );
+		return strtr( $text, "\x09", "\x20" );
 	}
 
 	/**
@@ -1064,6 +1073,7 @@ class Sanitize extends Admin_Pages {
 	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
 	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
 	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
+	 * @since 4.2.9 The first parameter is now required.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1071,7 +1081,7 @@ class Sanitize extends Admin_Pages {
 	 * @param bool   $escape           Whether to escape the excerpt.
 	 * @return string The escaped Excerpt.
 	 */
-	public function s_excerpt( $excerpt = '', $allow_shortcodes = true, $escape = true ) {
+	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) {
 
 		// No need to parse an empty excerpt. TODO consider not parsing '0' as well?
 		if ( '' === $excerpt ) return '';
@@ -1118,13 +1128,14 @@ class Sanitize extends Admin_Pages {
 	 * Cleans input excerpt. Does NOT escape excerpt for output.
 	 *
 	 * @since 2.8.2
+	 * @since 4.2.9 The first parameter is now required.
 	 * @see $this->s_excerpt - This is basically a copy without sanitation.
 	 *
 	 * @param string $excerpt          The excerpt.
 	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
 	 * @return string The unescaped Excerpt.
 	 */
-	public function s_excerpt_raw( $excerpt = '', $allow_shortcodes = true ) {
+	public function s_excerpt_raw( $excerpt, $allow_shortcodes = true ) {
 		return $this->s_excerpt( $excerpt, $allow_shortcodes, false );
 	}
 
@@ -1132,20 +1143,25 @@ class Sanitize extends Admin_Pages {
 	 * Escapes and beautifies title.
 	 *
 	 * @since 2.5.2
+	 * @since 4.2.9 The first parameter is now required.
 	 *
 	 * @param string $title The title to escape and beautify.
 	 * @param bool   $trim  Whether to trim the title from whitespaces.
 	 * @return string Escaped and beautified title.
 	 */
-	public function escape_title( $title = '', $trim = true ) {
+	public function escape_title( $title, $trim = true ) {
 
-		$title = \wptexturize( $title );
-		$title = \convert_chars( $title );
-		$title = \esc_html( $title );
-		$title = \capital_P_dangit( $title );
-		$title = $trim ? trim( $title ) : $title;
+		$title = \capital_P_dangit(
+			\esc_html(
+				\convert_chars(
+					\wptexturize(
+						$title
+					)
+				)
+			)
+		);
 
-		return $title;
+		return $trim ? trim( $title ) : $title;
 	}
 
 	/**
@@ -1154,15 +1170,15 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value The input Title.
+	 * @param string $title The input Title.
 	 * @return string Sanitized and trimmed title.
 	 */
-	public function s_title( $new_value ) {
-
-		$new_value = $this->s_title_raw( $new_value );
-		$new_value = $this->escape_title( $new_value );
-
-		return $new_value;
+	public function s_title( $title ) {
+		return $this->escape_title(
+			$this->s_title_raw(
+				$title
+			)
+		);
 	}
 
 	/**
@@ -1174,19 +1190,23 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.5 Now normalized `-` entities.
 	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 *
-	 * @param string $new_value The input Title.
+	 * @param string $title The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
 	 */
-	public function s_title_raw( $new_value ) {
-
-		$new_value = $this->s_nbsp( $new_value );
-		$new_value = $this->s_singleline( $new_value );
-		$new_value = $this->s_tabs( $new_value );
-		$new_value = $this->s_hyphen( $new_value );
-		$new_value = $this->s_bsol( $new_value );
-		$new_value = $this->s_dupe_space( $new_value );
-
-		return (string) $new_value;
+	public function s_title_raw( $title ) {
+		return (string) $this->s_dupe_space(
+			$this->s_bsol(
+				$this->s_hyphen(
+					$this->s_tabs(
+						$this->s_singleline(
+							$this->s_nbsp(
+								$title
+							)
+						)
+					)
+				)
+			)
+		);
 	}
 
 	/**
@@ -1196,15 +1216,15 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 * @since 4.1.0 Can no longer fall back to its previous value--instead, it will fall back to a generic value.
 	 *
-	 * @param mixed $new_value Should ideally be a string 'person' or 'organization' passed in.
+	 * @param mixed $type Should ideally be a string 'person' or 'organization' passed in.
 	 * @return string title Knowledge type option
 	 */
-	public function s_knowledge_type( $new_value ) {
+	public function s_knowledge_type( $type ) {
 
-		switch ( $new_value ) {
+		switch ( $type ) {
 			case 'person':
 			case 'organization':
-				return $new_value;
+				return $type;
 		}
 
 		return 'organization';
@@ -1217,22 +1237,20 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
+	 * @since 4.2.9 No longer falls back to option or default optionm, but a language-based default instead.
 	 *
-	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
+	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
 	 */
-	public function s_left_right( $new_value ) {
+	public function s_left_right( $position ) {
 
-		switch ( $new_value ) {
+		switch ( $position ) {
 			case 'left':
 			case 'right':
-				return $new_value;
+				return $position;
 		}
 
-		return (string) (
-			   $this->get_option( 'title_location' )
-			?: $this->get_default_option( 'title_location' )
-		);
+		return \is_rtl() ? 'left' : 'right';
 	}
 
 	/**
@@ -1242,22 +1260,14 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
+	 * @since 4.2.9 No longer falls back to option or default option, but a language-based default instead.
+	 * @todo deprecate 4.3.0, use s_left_right() instead.
 	 *
-	 * @param mixed $new_value Should ideally be a string 'left' or 'right' passed in.
+	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
 	 */
-	public function s_left_right_home( $new_value ) {
-
-		switch ( $new_value ) {
-			case 'left':
-			case 'right':
-				return $new_value;
-		}
-
-		return (string) (
-			   $this->get_option( 'home_title_location' )
-			?: $this->get_default_option( 'home_title_location' )
-		);
+	public function s_left_right_home( $position ) {
+		return $this->s_left_right( $position );
 	}
 
 	/**
@@ -1265,15 +1275,15 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.9.4
 	 *
-	 * @param mixed $new_value Should ideally be a string 'in_query' or 'post_query' passed in.
+	 * @param mixed $type Should ideally be a string 'in_query' or 'post_query' passed in.
 	 * @return string 'in_query' or 'post_query'
 	 */
-	public function s_alter_query_type( $new_value ) {
+	public function s_alter_query_type( $type ) {
 
-		switch ( $new_value ) {
+		switch ( $type ) {
 			case 'in_query':
 			case 'post_query':
-				return $new_value;
+				return $type;
 		}
 
 		return 'in_query';
@@ -1284,16 +1294,16 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.2.7
 	 *
-	 * @param mixed $new_value Should ideally be a string 'fast', 'accurate', or 'thorough' passed in.
+	 * @param mixed $method Should ideally be a string 'fast', 'accurate', or 'thorough' passed in.
 	 * @return string 'fast', 'accurate', or 'thorough'.
 	 */
-	public function s_description_html_method( $new_value ) {
+	public function s_description_html_method( $method ) {
 
-		switch ( $new_value ) {
+		switch ( $method ) {
 			case 'fast':
 			case 'accurate':
 			case 'thorough':
-				return $new_value;
+				return $method;
 		}
 
 		return 'fast';
@@ -1307,11 +1317,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
+	 * @param mixed $value Should ideally be a 1 or 0 integer passed in.
 	 * @return int 1 or 0.
 	 */
-	public function s_one_zero( $new_value ) {
-		return (int) (bool) $new_value;
+	public function s_one_zero( $value ) {
+		return (int) (bool) $value;
 	}
 
 	/**
@@ -1319,94 +1329,88 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param mixed $new_value Should ideally be -1, 0, or 1.
+	 * @param mixed $value Should ideally be -1, 0, or 1.
 	 * @return int -1, 0, or 1.
 	 */
-	public function s_qubit( $new_value ) {
+	public function s_qubit( $value ) {
 
-		if ( $new_value < -.33 ) {
-			$new_value = -1;
-		} elseif ( $new_value > .33 ) {
-			$new_value = 1;
-		} else {
-			$new_value = 0;
+		if ( $value < -.33 ) {
+			return -1;
+		} elseif ( $value > .33 ) {
+			return 1;
 		}
 
-		return $new_value;
+		return 0;
 	}
 
 	/**
 	 * Sanitizes disabled post type entries.
-	 *
 	 * Filters out default post types.
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param mixed $new_values Should ideally be an array with post type name indexes, and 1 or 0 passed in.
+	 * @param array[string,int] $post_types An array with post type name indexes and 0/1 values.
 	 * @return array
 	 */
-	public function s_disabled_post_types( $new_values ) {
+	public function s_disabled_post_types( $post_types ) {
 
-		if ( ! \is_array( $new_values ) ) return [];
+		if ( ! \is_array( $post_types ) ) return [];
 
 		foreach ( $this->get_forced_supported_post_types() as $forced )
-			unset( $new_values[ $forced ] );
+			unset( $post_types[ $forced ] );
 
-		return $this->s_post_types( $new_values );
+		return $this->s_post_types( $post_types );
 	}
 
 	/**
 	 * Sanitizes generic post type entries.
-	 *
 	 * Ideally, we want to check if the post type exists; however, some might be registered too late.
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param mixed $new_values Should ideally be an array with post type name indexes, and 1 or 0 passed in.
+	 * @param array[string,int] $post_types An array with post type name indexes and 0/1 values.
 	 * @return array
 	 */
-	public function s_post_types( $new_values ) {
+	public function s_post_types( $post_types ) {
 
-		if ( ! \is_array( $new_values ) ) return [];
+		if ( ! \is_array( $post_types ) ) return [];
 
-		foreach ( $new_values as &$value )
+		foreach ( $post_types as &$value )
 			$value = $this->s_one_zero( $value );
 
-		return $new_values;
+		return $post_types;
 	}
 
 	/**
 	 * Sanitizes disabled taxonomy entries.
-	 *
 	 * Filters out default taxonomies.
 	 *
 	 * @since 4.1.0
 	 *
-	 * @param mixed $new_values Should ideally be an array with taxonomy name indexes, and 1 or 0 passed in.
+	 * @param array[string,int] $taxonomies An array with taxonomy name indexes and 0/1 values.
 	 * @return array
 	 */
-	public function s_disabled_taxonomies( $new_values ) {
+	public function s_disabled_taxonomies( $taxonomies ) {
 
-		if ( ! \is_array( $new_values ) ) return [];
+		if ( ! \is_array( $taxonomies ) ) return [];
 
 		foreach ( $this->get_forced_supported_taxonomies() as $forced )
-			unset( $new_values[ $forced ] );
+			unset( $taxonomies[ $forced ] );
 
-		return $this->s_taxonomies( $new_values );
+		return $this->s_taxonomies( $taxonomies );
 	}
 
 	/**
 	 * Sanitizes generic taxonomy entries.
-	 *
 	 * Ideally, we want to check if the taxonomy exists; however, some might be registered too late.
 	 *
 	 * @since 4.1.0
 	 *
-	 * @param mixed $new_values Should ideally be an array with taxonomy name indexes, and 1 or 0 passed in.
+	 * @param array[string,int] $taxonomies An array with taxonomy name indexes and 0/1 values.
 	 * @return array
 	 */
-	public function s_taxonomies( $new_values ) {
-		return $this->s_post_types( $new_values );
+	public function s_taxonomies( $taxonomies ) {
+		return $this->s_post_types( $taxonomies );
 	}
 
 	/**
@@ -1417,11 +1421,11 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param mixed $new_value Should ideally be an integer.
+	 * @param mixed $value Should ideally be an integer.
 	 * @return string An integer as string.
 	 */
-	public function s_numeric_string( $new_value ) {
-		return (string) (int) $new_value;
+	public function s_numeric_string( $value ) {
+		return (string) (int) $value;
 	}
 
 	/**
@@ -1430,11 +1434,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param mixed $new_value Should ideally be a positive integer.
+	 * @param mixed $value Should ideally be a positive integer.
 	 * @return integer Positive integer.
 	 */
-	public function s_absint( $new_value ) {
-		return \absint( $new_value );
+	public function s_absint( $value ) {
+		return abs( (int) $value );
 	}
 
 	/**
@@ -1443,12 +1447,12 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value String, possibly with HTML in it.
+	 * @param string $text String, possibly with HTML in it.
 	 * @return string String without HTML in it.
 	 */
-	public function s_no_html( $new_value ) {
+	public function s_no_html( $text ) {
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
-		return strip_tags( $new_value );
+		return strip_tags( $text );
 	}
 
 	/**
@@ -1458,12 +1462,12 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value String, possibly with HTML and spaces in it.
+	 * @param string $text String, possibly with HTML and spaces in it.
 	 * @return string String without HTML and breaks in it.
 	 */
-	public function s_no_html_space( $new_value ) {
+	public function s_no_html_space( $text ) {
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
-		return str_replace( ' ', '', strip_tags( $new_value ) );
+		return str_replace( ' ', '', strip_tags( $text ) );
 	}
 
 	/**
@@ -1472,11 +1476,11 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param string $new_value String with possibly ampersands.
+	 * @param string $text String with possibly ampersands.
 	 * @return string
 	 */
-	public function esc_attr_preserve_amp( $new_value ) {
-		return \esc_attr( str_replace( '&', '&amp;', $new_value ) );
+	public function esc_attr_preserve_amp( $text ) {
+		return \esc_attr( str_replace( '&', '&amp;', $text ) );
 	}
 
 	/**
@@ -1485,18 +1489,17 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value String, a URL, possibly unsafe.
+	 * @param string $url A possibly unsafe URL.
 	 * @return string String a safe URL without Query Arguments.
 	 */
-	public function s_url( $new_value ) {
-
-		/**
-		 * If queries have been tokenized, take the value before the query args.
-		 * Otherwise it's empty, so take the current value.
-		 */
-		$url = strtok( $new_value, '?' ) ?: $new_value;
-
-		return \esc_url_raw( $url );
+	public function s_url( $url ) {
+		return \esc_url_raw(
+			/**
+			 * If queries have been tokenized, take the value before the query args.
+			 * Otherwise it's empty, so take the current value.
+			 */
+			strtok( $url, '?' ) ?: $url
+		);
 	}
 
 	/**
@@ -1506,11 +1509,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.0 Method is now public.
 	 * @TODO rename to s_url_keep_query?
 	 *
-	 * @param string $new_value String, a URL, possibly unsafe.
+	 * @param string $url A possibly unsafe URL.
 	 * @return string String a safe URL with Query Arguments.
 	 */
-	public function s_url_query( $new_value ) {
-		return \esc_url_raw( $new_value );
+	public function s_url_query( $url ) {
+		return \esc_url_raw( $url );
 	}
 
 	/**
@@ -1521,16 +1524,16 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.0.2
 	 *
-	 * @param string $new_value String, an (invalid) URL, possibly unsafe.
+	 * @param string $url A possibly unsafe URL.
 	 * @return string String a safe URL with Query Arguments.
 	 */
-	public function s_url_relative_to_current_scheme( $new_value ) {
+	public function s_url_relative_to_current_scheme( $url ) {
 
-		if ( $this->matches_this_domain( $new_value ) ) {
-			$url = $this->set_preferred_url_scheme( $new_value );
+		if ( $this->matches_this_domain( $url ) ) {
+			$url = $this->set_preferred_url_scheme( $url );
 		} else {
 			// This also sets preferred URL scheme if path.
-			$url = $this->convert_to_url_if_path( $new_value );
+			$url = $this->convert_to_url_if_path( $url );
 		}
 
 		return $this->s_url_query( $url );
@@ -1542,11 +1545,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value String, an email address, possibly unsafe.
+	 * @param string $email A possibly unsafe email.
 	 * @return string String a safe email address
 	 */
-	public function s_email_address( $new_value ) {
-		return \sanitize_email( $new_value );
+	public function s_email_address( $email ) {
+		return \sanitize_email( $email );
 	}
 
 	/**
@@ -1555,11 +1558,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 *
-	 * @param string $new_value String with potentially unsafe HTML in it.
+	 * @param string $text String with potentially unsafe HTML in it.
 	 * @return string String with only safe HTML in it
 	 */
-	public function s_safe_html( $new_value ) {
-		return \wp_kses_post( $new_value );
+	public function s_safe_html( $text ) {
+		return \wp_kses_post( $text );
 	}
 
 	/**
@@ -1573,28 +1576,36 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0 1. Now returns empty on lone `@` entries.
 	 *              2. Now returns empty when using only spaces and tabs.
 	 *
-	 * @param string $new_value String with potentially wrong Twitter username.
+	 * @param string $username String with potentially wrong Twitter username.
 	 * @return string String with 'correct' Twitter username
 	 */
-	public function s_twitter_name( $new_value ) {
+	public function s_twitter_name( $username ) {
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
-		$new_value = strip_tags( $new_value );
-		$new_value = $this->s_singleline( $new_value );
-		$new_value = $this->s_nbsp( $new_value );
-		$new_value = $this->s_tabs( $new_value );
-		$new_value = trim( $new_value );
+		$username = trim(
+			$this->s_tabs(
+				$this->s_nbsp(
+					$this->s_singleline(
+						// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+						strip_tags(
+							$username
+						)
+					)
+				)
+			)
+		);
 
-		if ( empty( $new_value ) ) return '';
+		if ( empty( $username ) )
+			return '';
 
-		$profile = trim( $this->s_relative_url( $new_value ), ' /' );
+		$username = trim( $this->s_relative_url( $username ), ' /' );
 
-		if ( '@' === $profile ) return '';
+		if ( '@' === $username )
+			return '';
 
-		if ( '@' !== substr( $profile, 0, 1 ) )
-			$profile = "@$profile";
+		if ( '@' !== substr( $username, 0, 1 ) )
+			$username = "@$username";
 
-		return str_replace( [ ' ', "\t" ], '', $profile );
+		return str_replace( [ ' ', "\t" ], '', $username );
 	}
 
 	/**
@@ -1606,21 +1617,27 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.0.0 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
 	 *              2. Now returns empty when using only spaces and tabs.
 	 *
-	 * @param string $new_value String with potentially wrong Facebook profile URL.
+	 * @param string $profile String with potentially wrong Facebook profile URL.
 	 * @return string String with 'correct' Facebook profile URL.
 	 */
-	public function s_facebook_profile( $new_value ) {
+	public function s_facebook_profile( $profile ) {
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
-		$new_value = strip_tags( $new_value );
-		$new_value = $this->s_singleline( $new_value );
-		$new_value = $this->s_nbsp( $new_value );
-		$new_value = $this->s_tabs( $new_value );
-		$new_value = trim( $new_value );
+		$profile = trim(
+			$this->s_tabs(
+				$this->s_nbsp(
+					$this->s_singleline(
+						// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+						strip_tags(
+							$profile
+						)
+					)
+				)
+			)
+		);
 
-		if ( empty( $new_value ) ) return '';
+		if ( empty( $profile ) ) return '';
 
-		$path = trim( $this->s_relative_url( $new_value ), ' /' );
+		$path = trim( $this->s_relative_url( $profile ), ' /' );
 
 		if ( ! $path ) return '';
 
@@ -1648,25 +1665,17 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
+	 * @since 4.2.9 Now falls back to 'summary_large_image' instead of the default option.
 	 *
-	 * @param string $new_value String with potentially wrong option value.
+	 * @param string $card String with potentially wrong option value.
 	 * @return string Sanitized twitter card type.
 	 */
-	public function s_twitter_card( $new_value ) {
+	public function s_twitter_card( $card ) {
 
-		// Fetch Twitter card array.
-		$card = $this->get_twitter_card_types();
+		if ( \array_key_exists( $card, $this->get_twitter_card_types() ) )
+			return (string) $card;
 
-		$key = \array_key_exists( $new_value, $card );
-
-		if ( $key ) return (string) $new_value;
-
-		$previous = $this->get_option( 'twitter_card' );
-
-		if ( empty( $previous ) )
-			$previous = $this->get_default_option( 'twitter_card' );
-
-		return (string) $previous;
+		return 'summary_large_image';
 	}
 
 	/**
@@ -1696,15 +1705,16 @@ class Sanitize extends Admin_Pages {
 	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://example.com/https://example.com/path/to/file/`)
 	 *                 when filter `the_seo_framework_allow_external_redirect` is set to false.
 	 *
-	 * @param string $new_value String with potentially unwanted redirect URL.
+	 * @param string $url String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL
 	 */
-	public function s_redirect_url( $new_value ) {
+	public function s_redirect_url( $url ) {
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple, performant sanity.
-		$url = strip_tags( $new_value );
+		$url = strip_tags( $url );
 
-		if ( ! $url ) return '';
+		if ( ! $url )
+			return '';
 
 		// This is also checked when performing a redirect.
 		if ( ! $this->allow_external_redirect() )
@@ -1718,30 +1728,20 @@ class Sanitize extends Admin_Pages {
 		 * @since 3.0.6 Now false by default.
 		 * @param bool $noqueries Whether to remove query arguments from URLs.
 		 */
-		$noqueries = (bool) \apply_filters( 'the_seo_framework_301_noqueries', false );
-
-		/**
-		 * Remove queries from the URL
-		 *
-		 * Returns plain Home URL if $this->allow_external_redirect() is set to false and only a query has been supplied
-		 * But that's okay. The URL was rogue anyway :)
-		 */
-		if ( $noqueries ) {
+		if ( (bool) \apply_filters( 'the_seo_framework_301_noqueries', false ) ) {
 			/**
-			 * Remove query args
+			 * Remove queries from the URL
 			 *
-			 * @see The_SEO_Framework\Sanitize::s_url
-			 * @since 2.2.4
+			 * Returns plain Home URL if $this->allow_external_redirect() is set to false and only a query has been supplied
+			 * But that's okay. The URL was rogue anyway :)
 			 */
-			$new_value = $this->s_url( $url );
-		} else {
-			/**
-			 * Allow query string parameters. XSS safe.
-			 */
-			$new_value = $this->s_url_query( $url );
+			return $this->s_url( $url );
 		}
 
-		return $new_value;
+		/**
+		 * Allow query string parameters. XSS safe.
+		 */
+		return $this->s_url_query( $url );
 	}
 
 	/**
@@ -1749,12 +1749,12 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param string $new_value String with potentially unwanted hex values.
+	 * @param string $color String with potentially unwanted hex values.
 	 * @return string The sanitized color hex.
 	 */
-	public function s_color_hex( $new_value ) {
+	public function s_color_hex( $color ) {
 
-		$color = trim( $new_value, '# ' );
+		$color = trim( $color, '# ' );
 
 		if ( '' === $color )
 			return '';
@@ -1782,12 +1782,13 @@ class Sanitize extends Admin_Pages {
 	 * @return string A string with safe HTML encoded hyphens.
 	 */
 	public function s_hyphen( $text ) {
-
-		$text = preg_replace( '/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/', '&#x2d;', $text );
-
-		// str_replace is faster than putting these alternative sequences in the `-|-` regex above.
+		// str_replace is faster than putting these alternative sequences in the `-|-` regex below.
 		// That'd be this: "/((?'h'-|&\#45;|\xe2\x80\x90){2,3}(*SKIP)(?&h)|(?&h))(?(h)(*FAIL))/u"
-		return str_replace( [ '&#45;', "\xe2\x80\x90" ], '&#x2d;', $text );
+		return str_replace(
+			[ '&#45;', "\xe2\x80\x90" ],
+			'&#x2d;',
+			preg_replace( '/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/', '&#x2d;', $text )
+		);
 	}
 
 	/**
@@ -1796,11 +1797,11 @@ class Sanitize extends Admin_Pages {
 	 * @since 2.8.2
 	 * @since 3.1.0 Now catches all non-breaking characters.
 	 *
-	 * @param string $new_value String with potentially unwanted nbsp values.
+	 * @param string $text String with potentially unwanted nbsp values.
 	 * @return string A spacey string.
 	 */
-	public function s_nbsp( $new_value ) {
-		return str_replace( [ '&nbsp;', '&#160;', '&#xA0;', "\xc2\xa0" ], ' ', $new_value );
+	public function s_nbsp( $text ) {
+		return str_replace( [ '&nbsp;', '&#160;', '&#xA0;', "\xc2\xa0" ], ' ', $text );
 	}
 
 	/**
@@ -1808,11 +1809,11 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.8.2
 	 *
-	 * @param string $new_value String with potentially unwanted \ values.
+	 * @param string $text String with potentially unwanted \ values.
 	 * @return string A string with safe HTML encoded backslashes.
 	 */
-	public function s_bsol( $new_value ) {
-		return str_replace( '\\', '&#92;', stripslashes( $new_value ) );
+	public function s_bsol( $text ) {
+		return str_replace( '\\', '&#92;', stripslashes( $text ) );
 	}
 
 	/**
@@ -1820,11 +1821,11 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param string $new_value String with potentially wanted \ values.
+	 * @param string $text String with potentially wanted \ values.
 	 * @return string A string with safe HTML encoded backslashes.
 	 */
-	public function s_bsol_raw( $new_value ) {
-		return str_replace( '\\', '&#92;', $new_value );
+	public function s_bsol_raw( $text ) {
+		return str_replace( '\\', '&#92;', $text );
 	}
 
 	/**
@@ -1832,19 +1833,17 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.9.0
 	 *
-	 * @param string $new_value String with potentially unwanted values.
+	 * @param string $text String with potentially unwanted values.
 	 * @return string A correct canonical scheme setting value.
 	 */
-	public function s_canonical_scheme( $new_value ) {
+	public function s_canonical_scheme( $text ) {
 
-		$accepted_values = [
-			'automatic',
-			'https',
-			'http',
-		];
-
-		if ( \in_array( $new_value, $accepted_values, true ) )
-			return (string) $new_value;
+		switch ( $text ) {
+			case 'automatic':
+			case 'https':
+			case 'http':
+				return $text;
+		}
 
 		return 'automatic';
 	}
@@ -1853,43 +1852,40 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes sitemap's min/max post value.
 	 *
 	 * @since 3.1.0
+	 * @since 4.2.9 Also sanitizes the default fallback value now.
 	 *
-	 * @param int $new_value Integer with potentially unwanted values.
+	 * @param int $limit Integer with potentially unwanted values.
 	 * @return int A limited integer 1<=R<=50000.
 	 */
-	public function s_min_max_sitemap( $new_value ) {
-
-		$new_value = $this->s_absint( $new_value );
-
-		if ( ! $new_value ) {
-			// We assume something's wrong. Return default value.
-			$new_value = $this->get_default_option( 'sitemap_query_limit' );
-		} else {
-			// At least 1, at most 50000.
-			$new_value = max( 1, min( 50000, $new_value ) );
-		}
-
-		return $new_value;
+	public function s_min_max_sitemap( $limit ) {
+		return max(
+			1,
+			min(
+				50000,
+				$this->s_absint( $limit ) ?: 1000
+			)
+		);
 	}
 
 	/**
 	 * Sanitizes image preview directive value.
 	 *
 	 * @since 4.0.2
+	 * @since 4.2.9 Now falls back to 'large' instead of 'standard'.
 	 *
-	 * @param string $new_value String with potentially unwanted values.
+	 * @param string $size The image preview size with possibly unwanted values.
 	 * @return string The robots image snippet preview directive value.
 	 */
-	public function s_image_preview( $new_value ) {
+	public function s_image_preview( $size ) {
 
-		switch ( $new_value ) {
+		switch ( $size ) {
 			case 'none':
 			case 'standard':
 			case 'large':
-				return $new_value;
+				return $size;
 		}
 
-		return 'standard';
+		return 'large';
 	}
 
 	/**
@@ -1897,12 +1893,12 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 4.0.2
 	 *
-	 * @param int $new_value Integer with potentially unwanted values.
-	 * @return int The robots video and snippet preview directive value.
+	 * @param int $length The snippet length that's possibly out of range.
+	 * @return int A limited integer -1<=R<=600.
 	 */
-	public function s_snippet_length( $new_value ) {
+	public function s_snippet_length( $length ) {
 		// At least -1, at most 600.
-		return max( -1, min( 600, (int) $new_value ) );
+		return max( -1, min( 600, (int) $length ) );
 	}
 
 	/**
@@ -2008,7 +2004,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
 
-		if ( false === strpos( $input, '<' ) ) return $input;
+		if ( false === strpos( $input, '<' ) )
+			return $input;
 
 		/**
 		 * Find the optimized version in `s_excerpt()`. The defaults here treats HTML for a18y reading, not description generation.
@@ -2263,53 +2260,5 @@ class Sanitize extends Admin_Pages {
 				array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
 			)
 		);
-	}
-
-	/**
-	 * Sets string value and returns boolean if it has any content.
-	 *
-	 * Best used in an or loop.
-	 * e.g.         set_and_strlen( $title, 'one' ) || set_and_strlen( $title, 'two' );
-	 * or (slower): set_and_strlen( $title, [ 'one', 'two', ...[value] ] );
-	 *
-	 * @since 4.1.0
-	 * @ignore unused. untested. Creates super-smelly code, but fixes bugs revolving around input '0' or ' '.
-	 *         We'd prefer a native PHP "string has length" comparison operator.
-	 *         I don't believe any language has this. Then again, many languages don't see '0' as false.
-	 *
-	 * @param variable        $var   The variable to set. Passed by reference.
-	 * @param string|string[] $value The value to set, or array of values.
-	 * @return bool True if content has any length.
-	 */
-	protected function set_and_strlen( &$var, $value = '' ) {
-
-		if ( \is_array( $value ) ) {
-			foreach ( $value as $v ) {
-				if ( $this->set_and_strlen( $var, $v ) )
-					return true;
-			}
-			return false;
-		}
-
-		return \strlen( $var = trim( $value ) );
-	}
-
-	/**
-	 * Sets string value if current variable has no content. Returns boolean value if it has any length.
-	 *
-	 * Can be used to loop via or statements -- here, $title will be set to 'two' if $usertitle is empty:
-	 * e.g. strlen_or_set( $title, trim( $usertitle ) ) || strlen_or_set( $title, 'two' );
-	 *
-	 * @since 4.2.3
-	 * @ignore unused. untested. Creates super-smelly code, but fixes bugs revolving around input '0' or ' '.
-	 *         We'd prefer a native PHP "string has length" comparison operator.
-	 *         I don't believe any language has this. Then again, many languages don't see '0' as false.
-	 *
-	 * @param variable $var   The variable to set. Passed by reference.
-	 * @param string   $value The value to set if $var has no string length.
-	 * @return bool True if content has any length.
-	 */
-	protected function strlen_or_set( &$var, $value ) {
-		return (bool) ( \strlen( $var ) ?: \strlen( $var = $value ) );
 	}
 }

@@ -734,7 +734,7 @@ function _do_upgrade_3103() {
 		$tsf->update_option( 'auto_description', 1 );
 
 		// Add default sitemap limit option.
-		$tsf->update_option( 'sitemap_query_limit', 3000 );
+		$tsf->update_option( 'sitemap_query_limit', 1000 );
 
 		// Add non-default HTML stripping option. Defaulting to previous behavior.
 		$tsf->update_option( 'title_strip_tags', 0 ); // NOTE: Default is 1.

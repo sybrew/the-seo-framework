@@ -273,6 +273,9 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			HTML::description(
 				__( 'The Twitter Card type may have the image highlighted, either small at the side or large above.', 'autodescription' )
 			);
+			HTML::description(
+				__( 'The Twitter Card type also affects Discord embeds, either small at the side or large below.', 'autodescription' )
+			);
 			?>
 
 			<p class=tsf-fields>
