@@ -896,17 +896,26 @@ class Generate_Description extends Generate {
 		// We'll rectify that later, somewhat, where characters are transformed.
 		// We could also use preg_match_all( '/./u' ); or count( preg_split( '/./u', $excerpt, $min_char_length ) );
 		// But, again, that'll eat CPU cycles.
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		// Decode to get a more accurate character length in Unicode.
 		$excerpt = html_entity_decode( $excerpt, \ENT_QUOTES, 'UTF-8' );
 
-		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
-		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su', $max_char_length ), trim( $excerpt ), $matches );
+		// Find all words until $max_char_length, and trim when the last word boundary or punctuation is found.
+		preg_match(
+			sprintf(
+				'/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su',
+				$max_char_length
+			),
+			trim( $excerpt ),
+			$matches
+		);
 
-		$excerpt = trim( $matches[0] ?? '' ?: '' );
+		$excerpt = trim( $matches[0] ?? '' );
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
 		$excerpt = html_entity_decode(
@@ -918,13 +927,14 @@ class Generate_Description extends Generate {
 			\ENT_QUOTES,
 			'UTF-8'
 		);
+
 		/**
-		 * Play with it here: https://regex101.com/r/u0DIgx/5/ (old) https://regex101.com/r/G92lUt/5 (new)
+		 * Play with it here:
+		 * https://regex101.com/r/u0DIgx/5/ (old)
+		 * https://regex101.com/r/G92lUt/5 (old)
+		 * https://regex101.com/r/dAqhWC/1 (current)
 		 *
 		 * TODO Group 4's match is repeated. However, referring to it as (4) will cause it to congeal into 3.
-		 *
-		 * TODO .+[\p{Pe}\p{Pf}](*THEN)\Z              still backtracks; it should just find \Z and see if one char is in front of it.
-		 *   -> [^\p{Pe}\p{Pf}]++.*?[\p{Pe}\p{Pf}]+?\Z would solve it... but I don't trust it; it's populating 4 and 5 in edge-cases.
 		 *
 		 * TODO we can further optimize this by capturing the last 4 words and refer to that. Of thence more than 3 words
 		 * found, we could simply end the query, mitigating all forms of backtracking. For now, backtracking cannot
@@ -942,7 +952,7 @@ class Generate_Description extends Generate {
 		 * }
 		 */
 		preg_match(
-			'/(?:\A[\p{P}\p{Z}]*?)?([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:.+[\p{Pe}\p{Pf}](*THEN)\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
+			'/(?:\A[\p{P}\p{Z}]*?)?([\P{Po}\p{M}\xBF\xA1:\'\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:[^\p{Pe}\p{Pf}]*+.*[\p{Pe}\p{Pf}]+\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$excerpt,
 			$matches
 		);
@@ -959,7 +969,8 @@ class Generate_Description extends Generate {
 		}
 		// else { TODO Should we empty excerpt here? Can we even reach this? }
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		/**
 		 * @param array $matches: {
@@ -984,7 +995,8 @@ class Generate_Description extends Generate {
 			$excerpt = '';
 		}
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		return trim( htmlentities( $excerpt, \ENT_QUOTES, 'UTF-8' ) );
 	}

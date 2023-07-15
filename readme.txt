@@ -272,9 +272,6 @@ TODO why is base_get_sitemap_store_key() used instead of one inferred from the $
 TODO with changes set to the sitemap, test whether plugins Polylang/WPML still work as intended -> Have their languages been initialized?
 	-> Also test other translation plugins.
 
-TODO use 0==strcasecmp() instead of strtolower==strtolower? It might be slower... or faster. Test?
-	Use strncmp for the first X chars? Do we use this here? Only in TSFEM, no?
-
 TODO change autodescription-updates-cache to autodescription-persistent-cache?
 	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
 		-> However, this may cause a notification pop up for those who use two or more SEO plugins simultaneously. Though this may be helpful.
@@ -299,13 +296,6 @@ TODO implement "@hook wp_action" in every function with a callback.
 TODO move THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS and THE_SEO_FRAMEWORK_DEBUG to define.php
 	-> Deprecate 4.3.0 tsf()->the_seo_framework_debug
 TODO Deprecate tsf()->script_debug, use NEW constant instead (Defaults to \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG )
-
-TODO highlight in large changes:
-	* Color scheme works again for tooltips.
-	* Issue with caching plugins and WordPress Core vulnerability yet unresolved?
-		* https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
-		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
-		* Also notify Nik via email?
 
 TODO "2.6.2" article for Extension Manager doesn't follow our description generation cutoff rules: "FULL STOP. Also..."
 
@@ -344,6 +334,13 @@ TODO Four new classes:
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
 
+TODO highlight in large changes:
+	* Color scheme works again for tooltips.
+	* Issue with caching plugins and WordPress Core vulnerability yet unresolved?
+		* https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
+		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
+		* Also notify Nik via email?
+
 **Detailed log**
 
 **For everyone:**
@@ -371,8 +368,9 @@ TODO add summary_large_image/summary toggle on a per-page basis
 	* Addressed a regression from TSF v4.2.0 where WordPress admin color schemes stopped affecting TSF's color scheme. Affected are:
 		* Tooltip background and text color.
 		* Post/Page SEO Settings active-tab border color.
-	* Words with attached quote marks (d'Anglais) now get tested correctly for repeated words.
 	* Title and description lengths are now calculated more quickly and more accurately for the SEO Bar.
+	* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
+	* Words with attached plain connector punctuation (`l'apostrophe`) are now considered a starting word, so the `l'`-part of `l'apostrophe` will also be included in the description.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
