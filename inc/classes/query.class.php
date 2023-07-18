@@ -511,6 +511,7 @@ class Query extends Core {
 	 * Detects Profile edit screen in WP Admin.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.9 Now also tests network profile edit screens.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool True if on Profile Edit screen. False otherwise.
@@ -519,7 +520,9 @@ class Query extends Core {
 
 		switch ( $GLOBALS['current_screen']->base ?? '' ) {
 			case 'profile':
+			case 'profile-network':
 			case 'user-edit':
+			case 'user-edit-network':
 				return true;
 		}
 

@@ -251,8 +251,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
 
-TODO when you add a custom title (homepage also?) to wpForo's page, the SEO Bar should exclaim it's being overwritten (and be marked STATE_BAD).
-	* wpForo's settings aren't read correctly? Retest.
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
@@ -340,6 +338,7 @@ TODO highlight in large changes:
 		* https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
 		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
 		* Also notify Nik via email?
+	* Multisite support for author SEO fields.
 
 **Detailed log**
 
@@ -347,6 +346,8 @@ TODO highlight in large changes:
 
 * **Added:**
 	* SEOPress metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
+	* On multisite, you can now inspect and edit user SEO metadata ("Authorial Info") for any users that have author capabilities on any (other) blog.
+		* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
@@ -404,6 +405,7 @@ TODO highlight in large changes:
 	* Method `tsf()->s_excerpt()` now requires a first parameter.
 	* Method `tsf()->s_excerpt_raw()` now requires a first parameter.
 	* Method `tsf()->escape_title()` now requires a first parameter.
+	* Method `tsf()->is_profile_edit()` now also tests network admin profile screens.
 	* Method `tsf()->s_min_max_sitemap()`
 		1. Now also sanitizes the default fallback value.
 		2. No longer falls back to the default option, but 1000 instead.

@@ -39,13 +39,15 @@ final class UserSettings {
 	 * Prepares the user setting fields.
 	 *
 	 * @since 4.1.4
+	 * @since 4.2.9 Now asserts if user has capability on any multisite network's blog.
 	 * @access private
 	 *
 	 * @param \WP_User $user WP_User object.
 	 */
 	public static function _prepare_setting_fields( $user ) {
 
-		if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+		if ( ! \tsf()->user_has_author_info_cap_on_network( $user ) )
+			return;
 
 		static::add_user_author_fields( $user );
 	}

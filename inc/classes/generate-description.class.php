@@ -957,6 +957,7 @@ class Generate_Description extends Generate {
 			$matches
 		);
 
+		// Unmatched isn't set. Since we count from last to first match, we don't need to test strlen().
 		if ( isset( $matches[5] ) ) {
 			$excerpt = "$matches[1]$matches[3]$matches[4]$matches[5]";
 			// Skip 4. It's useless content without 5.
@@ -967,7 +968,7 @@ class Generate_Description extends Generate {
 		} elseif ( isset( $matches[1] ) ) {
 			$excerpt = $matches[1];
 		}
-		// else { TODO Should we empty excerpt here? Can we even reach this? }
+		// Else: We'll get the original excerpt. This shouldn't happen, but at least it's already trimmed to $max_char_length.
 
 		if ( \strlen( $excerpt ) < $min_char_length )
 			return '';
@@ -984,7 +985,7 @@ class Generate_Description extends Generate {
 			$excerpt,
 			$matches
 		);
-		// Why can $matches[2] still be populated with 3 set? Does it populate empty results upward to last, always???
+
 		if ( isset( $matches[2] ) && \strlen( $matches[2] ) ) {
 			$excerpt = "$matches[1]$matches[2]";
 		} elseif ( isset( $matches[1] ) && \strlen( $matches[1] ) ) {
