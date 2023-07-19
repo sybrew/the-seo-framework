@@ -137,7 +137,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size=40 autocomplete=off />
+					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size=40 autocomplete=off data-form-type=other />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -243,7 +243,7 @@ $this->output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-og-title-wrap>
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size=40 autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
 				</div>
 			</td>
 		</tr>
@@ -275,7 +275,7 @@ $this->output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-tw-title-wrap>
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size=40 autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
 				</div>
 			</td>
 		</tr>

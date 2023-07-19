@@ -132,7 +132,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ) ?>" autocomplete=off />
+					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -221,6 +221,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_visibility_tab':
+
 		$canonical_placeholder = $this->get_canonical_url( $_generator_args );
 
 		// Get robots defaults.
@@ -486,7 +487,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ) ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
 				</div>
 			</div>
 		</div>
@@ -522,7 +523,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ) ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
 				</div>
 			</div>
 		</div>

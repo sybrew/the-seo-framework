@@ -237,6 +237,7 @@ class User_Data extends Term_Data {
 	 * @access private
 	 *         We're planning to migrate this object soon.
 	 * @todo 4.3.0 migrate to new user data bridge object.
+	 * @todo add memoization?
 	 *
 	 * @param int|\WP_User $user A user ID or valid \WP_User object.
 	 * @return bool True if user has author info cap on any blog.

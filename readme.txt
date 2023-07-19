@@ -351,6 +351,10 @@ TODO highlight in large changes:
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
+	* The Homepage SEO Settings box's title no longer carries a warning; instead, we added a bigger, more noticable warning to every settings section when editing the homepage.
+		* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
+		* This also works around an issue where Gutenberg still doesn't understand HTML.
+		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
 * **Improved:**
 	* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
 	* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
@@ -372,6 +376,10 @@ TODO highlight in large changes:
 	* Title and description lengths are now calculated more quickly and more accurately for the SEO Bar.
 	* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
 	* Words with attached plain connector punctuation (`l'apostrophe`) are now considered a starting word, so the `l'`-part of `l'apostrophe` will also be included in the description.
+	* Dashlane is being decadent by first removing a perfectly good desktop app, and then they quickly stopped adhering to agreed upon web accessibility standards. Since, it is trying to shove their own "standard" down our throats. We won't mention that "standard," for no one should use it.
+		* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
+	* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
+		* Most notably, the padding and border around the settings make it much easier on your eyes.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).

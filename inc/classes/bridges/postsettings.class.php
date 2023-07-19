@@ -43,52 +43,46 @@ final class PostSettings {
 	 * @since 4.0.0
 	 * @since 4.0.5 Now registers custom postbox classes.
 	 * @since 4.2.8 No longer uses the post type label for the meta box title.
+	 * @since 4.2.9 1. No longer uses the $post_type for the screen-parameter in add_meta_box.
+	 *              2. No longer generates a dynamic title for the Homepage with settings-helper.
+	 *                 This because Gutenberg is inconsistent with metabox display and escapes HTML incorrectly.
+	 *              3. Now registers homepage warnings in the primary tabs.
+	 *              4. Now adds postbox class to non-posts as well.
 	 * @access private
-	 *
-	 * @param string $post_type The current Post Type.
 	 */
-	public static function _prepare_meta_box( $post_type ) {
+	public static function _prepare_meta_box() {
+
+		$box_id = 'tsf-inpost-box';
+
+		\add_meta_box(
+			$box_id,
+			\esc_html__( 'SEO Settings', 'autodescription' ),
+			[ static::class, '_meta_box' ],
+			null, // We used to forward hook $post_type, which redundantly forces WP to regenerate the current screen type.
+			/**
+			 * @since 2.9.0
+			 * @param string $context Accepts 'normal', 'side', and 'advanced'.
+			 */
+			(string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' ),
+			/**
+			 * @since 2.6.0
+			 * @param string $default Accepts 'high', 'default', 'low'
+			 *                        Defaults to high, this box is seen right below the post/page edit screen.
+			 */
+			(string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' )
+		);
+
+		$screen_id = \get_current_screen()->id;
+
+		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, '_add_postbox_class' ] );
 
 		$tsf = \tsf();
 
-		/**
-		 * @since 2.9.0
-		 * @param string $context Accepts 'normal', 'side', and 'advanced'.
-		 */
-		$context = (string) \apply_filters( 'the_seo_framework_metabox_context', 'normal' );
-
-		/**
-		 * @since 2.6.0
-		 * @param string $default Accepts 'high', 'default', 'low'
-		 *                        Defaults to high, this box is seen right below the post/page edit screen.
-		 */
-		$priority = (string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' );
-
-		if ( $tsf->is_real_front_page_by_id( $tsf->get_the_real_id() ) ) {
-			if ( $tsf->can_access_settings() ) {
-				$schema = \is_rtl() ? '%2$s - %1$s' : '%1$s - %2$s';
-				$title  = sprintf(
-					$schema,
-					\esc_html__( 'Homepage SEO Settings', 'autodescription' ),
-					\The_SEO_Framework\Interpreters\HTML::make_info(
-						\__( 'The SEO Settings may take precedence over these settings.', 'autodescription' ),
-						$tsf->get_seo_settings_page_url(),
-						false
-					)
-				);
-			} else {
-				$title = \esc_html__( 'Homepage SEO Settings', 'autodescription' );
-			}
-		} else {
-			$title = \esc_html__( 'SEO Settings', 'autodescription' );
+		if ( $tsf->is_static_frontpage( $tsf->get_the_real_id() ) ) {
+			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', [ static::class, '_homepage_warning' ] );
+			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', [ static::class, '_homepage_warning' ] );
+			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', [ static::class, '_homepage_warning' ] );
 		}
-
-		$box_id = 'tsf-inpost-box';
-		// Implies `\get_current_screen()->id`. Is always 'post'.
-		$screen_id = 'post';
-
-		\add_meta_box( $box_id, $title, [ static::class, '_meta_box' ], $post_type, $context, $priority, [] );
-		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, '_add_postbox_class' ] );
 	}
 
 	/**
@@ -109,9 +103,13 @@ final class PostSettings {
 	 * }
 	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) { // phpcs:ignore,VariableAnalysis
-		\tsf()->get_view( 'edit/wrap-nav', get_defined_vars() );
-		\tsf()->get_view( 'edit/wrap-content', get_defined_vars() );
+	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
+
+		$vars = get_defined_vars();
+		$tsf  = \tsf();
+
+		$tsf->get_view( 'edit/wrap-nav', $vars );
+		$tsf->get_view( 'edit/wrap-content', $vars );
 	}
 
 	/**
@@ -132,6 +130,7 @@ final class PostSettings {
 
 		$tsf->is_gutenberg_page()
 			and $tsf->get_view( 'edit/seo-settings-singular-gutenberg-data' );
+
 		$tsf->get_view( 'edit/seo-settings-singular' );
 
 		/**
@@ -155,6 +154,15 @@ final class PostSettings {
 			$classes[] = 'tsf-is-block-editor';
 
 		return $classes;
+	}
+
+	/**
+	 * Outputs the Homepage SEO settings warning.
+	 *
+	 * @since 4.2.9
+	 */
+	public static function _homepage_warning() {
+		\tsf()->get_view( 'edit/seo-settings-singular-homepage-warning' );
 	}
 
 	/**

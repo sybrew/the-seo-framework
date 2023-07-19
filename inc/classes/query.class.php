@@ -702,8 +702,8 @@ class Query extends Core {
 	 * So, don't use this to test user-engaged WordPress queries, ever.
 	 * WARNING: This will lead to **FALSE POSITIVES** for Date, CPTA, Search, and other archives.
 	 *
-	 * @see $this->is_front_page_by_id(), which supports query checking.
 	 * @see $this->is_real_front_page(), which solely uses query checking.
+	 * @see $this->is_static_frontpage(), which adds an "is homepage static" check.
 	 *
 	 * @since 3.2.2
 	 *
