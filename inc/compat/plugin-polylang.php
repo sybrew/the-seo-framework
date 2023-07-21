@@ -219,7 +219,7 @@ function _polylang_blocklist_tsf_urls( $blocklist ) {
  *
  * @since 3.2.4
  * @since 4.1.2 Prefixed function name with _polylang.
- * @since 4.2.0 No longer uses the second parameter, and relies on theq query to find the homepage, instead.
+ * @since 4.2.0 No longer uses the second parameter, and relies on the query to find the homepage, instead.
  * @access private
  *
  * @param string $url The url to fix.
@@ -256,4 +256,33 @@ function _polylang_flush_sitemap() {
 			$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
 		)
 	); // No cache OK. DB call ok.
+}
+
+\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
+/**
+ * Polylang breaks the admin interface quick-edit and terms-addition functionality.
+ * This hack seeks to remove their broken code, letting WordPress take over
+ * correctly once more with full forward and backward compatibility, as we proposed.
+ *
+ * @see https://github.com/polylang/polylang/issues/928
+ * @since 4.2.9
+ */
+function _defunct_badly_coded_polylang_script() {
+
+	// Find last ajaxSuccess handler.
+	// Since this code runs directly after Polylang, it should grab theirs.
+	$remove_ajax_success = <<<JS
+	jQuery( () => {
+		const handler = jQuery._data( document, 'events' )?.ajaxSuccess?.pop().handler;
+		handler && jQuery( document ).off( 'ajaxSuccess', handler );
+	} );
+JS;
+
+	// Remove PLL term handler on ajaxSuccess. It is redundant, achieves nothing,
+	// creates redundant secondary requests, and breaks all plugins but Yoast SEO.
+	\wp_add_inline_script( 'pll_term', $remove_ajax_success );
+
+	// Remove PLL post handler on ajaxSuccess. It is redundant, achieves nothing,
+	// creates redundant secondary requests, and breaks all plugins but Yoast SEO.
+	\wp_add_inline_script( 'pll_post', $remove_ajax_success );
 }

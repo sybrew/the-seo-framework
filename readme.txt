@@ -267,8 +267,6 @@ TODO check mail Dean about WPML config
 TODO why is base_get_sitemap_store_key() used instead of one inferred from the $sitemap_id?
 	-> Move that to the sitemap bridge; so we could also a transient for Google News?
 		-> This may speed up rendering the news sitemap and reduce overhead when plugins are activate that manipulate the query.
-TODO with changes set to the sitemap, test whether plugins Polylang/WPML still work as intended -> Have their languages been initialized?
-	-> Also test other translation plugins.
 
 TODO change autodescription-updates-cache to autodescription-persistent-cache?
 	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
@@ -380,6 +378,7 @@ TODO highlight in large changes:
 		* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
 	* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
 		* Most notably, the padding and border around the settings make it much easier on your eyes.
+	* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
