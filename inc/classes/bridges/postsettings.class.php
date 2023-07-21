@@ -78,7 +78,7 @@ final class PostSettings {
 
 		$tsf = \tsf();
 
-		if ( $tsf->is_static_frontpage( $tsf->get_the_real_id() ) ) {
+		if ( ! $tsf->is_headless['settings'] && $tsf->is_static_frontpage( $tsf->get_the_real_id() ) ) {
 			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', [ static::class, '_homepage_warning' ] );
 			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', [ static::class, '_homepage_warning' ] );
 			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', [ static::class, '_homepage_warning' ] );

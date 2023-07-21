@@ -35,49 +35,6 @@ namespace The_SEO_Framework\Bridges;
 final class Cache {
 
 	/**
-	 * @since 4.2.9
-	 * @access private
-	 *         Immutable! Use constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` instead.
-	 * @see tsf()->init_debug_vars() which can set this to 'false'.
-	 * @var bool Whether transients are enabled.
-	 */
-	public static $use_transients = true;
-
-	/**
-	 * Set the value of the transient.
-	 *
-	 * Prevents setting of transients when they're disabled.
-	 *
-	 * @since 4.2.9
-	 *
-	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
-	 * @param string $value      Transient value. Expected to not be SQL-escaped.
-	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
-	 * @return bool True is value is set, false on failure.
-	 */
-	public static function set_transient( $transient, $value, $expiration = 0 ) {
-		return static::$use_transients && \set_transient( $transient, $value, $expiration );
-	}
-
-	/**
-	 * Get the value of the transient.
-	 *
-	 * If the transient does not exists, does not have a value or has expired,
-	 * or transients have been disabled through a constant, then the transient
-	 * will be false.
-	 *
-	 * N.B. not all transient settings make use of this function, bypassing the constant check.
-	 *
-	 * @since 4.2.9
-	 *
-	 * @param string $transient Transient name. Expected to not be SQL-escaped.
-	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
-	 */
-	public static function get_transient( $transient ) {
-		return static::$use_transients ? \get_transient( $transient ) : false;
-	}
-
-	/**
 	 * Returns a unique cache key suffix per blog and language.
 	 *
 	 * @since 4.2.9

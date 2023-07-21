@@ -107,11 +107,14 @@ function _wpml_sitemap_filter_display_translatables() {
 function _wpml_sitemap_filter_non_translatables( $args ) {
 	global $sitepress;
 
-	if ( empty( $sitepress )
-	|| ! method_exists( $sitepress, 'get_default_language' )
-	|| ! method_exists( $sitepress, 'get_current_language' )
-	|| ! method_exists( $sitepress, 'is_translated_post_type' ) )
+	if (
+		   empty( $sitepress )
+		|| ! method_exists( $sitepress, 'get_default_language' )
+		|| ! method_exists( $sitepress, 'get_current_language' )
+		|| ! method_exists( $sitepress, 'is_translated_post_type' )
+	) {
 		return $args;
+	}
 
 	if ( $sitepress->get_default_language() === $sitepress->get_current_language() ) return $args;
 

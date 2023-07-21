@@ -415,7 +415,7 @@ final class Scripts {
 		static $min, $rtl;
 
 		if ( ! isset( $min, $rtl ) ) {
-			$min = \tsf()->script_debug ? '' : '.min';
+			$min = \SCRIPT_DEBUG ? '' : '.min';
 			$rtl = \is_rtl() ? '.rtl' : '';
 		}
 

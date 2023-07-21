@@ -271,7 +271,7 @@ function _defunct_badly_coded_polylang_script() {
 
 	// Find last ajaxSuccess handler.
 	// Since this code runs directly after Polylang, it should grab theirs.
-	$remove_ajax_success = <<<JS
+	$remove_ajax_success = <<<'JS'
 	jQuery( () => {
 		const handler = jQuery._data( document, 'events' )?.ajaxSuccess?.pop().handler;
 		handler && jQuery( document ).off( 'ajaxSuccess', handler );

@@ -242,7 +242,7 @@ final class Scripts {
 							'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 						],
 						'states' => [
-							'debug' => \tsf()->script_debug,
+							'debug' => \SCRIPT_DEBUG,
 						],
 					],
 				],

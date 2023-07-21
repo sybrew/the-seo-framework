@@ -90,7 +90,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( $encode ) {
 			$options  = 0;
 			$options |= \JSON_UNESCAPED_SLASHES;
-			$options |= $this->script_debug ? \JSON_PRETTY_PRINT : 0;
+			$options |= \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0;
 
 			return $data ? (string) json_encode( $data, $options ) : '';
 		}

@@ -1721,7 +1721,7 @@ final class Deprecated {
 	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
 	 */
 	public function set_transient( $transient, $value, $expiration = 0 ) {
-		\The_SEO_Framework\Bridges\Cache::$use_transients and \set_transient( $transient, $value, $expiration );
+		return \set_transient( $transient, $value, $expiration );
 	}
 
 	/**
@@ -1742,10 +1742,6 @@ final class Deprecated {
 	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
 	 */
 	public function get_transient( $transient ) {
-
-		if ( \The_SEO_Framework\Bridges\Cache::$use_transients )
-			return \get_transient( $transient );
-
-		return false;
+		return \get_transient( $transient );
 	}
 }

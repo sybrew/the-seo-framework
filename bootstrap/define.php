@@ -158,6 +158,16 @@ namespace The_SEO_Framework;
 	or \define( 'THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP', 'edit_posts' );
 
 /**
+ * Enables the site-wide SEO debugging interface.
+ *
+ * @since 2.3.4
+ * @since 4.2.9 Is now registered during plugin load.
+ * @param bool
+ */
+\defined( 'THE_SEO_FRAMEWORK_DEBUG' )
+	or \define( 'THE_SEO_FRAMEWORK_DEBUG', false );
+
+/**
  * Robots setting, ignore protection.
  *
  * @since 4.0.0

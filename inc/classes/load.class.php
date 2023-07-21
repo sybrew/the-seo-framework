@@ -39,32 +39,22 @@ namespace The_SEO_Framework;
 final class Load extends Site_Options {
 
 	/**
-	 * @since 2.2.9
-	 * @TODO make this 'meta_debug'
-	 * @var bool $the_seo_framework_debug Whether TSF-specific debug is enabled.
-	 */
-	public $the_seo_framework_debug = false;
-
-	/**
-	 * @since 2.2.9
-	 * @var bool $script_debug Whether WP script debugging is enabled.
-	 */
-	public $script_debug = false;
-
-	/**
 	 * @since 4.1.4
 	 * @access protected
 	 *         DO NOT OVERWRITE, it should be 'immutable'. <https://wiki.php.net/rfc/immutability>
 	 *         Feel free to read.
 	 *         Use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
-	 * @var bool|array $is_headless Whether headless TSF is enabled.
-	 *    If not false, then array: {
+	 * @var array $is_headless Whether headless TSF is enabled: {
 	 *      'meta'     => bool True to disable post/term-meta-data storing/fetching.
 	 *      'settings' => bool True to disable non-default setting.
 	 *      'user'     => bool True to disable SEO user-meta-data storing/fetching.
 	 *    }
 	 */
-	public $is_headless = false;
+	public $is_headless = [
+		'meta'     => false,
+		'settings' => false,
+		'user'     => false,
+	];
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
@@ -83,10 +73,7 @@ final class Load extends Site_Options {
 			return null;
 		}
 
-		// Setup debug vars before initializing anything else.
-		$this->init_debug_vars();
-
-		if ( $this->the_seo_framework_debug ) {
+		if ( \THE_SEO_FRAMEWORK_DEBUG ) {
 			$debug_instance = Internal\Debug::get_instance();
 
 			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );
@@ -102,20 +89,7 @@ final class Load extends Site_Options {
 		// Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 
-		$this->is_headless = [
-			'meta'     => false,
-			'settings' => false,
-			'user'     => false,
-		];
-
-		if ( ! \apply_filters_deprecated(
-			'the_seo_framework_load_options',
-			[ true ],
-			'4.1.4 of The SEO Framework',
-			'constant THE_SEO_FRAMEWORK_HEADLESS'
-		) ) \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) or \define( 'THE_SEO_FRAMEWORK_HEADLESS', true );
-
-		// A headless boi is a good boi. Far less annoying, they are.
+		// Set headless property via augmenting the consant.
 		if ( \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) ) {
 			$this->is_headless = [
 				'meta'     => true,
@@ -129,24 +103,6 @@ final class Load extends Site_Options {
 					array_merge( $this->is_headless, \THE_SEO_FRAMEWORK_HEADLESS )
 				);
 		}
-	}
-
-	/**
-	 * Initializes public debug variables for the class to use.
-	 *
-	 * @since 2.6.0
-	 */
-	public function init_debug_vars() {
-
-		$this->the_seo_framework_debug = \defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && \THE_SEO_FRAMEWORK_DEBUG ?: $this->the_seo_framework_debug;
-		if ( $this->the_seo_framework_debug )
-			Internal\Debug::_set_instance( $this->the_seo_framework_debug );
-
-		if ( \defined( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ) && \THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS )
-			\The_SEO_Framework\Bridges\Cache::$use_transients = false;
-
-		// WP Core definition.
-		$this->script_debug = \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG ?: $this->script_debug;
 	}
 
 	/**
@@ -209,7 +165,7 @@ final class Load extends Site_Options {
 	}
 
 	/**
-	 * Mark a function as deprecated and inform when it has been used.
+	 * Marks a function as deprecated and inform when it has been used.
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
@@ -226,7 +182,7 @@ final class Load extends Site_Options {
 	}
 
 	/**
-	 * Mark a function as deprecated and inform when it has been used.
+	 * Marks a function as deprecated and inform when it has been used.
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
@@ -243,7 +199,7 @@ final class Load extends Site_Options {
 	}
 
 	/**
-	 * Mark a property or method inaccessible when it has been used.
+	 * Marks a property or method inaccessible when it has been used.
 	 * The current behavior is to trigger a user error if WP_DEBUG is true.
 	 *
 	 * @since 2.7.0

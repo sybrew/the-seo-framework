@@ -60,16 +60,23 @@ class Core {
 	 *
 	 * @since 2.8.0
 	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
+	 * @since 4.2.9 Now protects against fatal errors on PHP 8.2 or later.
 	 *
 	 * @param string $name  The property name.
 	 * @param mixed  $value The property value.
 	 */
 	final public function __set( $name, $value ) {
 
-		if ( 'load_options' === $name ) {
-			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
-			$this->is_headless['settings'] = $value;
-			return;
+		switch ( $name ) {
+			case 'load_options':
+				$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+				$this->is_headless['settings'] = $value;
+				return;
+
+			case 'the_seo_framework_debug':
+			case 'script_debug':
+				// TODO 4.3.0 emit notice.
+				return false;
 		}
 
 		/**
@@ -78,7 +85,7 @@ class Core {
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 
 		// Invoke default behavior: Write variable if it's not protected.
-		if ( ! isset( $this->$name ) )
+		if ( property_exists( $this, $name ) )
 			$this->$name = $value;
 	}
 
@@ -96,12 +103,20 @@ class Core {
 	 */
 	final public function __get( $name ) {
 
-		if ( 'load_options' === $name ) {
-			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
-			return ! $this->is_headless['settings'];
-		} elseif ( 'the_seo_framework_use_transients' === $name ) {
-			// $this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_use_transients', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS' ); // TODO 4.3.0
-			return \The_SEO_Framework\Bridges\Cache::$use_transients;
+		switch ( $name ) {
+			case 'load_option':
+				$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+				return ! $this->is_headless['settings'];
+
+			case 'the_seo_framework_use_transients':
+				// TODO 4.3.0 emit notice.
+				return true;
+			case 'the_seo_framework_debug':
+				// TODO 4.3.0 emit notice.
+				return \THE_SEO_FRAMEWORK_DEBUG;
+			case 'script_debug':
+				// TODO 4.3.0 emit notice.
+				return \SCRIPT_DEBUG;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );

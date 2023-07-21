@@ -289,10 +289,6 @@ TODO implement "@hook wp_action" in every function with a callback.
 		E.g.: @hook ~ wp_action
 	-> Then, we can remove unused variables (often tagged with "Unused.").
 
-TODO move THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS and THE_SEO_FRAMEWORK_DEBUG to define.php
-	-> Deprecate 4.3.0 tsf()->the_seo_framework_debug
-TODO Deprecate tsf()->script_debug, use NEW constant instead (Defaults to \defined( 'SCRIPT_DEBUG' ) && \SCRIPT_DEBUG )
-
 TODO "2.6.2" article for Extension Manager doesn't follow our description generation cutoff rules: "FULL STOP. Also..."
 
 TODO all "s_" methods are a mixed bag of:
@@ -337,6 +333,8 @@ TODO highlight in large changes:
 		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
 		* Also notify Nik via email?
 	* Multisite support for author SEO fields.
+
+If we go through with 4.3.0, consider removing deprecated filters (filters_deprecated)
 
 **Detailed log**
 
@@ -403,6 +401,8 @@ TODO highlight in large changes:
 	* Setting `auto_description_html_method` for `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
 		* This used to be `auto_descripton_html_method` (typo).
 	* New action, `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
+* **Improved:**
+	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 * **Changed:**
 	* Method `tsf()->query_supports_seo()` removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
@@ -420,12 +420,20 @@ TODO highlight in large changes:
 	* Method `tsf()->s_left_right()` no longer falls back to option or default option, but a language-based default instead.
 	* Method `tsf()->s_left_right_home()` no longer falls back to option or default option, but a language-based default instead.
 	* Method `tsf()->s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
+	* Constant `THE_SEO_FRAMEWORK_DEBUG` is now always available at `plugins_loaded`.
+	* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
 	* The `<font>` tag is deprecated, so we updated the tag to `<span>` in the debug panels.
 * **Deprecated:**
 	* Action `the_seo_framework_delete_cache_sitemap` is now soft deprecated (i.e., without warning). Use `the_seo_framework_cleared_sitemap_transients` instead.
+		* Full deprecation with notice will start from TSF v4.3.0.
+	* Property `tsf()->the_seo_framework_use_transients` is now soft-deprecated (i.e., without warning). There is no alternative.
+		* Full deprecation with notice will start from TSF v4.3.0.
+	* Property `tsf()->the_seo_framework_debug` is now soft-deprecated (i.e., without warning). Read constant `THE_SEO_FRAMEWORK_DEBUG` instead.
+		* Full deprecation with notice will start from TSF v4.3.0.
+	* Property `tsf()->script_debug` is now soft-deprecated (i.e., without warning). Read constant `SCRIPT_DEBUG` instead.
 		* Full deprecation with notice will start from TSF v4.3.0.
 * **Removed:**
 	* We dropped class `\The_SEO_Framework\Cache` from the god object `tsf()`. The following methods have been removed, because they weren't useful for the public APIs:
@@ -440,10 +448,10 @@ TODO highlight in large changes:
 		* `delete_excluded_post_ids_transient`
 		* `delete_cache`
 		* `set_transient`
-			* This has been moved to `The_SEO_Framework\Bridges\Cache::set_transient()`.
+			* Use WordPress builtin instead.
 			* This method will emit a deprecation warning from TSF v4.3.0.
 		* `get_transient`
-			* This has been moved to `The_SEO_Framework\Bridges\Cache::get_transient()`.
+			* Use WordPress builtin instead.
 			* This method will emit a deprecation warning from TSF v4.3.0.
 		* `get_exclusion_transient_name`
 		* `get_sitemap_transient_name`
@@ -465,6 +473,9 @@ TODO highlight in large changes:
 	* Setting `auto_descripton_html_method` from `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
 		* It is now `auto_description_html_method`.
 	* Removed inline Right-To-Left CSS registration from `tsf-pt`, this is handled in its file now.
+	* Deprecated filter `the_seo_framework_load_options` (deprecated in v4.1.4) is now gone.
+	* Constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` is no longer used.
+	* Method `tsf()->init_debug_vars()`, this was never meant to be public.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 	* Removed capitalization in PHP methods; mainly, `_ID`. Since PHP methods are case-insensitive at runtime, this should not matter nearly any case.

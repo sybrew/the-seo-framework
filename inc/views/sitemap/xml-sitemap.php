@@ -9,13 +9,13 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$this->the_seo_framework_debug and $timer_start = microtime( true );
+THE_SEO_FRAMEWORK_DEBUG and $timer_start = microtime( true );
 
 $sitemap_bridge = The_SEO_Framework\Bridges\Sitemap::get_instance();
 
 $sitemap_bridge->output_sitemap_header();
 
-if ( $this->the_seo_framework_debug ) {
+if ( THE_SEO_FRAMEWORK_DEBUG ) {
 	echo '<!-- Site estimated peak usage prior to generation: ', number_format( memory_get_peak_usage() / MB_IN_BYTES, 3 ), ' MB -->' . "\n";
 	echo '<!-- System estimated peak usage prior to generation: ', number_format( memory_get_peak_usage( true ) / MB_IN_BYTES, 3 ), ' MB -->' . "\n";
 }
@@ -37,7 +37,7 @@ if ( $sitemap_base->base_is_regenerated ) {
 // Destruct class.
 $sitemap_base = null;
 
-if ( $this->the_seo_framework_debug ) {
+if ( THE_SEO_FRAMEWORK_DEBUG ) {
 	echo "\n<!-- Site estimated current usage: ", number_format( memory_get_usage() / MB_IN_BYTES, 3 ), ' MB -->';
 	echo "\n<!-- System estimated current usage: ", number_format( memory_get_usage( true ) / MB_IN_BYTES, 3 ), ' MB -->';
 	echo "\n<!-- Site estimated peak usage: ", number_format( memory_get_peak_usage() / MB_IN_BYTES, 3 ), ' MB -->';

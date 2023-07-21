@@ -72,8 +72,8 @@ class Query extends Core {
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $memo = true;
 
-		$this->the_seo_framework_debug
-			and $this->do_query_error_notice( $method );
+		if ( \THE_SEO_FRAMEWORK_DEBUG )
+			$this->do_query_error_notice( $method );
 
 		return false;
 	}

@@ -383,7 +383,7 @@ final class Sitemap {
 
 		if ( ! $transient_key ) return false;
 
-		return Cache::set_transient( $transient_key, $content, $expiration );
+		return \set_transient( $transient_key, $content, $expiration );
 	}
 
 	/**
@@ -401,7 +401,7 @@ final class Sitemap {
 
 		if ( ! $transient_key ) return false;
 
-		return Cache::get_transient( $transient_key );
+		return \get_transient( $transient_key );
 	}
 
 	/**
