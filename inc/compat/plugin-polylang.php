@@ -246,7 +246,7 @@ function _polylang_flush_sitemap() {
 			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
 			$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
 		)
-	); // No cache OK. DB call ok.
+	);
 
 	// We didn't use a wildcard after "_transient_" to reduce scans.
 	// A second query is faster on saturated sites.
@@ -255,7 +255,7 @@ function _polylang_flush_sitemap() {
 			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
 			$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
 		)
-	); // No cache OK. DB call ok.
+	);
 }
 
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );

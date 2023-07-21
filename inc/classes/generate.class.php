@@ -140,7 +140,7 @@ class Generate extends User_Data {
 		 *     'max_video_preview' : 'max-video-preview:<string>'|''
 		 * }
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 * @param int <bit>  $options The ignore level. {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
 		 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)

@@ -184,7 +184,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
  * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
- *                            Is null when query is autodetermined.
+ *                            Is null when the query is auto-determined.
  * @param int <bit>  $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
  *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
@@ -284,7 +284,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
  *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
  * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
- *                         Is null when query is autodetermined.
+ *                         Is null when the query is auto-determined.
  * @return array $params
  */
 function _adjust_wc_image_generation_params( $params, $args ) {

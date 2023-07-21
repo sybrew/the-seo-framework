@@ -103,7 +103,7 @@ class Generate_Image extends Generate_Url {
 		 *    string alt:    The image alt tag,
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-		 *                            Is null when query is autodetermined.
+		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
 		 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
@@ -401,7 +401,7 @@ class Generate_Image extends Generate_Url {
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
 		 * @param array|null $args    The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                            Is null when query is autodetermined.
+		 *                            Is null when the query is auto-determined.
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
 		 */

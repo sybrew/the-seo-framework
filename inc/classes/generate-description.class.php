@@ -355,7 +355,7 @@ class Generate_Description extends Generate {
 		 *              2. Now supports the `$args['pta']` index.
 		 * @param string     $desc The custom-field description.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 */
 		$desc = (string) \apply_filters_ref_array(
 			'the_seo_framework_custom_field_description',
@@ -494,7 +494,7 @@ class Generate_Description extends Generate {
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 */
 		$excerpt = (string) \apply_filters_ref_array(
 			'the_seo_framework_fetched_description_excerpt',
@@ -520,7 +520,7 @@ class Generate_Description extends Generate {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $desc The generated description.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 */
 		$desc = (string) \apply_filters_ref_array(
 			'the_seo_framework_generated_description',
@@ -1028,7 +1028,7 @@ class Generate_Description extends Generate {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param bool       $autodescription Enable or disable the automated descriptions.
 		 * @param array|null $args            The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                                    Is null when query is autodetermined.
+		 *                                    Is null when the query is auto-determined.
 		 */
 		return (bool) \apply_filters_ref_array(
 			'the_seo_framework_enable_auto_description',

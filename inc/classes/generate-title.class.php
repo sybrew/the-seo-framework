@@ -154,7 +154,7 @@ class Generate_Title extends Generate_Description {
 		 *
 		 * @param string     $title The title.
 		 * @param array|null $args  The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                          Is null when query is autodetermined.
+		 *                          Is null when the query is auto-determined.
 		 */
 		return (string) \apply_filters_ref_array(
 			'the_seo_framework_title_from_custom_field',
@@ -191,7 +191,7 @@ class Generate_Title extends Generate_Description {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $title The title.
 		 * @param array|null $args  The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                          Is null when query is autodetermined.
+		 *                          Is null when the query is auto-determined.
 		 */
 		return (string) \apply_filters_ref_array(
 			'the_seo_framework_title_from_generation',
@@ -1491,7 +1491,7 @@ class Generate_Title extends Generate_Description {
 		 * @since 4.1.0 Added the third $social parameter.
 		 * @param string     $use    Whether to use branding.
 		 * @param array|null $args   The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                           Is null when query is autodetermined.
+		 *                           Is null when the query is auto-determined.
 		 * @param bool       $social Whether the title is meant for social display.
 		 */
 		return \apply_filters_ref_array(

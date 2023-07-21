@@ -31,7 +31,7 @@ namespace The_SEO_Framework;
  *
  * @param string     $title The title.
  * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
- *                          Is null when query is autodetermined.
+ *                          Is null when the query is auto-determined.
  * @return string The corrected bbPress title on bbPress pages.
  */
 function _bbpress_filter_title( $title, $args ) {
@@ -246,7 +246,7 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  *
  * @param string     $title The filter title.
  * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
- *                          Is null when query is autodetermined.
+ *                          Is null when the query is auto-determined.
  * @return string $title The bbPress title.
  */
 function _bbpress_filter_pre_title( $title = '', $args = null ) {
@@ -279,7 +279,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  * @param string     $excerpt The excerpt to use.
  * @param int        $page_id Deprecated.
  * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
- *                         Is null when query is autodetermined.
+ *                         Is null when the query is auto-determined.
  * @return string The excerpt.
  */
 function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args = null ) {
@@ -308,7 +308,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
  *
  * @param string     $desc The custom-field description.
  * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
- *                         Is null when query is autodetermined.
+ *                         Is null when the query is auto-determined.
  * @return string The custom description.
  */
 function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
@@ -366,7 +366,7 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
  * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
- *                            Is null when query is autodetermined.
+ *                            Is null when the query is auto-determined.
  * @param int <bit>  $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
  *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)

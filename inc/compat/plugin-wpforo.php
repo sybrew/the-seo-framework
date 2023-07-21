@@ -80,7 +80,7 @@ function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore
  *
  * @param string     $title The filter title.
  * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
- *                          Is null when query is autodetermined.
+ *                          Is null when the query is auto-determined.
  * @return string $title The wpForo title.
  */
 function _wpforo_filter_pre_title( $title = '', $args = null ) {

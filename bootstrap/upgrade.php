@@ -149,6 +149,7 @@ function _do_upgrade() {
 	// Don't run the upgrade cycle if the user downgraded. Downgrade, instead.
 	if ( $previous_version > \THE_SEO_FRAMEWORK_DB_VERSION ) {
 		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
+		// If we do, add it in function _downgrade()'s loop instead.
 		// \do_action( 'the_seo_framework_do_downgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
 		$current_version = _downgrade( $previous_version );
@@ -162,6 +163,7 @@ function _do_upgrade() {
 		\do_action( 'the_seo_framework_downgraded', (string) $previous_version, (string) $current_version );
 	} else {
 		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
+		// If we do, add it in function _upgrade()'s loop instead.
 		// \do_action( 'the_seo_framework_do_upgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
 		$current_version = _upgrade( $previous_version );
@@ -916,6 +918,7 @@ function _do_upgrade_4270() {
  * TODO registers default for static placeholder editing.
  *
  * @since 4.2.9
+ * @global \wpdb $wpdb
  */
 function _do_upgrade_4290() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4290' ) {
@@ -926,8 +929,19 @@ function _do_upgrade_4290() {
 			$tsf->get_option( 'auto_descripton_html_method', false ) ?: 'fast' // Typo intended
 		);
 
-		// Don't use API to clear this transient; the API may use different entropics.
-		$locale = strtolower( \get_locale() );
-		\delete_transient( "tsf_exclude_1_{$GLOBALS['blog_id']}_{$locale}" );
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( "_transient_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%'
+			)
+		);
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( "_transient_timeout_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%'
+			)
+		);
 	}
 }

@@ -385,8 +385,8 @@ TODO highlight in large changes:
 			* Yoast SEO is still checked for.
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
 * **Note:**
-	* Transient `tsf_sitemap_5_%`, where % changes per blog, is no longer used. This transient should clear automatically.
-	* Transient `tsf_exclude_1_%`, where % changes per blog, is no longer used. This transient will be deleted on upgrade.
+	* Transient `tsf_sitemap_5_%`, where % changes per blog ID and language, is no longer used. This transient should clear automatically.
+	* Transient `tsf_exclude_1_%`, where % changes per blog ID and language, is no longer used. This transient will be deleted on upgrade.
 
 **For translators:**
 
