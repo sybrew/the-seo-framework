@@ -8,15 +8,6 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-/**
- * Warns homepage global title and description about receiving input.
- *
- * @since 2.8.0
- */
-\add_filter( 'the_seo_framework_warn_homepage_global_title', '__return_true' );
-\add_filter( 'the_seo_framework_warn_homepage_global_description', '__return_true' );
-\add_filter( 'the_seo_framework_tell_multilingual_sitemap', '__return_true' );
-
 \add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 /**
  * Adds WPML filters based on current screen.

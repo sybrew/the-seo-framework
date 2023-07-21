@@ -122,6 +122,12 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				</div>
 				<div class=tsf-post-type-archive-if-not-excluded>
 					<?php
+					if ( $this->detect_multilingual_plugins() ) {
+						HTML::attention(
+							__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' )
+						);
+					}
+
 					SeoSettings::_nav_tab_wrapper(
 						"post_type_archive_{$post_type}",
 						/**
@@ -141,6 +147,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				</div>
 			</div>
 			<?php
+			// Output only the first time.
 			$i++ or print( '<hr class=hide-if-tsf-js>' );
 		}
 		break;

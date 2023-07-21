@@ -96,10 +96,17 @@ class Detect extends Render {
 				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
 			],
 			'twitter_card' => [],
+			'multilingual' => [
+				'Polylang'       => 'polylang/polylang.php',
+				'WPML'           => 'sitepress-multilingual-cms/sitepress.php',
+				'TranslatePress' => 'translatepress-multilingual/index.php',
+				'WPGlobus'       => 'wpglobus/wpglobus.php',
+			],
 		];
 
 		/**
 		 * @since 2.6.0
+		 * @since 4.2.9 Added index 'multilingual'
 		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
 		return (array) \apply_filters_ref_array( 'the_seo_framework_conflicting_plugins', [ $conflicting_plugins ] );
@@ -277,34 +284,25 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'seo_tools' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
-
-		foreach ( $this->get_conflicting_plugins( 'seo_tools' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @since 3.1.0 Added second and third parameters.
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters_ref_array(
-					'the_seo_framework_seo_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
-
-		return memo( $detected ?? false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @since 3.1.0 Added second and third parameters.
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_seo_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -326,34 +324,25 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'open_graph' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
-
-		foreach ( $this->get_conflicting_plugins( 'open_graph' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @since 3.1.0 Added second and third parameters.
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters_ref_array(
-					'the_seo_framework_og_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
-
-		return memo( $detected ?? false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @since 3.1.0 Added second and third parameters.
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_og_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -374,33 +363,24 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'twitter_card' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
-
-		foreach ( $this->get_conflicting_plugins( 'twitter_card' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters_ref_array(
-					'the_seo_framework_twittercard_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
-
-		return memo( $detected ?? false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_twittercard_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -438,33 +418,57 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'sitemaps' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_sitemap_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
+	}
 
-		foreach ( $this->get_conflicting_plugins( 'sitemaps' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters(
-					'the_seo_framework_sitemap_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
+	/**
+	 * Determines if other Multilingual plugins are active.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.9
+	 *
+	 * @return bool SEO plugin detected.
+	 */
+	public function detect_multilingual_plugins() {
 
-		return memo( $detected ?? false );
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'multilingual' ), $this->active_plugins() );
+
+		return memo(
+			/**
+			 * @since 4.2.9
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_multilingual_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**

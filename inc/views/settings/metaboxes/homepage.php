@@ -21,6 +21,23 @@ $_generator_args = [ 'id' => $home_id ];
 switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 	case 'homepage_main':
 		HTML::description( __( 'These settings will take precedence over the settings set within the homepage edit screen, if any.', 'autodescription' ) );
+
+		if ( $this->detect_multilingual_plugins() ) {
+			$_multilingual_warning = esc_html__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' );
+			if ( $home_id ) {
+				$_multilingual_warning .= '<br>' . $this->convert_markdown(
+					sprintf(
+						/* translators: %s = Homepage URL markdown */
+						esc_html__( 'Edit the fields on the [homepage](%s).', 'autodescription' ),
+						esc_url( admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) )
+					),
+					[ 'a' ],
+					[ 'a_internal' => false ] // opens in new tab.
+				);
+			}
+
+			HTML::attention_noesc( $_multilingual_warning );
+		}
 		?>
 		<hr>
 		<?php
@@ -109,24 +126,6 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) )
 			HTML::description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 
-		/**
-		 * @since 2.8.0
-		 * @param bool $warn Whether to warn that there's a plugin active with multiple homepages.
-		 */
-		if ( $home_id && apply_filters( 'the_seo_framework_warn_homepage_global_title', false ) ) {
-			HTML::attention_noesc(
-				// Markdown escapes.
-				$this->convert_markdown(
-					sprintf(
-						/* translators: %s = Homepage URL markdown */
-						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [homepage](%s).', 'autodescription' ),
-						esc_url( admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) )
-					),
-					[ 'a' ],
-					[ 'a_internal' => false ] // opens in new tab.
-				)
-			);
-		}
 		?>
 		<hr>
 
@@ -169,25 +168,6 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		if ( $home_id && $this->get_post_meta_item( '_genesis_description', $home_id ) ) {
 			HTML::description(
 				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
-			);
-		}
-
-		/**
-		 * @since 2.8.0
-		 * @param bool $warn Whether to warn that there's a plugin active with multiple homepages.
-		 */
-		if ( $home_id && apply_filters( 'the_seo_framework_warn_homepage_global_description', false ) ) {
-			HTML::attention_noesc(
-				// Markdown escapes.
-				$this->convert_markdown(
-					sprintf(
-						/* translators: %s = Homepage URL markdown */
-						esc_html__( 'A plugin has been detected that suggests to maintain this option on the [homepage](%s).', 'autodescription' ),
-						esc_url( admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) )
-					),
-					[ 'a' ],
-					[ 'a_internal' => false ] // opens in new tab.
-				)
 			);
 		}
 		break;

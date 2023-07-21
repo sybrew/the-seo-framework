@@ -145,15 +145,6 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 	return $args;
 }
 
-/**
- * Warns homepage global title and description about receiving input.
- *
- * @since 3.1.0
- */
-\add_filter( 'the_seo_framework_warn_homepage_global_title', '__return_true' );
-\add_filter( 'the_seo_framework_warn_homepage_global_description', '__return_true' );
-\add_filter( 'the_seo_framework_tell_multilingual_sitemap', '__return_true' );
-
 \add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' );

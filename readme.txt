@@ -254,8 +254,6 @@ TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
-TODO add user meta fields in multisite network (when user is author or higher on any site? We can test caps via user_meta globally)
-TODO add warning to PTA settings when translation plugin is detected.
 
 TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
 	-> This requires probably a whole lot more work than I'd have hoped.
@@ -264,19 +262,11 @@ TODO add toggle for homepage settings where each "language" installed can be alt
 			-> Speaking of which, we should also have such a switcher for those... ugh.
 TODO check mail Dean about WPML config
 
-TODO why is base_get_sitemap_store_key() used instead of one inferred from the $sitemap_id?
-	-> Move that to the sitemap bridge; so we could also a transient for Google News?
-		-> This may speed up rendering the news sitemap and reduce overhead when plugins are activate that manipulate the query.
-
 TODO change autodescription-updates-cache to autodescription-persistent-cache?
 	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
 		-> However, this may cause a notification pop up for those who use two or more SEO plugins simultaneously. Though this may be helpful.
 
 TODO db version 4270 -> 4290+
-
-TODO A tagline with a ' will be trimmed if the final two words don't end with a dot.
-	-> Consider only trimming the words if limit isn't met with ENTIRE content set.
-		-> e.g. "The story you aren't told" -- the ' will split the sentence (but why?)
 
 TODO add bespoke support for Events Calendar?
 	-> Basically, we need to overwrite the separator
@@ -289,8 +279,6 @@ TODO implement "@hook wp_action" in every function with a callback.
 		E.g.: @hook ~ wp_action
 	-> Then, we can remove unused variables (often tagged with "Unused.").
 
-TODO "2.6.2" article for Extension Manager doesn't follow our description generation cutoff rules: "FULL STOP. Also..."
-
 TODO all "s_" methods are a mixed bag of:
 	1. Option filters without default fallback.
 	2. Option filters with default fallback. (get_default_option)
@@ -299,6 +287,9 @@ TODO all "s_" methods are a mixed bag of:
 -> We should overhaul this in a major update?
 	-> Or, do it now? We're the only ones making thorough use of this, and assume a default only for selectable options.
 		-> Therefore, we can safely assume no one falls back to the default for "text"-based options, which is often what users filter.
+
+TODO the detect.*?plugins() functions use a foreach loop and then in_array() -- this can be slow, consider array_intersect instead?
+	-> Test performance.
 
 TODO make 4.3.0 instead of 4.2.9?
 	-> This way we can push through large API changes, clean up soon-to-be-deprecations, sanitizations, etc.
@@ -358,6 +349,10 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 		* Related Core ticket is [#51117](https://core.trac.wordpress.org/ticket/51117).
 	* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
 		* Related Core ticket is [#51542](https://core.trac.wordpress.org/ticket/51542).
+	* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
+		* A warning is displayed above the homepage settings.
+		* A warning is displayed above the Post Type Archive settings.
+		* A warning is displayed at the Sitemap Output settings.
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
@@ -371,7 +366,7 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 		* Post/Page SEO Settings active-tab border color.
 	* Title and description lengths are now calculated more quickly and more accurately for the SEO Bar.
 	* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
-	* Words with attached plain connector punctuation (`l'apostrophe`) are now considered a starting word, so the `l'`-part of `l'apostrophe` will also be included in the description.
+	* Words with attached plain connector punctuation (`l'apostrophe`) are now considered starting or mid-sentence words, so the `l'`-part of `l'apostrophe` will also be included in the description when it's at the start, and the `apostrophe` part won't be trimmed anymore if not followed by at least 2 more words or final punctuation (dot).
 	* Dashlane is being decadent by first removing a perfectly good desktop app, and then they quickly stopped adhering to agreed upon web accessibility standards. Since, it is trying to shove their own "standard" down our throats. We won't mention that "standard," for no one should use it.
 		* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
 	* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
@@ -396,11 +391,13 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 * **Added:**
 	* `The_SEO_Framework\Bridges\Cache`, provides a collection of static caching interface methods.
 	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
-	* Filter `the_seo_framework_auto_description_html_method_methods`.
+	* Filter `the_seo_framework_auto_description_html_method_methods` is new.
 		* This used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
 	* Setting `auto_description_html_method` for `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
 		* This used to be `auto_descripton_html_method` (typo).
 	* New action, `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
+	* Method `tsf()->detect_multilingual_plugins()` is now available.
+	* Filter `the_seo_framework_multilingual_plugin_detected` is also new.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 * **Changed:**
@@ -422,6 +419,7 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 	* Method `tsf()->s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
 	* Constant `THE_SEO_FRAMEWORK_DEBUG` is now always available at `plugins_loaded`.
 	* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
+	* Filter `the_seo_framework_conflicting_plugins` now supports index `'multilingual'`.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
@@ -476,6 +474,9 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 	* Deprecated filter `the_seo_framework_load_options` (deprecated in v4.1.4) is now gone.
 	* Constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` is no longer used.
 	* Method `tsf()->init_debug_vars()`, this was never meant to be public.
+	* Filter `the_seo_framework_warn_homepage_global_title` is now gone.
+	* Filter `the_seo_framework_warn_homepage_global_description` is now gone.
+	* Filter `the_seo_framework_tell_multilingual_sitemap` is now gone.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 	* Removed capitalization in PHP methods; mainly, `_ID`. Since PHP methods are case-insensitive at runtime, this should not matter nearly any case.

@@ -22,6 +22,7 @@ function _um_reinstate_title_support() {
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',
+			'um_dynamic_user_profile_pagetitle',
 		],
 	] ) ) return;
 

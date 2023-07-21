@@ -124,12 +124,8 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 					);
 			}
 
-			/**
-			 * @since 4.2.0
-			 * @param bool $tell Whether to tell that there's a plugin active that can use multiple sitemaps.
-			 */
-			if ( apply_filters( 'the_seo_framework_tell_multilingual_sitemap', false ) ) {
-				HTML::description_noesc(
+			if ( $this->detect_multilingual_plugins() ) {
+				HTML::attention_noesc(
 					// Markdown escapes.
 					$this->convert_markdown(
 						sprintf(

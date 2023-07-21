@@ -936,11 +936,7 @@ class Generate_Description extends Generate {
 		 *
 		 * TODO Group 4's match is repeated. However, referring to it as (4) will cause it to congeal into 3.
 		 *
-		 * TODO we can further optimize this by capturing the last 4 words and refer to that. Of thence more than 3 words
-		 * found, we could simply end the query, mitigating all forms of backtracking. For now, backtracking cannot
-		 * exceed step-count=($max_char_length*2+56) = 160*2+56 = 376, which is perfectly acceptable as a 'worst case'.
-		 *
-		 * Critically optimized, so the $matches don't make much sense. Bear with me:
+		 * Critically optimized (worst case: 217 logic steps), so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {
 		 *    0 : Full excerpt.
