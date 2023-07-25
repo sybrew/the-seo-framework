@@ -325,6 +325,10 @@ TODO highlight in large changes:
 		* Also notify Nik via email?
 	* Multisite support for author SEO fields.
 
+TODO add "disable JIT compiler" option to Description generator?
+	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
+		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
+
 If we go through with 4.3.0, consider removing deprecated filters (filters_deprecated)
 
 **Detailed log**
@@ -372,6 +376,14 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 	* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
 		* Most notably, the padding and border around the settings make it much easier on your eyes.
 	* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
+	* Resolved an issue where the description generator didn't recognize non-closing element tags in unescaped attributes.
+		* `<el attr="test>">content<el>` must match `content`, not `">content`.
+	* Resolved an issue where the description generator didn't recognize second or later unclosed attributes in an element.
+		* `<el attr attr="test> test=">content<el>` must match `content`, not ` test=">content`.
+	* Resolved an issue where the description would face catastrophic backtracking when stacking elements never closed all.
+		* `<el 1><el 2></el> ... never close el 1` should match the entire document, instead of halting the process.
+	* Resolved an issue that when the description generator found a similar unclosed element in a stack, it'd consider it as the beginning of the stack.
+		* `<element><element></element></never-closing-element>etc...` matched `<element></element></never-closing-element>etc...` but now matches the second `<element>` as content (which will then be obliterated in the second pass).
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).

@@ -1099,7 +1099,7 @@ class Sanitize extends Admin_Pages {
 				$passes = 2;
 		}
 
-		// Missing 'dd', 'dt', and 'li' -- these are obligatory subelements of what's already cleared.
+		// Missing 'th', 'tr', 'tbody', 'thead', 'dd', 'dt', and 'li' -- these are obligatory subelements of what's already cleared.
 		$strip_args = [
 			'space'  =>
 				[ 'article', 'br', 'blockquote', 'details', 'div', 'hr', 'p', 'section' ],
@@ -2000,7 +2000,7 @@ class Sanitize extends Admin_Pages {
 	 *                            Also note that their contents are maintained as-is, without added spaces.
 	 *                            It is why you should always list `style` and `script` in the `clear` array, never in 'space'.
 	 * @return string The output string without tags. May have many stray and repeated spaces.
-	 *                Not secure for display! Don't trust this method. Always use esc_* functionality.
+	 *                NOT SECURE for display! Don't trust this method. Always use esc_* functionality.
 	 */
 	public function strip_tags_cs( $input, $args = [] ) {
 
@@ -2092,9 +2092,10 @@ class Sanitize extends Admin_Pages {
 							/**
 							 * This one grabs opening tags only, and no content.
 							 * Basically, the content and closing tag reader is split from clear_query/flow_query's regex.
+							 * Akin to https://regex101.com/r/BqUCCG/1.
 							 */
 							sprintf(
-								'/<(?:%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+?)+)*?\/?>/i',
+								'/<(?!\/)(?:%s)\b(?:[^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+[^>]*>/i',
 								implode( '|', $elements )
 							),
 							'phrase' === $flow_type ? '' : ' ', // Add space if block, otherwise clear.
@@ -2104,26 +2105,27 @@ class Sanitize extends Admin_Pages {
 
 					case 'space_query':
 						$passes      = $args['passes'];
-						$replacement = ' $3 ';
+						$replacement = ' $4 ';
 						// Fall through;
 					case 'clear_query':
 						$passes      = $passes ?? 1;
 						$replacement = $replacement ?? ( 'phrase' === $flow_type ? '' : ' ' );
+
+						// Akin to https://regex101.com/r/LR8iem/6. (This might be outdated, copy work!)
+						// Ref https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html (specifically end-tags)
+						$regex = sprintf(
+							'/<(?!\/)(%s)\b([^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?2)++|[^>]*>)((?:[^<]*+(?:<(?!\/?\1\b.*?>)[^<]+)*|(?R))*?)<\/\1\s*>/i', // good enough
+							implode( '|', $elements )
+						);
+						// Work in progress: /(<(?(R)\/?|(?!\/))(%s)\b)([^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?-2)*+|(?:.*?))>([^<]*+|(?R)|<\/\2\b\s*>)/i
 
 						$i = 0;
 						// To be most accurate, we should parse 'space' $type at least twice, up to 6 times. This is a performance hog.
 						// This is because we process the tags from the outer layer to the most inner. Each pass goes deeper.
 						while ( $i++ < $passes ) {
 							$pre_pass_input = $input;
-							// Akin to https://regex101.com/r/mOWqoL/1. (This might be outdated, copy work!)
-							$input = preg_replace(
-								sprintf(
-									'/<(%s)\b(?:[^=>\/]+|(?>[^=>\/]*(?:=([\'"])[^\'"]+\g{-1})|[^>]+?)+)*?(?:\/>(*ACCEPT))?>((?:[^<]*+(?:<(?!\/?\1\b)[^<]+)*|(?R)|$(*ACCEPT))+?)<\/\1\b[^>]*>/i',
-									implode( '|', $elements )
-								),
-								$replacement,
-								$input
-							) ?? '';
+							$input          = preg_replace( $regex, $replacement, $input ) ?? '';
+
 							// If nothing changed, or no more HTML is present, we're done.
 							if ( $pre_pass_input === $input || ! str_contains( $input, '<' ) ) break;
 						}
