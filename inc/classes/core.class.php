@@ -594,7 +594,7 @@ class Core {
 		// Why not blog_charset? Because blog_charset is there only to onboard non-UTF-8 to UTF-8.
 		$string = \wp_check_invalid_utf8( html_entity_decode( $string, \ENT_QUOTES, 'UTF-8' ) );
 
-		if ( ! $string )
+		if ( empty( $string ) )
 			return [];
 
 		// Not if-function-exists; we're going for speed over accuracy. Hosts must do their job correctly.

@@ -23,7 +23,7 @@ It's easy to get started. Activate this plugin, and your site's instantly protec
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 18&#160;000 hours into this plugin. Here are the results: =
+= We poured over 25&#160;000 hours into this plugin. Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -35,7 +35,7 @@ With The SEO Framework, we provide an excellent starting point for your website 
 We made the only SEO plugin that follows Google's webmaster guidelines to the letter. It took years of research and tweaking to translate this well inside your WordPress interface. Finally, you can freely optimize your pages without having to worry about making critical mistakes.
 
 * **It creates a beautiful overview.**
-On your post overview pages, you'll find color-coded guidelines. They suggest you how to improve your pages as you hover over them with your mouse. For example, when your titles are unbranded or when WordPress blocks indexing. Instinctively, touch-and keyboard navigation is also supported.
+On your post overview pages, you'll find color-coded guidelines. They suggest how to improve your pages as you hover over them with your mouse cursor. For example, when your titles are unbranded or when WordPress blocks indexing. Instinctively, touch-and keyboard navigation is also supported.
 
 * **It includes exceptional support.**
 We don't outsource our support. We're here for you. Feel free to drop by [our support forums](https://wordpress.org/support/plugin/autodescription/) at any time to ask a question. More than 1400 inquiries have been answered personally, typically within 48 hours in the past five years.
@@ -306,13 +306,29 @@ TODO two new classes:
 				-> How do we determine failure? Out of range?
 		-> Relays to Sanitize
 	2. Sanitize
+	TODO Or The_SEO_Framework\Security?
+		1. The_SEO_Framework\Security\Input
+			Or \Sanitize
+		2. The_SEO_Framework\Security\Output
+			Or \Escape
 TODO Four new classes:
 	0. The_SEO_Framework\Data\
 		1. Options
 			x. \Filter
+				Or \Validate
+			-> See Sanitize above?
 		2. User_Options
 		3. Post_Data
 		4. Term_Data
+TODO New class:
+	1. The_SEO_Framework\Utils
+		-> Move array_merge_recursive_distinct() and friends to this.
+	1. Or, make them functions, and make Utils a namespace:
+		-> The_SEO_Framework\Utils\array_merge_recursive_distinct()
+
+TODO Move views\edit to something less ambiguous and confusing:
+	-> Views\Terms
+	-> Views\Posts
 
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
@@ -329,7 +345,70 @@ TODO add "disable JIT compiler" option to Description generator?
 	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
 		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
 
+TODO around the SEO Bar, make it a grid (expensive?) or add a container that eagerly collapses every 2 or 3 items, instead of one-by-one.
+	* Make the subitems collapsible, too -- but less eager.
+
+TODO distraction-free SEO Bar pallet (CSS media prefers-contrast:less?):
+	.tsf-seo-bar-bad {
+		background-color: #d14343;
+	}
+	.tsf-seo-bar-okay {
+		background-color: #e2c08d;
+	}
+	.tsf-seo-bar-good {
+		background-color: #36b37e;
+	}
+	.tsf-seo-bar-unknown {
+		background-color: #6886c5;
+	}
+	.tsf-seo-bar-undefined {
+		background-color: #9e9e9e;
+	}
+TODO ALT:
+	.tsf-seo-bar-bad {
+		background-color: #d15943;
+	}
+	.tsf-seo-bar-okay {
+		background-color: #e2c162;
+	}
+
+TODO deprecate and rename get_excerpt_by_id / fetch_excerpt
+
+TODO clear old deprecations?
+
+TODO 'show-if-tsf-js'
+	-> Use this to show a "Something went wrong, counters won't load" banner.
+		-> "Your site experienced a fatal error."
+			-> If current_user_can install plugins, add "You may have received an automated notification email about this. Otherwise, check the PHP error logs for details."
+
+TODO update doc "actions" (also update doc "constants" for TSFEM)
+
+TODO get_generated_title() uses s_title_raw while get_custom_field_title() doesn't. Why?
+		-> Probably because we apply s_title_raw before we store the data.
+	TODO Particularily of concern is that this happens AFTER the branding etc.
+
 If we go through with 4.3.0, consider removing deprecated filters (filters_deprecated)
+
+TODO add vertical expand title input?
+	-> This helps with Gutenberg's atrocious sidebar.
+
+TODO remove every case of wp_parse_args()?
+	-> It's bad practise over array_merge(), since it juggles types.
+
+TODO add performance timer next to every Performance setting?
+	-> Perform a simple site query and see what the impact is?
+		-> Do not do this automatically! This may hamper someone's ability to even change this setting.
+		-> Add a fancy button instead, which tests both settings at once?
+
+TODO at "Schema.org Settings", we say "Enable...", "Enable..." and then "Output...".
+	-> Use "Output" for anythign that outputs code, and "Enable" for a feature that adjusts already outputted code?
+TODO Searchbox -> Search box
+
+TODO test if TSF breadcrumbs are still gone from WC products
+
+TODO when setting primary term in bulk edit, make sure that the post has at least 2 terms attached.
+	(why isn't this listed as a feature neither on our pricing page nor this page at all??)
+		-> Now I understand why people think the plugin doesn't support it :/
 
 **Detailed log**
 

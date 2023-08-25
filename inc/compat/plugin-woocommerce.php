@@ -8,7 +8,18 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
+\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
+\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
+\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
+\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
+\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar' );
+\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
+\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
+
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
+
 /**
  * Initializes WooCommerce compatibility.
  *
@@ -22,18 +33,6 @@ namespace The_SEO_Framework;
  * @uses \is_product()
  */
 function _init_wc_compat() {
-	\add_action(
-		'the_seo_framework_do_before_output',
-		static function() {
-			/**
-			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
-			 */
-			if ( \function_exists( '\\is_product' ) && \is_product() ) {
-				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
-			}
-		}
-	);
-
 	$tsf = \tsf();
 
 	// Adjust the product link acknowledging the primary category.
@@ -46,6 +45,19 @@ function _init_wc_compat() {
 	\add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 
 	\remove_filter( 'wp_robots', 'wc_page_no_robots' );
+
+	// Anonymous function. Filter 'the_seo_framework_json_breadcrumb_output' instead.
+	\add_action(
+		'the_seo_framework_do_before_output',
+		static function () {
+			/**
+			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
+			 */
+			if ( \tsf()->is_product() ) {
+				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
+			}
+		}
+	);
 }
 
 /**
@@ -72,7 +84,6 @@ function _is_shop( $post = null ) {
 	return $is_shop;
 }
 
-\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
 /**
  * Sets the correct shop ID on the shop page.
  *
@@ -91,7 +102,6 @@ function _set_real_id_wc_shop( $id ) {
 	return $id;
 }
 
-\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
 /**
  * Sets singular archives for the WC shop page.
  *
@@ -107,7 +117,6 @@ function _set_shop_singular_archive( $is_singular_archive, $id ) {
 	return $is_singular_archive || _is_shop( $id );
 }
 
-\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
 /**
  * Sets the is_shop query.
  *
@@ -125,7 +134,6 @@ function _set_wc_is_shop( $is_shop, $post ) {
 	return $is_shop || _is_shop( $post );
 }
 
-\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
 /**
  * Sets the is_product query.
  *
@@ -146,7 +154,6 @@ function _set_wc_is_product( $is_product, $post ) {
 	return \function_exists( '\\is_product' ) && \is_product();
 }
 
-\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
 /**
  * Sets the is_product_admin query.
  *
@@ -167,7 +174,6 @@ function _set_wc_is_product_admin( $is_product_admin ) {
 	return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 }
 
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );
 /**
  * Sets 'noindex' default values for WooCommerce's restrictive pages.
  *
@@ -233,7 +239,6 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	return $meta;
 }
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar' );
 /**
  * Appends noindex default checks to the noindex item of the SEO Bar for pages.
  *
@@ -268,7 +273,6 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 	$index_item['assess']['recommends'] = \__( 'WooCommerce recommends not indexing this dynamic page.', 'autodescription' );
 }
 
-\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
 /**
  * Adjusts image generation parameters.
  *
@@ -395,7 +399,6 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
 	}
 }
 
-\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
 /**
  * Filters WC product PTA from TSF's recognized public post type archives.
  *

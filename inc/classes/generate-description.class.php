@@ -785,6 +785,7 @@ class Generate_Description extends Generate {
 	 *              2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
 	 * TODO deprecate and simplify (remove $excerpt and $deprecated).
+	 * TODO rename to get_sanitized_post_excerpt()?
 	 *
 	 * @param string $excerpt    The Excerpt.
 	 * @param int    $id         The Post ID.
@@ -816,6 +817,7 @@ class Generate_Description extends Generate {
 	 *              Internally, this was never an issue. @see `$this->get_singular_description_excerpt()`
 	 * @since 4.2.8 1. Now tests for post type support of 'excerpt' before parsing the excerpt.
 	 *              2. Now tests for post type support of 'editor' before parsing the content.
+	 * @todo rename to get_post_excerpt()?
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
 	 * @return string The excerpt.

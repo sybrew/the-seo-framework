@@ -996,7 +996,7 @@ class Sanitize extends Admin_Pages {
 					$this->s_tabs(
 						$this->s_singleline(
 							$this->s_nbsp(
-								$description
+								(string) $description
 							)
 						)
 					)
@@ -1194,13 +1194,13 @@ class Sanitize extends Admin_Pages {
 	 * @return string Sanitized, beautified and trimmed title.
 	 */
 	public function s_title_raw( $title ) {
-		return (string) $this->s_dupe_space(
+		return $this->s_dupe_space(
 			$this->s_bsol(
 				$this->s_hyphen(
 					$this->s_tabs(
 						$this->s_singleline(
 							$this->s_nbsp(
-								$title
+								(string) $title
 							)
 						)
 					)

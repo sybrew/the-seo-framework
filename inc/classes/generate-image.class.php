@@ -354,8 +354,6 @@ class Generate_Image extends Generate_Url {
 						$cbs['content'] = [ $builder, 'get_content_image_details' ];
 					}
 				}
-			} elseif ( $this->is_term_meta_capable() ) {
-				$cbs = [];
 			} else {
 				$cbs = [];
 			}
