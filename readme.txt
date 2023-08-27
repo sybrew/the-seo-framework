@@ -420,6 +420,7 @@ TODO filters *_plugin_detected only turn ONE conflicting plugin, instead of the 
 	-> Deprecate and rewrite?
 
 TODO deprecate the_seo_framework_conflicting_plugins_type, it adds complexity and negates filter the_seo_framework_conflicting_plugins.
+TODO test all compat files.
 
 **Detailed log**
 

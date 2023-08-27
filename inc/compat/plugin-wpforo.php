@@ -8,10 +8,13 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
+
 \add_action( 'wpforo_before_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
 /**
  * Initializes wpForo page fixes.
  *
+ * @hook wpforo_before_init 10
  * @since 2.9.2
  * @since 3.1.2 1. Now disables HTML output when wpForo SEO is enabled.
  *              2. Now disables title override when wpForo Title SEO is enabled.
@@ -45,6 +48,7 @@ function _wpforo_fix_page() {
 /**
  * Disables The SEO Framework's meta tag output on wpForo pages.
  *
+ * @hook the_seo_framework_after_init 1
  * @since 3.1.2 Introduced as Lambda.
  * @since 4.0.5 Introduced as function.
  * @access private
@@ -56,6 +60,7 @@ function _wpforo_disable_tsf_html_output() {
 /**
  * Filters the canonical/request URL for wpForo.
  *
+ * @hook get_canonical_url 10
  * @since 2.9.2 Introduced as Lambda.
  * @since 4.0.5 Introduced as function.
  * @access private
@@ -71,6 +76,7 @@ function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore
 /**
  * Fixes wpForo page Titles.
  *
+ * @hook the_seo_framework_title_from_generation 10
  * @since 2.9.2
  * @since 3.1.0 1. No longer emits an error when no wpForo title is presented.
  *              2. Updated to support new title generation.
@@ -96,10 +102,10 @@ function _wpforo_filter_pre_title( $title = '', $args = null ) {
 	return ( $wpforo_title ?? '' ) ?: $title;
 }
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
 /**
  * Appends noindex default checks to the noindex item of the SEO Bar for pages.
  *
+ * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
  * @access private
  *

@@ -8,11 +8,13 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-// Disable Genesis SEO.
 \add_filter( 'genesis_detect_seo_plugins', __NAMESPACE__ . '\\_disable_genesis_seo', 10, 1 );
+\add_filter( 'the_seo_framework_term_meta_defaults', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
+
 /**
  * Removes the Genesis SEO meta boxes on the SEO Settings page
  *
+ * @hook genesis_detect_seo_plugins 10
  * @since 2.8.0
  * @access private
  *
@@ -37,10 +39,10 @@ function _disable_genesis_seo( $plugins ) {
 	return $plugins;
 }
 
-\add_filter( 'the_seo_framework_term_meta_defaults', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
 /**
  * Returns Genesis term meta.
  *
+ * @hook the_seo_framework_term_meta_defaults 10
  * @since 2.8.0
  * @since 3.1.0 Now filters empty fields.
  * @TODO remove or shift this, so that we can reduce what's stored in the database via s_term_meta?
