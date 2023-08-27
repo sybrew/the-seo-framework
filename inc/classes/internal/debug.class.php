@@ -394,14 +394,14 @@ final class Debug {
 			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_id' ] );
 
 		// Start timer.
-		$t = microtime( true );
+		$t = hrtime( true );
 
 		// I hate ob_*.
 		ob_start();
 		$tsf->html_output();
 		$output = ob_get_clean();
 
-		$timer = '<div style="font-family:unset;display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $t, 5 ) . ' seconds</div>';
+		$timer = '<div style="font-family:unset;display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( ( hrtime( true ) - $t ) / 1e9, 5 ) . ' seconds</div>';
 
 		$title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="font-family:unset;color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
@@ -474,7 +474,7 @@ final class Debug {
 	protected function get_debug_query_output( $cache_version = 'nope' ) {
 
 		// Start timer.
-		$_t = microtime( true );
+		$_t = hrtime( true );
 
 		$tsf = \tsf();
 
@@ -536,7 +536,7 @@ final class Debug {
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
-		$timer = microtime( true ) - $_t;
+		$timer = ( hrtime( true ) - $_t ) / 1e9;
 
 		// Get all above vars, split them in two (true and false) and sort them by key names.
 		$vars = get_defined_vars();

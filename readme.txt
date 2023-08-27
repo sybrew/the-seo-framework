@@ -500,6 +500,7 @@ TODO test all compat files.
 * TODO: **Plugin database version is now at `4300`**
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
+	* Usage of `microtime()` for comparison has been exchanged for `hrtime()`, improving both performance and accuracy.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.

@@ -517,7 +517,7 @@ class Init extends Query {
 		 * Start the meta timer here. This also catches file inclusions,
 		 * which is also caught by the _bootstrap_timer().
 		 */
-		$init_start = microtime( true );
+		$init_start = hrtime( true );
 
 		// phpcs:disable, WordPress.Security.EscapeOutput -- Output is escaped.
 		echo "\n", $this->get_plugin_indicator( 'before' );
@@ -526,7 +526,7 @@ class Init extends Query {
 
 		echo $this->get_plugin_indicator(
 			'after',
-			microtime( true ) - $init_start,
+			( hrtime( true ) - $init_start ) / 1e9,
 			$bootstrap_timer
 		), "\n";
 		// phpcs:enable, WordPress.Security.EscapeOutput

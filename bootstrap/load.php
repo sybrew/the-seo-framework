@@ -133,7 +133,7 @@ function _autoload_classes( $class ) {
 	static $_timenow = true;
 	// Lock $_timenow to prevent stacking timers during class extending. This is released when the class stack loaded.
 	if ( $_timenow ) {
-		$_bootstrap_timer = microtime( true );
+		$_bootstrap_timer = hrtime( true );
 		$_timenow         = false;
 	} else {
 		$_bootstrap_timer = 0;
@@ -156,7 +156,7 @@ function _autoload_classes( $class ) {
 	require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
-		_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+		_bootstrap_timer( ( hrtime( true ) - $_bootstrap_timer ) / 1e9 );
 		$_timenow = true;
 	}
 }
