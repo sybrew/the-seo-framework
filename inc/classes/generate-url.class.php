@@ -176,7 +176,7 @@ class Generate_Url extends Generate_Title {
 
 			static $real_id;
 			// In the sitemap, do not use queries; plus pagination shouldn't be inserted here.
-			$real_id = $real_id ?? ( $this->is_sitemap() ? -1 : $this->get_the_real_id() );
+			$real_id ??= $this->is_sitemap() ? -1 : $this->get_the_real_id();
 
 			if ( $args['id'] === $real_id )
 				$url = $this->remove_pagination_from_url( $url );
@@ -703,14 +703,12 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function add_pagination_to_url( $url, $page = null, $use_base = null ) {
 
-		$page = $page ?? max( $this->paged(), $this->page() );
+		$page ??= max( $this->paged(), $this->page() );
 
 		if ( $page < 2 )
 			return $url;
 
-		$use_base = $use_base ?? (
-			$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
-		);
+		$use_base ??= $this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search();
 
 		if ( $this->pretty_permalinks ) {
 			$_query = parse_url( $url, \PHP_URL_QUERY );
@@ -718,11 +716,11 @@ class Generate_Url extends Generate_Title {
 			if ( $_query )
 				$url = $this->s_url( $url );
 
-			static $base;
-			$base = $base ?: $GLOBALS['wp_rewrite']->pagination_base;
-
 			if ( $use_base ) {
-				$url = \user_trailingslashit( \trailingslashit( $url ) . "$base/$page", 'paged' );
+				$url = \user_trailingslashit(
+					\trailingslashit( $url ) . "{$GLOBALS['wp_rewrite']->pagination_base}/$page",
+					'paged'
+				);
 			} else {
 				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );
 			}
@@ -786,16 +784,13 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->pretty_permalinks ) {
 
-			$page = $page ?? max( $this->paged(), $this->page() );
+			$page ??= max( $this->paged(), $this->page() );
 
 			if ( $page > 1 ) {
-				$_use_base = $use_base ?? (
-					$this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search()
-				);
-
 				$user_slash = ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
+				$use_base ??= $this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search();
 
-				if ( $_use_base ) {
+				if ( $use_base ) {
 					$find = "/{$GLOBALS['wp_rewrite']->pagination_base}/{$page}{$user_slash}";
 				} else {
 					$find = "/{$page}{$user_slash}";
@@ -992,7 +987,7 @@ class Generate_Url extends Generate_Title {
 		}
 
 		// See if-statements below.
-		if ( ! ( $page + 1 <= $_numpages || $page > 1 ) ) goto end;
+		if ( ! ( ( $page + 1 ) <= $_numpages || $page > 1 ) ) goto end;
 
 		$canonical_url = memo( null, 'canonical' )
 			?? memo(
@@ -1001,7 +996,7 @@ class Generate_Url extends Generate_Title {
 			);
 
 		// If this page is not the last, create a next-URL.
-		if ( $page + 1 <= $_numpages )
+		if ( ( $page + 1 ) <= $_numpages )
 			$next = $this->add_pagination_to_url( $canonical_url, $page + 1 );
 
 		// If this page is not the first, create a prev-URL.

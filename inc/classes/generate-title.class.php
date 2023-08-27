@@ -1003,7 +1003,7 @@ class Generate_Title extends Generate_Description {
 	/**
 	 * Returns Post Title from ID.
 	 *
-	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
+	 * @NOTE Taken from WordPress core. Altered to work in the Admin area and when post_title is actually supported.
 	 * @see WP Core single_post_title()
 	 *
 	 * @since 3.1.0
@@ -1051,9 +1051,9 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_single_term_title( $term = null ) {
 
-		if ( \is_null( $term ) )
-			$term = \get_queried_object();
+		$term ??= \get_queried_object();
 
+		// We're allowing `0` as a term name here. https://core.trac.wordpress.org/ticket/56518
 		if ( ! isset( $term->name ) ) return '';
 
 		switch ( $term->taxonomy ) {
@@ -1366,9 +1366,7 @@ class Generate_Title extends Generate_Description {
 		 * @since 2.3.9
 		 * @param string $eparator The title separator
 		 */
-		return isset( $sep )
-			? $sep
-			: $sep = (string) \apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
+		return $sep ??= (string) \apply_filters( 'the_seo_framework_title_separator', $this->get_separator( 'title' ) );
 	}
 
 	/**
@@ -1572,16 +1570,18 @@ class Generate_Title extends Generate_Description {
 	 * @return bool
 	 */
 	public function use_generated_archive_prefix( $term = null ) {
-
-		$term = $term ?? \get_queried_object();
-		$use  = ! $this->get_option( 'title_rem_prefixes' );
-
 		/**
 		 * @since 4.0.5
 		 * @param string                          $use  Whether to use branding.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type $term The current term.
 		 */
-		return \apply_filters_ref_array( 'the_seo_framework_use_archive_prefix', [ $use, $term ] );
+		return \apply_filters_ref_array(
+			'the_seo_framework_use_archive_prefix',
+			[
+				! $this->get_option( 'title_rem_prefixes' ),
+				$term ?? \get_queried_object(),
+			]
+		);
 	}
 
 	/**

@@ -50,8 +50,7 @@ if ( $use_tabs ) {
 						$label_name
 					</label>
 				</div>
-HTML;
-				// ^ At PHP 7.3+ we can indent this.
+				HTML;
 
 				$count++;
 			}

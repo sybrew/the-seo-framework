@@ -549,14 +549,16 @@ class Generate_Image extends Generate_Url {
 		$data = \wp_get_attachment_metadata( $src_id ) ?? [];
 		$data = $data['sizes'][ $size ] ?? $data;
 
-		$dimensions = [
-			'width'  => 0,
-			'height' => 0,
-		];
-
 		if ( isset( $data['width'], $data['height'] ) ) {
-			$dimensions['width']  = $data['width'];
-			$dimensions['height'] = $data['height'];
+			$dimensions = [
+				'width'  => $data['width'],
+				'height' => $data['height'],
+			];
+		} else {
+			$dimensions = [
+				'width'  => 0,
+				'height' => 0,
+			];
 		}
 
 		return $dimensions;
@@ -616,11 +618,14 @@ class Generate_Image extends Generate_Url {
 			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize )
 				continue;
 
-			if ( isset( $_d['width'], $_d['height'] ) ) {
-				if ( $_d['width'] <= $max_size && $_d['height'] <= $max_size && $_d['width'] > $law ) {
-					$law  = $_d['width'];
-					$size = $_s;
-				}
+			if (
+					isset( $_d['width'], $_d['height'] )
+				&& $_d['width'] <= $max_size
+				&& $_d['height'] <= $max_size
+				&& $_d['width'] > $law
+			) {
+				$law  = $_d['width'];
+				$size = $_s;
 			}
 		}
 

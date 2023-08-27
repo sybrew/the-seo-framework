@@ -137,8 +137,7 @@ class Core {
 
 		static $depr_class = null;
 
-		if ( \is_null( $depr_class ) )
-			$depr_class = new Internal\Deprecated;
+		$depr_class ??= new Internal\Deprecated;
 
 		if ( \is_callable( [ $depr_class, $name ] ) )
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );

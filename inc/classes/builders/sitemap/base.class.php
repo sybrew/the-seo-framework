@@ -519,7 +519,7 @@ class Base extends Main {
 		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {
 			static $timestamp_format;
 
-			$timestamp_format = $timestamp_format ?? static::$tsf->get_timestamp_format();
+			$timestamp_format ??= static::$tsf->get_timestamp_format();
 
 			$xml['lastmod'] = static::$tsf->gmt2date( $timestamp_format, $args['lastmod'] );
 		}

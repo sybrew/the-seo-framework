@@ -88,7 +88,7 @@ final class SEOBar {
 	 * @return static
 	 */
 	private static function get_instance() {
-		return static::$instance ?? ( static::$instance = new static );
+		return static::$instance ??= new static;
 	}
 
 	/**
@@ -122,11 +122,9 @@ final class SEOBar {
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
-		if ( static::$query['taxonomy'] ) {
-			$builder = \The_SEO_Framework\Builders\SEOBar\Term::get_instance();
-		} else {
-			$builder = \The_SEO_Framework\Builders\SEOBar\Page::get_instance();
-		}
+		$builder = static::$query['taxonomy']
+			? \The_SEO_Framework\Builders\SEOBar\Term::get_instance()
+			: \The_SEO_Framework\Builders\SEOBar\Page::get_instance();
 
 		$instance = static::get_instance();
 		$instance->store_seo_bar_items( $builder );
@@ -446,7 +444,7 @@ final class SEOBar {
 
 		static $use_symbols;
 
-		$use_symbols = $use_symbols ?? (bool) \tsf()->get_option( 'seo_bar_symbols' );
+		$use_symbols ??= (bool) \tsf()->get_option( 'seo_bar_symbols' );
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) {

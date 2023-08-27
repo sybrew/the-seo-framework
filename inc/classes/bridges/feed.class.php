@@ -51,7 +51,7 @@ final class Feed {
 	 * @return \The_SEO_Framework\Bridges\Feed $instance
 	 */
 	public static function get_instance() {
-		return static::$instance ?? ( static::$instance = new static );
+		return static::$instance ??= new static;
 	}
 
 	/**

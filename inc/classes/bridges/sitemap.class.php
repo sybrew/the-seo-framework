@@ -65,7 +65,7 @@ final class Sitemap {
 	 * @return \The_SEO_Framework\Bridges\Sitemap $instance
 	 */
 	public static function get_instance() {
-		return static::$instance ?? ( static::$instance = new static );
+		return static::$instance ??= new static;
 	}
 
 	/**

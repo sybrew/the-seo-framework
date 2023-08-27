@@ -99,7 +99,7 @@ final class Scripts {
 	 * @since 3.1.0
 	 */
 	public static function prepare() {
-		static::$instance ?? ( static::$instance = new static );
+		static::$instance ??= new static;
 	}
 
 	/**

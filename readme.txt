@@ -3,8 +3,8 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.9
-Tested up to: 6.1
-Requires PHP: 7.3.0
+Tested up to: 6.3
+Requires PHP: 7.4.0
 Stable tag: 4.2.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -110,8 +110,8 @@ The SEO Framework works on many things without notifying you, because the best s
 
 **The SEO Framework supports:**
 
-* PHP 7.3 and higher.
-* WordPress 5.5 and higher.
+* PHP 7.4 and higher.
+* WordPress 5.9 and higher.
 * Internationalization through WordPress.org.
 * Unicode (UTF-8) character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
 * Right to Left (RTL) languages (Arabic, Hebrew, Farsi, et al.), through its interface and metatag generation.
@@ -142,8 +142,8 @@ If you wish to learn more, please refer to the [EU commission on copyright](http
 
 = This plugin requires: =
 
-* PHP 7.3 or higher.
-* WordPress 5.5 or higher.
+* PHP 7.4 or higher.
+* WordPress 5.9 or higher.
 * Any modern browser for administration.
 
 = Installation instructions: =
@@ -249,9 +249,6 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
-	-> Embrace it.
-
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
@@ -297,6 +294,9 @@ TODO DONE (still check assigments below): make 4.3.0 instead of 4.2.9?
 	-> We can also add Twitter Card type to every post
 	-> We can also justify major change for Title/Description output.
 	-> And we can justify jumping to PHP 7.3, so we can start using hrtime instead of microtime.
+
+TODO since the sitemap loads so early now, can we get rid of clean_up_globals()?
+	-> Test with 50 plugins and some "premium theme" active, and see if they slip through.
 
 TODO two new classes:
 	1. Option_Filter (See below "Four new classes")
@@ -416,6 +416,11 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		-> Or, otherwise, allow all authors to be indexed on the site.
 			"Allow indexing of author pages that have no posts." with a warning.
 
+TODO filters *_plugin_detected only turn ONE conflicting plugin, instead of the lot.
+	-> Deprecate and rewrite?
+
+TODO deprecate the_seo_framework_conflicting_plugins_type, it adds complexity and negates filter the_seo_framework_conflicting_plugins.
+
 **Detailed log**
 
 **For everyone:**
@@ -432,16 +437,18 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		* This also works around an issue where Gutenberg still doesn't understand HTML.
 		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
 * **Improved:**
-	* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
-	* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
-	* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
-		* Related Core ticket is [#51117](https://core.trac.wordpress.org/ticket/51117).
-	* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
-		* Related Core ticket is [#51542](https://core.trac.wordpress.org/ticket/51542).
-	* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
-		* A warning is displayed above the homepage settings.
-		* A warning is displayed above the Post Type Archive settings.
-		* A warning is displayed at the Sitemap Output settings.
+	* **Performance:**
+		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
+		* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
+		* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
+			* Related Core ticket is [#51117](https://core.trac.wordpress.org/ticket/51117).
+		* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
+			* Related Core ticket is [#51542](https://core.trac.wordpress.org/ticket/51542).
+	* **Compatibility:**
+		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
+			* A warning is displayed above the homepage settings.
+			* A warning is displayed above the Post Type Archive settings.
+			* A warning is displayed at the Sitemap Output settings.
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
@@ -449,18 +456,21 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 			- `wp_is_json_request()`
 			- `wp_is_jsonp_request()`
 			- `wp_is_xml_request()`
-	* Tooltip text is now more specifically colored white, making text legible again with some custom admin themes.
-	* Addressed a regression from TSF v4.2.0 where WordPress admin color schemes stopped affecting TSF's color scheme. Affected are:
-		* Tooltip background and text color.
-		* Post/Page SEO Settings active-tab border color.
-	* Title and description lengths are now calculated more quickly and more accurately for the SEO Bar.
-	* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
-	* Words with attached plain connector punctuation (`l'apostrophe`) are now considered starting or mid-sentence words, so the `l'`-part of `l'apostrophe` will also be included in the description when it's at the start, and the `apostrophe` part won't be trimmed anymore if not followed by at least 2 more words or final punctuation (dot).
-	* Dashlane is being decadent by first removing a perfectly good desktop app, and then they quickly stopped adhering to agreed upon web accessibility standards. Since, it is trying to shove their own "standard" down our throats. We won't mention that "standard," for no one should use it.
-		* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
-	* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
-		* Most notably, the padding and border around the settings make it much easier on your eyes.
-	* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
+	* **Administration:**
+		* Tooltip text is now more specifically colored white, making text legible again with some custom admin themes.
+		* Addressed a regression from TSF v4.2.0 where WordPress admin color schemes stopped affecting TSF's color scheme. Affected are:
+			* Tooltip background and text color.
+			* Post/Page SEO Settings active-tab border color.
+		* Title and description lengths are now calculated more quickly and more accurately for the SEO Bar.
+		* Dashlane is being decadent by first removing a perfectly good desktop app, and then they quickly stopped adhering to agreed upon web accessibility standards. Since, it is trying to shove their own "standard" down our throats. We won't mention that "standard," for no one should use it.
+			* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
+		* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
+			* Most notably, the padding and border around the settings make it much easier on your eyes.
+	* **Description:**
+		* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
+		* Words with attached plain connector punctuation (`l'apostrophe`) are now considered starting or mid-sentence words, so the `l'`-part of `l'apostrophe` will also be included in the description when it's at the start, and the `apostrophe` part won't be trimmed anymore if not followed by at least 2 more words or final punctuation (dot).
+	* **Compatibility:**
+		* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
 	* Resolved an issue where the description generator didn't recognize non-closing element tags in unescaped attributes.
 		* `<el attr="test>">content<el>` must match `content`, not `">content`.
 	* Resolved an issue where the description generator didn't recognize second or later unclosed attributes in an element.
@@ -486,156 +496,178 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 
 **For developers:**
 
-* **Added:**
-	* `The_SEO_Framework\Bridges\Cache`, provides a collection of static caching interface methods.
-	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
-	* Filter `the_seo_framework_auto_description_html_method_methods` is new.
-		* This used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
-	* Setting `auto_description_html_method` for `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
-		* This used to be `auto_descripton_html_method` (typo).
-	* New action, `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
-	* Method `tsf()->detect_multilingual_plugins()` is now available.
-	* Filter `the_seo_framework_multilingual_plugin_detected` is also new.
+* TODO: **Plugin database version is now at `4300`**
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
-* **Changed:**
-	* Method `tsf()->query_supports_seo()` removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
-	* `tsf()->_init_sitemap()` no longer is called with `template_redirect`, but at `parse_request` at priority `15`.
-		* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed. This is because we no longer load the main query like this.
-	* Filter `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
-	* Method `tsf()->escape_description()` now requires a first parameter.
-	* Method `tsf()->s_excerpt()` now requires a first parameter.
-	* Method `tsf()->s_excerpt_raw()` now requires a first parameter.
-	* Method `tsf()->escape_title()` now requires a first parameter.
-	* Method `tsf()->is_profile_edit()` now also tests network admin profile screens.
-	* Method `tsf()->s_min_max_sitemap()`
-		1. Now also sanitizes the default fallback value.
-		2. No longer falls back to the default option, but 1000 instead.
-	* Method `tsf()->s_image_preview()` now falls back to `'large'` instead of `'standard'`.
-	* Method `tsf()->s_left_right()` no longer falls back to option or default option, but a language-based default instead.
-	* Method `tsf()->s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
-	* Constant `THE_SEO_FRAMEWORK_DEBUG` is now always available at `plugins_loaded`.
-	* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
-	* Filter `the_seo_framework_conflicting_plugins` now supports index `'multilingual'`.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
 	* The `<font>` tag is deprecated, so we updated the tag to `<span>` in the debug panels.
-* **Deprecated:**
-	* Action `the_seo_framework_delete_cache_sitemap` is now soft deprecated (i.e., without warning). Use `the_seo_framework_cleared_sitemap_transients` instead.
-		* Full deprecation with notice will start from TSF v4.3.0.
-	* Property `tsf()->the_seo_framework_use_transients` is now soft-deprecated (i.e., without warning). There is no alternative.
-		* Full deprecation with notice will start from TSF v4.3.0.
-	* Property `tsf()->the_seo_framework_debug` is now soft-deprecated (i.e., without warning). Read constant `THE_SEO_FRAMEWORK_DEBUG` instead.
-		* Full deprecation with notice will start from TSF v4.3.0.
-	* Property `tsf()->script_debug` is now soft-deprecated (i.e., without warning). Read constant `SCRIPT_DEBUG` instead.
-		* Full deprecation with notice will start from TSF v4.3.0.
-	* Method `tsf()->s_left_right_home()` is now deprecated. It also no longer falls back to option or default option, but a language-based default instead.
-* **Removed:**
-	* We dropped class `\The_SEO_Framework\Cache` from the god object `tsf()`. The following methods have been removed, because they weren't useful for the public APIs:
-		* `init_admin_caching_actions`
-		* `init_post_cache_actions`
-		* `set_plugin_check_caches`
-			* This is now `tsf()->reset_check_plugin_conflicts()`.
-		* `delete_main_cache`
-		* `delete_post_cache`
-		* `delete_excluded_ids_cache`
-			* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_excluded_post_ids_cache()`.
-		* `delete_excluded_post_ids_transient`
-		* `delete_cache`
-		* `set_transient`
-			* Use WordPress's isonymic builtin instead.
-		* `get_transient`
-			* Use WordPress's isonymic builtin instead.
-		* `get_exclusion_transient_name`
-		* `get_sitemap_transient_name`
-			* This has been moved to `The_SEO_Framework\Bridges\Sitemap::get_transient_key()`.
-		* `generate_cache_key`
-		* `generate_cache_key_by_type`
-		* `add_cache_key_suffix`
-			* This has been moved to `The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix()`.
-		* `delete_sitemap_transient_permalink_updated`
-			* This has been moved to `The_SEO_Framework\Bridges\Cache::_refresh_sitemap_transient_permalink_updated()`, but not part of the public API.
-		* `delete_sitemap_transient`
-			* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_sitemap_transients()`.
-	* Filter `the_seo_framework_delete_cache_args` is gone.
-	* Filter `the_seo_framework_delete_cache_{$type}` is gone. This includes `the_seo_framework_delete_cache_sitemap` and `the_seo_framework_delete_cache_excluded_post_ids`.
-		* We kept `the_seo_framework_delete_cache_sitemap` for now, but we'll deprecate it later.
-	* Filter `the_seo_framework_auto_descripton_html_method_methods`.
-		* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").
-		* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this still affects your site.
-	* Setting `auto_descripton_html_method` from `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`).
-		* It is now `auto_description_html_method`.
-	* Removed inline Right-To-Left CSS registration from `tsf-pt`, this is handled in its file now.
-	* Deprecated filter `the_seo_framework_load_options` (deprecated in v4.1.4) is now gone.
-	* Constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` is no longer used.
-	* Method `tsf()->init_debug_vars()`, this was never meant to be public.
-	* Filter `the_seo_framework_warn_homepage_global_title` is now gone.
-	* Filter `the_seo_framework_warn_homepage_global_description` is now gone.
-	* Filter `the_seo_framework_tell_multilingual_sitemap` is now gone.
-	* Deprecated in TSF v4.2.0, the following deprecated methods of the `The_SEO_Framework\Load` object (`tsf()`) are no longer available:
-		* `append_php_query()`
-		* `get_legacy_header_filters_output()`
-		* `get_legacy_header_filters_output()`
-		* `get_html_output()`
-		* `is_robots_meta_noindex_set_by_args()`
-		* `robots_meta()`
-		* `can_do_sitemap_robots()`
-		* `nav_tab_wrapper()`
-		* `inpost_flex_nav_tab_wrapper()`
-		* `get_social_image_uploader_form()`
-		* `get_logo_uploader_form()`
-		* `proportionate_dimensions()`
-		* `seo_settings_page_url()`
-		* `get_default_user_data()`
-		* `get_user_option()`
-		* `get_author_option()`
-		* `get_current_author_option()`
-		* `is_wc_shop()`
-		* `is_wc_product()`
-		* `is_wc_product_admin()`
-		* `update_user_option()`
-		* `get_field_name()`
-		* `field_name()`
-		* `get_field_id()`
-		* `field_id()`
-		* `code_wrap()`
-		* `code_wrap_noesc()`
-		* `description()`
-		* `description_noesc()`
-		* `attention()`
-		* `attention_noesc()`
-		* `attention_description()`
-		* `attention_description_noesc()`
-		* `wrap_fields()`
-		* `make_info()`
-		* `make_data_attributes()`
-		* `make_checkbox()`
-		* `make_single_select_form()`
-		* `is_default_checked()`
-		* `is_warning_checked()`
-		* `get_is_conditional_checked()`
-		* `is_conditional_checked()`
-		* `output_character_counter_wrap()`
-		* `output_pixel_counter_wrap()`
-		* `wp_version()`
-		* `detect_theme_support()`
-		* `detect_page_builder()`
-		* `uses_page_builder()`
-		* `fb_locales()`
-		* `language_keys()`
-		* `get_timezone_string()`
-		* `set_timezone()`
-		* `reset_timezone()`
-		* `get_current_term_meta()`
-		* `is_blog_page()`
-		* `is_blog_page_by_id()`
-		* `is_front_page_by_id()`
-		* `prepend_tax_label_prefix()`
-		* `check_the_real_id()`
-		* `get_default_settings()`
-		* `get_warned_settings()`
-		* `get_safe_schema_image()`
+* **Option notes:**
+	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
+	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+		* **Added:**
+			* `auto_description_html_method`, this used to be `auto_descripton_html_method` (typo).
+		* **Removed**
+			* `auto_descripton_html_method`.
+				* It is now `auto_description_html_method` (typo in "description").
+				* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
+* **Function notes:**
+* **Object notes:**
+	* **New objects:**
+		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods.
+	* **Existing objects:**
+		* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
+		* For class `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
+			* **Methods added:**
+				* `detect_multilingual_plugins()`
+			* **Methods changed:**
+				* `query_supports_seo()`, removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
+				* `_init_sitemap()` is no longer called with `template_redirect`, but at `parse_request` at priority `15`. This prevents loading the main query.
+					* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed.
+					* This method is still marked as private, just wanted you document how a part prone to causing catastrophe changed.
+				* `escape_description()` now requires a first parameter.
+				* `s_excerpt()` now requires a first parameter.
+				* `s_excerpt_raw()` now requires a first parameter.
+				* `escape_title()` now requires a first parameter.
+				* `is_profile_edit()` now also tests network admin profile screens.
+				* `s_min_max_sitemap()`:
+					1. Now also sanitizes the default fallback value.
+					2. No longer falls back to the default option, but 1000 instead.
+				* `s_image_preview` now falls back to `'large'` instead of `'standard'`.
+				* `s_left_right` no longer falls back to option or default option, but a language-based default instead.
+				* `s_twitter_card` no longer falls to the default option, but `'summary_large_image'`.
+			* **Methods deprecated:**
+				* `set_transient`, use WordPress's isonymic builtin instead.
+				* `get_transient`, use WordPress's isonymic builtin instead.
+				* `s_left_right_home()`, use `s_left_right()` instead. TODO we might move this.
+					* This method also no longer falls back to option or default option, but a language-based default instead.
+			* **Methods removed:**
+				* `init_debug_vars()`, was never meant to be public.
+				* Since we moved class `\The_SEO_Framework\Cache`'s functionality from this object, these are removed:
+					* `init_admin_caching_actions()`
+					* `init_post_cache_actions()`
+					* `set_plugin_check_caches()`
+						* This is now `tsf()->reset_check_plugin_conflicts()`.
+					* `delete_main_cache()`
+					* `delete_post_cache()`
+					* `delete_excluded_ids_cache()`
+						* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_excluded_post_ids_cache()`.
+					* `delete_excluded_post_ids_transient()`
+					* `delete_cache()`
+					* `get_exclusion_transient_name()`
+					* `get_sitemap_transient_name()`
+						* This has been moved to `The_SEO_Framework\Bridges\Sitemap::get_transient_key()`.
+					* `generate_cache_key()`
+					* `generate_cache_key_by_type()`
+					* `add_cache_key_suffix()`
+						* This has been moved to `The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix()`.
+					* `delete_sitemap_transient_permalink_updated`
+						* This has been moved to `The_SEO_Framework\Bridges\Cache::_refresh_sitemap_transient_permalink_updated()`, but not part of the public API.
+					* `delete_sitemap_transient()`
+						* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_sitemap_transients()`.
+				* Deprecated in TSF v4.2.0, the following deprecated methods of the `The_SEO_Framework\Load` object (`tsf()`) are no longer available:
+					* `append_php_query()`
+					* `get_legacy_header_filters_output()`
+					* `get_legacy_header_filters_output()`
+					* `get_html_output()`
+					* `is_robots_meta_noindex_set_by_args()`
+					* `robots_meta()`
+					* `can_do_sitemap_robots()`
+					* `nav_tab_wrapper()`
+					* `inpost_flex_nav_tab_wrapper()`
+					* `get_social_image_uploader_form()`
+					* `get_logo_uploader_form()`
+					* `proportionate_dimensions()`
+					* `seo_settings_page_url()`
+					* `get_default_user_data()`
+					* `get_user_option()`
+					* `get_author_option()`
+					* `get_current_author_option()`
+					* `is_wc_shop()`
+					* `is_wc_product()`
+					* `is_wc_product_admin()`
+					* `update_user_option()`
+					* `get_field_name()`
+					* `field_name()`
+					* `get_field_id()`
+					* `field_id()`
+					* `code_wrap()`
+					* `code_wrap_noesc()`
+					* `description()`
+					* `description_noesc()`
+					* `attention()`
+					* `attention_noesc()`
+					* `attention_description()`
+					* `attention_description_noesc()`
+					* `wrap_fields()`
+					* `make_info()`
+					* `make_data_attributes()`
+					* `make_checkbox()`
+					* `make_single_select_form()`
+					* `is_default_checked()`
+					* `is_warning_checked()`
+					* `get_is_conditional_checked()`
+					* `is_conditional_checked()`
+					* `output_character_counter_wrap()`
+					* `output_pixel_counter_wrap()`
+					* `wp_version()`
+					* `detect_theme_support()`
+					* `detect_page_builder()`
+					* `uses_page_builder()`
+					* `fb_locales()`
+					* `language_keys()`
+					* `get_timezone_string()`
+					* `set_timezone()`
+					* `reset_timezone()`
+					* `get_current_term_meta()`
+					* `is_blog_page()`
+					* `is_blog_page_by_id()`
+					* `is_front_page_by_id()`
+					* `prepend_tax_label_prefix()`
+					* `check_the_real_id()`
+					* `get_default_settings()`
+					* `get_warned_settings()`
+					* `get_safe_schema_image()`
+			* **Properties deprecated:**
+				* `the_seo_framework_use_transients`, with no alternative available.
+				* `the_seo_framework_debug`, use constant `THE_SEO_FRAMEWORK_DEBUG` instead.
+				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
+		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.
+* **Constant notes:**
+	* **Changed:**
+		* `THE_SEO_FRAMEWORK_DEBUG` is now always available at `plugins_loaded`.
+	* **Removed:**
+		* `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS`, for it is no longer used.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_auto_description_html_method_methods`, this used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
+		* `the_seo_framework_multilingual_plugin_detected` TODO this will be rewritten -- confirm if this still exists.
+			* This is used only to turn off detection, not turn it on.
+			* Register conflicting plugins at `the_seo_framework_conflicting_plugins`.
+				* TODO will we not deprecate this?
+		* `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
+		* `the_seo_framework_conflicting_plugins` now supports index `'multilingual'`.
+	* **Removed:**
+		* `the_seo_framework_auto_descripton_html_method_methods`.
+			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").
+			* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
+		* `the_seo_framework_delete_cache_args`, there's no functionality left that could use this.
+		* `the_seo_framework_delete_cache_{$type}`:
+			* This includes `the_seo_framework_delete_cache_excluded_post_ids`, which is gone.
+			* This also includes `the_seo_framework_delete_cache_sitemap`, which is now marked as deprecated.
+		* `the_seo_framework_load_options`, was marked as deprecated.
+		* `the_seo_framework_warn_homepage_global_title`, we now use multilingual plugin detection.
+		* `the_seo_framework_warn_homepage_global_description`, we now use multilingual plugin detection.
+		* `the_seo_framework_tell_multilingual_sitemap`, we now use multilingual plugin detection.
+* **Action notes:**
+	* **Added:**
+		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
+	* **Deprecated:**
+		* `the_seo_framework_delete_cache_sitemap`, use `the_seo_framework_cleared_sitemap_transients` instead.
+* **JavaScript notes:**
+* **CSS notes:**
+	* `tsf-pt` no longer has inline RTL support, but instead supports RLT built in its file.
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 	* Removed capitalization in PHP methods; mainly, `_ID`. Since PHP methods are case-insensitive at runtime, this should not matter nearly any case.

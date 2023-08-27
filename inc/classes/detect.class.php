@@ -720,7 +720,7 @@ class Detect extends Render {
 				// When the blog (home) is a page then these requests to any registered query variable will cause issues,
 				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_id() )` above).
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
-				// TODO: We only need one to pass this test. We could use array_key_first()... (PHP7.3+) -> Might be mixed.
+				// We only need one to pass this test. We could use array_key_first()... but that may be nulled (out of our control).
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
 			]
 		);

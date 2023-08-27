@@ -739,7 +739,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_singular_description_excerpt( $id = null ) {
 
-		$id = $id ?? $this->get_the_real_id();
+		$id ??= $this->get_the_real_id();
 
 		// If the post is protected, don't generate a description.
 		if ( $this->is_protected( $id ) ) return '';
@@ -937,6 +937,7 @@ class Generate_Description extends Generate {
 		 * https://regex101.com/r/dAqhWC/1 (current)
 		 *
 		 * TODO Group 4's match is repeated. However, referring to it as (4) will cause it to congeal into 3.
+		 * Note: Group 4 misses `?\p{Z}*` between `.+` and `[\p{Pc}`, but I couldn't find a use-case for it.
 		 *
 		 * Critically optimized (worst case: 217 logic steps), so the $matches don't make much sense. Bear with me:
 		 *

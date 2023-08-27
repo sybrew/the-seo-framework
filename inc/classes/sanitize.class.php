@@ -2021,8 +2021,8 @@ class Sanitize extends Admin_Pages {
 			foreach ( [ 'clear', 'space' ] as $type )
 				$args[ $type ] = (array) ( $args[ $type ] ?? [] );
 
-			$args['strip']  = $args['strip'] ?? $default_args['strip'];
-			$args['passes'] = $args['passes'] ?? $default_args['passes'];
+			$args['strip']  ??= $default_args['strip'];
+			$args['passes'] ??= $default_args['passes'];
 		}
 
 		$parse = umemo( __METHOD__ . '/parse', null, $args['space'], $args['clear'] );
@@ -2091,8 +2091,8 @@ class Sanitize extends Admin_Pages {
 						$replacement = ' $4 ';
 						// Fall through;
 					case 'clear_query':
-						$passes      = $passes ?? 1;
-						$replacement = $replacement ?? ( 'phrase' === $flow_type ? '' : ' ' );
+						$passes      ??= 1;
+						$replacement ??= 'phrase' === $flow_type ? '' : ' ';
 
 						// Akin to https://regex101.com/r/LR8iem/6. (This might be outdated, copy work!)
 						// Ref https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html (specifically end-tags)

@@ -54,7 +54,7 @@ namespace The_SEO_Framework\Bootstrap;
  */
 function _upgrade_default_site_options() {
 	static $memo;
-	return $memo ?? ( $memo = \tsf()->get_default_site_options() );
+	return $memo ??= \tsf()->get_default_site_options();
 }
 
 /**
@@ -67,7 +67,7 @@ function _upgrade_default_site_options() {
  */
 function _previous_db_version() {
 	static $memo;
-	return $memo ?? ( $memo = \get_option( 'the_seo_framework_upgraded_db_version', '0' ) );
+	return $memo ??= \get_option( 'the_seo_framework_upgraded_db_version', '0' );
 }
 
 /**

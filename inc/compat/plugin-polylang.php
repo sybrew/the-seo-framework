@@ -267,7 +267,7 @@ function _defunct_badly_coded_polylang_script() {
 		const handler = jQuery._data( document, 'events' )?.ajaxSuccess?.pop().handler;
 		handler && jQuery( document ).off( 'ajaxSuccess', handler );
 	} );
-JS;
+	JS;
 
 	// Remove PLL term handler on ajaxSuccess. It is redundant, achieves nothing,
 	// creates redundant secondary requests, and breaks all plugins but Yoast SEO.

@@ -60,8 +60,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _set_instance() {
-		if ( \is_null( static::$instance ) )
-			static::$instance = new static;
+		static::$instance ??= new static;
 	}
 
 	/**
