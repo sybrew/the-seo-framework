@@ -221,13 +221,6 @@ class Sanitize extends Admin_Pages {
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'title_location',
-			]
-		);
-
-		$this->add_option_filter(
-			's_left_right_home',
-			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[
 				'home_title_location',
 			]
 		);
@@ -649,6 +642,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 4.1.0 Added $option and $suboption parameters.
+	 * @since 4.3.0 Now emits a warning that the filter is gone.
 	 *
 	 * @param string $filter    Sanitization filter type.
 	 * @param string $new_value New value.
@@ -661,8 +655,14 @@ class Sanitize extends Admin_Pages {
 
 		$available_filters = $this->get_available_filters();
 
-		if ( ! \in_array( $filter, array_keys( $available_filters ), true ) )
+		if ( ! \in_array( $filter, array_keys( $available_filters ), true ) ) {
+			$this->_doing_it_wrong(
+				__METHOD__,
+				sprintf( 'Filter "%s" does not exists.', \esc_html( $filter ) ),
+				'4.3.0'
+			);
 			return $new_value;
+		}
 
 		return \call_user_func_array(
 			$available_filters[ $filter ],
@@ -697,36 +697,36 @@ class Sanitize extends Admin_Pages {
 		return (array) \apply_filters(
 			'the_seo_framework_available_sanitizer_filters',
 			[
-				's_left_right'                 => [ $this, 's_left_right' ],
-				's_left_right_home'            => [ $this, 's_left_right_home' ],
-				's_title_separator'            => [ $this, 's_title_separator' ],
-				's_description'                => [ $this, 's_description' ],
-				's_description_raw'            => [ $this, 's_description_raw' ],
-				's_title'                      => [ $this, 's_title' ],
-				's_title_raw'                  => [ $this, 's_title_raw' ],
-				's_knowledge_type'             => [ $this, 's_knowledge_type' ],
+				's_absint'                     => [ $this, 's_absint' ],
+				's_all_post_type_archive_meta' => [ $this, 's_all_post_type_archive_meta' ],
 				's_alter_query_type'           => [ $this, 's_alter_query_type' ],
+				's_canonical_scheme'           => [ $this, 's_canonical_scheme' ],
+				's_color_hex'                  => [ $this, 's_color_hex' ],
 				's_description_html_method'    => [ $this, 's_description_html_method' ],
-				's_one_zero'                   => [ $this, 's_one_zero' ],
+				's_description_raw'            => [ $this, 's_description_raw' ],
+				's_description'                => [ $this, 's_description' ],
 				's_disabled_post_types'        => [ $this, 's_disabled_post_types' ],
 				's_disabled_taxonomies'        => [ $this, 's_disabled_taxonomies' ],
-				's_post_types'                 => [ $this, 's_post_types' ],
-				's_taxonomies'                 => [ $this, 's_taxonomies' ],
-				's_all_post_type_archive_meta' => [ $this, 's_all_post_type_archive_meta' ],
-				's_numeric_string'             => [ $this, 's_numeric_string' ],
-				's_no_html'                    => [ $this, 's_no_html' ],
-				's_no_html_space'              => [ $this, 's_no_html_space' ],
-				's_absint'                     => [ $this, 's_absint' ],
-				's_safe_html'                  => [ $this, 's_safe_html' ],
-				's_url'                        => [ $this, 's_url' ],
-				's_url_query'                  => [ $this, 's_url_query' ],
 				's_facebook_profile'           => [ $this, 's_facebook_profile' ],
-				's_twitter_name'               => [ $this, 's_twitter_name' ],
-				's_twitter_card'               => [ $this, 's_twitter_card' ],
-				's_canonical_scheme'           => [ $this, 's_canonical_scheme' ],
-				's_min_max_sitemap'            => [ $this, 's_min_max_sitemap' ],
 				's_image_preview'              => [ $this, 's_image_preview' ],
+				's_knowledge_type'             => [ $this, 's_knowledge_type' ],
+				's_left_right'                 => [ $this, 's_left_right' ],
+				's_min_max_sitemap'            => [ $this, 's_min_max_sitemap' ],
+				's_no_html_space'              => [ $this, 's_no_html_space' ],
+				's_no_html'                    => [ $this, 's_no_html' ],
+				's_numeric_string'             => [ $this, 's_numeric_string' ],
+				's_one_zero'                   => [ $this, 's_one_zero' ],
+				's_post_types'                 => [ $this, 's_post_types' ],
+				's_safe_html'                  => [ $this, 's_safe_html' ],
 				's_snippet_length'             => [ $this, 's_snippet_length' ],
+				's_taxonomies'                 => [ $this, 's_taxonomies' ],
+				's_title_raw'                  => [ $this, 's_title_raw' ],
+				's_title_separator'            => [ $this, 's_title_separator' ],
+				's_title'                      => [ $this, 's_title' ],
+				's_twitter_card'               => [ $this, 's_twitter_card' ],
+				's_twitter_name'               => [ $this, 's_twitter_name' ],
+				's_url_query'                  => [ $this, 's_url_query' ],
+				's_url'                        => [ $this, 's_url' ],
 			]
 		);
 	}
@@ -1251,23 +1251,6 @@ class Sanitize extends Admin_Pages {
 		}
 
 		return \is_rtl() ? 'left' : 'right';
-	}
-
-	/**
-	 * Returns left or right, for the home separator location.
-	 *
-	 * This method fetches the default option because it's conditional (LTR/RTL).
-	 *
-	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
-	 * @since 4.3.0 No longer falls back to option or default option, but a language-based default instead.
-	 * @todo deprecate 4.3.0, use s_left_right() instead.
-	 *
-	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
-	 * @return string left or right
-	 */
-	public function s_left_right_home( $position ) {
-		return $this->s_left_right( $position );
 	}
 
 	/**

@@ -474,6 +474,7 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
 			* Yoast SEO is still checked for.
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
+	* Option filter `s_left_right_home` is now gone; use `s_left_right` instead.
 * **Note:**
 	* Transient `tsf_sitemap_5_%`, where % changes per blog ID and language, is no longer used. This transient should clear automatically.
 	* Transient `tsf_exclude_1_%`, where % changes per blog ID and language, is no longer used. This transient will be deleted on upgrade.
@@ -512,7 +513,6 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		2. No longer falls back to the default option, but 1000 instead.
 	* Method `tsf()->s_image_preview()` now falls back to `'large'` instead of `'standard'`.
 	* Method `tsf()->s_left_right()` no longer falls back to option or default option, but a language-based default instead.
-	* Method `tsf()->s_left_right_home()` no longer falls back to option or default option, but a language-based default instead.
 	* Method `tsf()->s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
 	* Constant `THE_SEO_FRAMEWORK_DEBUG` is now always available at `plugins_loaded`.
 	* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
@@ -530,6 +530,7 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		* Full deprecation with notice will start from TSF v4.3.0.
 	* Property `tsf()->script_debug` is now soft-deprecated (i.e., without warning). Read constant `SCRIPT_DEBUG` instead.
 		* Full deprecation with notice will start from TSF v4.3.0.
+	* Method `tsf()->s_left_right_home()` is now deprecated. It also no longer falls back to option or default option, but a language-based default instead.
 * **Removed:**
 	* We dropped class `\The_SEO_Framework\Cache` from the god object `tsf()`. The following methods have been removed, because they weren't useful for the public APIs:
 		* `init_admin_caching_actions`
@@ -543,11 +544,9 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		* `delete_excluded_post_ids_transient`
 		* `delete_cache`
 		* `set_transient`
-			* Use WordPress builtin instead.
-			* This method will emit a deprecation warning from TSF v4.3.0.
+			* Use WordPress's isonymic builtin instead.
 		* `get_transient`
-			* Use WordPress builtin instead.
-			* This method will emit a deprecation warning from TSF v4.3.0.
+			* Use WordPress's isonymic builtin instead.
 		* `get_exclusion_transient_name`
 		* `get_sitemap_transient_name`
 			* This has been moved to `The_SEO_Framework\Bridges\Sitemap::get_transient_key()`.
@@ -574,6 +573,69 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 	* Filter `the_seo_framework_warn_homepage_global_title` is now gone.
 	* Filter `the_seo_framework_warn_homepage_global_description` is now gone.
 	* Filter `the_seo_framework_tell_multilingual_sitemap` is now gone.
+	* Deprecated in TSF v4.2.0, the following deprecated methods of the `The_SEO_Framework\Load` object (`tsf()`) are no longer available:
+		* `append_php_query()`
+		* `get_legacy_header_filters_output()`
+		* `get_legacy_header_filters_output()`
+		* `get_html_output()`
+		* `is_robots_meta_noindex_set_by_args()`
+		* `robots_meta()`
+		* `can_do_sitemap_robots()`
+		* `nav_tab_wrapper()`
+		* `inpost_flex_nav_tab_wrapper()`
+		* `get_social_image_uploader_form()`
+		* `get_logo_uploader_form()`
+		* `proportionate_dimensions()`
+		* `seo_settings_page_url()`
+		* `get_default_user_data()`
+		* `get_user_option()`
+		* `get_author_option()`
+		* `get_current_author_option()`
+		* `is_wc_shop()`
+		* `is_wc_product()`
+		* `is_wc_product_admin()`
+		* `update_user_option()`
+		* `get_field_name()`
+		* `field_name()`
+		* `get_field_id()`
+		* `field_id()`
+		* `code_wrap()`
+		* `code_wrap_noesc()`
+		* `description()`
+		* `description_noesc()`
+		* `attention()`
+		* `attention_noesc()`
+		* `attention_description()`
+		* `attention_description_noesc()`
+		* `wrap_fields()`
+		* `make_info()`
+		* `make_data_attributes()`
+		* `make_checkbox()`
+		* `make_single_select_form()`
+		* `is_default_checked()`
+		* `is_warning_checked()`
+		* `get_is_conditional_checked()`
+		* `is_conditional_checked()`
+		* `output_character_counter_wrap()`
+		* `output_pixel_counter_wrap()`
+		* `wp_version()`
+		* `detect_theme_support()`
+		* `detect_page_builder()`
+		* `uses_page_builder()`
+		* `fb_locales()`
+		* `language_keys()`
+		* `get_timezone_string()`
+		* `set_timezone()`
+		* `reset_timezone()`
+		* `get_current_term_meta()`
+		* `is_blog_page()`
+		* `is_blog_page_by_id()`
+		* `is_front_page_by_id()`
+		* `prepend_tax_label_prefix()`
+		* `check_the_real_id()`
+		* `get_default_settings()`
+		* `get_warned_settings()`
+		* `get_safe_schema_image()`
 * **Other:**
 	* Cleaned up code. Reduced function call overhead.
 	* Removed capitalization in PHP methods; mainly, `_ID`. Since PHP methods are case-insensitive at runtime, this should not matter nearly any case.
