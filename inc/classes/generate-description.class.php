@@ -152,7 +152,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -288,7 +288,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -415,7 +415,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *

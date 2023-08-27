@@ -151,7 +151,7 @@ class Generate_Url extends Generate_Title {
 	 * @since 3.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.3 Now accepts arguments publicly.
-	 * @since 4.2.9 No longer calls the query in the sitemap to remove pagination.
+	 * @since 4.3.0 No longer calls the query in the sitemap to remove pagination.
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id               The Post, Page or Term ID to generate the URL for.

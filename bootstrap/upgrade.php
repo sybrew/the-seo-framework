@@ -212,7 +212,7 @@ function _upgrade( $previous_version ) {
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
 	// When a user upgrades beyond this scope, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270', '4290' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270', '4300' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -917,11 +917,11 @@ function _do_upgrade_4270() {
  * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
  * TODO registers default for static placeholder editing.
  *
- * @since 4.2.9
+ * @since 4.3.0
  * @global \wpdb $wpdb
  */
-function _do_upgrade_4290() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4290' ) {
+function _do_upgrade_4300() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4300' ) {
 		$tsf = \tsf();
 
 		$tsf->update_option(

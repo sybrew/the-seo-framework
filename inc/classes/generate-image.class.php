@@ -259,7 +259,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.4 Now returns filesizes under index `filesize`.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 *
 	 * @param array $args The query arguments. Must have 'id' and 'taxonomy'.
 	 * @return array The image details array, sequential: int => {
@@ -320,7 +320,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 4.0.0
 	 * @since 4.1.1 Now only the 'social' context will fetch images from the content.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before testing whether an attachment is an image.
+	 * @since 4.3.0 Now expects an ID before testing whether an attachment is an image.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.

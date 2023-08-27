@@ -45,7 +45,7 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  * Deletes all sitemap transients, instead of just one.
  *
  * @since 3.1.0
- * @since 4.2.9 Removed clearing once-per-request restriction.
+ * @since 4.3.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
  */

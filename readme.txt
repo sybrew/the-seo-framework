@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.9
 Tested up to: 6.1
-Requires PHP: 7.2.0
+Requires PHP: 7.3.0
 Stable tag: 4.2.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -110,7 +110,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 **The SEO Framework supports:**
 
-* PHP 7.2 and higher.
+* PHP 7.3 and higher.
 * WordPress 5.5 and higher.
 * Internationalization through WordPress.org.
 * Unicode (UTF-8) character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
@@ -142,7 +142,7 @@ If you wish to learn more, please refer to the [EU commission on copyright](http
 
 = This plugin requires: =
 
-* PHP 7.2 or higher.
+* PHP 7.3 or higher.
 * WordPress 5.5 or higher.
 * Any modern browser for administration.
 
@@ -250,6 +250,7 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 == Changelog ==
 
 TODO require PHP 7.3 henceforth? (Requires PHP in head and readme)
+	-> Embrace it.
 
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
@@ -266,7 +267,7 @@ TODO change autodescription-updates-cache to autodescription-persistent-cache?
 	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
 		-> However, this may cause a notification pop up for those who use two or more SEO plugins simultaneously. Though this may be helpful.
 
-TODO db version 4270 -> 4290+
+TODO db version 4270 -> 4300+
 
 TODO add bespoke support for Events Calendar?
 	-> Basically, we need to overwrite the separator
@@ -291,7 +292,7 @@ TODO all "s_" methods are a mixed bag of:
 TODO the detect.*?plugins() functions use a foreach loop and then in_array() -- this can be slow, consider array_intersect instead?
 	-> Test performance.
 
-TODO make 4.3.0 instead of 4.2.9?
+TODO DONE (still check assigments below): make 4.3.0 instead of 4.2.9?
 	-> This way we can push through large API changes, clean up soon-to-be-deprecations, sanitizations, etc.
 	-> We can also add Twitter Card type to every post
 	-> We can also justify major change for Title/Description output.
@@ -409,6 +410,11 @@ TODO test if TSF breadcrumbs are still gone from WC products
 TODO when setting primary term in bulk edit, make sure that the post has at least 2 terms attached.
 	(why isn't this listed as a feature neither on our pricing page nor this page at all??)
 		-> Now I understand why people think the plugin doesn't support it :/
+
+TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_cap_on_network et al.)
+	-> We may want to add "is indexable" on a per-site basis.
+		-> Or, otherwise, allow all authors to be indexed on the site.
+			"Allow indexing of author pages that have no posts." with a warning.
 
 **Detailed log**
 

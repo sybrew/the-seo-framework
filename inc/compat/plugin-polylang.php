@@ -225,7 +225,7 @@ function _polylang_fix_home_url( $url ) {
  * Deletes all sitemap transients, instead of just one.
  *
  * @since 4.0.5
- * @since 4.2.9 Removed clearing once-per-request restriction.
+ * @since 4.3.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
  */
@@ -256,7 +256,7 @@ function _polylang_flush_sitemap() {
  * correctly once more with full forward and backward compatibility, as we proposed.
  *
  * @see https://github.com/polylang/polylang/issues/928
- * @since 4.2.9
+ * @since 4.3.0
  */
 function _defunct_badly_coded_polylang_script() {
 

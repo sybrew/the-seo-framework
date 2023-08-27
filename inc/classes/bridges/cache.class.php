@@ -27,7 +27,7 @@ namespace The_SEO_Framework\Bridges;
 /**
  * Handles the caching interface.
  *
- * @since 4.2.9
+ * @since 4.3.0
  * @access public
  * @internal
  * @final Can't be extended.
@@ -37,7 +37,7 @@ final class Cache {
 	/**
 	 * Returns a unique cache key suffix per blog and language.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 *
 	 * @param string $key The cache key.
 	 * @return string The cache key with blog ID and locale appended.
@@ -53,7 +53,7 @@ final class Cache {
 	/**
 	 * Clears static excluded IDs cache.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -64,7 +64,7 @@ final class Cache {
 	/**
 	 * Refreshes sitemaps on post change.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @param int $post_id The Post ID that has been updated.
@@ -81,7 +81,7 @@ final class Cache {
 	/**
 	 * Checks whether the permalink structure is updated.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
@@ -101,7 +101,7 @@ final class Cache {
 	/**
 	 * Clears sitemap transients.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 */
 	public static function clear_sitemap_transients() {
 
@@ -115,21 +115,20 @@ final class Cache {
 		}
 
 		/**
-		 * @since 4.2.9
+		 * @since 4.3.0
 		 */
 		\do_action( 'the_seo_framework_cleared_sitemap_transients' );
 
 		/**
 		 * @since 3.1.0
-		 * @since 4.2.9 Soft deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
-		 * @todo 4.3.0 deprecate, use do_action_deprecated.
+		 * @since 4.3.0 Deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
 		 *
 		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
 		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_id().
 		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
 		 * @param array  $success Whether the action cleared. Set to always be true since deprecation.
 		 */
-		\do_action(
+		\do_action_deprecated(
 			'the_seo_framework_delete_cache_sitemap',
 			[
 				'sitemap',
@@ -137,7 +136,7 @@ final class Cache {
 				[ 'type' => 'sitemap' ],
 				[ true ],
 			],
-			'4.2.9 of The SEO Framework',
+			'4.3.0 of The SEO Framework',
 			'the_seo_framework_cleared_sitemap_transients'
 		);
 	}

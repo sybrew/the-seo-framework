@@ -519,7 +519,7 @@ class Generate extends User_Data {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
 	 *              2. Now redirects post type archives.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.

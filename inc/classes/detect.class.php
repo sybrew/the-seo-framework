@@ -106,7 +106,7 @@ class Detect extends Render {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.2.9 Added index 'multilingual'
+		 * @since 4.3.0 Added index 'multilingual'
 		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
 		return (array) \apply_filters_ref_array( 'the_seo_framework_conflicting_plugins', [ $conflicting_plugins ] );
@@ -442,7 +442,7 @@ class Detect extends Render {
 	 * Determines if other Multilingual plugins are active.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 *
 	 * @return bool SEO plugin detected.
 	 */
@@ -455,7 +455,7 @@ class Detect extends Render {
 
 		return memo(
 			/**
-			 * @since 4.2.9
+			 * @since 4.3.0
 			 * @param bool   $detected    Whether the plugin should be detected.
 			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
 			 * @param string $plugin      The plugin that's been detected.
@@ -579,7 +579,7 @@ class Detect extends Render {
 	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
 	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
 	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
-	 * @since 4.2.9 Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
+	 * @since 4.3.0 Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	 *
 	 * @return bool
 	 */
@@ -1290,7 +1290,7 @@ class Detect extends Render {
 	/**
 	 * Registers plugin cache checks on plugin activation.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 */
 	public function reset_check_plugin_conflicts() {
 		$this->update_static_cache( 'check_seo_plugin_conflicts', 1 );

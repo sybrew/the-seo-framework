@@ -694,7 +694,7 @@ class Post_Data extends Detect {
 	 * @since 3.1.0 Now no longer crashes on database errors.
 	 * @since 4.1.4 1. Now tests against post type exclusions.
 	 *              2. Now considers headlessness. This method runs only on the front-end.
-	 * @since 4.2.9 Now uses the static cache methods instead of non-expiring-transients.
+	 * @since 4.3.0 Now uses the static cache methods instead of non-expiring-transients.
 	 *
 	 * @return array : { 'archive', 'search' }
 	 */

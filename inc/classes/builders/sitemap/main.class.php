@@ -65,7 +65,6 @@ abstract class Main {
 	 * @since 4.0.0
 	 * @since 4.0.4 Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
 	 * @since 4.2.0 No longer sets timezone.
-	 * @since 4.2.9 Now filters `pre_get_posts` to prevent setting `is_home`.
 	 */
 	final public function prepare_generation() {
 		\wp_raise_memory_limit( 'sitemap' );

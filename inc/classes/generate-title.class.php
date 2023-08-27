@@ -79,16 +79,16 @@ class Generate_Title extends Generate_Description {
 
 		$title = $this->get_filtered_raw_custom_field_title( $args );
 
-		if ( $title ) {
-			if ( $this->use_title_protection( $args ) )
-				$this->merge_title_protection( $title, $args );
+		if ( empty( $title ) ) return '';
 
-			if ( $this->use_title_pagination( $args ) )
-				$this->merge_title_pagination( $title );
+		if ( $this->use_title_protection( $args ) )
+			$this->merge_title_protection( $title, $args );
 
-			if ( $this->use_title_branding( $args, $social ) )
-				$this->merge_title_branding( $title, $args );
-		}
+		if ( $this->use_title_pagination( $args ) )
+			$this->merge_title_pagination( $title );
+
+		if ( $this->use_title_branding( $args, $social ) )
+			$this->merge_title_branding( $title, $args );
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -102,6 +102,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 4.0.0 Moved the filter to a separated method.
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved `s_title_raw()` to before the title merging, to be more in line with custom title merging.
 	 * @uses $this->s_title_raw() : This is the same method used to prepare custom title on save.
 	 * @uses $this->get_filtered_raw_generated_title()
 	 *
@@ -113,7 +114,8 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_generated_title( $args = null, $escape = true, $social = false ) {
 
-		$title = $this->get_filtered_raw_generated_title( $args );
+		// We should always get something from here.
+		$title = $this->s_title_raw( $this->get_filtered_raw_generated_title( $args ) );
 
 		if ( $this->use_title_protection( $args ) )
 			$this->merge_title_protection( $title, $args );
@@ -123,8 +125,6 @@ class Generate_Title extends Generate_Description {
 
 		if ( $this->use_title_branding( $args, $social ) )
 			$this->merge_title_branding( $title, $args );
-
-		$title = $this->s_title_raw( $title );
 
 		return $escape ? $this->escape_title( $title ) : $title;
 	}
@@ -294,7 +294,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @see $this->get_twitter_title()
 	 * @see $this->get_twitter_title_from_custom_field()
 	 *
@@ -433,7 +433,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @see $this->get_open_graph_title()
 	 * @see $this->get_open_graph_title_from_custom_field()
 	 *
@@ -553,7 +553,7 @@ class Generate_Title extends Generate_Description {
 	 * @since 3.1.4 Now uses the 'id' to get custom singular title.
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.9 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @internal
 	 * @see $this->get_raw_custom_field_title()
 	 *
@@ -620,7 +620,7 @@ class Generate_Title extends Generate_Description {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.0 Added a second parameter, $args, to help soften the burden of this method.
-	 * @since 4.2.9 Now handles filters with a priority of 0. Only a theoretical bug, so not in changelog.
+	 * @since 4.3.0 Now handles filters with a priority of 0. Only a theoretical bug, so not in changelog.
 	 * @internal Only to be used within $this->get_raw_generated_title()
 	 *
 	 * @param bool       $reset Whether to reset the removed filters.

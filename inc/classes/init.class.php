@@ -720,7 +720,7 @@ class Init extends Query {
 	 * Initializes various callbacks on post-status changing actions to flush caches.
 	 *
 	 * @see WP Core wp_transition_post_status()
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @see $this->init_admin_actions();
 	 * @see $this->init_cron_actions();
 	 *

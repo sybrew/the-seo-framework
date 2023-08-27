@@ -63,7 +63,7 @@ namespace The_SEO_Framework;
  * Enables the site-wide SEO debugging interface.
  *
  * @since 2.3.4
- * @since 4.2.9 Is now registered during plugin load.
+ * @since 4.3.0 Is now registered during plugin load.
  * @param bool
  */
 \defined( 'THE_SEO_FRAMEWORK_DEBUG' )

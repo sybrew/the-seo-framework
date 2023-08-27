@@ -60,7 +60,7 @@ class Core {
 	 *
 	 * @since 2.8.0
 	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
-	 * @since 4.2.9 Now protects against fatal errors on PHP 8.2 or later.
+	 * @since 4.3.0 Now protects against fatal errors on PHP 8.2 or later.
 	 *
 	 * @param string $name  The property name.
 	 * @param mixed  $value The property value.
@@ -74,8 +74,10 @@ class Core {
 				return;
 
 			case 'the_seo_framework_debug':
+				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				return false;
 			case 'script_debug':
-				// TODO 4.3.0 emit notice.
+				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
 				return false;
 		}
 
@@ -109,13 +111,13 @@ class Core {
 				return ! $this->is_headless['settings'];
 
 			case 'the_seo_framework_use_transients':
-				// TODO 4.3.0 emit notice.
+				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_use_transients', 'since 4.3.0; with no alternative available' );
 				return true;
 			case 'the_seo_framework_debug':
-				// TODO 4.3.0 emit notice.
+				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
 				return \THE_SEO_FRAMEWORK_DEBUG;
 			case 'script_debug':
-				// TODO 4.3.0 emit notice.
+				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
 				return \SCRIPT_DEBUG;
 		}
 
@@ -578,7 +580,7 @@ class Core {
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
 	 *              and recognizes those as whole words.
-	 * @since 4.2.9 Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
+	 * @since 4.3.0 Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int    $dupe_count       Minimum amount of words to encounter in the string.

@@ -1712,8 +1712,7 @@ final class Deprecated {
 	 * Prevents setting of transients when they're disabled.
 	 *
 	 * @since 2.6.0
-	 * @since 4.2.9 Soft deprecated
-	 * @todo 4.3.0 Deprecate!
+	 * @todo 4.3.0 Deprecated
 	 * @deprecated
 	 *
 	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
@@ -1721,6 +1720,9 @@ final class Deprecated {
 	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
 	 */
 	public function set_transient( $transient, $value, $expiration = 0 ) {
+
+		\tsf()->_deprecated_function( 'tsf()->set_transient()', '4.3.0', 'set_transient()' );
+
 		return \set_transient( $transient, $value, $expiration );
 	}
 
@@ -1734,14 +1736,16 @@ final class Deprecated {
 	 * N.B. not all transient settings make use of this function, bypassing the constant check.
 	 *
 	 * @since 2.6.0
-	 * @since 4.2.9 Soft deprecated
-	 * @todo 4.3.0 Deprecate!
+	 * @since 4.3.0 Deprecated
 	 * @deprecated
 	 *
 	 * @param string $transient Transient name. Expected to not be SQL-escaped.
 	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
 	 */
 	public function get_transient( $transient ) {
+
+		\tsf()->_deprecated_function( 'tsf()->get_transient()', '4.3.0', 'get_transient()' );
+
 		return \get_transient( $transient );
 	}
 }

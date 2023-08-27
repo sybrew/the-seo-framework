@@ -43,7 +43,7 @@ final class PostSettings {
 	 * @since 4.0.0
 	 * @since 4.0.5 Now registers custom postbox classes.
 	 * @since 4.2.8 No longer uses the post type label for the meta box title.
-	 * @since 4.2.9 1. No longer uses the $post_type for the screen-parameter in add_meta_box.
+	 * @since 4.3.0 1. No longer uses the $post_type for the screen-parameter in add_meta_box.
 	 *              2. No longer generates a dynamic title for the Homepage with settings-helper.
 	 *                 This because Gutenberg is inconsistent with metabox display and escapes HTML incorrectly.
 	 *              3. Now registers homepage warnings in the primary tabs.
@@ -159,7 +159,7 @@ final class PostSettings {
 	/**
 	 * Outputs the Homepage SEO settings warning.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 */
 	public static function _homepage_warning() {
 		\tsf()->get_view( 'edit/seo-settings-singular-homepage-warning' );

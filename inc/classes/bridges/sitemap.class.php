@@ -52,7 +52,7 @@ final class Sitemap {
 	private static $tsf = null;
 
 	/**
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @var string The sitemap ID.
 	 */
 	public $sitemap_id = '';
@@ -183,7 +183,7 @@ final class Sitemap {
 	 *
 	 * @link https://core.trac.wordpress.org/ticket/51542
 	 * @link https://core.trac.wordpress.org/ticket/51117
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @param \WP_Query $wp_query The WordPress WC_Query instance.
@@ -307,7 +307,7 @@ final class Sitemap {
 	 *
 	 * Can only run once per request.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -348,7 +348,7 @@ final class Sitemap {
 	/**
 	 * Returns the sitemap's storage transient name.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @uses \The_SEO_Framework\Bridges\Cache
 	 *
 	 * @param string $sitemap_id The sitemap ID.
@@ -369,7 +369,7 @@ final class Sitemap {
 	/**
 	 * Stores the sitemap in transient cache.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @uses \The_SEO_Framework\Bridges\Cache
 	 *
 	 * @param string $content    The sitemap content
@@ -389,7 +389,7 @@ final class Sitemap {
 	/**
 	 * Returns the sitemap from transient cache.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @uses \The_SEO_Framework\Bridges\Cache
 	 *
 	 * @param string $sitemap_id The sitemap ID.
@@ -408,7 +408,7 @@ final class Sitemap {
 	 * Returns the sitemap's lock cache ID.
 	 *
 	 * @since 4.1.2
-	 * @since 4.2.9 The first parameter is now optional.
+	 * @since 4.3.0 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return string|false The sitemap lock key. False when key is invalid.
@@ -459,7 +459,7 @@ final class Sitemap {
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now considers "unlimited" execution time (0) that'd've prevented locks altogether.
-	 * @since 4.2.9 The first parameter is now optional.
+	 * @since 4.3.0 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on success, false on failure.
@@ -490,7 +490,7 @@ final class Sitemap {
 	 * Unlocks a sitemap for the current blog & locale and $sitemap_id.
 	 *
 	 * @since 4.1.2
-	 * @since 4.2.9 The first parameter is now optional.
+	 * @since 4.3.0 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on success, false on failure.
@@ -506,7 +506,7 @@ final class Sitemap {
 	 * Tells whether a sitemap is locked for the current blog & locale and $sitemap_id.
 	 *
 	 * @since 4.1.2
-	 * @since 4.2.9 The first parameter is now optional.
+	 * @since 4.3.0 The first parameter is now optional.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool|int False if not locked, the lock UNIX release time otherwise.
@@ -650,7 +650,7 @@ final class Sitemap {
 	 * Useful when the path is non-standard, like notoriously in Polylang.
 	 *
 	 * @since 4.1.2
-	 * @since 4.2.9 Is now static.
+	 * @since 4.3.0 Is now static.
 	 *
 	 * @return string The path.
 	 */
@@ -676,7 +676,7 @@ final class Sitemap {
 	 * Useful when the prefix path is non-standard, like notoriously in Polylang.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.9 Is now static.
+	 * @since 4.3.0 Is now static.
 	 *
 	 * @return string The path prefix.
 	 */
@@ -696,7 +696,7 @@ final class Sitemap {
 	 * Returns the base path information for the sitemap.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.9 Is now static.
+	 * @since 4.3.0 Is now static.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return array : {
@@ -733,7 +733,7 @@ final class Sitemap {
 	 * This method is to be used after outputting the sitemap.
 	 *
 	 * @since 4.1.1
-	 * @since 4.2.9 Is now static.
+	 * @since 4.3.0 Is now static.
 	 *
 	 * @return int bytes freed.
 	 */
@@ -751,7 +751,7 @@ final class Sitemap {
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from clean_up_globals_for_sitemap()
 	 * @since 4.2.0 Now always returns the freed memory.
-	 * @since 4.2.9 Is now static.
+	 * @since 4.3.0 Is now static.
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory in bytes

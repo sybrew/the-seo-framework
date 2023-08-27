@@ -39,7 +39,7 @@ final class UserSettings {
 	 * Prepares the user setting fields.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.9 Now asserts if user has capability on any multisite network's blog.
+	 * @since 4.3.0 Now asserts if user has capability on any multisite network's blog.
 	 * @access private
 	 *
 	 * @param \WP_User $user WP_User object.

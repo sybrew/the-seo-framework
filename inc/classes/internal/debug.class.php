@@ -37,7 +37,7 @@ use function \The_SEO_Framework\memo;
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
  * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
- * @since 4.2.9 Is now private. This was never meant to be public.
+ * @since 4.3.0 Is now private. This was never meant to be public.
  * @access private
  */
 final class Debug {
@@ -60,7 +60,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _set_instance() {
-		if ( is_null( static::$instance ) )
+		if ( \is_null( static::$instance ) )
 			static::$instance = new static;
 	}
 

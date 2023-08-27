@@ -511,7 +511,7 @@ class Query extends Core {
 	 * Detects Profile edit screen in WP Admin.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.9 Now also tests network profile edit screens.
+	 * @since 4.3.0 Now also tests network profile edit screens.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool True if on Profile Edit screen. False otherwise.

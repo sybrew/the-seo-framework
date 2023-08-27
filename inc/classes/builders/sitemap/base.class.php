@@ -56,7 +56,7 @@ class Base extends Main {
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now no longer lowers the PHP execution time limit from unlimited to 3 minutes.
-	 * @since 4.2.9 Can now prerender sitemap on a $sitemap_id basis.
+	 * @since 4.3.0 Can now prerender sitemap on a $sitemap_id basis.
 	 *
 	 * @param string $sitemap_id The sitemap ID to prerender.
 	 * @return void Early if the sitemap's already generated.
@@ -92,7 +92,7 @@ class Base extends Main {
 	 * Returns the generated sitemap. Also stores it in the database when caching is enabled.
 	 *
 	 * @since 4.1.2
-	 * @since 4.2.9 Can now generate cache on a $sitemap_id basis.
+	 * @since 4.3.0 Can now generate cache on a $sitemap_id basis.
 	 * @abstract
 	 *
 	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwritten via the API.

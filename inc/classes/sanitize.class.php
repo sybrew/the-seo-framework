@@ -937,7 +937,7 @@ class Sanitize extends Admin_Pages {
 	 * Escapes and beautifies description.
 	 *
 	 * @since 2.5.2
-	 * @since 4.2.9 The first parameter is now required.
+	 * @since 4.3.0 The first parameter is now required.
 	 *
 	 * @param string $description The description to escape and beautify.
 	 * @return string Escaped and beautified description.
@@ -1073,7 +1073,7 @@ class Sanitize extends Admin_Pages {
 	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
 	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
 	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
-	 * @since 4.2.9 The first parameter is now required.
+	 * @since 4.3.0 The first parameter is now required.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1128,7 +1128,7 @@ class Sanitize extends Admin_Pages {
 	 * Cleans input excerpt. Does NOT escape excerpt for output.
 	 *
 	 * @since 2.8.2
-	 * @since 4.2.9 The first parameter is now required.
+	 * @since 4.3.0 The first parameter is now required.
 	 * @see $this->s_excerpt - This is basically a copy without sanitation.
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1143,7 +1143,7 @@ class Sanitize extends Admin_Pages {
 	 * Escapes and beautifies title.
 	 *
 	 * @since 2.5.2
-	 * @since 4.2.9 The first parameter is now required.
+	 * @since 4.3.0 The first parameter is now required.
 	 *
 	 * @param string $title The title to escape and beautify.
 	 * @param bool   $trim  Whether to trim the title from whitespaces.
@@ -1237,7 +1237,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 4.2.9 No longer falls back to option or default optionm, but a language-based default instead.
+	 * @since 4.3.0 No longer falls back to option or default optionm, but a language-based default instead.
 	 *
 	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
 	 * @return string left or right
@@ -1260,7 +1260,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 4.2.9 No longer falls back to option or default option, but a language-based default instead.
+	 * @since 4.3.0 No longer falls back to option or default option, but a language-based default instead.
 	 * @todo deprecate 4.3.0, use s_left_right() instead.
 	 *
 	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
@@ -1665,7 +1665,7 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 4.2.9 Now falls back to 'summary_large_image' instead of the default option.
+	 * @since 4.3.0 Now falls back to 'summary_large_image' instead of the default option.
 	 *
 	 * @param string $card String with potentially wrong option value.
 	 * @return string Sanitized twitter card type.
@@ -1852,7 +1852,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes sitemap's min/max post value.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.9 Also sanitizes the default fallback value now.
+	 * @since 4.3.0 Also sanitizes the default fallback value now.
 	 *
 	 * @param int $limit Integer with potentially unwanted values.
 	 * @return int A limited integer 1<=R<=50000.
@@ -1871,7 +1871,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes image preview directive value.
 	 *
 	 * @since 4.0.2
-	 * @since 4.2.9 Now falls back to 'large' instead of 'standard'.
+	 * @since 4.3.0 Now falls back to 'large' instead of 'standard'.
 	 *
 	 * @param string $size The image preview size with possibly unwanted values.
 	 * @return string The robots image snippet preview directive value.
