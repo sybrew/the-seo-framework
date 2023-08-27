@@ -422,6 +422,14 @@ TODO filters *_plugin_detected only turn ONE conflicting plugin, instead of the 
 TODO deprecate the_seo_framework_conflicting_plugins_type, it adds complexity and negates filter the_seo_framework_conflicting_plugins.
 TODO test all compat files.
 
+TODO what about get_image_dimensions()
+	-> Are we going to move this to a new generator class?
+		-> If so, we can remove the deprecation altogether.
+
+TODO remove inc\classes\builders\sitemap.class.php
+TODO mark update_settings as private?
+TODO cache_json_data makes no sense.
+
 **Detailed log**
 
 **For everyone:**

@@ -461,7 +461,7 @@ final class Term extends Main {
 					/* translators: 1: Word found, 2: Occurrences */
 					\esc_attr__( '&#8220;%1$s&#8221; is used %2$d times.', 'autodescription' ),
 					\esc_attr( key( $_repeated_word ) ),
-					reset( $_repeated_word )
+					reset( $_repeated_word ) // escaped in sprintf %d
 				);
 			}
 

@@ -482,9 +482,7 @@ class Term_Data extends Post_Data {
 		$taxonomies = \get_object_taxonomies( $post_type, 'objects' );
 		$taxonomies = array_filter(
 			$taxonomies,
-			static function( $t ) {
-				return ! empty( $t->hierarchical );
-			}
+			static fn( $t ) => ! empty( $t->hierarchical )
 		);
 
 		// If names isn't $get, assume objects.

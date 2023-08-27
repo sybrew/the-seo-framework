@@ -73,22 +73,26 @@ final class Form {
 
 		$args = array_merge( $defaults, $args );
 
-		// The walk below destroys the option array. Assign it to a new var to prevent confusion later.
+		// The walk below would mangle the option index. Assign it to a new var to prevent confusion later.
 		$html_options = $args['options'];
-		/**
-		 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
-		 * @param mixed  $value
-		 * @param mixed  $default
-		 */
-		$create_option = static function( &$name, $value, $default ) {
-			$name = sprintf(
-				'<option value="%s"%s>%s</option>',
-				\esc_attr( $value ),
-				(string) $value === (string) $default ? ' selected' : '',
-				\esc_html( $name )
-			);
-		};
-		array_walk( $html_options, $create_option, $args['default'] );
+
+		array_walk(
+			$html_options,
+			/**
+			 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
+			 * @param mixed  $value
+			 * @param mixed  $default
+			 */
+			static function ( &$name, $value, $default ) {
+				$name = sprintf(
+					'<option value="%s"%s>%s</option>',
+					\esc_attr( $value ),
+					(string) $value === (string) $default ? ' selected' : '',
+					\esc_html( $name )
+				);
+			},
+			$args['default']
+		);
 
 		$tsf = \tsf();
 

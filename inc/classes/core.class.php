@@ -494,7 +494,7 @@ class Core {
 	 */
 	public function array_flatten_list( $array ) {
 
-		// We can later use `!array_is_list()`.
+		// PHP 8.1+, use `!array_is_list()`?
 		// This is 350x faster than a polyfill for `!array_is_list()`.
 		if ( [] === $array || array_values( $array ) !== $array ) return $array;
 
@@ -676,7 +676,7 @@ class Core {
 			)
 		);
 
-		$get_relative_luminance = static function( $v ) {
+		$get_relative_luminance = static function ( $v ) {
 			// Convert hex to 0~1 float.
 			$v /= 0xFF;
 

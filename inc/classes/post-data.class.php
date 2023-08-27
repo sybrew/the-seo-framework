@@ -741,7 +741,7 @@ class Post_Data extends Detect {
 		foreach ( [ 'archive', 'search' ] as $type ) {
 			array_walk(
 				$cache[ $type ],
-				static function( &$v ) {
+				static function ( &$v ) {
 					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
 						$v = (int) $v->post_id;
 					} else {

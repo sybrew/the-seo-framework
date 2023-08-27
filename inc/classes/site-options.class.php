@@ -580,14 +580,12 @@ class Site_Options extends Sanitize {
 	 * Allows bulk-updating of the SEO settings.
 	 *
 	 * @since 2.7.0
+	 * @todo mark private and make $new_option accept array only?
 	 *
 	 * @param string|array $new_option : {
-	 *      if string: The string will act as a key for a new empty string option, e.g. : {
-	 *           'sitemap_index' becomes ['sitemap_index' => '']
-	 *      }
-	 *      if array: The option name(s) and value(s), e.g. : {
-	 *            ['sitemap_index' => 1]
-	 *      }
+	 *      if string: The string will act as a key for a new empty string option, e.g.,
+	 *                 'sitemap_index' becomes ['sitemap_index' => '']
+	 *      if array:  The option name(s) and value(s), e.g., ['sitemap_index' => 1]
 	 * }
 	 * @param string       $settings_field The Settings Field to update. Defaults
 	 *                                     to The SEO Framework settings field.

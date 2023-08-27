@@ -627,7 +627,7 @@ final class Sitemap {
 
 		array_walk(
 			$schemas,
-			static function( &$schema, $key ) {
+			static function ( &$schema, $key ) {
 				$schema = sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
 			}
 		);

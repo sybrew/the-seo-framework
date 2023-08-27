@@ -956,9 +956,7 @@ class Detect extends Render {
 					array_values(
 						array_filter(
 							$this->get_public_post_types(),
-							static function( $post_type ) {
-								return \get_post_type_object( $post_type )->has_archive ?? false;
-							}
+							static fn( $post_type ) => \get_post_type_object( $post_type )->has_archive ?? false
 						)
 					)
 				)

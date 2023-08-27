@@ -55,7 +55,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			// Create: `[ 'doctitle' => [ 'pta', $post_type, 'doctitle' ] ];`
 			array_walk(
 				$_option_map,
-				static function( &$input_id, $key ) {
+				static function ( &$input_id, $key ) {
 					$input_id = array_merge( $input_id, [ $key ] );
 				}
 			);
