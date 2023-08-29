@@ -25,6 +25,8 @@ namespace The_SEO_Framework\Builders;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\umemo;
+
 Scripts::prepare();
 
 /**
@@ -97,7 +99,7 @@ final class Scripts {
 	 * @since 3.1.0
 	 */
 	public static function prepare() {
-		static::$instance ?? ( static::$instance = new static );
+		static::$instance ??= new static;
 	}
 
 	/**
@@ -358,8 +360,8 @@ final class Scripts {
 				isset( $s['inline'] )
 					and \wp_add_inline_script( $s['id'], $instance->create_inline_js( $s['inline'] ) );
 				$registered = true;
-				break;
 		}
+
 		if ( $registered ) {
 			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
 				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
@@ -389,8 +391,8 @@ final class Scripts {
 			case 'js':
 				\wp_enqueue_script( $id );
 				$loaded = true;
-				break;
 		}
+
 		if ( $loaded ) {
 			isset( static::$queue[ $type ][ $id ] )
 				and static::$queue[ $type ][ $id ] |= static::LOADED
@@ -413,7 +415,7 @@ final class Scripts {
 		static $min, $rtl;
 
 		if ( ! isset( $min, $rtl ) ) {
-			$min = \tsf()->script_debug ? '' : '.min';
+			$min = \SCRIPT_DEBUG ? '' : '.min';
 			$rtl = \is_rtl() ? '.rtl' : '';
 		}
 
@@ -442,8 +444,11 @@ final class Scripts {
 		$out = '';
 
 		foreach ( $styles as $selector => $css ) {
-			$css  = implode( ';', $this->convert_color_css( $css ) );
-			$out .= "$selector{$css}";
+			$out .= sprintf(
+				'%s{%s}',
+				$selector,
+				implode( ';', $this->convert_color_css( $css ) )
+			);
 		}
 
 		return $out;
@@ -479,9 +484,9 @@ final class Scripts {
 	 */
 	private function convert_color_css( $css ) {
 
-		static $c_ck, $c_cv;
-		// Memoize the conversion types.
-		if ( ! isset( $c_ck, $c_cv ) ) {
+		$conversions = umemo( __METHOD__ . '/conversions' );
+
+		if ( ! $conversions ) {
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
@@ -501,7 +506,7 @@ final class Scripts {
 				$_colors = $_colors[ $_scheme ]->colors;
 			}
 
-			$_table = [
+			$_conversion_table = [
 				'{{$bg}}'               => $_colors[0],
 				'{{$rel_bg}}'           => "#{$tsf->get_relative_fontcolor( $_colors[0] )}",
 				'{{$bg_accent}}'        => $_colors[1],
@@ -512,11 +517,16 @@ final class Scripts {
 				'{{$rel_color_accent}}' => "#{$tsf->get_relative_fontcolor( $_colors[3] )}",
 			];
 
-			$c_ck = array_keys( $_table );
-			$c_cv = array_values( $_table );
+			$conversions = umemo(
+				__METHOD__ . '/conversions',
+				[
+					'search'  => array_keys( $_conversion_table ),
+					'replace' => array_values( $_conversion_table ),
+				]
+			);
 		}
 
-		return str_replace( $c_ck, $c_cv, $css );
+		return str_replace( $conversions['search'], $conversions['replace'], $css );
 	}
 
 	/**

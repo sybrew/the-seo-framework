@@ -50,7 +50,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		);
 
 		/**
-		 * @since 4.2.9
+		 * @since 4.3.0
 		 * @param array $html_passes_method The HTML pass option by [ 'option_value' => 'Name' ]
 		 */
 		$html_passes_methods = (array) apply_filters(
@@ -96,8 +96,4 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 				esc_html__( 'Learn how this works.', 'autodescription' )
 			)
 		);
-		break;
-
-	default:
-		break;
 endswitch;

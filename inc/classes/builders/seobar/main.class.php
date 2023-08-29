@@ -53,9 +53,9 @@ abstract class Main {
 	/**
 	 * @since 4.0.0
 	 * Shared between instances.
-	 * @var null|\The_SEO_Framework\Load
+	 * @var \The_SEO_Framework\Load
 	 */
-	protected static $tsf = null;
+	protected static $tsf;
 
 	/**
 	 * @since 4.0.0
@@ -93,7 +93,7 @@ abstract class Main {
 	 * @since 4.0.0
 	 */
 	final protected function __construct() {
-		self::$tsf = self::$tsf ?: \tsf();
+		self::$tsf ??= \tsf();
 		$this->prime_cache();
 	}
 
@@ -105,7 +105,7 @@ abstract class Main {
 	 * @return static
 	 */
 	final public static function get_instance() {
-		return static::$instance ?? ( static::$instance = new static );
+		return static::$instance ??= new static;
 	}
 
 	/**

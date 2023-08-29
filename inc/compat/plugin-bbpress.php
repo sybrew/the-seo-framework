@@ -16,6 +16,14 @@ namespace The_SEO_Framework;
 \add_filter( 'bbp_title', [ $this, 'get_document_title' ], 99, 3 );
 
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_title', 10, 2 );
+\add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );
+\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_pre_title', 10, 2 );
+\add_filter( 'the_seo_framework_fetched_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 3 );
+\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description', 10, 2 );
+\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 3 );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar' );
+
 /**
  * Override's The SEO Framework's auto-generated title with bbPress's on bbPress queries.
  *
@@ -25,13 +33,14 @@ namespace The_SEO_Framework;
  * We're going to trust Automattic/bbPress that they'll deprecate all functions called here, instead of removing them,
  * might they desire to add/improve new functionality.
  *
+ * @hook the_seo_framework_title_from_generation 10
  * @since 4.0.6
  * @source bbp_title()
  * @NOTE Do NOT call `bbp_title()` or apply filter `bbptitle` here, it'll cause an infinite loop.
  *
  * @param string     $title The title.
  * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
- *                          Is null when query is autodetermined.
+ *                          Is null when the query is auto-determined.
  * @return string The corrected bbPress title on bbPress pages.
  */
 function _bbpress_filter_title( $title, $args ) {
@@ -211,10 +220,10 @@ function _bbpress_filter_title( $title, $args ) {
 	return $new_title;
 }
 
-\add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );
 /**
  * Filters the order keys for The SEO Bar.
  *
+ * @hook the_seo_framework_seo_column_keys_order 10
  * @since 2.8.0
  * @access private
  *
@@ -232,10 +241,10 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
 	return array_merge( $current_keys, $new_keys );
 }
 
-\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_pre_title', 10, 2 );
 /**
  * Fixes bbPress tag titles.
  *
+ * @hook the_seo_framework_title_from_generation 10
  * @since 2.9.0
  * @since 3.1.0 1. Updated to support new title generation.
  *              2. Now no longer fixes the title when `is_tax()` is true. Because,
@@ -246,7 +255,7 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  *
  * @param string     $title The filter title.
  * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
- *                          Is null when query is autodetermined.
+ *                          Is null when the query is auto-determined.
  * @return string $title The bbPress title.
  */
 function _bbpress_filter_pre_title( $title = '', $args = null ) {
@@ -261,7 +270,6 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
 	return $title;
 }
 
-\add_filter( 'the_seo_framework_fetched_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 3 );
 /**
  * Fixes bbPress excerpts.
  *
@@ -269,6 +277,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  * This should be fixed with bbPress 3.0.
  * This function fixes the Excerpt part.
  *
+ * @hook the_seo_framework_fetched_description_excerpt 10
  * @since 2.9.0
  * @since 3.0.4 Default value for $max_char_length has been increased from 155 to 300.
  * @since 3.1.0 Now no longer fixes the description when `is_tax()` is true.
@@ -279,7 +288,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  * @param string     $excerpt The excerpt to use.
  * @param int        $page_id Deprecated.
  * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
- *                         Is null when query is autodetermined.
+ *                         Is null when the query is auto-determined.
  * @return string The excerpt.
  */
 function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args = null ) {
@@ -294,7 +303,6 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
 	return $excerpt;
 }
 
-\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description', 10, 2 );
 /**
  * Fixes bbPress custom Description for social meta.
  *
@@ -302,26 +310,26 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
  * This should be fixed with bbPress 3.0.
  * This function fixes the Custom Description part.
  *
+ * @hook the_seo_framework_custom_field_description 10
  * @since 2.9.0
  * @since 4.0.0 No longer overrules external queries.
  * @access private
  *
  * @param string     $desc The custom-field description.
  * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
- *                         Is null when query is autodetermined.
+ *                         Is null when the query is auto-determined.
  * @return string The custom description.
  */
 function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
 
 	if ( null === $args && \is_bbpress() && \bbp_is_topic_tag() ) {
-		// Ovewrite $desc.
+		// Overwrite $desc.
 		return \tsf()->get_term_meta( \get_queried_object_id() )['description'] ?? '';
 	}
 
 	return $desc;
 }
 
-\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
 /**
  * Fixes bbPress exclusion of first reply.
  *
@@ -329,6 +337,7 @@ function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
  * This should be fixed with bbPress 3.0.
  * This function fixes the query alteration part.
  *
+ * @hook the_seo_framework_do_adjust_archive_query 10
  * @since 3.0.3
  * @access private
  * @link <https://bbpress.trac.wordpress.org/ticket/2607> (regression)
@@ -348,12 +357,12 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
 	return $do;
 }
 
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 2 );
 /**
  * Filters bbPress hidden forums.
  *
  * This should actually only consider non-loop queries, for hidden forums can't be reached anyway.
  *
+ * @hook the_seo_framework_robots_meta_array 10
  * @since 4.2.8
  * @access private
  *
@@ -365,8 +374,8 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
  *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
- *                            Is null when query is autodetermined.
+ * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+ *                         Is null when the query is auto-determined.
  * @return array
  */
 function _bbpress_filter_robots( $meta, $args ) {
@@ -374,11 +383,11 @@ function _bbpress_filter_robots( $meta, $args ) {
 	if ( null === $args ) {
 		// Front-end
 		if ( \bbp_is_single_forum() ) {
-			$forum_id = \tsf()->get_the_real_ID();
+			$forum_id = \tsf()->get_the_real_id();
 		} elseif ( \bbp_is_single_topic() ) {
-			$forum_id = \get_post_meta( \tsf()->get_the_real_ID(), '_bbp_forum_id', true );
+			$forum_id = \get_post_meta( \tsf()->get_the_real_id(), '_bbp_forum_id', true );
 		} elseif ( \bbp_is_single_reply() ) {
-			$forum_id = \get_post_meta( \tsf()->get_the_real_ID(), '_bbp_forum_id', true );
+			$forum_id = \get_post_meta( \tsf()->get_the_real_id(), '_bbp_forum_id', true );
 		}
 	} else {
 		// Custom query, back-end or sitemap.
@@ -390,7 +399,6 @@ function _bbpress_filter_robots( $meta, $args ) {
 				case \bbp_get_topic_post_type():
 				case \bbp_get_reply_post_type():
 					$forum_id = \get_post_meta( $args['id'], '_bbp_forum_id', true );
-					break;
 			}
 		}
 	}
@@ -401,10 +409,10 @@ function _bbpress_filter_robots( $meta, $args ) {
 	return $meta;
 }
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar' );
 /**
  * Appends noindex default checks to the noindex item of the SEO Bar for pages.
  *
+ * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
  * @access private
  *
@@ -426,7 +434,6 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
 		case \bbp_get_topic_post_type():
 		case \bbp_get_reply_post_type():
 			$forum_id = \get_post_meta( $interpreter::$query['id'], '_bbp_forum_id', true );
-			break;
 	}
 
 	if ( empty( $forum_id ) || \bbp_is_forum_public( $forum_id ) ) return;

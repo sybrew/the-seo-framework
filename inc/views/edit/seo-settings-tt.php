@@ -100,17 +100,21 @@ $robots_settings = [
 
 <table class="form-table tsf-term-meta">
 	<tbody>
-		<?php if ( $this->get_option( 'display_seo_bar_metabox' ) ) : ?>
-		<tr class=form-field>
-			<th scope=row valign=top><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
-			<td>
-				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
-				echo $this->get_generated_seo_bar( $_generator_args );
-				?>
-			</td>
-		</tr>
-		<?php endif; ?>
+		<?php
+		if ( $this->get_option( 'display_seo_bar_metabox' ) ) {
+			?>
+			<tr class=form-field>
+				<th scope=row valign=top><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
+				<td>
+					<?php
+					// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
+					echo $this->get_generated_seo_bar( $_generator_args );
+					?>
+				</td>
+			</tr>
+			<?php
+		}
+		?>
 
 		<tr class=form-field>
 			<th scope=row valign=top>
@@ -133,7 +137,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size=40 autocomplete=off />
+					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size=40 autocomplete=off data-form-type=other />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -239,7 +243,7 @@ $this->output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-og-title-wrap>
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size=40 autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
 				</div>
 			</td>
 		</tr>
@@ -271,7 +275,7 @@ $this->output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-tw-title-wrap>
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size=40 autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
 				</div>
 			</td>
 		</tr>
@@ -353,7 +357,10 @@ $this->output_js_social_data(
 				</th>
 			<td>
 				<?php
-				foreach ( $robots_settings as $_s ) :
+				/* translators: %s = default option value */
+				$_default_i18n = __( 'Default (%s)', 'autodescription' );
+
+				foreach ( $robots_settings as $_s ) {
 					// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 					echo Form::make_single_select_form( [
 						'id'      => $_s['id'],
@@ -361,8 +368,7 @@ $this->output_js_social_data(
 						'name'    => $_s['name'],
 						'label'   => $_s['label'],
 						'options' => [
-							/* translators: %s = default option value */
-							0  => sprintf( __( 'Default (%s)', 'autodescription' ), $_s['_default'] ),
+							0  => sprintf( $_default_i18n, $_s['_default'] ),
 							-1 => $_s['force_on'],
 							1  => $_s['force_off'],
 						],
@@ -370,12 +376,11 @@ $this->output_js_social_data(
 						'info'    => $_s['_info'],
 						'data'    => [
 							'defaultUnprotected' => $_s['_default'],
-							/* translators: %s = default option value */
-							'defaultI18n'        => __( 'Default (%s)', 'autodescription' ),
+							'defaultI18n'        => $_default_i18n,
 						],
 					] );
 					// phpcs:enable, WordPress.Security.EscapeOutput
-				endforeach;
+				}
 				?>
 			</td>
 		</tr>

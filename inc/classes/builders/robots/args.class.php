@@ -68,7 +68,7 @@ final class Args extends Factory {
 				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type, $args['pta'] );
 			}
 
-			switch ( isset( $qubit ) ) :
+			switch ( isset( $qubit ) ) {
 				case false:
 					// Page doesn't support metadata.
 					break;
@@ -85,7 +85,7 @@ final class Args extends Factory {
 				default:
 					// qubit is (closer to) 0. Assert we use _default, albeit false.
 					yield 'meta_qubit_default' => false;
-			endswitch;
+			}
 		}
 
 		globals:
@@ -138,7 +138,7 @@ final class Args extends Factory {
 		// $tsf  = static::$tsf;
 		$args = static::$args;
 
-		switch ( $pass ) :
+		switch ( $pass ) {
 			case '404':
 				yield '404' => ! static::$tsf->is_term_populated( $args['id'], $args['taxonomy'] );
 				break;
@@ -146,7 +146,6 @@ final class Args extends Factory {
 			case 'protected':
 				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
 				yield 'protected' => static::$tsf->is_protected( $args['id'] );
-				break;
-		endswitch;
+		}
 	}
 }

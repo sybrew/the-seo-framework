@@ -53,18 +53,6 @@ final class Scripts {
 	public static function prepare() {}
 
 	/**
-	 * The constructor. Can't be instantiated.
-	 * Kills PHP. Enforces singleton.
-	 *
-	 * This probably autoloads at action "admin_enqueue_scripts", priority "0".
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 * @internal
-	 */
-	private function __construct() {}
-
-	/**
 	 * Initializes scripts based on admin query.
 	 *
 	 * @since 4.0.0
@@ -197,7 +185,7 @@ final class Scripts {
 		$args = [];
 
 		if ( $tsf->is_post_edit() )
-			$args['post'] = $tsf->get_the_real_admin_ID();
+			$args['post'] = $tsf->get_the_real_admin_id();
 
 		\wp_enqueue_media( $args );
 	}
@@ -254,7 +242,7 @@ final class Scripts {
 							'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
 						],
 						'states' => [
-							'debug' => \tsf()->script_debug,
+							'debug' => \SCRIPT_DEBUG,
 						],
 					],
 				],
@@ -283,6 +271,9 @@ final class Scripts {
 				'inline'   => [
 					'.tsf-tooltip-text-wrap'   => [
 						'background-color:{{$bg_accent}}',
+						'color:{{$rel_bg_accent}}',
+					],
+					'.tsf-tooltip-text-wrap *' => [
 						'color:{{$rel_bg_accent}}',
 					],
 					'.tsf-tooltip-arrow:after' => [
@@ -382,7 +373,7 @@ final class Scripts {
 
 		$tsf = \tsf();
 
-		$front_id = $tsf->get_the_front_page_ID();
+		$front_id = $tsf->get_the_front_page_id();
 
 		return [
 			[
@@ -430,7 +421,7 @@ final class Scripts {
 	public static function get_post_edit_scripts() {
 
 		$tsf = \tsf();
-		$id  = $tsf->get_the_real_ID();
+		$id  = $tsf->get_the_real_id();
 
 		$is_static_frontpage = $tsf->is_static_frontpage( $id );
 
@@ -505,7 +496,7 @@ final class Scripts {
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
 
-		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( $tsf->get_the_real_ID(), $taxonomy ) )
+		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( $tsf->get_the_real_id(), $taxonomy ) )
 			/* translators: %s: Taxonomy singular name. */
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
@@ -728,7 +719,7 @@ final class Scripts {
 
 		$tsf = \tsf();
 
-		$id = $tsf->get_the_real_admin_ID();
+		$id = $tsf->get_the_real_admin_id();
 
 		$post_type   = \get_post_type( $id );
 		$_taxonomies = $post_type ? $tsf->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
@@ -776,19 +767,6 @@ final class Scripts {
 			);
 		}
 
-		$inline_css = [];
-		if ( \is_rtl() ) {
-			$inline_css = [
-				'.tsf-primary-term-selector'           => [
-					'float:left;',
-				],
-				'.tsf-primary-term-selector-help-wrap' => [
-					'left:25px;',
-					'right:initial;',
-				],
-			];
-		}
-
 		if ( $gutenberg ) {
 			$vars = [
 				'id'   => 'tsf-pt-gb',
@@ -813,7 +791,6 @@ final class Scripts {
 				'name'     => 'pt',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
-				'inline'   => $inline_css,
 			],
 			[
 				'id'       => $vars['id'],

@@ -276,7 +276,6 @@ class Admin_Pages extends Generate_Ldjson {
 			case 'error':
 				$message = \__( 'An unknown error occurred saving SEO settings.', 'autodescription' );
 				$type    = 'error';
-				break;
 		}
 
 		$this->update_static_cache( 'settings_notice', '' );
@@ -320,6 +319,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 *              4. Now enqueues scripts in the footer, so templates won't spam the header.
 	 * @TODO deprecate -- Use the more reliable and secure persistent notices registry instead...
 	 *                    Then again, this allows for AJAX-generated notices.
+	 * @TODO at least align this with `/persistent.php`?
 	 * @see register_dismissible_persistent_notice()
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
@@ -343,7 +343,6 @@ class Admin_Pages extends Generate_Ldjson {
 			case 'warning':
 			case 'info':
 				$type = "notice-$type";
-				break;
 		}
 
 		return vsprintf(
@@ -353,7 +352,7 @@ class Admin_Pages extends Generate_Ldjson {
 				( $icon ? 'tsf-show-icon' : '' ),
 				( $inline ? 'inline' : '' ),
 				sprintf(
-					( ! $escape && 0 === strpos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
+					( ! $escape && 0 === stripos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
 					( $escape ? \esc_html( $message ) : $message )
 				),
 				sprintf(

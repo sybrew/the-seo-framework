@@ -65,7 +65,7 @@ class Post_Data extends Detect {
 	 * @return mixed The post meta item's value. Null when item isn't registered.
 	 */
 	public function get_post_meta_item( $item, $post_id = 0, $use_cache = true ) {
-		return $this->get_post_meta( $post_id ?: $this->get_the_real_ID(), $use_cache )[ $item ] ?? null;
+		return $this->get_post_meta( $post_id ?: $this->get_the_real_id(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -175,7 +175,7 @@ class Post_Data extends Detect {
 			'the_seo_framework_post_meta_defaults',
 			[
 				$this->get_unfiltered_post_meta_defaults(),
-				$post_id ?: $this->get_the_real_ID(),
+				$post_id ?: $this->get_the_real_id(),
 			]
 		);
 	}
@@ -388,8 +388,8 @@ class Post_Data extends Detect {
 
 		$new_data = [];
 
-		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) :
-			switch ( $key ) :
+		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) {
+			switch ( $key ) {
 				case 'doctitle':
 					$new_data['_genesis_title'] = $value;
 					break;
@@ -407,12 +407,8 @@ class Post_Data extends Detect {
 
 				case 'canonical':
 					$new_data['_genesis_canonical_uri'] = $value;
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -456,19 +452,15 @@ class Post_Data extends Detect {
 			$new_data = [];
 
 			// This is sent via GET. Keep using $_REQUEST for future-compatibility.
-			foreach ( (array) $_REQUEST['autodescription-bulk'] as $key => $value ) :
-				switch ( $key ) :
+			foreach ( (array) $_REQUEST['autodescription-bulk'] as $key => $value ) {
+				switch ( $key ) {
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
 						if ( 'nochange' === $value ) continue 2;
 						$new_data[ "_genesis_$key" ] = $value;
-						break;
-
-					default:
-						break;
-				endswitch;
-			endforeach;
+				}
+			}
 		}
 
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
@@ -580,7 +572,7 @@ class Post_Data extends Detect {
 	 */
 	public function get_post_content( $post = null ) {
 
-		$post = \get_post( $post ?: $this->get_the_real_ID() );
+		$post = \get_post( $post ?: $this->get_the_real_id() );
 
 		// '0' is not deemed content. Return empty string for it's a slippery slope.
 		return ! empty( $post->post_content ) && \post_type_supports( $post->post_type, 'editor' )
@@ -620,15 +612,10 @@ class Post_Data extends Detect {
 		if ( empty( $meta ) || ! $this->detect_non_html_page_builder() )
 			return false;
 
-		if ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) ) :
-			// Divi Builder by Elegant Themes
-			return true;
-		elseif ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) ) :
-			// Visual Composer by WPBakery
-			return true;
-		endif;
-
-		return false;
+		// Divi Builder by Elegant Themes
+		// || Visual Composer by WPBakery
+		return ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) )
+			|| ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) );
 	}
 
 	/**
@@ -707,7 +694,7 @@ class Post_Data extends Detect {
 	 * @since 3.1.0 Now no longer crashes on database errors.
 	 * @since 4.1.4 1. Now tests against post type exclusions.
 	 *              2. Now considers headlessness. This method runs only on the front-end.
-	 * @since 4.2.9 Now uses the static cache methods instead of non-expiring-transients.
+	 * @since 4.3.0 Now uses the static cache methods instead of non-expiring-transients.
 	 *
 	 * @return array : { 'archive', 'search' }
 	 */
@@ -754,7 +741,7 @@ class Post_Data extends Detect {
 		foreach ( [ 'archive', 'search' ] as $type ) {
 			array_walk(
 				$cache[ $type ],
-				static function( &$v ) {
+				static function ( &$v ) {
 					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
 						$v = (int) $v->post_id;
 					} else {

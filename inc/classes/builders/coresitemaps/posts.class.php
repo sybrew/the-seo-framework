@@ -153,7 +153,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			}
 		}
 
-		foreach ( $query->posts as $post ) :
+		foreach ( $query->posts as $post ) {
 			/**
 			 * @augmented This if-statement prevents including the post in the sitemap when conditions apply.
 			 */
@@ -185,7 +185,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			 */
 			$sitemap_entry = \apply_filters( 'wp_sitemaps_posts_entry', $sitemap_entry, $post, $post_type );
 			$url_list[]    = $sitemap_entry;
-		endforeach;
+		}
 
 		return $url_list;
 	}

@@ -3,14 +3,14 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 4.2.9-dev-11
+ * Version: 4.3.0-dev-37
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
- * Requires at least: 5.5
- * Requires PHP: 7.3.0
+ * Requires at least: 5.9
+ * Requires PHP: 7.4.0
  *
  * @package The_SEO_Framework\Bootstrap
  */
@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.3.5
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '4.2.9' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '4.3.0' );
 
 /**
  * The plugin Database version.
@@ -50,7 +50,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '4.2.9' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '4270' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '4301' );
 
 /**
  * The plugin file, absolute unix path.
@@ -95,8 +95,8 @@ require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 // #    ;;Olll;;:::ittL::,;;;;;;ii;ttttt.                i.iii..
 // #        ;,iiiii:LL:,,:iiiii;ii;ttttt.              ;::iii0..
 // #        ,,...,,;;;,.....,ii;ii;...ll.            :::OO,GG.
-// # , L...........,::O::.00Gii;ii;ll.11.           .,,G,,0..
-// # , L..000LLL00LLLL0::.00Gii,;;l..lll.  ...    ..,00,00.
+// # , L....;,.....,::O::.00Gii;ii;ll.11.           .,,G,,0..
+// # , L..LL;LLL00LLLL0::.00Gii,;;l..lll.  ...    ..,00,00.
 // # , L..L;;;..11LLLLLLL1iiiii,ll;ttt11t..:::.  .,,0,,0..
 // # , L..O;;i;;;LLLLLLLLiiiiii,;;L;;t11t..:ii.;;,0i:0;,
 // # , L..Oiii;;;;;LLL1iiiii,::t,,t111::1:::00.,,,00L..
@@ -123,16 +123,15 @@ require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 //
 // Headless tip: ?tsf_headless[meta]=0&tsf_headless[settings]=0&tsf_headless[user]=0
 //
-// add_action( 'plugins_loaded', function() { if ( is_super_admin() ) {
+// add_action( 'plugins_loaded', function () { if ( is_super_admin() ) {
 // if ( is_admin() ) {
 // 	define( 'THE_SEO_FRAMEWORK_DEBUG', true );
-// 	define( 'THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS', true );
 // 	delete_option( 'the_seo_framework_upgraded_db_version' );
 // 	( $_GET['reset_tsf_upgrade'] ?? 0 ) and delete_option( 'the_seo_framework_upgraded_db_version' ) and delete_option( 'the_seo_framework_initial_db_version' );
 // 	( $_GET['downgrade_tsf'] ?? 0 ) and update_option( 'the_seo_framework_upgraded_db_version', (string) (int) $_GET['downgrade_tsf'] );
 // 	( $_GET['downgrade_tsf_initial'] ?? 0 ) and update_option( 'the_seo_framework_initial_db_version', (string) (int) $_GET['downgrade_tsf_initial'] );
 // 	( $_GET['tsf_headless'] ?? 0 ) and define( 'THE_SEO_FRAMEWORK_HEADLESS', $_GET['tsf_headless'] === 'true' ?: $_GET['tsf_headless'] );
-// 	add_action( 'admin_footer', function() { print( '<script>jQuery.migrateMute=true;</script>' ); } );
+// 	add_action( 'admin_footer', function () { print( '<script>jQuery.migrateMute=true;</script>' ); } );
 // }
 // }},0);
 // phpcs:enable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode

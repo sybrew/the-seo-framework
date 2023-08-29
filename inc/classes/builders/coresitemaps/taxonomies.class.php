@@ -94,7 +94,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 
 		$main = Main::get_instance();
 
-		foreach ( $taxonomy_terms->terms ?? [] as $term ) :
+		foreach ( $taxonomy_terms->terms ?? [] as $term ) {
 			/**
 			 * @augmented This if-statement prevents including the term in the sitemap when conditions apply.
 			 */
@@ -123,7 +123,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			 */
 			$sitemap_entry = \apply_filters( 'wp_sitemaps_taxonomies_entry', $sitemap_entry, $term->term_id, $taxonomy, $term );
 			$url_list[]    = $sitemap_entry;
-		endforeach;
+		}
 
 		return $url_list;
 	}

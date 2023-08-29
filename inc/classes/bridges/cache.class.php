@@ -27,7 +27,7 @@ namespace The_SEO_Framework\Bridges;
 /**
  * Handles the caching interface.
  *
- * @since 4.2.9
+ * @since 4.3.0
  * @access public
  * @internal
  * @final Can't be extended.
@@ -35,54 +35,9 @@ namespace The_SEO_Framework\Bridges;
 final class Cache {
 
 	/**
-	 * @since 4.2.9
-	 * @access private
-	 *         Use constant `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS` instead.
-	 * @see tsf()->init_debug_vars() which can set this to 'false'.
-	 * @var bool Whether transients are enabled.
-	 */
-	public static $use_transients = true;
-
-	/**
-	 * Set the value of the transient.
-	 *
-	 * Prevents setting of transients when they're disabled.
-	 *
-	 * @since 4.2.9
-	 * @uses $this->the_seo_framework_use_transients
-	 *
-	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
-	 * @param string $value      Transient value. Expected to not be SQL-escaped.
-	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
-	 * @return bool True is value is set, false on failure.
-	 */
-	public static function set_transient( $transient, $value, $expiration = 0 ) {
-		return static::$use_transients && \set_transient( $transient, $value, $expiration );
-	}
-
-	/**
-	 * Get the value of the transient.
-	 *
-	 * If the transient does not exists, does not have a value or has expired,
-	 * or transients have been disabled through a constant, then the transient
-	 * will be false.
-	 *
-	 * N.B. not all transient settings make use of this function, bypassing the constant check.
-	 *
-	 * @since 4.2.9
-	 * @uses $this->the_seo_framework_use_transients
-	 *
-	 * @param string $transient Transient name. Expected to not be SQL-escaped.
-	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
-	 */
-	public static function get_transient( $transient ) {
-		return static::$use_transients ? \get_transient( $transient ) : false;
-	}
-
-	/**
 	 * Returns a unique cache key suffix per blog and language.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 *
 	 * @param string $key The cache key.
 	 * @return string The cache key with blog ID and locale appended.
@@ -98,18 +53,18 @@ final class Cache {
 	/**
 	 * Clears static excluded IDs cache.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public static function clear_excluded_post_ids_cache() {
-		return \tsf()->update_static_cache( 'excluded_ids', false );
+		return \tsf()->update_static_cache( 'excluded_ids', [] );
 	}
 
 	/**
 	 * Refreshes sitemaps on post change.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @param int $post_id The Post ID that has been updated.
@@ -126,7 +81,7 @@ final class Cache {
 	/**
 	 * Checks whether the permalink structure is updated.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
@@ -146,7 +101,7 @@ final class Cache {
 	/**
 	 * Clears sitemap transients.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 */
 	public static function clear_sitemap_transients() {
 
@@ -160,21 +115,20 @@ final class Cache {
 		}
 
 		/**
-		 * @since 4.2.9
+		 * @since 4.3.0
 		 */
 		\do_action( 'the_seo_framework_cleared_sitemap_transients' );
 
 		/**
 		 * @since 3.1.0
-		 * @since 4.2.9 Soft deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
-		 * @todo 4.3.0 deprecate, use do_action_deprecated.
+		 * @since 4.3.0 Deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
 		 *
 		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
-		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_ID().
+		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_id().
 		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
 		 * @param array  $success Whether the action cleared. Set to always be true since deprecation.
 		 */
-		\do_action(
+		\do_action_deprecated(
 			'the_seo_framework_delete_cache_sitemap',
 			[
 				'sitemap',
@@ -182,7 +136,7 @@ final class Cache {
 				[ 'type' => 'sitemap' ],
 				[ true ],
 			],
-			'4.2.9 of The SEO Framework',
+			'4.3.0 of The SEO Framework',
 			'the_seo_framework_cleared_sitemap_transients'
 		);
 	}

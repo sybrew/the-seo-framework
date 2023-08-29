@@ -103,7 +103,7 @@ class Generate_Image extends Generate_Url {
 		 *    string alt:    The image alt tag,
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-		 *                            Is null when query is autodetermined.
+		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
 		 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
@@ -259,6 +259,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.4 Now returns filesizes under index `filesize`.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 *
 	 * @param array $args The query arguments. Must have 'id' and 'taxonomy'.
 	 * @return array The image details array, sequential: int => {
@@ -282,32 +283,26 @@ class Generate_Image extends Generate_Url {
 				'url' => $this->get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
 				'id'  => $this->get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
 			];
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
-				$details = [
-					'url' => $this->get_option( 'homepage_social_image_url' ),
-					'id'  => $this->get_option( 'homepage_social_image_id' ),
-				];
-				if ( ! $details['url'] ) {
-					$details = [
-						'url' => $this->get_post_meta_item( '_social_image_url', $args['id'] ),
-						'id'  => $this->get_post_meta_item( '_social_image_id', $args['id'] ),
-					];
-				}
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$details = [
-					'url' => $this->get_option( 'homepage_social_image_url' ),
-					'id'  => $this->get_option( 'homepage_social_image_id' ),
-				];
-			} else {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			$details = [
+				'url' => $this->get_option( 'homepage_social_image_url' ),
+				'id'  => $this->get_option( 'homepage_social_image_id' ),
+			];
+
+			if ( $args['id'] && ! $details['url'] ) {
 				$details = [
 					'url' => $this->get_post_meta_item( '_social_image_url', $args['id'] ),
 					'id'  => $this->get_post_meta_item( '_social_image_id', $args['id'] ),
 				];
 			}
+		} elseif ( $args['id'] ) {
+			$details = [
+				'url' => $this->get_post_meta_item( '_social_image_url', $args['id'] ),
+				'id'  => $this->get_post_meta_item( '_social_image_id', $args['id'] ),
+			];
 		}
 
-		if ( $details['url'] ) {
+		if ( ! empty( $details['url'] ) ) {
 			$details = $this->merge_extra_image_details( $details, 'full' );
 		} else {
 			$details = [
@@ -325,6 +320,7 @@ class Generate_Image extends Generate_Url {
 	 * @since 4.0.0
 	 * @since 4.1.1 Now only the 'social' context will fetch images from the content.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Now expects an ID before testing whether an attachment is an image.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -358,8 +354,6 @@ class Generate_Image extends Generate_Url {
 						$cbs['content'] = [ $builder, 'get_content_image_details' ];
 					}
 				}
-			} elseif ( $this->is_term_meta_capable() ) {
-				$cbs = [];
 			} else {
 				$cbs = [];
 			}
@@ -369,7 +363,7 @@ class Generate_Image extends Generate_Url {
 			if ( $args['taxonomy'] || $args['pta'] ) {
 				$cbs = [];
 			} else {
-				if ( \wp_attachment_is_image( $args['id'] ) ) {
+				if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
 					$cbs = [
 						'attachment' => [ $builder, 'get_attachment_image_details' ],
 					];
@@ -405,7 +399,7 @@ class Generate_Image extends Generate_Url {
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
 		 * @param array|null $args    The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                            Is null when query is autodetermined.
+		 *                            Is null when the query is auto-determined.
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
 		 */
@@ -555,14 +549,16 @@ class Generate_Image extends Generate_Url {
 		$data = \wp_get_attachment_metadata( $src_id ) ?? [];
 		$data = $data['sizes'][ $size ] ?? $data;
 
-		$dimensions = [
-			'width'  => 0,
-			'height' => 0,
-		];
-
 		if ( isset( $data['width'], $data['height'] ) ) {
-			$dimensions['width']  = $data['width'];
-			$dimensions['height'] = $data['height'];
+			$dimensions = [
+				'width'  => $data['width'],
+				'height' => $data['height'],
+			];
+		} else {
+			$dimensions = [
+				'width'  => 0,
+				'height' => 0,
+			];
 		}
 
 		return $dimensions;
@@ -622,11 +618,14 @@ class Generate_Image extends Generate_Url {
 			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize )
 				continue;
 
-			if ( isset( $_d['width'], $_d['height'] ) ) {
-				if ( $_d['width'] <= $max_size && $_d['height'] <= $max_size && $_d['width'] > $law ) {
-					$law  = $_d['width'];
-					$size = $_s;
-				}
+			if (
+					isset( $_d['width'], $_d['height'] )
+				&& $_d['width'] <= $max_size
+				&& $_d['height'] <= $max_size
+				&& $_d['width'] > $law
+			) {
+				$law  = $_d['width'];
+				$size = $_s;
 			}
 		}
 

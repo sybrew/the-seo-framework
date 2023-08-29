@@ -88,7 +88,7 @@ final class SEOBar {
 	 * @return static
 	 */
 	private static function get_instance() {
-		return static::$instance ?? ( static::$instance = new static );
+		return static::$instance ??= new static;
 	}
 
 	/**
@@ -122,11 +122,9 @@ final class SEOBar {
 		if ( ! static::$query['taxonomy'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
-		if ( static::$query['taxonomy'] ) {
-			$builder = \The_SEO_Framework\Builders\SEOBar\Term::get_instance();
-		} else {
-			$builder = \The_SEO_Framework\Builders\SEOBar\Page::get_instance();
-		}
+		$builder = static::$query['taxonomy']
+			? \The_SEO_Framework\Builders\SEOBar\Term::get_instance()
+			: \The_SEO_Framework\Builders\SEOBar\Page::get_instance();
 
 		$instance = static::get_instance();
 		$instance->store_seo_bar_items( $builder );
@@ -407,7 +405,7 @@ final class SEOBar {
 	 */
 	private function interpret_status_to_class_suffix( $item ) {
 
-		switch ( $item['status'] ) :
+		switch ( $item['status'] ) {
 			case static::STATE_GOOD:
 				$status = 'good';
 				break;
@@ -424,11 +422,10 @@ final class SEOBar {
 				$status = 'unknown';
 				break;
 
-			default:
 			case static::STATE_UNDEFINED:
+			default:
 				$status = 'undefined';
-				break;
-		endswitch;
+		}
 
 		return $status;
 	}
@@ -447,10 +444,10 @@ final class SEOBar {
 
 		static $use_symbols;
 
-		$use_symbols = $use_symbols ?? (bool) \tsf()->get_option( 'seo_bar_symbols' );
+		$use_symbols ??= (bool) \tsf()->get_option( 'seo_bar_symbols' );
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
-			switch ( $item['status'] ) :
+			switch ( $item['status'] ) {
 				case static::STATE_OKAY:
 					$symbol = '!?';
 					break;
@@ -463,11 +460,10 @@ final class SEOBar {
 					$symbol = '??';
 					break;
 
-				default:
 				case static::STATE_UNDEFINED:
+				default:
 					$symbol = '--';
-					break;
-			endswitch;
+			}
 
 			return $symbol;
 		}

@@ -44,7 +44,7 @@ final class Images {
 	 *
 	 * @since 4.0.0
 	 */
-	private function __construct() { }
+	private function __construct() {}
 
 	/**
 	 * Generates image URLs and IDs from the attachment page entry.
@@ -62,7 +62,7 @@ final class Images {
 	 */
 	public static function get_attachment_image_details( $args = null, $size = 'full' ) {
 
-		$id = $args['id'] ?? \tsf()->get_the_real_ID();
+		$id = $args['id'] ?? \tsf()->get_the_real_id();
 
 		if ( $id ) {
 			yield [
@@ -93,7 +93,7 @@ final class Images {
 	 */
 	public static function get_featured_image_details( $args = null, $size = 'full' ) {
 
-		$post_id = $args['id'] ?? \tsf()->get_the_real_ID();
+		$post_id = $args['id'] ?? \tsf()->get_the_real_id();
 		$id      = \get_post_thumbnail_id( $post_id );
 
 		if ( $id ) {
@@ -148,8 +148,6 @@ final class Images {
 			}
 		}
 
-		$matches = [];
-
 		// \strlen( '<img src=a>' ) === 11; yes, that's a valid self-closing tag with a relative source.
 		if ( \strlen( $content ) > 10 && false !== stripos( $content, '<img ' ) ) {
 			// Clear what might have unfavourable images.
@@ -163,7 +161,7 @@ final class Images {
 				]
 			);
 
-			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match(), but the opcodes won't help.
+			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match() and strip content, but the opcodes won't help.
 			preg_match_all(
 				'/<img\b[^>]+?\bsrc=(["\'])?([^"\'>\s]+)\1?[^>]*?>/mi',
 				$content,
@@ -172,27 +170,18 @@ final class Images {
 			);
 		}
 
-		if ( $matches ) {
-			for ( $i = 0; $i < static::MAX_CONTENT_IMAGES; $i++ ) {
-				// Fewer than MAX_CONTENT_IMAGES matched.
-				if ( ! isset( $matches[ $i ][2] ) ) break;
+		$yielded_images = 0;
 
-				// Assume every URL to be correct? Yes. WordPress assumes that too.
-				$url = $matches[ $i ][2];
+		foreach ( $matches ?? [] as $match ) {
+			// false-esque matches, like '0', are so uncommon it's not worth dealing with them.
+			if ( empty( $match[2] ) ) continue;
 
-				// false-esque matches, like '0', are so uncommon it's not worth dealing with them.
-				if ( ! $url ) continue;
-
-				yield [
-					'url' => $url,
-					'id'  => 0,
-				];
-			}
-		} else {
 			yield [
-				'url' => '',
+				'url' => $match[2],
 				'id'  => 0,
 			];
+
+			if ( ++$yielded_images > static::MAX_CONTENT_IMAGES ) break;
 		}
 	}
 

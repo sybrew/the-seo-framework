@@ -60,7 +60,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_pre_get_document_title',
 			[
 				$this->get_title(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 	}
@@ -92,7 +92,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_wp_title',
 			[
 				$this->get_title(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 	}
@@ -169,7 +169,6 @@ class Render extends Admin_Init {
 					break;
 				default:
 					$_secure_attr_value = \esc_attr( $_value );
-					break;
 			}
 
 			// phpcs:disable -- Security hint for later, left code intact; Redundant, internal... for now.
@@ -258,7 +257,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_description_output',
 			[
 				$this->get_description(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -292,7 +291,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_ogdescription_output',
 			[
 				$this->get_open_graph_description(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -324,7 +323,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_oglocale_output',
 			[
 				$this->fetch_locale(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -358,7 +357,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_ogtitle_output',
 			[
 				$this->get_open_graph_title(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -460,7 +459,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_ogsitename_output',
 			[
 				$this->get_blogname(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -493,7 +492,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_ogurl_output',
 			[
 				$this->get_current_canonical_url(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -543,7 +542,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_twittersite_output',
 			[
 				$this->get_option( 'twitter_site' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -577,7 +576,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_twittercreator_output',
 			[
 				$this->get_current_post_author_meta_item( 'twitter_page' ) ?: $this->get_option( 'twitter_creator' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -610,7 +609,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_twittertitle_output',
 			[
 				$this->get_twitter_title(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -643,7 +642,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_twitterdescription_output',
 			[
 				$this->get_twitter_description(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -731,7 +730,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_facebookauthor_output',
 			[
 				$this->get_current_post_author_meta_item( 'facebook_page' ) ?: $this->get_option( 'facebook_author' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -764,7 +763,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_facebookpublisher_output',
 			[
 				$this->get_option( 'facebook_publisher' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -795,7 +794,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_facebookappid_output',
 			[
 				$this->get_option( 'facebook_appid' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -820,7 +819,7 @@ class Render extends Admin_Init {
 
 		if ( ! $this->output_published_time() ) return '';
 
-		$id            = $this->get_the_real_ID();
+		$id            = $this->get_the_real_id();
 		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
 
 		if ( '0000-00-00 00:00:00' === $post_date_gmt )
@@ -850,7 +849,7 @@ class Render extends Admin_Init {
 	 * Renders Article Modified Time meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0 Listens to $this->get_the_real_ID() instead of WordPress Core ID determination.
+	 * @since 2.7.0 Listens to $this->get_the_real_id() instead of WordPress Core ID determination.
 	 * @since 2.8.0 Returns empty on product pages.
 	 * @since 3.0.0 1. Now checks for 0000 timestamps.
 	 *              2. Now uses timestamp formats.
@@ -914,7 +913,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_rel_canonical_output',
 			[
 				$_url,
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -955,7 +954,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_ldjson_scripts',
 			[
 				$this->render_ld_json_scripts(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -979,7 +978,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_googlesite_output',
 			[
 				$this->get_option( 'google_verification' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -1006,7 +1005,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_bingsite_output',
 			[
 				$this->get_option( 'bing_verification' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -1033,7 +1032,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_yandexsite_output',
 			[
 				$this->get_option( 'yandex_verification' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -1060,7 +1059,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_baidusite_output',
 			[
 				$this->get_option( 'baidu_verification' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -1087,7 +1086,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_pintsite_output',
 			[
 				$this->get_option( 'pint_verification' ),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -1138,7 +1137,7 @@ class Render extends Admin_Init {
 				'the_seo_framework_robots_meta',
 				[
 					$this->generate_robots_meta(),
-					$this->get_the_real_ID(),
+					$this->get_the_real_id(),
 				]
 			)
 		);
@@ -1164,7 +1163,7 @@ class Render extends Admin_Init {
 			'the_seo_framework_shortlink_output',
 			[
 				$this->get_shortlink(),
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 
@@ -1188,7 +1187,7 @@ class Render extends Admin_Init {
 	public function paged_urls() {
 
 		$paged_urls = $this->get_paged_urls();
-		$id         = $this->get_the_real_ID();
+		$id         = $this->get_the_real_id();
 
 		/**
 		 * @since 2.6.0
@@ -1280,7 +1279,7 @@ class Render extends Admin_Init {
 
 		if ( ! $cache['run'] ) return '';
 
-		switch ( $where ) :
+		switch ( $where ) {
 			case 'before':
 				return "<!-- {$cache['annotation']} -->\n";
 
@@ -1297,7 +1296,7 @@ class Render extends Admin_Init {
 				}
 
 				return "<!-- / {$cache['annotation']}{$timers} -->\n";
-		endswitch;
+		}
 	}
 
 	/**

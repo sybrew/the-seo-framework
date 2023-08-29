@@ -73,8 +73,4 @@ switch ( $this->get_view_instance( 'feed', $instance ) ) :
 				esc_html__( 'View the main feed.', 'autodescription' )
 			)
 		);
-		break;
-
-	default:
-		break;
 endswitch;

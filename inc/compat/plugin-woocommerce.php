@@ -9,9 +9,20 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
+\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
+\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
+\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
+\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
+\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar' );
+\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
+\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
+
 /**
  * Initializes WooCommerce compatibility.
  *
+ * @hook woocommerce_init 10
  * @since 3.1.0
  * @since 4.0.3 Added primary term support to products.
  * @since 4.1.1 Added primary term support to category widgets.
@@ -22,18 +33,6 @@ namespace The_SEO_Framework;
  * @uses \is_product()
  */
 function _init_wc_compat() {
-	\add_action(
-		'the_seo_framework_do_before_output',
-		static function() {
-			/**
-			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
-			 */
-			if ( \function_exists( '\\is_product' ) && \is_product() ) {
-				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
-			}
-		}
-	);
-
 	$tsf = \tsf();
 
 	// Adjust the product link acknowledging the primary category.
@@ -45,10 +44,20 @@ function _init_wc_compat() {
 	// Adjust the widget's tree primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
 	\add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
 
-	// WP <5.7
-	\remove_action( 'wp_head', 'wc_page_noindex' );
-	// WP 5.7+
 	\remove_filter( 'wp_robots', 'wc_page_no_robots' );
+
+	// Anonymous function. Filter 'the_seo_framework_json_breadcrumb_output' instead.
+	\add_action(
+		'the_seo_framework_do_before_output',
+		static function () {
+			/**
+			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
+			 */
+			if ( \tsf()->is_product() ) {
+				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
+			}
+		}
+	);
 }
 
 /**
@@ -75,10 +84,10 @@ function _is_shop( $post = null ) {
 	return $is_shop;
 }
 
-\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
 /**
  * Sets the correct shop ID on the shop page.
  *
+ * @hook the_seo_framework_real_id 10
  * @since 4.0.5
  * @access private
  *
@@ -94,10 +103,10 @@ function _set_real_id_wc_shop( $id ) {
 	return $id;
 }
 
-\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
 /**
  * Sets singular archives for the WC shop page.
  *
+ * @hook the_seo_framework_is_singular_archive 10
  * @since 4.0.5
  * @access private
  *
@@ -110,10 +119,10 @@ function _set_shop_singular_archive( $is_singular_archive, $id ) {
 	return $is_singular_archive || _is_shop( $id );
 }
 
-\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
 /**
  * Sets the is_shop query.
  *
+ * @hook the_seo_framework_is_shop 10
  * @since 4.0.5
  * @since 4.1.4 Now handles the assertion fully.
  * @access private
@@ -128,10 +137,10 @@ function _set_wc_is_shop( $is_shop, $post ) {
 	return $is_shop || _is_shop( $post );
 }
 
-\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
 /**
  * Sets the is_product query.
  *
+ * @hook the_seo_framework_is_product 10
  * @since 4.0.5
  * @since 4.1.4 Now handles the assertion fully.
  *
@@ -149,10 +158,10 @@ function _set_wc_is_product( $is_product, $post ) {
 	return \function_exists( '\\is_product' ) && \is_product();
 }
 
-\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
 /**
  * Sets the is_product_admin query.
  *
+ * @hook the_seo_framework_is_product_admin 10
  * @since 4.0.5
  * @since 4.1.4 Now handles the assertion fully.
  * @access private
@@ -170,10 +179,10 @@ function _set_wc_is_product_admin( $is_product_admin ) {
 	return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
 }
 
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );
 /**
  * Sets 'noindex' default values for WooCommerce's restrictive pages.
  *
+ * @hook the_seo_framework_robots_meta_array 10
  * @since 4.1.4
  * @since 4.2.8 Now uses `tsf()->is_singular()` instead of `is_singular()` (for debug support).
  * @access private
@@ -187,7 +196,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
  * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
- *                            Is null when query is autodetermined.
+ *                            Is null when the query is auto-determined.
  * @param int <bit>  $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
  *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
@@ -205,7 +214,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 
 	if ( null === $args ) {
 		if ( $tsf->is_singular() )
-			$page_id = $tsf->get_the_real_ID();
+			$page_id = $tsf->get_the_real_id();
 	} else {
 		if ( '' === $args['taxonomy'] )
 			$page_id = $args['id'];
@@ -236,10 +245,10 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	return $meta;
 }
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar' );
 /**
  * Appends noindex default checks to the noindex item of the SEO Bar for pages.
  *
+ * @hook the_seo_framework_seo_bar 10
  * @since 4.1.4
  * @access private
  *
@@ -271,10 +280,10 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 	$index_item['assess']['recommends'] = \__( 'WooCommerce recommends not indexing this dynamic page.', 'autodescription' );
 }
 
-\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
 /**
  * Adjusts image generation parameters.
  *
+ * @hook the_seo_framework_image_generation_params 10
  * @since 4.0.5 (introduced @ 4.0.0, renamed to prevent conflict).
  * @since 4.2.0 Now supports the `$args['pta']` index.
  * @since 4.2.8 Fixed the taxonomy query for the admin area.
@@ -287,7 +296,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
  *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
  * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
- *                         Is null when query is autodetermined.
+ *                         Is null when the query is auto-determined.
  * @return array $params
  */
 function _adjust_wc_image_generation_params( $params, $args ) {
@@ -320,6 +329,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 /**
  * Generates image URLs and IDs from the WooCommerce product gallery entries.
  *
+ * @hook the_seo_framework_public_post_type_archives 10
  * @since 4.0.0
  * @since 4.2.0 Now supports the `$args['pta']` index.
  * @access private
@@ -335,7 +345,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  */
 function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 
-	$post_id        = $args['id'] ?? \tsf()->get_the_real_ID();
+	$post_id        = $args['id'] ?? \tsf()->get_the_real_id();
 	$attachment_ids = [];
 
 	if ( $post_id && \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
@@ -382,7 +392,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  */
 function _get_product_category_thumbnail_image_details( $args = null, $size = 'full' ) {
 
-	$term_id      = $args['id'] ?? \tsf()->get_the_real_ID();
+	$term_id      = $args['id'] ?? \tsf()->get_the_real_id();
 	$thumbnail_id = \get_term_meta( $term_id, 'thumbnail_id', true ) ?: 0;
 
 	if ( $thumbnail_id ) {
@@ -398,7 +408,6 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
 	}
 }
 
-\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
 /**
  * Filters WC product PTA from TSF's recognized public post type archives.
  *
@@ -406,6 +415,7 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
  * This is because the shop page is singular, singular_archive, shop, and post_type_archive,
  * and can even be is_static_frontpage (but not is_real_front_page if queried /shop/ instead of /).
  *
+ * @hook the_seo_framework_public_post_type_archives 10
  * @since 4.2.8
  * @access private
  *

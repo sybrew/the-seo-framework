@@ -165,7 +165,7 @@ final class AJAX {
 		if ( ! $cropped || \is_wp_error( $cropped ) )
 			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
 
-		switch ( $context ) :
+		switch ( $context ) {
 			case 'tsf-image':
 				/**
 				 * Fires before a cropped image is saved.
@@ -245,8 +245,7 @@ final class AJAX {
 
 			default:
 				\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
-				break;
-		endswitch;
+		}
 
 		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
 
@@ -331,7 +330,6 @@ final class AJAX {
 						} else {
 							$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
 						}
-						break;
 				}
 
 				$data[ $g ] = $tsf->s_description( $data[ $g ] );
@@ -343,10 +341,6 @@ final class AJAX {
 				} else {
 					$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
 				}
-				break;
-
-			default:
-				break;
 		}
 
 		\wp_send_json_success( [

@@ -127,13 +127,13 @@ function _autoload_classes( $class ) {
 
 	$class = strtolower( $class );
 
-	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't gotten any friends.
-	if ( 0 !== strpos( $class, 'the_seo_framework\\', 0 ) ) return;
+	// It's The_SEO_Framework, not the_seo_framework! -- Sybre's a nightmare, honestly! No wonder he hasn't got any friends.
+	if ( ! str_starts_with( $class, 'the_seo_framework\\' ) ) return;
 
 	static $_timenow = true;
 	// Lock $_timenow to prevent stacking timers during class extending. This is released when the class stack loaded.
 	if ( $_timenow ) {
-		$_bootstrap_timer = microtime( true );
+		$_bootstrap_timer = hrtime( true );
 		$_timenow         = false;
 	} else {
 		$_bootstrap_timer = 0;
@@ -156,7 +156,7 @@ function _autoload_classes( $class ) {
 	require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
-		_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+		_bootstrap_timer( ( hrtime( true ) - $_bootstrap_timer ) / 1e9 );
 		$_timenow = true;
 	}
 }
@@ -193,6 +193,9 @@ function _do_plugin_deactivation() {
  * @return int The accumulated time, roughly.
  */
 function _bootstrap_timer( $add = 0 ) {
-	static $time  = 0;
-	return $time += $add;
+
+	static $time = 0;
+
+	$time += $add;
+	return $time;
 }

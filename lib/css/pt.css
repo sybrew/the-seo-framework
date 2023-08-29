@@ -20,6 +20,10 @@
 	display: block;
 }
 
+body.rtl .tsf-primary-term-selector {
+	float: left;
+}
+
 .tsf-primary-term-selector input {
 	vertical-align: middle;
 	height: 14px;
@@ -42,6 +46,11 @@
 	position: absolute;
 	top: 0;
 	right: 25px;
+}
+
+body.rtl .tsf-primary-term-selector-help-wrap {
+	left: 25px;
+	right: initial;
 }
 
 @media screen and (max-width: 782px) {

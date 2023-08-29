@@ -101,7 +101,10 @@ $robots_settings = [
 			</label>
 			<div class="inline-edit-group wp-clearfix">
 				<?php
-				foreach ( $robots_settings as $_setting ) :
+				/* translators: %s = default option value */
+				$_default_i18n = __( 'Default (%s)', 'autodescription' );
+
+				foreach ( $robots_settings as $_setting ) {
 					// This is bad accessibility, but it's exactly as bad as WP is, and we don't want to stray away from their standards.
 					echo '<label class=clear>';
 						printf( '<span class=title>%s</span>', esc_html( $_setting['label'] ) );
@@ -111,7 +114,7 @@ $robots_settings = [
 							'name'    => $_setting['name'],
 							'options' => [
 								/* translators: %s = default option value */
-								0  => __( 'Default (%s)', 'autodescription' ),
+								0  => $_default_i18n,
 								-1 => $_setting['force_on'],
 								1  => $_setting['force_off'],
 							],
@@ -119,7 +122,7 @@ $robots_settings = [
 						] );
 						// phpcs:enable, WordPress.Security.EscapeOutput
 					echo '</label>';
-				endforeach;
+				}
 				?>
 			</div>
 			<div class="inline-edit-group wp-clearfix">

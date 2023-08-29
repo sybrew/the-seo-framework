@@ -14,7 +14,7 @@ use The_SEO_Framework\Bridges\PostSettings,
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Setup default vars.
-$post_id = $this->get_the_real_ID(); // We also have access to object $post at the main call...
+$post_id = $this->get_the_real_id(); // We also have access to object $post at the main call...
 
 $_generator_args = [ 'id' => $post_id ];
 
@@ -59,7 +59,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_general_tab':
-		if ( $this->get_option( 'display_seo_bar_metabox' ) ) :
+		if ( $this->get_option( 'display_seo_bar_metabox' ) ) {
 			?>
 			<div class="tsf-flex-setting tsf-flex" id=tsf-doing-it-right-wrap>
 				<div class="tsf-flex-setting-label tsf-flex">
@@ -78,7 +78,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<?php
-		endif;
+		}
 
 		if ( $_is_static_frontpage ) {
 			$_has_home_title = (bool) $this->escape_title( $this->get_option( 'homepage_title' ) );
@@ -132,7 +132,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ) ?>" autocomplete=off />
+					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_genesis_title' ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -155,7 +155,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				<div class=tsf-checkbox-wrapper>
 					<label for=autodescription_title_no_blogname>
 						<?php
-						if ( $_is_static_frontpage ) :
+						if ( $_is_static_frontpage ) {
 							// Disable the input, and hide the previously stored value.
 							?>
 							<input type=checkbox id=autodescription_title_no_blogname value=1 <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> disabled />
@@ -164,14 +164,14 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 							esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
 							HTML::make_info( __( 'For the homepage, this option must be managed on the SEO Settings page.', 'autodescription' ) );
-						else :
+						} else {
 							?>
 							<input type=checkbox name="autodescription[_tsf_title_no_blogname]" id=autodescription_title_no_blogname value=1 <?php checked( $this->get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
 							<?php
 							esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
 							HTML::make_info( __( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ) );
-						endif;
+						}
 						?>
 					</label>
 				</div>
@@ -221,6 +221,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_visibility_tab':
+
 		$canonical_placeholder = $this->get_canonical_url( $_generator_args );
 
 		// Get robots defaults.
@@ -308,7 +309,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<?php
-				foreach ( $r_settings as $_s ) :
+				foreach ( $r_settings as $_s ) {
 					?>
 					<div class="tsf-flex-setting tsf-flex">
 						<div class="tsf-flex-setting-label tsf-flex">
@@ -320,6 +321,9 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						</div>
 						<div class="tsf-flex-setting-input tsf-flex">
 						<?php
+							/* translators: %s = default option value */
+							$_default_i18n = __( 'Default (%s)', 'autodescription' );
+
 							// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 							echo Form::make_single_select_form( [
 								'id'      => $_s['id'],
@@ -327,16 +331,14 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 								'name'    => sprintf( 'autodescription[%s]', $_s['option'] ),
 								'label'   => '',
 								'options' => [
-									/* translators: %s = default option value */
-									0  => sprintf( __( 'Default (%s)', 'autodescription' ), $_s['_default'] ),
+									0  => sprintf( $_default_i18n, $_s['_default'] ),
 									-1 => $_s['force_on'],
 									1  => $_s['force_off'],
 								],
 								'default' => $this->get_post_meta_item( $_s['option'] ),
 								'data'    => [
 									'defaultUnprotected' => $_s['_default'],
-									/* translators: %s = default option value */
-									'defaultI18n'        => __( 'Default (%s)', 'autodescription' ),
+									'defaultI18n'        => $_default_i18n,
 								],
 							] );
 							// phpcs:enable, WordPress.Security.EscapeOutput
@@ -344,7 +346,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						</div>
 					</div>
 					<?php
-				endforeach;
+				}
 				?>
 			</div>
 		</div>
@@ -485,7 +487,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ) ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_open_graph_title' ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
 				</div>
 			</div>
 		</div>
@@ -521,7 +523,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ) ?>" autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= $this->esc_attr_preserve_amp( $this->get_post_meta_item( '_twitter_title' ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
 				</div>
 			</div>
 		</div>
@@ -584,5 +586,4 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 		</div>
 		<?php
-		break;
 endswitch;

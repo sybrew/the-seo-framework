@@ -489,6 +489,10 @@ class Site_Options extends Sanitize {
 		\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS )
 			or \add_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() );
 
+		// Not a public "setting" -- only add the option to prevent additional db-queries when it's yet to be populated.
+		\get_option( \THE_SEO_FRAMEWORK_SITE_CACHE )
+			or \add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] );
+
 		// Check whether the Options Reset initialization has been added.
 		$this->check_options_reset();
 
@@ -580,14 +584,13 @@ class Site_Options extends Sanitize {
 	 * Allows bulk-updating of the SEO settings.
 	 *
 	 * @since 2.7.0
+	 * @todo mark private and make $new_option accept array only?
+	 *       This way, we can exchange the wp_parse_args() call for array_merge()
 	 *
 	 * @param string|array $new_option : {
-	 *      if string: The string will act as a key for a new empty string option, e.g. : {
-	 *           'sitemap_index' becomes ['sitemap_index' => '']
-	 *      }
-	 *      if array: The option name(s) and value(s), e.g. : {
-	 *            ['sitemap_index' => 1]
-	 *      }
+	 *      if string: The string will act as a key for a new empty string option, e.g.,
+	 *                 'sitemap_index' becomes ['sitemap_index' => '']
+	 *      if array:  The option name(s) and value(s), e.g., ['sitemap_index' => 1]
 	 * }
 	 * @param string       $settings_field The Settings Field to update. Defaults
 	 *                                     to The SEO Framework settings field.
@@ -600,9 +603,10 @@ class Site_Options extends Sanitize {
 			$this->init_sanitizer_filters();
 		}
 
-		$settings = \wp_parse_args( $new_option, \get_option( $settings_field ) );
-
-		return \update_option( $settings_field, $settings );
+		return \update_option(
+			$settings_field,
+			\wp_parse_args( $new_option, \get_option( $settings_field ) )
+		);
 	}
 
 	/**

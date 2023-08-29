@@ -8,19 +8,16 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-/**
- * Warns homepage global title and description about receiving input.
- *
- * @since 2.8.0
- */
-\add_filter( 'the_seo_framework_warn_homepage_global_title', '__return_true' );
-\add_filter( 'the_seo_framework_warn_homepage_global_description', '__return_true' );
-\add_filter( 'the_seo_framework_tell_multilingual_sitemap', '__return_true' );
-
 \add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
+\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
+\add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
+\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
+\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
+
 /**
  * Adds WPML filters based on current screen.
  *
+ * @hook current_screen 10
  * @since 2.8.0
  * @access private
  */
@@ -36,6 +33,7 @@ function _wpml_do_current_screen_action() {
  *
  * FIXME: Why did we do this again? Does it even affect the settings? Does it fix the home query? Remove me?
  *
+ * @hook wpml_admin_language_switcher_items 10
  * @since 2.8.0
  * @access private
  *
@@ -49,12 +47,12 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
 	return $languages_links;
 }
 
-\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
 /**
  * Deletes all sitemap transients, instead of just one.
  *
+ * @hook the_seo_framework_cleared_sitemap_transients 10
  * @since 3.1.0
- * @since 4.2.9 Removed clearing once-per-request restriction.
+ * @since 4.3.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
  */
@@ -78,11 +76,11 @@ function _wpml_flush_sitemap() {
 	); // No cache OK. DB call ok.
 }
 
-\add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
 /**
  * Filters "display translatable" post types from the sitemap query arguments.
  * Only appends actually translated posts to the translated sitemap.
  *
+ * @hook the_seo_framework_sitemap_header 10
  * @since 4.1.4
  * @access private
  */
@@ -91,12 +89,12 @@ function _wpml_sitemap_filter_display_translatables() {
 	\add_filter( 'wpml_should_use_display_as_translated_snippet', '__return_false' );
 }
 
-\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
-\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
 /**
  * Filters nontranslatable post types from the sitemap query arguments.
  * Only appends when the default sitemap language is not displayed.
  *
+ * @hook the_seo_framework_sitemap_hpt_query_args 10
+ * @hook the_seo_framework_sitemap_nhpt_query_args 10
  * @since 4.1.4
  * @access private
  * @global $sitepress \SitePress
@@ -107,11 +105,14 @@ function _wpml_sitemap_filter_display_translatables() {
 function _wpml_sitemap_filter_non_translatables( $args ) {
 	global $sitepress;
 
-	if ( empty( $sitepress )
-	|| ! method_exists( $sitepress, 'get_default_language' )
-	|| ! method_exists( $sitepress, 'get_current_language' )
-	|| ! method_exists( $sitepress, 'is_translated_post_type' ) )
+	if (
+		   empty( $sitepress )
+		|| ! method_exists( $sitepress, 'get_default_language' )
+		|| ! method_exists( $sitepress, 'get_current_language' )
+		|| ! method_exists( $sitepress, 'is_translated_post_type' )
+	) {
 		return $args;
+	}
 
 	if ( $sitepress->get_default_language() === $sitepress->get_current_language() ) return $args;
 

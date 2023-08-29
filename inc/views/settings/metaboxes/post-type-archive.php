@@ -55,7 +55,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			// Create: `[ 'doctitle' => [ 'pta', $post_type, 'doctitle' ] ];`
 			array_walk(
 				$_option_map,
-				static function( &$input_id, $key ) {
+				static function ( &$input_id, $key ) {
 					$input_id = array_merge( $input_id, [ $key ] );
 				}
 			);
@@ -122,6 +122,12 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				</div>
 				<div class=tsf-post-type-archive-if-not-excluded>
 					<?php
+					if ( $this->detect_multilingual_plugins() ) {
+						HTML::attention(
+							__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' )
+						);
+					}
+
 					SeoSettings::_nav_tab_wrapper(
 						"post_type_archive_{$post_type}",
 						/**
@@ -141,6 +147,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				</div>
 			</div>
 			<?php
+			// Output only the first time.
 			$i++ or print( '<hr class=hide-if-tsf-js>' );
 		}
 		break;
@@ -412,7 +419,11 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			],
 		];
 
-		foreach ( $robots_settings as $_r_type => $_rs ) :
+		/* translators: %s = default option value */
+		$_default_i18n         = __( 'Default (%s)', 'autodescription' );
+		$_default_unknown_i18n = __( 'Default (unknown)', 'autodescription' );
+
+		foreach ( $robots_settings as $_r_type => $_rs ) {
 			// phpcs:enable, WordPress.Security.EscapeOutput
 			HTML::wrap_fields(
 				vsprintf(
@@ -436,19 +447,18 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				'name'    => Input::get_field_name( $_option_map[ $_r_type ] ),
 				'label'   => '',
 				'options' => [
-					0  => __( 'Default (unknown)', 'autodescription' ),
+					0  => $_default_unknown_i18n,
 					-1 => $_rs['force_on'],
 					1  => $_rs['force_off'],
 				],
 				'default' => $_rs['_value'],
 				'data'    => [
-					/* translators: %s = default option value */
-					'defaultI18n' => __( 'Default (%s)', 'autodescription' ),
+					'defaultI18n' => $_default_i18n,
 					'defaultOn'   => $_rs['_defaultOn'],
 					'defaultOff'  => $_rs['_defaultOff'],
 				],
 			] );
-		endforeach;
+		}
 		?>
 		<hr>
 
@@ -468,5 +478,4 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			<input type=url name="<?php Input::field_name( $_option_map['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['redirect'] ); ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'redirect', $post_type ) ) ?>" autocomplete=off />
 		</p>
 		<?php
-		break;
 endswitch;

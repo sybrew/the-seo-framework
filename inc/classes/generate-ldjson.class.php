@@ -90,7 +90,7 @@ class Generate_Ldjson extends Generate_Image {
 		if ( $encode ) {
 			$options  = 0;
 			$options |= \JSON_UNESCAPED_SLASHES;
-			$options |= $this->script_debug ? \JSON_PRETTY_PRINT : 0;
+			$options |= \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0;
 
 			return $data ? (string) json_encode( $data, $options ) : '';
 		}
@@ -339,7 +339,7 @@ class Generate_Ldjson extends Generate_Image {
 		$output = '';
 
 		if ( $this->is_singular() && ! $this->is_real_front_page() ) {
-			if ( \is_post_type_hierarchical( $this->get_post_type_real_ID() ) ) {
+			if ( \is_post_type_hierarchical( $this->get_post_type_real_id() ) ) {
 				$output = $this->get_ld_json_breadcrumbs_page();
 			} else {
 				$output = $this->get_ld_json_breadcrumbs_post();
@@ -361,7 +361,7 @@ class Generate_Ldjson extends Generate_Image {
 	public function get_ld_json_breadcrumbs_page() {
 
 		$items   = [];
-		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_ID() ) );
+		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_id() ) );
 
 		$position = 1; // 0 is the homepage.
 		foreach ( $parents as $parent_id ) {
@@ -411,8 +411,8 @@ class Generate_Ldjson extends Generate_Image {
 
 		$output = '';
 
-		$post_id    = $this->get_the_real_ID();
-		$post_type  = $this->get_post_type_real_ID( $post_id );
+		$post_id    = $this->get_the_real_id();
+		$post_type  = $this->get_post_type_real_id( $post_id );
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**
@@ -465,7 +465,7 @@ class Generate_Ldjson extends Generate_Image {
 		$assigned_ids = [];
 
 		// Fetch cats children id's, if any.
-		foreach ( $terms as $term_id => $parent_id ) :
+		foreach ( $terms as $term_id => $parent_id ) {
 			$assigned_ids[ $term_id ] = $parent_id;
 			// Check if they have parents (gets them all).
 			$ancestors = \get_ancestors( $term_id, $taxonomy );
@@ -476,7 +476,7 @@ class Generate_Ldjson extends Generate_Image {
 				// Save current only with empty parent id..
 				$parents[ $term_id ] = [];
 			}
-		endforeach;
+		}
 
 		unset( $terms );
 
@@ -519,7 +519,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$items = [];
 
-		foreach ( $tree_ids as $pos => $child_id ) :
+		foreach ( $tree_ids as $pos => $child_id ) {
 			$position = $pos + 2;
 
 			$_generator_args = [
@@ -548,7 +548,7 @@ class Generate_Ldjson extends Generate_Image {
 					'name' => $this->escape_title( $cat_name ),
 				],
 			];
-		endforeach;
+		}
 
 		if ( $items ) {
 			array_unshift( $items, $this->get_ld_json_breadcrumb_home_crumb() );
@@ -652,7 +652,7 @@ class Generate_Ldjson extends Generate_Image {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$_generator_args = [ 'id' => $this->get_the_front_page_ID() ];
+		$_generator_args = [ 'id' => $this->get_the_front_page_id() ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$title = $this->get_filtered_raw_custom_field_title( $_generator_args )
@@ -694,7 +694,7 @@ class Generate_Ldjson extends Generate_Image {
 			return $crumb;
 		}
 
-		$post_id         = $this->get_the_real_ID();
+		$post_id         = $this->get_the_real_id();
 		$_generator_args = [ 'id' => $post_id ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
@@ -781,7 +781,6 @@ class Generate_Ldjson extends Generate_Image {
 
 			default:
 				$url = '';
-				break;
 		}
 
 		return $url;

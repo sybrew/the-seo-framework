@@ -140,7 +140,7 @@ class Generate extends User_Data {
 		 *     'max_video_preview' : 'max-video-preview:<string>'|''
 		 * }
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 * @param int <bit>  $options The ignore level. {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
 		 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
@@ -358,7 +358,7 @@ class Generate extends User_Data {
 				'the_seo_framework_ogtype_output',
 				[
 					$this->generate_og_type(),
-					$this->get_the_real_ID(),
+					$this->get_the_real_id(),
 				]
 			)
 		);
@@ -377,7 +377,7 @@ class Generate extends User_Data {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$id                = $this->get_the_real_ID();
+		$id                = $this->get_the_real_id();
 		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 		return memo(
@@ -431,7 +431,7 @@ class Generate extends User_Data {
 			'the_seo_framework_twittercard_output',
 			[
 				$type,
-				$this->get_the_real_ID(),
+				$this->get_the_real_id(),
 			]
 		);
 	}
@@ -519,6 +519,7 @@ class Generate extends User_Data {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
 	 *              2. Now redirects post type archives.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -542,7 +543,7 @@ class Generate extends User_Data {
 				$url = $this->get_term_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {
 				$url = $this->get_post_type_archive_meta_item( 'redirect', $args['pta'] );
-			} else {
+			} elseif ( $args['id'] ) {
 				$url = $this->get_post_meta_item( 'redirect', $args['id'] );
 			}
 		}

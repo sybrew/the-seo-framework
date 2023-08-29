@@ -517,7 +517,7 @@ class Init extends Query {
 		 * Start the meta timer here. This also catches file inclusions,
 		 * which is also caught by the _bootstrap_timer().
 		 */
-		$init_start = microtime( true );
+		$init_start = hrtime( true );
 
 		// phpcs:disable, WordPress.Security.EscapeOutput -- Output is escaped.
 		echo "\n", $this->get_plugin_indicator( 'before' );
@@ -526,7 +526,7 @@ class Init extends Query {
 
 		echo $this->get_plugin_indicator(
 			'after',
-			microtime( true ) - $init_start,
+			( hrtime( true ) - $init_start ) / 1e9,
 			$bootstrap_timer
 		), "\n";
 		// phpcs:enable, WordPress.Security.EscapeOutput
@@ -551,13 +551,11 @@ class Init extends Query {
 		 */
 		\do_action( 'the_seo_framework_before_meta_output' );
 
-		$get = [ 'robots' ];
-
 		// Limit processing and redundant tags on 404 and search.
-		if ( $this->is_search() ) :
-			array_push(
-				$get,
-				...[
+		switch ( true ) {
+			case $this->is_search():
+				$get = [
+					'robots',
 					'og_locale',
 					'og_type',
 					'og_title',
@@ -572,26 +570,29 @@ class Init extends Query {
 					'yandex_site_output',
 					'baidu_site_output',
 					'pint_site_output',
-				]
-			);
-		elseif ( \is_404() ) :
-			array_push(
-				$get,
-				...[
+				];
+				break;
+			case \is_404():
+				$get = [
+					'robots',
 					'theme_color',
 					'google_site_output',
 					'bing_site_output',
 					'yandex_site_output',
 					'baidu_site_output',
 					'pint_site_output',
-				]
-			);
-		elseif ( $this->is_query_exploited() ) :
-			$get[] = 'advanced_query_protection';
-		else :
-			array_push(
-				$get,
-				...[
+				];
+				break;
+			case $this->is_query_exploited():
+				// search and 404 cannot be exploited.
+				$get = [
+					'robots',
+					'advanced_query_protection',
+				];
+				break;
+			default:
+				$get = [
+					'robots',
 					'the_description',
 					'og_image',
 					'og_locale',
@@ -622,9 +623,8 @@ class Init extends Query {
 					'yandex_site_output',
 					'baidu_site_output',
 					'pint_site_output',
-				]
-			);
-		endif;
+				];
+		}
 
 		// TODO add filter to $get? It won't last a few major updates though...
 		// But that's why I created this method like so... anyway... tough luck.
@@ -720,7 +720,7 @@ class Init extends Query {
 	 * Initializes various callbacks on post-status changing actions to flush caches.
 	 *
 	 * @see WP Core wp_transition_post_status()
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 * @see $this->init_admin_actions();
 	 * @see $this->init_cron_actions();
 	 *
@@ -745,8 +745,8 @@ class Init extends Query {
 		$clear_excluded_callback = [ Bridges\Cache::class, 'clear_excluded_post_ids_cache' ];
 
 		// Excluded IDs cache.
-		\add_action( 'save_post', $clear_excluded_callback );
-		\add_action( 'edit_attachment', $clear_excluded_callback );
+		\add_action( 'wp_insert_post', $clear_excluded_callback );
+		\add_action( 'attachment_updated', $clear_excluded_callback );
 	}
 
 	/**
@@ -924,16 +924,15 @@ class Init extends Query {
 	 * @since 2.9.4
 	 */
 	public function init_alter_search_query() {
-		switch ( $this->get_option( 'alter_search_query_type' ) ) :
+		switch ( $this->get_option( 'alter_search_query_type' ) ) {
 			case 'post_query':
 				\add_filter( 'the_posts', [ $this, '_alter_search_query_post' ], 10, 2 );
 				break;
 
-			default:
 			case 'in_query':
+			default:
 				\add_action( 'pre_get_posts', [ $this, '_alter_search_query_in' ], 9999, 1 );
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -942,16 +941,15 @@ class Init extends Query {
 	 * @since 2.9.4
 	 */
 	public function init_alter_archive_query() {
-		switch ( $this->get_option( 'alter_archive_query_type' ) ) :
+		switch ( $this->get_option( 'alter_archive_query_type' ) ) {
 			case 'post_query':
 				\add_filter( 'the_posts', [ $this, '_alter_archive_query_post' ], 10, 2 );
 				break;
 
-			default:
 			case 'in_query':
+			default:
 				\add_action( 'pre_get_posts', [ $this, '_alter_archive_query_in' ], 9999, 1 );
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -1131,7 +1129,7 @@ class Init extends Query {
 
 		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
 			$referer = \wp_get_referer();
-			if ( false !== strpos( $referer, 'post.php' ) || false !== strpos( $referer, 'post-new.php' ) ) {
+			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
 				/**
 				 * WordPress should've authenthicated the user at
 				 * WP_REST_Server::check_authentication() -> rest_cookie_check_errors() -> wp_nonce et al.
@@ -1150,7 +1148,7 @@ class Init extends Query {
 			return true;
 
 		// This should primarily affect 'terms'. Test if TSF is blocked from supporting said terms.
-		if ( ! empty( $wp_query->tax_query->queries ) ) :
+		if ( ! empty( $wp_query->tax_query->queries ) ) {
 			$supported = true;
 
 			foreach ( $wp_query->tax_query->queries as $_query ) {
@@ -1163,7 +1161,7 @@ class Init extends Query {
 
 			if ( ! $supported )
 				return true;
-		endif;
+		}
 
 		return false;
 	}

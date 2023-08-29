@@ -87,7 +87,7 @@ final class Main {
 	 * @return Main
 	 */
 	public static function instance() {
-		return static::$instance ?? ( static::$instance = new static );
+		return static::$instance ??= new static;
 	}
 
 	/**

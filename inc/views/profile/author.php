@@ -30,7 +30,7 @@ $fields = [
 <h2><?php esc_html_e( 'Authorial Info', 'autodescription' ); ?></h2>
 <table class=form-table>
 <?php
-foreach ( $fields as $field => $labels ) :
+foreach ( $fields as $field => $labels ) {
 	?>
 	<tr class="user-<?= esc_attr( $field ) ?>-wrap">
 		<th><label for="<?= esc_attr( $field ) ?>">
@@ -48,7 +48,7 @@ foreach ( $fields as $field => $labels ) :
 		</td>
 	</tr>
 	<?php
-endforeach;
+}
 ?>
 </table>
 <?php

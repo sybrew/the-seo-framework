@@ -37,6 +37,8 @@ use function \The_SEO_Framework\memo;
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
  * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
+ * @since 4.3.0 Is now private. This was never meant to be public.
+ * @access private
  */
 final class Debug {
 
@@ -45,12 +47,6 @@ final class Debug {
 	 * @var object|null $instance This object instance.
 	 */
 	private static $instance = null;
-
-	/**
-	 * @since 2.8.0
-	 * @var bool $the_seo_framework_debug Whether debug is enabled.
-	 */
-	public $the_seo_framework_debug = false;
 
 	/**
 	 * Constructor.
@@ -62,16 +58,9 @@ final class Debug {
 	 *
 	 * @since 3.1.0
 	 * @access private
-	 *
-	 * @param bool|null $debug Whether TSF debugging is enabled.
 	 */
-	public static function _set_instance( $debug = null ) {
-
-		if ( \is_null( static::$instance ) )
-			static::$instance = new static();
-
-		if ( isset( $debug ) )
-			static::$instance->the_seo_framework_debug = (bool) $debug;
+	public static function _set_instance() {
+		static::$instance ??= new static;
 	}
 
 	/**
@@ -334,7 +323,7 @@ final class Debug {
 	 */
 	protected function combobulate_error_message( $error, $message, $code ) {
 
-		switch ( $code ) :
+		switch ( $code ) {
 			case \E_USER_ERROR:
 				$type = 'Error';
 				break;
@@ -350,8 +339,7 @@ final class Debug {
 			case \E_USER_NOTICE:
 			default:
 				$type = 'Notice';
-				break;
-		endswitch;
+		}
 
 		$file = \esc_html( $error['file'] ?? '' );
 		$line = \esc_html( $error['line'] ?? '' );
@@ -403,24 +391,24 @@ final class Debug {
 			return;
 
 		if ( $tsf->is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_ID' ] );
+			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_id' ] );
 
 		// Start timer.
-		$t = microtime( true );
+		$t = hrtime( true );
 
 		// I hate ob_*.
 		ob_start();
 		$tsf->html_output();
 		$output = ob_get_clean();
 
-		$timer = '<div style="font-family:unset;display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( microtime( true ) - $t, 5 ) . ' seconds</div>';
+		$timer = '<div style="font-family:unset;display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( ( hrtime( true ) - $t ) / 1e9, 5 ) . ' seconds</div>';
 
 		$title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 		$title = '<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;"><h2 style="font-family:unset;color:#ddd;font-size:22px;padding:0;margin:0">' . $title . '</h2></div>';
 
 		// Escape it, replace EOL with breaks, and style everything between quotes (which are ending with space).
 		$output = str_replace( [ "\r\n", "\r", "\n" ], "<br>\n", \esc_html( str_replace( str_repeat( ' ', 4 ), str_repeat( '&nbsp;', 4 ), $output ) ) );
-		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<font color=arnoldschwarzenegger>$1</font> ', $output );
+		$output = preg_replace( '/(&quot;.*?&quot;)(\s|&nbps;)/', '<span style=color:#8bc34a>$1</span> ', $output );
 
 		$output = '<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">' . $output . '</div>';
 		$output = '<div style="font-family:unset;display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">' . $title . $timer . $output . '</div>';
@@ -486,13 +474,13 @@ final class Debug {
 	protected function get_debug_query_output( $cache_version = 'nope' ) {
 
 		// Start timer.
-		$_t = microtime( true );
+		$_t = hrtime( true );
 
 		$tsf = \tsf();
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
-		$page_id                        = $tsf->get_the_real_ID();
+		$page_id                        = $tsf->get_the_real_id();
 		$is_query_exploited             = $tsf->is_query_exploited();
 		$query_supports_seo             = $tsf->query_supports_seo() ? 'yes' : 'no';
 		$is_404                         = $tsf->is_404();
@@ -535,7 +523,7 @@ final class Debug {
 		$has_page_on_front              = $tsf->has_page_on_front();
 		$is_taxonomy_supported          = $tsf->is_taxonomy_supported();
 		$get_post_type                  = \get_post_type();
-		$get_post_type_real_ID          = $tsf->get_post_type_real_ID();
+		$get_post_type_real_id          = $tsf->get_post_type_real_id();
 		$admin_post_type                = $tsf->get_admin_post_type();
 		$current_taxonomy               = $tsf->get_current_taxonomy();
 		$current_post_type              = $tsf->get_current_post_type();
@@ -548,7 +536,7 @@ final class Debug {
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
-		$timer = microtime( true ) - $_t;
+		$timer = ( hrtime( true ) - $_t ) / 1e9;
 
 		// Get all above vars, split them in two (true and false) and sort them by key names.
 		$vars = get_defined_vars();
@@ -572,7 +560,7 @@ final class Debug {
 				$value = \esc_html( var_export( $value, true ) );
 			}
 
-			$value   = '<font color=harrisonford>' . "$type $value" . '</font>';
+			$value   = "<span style=color:#0a00f0>$type $value</span>";
 			$out     = \esc_html( $name ) . ' => ' . $value;
 			$output .= "<span style=background:#dadada>$out</span>\n";
 		}
@@ -586,7 +574,7 @@ final class Debug {
 				$value = \esc_html( var_export( $value, true ) );
 			}
 
-			$value = '<font color=harrisonford>' . "$type $value" . '</font>';
+			$value = "<span style=color:#0a00f0>$type $value</span>";
 			$out   = \esc_html( $name ) . ' => ' . $value;
 
 			$output .= "$out\n";

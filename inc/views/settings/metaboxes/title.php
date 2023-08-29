@@ -329,8 +329,4 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			?>
 		</div>
 		<?php
-		break;
-
-	default:
-		break;
 endswitch;

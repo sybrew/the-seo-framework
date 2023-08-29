@@ -72,8 +72,8 @@ class Query extends Core {
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
 			return $memo = true;
 
-		$this->the_seo_framework_debug
-			and $this->do_query_error_notice( $method );
+		if ( \THE_SEO_FRAMEWORK_DEBUG )
+			$this->do_query_error_notice( $method );
 
 		return false;
 	}
@@ -117,7 +117,7 @@ class Query extends Core {
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return string|false Post type on success, false on failure.
 	 */
-	public function get_post_type_real_ID( $post = null ) {
+	public function get_post_type_real_id( $post = null ) {
 
 		if ( isset( $post ) )
 			return \get_post_type( $post );
@@ -130,11 +130,11 @@ class Query extends Core {
 				$post_type = \get_query_var( 'post_type' );
 				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 			} else {
-				// Let WP guess for us. This works reliable (enough) on non-404 queries.
+				// Let WP guess for us. This works reliably (enough) on non-404 queries.
 				$post_type = \get_post_type();
 			}
 		} else {
-			$post_type = \get_post_type( $this->get_the_real_ID() );
+			$post_type = \get_post_type( $this->get_the_real_id() );
 		}
 
 		return $post_type;
@@ -178,10 +178,10 @@ class Query extends Core {
 	 * @param bool $use_cache Whether to use the cache or not.
 	 * @return int|false The ID.
 	 */
-	public function get_the_real_ID( $use_cache = true ) { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
+	public function get_the_real_id( $use_cache = true ) {
 
 		if ( \is_admin() )
-			return $this->get_the_real_admin_ID();
+			return $this->get_the_real_admin_id();
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( $use_cache && null !== $memo = umemo( __METHOD__ ) ) return $memo;
@@ -227,7 +227,7 @@ class Query extends Core {
 	 *
 	 * @return int The admin ID.
 	 */
-	public function get_the_real_admin_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
+	public function get_the_real_admin_id() {
 		/**
 		 * @since 2.9.0
 		 * @param int $id
@@ -250,7 +250,7 @@ class Query extends Core {
 	 *
 	 * @return int the ID.
 	 */
-	public function get_the_front_page_ID() { // phpcs:ignore -- ID is capitalized because WordPress does that too: get_the_ID().
+	public function get_the_front_page_id() {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
@@ -308,7 +308,7 @@ class Query extends Core {
 	 * @return string The queried post type.
 	 */
 	public function get_current_post_type() {
-		return $this->get_post_type_real_ID() ?: $this->get_admin_post_type();
+		return $this->get_post_type_real_id() ?: $this->get_admin_post_type();
 	}
 
 	/**
@@ -511,6 +511,7 @@ class Query extends Core {
 	 * Detects Profile edit screen in WP Admin.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Now also tests network profile edit screens.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool True if on Profile Edit screen. False otherwise.
@@ -519,7 +520,9 @@ class Query extends Core {
 
 		switch ( $GLOBALS['current_screen']->base ?? '' ) {
 			case 'profile':
+			case 'profile-network':
 			case 'user-edit':
+			case 'user-edit-network':
 				return true;
 		}
 
@@ -685,7 +688,7 @@ class Query extends Core {
 
 		if ( ! $is_front_page ) {
 			// Elegant Themes's Extra Support: Assert home, but only when it's not registered as such.
-			$is_front_page = $this->is_home() && 0 === $this->get_the_real_ID()
+			$is_front_page = $this->is_home() && 0 === $this->get_the_real_id()
 				&& ! \in_array( \get_option( 'show_on_front' ), [ 'page', 'post' ], true );
 		}
 
@@ -699,8 +702,8 @@ class Query extends Core {
 	 * So, don't use this to test user-engaged WordPress queries, ever.
 	 * WARNING: This will lead to **FALSE POSITIVES** for Date, CPTA, Search, and other archives.
 	 *
-	 * @see $this->is_front_page_by_id(), which supports query checking.
 	 * @see $this->is_real_front_page(), which solely uses query checking.
+	 * @see $this->is_static_frontpage(), which adds an "is homepage static" check.
 	 *
 	 * @since 3.2.2
 	 *
@@ -708,7 +711,7 @@ class Query extends Core {
 	 * @return bool
 	 */
 	public function is_real_front_page_by_id( $id ) {
-		return $id === $this->get_the_front_page_ID();
+		return $id === $this->get_the_front_page_id();
 	}
 
 	/**
@@ -911,7 +914,7 @@ class Query extends Core {
 				'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : false
 			);
 
-		return false !== $front_id && ( $id ?: $this->get_the_real_ID() ) === $front_id;
+		return false !== $front_id && ( $id ?: $this->get_the_real_id() ) === $front_id;
 	}
 
 	/**
@@ -1212,16 +1215,16 @@ class Query extends Core {
 		global $wp_query;
 
 		if ( $this->is_singular() && ! $this->is_singular_archive() )
-			$post = \get_post( $this->get_the_real_ID() );
+			$post = \get_post( $this->get_the_real_id() );
 
 		if ( ( $post ?? null ) instanceof \WP_Post ) {
 			$content = $this->get_post_content( $post );
 
-			if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
+			if ( str_contains( $content, '<!--nextpage-->' ) ) {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
 
 				// Ignore nextpage at the beginning of the content.
-				if ( 0 === strpos( $content, '<!--nextpage-->' ) )
+				if ( str_starts_with( $content, '<!--nextpage-->' ) )
 					$content = substr( $content, 15 );
 
 				$pages = explode( '<!--nextpage-->', $content );

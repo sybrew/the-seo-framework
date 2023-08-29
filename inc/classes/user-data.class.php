@@ -129,9 +129,12 @@ class User_Data extends Term_Data {
 				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
 
 				foreach ( $this->get_headless_user_meta_support() as $meta_key => $supports ) {
+
 					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
+
 					foreach ( $supports as $support_type ) {
 						if ( $this->is_headless[ $support_type ] ) continue;
+
 						$meta[ $meta_key ] = $_meta[ $meta_key ];
 						continue 2;
 					}
@@ -215,9 +218,7 @@ class User_Data extends Term_Data {
 		\check_admin_referer( "update-user_{$user_id}" );
 		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
-		$user = \get_userdata( $user_id );
-
-		if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
+		if ( ! $this->user_has_author_info_cap_on_network( $user_id ) ) return;
 
 		// We won't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -227,6 +228,56 @@ class User_Data extends Term_Data {
 		);
 
 		$this->save_user_meta( $user_id, $data );
+	}
+
+	/**
+	 * Saves user profile fields.
+	 *
+	 * @since 4.3.0
+	 * @access private
+	 *         We're planning to migrate this object soon.
+	 * @todo add memoization?
+	 *
+	 * @param int|\WP_User $user A user ID or valid \WP_User object.
+	 * @return bool True if user has author info cap on any blog.
+	 */
+	public function user_has_author_info_cap_on_network( $user ) {
+
+		if ( ! \is_object( $user ) )
+			$user = \get_userdata( $user );
+
+		// User is logged out, how did I get here? (nice song btw)
+		if ( ! $user )
+			return false;
+
+		if ( \is_multisite() ) {
+			// If on multisite, WP prevents editing of other's profiles for non-super admin.
+			// Hence, this is fine to test this on either single-or-multisite user-edit.
+
+			// Clone user so not to taint the global object.
+			$_user = clone $user;
+
+			// It's funny: get_blogs_of_user() uses the capabilities field to see if the user is of a blog.
+			// Then, we switch to the blog to extract those capabilities. This cannot be improved here for security reasons.
+			foreach ( \get_blogs_of_user( $_user->ID ) as $user_blog ) {
+				// We must use switch_to_blog() for plugins may insert custom roles for the site.
+				\switch_to_blog( $user_blog->userblog_id );
+
+				// Neither the stored nor cloned user object switches with switch_to_blog(); let's fix that:
+				$_user->for_site( $user_blog->userblog_id );
+
+				$user_has_cap = $_user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP );
+
+				\restore_current_blog();
+				// There's no need to switch back $_user for it's a clone.
+
+				if ( $user_has_cap ) break;
+			}
+
+			return $user_has_cap ?? false;
+		}
+
+		return $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP );
 	}
 
 	/**
@@ -302,7 +353,7 @@ class User_Data extends Term_Data {
 		if ( null !== $memo = memo() ) return $memo;
 
 		if ( $this->is_singular() ) {
-			$post      = \get_post( $this->get_the_real_ID() );
+			$post      = \get_post( $this->get_the_real_id() );
 			$author_id = isset( $post->post_author ) && \post_type_supports( $post->post_type, 'author' )
 				? $post->post_author
 				: 0;

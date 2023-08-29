@@ -77,7 +77,6 @@ class Detect extends Render {
 		$conflicting_plugins = [
 			'seo_tools'    => [
 				'Yoast SEO'           => 'wordpress-seo/wp-seo.php',
-				'Yoast SEO Premium'   => 'wordpress-seo-premium/wp-seo-premium.php',
 				'All in One SEO Pack' => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
 				'SEO Ultimate'        => 'seo-ultimate/seo-ultimate.php',
 				'SEOPress'            => 'wp-seopress/seopress.php',
@@ -88,7 +87,6 @@ class Detect extends Render {
 				'Google XML Sitemaps'             => 'google-sitemap-generator/sitemap.php',
 				'XML Sitemap & Google News feeds' => 'xml-sitemap-feed/xml-sitemap.php',
 				'Google Sitemap by BestWebSoft'   => 'google-sitemap-plugin/google-sitemap-plugin.php',
-				'Simple Wp Sitemap'               => 'simple-wp-sitemap/simple-wp-sitemap.php', // Remove?
 			],
 			'open_graph'   => [
 				'Facebook Open Graph Meta Tags for WordPress' => 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php',
@@ -98,10 +96,17 @@ class Detect extends Render {
 				'WordPress Social Sharing Optimization' => 'wpsso/wpsso.php',
 			],
 			'twitter_card' => [],
+			'multilingual' => [
+				'Polylang'       => 'polylang/polylang.php',
+				'WPML'           => 'sitepress-multilingual-cms/sitepress.php',
+				'TranslatePress' => 'translatepress-multilingual/index.php',
+				'WPGlobus'       => 'wpglobus/wpglobus.php',
+			],
 		];
 
 		/**
 		 * @since 2.6.0
+		 * @since 4.3.0 Added index 'multilingual'
 		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
 		return (array) \apply_filters_ref_array( 'the_seo_framework_conflicting_plugins', [ $conflicting_plugins ] );
@@ -279,34 +284,25 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'seo_tools' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
-
-		foreach ( $this->get_conflicting_plugins( 'seo_tools' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @since 3.1.0 Added second and third parameters.
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters_ref_array(
-					'the_seo_framework_seo_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
-
-		return memo( $detected ?? false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @since 3.1.0 Added second and third parameters.
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_seo_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -328,34 +324,25 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'open_graph' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
-
-		foreach ( $this->get_conflicting_plugins( 'open_graph' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @since 3.1.0 Added second and third parameters.
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters_ref_array(
-					'the_seo_framework_og_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
-
-		return memo( $detected ?? false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @since 3.1.0 Added second and third parameters.
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_og_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -376,33 +363,24 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'twitter_card' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
-
-		foreach ( $this->get_conflicting_plugins( 'twitter_card' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters_ref_array(
-					'the_seo_framework_twittercard_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
-
-		return memo( $detected ?? false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_twittercard_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -440,33 +418,57 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$active_plugins = $this->active_plugins();
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'sitemaps' ), $this->active_plugins() );
 
-		if ( ! $active_plugins ) return memo( false );
+		return memo(
+			/**
+			 * @since 2.6.1
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_sitemap_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
+	}
 
-		foreach ( $this->get_conflicting_plugins( 'sitemaps' ) as $plugin_name => $plugin ) {
-			if ( \in_array( $plugin, $active_plugins, true ) ) {
-				/**
-				 * @since 2.6.1
-				 * @param bool   $detected    Whether the plugin should be detected.
-				 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
-				 * @param string $plugin      The plugin that's been detected.
-				 */
-				if ( \apply_filters(
-					'the_seo_framework_sitemap_plugin_detected',
-					[
-						true,
-						$plugin_name,
-						$plugin,
-					]
-				) ) {
-					$detected = true;
-					break;
-				}
-			}
-		}
+	/**
+	 * Determines if other Multilingual plugins are active.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return bool SEO plugin detected.
+	 */
+	public function detect_multilingual_plugins() {
 
-		return memo( $detected ?? false );
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'multilingual' ), $this->active_plugins() );
+
+		return memo(
+			/**
+			 * @since 4.3.0
+			 * @param bool   $detected    Whether the plugin should be detected.
+			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
+			 * @param string $plugin      The plugin that's been detected.
+			 */
+			$conflicting_plugin && \apply_filters_ref_array(
+				'the_seo_framework_multilingual_plugin_detected',
+				[
+					true,
+					key( $conflicting_plugin ),
+					reset( $conflicting_plugin ),
+				]
+			)
+		);
 	}
 
 	/**
@@ -577,7 +579,7 @@ class Detect extends Render {
 	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
 	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
 	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
-	 * @since 4.2.9 Removed detection for JSON type requests, because these cannot be verified as legitimate.
+	 * @since 4.3.0 Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	 *
 	 * @return bool
 	 */
@@ -586,46 +588,30 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		switch ( true ) :
+		switch ( true ) {
 			case \is_feed():
 			case \wp_doing_ajax():
 			case \wp_doing_cron():
 			case \defined( 'REST_REQUEST' ) && \REST_REQUEST:
 				$supported = false;
 				break;
-
 			case $this->is_singular():
-				$supported = $this->is_post_type_supported() && $this->get_the_real_ID();
+				// This is the most likely scenario, but may collide with is_feed() et al.
+				$supported = $this->is_post_type_supported() && $this->get_the_real_id();
 				break;
-
 			case \is_post_type_archive():
 				$supported = $this->is_post_type_archive_supported();
 				break;
-
 			case $this->is_term_meta_capable():
 				// When a term has no posts attached, it'll not return a post type, and it returns a 404 late in the loop.
 				// This is because get_post_type() tries to assert the first post in the loop here.
 				// Thus, we test for is_taxonomy_supported() instead.
-				$supported = $this->is_taxonomy_supported() && $this->get_the_real_ID();
+				$supported = $this->is_taxonomy_supported() && $this->get_the_real_id();
 				break;
-
-			// This includes 404.
 			default:
+				// Everything else: homepage, 404, search, edge-cases.
 				$supported = true;
-				break;
-
-			// TODO consider this instead of the current default? (it'd make the AJAX through REST test obsolete)
-			// Every recognized query (aside from $this->is_singular()/is_post_type_archive for we already covered those in full)
-			// case \is_404():
-			// case $this->is_search():
-			// case $this->is_real_front_page():
-			// case $this->is_archive():
-			// $supported = true;
-			// break;
-			// default:
-			// $supported = false;
-			// break;
-		endswitch;
+		}
 
 		/**
 		 * Override false negatives on exploit.
@@ -692,7 +678,7 @@ class Detect extends Render {
 			return memo( false );
 
 		// When the page ID is not 0, a real page will always be returned.
-		if ( $this->get_the_real_ID() )
+		if ( $this->get_the_real_id() )
 			return memo( false );
 
 		global $wp_query;
@@ -732,21 +718,21 @@ class Detect extends Render {
 					'sentence',
 				],
 				// When the blog (home) is a page then these requests to any registered query variable will cause issues,
-				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_ID() )` above).
+				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_id() )` above).
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
-				// TODO: We only need one to pass this test. We could use array_key_first()... (PHP7.3+) -> Might be mixed.
+				// We only need one to pass this test. We could use array_key_first()... but that may be nulled (out of our control).
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
 			]
 		);
 
 		$query = $wp_query->query;
 
-		foreach ( $exploitables as $type => $qvs ) :
-			foreach ( $qvs as $qv ) :
+		foreach ( $exploitables as $type => $qvs ) {
+			foreach ( $qvs as $qv ) {
 				// Only test isset, because falsey or empty-array is what we need to test against.
 				if ( ! isset( $query[ $qv ] ) ) continue;
 
-				switch ( $type ) :
+				switch ( $type ) {
 					case 'numeric':
 						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) )
 							return memo( true );
@@ -769,16 +755,12 @@ class Detect extends Render {
 
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
-						// !$this->get_the_real_ID() is already executed. Just test if home is a page.
+						// !$this->get_the_real_id() is already executed. Just test if home is a page.
 						if ( $this->is_home_as_page() )
 							return memo( true );
-						break;
-
-					default:
-						break;
-				endswitch;
-			endforeach;
-		endforeach;
+				}
+			}
+		}
 
 		return memo( false );
 	}
@@ -974,9 +956,7 @@ class Detect extends Render {
 					array_values(
 						array_filter(
 							$this->get_public_post_types(),
-							static function( $post_type ) {
-								return \get_post_type_object( $post_type )->has_archive ?? false;
-							}
+							static fn( $post_type ) => \get_post_type_object( $post_type )->has_archive ?? false
 						)
 					)
 				)
@@ -1308,7 +1288,7 @@ class Detect extends Render {
 	/**
 	 * Registers plugin cache checks on plugin activation.
 	 *
-	 * @since 4.2.9
+	 * @since 4.3.0
 	 */
 	public function reset_check_plugin_conflicts() {
 		$this->update_static_cache( 'check_seo_plugin_conflicts', 1 );
@@ -1354,7 +1334,7 @@ class Detect extends Render {
 	public function has_yoast_syntax( $text ) {
 
 		// %%id%% is the shortest valid tag... ish. Let's stop at 6.
-		if ( \strlen( $text ) < 6 || false === strpos( $text, '%%' ) )
+		if ( \strlen( $text ) < 6 || ! str_contains( $text, '%%' ) )
 			return false;
 
 		$tags = umemo( __METHOD__ . '/tags' );
@@ -1441,7 +1421,7 @@ class Detect extends Render {
 	public function has_rankmath_syntax( $text ) {
 
 		// %id% is the shortest valid tag... ish. Let's stop at 4.
-		if ( \strlen( $text ) < 4 || false === strpos( $text, '%' ) )
+		if ( \strlen( $text ) < 4 || ! str_contains( $text, '%' ) )
 			return false;
 
 		$tags = umemo( __METHOD__ . '/tags' );
@@ -1544,7 +1524,7 @@ class Detect extends Render {
 	public function has_seopress_syntax( $text ) {
 
 		// %%sep%% is the shortest valid tag... ish. Let's stop at 7.
-		if ( \strlen( $text ) < 7 || false === strpos( $text, '%%' ) )
+		if ( \strlen( $text ) < 7 || ! str_contains( $text, '%%' ) )
 			return false;
 
 		$tags = umemo( __METHOD__ . '/tags' );

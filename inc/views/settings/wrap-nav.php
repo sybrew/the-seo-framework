@@ -11,18 +11,19 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 // Whether tabs are active.
 $use_tabs = $use_tabs && count( $tabs ) > 1;
-$count    = 1;
 
 /**
  * Start navigational tabs.
  *
  * Don't output navigation if $use_tabs is false and the amount of tabs is 1 or lower.
  */
-if ( $use_tabs ) :
+if ( $use_tabs ) {
 	?>
 	<div class="tsf-nav-tab-wrapper hide-if-no-tsf-js" id="<?= esc_attr( $id . '-tabs-wrapper' ) ?>">
 		<?php
-		foreach ( $tabs as $tab => $value ) :
+		$count = 1;
+
+		foreach ( $tabs as $tab => $value ) {
 			$dashicon = $value['dashicon'] ?? '';
 			$name     = $value['name'] ?? '';
 
@@ -45,8 +46,8 @@ if ( $use_tabs ) :
 				)
 			);
 			$count++;
-		endforeach;
+		}
 		?>
 	</div>
 	<?php
-endif;
+}

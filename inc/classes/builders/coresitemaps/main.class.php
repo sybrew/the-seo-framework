@@ -119,9 +119,6 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 				// static::$tsf isn't set, because static doesn't require instantiation here.
 				if ( \tsf()->get_option( 'author_noindex' ) )
 					$provider = null;
-				break;
-			default:
-				break;
 		}
 
 		return $provider;

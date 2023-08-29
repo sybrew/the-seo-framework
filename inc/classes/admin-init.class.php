@@ -147,7 +147,7 @@ class Admin_Init extends Init {
 	 *       are barely any different.
 	 * TODO move this to another object?
 	 *
-	 * @param string|null $locale The locale to test. If empty, it will be auto-determined.
+	 * @param ?string $locale The locale to test. If empty, it will be auto-determined.
 	 * @return array
 	 */
 	public function get_input_guidelines( $locale = null ) {

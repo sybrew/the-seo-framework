@@ -152,6 +152,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @see $this->get_open_graph_description()
 	 * @see $this->get_open_graph_description_from_custom_field()
 	 *
@@ -166,21 +167,21 @@ class Generate_Description extends Generate {
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			} else {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} else {
-				$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args, false );
 			}
+		} elseif ( $args['id'] ) {
+			$desc = $this->get_post_meta_item( '_open_graph_description', $args['id'] )
+					?: $this->get_description_from_custom_field( $args, false );
 		}
 
-		return $desc ?: '';
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -287,6 +288,7 @@ class Generate_Description extends Generate {
 	 * @since 4.0.0 Added term meta item checks.
 	 * @since 4.2.0 1. No longer returns an escaped custom field description.
 	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @see $this->get_twitter_description()
 	 * @see $this->get_twitter_description_from_custom_field()
 	 *
@@ -303,25 +305,25 @@ class Generate_Description extends Generate {
 			$desc = $this->get_post_type_archive_meta_item( 'tw_description', $args['pta'] )
 				 ?: $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_post_meta_item( '_twitter_description', $args['id'] )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			} else {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( $args, false );
-			} else {
-				$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
-					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
-					 ?: $this->get_description_from_custom_field( $args, false );
 			}
+		} elseif ( $args['id'] ) {
+			$desc = $this->get_post_meta_item( '_twitter_description', $args['id'] )
+				 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
+				 ?: $this->get_description_from_custom_field( $args, false );
 		}
 
-		return $desc ?: '';
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -353,7 +355,7 @@ class Generate_Description extends Generate {
 		 *              2. Now supports the `$args['pta']` index.
 		 * @param string     $desc The custom-field description.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 */
 		$desc = (string) \apply_filters_ref_array(
 			'the_seo_framework_custom_field_description',
@@ -413,6 +415,7 @@ class Generate_Description extends Generate {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Now expects an ID before getting a post meta item.
 	 * @internal
 	 * @see $this->get_description_from_custom_field()
 	 *
@@ -425,18 +428,18 @@ class Generate_Description extends Generate {
 			$desc = $this->get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'description', $args['pta'] );
-		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] );
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
-				$desc = $this->get_option( 'homepage_description' );
 			} else {
-				$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] );
+				$desc = $this->get_option( 'homepage_description' );
 			}
+		} elseif ( $args['id'] ) {
+			$desc = $this->get_post_meta_item( '_genesis_description', $args['id'] );
 		}
 
-		return $desc ?: '';
+		return $desc ?? '' ?: '';
 	}
 
 	/**
@@ -491,7 +494,7 @@ class Generate_Description extends Generate {
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 */
 		$excerpt = (string) \apply_filters_ref_array(
 			'the_seo_framework_fetched_description_excerpt',
@@ -517,7 +520,7 @@ class Generate_Description extends Generate {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $desc The generated description.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when query is autodetermined.
+		 *                         Is null when the query is auto-determined.
 		 */
 		$desc = (string) \apply_filters_ref_array(
 			'the_seo_framework_generated_description',
@@ -636,7 +639,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_front_page_description_excerpt() {
 
-		$id = $this->get_the_front_page_ID();
+		$id = $this->get_the_front_page_id();
 
 		return ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
 			   ?: $this->get_description_additions( [ 'id' => $id ] );
@@ -736,7 +739,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_singular_description_excerpt( $id = null ) {
 
-		$id = $id ?? $this->get_the_real_ID();
+		$id ??= $this->get_the_real_id();
 
 		// If the post is protected, don't generate a description.
 		if ( $this->is_protected( $id ) ) return '';
@@ -782,6 +785,7 @@ class Generate_Description extends Generate {
 	 *              2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
 	 * TODO deprecate and simplify (remove $excerpt and $deprecated).
+	 * TODO rename to get_sanitized_post_excerpt()?
 	 *
 	 * @param string $excerpt    The Excerpt.
 	 * @param int    $id         The Post ID.
@@ -813,13 +817,14 @@ class Generate_Description extends Generate {
 	 *              Internally, this was never an issue. @see `$this->get_singular_description_excerpt()`
 	 * @since 4.2.8 1. Now tests for post type support of 'excerpt' before parsing the excerpt.
 	 *              2. Now tests for post type support of 'editor' before parsing the content.
+	 * @todo rename to get_post_excerpt()?
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
 	 * @return string The excerpt.
 	 */
 	public function fetch_excerpt( $post = null ) {
 
-		$post = \get_post( $post ?: $this->get_the_real_ID() );
+		$post = \get_post( $post ?: $this->get_the_real_id() );
 
 		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) )
 			return $post->post_excerpt;
@@ -893,17 +898,26 @@ class Generate_Description extends Generate {
 		// We'll rectify that later, somewhat, where characters are transformed.
 		// We could also use preg_match_all( '/./u' ); or count( preg_split( '/./u', $excerpt, $min_char_length ) );
 		// But, again, that'll eat CPU cycles.
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		// Decode to get a more accurate character length in Unicode.
 		$excerpt = html_entity_decode( $excerpt, \ENT_QUOTES, 'UTF-8' );
 
-		// Find all words with $max_char_length, and trim when the last word boundary or punctuation is found.
-		preg_match( sprintf( '/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su', $max_char_length ), trim( $excerpt ), $matches );
+		// Find all words until $max_char_length, and trim when the last word boundary or punctuation is found.
+		preg_match(
+			sprintf(
+				'/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su',
+				$max_char_length
+			),
+			trim( $excerpt ),
+			$matches
+		);
 
-		$excerpt = trim( $matches[0] ?? '' ?: '' );
+		$excerpt = trim( $matches[0] ?? '' );
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		// Texturize to recognize the sentence structure. Decode thereafter since we get HTML returned.
 		$excerpt = html_entity_decode(
@@ -915,19 +929,17 @@ class Generate_Description extends Generate {
 			\ENT_QUOTES,
 			'UTF-8'
 		);
+
 		/**
-		 * Play with it here: https://regex101.com/r/u0DIgx/5/ (old) https://regex101.com/r/G92lUt/5 (new)
+		 * Play with it here:
+		 * https://regex101.com/r/u0DIgx/5/ (old)
+		 * https://regex101.com/r/G92lUt/5 (old)
+		 * https://regex101.com/r/dAqhWC/1 (current)
 		 *
 		 * TODO Group 4's match is repeated. However, referring to it as (4) will cause it to congeal into 3.
+		 * Note: Group 4 misses `?\p{Z}*` between `.+` and `[\p{Pc}`, but I couldn't find a use-case for it.
 		 *
-		 * TODO .+[\p{Pe}\p{Pf}](*THEN)\Z              still backtracks; it should just find \Z and see if one char is in front of it.
-		 *   -> [^\p{Pe}\p{Pf}]++.*?[\p{Pe}\p{Pf}]+?\Z would solve it... but I don't trust it; it's populating 4 and 5 in edge-cases.
-		 *
-		 * TODO we can further optimize this by capturing the last 4 words and refer to that. Of thence more than 3 words
-		 * found, we could simply end the query, mitigating all forms of backtracking. For now, backtracking cannot
-		 * exceed step-count=($max_char_length*2+56) = 160*2+56 = 376, which is perfectly acceptable as a 'worst case'.
-		 *
-		 * Critically optimized, so the $matches don't make much sense. Bear with me:
+		 * Critically optimized (worst case: 217 logic steps), so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {
 		 *    0 : Full excerpt.
@@ -939,11 +951,12 @@ class Generate_Description extends Generate {
 		 * }
 		 */
 		preg_match(
-			'/(?:\A[\p{P}\p{Z}]*?)?([\P{Po}\p{M}\xBF\xA1:\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:.+[\p{Pe}\p{Pf}](*THEN)\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
+			'/(?:\A[\p{P}\p{Z}]*?)?([\P{Po}\p{M}\xBF\xA1:\'\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:[^\p{Pe}\p{Pf}]*+.*[\p{Pe}\p{Pf}]+\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$excerpt,
 			$matches
 		);
 
+		// Unmatched isn't set. Since we count from last to first match, we don't need to test strlen().
 		if ( isset( $matches[5] ) ) {
 			$excerpt = "$matches[1]$matches[3]$matches[4]$matches[5]";
 			// Skip 4. It's useless content without 5.
@@ -954,9 +967,10 @@ class Generate_Description extends Generate {
 		} elseif ( isset( $matches[1] ) ) {
 			$excerpt = $matches[1];
 		}
-		// else { TODO Should we empty excerpt here? Can we even reach this? }
+		// Else: We'll get the original excerpt. This shouldn't happen, but at least it's already trimmed to $max_char_length.
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		/**
 		 * @param array $matches: {
@@ -970,7 +984,7 @@ class Generate_Description extends Generate {
 			$excerpt,
 			$matches
 		);
-		// Why can $matches[2] still be populated with 3 set? Does it populate empty results upward to last, always???
+
 		if ( isset( $matches[2] ) && \strlen( $matches[2] ) ) {
 			$excerpt = "$matches[1]$matches[2]";
 		} elseif ( isset( $matches[1] ) && \strlen( $matches[1] ) ) {
@@ -981,7 +995,8 @@ class Generate_Description extends Generate {
 			$excerpt = '';
 		}
 
-		if ( \strlen( $excerpt ) < $min_char_length ) return '';
+		if ( \strlen( $excerpt ) < $min_char_length )
+			return '';
 
 		return trim( htmlentities( $excerpt, \ENT_QUOTES, 'UTF-8' ) );
 	}
@@ -993,7 +1008,7 @@ class Generate_Description extends Generate {
 	 * @since 4.2.0 1. Now fixes the input arguments.
 	 *              2. Now supports the `$args['pta']` index.
 	 * @access private
-	 * @see $this->get_the_real_ID()
+	 * @see $this->get_the_real_id()
 	 * @see $this->get_current_taxonomy()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -1012,7 +1027,7 @@ class Generate_Description extends Generate {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param bool       $autodescription Enable or disable the automated descriptions.
 		 * @param array|null $args            The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                                    Is null when query is autodetermined.
+		 *                                    Is null when the query is auto-determined.
 		 */
 		return (bool) \apply_filters_ref_array(
 			'the_seo_framework_enable_auto_description',

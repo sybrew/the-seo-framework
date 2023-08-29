@@ -54,7 +54,7 @@ namespace The_SEO_Framework\Bootstrap;
  */
 function _upgrade_default_site_options() {
 	static $memo;
-	return $memo ?? ( $memo = \tsf()->get_default_site_options() );
+	return $memo ??= \tsf()->get_default_site_options();
 }
 
 /**
@@ -67,7 +67,7 @@ function _upgrade_default_site_options() {
  */
 function _previous_db_version() {
 	static $memo;
-	return $memo ?? ( $memo = \get_option( 'the_seo_framework_upgraded_db_version', '0' ) );
+	return $memo ??= \get_option( 'the_seo_framework_upgraded_db_version', '0' );
 }
 
 /**
@@ -149,6 +149,7 @@ function _do_upgrade() {
 	// Don't run the upgrade cycle if the user downgraded. Downgrade, instead.
 	if ( $previous_version > \THE_SEO_FRAMEWORK_DB_VERSION ) {
 		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
+		// If we do, add it in function _downgrade()'s loop instead.
 		// \do_action( 'the_seo_framework_do_downgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
 		$current_version = _downgrade( $previous_version );
@@ -162,6 +163,7 @@ function _do_upgrade() {
 		\do_action( 'the_seo_framework_downgraded', (string) $previous_version, (string) $current_version );
 	} else {
 		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
+		// If we do, add it in function _upgrade()'s loop instead.
 		// \do_action( 'the_seo_framework_do_upgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
 		$current_version = _upgrade( $previous_version );
@@ -210,7 +212,7 @@ function _upgrade( $previous_version ) {
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
 	// When a user upgrades beyond this scope, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270', '4290' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270', '4301' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -485,9 +487,14 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'from'  => $wpdb->postmeta,
 				'in'    => [ 'rank_math_title', 'rank_math_description', 'rank_math_facebook_title', 'rank_math_facebook_description', 'rank_math_twitter_title', 'rank_math_twitter_description', 'rank_math_canonical_url', 'rank_math_robots' ],
 			],
+			'wp-seopress'      => [
+				'title' => 'SEOPress',
+				'from'  => $wpdb->postmeta,
+				'in'    => [ '_seopress_titles_title', '_seopress_titles_desc', '_seopress_social_fb_title', '_seopress_social_fb_desc', '_seopress_social_twitter_title', '_seopress_social_twitter_desc', '_seopress_robots_canonical', '_seopress_robots_index' ],
+			],
 		];
 
-		$esc_sql_in = function( $var ) {
+		$esc_sql_in = function ( $var ) {
 			if ( ! is_scalar( $var ) )
 				$var = array_filter( (array) $var, 'is_scalar' );
 			return \esc_sql( $var );
@@ -628,7 +635,7 @@ function _do_upgrade_2701() {
  * @since 2.8.0
  */
 function _do_upgrade_2802() {
-	// Delete old values from database. Removes backwards compatibility.
+	// Delete old values from database. Removes backwards compatibility. 2701 is intentional.
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
 		\delete_option( 'autodescription-term-meta' );
 }
@@ -641,7 +648,6 @@ function _do_upgrade_2802() {
  * @since 4.1.1 No longer tests for default options.
  */
 function _do_upgrade_2900() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
 		$tsf = \tsf();
 
@@ -665,7 +671,6 @@ function _do_upgrade_2900() {
  * @since 4.1.1 No longer tests for default options.
  */
 function _do_upgrade_3001() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
 		$tsf = \tsf();
 
@@ -697,12 +702,9 @@ function _do_upgrade_3001() {
  *
  * @since 3.1.0
  * @since 4.1.1 No longer tests for default options.
+ * @since 4.3.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 4301)
  */
 function _do_upgrade_3103() {
-
-	// Prevent database lookups when checking for cache.
-	\add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] );
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
 		$tsf = \tsf();
 
@@ -729,7 +731,7 @@ function _do_upgrade_3103() {
 		$tsf->update_option( 'auto_description', 1 );
 
 		// Add default sitemap limit option.
-		$tsf->update_option( 'sitemap_query_limit', 3000 );
+		$tsf->update_option( 'sitemap_query_limit', 1000 );
 
 		// Add non-default HTML stripping option. Defaulting to previous behavior.
 		$tsf->update_option( 'title_strip_tags', 0 ); // NOTE: Default is 1.
@@ -749,7 +751,6 @@ function _do_upgrade_3103() {
  * @since 4.0.5 The upgrader now updates "dash" to "hyphen".
  */
 function _do_upgrade_3300() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
 		$tsf = \tsf();
 
@@ -798,7 +799,6 @@ function _do_upgrade_3300() {
  * @since 4.0.5
  */
 function _do_upgrade_4051() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
 		$tsf = \tsf();
 
@@ -821,7 +821,6 @@ function _do_upgrade_4051() {
  * @since 4.1.0
  */
 function _do_upgrade_4103() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4103' ) {
 		$tsf = \tsf();
 
@@ -863,7 +862,6 @@ function _do_upgrade_4103() {
  * @since 4.1.1
  */
 function _do_upgrade_4110() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
 		$tsf = \tsf();
 
@@ -878,9 +876,8 @@ function _do_upgrade_4110() {
  * @since 4.1.2
  */
 function _do_upgrade_4120() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' )
 		\tsf()->update_option( 'ping_use_cron_prerender', 0 );
-	}
 }
 
 /**
@@ -889,9 +886,8 @@ function _do_upgrade_4120() {
  * @since 4.2.0
  */
 function _do_upgrade_4200() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4200' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4200' )
 		\delete_option( 'the_seo_framework_tested_upgrade_version' );
-	}
 }
 
 /**
@@ -900,20 +896,21 @@ function _do_upgrade_4200() {
  * @since 4.2.7
  */
 function _do_upgrade_4270() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' )
 		\tsf()->update_option( 'auto_description_html_method', 'fast' );
-	}
 }
 
 /**
  * Deletes the static cache for exclusions.
  * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
+ * Changes option `autodescription-updates-cache` to constant value THE_SEO_FRAMEWORK_SITE_CACHE.
  * TODO registers default for static placeholder editing.
  *
- * @since 4.2.9
+ * @since 4.3.0
+ * @global \wpdb $wpdb
  */
-function _do_upgrade_4290() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4290' ) {
+function _do_upgrade_4301() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4301' ) {
 		$tsf = \tsf();
 
 		$tsf->update_option(
@@ -921,8 +918,43 @@ function _do_upgrade_4290() {
 			$tsf->get_option( 'auto_descripton_html_method', false ) ?: 'fast' // Typo intended
 		);
 
-		// Don't use API to clear this transient; the API may use different entropics.
-		$locale = strtolower( \get_locale() );
-		\delete_transient( "tsf_exclude_1_{$GLOBALS['blog_id']}_{$locale}" );
+		global $wpdb;
+
+		// Cleanup leftover from TSF 3.0.0 ~ 3.1.0. Sans trailing _, since it doesn't support multilingual.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( "_transient_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%'
+			)
+		);
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( "_transient_timeout_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%'
+			)
+		);
+
+		// Cleanup from 3.1.0 ~ 4.2.8. This data will be rebuilt automatically.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( "_transient_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%'
+			)
+		);
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+				$wpdb->esc_like( "_transient_timeout_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%'
+			)
+		);
+
+		$site_cache = get_option( 'autodescription-updates-cache' ) ?: [];
+		if ( $site_cache ) {
+			// Try to use the options API as much as possible, instead of using $wpdb->update().
+			update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
+			// The option holds only generated data that can be regenerated easily.
+			// On downgrade, this will be repopulated.
+			delete_option( 'autodescription-updates-cache' );
+		}
 	}
 }

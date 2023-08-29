@@ -73,22 +73,26 @@ final class Form {
 
 		$args = array_merge( $defaults, $args );
 
-		// The walk below destroys the option array. Assign it to a new var to prevent confusion later.
+		// The walk below would mangle the option index. Assign it to a new var to prevent confusion later.
 		$html_options = $args['options'];
-		/**
-		 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
-		 * @param mixed  $value
-		 * @param mixed  $default
-		 */
-		$create_option = static function( &$name, $value, $default ) {
-			$name = sprintf(
-				'<option value="%s"%s>%s</option>',
-				\esc_attr( $value ),
-				(string) $value === (string) $default ? ' selected' : '',
-				\esc_html( $name )
-			);
-		};
-		array_walk( $html_options, $create_option, $args['default'] );
+
+		array_walk(
+			$html_options,
+			/**
+			 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
+			 * @param mixed  $value
+			 * @param mixed  $default
+			 */
+			static function ( &$name, $value, $default ) {
+				$name = sprintf(
+					'<option value="%s"%s>%s</option>',
+					\esc_attr( $value ),
+					(string) $value === (string) $default ? ' selected' : '',
+					\esc_html( $name )
+				);
+			},
+			$args['default']
+		);
 
 		$tsf = \tsf();
 
@@ -221,7 +225,7 @@ final class Form {
 		$args = $tsf->array_merge_recursive_distinct(
 			[
 				'id'           => '',
-				'post_id'      => $tsf->get_the_real_ID(), // This will bind the uploade file to the current post.
+				'post_id'      => $tsf->get_the_real_id(), // This will bind the uploade file to the current post.
 				'data'         => [
 					'inputType' => 'social',
 					'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.

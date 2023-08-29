@@ -60,16 +60,25 @@ class Core {
 	 *
 	 * @since 2.8.0
 	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
+	 * @since 4.3.0 Now protects against fatal errors on PHP 8.2 or later.
 	 *
 	 * @param string $name  The property name.
 	 * @param mixed  $value The property value.
 	 */
 	final public function __set( $name, $value ) {
 
-		if ( 'load_options' === $name ) {
-			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
-			$this->is_headless['settings'] = $value;
-			return;
+		switch ( $name ) {
+			case 'load_options':
+				$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+				$this->is_headless['settings'] = $value;
+				return;
+
+			case 'the_seo_framework_debug':
+				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				return false;
+			case 'script_debug':
+				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
+				return false;
 		}
 
 		/**
@@ -78,7 +87,7 @@ class Core {
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 
 		// Invoke default behavior: Write variable if it's not protected.
-		if ( ! isset( $this->$name ) )
+		if ( property_exists( $this, $name ) )
 			$this->$name = $value;
 	}
 
@@ -96,9 +105,20 @@ class Core {
 	 */
 	final public function __get( $name ) {
 
-		if ( 'load_options' === $name ) {
-			$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
-			return ! $this->is_headless['settings'];
+		switch ( $name ) {
+			case 'load_option':
+				$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
+				return ! $this->is_headless['settings'];
+
+			case 'the_seo_framework_use_transients':
+				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_use_transients', 'since 4.3.0; with no alternative available' );
+				return true;
+			case 'the_seo_framework_debug':
+				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				return \THE_SEO_FRAMEWORK_DEBUG;
+			case 'script_debug':
+				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
+				return \SCRIPT_DEBUG;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
@@ -117,8 +137,7 @@ class Core {
 
 		static $depr_class = null;
 
-		if ( \is_null( $depr_class ) )
-			$depr_class = new Internal\Deprecated;
+		$depr_class ??= new Internal\Deprecated;
 
 		if ( \is_callable( [ $depr_class, $name ] ) )
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
@@ -189,7 +208,9 @@ class Core {
 	public function get_view( $view, $__args = [], $instance = 'main' ) {
 
 		// A faster extract().
-		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		foreach ( $__args as $__k => $__v )
+			$$__k = $__v;
+
 		unset( $__k, $__v, $__args );
 
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
@@ -473,7 +494,7 @@ class Core {
 	 */
 	public function array_flatten_list( $array ) {
 
-		// We can later use `!array_is_list()`.
+		// PHP 8.1+, use `!array_is_list()`?
 		// This is 350x faster than a polyfill for `!array_is_list()`.
 		if ( [] === $array || array_values( $array ) !== $array ) return $array;
 
@@ -558,6 +579,7 @@ class Core {
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
 	 *              and recognizes those as whole words.
+	 * @since 4.3.0 Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
 	 *
 	 * @param string $string Required. The string to count words in.
 	 * @param int    $dupe_count       Minimum amount of words to encounter in the string.
@@ -570,9 +592,11 @@ class Core {
 	 */
 	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
 
-		$string = \wp_check_invalid_utf8( html_entity_decode( $string ) );
+		// Why not blog_charset? Because blog_charset is there only to onboard non-UTF-8 to UTF-8.
+		$string = \wp_check_invalid_utf8( html_entity_decode( $string, \ENT_QUOTES, 'UTF-8' ) );
 
-		if ( ! $string ) return [];
+		if ( empty( $string ) )
+			return [];
 
 		// Not if-function-exists; we're going for speed over accuracy. Hosts must do their job correctly.
 		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
@@ -584,7 +608,8 @@ class Core {
 			\PREG_SPLIT_OFFSET_CAPTURE | \PREG_SPLIT_NO_EMPTY
 		);
 
-		if ( ! \count( $word_list ) ) goto end;
+		if ( ! \count( $word_list ) )
+			return [];
 
 		$words = [];
 
@@ -615,7 +640,6 @@ class Core {
 			}
 		}
 
-		end:;
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
 		return $words_too_many ?? [];
 	}
@@ -652,7 +676,7 @@ class Core {
 			)
 		);
 
-		$get_relative_luminance = static function( $v ) {
+		$get_relative_luminance = static function ( $v ) {
 			// Convert hex to 0~1 float.
 			$v /= 0xFF;
 
