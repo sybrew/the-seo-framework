@@ -249,6 +249,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+TODO mark that db version 4270 -> 4300+
+
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
@@ -257,14 +259,10 @@ TODO add toggle for homepage settings where each "language" installed can be alt
 	-> This requires probably a whole lot more work than I'd have hoped.
 	-> This can go wrong if the default language changes, or disappears.
 		-> But, this is effectively the same issue we have with Custom Post Type Archives.
-			-> Speaking of which, we should also have such a switcher for those... ugh.
+			-> Speaking of which, we should also have another of such a switcher for those... ugh.
+	-> If we consider this, always have primary site language setting, and store sublanguages under another index.
+		-> This will cause issues if the main language changes?
 TODO check mail Dean about WPML config
-
-TODO change autodescription-updates-cache to autodescription-persistent-cache?
-	-> In theory, we can just delete the old one; since it has no data that is required for normal operation.
-		-> However, this may cause a notification pop up for those who use two or more SEO plugins simultaneously. Though this may be helpful.
-
-TODO db version 4270 -> 4300+
 
 TODO add bespoke support for Events Calendar?
 	-> Basically, we need to overwrite the separator
@@ -493,10 +491,6 @@ TODO cache_json_data makes no sense.
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
 			* Yoast SEO is still checked for.
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
-	* Option filter `s_left_right_home` is now gone; use `s_left_right` instead.
-* **Note:**
-	* Transient `tsf_sitemap_5_%`, where % changes per blog ID and language, is no longer used. This transient should clear automatically.
-	* Transient `tsf_exclude_1_%`, where % changes per blog ID and language, is no longer used. This transient will be deleted on upgrade.
 
 **For translators:**
 
@@ -508,20 +502,31 @@ TODO cache_json_data makes no sense.
 * TODO: **Plugin database version is now at `4300`**
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
-	* Usage of `microtime()` for comparison has been exchanged for `hrtime()`, improving both performance and accuracy.
+	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
-	* The `<font>` tag is deprecated, so we updated the tag to `<span>` in the debug panels.
+	* The `<font>` tag is deprecated, so we updated the tag and its to `<span>` in the debug panels.
+		* These Easter eggs were fun while they lasted.
 * **Option notes:**
-	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
-	* For option index `autodescription-site-settings` (filter `the_seo_framework_site_options`, constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
+	* For option index `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* **Added:**
-			* `auto_description_html_method`, this used to be `auto_descripton_html_method` (typo).
+			* Index `auto_description_html_method`, this used to be `auto_descripton_html_method` (typo).
+			* Suboption filter `s_color_hex` is available.
 		* **Removed**
-			* `auto_descripton_html_method`.
+			* Index `auto_descripton_html_method`.
 				* It is now `auto_description_html_method` (typo in "description").
 				* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
+			* Suboption filter `s_left_right_home` is now gone; use `s_left_right` instead.
+	* For option index `autodescription-updates-cache` (constant `THE_SEO_FRAMEWORK_SITE_CACHE`):
+		* It's now `autodescription-site-cache` and its contents will be migrated after updating.
+			* This option will now also be home to the Archive and Search Exclusion cache.
+		* This option will be **removed** on upgrade. If you downgrade, it will be repopulated, and there should be no issues with that.
+* **Transient notes:**
+	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
+	* Transient `tsf_sitemap_5_%`, where % doesn't contain the sitemap ID, but changes per blog ID and language, is no longer used. This transient should clear automatically.
+	* Transient `tsf_exclude_1_%`, where % changes per blog ID and language, is no longer used. This transient will be deleted on upgrade.
+	* Transient `tsf_exclude_0_%` was leftover from TSF 3.0 and will be deleted on upgrade.
 * **Function notes:**
 * **Object notes:**
 	* **New objects:**
@@ -670,11 +675,17 @@ TODO cache_json_data makes no sense.
 		* `the_seo_framework_warn_homepage_global_title`, we now use multilingual plugin detection.
 		* `the_seo_framework_warn_homepage_global_description`, we now use multilingual plugin detection.
 		* `the_seo_framework_tell_multilingual_sitemap`, we now use multilingual plugin detection.
+		* `the_seo_framework_site_options`, use WP options API instead to alter option name `'autodescription-site-settings'`.
+		* `the_seo_framework_term_options`, use WP options API instead to alter term metadata name `'autodescription-term-settings'`.
+		* `the_seo_framework_user_options`, use WP options API instead to alter user metadata name `'autodescription-user-settings'`.
+		* `the_seo_framework_site_cache`, use WP options API instead to alter option name `'autodescription-site-cache'`.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
 	* **Deprecated:**
 		* `the_seo_framework_delete_cache_sitemap`, use `the_seo_framework_cleared_sitemap_transients` instead.
+* **Hook notes:**
+	* Excluded IDs cache is now cleared on `wp_insert_post` and `attachment_updated`, from `save_post` and `edit_attachment` respectively.
 * **JavaScript notes:**
 * **CSS notes:**
 	* `tsf-pt` no longer has inline RTL support, but instead supports RLT built in its file.

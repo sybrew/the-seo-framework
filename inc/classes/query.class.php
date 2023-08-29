@@ -130,7 +130,7 @@ class Query extends Core {
 				$post_type = \get_query_var( 'post_type' );
 				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 			} else {
-				// Let WP guess for us. This works reliable (enough) on non-404 queries.
+				// Let WP guess for us. This works reliably (enough) on non-404 queries.
 				$post_type = \get_post_type();
 			}
 		} else {

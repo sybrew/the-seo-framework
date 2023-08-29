@@ -745,8 +745,8 @@ class Init extends Query {
 		$clear_excluded_callback = [ Bridges\Cache::class, 'clear_excluded_post_ids_cache' ];
 
 		// Excluded IDs cache.
-		\add_action( 'save_post', $clear_excluded_callback );
-		\add_action( 'edit_attachment', $clear_excluded_callback );
+		\add_action( 'wp_insert_post', $clear_excluded_callback );
+		\add_action( 'attachment_updated', $clear_excluded_callback );
 	}
 
 	/**

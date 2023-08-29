@@ -35,8 +35,8 @@ namespace The_SEO_Framework;
  * The user capability required to access the extension overview page.
  *
  * == WARNING ==
- * When this constant is used incorrectly, you can expose your site to
- * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * When this constant is used incorrectly, you can expose your site to unforeseen
+ * security risks. We assume the role supplied here is lower than the webmaster's;
  * for example, in a WPMU environment. However, proceed with caution.
  *
  * @since 4.1.0
@@ -49,8 +49,8 @@ namespace The_SEO_Framework;
  * The user capability required to have SEO-fields on their profiles.
  *
  * == WARNING ==
- * When this constant is used incorrectly, you can expose your site to
- * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * When this constant is used incorrectly, you can expose your site to unforeseen
+ * security risks. We assume the role supplied here is lower than the webmaster's;
  * for example, in a WPMU environment. However, proceed with caution.
  *
  * @since 4.1.0
@@ -75,33 +75,33 @@ namespace The_SEO_Framework;
  * Used for storing the SEO options array.
  *
  * @since 2.2.2
- * @param string THE_SEO_FRAMEWORK_SITE_OPTIONS
+ * @since 4.3.0 Removed its filter.
  */
-\define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', (string) \apply_filters( 'the_seo_framework_site_options', 'autodescription-site-settings' ) );
+\define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', 'autodescription-site-settings' );
 
 /**
  * Plugin term options key.
  *
  * @since 2.7.0
- * @param string THE_SEO_FRAMEWORK_TERM_OPTIONS
+ * @since 4.3.0 Removed its filter.
  */
-\define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', (string) \apply_filters( 'the_seo_framework_term_options', 'autodescription-term-settings' ) );
+\define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', 'autodescription-term-settings' );
 
 /**
  * Plugin user term options key.
  *
  * @since 2.7.0
- * @param string THE_SEO_FRAMEWORK_USER_OPTIONS
+ * @since 4.3.0 Removed its filter.
  */
-\define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', (string) \apply_filters( 'the_seo_framework_user_options', 'autodescription-user-settings' ) );
+\define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', 'autodescription-user-settings' );
 
 /**
  * Plugin updates cache key.
  *
  * @since 3.1.0
- * @param string THE_SEO_FRAMEWORK_SITE_CACHE
+ * @since 4.3.0 Removed its filter.
  */
-\define( 'THE_SEO_FRAMEWORK_SITE_CACHE', (string) \apply_filters( 'the_seo_framework_site_cache', 'autodescription-updates-cache' ) );
+\define( 'THE_SEO_FRAMEWORK_SITE_CACHE', 'autodescription-site-cache' );
 
 /**
  * The plugin folder URL. Has a trailing slash.

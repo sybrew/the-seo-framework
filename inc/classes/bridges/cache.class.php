@@ -58,7 +58,7 @@ final class Cache {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function clear_excluded_post_ids_cache() {
-		return \tsf()->update_static_cache( 'excluded_ids', false );
+		return \tsf()->update_static_cache( 'excluded_ids', [] );
 	}
 
 	/**
