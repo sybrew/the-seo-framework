@@ -179,7 +179,7 @@ class Init extends Query {
 			\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
 
 			// Enqueue Post meta boxes.
-			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 2 );
+			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 1 );
 
 			// Enqueue Term meta output.
 			\add_action( 'current_screen', [ $this, '_init_term_edit_view' ] );
@@ -395,7 +395,7 @@ class Init extends Query {
 		 * Careful, WordPress can switch blogs when this filter runs. So, run this always,
 		 * and assess options (uncached!) therein.
 		 */
-		\add_filter( 'oembed_response_data', [ $this, '_alter_oembed_response_data' ], 10, 4 );
+		\add_filter( 'oembed_response_data', [ $this, '_alter_oembed_response_data' ], 10, 2 );
 	}
 
 	/**
@@ -1177,11 +1177,9 @@ class Init extends Query {
 	 *
 	 * @param array    $data   The response data.
 	 * @param \WP_Post $post   The post object.
-	 * @param int      $width  The requested width. Unused.
-	 * @param int      $height The calculated height. Unused.
 	 * @return array Possibly altered $data.
 	 */
-	public function _alter_oembed_response_data( $data, $post, $width, $height ) {
+	public function _alter_oembed_response_data( $data, $post ) {
 
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_og_title', false ) )
