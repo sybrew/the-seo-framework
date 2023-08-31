@@ -9,7 +9,8 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+	The_SEO_Framework\Interpreters\Settings_Input as Input,
+	The_SEO_Framework\Helper\Query;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -415,7 +416,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 				'escape'   => false,
 				'disabled' => in_array( $taxonomy, $forced_tax, true ),
 				'data'     => [
-					'postTypes' => $this->get_post_types_from_taxonomy( $taxonomy ),
+					'postTypes' => Query::get_post_types_from_taxonomy( $taxonomy ),
 				],
 			] );
 		}

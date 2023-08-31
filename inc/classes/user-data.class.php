@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -352,8 +354,8 @@ class User_Data extends Term_Data {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( $this->is_singular() ) {
-			$post      = \get_post( $this->get_the_real_id() );
+		if ( Query::is_singular() ) {
+			$post      = \get_post( Query::get_the_real_id() );
 			$author_id = isset( $post->post_author ) && \post_type_supports( $post->post_type, 'author' )
 				? $post->post_author
 				: 0;

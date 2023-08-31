@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -97,13 +99,13 @@ class Admin_Init extends Init {
 	public function _init_admin_scripts() {
 
 		if (
-			   $this->is_seo_settings_page()
+			   Query::is_seo_settings_page()
 			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
 			|| $this->get_static_cache( 'persistent_notices', [] )
 			|| (
 				! $this->is_headless['meta'] && (
-					   ( $this->is_archive_admin() && $this->is_taxonomy_supported() )
-					|| ( $this->is_singular_admin() && $this->is_post_type_supported( $this->get_admin_post_type() ) )
+					   ( Query::is_archive_admin() && $this->is_taxonomy_supported() )
+					|| ( Query::is_singular_admin() && $this->is_post_type_supported( Query::get_admin_post_type() ) )
 				)
 			)
 		) {

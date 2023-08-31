@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -147,7 +149,7 @@ class Generate_Ldjson extends Generate_Image {
 	public function render_ld_json_scripts() {
 
 		// Homepage Schema.org
-		if ( $this->is_real_front_page() )
+		if ( Query::is_real_front_page() )
 			return $this->get_ld_json_website() . $this->get_ld_json_links();
 
 		// All other pages' Schema.org
@@ -338,8 +340,8 @@ class Generate_Ldjson extends Generate_Image {
 
 		$output = '';
 
-		if ( $this->is_singular() && ! $this->is_real_front_page() ) {
-			if ( \is_post_type_hierarchical( $this->get_post_type_real_id() ) ) {
+		if ( Query::is_singular() && ! Query::is_real_front_page() ) {
+			if ( \is_post_type_hierarchical( Query::get_post_type_real_id() ) ) {
 				$output = $this->get_ld_json_breadcrumbs_page();
 			} else {
 				$output = $this->get_ld_json_breadcrumbs_post();
@@ -361,7 +363,7 @@ class Generate_Ldjson extends Generate_Image {
 	public function get_ld_json_breadcrumbs_page() {
 
 		$items   = [];
-		$parents = array_reverse( \get_post_ancestors( $this->get_the_real_id() ) );
+		$parents = array_reverse( \get_post_ancestors( Query::get_the_real_id() ) );
 
 		$position = 1; // 0 is the homepage.
 		foreach ( $parents as $parent_id ) {
@@ -411,8 +413,8 @@ class Generate_Ldjson extends Generate_Image {
 
 		$output = '';
 
-		$post_id    = $this->get_the_real_id();
-		$post_type  = $this->get_post_type_real_id( $post_id );
+		$post_id    = Query::get_the_real_id();
+		$post_type  = Query::get_post_type_real_id( $post_id );
 		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**
@@ -652,7 +654,7 @@ class Generate_Ldjson extends Generate_Image {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$_generator_args = [ 'id' => $this->get_the_front_page_id() ];
+		$_generator_args = [ 'id' => Query::get_the_front_page_id() ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
 			$title = $this->get_filtered_raw_custom_field_title( $_generator_args )
@@ -694,7 +696,7 @@ class Generate_Ldjson extends Generate_Image {
 			return $crumb;
 		}
 
-		$post_id         = $this->get_the_real_id();
+		$post_id         = Query::get_the_real_id();
 		$_generator_args = [ 'id' => $post_id ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {

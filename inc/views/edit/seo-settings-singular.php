@@ -9,16 +9,17 @@
 
 use The_SEO_Framework\Bridges\PostSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+	The_SEO_Framework\Interpreters\Form,
+	The_SEO_Framework\Helper\Query;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Setup default vars.
-$post_id = $this->get_the_real_id(); // We also have access to object $post at the main call...
+$post_id = Query::get_the_real_id(); // We also have access to object $post at the main call...
 
 $_generator_args = [ 'id' => $post_id ];
 
-$_is_static_frontpage = $this->is_static_frontpage( $post_id );
+$_is_static_frontpage = Query::is_static_frontpage( $post_id );
 
 switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 	case 'inpost_main':

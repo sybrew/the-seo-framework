@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Prepares admin GUI scripts. Auto-invokes everything the moment this file is required.
@@ -68,7 +70,7 @@ final class Scripts {
 			static::get_tt_scripts(),
 		];
 
-		if ( $tsf->is_post_edit() ) {
+		if ( Query::is_post_edit() ) {
 			static::prepare_media_scripts();
 
 			$scripts[] = static::get_post_edit_scripts();
@@ -85,7 +87,7 @@ final class Scripts {
 
 			if ( $tsf->is_gutenberg_page() )
 				$scripts[] = static::get_gutenberg_compat_scripts();
-		} elseif ( $tsf->is_term_edit() ) {
+		} elseif ( Query::is_term_edit() ) {
 			static::prepare_media_scripts();
 
 			$scripts[] = static::get_term_edit_scripts();
@@ -97,14 +99,14 @@ final class Scripts {
 
 			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
-		} elseif ( $tsf->is_wp_lists_edit() ) {
+		} elseif ( Query::is_wp_lists_edit() ) {
 			$scripts[] = static::get_list_edit_scripts();
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 
 			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
-		} elseif ( $tsf->is_seo_settings_page() ) {
+		} elseif ( Query::is_seo_settings_page() ) {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();
 
@@ -181,11 +183,10 @@ final class Scripts {
 	 */
 	public static function prepare_media_scripts() {
 
-		$tsf  = \tsf();
 		$args = [];
 
-		if ( $tsf->is_post_edit() )
-			$args['post'] = $tsf->get_the_real_admin_id();
+		if ( Query::is_post_edit() )
+			$args['post'] = Query::get_the_real_admin_id();
 
 		\wp_enqueue_media( $args );
 	}
@@ -373,7 +374,7 @@ final class Scripts {
 
 		$tsf = \tsf();
 
-		$front_id = $tsf->get_the_front_page_id();
+		$front_id = Query::get_the_front_page_id();
 
 		return [
 			[
@@ -421,9 +422,9 @@ final class Scripts {
 	public static function get_post_edit_scripts() {
 
 		$tsf = \tsf();
-		$id  = $tsf->get_the_real_id();
+		$id  = Query::get_the_real_id();
 
-		$is_static_frontpage = $tsf->is_static_frontpage( $id );
+		$is_static_frontpage = Query::is_static_frontpage( $id );
 
 		if ( $is_static_frontpage ) {
 			$additions_forced_disabled = ! $tsf->get_option( 'homepage_tagline' );
@@ -492,11 +493,11 @@ final class Scripts {
 	public static function get_term_edit_scripts() {
 
 		$tsf      = \tsf();
-		$taxonomy = $tsf->get_current_taxonomy();
+		$taxonomy = Query::get_current_taxonomy();
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
 
-		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( $tsf->get_the_real_id(), $taxonomy ) )
+		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
 			/* translators: %s: Taxonomy singular name. */
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
@@ -719,7 +720,7 @@ final class Scripts {
 
 		$tsf = \tsf();
 
-		$id = $tsf->get_the_real_admin_id();
+		$id = Query::get_the_real_admin_id();
 
 		$post_type   = \get_post_type( $id );
 		$_taxonomies = $post_type ? $tsf->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];

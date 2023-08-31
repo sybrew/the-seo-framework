@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 \add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
@@ -23,7 +25,7 @@ namespace The_SEO_Framework;
  */
 function _wpml_do_current_screen_action() {
 
-	if ( \tsf()->is_seo_settings_page() ) {
+	if ( Query::is_seo_settings_page() ) {
 		\add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_remove_all_languages' );
 	}
 }

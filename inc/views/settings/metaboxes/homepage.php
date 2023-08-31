@@ -10,11 +10,12 @@
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Form,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+	The_SEO_Framework\Interpreters\Settings_Input as Input,
+	The_SEO_Framework\Helper\Query;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$home_id = $this->get_the_front_page_id();
+$home_id = Query::get_the_front_page_id();
 
 $_generator_args = [ 'id' => $home_id ];
 

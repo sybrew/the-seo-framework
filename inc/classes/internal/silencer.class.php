@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Internal;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- That's the whole premise of this file.
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2018 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,10 +26,6 @@ namespace The_SEO_Framework\Internal;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- That's the whole premise of this file.
 
 /**
  * Class The_SEO_Framework\Internal\Silencer

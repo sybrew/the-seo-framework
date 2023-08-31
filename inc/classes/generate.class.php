@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -81,6 +83,31 @@ class Generate extends User_Data {
 	 */
 	public function retrieve_robots_meta_assertions() {
 		return Builders\Robots\Main::instance()->collect_assertions();
+	}
+
+	/**
+	 * Returns the robots meta array.
+	 * Memoizes the return value.
+	 *
+	 * @since 3.2.4
+	 *
+	 * @return array
+	 */
+	public function get_robots_meta() {
+		return memo() ?? memo(
+			/**
+			 * @since 2.6.0
+			 * @param array $meta The robots meta.
+			 * @param int   $id   The current post or term ID.
+			 */
+			(array) \apply_filters_ref_array(
+				'the_seo_framework_robots_meta',
+				[
+					$this->generate_robots_meta(),
+					Query::get_the_real_id(),
+				]
+			)
+		);
 	}
 
 	/**
@@ -176,7 +203,7 @@ class Generate extends User_Data {
 		return ! empty(
 			$this->get_option(
 				$this->get_robots_post_type_option_id( $type )
-			)[ $post_type ?: $this->get_current_post_type() ]
+			)[ $post_type ?: Query::get_current_post_type() ]
 		);
 	}
 
@@ -194,7 +221,7 @@ class Generate extends User_Data {
 		return ! empty(
 			$this->get_option(
 				$this->get_robots_taxonomy_option_id( $type )
-			)[ $taxonomy ?: $this->get_current_taxonomy() ]
+			)[ $taxonomy ?: Query::get_current_taxonomy() ]
 		);
 	}
 
@@ -320,22 +347,22 @@ class Generate extends User_Data {
 	 * Generates the Open Graph type based on query status.
 	 *
 	 * @since 2.7.0
+	 * @since 4.3.0 An image is no longer required to generate the 'article' type.
 	 *
 	 * @return string The Open Graph type.
 	 */
 	public function generate_og_type() {
 
-		if ( $this->is_product() ) {
-			$type = 'product';
-		} elseif ( $this->is_single() && $this->get_image_from_cache() ) {
-			$type = 'article';
-		} elseif ( $this->is_author() ) {
-			$type = 'profile';
-		} else {
-			$type = 'website';
+		switch ( true ) {
+			case Query::is_product():
+				return 'product';
+			case Query::is_single():
+				return 'article';
+			case Query::is_author():
+				return 'profile';
 		}
 
-		return $type;
+		return 'website';
 	}
 
 	/**
@@ -358,7 +385,7 @@ class Generate extends User_Data {
 				'the_seo_framework_ogtype_output',
 				[
 					$this->generate_og_type(),
-					$this->get_the_real_id(),
+					Query::get_the_real_id(),
 				]
 			)
 		);
@@ -377,7 +404,7 @@ class Generate extends User_Data {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$id                = $this->get_the_real_id();
+		$id                = Query::get_the_real_id();
 		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 		return memo(
@@ -431,7 +458,7 @@ class Generate extends User_Data {
 			'the_seo_framework_twittercard_output',
 			[
 				$type,
-				$this->get_the_real_id(),
+				Query::get_the_real_id(),
 			]
 		);
 	}
@@ -530,7 +557,7 @@ class Generate extends User_Data {
 	public function get_redirect_url( $args = null ) {
 
 		if ( null === $args ) {
-			if ( $this->is_singular() ) {
+			if ( Query::is_singular() ) {
 				$url = $this->get_post_meta_item( 'redirect' );
 			} elseif ( $this->is_term_meta_capable() ) {
 				$url = $this->get_term_meta_item( 'redirect' );

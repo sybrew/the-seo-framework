@@ -7,17 +7,18 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Internal\Debug;
+use The_SEO_Framework\Internal\Debug,
+	The_SEO_Framework\Helper\Query;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-$id        = $this->get_the_real_id();
+$id        = Query::get_the_real_id();
 $mdash     = ' &mdash; ';
-$taxonomy  = $this->get_current_taxonomy();
-$post_type = $this->get_current_post_type();
+$taxonomy  = Query::get_current_taxonomy();
+$post_type = Query::get_current_post_type();
 
 // This will return 'Page' on all non-archive types (except the homepage)
-if ( $this->is_real_front_page() ) {
+if ( Query::is_real_front_page() ) {
 	$type = 'Front Page';
 } elseif ( $taxonomy ) {
 	$type = $this->get_tax_type_label( $taxonomy );
@@ -36,7 +37,7 @@ if ( is_admin() ) {
 		<h3 style="font-family:unset;font-size:14px;padding:0 12px;margin:0;line-height:39px;border-bottom:2px solid #aaa;position:absolute;z-index:9002;width:100%;right:0;left:0;top:0;background:#fff;border-radius:3px 3px 0 0;height:39px;">
 			SEO Debug Information
 			<?php
-			if ( $this->is_post_edit() || $this->is_term_edit() ) {
+			if ( Query::is_post_edit() || Query::is_term_edit() ) {
 				echo ' :: ';
 				echo esc_html( "Type: $type" );
 				echo esc_html( $mdash . 'ID: ' . $id );

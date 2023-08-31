@@ -6,6 +6,12 @@
 
 namespace The_SEO_Framework\Builders;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use function \The_SEO_Framework\umemo;
+
+Scripts::prepare();
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2018 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,12 +28,6 @@ namespace The_SEO_Framework\Builders;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-use function \The_SEO_Framework\umemo;
-
-Scripts::prepare();
 
 /**
  * Registers and outputs admin GUI scripts. Auto-invokes everything the moment

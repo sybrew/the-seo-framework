@@ -7,6 +7,8 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -79,6 +81,7 @@ function _previous_db_version() {
  * @TODO run this upgrader in a separate thread (e.g. via cron)? And store all notices as persistent?
  * TODO Add a notice that the upgrader is still running (and clear it once the upgrade is completed--preferably before the user can see it!)
  *
+ * @hook init 20
  * @since 2.7.0
  * @since 2.9.4 No longer tests WP version. This file won't be loaded anyway if rendered incompatible.
  * @since 3.0.0 Fewer option calls are now made when version is higher than former checks.
@@ -106,7 +109,7 @@ function _do_upgrade() {
 
 	if ( ! $tsf->loaded || \wp_doing_ajax() ) return;
 
-	if ( $tsf->is_seo_settings_page( false ) ) {
+	if ( Query::is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
 		\wp_redirect( \self_admin_url() );
 		exit;
@@ -346,6 +349,7 @@ function _set_to_current_version() {
 /**
  * Prepares a notice when the downgrade is completed.
  *
+ * @hook the_seo_framework_downgraded 99
  * @since 4.1.1
  * @TODO Add browser cache flush notice? Or set a pragma/cache-control header?
  *       Users that remove query strings (thanks to YSlow) are to blame, though.
@@ -392,6 +396,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 /**
  * Prepares a notice when the upgrade is completed.
  *
+ * @hook the_seo_framework_upgraded 99
  * @since 4.0.0
  * @since 4.1.0 1. Moved admin notice user capability check here.
  *              2. Now registers persistent notice for the update version.
@@ -553,6 +558,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 /**
  * Enqueues and outputs an Extension Manager suggestion.
  *
+ * @hook the_seo_framework_upgraded 100
  * @since 3.1.0
  * @since 3.2.2 No longer suggests when the user is new.
  * @since 3.2.4 Moved upgrade suggestion call to applicable file.

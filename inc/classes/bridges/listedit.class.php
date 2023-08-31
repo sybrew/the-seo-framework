@@ -6,7 +6,10 @@
 
 namespace The_SEO_Framework\Bridges;
 
-use \The_SEO_Framework\Interpreters\HTML;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -24,8 +27,6 @@ use \The_SEO_Framework\Interpreters\HTML;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Prepares the List Edit view interface.
@@ -237,7 +238,7 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		if ( $tsf->is_static_frontpage( $_generator_args['id'] ) ) {
+		if ( Query::is_static_frontpage( $_generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
@@ -264,7 +265,7 @@ final class ListEdit extends ListTable {
 		}
 
 		$post_data  = [
-			'isFront' => $tsf->is_static_frontpage( $_generator_args['id'] ),
+			'isFront' => Query::is_static_frontpage( $_generator_args['id'] ),
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,

@@ -5,6 +5,8 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -21,8 +23,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Prepares the List Edit view interface.

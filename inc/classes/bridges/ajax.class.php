@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Holds AJAX callbacks.
@@ -308,7 +310,7 @@ final class AJAX {
 			case 'twdescription':
 				switch ( $g ) {
 					case 'metadescription':
-						if ( $tsf->is_static_frontpage( $post_id ) ) {
+						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										?: $tsf->get_generated_description( $_generator_args, false );
 						} else {
@@ -316,7 +318,7 @@ final class AJAX {
 						}
 						break;
 					case 'ogdescription':
-						if ( $tsf->is_static_frontpage( $post_id ) ) {
+						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										?: $tsf->get_generated_open_graph_description( $_generator_args, false );
 						} else {
@@ -324,7 +326,7 @@ final class AJAX {
 						}
 						break;
 					case 'twdescription':
-						if ( $tsf->is_static_frontpage( $post_id ) ) {
+						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
 										?: $tsf->get_generated_twitter_description( $_generator_args, false );
 						} else {
@@ -336,7 +338,7 @@ final class AJAX {
 				break;
 
 			case 'imageurl':
-				if ( $tsf->is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
+				if ( Query::is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
 					$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
 				} else {
 					$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';

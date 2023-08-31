@@ -6,6 +6,14 @@
 
 namespace The_SEO_Framework\Internal;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
+use function \The_SEO_Framework\memo;
+
+// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,12 +30,6 @@ namespace The_SEO_Framework\Internal;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
-
-use function \The_SEO_Framework\memo;
 
 /**
  * Singleton class The_SEO_Framework\Internal\Debug
@@ -137,7 +139,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error( \E_USER_DEPRECATED ), $message, \E_USER_DEPRECATED ),
+				$this->combobulate_error_message( $this->get_error(), $message, \E_USER_DEPRECATED ),
 				\E_USER_DEPRECATED
 			);
 		}
@@ -194,7 +196,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error( \E_USER_NOTICE ), $message, \E_USER_NOTICE ),
+				$this->combobulate_error_message( $this->get_error(), $message, \E_USER_NOTICE ),
 				\E_USER_NOTICE
 			);
 		}
@@ -208,12 +210,14 @@ final class Debug {
 	 * @since 2.8.0 1. Now escapes all parameters.
 	 *              2. Removed check for gettext.
 	 * @since 4.1.1 No longer registers a custom error handler.
+	 * @since 4.3.0 Added third parameter $handle.
 	 * @access private
 	 *
-	 * @param string $p_or_m The Property or Method.
+	 * @param string $p_or_m  The Property or Method.
 	 * @param string $message A message explaining what has been done incorrectly.
+	 * @param string $handle  The method handler.
 	 */
-	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
+	public function _inaccessible_p_or_m( $p_or_m, $message = '', $handle = 'tsf()' ) {
 
 		/**
 		 * Fires when the inaccessible property or method is being used.
@@ -234,16 +238,17 @@ final class Debug {
 		 */
 		if ( \WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
 			$message = sprintf(
-				/* translators: 1: Method or Property name, 2: The SEO Framework class. 3: Message */
-				\esc_html__( '%1$s is not accessible in %2$s. %3$s', 'autodescription' ),
+				/* translators: 1: Method or Property name, 2: "inaccessible", 3: Class name. 4: Message */
+				\esc_html__( '%1$s is %2$s in %3$s. %4$s', 'autodescription' ),
 				'<code>' . \esc_html( $p_or_m ) . '</code>',
-				'<code>tsf()</code>',
+				'<strong>' . \esc_html__( 'inaccessible', 'autodescription' ) . '</strong>',
+				sprintf( '<code>%s</code>', \esc_html( $handle ) ),
 				\esc_html( $message )
 			);
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error( \E_USER_WARNING ), $message, \E_USER_WARNING ),
+				$this->combobulate_error_message( $this->get_error(), $message, \E_USER_WARNING ),
 				\E_USER_WARNING
 			);
 		}
@@ -258,54 +263,35 @@ final class Debug {
 	 *
 	 * @since 3.2.2
 	 * @since 4.1.1 Reworked to work with any error handler.
+	 * @since 4.3.0 Now actualyl used my brain and added an automated object searcher instead of guessing.
 	 * @see PHP debug_backtrace()
 	 * @see $this->combobulate_error_message()
 	 *
-	 * @param int|null $type The error type, that helps us locate the error's origin.
 	 * @return array The erroneous caller data
 	 */
-	protected function get_error( $type = null ) {
+	protected function get_error() {
 
-		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 5 );
+		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 6 );
 
 		if ( ! $backtrace ) return [];
 
-		if ( $type & \E_USER_DEPRECATED ) {
-			/**
-			 * 0 = This function.
-			 * 1 = Error handler (This class).
-			 * 2 = Error forwarder (TSF class).
-			 */
-			if ( isset( $backtrace[4]['args'][0][0] ) && is_a( $backtrace[4]['args'][0][0], 'The_SEO_Framework\Internal\Deprecated', false ) ) {
-				/**
-				 * 3 = Deprecated call.
-				 * 4 = TSF deprecation class forwarder.
-				 * 5 = User mistake.
-				 */
-				$error = $backtrace[5];
-			} else {
-				/**
-				 * 3 = Deprecated call & user mistake. (no forwarder)
-				 */
-				$error = $backtrace[3];
-			}
-		} else {
-			/**
-			 * 0 = This function.
-			 * 1 = Error handler (This class).
-			 * 2 = Error forwarder (TSF class).
-			 */
-			if ( isset( $backtrace[2]['object'] ) && is_a( $backtrace[2]['object'], \the_seo_framework_class(), false ) ) {
-				/**
-				 * 3 = Method with fault test & user mistake.
-				 */
-				$error = $backtrace[3];
-			} else {
-				/**
-				 * 3 = Method with fault test.
-				 * 4 = User mistake.
-				 */
-				$error = $backtrace[4];
+		/**
+		 * Always one step before TSF:
+		 * 0 = caller of this func
+		 * 1 = tsf debugger
+		 * 2 = debugger container
+		 * 3 = container caller
+		 */
+		$error = $backtrace[3];
+
+		// Search deeper if it exists. Skip the first 3.
+		foreach ( \array_slice( $backtrace, 3 ) as $trace ) {
+			if (
+					isset( $trace['object'] )
+				&& is_a( $trace['object'], \the_seo_framework_class(), false )
+			) {
+				$error = $trace;
+				break;
 			}
 		}
 
@@ -387,10 +373,10 @@ final class Debug {
 
 		$tsf = \tsf();
 
-		if ( \is_admin() && ! $tsf->is_term_edit() && ! $tsf->is_post_edit() && ! $tsf->is_seo_settings_page( true ) )
+		if ( \is_admin() && ! Query::is_term_edit() && ! Query::is_post_edit() && ! Query::is_seo_settings_page( true ) )
 			return;
 
-		if ( $tsf->is_seo_settings_page( true ) )
+		if ( Query::is_seo_settings_page( true ) )
 			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_id' ] );
 
 		// Start timer.
@@ -480,53 +466,54 @@ final class Debug {
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
-		$page_id                        = $tsf->get_the_real_id();
+		$page_id                        = Query::get_the_real_id();
 		$is_query_exploited             = $tsf->is_query_exploited();
 		$query_supports_seo             = $tsf->query_supports_seo() ? 'yes' : 'no';
-		$is_404                         = $tsf->is_404();
-		$is_admin                       = $tsf->is_admin();
-		$is_attachment                  = $tsf->is_attachment();
-		$is_archive                     = $tsf->is_archive();
-		$is_term_edit                   = $tsf->is_term_edit();
-		$is_post_edit                   = $tsf->is_post_edit();
-		$is_wp_lists_edit               = $tsf->is_wp_lists_edit();
-		$is_author                      = $tsf->is_author();
-		$is_category                    = $tsf->is_category();
-		$is_date                        = $tsf->is_date();
-		$is_year                        = $tsf->is_year();
-		$is_month                       = $tsf->is_month();
-		$is_day                         = $tsf->is_day();
-		$is_feed                        = $tsf->is_feed();
-		$is_real_front_page             = $tsf->is_real_front_page();
-		$is_home                        = $tsf->is_home();
-		$is_home_as_page                = $tsf->is_home_as_page();
-		$is_page                        = $tsf->is_page();
-		$page                           = $tsf->page();
-		$paged                          = $tsf->paged();
-		$is_preview                     = $tsf->is_preview();
-		$is_customize_preview           = $tsf->is_customize_preview();
-		$is_search                      = $tsf->is_search();
-		$is_single                      = $tsf->is_single();
-		$is_singular                    = $tsf->is_singular();
-		$is_static_frontpage            = $tsf->is_static_frontpage();
-		$is_tag                         = $tsf->is_tag();
-		$is_tax                         = $tsf->is_tax();
-		$is_shop                        = $tsf->is_shop();
-		$is_product                     = $tsf->is_product();
-		$is_seo_settings_page           = $tsf->is_seo_settings_page( true );
-		$numpages                       = $tsf->numpages();
-		$is_multipage                   = $tsf->is_multipage();
-		$is_singular_archive            = $tsf->is_singular_archive();
+		$is_404                         = \is_404();
+		$is_admin                       = \is_admin();
+		$is_attachment                  = Query::is_attachment();
+		$is_archive                     = Query::is_archive();
+		$is_term_edit                   = Query::is_term_edit();
+		$is_post_edit                   = Query::is_post_edit();
+		$is_wp_lists_edit               = Query::is_wp_lists_edit();
+		$is_author                      = Query::is_author();
+		$is_category                    = Query::is_category();
+		$is_date                        = \is_date();
+		$is_year                        = \is_year();
+		$is_month                       = \is_month();
+		$is_day                         = \is_day();
+		$is_feed                        = \is_feed();
+		$is_robots                      = \is_robots();
+		$is_real_front_page             = Query::is_real_front_page();
+		$is_home                        = Query::is_home();
+		$is_home_as_page                = Query::is_home_as_page();
+		$is_page                        = Query::is_page();
+		$page                           = Query::page();
+		$paged                          = Query::paged();
+		$is_preview                     = Query::is_preview();
+		$is_customize_preview           = \is_customize_preview();
+		$is_search                      = Query::is_search();
+		$is_single                      = Query::is_single();
+		$is_singular                    = Query::is_singular();
+		$is_static_frontpage            = Query::is_static_frontpage();
+		$is_tag                         = Query::is_tag();
+		$is_tax                         = Query::is_tax();
+		$is_shop                        = Query::is_shop();
+		$is_product                     = Query::is_product();
+		$is_seo_settings_page           = Query::is_seo_settings_page( true );
+		$numpages                       = Query::numpages();
+		$is_multipage                   = Query::is_multipage();
+		$is_singular_archive            = Query::is_singular_archive();
 		$is_term_meta_capable           = $tsf->is_term_meta_capable();
 		$is_post_type_supported         = $tsf->is_post_type_supported();
 		$is_post_type_archive_supported = $tsf->is_post_type_archive_supported();
 		$has_page_on_front              = $tsf->has_page_on_front();
 		$is_taxonomy_supported          = $tsf->is_taxonomy_supported();
 		$get_post_type                  = \get_post_type();
-		$get_post_type_real_id          = $tsf->get_post_type_real_id();
-		$admin_post_type                = $tsf->get_admin_post_type();
-		$current_taxonomy               = $tsf->get_current_taxonomy();
-		$current_post_type              = $tsf->get_current_post_type();
+		$get_post_type_real_id          = Query::get_post_type_real_id();
+		$admin_post_type                = Query::get_admin_post_type();
+		$current_taxonomy               = Query::get_current_taxonomy();
+		$current_post_type              = Query::get_current_post_type();
 		$is_taxonomy_disabled           = $tsf->is_taxonomy_disabled();
 		$is_post_type_archive           = \is_post_type_archive();
 		$is_protected                   = $tsf->is_protected( $page_id );

@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Builders;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Builders;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Generates images.
@@ -62,7 +64,7 @@ final class Images {
 	 */
 	public static function get_attachment_image_details( $args = null, $size = 'full' ) {
 
-		$id = $args['id'] ?? \tsf()->get_the_real_id();
+		$id = $args['id'] ?? Query::get_the_real_id();
 
 		if ( $id ) {
 			yield [
@@ -93,7 +95,7 @@ final class Images {
 	 */
 	public static function get_featured_image_details( $args = null, $size = 'full' ) {
 
-		$post_id = $args['id'] ?? \tsf()->get_the_real_id();
+		$post_id = $args['id'] ?? Query::get_the_real_id();
 		$id      = \get_post_thumbnail_id( $post_id );
 
 		if ( $id ) {
@@ -137,7 +139,7 @@ final class Images {
 		$tsf = \tsf();
 
 		if ( null === $args ) {
-			if ( $tsf->is_singular() ) {
+			if ( Query::is_singular() ) {
 				$content = $tsf->get_post_content();
 			}
 		} else {

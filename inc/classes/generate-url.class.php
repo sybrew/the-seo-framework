@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -51,7 +53,7 @@ class Generate_Url extends Generate_Title {
 	public function has_custom_canonical_url( $args = null ) {
 
 		if ( null === $args ) {
-			if ( $this->is_singular() ) {
+			if ( Query::is_singular() ) {
 				$has = $this->get_singular_custom_canonical_url();
 			} elseif ( $this->is_term_meta_capable() ) {
 				$has = $this->get_taxonomical_custom_canonical_url();
@@ -101,8 +103,8 @@ class Generate_Url extends Generate_Title {
 	public function get_current_permalink() {
 		return memo() ?? memo(
 			$this->get_canonical_url( [
-				'id'       => $this->get_the_real_id(),
-				'taxonomy' => $this->get_current_taxonomy(),
+				'id'       => Query::get_the_real_id(),
+				'taxonomy' => Query::get_current_taxonomy(),
 			] )
 		);
 	}
@@ -117,7 +119,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_homepage_permalink() {
 		return memo() ?? memo(
-			$this->get_canonical_url( [ 'id' => $this->get_the_front_page_id() ] )
+			$this->get_canonical_url( [ 'id' => Query::get_the_front_page_id() ] )
 		);
 	}
 
@@ -176,7 +178,7 @@ class Generate_Url extends Generate_Title {
 
 			static $real_id;
 			// In the sitemap, do not use queries; plus pagination shouldn't be inserted here.
-			$real_id ??= $this->is_sitemap() ? -1 : $this->get_the_real_id();
+			$real_id ??= Query::is_sitemap() ? -1 : Query::get_the_real_id();
 
 			if ( $args['id'] === $real_id )
 				$url = $this->remove_pagination_from_url( $url );
@@ -222,13 +224,13 @@ class Generate_Url extends Generate_Title {
 					: ''
 				) ?: $this->get_post_type_archive_canonical_url( $args['pta'] );
 		} else {
-			if ( $this->is_static_frontpage( $args['id'] ) ) {
+			if ( Query::is_static_frontpage( $args['id'] ) ) {
 				$url = (
 					$args['get_custom_field']
 						? $this->get_singular_custom_canonical_url( $args['id'] )
 						: ''
 					) ?: $this->get_raw_home_canonical_url();
-			} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$url = $this->get_raw_home_canonical_url();
 			} elseif ( $args['id'] ) {
 				$url = (
@@ -255,24 +257,24 @@ class Generate_Url extends Generate_Title {
 	 */
 	protected function generate_canonical_url() {
 
-		if ( $this->is_real_front_page() ) {
+		if ( Query::is_real_front_page() ) {
 			if ( $this->has_page_on_front() ) {
 				$url = $this->get_singular_custom_canonical_url()
 					?: $this->get_home_canonical_url();
 			} else {
 				$url = $this->get_home_canonical_url();
 			}
-		} elseif ( $this->is_singular() ) {
+		} elseif ( Query::is_singular() ) {
 			$url = $this->get_singular_custom_canonical_url()
 				?: $this->get_singular_canonical_url();
-		} elseif ( $this->is_archive() ) {
+		} elseif ( Query::is_archive() ) {
 			if ( $this->is_term_meta_capable() ) {
 				$url = $this->get_taxonomical_custom_canonical_url()
 					?: $this->get_taxonomical_canonical_url();
 			} elseif ( \is_post_type_archive() ) {
 				$url = $this->get_post_type_archive_custom_canonical_url()
 					?: $this->get_post_type_archive_canonical_url();
-			} elseif ( $this->is_author() ) {
+			} elseif ( Query::is_author() ) {
 				$url = $this->get_author_canonical_url();
 			} elseif ( \is_date() ) {
 				if ( \is_day() ) {
@@ -283,7 +285,7 @@ class Generate_Url extends Generate_Title {
 					$url = $this->get_date_canonical_url( \get_query_var( 'year' ) );
 				}
 			}
-		} elseif ( $this->is_search() ) {
+		} elseif ( Query::is_search() ) {
 			$url = $this->get_search_canonical_url();
 		}
 
@@ -325,15 +327,15 @@ class Generate_Url extends Generate_Title {
 
 		if ( ! $url ) return '';
 
-		$query_id = $this->get_the_real_id();
+		$query_id = Query::get_the_real_id();
 
 		if ( $this->has_page_on_front() ) {
-			if ( $this->is_static_frontpage( $query_id ) ) {
+			if ( Query::is_static_frontpage( $query_id ) ) {
 				// Yes, we use the pagination base for the static frontpage.
-				$url = $this->add_pagination_to_url( $url, $this->page(), true );
+				$url = $this->add_pagination_to_url( $url, Query::page(), true );
 			}
 		} elseif ( (int) \get_option( 'page_for_posts' ) === $query_id ) {
-			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
+			$url = $this->add_pagination_to_url( $url, Query::paged(), true );
 		}
 
 		return $this->slash_root_url( $url );
@@ -368,7 +370,7 @@ class Generate_Url extends Generate_Title {
 	 * Returns singular canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via $this->paged().
+	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via Query::paged().
 	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
 	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
 	 * @since 4.2.0 1. Added memoization.
@@ -384,20 +386,20 @@ class Generate_Url extends Generate_Title {
 		if ( null !== $memo = umemo( __METHOD__, null, $post_id ) ) return $memo;
 
 		$url = \wp_get_canonical_url(
-			$post_id ?? $this->get_the_real_id()
+			$post_id ?? Query::get_the_real_id()
 		);
 
 		if ( ! $url ) return '';
 
 		$page = \get_query_var( 'page', 1 ) ?: 1;
 		// Remove undesired/fake pagination. See: <https://core.trac.wordpress.org/ticket/37505>
-		if ( $page > 1 && $page !== $this->page() )
+		if ( $page > 1 && $page !== Query::page() )
 			$url = $this->remove_pagination_from_url( $url, $page, false );
 
 		// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
 		// wp_get_canonical_url() only tests 'page'. Fix that:
-		if ( null === $post_id && $this->is_singular_archive() )
-			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
+		if ( null === $post_id && Query::is_singular_archive() )
+			$url = $this->add_pagination_to_url( $url, Query::paged(), true );
 
 		return umemo( __METHOD__, $url, $post_id );
 	}
@@ -447,13 +449,13 @@ class Generate_Url extends Generate_Title {
 		if ( null !== $memo = umemo( __METHOD__, null, $term_id, $taxonomy ) )
 			return $memo;
 
-		$url = \get_term_link( $term_id ?: $this->get_the_real_id(), $taxonomy );
+		$url = \get_term_link( $term_id ?: Query::get_the_real_id(), $taxonomy );
 
 		if ( \is_wp_error( $url ) )
 			return umemo( __METHOD__, '', $term_id, $taxonomy );
 
 		if ( null === $term_id )
-			$url = $this->add_pagination_to_url( $url, $this->paged(), true );
+			$url = $this->add_pagination_to_url( $url, Query::paged(), true );
 
 		return umemo( __METHOD__, $url, $term_id, $taxonomy );
 	}
@@ -473,12 +475,12 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
-		$url = \get_post_type_archive_link( $post_type ?? $this->get_current_post_type() );
+		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
 
 		if ( ! $url ) return '';
 
 		return null === $post_type
-			? $this->add_pagination_to_url( $url, $this->paged(), true )
+			? $this->add_pagination_to_url( $url, Query::paged(), true )
 			: $url;
 	}
 
@@ -495,12 +497,12 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function get_author_canonical_url( $id = null ) {
 
-		$url = \get_author_posts_url( $id ?? $this->get_the_real_id() );
+		$url = \get_author_posts_url( $id ?? Query::get_the_real_id() );
 
 		if ( ! $url ) return '';
 
 		return null === $id
-			? $this->add_pagination_to_url( $url, $this->paged(), true )
+			? $this->add_pagination_to_url( $url, Query::paged(), true )
 			: $url;
 	}
 
@@ -549,7 +551,7 @@ class Generate_Url extends Generate_Title {
 
 		if ( $_paginate ) {
 			// Adds pagination if input matches query.
-			$link = $this->add_pagination_to_url( $link, $this->paged(), true );
+			$link = $this->add_pagination_to_url( $link, Query::paged(), true );
 		}
 
 		return $link;
@@ -575,7 +577,7 @@ class Generate_Url extends Generate_Title {
 		if ( ! $url ) return '';
 
 		return null === $search_query
-			? $this->add_pagination_to_url( $url, $this->paged(), true )
+			? $this->add_pagination_to_url( $url, Query::paged(), true )
 			: $url;
 	}
 
@@ -634,7 +636,7 @@ class Generate_Url extends Generate_Title {
 			$this->get_home_url(),
 			\PHP_URL_SCHEME
 		) ) ?: (
-			$this->is_ssl() ? 'https' : 'http'
+			Query::is_ssl() ? 'https' : 'http'
 		);
 	}
 
@@ -667,11 +669,11 @@ class Generate_Url extends Generate_Title {
 	public function set_url_scheme( $url, $scheme = null ) {
 
 		if ( empty( $scheme ) ) {
-			$scheme = $this->is_ssl() ? 'https' : 'http';
+			$scheme = Query::is_ssl() ? 'https' : 'http';
 		} elseif ( 'admin' === $scheme || 'login' === $scheme || 'login_post' === $scheme || 'rpc' === $scheme ) {
-			$scheme = $this->is_ssl() || \force_ssl_admin() ? 'https' : 'http';
+			$scheme = Query::is_ssl() || \force_ssl_admin() ? 'https' : 'http';
 		} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
-			$scheme = $this->is_ssl() ? 'https' : 'http';
+			$scheme = Query::is_ssl() ? 'https' : 'http';
 		}
 
 		$url = $this->make_fully_qualified_url( $url );
@@ -703,12 +705,12 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function add_pagination_to_url( $url, $page = null, $use_base = null ) {
 
-		$page ??= max( $this->paged(), $this->page() );
+		$page ??= max( Query::paged(), Query::page() );
 
 		if ( $page < 2 )
 			return $url;
 
-		$use_base ??= $this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search();
+		$use_base ??= Query::is_real_front_page() || Query::is_archive() || Query::is_singular_archive() || Query::is_search();
 
 		if ( $this->pretty_permalinks ) {
 			$_query = parse_url( $url, \PHP_URL_QUERY );
@@ -784,11 +786,11 @@ class Generate_Url extends Generate_Title {
 
 		if ( $this->pretty_permalinks ) {
 
-			$page ??= max( $this->paged(), $this->page() );
+			$page ??= max( Query::paged(), Query::page() );
 
 			if ( $page > 1 ) {
 				$user_slash = ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
-				$use_base ??= $this->is_real_front_page() || $this->is_archive() || $this->is_singular_archive() || $this->is_search();
+				$use_base ??= Query::is_real_front_page() || Query::is_archive() || Query::is_singular_archive() || Query::is_search();
 
 				if ( $use_base ) {
 					$find = "/{$GLOBALS['wp_rewrite']->pagination_base}/{$page}{$user_slash}";
@@ -833,7 +835,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
 		return $this->get_primary_term(
-			( $post ?? \get_post( $this->get_the_real_id() ) )->ID,
+			( $post ?? \get_post( Query::get_the_real_id() ) )->ID,
 			$term->taxonomy
 		) ?: $term;
 	}
@@ -851,19 +853,19 @@ class Generate_Url extends Generate_Title {
 	public function get_shortlink() {
 
 		if ( ! $this->get_option( 'shortlink_tag' ) ) return '';
-		if ( $this->is_real_front_page() ) return '';
+		if ( Query::is_real_front_page() ) return '';
 
 		// We slash it because plain permalinks do that too, for consistency.
 		$home = \trailingslashit( $this->get_homepage_permalink() );
-		$id   = $this->get_the_real_id();
+		$id   = Query::get_the_real_id();
 		$url  = '';
 
-		if ( $this->is_singular() ) {
+		if ( Query::is_singular() ) {
 			$url = \add_query_arg( [ 'p' => $id ], $home );
-		} elseif ( $this->is_archive() ) {
-			if ( $this->is_category() ) {
+		} elseif ( Query::is_archive() ) {
+			if ( Query::is_category() ) {
 				$url = \add_query_arg( [ 'cat' => $id ], $home );
-			} elseif ( $this->is_tag() ) {
+			} elseif ( Query::is_tag() ) {
 				$url = \add_query_arg( [ 'post_tag' => $id ], $home );
 			} elseif ( \is_date() && isset( $GLOBALS['wp_query']->query ) ) {
 				// FIXME: Core Report: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
@@ -875,9 +877,9 @@ class Generate_Url extends Generate_Title {
 				];
 
 				$url = \add_query_arg( [ 'm' => implode( '', $_date ) ], $home );
-			} elseif ( $this->is_author() ) {
+			} elseif ( Query::is_author() ) {
 				$url = \add_query_arg( [ 'author' => $id ], $home );
-			} elseif ( $this->is_tax() ) {
+			} elseif ( Query::is_tax() ) {
 				// Generate shortlink for object type and slug.
 				$object = \get_queried_object();
 
@@ -887,22 +889,22 @@ class Generate_Url extends Generate_Title {
 				if ( $tax && $slug )
 					$url = \add_query_arg( [ $tax => $slug ], $home );
 			}
-		} elseif ( $this->is_search() ) {
+		} elseif ( Query::is_search() ) {
 			$url = \add_query_arg( [ 's' => \get_search_query( false ) ], $home );
 		}
 
 		if ( ! $url ) return '';
 
-		if ( $this->is_archive() || $this->is_singular_archive() || $this->is_search() ) {
-			$paged = $this->maybe_get_paged( $this->paged(), false, true );
+		if ( Query::is_archive() || Query::is_singular_archive() || Query::is_search() ) {
+			$paged = $this->maybe_get_paged( Query::paged(), false, true );
 			$url   = \add_query_arg( [ 'paged' => $paged ], $url );
 		} else {
-			$page = $this->maybe_get_paged( $this->page(), false, true );
+			$page = $this->maybe_get_paged( Query::page(), false, true );
 			$url  = \add_query_arg( [ 'page' => $page ], $url );
 		}
 
 		// Append queries other plugins might've filtered.
-		if ( $this->is_singular() ) {
+		if ( Query::is_singular() ) {
 			$url = $this->append_url_query(
 				$url,
 				parse_url( \get_permalink( $id ), \PHP_URL_QUERY )
@@ -956,32 +958,32 @@ class Generate_Url extends Generate_Title {
 		if ( $this->has_custom_canonical_url() ) goto end;
 
 		if (
-			   $this->is_singular()
-			&& ! $this->is_singular_archive()
-			&& $this->is_multipage()
+			   Query::is_singular()
+			&& ! Query::is_singular_archive()
+			&& Query::is_multipage()
 		) {
-			$_run = $this->is_real_front_page()
+			$_run = Query::is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_posts' );
 
 			if ( ! $_run ) goto end;
 
-			$page      = $this->page();
-			$_numpages = $this->numpages();
+			$page      = Query::page();
+			$_numpages = Query::numpages();
 		} elseif (
-			   $this->is_real_front_page()
-			|| $this->is_archive()
-			|| $this->is_singular_archive()
-			|| $this->is_search()
+			   Query::is_real_front_page()
+			|| Query::is_archive()
+			|| Query::is_singular_archive()
+			|| Query::is_search()
 		) {
-			$_run = $this->is_real_front_page()
+			$_run = Query::is_real_front_page()
 				  ? $this->get_option( 'prev_next_frontpage' )
 				  : $this->get_option( 'prev_next_archives' );
 
 			if ( ! $_run ) goto end;
 
-			$page      = $this->paged();
-			$_numpages = $this->numpages();
+			$page      = Query::paged();
+			$_numpages = Query::numpages();
 		} else {
 			goto end;
 		}

@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Builders\Robots;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Builders\Robots;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Engine for robots generator by arguments.
@@ -97,7 +99,7 @@ final class Args extends Factory {
 				yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $args['taxonomy'] );
 
 				// Store values from each post type bound to the taxonomy.
-				foreach ( $tsf->get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
+				foreach ( Query::get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
 					$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
 
 				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
@@ -106,7 +108,7 @@ final class Args extends Factory {
 				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $args['pta'] );
 			} else {
 				// $args['id'] can be empty, pointing to a plausible homepage query.
-				if ( $tsf->is_real_front_page_by_id( $args['id'] ) )
+				if ( Query::is_real_front_page_by_id( $args['id'] ) )
 					yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
 
 				if ( $args['id'] )

@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 \add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\\_polylang_fix_sitemap_base_bath' );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
@@ -232,7 +234,7 @@ function _polylang_blocklist_tsf_urls( $blocklist ) {
  * @return string The fixed home URL.
  */
 function _polylang_fix_home_url( $url ) {
-	return \tsf()->is_real_front_page() && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
+	return Query::is_real_front_page() && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
 }
 
 /**

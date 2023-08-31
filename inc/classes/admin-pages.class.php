@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -175,13 +177,14 @@ class Admin_Pages extends Generate_Ldjson {
 	/**
 	 * Prepares post edit view, like outputting the fields.
 	 *
+	 * @hook add_meta_boxes 5
 	 * @since 4.0.0
 	 *
 	 * @param string $post_type The current post type.
 	 */
 	public function _init_post_edit_view( $post_type ) {
 
-		if ( ! $this->is_post_edit() || ! $this->is_post_type_supported( $post_type ) ) return;
+		if ( ! Query::is_post_edit() || ! $this->is_post_type_supported( $post_type ) ) return;
 
 		/**
 		 * @since 2.0.0
@@ -203,9 +206,9 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_term_edit_view() {
 
-		if ( ! $this->is_term_edit() ) return;
+		if ( ! Query::is_term_edit() ) return;
 
-		$taxonomy = $this->get_current_taxonomy();
+		$taxonomy = Query::get_current_taxonomy();
 
 		if ( ! $this->is_taxonomy_supported( $taxonomy ) ) return;
 
@@ -232,7 +235,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_user_edit_view() {
 
-		if ( ! $this->is_profile_edit() ) return;
+		if ( ! Query::is_profile_edit() ) return;
 
 		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
 		// if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;

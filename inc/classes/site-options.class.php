@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -545,7 +547,7 @@ class Site_Options extends Sanitize {
 	protected function check_options_reset() {
 
 		// Check if we're already dealing with the settings. Buggy cache might interfere, otherwise.
-		if ( ! $this->is_seo_settings_page( false ) || ! $this->can_access_settings() )
+		if ( ! Query::is_seo_settings_page( false ) || ! $this->can_access_settings() )
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
@@ -858,7 +860,7 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_post_type_archive_meta_item( $item, $post_type = '', $use_cache = true ) {
 		return $this->get_post_type_archive_meta(
-			$post_type ?: $this->get_current_post_type(),
+			$post_type ?: Query::get_current_post_type(),
 			$use_cache
 		)[ $item ] ?? null;
 	}
@@ -899,7 +901,7 @@ class Site_Options extends Sanitize {
 			'the_seo_framework_get_post_type_archive_meta_defaults',
 			[
 				$this->get_unfiltered_post_type_archive_meta_defaults(),
-				$post_type ?: $this->get_current_post_type(),
+				$post_type ?: Query::get_current_post_type(),
 			]
 		);
 	}

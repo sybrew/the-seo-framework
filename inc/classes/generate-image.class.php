@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -33,6 +35,29 @@ namespace The_SEO_Framework;
  * @since 2.8.0
  */
 class Generate_Image extends Generate_Url {
+
+	/**
+	 * Caches current Image URL in static variable.
+	 * To be used on the front-end only.
+	 *
+	 * @since 2.2.2
+	 * @since 2.7.0 $get_id parameter has been added.
+	 * @since 4.0.0 Now uses the new image generator.
+	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
+	 *              it'll always use just one image, we read this option so we'll only
+	 *              use a single cache instance internally with the generator.
+	 *
+	 * @return string The image URL.
+	 */
+	public function get_image_from_cache() {
+
+		foreach ( $this->get_image_details_from_cache( ! $this->get_option( 'multi_og_image' ) ) as $image ) {
+			$url = $image['url'];
+			if ( $url ) break;
+		}
+
+		return $url ?? '';
+	}
 
 	/**
 	 * Returns the image details from cache.
@@ -201,8 +226,8 @@ class Generate_Image extends Generate_Url {
 	 */
 	protected function get_custom_field_image_details_from_query() {
 
-		if ( $this->is_real_front_page() ) {
-			if ( $this->is_static_frontpage() ) {
+		if ( Query::is_real_front_page() ) {
+			if ( Query::is_static_frontpage() ) {
 				$details = [
 					'url' => $this->get_option( 'homepage_social_image_url' ),
 					'id'  => $this->get_option( 'homepage_social_image_id' ),
@@ -219,7 +244,7 @@ class Generate_Image extends Generate_Url {
 					'id'  => $this->get_option( 'homepage_social_image_id' ),
 				];
 			}
-		} elseif ( $this->is_singular() ) {
+		} elseif ( Query::is_singular() ) {
 			$details = [
 				'url' => $this->get_post_meta_item( '_social_image_url' ),
 				'id'  => $this->get_post_meta_item( '_social_image_id' ),
@@ -283,7 +308,7 @@ class Generate_Image extends Generate_Url {
 				'url' => $this->get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
 				'id'  => $this->get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
 			];
-		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			$details = [
 				'url' => $this->get_option( 'homepage_social_image_url' ),
 				'id'  => $this->get_option( 'homepage_social_image_id' ),
@@ -341,8 +366,8 @@ class Generate_Image extends Generate_Url {
 		$builder = Builders\Images::class;
 
 		if ( null === $args ) {
-			if ( $this->is_singular() ) {
-				if ( $this->is_attachment() ) {
+			if ( Query::is_singular() ) {
+				if ( Query::is_attachment() ) {
 					$cbs = [
 						'attachment' => [ $builder, 'get_attachment_image_details' ],
 					];

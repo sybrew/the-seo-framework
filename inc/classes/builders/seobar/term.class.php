@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Builders\SEOBar;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Builders\SEOBar;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Generates the SEO Bar for posts.
@@ -100,7 +102,7 @@ final class Term extends Main {
 			'states' => [
 				'locale'       => \get_locale(),
 				'isempty'      => ! static::$tsf->is_term_populated( static::$query['id'], static::$query['taxonomy'] ),
-				'posttypes'    => static::$tsf->get_post_types_from_taxonomy( static::$query['taxonomy'] ),
+				'posttypes'    => Query::get_post_types_from_taxonomy( static::$query['taxonomy'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,

@@ -7,6 +7,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -31,7 +33,7 @@ namespace The_SEO_Framework;
  *
  * @since 2.8.0
  */
-class Init extends Query {
+class Init extends Pool {
 
 	/**
 	 * A true legacy. Ran the plugin on the front-end.
@@ -497,44 +499,13 @@ class Init extends Query {
 	 *              2. Now always sets timezone regardless of settings, because, again, bug.
 	 * @since 4.2.0 No longer sets timezone.
 	 * @since 4.2.7 No longer marked as private.
+	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
 	 */
 	public function html_output() {
 
-		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
+		if ( Query::is_preview() || \is_customize_preview() || ! \tsf()->query_supports_seo() ) return;
 
-		/**
-		 * @since 2.6.0
-		 */
-		\do_action( 'the_seo_framework_do_before_output' );
-
-		/**
-		 * The bootstrap timer keeps adding when metadata is strapping.
-		 * This causes both timers to increase simultaneously.
-		 * We catch the bootstrap here, and let the meta-timer take over.
-		 */
-		$bootstrap_timer = _bootstrap_timer();
-		/**
-		 * Start the meta timer here. This also catches file inclusions,
-		 * which is also caught by the _bootstrap_timer().
-		 */
-		$init_start = hrtime( true );
-
-		// phpcs:disable, WordPress.Security.EscapeOutput -- Output is escaped.
-		echo "\n", $this->get_plugin_indicator( 'before' );
-
-		$this->do_meta_output();
-
-		echo $this->get_plugin_indicator(
-			'after',
-			( hrtime( true ) - $init_start ) / 1e9,
-			$bootstrap_timer
-		), "\n";
-		// phpcs:enable, WordPress.Security.EscapeOutput
-
-		/**
-		 * @since 2.6.0
-		 */
-		\do_action( 'the_seo_framework_do_after_output' );
+		\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
 	}
 
 	/**
@@ -543,98 +514,10 @@ class Init extends Query {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now invokes two actions before and after output.
 	 *              2. No longer rectifies timezones.
+	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_tags();
 	 */
 	public function do_meta_output() {
-
-		/**
-		 * @since 4.2.0
-		 */
-		\do_action( 'the_seo_framework_before_meta_output' );
-
-		// Limit processing and redundant tags on 404 and search.
-		switch ( true ) {
-			case $this->is_search():
-				$get = [
-					'robots',
-					'og_locale',
-					'og_type',
-					'og_title',
-					'og_url',
-					'og_sitename',
-					'theme_color',
-					'shortlink',
-					'canonical',
-					'paged_urls',
-					'google_site_output',
-					'bing_site_output',
-					'yandex_site_output',
-					'baidu_site_output',
-					'pint_site_output',
-				];
-				break;
-			case \is_404():
-				$get = [
-					'robots',
-					'theme_color',
-					'google_site_output',
-					'bing_site_output',
-					'yandex_site_output',
-					'baidu_site_output',
-					'pint_site_output',
-				];
-				break;
-			case $this->is_query_exploited():
-				// search and 404 cannot be exploited.
-				$get = [
-					'robots',
-					'advanced_query_protection',
-				];
-				break;
-			default:
-				$get = [
-					'robots',
-					'the_description',
-					'og_image',
-					'og_locale',
-					'og_type',
-					'og_title',
-					'og_description',
-					'og_url',
-					'og_sitename',
-					'og_updated_time',
-					'facebook_publisher',
-					'facebook_author',
-					'facebook_app_id',
-					'article_published_time',
-					'article_modified_time',
-					'twitter_card',
-					'twitter_site',
-					'twitter_creator',
-					'twitter_title',
-					'twitter_description',
-					'twitter_image',
-					'theme_color',
-					'shortlink',
-					'canonical',
-					'paged_urls',
-					'ld_json',
-					'google_site_output',
-					'bing_site_output',
-					'yandex_site_output',
-					'baidu_site_output',
-					'pint_site_output',
-				];
-		}
-
-		// TODO add filter to $get? It won't last a few major updates though...
-		// But that's why I created this method like so... anyway... tough luck.
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
-		foreach ( $get as $method ) echo $this->{$method}();
-
-		/**
-		 * @since 4.2.0
-		 */
-		\do_action( 'the_seo_framework_after_meta_output' );
+		\The_SEO_Framework\Front\Meta\Head::print_tags();
 	}
 
 	/**
@@ -652,7 +535,7 @@ class Init extends Query {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( $this->is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
+		if ( Query::is_preview() || \is_customize_preview() || ! $this->query_supports_seo() ) return;
 
 		$url = $this->get_redirect_url();
 
@@ -705,7 +588,7 @@ class Init extends Query {
 			$url  = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
 
 			// Maintain current request's scheme.
-			$scheme = $this->is_ssl() ? 'https' : 'http';
+			$scheme = Query::is_ssl() ? 'https' : 'http';
 
 			\wp_safe_redirect( $this->set_url_scheme( $url, $scheme ), $redirect_type );
 			exit;
@@ -898,14 +781,18 @@ class Init extends Query {
 	 */
 	public function _init_robots_headers() {
 
-		/**
-		 * @since 4.0.5
-		 * @param bool $noindex Whether a noindex header must be set.
-		 */
-		if ( \apply_filters(
-			'the_seo_framework_set_noindex_header',
-			\is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() )
-		) ) $this->_output_robots_noindex_headers();
+		if (
+			/**
+			 * @since 4.0.5
+			 * @param bool $noindex Whether a noindex header must be set.
+			 */
+			\apply_filters(
+				'the_seo_framework_set_noindex_header',
+				\is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() )
+			)
+		) {
+			$this->_output_robots_noindex_headers();
+		}
 	}
 
 	/**
@@ -1144,7 +1031,7 @@ class Init extends Query {
 		}
 
 		// If doing sitemap, don't adjust query via query settings.
-		if ( $this->is_sitemap() )
+		if ( Query::is_sitemap() )
 			return true;
 
 		// This should primarily affect 'terms'. Test if TSF is blocked from supporting said terms.
@@ -1171,6 +1058,7 @@ class Init extends Query {
 	 *
 	 * @WARNING: WordPress can switch blogs as this filter runs. So, check all options again, without cache!
 	 *           This should only happen at `/oembed/1.0/proxy`.
+	 * @hook oembed_response_data 10
 	 * @since 4.0.5
 	 * @since 4.1.1 Now also alters titles and images.
 	 * @access private

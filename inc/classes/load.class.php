@@ -57,6 +57,16 @@ final class Load extends Site_Options {
 	];
 
 	/**
+	 * Checks for pretty permalinks.
+	 *
+	 * @since 2.2.9
+	 * @since 3.1.0 Now public.
+	 *
+	 * @var bool true if pretty
+	 */
+	public $pretty_permalinks;
+
+	/**
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
 	 * @since 2.8.0
@@ -207,8 +217,9 @@ final class Load extends Site_Options {
 	 *
 	 * @param string $p_or_m  The Property or Method.
 	 * @param string $message A message explaining what has been done incorrectly.
+	 * @param string $handle  The method handler.
 	 */
-	public function _inaccessible_p_or_m( $p_or_m, $message = '' ) {
-		Internal\Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message );
+	public function _inaccessible_p_or_m( $p_or_m, $message = '', $handle = 'tsf()' ) {
+		Internal\Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message, $handle );
 	}
 }

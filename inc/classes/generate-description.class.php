@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -119,8 +121,8 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_open_graph_description_from_query() {
 
-		if ( $this->is_real_front_page() ) {
-			if ( $this->is_static_frontpage() ) {
+		if ( Query::is_real_front_page() ) {
+			if ( Query::is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description' )
 					 ?: $this->get_description_from_custom_field( null, false );
@@ -128,7 +130,7 @@ class Generate_Description extends Generate {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_description_from_custom_field( null, false );
 			}
-		} elseif ( $this->is_singular() ) {
+		} elseif ( Query::is_singular() ) {
 			$desc = $this->get_post_meta_item( '_open_graph_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
 		} elseif ( $this->is_term_meta_capable() ) {
@@ -167,7 +169,7 @@ class Generate_Description extends Generate {
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
-		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_post_meta_item( '_open_graph_description', $args['id'] )
@@ -249,8 +251,8 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_twitter_description_from_query() {
 
-		if ( $this->is_real_front_page() ) {
-			if ( $this->is_static_frontpage() ) {
+		if ( Query::is_real_front_page() ) {
+			if ( Query::is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_post_meta_item( '_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
@@ -261,7 +263,7 @@ class Generate_Description extends Generate {
 					?: $this->get_option( 'homepage_og_description' )
 					?: $this->get_description_from_custom_field( null, false );
 			}
-		} elseif ( $this->is_singular() ) {
+		} elseif ( Query::is_singular() ) {
 			$desc = $this->get_post_meta_item( '_twitter_description' )
 				 ?: $this->get_post_meta_item( '_open_graph_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
@@ -305,7 +307,7 @@ class Generate_Description extends Generate {
 			$desc = $this->get_post_type_archive_meta_item( 'tw_description', $args['pta'] )
 				 ?: $this->get_post_type_archive_meta_item( 'og_description', $args['pta'] )
 				 ?: $this->get_description_from_custom_field( $args, false );
-		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_post_meta_item( '_twitter_description', $args['id'] )
@@ -381,14 +383,14 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_custom_description_from_query() {
 
-		if ( $this->is_real_front_page() ) {
-			if ( $this->is_static_frontpage() ) {
+		if ( Query::is_real_front_page() ) {
+			if ( Query::is_static_frontpage() ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_post_meta_item( '_genesis_description' );
 			} else {
 				$desc = $this->get_option( 'homepage_description' );
 			}
-		} elseif ( $this->is_singular() ) {
+		} elseif ( Query::is_singular() ) {
 			$desc = $this->get_post_meta_item( '_genesis_description' );
 		} elseif ( $this->is_term_meta_capable() ) {
 			$desc = $this->get_term_meta_item( 'description' );
@@ -428,7 +430,7 @@ class Generate_Description extends Generate {
 			$desc = $this->get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = $this->get_post_type_archive_meta_item( 'description', $args['pta'] );
-		} elseif ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = $this->get_option( 'homepage_description' )
 					 ?: $this->get_post_meta_item( '_genesis_description', $args['id'] );
@@ -577,13 +579,13 @@ class Generate_Description extends Generate {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( $this->is_real_front_page() ) {
+		if ( Query::is_real_front_page() ) {
 			$excerpt = $this->get_front_page_description_excerpt();
-		} elseif ( $this->is_home_as_page() ) {
+		} elseif ( Query::is_home_as_page() ) {
 			$excerpt = $this->get_blog_page_description_excerpt();
-		} elseif ( $this->is_singular() ) {
+		} elseif ( Query::is_singular() ) {
 			$excerpt = $this->get_singular_description_excerpt();
-		} elseif ( $this->is_archive() ) {
+		} elseif ( Query::is_archive() ) {
 			$excerpt = $this->get_archival_description_excerpt();
 		}
 
@@ -607,9 +609,9 @@ class Generate_Description extends Generate {
 		} elseif ( $args['pta'] ) {
 			$excerpt = $this->get_archival_description_excerpt( \get_post_type_object( $args['pta'] ) );
 		} else {
-			if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+			if ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$excerpt = $this->get_front_page_description_excerpt();
-			} elseif ( $this->is_home_as_page( $args['id'] ) ) {
+			} elseif ( Query::is_home_as_page( $args['id'] ) ) {
 				$excerpt = $this->get_blog_page_description_excerpt();
 			} else {
 				$excerpt = $this->get_singular_description_excerpt( $args['id'] );
@@ -639,7 +641,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_front_page_description_excerpt() {
 
-		$id = $this->get_the_front_page_id();
+		$id = Query::get_the_front_page_id();
 
 		return ( $id ? $this->get_singular_description_excerpt( $id ) : '' )
 			   ?: $this->get_description_additions( [ 'id' => $id ] );
@@ -684,11 +686,11 @@ class Generate_Description extends Generate {
 		if ( $excerpt ) return $excerpt;
 
 		if ( $in_the_loop ) {
-			if ( $this->is_category() || $this->is_tag() || $this->is_tax() ) {
+			if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
 				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
 				$excerpt = $this->s_description_raw( $object->description ?? '' );
-			} elseif ( $this->is_author() ) {
+			} elseif ( Query::is_author() ) {
 				$excerpt = $this->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} elseif ( \is_post_type_archive() ) {
 				/**
@@ -739,7 +741,7 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_singular_description_excerpt( $id = null ) {
 
-		$id ??= $this->get_the_real_id();
+		$id ??= Query::get_the_real_id();
 
 		// If the post is protected, don't generate a description.
 		if ( $this->is_protected( $id ) ) return '';
@@ -763,9 +765,9 @@ class Generate_Description extends Generate {
 	 */
 	protected function get_description_additions( $args ) {
 
-		if ( $this->is_real_front_page_by_id( $args['id'] ) ) {
+		if ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			$title = $this->get_home_title_additions();
-		} elseif ( $this->is_home_as_page( $args['id'] ) ) {
+		} elseif ( Query::is_home_as_page( $args['id'] ) ) {
 			$title = sprintf(
 				/* translators: %s = Blog page title. Front-end output. */
 				\__( 'Latest posts: %s', 'autodescription' ),
@@ -824,7 +826,7 @@ class Generate_Description extends Generate {
 	 */
 	public function fetch_excerpt( $post = null ) {
 
-		$post = \get_post( $post ?: $this->get_the_real_id() );
+		$post = \get_post( $post ?: Query::get_the_real_id() );
 
 		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) )
 			return $post->post_excerpt;
@@ -1008,8 +1010,8 @@ class Generate_Description extends Generate {
 	 * @since 4.2.0 1. Now fixes the input arguments.
 	 *              2. Now supports the `$args['pta']` index.
 	 * @access private
-	 * @see $this->get_the_real_id()
-	 * @see $this->get_current_taxonomy()
+	 * @see Query::get_the_real_id()
+	 * @see Query::get_current_taxonomy()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.

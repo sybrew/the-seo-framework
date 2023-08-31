@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Builders\SEOBar;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Builders\SEOBar;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Generates the SEO Bar for posts.
@@ -93,7 +95,7 @@ final class Page extends Main {
 			'post'   => \get_post( static::$query['id'] ),
 			'meta'   => static::$tsf->get_post_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
-				'ishome'       => static::$tsf->is_real_front_page_by_id( static::$query['id'] ),
+				'ishome'       => Query::is_real_front_page_by_id( static::$query['id'] ),
 				'locale'       => \get_locale(),
 				'isprotected'  => static::$tsf->is_protected( static::$query['id'] ),
 				'isdraft'      => static::$tsf->is_draft( static::$query['id'] ),

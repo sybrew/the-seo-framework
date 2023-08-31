@@ -6,6 +6,15 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
+use function \The_SEO_Framework\{
+	memo,
+	umemo,
+};
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,13 +31,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-use function \The_SEO_Framework\{
-	memo,
-	umemo,
-};
 
 /**
  * Prepares sitemap output.
@@ -159,7 +161,8 @@ final class Sitemap {
 
 		if ( ! $this->sitemap_id ) return;
 
-		static::$tsf->is_sitemap( true );
+		// Register we're on a sitemap.
+		Query::is_sitemap( true );
 		\add_action( 'pre_get_posts', [ static::class, '_override_query_parameters' ] );
 
 		/**
@@ -181,6 +184,7 @@ final class Sitemap {
 	 * Sets `is_home` to false for the sitemap.
 	 * Also sets proposed `is_sitemap` to true, effectively achieving the same.
 	 *
+	 * @hook pre_get_posts 10
 	 * @link https://core.trac.wordpress.org/ticket/51542
 	 * @link https://core.trac.wordpress.org/ticket/51117
 	 * @since 4.3.0

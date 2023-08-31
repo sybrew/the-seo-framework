@@ -6,6 +6,8 @@
 
 namespace The_SEO_Framework\Interpreters;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +24,6 @@ namespace The_SEO_Framework\Interpreters;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Interprets the SEO Bar into an HTML item.

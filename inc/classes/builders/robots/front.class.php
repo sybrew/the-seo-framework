@@ -1,14 +1,18 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\Robots\Query
+ * @package The_SEO_Framework\Classes\Builders\Robots\Front
  * @subpackage The_SEO_Framework\Getter\Robots
  */
 
 namespace The_SEO_Framework\Builders\Robots;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
- * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -23,17 +27,15 @@ namespace The_SEO_Framework\Builders\Robots;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
 /**
- * Engine for robots generator via query.
+ * Engine for robots generator via front-end query.
  *
- * @since 4.2.0
+ * @since 4.3.0
  * @access private
  *         Not part of the public API.
  * @final Can't be extended.
  */
-final class Query extends Factory {
+final class Front extends Factory {
 
 	// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
 	// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
@@ -64,7 +66,7 @@ final class Query extends Factory {
 
 			if ( $tsf->is_term_meta_capable() ) {
 				$qubit = (int) $tsf->get_term_meta_item( $type );
-			} elseif ( $tsf->is_singular() ) {
+			} elseif ( Query::is_singular() ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type" );
 			} elseif ( \is_post_type_archive() ) {
 				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type );
@@ -93,48 +95,48 @@ final class Query extends Factory {
 		globals:
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
-			if ( $tsf->is_real_front_page() ) {
+			if ( Query::is_real_front_page() ) {
 				yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
 			} else {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				if ( $tsf->is_archive() ) {
-					if ( $tsf->is_author() ) {
+				if ( Query::is_archive() ) {
+					if ( Query::is_author() ) {
 						yield 'globals_author' => (bool) $tsf->get_option( "author_$type" );
 					} elseif ( \is_date() ) {
 						yield 'globals_date' => (bool) $tsf->get_option( "date_$type" );
 					}
-				} elseif ( $tsf->is_search() ) {
+				} elseif ( Query::is_search() ) {
 					yield 'globals_search' => (bool) $tsf->get_option( "search_$type" );
 				}
 			}
 
 			// is_real_front_page() can still be singular or archive. Thus, this conditional block is split up.
-			if ( $tsf->is_archive() ) {
-				if ( $tsf->is_category() || $tsf->is_tag() || $tsf->is_tax() ) {
-					yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $tsf->get_current_taxonomy() );
+			if ( Query::is_archive() ) {
+				if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
+					yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, Query::get_current_taxonomy() );
 
 					// Store values from each post type bound to the taxonomy.
-					foreach ( $tsf->get_post_types_from_taxonomy() as $post_type )
+					foreach ( Query::get_post_types_from_taxonomy() as $post_type )
 						$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
 
 					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 				} elseif ( \is_post_type_archive() ) {
-					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
+					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, Query::get_current_post_type() );
 				}
-			} elseif ( $tsf->is_singular() ) {
-				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $tsf->get_current_post_type() );
+			} elseif ( Query::is_singular() ) {
+				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, Query::get_current_post_type() );
 			}
 
 		// We assert options here for a jump to index_protection might be unaware.
 		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
-			if ( $tsf->is_real_front_page() ) {
+			if ( Query::is_real_front_page() ) {
 				yield from static::assert_noindex_query_pass( 'paged_home' );
-			} elseif ( $tsf->is_archive() || $tsf->is_singular_archive() ) {
+			} elseif ( Query::is_archive() || Query::is_singular_archive() ) {
 				yield from static::assert_noindex_query_pass( 'paged' );
 			}
-			if ( $tsf->is_singular() ) {
+			if ( Query::is_singular() ) {
 				yield from static::assert_noindex_query_pass( 'protected' );
 
 				/**
@@ -167,16 +169,13 @@ final class Query extends Factory {
 	 * @param string $pass The passage to assert.
 	 */
 	private static function assert_noindex_query_pass( $pass ) {
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf hereinafter.
-		$tsf = static::$tsf;
-
 		switch ( $pass ) {
 			case 'paged_home':
-				yield 'paged_home' => ( $tsf->get_option( 'home_paged_noindex' ) && ( $tsf->page() > 1 || $tsf->paged() > 1 ) );
+				yield 'paged_home' => ( static::$tsf->get_option( 'home_paged_noindex' ) && ( Query::page() > 1 || Query::paged() > 1 ) );
 				break;
 
 			case '404':
-				if ( $tsf->is_singular_archive() ) {
+				if ( Query::is_singular_archive() ) {
 					/**
 					 * Pagination overflow protection via 404 test.
 					 *
@@ -223,12 +222,12 @@ final class Query extends Factory {
 
 			case 'paged':
 				// Advanced Query Protection protects further against pagination attacks. No need to have that here.
-				yield 'paged' => $tsf->get_option( 'paged_noindex' ) && $tsf->paged() > 1;
+				yield 'paged' => static::$tsf->get_option( 'paged_noindex' ) && Query::paged() > 1;
 				break;
 
 			case 'protected':
 				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
-				yield 'protected' => $tsf->is_protected( $tsf->get_the_real_id() );
+				yield 'protected' => static::$tsf->is_protected( Query::get_the_real_id() );
 				break;
 
 			case 'cpage':

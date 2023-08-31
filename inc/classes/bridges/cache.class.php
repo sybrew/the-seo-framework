@@ -5,6 +5,8 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -21,8 +23,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Handles the caching interface.
@@ -124,7 +124,7 @@ final class Cache {
 		 * @since 4.3.0 Deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
 		 *
 		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
-		 * @param int    $id      The post, page or TT ID. Defaults to tsf()->get_the_real_id().
+		 * @param int    $id      The post, page or TT ID. Defaults to Query::get_the_real_id().
 		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
 		 * @param array  $success Whether the action cleared. Set to always be true since deprecation.
 		 */

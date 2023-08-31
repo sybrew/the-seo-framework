@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -32,7 +34,7 @@ namespace The_SEO_Framework;
  *
  * @since 2.8.0
  */
-class Detect extends Render {
+class Detect extends Admin_Init {
 
 	/**
 	 * Returns list of active plugins.
@@ -595,9 +597,9 @@ class Detect extends Render {
 			case \defined( 'REST_REQUEST' ) && \REST_REQUEST:
 				$supported = false;
 				break;
-			case $this->is_singular():
+			case Query::is_singular():
 				// This is the most likely scenario, but may collide with is_feed() et al.
-				$supported = $this->is_post_type_supported() && $this->get_the_real_id();
+				$supported = $this->is_post_type_supported() && Query::get_the_real_id();
 				break;
 			case \is_post_type_archive():
 				$supported = $this->is_post_type_archive_supported();
@@ -606,7 +608,7 @@ class Detect extends Render {
 				// When a term has no posts attached, it'll not return a post type, and it returns a 404 late in the loop.
 				// This is because get_post_type() tries to assert the first post in the loop here.
 				// Thus, we test for is_taxonomy_supported() instead.
-				$supported = $this->is_taxonomy_supported() && $this->get_the_real_id();
+				$supported = $this->is_taxonomy_supported() && Query::get_the_real_id();
 				break;
 			default:
 				// Everything else: homepage, 404, search, edge-cases.
@@ -678,7 +680,7 @@ class Detect extends Render {
 			return memo( false );
 
 		// When the page ID is not 0, a real page will always be returned.
-		if ( $this->get_the_real_id() )
+		if ( Query::get_the_real_id() )
 			return memo( false );
 
 		global $wp_query;
@@ -718,7 +720,7 @@ class Detect extends Render {
 					'sentence',
 				],
 				// When the blog (home) is a page then these requests to any registered query variable will cause issues,
-				// but only when the page ID returns 0. (We already tested for `if ( $this->get_the_real_id() )` above).
+				// but only when the page ID returns 0. (We already tested for `if ( Query::get_the_real_id() )` above).
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
 				// We only need one to pass this test. We could use array_key_first()... but that may be nulled (out of our control).
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
@@ -755,8 +757,8 @@ class Detect extends Render {
 
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
-						// !$this->get_the_real_id() is already executed. Just test if home is a page.
-						if ( $this->is_home_as_page() )
+						// !Query::get_the_real_id() is already executed. Just test if home is a page.
+						if ( Query::is_home_as_page() )
 							return memo( true );
 				}
 			}
@@ -809,7 +811,7 @@ class Detect extends Render {
 	 */
 	public function is_post_type_supported( $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_current_post_type();
+		$post_type = $post_type ?: Query::get_current_post_type();
 
 		/**
 		 * @since 2.6.2
@@ -839,7 +841,7 @@ class Detect extends Render {
 	 */
 	public function is_post_type_archive_supported( $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_current_post_type();
+		$post_type = $post_type ?: Query::get_current_post_type();
 
 		/**
 		 * @since 4.2.8
@@ -870,7 +872,7 @@ class Detect extends Render {
 	 */
 	public function is_taxonomy_supported( $taxonomy = '' ) {
 
-		$taxonomy = $taxonomy ?: $this->get_current_taxonomy();
+		$taxonomy = $taxonomy ?: Query::get_current_taxonomy();
 
 		/**
 		 * @since 3.1.0
@@ -906,7 +908,7 @@ class Detect extends Render {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
 
-		$post_type = $post_type ?: $this->get_current_post_type();
+		$post_type = $post_type ?: Query::get_current_post_type();
 
 		// Return false if no post type if found -- do not memo that, for query call might be too early.
 		return $post_type && memo( (bool) \get_object_taxonomies( $post_type, 'names' ), $post_type );
@@ -1131,7 +1133,7 @@ class Detect extends Render {
 	 */
 	public function is_post_type_disabled( $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_current_post_type();
+		$post_type = $post_type ?: Query::get_current_post_type();
 
 		/**
 		 * @since 3.1.2
@@ -1170,7 +1172,7 @@ class Detect extends Render {
 		} else {
 			// Then, test some() post types.
 			// Populate $disabled within loop, for the taxonomy might not have post types at all.
-			foreach ( $this->get_post_types_from_taxonomy( $taxonomy ) as $type ) {
+			foreach ( Query::get_post_types_from_taxonomy( $taxonomy ) as $type ) {
 				if ( $this->is_post_type_supported( $type ) ) {
 					$disabled = false;
 					break;

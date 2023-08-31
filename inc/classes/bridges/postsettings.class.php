@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Prepares the Post Settings meta box interface.
@@ -76,9 +78,7 @@ final class PostSettings {
 
 		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, '_add_postbox_class' ] );
 
-		$tsf = \tsf();
-
-		if ( ! $tsf->is_headless['settings'] && $tsf->is_static_frontpage( $tsf->get_the_real_id() ) ) {
+		if ( ! \tsf()->is_headless['settings'] && Query::is_static_frontpage( Query::get_the_real_id() ) ) {
 			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', [ static::class, '_homepage_warning' ] );
 			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', [ static::class, '_homepage_warning' ] );
 			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', [ static::class, '_homepage_warning' ] );

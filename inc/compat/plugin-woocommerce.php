@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 \add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
 \add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
@@ -49,11 +51,11 @@ function _init_wc_compat() {
 	// Anonymous function. Filter 'the_seo_framework_json_breadcrumb_output' instead.
 	\add_action(
 		'the_seo_framework_do_before_output',
-		static function () {
+		function () {
 			/**
 			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
 			 */
-			if ( \tsf()->is_product() ) {
+			if ( Query::is_product() ) {
 				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
 			}
 		}
@@ -174,9 +176,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
 
 	if ( $is_product_admin ) return $is_product_admin;
 
-	$tsf = \tsf();
-
-	return $tsf->is_singular_admin() && 'product' === $tsf->get_admin_post_type();
+	return Query::is_singular_admin() && 'product' === Query::get_admin_post_type();
 }
 
 /**
@@ -184,7 +184,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *
  * @hook the_seo_framework_robots_meta_array 10
  * @since 4.1.4
- * @since 4.2.8 Now uses `tsf()->is_singular()` instead of `is_singular()` (for debug support).
+ * @since 4.2.8 Now uses `Query::is_singular()` instead of `is_singular()` (for debug support).
  * @access private
  *
  * @param array      $meta The parsed robots meta. {
@@ -210,11 +210,9 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// Nothing to do here...
 	if ( 'noindex' === $meta['noindex'] ) return $meta;
 
-	$tsf = \tsf();
-
 	if ( null === $args ) {
-		if ( $tsf->is_singular() )
-			$page_id = $tsf->get_the_real_id();
+		if ( Query::is_singular() )
+			$page_id = Query::get_the_real_id();
 	} else {
 		if ( '' === $args['taxonomy'] )
 			$page_id = $args['id'];
@@ -233,6 +231,8 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 
 	// This current page isn't a WC cart/checkout/myaccount page.
 	if ( ! \in_array( $page_id, $page_ids, true ) ) return $meta;
+
+	$tsf = \tsf();
 
 	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
 	if (
@@ -305,7 +305,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 	$is_product_category = false;
 
 	if ( null === $args ) {
-		$is_product          = \tsf()->is_product();
+		$is_product          = Query::is_product();
 		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
 	} else {
 		if ( $args['taxonomy'] ) {
@@ -313,7 +313,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 		} elseif ( $args['pta'] ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement.DetectedElseif
 			// TODO ? Which public non-page-PTA does WC have, actually?
 		} else {
-			$is_product = \tsf()->is_product( $args['id'] );
+			$is_product = Query::is_product( $args['id'] );
 		}
 	}
 
@@ -345,7 +345,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  */
 function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 
-	$post_id        = $args['id'] ?? \tsf()->get_the_real_id();
+	$post_id        = $args['id'] ?? Query::get_the_real_id();
 	$attachment_ids = [];
 
 	if ( $post_id && \metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
@@ -392,7 +392,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  */
 function _get_product_category_thumbnail_image_details( $args = null, $size = 'full' ) {
 
-	$term_id      = $args['id'] ?? \tsf()->get_the_real_id();
+	$term_id      = $args['id'] ?? Query::get_the_real_id();
 	$thumbnail_id = \get_term_meta( $term_id, 'thumbnail_id', true ) ?: 0;
 
 	if ( $thumbnail_id ) {

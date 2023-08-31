@@ -324,6 +324,35 @@ TODO New class:
 		-> Move array_merge_recursive_distinct() and friends to this.
 	1. Or, make them functions, and make Utils a namespace:
 		-> The_SEO_Framework\Utils\array_merge_recursive_distinct()
+TODO New class:
+	1. The_SEO_Framework\Builders\OpenGraph (yea, let's not use "Meta")
+		-> Name it OG instead?
+		-> Use generator syntax for storing the metadata?
+			-> See https://github.com/sybrew/the-seo-framework/blob/3.2/inc/traits/generator/meta.trait.php
+		-> See https://github.com/sybrew/the-seo-framework/blob/3.2/inc/classes/builders/og.class.php.
+			^ BAD! The rendered must make the property, not the data holder.
+				-> So, we must make a rendered for each tag, which then grabs the data from the builders?
+	2. The_SEO_Framework\Builders\Twitter (let's not use X, it's too ambiguous)
+		-> Use generator syntax for generating metadata?
+			-> See The_SEO_Framework\Builders\Robots\Factory::generator()
+				-> Builders\Robots\Main::instance()->set( $args, $options )->get( $get );
+				-> Builders\Robots\Main::instance()->collect_assertions();
+			-> This way, we can halt early (e.g., When there's no Title or Card)
+		1. Twitter Card
+			-> Generate with new "auto" option.
+			-> Uses Options
+		2. Twitter Site
+			-> Uses Options
+		3. Twitter Creator
+			-> Uses Options
+			-> Uses UserMeta
+		4. Twitter Title.
+			-> Uses OpenGraph and Meta Title.
+		5. Twitter Description
+			-> Uses OpenGraph and Meta Description
+		6. Twitter Image
+			-> Uses Options
+			-> Uses OpenGraph image
 
 TODO Move views\edit to something less ambiguous and confusing:
 	-> Views\Terms
@@ -331,6 +360,9 @@ TODO Move views\edit to something less ambiguous and confusing:
 
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
+	- Also make twitter card default to summary when a square image is posted.
+		- Only when set to "auto"
+	- See https://github.com/sybrew/the-seo-framework/issues/525
 
 TODO highlight in large changes:
 	* Color scheme works again for tooltips.
@@ -428,6 +460,16 @@ TODO remove inc\classes\builders\sitemap.class.php
 TODO mark update_settings as private?
 TODO cache_json_data makes no sense.
 
+TODO remove $use_cache support in get_option(), but have its cache be updated dynamically instead?
+	-> This may require us to work with traits, which is perfect.
+	-> See Extensions_Options_Cache / Extension_Options
+
+TODO remove leftover var_dump()
+
+TODO deprecate all filters in the generator pools.
+	-> Suggest using the_seo_framework_meta_render_data instead.
+
+
 **Detailed log**
 
 **For everyone:**
@@ -443,6 +485,8 @@ TODO cache_json_data makes no sense.
 		* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
 		* This also works around an issue where Gutenberg still doesn't understand HTML.
 		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
+	* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
+	* `article:modified_time` and `article:published_time` now listen to Open Graph settings.
 * **Improved:**
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
@@ -491,6 +535,8 @@ TODO cache_json_data makes no sense.
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
 			* Yoast SEO is still checked for.
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
+	* Open Graph tag `og:updated_time` is no longer outputted, it is inferred from `article:modified_time`.
+	* TODO remove `fb:app_id` -- even though users will get warnings and annoy us?
 
 **For translators:**
 
@@ -500,9 +546,23 @@ TODO cache_json_data makes no sense.
 **For developers:**
 
 * TODO: **Plugin database version is now at `4300`**
+* **Added:**
+	* Pool `\tsf()->query()` is now available.
+		* All public query-related methods have been moved to that pool. E.g., `tsf()->is_product()` is now `tsf()->query()->is_product()`.
+		* It is a class alias of `The_SEO_Framework\Helper\Query`; but, not quite.
+		* We do not use this pool internally (we call the query-methods directly) -- however, we **urge you to use the pool**. This is because it has a neat little feature: **Dynamic deprecation**. Whenever we choose to remove a method or property you used, your site won't crash when you update the plugin -- instead, you get a deprecation notice and a temporary fallback value.
+			* To learn more, check out methods `tsf()->query()` and trait `Static_Deprecator`. Since the method is brand new, nothing has been deprecated yet.
+	* TODO add Pool `tsf()->gen( 'title' )->`?
+		* Or keep getters like get_title() and get_description() intact?
+			* We might as well move on.... It'll be annoying for end-users though with these popular methods.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
+	* Deprecation and inaccessible property/method notices now ***absolutely accurately***&trade; find the originating caller.
+	* Query error notices also now ***absolutely accurately***&trade; find the originating caller, in reverse order.
+* **Changed:**
+	* Twitter cards are no longer validated whether a card type is provided
+		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
@@ -553,11 +613,106 @@ TODO cache_json_data makes no sense.
 				* `s_left_right` no longer falls back to option or default option, but a language-based default instead.
 				* `s_twitter_card` no longer falls to the default option, but `'summary_large_image'`.
 			* **Methods deprecated:**
-				* `set_transient`, use WordPress's isonymic builtin instead.
-				* `get_transient`, use WordPress's isonymic builtin instead.
+				* `set_transient`, use WordPress's builtin namesake instead.
+				* `get_transient`, use WordPress's builtin namesake instead.
+				* `is_404`, use WordPress's builtin namesake instead.
+				* `is_admin`, use WordPress's builtin namesake instead.
+				* `is_customize_preview`, use WordPress's builtin namesake instead.
+				* `is_date`, use WordPress's builtin namesake instead.
+				* `is_day`, use WordPress's builtin namesake instead.
+				* `is_feed`, use WordPress's builtin namesake instead.
+				* `is_month`, use WordPress's builtin namesake instead.
+				* `is_robots`, use WordPress's builtin namesake instead.
 				* `s_left_right_home()`, use `s_left_right()` instead. TODO we might move this.
-					* This method also no longer falls back to option or default option, but a language-based default instead.
+					* This method also no longer falls back to option or default option, but a language-based default instead.* `get_post_type_real_id`, use `tsf()->query()->get_post_type_real_id` instead.
+				* `get_admin_post_type`, use `tsf()->query()->get_admin_post_type` instead.
+				* `get_post_types_from_taxonomy`, use `tsf()->query()->get_post_types_from_taxonomy` instead.
+				* `get_the_real_id`, use `tsf()->query()->get_the_real_id` instead.
+				* `get_the_real_admin_id`, use `tsf()->query()->get_the_real_admin_id` instead.
+				* `get_the_front_page_id`, use `tsf()->query()->get_the_front_page_id` instead.
+				* `get_admin_term_id`, use `tsf()->query()->get_admin_term_id` instead.
+				* `get_current_taxonomy`, use `tsf()->query()->get_current_taxonomy` instead.
+				* `get_current_post_type`, use `tsf()->query()->get_current_post_type` instead.
+				* `is_attachment`, use `tsf()->query()->is_attachment` instead.
+				* `is_attachment_admin`, use `tsf()->query()->is_attachment_admin` instead.
+				* `is_singular_archive`, use `tsf()->query()->is_singular_archive` instead.
+				* `is_archive`, use `tsf()->query()->is_archive` instead.
+				* `is_archive_admin`, use `tsf()->query()->is_archive_admin` instead.
+				* `is_term_edit`, use `tsf()->query()->is_term_edit` instead.
+				* `is_post_edit`, use `tsf()->query()->is_post_edit` instead.
+				* `is_wp_lists_edit`, use `tsf()->query()->is_wp_lists_edit` instead.
+				* `is_profile_edit`, use `tsf()->query()->is_profile_edit` instead.
+				* `is_author`, use `tsf()->query()->is_author` instead.
+				* `is_home`, use `tsf()->query()->is_home` instead.
+				* `is_home_as_page`, use `tsf()->query()->is_home_as_page` instead.
+				* `is_category`, use `tsf()->query()->is_category` instead.
+				* `is_category_admin`, use `tsf()->query()->is_category_admin` instead.
+				* `is_real_front_page`, use `tsf()->query()->is_real_front_page` instead.
+				* `is_real_front_page_by_id`, use `tsf()->query()->is_real_front_page_by_id` instead.
+				* `is_page`, use `tsf()->query()->is_page` instead.
+				* `is_page_admin`, use `tsf()->query()->is_page_admin` instead.
+				* `is_preview`, use `tsf()->query()->is_preview` instead.
+				* `is_search`, use `tsf()->query()->is_search` instead.
+				* `is_single`, use `tsf()->query()->is_single` instead.
+				* `is_single_admin`, use `tsf()->query()->is_single_admin` instead.
+				* `is_singular`, use `tsf()->query()->is_singular` instead.
+				* `is_singular_admin`, use `tsf()->query()->is_singular_admin` instead.
+				* `is_static_frontpage`, use `tsf()->query()->is_static_frontpage` instead.
+				* `is_tag`, use `tsf()->query()->is_tag` instead.
+				* `is_tag_admin`, use `tsf()->query()->is_tag_admin` instead.
+				* `is_tax`, use `tsf()->query()->is_tax` instead.
+				* `is_shop`, use `tsf()->query()->is_shop` instead.
+				* `is_product`, use `tsf()->query()->is_product` instead.
+				* `is_product_admin`, use `tsf()->query()->is_product_admin` instead.
+				* `is_year`, use `tsf()->query()->is_year` instead.
+				* `is_ssl`, use `tsf()->query()->is_ssl` instead.
+				* `is_seo_settings_page`, use `tsf()->query()->is_seo_settings_page` instead.
+				* `is_menu_page`, use `tsf()->query()->is_menu_page` instead.
+				* `page`, use `tsf()->query()->page` instead.
+				* `paged`, use `tsf()->query()->paged` instead.
+				* `numpages`, use `tsf()->query()->numpages` instead.
+				* `is_multipage`, use `tsf()->query()->is_multipage` instead.
+				* `is_sitemap`, use `tsf()->query()->is_sitemap` instead.
+				* `advanced_query_protection`, with no alternative available.
+				* `the_description`, with no alternative available.
+				* `robots`, with no alternative available.
+				* `canonical`, with no alternative available.
+				* `shortlink`, with no alternative available.
+				* `paged_urls`, with no alternative available.
+				* `theme_color`, with no alternative available.
+				* `google_site_output`, with no alternative available.
+				* `bing_site_output`, with no alternative available.
+				* `yandex_site_output`, with no alternative available.
+				* `baidu_site_output`, with no alternative available.
+				* `pint_site_output`, with no alternative available.
+				* `use_og_tags`, with no alternative available.
+				* `og_title`, with no alternative available.
+				* `og_description`, with no alternative available.
+				* `og_locale`, with no alternative available.
+				* `og_type`, with no alternative available.
+				* `og_image`, with no alternative available.
+				* `og_sitename`, with no alternative available.
+				* `og_url`, with no alternative available.
+				* `og_updated_time`, with no alternative available.
+				* `facebook_author`, with no alternative available.
+				* `facebook_publisher`, with no alternative available.
+				* `facebook_app_id`, with no alternative available.
+				* `use_facebook_tags`, with no alternative available.
+				* `article_published_time`, with no alternative available.
+				* `article_modified_time`, with no alternative available.
+				* `output_modified_time`, with no alternative available.
+				* `output_published_time`, with no alternative available.
+				* `get_current_twitter_card_type`, with no alternative available.
+				* `twitter_card`, with no alternative available.
+				* `twitter_site`, with no alternative available.
+				* `twitter_creator`, with no alternative available.
+				* `twitter_title`, with no alternative available.
+				* `twitter_description`, with no alternative available.
+				* `twitter_image`, with no alternative available.
+				* `use_twitter_tags`, with no alternative available.
+				* `ld_json`, with no alternative available.
 			* **Methods removed:**
+				* `render_element()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
 				* Since we moved class `\The_SEO_Framework\Cache`'s functionality from this object, these are removed:
 					* `init_admin_caching_actions()`
@@ -663,6 +818,37 @@ TODO cache_json_data makes no sense.
 				* TODO will we not deprecate this?
 		* `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
 		* `the_seo_framework_conflicting_plugins` now supports index `'multilingual'`.
+		* `the_seo_framework_meta_generator_pools`, this is used to **remove meta generator callback pools** preemptively.
+		* `the_seo_framework_meta_generators`, this is used to **add and remove meta generator callbacks**.
+		* `the_seo_framework_meta_render_data`, this is used to **add, remove, and tweak generated metadata** before it's sent to the browser.
+	* **Deprecated:**
+		* `the_seo_framework_googlesite_output`, with no alternative available.
+		* `the_seo_framework_bingsite_output`, with no alternative available.
+		* `the_seo_framework_yandexsite_output`, with no alternative available.
+		* `the_seo_framework_baidusite_output`, with no alternative available.
+		* `the_seo_framework_pintsite_output`, with no alternative available.
+		* `the_seo_framework_ldjson_scripts`, with no alternative available.
+		* `the_seo_framework_description_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_rel_canonical_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_shortlink_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_paged_url_output_next`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_paged_url_output_prev`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_ogtitle_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_ogdescription_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_oglocale_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_ogsitename_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_ogurl_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_facebookauthor_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_facebookpublisher_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_facebookappid_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_publishedtime_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_twittersite_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_twittercreator_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_twittertitle_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_twitterdescription_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_use_og_tags`, use `the_seo_framework_meta_generators` instead.
+		* `the_seo_framework_use_facebook_tags`, use `the_seo_framework_meta_generators` instead.
+		* `the_seo_framework_use_twitter_tags`, use `the_seo_framework_meta_generators` instead.
 	* **Removed:**
 		* `the_seo_framework_auto_descripton_html_method_methods`.
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").

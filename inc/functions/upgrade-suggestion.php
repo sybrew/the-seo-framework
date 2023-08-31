@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Suggestion;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2018 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,10 +26,6 @@ namespace The_SEO_Framework\Suggestion;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * This file holds functions for installing TSFEM.

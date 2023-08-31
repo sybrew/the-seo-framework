@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -43,7 +45,7 @@ class Term_Data extends Post_Data {
 	 * @return bool
 	 */
 	public function is_term_meta_capable() {
-		return $this->is_category() || $this->is_tag() || $this->is_tax();
+		return Query::is_category() || Query::is_tag() || Query::is_tax();
 	}
 
 	/**
@@ -58,7 +60,7 @@ class Term_Data extends Post_Data {
 	 * @return mixed The term meta item. Null when not found.
 	 */
 	public function get_term_meta_item( $item, $term_id = 0, $use_cache = true ) {
-		return $this->get_term_meta( $term_id ?: $this->get_the_real_id(), $use_cache )[ $item ] ?? null;
+		return $this->get_term_meta( $term_id ?: Query::get_the_real_id(), $use_cache )[ $item ] ?? null;
 	}
 
 	/**
@@ -157,7 +159,7 @@ class Term_Data extends Post_Data {
 			'the_seo_framework_term_meta_defaults',
 			[
 				$this->get_unfiltered_term_meta_defaults(),
-				$term_id ?: $this->get_the_real_id(),
+				$term_id ?: Query::get_the_real_id(),
 			]
 		);
 	}
@@ -474,7 +476,7 @@ class Term_Data extends Post_Data {
 	 */
 	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
 
-		$post_type = $post_type ?: $this->get_current_post_type();
+		$post_type = $post_type ?: Query::get_current_post_type();
 
 		if ( ! $post_type )
 			return [];

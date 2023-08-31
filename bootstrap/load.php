@@ -114,13 +114,15 @@ spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
  *              2. Added timing functionality
  *              3. No longer loads interfaces automatically.
  * @since 4.2.0 Now supports mixed class case.
+ * @since 4.3.0 Now supports trait loading.
+ * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  *
  * @NOTE 'The_SEO_Framework\' is a reserved namespace. Using it outside of this
  *       plugin's scope could result in an error.
  *
- * @param string $class The class name.
+ * @param string $class The class or trait name.
  * @return void Early if the class is not within the current namespace.
  */
 function _autoload_classes( $class ) {
@@ -139,21 +141,32 @@ function _autoload_classes( $class ) {
 		$_bootstrap_timer = 0;
 	}
 
-	$_chunks      = explode( '\\', $class );
-	$_chunk_count = \count( $_chunks );
-
-	if ( $_chunk_count > 2 ) {
-		// directory position = $_chunk_count - ( 2 = (The_SEO_Framework)\ + (Bridges/Builders/Interpreters)\ )
-		$rel_dir = implode( \DIRECTORY_SEPARATOR, array_splice( $_chunks, 1, $_chunk_count - 2 ) ) . \DIRECTORY_SEPARATOR;
-	} else {
-		$rel_dir = '';
-	}
+	$_class_parts   = explode( '\\', $class );
+	$_rel_dir_parts = \array_slice( $_class_parts, 1, -1 );
 
 	// The last part of the chunks is the class name--which corresponds to the file.
-	$file = str_replace( '_', '-', end( $_chunks ) );
+	$file = str_replace( '_', '-', end( $_class_parts ) );
 
-	// The extension is deemed to be ".class.php" always. We may wish to alter this for traits?
-	require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
+	if ( $_rel_dir_parts ) {
+		if ( 'traits' === $_rel_dir_parts[0] ) {
+			// Remove 'traits', otherwise we get /traits/traits/...
+			unset( $_rel_dir_parts[0] );
+
+			$rel_dir = implode( \DIRECTORY_SEPARATOR, $_rel_dir_parts ) . \DIRECTORY_SEPARATOR;
+
+			// The extension is deemed to be ".trait.php" always.
+			require \THE_SEO_FRAMEWORK_DIR_PATH_TRAIT . "{$rel_dir}{$file}.trait.php";
+		} else {
+			$rel_dir = implode( \DIRECTORY_SEPARATOR, $_rel_dir_parts ) . \DIRECTORY_SEPARATOR;
+
+			// The extension is deemed to be ".class.php" always.
+			require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
+		}
+	} else {
+		// Simplified version for facade class loading to improve performance.
+		// The extension is deemed to be ".class.php" always.
+		require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$file}.class.php";
+	}
 
 	if ( $_bootstrap_timer ) {
 		_bootstrap_timer( ( hrtime( true ) - $_bootstrap_timer ) / 1e9 );

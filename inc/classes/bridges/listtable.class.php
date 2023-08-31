@@ -5,6 +5,10 @@
 
 namespace The_SEO_Framework\Bridges;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -21,8 +25,6 @@ namespace The_SEO_Framework\Bridges;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Prepares the list table action sequence.
@@ -159,7 +161,7 @@ abstract class ListTable {
 	private function init_columns( $screen ) {
 
 		if (
-			   ! \tsf()->is_wp_lists_edit()
+			   ! Query::is_wp_lists_edit()
 			|| empty( $screen->id )
 		) return;
 

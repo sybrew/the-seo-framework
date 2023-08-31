@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Builders\Robots;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use function \The_SEO_Framework\umemo;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,10 +26,6 @@ namespace The_SEO_Framework\Builders\Robots;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-use function \The_SEO_Framework\umemo;
 
 /**
  * Generates robots meta.
@@ -139,7 +139,7 @@ final class Main {
 		$generator = $factory->set(
 			$this->args,
 			$options
-		)->generator();
+		)::generator();
 
 		$results = [];
 
@@ -167,13 +167,13 @@ final class Main {
 	 * @since 4.2.0
 	 * @factory
 	 *
-	 * @return The_SEO_Framework\Builders\Robots\<Args|Query>
+	 * @return The_SEO_Framework\Builders\Robots\<Args|Front>
 	 */
 	private function get_factory() {
 		return umemo( __METHOD__, null, isset( $this->args ) )
 			?? umemo(
 				__METHOD__,
-				isset( $this->args ) ? new Args : new Query,
+				isset( $this->args ) ? new Args : new Front,
 				isset( $this->args )
 			);
 	}

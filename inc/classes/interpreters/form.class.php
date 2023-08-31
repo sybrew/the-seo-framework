@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Interpreters;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,8 +26,6 @@ namespace The_SEO_Framework\Interpreters;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * Interprets anything you send here into Form HTML. Or so it should.
@@ -220,12 +222,10 @@ final class Form {
 		// Required.
 		if ( empty( $args['id'] ) ) return '';
 
-		$tsf = \tsf();
-
-		$args = $tsf->array_merge_recursive_distinct(
+		$args = \tsf()->array_merge_recursive_distinct(
 			[
 				'id'           => '',
-				'post_id'      => $tsf->get_the_real_id(), // This will bind the uploade file to the current post.
+				'post_id'      => Query::get_the_real_id(), // This will bind the uploade file to the current post.
 				'data'         => [
 					'inputType' => 'social',
 					'width'     => 1200, // TODO make 1280 - 80px overflow margin? It'd be better for mixed platforms.
