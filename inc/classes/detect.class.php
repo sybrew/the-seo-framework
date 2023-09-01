@@ -1143,7 +1143,7 @@ class Detect extends Admin_Init {
 		return \apply_filters_ref_array(
 			'the_seo_framework_post_type_disabled',
 			[
-				isset( $this->get_option( 'disabled_post_types' )[ $post_type ] ),
+				$this->get_option( [ 'disabled_post_types', $post_type ] ),
 				$post_type,
 			]
 		);
@@ -1167,7 +1167,7 @@ class Detect extends Admin_Init {
 		$disabled = false;
 
 		// First, test pertaining option directly.
-		if ( $taxonomy && isset( $this->get_option( 'disabled_taxonomies' )[ $taxonomy ] ) ) {
+		if ( $taxonomy && $this->get_option( [ 'disabled_taxonomies', $taxonomy ] ) ) {
 			$disabled = true;
 		} else {
 			// Then, test some() post types.

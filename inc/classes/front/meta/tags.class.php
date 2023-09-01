@@ -36,6 +36,20 @@ final class Tags {
 
 	/**
 	 * @since 4.3.0
+	 * @var array[] The meta tags' render data defaults : {
+	 *    @param ?array  attributes A list of attributes by [ name => value ].
+	 *    @param ?string tag        The tag name. Defaults to 'meta' if left empty.
+	 *    @param ?string content    The tag's content. Leave null to not render content.
+	 * }
+	 */
+	private const DATA_DEFAULTS = [
+		'attributes' => [],
+		'tag'        => 'meta',
+		'content'    => null,
+	];
+
+	/**
+	 * @since 4.3.0
 	 * @var callable[] Meta tag generator callbacks.
 	 */
 	private static $tag_generators = [];
@@ -86,18 +100,9 @@ final class Tags {
 
 		$tags_render_data = &static::tags_render_data();
 
-		foreach ( static::$tag_generators as $callback ) {
-			foreach ( \call_user_func( $callback ) as $data ) {
-				$tags_render_data[] = array_merge(
-					[
-						'attributes' => [],
-						'tag'        => 'meta',
-						'content'    => null,
-					],
-					$data
-				);
-			}
-		}
+		foreach ( static::$tag_generators as $callback )
+			foreach ( \call_user_func( $callback ) as $data )
+				$tags_render_data[] = $data;
 	}
 
 	/**
@@ -109,13 +114,20 @@ final class Tags {
 
 		$tags_render_data = &static::tags_render_data();
 
+		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::DATA_DEFAULTS hereinafter.
+		$data_defaults = static::DATA_DEFAULTS;
+		// Also remit FETCH_DIM_R by writing the index to variables: https://3v4l.org/SLKbq & https://3v4l.org/ipmh5.
+		$default_attributes = $data_defaults['attributes'];
+		$default_tag        = $data_defaults['tag'];
+		$default_content    = $data_defaults['content'];
+
 		foreach ( $tags_render_data as &$tagdata ) {
 			if ( $tagdata['rendered'] ?? false ) continue;
 
 			static::render(
-				$tagdata['attributes'] ??= [],
-				$tagdata['tag']        ??= 'meta',
-				$tagdata['content']    ??= null,
+				$tagdata['attributes'] ??= $default_attributes,
+				$tagdata['tag']        ??= $default_tag,
+				$tagdata['content']    ??= $default_content,
 			);
 
 			$tagdata['rendered'] = true;
@@ -129,17 +141,19 @@ final class Tags {
 	 * We expect HTML5 fully on the back-end.
 	 *
 	 * @since 4.3.0
-	 * @link <https://github.com/sybrew/the-seo-framework/commit/894d7d3a74e0ed6890b6e8851ef0866df15ea522>
-	 *       Which is something we eventually want to go to, but that's not ready yet.
 	 *
 	 * @param array   $attributes Associative array of tag names and tag values : {
 	 *    string $name => string $value
 	 * }
-	 * @param string  $tag      The element's tag-name.
-	 * @param ?string $content  The element's contents. If not null,
-	 *                          it will create a content-wrapping element.
+	 * @param string  $tag        The element's tag-name.
+	 * @param ?string $content    The element's contents. If not null,
+	 *                            it will create a content-wrapping element.
 	 */
-	public static function render( $attributes = [], $tag = 'meta', $content = null ) {
+	public static function render(
+		$attributes = self::DATA_DEFAULTS['attributes'],
+		$tag = self::DATA_DEFAULTS['tag'],
+		$content = self::DATA_DEFAULTS['content']
+	) {
 
 		$attr = '';
 

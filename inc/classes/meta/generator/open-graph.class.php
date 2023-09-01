@@ -40,40 +40,16 @@ final class Open_Graph {
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
-		[ __CLASS__, 'generate_open_graph' ],
+		[ __CLASS__, 'generate_open_graph_type' ],
+		[ __CLASS__, 'generate_open_graph_locale' ],
+		[ __CLASS__, 'generate_open_graph_site_name' ],
+		[ __CLASS__, 'generate_open_graph_title' ],
+		[ __CLASS__, 'generate_open_graph_description' ],
+		[ __CLASS__, 'generate_open_graph_url' ],
+		[ __CLASS__, 'generate_open_graph_image' ],
+		[ __CLASS__, 'generate_article_published_time' ],
+		[ __CLASS__, 'generate_article_modified_time' ],
 	];
-
-	/**
-	 * @since 4.3.0
-	 * @access protected
-	 * @generator
-	 */
-	public static function generate_open_graph() {
-		/**
-		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
-		 * @deprecated
-		 * @param bool $use_open_graph
-		 */
-		$use_open_graph = \apply_filters_deprecated(
-			'the_seo_framework_use_og_tags',
-			[
-				(bool) \tsf()->get_option( 'og_tags' ),
-			],
-			'4.3.0 of The SEO Framework',
-			'the_seo_framework_meta_generators',
-		);
-
-		if ( $use_open_graph ) {
-			yield from static::generate_open_graph_type();
-			yield from static::generate_open_graph_locale();
-			yield from static::generate_open_graph_site_name();
-			yield from static::generate_open_graph_title();
-			yield from static::generate_open_graph_description();
-			yield from static::generate_open_graph_url();
-			yield from static::generate_open_graph_image();
-		}
-	}
 
 	/**
 	 * @since 4.3.0
@@ -331,68 +307,76 @@ final class Open_Graph {
 	}
 
 	/**
-	 * Renders Article Publishing Time meta tag.
-	 *
-	 * @since 2.2.2
-	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0 1. Now checks for 0000 timestamps.
-	 *              2. Now uses timestamp formats.
-	 *              3. Now uses GMT time.
-	 *
-	 * @return string The Article Publishing Time meta tag.
+	 * @since 4.3.0
+	 * @access protected
+	 * @generator
 	 */
-	public function article_published_time() {
+	public static function generate_article_published_time() {
 
-		if ( ! $this->output_published_time() ) return '';
+		$tsf = \tsf();
 
-		$id            = Query::get_the_real_id();
+		// var_dump() offload this to something like (the derpecated) output_published_time()
+		// Builder/OpenGraph::get_article_published_time()?
+		if ( ! $tsf->get_option( 'post_publish_time' ) && 'article' === \tsf()->get_og_type() ) return;
+
+		$id            = \The_SEO_Framework\Helper\Query::get_the_real_id();
 		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
 
-		if ( '0000-00-00 00:00:00' === $post_date_gmt )
-			return '';
+		if ( '0000-00-00 00:00:00' === $post_date_gmt ) return;
 
-		/**
-		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
-		 * @param string $time The article published time.
-		 * @param int    $id   The current page or term ID.
-		 */
-		$time = (string) \apply_filters_ref_array(
-			'the_seo_framework_publishedtime_output',
-			[
-				$this->gmt2date( $this->get_timestamp_format(), $post_date_gmt ),
-				$id,
-			]
-		);
+		$time = $tsf->gmt2date( $tsf->get_timestamp_format(), $post_date_gmt );
+		// to this.
 
-		return $time ? Interpreters\Meta::render( [
-			'property' => 'article:published_time',
-			'content'  => $time,
-		] ) : '';
+		if ( \has_filter( 'the_seo_framework_publishedtime_output' ) ) {
+			/**
+			 * @since 2.3.0
+			 * @since 2.7.0 Added output within filter.
+			 * @since 2.9.3
+			 * @since 4.3.0 Deprecated
+			 * @param string $time The article published time.
+			 * @param int    $id   The current page or term ID.
+			 */
+			$time = (string) \apply_filters_ref_array(
+				'the_seo_framework_publishedtime_output',
+				[
+					$time,
+					$id,
+				],
+				'4.3.0 of The SEO Framework',
+				'the_seo_framework_meta_render_data',
+			);
+		}
+
+		if ( $time )
+			yield [
+				'attributes' => [
+					'property' => 'article:published_time',
+					'content'  => $time,
+				],
+			];
 	}
 
 	/**
-	 * Renders Article Modified Time meta tag.
-	 *
-	 * @since 2.2.2
-	 * @since 2.7.0 Listens to Query::get_the_real_id() instead of WordPress Core ID determination.
-	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0 1. Now checks for 0000 timestamps.
-	 *              2. Now uses timestamp formats.
-	 * @since 4.1.4 No longer renders the Open Graph Updated Time meta tag.
-	 * @see og_updated_time()
-	 *
-	 * @return string The Article Modified Time meta tag
+	 * @since 4.3.0
+	 * @access protected
+	 * @generator
 	 */
-	public function article_modified_time() {
+	public static function generate_article_modified_time() {
 
-		if ( ! $this->output_modified_time() ) return '';
+		$tsf = \tsf();
 
-		$time = $this->get_modified_time();
+		// var_dump() offload this to something like (the derpecated) output_modified_time()
+		// Builder/OpenGraph::get_article_modified_time()?
+		if ( ! $tsf->get_option( 'post_modify_time' ) && 'article' === \tsf()->get_og_type() ) return;
 
-		return $time ? Interpreters\Meta::render( [
-			'property' => 'article:modified_time',
-			'content'  => $time,
-		] ) : '';
+		$time = $tsf->get_modified_time();
+
+		if ( $time )
+			yield [
+				'attributes' => [
+					'property' => 'article:modified_time',
+					'content'  => $time,
+				],
+			];
 	}
 }

@@ -469,6 +469,8 @@ TODO remove leftover var_dump()
 TODO deprecate all filters in the generator pools.
 	-> Suggest using the_seo_framework_meta_render_data instead.
 
+TODO if Open Graph is disabled, but still has data, will Twitter Card still fall back to that data?
+	-> If so... ugh. Should we even bother; does the JS already consider this? No one reported this as an issue.
 
 **Detailed log**
 
@@ -846,9 +848,11 @@ TODO deprecate all filters in the generator pools.
 		* `the_seo_framework_twittercreator_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_twittertitle_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_twitterdescription_output`, use `the_seo_framework_meta_render_data` instead.
-		* `the_seo_framework_use_og_tags`, use `the_seo_framework_meta_generators` instead.
-		* `the_seo_framework_use_facebook_tags`, use `the_seo_framework_meta_generators` instead.
-		* `the_seo_framework_use_twitter_tags`, use `the_seo_framework_meta_generators` instead.
+		* `the_seo_framework_modifiedtime_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_ogtype_output`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_use_og_tags`, use `the_seo_framework_meta_generator_pools` instead.
+		* `the_seo_framework_use_facebook_tags`, use `the_seo_framework_meta_generator_pools` instead.
+		* `the_seo_framework_use_twitter_tags`, use `the_seo_framework_meta_generator_pools` instead.
 	* **Removed:**
 		* `the_seo_framework_auto_descripton_html_method_methods`.
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").

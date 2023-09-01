@@ -200,11 +200,10 @@ class Generate extends User_Data {
 	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public function is_post_type_robots_set( $type, $post_type = '' ) {
-		return ! empty(
-			$this->get_option(
-				$this->get_robots_post_type_option_id( $type )
-			)[ $post_type ?: Query::get_current_post_type() ]
-		);
+		return (bool) $this->get_option( [
+			$this->get_robots_post_type_option_id( $type ),
+			$post_type ?: Query::get_current_post_type(),
+		] );
 	}
 
 	/**
@@ -218,11 +217,10 @@ class Generate extends User_Data {
 	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
-		return ! empty(
-			$this->get_option(
-				$this->get_robots_taxonomy_option_id( $type )
-			)[ $taxonomy ?: Query::get_current_taxonomy() ]
-		);
+		return (bool) $this->get_option( [
+			$this->get_robots_taxonomy_option_id( $type ),
+			$taxonomy ?: Query::get_current_taxonomy(),
+		] );
 	}
 
 	/**
@@ -378,15 +376,19 @@ class Generate extends User_Data {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated
+			 * @deprecated
 			 * @param string $type The OG type.
 			 * @param int    $id   The page/term/object ID.
 			 */
-			(string) \apply_filters_ref_array(
+			(string) \apply_filters_deprecated(
 				'the_seo_framework_ogtype_output',
 				[
 					$this->generate_og_type(),
 					Query::get_the_real_id(),
-				]
+				],
+				'4.3.0 of The SEO Framework',
+				'the_seo_framework_meta_render_data',
 			)
 		);
 	}
@@ -413,15 +415,19 @@ class Generate extends User_Data {
 				/**
 				 * @since 2.3.0
 				 * @since 2.7.0 Added output within filter.
+				 * @since 4.3.0 Deprecated
+				 * @deprecated
 				 * @param string $time The article modified time.
 				 * @param int    $id   The current page or term ID.
 				 */
-				: (string) \apply_filters_ref_array(
+				: (string) \apply_filters_deprecated(
 					'the_seo_framework_modifiedtime_output',
 					[
 						$this->gmt2date( $this->get_timestamp_format(), $post_modified_gmt ),
 						$id,
-					]
+					],
+					'4.3.0 of The SEO Framework',
+					'the_seo_framework_meta_render_data',
 				)
 		);
 	}

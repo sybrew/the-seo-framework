@@ -49,21 +49,9 @@ final class Structured_Data {
 	 * @generator
 	 */
 	public static function generate_structured_data() {
+		// TEMP for testing performance.
+		echo \tsf()->render_ld_json_scripts();
 		return;
-		yield; // Enable generator to prevent crashing.
-
-		// TODO defunct. We should probably boot this without deprecation.
-		/**
-		 * @since 2.6.0
-		 * @param string $json The JSON output. Must be escaped.
-		 * @param int    $id   The current page or term ID.
-		 */
-		$json = (string) \apply_filters_ref_array(
-			'the_seo_framework_ldjson_scripts',
-			[
-				\tsf()->render_ld_json_scripts(),
-				Query::get_the_real_id(),
-			]
-		);
+		yield;
 	}
 }

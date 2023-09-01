@@ -40,38 +40,10 @@ final class Facebook {
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
-		[ __CLASS__, 'generate_facebook' ],
+		[ __CLASS__, 'generate_facebook_author' ],
+		[ __CLASS__, 'generate_facebook_publisher' ],
+		[ __CLASS__, 'generate_facebook_app_id' ],
 	];
-
-	/**
-	 * @since 4.3.0
-	 * @access protected
-	 * @generator
-	 */
-	public static function generate_facebook() {
-		/**
-		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
-		 * @deprecated
-		 * @param bool $use_facebook
-		 */
-		$use_facebook = \apply_filters_deprecated(
-			'the_seo_framework_use_facebook_tags',
-			[
-				(bool) \tsf()->get_option( 'facebook_tags' ),
-			],
-			'4.3.0 of The SEO Framework',
-			'the_seo_framework_meta_generators',
-		);
-
-		if ( $use_facebook ) {
-			if ( 'article' === \tsf()->get_og_type() ) {
-				yield from static::generate_facebook_author();
-				yield from static::generate_facebook_publisher();
-			}
-			yield from static::generate_facebook_app_id();
-		}
-	}
 
 	/**
 	 * @since 4.3.0
@@ -82,9 +54,13 @@ final class Facebook {
 
 		$tsf = \tsf();
 
+		// var_dump() offload this.
+		if ( 'article' !== $tsf->get_og_type() ) return;
+
 		$author =
 			   $tsf->get_current_post_author_meta_item( 'facebook_page' )
 			?: $tsf->get_option( 'facebook_author' );
+		// to this.
 
 		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
 			/**
@@ -125,7 +101,12 @@ final class Facebook {
 	 */
 	public static function generate_facebook_publisher() {
 
-		$publisher = \tsf()->get_option( 'facebook_publisher' );
+		$tsf = \tsf();
+		// var_dump() offload this.
+		if ( 'article' !== $tsf->get_og_type() ) return;
+
+		$publisher = $tsf->get_option( 'facebook_publisher' );
+		// to this
 
 		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
 			/**

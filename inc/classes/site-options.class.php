@@ -362,15 +362,13 @@ class Site_Options extends Sanitize {
 			return ! empty( $val ) ? \stripslashes_deep( $val ) : '';
 		}
 
-		static $cache;
+		static $memo;
 
-		// PHP 7.4: null coalesce equal operator: ??=
-		if ( ! isset( $cache ) )
-			$cache = \stripslashes_deep( $this->get_all_options( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
+		$memo ??= \stripslashes_deep( $this->get_all_options( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) );
 
-		$val = $cache;
+		$val = $memo;
 
-		// This loop digs through itself: $val[ $index ][ $index ]... etc.
+		// This loop digs through itself: $val[ $k ][ $k ]... etc.
 		foreach ( (array) $key as $k )
 			$val = $val[ $k ] ?? '';
 

@@ -2421,7 +2421,8 @@ final class Deprecated {
 			[
 				\tsf()->render_ld_json_scripts(),
 				Query::get_the_real_id(),
-			]
+			],
+			'4.3.0 of The SEO Framework'
 		);
 	}
 }

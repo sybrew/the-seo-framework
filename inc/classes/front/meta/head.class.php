@@ -91,6 +91,8 @@ final class Head {
 		 */
 		\do_action( 'the_seo_framework_before_meta_output' );
 
+		$tsf = \tsf();
+
 		// Limit processing and redundant tags on 404 and search.
 		switch ( true ) {
 			case \is_search():
@@ -99,9 +101,9 @@ final class Head {
 			case \is_404():
 				$generator_pools = [ 'Robots', 'Theme_Color', 'Webmasters' ];
 				break;
-			case \tsf()->is_query_exploited():
+			case $tsf->is_query_exploited():
 				// search and 404 cannot be exploited, hence they're tested earlier.
-				$generator_pools = [ 'Advanced_Query_Protection', 'Robots', 'Theme_Color', 'Webmasters' ];
+				$generator_pools = [ 'Robots', 'Advanced_Query_Protection', 'Theme_Color', 'Webmasters' ];
 				break;
 			default:
 				$generator_pools = [
@@ -118,34 +120,84 @@ final class Head {
 		}
 
 		/**
+		 * @since 3.1.4
+		 * @since 4.3.0 Deprecated
+		 * @deprecated
+		 * @param bool
+		 */
+		if ( ! \apply_filters_deprecated(
+			'the_seo_framework_use_og_tags',
+			[
+				(bool) $tsf->get_option( 'og_tags' ),
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_generator_pools',
+		) ) {
+			// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- coalescable.
+			$remove_pools[] = 'Open_Graph';
+		}
+		/**
+		 * @since 3.1.4
+		 * @since 4.3.0 Deprecated
+		 * @deprecated
+		 * @param bool
+		 */
+		if ( ! \apply_filters_deprecated(
+			'the_seo_framework_use_facebook_tags',
+			[
+				(bool) $tsf->get_option( 'facebook_tags' ),
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_generator_pools',
+		) ) {
+			$remove_pools[] = 'Facebook';
+		}
+		/**
+		 * @since 3.1.4
+		 * @since 4.3.0 Deprecated
+		 * @deprecated
+		 * @param bool
+		 */
+		if ( ! \apply_filters_deprecated(
+			'the_seo_framework_use_twitter_tags',
+			[
+				(bool) $tsf->get_option( 'twitter_tags' ),
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_generator_pools',
+		) ) {
+			$remove_pools[] = 'Twitter';
+		}
+
+		/**
 		 * @since 4.3.0
 		 * @param string[] $generator_pools A list of tag pools requested for the current query.
-		 *                                  The tag pool names correspond directly to the classes.
+		 *                                  The tag pool names correspond directly to the classes'.
 		 *                                  Do not register new pools, it'll cause a fatal error.
 		 */
 		$generator_pools = \apply_filters(
 			'the_seo_framework_meta_generator_pools',
-			$generator_pools
+			isset( $remove_pools ) ? array_diff( $generator_pools, $remove_pools ) : $generator_pools
 		);
 
-		$tag_generators    = &Tags::tag_generators();
-		$generators_spread = [];
+		$tag_generators   = &Tags::tag_generators();
+		$generators_queue = [];
 
 		// Queue array_merge for improved performance.
 		foreach ( $generator_pools as $pool )
-			$generators_spread[] = ( '\The_SEO_Framework\Meta\Generator\\' . $pool )::GENERATORS;
+			$generators_queue[] = ( '\The_SEO_Framework\Meta\Generator\\' . $pool )::GENERATORS;
 
 		/**
 		 * @since 4.3.0
 		 * @param callable[] $tag_generators  A list of meta tag generator callbacks.
 		 *                                    The generators may offload work to other generators.
 		 * @param string[]   $generator_pools A list of tag pools requested for the current query.
-		 *                                    The tag pool names correspond directly to the classes.
+		 *                                    The tag pool names correspond directly to the classes'.
 		 */
 		$tag_generators = \apply_filters_ref_array(
 			'the_seo_framework_meta_generators',
 			[
-				$tag_generators = array_merge( ...$generators_spread ),
+				$tag_generators = array_merge( ...$generators_queue ),
 				$generator_pools,
 			]
 		);

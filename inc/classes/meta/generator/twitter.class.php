@@ -40,39 +40,13 @@ final class Twitter {
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
-		[ __CLASS__, 'generate_twitter' ],
+		[ __CLASS__, 'generate_twitter_card' ],
+		[ __CLASS__, 'generate_twitter_site' ],
+		[ __CLASS__, 'generate_twitter_creator' ],
+		[ __CLASS__, 'generate_twitter_title' ],
+		[ __CLASS__, 'generate_twitter_description' ],
+		[ __CLASS__, 'generate_twitter_image' ],
 	];
-
-	/**
-	 * @since 4.3.0
-	 * @access protected
-	 * @generator
-	 */
-	public static function generate_twitter() {
-		/**
-		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
-		 * @deprecated
-		 * @param bool $use_twitter_card
-		 */
-		$use_twitter_card = \apply_filters_deprecated(
-			'the_seo_framework_use_twitter_tags',
-			[
-				(bool) \tsf()->get_option( 'twitter_tags' ),
-			],
-			'4.3.0 of The SEO Framework',
-			'the_seo_framework_meta_generators',
-		);
-
-		if ( $use_twitter_card ) {
-			yield from static::generate_twitter_card();
-			yield from static::generate_twitter_site();
-			yield from static::generate_twitter_creator();
-			yield from static::generate_twitter_title();
-			yield from static::generate_twitter_description();
-			yield from static::generate_twitter_image();
-		}
-	}
 
 	/**
 	 * @since 4.3.0
@@ -136,6 +110,7 @@ final class Twitter {
 
 		$tsf = \tsf();
 
+		// var_dump() offload this
 		$creator =
 			   $tsf->get_current_post_author_meta_item( 'twitter_page' )
 			?: $tsf->get_option( 'twitter_creator' );
