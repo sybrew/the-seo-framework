@@ -317,7 +317,7 @@ final class Open_Graph {
 
 		// var_dump() offload this to something like (the derpecated) output_published_time()
 		// Builder/OpenGraph::get_article_published_time()?
-		if ( ! $tsf->get_option( 'post_publish_time' ) && 'article' === \tsf()->get_og_type() ) return;
+		if ( ! $tsf->get_option( 'post_publish_time' ) || 'article' !== $tsf->get_og_type() ) return;
 
 		$id            = \The_SEO_Framework\Helper\Query::get_the_real_id();
 		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
@@ -367,7 +367,7 @@ final class Open_Graph {
 
 		// var_dump() offload this to something like (the derpecated) output_modified_time()
 		// Builder/OpenGraph::get_article_modified_time()?
-		if ( ! $tsf->get_option( 'post_modify_time' ) && 'article' === \tsf()->get_og_type() ) return;
+		if ( ! $tsf->get_option( 'post_modify_time' ) || 'article' !== $tsf->get_og_type() ) return;
 
 		$time = $tsf->get_modified_time();
 

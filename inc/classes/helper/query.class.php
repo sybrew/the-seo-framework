@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Helpers\Query
+ * @package The_SEO_Framework\Classes\Helper\Query
  * @subpackage The_SEO_Framework\Query
  */
 
@@ -28,6 +28,7 @@ namespace The_SEO_Framework\Helper;
 use function \The_SEO_Framework\umemo;
 
 /**
+ * Holds a collection of helper methods for the WordPress query.
  * Interprets the WordPress query to eliminate known pitfalls.
  *
  * @since 4.3.0
@@ -53,7 +54,7 @@ class Query {
 
 		if ( static::is_archive() ) {
 			if ( static::is_category() || static::is_tag() || static::is_tax() ) {
-				$post_type = static::get_post_types_from_taxonomy();
+				$post_type = Taxonomies::get_post_types_from_taxonomy();
 				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 			} elseif ( \is_post_type_archive() ) {
 				$post_type = \get_query_var( 'post_type' );
@@ -80,23 +81,6 @@ class Query {
 	 */
 	public static function get_admin_post_type() {
 		return $GLOBALS['current_screen']->post_type ?? '';
-	}
-
-	/**
-	 * Returns a list of post types shared with the taxonomy.
-	 *
-	 * @since 4.0.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query
-	 *
-	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxonomy.
-	 * @return array List of post types.
-	 */
-	public static function get_post_types_from_taxonomy( $taxonomy = '' ) {
-
-		$taxonomy = $taxonomy ?: static::get_current_taxonomy();
-		$tax      = $taxonomy ? \get_taxonomy( $taxonomy ) : null;
-
-		return $tax->object_type ?? [];
 	}
 
 	/**
@@ -186,7 +170,7 @@ class Query {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				\tsf()->has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0
+				Query_Utils::has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0
 			);
 	}
 
@@ -220,7 +204,7 @@ class Query {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 1. Now works in the admin.
-	 *              2. Added caching
+	 *              2. Added memoization.
 	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query
 	 * @global \WP_Screen $current_screen
 	 *
@@ -236,14 +220,22 @@ class Query {
 
 	/**
 	 * Returns the current post type, if any.
+	 * Memoizes the return value.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 1. Moved to The_SEO_Framework\Helper\Query
+	 *              2. Now falls back to the current post type instead erroneously to a boolean.
+	 *              3. Now memoizes the return value.
 	 *
 	 * @return string The queried post type.
 	 */
 	public static function get_current_post_type() {
-		return static::get_post_type_real_id() ?: static::is_singular_admin();
+		return Query_Cache::memo()
+			?? Query_Cache::memo(
+				\is_admin()
+					? static::get_admin_post_type()
+					: static::get_post_type_real_id()
+			);
 	}
 
 	/**
@@ -507,7 +499,7 @@ class Query {
 	 */
 	public static function is_home_as_page( $post = null ) {
 		// If front is a blog, the blog is never a page.
-		return \tsf()->has_page_on_front() ? static::is_home( $post ) : false;
+		return Query_Utils::has_page_on_front() ? static::is_home( $post ) : false;
 	}
 
 	/**
@@ -541,6 +533,20 @@ class Query {
 	 */
 	public static function is_category_admin() {
 		return static::is_archive_admin() && 'category' === static::get_current_taxonomy();
+	}
+
+	/**
+	 * Determines if the current query handles term metadata.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return bool
+	 */
+	public static function is_editable_term() {
+		return Query_Cache::memo()
+			?? Query_Cache::memo(
+				Query::is_category() || Query::is_tag() || Query::is_tax()
+			);
 	}
 
 	/**
@@ -612,7 +618,7 @@ class Query {
 		return Query_Cache::memo( null, $page )
 			?? Query_Cache::memo(
 				\is_int( $page ) || $page instanceof \WP_Post
-					? \in_array( \get_post_type( $page ), \tsf()->get_hierarchical_post_types(), true )
+					? \in_array( \get_post_type( $page ), Post_Types::get_hierarchical_post_types(), true )
 					: \is_page( $page ),
 				$page
 			);
@@ -629,7 +635,8 @@ class Query {
 	 * @return bool
 	 */
 	public static function is_page_admin() {
-		return static::is_singular_admin() && \in_array( static::is_singular_admin(), \tsf()->get_hierarchical_post_types(), true );
+		return static::is_singular_admin()
+			&& \in_array( static::is_singular_admin(), Post_Types::get_hierarchical_post_types(), true );
 	}
 
 	/**
@@ -696,7 +703,7 @@ class Query {
 		return Query_Cache::memo( null, $post )
 			?? Query_Cache::memo(
 				\is_int( $post ) || $post instanceof \WP_Post
-					? \in_array( \get_post_type( $post ), \tsf()->get_nonhierarchical_post_types(), true )
+					? \in_array( \get_post_type( $post ), Post_Types::get_nonhierarchical_post_types(), true )
 					: \is_single( $post ),
 				$post
 			);
@@ -714,7 +721,8 @@ class Query {
 	 */
 	public static function is_single_admin() {
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
-		return static::is_singular_admin() && \in_array( static::is_singular_admin(), \tsf()->get_nonhierarchical_post_types(), true );
+		return static::is_singular_admin()
+			&& \in_array( static::is_singular_admin(), Post_Types::get_nonhierarchical_post_types(), true );
 	}
 
 	/**

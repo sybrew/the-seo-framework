@@ -149,8 +149,8 @@ final class Deprecated {
 	 * @return array List of post types.
 	 */
 	public function get_post_types_from_taxonomy( $taxonomy = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->query()->get_post_types_from_taxonomy()' );
-		return \tsf()->query()->get_post_types_from_taxonomy( $taxonomy );
+		\tsf()->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->taxonomies()->get_post_types_from_taxonomy()' );
+		return \tsf()->taxonomies()->get_post_types_from_taxonomy( $taxonomy );
 	}
 
 	/**
@@ -223,7 +223,7 @@ final class Deprecated {
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 1. Now works in the admin.
-	 *              2. Added caching
+	 *              2. Added caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -238,7 +238,9 @@ final class Deprecated {
 	 * Returns the current post type, if any.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 4.3.0 1. Deprecated.
+	 *              2. Now falls back to the current post type instead erroneously to a boolean.
+	 *              3. Now memoizes the return value.
 	 * @deprecated
 	 *
 	 * @return string The queried post type.
@@ -1071,7 +1073,7 @@ final class Deprecated {
 			'the_seo_framework_description_output',
 			[
 				$tsf->get_description(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1102,11 +1104,11 @@ final class Deprecated {
 		// Don't do anything if the blog isn't set to public.
 		if ( false === $tsf->is_blog_public() ) return '';
 
-		$meta = $tsf->get_robots_meta();
+		$meta = $tsf->robots()->get_meta();
 
 		return $meta ? \The_SEO_Framework\Interpreters\Meta::render( [
 			'name'    => 'robots',
-			'content' => implode( ',', $meta ),
+			'content' => $meta,
 		] ) : '';
 	}
 
@@ -1140,14 +1142,14 @@ final class Deprecated {
 			'the_seo_framework_rel_canonical_output',
 			[
 				$_url,
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
 		// If the page should not be indexed, consider removing the canonical URL.
-		if ( \in_array( 'noindex', $tsf->get_robots_meta(), true ) ) {
+		if ( \in_array( 'noindex', $tsf->robots()->generate_meta(), true ) ) {
 			// If the URL is filtered, don't empty it.
 			// If a custom canonical URL is set, don't empty it.
 			if ( $url === $_url && ! $tsf->has_custom_canonical_url() ) {
@@ -1191,7 +1193,7 @@ final class Deprecated {
 			'the_seo_framework_shortlink_output',
 			[
 				$tsf->get_shortlink(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1222,7 +1224,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->paged_urls()', '4.3.0' );
 
 		$paged_urls = $tsf->get_paged_urls();
-		$id         = Query::get_the_real_id();
+		$id         = $tsf->query()->get_the_real_id();
 
 		/**
 		 * @since 2.6.0
@@ -1538,7 +1540,7 @@ final class Deprecated {
 			'the_seo_framework_ogtitle_output',
 			[
 				$tsf->get_open_graph_title(),
-				\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1581,7 +1583,7 @@ final class Deprecated {
 			'the_seo_framework_ogdescription_output',
 			[
 				$tsf->get_open_graph_description(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1622,7 +1624,7 @@ final class Deprecated {
 			'the_seo_framework_oglocale_output',
 			[
 				$tsf->fetch_locale(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1743,7 +1745,7 @@ final class Deprecated {
 			'the_seo_framework_ogsitename_output',
 			[
 				$tsf->get_blogname(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1785,7 +1787,7 @@ final class Deprecated {
 			'the_seo_framework_ogurl_output',
 			[
 				$tsf->get_current_canonical_url(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1853,7 +1855,7 @@ final class Deprecated {
 			'the_seo_framework_facebookauthor_output',
 			[
 				$tsf->get_current_post_author_meta_item( 'facebook_page' ) ?: $tsf->get_option( 'facebook_author' ),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1895,7 +1897,7 @@ final class Deprecated {
 			'the_seo_framework_facebookpublisher_output',
 			[
 				$tsf->get_option( 'facebook_publisher' ),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -1935,7 +1937,7 @@ final class Deprecated {
 			'the_seo_framework_facebookappid_output',
 			[
 				$tsf->get_option( 'facebook_appid' ),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data', // var_dump() delete me?
@@ -2002,7 +2004,7 @@ final class Deprecated {
 
 		if ( ! $tsf->output_published_time() ) return '';
 
-		$id            = Query::get_the_real_id();
+		$id            = $tsf->query()->get_the_real_id();
 		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
 
 		if ( '0000-00-00 00:00:00' === $post_date_gmt )
@@ -2036,7 +2038,7 @@ final class Deprecated {
 	 * Renders Article Modified Time meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0 Listens to Query::get_the_real_id() instead of WordPress Core ID determination.
+	 * @since 2.7.0 Listens to $tsf->query()->get_the_real_id() instead of WordPress Core ID determination.
 	 * @since 2.8.0 Returns empty on product pages.
 	 * @since 3.0.0 1. Now checks for 0000 timestamps.
 	 *              2. Now uses timestamp formats.
@@ -2176,7 +2178,7 @@ final class Deprecated {
 			'the_seo_framework_twittersite_output',
 			[
 				$tsf->get_option( 'twitter_site' ),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -2219,7 +2221,7 @@ final class Deprecated {
 			'the_seo_framework_twittercreator_output',
 			[
 				$tsf->get_current_post_author_meta_item( 'twitter_page' ) ?: $tsf->get_option( 'twitter_creator' ),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -2261,7 +2263,7 @@ final class Deprecated {
 			'the_seo_framework_twittertitle_output',
 			[
 				$tsf->get_twitter_title(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -2303,7 +2305,7 @@ final class Deprecated {
 			'the_seo_framework_twitterdescription_output',
 			[
 				$tsf->get_twitter_description(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -2420,9 +2422,547 @@ final class Deprecated {
 			'the_seo_framework_ldjson_scripts',
 			[
 				\tsf()->render_ld_json_scripts(),
-				Query::get_the_real_id(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework'
 		);
+	}
+
+	/**
+	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
+	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
+	 *
+	 * @link <https://3v4l.org/9pnW1#v8.1.8> Test it here.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.7 1. Now supports a single array entry without causing issues.
+	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
+	 *              3. Now no longer throws warnings with qubed+ arrays.
+	 *              4. Now no longer prevents scalar values overwriting arrays.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
+	 * @return array The merged arrays.
+	 */
+	public function array_merge_recursive_distinct( ...$arrays ) {
+		\tsf()->_deprecated_function(
+			'tsf()->array_merge_recursive_distinct()',
+			'4.3.0',
+			'function \The_SEO_Framework\Utils\array_merge_recursive_distinct()'
+		);
+
+		return \The_SEO_Framework\Utils\array_merge_recursive_distinct( ...$arrays );
+	}
+
+	/**
+	 * Returns an array of the collected robots meta assertions.
+	 *
+	 * This only works when generate_robots_meta()'s $options value was given:
+	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array
+	 */
+	public function retrieve_robots_meta_assertions() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->retrieve_robots_meta_assertions()', '4.3.0', 'tsf()->robots()->get_collected_meta_assertions()' );
+
+		return $tsf->query()->get_collected_meta_assertions();
+	}
+
+	/**
+	 * Returns the robots meta array.
+	 * Memoizes the return value.
+	 *
+	 * @since 3.2.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array
+	 */
+	public function get_robots_meta() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_robots_meta()', '4.3.0', 'tsf()->robots()->get_meta()' );
+
+		return explode( ',', $tsf->robots()->get_meta() );
+	}
+
+	/**
+	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.0 1. Now offloads metadata generation to an actual generator.
+	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
+	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
+	 * }
+	 * @param int <bit>  $options The options level. {
+	 *    0 = 0b000: Ignore nothing. Collect no assertions. (Default front-end.)
+	 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
+	 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
+	 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
+	 * }
+	 * @return array Only values actualized for display: {
+	 *    string index : string value
+	 * }
+	 */
+	public function generate_robots_meta( $args = null, $get = null, $options = 0b00 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->generate_robots_meta()', '4.3.0', 'tsf()->robots()->generate_meta()' );
+
+		return $tsf->robots()->generate_meta( $args, $get, $options );
+	}
+
+	/**
+	 * Determines if the post type has a robots value set.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
+	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
+	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
+	 */
+	public function is_post_type_robots_set( $type, $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_post_type_robots_set()', '4.3.0', 'tsf()->robots()->is_post_type_robots_set()' );
+
+		return $tsf->robots()->is_post_type_robots_set( $type, $post_type );
+	}
+
+	/**
+	 * Determines if the taxonomy has a robots value set.
+	 *
+	 * @since 4.1.0
+	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.
+	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
+	 */
+	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_robots_set()', '4.3.0', 'tsf()->robots()->is_taxonomy_robots_set()' );
+
+		return $tsf->robots()->is_taxonomy_robots_set( $type, $taxonomy ?: null );
+	}
+
+	/**
+	 * Determines whether the main query supports custom SEO.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
+	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
+	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
+	 * @since 4.3.0 1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function query_supports_seo() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->query_supports_seo()', '4.3.0', 'tsf()->query_utils()->query_supports_seo()' );
+
+		return $tsf->query_utils()->query_supports_seo();
+	}
+
+	/**
+	 * Determines when paged/page is exploited.
+	 * Memoizes the return value.
+	 *
+	 * Google is acting "smart" nowadays, and follows everything that remotely resembles a link. Therefore, unintentional
+	 * queries can occur in WordPress. WordPress deals with this well, alas, the query parser (WP_Query::parse_query)
+	 * doesn't rectify the mixed signals it receives. Instead, it only sanitizes it, resulting in a combobulated mess.
+	 * Ultimately, this leads to non-existing blog archives, among other failures.
+	 *
+	 * Example 1: `/?p=nonnumeric` will cause an issue. We will see a non-existing blog page. `is_home` is true, but
+	 * `page_id` leads to 0 while the database expects the blog page to be another page. So, `is_posts_page` is
+	 * incorrectly false. This is mitigated via the canonical URL, but that MUST output, thus overriding otherwise chosen
+	 * and expected behavior.
+	 *
+	 * Example 2: `/page/2/?p=nonnumeric` will cause a bigger issue. What happens is that `is_home` will again be true,
+	 * but so will `is_paged`. `paged` will be set to `2` (as per example URL). The page ID will again be set to `0`,
+	 * which is completely false. The canonical URL will be malformed. Even more so, Google can ignore the canonical URL,
+	 * so we MUST output noindex.
+	 *
+	 * Example 3: `/page/2/?X=nonnumeric` will also cause the same issues as in example 2. Where X can be:
+	 * `page_id`, `attachment_id`, `year`, `monthnum`, `day`, `w`, `m`, and of course `p`.
+	 *
+	 * Example 4: `/?hour=nonnumeric`, the same issue as Example 1. The canonical URL is malformed, noindex is set, and
+	 * link relationships will be active. A complete mess. `minute` and `second` are also affected the same way.
+	 *
+	 * Example 5: `/page/2/?p=0`, this is the trickiest. It's indicative of a paginated blog, but also the homepage. When
+	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query.
+	 *
+	 * @since 4.0.5
+	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
+	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
+	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @global \WP_Query $wp_query
+	 *
+	 * @return bool Whether the query is (accidentally) exploited.
+	 *              Defaults to false when `advanced_query_protection` option is disabled.
+	 *              False when there's a query-ID found.
+	 *              False when no custom query is set (for the homepage).
+	 *              Otherwise, it performs query tests.
+	 */
+	public function is_query_exploited() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_query_exploited()', '4.3.0', 'tsf()->query_utils()->is_query_exploited()' );
+
+		return $tsf->query_utils()->is_query_exploited();
+	}
+
+	/**
+	 * Determines whether a page or blog is on front.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Removed caching.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function has_page_on_front() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->has_page_on_front()', '4.3.0', 'tsf()->query_utils()->has_page_on_front()' );
+
+		return $tsf->query_utils()->has_page_on_front();
+	}
+
+	/**
+	 * Detects if the current or inputted post type is supported and not disabled.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool
+	 */
+	public function is_post_type_supported( $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_post_type_supported()', '4.3.0', 'tsf()->post_types()->is_post_type_supported()' );
+
+		return $tsf->post_types()->is_post_type_supported( $post_type );
+	}
+
+	/**
+	 * Detects if the current or inputted post type's archive is supported and not disabled.
+	 *
+	 * @since 4.2.8
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @uses `tsf()->is_post_type_supported()`
+	 *
+	 * @param string $post_type Optional. The post type's archive to check.
+	 * @return bool
+	 */
+	public function is_post_type_archive_supported( $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_post_type_archive_supported()', '4.3.0', 'tsf()->post_types()->is_post_type_archive_supported()' );
+
+		return $tsf->post_types()->is_post_type_archive_supported( $post_type );
+	}
+
+	/**
+	 * Checks (current) Post Type for having taxonomical archives.
+	 * Memoizes the return value for the input argument.
+	 *
+	 * @since 2.9.3
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool True when the post type has taxonomies.
+	 */
+	public function post_type_supports_taxonomies( $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->post_type_supports_taxonomies()', '4.3.0', 'tsf()->post_types()->post_type_supports_taxonomies()' );
+
+		return $tsf->post_types()->post_type_supports_taxonomies( $post_type );
+	}
+
+
+	/**
+	 * Returns a list of all supported post types with archives.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 * @since 4.2.8 Now filters via `tsf()->is_post_type_archive_supported()`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string[] Supported post types with post type archive support.
+	 */
+	public function get_supported_post_type_archives() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_supported_post_type_archives()', '4.3.0', 'tsf()->post_types()->get_supported_post_type_archives()' );
+
+		return $tsf->post_types()->get_supported_post_type_archives();
+	}
+
+	/**
+	 * Gets all post types that have PTA and could possibly support SEO.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 * @since 4.2.8 Added filter `the_seo_framework_public_post_type_archives`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string[] Public post types with post type archive support.
+	 */
+	public function get_public_post_type_archives() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_public_post_type_archives()', '4.3.0', 'tsf()->post_types()->get_public_post_type_archives()' );
+
+		return $tsf->post_types()->get_public_post_type_archives();
+	}
+
+	/**
+	 * Returns a list of all supported post types.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string[] All supported post types.
+	 */
+	public function get_supported_post_types() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_supported_post_types()', '4.3.0', 'tsf()->post_types()->get_supported_post_types()' );
+
+		return $tsf->post_types()->get_supported_post_types();
+	}
+
+	/**
+	 * Determines if the post type is disabled from SEO all optimization.
+	 *
+	 * @since 3.1.0
+	 * @since 3.1.2 Now is fiterable.
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
+	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type Optional. The post type to check.
+	 * @return bool True if disabled, false otherwise.
+	 */
+	public function is_post_type_disabled( $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_post_type_disabled()', '4.3.0', 'tsf()->post_types()->is_post_type_disabled()' );
+
+		return $tsf->post_types()->is_post_type_disabled( $post_type );
+	}
+
+	/**
+	 * Determines if the taxonomy supports The SEO Framework.
+	 *
+	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
+	 * and whether the taxonomy is public and rewritable.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $taxonomy Optional. The taxonomy name.
+	 * @return bool True if at least one post type in taxonomy isn't disabled.
+	 */
+	public function is_taxonomy_supported( $taxonomy = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_supported()', '4.3.0', 'tsf()->taxonomies()->is_taxonomy_supported()' );
+
+		return $tsf->taxonomies()->is_taxonomy_supported( $taxonomy );
+	}
+
+	/**
+	 * Returns a list of all supported taxonomies.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string[] All supported taxonomies.
+	 */
+	public function get_supported_taxonomies() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_supported_taxonomies()', '4.3.0', 'tsf()->taxonomies()->get_supported_taxonomies()' );
+
+		return $tsf->taxonomies()->get_supported_taxonomies();
+	}
+
+	/**
+	 * Checks if the taxonomy isn't disabled, and that at least one taxonomy
+	 * objects post type supports The SEO Framework.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 1. Now returns true if at least one post type for the taxonomy is supported.
+	 *              2. Now uses `is_post_type_supported()` instead of `is_post_type_disabled()`.
+	 * @since 4.1.0 1. Now also checks for the option `disabled_taxonomies`.
+	 *              2. Now applies filters `the_seo_framework_taxonomy_disabled`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $taxonomy The taxonomy name.
+	 * @return bool True if at least one post type in taxonomy is supported.
+	 */
+	public function is_taxonomy_disabled( $taxonomy = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_disabled()', '4.3.0', 'tsf()->taxonomies()->is_taxonomy_disabled()' );
+
+		return $tsf->taxonomies()->is_taxonomy_disabled( $taxonomy );
+	}
+
+	/**
+	 * Determines if current query handles term meta.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 No longer lists post type archives as term-meta capable. It's not a taxonomy.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function is_term_meta_capable() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_term_meta_capable()', '4.3.0', 'tsf()->query()->is_editable_term()' );
+
+		return $tsf->query()->is_editable_term();
+	}
+
+	/**
+	 * Returns an array of hierarchical post types.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array The public hierarchical post types.
+	 */
+	public function get_hierarchical_post_types() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_hierarchical_post_types()', '4.3.0', 'tsf()->post_types()->get_hierarchical_post_types()' );
+
+		return $tsf->post_types()->get_hierarchical_post_types();
+	}
+
+	/**
+	 * Returns an array of nonhierarchical post types.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array The public nonhierarchical post types.
+	 */
+	public function get_nonhierarchical_post_types() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_nonhierarchical_post_types()', '4.3.0', 'tsf()->post_types()->get_nonhierarchical_post_types()' );
+
+		return $tsf->post_types()->get_nonhierarchical_post_types();
+	}
+
+	/**
+	 * Returns hierarchical taxonomies for post type.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`.
+	 * @since 4.1.0 Now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $get       Whether to get the names or objects.
+	 * @param string $post_type The post type. Will default to current post type.
+	 * @return object[]|string[] The post type taxonomy objects or names.
+	 */
+	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_hierarchical_taxonomies_as()', '4.3.0', 'tsf()->taxonomies()->get_hierarchical_taxonomies_as()' );
+
+		return $tsf->taxonomies()->get_hierarchical_taxonomies_as( $get, $post_type );
+	}
+
+	/**
+	 * Returns the post type object label. Either plural or singular.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type The post type. Required.
+	 * @param bool   $singular  Whether to get the singlural or plural name.
+	 * @return string The Post Type name/label, if found.
+	 */
+	public function get_post_type_label( $post_type, $singular = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_label()', '4.3.0', 'tsf()->post_types()->get_post_type_label()' );
+
+		return $tsf->post_types()->get_post_type_label( $post_type, $singular );
+	}
+
+	/**
+	 * Returns the taxonomy type object label. Either plural or singular.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $tax_type The taxonomy type. Required.
+	 * @param bool   $singular Whether to get the singlural or plural name.
+	 * @return string The Taxonomy Type name/label, if found.
+	 */
+	public function get_tax_type_label( $tax_type, $singular = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_tax_type_label()', '4.3.0', 'tsf()->post_types()->get_taxonomy_label()' );
+
+		return $tsf->taxonomies()->get_taxonomy_label( $tax_type, $singular );
 	}
 }

@@ -191,7 +191,7 @@ class Generate_Ldjson extends Generate_Image {
 		// The searchbox part.
 		$pattern     = '%s{%s}';
 		$action_name = 'search_term_string';
-		$search_link = $this->pretty_permalinks ? \trailingslashit( \get_search_link() ) : \get_search_link();
+		$search_link = \The_SEO_Framework\Helper\Query_Utils::using_pretty_permalinks() ? \trailingslashit( \get_search_link() ) : \get_search_link();
 		/**
 		 * @since 2.7.0
 		 * @param string $search_url The default WordPress search URL without query parameters.
@@ -415,7 +415,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$post_id    = Query::get_the_real_id();
 		$post_type  = Query::get_post_type_real_id( $post_id );
-		$taxonomies = $this->get_hierarchical_taxonomies_as( 'names', $post_type );
+		$taxonomies = \The_SEO_Framework\Helper\Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**
 		 * @since 3.0.0

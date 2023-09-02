@@ -9,8 +9,13 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input,
-	The_SEO_Framework\Helper\Query;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
+
+use The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Taxonomies,
+};
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -36,8 +41,8 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 			],
 		];
 
-		$post_types = $this->get_public_post_types();
-		$taxonomies = $this->get_public_taxonomies();
+		$post_types = Post_Types::get_public_post_types();
+		$taxonomies = Taxonomies::get_public_taxonomies();
 
 		// Robots i18n
 		$robots = [
@@ -321,7 +326,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				'label'  => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
-					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, esc_html( $this->get_post_type_label( $post_type, false ) ) ),
+					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, esc_html( Post_Types::get_post_type_label( $post_type, false ) ) ),
 					esc_html( $post_type )
 				),
 				'escape' => false,
@@ -350,12 +355,12 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 				'label'  => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
-					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, esc_html( $this->get_tax_type_label( $taxonomy, false ) ) ),
+					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, esc_html( Taxonomies::get_taxonomy_label( $taxonomy, false ) ) ),
 					esc_html( $taxonomy )
 				),
 				'escape' => false,
 				'data'   => [
-					'postTypes' => Query::get_post_types_from_taxonomy( $taxonomy ),
+					'postTypes' => Taxonomies::get_post_types_from_taxonomy( $taxonomy ),
 					'robots'    => $ro_value,
 				],
 			] );

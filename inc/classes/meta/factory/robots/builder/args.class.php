@@ -1,18 +1,24 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\Robots\Args
- * @subpackage The_SEO_Framework\Getter\Robots
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Builders\Robots;
+namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use const \The_SEO_Framework\{
+	ROBOTS_IGNORE_SETTINGS,
+	ROBOTS_IGNORE_PROTECTION,
+};
+
+use \The_SEO_Framework\Meta\Factory\Robots;
 use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -31,6 +37,7 @@ use \The_SEO_Framework\Helper\Query;
  * Engine for robots generator by arguments.
  *
  * @since 4.2.0
+ * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
  * @access private
  *         Not part of the public API.
  * @final Can't be extended.
@@ -59,7 +66,7 @@ final class Args extends Factory {
 		$asserting_noindex = 'noindex' === $type;
 
 		// We assert options here for a jump to meta_settings might be unaware.
-		meta_settings: if ( ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) ) {
+		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) {
 			$qubit = null;
 
 			if ( $args['taxonomy'] ) {
@@ -96,26 +103,26 @@ final class Args extends Factory {
 			if ( $args['taxonomy'] ) {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, $args['taxonomy'] );
+				yield 'globals_taxonomy' => Robots\API::is_taxonomy_robots_set( $type, $args['taxonomy'] );
 
 				// Store values from each post type bound to the taxonomy.
-				foreach ( Query::get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
-					$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+				foreach ( \The_SEO_Framework\Helper\Taxonomies::get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
+					$_is_post_type_robots_set[] = Robots\API::is_post_type_robots_set( $type, $post_type );
 
 				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 			} elseif ( $args['pta'] ) {
-				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, $args['pta'] );
+				yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, $args['pta'] );
 			} else {
 				// $args['id'] can be empty, pointing to a plausible homepage query.
 				if ( Query::is_real_front_page_by_id( $args['id'] ) )
 					yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
 
 				if ( $args['id'] )
-					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+					yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
 			}
 
-		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
+		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
 			if ( ! $args['taxonomy'] )
 				yield from static::assert_noindex_query_pass( 'protected' );
 		}

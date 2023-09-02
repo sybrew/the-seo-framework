@@ -1,18 +1,20 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\Robots\Main
- * @subpackage The_SEO_Framework\Getter\Robots
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Builders\Robots;
+namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use const \The_SEO_Framework\ROBOTS_ASSERT;
 
 use function \The_SEO_Framework\umemo;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -31,6 +33,7 @@ use function \The_SEO_Framework\umemo;
  * Generates robots meta.
  *
  * @since 4.2.0
+ * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
  * @access protected
  *         Instantiation of class is not part of the public API.
  * @final Can't be extended.
@@ -128,7 +131,7 @@ final class Main {
 		// Remit FETCH_OBJ_R opcode calls every time we'd otherwise use $this->options hereinafter.
 		$options = $this->options;
 
-		$assert = (bool) ( $options & \The_SEO_Framework\ROBOTS_ASSERT );
+		$assert = (bool) ( $options & ROBOTS_ASSERT );
 
 		$assert
 			and $this->reset_assertions();

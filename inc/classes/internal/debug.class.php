@@ -8,7 +8,12 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Query_Utils,
+	Taxonomies,
+};
 
 use function \The_SEO_Framework\memo;
 
@@ -467,8 +472,8 @@ final class Debug {
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
 		$page_id                        = Query::get_the_real_id();
-		$is_query_exploited             = $tsf->is_query_exploited();
-		$query_supports_seo             = $tsf->query_supports_seo() ? 'yes' : 'no';
+		$is_query_exploited             = Query_Utils::is_query_exploited();
+		$query_supports_seo             = Query_Utils::query_supports_seo() ? 'yes' : 'no';
 		$is_404                         = \is_404();
 		$is_admin                       = \is_admin();
 		$is_attachment                  = Query::is_attachment();
@@ -504,17 +509,17 @@ final class Debug {
 		$numpages                       = Query::numpages();
 		$is_multipage                   = Query::is_multipage();
 		$is_singular_archive            = Query::is_singular_archive();
-		$is_term_meta_capable           = $tsf->is_term_meta_capable();
-		$is_post_type_supported         = $tsf->is_post_type_supported();
-		$is_post_type_archive_supported = $tsf->is_post_type_archive_supported();
-		$has_page_on_front              = $tsf->has_page_on_front();
-		$is_taxonomy_supported          = $tsf->is_taxonomy_supported();
+		$is_term_meta_capable           = Query::is_editable_term();
+		$is_post_type_supported         = Post_Types::is_post_type_supported();
+		$is_post_type_archive_supported = Post_Types::is_post_type_archive_supported();
+		$has_page_on_front              = Query_Utils::has_page_on_front();
+		$is_taxonomy_supported          = Taxonomies::is_taxonomy_supported();
 		$get_post_type                  = \get_post_type();
 		$get_post_type_real_id          = Query::get_post_type_real_id();
 		$admin_post_type                = Query::get_admin_post_type();
 		$current_taxonomy               = Query::get_current_taxonomy();
 		$current_post_type              = Query::get_current_post_type();
-		$is_taxonomy_disabled           = $tsf->is_taxonomy_disabled();
+		$is_taxonomy_disabled           = Taxonomies::is_taxonomy_disabled();
 		$is_post_type_archive           = \is_post_type_archive();
 		$is_protected                   = $tsf->is_protected( $page_id );
 		$wp_doing_ajax                  = \wp_doing_ajax();

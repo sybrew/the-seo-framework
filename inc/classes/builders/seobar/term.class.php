@@ -102,14 +102,14 @@ final class Term extends Main {
 			'states' => [
 				'locale'       => \get_locale(),
 				'isempty'      => ! static::$tsf->is_term_populated( static::$query['id'], static::$query['taxonomy'] ),
-				'posttypes'    => Query::get_post_types_from_taxonomy( static::$query['taxonomy'] ),
+				'posttypes'    => \The_SEO_Framework\Helper\Taxonomies::get_post_types_from_taxonomy( static::$query['taxonomy'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					static::$tsf->generate_robots_meta(
+					\The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
 						[
 							'id'       => static::$query['id'],
 							'taxonomy' => static::$query['taxonomy'],
@@ -120,7 +120,7 @@ final class Term extends Main {
 				),
 				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
 				// The asserter should be leading, but the SEO Bar should be readable.
-				'robotsassert' => static::$tsf->retrieve_robots_meta_assertions(),
+				'robotsassert' => \The_SEO_Framework\Meta\Factory\Robots\Api::get_collected_meta_assertions(),
 			],
 		];
 	}

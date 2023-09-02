@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -98,7 +101,7 @@ class Post_Data extends Detect {
 		$post = \get_post( $post_id );
 
 		// We test post type support for "post_query"-queries might get past this point.
-		if ( empty( $post->ID ) || ! $this->is_post_type_supported( $post->post_type ) ) {
+		if ( empty( $post->ID ) || ! Post_Types::is_post_type_supported( $post->post_type ) ) {
 			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 			return $use_cache ? umemo( __METHOD__, [], $post_id ) : [];
 		}
@@ -513,7 +516,7 @@ class Post_Data extends Detect {
 		// Can this even fail?
 		if ( ! $post_type ) return;
 
-		foreach ( $this->get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
+		foreach ( \The_SEO_Framework\Helper\Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
 			$_post_key = "_primary_term_{$_taxonomy}";
 
 			if ( \wp_verify_nonce(
@@ -714,8 +717,8 @@ class Post_Data extends Detect {
 
 		global $wpdb;
 
-		$supported_post_types = $this->get_supported_post_types();
-		$public_post_types    = $this->get_public_post_types();
+		$supported_post_types = Post_Types::get_supported_post_types();
+		$public_post_types    = Post_Types::get_public_post_types();
 
 		$join  = '';
 		$where = '';
@@ -757,22 +760,6 @@ class Post_Data extends Detect {
 		$this->update_static_cache( 'excluded_ids', $cache );
 
 		return $cache;
-	}
-
-	/**
-	 * Returns the post type object label. Either plural or singular.
-	 *
-	 * @since 3.1.0
-	 * @see $this->get_tax_type_label() For the taxonomical alternative.
-	 *
-	 * @param string $post_type The post type. Required.
-	 * @param bool   $singular  Whether to get the singlural or plural name.
-	 * @return string The Post Type name/label, if found.
-	 */
-	public function get_post_type_label( $post_type, $singular = true ) {
-		return \get_post_type_object( $post_type )->labels->{
-			$singular ? 'singular_name' : 'name'
-		} ?? '';
 	}
 
 	/**

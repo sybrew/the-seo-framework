@@ -99,6 +99,7 @@ class Core {
 	 * @since 2.7.0
 	 * @since 3.1.0 Removed known deprecations.
 	 * @since 3.2.2 This method no longer invokes PHP errors, nor returns protected values.
+	 * @since 4.3.0 Removed 'load_option' deprecation.
 	 *
 	 * @param string $name The property name.
 	 * @return mixed
@@ -106,10 +107,6 @@ class Core {
 	final public function __get( $name ) {
 
 		switch ( $name ) {
-			case 'load_option':
-				$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
-				return ! $this->is_headless['settings'];
-
 			case 'the_seo_framework_use_transients':
 				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_use_transients', 'since 4.3.0; with no alternative available' );
 				return true;
@@ -119,6 +116,9 @@ class Core {
 			case 'script_debug':
 				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
 				return \SCRIPT_DEBUG;
+			case 'pretty_permalinks':
+				$this->_inaccessible_p_or_m( 'tsf()->pretty_permalinks', 'since 4.3.0; use tsf()->query_utils()->using_pretty_permalinks()' );
+				return $this->query_utils()->using_pretty_permalinks();
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
@@ -282,46 +282,6 @@ class Core {
 	}
 
 	/**
-	 * Returns an array of hierarchical post types.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
-	 *
-	 * @return array The public hierarchical post types.
-	 */
-	public function get_hierarchical_post_types() {
-		return memo() ?: memo(
-			\get_post_types(
-				[
-					'hierarchical' => true,
-					'public'       => true,
-				],
-				'names'
-			)
-		);
-	}
-
-	/**
-	 * Returns an array of nonhierarchical post types.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
-	 *
-	 * @return array The public nonhierarchical post types.
-	 */
-	public function get_nonhierarchical_post_types() {
-		return memo() ?: memo(
-			\get_post_types(
-				[
-					'hierarchical' => false,
-					'public'       => true,
-				],
-				'names'
-			)
-		);
-	}
-
-	/**
 	 * Whether to allow external redirect through the 301 redirect option.
 	 * Memoizes the return value.
 	 *
@@ -474,73 +434,6 @@ class Core {
 	 */
 	public function uses_time_in_timestamp_format() {
 		return '1' === $this->get_option( 'timestamps_format' );
-	}
-
-	/**
-	 * Flattens multidimensional lists into a single dimensional list.
-	 * Deeply nested lists are merged as well. Won't dig associative arrays.
-	 *
-	 * E.g., this [ [ 'one' => 1 ], [ [ 'two' => 2 ], [ 'three' => [ 3, 4 ] ] ] ]
-	 * becomes    [ [ 'one' => 1 ], [ 'two', => 2 ], [ 'three' => [ 3, 4 ] ] ];
-	 *
-	 * @link <https://3v4l.org/XBSFa>, test it here.
-	 *
-	 * @since 4.2.7
-	 * @access private
-	 * @ignore This will move to new "helper" classes in a future update, becoming public then.
-	 *
-	 * @param array $array The array to flatten. If input is not an array, it'll be casted.
-	 * @return array The flattened array.
-	 */
-	public function array_flatten_list( $array ) {
-
-		// PHP 8.1+, use `!array_is_list()`?
-		// This is 350x faster than a polyfill for `!array_is_list()`.
-		if ( [] === $array || array_values( $array ) !== $array ) return $array;
-
-		$ret = [];
-
-		foreach ( $array as $value ) {
-			// We can later use `array_is_list()`.
-			if ( \is_array( $value ) && [] !== $value && array_values( $value ) === $value ) {
-				$ret = array_merge( $ret, $this->array_flatten_list( $value ) );
-			} else {
-				array_push( $ret, $value );
-			}
-		}
-
-		return $ret;
-	}
-
-	/**
-	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
-	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
-	 *
-	 * @link <https://3v4l.org/9pnW1#v8.1.8> Test it here.
-	 *
-	 * @since 4.1.4
-	 * @since 4.2.7 1. Now supports a single array entry without causing issues.
-	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
-	 *              3. Now no longer throws warnings with qubed+ arrays.
-	 *              4. Now no longer prevents scalar values overwriting arrays.
-	 *
-	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
-	 * @return array The merged arrays.
-	 */
-	public function array_merge_recursive_distinct( ...$arrays ) {
-
-		$i = \count( $arrays );
-
-		while ( --$i ) {
-			$p = $i - 1;
-
-			foreach ( $arrays[ $i ] as $key => $value )
-				$arrays[ $p ][ $key ] = isset( $arrays[ $p ][ $key ] ) && \is_array( $value )
-					? $this->array_merge_recursive_distinct( $arrays[ $p ][ $key ], $value )
-					: $value;
-		}
-
-		return $arrays[0];
 	}
 
 	/**

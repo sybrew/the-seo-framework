@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\Utils\normalize_generation_args;
+
 use \The_SEO_Framework\Helper\Query;
 
 /**
@@ -169,7 +171,7 @@ class Generate_Image extends Generate_Url {
 		if ( null === $args ) {
 			$details = $this->get_custom_field_image_details_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$details = $this->get_custom_field_image_details_from_args( $args );
 		}
 
@@ -201,7 +203,7 @@ class Generate_Image extends Generate_Url {
 		if ( null === $args ) {
 			$details = $this->generate_image_details( null, $single, $context );
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$details = $this->generate_image_details( $args, $single, $context );
 		}
 
@@ -249,7 +251,7 @@ class Generate_Image extends Generate_Url {
 				'url' => $this->get_post_meta_item( '_social_image_url' ),
 				'id'  => $this->get_post_meta_item( '_social_image_id' ),
 			];
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$details = [
 				'url' => $this->get_term_meta_item( 'social_image_url' ),
 				'id'  => $this->get_term_meta_item( 'social_image_id' ),
@@ -383,7 +385,7 @@ class Generate_Image extends Generate_Url {
 				$cbs = [];
 			}
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 
 			if ( $args['taxonomy'] || $args['pta'] ) {
 				$cbs = [];

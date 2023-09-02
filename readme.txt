@@ -320,11 +320,6 @@ TODO Four new classes:
 		3. Post_Data
 		4. Term_Data
 TODO New class:
-	1. The_SEO_Framework\Utils
-		-> Move array_merge_recursive_distinct() and friends to this.
-	1. Or, make them functions, and make Utils a namespace:
-		-> The_SEO_Framework\Utils\array_merge_recursive_distinct()
-TODO New class:
 	1. The_SEO_Framework\Builders\OpenGraph (yea, let's not use "Meta")
 		-> Name it OG instead?
 		-> Use generator syntax for storing the metadata?
@@ -472,6 +467,42 @@ TODO deprecate all filters in the generator pools.
 TODO if Open Graph is disabled, but still has data, will Twitter Card still fall back to that data?
 	-> If so... ugh. Should we even bother; does the JS already consider this? No one reported this as an issue.
 
+TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
+	* Also list all methods affected.
+
+TODO see todo's in has_custom_canonical_url and get_canonical_url
+TODO list all methods available in every pool? Zzz.
+
+// Lacking imports:
+^<\?php([\w\W](?!use \\The_SEO_Framework\\Helper\\Query;))*?(Query::)
+
+// Lacking header:
+^<\?php([\w\W](?!defined))*?(The SEO Framework plugin)
+
+// Lacking deprecation comment:
+\/\*\*([\w\W](?!deprecated))*?(public function)
+
+// Lacking deprecation notice:
+function.*?\{([\w\W](?!tsf\(\)))*?\}
+
+// Mismatch deprecation notices:
+function (.*?)\(([\w\W](?!\1))*?\}
+
+// Extract function names (by removing everything else)
+1. Strip: ^([\w\W](?!_deprecated_function))*?$
+2. Extract:
+	1. With alternatives
+		1. ^.*?\( '(.*?)',.*?, '(.*?)'.*\n+
+		2. * `$1`, use `$2` instead.\n
+	2. without alternatives:
+		1. ^.*?\( '(.*?)'.*\n+
+		2. * `$1`, with no alternative available.
+	- remove leftover tsf() from start:
+		1. \* `tsf\(\)->
+		2. * `
+
+TODO keep popular default getters `get_title()` and `get_description()` intact.
+
 **Detailed log**
 
 **For everyone:**
@@ -549,14 +580,24 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 
 * TODO: **Plugin database version is now at `4300`**
 * **Added:**
-	* Pool `\tsf()->query()` is now available.
+	* Pooled objects:
+		* We do not use pools internally (we call the query-methods directly) -- however, we **urge you to use the pool**. This is because it has a neat little feature: **Dynamic deprecation**. Whenever we choose to remove a method or property you used, your site won't crash when you update the plugin -- instead, you get a deprecation notice and a temporary fallback value.
+			* To learn more, check out methods `tsf()->query()` and trait `Static_Deprecator`. Since the method is brand new, nothing has been deprecated yet.
+	* Pool `tsf()->query()` is now available.
 		* All public query-related methods have been moved to that pool. E.g., `tsf()->is_product()` is now `tsf()->query()->is_product()`.
 		* It is a class alias of `The_SEO_Framework\Helper\Query`; but, not quite.
-		* We do not use this pool internally (we call the query-methods directly) -- however, we **urge you to use the pool**. This is because it has a neat little feature: **Dynamic deprecation**. Whenever we choose to remove a method or property you used, your site won't crash when you update the plugin -- instead, you get a deprecation notice and a temporary fallback value.
-			* To learn more, check out methods `tsf()->query()` and trait `Static_Deprecator`. Since the method is brand new, nothing has been deprecated yet.
-	* TODO add Pool `tsf()->gen( 'title' )->`?
-		* Or keep getters like get_title() and get_description() intact?
-			* We might as well move on.... It'll be annoying for end-users though with these popular methods.
+	* Pool `tsf()->query_utils()` is now available.
+		* All public query-utility methods have been moved to that pool. E.g., `tsf()->query_supports_seo()` is now `tsf()->query_utils()->query_supports_seo()`.
+		* It is a class alias of `The_SEO_Framework\Helper\Query_Utils`; but, not quite.
+	* Pool `tsf()->post_types()` is now available.
+		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_types()->is_post_type_supported()`.
+		* It is a class alias of `The_SEO_Framework\Helper\Post_Types`; but, not quite.
+	* Pool `tsf()->taxonomies()` is now available.
+		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->is_taxonomy_supported()` is now `tsf()->taxonomies()->is_taxonomy_supported()`.
+		* It is a class alias of `The_SEO_Framework\Helper\Taxonomies`; but, not quite.
+	* Pool `tsf()->robots()` is now available.
+		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->get_robots_meta()` is now `tsf()->robots()->get_meta()`.
+		* It is a class alias of `The_SEO_Framework\Meta\Factory\Robots\API`; but, not quite.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
@@ -585,11 +626,19 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 			* This option will now also be home to the Archive and Search Exclusion cache.
 		* This option will be **removed** on upgrade. If you downgrade, it will be repopulated, and there should be no issues with that.
 * **Transient notes:**
-	* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
-	* Transient `tsf_sitemap_5_%`, where % doesn't contain the sitemap ID, but changes per blog ID and language, is no longer used. This transient should clear automatically.
-	* Transient `tsf_exclude_1_%`, where % changes per blog ID and language, is no longer used. This transient will be deleted on upgrade.
-	* Transient `tsf_exclude_0_%` was leftover from TSF 3.0 and will be deleted on upgrade.
+	* **Added:**
+		* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
+	* **Removed:**
+		* Transient `tsf_sitemap_5_%`, where % doesn't contain the sitemap ID, but changes per blog ID and language, is no longer used. This transient should clear automatically.
+		* Transient `tsf_exclude_1_%`, where % changes per blog ID and language, is no longer used. This transient will be deleted on upgrade.
+		* Transient `tsf_exclude_0_%` was leftover from TSF 3.0 and will be deleted on upgrade.
 * **Function notes:**
+	* **Added:**
+		* `The_SEO_Framework\Utils\normalize_generation_args()` is now available.
+		* `The_SEO_Framework\Utils\array_flatten_list()` is now available.
+		* `The_SEO_Framework\Utils\array_merge_recursive_distinct()` is now available.
+			* Fun fact: This is the only correct function of kind that exists, made bespoke by me for TSF.
+			* It's practically `array_merge()` for multidimensional arrays.
 * **Object notes:**
 	* **New objects:**
 		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods.
@@ -628,7 +677,7 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 				* `s_left_right_home()`, use `s_left_right()` instead. TODO we might move this.
 					* This method also no longer falls back to option or default option, but a language-based default instead.* `get_post_type_real_id`, use `tsf()->query()->get_post_type_real_id` instead.
 				* `get_admin_post_type`, use `tsf()->query()->get_admin_post_type` instead.
-				* `get_post_types_from_taxonomy`, use `tsf()->query()->get_post_types_from_taxonomy` instead.
+				* `get_post_types_from_taxonomy`, use `tsf()->taxonomies()->get_post_types_from_taxonomy` instead.
 				* `get_the_real_id`, use `tsf()->query()->get_the_real_id` instead.
 				* `get_the_real_admin_id`, use `tsf()->query()->get_the_real_admin_id` instead.
 				* `get_the_front_page_id`, use `tsf()->query()->get_the_front_page_id` instead.
@@ -713,8 +762,34 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 				* `twitter_image`, with no alternative available.
 				* `use_twitter_tags`, with no alternative available.
 				* `ld_json`, with no alternative available.
+				* `array_merge_recursive_distinct`, use function `\The_SEO_Framework\Utils\array_merge_recursive_distinct()` instead.
+				* `retrieve_robots_meta_assertions()`, use `tsf()->robots()->get_collected_meta_assertions()` instead.
+				* `get_robots_meta()`, use `tsf()->robots()->get_meta()` instead.
+				* `generate_robots_meta()`, use `tsf()->robots()->generate_meta()` instead.
+				* `is_post_type_robots_set()`, use `tsf()->robots()->is_post_type_robots_set()` instead.
+				* `is_taxonomy_robots_set()`, use `tsf()->robots()->is_taxonomy_robots_set()` instead.
+				* `query_supports_seo()`, use `tsf()->query_utils()->query_supports_seo()` instead.
+				* `is_query_exploited()`, use `tsf()->query_utils()->is_query_exploited()` instead.
+				* `has_page_on_front()`, use `tsf()->query_utils()->has_page_on_front()` instead.
+				* `is_post_type_supported()`, use `tsf()->post_types()->is_post_type_supported()` instead.
+				* `is_post_type_archive_supported()`, use `tsf()->post_types()->is_post_type_archive_supported()` instead.
+				* `post_type_supports_taxonomies()`, use `tsf()->post_types()->post_type_supports_taxonomies()` instead.
+				* `get_supported_post_type_archives()`, use `tsf()->post_types()->get_supported_post_type_archives()` instead.
+				* `get_public_post_type_archives()`, use `tsf()->post_types()->get_public_post_type_archives()` instead.
+				* `get_supported_post_types()`, use `tsf()->post_types()->get_supported_post_types()` instead.
+				* `is_post_type_disabled()`, use `tsf()->post_types()->is_post_type_disabled()` instead.
+				* `is_taxonomy_supported()`, use `tsf()->taxonomies()->is_taxonomy_supported()` instead.
+				* `get_supported_taxonomies()`, use `tsf()->taxonomies()->get_supported_taxonomies()` instead.
+				* `is_taxonomy_disabled()`, use `tsf()->taxonomies()->is_taxonomy_disabled()` instead.
+				* `is_term_meta_capable()`, use `tsf()->query()->is_editable_term()` instead.
+				* `get_hierarchical_post_types()`, use `tsf()->post_types()->get_hierarchical_post_types()` instead.
+				* `get_nonhierarchical_post_types()`, use `tsf()->post_types()->get_nonhierarchical_post_types()` instead.
+				* `get_hierarchical_taxonomies_as()`, use `tsf()->taxonomies()->get_hierarchical_taxonomies_as()` instead.
+				* `get_post_type_label()`, use `tsf()->post_types()->get_post_type_label()` instead.
+				* `get_tax_type_label()`, use `tsf()->post_types()->get_taxonomy_label()` instead.
 			* **Methods removed:**
 				* `render_element()`, without deprecation (it was marked protected).
+				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
 				* Since we moved class `\The_SEO_Framework\Cache`'s functionality from this object, these are removed:
 					* `init_admin_caching_actions()`
@@ -805,6 +880,8 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 				* `the_seo_framework_use_transients`, with no alternative available.
 				* `the_seo_framework_debug`, use constant `THE_SEO_FRAMEWORK_DEBUG` instead.
 				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
+			* **Properties removed:**
+				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
 		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.
 * **Constant notes:**
 	* **Changed:**
@@ -823,6 +900,8 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 		* `the_seo_framework_meta_generator_pools`, this is used to **remove meta generator callback pools** preemptively.
 		* `the_seo_framework_meta_generators`, this is used to **add and remove meta generator callbacks**.
 		* `the_seo_framework_meta_render_data`, this is used to **add, remove, and tweak generated metadata** before it's sent to the browser.
+	* **Changed:**
+		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 	* **Deprecated:**
 		* `the_seo_framework_googlesite_output`, with no alternative available.
 		* `the_seo_framework_bingsite_output`, with no alternative available.
@@ -853,6 +932,7 @@ TODO if Open Graph is disabled, but still has data, will Twitter Card still fall
 		* `the_seo_framework_use_og_tags`, use `the_seo_framework_meta_generator_pools` instead.
 		* `the_seo_framework_use_facebook_tags`, use `the_seo_framework_meta_generator_pools` instead.
 		* `the_seo_framework_use_twitter_tags`, use `the_seo_framework_meta_generator_pools` instead.
+		* `the_seo_framework_robots_meta`, use `the_seo_framework_meta_render_data` instead.
 	* **Removed:**
 		* `the_seo_framework_auto_descripton_html_method_methods`.
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").

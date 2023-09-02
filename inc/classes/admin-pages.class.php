@@ -184,7 +184,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_post_edit_view( $post_type ) {
 
-		if ( ! Query::is_post_edit() || ! $this->is_post_type_supported( $post_type ) ) return;
+		if ( ! Query::is_post_edit() || ! \The_SEO_Framework\Helper\Post_Types::is_post_type_supported( $post_type ) ) return;
 
 		/**
 		 * @since 2.0.0
@@ -210,7 +210,7 @@ class Admin_Pages extends Generate_Ldjson {
 
 		$taxonomy = Query::get_current_taxonomy();
 
-		if ( ! $this->is_taxonomy_supported( $taxonomy ) ) return;
+		if ( ! \The_SEO_Framework\Helper\Taxonomies::is_taxonomy_supported( $taxonomy ) ) return;
 
 		/**
 		 * @since 2.6.0

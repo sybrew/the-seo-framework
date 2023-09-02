@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Front\Meta;
 
 use function \The_SEO_Framework\memo;
 
+use \The_SEO_Framework\Helper\Query_Utils;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -101,7 +103,7 @@ final class Head {
 			case \is_404():
 				$generator_pools = [ 'Robots', 'Theme_Color', 'Webmasters' ];
 				break;
-			case $tsf->is_query_exploited():
+			case Query_Utils::is_query_exploited():
 				// search and 404 cannot be exploited, hence they're tested earlier.
 				$generator_pools = [ 'Robots', 'Advanced_Query_Protection', 'Theme_Color', 'Webmasters' ];
 				break;

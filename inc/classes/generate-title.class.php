@@ -8,7 +8,14 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use function \The_SEO_Framework\Utils\normalize_generation_args;
+
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Query_Utils,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -53,7 +60,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_document_title( $title = '' ) {
 
-		if ( ! $this->query_supports_seo() )
+		if ( ! Query_Utils::query_supports_seo() )
 			return $title;
 
 		/**
@@ -85,7 +92,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_wp_title( $title = '' ) {
 
-		if ( ! $this->query_supports_seo() )
+		if ( ! Query_Utils::query_supports_seo() )
 			return $title;
 
 		/**
@@ -208,8 +215,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_filtered_raw_custom_field_title( $args = null ) {
 
-		if ( null !== $args )
-			$this->fix_generation_args( $args );
+		isset( $args ) and normalize_generation_args( $args );
 
 		/**
 		 * Filters the title from custom field, if any.
@@ -244,8 +250,7 @@ class Generate_Title extends Generate_Description {
 	 */
 	public function get_filtered_raw_generated_title( $args = null ) {
 
-		if ( null !== $args )
-			$this->fix_generation_args( $args );
+		isset( $args ) and normalize_generation_args( $args );
 
 		/**
 		 * Filters the title from query.
@@ -305,7 +310,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$title = $this->get_custom_twitter_title_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$title = $this->get_custom_twitter_title_from_args( $args );
 		}
 
@@ -340,7 +345,7 @@ class Generate_Title extends Generate_Description {
 		} elseif ( Query::is_singular() ) {
 			$title = $this->get_post_meta_item( '_twitter_title' )
 				  ?: $this->get_post_meta_item( '_open_graph_title' );
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$title = $this->get_term_meta_item( 'tw_title' )
 				  ?: $this->get_term_meta_item( 'og_title' );
 		} elseif ( \is_post_type_archive() ) {
@@ -450,7 +455,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$title = $this->get_custom_open_graph_title_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$title = $this->get_custom_open_graph_title_from_args( $args );
 		}
 
@@ -481,7 +486,7 @@ class Generate_Title extends Generate_Description {
 			}
 		} elseif ( Query::is_singular() ) {
 			$title = $this->get_post_meta_item( '_open_graph_title' );
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$title = $this->get_term_meta_item( 'og_title' );
 		} elseif ( \is_post_type_archive() ) {
 			$title = $this->get_post_type_archive_meta_item( 'og_title' );
@@ -563,7 +568,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$title = $this->get_custom_field_title_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$title = $this->get_custom_field_title_from_args( $args );
 		}
 
@@ -592,7 +597,7 @@ class Generate_Title extends Generate_Description {
 			}
 		} elseif ( Query::is_singular() ) {
 			$title = $this->get_post_meta_item( '_genesis_title' );
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$title = $this->get_term_meta_item( 'doctitle' );
 		} elseif ( \is_post_type_archive() ) {
 			/**
@@ -668,7 +673,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$title = $this->generate_title_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$title = $this->generate_title_from_args( $args );
 		}
 
@@ -707,7 +712,7 @@ class Generate_Title extends Generate_Description {
 			if ( null === $args ) {
 				$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
 			} else {
-				$this->fix_generation_args( $args );
+				isset( $args ) and normalize_generation_args( $args );
 
 				if ( 'category' === $args['taxonomy'] ) {
 					$filters = [ 'single_cat_title' ];
@@ -1015,7 +1020,7 @@ class Generate_Title extends Generate_Description {
 				$prefix = sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-					$this->get_tax_type_label( $term->taxonomy ?? '' )
+					Taxonomies::get_taxonomy_label( $term->taxonomy ?? '' )
 				);
 			}
 		}
@@ -1051,7 +1056,7 @@ class Generate_Title extends Generate_Description {
 					$prefix = sprintf(
 						/* translators: %s: Taxonomy singular name. */
 						\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-						$this->get_tax_type_label( $term->taxonomy )
+						Taxonomies::get_taxonomy_label( $term->taxonomy )
 					);
 			}
 		} elseif ( $term instanceof \WP_User && isset( $term->display_name ) ) {
@@ -1178,7 +1183,7 @@ class Generate_Title extends Generate_Description {
 		if ( \is_array( $post_type ) )
 			$post_type = reset( $post_type );
 
-		if ( ! \in_array( $post_type, $this->get_public_post_type_archives(), true ) )
+		if ( ! \in_array( $post_type, Post_Types::get_public_post_type_archives(), true ) )
 			return '';
 
 		/**
@@ -1192,7 +1197,7 @@ class Generate_Title extends Generate_Description {
 		$title = \apply_filters_ref_array(
 			'post_type_archive_title',
 			[
-				$this->get_post_type_label( $post_type, false ),
+				Post_Types::get_post_type_label( $post_type, false ),
 				$post_type,
 			]
 		);
@@ -1259,7 +1264,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$data = $this->get_title_branding_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$data = $this->get_title_branding_from_args( $args );
 		}
 
@@ -1369,7 +1374,7 @@ class Generate_Title extends Generate_Description {
 			$id    = Query::get_the_real_id();
 			$merge = Query::is_singular();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$id    = $args['id'];
 			$merge = ! $args['taxonomy'] && ! $args['pta'];
 		}
@@ -1481,7 +1486,7 @@ class Generate_Title extends Generate_Description {
 		if ( null === $args ) {
 			$use = Query::is_singular();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$use = $args && ! $args['taxonomy'] && ! $args['pta'];
 		}
 
@@ -1544,7 +1549,7 @@ class Generate_Title extends Generate_Description {
 			if ( null === $args ) {
 				$use = $this->use_title_branding_from_query();
 			} else {
-				$this->fix_generation_args( $args );
+				isset( $args ) and normalize_generation_args( $args );
 				$use = $this->use_title_branding_from_args( $args );
 			}
 		}
@@ -1584,7 +1589,7 @@ class Generate_Title extends Generate_Description {
 			$use = $this->use_home_page_title_tagline();
 		} elseif ( Query::is_singular() ) {
 			$use = $this->use_singular_title_branding();
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$use = $this->use_taxonomical_title_branding();
 		} elseif ( \is_post_type_archive() ) {
 			$use = $this->use_post_type_archive_title_branding();

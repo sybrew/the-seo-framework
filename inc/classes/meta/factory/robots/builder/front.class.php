@@ -1,14 +1,24 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\Robots\Front
- * @subpackage The_SEO_Framework\Getter\Robots
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Builders\Robots;
+namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use const \The_SEO_Framework\{
+	ROBOTS_IGNORE_SETTINGS,
+	ROBOTS_IGNORE_PROTECTION,
+};
+
+use \The_SEO_Framework\Meta\Factory\Robots;
+use \The_SEO_Framework\Helper\{
+	Query,
+	Query_Utils,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -30,7 +40,8 @@ use \The_SEO_Framework\Helper\Query;
 /**
  * Engine for robots generator via front-end query.
  *
- * @since 4.3.0
+ * @since 4.2.0
+ * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
  * @access private
  *         Not part of the public API.
  * @final Can't be extended.
@@ -60,11 +71,11 @@ final class Front extends Factory {
 		$asserting_noindex = 'noindex' === $type;
 
 		// We assert options here for a jump to meta_settings might be unaware.
-		meta_settings: if ( ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS ) ) {
+		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) {
 
 			$qubit = null;
 
-			if ( $tsf->is_term_meta_capable() ) {
+			if ( Query::is_editable_term() ) {
 				$qubit = (int) $tsf->get_term_meta_item( $type );
 			} elseif ( Query::is_singular() ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type" );
@@ -114,23 +125,23 @@ final class Front extends Factory {
 			// is_real_front_page() can still be singular or archive. Thus, this conditional block is split up.
 			if ( Query::is_archive() ) {
 				if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
-					yield 'globals_taxonomy' => $tsf->is_taxonomy_robots_set( $type, Query::get_current_taxonomy() );
+					yield 'globals_taxonomy' => Robots\API::is_taxonomy_robots_set( $type, Query::get_current_taxonomy() );
 
 					// Store values from each post type bound to the taxonomy.
-					foreach ( Query::get_post_types_from_taxonomy() as $post_type )
-						$_is_post_type_robots_set[] = $tsf->is_post_type_robots_set( $type, $post_type );
+					foreach ( \The_SEO_Framework\Helper\Taxonomies::get_post_types_from_taxonomy() as $post_type )
+						$_is_post_type_robots_set[] = Robots\API::is_post_type_robots_set( $type, $post_type );
 
 					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 				} elseif ( \is_post_type_archive() ) {
-					yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, Query::get_current_post_type() );
+					yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, Query::get_current_post_type() );
 				}
 			} elseif ( Query::is_singular() ) {
-				yield 'globals_post_type' => $tsf->is_post_type_robots_set( $type, Query::get_current_post_type() );
+				yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, Query::get_current_post_type() );
 			}
 
 		// We assert options here for a jump to index_protection might be unaware.
-		index_protection: if ( $asserting_noindex && ! ( static::$options & \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION ) ) {
+		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
 			if ( Query::is_real_front_page() ) {
 				yield from static::assert_noindex_query_pass( 'paged_home' );
 			} elseif ( Query::is_archive() || Query::is_singular_archive() ) {
@@ -149,7 +160,7 @@ final class Front extends Factory {
 			}
 		}
 
-		exploit_protection: if ( $tsf->is_query_exploited() ) {
+		exploit_protection: if ( Query_Utils::is_query_exploited() ) {
 			if ( \in_array( $type, [ 'noindex', 'nofollow' ], true ) )
 				yield 'query_protection' => true;
 		}
@@ -171,7 +182,8 @@ final class Front extends Factory {
 	private static function assert_noindex_query_pass( $pass ) {
 		switch ( $pass ) {
 			case 'paged_home':
-				yield 'paged_home' => ( static::$tsf->get_option( 'home_paged_noindex' ) && ( Query::page() > 1 || Query::paged() > 1 ) );
+				yield 'paged_home' =>
+					static::$tsf->get_option( 'home_paged_noindex' ) && ( Query::page() > 1 || Query::paged() > 1 );
 				break;
 
 			case '404':

@@ -8,6 +8,10 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory\Robots;
+
+use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -184,8 +188,11 @@ abstract class Main {
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
 			$included = 'noindex'
 				!== (
-					static::$tsf->generate_robots_meta( $_generator_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
-						?? false // We cast type false for Zend tests strict type before identical-string-comparing.
+					Robots\API::generate_meta(
+						$_generator_args,
+						[ 'noindex' ],
+						ROBOTS_IGNORE_PROTECTION
+					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
 			if ( ! $included ) break;
@@ -240,8 +247,11 @@ abstract class Main {
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
 			$included = 'noindex'
 				!== (
-					static::$tsf->generate_robots_meta( $_generator_args, [ 'noindex' ], \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION )['noindex']
-						?? false // We cast type false for Zend tests strict type before identical-string-comparing.
+					Robots\API::generate_meta(
+						$_generator_args,
+						[ 'noindex' ],
+						ROBOTS_IGNORE_PROTECTION
+					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
 			if ( ! $included ) break;

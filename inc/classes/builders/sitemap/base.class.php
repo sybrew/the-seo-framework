@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Query_Utils;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -365,7 +367,7 @@ class Base extends Main {
 	 */
 	protected function generate_front_and_blog_url_items( $args, &$count = 0 ) {
 
-		if ( static::$tsf->has_page_on_front() ) {
+		if ( Query_Utils::has_page_on_front() ) {
 			$front_page_id = (int) \get_option( 'page_on_front' );
 			$posts_page_id = (int) \get_option( 'page_for_posts' );
 

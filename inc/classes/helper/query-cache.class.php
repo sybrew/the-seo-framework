@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Helpers\Query_Memo
+ * @package The_SEO_Framework\Classes\Helper\Query_Memo
  * @subpackage The_SEO_Framework\Query
  */
 
@@ -31,9 +31,8 @@ namespace The_SEO_Framework\Helper;
  * @since 4.3.0
  * @access protected
  * @internal
- * @final Can't be extended.
  */
-final class Query_Cache {
+class Query_Cache {
 
 	/**
 	 * @since 4.3.0
@@ -55,7 +54,7 @@ final class Query_Cache {
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query_Cache
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty queries.
@@ -95,7 +94,7 @@ final class Query_Cache {
 	 *              3. Now returns false on WP CLI.
 	 * @since 3.2.2 No longer spits out errors on production websites.
 	 * @since 4.3.0 1. No longer accepts the $method parameter.
-	 *              2. Moved to The_SEO_Framework\Helper\Query
+	 *              2. Moved to The_SEO_Framework\Helper\Query_Cache
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
 	 *
@@ -125,7 +124,7 @@ final class Query_Cache {
 	 *
 	 * @since 3.0.0
 	 * @since 4.3.0 1. No longer accepts the method parameter.
-	 *              2. Moved to The_SEO_Framework\Helper\Query
+	 *              2. Moved to The_SEO_Framework\Helper\Query_Cache
 	 *
 	 * @param string $method The original caller method.
 	 */

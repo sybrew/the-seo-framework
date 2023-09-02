@@ -105,7 +105,7 @@ final class Page extends Main {
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					static::$tsf->generate_robots_meta(
+					\The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
 						[ 'id' => static::$query['id'] ],
 						[ 'noindex', 'nofollow', 'noarchive' ],
 						\The_SEO_Framework\ROBOTS_ASSERT
@@ -113,7 +113,7 @@ final class Page extends Main {
 				),
 				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
 				// The asserter should be leading, but the SEO Bar should be readable.
-				'robotsassert' => static::$tsf->retrieve_robots_meta_assertions(),
+				'robotsassert' => \The_SEO_Framework\Meta\Factory\Robots\API::get_collected_meta_assertions(),
 			],
 		];
 	}

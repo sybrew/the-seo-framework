@@ -37,18 +37,6 @@ use \The_SEO_Framework\Helper\Query;
 class Term_Data extends Post_Data {
 
 	/**
-	 * Determines if current query handles term meta.
-	 *
-	 * @since 3.0.0
-	 * @since 4.0.0 No longer lists post type archives as term-meta capable. It's not a taxonomy.
-	 *
-	 * @return bool
-	 */
-	public function is_term_meta_capable() {
-		return Query::is_category() || Query::is_tag() || Query::is_tax();
-	}
-
-	/**
 	 * Returns the term meta item by key.
 	 *
 	 * @since 4.0.0
@@ -91,7 +79,7 @@ class Term_Data extends Post_Data {
 		$term = \get_term( $term_id );
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
-		if ( empty( $term->term_id ) || ! $this->is_taxonomy_supported( $term->taxonomy ) ) {
+		if ( empty( $term->term_id ) || ! \The_SEO_Framework\Helper\Taxonomies::is_taxonomy_supported( $term->taxonomy ) ) {
 			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 			return $use_cache ? memo( [], $term_id ) : [];
 		}
@@ -445,49 +433,5 @@ class Term_Data extends Post_Data {
 			$term_id,
 			$taxonomy
 		);
-	}
-
-	/**
-	 * Returns the taxonomy type object label. Either plural or singular.
-	 *
-	 * @since 3.1.0
-	 * @see $this->get_post_type_label() For the singular alternative.
-	 *
-	 * @param string $tax_type The taxonomy type. Required.
-	 * @param bool   $singular Whether to get the singlural or plural name.
-	 * @return string The Taxonomy Type name/label, if found.
-	 */
-	public function get_tax_type_label( $tax_type, $singular = true ) {
-		return \get_taxonomy( $tax_type )->labels->{
-			$singular ? 'singular_name' : 'name'
-		} ?? '';
-	}
-
-	/**
-	 * Returns hierarchical taxonomies for post type.
-	 *
-	 * @since 3.0.0
-	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`.
-	 * @since 4.1.0 Now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
-	 *
-	 * @param string $get       Whether to get the names or objects.
-	 * @param string $post_type The post type. Will default to current post type.
-	 * @return object[]|string[] The post type taxonomy objects or names.
-	 */
-	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
-
-		$post_type = $post_type ?: Query::get_current_post_type();
-
-		if ( ! $post_type )
-			return [];
-
-		$taxonomies = \get_object_taxonomies( $post_type, 'objects' );
-		$taxonomies = array_filter(
-			$taxonomies,
-			static fn( $t ) => ! empty( $t->hierarchical )
-		);
-
-		// If names isn't $get, assume objects.
-		return 'names' === $get ? array_keys( $taxonomies ) : $taxonomies;
 	}
 }

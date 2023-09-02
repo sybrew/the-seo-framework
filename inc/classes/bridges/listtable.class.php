@@ -7,7 +7,11 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Helper\Query;
+use The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -169,10 +173,10 @@ abstract class ListTable {
 		$taxonomy  = $screen->taxonomy ?? '';
 
 		if ( $taxonomy ) {
-			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) )
+			if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! \tsf()->is_post_type_supported( $post_type ) )
+			if ( ! Post_Types::is_post_type_supported( $post_type ) )
 				return;
 		}
 
@@ -211,10 +215,10 @@ abstract class ListTable {
 				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 
 		if ( $taxonomy ) {
-			if ( ! \tsf()->is_taxonomy_supported( $taxonomy ) )
+			if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! \tsf()->is_post_type_supported( $post_type ) )
+			if ( ! Post_Types::is_post_type_supported( $post_type ) )
 				return;
 		}
 

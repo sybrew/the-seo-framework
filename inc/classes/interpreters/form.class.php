@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Interpreters;
 
 use \The_SEO_Framework\Helper\Query;
 
+use function \The_SEO_Framework\Utils\array_merge_recursive_distinct;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -222,7 +224,7 @@ final class Form {
 		// Required.
 		if ( empty( $args['id'] ) ) return '';
 
-		$args = \tsf()->array_merge_recursive_distinct(
+		$args = array_merge_recursive_distinct(
 			[
 				'id'           => '',
 				'post_id'      => Query::get_the_real_id(), // This will bind the uploade file to the current post.

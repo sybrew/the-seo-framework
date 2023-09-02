@@ -7,9 +7,18 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\TermSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form;
+use \The_SEO_Framework\Meta\Factory\{
+	Robots
+};
+
+use const \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
+
+use \The_SEO_Framework\Interpreters\{
+	HTML,
+	Form,
+};
+
+use The_SEO_Framework\Bridges\TermSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -46,10 +55,10 @@ $image_details     = current( $this->get_generated_image_details( $_generator_ar
 $image_placeholder = $image_details['url'] ?? '';
 
 $canonical_placeholder = $this->get_canonical_url( $_generator_args ); // implies get_custom_field = false
-$robots_defaults       = $this->generate_robots_meta(
+$robots_defaults       = Robots\API::generate_meta(
 	$_generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],
-	The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
+	ROBOTS_IGNORE_SETTINGS
 );
 
 // TODO reintroduce the info blocks, and place the labels at the left, instead??

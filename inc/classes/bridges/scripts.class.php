@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -135,7 +138,7 @@ final class Scripts {
 			'the_seo_framework_scripts',
 			[
 				// Flattening is 3% of this method's total time, we can improve by simplifying the getters above like do_meta_output().
-				$tsf->array_flatten_list( $scripts ),
+				\The_SEO_Framework\Utils\array_flatten_list( $scripts ),
 				\The_SEO_Framework\Builders\Scripts::class,
 				static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
 			]
@@ -502,7 +505,7 @@ final class Scripts {
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				$tsf->get_tax_type_label( $taxonomy )
+				Taxonomies::get_taxonomy_label( $taxonomy )
 			)
 			: '';
 
@@ -723,15 +726,15 @@ final class Scripts {
 		$id = Query::get_the_real_admin_id();
 
 		$post_type   = \get_post_type( $id );
-		$_taxonomies = $post_type ? $tsf->get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
+		$_taxonomies = $post_type ? Taxonomies::get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
 		$taxonomies  = [];
 
 		$gutenberg = $tsf->is_gutenberg_page();
 
 		foreach ( $_taxonomies as $_t ) {
-			if ( ! $tsf->is_taxonomy_supported( $_t->name ) ) continue;
+			if ( ! Taxonomies::is_taxonomy_supported( $_t->name ) ) continue;
 
-			$singular_name   = $tsf->get_tax_type_label( $_t->name );
+			$singular_name   = Taxonomies::get_taxonomy_label( $_t->name );
 			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name ) ?: 0;
 
 			if ( ! $primary_term_id ) {

@@ -190,7 +190,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 					__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
 				);
 				echo '<hr>';
-			} elseif ( ! $this->pretty_permalinks ) {
+			} elseif ( ! Query_Utils::using_pretty_permalinks() ) {
 				HTML::attention_description(
 					__( "Note: You're using the plain permalink structure; so, no robots.txt file can be generated.", 'autodescription' )
 				);

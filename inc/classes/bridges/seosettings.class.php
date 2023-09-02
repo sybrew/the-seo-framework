@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Post_Types;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -111,7 +113,7 @@ final class SeoSettings {
 				'main'
 			);
 
-		if ( $post_type_archive && $tsf->get_public_post_type_archives() )
+		if ( $post_type_archive && Post_Types::get_public_post_type_archives() )
 			\add_meta_box(
 				'autodescription-post-type-archive-settings',
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),

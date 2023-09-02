@@ -7,10 +7,18 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\PostSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form,
-	The_SEO_Framework\Helper\Query;
+use const \The_SEO_Framework\{
+	ROBOTS_IGNORE_SETTINGS,
+	ROBOTS_IGNORE_PROTECTION,
+};
+
+use \The_SEO_Framework\Bridges\PostSettings,
+	\The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Meta\Factory\Robots;
+use \The_SEO_Framework\Interpreters\{
+	HTML,
+	Form,
+};
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -226,10 +234,10 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		$canonical_placeholder = $this->get_canonical_url( $_generator_args );
 
 		// Get robots defaults.
-		$r_defaults = $this->generate_robots_meta(
+		$r_defaults = Robots\API::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
-			The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | The_SEO_Framework\ROBOTS_IGNORE_PROTECTION
+			ROBOTS_IGNORE_SETTINGS | ROBOTS_IGNORE_PROTECTION
 		);
 		$r_settings = [
 			'noindex'   => [

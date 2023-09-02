@@ -8,7 +8,12 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use function \The_SEO_Framework\Utils\normalize_generation_args;
+
+use \The_SEO_Framework\Helper\{
+	Query,
+	Query_Utils
+};
 
 /**
  * The SEO Framework plugin
@@ -51,11 +56,12 @@ class Generate_Url extends Generate_Title {
 	 * @return bool
 	 */
 	public function has_custom_canonical_url( $args = null ) {
+		// TODO change to get_custom_canonical_url();
 
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
 				$has = $this->get_singular_custom_canonical_url();
-			} elseif ( $this->is_term_meta_capable() ) {
+			} elseif ( Query::is_editable_term() ) {
 				$has = $this->get_taxonomical_custom_canonical_url();
 			} elseif ( \is_post_type_archive() ) {
 				$has = $this->get_post_type_archive_custom_canonical_url();
@@ -63,7 +69,7 @@ class Generate_Url extends Generate_Title {
 				$has = false;
 			}
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			if ( $args['taxonomy'] ) {
 				$has = $this->get_taxonomical_custom_canonical_url( $args['id'] );
 			} elseif ( $args['pta'] ) {
@@ -166,6 +172,9 @@ class Generate_Url extends Generate_Title {
 	public function get_canonical_url( $args = null ) {
 
 		if ( $args ) {
+			// TODO make "get_custom_canonical_url() instead.
+			// TODO also use fix_generation_args NOTE: DO NOT cache
+			// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
 			$args += [
 				'id'               => 0,
 				'taxonomy'         => '',
@@ -258,7 +267,7 @@ class Generate_Url extends Generate_Title {
 	protected function generate_canonical_url() {
 
 		if ( Query::is_real_front_page() ) {
-			if ( $this->has_page_on_front() ) {
+			if ( Query_Utils::has_page_on_front() ) {
 				$url = $this->get_singular_custom_canonical_url()
 					?: $this->get_home_canonical_url();
 			} else {
@@ -268,7 +277,7 @@ class Generate_Url extends Generate_Title {
 			$url = $this->get_singular_custom_canonical_url()
 				?: $this->get_singular_canonical_url();
 		} elseif ( Query::is_archive() ) {
-			if ( $this->is_term_meta_capable() ) {
+			if ( Query::is_editable_term() ) {
 				$url = $this->get_taxonomical_custom_canonical_url()
 					?: $this->get_taxonomical_canonical_url();
 			} elseif ( \is_post_type_archive() ) {
@@ -303,7 +312,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function clean_canonical_url( $url ) {
 
-		if ( $this->pretty_permalinks )
+		if ( Query_Utils::using_pretty_permalinks() )
 			return \esc_url( $url, [ 'https', 'http' ] );
 
 		// Keep the &'s more readable when using query-parameters.
@@ -329,7 +338,7 @@ class Generate_Url extends Generate_Title {
 
 		$query_id = Query::get_the_real_id();
 
-		if ( $this->has_page_on_front() ) {
+		if ( Query_Utils::has_page_on_front() ) {
 			if ( Query::is_static_frontpage( $query_id ) ) {
 				// Yes, we use the pagination base for the static frontpage.
 				$url = $this->add_pagination_to_url( $url, Query::page(), true );
@@ -393,7 +402,7 @@ class Generate_Url extends Generate_Title {
 
 		$page = \get_query_var( 'page', 1 ) ?: 1;
 		// Remove undesired/fake pagination. See: <https://core.trac.wordpress.org/ticket/37505>
-		if ( $page > 1 && $page !== Query::page() )
+		if ( $page > 1 && Query::page() !== $page )
 			$url = $this->remove_pagination_from_url( $url, $page, false );
 
 		// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
@@ -712,7 +721,7 @@ class Generate_Url extends Generate_Title {
 
 		$use_base ??= Query::is_real_front_page() || Query::is_archive() || Query::is_singular_archive() || Query::is_search();
 
-		if ( $this->pretty_permalinks ) {
+		if ( Query_Utils::using_pretty_permalinks() ) {
 			$_query = parse_url( $url, \PHP_URL_QUERY );
 			// Remove queries, add them back later.
 			if ( $_query )
@@ -784,7 +793,7 @@ class Generate_Url extends Generate_Title {
 	 */
 	public function remove_pagination_from_url( $url, $page = null, $use_base = null ) {
 
-		if ( $this->pretty_permalinks ) {
+		if ( Query_Utils::using_pretty_permalinks() ) {
 
 			$page ??= max( Query::paged(), Query::page() );
 

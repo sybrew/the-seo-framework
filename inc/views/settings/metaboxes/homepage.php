@@ -10,8 +10,12 @@
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Form,
-	The_SEO_Framework\Interpreters\Settings_Input as Input,
-	The_SEO_Framework\Helper\Query;
+	The_SEO_Framework\Interpreters\Settings_Input as Input;
+
+use The_SEO_Framework\Helper\{
+	Query,
+	Query_Utils,
+};
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -300,7 +304,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_og_title' ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
-		if ( $this->has_page_on_front() && $custom_og_title ) {
+		if ( Query_Utils::has_page_on_front() && $custom_og_title ) {
 			HTML::description(
 				__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -320,7 +324,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?= esc_attr( $this->get_option( 'homepage_og_description' ) ) ?></textarea>
 		</p>
 		<?php
-		if ( $this->has_page_on_front() && $custom_og_desc ) {
+		if ( Query_Utils::has_page_on_front() && $custom_og_desc ) {
 			HTML::description(
 				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -341,7 +345,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'homepage_twitter_title' ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
-		if ( $this->has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
+		if ( Query_Utils::has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
 			HTML::description(
 				__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -361,7 +365,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?= esc_attr( $this->get_option( 'homepage_twitter_description' ) ) ?></textarea>
 		</p>
 		<?php
-		if ( $this->has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
+		if ( Query_Utils::has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
 			HTML::description(
 				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -495,7 +499,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			true
 		);
 
-		if ( $this->has_page_on_front() ) {
+		if ( Query_Utils::has_page_on_front() ) {
 			HTML::description_noesc(
 				$this->convert_markdown(
 					sprintf(

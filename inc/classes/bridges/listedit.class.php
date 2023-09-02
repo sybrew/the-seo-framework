@@ -170,7 +170,7 @@ final class ListEdit extends ListTable {
 
 		$_generator_args = [ 'id' => $post_id ];
 
-		$r_defaults = $tsf->generate_robots_meta(
+		$r_defaults = \The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
@@ -333,7 +333,7 @@ final class ListEdit extends ListTable {
 			'taxonomy' => $this->taxonomy,
 		];
 
-		$r_defaults = $tsf->generate_robots_meta(
+		$r_defaults = \The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
@@ -406,7 +406,7 @@ final class ListEdit extends ListTable {
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				$tsf->get_tax_type_label( $_generator_args['taxonomy'] )
+				\The_SEO_Framework\Helper\Taxonomies::get_taxonomy_label( $_generator_args['taxonomy'] )
 			)
 			: '';
 

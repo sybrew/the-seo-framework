@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\Utils\normalize_generation_args;
+
 use \The_SEO_Framework\Helper\Query;
 
 /**
@@ -35,193 +37,6 @@ use \The_SEO_Framework\Helper\Query;
  * @since 2.8.0
  */
 class Generate extends User_Data {
-
-	/**
-	 * Fixes generation arguments, to prevent ID conflicts with taxonomies.
-	 *
-	 * @since 3.1.0
-	 * @since 4.1.0 1. Improved performance by testing for null first.
-	 *              2. Improved performance by testing argument keys prior array merge.
-	 * @since 4.2.0 1. Added support for the 'pta' index.
-	 *              2. Removed isset() check -- we now expect incomplete $args, always.
-	 *              3. Improved performance by 60% switching from array_merge to array_union.
-	 * @internal
-	 * @todo Remove support for non-array input. Integers' been silently deprecated since 2018. Announce deprecation first?
-	 *
-	 * @param array|int|null $args The arguments, passed by reference.
-	 */
-	protected function fix_generation_args( &$args ) {
-
-		if ( null === $args ) return;
-
-		if ( \is_array( $args ) ) {
-			$args += [
-				'id'       => 0,
-				'taxonomy' => '',
-				'pta'      => '',
-			];
-		} elseif ( is_numeric( $args ) ) {
-			$args = [
-				'id'       => (int) $args,
-				'taxonomy' => '',
-				'pta'      => '',
-			];
-		} else {
-			$args = null;
-		}
-	}
-
-	/**
-	 * Returns an array of the collected robots meta assertions.
-	 *
-	 * This only works when generate_robots_meta()'s $options value was given:
-	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
-	 *
-	 * @since 4.2.0
-	 *
-	 * @return array
-	 */
-	public function retrieve_robots_meta_assertions() {
-		return Builders\Robots\Main::instance()->collect_assertions();
-	}
-
-	/**
-	 * Returns the robots meta array.
-	 * Memoizes the return value.
-	 *
-	 * @since 3.2.4
-	 *
-	 * @return array
-	 */
-	public function get_robots_meta() {
-		return memo() ?? memo(
-			/**
-			 * @since 2.6.0
-			 * @param array $meta The robots meta.
-			 * @param int   $id   The current post or term ID.
-			 */
-			(array) \apply_filters_ref_array(
-				'the_seo_framework_robots_meta',
-				[
-					$this->generate_robots_meta(),
-					Query::get_the_real_id(),
-				]
-			)
-		);
-	}
-
-	/**
-	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
-	 *
-	 * @since 4.1.4
-	 * @since 4.2.0 1. Now offloads metadata generation to an actual generator.
-	 *              2. Now supports the `$args['pta']` index.
-	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
-	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
-	 * }
-	 * @param int <bit>  $options The options level. {
-	 *    0 = 0b000: Ignore nothing. Collect no assertions. (Default front-end.)
-	 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-	 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-	 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
-	 * }
-	 * @return array Only values actualized for display: {
-	 *    string index : string value
-	 * }
-	 */
-	public function generate_robots_meta( $args = null, $get = null, $options = 0b00 ) {
-
-		$this->fix_generation_args( $args );
-
-		$meta = Builders\Robots\Main::instance()->set( $args, $options )->get( $get );
-
-		// Convert the [ 'noindex' => true ] to [ 'noindex' => 'noindex' ]
-		foreach (
-			array_intersect_key( $meta, array_flip( [ 'noindex', 'nofollow', 'noarchive' ] ) )
-			as $k => $v
-		) $v and $meta[ $k ] = $k;
-
-		// Convert the [ 'max_snippet' => x ] to [ 'max-snippet' => 'max-snippet:x' ]
-		foreach (
-			array_intersect_key( $meta, array_flip( [ 'max_snippet', 'max_image_preview', 'max_video_preview' ] ) )
-			as $k => $v
-		) false !== $v and $meta[ $k ] = str_replace( '_', '-', $k ) . ":$v";
-
-		/**
-		 * Filters the front-end robots array, and strips empty indexes thereafter.
-		 *
-		 * @since 2.6.0
-		 * @since 4.0.0 Added two parameters ($args and $ignore).
-		 * @since 4.0.2 Now contains the copyright directive values.
-		 * @since 4.0.3 Changed `$meta` key `max_snippet_length` to `max_snippet`
-		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 *
-		 * @param array      $meta The current robots meta. {
-		 *     'noindex'           : 'noindex'|''
-		 *     'nofollow'          : 'nofollow'|''
-		 *     'noarchive'         : 'noarchive'|''
-		 *     'max_snippet'       : 'max-snippet:<int>'|''
-		 *     'max_image_preview' : 'max-image-preview:<string>'|''
-		 *     'max_video_preview' : 'max-video-preview:<string>'|''
-		 * }
-		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
-		 *                         Is null when the query is auto-determined.
-		 * @param int <bit>  $options The ignore level. {
-		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
-		 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
-		 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
-		 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
-		 * }
-		 */
-		return array_filter(
-			(array) \apply_filters_ref_array(
-				'the_seo_framework_robots_meta_array',
-				[
-					$meta,
-					$args,
-					$options,
-				]
-			)
-		);
-	}
-
-	/**
-	 * Determines if the post type has a robots value set.
-	 *
-	 * @since 3.1.0
-	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
-	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 *
-	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
-	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
-	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
-	 */
-	public function is_post_type_robots_set( $type, $post_type = '' ) {
-		return (bool) $this->get_option( [
-			$this->get_robots_post_type_option_id( $type ),
-			$post_type ?: Query::get_current_post_type(),
-		] );
-	}
-
-	/**
-	 * Determines if the taxonomy has a robots value set.
-	 *
-	 * @since 4.1.0
-	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 *
-	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
-	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.
-	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
-	 */
-	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
-		return (bool) $this->get_option( [
-			$this->get_robots_taxonomy_option_id( $type ),
-			$taxonomy ?: Query::get_current_taxonomy(),
-		] );
-	}
 
 	/**
 	 * Returns cached and parsed separator option.
@@ -565,13 +380,13 @@ class Generate extends User_Data {
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
 				$url = $this->get_post_meta_item( 'redirect' );
-			} elseif ( $this->is_term_meta_capable() ) {
+			} elseif ( Query::is_editable_term() ) {
 				$url = $this->get_term_meta_item( 'redirect' );
 			} elseif ( \is_post_type_archive() ) {
 				$url = $this->get_post_type_archive_meta_item( 'redirect' );
 			}
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			if ( $args['taxonomy'] ) {
 				$url = $this->get_term_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {

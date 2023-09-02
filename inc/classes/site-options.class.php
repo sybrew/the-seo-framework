@@ -874,7 +874,7 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_all_post_type_archive_meta_defaults() {
 
-		foreach ( $this->get_public_post_type_archives() as $pta )
+		foreach ( \The_SEO_Framework\Helper\Post_Types::get_public_post_type_archives() as $pta )
 			$defaults[ $pta ] = $this->get_post_type_archive_meta_defaults( $pta );
 
 		return $defaults ?? [];

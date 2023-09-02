@@ -41,6 +41,8 @@ final class URI {
 	 */
 	public const GENERATORS = [
 		[ __CLASS__, 'generate_canonical_url' ],
+		[ __CLASS__, 'generate_pagination_urls' ],
+		[ __CLASS__, 'generate_shortlink' ],
 	];
 
 	/**
@@ -73,14 +75,16 @@ final class URI {
 			$url = $_url;
 		}
 
+		// var_dump() offload this.
 		// If the page should not be indexed, consider removing the canonical URL.
-		if ( \in_array( 'noindex', $tsf->get_robots_meta(), true ) ) {
+		if ( str_contains( \The_SEO_Framework\Meta\Factory\Robots\API::get_meta(), 'noindex' ) ) {
 			// If the URL is filtered, don't empty it.
 			// If a custom canonical URL is set, don't empty it.
 			if ( $url === $_url && ! $tsf->has_custom_canonical_url() ) {
 				$url = '';
 			}
 		}
+		// to this
 
 		if ( $url )
 			yield [
@@ -97,47 +101,9 @@ final class URI {
 	 * @access protected
 	 * @generator
 	 */
-	public function shortlink() {
+	public static function generate_pagination_urls() {
 
-		$url = \tsf()->get_shortlink();
-
-		if ( \has_filter( 'the_seo_framework_googlesite_output' ) ) {
-			/**
-			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
-			 * @deprecated
-			 * @param string $url The generated shortlink URL.
-			 * @param int    $id  The current post or term ID.
-			 */
-			$url = (string) \apply_filters_deprecated(
-				'the_seo_framework_shortlink_output',
-				[
-					$url,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'4.3.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
-		if ( $url )
-			yield [
-				'tag'        => 'link',
-				'attributes' => [
-					'rel'  => 'shortlink',
-					'href' => $url,
-				],
-			];
-	}
-
-	/**
-	 * @since 4.3.0
-	 * @access protected
-	 * @generator
-	 */
-	public function paged_urls() {
-
-		$paged_urls = $this->get_paged_urls();
+		$paged_urls = \tsf()->get_paged_urls();
 
 		if ( \has_filter( 'the_seo_framework_paged_url_output_next' ) ) {
 			/**
@@ -191,6 +157,44 @@ final class URI {
 				'attributes' => [
 					'rel'  => 'next',
 					'href' => $paged_urls['next'],
+				],
+			];
+	}
+
+	/**
+	 * @since 4.3.0
+	 * @access protected
+	 * @generator
+	 */
+	public static function generate_shortlink() {
+
+		$url = \tsf()->get_shortlink();
+
+		if ( \has_filter( 'the_seo_framework_googlesite_output' ) ) {
+			/**
+			 * @since 2.6.0
+			 * @since 4.3.0 Deprecated
+			 * @deprecated
+			 * @param string $url The generated shortlink URL.
+			 * @param int    $id  The current post or term ID.
+			 */
+			$url = (string) \apply_filters_deprecated(
+				'the_seo_framework_shortlink_output',
+				[
+					$url,
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				],
+				'4.3.0 of The SEO Framework',
+				'the_seo_framework_meta_render_data',
+			);
+		}
+
+		if ( $url )
+			yield [
+				'tag'        => 'link',
+				'attributes' => [
+					'rel'  => 'shortlink',
+					'href' => $url,
 				],
 			];
 	}

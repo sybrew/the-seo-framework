@@ -12,18 +12,20 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Form,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
+use The_SEO_Framework\Helper\Post_Types;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 // Fetch the required instance within this file.
 switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 	case 'post_type_archive_main':
 		$_settings_class = SeoSettings::class;
-		$post_types      = $this->get_public_post_type_archives();
+		$post_types      = Post_Types::get_public_post_type_archives();
 
 		$post_types_data = [];
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
-				'label'    => $this->get_post_type_label( $post_type ),
+				'label'    => Post_Types::get_post_type_label( $post_type ),
 				'url'      => $this->get_canonical_url( [ 'pta' => $post_type ] ),
 				'hasPosts' => $this->has_posts_in_post_type_archive( $post_type ),
 			];

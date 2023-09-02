@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\Utils\normalize_generation_args;
+
 use \The_SEO_Framework\Helper\Query;
 
 /**
@@ -98,7 +100,7 @@ class Generate_Description extends Generate {
 		if ( null === $args ) {
 			$desc = $this->get_custom_open_graph_description_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$desc = $this->get_custom_open_graph_description_from_args( $args );
 		}
 
@@ -133,7 +135,7 @@ class Generate_Description extends Generate {
 		} elseif ( Query::is_singular() ) {
 			$desc = $this->get_post_meta_item( '_open_graph_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$desc = $this->get_term_meta_item( 'og_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
 		} elseif ( \is_post_type_archive() ) {
@@ -227,7 +229,7 @@ class Generate_Description extends Generate {
 		if ( null === $args ) {
 			$desc = $this->get_custom_twitter_description_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$desc = $this->get_custom_twitter_description_from_args( $args );
 		}
 
@@ -267,7 +269,7 @@ class Generate_Description extends Generate {
 			$desc = $this->get_post_meta_item( '_twitter_description' )
 				 ?: $this->get_post_meta_item( '_open_graph_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$desc = $this->get_term_meta_item( 'tw_description' )
 				 ?: $this->get_term_meta_item( 'og_description' )
 				 ?: $this->get_description_from_custom_field( null, false );
@@ -345,7 +347,7 @@ class Generate_Description extends Generate {
 		if ( null === $args ) {
 			$desc = $this->get_custom_description_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$desc = $this->get_custom_description_from_args( $args );
 		}
 
@@ -392,7 +394,7 @@ class Generate_Description extends Generate {
 			}
 		} elseif ( Query::is_singular() ) {
 			$desc = $this->get_post_meta_item( '_genesis_description' );
-		} elseif ( $this->is_term_meta_capable() ) {
+		} elseif ( Query::is_editable_term() ) {
 			$desc = $this->get_term_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
 			/**
@@ -483,7 +485,7 @@ class Generate_Description extends Generate {
 		if ( null === $args ) {
 			$excerpt = $this->get_description_excerpt_from_query();
 		} else {
-			$this->fix_generation_args( $args );
+			normalize_generation_args( $args );
 			$excerpt = $this->get_description_excerpt_from_args( $args );
 		}
 
@@ -1019,8 +1021,7 @@ class Generate_Description extends Generate {
 	 */
 	public function is_auto_description_enabled( $args = null ) {
 
-		if ( null !== $args )
-			$this->fix_generation_args( $args );
+		isset( $args ) and normalize_generation_args( $args );
 
 		/**
 		 * @since 2.5.0

@@ -57,16 +57,6 @@ final class Load extends Site_Options {
 	];
 
 	/**
-	 * Checks for pretty permalinks.
-	 *
-	 * @since 2.2.9
-	 * @since 3.1.0 Now public.
-	 *
-	 * @var bool true if pretty
-	 */
-	public $pretty_permalinks;
-
-	/**
 	 * Constructor, setup debug vars and then load parent constructor.
 	 *
 	 * @since 2.8.0
@@ -93,8 +83,6 @@ final class Load extends Site_Options {
 
 		// Register the capabilities early.
 		\add_filter( 'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
-
-		$this->pretty_permalinks = '' !== \get_option( 'permalink_structure' );
 
 		// Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
