@@ -8,11 +8,11 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use \The_SEO_Framework\Traits\Internal\Static_Deprecator;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -40,7 +40,13 @@ use function \The_SEO_Framework\memo;
  * @since 4.3.0
  * @link https://en.wikipedia.org/wiki/Object_pool_pattern
  */
-class Pool extends Core {
+class Pool extends Legacy_API {
+
+	/**
+	 * @since 4.3.0
+	 * @var class[] The class store. Used in favor of memo() for a chain would become expensive.
+	 */
+	private static $pool = [];
 
 	/**
 	 * Returns the Query class as instantiated object with deprecation capabilities.
@@ -51,18 +57,16 @@ class Pool extends Core {
 	 *
 	 * @return \The_SEO_Framework\Helper\Query
 	 */
-	public function query() {
-		return memo() ?? memo(
-			new class extends Helper\Query {
-				use Traits\Internal\Static_Deprecator;
+	public static function query() {
+		return static::$pool['query'] ??= new class extends Helper\Query {
+			use Static_Deprecator;
 
-				// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-				private $colloquial_handle     = 'tsf()->query()';
-				private $deprecated_methods    = [];
-				private $deprecated_properties = [];
-				// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-			}
-		);
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->query()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
 	}
 
 	/**
@@ -74,18 +78,16 @@ class Pool extends Core {
 	 *
 	 * @return \The_SEO_Framework\Helper\Query_Utils
 	 */
-	public function query_utils() {
-		return memo() ?? memo(
-			new class extends Helper\Query_Utils {
-				use Traits\Internal\Static_Deprecator;
+	public static function query_utils() {
+		return static::$pool['query_utils'] ??= new class extends Helper\Query_Utils {
+			use Static_Deprecator;
 
-				// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-				private $colloquial_handle     = 'tsf()->query_utils()';
-				private $deprecated_methods    = [];
-				private $deprecated_properties = [];
-				// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-			}
-		);
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->query_utils()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
 	}
 
 	/**
@@ -97,18 +99,16 @@ class Pool extends Core {
 	 *
 	 * @return \The_SEO_Framework\Helper\Post_Types
 	 */
-	public function post_types() {
-		return memo() ?? memo(
-			new class extends Helper\Post_Types {
-				use Traits\Internal\Static_Deprecator;
+	public static function post_types() {
+		return static::$pool['post_types'] ??= new class extends Helper\Post_Types {
+			use Static_Deprecator;
 
-				// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-				private $colloquial_handle     = 'tsf()->post_types()';
-				private $deprecated_methods    = [];
-				private $deprecated_properties = [];
-				// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-			}
-		);
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->post_types()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
 	}
 
 	/**
@@ -120,40 +120,343 @@ class Pool extends Core {
 	 *
 	 * @return \The_SEO_Framework\Helper\Taxonomies
 	 */
-	public function taxonomies() {
-		return memo() ?? memo(
-			new class extends Helper\Taxonomies {
-				use Traits\Internal\Static_Deprecator;
+	public static function taxonomies() {
+		return static::$pool['taxonomies'] ??= new class extends Helper\Taxonomies {
+			use Static_Deprecator;
 
-				// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-				private $colloquial_handle     = 'tsf()->taxonomies()';
-				private $deprecated_methods    = [];
-				private $deprecated_properties = [];
-				// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-			}
-		);
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->taxonomies()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
 	}
 
 	/**
-	 * Returns the Robots class as instantiated object with deprecation capabilities.
+	 * Returns the Robots API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Robots\API
+	 * @return \The_SEO_Framework\Meta\Factory\Robots
 	 */
-	public function robots() {
-		return memo() ?? memo(
-			new class extends Meta\Factory\Robots\API {
-				use Traits\Internal\Static_Deprecator;
+	public static function robots() {
+		return static::$pool['robots'] ??= new class extends Meta\Factory\Robots {
+			use Static_Deprecator;
 
-				// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-				private $colloquial_handle     = 'tsf()->robots()';
-				private $deprecated_methods    = [];
-				private $deprecated_properties = [];
-				// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->robots()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the URI API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\URI
+	 */
+	public static function uri() {
+		return static::$pool['uri'] ??= new class extends Meta\Factory\URI {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->uri()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Title API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Title
+	 */
+	public static function title() {
+		return static::$pool['title'] ??= new class extends Meta\Factory\Title {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->title()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Description API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Description
+	 */
+	public static function description() {
+		return static::$pool['description'] ??= new class extends Meta\Factory\Description {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->description()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Open_Graph API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Open_Graph
+	 */
+	public static function open_graph() {
+		return static::$pool['open_graph'] ??= new class extends Meta\Factory\Open_Graph {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->open_graph()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Facebook API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Facebook
+	 */
+	public static function facebook() {
+		return static::$pool['facebook'] ??= new class extends Meta\Factory\Facebook {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->facebook()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Twitter API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Twitter
+	 */
+	public static function twitter() {
+		return static::$pool['twitter'] ??= new class extends Meta\Factory\Twitter {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->twitter()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Image API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Image
+	 */
+	public static function image() {
+		return static::$pool['image'] ??= new class extends Meta\Factory\Image {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->image()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns the Structured_Data API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Factory\Structured_Data
+	 */
+	public static function structured_data() {
+		return static::$pool['structured_data'] ??= new class extends Meta\Factory\Structured_Data {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->structured_data()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
+	 * Returns a pool of Data classes as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return anonymous An anonymous data class containing subpools.
+	 */
+	public static function data() {
+		return static::$pool['data'] ??= new class {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->data()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @var class[] The class store. Used in favor of memo() for a chain would become expensive.
+			 */
+			private static $pool = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\Blog
+			 */
+			public static function blog() {
+				return static::$pool['blog'] ??= new class extends Data\Blog {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->blog()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
 			}
-		);
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\Network
+			 */
+			public static function network() {
+				return static::$pool['network'] ??= new class extends Data\Network {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->network()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\Options
+			 */
+			public static function options() {
+				return static::$pool['options'] ??= new class extends Data\Options {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->options()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\Post
+			 */
+			public static function post() {
+				return static::$pool['post'] ??= new class extends Data\Post {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->post()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\Term
+			 */
+			public static function term() {
+				return static::$pool['term'] ??= new class extends Data\Term {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->term()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\Transient
+			 */
+			public static function transient() {
+				return static::$pool['transient'] ??= new class extends Data\Transient {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->transient()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Data\User
+			 */
+			public static function user() {
+				return static::$pool['user'] ??= new class extends Data\User {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->data()->user()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+		};
 	}
 }

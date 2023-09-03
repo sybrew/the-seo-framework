@@ -11,12 +11,15 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta\Factory;
+
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'title', $instance ) ) :
 	case 'title_main':
-		$blogname = esc_html( $this->get_blogname() );
-		$sep      = esc_html( $this->get_separator( 'title' ) );
+		$blogname = esc_html( Data\Blog::get_public_blog_name() );
+		$sep      = esc_html( Factory\Title::get_separator() );
 
 		$additions_left  = "<span class=tsf-title-additions-js><span class=tsf-site-title-js>$blogname</span><span class=tsf-sep-js> $sep </span></span>";
 		$additions_right = "<span class=tsf-title-additions-js><span class=tsf-sep-js> $sep </span><span class=tsf-site-title-js>$blogname</span></span>";
@@ -172,7 +175,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		break;
 
 	case 'title_general_tab':
-		$title_separator         = $this->get_separator_list();
+		$title_separator         = Factory\Title::get_separator_list();
 		$default_title_separator = $this->get_option( 'title_separator' );
 
 		?>
@@ -236,7 +239,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( $this->get_filtered_raw_blogname() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( __( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );

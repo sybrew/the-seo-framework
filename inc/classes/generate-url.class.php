@@ -39,7 +39,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 2.8.0
  */
-class Generate_Url extends Generate_Title {
+class Generate_Url extends User_Data {
 
 	/**
 	 * Determines if the given page has a custom canonical URL.

@@ -319,35 +319,6 @@ TODO Four new classes:
 		2. User_Options
 		3. Post_Data
 		4. Term_Data
-TODO New class:
-	1. The_SEO_Framework\Builders\OpenGraph (yea, let's not use "Meta")
-		-> Name it OG instead?
-		-> Use generator syntax for storing the metadata?
-			-> See https://github.com/sybrew/the-seo-framework/blob/3.2/inc/traits/generator/meta.trait.php
-		-> See https://github.com/sybrew/the-seo-framework/blob/3.2/inc/classes/builders/og.class.php.
-			^ BAD! The rendered must make the property, not the data holder.
-				-> So, we must make a rendered for each tag, which then grabs the data from the builders?
-	2. The_SEO_Framework\Builders\Twitter (let's not use X, it's too ambiguous)
-		-> Use generator syntax for generating metadata?
-			-> See The_SEO_Framework\Builders\Robots\Factory::generator()
-				-> Builders\Robots\Main::instance()->set( $args, $options )->get( $get );
-				-> Builders\Robots\Main::instance()->collect_assertions();
-			-> This way, we can halt early (e.g., When there's no Title or Card)
-		1. Twitter Card
-			-> Generate with new "auto" option.
-			-> Uses Options
-		2. Twitter Site
-			-> Uses Options
-		3. Twitter Creator
-			-> Uses Options
-			-> Uses UserMeta
-		4. Twitter Title.
-			-> Uses OpenGraph and Meta Title.
-		5. Twitter Description
-			-> Uses OpenGraph and Meta Description
-		6. Twitter Image
-			-> Uses Options
-			-> Uses OpenGraph image
 
 TODO Move views\edit to something less ambiguous and confusing:
 	-> Views\Terms
@@ -473,14 +444,21 @@ TODO announce that integers are no longer supported for `$args` in all methods t
 TODO see todo's in has_custom_canonical_url and get_canonical_url
 TODO list all methods available in every pool? Zzz.
 
+TODO move "Facebook" to "Open Graph", and purge fb:app_id?
+
+TODO purge "@since 4.2.0 Deprecated"
+
 // Lacking imports:
-^<\?php([\w\W](?!use \\The_SEO_Framework\\Helper\\Query;))*?(Query::)
+^<\?php([\w\W](?!use (\\The_SEO_Framework\\(Helper|Data|Meta)\\\{).*;))*?(^(.(?!\*|\/\/))*?\\The_SEO_Framework\\.*?::)(.(?!\/\/ Lacking import OK.))*$
+ // Lacking import OK.
+^ not robust enough
 
 // Lacking header:
 ^<\?php([\w\W](?!defined))*?(The SEO Framework plugin)
 
 // Lacking deprecation comment:
 \/\*\*([\w\W](?!deprecated))*?(public function)
+\/\*\*([\w\W](?!deprecated))*?(apply_filters_deprecated)
 
 // Lacking deprecation notice:
 function.*?\{([\w\W](?!tsf\(\)))*?\}
@@ -496,12 +474,24 @@ function (.*?)\(([\w\W](?!\1))*?\}
 		2. * `$1`, use `$2` instead.\n
 	2. without alternatives:
 		1. ^.*?\( '(.*?)'.*\n+
-		2. * `$1`, with no alternative available.
+		2. * `$1`, with no alternative available.\n
 	- remove leftover tsf() from start:
 		1. \* `tsf\(\)->
 		2. * `
 
-TODO keep popular default getters `get_title()` and `get_description()` intact.
+// Replace tsf()->_deprecated.*\ntsf()-> with $tsf->
+1. (^.*?)\\tsf\(\)->(_deprecated.*$\n)(.*?return )\\tsf\(\)->
+2. \n$1$$tsf = \\tsf();\n$1$$tsf->$2\n$3$tsf->
+
+// Find broken replacements
+^(?!use|namespace|\s*\t*\*)(.(?!@|Class|new|'))*?[_A-Za-z\\]*The_SEO_Framework\\(?!has_run|ROBOTS|_|Utils)([^:{](?! as ))*$
+
+TODO remove unusued Utils\normalize_generation_args imports (and other imports..)
+TODO find new public function and filters via @since 4.3.0.*?...
+TODO find repeated tsf() calls in functions.
+TODO mark subroutine methods in Factory private?
+
+TODO remove the_seo_framework_pre\the_seo_framework_before_output\the_seo_framework_after_output\the_seo_framework_pro
 
 **Detailed log**
 
@@ -519,7 +509,8 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 		* This also works around an issue where Gutenberg still doesn't understand HTML.
 		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
 	* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
-	* `article:modified_time` and `article:published_time` now listen to Open Graph settings.
+	* `article:modified_time` and `article:published_time` now listen to Open Graph settings, and will always try to output on single post types.
+	* No longer uses the blog tagline for the homepage, it's often too short anyway.
 * **Improved:**
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
@@ -550,19 +541,25 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 			* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
 		* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
 			* Most notably, the padding and border around the settings make it much easier on your eyes.
+	* **Title:**
+		* Resolved an issue where the Twitter title would fall back to a custom Open Graph title when Open Graph is disabled.
+		* Resolved an issue where the incorrect Open Graph fallback title was proposed as a placeholder in the admin interface.
+			* This probably can only be replicated after you already published the page and halt JS. We only resolved the bug in theory and verified there wasn't a new issue created. TODO actually verify.
+				-> This works on the front-end, not back-end.
 	* **Description:**
+		* Resolved an issue where the Twitter description would fall back to a custom Open Graph description when Open Graph is disabled.
 		* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
 		* Words with attached plain connector punctuation (`l'apostrophe`) are now considered starting or mid-sentence words, so the `l'`-part of `l'apostrophe` will also be included in the description when it's at the start, and the `apostrophe` part won't be trimmed anymore if not followed by at least 2 more words or final punctuation (dot).
+		* Resolved an issue where the description generator didn't recognize non-closing element tags in unescaped attributes.
+			* `<el attr="test>">content<el>` must match `content`, not `">content`.
+		* Resolved an issue where the description generator didn't recognize second or later unclosed attributes in an element.
+			* `<el attr attr="test> test=">content<el>` must match `content`, not ` test=">content`.
+		* Resolved an issue where the description would face catastrophic backtracking when stacking elements never closed all.
+			* `<el 1><el 2></el> ... never close el 1` should match the entire document, instead of halting the process.
+		* Resolved an issue that when the description generator found a similar unclosed element in a stack, it'd consider it as the beginning of the stack.
+			* `<element><element></element></never-closing-element>etc...` matched `<element></element></never-closing-element>etc...` but now matches the second `<element>` as content (which will then be obliterated in the second pass).
 	* **Compatibility:**
 		* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
-	* Resolved an issue where the description generator didn't recognize non-closing element tags in unescaped attributes.
-		* `<el attr="test>">content<el>` must match `content`, not `">content`.
-	* Resolved an issue where the description generator didn't recognize second or later unclosed attributes in an element.
-		* `<el attr attr="test> test=">content<el>` must match `content`, not ` test=">content`.
-	* Resolved an issue where the description would face catastrophic backtracking when stacking elements never closed all.
-		* `<el 1><el 2></el> ... never close el 1` should match the entire document, instead of halting the process.
-	* Resolved an issue that when the description generator found a similar unclosed element in a stack, it'd consider it as the beginning of the stack.
-		* `<element><element></element></never-closing-element>etc...` matched `<element></element></never-closing-element>etc...` but now matches the second `<element>` as content (which will then be obliterated in the second pass).
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
@@ -597,14 +594,18 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 		* It is a class alias of `The_SEO_Framework\Helper\Taxonomies`; but, not quite.
 	* Pool `tsf()->robots()` is now available.
 		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->get_robots_meta()` is now `tsf()->robots()->get_meta()`.
-		* It is a class alias of `The_SEO_Framework\Meta\Factory\Robots\API`; but, not quite.
+		* It is a class alias of `The_SEO_Framework\Meta\Factory\Robots`; but, not quite.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
 	* Deprecation and inaccessible property/method notices now ***absolutely accurately***&trade; find the originating caller.
 	* Query error notices also now ***absolutely accurately***&trade; find the originating caller, in reverse order.
+	* `0` should be allowed as a custom title now.
+		* TODO verify. If not, set "Allow 0 to be the title." back to an empty() check?
+			-> It works on admin, not on front...
 * **Changed:**
-	* Twitter cards are no longer validated whether a card type is provided
+	* When `tsf()` or `the_seo_framework()` are called too early (before `plugins_loaded`), they'll return a silencer class.
+	* Twitter cards are no longer validated whether a card type is provided.
 		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
@@ -639,6 +640,11 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 		* `The_SEO_Framework\Utils\array_merge_recursive_distinct()` is now available.
 			* Fun fact: This is the only correct function of kind that exists, made bespoke by me for TSF.
 			* It's practically `array_merge()` for multidimensional arrays.
+	* **Changed:**
+		* `tsf()` and `the_seo_framework()` now return an uncached silencer when called to early (before `plugins_loaded`).
+			* All calls made to this object return void.
+			* This may cause fatal errors in rare cases.
+			* This will prevent TSF from acting sporadically when other plugins hook into TSF too early.
 * **Object notes:**
 	* **New objects:**
 		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods.
@@ -660,9 +666,10 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 				* `s_min_max_sitemap()`:
 					1. Now also sanitizes the default fallback value.
 					2. No longer falls back to the default option, but 1000 instead.
-				* `s_image_preview` now falls back to `'large'` instead of `'standard'`.
-				* `s_left_right` no longer falls back to option or default option, but a language-based default instead.
-				* `s_twitter_card` no longer falls to the default option, but `'summary_large_image'`.
+				* `s_image_preview()` now falls back to `'large'` instead of `'standard'`.
+				* `s_left_right()` no longer falls back to option or default option, but a language-based default instead.
+				* `s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
+				* `get_title()`'s third parameter is now gone. Use `get_open_graph_title()` or `get_twitter_title()`` instead.
 			* **Methods deprecated:**
 				* `set_transient`, use WordPress's builtin namesake instead.
 				* `get_transient`, use WordPress's builtin namesake instead.
@@ -787,7 +794,61 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 				* `get_hierarchical_taxonomies_as()`, use `tsf()->taxonomies()->get_hierarchical_taxonomies_as()` instead.
 				* `get_post_type_label()`, use `tsf()->post_types()->get_post_type_label()` instead.
 				* `get_tax_type_label()`, use `tsf()->post_types()->get_taxonomy_label()` instead.
+				* `generate_og_type()`, use `tsf()->open_graph()->get_type()` instead.
+				* `get_og_type()`, use `tsf()->open_graph()->get_type()` instead.
+				* `get_redirect_url()`, use `tsf()->uri()->get_redirect_url()` instead.
+				* `get_blogname()`, use `tsf()->data()->blog()->get_public_blog_name()` instead.
+				* `get_filtered_raw_blogname()`, use `tsf()->data()->blog()->get_filtered_blog_name()` instead.
+				* `get_blogdescription()`, use `tsf()->data()->blog()->get_filtered_blog_description()` instead.
+				* `generate_twitter_card_type()`, use `tsf()->twitter()->get_card_type()` instead.
+				* `get_twitter_card_types()`, use `tsf()->twitter()->get_supported_cards()` instead.
+				* `get_available_twitter_cards()`, with no alternative available.
+				* `get_separator()`, use `tsf()->title()->get_separator()` instead.
+				* `get_title_separator()`, use `tsf()->title()->get_separator()` instead.
+				* `get_separator_list()`, use `tsf()->title()->get_separator_list()` instead.
+				* `trim_excerpt()`, use `\The_SEO_Framework\Utils\clamp_sentence()` instead.
+				* `get_excerpt_by_id()`, use `tsf()->description()->get_singular_excerpt()` instead.
+				* `fetch_excerpt()`, use `tsf()->description()->get_singular_excerpt()` instead.
+				* `get_modified_time()`, with no alternative available.
+				* `get_description()`, use `tsf()->description()->get_description()` instead.
+				* `get_description_from_custom_field()`, use `tsf()->description()->get_custom_description()` instead.
+				* `get_generated_description()`, use `tsf()->description()->get_generated()` instead.
+				* `get_generated_twitter_description()`, use `tsf()->twitter()->get_generated_description()` instead.
+				* `get_generated_open_graph_description()`, use `tsf()->open_graph()->get_generated_description()` instead.
+				* `supported_social_locales()`, use `tsf()->open_graph()->get_supported_locales()` instead.
+				* `get_generated_open_graph_title()`, use `tsf()->open_graph()->get_generated_title()` instead.
+				* `get_generated_twitter_title()`, use `tsf()->twitter()->get_generated_title()` instead.
+				* `use_title_protection()`, with no alternative available.
+				* `use_title_pagination()`, with no alternative available.
+				* `use_title_branding()`, with no alternative available.
+				* `use_generated_archive_prefix()`, with no alternative available.
+				* `use_home_page_title_tagline()`, with no alternative available.
+				* `use_singular_title_branding()`, with no alternative available.
+				* `use_taxonomical_title_branding()`, with no alternative available.
+				* `use_post_type_archive_title_branding()`, with no alternative available.
+				* `get_title_seplocation()`, use `tsf()->title()->get_additions_location()` instead.
+				* `get_home_title_seplocation()`, use `tsf()->title()->get_additions_location_for_front_page()` instead.
+				* `get_home_title_additions()`, use `tsf()->title()->get_additions_for_front_page()` instead.
+				* `get_custom_field_title()`, use `tsf()->title()->get_custom_title()` instead.
+				* `get_generated_title()`, use `tsf()->title()->get_generated_title()` instead.
+				* `get_filtered_raw_custom_field_title()`, use `tsf()->title()->get_bare_custom_title()` instead.
+				* `get_filtered_raw_generated_title()`, use `tsf()->title()->get_bare_generated_title()` instead.
+				* `get_raw_custom_field_title()`, use `tsf()->title()->get_bare_unfiltered_custom_title()` instead.
+				* `get_raw_generated_title()`, use `tsf()->title()->get_bare_unfiltered_generated_title()` instead.
+				* `get_static_front_page_title()`, use `tsf()->title()->get_front_page_title()` instead.
+				* `get_generated_archive_title()`, use `tsf()->title()->get_archive_title()` instead.
+				* `get_raw_generated_archive_title_items()`, use `tsf()->title()->get_archive_title_list()` instead.
+				* `get_generated_single_post_title()`, use `tsf()->title()->get_post_title()` instead.
+				* `get_generated_single_term_title()`, use `tsf()->title()->get_term_title()` instead.
+				* `get_generated_post_type_archive_title()`, use `tsf()->title()->get_post_type_archive_title()` instead.
+				* `get_static_untitled_title()`, use `tsf()->title()->get_untitled_title()` instead.
+				* `get_generated_search_query_title()`, use `tsf()->title()->get_search_query_title()` instead.
+				* `get_static_404_title()`, use `tsf()->title()->get_404_title()` instead.
+				* `merge_title_branding()`, use `tsf()->title()->add_branding()` instead.
+				* `merge_title_pagination()`, use `tsf()->title()->add_pagination()` instead.
+				* `merge_title_protection()`, use `tsf()->title()->add_protection_status()` instead.
 			* **Methods removed:**
+				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `render_element()`, without deprecation (it was marked protected).
 				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
@@ -949,6 +1010,7 @@ TODO keep popular default getters `get_title()` and `get_description()` intact.
 		* `the_seo_framework_term_options`, use WP options API instead to alter term metadata name `'autodescription-term-settings'`.
 		* `the_seo_framework_user_options`, use WP options API instead to alter user metadata name `'autodescription-user-settings'`.
 		* `the_seo_framework_site_cache`, use WP options API instead to alter option name `'autodescription-site-cache'`.
+		* `the_seo_framework_available_twitter_cards`, we couldn't make it work in the new API.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.

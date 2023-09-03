@@ -13,6 +13,9 @@ use \The_SEO_Framework\Helper\{
 	Taxonomies,
 };
 
+use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Builders;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -139,12 +142,12 @@ final class Scripts {
 			[
 				// Flattening is 3% of this method's total time, we can improve by simplifying the getters above like do_meta_output().
 				\The_SEO_Framework\Utils\array_flatten_list( $scripts ),
-				\The_SEO_Framework\Builders\Scripts::class,
+				Builders\Scripts::class,
 				static::class, // i.e. `\The_SEO_Framework\Bridges\Scripts::class`
 			]
 		);
 
-		\The_SEO_Framework\Builders\Scripts::register( $scripts );
+		Builders\Scripts::register( $scripts );
 	}
 
 	/**
@@ -653,11 +656,13 @@ final class Scripts {
 				'name' => 'tsfTitleL10n',
 				'data' => [
 					'states' => [
-						'titleSeparator'  => static::decode_entities( $tsf->s_title_raw( $tsf->get_title_separator() ) ),
+						'titleSeparator'  => static::decode_entities( $tsf->s_title_raw(
+							Factory\Title::get_separator()
+						) ),
 						'prefixPlacement' => \is_rtl() ? 'after' : 'before',
 					],
 					'params' => [
-						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( $tsf->get_static_untitled_title() ) ),
+						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( Factory\Title::get_untitled_title() ) ),
 						'stripTitleTags' => (bool) $tsf->get_option( 'title_strip_tags' ),
 					],
 					'i18n'   => [

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Internal\Deprecated
+ * @package The_SEO_Framework\Traits\Internal\Deprecated
  * @subpackage The_SEO_Framework\Debug\Deprecated
  */
 
@@ -26,7 +26,7 @@ namespace The_SEO_Framework\Traits\Internal;
  */
 
 /**
- * Class The_SEO_Framework\Internal\Static_Deprecator
+ * Trait The_SEO_Framework\Traits\Internal\Static_Deprecator
  * Holds deprecation handler for static classes.
  *
  * @since 4.3.0
@@ -35,17 +35,17 @@ namespace The_SEO_Framework\Traits\Internal;
  *
  * @property string $colloquial_handle
  * @property array  $deprecated_methods : {
- *     @param string $name => {
- *        @param string   since
- *        @param string   alternative
- *        @param callable fallback
+ *     @param string $name The method name => {
+ *        @param string   since       The TSF version of deprecation,
+ *        @param string   alternative The alternative call,
+ *        @param callable fallback    The fallback callback,
  *     }
  * }
  * @property array $deprecated_properties : {
- *     @param string $name => {
- *        @param string since
- *        @param string alternative
- *        @param mixed  fallback
+ *     @param string $name The property name => {
+ *        @param string since       The TSF version of deprecation,
+ *        @param string alternative The alternative call,
+ *        @param mixed  fallback    The fallback value,
  *     }
  * }
  */
@@ -64,10 +64,11 @@ trait Static_Deprecator {
 	 */
 	final public function __set( $name, $value ) {
 
-		$deprecation = $this->deprecated_properties[ $name ] ?? '';
-		if ( $deprecation ) {
-			$alternative = $deprecation['alternative'] ?? '';
-			$since       = $deprecation['since'] ?? '';
+		$deprecated = $this->deprecated_properties[ $name ] ?? '';
+
+		if ( $deprecated ) {
+			$alternative = $deprecated['alternative'] ?? '';
+			$since       = $deprecated['since'] ?? '';
 
 			\tsf()->_inaccessible_p_or_m(
 				"$$name",
@@ -83,8 +84,8 @@ trait Static_Deprecator {
 				$this->colloquial_handle
 			);
 
-			if ( $deprecation['fallback'] )
-				return $deprecation['fallback'];
+			if ( $deprecated['fallback'] )
+				return $deprecated['fallback'];
 		} else {
 			/**
 			 * For now, no deprecation is being handled; as no properties have been deprecated. Just removed.
@@ -109,11 +110,11 @@ trait Static_Deprecator {
 	 */
 	final public function __get( $name ) {
 
-		$deprecation = $this->deprecated_properties[ $name ] ?? '';
+		$deprecated = $this->deprecated_properties[ $name ] ?? '';
 
-		if ( $deprecation ) {
-			$alternative = $deprecation['alternative'] ?? '';
-			$since       = $deprecation['since'] ?? '';
+		if ( $deprecated ) {
+			$alternative = $deprecated['alternative'] ?? '';
+			$since       = $deprecated['since'] ?? '';
 
 			\tsf()->_inaccessible_p_or_m(
 				"$$name",
@@ -129,8 +130,8 @@ trait Static_Deprecator {
 				$this->colloquial_handle
 			);
 
-			if ( $deprecation['fallback'] )
-				return $deprecation['fallback'];
+			if ( $deprecated['fallback'] )
+				return $deprecated['fallback'];
 		} else {
 			\tsf()->_inaccessible_p_or_m( "$$name" );
 		}
@@ -147,16 +148,16 @@ trait Static_Deprecator {
 	 */
 	final public function __call( $name, $arguments ) {
 
-		$deprecation = $this->deprecated_methods[ $name ] ?? '';
+		$deprecated = $this->deprecated_methods[ $name ] ?? '';
 
-		if ( $deprecation ) {
+		if ( $deprecated ) {
 			\tsf()->_deprecated_function(
 				\esc_html( "{$this->colloquial_handle}::$name" ),
-				\esc_html( $deprecation['since'] ?? '' ),
-				\esc_html( $deprecation['alternative'] ?? '' ),
+				\esc_html( $deprecated['since'] ?? '' ),
+				\esc_html( $deprecated['alternative'] ?? '' ),
 			);
 
-			$fallback = $deprecation['fallback'] ?? null;
+			$fallback = $deprecated['fallback'] ?? null;
 
 			if ( $fallback )
 				return \call_user_func_array( $fallback, $arguments );

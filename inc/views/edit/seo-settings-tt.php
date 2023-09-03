@@ -7,9 +7,6 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use \The_SEO_Framework\Meta\Factory\{
-	Robots
-};
 
 use const \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 
@@ -18,7 +15,9 @@ use \The_SEO_Framework\Interpreters\{
 	Form,
 };
 
-use The_SEO_Framework\Bridges\TermSettings;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta\Factory,
+	\The_SEO_Framework\Bridges\TermSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -55,7 +54,7 @@ $image_details     = current( $this->get_generated_image_details( $_generator_ar
 $image_placeholder = $image_details['url'] ?? '';
 
 $canonical_placeholder = $this->get_canonical_url( $_generator_args ); // implies get_custom_field = false
-$robots_defaults       = Robots\API::generate_meta(
+$robots_defaults       = Factory\Robots::generate_meta(
 	$_generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],
 	ROBOTS_IGNORE_SETTINGS
@@ -154,11 +153,11 @@ $robots_settings = [
 						[
 							'state' => [
 								'refTitleLocked'    => false,
-								'defaultTitle'      => $this->s_title( $this->get_filtered_raw_generated_title( $_generator_args ) ),
-								'addAdditions'      => $this->use_title_branding( $_generator_args ),
-								'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-								'additionValue'     => $this->s_title( $this->get_blogname() ),
-								'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
+								'defaultTitle'      => $this->s_title( Factory\Title::get_bare_generated_title( $_generator_args ) ),
+								'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
+								'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
+								'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
+								'additionPlacement' => 'left' === Factory\Title::get_additions_location() ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],
 						]
@@ -203,7 +202,7 @@ $robots_settings = [
 					'autodescription-meta[description]',
 					[
 						'state' => [
-							'defaultDescription' => $this->get_generated_description( $_generator_args ),
+							'defaultDescription' => Factory\Description::get_generated_description( $_generator_args ),
 							'hasLegacy'          => true,
 						],
 					]
@@ -222,16 +221,16 @@ $this->output_js_social_data(
 	[
 		'og' => [
 			'state' => [
-				'defaultTitle' => $this->s_title( $this->get_generated_open_graph_title( $_generator_args, false ) ),
-				'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ),
-				'defaultDesc'  => $this->s_description( $this->get_generated_open_graph_description( $_generator_args, false ) ),
+				'defaultTitle' => $this->s_title( Factory\Open_Graph::get_generated_title( $_generator_args, false ) ),
+				'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
+				'defaultDesc'  => $this->s_description( Factory\Open_Graph::get_generated_description( $_generator_args, false ) ),
 			],
 		],
 		'tw' => [
 			'state' => [
-				'defaultTitle' => $this->s_title( $this->get_generated_twitter_title( $_generator_args, false ) ),
-				'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ),
-				'defaultDesc'  => $this->s_description( $this->get_generated_twitter_description( $_generator_args, false ) ),
+				'defaultTitle' => $this->s_title( Factory\Twitter::get_generated_title( $_generator_args, false ) ),
+				'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
+				'defaultDesc'  => $this->s_description( Factory\Twitter::get_generated_description( $_generator_args, false ) ),
 			],
 		],
 	]

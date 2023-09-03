@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\Utils\clamp_sentence;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -927,10 +929,12 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_title_separator( $sep ) {
 
-		if ( \array_key_exists( $sep, $this->get_separator_list() ) )
+		$sep_list = Meta\Factory\Title::get_separator_list();
+
+		if ( \array_key_exists( $sep, $sep_list ) )
 			return (string) $sep;
 
-		return (string) array_key_first( $this->get_separator_list() );
+		return (string) array_key_first( $sep_list );
 	}
 
 	/**
@@ -1648,17 +1652,17 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.5.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 4.3.0 Now falls back to 'summary_large_image' instead of the default option.
+	 * @since 4.3.0 Now falls back to 'summary_large_image' instead of the default option. // var_dump() auto!
 	 *
 	 * @param string $card String with potentially wrong option value.
 	 * @return string Sanitized twitter card type.
 	 */
 	public function s_twitter_card( $card ) {
 
-		if ( \array_key_exists( $card, $this->get_twitter_card_types() ) )
+		if ( \array_key_exists( $card, Meta\Factory\Twitter::get_supported_cards() ) )
 			return (string) $card;
 
-		return 'summary_large_image';
+		return 'summary_large_image'; // var_dump() make 'auto'?
 	}
 
 	/**
@@ -2207,7 +2211,7 @@ class Sanitize extends Admin_Pages {
 			$alt = \wp_strip_all_tags( $alt );
 			// 420: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/summary.html
 			// Don't "ai"-trim if under, it's unlikely to always be a sentence.
-			$alt = \strlen( $alt ) > 420 ? $this->trim_excerpt( $alt, 0, 420 ) : $alt;
+			$alt = \strlen( $alt ) > 420 ? clamp_sentence( $alt, 0, 420 ) : $alt;
 		}
 
 		return compact( 'url', 'id', 'width', 'height', 'alt', 'filesize' );

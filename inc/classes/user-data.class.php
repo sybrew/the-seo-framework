@@ -105,7 +105,7 @@ class User_Data extends Term_Data {
 	 */
 	public function get_user_meta( $user_id = 0, $use_cache = true, $depr = true ) {
 
-		if ( false === $depr ) $use_cache = false;
+		if ( false === $depr ) $use_cache = false; // var_dump() move this to method deprecator.
 
 		$user_id = $user_id ?: $this->get_user_id();
 

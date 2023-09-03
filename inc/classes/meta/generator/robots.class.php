@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -50,7 +52,7 @@ final class Robots {
 	 */
 	public static function generate_robots() {
 
-		$meta = \The_SEO_Framework\Meta\Factory\Robots\API::get_meta();
+		$meta = Factory\Robots::get_meta();
 
 		if ( \has_filter( 'the_seo_framework_robots_meta' ) ) {
 			/**
@@ -67,7 +69,7 @@ final class Robots {
 					'the_seo_framework_robots_meta',
 					[
 						explode( ',', $meta ),
-						\The_SEO_Framework\Helper\Query::get_the_real_id(),
+						\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 					],
 					'4.3.0 of The SEO Framework',
 					'the_seo_framework_robots_meta_array',

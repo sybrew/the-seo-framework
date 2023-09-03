@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -55,7 +57,7 @@ final class Twitter {
 	 */
 	public static function generate_twitter_card() {
 
-		$card = \tsf()->generate_twitter_card_type();
+		$card = Factory\Twitter::get_card_type();
 
 		if ( $card )
 			yield [
@@ -73,7 +75,7 @@ final class Twitter {
 	 */
 	public static function generate_twitter_site() {
 
-		$site = \tsf()->get_option( 'twitter_site' );
+		$site = Factory\Twitter::get_site();
 
 		if ( \has_filter( 'the_seo_framework_twittersite_output' ) ) {
 			/**
@@ -86,7 +88,7 @@ final class Twitter {
 				'the_seo_framework_twittersite_output',
 				[
 					$site,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -108,12 +110,7 @@ final class Twitter {
 	 */
 	public static function generate_twitter_creator() {
 
-		$tsf = \tsf();
-
-		// var_dump() offload this
-		$creator =
-			   $tsf->get_current_post_author_meta_item( 'twitter_page' )
-			?: $tsf->get_option( 'twitter_creator' );
+		$creator = Factory\Twitter::get_creator();
 
 		if ( \has_filter( 'the_seo_framework_twittercreator_output' ) ) {
 			/**
@@ -126,7 +123,7 @@ final class Twitter {
 				'the_seo_framework_twittercreator_output',
 				[
 					$creator,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -148,7 +145,7 @@ final class Twitter {
 	 */
 	public static function generate_twitter_title() {
 
-		$title = \tsf()->get_twitter_title();
+		$title = Factory\Twitter::get_title();
 
 		if ( \has_filter( 'the_seo_framework_twittertitle_output' ) ) {
 			/**
@@ -161,7 +158,7 @@ final class Twitter {
 				'the_seo_framework_twittertitle_output',
 				[
 					$title,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -183,7 +180,7 @@ final class Twitter {
 	 */
 	public static function generate_twitter_description() {
 
-		$description = \tsf()->get_twitter_description();
+		$description = Factory\Twitter::get_description();
 
 		if ( \has_filter( 'the_seo_framework_twitterdescription_output' ) ) {
 			/**
@@ -196,7 +193,7 @@ final class Twitter {
 				'the_seo_framework_twitterdescription_output',
 				[
 					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -40,8 +42,8 @@ final class Facebook {
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
-		[ __CLASS__, 'generate_facebook_author' ],
-		[ __CLASS__, 'generate_facebook_publisher' ],
+		[ __CLASS__, 'generate_article_author' ],
+		[ __CLASS__, 'generate_article_publisher' ],
 		[ __CLASS__, 'generate_facebook_app_id' ],
 	];
 
@@ -50,17 +52,9 @@ final class Facebook {
 	 * @access protected
 	 * @generator
 	 */
-	public static function generate_facebook_author() {
+	public static function generate_article_author() {
 
-		$tsf = \tsf();
-
-		// var_dump() offload this.
-		if ( 'article' !== $tsf->get_og_type() ) return;
-
-		$author =
-			   $tsf->get_current_post_author_meta_item( 'facebook_page' )
-			?: $tsf->get_option( 'facebook_author' );
-		// to this.
+		$author = Factory\Facebook::get_author();
 
 		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
 			/**
@@ -75,7 +69,7 @@ final class Facebook {
 				'the_seo_framework_facebookauthor_output',
 				[
 					$author,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK;
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -92,21 +86,13 @@ final class Facebook {
 	}
 
 	/**
-	 * Renders Facebook Publisher meta tag.
-	 *
-	 * @since 2.2.2
-	 * @since 3.0.0 No longer outputs tag when "og:type" isn't 'article'.
-	 *
-	 * @return string The Facebook Publisher meta tag.
+	 * @since 4.3.0
+	 * @access protected
+	 * @generator
 	 */
-	public static function generate_facebook_publisher() {
+	public static function generate_article_publisher() {
 
-		$tsf = \tsf();
-		// var_dump() offload this.
-		if ( 'article' !== $tsf->get_og_type() ) return;
-
-		$publisher = $tsf->get_option( 'facebook_publisher' );
-		// to this
+		$publisher = Factory\Facebook::get_author();
 
 		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
 			/**
@@ -121,7 +107,7 @@ final class Facebook {
 				'the_seo_framework_facebookpublisher_output',
 				[
 					$publisher,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK;
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -138,15 +124,13 @@ final class Facebook {
 	}
 
 	/**
-	 * Renders Facebook App ID meta tag.
-	 *
-	 * @since 2.2.2
-	 *
-	 * @return string The Facebook App ID meta tag.
+	 * @since 4.3.0
+	 * @access protected
+	 * @generator
 	 */
 	public static function generate_facebook_app_id() {
 
-		$app_id = \tsf()->get_option( 'facebook_appid' );
+		$app_id = Factory\Facebook::get_app_id();
 
 		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
 			/**
@@ -161,7 +145,7 @@ final class Facebook {
 				'the_seo_framework_facebookappid_output',
 				[
 					$app_id,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK;
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

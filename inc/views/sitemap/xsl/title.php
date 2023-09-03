@@ -10,8 +10,8 @@
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 $title    = __( 'XML Sitemap', 'autodescription' );
-$sep      = $this->get_title_separator();
-$addition = $this->get_blogname();
+$sep      = \The_SEO_Framework\Meta\Factory\Title::get_separator(); // Lacking import OK.
+$addition = \The_SEO_Framework\Data\Blog::get_public_blog_name();   // Lacking import OK.
 
 ?>
 <title><?= esc_xml( $this->s_title_raw( "$title $sep $addition" ) ) ?></title>

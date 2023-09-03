@@ -10,7 +10,8 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\Utils\normalize_generation_args;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Meta\Factory,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -365,20 +366,20 @@ class Generate_Image extends Generate_Url {
 	 */
 	public function get_image_generation_params( $args = null, $context = 'social' ) {
 
-		$builder = Builders\Images::class;
+		$generator = Factory\Image\Generator::class;
 
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
 				if ( Query::is_attachment() ) {
 					$cbs = [
-						'attachment' => [ $builder, 'get_attachment_image_details' ],
+						'attachment' => [ $generator, 'generate_attachment_image_details' ],
 					];
 				} else {
 					$cbs = [
-						'featured' => [ $builder, 'get_featured_image_details' ],
+						'featured' => [ $generator, 'generate_featured_image_details' ],
 					];
 					if ( 'social' === $context ) {
-						$cbs['content'] = [ $builder, 'get_content_image_details' ];
+						$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 					}
 				}
 			} else {
@@ -392,14 +393,14 @@ class Generate_Image extends Generate_Url {
 			} else {
 				if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
 					$cbs = [
-						'attachment' => [ $builder, 'get_attachment_image_details' ],
+						'attachment' => [ $generator, 'generate_attachment_image_details' ],
 					];
 				} else {
 					$cbs = [
-						'featured' => [ $builder, 'get_featured_image_details' ],
+						'featured' => [ $generator, 'generate_featured_image_details' ],
 					];
 					if ( 'social' === $context ) {
-						$cbs['content'] = [ $builder, 'get_content_image_details' ];
+						$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 					}
 				}
 			}
@@ -407,10 +408,10 @@ class Generate_Image extends Generate_Url {
 
 		if ( 'social' === $context ) {
 			$fallback = [
-				'settings' => [ $builder, 'get_fallback_image_details' ],
-				'header'   => [ $builder, 'get_theme_header_image_details' ],
-				'logo'     => [ $builder, 'get_site_logo_image_details' ],
-				'icon'     => [ $builder, 'get_site_icon_image_details' ],
+				'settings' => [ $generator, 'generate_fallback_image_details' ],
+				'header'   => [ $generator, 'generate_theme_header_image_details' ],
+				'logo'     => [ $generator, 'generate_site_logo_image_details' ],
+				'icon'     => [ $generator, 'generate_site_icon_image_details' ],
 			];
 		} else {
 			$fallback = [];

@@ -7,10 +7,15 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Front,
+	\The_SEO_Framework\Meta\Factory;
+
 use \The_SEO_Framework\Helper\{
 	Query,
 	Query_Utils,
+	Taxonomies,
 };
+
 
 /**
  * The SEO Framework plugin
@@ -404,6 +409,69 @@ class Init extends Pool {
 	}
 
 	/**
+	 * Returns the document title.
+	 *
+	 * This method serves as a callback for filter `pre_get_document_title`.
+	 * Use tsf()->get_title() instead.
+	 *
+	 * @since 3.1.0
+	 * @see $this->get_title()
+	 *
+	 * @param string $title The filterable title.
+	 * @return string The document title
+	 */
+	public function get_document_title( $title = '' ) {
+
+		if ( ! Query_Utils::query_supports_seo() )
+			return $title;
+
+		/**
+		 * @since 3.1.0
+		 * @param string $title The generated title.
+		 * @param int    $id    The page or term ID.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_pre_get_document_title',
+			[
+				Factory\Title::get_title(),
+				Query::get_the_real_id(),
+			]
+		);
+	}
+
+	/**
+	 * Returns the document title.
+	 *
+	 * This method serves as a callback for filter `wp_title`.
+	 * Use tsf()->get_title() instead.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 Removed extraneous, unused parameters.
+	 * @see $this->get_title()
+	 *
+	 * @param string $title The filterable title.
+	 * @return string $title
+	 */
+	public function get_wp_title( $title = '' ) {
+
+		if ( ! Query_Utils::query_supports_seo() )
+			return $title;
+
+		/**
+		 * @since 3.1.0
+		 * @param string $title The generated title.
+		 * @param int    $id    The page or term ID.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_wp_title',
+			[
+				Factory\Title::get_title(),
+				Query::get_the_real_id(),
+			]
+		);
+	}
+
+	/**
 	 * Outputs deprecated output hooks.
 	 *
 	 * @since 4.2.0
@@ -508,7 +576,7 @@ class Init extends Pool {
 
 		if ( Query::is_preview() || \is_customize_preview() || ! Query_Utils::query_supports_seo() ) return;
 
-		\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
+		Front\Meta\Head::print_wrap_and_tags();
 	}
 
 	/**
@@ -520,7 +588,7 @@ class Init extends Pool {
 	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_tags();
 	 */
 	public function do_meta_output() {
-		\The_SEO_Framework\Front\Meta\Head::print_tags();
+		Front\Meta\Head::print_tags();
 	}
 
 	/**
@@ -540,7 +608,7 @@ class Init extends Pool {
 
 		if ( Query::is_preview() || \is_customize_preview() || ! Query_Utils::query_supports_seo() ) return;
 
-		$url = $this->get_redirect_url();
+		$url = Meta\Factory\URI::get_redirect_url();
 
 		if ( $url ) {
 			/**
@@ -1043,7 +1111,7 @@ class Init extends Pool {
 
 			foreach ( $wp_query->tax_query->queries as $_query ) {
 				if ( isset( $_query['taxonomy'] ) ) {
-					$supported = \The_SEO_Framework\Helper\Taxonomies::is_taxonomy_supported( $_query['taxonomy'] );
+					$supported = Taxonomies::is_taxonomy_supported( $_query['taxonomy'] );
 					// If just one tax is supported for this query, greenlight it: all must be blocking.
 					if ( $supported ) break;
 				}

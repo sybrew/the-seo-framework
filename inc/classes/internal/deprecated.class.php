@@ -102,7 +102,6 @@ final class Deprecated {
 	public function s_left_right_home( $position ) {
 
 		$tsf = \tsf();
-
 		$tsf->_deprecated_function( 'tsf()->s_left_right_home()', '4.3.0', 'tsf()->s_left_right()' );
 
 		return $tsf->s_left_right( $position );
@@ -120,8 +119,11 @@ final class Deprecated {
 	 * @return string|false Post type on success, false on failure.
 	 */
 	public function get_post_type_real_id( $post = null ) {
-		\tsf()->_deprecated_function( 'tsf()->get_post_type_real_id()', '4.3.0', 'tsf()->query()->get_post_type_real_id()' );
-		return \tsf()->query()->get_post_type_real_id( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_real_id()', '4.3.0', 'tsf()->query()->get_post_type_real_id()' );
+
+		return $tsf->query()->get_post_type_real_id( $post );
 	}
 
 	/**
@@ -134,8 +136,11 @@ final class Deprecated {
 	 * @return string
 	 */
 	public function get_admin_post_type() {
-		\tsf()->_deprecated_function( 'tsf()->get_admin_post_type()', '4.3.0', 'tsf()->query()->get_admin_post_type()' );
-		return \tsf()->query()->get_admin_post_type();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_admin_post_type()', '4.3.0', 'tsf()->query()->get_admin_post_type()' );
+
+		return $tsf->query()->get_admin_post_type();
 	}
 
 	/**
@@ -149,8 +154,11 @@ final class Deprecated {
 	 * @return array List of post types.
 	 */
 	public function get_post_types_from_taxonomy( $taxonomy = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->taxonomies()->get_post_types_from_taxonomy()' );
-		return \tsf()->taxonomies()->get_post_types_from_taxonomy( $taxonomy );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->taxonomies()->get_post_types_from_taxonomy()' );
+
+		return $tsf->taxonomies()->get_post_types_from_taxonomy( $taxonomy );
 	}
 
 	/**
@@ -166,8 +174,11 @@ final class Deprecated {
 	 * @return int|false The ID.
 	 */
 	public function get_the_real_id( $use_cache = true ) {
-		\tsf()->_deprecated_function( 'tsf()->get_the_real_id()', '4.3.0', 'tsf()->query()->get_the_real_id()' );
-		return \tsf()->query()->get_the_real_id( $use_cache );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_the_real_id()', '4.3.0', 'tsf()->query()->get_the_real_id()' );
+
+		return $tsf->query()->get_the_real_id( $use_cache );
 	}
 
 	/**
@@ -182,8 +193,11 @@ final class Deprecated {
 	 * @return int The admin ID.
 	 */
 	public function get_the_real_admin_id() {
-		\tsf()->_deprecated_function( 'tsf()->get_the_real_admin_id()', '4.3.0', 'tsf()->query()->get_the_real_admin_id()' );
-		return \tsf()->query()->get_the_real_admin_id();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_the_real_admin_id()', '4.3.0', 'tsf()->query()->get_the_real_admin_id()' );
+
+		return $tsf->query()->get_the_real_admin_id();
 	}
 
 	/**
@@ -196,8 +210,11 @@ final class Deprecated {
 	 * @return int the ID.
 	 */
 	public function get_the_front_page_id() {
-		\tsf()->_deprecated_function( 'tsf()->get_the_front_page_id()', '4.3.0', 'tsf()->query()->get_the_front_page_id()' );
-		return \tsf()->query()->get_the_front_page_id();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_the_front_page_id()', '4.3.0', 'tsf()->query()->get_the_front_page_id()' );
+
+		return $tsf->query()->get_the_front_page_id();
 	}
 
 	/**
@@ -213,8 +230,11 @@ final class Deprecated {
 	 * @return int Term ID.
 	 */
 	public function get_admin_term_id() {
-		\tsf()->_deprecated_function( 'tsf()->get_admin_term_id()', '4.3.0', 'tsf()->query()->get_admin_term_id()' );
-		return \tsf()->query()->get_admin_term_id();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_admin_term_id()', '4.3.0', 'tsf()->query()->get_admin_term_id()' );
+
+		return $tsf->query()->get_admin_term_id();
 	}
 
 	/**
@@ -230,8 +250,11 @@ final class Deprecated {
 	 * @return string The queried taxonomy type.
 	 */
 	public function get_current_taxonomy() {
-		\tsf()->_deprecated_function( 'tsf()->get_current_taxonomy()', '4.3.0', 'tsf()->query()->get_current_taxonomy()' );
-		return \tsf()->query()->get_current_taxonomy();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_taxonomy()', '4.3.0', 'tsf()->query()->get_current_taxonomy()' );
+
+		return $tsf->query()->get_current_taxonomy();
 	}
 
 	/**
@@ -246,8 +269,11 @@ final class Deprecated {
 	 * @return string The queried post type.
 	 */
 	public function get_current_post_type() {
-		\tsf()->_deprecated_function( 'tsf()->get_current_post_type()', '4.3.0', 'tsf()->query()->get_current_post_type()' );
-		return \tsf()->query()->get_current_post_type();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_post_type()', '4.3.0', 'tsf()->query()->get_current_post_type()' );
+
+		return $tsf->query()->get_current_post_type();
 	}
 
 	/**
@@ -290,8 +316,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_attachment( $attachment = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_attachment()', '4.3.0', 'tsf()->query()->is_attachment()' );
-		return \tsf()->query()->is_attachment( $attachment );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_attachment()', '4.3.0', 'tsf()->query()->is_attachment()' );
+
+		return $tsf->query()->is_attachment( $attachment );
 	}
 
 	/**
@@ -304,8 +333,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_attachment_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_attachment_admin()', '4.3.0', 'tsf()->query()->is_attachment_admin()' );
-		return \tsf()->query()->is_attachment_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_attachment_admin()', '4.3.0', 'tsf()->query()->is_attachment_admin()' );
+
+		return $tsf->query()->is_attachment_admin();
 	}
 
 	/**
@@ -324,8 +356,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_singular_archive( $post = null ) {
-		\tsf()->_deprecated_function( 'tsf()->is_singular_archive()', '4.3.0', 'tsf()->query()->is_singular_archive()' );
-		return \tsf()->query()->is_singular_archive( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_singular_archive()', '4.3.0', 'tsf()->query()->is_singular_archive()' );
+
+		return $tsf->query()->is_singular_archive( $post );
 	}
 
 	/**
@@ -338,8 +373,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_archive() {
-		\tsf()->_deprecated_function( 'tsf()->is_archive()', '4.3.0', 'tsf()->query()->is_archive()' );
-		return \tsf()->query()->is_archive();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_archive()', '4.3.0', 'tsf()->query()->is_archive()' );
+
+		return $tsf->query()->is_archive();
 	}
 
 	/**
@@ -352,8 +390,11 @@ final class Deprecated {
 	 * @return bool Post Type is archive
 	 */
 	public function is_archive_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_archive_admin()', '4.3.0', 'tsf()->query()->is_archive_admin()' );
-		return \tsf()->query()->is_archive_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_archive_admin()', '4.3.0', 'tsf()->query()->is_archive_admin()' );
+
+		return $tsf->query()->is_archive_admin();
 	}
 
 	/**
@@ -366,8 +407,11 @@ final class Deprecated {
 	 * @return bool True if on Term Edit screen. False otherwise.
 	 */
 	public function is_term_edit() {
-		\tsf()->_deprecated_function( 'tsf()->is_term_edit()', '4.3.0', 'tsf()->query()->is_term_edit()' );
-		return \tsf()->query()->is_term_edit();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_term_edit()', '4.3.0', 'tsf()->query()->is_term_edit()' );
+
+		return $tsf->query()->is_term_edit();
 	}
 
 	/**
@@ -380,8 +424,11 @@ final class Deprecated {
 	 * @return bool We're on Post Edit screen.
 	 */
 	public function is_post_edit() {
-		\tsf()->_deprecated_function( 'tsf()->is_post_edit()', '4.3.0', 'tsf()->query()->is_post_edit()' );
-		return \tsf()->query()->is_post_edit();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_post_edit()', '4.3.0', 'tsf()->query()->is_post_edit()' );
+
+		return $tsf->query()->is_post_edit();
 	}
 
 	/**
@@ -394,8 +441,11 @@ final class Deprecated {
 	 * @return bool We're on the edit screen.
 	 */
 	public function is_wp_lists_edit() {
-		\tsf()->_deprecated_function( 'tsf()->is_wp_lists_edit()', '4.3.0', 'tsf()->query()->is_wp_lists_edit()' );
-		return \tsf()->query()->is_wp_lists_edit();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_wp_lists_edit()', '4.3.0', 'tsf()->query()->is_wp_lists_edit()' );
+
+		return $tsf->query()->is_wp_lists_edit();
 	}
 
 	/**
@@ -409,8 +459,11 @@ final class Deprecated {
 	 * @return bool True if on Profile Edit screen. False otherwise.
 	 */
 	public function is_profile_edit() {
-		\tsf()->_deprecated_function( 'tsf()->is_profile_edit()', '4.3.0', 'tsf()->query()->is_profile_edit()' );
-		return \tsf()->query()->is_profile_edit();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_profile_edit()', '4.3.0', 'tsf()->query()->is_profile_edit()' );
+
+		return $tsf->query()->is_profile_edit();
 	}
 
 	/**
@@ -424,8 +477,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_author( $author = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_author()', '4.3.0', 'tsf()->query()->is_author()' );
-		return \tsf()->query()->is_author( $author );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_author()', '4.3.0', 'tsf()->query()->is_author()' );
+
+		return $tsf->query()->is_author( $author );
 	}
 
 	/**
@@ -441,8 +497,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_home( $post = null ) {
-		\tsf()->_deprecated_function( 'tsf()->is_home()', '4.3.0', 'tsf()->query()->is_home()' );
-		return \tsf()->query()->is_home( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_home()', '4.3.0', 'tsf()->query()->is_home()' );
+
+		return $tsf->query()->is_home( $post );
 	}
 
 	/**
@@ -457,8 +516,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_home_as_page( $post = null ) {
-		\tsf()->_deprecated_function( 'tsf()->is_home_as_page()', '4.3.0', 'tsf()->query()->is_home_as_page()' );
-		return \tsf()->query()->is_home_as_page( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_home_as_page()', '4.3.0', 'tsf()->query()->is_home_as_page()' );
+
+		return $tsf->query()->is_home_as_page( $post );
 	}
 
 	/**
@@ -472,8 +534,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_category( $category = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_category()', '4.3.0', 'tsf()->query()->is_category()' );
-		return \tsf()->query()->is_category( $category );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_category()', '4.3.0', 'tsf()->query()->is_category()' );
+
+		return $tsf->query()->is_category( $category );
 	}
 
 	/**
@@ -488,8 +553,11 @@ final class Deprecated {
 	 * @return bool Post Type is category
 	 */
 	public function is_category_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_category_admin()', '4.3.0', 'tsf()->query()->is_category_admin()' );
-		return \tsf()->query()->is_category_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_category_admin()', '4.3.0', 'tsf()->query()->is_category_admin()' );
+
+		return $tsf->query()->is_category_admin();
 	}
 
 	/**
@@ -562,8 +630,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_real_front_page() {
-		\tsf()->_deprecated_function( 'tsf()->is_real_front_page()', '4.3.0', 'tsf()->query()->is_real_front_page()' );
-		return \tsf()->query()->is_real_front_page();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_real_front_page()', '4.3.0', 'tsf()->query()->is_real_front_page()' );
+
+		return $tsf->query()->is_real_front_page();
 	}
 
 	/**
@@ -584,8 +655,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_real_front_page_by_id( $id ) {
-		\tsf()->_deprecated_function( 'tsf()->is_real_front_page_by_id()', '4.3.0', 'tsf()->query()->is_real_front_page_by_id()' );
-		return \tsf()->query()->is_real_front_page_by_id( $id );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_real_front_page_by_id()', '4.3.0', 'tsf()->query()->is_real_front_page_by_id()' );
+
+		return $tsf->query()->is_real_front_page_by_id( $id );
 	}
 
 	/**
@@ -615,8 +689,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_page( $page = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_page()', '4.3.0', 'tsf()->query()->is_page()' );
-		return \tsf()->query()->is_page( $page );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_page()', '4.3.0', 'tsf()->query()->is_page()' );
+
+		return $tsf->query()->is_page( $page );
 	}
 
 	/**
@@ -630,8 +707,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_page_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_page_admin()', '4.3.0', 'tsf()->query()->is_page_admin()' );
-		return \tsf()->query()->is_page_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_page_admin()', '4.3.0', 'tsf()->query()->is_page_admin()' );
+
+		return $tsf->query()->is_page_admin();
 	}
 
 	/**
@@ -649,8 +729,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_preview() {
-		\tsf()->_deprecated_function( 'tsf()->is_preview()', '4.3.0', 'tsf()->query()->is_preview()' );
-		return \tsf()->query()->is_preview();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_preview()', '4.3.0', 'tsf()->query()->is_preview()' );
+
+		return $tsf->query()->is_preview();
 	}
 
 	/**
@@ -664,8 +747,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_search() {
-		\tsf()->_deprecated_function( 'tsf()->is_search()', '4.3.0', 'tsf()->query()->is_search()' );
-		return \tsf()->query()->is_search();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_search()', '4.3.0', 'tsf()->query()->is_search()' );
+
+		return $tsf->query()->is_search();
 	}
 
 	/**
@@ -681,8 +767,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_single( $post = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_single()', '4.3.0', 'tsf()->query()->is_single()' );
-		return \tsf()->query()->is_single( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_single()', '4.3.0', 'tsf()->query()->is_single()' );
+
+		return $tsf->query()->is_single( $post );
 	}
 
 	/**
@@ -696,8 +785,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_single_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_single_admin()', '4.3.0', 'tsf()->query()->is_single_admin()' );
-		return \tsf()->query()->is_single_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_single_admin()', '4.3.0', 'tsf()->query()->is_single_admin()' );
+
+		return $tsf->query()->is_single_admin();
 	}
 
 	/**
@@ -715,8 +807,11 @@ final class Deprecated {
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular( $post_types = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_singular()', '4.3.0', 'tsf()->query()->is_singular()' );
-		return \tsf()->query()->is_singular( $post_types );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_singular()', '4.3.0', 'tsf()->query()->is_singular()' );
+
+		return $tsf->query()->is_singular( $post_types );
 	}
 
 	/**
@@ -731,8 +826,11 @@ final class Deprecated {
 	 * @return bool Post Type is singular
 	 */
 	public function is_singular_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_singular_admin()', '4.3.0', 'tsf()->query()->is_singular_admin()' );
-		return \tsf()->query()->is_singular_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_singular_admin()', '4.3.0', 'tsf()->query()->is_singular_admin()' );
+
+		return $tsf->query()->is_singular_admin();
 	}
 
 	/**
@@ -747,8 +845,11 @@ final class Deprecated {
 	 * @return bool True when homepage is static and given/current ID matches.
 	 */
 	public function is_static_frontpage( $id = 0 ) {
-		\tsf()->_deprecated_function( 'tsf()->is_static_frontpage()', '4.3.0', 'tsf()->query()->is_static_frontpage()' );
-		return \tsf()->query()->is_static_frontpage( $id );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_static_frontpage()', '4.3.0', 'tsf()->query()->is_static_frontpage()' );
+
+		return $tsf->query()->is_static_frontpage( $id );
 	}
 
 	/**
@@ -762,8 +863,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_tag( $tag = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_tag()', '4.3.0', 'tsf()->query()->is_tag()' );
-		return \tsf()->query()->is_tag( $tag );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_tag()', '4.3.0', 'tsf()->query()->is_tag()' );
+
+		return $tsf->query()->is_tag( $tag );
 	}
 
 	/**
@@ -778,8 +882,11 @@ final class Deprecated {
 	 * @return bool Post Type is tag.
 	 */
 	public function is_tag_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_tag_admin()', '4.3.0', 'tsf()->query()->is_tag_admin()' );
-		return \tsf()->query()->is_tag_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_tag_admin()', '4.3.0', 'tsf()->query()->is_tag_admin()' );
+
+		return $tsf->query()->is_tag_admin();
 	}
 
 	/**
@@ -794,8 +901,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_tax( $taxonomy = '', $term = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_tax()', '4.3.0', 'tsf()->query()->is_tax()' );
-		return \tsf()->query()->is_tax( $taxonomy, $term );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_tax()', '4.3.0', 'tsf()->query()->is_tax()' );
+
+		return $tsf->query()->is_tax( $taxonomy, $term );
 	}
 
 	/**
@@ -810,8 +920,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_shop( $post = null ) {
-		\tsf()->_deprecated_function( 'tsf()->is_shop()', '4.3.0', 'tsf()->query()->is_shop()' );
-		return \tsf()->query()->is_shop( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_shop()', '4.3.0', 'tsf()->query()->is_shop()' );
+
+		return $tsf->query()->is_shop( $post );
 	}
 
 	/**
@@ -826,8 +939,11 @@ final class Deprecated {
 	 * @return bool True if on a WooCommerce Product page.
 	 */
 	public function is_product( $post = null ) {
-		\tsf()->_deprecated_function( 'tsf()->is_product()', '4.3.0', 'tsf()->query()->is_product()' );
-		return \tsf()->query()->is_product( $post );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_product()', '4.3.0', 'tsf()->query()->is_product()' );
+
+		return $tsf->query()->is_product( $post );
 	}
 
 	/**
@@ -841,8 +957,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_product_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_product_admin()', '4.3.0', 'tsf()->query()->is_product_admin()' );
-		return \tsf()->query()->is_product_admin();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_product_admin()', '4.3.0', 'tsf()->query()->is_product_admin()' );
+
+		return $tsf->query()->is_product_admin();
 	}
 
 	/**
@@ -855,8 +974,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_year() {
-		\tsf()->_deprecated_function( 'tsf()->is_year()', '4.3.0', 'tsf()->query()->is_year()' );
-		return \tsf()->query()->is_year();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_year()', '4.3.0', 'tsf()->query()->is_year()' );
+
+		return $tsf->query()->is_year();
 	}
 
 	/**
@@ -870,8 +992,11 @@ final class Deprecated {
 	 * @return bool True if SSL, false otherwise.
 	 */
 	public function is_ssl() {
-		\tsf()->_deprecated_function( 'tsf()->is_ssl()', '4.3.0', 'tsf()->query()->is_ssl()' );
-		return \tsf()->query()->is_ssl();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_ssl()', '4.3.0', 'tsf()->query()->is_ssl()' );
+
+		return $tsf->query()->is_ssl();
 	}
 
 	/**
@@ -889,8 +1014,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_seo_settings_page( $secure = true ) {
-		\tsf()->_deprecated_function( 'tsf()->is_seo_settings_page()', '4.3.0', 'tsf()->query()->is_seo_settings_page()' );
-		return \tsf()->query()->is_seo_settings_page( $secure );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_seo_settings_page()', '4.3.0', 'tsf()->query()->is_seo_settings_page()' );
+
+		return $tsf->query()->is_seo_settings_page( $secure );
 	}
 
 	/**
@@ -918,8 +1046,11 @@ final class Deprecated {
 	 * @return bool true if screen match.
 	 */
 	public function is_menu_page( $pagehook = '', $pageslug = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_menu_page()', '4.3.0', 'tsf()->query()->is_menu_page()' );
-		return \tsf()->query()->is_menu_page( $pagehook, $pageslug );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_menu_page()', '4.3.0', 'tsf()->query()->is_menu_page()' );
+
+		return $tsf->query()->is_menu_page( $pagehook, $pageslug );
 	}
 
 	/**
@@ -937,8 +1068,11 @@ final class Deprecated {
 	 * @return int (R>0) $page Always a positive number.
 	 */
 	public function page() {
-		\tsf()->_deprecated_function( 'tsf()->page()', '4.3.0', 'tsf()->query()->page()' );
-		return \tsf()->query()->page();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->page()', '4.3.0', 'tsf()->query()->page()' );
+
+		return $tsf->query()->page();
 	}
 
 	/**
@@ -954,8 +1088,11 @@ final class Deprecated {
 	 * @return int (R>0) $paged Always a positive number.
 	 */
 	public function paged() {
-		\tsf()->_deprecated_function( 'tsf()->paged()', '4.3.0', 'tsf()->query()->paged()' );
-		return \tsf()->query()->paged();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->paged()', '4.3.0', 'tsf()->query()->paged()' );
+
+		return $tsf->query()->paged();
 	}
 
 	/**
@@ -972,8 +1109,11 @@ final class Deprecated {
 	 * @return int
 	 */
 	public function numpages() {
-		\tsf()->_deprecated_function( 'tsf()->numpages()', '4.3.0', 'tsf()->query()->numpages()' );
-		return \tsf()->query()->numpages();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->numpages()', '4.3.0', 'tsf()->query()->numpages()' );
+
+		return $tsf->query()->numpages();
 	}
 
 	/**
@@ -989,8 +1129,11 @@ final class Deprecated {
 	 * @return bool True if multipage.
 	 */
 	public function is_multipage() {
-		\tsf()->_deprecated_function( 'tsf()->is_multipage()', '4.3.0', 'tsf()->query()->is_multipage()' );
-		return \tsf()->query()->is_multipage();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_multipage()', '4.3.0', 'tsf()->query()->is_multipage()' );
+
+		return $tsf->query()->is_multipage();
 	}
 
 	/**
@@ -1006,8 +1149,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function is_sitemap( $set = false ) {
-		\tsf()->_deprecated_function( 'tsf()->is_sitemap()', '4.3.0', 'tsf()->query()->is_sitemap()' );
-		return \tsf()->query()->is_sitemap( $set );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_sitemap()', '4.3.0', 'tsf()->query()->is_sitemap()' );
+
+		return $tsf->query()->is_sitemap( $set );
 	}
 
 	/**
@@ -1324,7 +1470,7 @@ final class Deprecated {
 			'the_seo_framework_googlesite_output',
 			[
 				$tsf->get_option( 'google_verification' ),
-				\The_SEO_Framework\Helper\Queryget_the_real_id(),
+				\The_SEO_Framework\Helper\Query::get_the_real_id(),
 			]
 		);
 
@@ -1359,7 +1505,7 @@ final class Deprecated {
 			'the_seo_framework_bingsite_output',
 			[
 				$tsf->get_option( 'bing_verification' ),
-				\The_SEO_Framework\Helper\Queryget_the_real_id(),
+				\The_SEO_Framework\Helper\Query::get_the_real_id(),
 			]
 		);
 
@@ -1394,7 +1540,7 @@ final class Deprecated {
 			'the_seo_framework_yandexsite_output',
 			[
 				$tsf->get_option( 'yandex_verification' ),
-				\The_SEO_Framework\Helper\Queryget_the_real_id(),
+				\The_SEO_Framework\Helper\Query::get_the_real_id(),
 			]
 		);
 
@@ -1429,7 +1575,7 @@ final class Deprecated {
 			'the_seo_framework_baidusite_output',
 			[
 				$tsf->get_option( 'baidu_verification' ),
-				\The_SEO_Framework\Helper\Queryget_the_real_id(),
+				\The_SEO_Framework\Helper\Query::get_the_real_id(),
 			]
 		);
 
@@ -1464,7 +1610,7 @@ final class Deprecated {
 			'the_seo_framework_pintsite_output',
 			[
 				$tsf->get_option( 'pint_verification' ),
-				\The_SEO_Framework\Helper\Queryget_the_real_id(),
+				\The_SEO_Framework\Helper\Query::get_the_real_id(),
 			]
 		);
 
@@ -1623,7 +1769,7 @@ final class Deprecated {
 		$locale = (string) \apply_filters_deprecated(
 			'the_seo_framework_oglocale_output',
 			[
-				$tsf->fetch_locale(),
+				$tsf->open_graph()->get_supported_locales(),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -1653,7 +1799,7 @@ final class Deprecated {
 		if ( ! $tsf->use_og_tags() )
 			return '';
 
-		$type = $tsf->get_og_type();
+		$type = $tsf->open_graph()->get_type();
 
 		return $type ? \The_SEO_Framework\Interpreters\Meta::render( [
 			'property' => 'og:type',
@@ -1744,7 +1890,7 @@ final class Deprecated {
 		$sitename = (string) \apply_filters_deprecated(
 			'the_seo_framework_ogsitename_output',
 			[
-				$tsf->get_blogname(),
+				$tsf->data()->blog()->get_public_blogname(),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -1841,7 +1987,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->facebook_author()', '4.3.0' );
 
 		if ( ! $tsf->use_facebook_tags() ) return '';
-		if ( 'article' !== $tsf->get_og_type() ) return '';
+		if ( 'article' !== $tsf->open_graph()->get_type() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -1883,7 +2029,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->facebook_publisher()', '4.3.0' );
 
 		if ( ! $tsf->use_facebook_tags() ) return '';
-		if ( 'article' !== $tsf->get_og_type() ) return '';
+		if ( 'article' !== $tsf->open_graph()->get_type() ) return '';
 
 		/**
 		 * @since 2.3.0
@@ -1977,7 +2123,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
 			[
-				(bool) \tsf()->get_option( 'facebook_tags' ),
+				(bool) $tsf->get_option( 'facebook_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -2079,7 +2225,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->output_modified_time()', '4.3.0' );
 
-		if ( 'article' !== $tsf->get_og_type() )
+		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
 		return (bool) $tsf->get_option( 'post_modify_time' );
@@ -2100,7 +2246,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->output_published_time()', '4.3.0' );
 
-		if ( 'article' !== $tsf->get_og_type() )
+		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
 		return (bool) $tsf->get_option( 'post_publish_time' );
@@ -2123,7 +2269,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_current_twitter_card_type()', '4.3.0' );
 
-		return $tsf->generate_twitter_card_type();
+		return $tsf->twitter()->get_card_type();
 	}
 
 	/**
@@ -2421,7 +2567,7 @@ final class Deprecated {
 		return (string) \apply_filters_deprecated(
 			'the_seo_framework_ldjson_scripts',
 			[
-				\tsf()->render_ld_json_scripts(),
+				$tsf->render_ld_json_scripts(),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework'
@@ -2451,7 +2597,6 @@ final class Deprecated {
 			'4.3.0',
 			'function \The_SEO_Framework\Utils\array_merge_recursive_distinct()'
 		);
-
 		return \The_SEO_Framework\Utils\array_merge_recursive_distinct( ...$arrays );
 	}
 
@@ -2964,5 +3109,1179 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->get_tax_type_label()', '4.3.0', 'tsf()->post_types()->get_taxonomy_label()' );
 
 		return $tsf->taxonomies()->get_taxonomy_label( $tax_type, $singular );
+	}
+
+	/**
+	 * Generates the Open Graph type based on query status.
+	 *
+	 * @since 2.7.0
+	 * @since 4.3.0 1. An image is no longer required to generate the 'article' type.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The Open Graph type.
+	 */
+	public function generate_og_type() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->generate_og_type()', '4.3.0', 'tsf()->open_graph()->get_type()' );
+
+		return $tsf->open_graph()->get_type();
+	}
+
+	/**
+	 * Returns Open Graph type value.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.8.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string
+	 */
+	public function get_og_type() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_og_type()', '4.3.0', 'tsf()->open_graph()->get_type()' );
+
+		return $tsf->open_graph()->get_type();
+	}
+
+	/**
+	 * Returns the redirect URL, if any.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
+	 *              2. Now redirects post type archives.
+	 * @since 4.3.0 1. Now expects an ID before getting a post meta item.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The taxonomy.
+	 * }
+	 * @return string The canonical URL if found, empty string otherwise.
+	 */
+	public function get_redirect_url( $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_redirect_url()', '4.3.0', 'tsf()->uri()->get_redirect_url()' );
+
+		return $tsf->uri()->get_redirect_url( $args );
+	}
+
+	/**
+	 * Fetches public blogname (site title).
+	 * Memoizes the return value.
+	 *
+	 * Do not consider this function safe for printing!
+	 *
+	 * @since 2.5.2
+	 * @since 4.2.0 1. Now listens to the new `site_title` option.
+	 *              2. Now applies filters.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string $blogname The sanitized blogname.
+	 */
+	public function get_blogname() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_blogname()', '4.3.0', 'tsf()->data()->blog()->get_public_blog_name()' );
+
+		return $tsf->data()->blog()->get_public_blog_name();
+	}
+
+	/**
+	 * Fetches blogname (site title).
+	 *
+	 * Do not consider this function safe for printing!
+	 *
+	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string $blogname The sanitized blogname.
+	 */
+	public function get_filtered_raw_blogname() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_blogname()', '4.3.0', 'tsf()->data()->blog()->get_filtered_blog_name()' );
+
+		return $tsf->data()->blog()->get_filtered_blog_name();
+	}
+
+	/**
+	 * Fetch blog description.
+	 * Memoizes the return value.
+	 *
+	 * Do not consider this function safe for printing!
+	 *
+	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
+	 *
+	 * @since 2.5.2
+	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
+	 * @since 4.3.0 1. No longer memoizes the return value.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @return string $blogname The sanitized blog description.
+	 */
+	public function get_blogdescription() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_blogdescription()', '4.3.0', 'tsf()->data()->blog()->get_filtered_blog_description()' );
+
+		return $tsf->data()->blog()->get_filtered_blog_description();
+	}
+
+	/**
+	 * Generates the Twitter Card type.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.2 Now considers description output.
+	 * @since 2.9.0 Now listens to $this->get_available_twitter_cards().
+	 * @since 3.1.0 Now inherits filter `the_seo_framework_twittercard_output`.
+	 * @since 4.1.4 Removed needless preprocessing of the option.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
+	 */
+	public function generate_twitter_card_type() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->generate_twitter_card_type()', '4.3.0', 'tsf()->twitter()->get_card_type()' );
+
+		return $tsf->twitter()->get_card_type();
+	}
+
+	/**
+	 * Returns array of Twitter Card Types
+	 *
+	 * @since 2.6.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array Twitter Card types.
+	 */
+	public function get_twitter_card_types() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_twitter_card_types()', '4.3.0', 'tsf()->twitter()->get_supported_cards()' );
+
+		return $tsf->twitter()->get_supported_cards();
+	}
+
+	/**
+	 * Determines which Twitter cards can be used.
+	 *
+	 * @since 2.9.0
+	 * @since 4.0.0 1. Now only asserts the social titles as required.
+	 *              2. Now always returns an array, instead of a boolean (false) on failure.
+	 * @since 4.2.0 1. No longer memoizes the return value.
+	 *              2. No longer tests for the Twitter title.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array False when it shouldn't be used. Array of available cards otherwise.
+	 */
+	public function get_available_twitter_cards() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_available_twitter_cards()', '4.3.0' );
+
+		return array_keys( $tsf->twitter()->get_supported_cards() );
+	}
+
+	/**
+	 * Returns cached and parsed separator option.
+	 *
+	 * @since 2.3.9
+	 * @since 3.1.0 1. Removed caching.
+	 *              2. Removed escaping parameter.
+	 * @since 4.0.0 No longer converts the `dash` separator option.
+	 * @since 4.0.5 1. Now utilizes the predefined separator list, instead of guessing the output.
+	 *              2. The default fallback value is now a hyphen.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The separator.
+	 */
+	public function get_separator() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_separator()', '4.3.0', 'tsf()->title()->get_separator()' );
+
+		return $tsf->title()->get_separator();
+	}
+
+	/**
+	 * Gets Title Separator.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.6.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The Separator, unescaped.
+	 */
+	public function get_title_separator() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_title_separator()', '4.3.0', 'tsf()->title()->get_separator()' );
+
+		return $tsf->title()->get_separator();
+	}
+
+	/**
+	 * List of title separators.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Is now filterable.
+	 * @since 4.0.0 Removed the dash key.
+	 * @since 4.0.5 Added back the hyphen.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array Title separators.
+	 */
+	public function get_separator_list() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_separator_list()', '4.3.0', 'tsf()->title()->get_separator_list()' );
+
+		return $tsf->title()->get_separator_list();
+	}
+
+	/**
+	 * Trims the excerpt by word and determines sentence stops.
+	 *
+	 * Warning: Returns with entities encoded. The output is not safe for printing.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 1. Now uses smarter trimming.
+	 *              2. Deprecated 2nd parameter.
+	 *              3. Now has unicode support for sentence closing.
+	 *              4. Now strips last three words when preceded by a sentence closing separator.
+	 *              5. Now always leads with (inviting) dots, even if the excerpt is shorter than $max_char_length.
+	 * @since 4.0.0 1. Now stops parsing earlier on failure.
+	 *              2. Now performs faster queries.
+	 *              3. Now maintains last sentence with closing punctuations.
+	 * @since 4.0.5 1. Now decodes the excerpt input, improving accuracy, and so that HTML entities at
+	 *                 the end won't be transformed into gibberish.
+	 * @since 4.1.0 1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
+	 *              2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11).
+	 *                 Mind you, this method probably boots PCRE and wptexturize; so, it'll be slower than what we noted--it's
+	 *                 overhead that otherwise WP, the theme, or other plugin would cause anyway. So, deduct that.
+	 *              3. Now recognizes connector and final punctuations for preliminary sentence bounding.
+	 *              4. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes,
+	 *                 and marks used in some latin languages like ¡¿.
+	 *              5. Is now able to always strip leading punctuation.
+	 *              6. It will now strip leading colon characters.
+	 *              7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
+	 *              8. Now returns encoded entities once more. So that the return value can be treated the same as anything else
+	 *                 revolving around descriptions--preventing double transcoding like `&amp;amp; > &amp; > &` instead of `&amp;`.
+	 * @since 4.1.5 1. The second parameter now accepts values again. From "current description length" to minimum accepted char length.
+	 *              2. Can now return an empty string when the input string doesn't satisfy the minimum character length.
+	 *              3. The third parameter now defaults to 4096, so no longer unexpected results are created.
+	 *              4. Resolved some backtracking issues.
+	 *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
+	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
+	 * @since 4.2.7 Now considers floating numerics as one word.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
+	 *
+	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
+	 * This is perfect. Please have the courtesy to credit us when taking it. :)
+	 *
+	 * @param string $excerpt         The untrimmed excerpt. Expected not to contain any HTML operators.
+	 * @param int    $min_char_length The minimum character length. Set to 0 to ignore the requirement.
+	 *                                This is read as a SUGGESTION. Multibyte characters will create inaccuracies.
+	 * @param int    $max_char_length At what point to shave off the excerpt.
+	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.
+	 */
+	public function trim_excerpt( $excerpt, $min_char_length = 1, $max_char_length = 4096 ) {
+		\tsf()->_deprecated_function( 'tsf()->trim_excerpt()', '4.3.0', 'function \The_SEO_Framework\Utils\clamp_sentence()' );
+		return \The_SEO_Framework\Utils\clamp_sentence( $excerpt, $min_char_length, $max_char_length );
+	}
+
+	/**
+	 * Fetches or parses the excerpt of the post.
+	 *
+	 * @since 1.0.0
+	 * @since 2.8.2 Added 4th parameter for escaping.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
+	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $excerpt    The Excerpt.
+	 * @param int    $id         The Post ID.
+	 * @param null   $deprecated No longer used.
+	 * @param bool   $escape     Whether to escape the excerpt.
+	 * @return string The trimmed excerpt.
+	 */
+	public function get_excerpt_by_id( $excerpt = '', $id = 0, $deprecated = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_excerpt_by_id()', '4.3.0', 'tsf()->description()->get_singular_excerpt()' );
+
+		$excerpt = $excerpt ?: $tsf->description()->get_singular_excerpt( $id );
+
+		return $escape ? $tsf->s_excerpt( $excerpt ) : $tsf->s_excerpt_raw( $excerpt );
+	}
+
+	/**
+	 * Fetches excerpt from post excerpt or fetches the full post content.
+	 * Determines if a page builder is used to return an empty string.
+	 * Does not sanitize output.
+	 *
+	 * @since 2.5.2
+	 * @since 2.6.6 Detects Page builders.
+	 * @since 3.1.0 1. No longer returns anything for terms.
+	 *              2. Now strips plausible embeds URLs.
+	 * @since 4.0.1 Now fetches the real ID when no post is supplied.
+	 *              Internally, this was never an issue. @see `$this->get_singular_description_excerpt()`
+	 * @since 4.2.8 1. Now tests for post type support of 'excerpt' before parsing the excerpt.
+	 *              2. Now tests for post type support of 'editor' before parsing the content.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
+	 * @return string The excerpt.
+	 */
+	public function fetch_excerpt( $post = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->get_singular_excerpt()' );
+
+		return $tsf->description()->get_singular_excerpt( $post );
+	}
+
+	/**
+	 * Returns the post's modified time.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @return string The current post's modified time
+	 */
+	public function get_modified_time() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_modified_time()', '4.3.0' );
+
+		$id                = \The_SEO_Framework\Helper\Query::get_the_real_id();
+		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
+
+		return '0000-00-00 00:00:00' === $post_modified_gmt
+			? ''
+			/**
+			 * @since 2.3.0
+			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated
+			 * @deprecated
+			 * @param string $time The article modified time.
+			 * @param int    $id   The current page or term ID.
+			 */
+			: (string) \apply_filters_deprecated(
+				'the_seo_framework_modifiedtime_output',
+				[
+					$tsf->gmt2date( $tsf->get_timestamp_format(), $post_modified_gmt ),
+					$id,
+				],
+				'4.3.0 of The SEO Framework',
+				'the_seo_framework_meta_render_data',
+			);
+	}
+
+	/**
+	 * Returns the meta description from custom fields. Falls back to autogenerated description.
+	 *
+	 * @since 3.0.6
+	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the description.
+	 * @return string The real description output.
+	 */
+	public function get_description( $args = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_description()', '4.3.0', 'tsf()->description()->get_description()' );
+
+		return $tsf->description()->get_description( $args, $escape );
+	}
+
+	/**
+	 * Returns the custom user-inputted description.
+	 *
+	 * @since 3.0.6
+	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the description.
+	 * @return string The custom field description.
+	 */
+	public function get_description_from_custom_field( $args = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_description_from_custom_field()', '4.3.0', 'tsf()->description()->get_custom_description()' );
+
+		return $tsf->description()->get_custom_description( $args, $escape );
+	}
+
+	/**
+	 * Returns the autogenerated meta description.
+	 *
+	 * @since 3.0.6
+	 * @since 3.1.0 1. The first argument now accepts an array, with "id" and "taxonomy" fields.
+	 *              2. No longer caches.
+	 *              3. Now listens to option.
+	 *              4. Added type argument.
+	 * @since 3.1.2 1. Now omits additions when the description will be deemed too short.
+	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
+	 * @since 3.2.2 Now converts HTML characters prior trimming.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @uses $this->generate_description()
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the description.
+	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
+	 * @return string The generated description output.
+	 */
+	public function get_generated_description( $args = null, $escape = true, $type = 'search' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_description()', '4.3.0', 'tsf()->description()->get_generated()' );
+
+		return $tsf->description()->get_generated( $args, $escape, $type );
+	}
+
+	/**
+	 * Returns the autogenerated Twitter meta description. Falls back to meta description.
+	 *
+	 * @since 3.0.4
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the description.
+	 * @return string The generated Twitter description output.
+	 */
+	public function get_generated_twitter_description( $args = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_description()', '4.3.0', 'tsf()->twitter()->get_generated_description()' );
+
+		return $tsf->twitter()->get_generated_description( $args, $escape );
+	}
+
+	/**
+	 * Returns the autogenerated Open Graph meta description. Falls back to meta description.
+	 *
+	 * @since 3.0.4
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the description.
+	 * @return string The generated Open Graph description output.
+	 */
+	public function get_generated_open_graph_description( $args = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_description()', '4.3.0', 'tsf()->open_graph()->get_generated_description()' );
+
+		return $tsf->open_graph()->get_generated_description( $args, $escape );
+	}
+
+	/**
+	 * Returns supported social site locales.
+	 *
+	 * @since 4.2.0
+	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
+	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
+	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array Valid social locales
+	 */
+	public function supported_social_locales() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->supported_social_locales()', '4.3.0', 'tsf()->open_graph()->get_supported_locales()' );
+
+		return $tsf->open_graph()->get_supported_locales();
+	}
+
+	/**
+	 * Returns the autogenerated Open Graph meta title. Falls back to meta title.
+	 * Falls back to meta title.
+	 *
+	 * @since 3.0.4
+	 * @since 3.1.0 The first parameter now expects an array.
+	 * @since 4.1.0 Now appends the "social" argument when getting the title.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the title.
+	 * @return string The generated Open Graph Title.
+	 */
+	public function get_generated_open_graph_title( $args = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_title()', '4.3.0', 'tsf()->open_graph()->get_generated_title()' );
+
+		// Discrepancy: The interface always hid this bug of using the wrong callback.
+		// Let's keep this bug where it fetches the custom field title first.
+		return $tsf->title()->get_title( $args, $escape, true ); // Discrepancy OK.
+	}
+
+	/**
+	 * Returns the autogenerated Twitter meta title.
+	 * Falls back to meta title.
+	 *
+	 * @since 3.0.4
+	 * @since 3.1.0 The first parameter now expects an array.
+	 * @since 4.1.0 Now appends the "social" argument when getting the title.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the title.
+	 * @return string The generated Twitter Title.
+	 */
+	public function get_generated_twitter_title( $args = null, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_title()', '4.3.0', 'tsf()->twitter()->get_generated_title()' );
+
+		// Discrepancy: The interface always hid this bug of using the wrong callback.
+		// Let's keep this bug where it fetches the custom field title first.
+		return $tsf->title()->get_title( $args, $escape, true ); // Discrepancy OK.
+	}
+
+
+	/**
+	 * Determines whether to add or remove title protection prefixes.
+	 *
+	 * @since 3.2.4
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return bool True when prefixes are allowed.
+	 */
+	public function use_title_protection( $args = null ) {
+		\tsf()->_deprecated_function( 'tsf()->use_title_protection()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_protection_status( $args );
+	}
+
+	/**
+	 * Determines whether to add or remove title pagination additions.
+	 *
+	 * @since 3.2.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return bool True when additions are allowed.
+	 */
+	public function use_title_pagination( $args = null ) {
+		\tsf()->_deprecated_function( 'tsf()->use_title_pagination()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_pagination( $args );
+	}
+
+	/**
+	 * Determines whether to add or remove title branding additions.
+	 *
+	 * @since 3.1.0
+	 * @since 3.1.2 1. Added filter.
+	 *              2. Added strict taxonomical check.
+	 * @since 3.2.2 Now differentiates from query and parameter input.
+	 * @since 4.1.0 Added the second $social parameter.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null  $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool|string $social Whether the title is meant for social display.
+	 *                            Also accepts string 'og' and 'twitter' for future proofing.
+	 * @return bool True when additions are allowed.
+	 */
+	public function use_title_branding( $args = null, $social = false ) {
+		\tsf()->_deprecated_function( 'tsf()->use_title_branding()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( $args, $social );
+	}
+
+	/**
+	 * Determines whether to use the autogenerated archive title prefix or not.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.5 1: Added first parameter `$term`.
+	 *              2: Added filter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $term The Term object. Leave null to autodermine query.
+	 * @return bool
+	 */
+	public function use_generated_archive_prefix( $term = null ) {
+		\tsf()->_deprecated_function( 'tsf()->use_generated_archive_prefix()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_generated_archive_prefix( $term );
+	}
+
+	/**
+	 * Determines whether to add homepage tagline.
+	 *
+	 * @since 2.6.0
+	 * @since 3.0.4 Now checks for `$this->get_home_title_additions()`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function use_home_page_title_tagline() {
+		\tsf()->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding();
+	}
+
+	/**
+	 * Determines whether to add the title tagline for the post.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The post ID. Optional.
+	 * @return bool
+	 */
+	public function use_singular_title_branding( $id = 0 ) {
+		\tsf()->_deprecated_function( 'tsf()->use_singular_title_branding()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( [ 'id' => $id ] );
+	}
+
+	/**
+	 * Determines whether to add the title tagline for the term.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $id The term ID. Optional.
+	 * @return bool
+	 */
+	public function use_taxonomical_title_branding( $id = 0 ) {
+		\tsf()->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( [ 'id' => $id ] );
+	}
+
+	/**
+	 * Determines whether to add the title tagline for the pta.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $pta The post type archive. Optional.
+	 * @return bool
+	 */
+	public function use_post_type_archive_title_branding( $pta = '' ) {
+		\tsf()->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '4.3.0' );
+		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( [ 'pta' => $pta ] );
+	}
+
+	/**
+	 * Returns title separator location.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 1. Removed the first $seplocation parameter.
+	 *              2. The first parameter is now $home
+	 *              3. Removed caching.
+	 *              4. Removed filters.
+	 * @since 4.0.0 The homepage option's return value is now reversed from expected.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param bool $home The home separator location.
+	 * @return string The separator location.
+	 */
+	public function get_title_seplocation( $home = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_title_seplocation()', '4.3.0', 'tsf()->title()->get_additions_location()' );
+
+		if ( $home )
+			return $tsf->get_home_title_seplocation();
+
+		return $tsf->title()->get_additions_location();
+	}
+
+	/**
+	 * Gets Title Seplocation for the homepage.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Removed first parameter.
+	 * @since 4.0.0 Left is now right, and right is now left.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The Seplocation for the homepage.
+	 */
+	public function get_home_title_seplocation() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_home_title_seplocation()', '4.3.0', 'tsf()->title()->get_additions_location_for_front_page()' );
+
+		return $tsf->title()->get_additions_location_for_front_page();
+	}
+
+	/**
+	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The trimmed tagline.
+	 */
+	public function get_home_title_additions() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_home_title_additions()', '4.3.0', 'tsf()->title()->get_additions_for_front_page()' );
+
+		return $tsf->title()->get_additions_for_front_page();
+	}
+
+	/**
+	 * Returns the custom user-inputted title.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 Moved the filter to a separated method.
+	 * @since 4.1.0 Added the third $social parameter.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $social Whether the title is meant for social display.
+	 * @return string The custom field title.
+	 */
+	public function get_custom_field_title( $args = null, $escape = true, $social = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_custom_field_title()', '4.3.0', 'tsf()->title()->get_custom_title()' );
+
+		return $tsf->title()->get_custom_title( $args, $escape, $social );
+	}
+
+	/**
+	 * Returns the autogenerated meta title.
+	 *
+	 * @since 3.1.0
+	 * @since 3.2.4 1. Added check for title protection.
+	 *              2. Moved check for title pagination.
+	 * @since 4.0.0 Moved the filter to a separated method.
+	 * @since 4.1.0 Added the third $social parameter.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $social Whether the title is meant for social display.
+	 * @return string The generated title output.
+	 */
+	public function get_generated_title( $args = null, $escape = true, $social = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_title()', '4.3.0', 'tsf()->title()->get_generated_title()' );
+
+		return $tsf->title()->get_generated_title( $args, $escape, $social );
+	}
+
+	/**
+	 * Returns the raw filtered custom field meta title.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 1. The first parameter can now be voided.
+	 *              2. The first parameter is now rectified, so you can leave out indexes.
+	 *              3. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @return string The raw generated title output.
+	 */
+	public function get_filtered_raw_custom_field_title( $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_custom_field_title()', '4.3.0', 'tsf()->title()->get_bare_custom_title()' );
+
+		return $tsf->title()->get_bare_custom_title( $args );
+	}
+
+	/**
+	 * Returns the raw filtered autogenerated meta title.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 1. The first parameter can now be voided.
+	 *              2. The first parameter is now rectified, so you can leave out indexes.
+	 *              3. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @return string The raw generated title output.
+	 */
+	public function get_filtered_raw_generated_title( $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_generated_title()', '4.3.0', 'tsf()->title()->get_bare_generated_title()' );
+
+		return $tsf->title()->get_bare_generated_title( $args );
+	}
+
+	/**
+	 * Returns the custom user-inputted title.
+	 *
+	 * This doesn't use the taxonomy arguments, because, wonderously, WordPress
+	 * finally admits through their code that terms can be queried using only IDs.
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @internal But, feel free to use it.
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The custom field title, if it exists.
+	 */
+	public function get_raw_custom_field_title( $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_raw_custom_field_title()', '4.3.0', 'tsf()->title()->get_bare_unfiltered_custom_title()' );
+
+		return $tsf->title()->get_bare_unfiltered_custom_title( $args );
+	}
+
+	/**
+	 * Generates a title, based on expected or current query, without additions or prefixes.
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @uses $this->generate_title_from_query()
+	 * @uses $this->generate_title_from_args()
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The generated title.
+	 */
+	public function get_raw_generated_title( $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_raw_generated_title()', '4.3.0', 'tsf()->title()->get_bare_unfiltered_generated_title()' );
+
+		return $tsf->title()->get_bare_unfiltered_generated_title( $args );
+	}
+
+	/**
+	 * Generates front page title.
+	 *
+	 * This is an alias of get_blogname(). The difference is that this is used for
+	 * the front-page title output solely, whereas the other one has a mixed usage.
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 1. Now listens to the new `site_title` option.
+	 *              2. Now applies filters.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The generated front page title.
+	 */
+	public function get_static_front_page_title() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_static_front_page_title()', '4.3.0', 'tsf()->title()->get_front_page_title()' );
+
+		return $tsf->title()->get_front_page_title();
+	}
+
+	/**
+	 * Returns the archive title. Also works in admin.
+	 *
+	 * @NOTE Taken from WordPress core. Altered to work for metadata and in admin.
+	 * @see WP Core get_the_archive_title()
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
+	 * @since 4.0.5 1: Now no longer uses `get_the_author()` to fetch the author's display name,
+	 *                 but uses the provided term object instead.
+	 *              2: The first parameter now accepts `\WP_User` objects.
+	 * @since 4.1.2 Now supports WP 5.5 archive titles.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
+	 *                                                               Leave null to autodetermine query.
+	 * @return string The generated archive title, not escaped.
+	 */
+	public function get_generated_archive_title( $object = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_archive_title()', '4.3.0', 'tsf()->title()->get_archive_title()' );
+
+		return $tsf->title()->get_archive_title( $object );
+	}
+
+	/**
+	 * Returns the archive title items. Also works in admin.
+	 *
+	 * @NOTE Taken from WordPress core. Altered to work for metadata.
+	 * @see WP Core get_the_archive_title()
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The Term object.
+	 *                                                     Leave null to autodetermine query.
+	 * @return String[$title,$prefix,$title_without_prefix] The generated archive title items, not escaped.
+	 */
+	public function get_raw_generated_archive_title_items( $object = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_raw_generated_archive_title_items()', '4.3.0', 'tsf()->title()->get_archive_title_list()' );
+
+		return $tsf->title()->get_archive_title_list( $object );
+	}
+
+	/**
+	 * Returns Post Title from ID.
+	 *
+	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
+	 * @see WP Core single_post_title()
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.8 Now tests for post type support of 'title' before parsing the title.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|\WP_Post $id The Post ID or post object.
+	 * @return string The generated post title.
+	 */
+	public function get_generated_single_post_title( $id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_single_post_title()', '4.3.0', 'tsf()->title()->get_post_title()' );
+
+		return $tsf->title()->get_post_title( $id );
+	}
+
+	/**
+	 * Fetches single term title.
+	 *
+	 * It can autodetermine the term; so, perform your checks prior calling.
+	 *
+	 * Taken from WordPress core. Altered to work in the Admin area.
+	 *
+	 * @see WP Core single_term_title()
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
+	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
+	 * @since 4.2.7 Now invokes proper filters when 'category' or 'tag' taxonomies are used.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param null|\WP_Term $term The term name, required in the admin area.
+	 * @return string The generated single term title.
+	 */
+	public function get_generated_single_term_title( $term = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_single_term_title()', '4.3.0', 'tsf()->title()->get_term_title()' );
+
+		return $tsf->title()->get_term_title( $term );
+	}
+
+	/**
+	 * Fetches single term title.
+	 *
+	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
+	 * @see WP Core post_type_archive_title()
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 Now actually works in the admin area, provided you forward $post_type.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type The post type.
+	 * @return string The generated post type archive title.
+	 */
+	public function get_generated_post_type_archive_title( $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_post_type_archive_title()', '4.3.0', 'tsf()->title()->get_post_type_archive_title()' );
+
+		return $tsf->title()->get_post_type_archive_title( $post_type );
+	}
+
+	/**
+	 * Returns untitled title.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The untitled title.
+	 */
+	public function get_static_untitled_title() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_static_untitled_title()', '4.3.0', 'tsf()->title()->get_untitled_title()' );
+
+		return $tsf->title()->get_untitled_title();
+	}
+
+	/**
+	 * Returns search title.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The generated search title, partially escaped.
+	 */
+	public function get_generated_search_query_title() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_search_query_title()', '4.3.0', 'tsf()->title()->get_search_query_title()' );
+
+		return $tsf->title()->get_search_query_title();
+	}
+
+	/**
+	 * Returns 404 title.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 No longer accepts parameters, nor has conditions.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The generated 404 title.
+	 */
+	public function get_static_404_title() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_static_404_title()', '4.3.0', 'tsf()->title()->get_404_title()' );
+
+		return $tsf->title()->get_404_title();
+	}
+
+	/**
+	 * Merges title branding, when allowed.
+	 *
+	 * @since 3.1.0
+	 * @since 3.1.2 Added strict taxonomical check.
+	 * @since 3.1.3 Fixed conditional logic.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string     $title The title. Passed by reference.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                          Leave null to autodetermine query.
+	 */
+	public function merge_title_branding( &$title, $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->merge_title_branding()', '4.3.0', 'tsf()->title()->add_branding()' );
+
+		$title = $tsf->title()->add_branding( $title, $args );
+	}
+
+	/**
+	 * Merges pagination with the title, if paginated.
+	 *
+	 * @since 3.1.0
+	 * @since 3.1.2 Now uses the registered default translation.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $title The title. Passed by reference.
+	 */
+	public function merge_title_pagination( &$title ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->merge_title_pagination()', '4.3.0', 'tsf()->title()->add_pagination()' );
+
+		$title = $tsf->title()->add_pagination( $title );
+	}
+
+	/**
+	 * Merges title protection prefixes.
+	 *
+	 * @since 3.1.0
+	 * @since 3.1.2 Added strict taxonomical checks for title protection.
+	 * @since 3.1.3 Fixed conditional logic.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.4 Resolved regression where $run-test was reversed (renamed to $merge).
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string     $title The title. Passed by reference.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                          Leave null to autodetermine query.
+	 * @return void
+	 */
+	public function merge_title_protection( &$title, $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->merge_title_protection()', '4.3.0', 'tsf()->title()->add_protection_status()' );
+
+		$title = $tsf->title()->add_protection_status( $title, $args );
 	}
 }

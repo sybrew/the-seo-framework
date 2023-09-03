@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Interpreters;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -118,7 +120,7 @@ final class SEOBar extends ListTable {
 		if ( $this->column_name !== $column_name ) return;
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput
-		echo \The_SEO_Framework\Interpreters\SEOBar::generate_bar( [
+		echo Interpreters\SEOBar::generate_bar( [
 			'id'        => $post_id,
 			'post_type' => $this->post_type,
 		] );
@@ -150,7 +152,7 @@ final class SEOBar extends ListTable {
 		if ( $this->doing_ajax )
 			$string .= $this->get_ajax_dispatch_updated_event();
 
-		return \The_SEO_Framework\Interpreters\SEOBar::generate_bar( [
+		return Interpreters\SEOBar::generate_bar( [
 			'id'       => $term_id,
 			'taxonomy' => $this->taxonomy,
 		] ) . $string;

@@ -8,7 +8,12 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Query,
+	Query_Utils,
+	Taxonomies,
+};
+use \The_SEO_Framework\Meta\Factory;
 
 /**
  * The SEO Framework plugin
@@ -178,7 +183,7 @@ class Generate_Ldjson extends Generate_Image {
 		];
 
 		// The name part.
-		$blogname = $this->get_blogname();
+		$blogname = Data\Blog::get_public_blog_name();
 		$kname    = $this->get_option( 'knowledge_name' );
 
 		$alternate_name = $kname && $kname !== $blogname ? $kname : '';
@@ -191,7 +196,7 @@ class Generate_Ldjson extends Generate_Image {
 		// The searchbox part.
 		$pattern     = '%s{%s}';
 		$action_name = 'search_term_string';
-		$search_link = \The_SEO_Framework\Helper\Query_Utils::using_pretty_permalinks() ? \trailingslashit( \get_search_link() ) : \get_search_link();
+		$search_link = Query_Utils::using_pretty_permalinks() ? \trailingslashit( \get_search_link() ) : \get_search_link();
 		/**
 		 * @since 2.7.0
 		 * @param string $search_url The default WordPress search URL without query parameters.
@@ -239,7 +244,7 @@ class Generate_Ldjson extends Generate_Image {
 			return '';
 
 		$knowledge_type = $this->get_option( 'knowledge_type' );
-		$knowledge_name = $this->get_option( 'knowledge_name' ) ?: $this->get_blogname();
+		$knowledge_name = $this->get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name();
 
 		$data = [
 			'@context' => 'https://schema.org',
@@ -318,7 +323,7 @@ class Generate_Ldjson extends Generate_Image {
 			'the_seo_framework_knowledge_logo',
 			[
 				( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
-					?: Builders\Images::get_site_icon_image_details()->current()['url']
+					?: Factory\Image\Main::get_site_icon_image_details()->current()['url'] // var_dump() use non-main!
 					?: '',
 				$get_option,
 			]
@@ -372,10 +377,10 @@ class Generate_Ldjson extends Generate_Image {
 			$_generator_args = [ 'id' => $parent_id ];
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$parent_name = $this->get_filtered_raw_custom_field_title( $_generator_args )
-							?: $this->get_filtered_raw_generated_title( $_generator_args );
+				$parent_name = Factory\Title::get_bare_custom_title( $_generator_args )
+							?: Factory\Title::get_bare_generated_title( $_generator_args );
 			} else {
-				$parent_name = $this->get_filtered_raw_generated_title( $_generator_args );
+				$parent_name = Factory\Title::get_bare_generated_title( $_generator_args );
 			}
 
 			$crumb = [
@@ -415,7 +420,7 @@ class Generate_Ldjson extends Generate_Image {
 
 		$post_id    = Query::get_the_real_id();
 		$post_type  = Query::get_post_type_real_id( $post_id );
-		$taxonomies = \The_SEO_Framework\Helper\Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type );
+		$taxonomies = Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type );
 
 		/**
 		 * @since 3.0.0
@@ -530,12 +535,12 @@ class Generate_Ldjson extends Generate_Image {
 			];
 
 			if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-				$cat_name = $this->get_filtered_raw_custom_field_title( $_generator_args )
-						 ?: $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
-						 ?: $this->get_static_untitled_title();
+				$cat_name = Factory\Title::get_bare_custom_title( $_generator_args )
+						 ?: Factory\Title::get_term_title( \get_term( $child_id, $taxonomy ) )
+						 ?: Factory\Title::get_untitled_title();
 			} else {
-				$cat_name = $this->get_generated_single_term_title( \get_term( $child_id, $taxonomy ) )
-						 ?: $this->get_static_untitled_title();
+				$cat_name = Factory\Title::get_term_title( \get_term( $child_id, $taxonomy ) )
+						 ?: Factory\Title::get_untitled_title();
 			}
 
 			$items[] = [
@@ -657,11 +662,11 @@ class Generate_Ldjson extends Generate_Image {
 		$_generator_args = [ 'id' => Query::get_the_front_page_id() ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$title = $this->get_filtered_raw_custom_field_title( $_generator_args )
-				 ?: $this->get_blogname();
+			$title = Factory\Title::get_bare_custom_title( $_generator_args )
+				 ?: Data\Blog::get_public_blog_name();
 		} else {
-			$title = $this->get_filtered_raw_generated_title( $_generator_args )
-				 ?: $this->get_blogname();
+			$title = Factory\Title::get_bare_generated_title( $_generator_args )
+				 ?: Data\Blog::get_public_blog_name();
 		}
 
 		return memo( [
@@ -700,12 +705,12 @@ class Generate_Ldjson extends Generate_Image {
 		$_generator_args = [ 'id' => $post_id ];
 
 		if ( $this->ld_json_breadcrumbs_use_seo_title() ) {
-			$name = $this->get_filtered_raw_custom_field_title( $_generator_args )
-				 ?: $this->get_generated_single_post_title( $post_id )
-				 ?: $this->get_static_untitled_title();
+			$name = Factory\Title::get_bare_custom_title( $_generator_args )
+				 ?: Factory\Title::get_post_title( $post_id )
+				 ?: Factory\Title::get_untitled_title();
 		} else {
-			$name = $this->get_generated_single_post_title( $post_id )
-				 ?: $this->get_static_untitled_title();
+			$name = Factory\Title::get_post_title( $post_id )
+				 ?: Factory\Title::get_untitled_title();
 		}
 
 		$crumb = [

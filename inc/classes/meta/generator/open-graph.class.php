@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -58,7 +60,7 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_type() {
 
-		$type = \tsf()->get_og_type();
+		$type = Factory\Open_Graph::get_type();
 
 		if ( $type )
 			yield [
@@ -76,7 +78,7 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_locale() {
 
-		$locale = \tsf()->fetch_locale();
+		$locale = Factory\Open_Graph::get_locale();
 
 		if ( \has_filter( 'the_seo_framework_ogdescription_output' ) ) {
 			/**
@@ -91,7 +93,7 @@ final class Open_Graph {
 				'the_seo_framework_oglocale_output',
 				[
 					$locale,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -114,7 +116,7 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_site_name() {
 
-		$sitename = \tsf()->get_blogname();
+		$sitename = Factory\Open_Graph::get_site_name();
 
 		if ( \has_filter( 'the_seo_framework_ogsitename_output' ) ) {
 			/**
@@ -129,7 +131,7 @@ final class Open_Graph {
 				'the_seo_framework_ogsitename_output',
 				[
 					$sitename,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -152,7 +154,7 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_title() {
 
-		$title = \tsf()->get_open_graph_title();
+		$title = Factory\Open_Graph::get_title();
 
 		if ( \has_filter( 'the_seo_framework_ogtitle_output' ) ) {
 			/**
@@ -167,7 +169,7 @@ final class Open_Graph {
 				'the_seo_framework_ogtitle_output',
 				[
 					$title,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -190,7 +192,7 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_description() {
 
-		$description = \tsf()->get_open_graph_description();
+		$description = Factory\Open_Graph::get_description();
 
 		if ( \has_filter( 'the_seo_framework_ogdescription_output' ) ) {
 			/**
@@ -205,7 +207,7 @@ final class Open_Graph {
 				'the_seo_framework_ogdescription_output',
 				[
 					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -228,7 +230,7 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_url() {
 
-		$url = \tsf()->get_current_canonical_url();
+		$url = Factory\Open_Graph::get_url();
 
 		if ( \has_filter( 'the_seo_framework_ogurl_output' ) ) {
 			/**
@@ -242,7 +244,7 @@ final class Open_Graph {
 				'the_seo_framework_ogurl_output',
 				[
 					$url,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -313,19 +315,7 @@ final class Open_Graph {
 	 */
 	public static function generate_article_published_time() {
 
-		$tsf = \tsf();
-
-		// var_dump() offload this to something like (the derpecated) output_published_time()
-		// Builder/OpenGraph::get_article_published_time()?
-		if ( ! $tsf->get_option( 'post_publish_time' ) || 'article' !== $tsf->get_og_type() ) return;
-
-		$id            = \The_SEO_Framework\Helper\Query::get_the_real_id();
-		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
-
-		if ( '0000-00-00 00:00:00' === $post_date_gmt ) return;
-
-		$time = $tsf->gmt2date( $tsf->get_timestamp_format(), $post_date_gmt );
-		// to this.
+		$time = Factory\Open_Graph::get_article_published_time();
 
 		if ( \has_filter( 'the_seo_framework_publishedtime_output' ) ) {
 			/**
@@ -340,7 +330,7 @@ final class Open_Graph {
 				'the_seo_framework_publishedtime_output',
 				[
 					$time,
-					$id,
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -363,13 +353,26 @@ final class Open_Graph {
 	 */
 	public static function generate_article_modified_time() {
 
-		$tsf = \tsf();
+		$time = Factory\Open_Graph::get_article_modified_time();
 
-		// var_dump() offload this to something like (the derpecated) output_modified_time()
-		// Builder/OpenGraph::get_article_modified_time()?
-		if ( ! $tsf->get_option( 'post_modify_time' ) || 'article' !== $tsf->get_og_type() ) return;
-
-		$time = $tsf->get_modified_time();
+		if ( \has_filter( 'the_seo_framework_modifiedtime_output' ) ) {
+			/**
+			 * @since 2.3.0
+			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated
+			 * @param string $time The article modified time.
+			 * @param int    $id   The current page or term ID.
+			 */
+			$time = (string) \apply_filters_ref_array(
+				'the_seo_framework_modifiedtime_output',
+				[
+					$time,
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+				],
+				'4.3.0 of The SEO Framework',
+				'the_seo_framework_meta_render_data',
+			);
+		}
 
 		if ( $time )
 			yield [

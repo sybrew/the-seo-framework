@@ -9,7 +9,13 @@ namespace The_SEO_Framework\Bridges;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Helper\Query;
+	\The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta\Factory;
+
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -170,7 +176,7 @@ final class ListEdit extends ListTable {
 
 		$_generator_args = [ 'id' => $post_id ];
 
-		$r_defaults = \The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
+		$r_defaults = Factory\Robots::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
@@ -242,25 +248,25 @@ final class ListEdit extends ListTable {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
-								 ? $tsf->get_custom_field_title( $_generator_args )
-								 : $tsf->get_filtered_raw_generated_title( $_generator_args );
-			$addition            = $tsf->get_home_title_additions();
-			$seplocation         = $tsf->get_home_title_seplocation();
+								 ? Factory\Title::get_custom_title( $_generator_args )
+								 : Factory\Title::get_bare_generated_title( $_generator_args );
+			$addition            = Factory\Title::get_additions_for_front_page();
+			$seplocation         = $tsf->get_additions_location_for_front_page();
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
 			$_has_home_desc      = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
-								 ? $tsf->get_description_from_custom_field( $_generator_args )
-								 : $tsf->get_generated_description( $_generator_args );
+								 ? Factory\Description::get_custom_description( $_generator_args )
+								 : Factory\Description::get_generated_description( $_generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
 		} else {
-			$default_title       = $tsf->get_filtered_raw_generated_title( $_generator_args );
-			$addition            = $tsf->get_blogname();
-			$seplocation         = $tsf->get_title_seplocation();
+			$default_title       = Factory\Title::get_bare_generated_title( $_generator_args );
+			$addition            = Data\Blog::get_public_blog_name();
+			$seplocation         = $tsf->get_additions_location();
 			$is_title_ref_locked = false;
 
-			$default_description = $tsf->get_generated_description( $_generator_args );
+			$default_description = Factory\Description::get_generated_description( $_generator_args );
 			$is_desc_ref_locked  = false;
 		}
 
@@ -270,7 +276,7 @@ final class ListEdit extends ListTable {
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => $tsf->s_title( $default_title ),
-			'addAdditions'      => $tsf->use_title_branding( $_generator_args ),
+			'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
 			'additionValue'     => $tsf->s_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
@@ -333,7 +339,7 @@ final class ListEdit extends ListTable {
 			'taxonomy' => $this->taxonomy,
 		];
 
-		$r_defaults = \The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
+		$r_defaults = Factory\Robots::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
@@ -406,21 +412,21 @@ final class ListEdit extends ListTable {
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				\The_SEO_Framework\Helper\Taxonomies::get_taxonomy_label( $_generator_args['taxonomy'] )
+				Taxonomies::get_taxonomy_label( $_generator_args['taxonomy'] )
 			)
 			: '';
 
 		$title_data = [
 			'refTitleLocked'    => false,
-			'defaultTitle'      => $tsf->s_title( $tsf->get_filtered_raw_generated_title( $_generator_args ) ),
-			'addAdditions'      => $tsf->use_title_branding( $_generator_args ),
-			'additionValue'     => $tsf->s_title( $tsf->get_blogname() ),
-			'additionPlacement' => 'left' === $tsf->get_title_seplocation() ? 'before' : 'after',
+			'defaultTitle'      => $tsf->s_title( Factory\Title::get_bare_generated_title( $_generator_args ) ),
+			'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
+			'additionValue'     => $tsf->s_title( Data\Blog::get_public_blog_name() ),
+			'additionPlacement' => 'left' === $tsf->get_additions_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];
 		$desc_data  = [
 			'refDescriptionLocked' => false,
-			'defaultDescription'   => $tsf->get_generated_description( $_generator_args ),
+			'defaultDescription'   => Factory\Description::get_generated_description( $_generator_args ),
 		];
 
 		$container .= sprintf(

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots
  * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
+namespace The_SEO_Framework\Meta\Factory\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
  * Factory engine for robots generator.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
+ * @since 4.3.0 Moved to Meta\Factory\Robots from Builders\Robots
  * @access private
  *         Not part of the public API.
  */

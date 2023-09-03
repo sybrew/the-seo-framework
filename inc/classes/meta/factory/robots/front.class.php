@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots
  * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
+namespace The_SEO_Framework\Meta\Factory\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -13,7 +13,7 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
-use \The_SEO_Framework\Meta\Factory\Robots;
+use \The_SEO_Framework\Meta\Factory\Robots; // Yes, it is legal to share class and namespaces.
 use \The_SEO_Framework\Helper\{
 	Query,
 	Query_Utils,
@@ -41,7 +41,7 @@ use \The_SEO_Framework\Helper\{
  * Engine for robots generator via front-end query.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
+ * @since 4.3.0 Moved to Meta\Factory\Robots from Builders\Robots
  * @access private
  *         Not part of the public API.
  * @final Can't be extended.
@@ -125,19 +125,19 @@ final class Front extends Factory {
 			// is_real_front_page() can still be singular or archive. Thus, this conditional block is split up.
 			if ( Query::is_archive() ) {
 				if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
-					yield 'globals_taxonomy' => Robots\API::is_taxonomy_robots_set( $type, Query::get_current_taxonomy() );
+					yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, Query::get_current_taxonomy() );
 
 					// Store values from each post type bound to the taxonomy.
-					foreach ( \The_SEO_Framework\Helper\Taxonomies::get_post_types_from_taxonomy() as $post_type )
-						$_is_post_type_robots_set[] = Robots\API::is_post_type_robots_set( $type, $post_type );
+					foreach ( Taxonomies::get_post_types_from_taxonomy() as $post_type )
+						$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
 					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 				} elseif ( \is_post_type_archive() ) {
-					yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, Query::get_current_post_type() );
+					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, Query::get_current_post_type() );
 				}
 			} elseif ( Query::is_singular() ) {
-				yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, Query::get_current_post_type() );
+				yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, Query::get_current_post_type() );
 			}
 
 		// We assert options here for a jump to index_protection might be unaware.

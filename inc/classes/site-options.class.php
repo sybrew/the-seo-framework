@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -636,161 +639,6 @@ class Site_Options extends Sanitize {
 	}
 
 	/**
-	 * Returns supported social site locales.
-	 *
-	 * @since 4.2.0
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
-	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
-	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
-	 *
-	 * @return array Valid social locales
-	 */
-	public function supported_social_locales() {
-		return [
-			'af_ZA' => 'af',  // Afrikaans
-			'ak_GH' => 'ak',  // Akan
-			'am_ET' => 'am',  // Amharic
-			'ar_AR' => 'ar',  // Arabic
-			'as_IN' => 'as',  // Assamese
-			'ay_BO' => 'ay',  // Aymara
-			'az_AZ' => 'az',  // Azerbaijani
-			'be_BY' => 'be',  // Belarusian
-			'bg_BG' => 'bg',  // Bulgarian
-			'bn_IN' => 'bn',  // Bengali
-			'br_FR' => 'br',  // Breton
-			'bs_BA' => 'bs',  // Bosnian
-			'ca_ES' => 'ca',  // Catalan
-			'cb_IQ' => 'cb',  // Sorani Kurdish
-			'ck_US' => 'ck',  // Cherokee
-			'co_FR' => 'co',  // Corsican
-			'cs_CZ' => 'cs',  // Czech
-			'cx_PH' => 'cx',  // Cebuano
-			'cy_GB' => 'cy',  // Welsh
-			'da_DK' => 'da',  // Danish
-			'de_DE' => 'de',  // German
-			'el_GR' => 'el',  // Greek
-			'en_GB' => 'en',  // English (UK)
-			'en_IN' => 'en',  // English (India)
-			'en_PI' => 'en',  // English (Pirate)
-			'en_UD' => 'en',  // English (Upside Down)
-			'en_US' => 'en',  // English (US)
-			'eo_EO' => 'eo',  // Esperanto
-			'es_CL' => 'es',  // Spanish (Chile)
-			'es_CO' => 'es',  // Spanish (Colombia)
-			'es_ES' => 'es',  // Spanish (Spain)
-			'es_LA' => 'es',  // Spanish
-			'es_MX' => 'es',  // Spanish (Mexico)
-			'es_VE' => 'es',  // Spanish (Venezuela)
-			'et_EE' => 'et',  // Estonian
-			'eu_ES' => 'eu',  // Basque
-			'fa_IR' => 'fa',  // Persian
-			'fb_LT' => 'fb',  // Leet Speak
-			'ff_NG' => 'ff',  // Fulah
-			'fi_FI' => 'fi',  // Finnish
-			'fo_FO' => 'fo',  // Faroese
-			'fr_CA' => 'fr',  // French (Canada)
-			'fr_FR' => 'fr',  // French (France)
-			'fy_NL' => 'fy',  // Frisian
-			'ga_IE' => 'ga',  // Irish
-			'gl_ES' => 'gl',  // Galician
-			'gn_PY' => 'gn',  // Guarani
-			'gu_IN' => 'gu',  // Gujarati
-			'gx_GR' => 'gx',  // Classical Greek
-			'ha_NG' => 'ha',  // Hausa
-			'he_IL' => 'he',  // Hebrew
-			'hi_IN' => 'hi',  // Hindi
-			'hr_HR' => 'hr',  // Croatian
-			'hu_HU' => 'hu',  // Hungarian
-			'hy_AM' => 'hy',  // Armenian
-			'id_ID' => 'id',  // Indonesian
-			'ig_NG' => 'ig',  // Igbo
-			'is_IS' => 'is',  // Icelandic
-			'it_IT' => 'it',  // Italian
-			'ja_JP' => 'ja',  // Japanese
-			'ja_KS' => 'ja',  // Japanese (Kansai)
-			'jv_ID' => 'jv',  // Javanese
-			'ka_GE' => 'ka',  // Georgian
-			'kk_KZ' => 'kk',  // Kazakh
-			'km_KH' => 'km',  // Khmer
-			'kn_IN' => 'kn',  // Kannada
-			'ko_KR' => 'ko',  // Korean
-			'ku_TR' => 'ku',  // Kurdish (Kurmanji)
-			'ky_KG' => 'ky',  // Kyrgyz
-			'la_VA' => 'la',  // Latin
-			'lg_UG' => 'lg',  // Ganda
-			'li_NL' => 'li',  // Limburgish
-			'ln_CD' => 'ln',  // Lingala
-			'lo_LA' => 'lo',  // Lao
-			'lt_LT' => 'lt',  // Lithuanian
-			'lv_LV' => 'lv',  // Latvian
-			'mg_MG' => 'mg',  // Malagasy
-			'mi_NZ' => 'mi',  // Māori
-			'mk_MK' => 'mk',  // Macedonian
-			'ml_IN' => 'ml',  // Malayalam
-			'mn_MN' => 'mn',  // Mongolian
-			'mr_IN' => 'mr',  // Marathi
-			'ms_MY' => 'ms',  // Malay
-			'mt_MT' => 'mt',  // Maltese
-			'my_MM' => 'my',  // Burmese
-			'nb_NO' => 'nb',  // Norwegian (bokmal)
-			'nd_ZW' => 'nd',  // Ndebele
-			'ne_NP' => 'ne',  // Nepali
-			'nl_BE' => 'nl',  // Dutch (België)
-			'nl_NL' => 'nl',  // Dutch
-			'nn_NO' => 'nn',  // Norwegian (nynorsk)
-			'ny_MW' => 'ny',  // Chewa
-			'or_IN' => 'or',  // Oriya
-			'pa_IN' => 'pa',  // Punjabi
-			'pl_PL' => 'pl',  // Polish
-			'ps_AF' => 'ps',  // Pashto
-			'pt_BR' => 'pt',  // Portuguese (Brazil)
-			'pt_PT' => 'pt',  // Portuguese (Portugal)
-			'qu_PE' => 'qu',  // Quechua
-			'rm_CH' => 'rm',  // Romansh
-			'ro_RO' => 'ro',  // Romanian
-			'ru_RU' => 'ru',  // Russian
-			'rw_RW' => 'rw',  // Kinyarwanda
-			'sa_IN' => 'sa',  // Sanskrit
-			'sc_IT' => 'sc',  // Sardinian
-			'se_NO' => 'se',  // Northern Sámi
-			'si_LK' => 'si',  // Sinhala
-			'sk_SK' => 'sk',  // Slovak
-			'sl_SI' => 'sl',  // Slovenian
-			'sn_ZW' => 'sn',  // Shona
-			'so_SO' => 'so',  // Somali
-			'sq_AL' => 'sq',  // Albanian
-			'sr_RS' => 'sr',  // Serbian
-			'sv_SE' => 'sv',  // Swedish
-			'sy_SY' => 'sy',  // Swahili
-			'sw_KE' => 'sw',  // Syriac
-			'sz_PL' => 'sz',  // Silesian
-			'ta_IN' => 'ta',  // Tamil
-			'te_IN' => 'te',  // Telugu
-			'tg_TJ' => 'tg',  // Tajik
-			'th_TH' => 'th',  // Thai
-			'tk_TM' => 'tk',  // Turkmen
-			'tl_PH' => 'tl',  // Filipino
-			'tl_ST' => 'tl',  // Klingon
-			'tr_TR' => 'tr',  // Turkish
-			'tt_RU' => 'tt',  // Tatar
-			'tz_MA' => 'tz',  // Tamazight
-			'uk_UA' => 'uk',  // Ukrainian
-			'ur_PK' => 'ur',  // Urdu
-			'uz_UZ' => 'uz',  // Uzbek
-			'vi_VN' => 'vi',  // Vietnamese
-			'wo_SN' => 'wo',  // Wolof
-			'xh_ZA' => 'xh',  // Xhosa
-			'yi_DE' => 'yi',  // Yiddish
-			'yo_NG' => 'yo',  // Yoruba
-			'zh_CN' => 'zh',  // Simplified Chinese (China)
-			'zh_HK' => 'zh',  // Traditional Chinese (Hong Kong)
-			'zh_TW' => 'zh',  // Traditional Chinese (Taiwan)
-			'zu_ZA' => 'zu',  // Zulu
-			'zz_TR' => 'zz',  // Zazaki
-		];
-	}
-
-	/**
 	 * Returns all post type archive meta.
 	 *
 	 * We do not test whether a post type is supported, for it'll conflict with data-fills on the
@@ -874,7 +722,7 @@ class Site_Options extends Sanitize {
 	 */
 	public function get_all_post_type_archive_meta_defaults() {
 
-		foreach ( \The_SEO_Framework\Helper\Post_Types::get_public_post_type_archives() as $pta )
+		foreach ( Post_Types::get_public_post_type_archives() as $pta )
 			$defaults[ $pta ] = $this->get_post_type_archive_meta_defaults( $pta );
 
 		return $defaults ?? [];

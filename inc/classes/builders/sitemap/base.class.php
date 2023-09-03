@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query_Utils;
+use \The_SEO_Framework\Helper\Query_Utils,
+	\The_SEO_Framework\Bridges;
 
 /**
  * The SEO Framework plugin
@@ -65,7 +66,7 @@ class Base extends Main {
 	 */
 	public function prerender_sitemap( $sitemap_id = 'base' ) {
 
-		$bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+		$bridge = Bridges\Sitemap::get_instance();
 
 		if ( ! $bridge->sitemap_cache_enabled() ) return;
 
@@ -102,7 +103,7 @@ class Base extends Main {
 	 */
 	public function generate_sitemap( $sitemap_id = 'base' ) {
 
-		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+		$bridge           = Bridges\Sitemap::get_instance();
 		$_caching_enabled = $bridge->sitemap_cache_enabled();
 
 		$sitemap_content = $_caching_enabled

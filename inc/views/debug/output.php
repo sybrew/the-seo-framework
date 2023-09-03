@@ -9,7 +9,11 @@
 
 use The_SEO_Framework\Internal\Debug;
 
-use The_SEO_Framework\Helper\Query;
+use The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Taxonomies
+};
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -22,9 +26,9 @@ $post_type = Query::get_current_post_type();
 if ( Query::is_real_front_page() ) {
 	$type = 'Front Page';
 } elseif ( $taxonomy ) {
-	$type = \The_SEO_Framework\Helper\Taxonomies::get_taxonomy_label( $taxonomy );
+	$type = Taxonomies::get_taxonomy_label( $taxonomy );
 } elseif ( $post_type ) {
-	$type = \The_SEO_Framework\Helper\Post_Types::get_post_type_label( $post_type );
+	$type = Post_Types::get_post_type_label( $post_type );
 } else {
 	$type = 'Unknown';
 }

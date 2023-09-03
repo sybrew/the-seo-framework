@@ -8,7 +8,16 @@ namespace The_SEO_Framework\Builders\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use const \The_SEO_Framework\ROBOTS_ASSERT;
+
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
+};
+
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta\Factory,
+	\The_SEO_Framework\Interpreters\SEOBar;
 
 /**
  * The SEO Framework plugin
@@ -35,8 +44,8 @@ use \The_SEO_Framework\Helper\Query;
  *
  * @access private
  * @internal
- * @see \The_SEO_Framework\Interpreters\SEOBar
- *      Use \The_SEO_Framework\Interpreters\SEOBar::generate_bar() instead.
+ * @see SEOBar
+ *      Use SEOBar::generate_bar() instead.
  */
 final class Term extends Main {
 
@@ -102,25 +111,25 @@ final class Term extends Main {
 			'states' => [
 				'locale'       => \get_locale(),
 				'isempty'      => ! static::$tsf->is_term_populated( static::$query['id'], static::$query['taxonomy'] ),
-				'posttypes'    => \The_SEO_Framework\Helper\Taxonomies::get_post_types_from_taxonomy( static::$query['taxonomy'] ),
+				'posttypes'    => Taxonomies::get_post_types_from_taxonomy( static::$query['taxonomy'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					\The_SEO_Framework\Meta\Factory\Robots\API::generate_meta(
+					Factory\Robots::generate_meta(
 						[
 							'id'       => static::$query['id'],
 							'taxonomy' => static::$query['taxonomy'],
 						],
 						[ 'noindex', 'nofollow', 'noarchive' ],
-						\The_SEO_Framework\ROBOTS_ASSERT
+						ROBOTS_ASSERT
 					)
 				),
 				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
 				// The asserter should be leading, but the SEO Bar should be readable.
-				'robotsassert' => \The_SEO_Framework\Meta\Factory\Robots\Api::get_collected_meta_assertions(),
+				'robotsassert' => Factory\Robots::get_collected_meta_assertions(),
 			],
 		];
 	}
@@ -148,7 +157,7 @@ final class Term extends Main {
 	 * @return array $item : {
 	 *    string  $symbol : The displayed symbol that identifies your bar.
 	 *    string  $title  : The title of the assessment.
-	 *    int     $status : Power of two. See \The_SEO_Framework\Interpreters\SEOBar's class constants.
+	 *    int     $status : Power of two. See SEOBar's class constants.
 	 *    string  $reason : The final assessment: The reason for the $status. The latest state-changing reason is used.
 	 *    string  $assess : The assessments on why the reason is set. Keep it short and concise!
 	 *                     Does not accept HTML for performant ARIA support.
@@ -160,8 +169,8 @@ final class Term extends Main {
 			'term/title/defaults',
 			[
 				'params'   => [
-					'untitled'        => static::$tsf->get_static_untitled_title(),
-					'blogname_quoted' => preg_quote( static::$tsf->get_blogname(), '/' ),
+					'untitled'        => Factory\Title::get_untitled_title(),
+					'blogname_quoted' => preg_quote( Data\Blog::get_public_blog_name(), '/' ),
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
 					'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
 					'estimated'       => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
@@ -171,7 +180,7 @@ final class Term extends Main {
 					'untitled'   => sprintf(
 						/* translators: %s = "Untitled" */
 						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
-						static::$tsf->get_static_untitled_title()
+						Factory\Title::get_untitled_title()
 					),
 					'prefixed'   => \__( 'A term label prefix is automatically added which increases the length.', 'autodescription' ),
 					'branding'   => [
@@ -192,7 +201,7 @@ final class Term extends Main {
 					'generated' => [
 						'symbol' => \_x( 'TG', 'Title Generated', 'autodescription' ),
 						'title'  => \__( 'Title, generated', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( "It's built from the term name.", 'autodescription' ),
@@ -201,7 +210,7 @@ final class Term extends Main {
 					'custom'    => [
 						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
 						'title'  => \__( 'Title', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Obtained from term SEO meta input.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( "It's built from term SEO meta input.", 'autodescription' ),
@@ -218,13 +227,13 @@ final class Term extends Main {
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$title_part = static::$tsf->get_filtered_raw_custom_field_title( $_generator_args );
+		$title_part = Factory\Title::get_bare_custom_title( $_generator_args );
 
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
 
 			if ( static::$tsf->has_unprocessed_syntax( $title_part, false ) ) {
-				$item['status']           = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+				$item['status']           = SEOBar::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
 
@@ -238,18 +247,18 @@ final class Term extends Main {
 				$item['assess']['prefixed'] = $cache['assess']['prefixed'];
 			}
 
-			$title_part = static::$tsf->get_filtered_raw_generated_title( $_generator_args );
+			$title_part = Factory\Title::get_bare_generated_title( $_generator_args );
 		}
 
 		if ( ! $title_part ) {
-			$item['status']          = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status']          = SEOBar::STATE_BAD;
 			$item['reason']          = $cache['reason']['incomplete'];
 			$item['assess']['empty'] = $cache['assess']['empty'];
 
 			// Further assessments must be made later. Halt assertion here to prevent confusion.
 			return $item;
 		} elseif ( $title_part === $cache['params']['untitled'] ) {
-			$item['status']             = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status']             = SEOBar::STATE_BAD;
 			$item['reason']             = $cache['reason']['incomplete'];
 			$item['assess']['untitled'] = $cache['assess']['untitled'];
 
@@ -259,9 +268,9 @@ final class Term extends Main {
 
 		$title = $title_part;
 
-		if ( static::$tsf->use_title_branding( $_generator_args ) ) {
+		if ( Factory\Title\Conditions::use_title_branding( $_generator_args ) ) {
 			$_title_before = $title;
-			static::$tsf->merge_title_branding( $title, $_generator_args );
+			$title         = Factory\Title::add_branding( $title, $_generator_args );
 
 			// Absence assertion is done after this.
 			if ( $title === $_title_before ) {
@@ -284,11 +293,11 @@ final class Term extends Main {
 
 		if ( ! $brand_count ) {
 			// Override branding state.
-			$item['status']             = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
+			$item['status']             = SEOBar::STATE_UNKNOWN;
 			$item['reason']             = $cache['reason']['notbranded'];
 			$item['assess']['branding'] = $cache['assess']['branding']['not'];
 		} elseif ( $brand_count > 1 ) {
-			$item['status']               = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status']               = SEOBar::STATE_BAD;
 			$item['reason']               = $cache['reason']['duplicated'];
 			$item['assess']['duplicated'] = $cache['assess']['duplicated'];
 
@@ -308,19 +317,19 @@ final class Term extends Main {
 		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
 
 		if ( $title_len < $guidelines['lower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooShort'];
 			$length_i18n    = $guidelines_i18n['long']['farTooShort'];
 		} elseif ( $title_len < $guidelines['goodLower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+			$item['status'] = SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooShort'];
 			$length_i18n    = $guidelines_i18n['long']['tooShort'];
 		} elseif ( $title_len > $guidelines['upper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooLong'];
 			$length_i18n    = $guidelines_i18n['long']['farTooLong'];
 		} elseif ( $title_len > $guidelines['goodUpper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+			$item['status'] = SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooLong'];
 			$length_i18n    = $guidelines_i18n['long']['tooLong'];
 		} else {
@@ -377,7 +386,7 @@ final class Term extends Main {
 					'generated'   => [
 						'symbol' => \_x( 'DG', 'Description Generated', 'autodescription' ),
 						'title'  => \__( 'Description, generated', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Automatically generated.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( "It's built from the term description field.", 'autodescription' ),
@@ -386,7 +395,7 @@ final class Term extends Main {
 					'emptynoauto' => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'status' => SEOBar::STATE_UNKNOWN,
 						'reason' => \__( 'Empty.', 'autodescription' ),
 						'assess' => [
 							'noauto' => \__( 'No term description is set.', 'autodescription' ),
@@ -395,7 +404,7 @@ final class Term extends Main {
 					'custom'      => [
 						'symbol' => \_x( 'D', 'Description', 'autodescription' ),
 						'title'  => \__( 'Description', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Obtained from the term SEO meta input.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( "It's built from the term SEO meta input.", 'autodescription' ),
@@ -412,20 +421,20 @@ final class Term extends Main {
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$desc = static::$tsf->get_description_from_custom_field( $_generator_args, false );
+		$desc = Factory\Description::get_custom_description( $_generator_args, false );
 
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
 
 			if ( static::$tsf->has_unprocessed_syntax( $desc ) ) {
-				$item['status']           = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+				$item['status']           = SEOBar::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
 
 				// Further assessments must be made later. Halt assertion here to prevent confusion.
 				return $item;
 			}
-		} elseif ( ! static::$tsf->is_auto_description_enabled( $_generator_args ) ) {
+		} elseif ( ! Factory\Description::may_generate( $_generator_args ) ) {
 			$item = $cache['defaults']['emptynoauto'];
 
 			// No description is found. There's no need to continue parsing.
@@ -433,10 +442,10 @@ final class Term extends Main {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			$desc = static::$tsf->get_generated_description( $_generator_args, false );
+			$desc = Factory\Description::get_generated_description( $_generator_args, false );
 
 			if ( ! \strlen( $desc ) ) {
-				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNDEFINED;
+				$item['status'] = SEOBar::STATE_UNDEFINED;
 				$item['reason'] = $cache['reason']['empty'];
 
 				// This is now inaccurate, purge it.
@@ -476,11 +485,11 @@ final class Term extends Main {
 			if ( $max > 3 || \count( $repeated_words ) > 1 ) {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
-				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+				$item['status'] = SEOBar::STATE_BAD;
 				return $item;
 			} else {
 				$item['reason'] = $cache['reason']['founddupe'];
-				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+				$item['status'] = SEOBar::STATE_OKAY;
 			}
 		}
 
@@ -496,19 +505,19 @@ final class Term extends Main {
 		);
 
 		if ( $desc_len < $guidelines['lower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooShort'];
 			$length_i18n    = $guidelines_i18n['long']['farTooShort'];
 		} elseif ( $desc_len < $guidelines['goodLower'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+			$item['status'] = SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooShort'];
 			$length_i18n    = $guidelines_i18n['long']['tooShort'];
 		} elseif ( $desc_len > $guidelines['upper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $guidelines_i18n['shortdot']['farTooLong'];
 			$length_i18n    = $guidelines_i18n['long']['farTooLong'];
 		} elseif ( $desc_len > $guidelines['goodUpper'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+			$item['status'] = SEOBar::STATE_OKAY;
 			$item['reason'] = $guidelines_i18n['shortdot']['tooLong'];
 			$length_i18n    = $guidelines_i18n['long']['tooLong'];
 		} else {
@@ -561,7 +570,7 @@ final class Term extends Main {
 					'index'   => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Term may be indexed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag allows indexing.', 'autodescription' ),
@@ -570,7 +579,7 @@ final class Term extends Main {
 					'noindex' => [
 						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
 						'title'  => \__( 'Indexing', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'status' => SEOBar::STATE_UNKNOWN,
 						'reason' => \__( 'Term may not be indexed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag does not allow indexing.', 'autodescription' ),
@@ -589,7 +598,7 @@ final class Term extends Main {
 		}
 
 		if ( ! $robots_global['blogpublic'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $cache['reason']['notpublic'];
 
 			unset( $item['assess']['base'] );
@@ -645,7 +654,7 @@ final class Term extends Main {
 				'get_custom_field' => true,
 			] );
 			if ( $permalink !== $canonical ) {
-				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
+				$item['status'] = SEOBar::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['canonicalurl'];
 
 				$item['assess']['protected'] = $cache['assess']['canonicalurl'];
@@ -655,13 +664,13 @@ final class Term extends Main {
 		if ( $this->query_cache['states']['isempty'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
 				// Everything's as intended...
-				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN;
+				$item['status'] = SEOBar::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['empty'];
 
 				$item['assess']['empty'] = $cache['assess']['empty'];
 			} else {
 				// Something's wrong. Maybe override, maybe filter, maybe me.
-				$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+				$item['status'] = SEOBar::STATE_BAD;
 
 				$item['reason']          = $cache['reason']['emptyoverride'];
 				$item['assess']['empty'] = $cache['assess']['emptyoverride'];
@@ -707,7 +716,7 @@ final class Term extends Main {
 					'follow'   => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Term links may be followed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag allows link following.', 'autodescription' ),
@@ -716,7 +725,7 @@ final class Term extends Main {
 					'nofollow' => [
 						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
 						'title'  => \__( 'Following', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'status' => SEOBar::STATE_UNKNOWN,
 						'reason' => \__( 'Term links may not be followed.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag does not allow link following.', 'autodescription' ),
@@ -735,7 +744,7 @@ final class Term extends Main {
 		}
 
 		if ( ! $robots_global['blogpublic'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $cache['reason']['notpublic'];
 
 			unset( $item['assess']['base'] );
@@ -780,7 +789,7 @@ final class Term extends Main {
 
 		if ( ! $this->query_cache['states']['robotsmeta']['nofollow'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-				$item['status']            = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+				$item['status']            = SEOBar::STATE_OKAY;
 				$item['assess']['noindex'] = $cache['assess']['noindex'];
 			}
 
@@ -824,7 +833,7 @@ final class Term extends Main {
 					'archive'   => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+						'status' => SEOBar::STATE_GOOD,
 						'reason' => \__( 'Term may be archived.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag allows archiving.', 'autodescription' ),
@@ -833,7 +842,7 @@ final class Term extends Main {
 					'noarchive' => [
 						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
 						'title'  => \__( 'Archiving', 'autodescription' ),
-						'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+						'status' => SEOBar::STATE_UNKNOWN,
 						'reason' => \__( 'Term may not be archived.', 'autodescription' ),
 						'assess' => [
 							'base' => \__( 'The robots meta tag does not allow archiving.', 'autodescription' ),
@@ -852,7 +861,7 @@ final class Term extends Main {
 		}
 
 		if ( ! $robots_global['blogpublic'] ) {
-			$item['status'] = \The_SEO_Framework\Interpreters\SEOBar::STATE_BAD;
+			$item['status'] = SEOBar::STATE_BAD;
 			$item['reason'] = $cache['reason']['notpublic'];
 
 			unset( $item['assess']['base'] );
@@ -897,7 +906,7 @@ final class Term extends Main {
 
 		if ( ! $this->query_cache['states']['robotsmeta']['noarchive'] ) {
 			if ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
-				$item['status']            = \The_SEO_Framework\Interpreters\SEOBar::STATE_OKAY;
+				$item['status']            = SEOBar::STATE_OKAY;
 				$item['assess']['noindex'] = $cache['assess']['noindex'];
 			}
 
@@ -925,7 +934,7 @@ final class Term extends Main {
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
 					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_GOOD,
+					'status' => SEOBar::STATE_GOOD,
 					'reason' => \__( 'Term does not redirect visitors.', 'autodescription' ),
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers may access this page.', 'autodescription' ),
@@ -941,7 +950,7 @@ final class Term extends Main {
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
 					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => \The_SEO_Framework\Interpreters\SEOBar::STATE_UNKNOWN,
+					'status' => SEOBar::STATE_UNKNOWN,
 					'reason' => \__( 'Term redirects visitors.', 'autodescription' ),
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),

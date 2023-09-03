@@ -7,9 +7,9 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use \The_SEO_Framework\Interpreters\HTML;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
+use \The_SEO_Framework\Interpreters\HTML;
 
 ?>
 <script type=text/html id=tmpl-tsf-disabled-post-type-help>

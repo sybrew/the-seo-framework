@@ -9,6 +9,7 @@ namespace The_SEO_Framework\Bridges;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Meta\Factory;
 
 /**
  * The SEO Framework plugin
@@ -312,17 +313,17 @@ final class AJAX {
 					case 'metadescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
-										?: $tsf->get_generated_description( $_generator_args, false );
+									   ?: Factory\Description::get_generated_description( $_generator_args, false );
 						} else {
-							$data[ $g ] = $tsf->get_generated_description( $_generator_args, false );
+							$data[ $g ] = Factory\Description::get_generated_description( $_generator_args, false );
 						}
 						break;
 					case 'ogdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
-										?: $tsf->get_generated_open_graph_description( $_generator_args, false );
+									   ?: Factory\Open_Graph::get_generated_description( $_generator_args, false );
 						} else {
-							$data[ $g ] = $tsf->get_generated_open_graph_description( $_generator_args, false );
+							$data[ $g ] = Factory\Open_Graph::get_generated_description( $_generator_args, false );
 						}
 						break;
 					case 'twdescription':

@@ -68,7 +68,7 @@ final class Webmasters {
 				'the_seo_framework_googlesite_output',
 				[
 					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -105,7 +105,7 @@ final class Webmasters {
 				'the_seo_framework_bingsite_output',
 				[
 					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -142,7 +142,7 @@ final class Webmasters {
 				'the_seo_framework_yandexsite_output',
 				[
 					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -179,7 +179,7 @@ final class Webmasters {
 				'the_seo_framework_baidusite_output',
 				[
 					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -216,7 +216,7 @@ final class Webmasters {
 				'the_seo_framework_pintsite_output',
 				[
 					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

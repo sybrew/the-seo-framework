@@ -51,6 +51,7 @@ function _init_locale() {
  * action later than plugins_loaded and you can access the class and functions.
  *
  * @since 3.1.0
+ * @since 4.3.0 Now returns an uncached silencer when called too early.
  * @access private
  * @see function tsf().
  * @see function tsf().
@@ -61,7 +62,7 @@ function _init_locale() {
 function _init_tsf() {
 
 	// Memoize the class. Do not run constructors more than once.
-	static $tsf = null;
+	static $tsf;
 
 	if ( $tsf )
 		return $tsf;
@@ -70,7 +71,10 @@ function _init_tsf() {
 	 * @since 2.3.7
 	 * @param bool $load
 	 */
-	if ( \apply_filters( 'the_seo_framework_load', true ) ) {
+	if (
+		   \apply_filters( 'the_seo_framework_load', true )
+		&& \did_action( 'plugins_loaded' )
+	) {
 		$tsf         = new Load();
 		$tsf->loaded = true;
 
@@ -91,13 +95,17 @@ function _init_tsf() {
 		 */
 		\do_action( 'the_seo_framework_loaded' );
 	} else {
-		$tsf         = new Internal\Silencer();
-		$tsf->loaded = false;
-	}
+		$_tsf         = new Internal\Silencer();
+		$_tsf->loaded = false;
 
-	// did_action() checks for current action too.
-	if ( ! \did_action( 'plugins_loaded' ) )
-		$tsf->_doing_it_wrong( 'tsf(), the_seo_framework(), or ' . __FUNCTION__, 'Use <code>tsf()</code> after action <code>plugins_loaded</code> priority 5.', '3.1' );
+		// did_action() checks for current action too.
+		if ( \did_action( 'plugins_loaded' ) ) {
+			// Cache the silencer.
+			$tsf = $_tsf;
+		} else {
+			\_doing_it_wrong( 'tsf(), the_seo_framework(), or ' . __FUNCTION__, 'Use <code>tsf()</code> after action <code>plugins_loaded</code> priority 5.', '3.1 or The SEO Framework' );
+		}
+	}
 
 	return $tsf;
 }
@@ -141,11 +149,11 @@ function _autoload_classes( $class ) {
 		$_bootstrap_timer = 0;
 	}
 
-	$_class_parts   = explode( '\\', $class );
+	$_class_parts   = explode( '\\', str_replace( '_', '-', $class ) );
 	$_rel_dir_parts = \array_slice( $_class_parts, 1, -1 );
 
 	// The last part of the chunks is the class name--which corresponds to the file.
-	$file = str_replace( '_', '-', end( $_class_parts ) );
+	$file = end( $_class_parts );
 
 	if ( $_rel_dir_parts ) {
 		if ( 'traits' === $_rel_dir_parts[0] ) {

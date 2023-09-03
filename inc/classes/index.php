@@ -28,4 +28,5 @@
  *       | Load
  *          |-> Final
  *          |-> Instanced in function `tsf()`|`the_seo_framework()`|`The_SEO_Framework\_init_tsf()`
+ * var_dump() reorder.
  */

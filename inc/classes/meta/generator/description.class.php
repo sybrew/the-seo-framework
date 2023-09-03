@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -50,7 +52,7 @@ final class Description {
 	 */
 	public static function generate_description() {
 
-		$description = \tsf()->get_description();
+		$description = Factory\Description::get_description();
 
 		if ( \has_filter( 'the_seo_framework_description_output' ) ) {
 			/**
@@ -63,7 +65,7 @@ final class Description {
 				'the_seo_framework_description_output',
 				[
 					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

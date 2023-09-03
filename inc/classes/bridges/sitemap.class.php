@@ -8,12 +8,10 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Interpreters;
 
-use function \The_SEO_Framework\{
-	memo,
-	umemo,
-};
+use function \The_SEO_Framework\memo;
 
 /**
  * The SEO Framework plugin
@@ -581,7 +579,7 @@ final class Sitemap {
 			header( 'Cache-Control: max-age=1800', true );
 		}
 
-		\The_SEO_Framework\Interpreters\Sitemap_XSL::prepare();
+		Interpreters\Sitemap_XSL::prepare();
 
 		static::$tsf->get_view( 'sitemap/xsl-stylesheet' );
 		exit;

@@ -9,7 +9,10 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
+use \The_SEO_Framework\Data;
+
 $logo = '';
+
 if ( $this->get_option( 'sitemap_logo' ) ) {
 
 	$id   = $this->get_option( 'sitemap_logo_id' ) ?: get_theme_mod( 'custom_logo' ) ?: get_option( 'site_icon' );
@@ -49,7 +52,7 @@ printf(
 		]
 	),
 	esc_xml(
-		$this->s_title_raw( $this->get_blogname() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) )
+		$this->s_title_raw( Data\Blog::get_public_blog_name() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) )
 	)
 );
 ?>

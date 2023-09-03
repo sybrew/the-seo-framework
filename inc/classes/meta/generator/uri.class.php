@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -66,7 +68,7 @@ final class URI {
 				'the_seo_framework_rel_canonical_output',
 				[
 					$_url,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -77,7 +79,7 @@ final class URI {
 
 		// var_dump() offload this.
 		// If the page should not be indexed, consider removing the canonical URL.
-		if ( str_contains( \The_SEO_Framework\Meta\Factory\Robots\API::get_meta(), 'noindex' ) ) {
+		if ( str_contains( Factory\Robots::get_meta(), 'noindex' ) ) {
 			// If the URL is filtered, don't empty it.
 			// If a custom canonical URL is set, don't empty it.
 			if ( $url === $_url && ! $tsf->has_custom_canonical_url() ) {
@@ -117,7 +119,7 @@ final class URI {
 				'the_seo_framework_paged_url_output_next',
 				[
 					$paged_urls['next'],
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -135,7 +137,7 @@ final class URI {
 				'the_seo_framework_paged_url_output_prev',
 				[
 					$paged_urls['prev'],
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -182,7 +184,7 @@ final class URI {
 				'the_seo_framework_shortlink_output',
 				[
 					$url,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

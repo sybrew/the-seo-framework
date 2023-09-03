@@ -12,7 +12,9 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Form,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
-use The_SEO_Framework\Helper\Post_Types;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Post_Types,
+	\The_SEO_Framework\Meta\Factory;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -187,19 +189,19 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 
 			// Skip first entry: $_full_title
 			[ , $_prefix_value, $_default_title ] =
-				$this->get_raw_generated_archive_title_items( $pto );
+				Factory\Title::get_archive_title_list( $pto );
 
 			$this->output_js_title_data(
 				Input::get_field_id( $_option_map['doctitle'] ),
 				[
 					'state' => [
 						'defaultTitle'      => $this->s_title( $_default_title ),
-						'addAdditions'      => $this->use_title_branding( $_generator_args ),
-						'useSocialTagline'  => $this->use_title_branding( $_generator_args, true ),
-						'additionValue'     => $this->s_title( $this->get_blogname() ),
-						'additionPlacement' => 'left' === $this->get_title_seplocation() ? 'before' : 'after',
+						'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
+						'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
+						'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
+						'additionPlacement' => 'left' === Factory\Title::get_additions_location() ? 'before' : 'after',
 						'prefixValue'       => $this->s_title( $_prefix_value ),
-						'showPrefix'        => $this->use_generated_archive_prefix( $pto ),
+						'showPrefix'        => Factory\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
 				]
 			);
@@ -253,7 +255,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				Input::get_field_id( $_option_map['description'] ),
 				[
 					'state' => [
-						'defaultDescription' => $this->get_generated_description( $_generator_args ),
+						'defaultDescription' => Factory\Description::get_generated_description( $_generator_args ),
 					],
 				]
 			);
@@ -267,16 +269,16 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( $this->get_generated_open_graph_title( $_generator_args, false ) ),
-						'addAdditions' => $this->use_title_branding( $_generator_args, 'og' ),
-						'defaultDesc'  => $this->s_description( $this->get_generated_open_graph_description( $_generator_args, false ) ),
+						'defaultTitle' => $this->s_title( Factory\Open_Graph::get_generated_title( $_generator_args, false ) ),
+						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
+						'defaultDesc'  => $this->s_description( Factory\Open_Graph::get_generated_description( $_generator_args, false ) ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( $this->get_generated_twitter_title( $_generator_args, false ) ),
-						'addAdditions' => $this->use_title_branding( $_generator_args, 'twitter' ),
-						'defaultDesc'  => $this->s_description( $this->get_generated_twitter_description( $_generator_args, false ) ),
+						'defaultTitle' => $this->s_title( Factory\Twitter::get_generated_title( $_generator_args, false ) ),
+						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
+						'defaultDesc'  => $this->s_description( Factory\Twitter::get_generated_description( $_generator_args, false ) ),
 					],
 				],
 			]

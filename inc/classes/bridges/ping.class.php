@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Bridges;
 
 use function \The_SEO_Framework\memo;
 
+use \The_SEO_Framework\Bridges;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -117,11 +119,11 @@ final class Ping {
 		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
 
 		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
-		if ( \The_SEO_Framework\Bridges\Sitemap::get_instance()->is_sitemap_locked() ) {
+		if ( Bridges\Sitemap::get_instance()->is_sitemap_locked() ) {
 			static::engage_pinging_retry_cron( [ 'id' => 'base' ] );
 			return;
 		}
-		$transient = \The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix( 'tsf_throttle_ping' );
+		$transient = Bridges\Cache::build_unique_cache_key_suffix( 'tsf_throttle_ping' );
 
 		// Uses legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
@@ -211,7 +213,7 @@ final class Ping {
 			(
 				\tsf()->use_core_sitemaps()
 					? \get_sitemap_url( 'index' )
-					: \The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
+					: Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
 			)
 			?: ''
 		);

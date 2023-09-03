@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots
  * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
+namespace The_SEO_Framework\Meta\Factory\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -33,7 +33,7 @@ use function \The_SEO_Framework\umemo;
  * Generates robots meta.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
+ * @since 4.3.0 Moved to Meta\Factory\Robots from Builders\Robots
  * @access protected
  *         Instantiation of class is not part of the public API.
  * @final Can't be extended.

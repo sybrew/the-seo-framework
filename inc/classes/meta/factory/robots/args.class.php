@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots\Builder
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots
  * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Meta\Factory\Robots\Builder;
+namespace The_SEO_Framework\Meta\Factory\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -13,8 +13,11 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
-use \The_SEO_Framework\Meta\Factory\Robots;
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Meta\Factory\Robots; // Yes, it is legal to share class and namespaces.
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -37,7 +40,7 @@ use \The_SEO_Framework\Helper\Query;
  * Engine for robots generator by arguments.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved to Meta\Factory\Robots\Builder from Builders\Robots
+ * @since 4.3.0 Moved to Meta\Factory\Robots from Builders\Robots
  * @access private
  *         Not part of the public API.
  * @final Can't be extended.
@@ -103,23 +106,23 @@ final class Args extends Factory {
 			if ( $args['taxonomy'] ) {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				yield 'globals_taxonomy' => Robots\API::is_taxonomy_robots_set( $type, $args['taxonomy'] );
+				yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, $args['taxonomy'] );
 
 				// Store values from each post type bound to the taxonomy.
-				foreach ( \The_SEO_Framework\Helper\Taxonomies::get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
-					$_is_post_type_robots_set[] = Robots\API::is_post_type_robots_set( $type, $post_type );
+				foreach ( Taxonomies::get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
+					$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
 				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
 				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 			} elseif ( $args['pta'] ) {
-				yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, $args['pta'] );
+				yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
 			} else {
 				// $args['id'] can be empty, pointing to a plausible homepage query.
 				if ( Query::is_real_front_page_by_id( $args['id'] ) )
 					yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
 
 				if ( $args['id'] )
-					yield 'globals_post_type' => Robots\API::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
 			}
 
 		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {

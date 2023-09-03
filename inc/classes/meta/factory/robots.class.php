@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Meta\Factory\Robots
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory
  * @subpackage The_SEO_Framework\Meta\Robots
  */
 
-namespace The_SEO_Framework\Meta\Factory\Robots;
+namespace The_SEO_Framework\Meta\Factory;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -33,13 +33,13 @@ use function \The_SEO_Framework\{
  */
 
 /**
- * Holds structured data generators for meta tag output.
+ * Holds getters for meta tag output.
  *
  * @since 4.3.0
  * @access protected
  * @internal
  */
-class API {
+class Robots {
 
 	/**
 	 * Returns an array of the collected robots meta assertions.
@@ -52,7 +52,7 @@ class API {
 	 * @return array
 	 */
 	public static function get_collected_meta_assertions() {
-		return Builder\Main::instance()->collect_assertions();
+		return Robots\Main::instance()->collect_assertions();
 	}
 
 	/**
@@ -95,7 +95,7 @@ class API {
 		// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
 		normalize_generation_args( $args );
 
-		$meta = Builder\Main::instance()->set( $args, $options )->get( $get );
+		$meta = Robots\Main::instance()->set( $args, $options )->get( $get );
 
 		foreach ( $meta as $k => $v ) {
 			switch ( $k ) {

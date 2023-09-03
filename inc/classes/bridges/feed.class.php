@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\Utils\clamp_sentence;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2020 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -123,7 +125,7 @@ final class Feed {
 		 */
 		if ( isset( $feed_type ) && $tsf->get_option( 'excerpt_the_feed' ) ) {
 			// Strip all code and lines, and AI-trim it.
-			$excerpt = $tsf->trim_excerpt(
+			$excerpt = clamp_sentence(
 				$tsf->s_excerpt_raw( $content, false ),
 				0,
 				/**

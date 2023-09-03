@@ -286,7 +286,7 @@ final class Scripts {
 	 * @uses static::$include_secret
 	 *
 	 * @example template file header:
-	 * `defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;`
+	 * `defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;`
 	 *
 	 * @param string $secret The passed secret.
 	 * @return bool True on success, false on failure.

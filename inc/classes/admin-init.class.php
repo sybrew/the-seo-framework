@@ -8,7 +8,11 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -104,8 +108,8 @@ class Admin_Init extends Init {
 			|| $this->get_static_cache( 'persistent_notices', [] )
 			|| (
 				! $this->is_headless['meta'] && (
-					   ( Query::is_archive_admin() && \The_SEO_Framework\Helper\Taxonomies::is_taxonomy_supported() )
-					|| ( Query::is_singular_admin() && \The_SEO_Framework\Helper\Post_Types::is_post_type_supported() )
+					   ( Query::is_archive_admin() && Taxonomies::is_taxonomy_supported() )
+					|| ( Query::is_singular_admin() && Post_Types::is_post_type_supported() )
 				)
 			)
 		) {

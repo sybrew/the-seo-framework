@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -79,7 +82,7 @@ class Term_Data extends Post_Data {
 		$term = \get_term( $term_id );
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
-		if ( empty( $term->term_id ) || ! \The_SEO_Framework\Helper\Taxonomies::is_taxonomy_supported( $term->taxonomy ) ) {
+		if ( empty( $term->term_id ) || ! Taxonomies::is_taxonomy_supported( $term->taxonomy ) ) {
 			// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
 			return $use_cache ? memo( [], $term_id ) : [];
 		}

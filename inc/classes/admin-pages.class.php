@@ -8,7 +8,13 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Taxonomies,
+	Post_Types,
+	Query,
+};
+
+use \The_SEO_Framework\Builders;
 
 /**
  * The SEO Framework plugin
@@ -184,7 +190,7 @@ class Admin_Pages extends Generate_Ldjson {
 	 */
 	public function _init_post_edit_view( $post_type ) {
 
-		if ( ! Query::is_post_edit() || ! \The_SEO_Framework\Helper\Post_Types::is_post_type_supported( $post_type ) ) return;
+		if ( ! Query::is_post_edit() || ! Post_Types::is_post_type_supported( $post_type ) ) return;
 
 		/**
 		 * @since 2.0.0
@@ -210,7 +216,7 @@ class Admin_Pages extends Generate_Ldjson {
 
 		$taxonomy = Query::get_current_taxonomy();
 
-		if ( ! \The_SEO_Framework\Helper\Taxonomies::is_taxonomy_supported( $taxonomy ) ) return;
+		if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) ) return;
 
 		/**
 		 * @since 2.6.0
@@ -339,7 +345,7 @@ class Admin_Pages extends Generate_Ldjson {
 		if ( ! \wp_doing_ajax() ) {
 			// Make sure the scripts are loaded.
 			$this->init_admin_scripts();
-			\The_SEO_Framework\Builders\Scripts::footer_enqueue();
+			Builders\Scripts::footer_enqueue();
 		}
 
 		switch ( $type ) {

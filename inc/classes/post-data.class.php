@@ -11,6 +11,7 @@ namespace The_SEO_Framework;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
+	Taxonomies,
 };
 
 /**
@@ -516,7 +517,7 @@ class Post_Data extends Detect {
 		// Can this even fail?
 		if ( ! $post_type ) return;
 
-		foreach ( \The_SEO_Framework\Helper\Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
+		foreach ( Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type ) as $_taxonomy ) {
 			$_post_key = "_primary_term_{$_taxonomy}";
 
 			if ( \wp_verify_nonce(

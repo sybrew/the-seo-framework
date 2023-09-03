@@ -8,7 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Builders;
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 \add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
@@ -273,7 +274,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status']               =
 		0 !== \tsf()->s_qubit(
-			\The_SEO_Framework\Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
+			Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
 		)
 			? $interpreter::STATE_OKAY
 			: $interpreter::STATE_UNKNOWN;

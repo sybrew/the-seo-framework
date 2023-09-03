@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Interpreters;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Builders;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -123,8 +125,8 @@ final class SEOBar {
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
 		$builder = static::$query['taxonomy']
-			? \The_SEO_Framework\Builders\SEOBar\Term::get_instance()
-			: \The_SEO_Framework\Builders\SEOBar\Page::get_instance();
+			? Builders\SEOBar\Term::get_instance()
+			: Builders\SEOBar\Page::get_instance();
 
 		$instance = static::get_instance();
 		$instance->store_seo_bar_items( $builder );
