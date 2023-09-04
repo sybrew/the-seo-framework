@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Data;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\{
+	memo,
+	umemo,
+};
 
 /**
  * The SEO Framework plugin
@@ -80,5 +83,20 @@ class Blog {
 	 */
 	public static function get_filtered_blog_description() {
 		return trim( \get_bloginfo( 'description', 'display' ) );
+	}
+
+	/**
+	 * Returns the home URL. Created for the WordPress method is slow for it
+	 * performs "set_url_scheme" calls slowly. We rely on this method for some
+	 * plugins filter `home_url`.
+	 * Memoized.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 *
+	 * @return string The home URL.
+	 */
+	public static function get_home_url() {
+		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_home_url() );
 	}
 }

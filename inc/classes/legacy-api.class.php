@@ -156,18 +156,19 @@ class Legacy_API extends Core {
 	 * @since 4.2.3 Now accepts arguments publicly.
 	 * @since 4.3.0 1. No longer calls the query in the sitemap to remove pagination.
 	 *              2. Ennobled to be part of the legacy API.
+	 *              3. Removed support for `get_custom_field` without deprecation notice.
+	 *                 You should've used create_canonical_url() instead.
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
-	 *    int    $id               The Post, Page or Term ID to generate the URL for.
-	 *    string $taxonomy         The taxonomy.
-	 *    string $pta              The pta.
-	 *    bool   $get_custom_field Whether to get custom canonical URLs from user settings.
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The taxonomy.
+	 *    string $pta      The pta.
 	 * }
 	 * @return string The canonical URL, if any.
 	 */
-	// public static function get_canonical_url( $args = null ) {
-	// 	return static::uri()->get_canonical_url( $args );
-	// }
+	public static function get_canonical_url( $args = null ) {
+		return static::uri()->get_canonical_url( $args );
+	}
 
 	/**
 	 * Returns image details.

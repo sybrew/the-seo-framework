@@ -8,7 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Meta\Factory;
 
 /**
  * The SEO Framework plugin
@@ -652,10 +653,10 @@ class Detect extends Admin_Init {
 	public function get_robots_txt_url() {
 
 		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! $this->is_subdirectory_installation() ) {
-			$home = \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) );
+			$home = \trailingslashit( Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() ) );
 			$path = "{$home}robots.txt";
 		} elseif ( $this->has_robots_txt() ) {
-			$home = \trailingslashit( $this->set_preferred_url_scheme( \get_option( 'home' ) ) );
+			$home = \trailingslashit( Factory\URI\Utils::set_preferred_url_scheme( \get_option( 'home' ) ) );
 			$path = "{$home}robots.txt";
 		} else {
 			$path = '';

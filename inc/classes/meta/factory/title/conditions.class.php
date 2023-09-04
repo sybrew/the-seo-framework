@@ -35,9 +35,8 @@ use \The_SEO_Framework\Meta\Factory;
  * Holds conditions for the Title factory.
  *
  * @since 4.3.0
- * @access private
- *         Not part of the public API.
- * @final Can't be extended.
+ * @access protected
+ * @internal Use tsf()->title()->conditions() instead.
  */
 final class Conditions {
 

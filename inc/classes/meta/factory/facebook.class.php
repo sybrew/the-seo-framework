@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Meta\Factory;
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->facebook() instead.
  */
 class Facebook {
 

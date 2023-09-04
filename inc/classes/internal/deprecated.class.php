@@ -6,7 +6,12 @@
 
 namespace The_SEO_Framework\Internal;
 
-var_dump( 'DEPRECATOR IS LOADED' );
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use function \The_SEO_Framework\{
+	memo,   // Precautionary.
+	umemo,  // Precautionary.
+};
 
 /**
  * The SEO Framework plugin
@@ -25,12 +30,6 @@ var_dump( 'DEPRECATOR IS LOADED' );
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-use function \The_SEO_Framework\{
-	memo,   // Precautionary.
-	umemo,  // Precautionary.
-};
 
 /**
  * Class The_SEO_Framework\Internal\Deprecated
@@ -646,9 +645,6 @@ final class Deprecated {
 	 * So, don't use this to test user-engaged WordPress queries, ever.
 	 * WARNING: This will lead to **FALSE POSITIVES** for Date, CPTA, Search, and other archives.
 	 *
-	 * @see \tsf()->is_real_front_page(), which solely uses query checking.
-	 * @see \tsf()->is_static_frontpage(), which adds an "is homepage static" check.
-	 *
 	 * @since 3.2.2
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
@@ -1010,7 +1006,6 @@ final class Deprecated {
 	 * @since 2.9.0 If $secure is false, the cache is no longer used.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @see \tsf()->is_menu_page() for security notification.
 	 *
 	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
 	 * @return bool
@@ -1200,7 +1195,6 @@ final class Deprecated {
 	 * @since 3.1.0 No longer checks for SEO plugin presence.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_description()
 	 *
 	 * @return string The description meta tag.
 	 */
@@ -1268,7 +1262,6 @@ final class Deprecated {
 	 * @since 3.2.4 Now no longer returns a value when the post is not indexed with a non-custom URL.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_current_canonical_url()
 	 *
 	 * @return string The Canonical URL meta tag.
 	 */
@@ -1321,7 +1314,6 @@ final class Deprecated {
 	 * @since 2.9.3 Now work when homepage is a blog.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_shortlink()
 	 *
 	 * @return string The Shortlink meta tag.
 	 */
@@ -1362,7 +1354,6 @@ final class Deprecated {
 	 * @since 2.2.2
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_paged_urls()
 	 *
 	 * @return string The Prev/Next Paged URL meta tags.
 	 */
@@ -1371,8 +1362,8 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->paged_urls()', '4.3.0' );
 
-		$paged_urls = $tsf->get_paged_urls();
-		$id         = $tsf->query()->get_the_real_id();
+		[ $next, $prev ] = $tsf->uri()->get_paged_urls();
+		$id              = $tsf->query()->get_the_real_id();
 
 		/**
 		 * @since 2.6.0
@@ -1384,7 +1375,7 @@ final class Deprecated {
 		$next = (string) \apply_filters_deprecated(
 			'the_seo_framework_paged_url_output_next',
 			[
-				$paged_urls['next'],
+				$next,
 				$id,
 			],
 			'4.3.0 of The SEO Framework',
@@ -1400,7 +1391,7 @@ final class Deprecated {
 		$prev = (string) \apply_filters_deprecated(
 			'the_seo_framework_paged_url_output_prev',
 			[
-				$paged_urls['prev'],
+				$prev,
 				$id,
 			],
 			'4.3.0 of The SEO Framework',
@@ -1664,7 +1655,6 @@ final class Deprecated {
 	 * @since 3.0.4 No longer uses \tsf()->title_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_open_graph_title()
 	 *
 	 * @return string The Open Graph title meta tag.
 	 */
@@ -1707,7 +1697,6 @@ final class Deprecated {
 	 * @since 3.0.4 No longer uses \tsf()->description_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_open_graph_description()
 	 *
 	 * @return string The Open Graph description meta tag.
 	 */
@@ -1913,7 +1902,6 @@ final class Deprecated {
 	 * @since 4.1.4 Now uses `render_element()`, which applies `esc_attr()` on the URL.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_current_canonical_url()
 	 *
 	 * @return string The Open Graph URL meta tag.
 	 */
@@ -2193,7 +2181,6 @@ final class Deprecated {
 	 * @since 4.1.4 No longer renders the Open Graph Updated Time meta tag.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @see og_updated_time()
 	 *
 	 * @return string The Article Modified Time meta tag
 	 */
@@ -2388,7 +2375,6 @@ final class Deprecated {
 	 * @since 3.0.4 No longer uses \tsf()->title_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_twitter_title()
 	 *
 	 * @return string The Twitter Title meta tag.
 	 */
@@ -2430,7 +2416,6 @@ final class Deprecated {
 	 * @since 3.0.4 No longer uses \tsf()->description_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses \tsf()->get_twitter_description()
 	 *
 	 * @return string The Twitter Description meta tag.
 	 */
@@ -2544,8 +2529,6 @@ final class Deprecated {
 
 	/**
 	 * Renders LD+JSON Schema.org scripts.
-	 *
-	 * @uses \tsf()->render_ld_json_scripts()
 	 *
 	 * @since 1.2.0
 	 * @since 3.1.0 No longer returns early on search, 404 or preview.
@@ -2828,7 +2811,6 @@ final class Deprecated {
 	 * @since 4.2.8
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses `tsf()->is_post_type_supported()`
 	 *
 	 * @param string $post_type Optional. The post type's archive to check.
 	 * @return bool
@@ -3399,7 +3381,6 @@ final class Deprecated {
 	 * @since 4.2.7 Now considers floating numerics as one word.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
 	 * This is perfect. Please have the courtesy to credit us when taking it. :)
@@ -3435,9 +3416,9 @@ final class Deprecated {
 	public function get_excerpt_by_id( $excerpt = '', $id = 0, $deprecated = null, $escape = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_excerpt_by_id()', '4.3.0', 'tsf()->description()->get_singular_excerpt()' );
+		$tsf->_deprecated_function( 'tsf()->get_excerpt_by_id()', '4.3.0', 'tsf()->description()->excerpt()->get_excerpt_from_args()' );
 
-		$excerpt = $excerpt ?: $tsf->description()->get_singular_excerpt( $id );
+		$excerpt = $excerpt ?: $tsf->description()->get_excerpt_from_args( [ 'id' => $id ] );
 
 		return $escape ? $tsf->s_excerpt( $excerpt ) : $tsf->s_excerpt_raw( $excerpt );
 	}
@@ -3452,7 +3433,7 @@ final class Deprecated {
 	 * @since 3.1.0 1. No longer returns anything for terms.
 	 *              2. Now strips plausible embeds URLs.
 	 * @since 4.0.1 Now fetches the real ID when no post is supplied.
-	 *              Internally, this was never an issue. @see `$this->get_singular_description_excerpt()`
+	 *              Internally, this was never an issue.
 	 * @since 4.2.8 1. Now tests for post type support of 'excerpt' before parsing the excerpt.
 	 *              2. Now tests for post type support of 'editor' before parsing the content.
 	 * @since 4.3.0 Deprecated.
@@ -3464,9 +3445,11 @@ final class Deprecated {
 	public function fetch_excerpt( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->get_singular_excerpt()' );
+		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->excerpt()->get_excerpt()' );
 
-		return $tsf->description()->get_singular_excerpt( $post );
+		return $tsf->description()->excerpt()->get_excerpt(
+			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null
+		);
 	}
 
 	/**
@@ -3564,7 +3547,6 @@ final class Deprecated {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses $this->generate_description()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -3626,9 +3608,6 @@ final class Deprecated {
 	 * Returns supported social site locales.
 	 *
 	 * @since 4.2.0
-	 * @see https://www.facebook.com/translations/FacebookLocales.xml (deprecated)
-	 * @see https://wordpress.org/support/topic/oglocale-problem/#post-11456346
-	 * mirror: http://web.archive.org/web/20190601043836/https://wordpress.org/support/topic/oglocale-problem/
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3708,8 +3687,11 @@ final class Deprecated {
 	 * @return bool True when prefixes are allowed.
 	 */
 	public function use_title_protection( $args = null ) {
-		\tsf()->_deprecated_function( 'tsf()->use_title_protection()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_protection_status( $args );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_title_protection()', '4.3.0', 'tsf()->title()->conditions()->use_title_protection_status()' );
+
+		return $tsf->title()->conditions()->use_title_protection_status( $args );
 	}
 
 	/**
@@ -3724,8 +3706,11 @@ final class Deprecated {
 	 * @return bool True when additions are allowed.
 	 */
 	public function use_title_pagination( $args = null ) {
-		\tsf()->_deprecated_function( 'tsf()->use_title_pagination()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_pagination( $args );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_title_pagination()', '4.3.0', 'tsf()->title()->conditions()->use_title_pagination()' );
+
+		return $tsf->title()->conditions()->use_title_pagination( $args );
 	}
 
 	/**
@@ -3747,8 +3732,11 @@ final class Deprecated {
 	 * @return bool True when additions are allowed.
 	 */
 	public function use_title_branding( $args = null, $social = false ) {
-		\tsf()->_deprecated_function( 'tsf()->use_title_branding()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( $args, $social );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+
+		return $tsf->title()->conditions()->use_title_branding( $args, $social );
 	}
 
 	/**
@@ -3764,8 +3752,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function use_generated_archive_prefix( $term = null ) {
-		\tsf()->_deprecated_function( 'tsf()->use_generated_archive_prefix()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_generated_archive_prefix( $term );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_generated_archive_prefix()', '4.3.0', 'tsf()->title()->conditions()->use_generated_archive_prefix()' );
+
+		return $tsf->title()->conditions()->use_generated_archive_prefix( $term );
 	}
 
 	/**
@@ -3779,8 +3770,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function use_home_page_title_tagline() {
-		\tsf()->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding();
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+
+		return $tsf->title()->conditions()->use_title_branding();
 	}
 
 	/**
@@ -3794,8 +3788,11 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function use_singular_title_branding( $id = 0 ) {
-		\tsf()->_deprecated_function( 'tsf()->use_singular_title_branding()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( [ 'id' => $id ] );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_singular_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+
+		return $tsf->title()->conditions()->use_title_branding( [ 'id' => $id ] );
 	}
 
 	/**
@@ -3809,8 +3806,14 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function use_taxonomical_title_branding( $id = 0 ) {
-		\tsf()->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( [ 'id' => $id ] );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+
+		return $tsf->title()->conditions()->use_title_branding( [
+			'id'       => $id ?: $tsf->query()->get_the_real_id(),
+			'taxonomy' => $tsf->query()->get_current_taxonomy(),
+		] );
 	}
 
 	/**
@@ -3824,8 +3827,13 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function use_post_type_archive_title_branding( $pta = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '4.3.0' );
-		return \The_SEO_Framework\Meta\Factory\Title\Conditions::use_title_branding( [ 'pta' => $pta ] );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+
+		return $tsf->title()->conditions()->use_title_branding( [
+			'pta' => $pta ?: $tsf->query()->get_current_post_type(),
+		] );
 	}
 
 	/**
@@ -4017,8 +4025,6 @@ final class Deprecated {
 	 *              2. Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @uses $this->generate_title_from_query()
-	 * @uses $this->generate_title_from_args()
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -4058,7 +4064,6 @@ final class Deprecated {
 	 * Returns the archive title. Also works in admin.
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work for metadata and in admin.
-	 * @see WP Core get_the_archive_title()
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
@@ -4085,7 +4090,6 @@ final class Deprecated {
 	 * Returns the archive title items. Also works in admin.
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work for metadata.
-	 * @see WP Core get_the_archive_title()
 	 *
 	 * @since 4.2.0
 	 * @since 4.3.0 Deprecated.
@@ -4107,7 +4111,6 @@ final class Deprecated {
 	 * Returns Post Title from ID.
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
-	 * @see WP Core single_post_title()
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.8 Now tests for post type support of 'title' before parsing the title.
@@ -4132,8 +4135,6 @@ final class Deprecated {
 	 *
 	 * Taken from WordPress core. Altered to work in the Admin area.
 	 *
-	 * @see WP Core single_term_title()
-	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
 	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
@@ -4156,7 +4157,6 @@ final class Deprecated {
 	 * Fetches single term title.
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
-	 * @see WP Core post_type_archive_title()
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Now actually works in the admin area, provided you forward $post_type.
@@ -4288,5 +4288,709 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->merge_title_protection()', '4.3.0', 'tsf()->title()->add_protection_status()' );
 
 		$title = $tsf->title()->add_protection_status( $title, $args );
+	}
+
+	/**
+	 * Determines if the given page has a custom canonical URL.
+	 *
+	 * @since 3.2.4
+	 * @since 4.2.0 1. Now also detects canonical URLs for taxonomies.
+	 *              2. Now also detects canonical URLs for PTAs.
+	 *              3. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The taxonomy.
+	 * }
+	 * @return bool
+	 */
+	public function has_custom_canonical_url( $args = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->has_custom_canonical_url()', '4.3.0', 'tsf()->uri()->get_custom_canonical_url()' );
+
+		return (bool) $tsf->uri()->get_custom_canonical_url( $args );
+	}
+
+	/**
+	 * Returns the home URL. Created for the WordPress method is slow for it
+	 * performs "set_url_scheme" calls slowly. We rely on this method for some
+	 * plugins filter `home_url`.
+	 * Memoized.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The home URL.
+	 */
+	public function get_home_url() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_home_url()', '4.3.0', 'tsf->data()->blog()->get_home_url()' );
+
+		return $tsf->data()->blog()->get_home_url();
+	}
+
+	/**
+	 * Returns preferred $url scheme.
+	 * Which can automatically be detected when not set, based on the site URL setting.
+	 * Memoizes the return value.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The preferred URl scheme.
+	 */
+	public function get_preferred_scheme() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_preferred_scheme()', '4.3.0', 'tsf->uri()->utils()->get_preferred_url_scheme()' );
+
+		return $tsf->uri()->utils()->get_preferred_url_scheme();
+	}
+
+	/**
+	 * Sets URL to preferred URL scheme.
+	 * Does not sanitize output.
+	 *
+	 * @since 2.8.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url The URL to set scheme for.
+	 * @return string The URL with the preferred scheme.
+	 */
+	public function set_preferred_url_scheme( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->set_preferred_url_scheme()', '4.3.0', 'tsf->uri()->utils()->set_preferred_url_scheme()' );
+
+		return $tsf->uri()->utils()->set_preferred_url_scheme( $url );
+	}
+
+	/**
+	 * Detects site's URL scheme from site options.
+	 * Falls back to is_ssl() when the hom misconfigured via wp-config.php
+	 *
+	 * NOTE: Some (insecure, e.g. SP) implementations for the `WP_HOME` constant, where
+	 * the scheme is interpreted from the request, may cause this to be unreliable.
+	 * We're going to ignore those edge-cases; they're doing it wrong.
+	 *
+	 * However, should we output a notification? Or let them suffer until they use Monitor to find the issue for them?
+	 * Yea, Monitor's great for that. Gibe moni plos.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The detected URl scheme, lowercase.
+	 */
+	public function detect_site_url_scheme() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->detect_site_url_scheme()', '4.3.0', 'uri()->utils()->detect_site_url_scheme()' );
+
+		return $tsf->uri()->utils()->detect_site_url_scheme();
+	}
+
+	/**
+	 * Sets URL scheme for input URL.
+	 * WordPress core function, without filter.
+	 *
+	 * @since 2.4.2
+	 * @since 3.0.0 $use_filter now defaults to false.
+	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
+	 * @since 4.0.0 Removed the deprecated parameter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url    Absolute url that includes a scheme.
+	 * @param string $scheme Optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
+	 * @return string url with chosen scheme.
+	 */
+	public function set_url_scheme( $url, $scheme = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->set_url_scheme()', '4.3.0', 'uri()->utils()->set_url_scheme()' );
+
+		return $tsf->uri()->utils()->set_url_scheme( $url, $scheme );
+	}
+
+	/**
+	 * Makes a fully qualified URL by adding the scheme prefix.
+	 * Always adds http prefix, not https.
+	 *
+	 * NOTE: Expects the URL to have either a scheme, or a relative scheme set.
+	 *       Domain-relative URLs will not be parsed correctly.
+	 *       '/path/to/folder/` will become `http:///path/to/folder/`
+	 *
+	 * @since 2.6.5
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url Required the current maybe not fully qualified URL.
+	 * @return string $url
+	 */
+	public function make_fully_qualified_url( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->make_fully_qualified_url()', '4.3.0', 'uri()->utils()->make_fully_qualified_url()' );
+
+		return $tsf->uri()->utils()->make_fully_qualified_url( $url );
+	}
+
+	/**
+	 * Caches and returns the current URL.
+	 * Memoizes the return value.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The current URL.
+	 */
+	public function get_current_canonical_url() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_canonical_url()', '4.3.0', 'tsf()->uri()->get_canonical_url()' );
+
+		return $tsf->uri()->get_canonical_url();
+	}
+
+	/**
+	 * Caches and returns the current permalink.
+	 * This link excludes any pagination. Great for structured data.
+	 *
+	 * Does not work for unregistered pages, like search, 404, date, author, and CPTA.
+	 * Memoizes the return value.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Now properly generates taxonomical URLs.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The current permalink.
+	 */
+	public function get_current_permalink() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_permalink()', '4.3.0', 'tsf()->uri()->get_generated_canonical_url()' );
+
+		return $tsf->uri()->get_generated_canonical_url();
+	}
+
+	/**
+	 * Caches and returns the homepage URL.
+	 * Memoizes the return value.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The home URL.
+	 */
+	public function get_homepage_permalink() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '4.3.0', 'tsf()->uri()->get_bare_home_canonical_url()' );
+
+		return $tsf->uri()->get_bare_home_canonical_url();
+	}
+
+	/**
+	 * Returns a canonical URL based on parameters.
+	 * The URL will never be paginated.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 Now preemptively fixes the generation arguments, for easier implementation.
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.3 Marked for deprecation.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $args The canonical URL arguments : {
+	 *    int    $id               The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy         The taxonomy.
+	 *    string $pta              The pta.
+	 *    bool   $get_custom_field Whether to get custom canonical URLs from user settings.
+	 * }
+	 * @return string The canonical URL, if any.
+	 */
+	public function create_canonical_url( $args = [] ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->create_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+
+		if ( empty( $args['get_custom_field'] ) )
+			return $tsf->uri()->get_generated_canonical_url( $args ?: null );
+
+		return $tsf->uri()->get_custom_canonical_url( $args ?: null );
+	}
+
+	/**
+	 * Returns home canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.4 1. Now adds a slash to the home URL when it's a root URL.
+	 *              2. Now skips slashing when queries have been appended to the URL.
+	 *              3. Home-as-page pagination is now supported.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The home canonical URL.
+	 */
+	public function get_home_canonical_url() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '4.3.0', 'tsf->uri()->get_home_canonical_url()' );
+
+		return $tsf->uri()->get_home_canonical_url();
+	}
+
+	/**
+	 * Returns home canonical URL without query considerations.
+	 *
+	 * @since 4.2.0
+	 * @since 4.2.2 Now adds a trailing slash if the URL is a root URL.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The home canonical URL without query considerations.
+	 */
+	public function get_raw_home_canonical_url() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '4.3.0', 'tsf->uri()->get_bare_home_canonical_url()' );
+
+		return $tsf->uri()->get_bare_home_canonical_url();
+	}
+
+	/**
+	 * Returns singular canonical URL.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via Query::paged().
+	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
+	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
+	 * @since 4.2.3 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null $post_id The page ID. Leave null to autodetermine.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public function get_singular_canonical_url( $post_id = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_singular_canonical_url()', '4.3.0', 'tsf()->uri()->get_singular_canonical_url()' );
+
+		return $tsf->uri()->get_singular_canonical_url( $post_id );
+	}
+
+	/**
+	 * Returns taxonomical canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 1. Renamed from "get_taxonomial_canonical_url" (note the typo)
+	 *              2. Now works on the admin-screens.
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. The parameters are now optional.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
+	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
+	 * @return string The taxonomical canonical URL, if any.
+	 */
+	public function get_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_taxonomical_canonical_url()', '4.3.0', 'tsf()->uri()->get_taxonomical_canonical_url()' );
+
+		return $tsf->uri()->get_taxonomical_canonical_url( $term_id, $taxonomy );
+	}
+
+	/**
+	 * Returns post type archive canonical URL.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 1. Deprecated first parameter as integer. Use strings or null.
+	 *              2. Now forwards post type object calling to WordPress's function.
+	 * @since 4.2.0 1. Now correctly adds pagination to the URL.
+	 *              2. Removed argument type deprecation doing it wrong warning.
+	 *
+	 * @param null|string $post_type The post type archive's post type.
+	 *                               Leave null to autodetermine query and allow pagination.
+	 * @return string The post type archive canonical URL, if any.
+	 */
+	public function get_post_type_archive_canonical_url( $post_type = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '4.3.0', 'tsf()->uri()->get_post_type_archive_canonical_url()' );
+
+		return $tsf->uri()->get_post_type_archive_canonical_url( $post_type );
+	}
+
+	/**
+	 * Returns author canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 4.2.0 1. The first parameter is now optional.
+	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null $id The author ID. Leave null to autodetermine.
+	 * @return string The author canonical URL, if any.
+	 */
+	public function get_author_canonical_url( $id = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_author_canonical_url()', '4.3.0', 'tsf()->uri()->get_author_canonical_url()' );
+
+		return $tsf->uri()->get_author_canonical_url( $id );
+	}
+
+	/**
+	 * Returns date canonical URL.
+	 * Automatically adds pagination if the date input matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $year  The year.
+	 * @param int $month The month.
+	 * @param int $day   The day.
+	 * @return string The author canonical URL, if any.
+	 */
+	public function get_date_canonical_url( $year, $month = null, $day = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_date_canonical_url()', '4.3.0', 'tsf()->uri()->get_date_canonical_url()' );
+
+		return $tsf->uri()->get_date_canonical_url( $year, $month, $day );
+	}
+
+	/**
+	 * Returns search canonical URL.
+	 * Automatically adds pagination if the input matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 1. The first parameter now defaults to null.
+	 *              2. The search term is now matched with the input query if not set,
+	 *                 instead of it being empty.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $search_query The search query. Mustn't be escaped.
+	 *                             When left empty, the current query will be used.
+	 * @return string The search link.
+	 */
+	public function get_search_canonical_url( $search_query = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_search_canonical_url()', '4.3.0', 'tsf()->uri()->get_search_canonical_url()' );
+
+		return $tsf->uri()->get_search_canonical_url( $search_query );
+	}
+
+	/**
+	 * Adds pagination to input URL.
+	 *
+	 * @since 4.2.3
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url      The fully qualified URL.
+	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
+	 * @param bool   $use_base Whether to use pagination base.
+	 *                         If null, it will autodetermine.
+	 *                         Should be true on archives and the homepage (blog and static!).
+	 *                         False on singular post types.
+	 * @return string The fully qualified URL with pagination.
+	 */
+	public function add_pagination_to_url( $url, $page = null, $use_base = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->add_pagination_to_url()', '4.3.0', 'tsf()->uri()->utils()->add_pagination_to_url()' );
+
+		return $tsf->uri()->utils()->add_pagination_to_url( $url, $page, $use_base );
+	}
+
+	/**
+	 * Adds pagination to input URL.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.4 1. Now considers query arguments when using pretty permalinks.
+	 *              2. The second and third parameters are now optional.
+	 * @since 4.2.0 Now properly adds pagination to search links.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url      The fully qualified URL.
+	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
+	 * @param bool   $use_base Whether to use pagination base.
+	 *                         If null, it will autodetermine.
+	 *                         Should be true on archives and the homepage (blog and static!).
+	 *                         False on singular post types.
+	 * @return string The fully qualified URL with pagination.
+	 */
+	public function add_url_pagination( $url, $page = null, $use_base = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->add_url_pagination()', '4.3.0', 'tsf()->uri()->utils()->add_pagination_to_url()' );
+
+		return $tsf->uri()->utils()->add_pagination_to_url( $url, $page, $use_base );
+	}
+
+	/**
+	 * Removes pagination from input URL.
+	 * The URL must match this query if no second parameter is provided.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.4 1. Now correctly removes the pagination base on singular post types.
+	 *              2. The second parameter now accepts null or a value.
+	 *              3. The third parameter is now changed to $use_base, from the archive pagination number.
+	 *              4. Now supports pretty permalinks with query parameters.
+	 *              5. Is now public.
+	 * @since 4.1.2 Now correctly reappends query when pagination isn't removed.
+	 * @since 4.2.0 Now properly removes pagination from search links.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string    $url  The fully qualified URL to remove pagination from.
+	 * @param int|null  $page The page number to remove. If null, it will get number from query.
+	 * @param bool|null $use_base Whether to remove the pagination base.
+	 *                            If null, it will autodetermine.
+	 *                            Should be true on archives and the homepage (blog and static!).
+	 *                            False on singular post types.
+	 * @return string $url The fully qualified URL without pagination.
+	 */
+	public function remove_pagination_from_url( $url, $page = null, $use_base = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->remove_pagination_from_url()', '4.3.0', 'tsf->uri()->utils()->remove_pagination_from_url()' );
+
+		return $tsf->uri()->utils()->remove_pagination_from_url( $url, $page, $use_base );
+	}
+
+	/**
+	 * Generates Previous and Next links.
+	 *
+	 * @since 2.2.4
+	 * @since 3.1.0 1. Now recognizes WC Shops and WP Blog pages as archival types.
+	 *              2. Now sanitizes canonical URL according to permalink settings.
+	 *              3. Removed second parameter. It was only a source of bugs.
+	 *              4. Removed WordPress Core `get_pagenum_link` filter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $next_prev Whether to get the previous or next page link.
+	 *                          Accepts 'prev' and 'next'.
+	 * @return string Escaped site Pagination URL
+	 */
+	public function get_paged_url( $next_prev ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_paged_url()', '4.3.0', 'tsf->uri()->get_paged_url()' );
+
+		[ $next, $prev ] = $tsf->uri()->get_paged_urls();
+
+		if ( 'next' === $next_prev )
+			return $next;
+
+		return $prev;
+	}
+
+	/**
+	 * Generates Previous and Next links.
+	 *
+	 * @since 3.1.0
+	 * @since 3.2.4 1. Now correctly removes the pagination base from singular URLs.
+	 *              2. Now returns no URLs when a custom canonical URL is set.
+	 * @since 4.1.0 Removed memoization.
+	 * @since 4.1.2 1. Added back memoization.
+	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array Escaped site Pagination URLs: {
+	 *    string 'prev'
+	 *    string 'next'
+	 * }
+	 */
+	public function get_paged_urls() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_paged_urls()', '4.3.0', 'tsf->uri()->get_paged_url()' );
+
+		[ $next, $prev ] = $tsf->uri()->get_paged_urls();
+
+		return compact( 'next', 'prev' );
+	}
+
+	/**
+	 * Fetches home URL host. Like "wordpress.org".
+	 * If this fails, you're going to have a bad time.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.7.0
+	 * @since 2.9.2 1. Now considers port too.
+	 *              2. Now uses get_home_url(), rather than get_option('home').
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The home URL host.
+	 */
+	public function get_home_host() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_home_host()', '4.3.0', 'tsf->data()->blog()->get_site_host()' );
+
+		return $tsf->uri()->utils()->get_site_host();
+	}
+
+	/**
+	 * Appends given query to given URL.
+	 *
+	 * @since 4.1.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url   A fully qualified URL.
+	 * @param string $query A fully qualified query taken from parse_url( $url, \PHP_URL_QUERY );
+	 * @return string A fully qualified URL with appended $query.
+	 */
+	public function append_url_query( $url, $query = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->append_url_query()', '4.3.0', 'tsf->uri()->utils()->append_url_query()' );
+
+		return $tsf->uri()->utils()->append_query_to_url( $url, $query );
+	}
+
+	/**
+	 * Tests if input URL matches current domain.
+	 *
+	 * @since 2.9.4
+	 * @since 4.1.0 Improved performance by testing an early match.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url The URL to test. Required.
+	 * @return bool true on match, false otherwise.
+	 */
+	public function matches_this_domain( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->matches_this_domain()', '4.3.0', 'tsf->uri()->utils()->url_matches_blog_domain()' );
+
+		return $tsf->uri()->utils()->url_matches_blog_domain( $url );
+	}
+
+	/**
+	 * Makes a fully qualified URL from any input.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $path Either the URL or path. Will always be transformed to the current domain.
+	 * @param string $url  The URL to add the path to. Defaults to the current home URL.
+	 * @return string $url
+	 */
+	public function convert_to_url_if_path( $path, $url = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->convert_to_url_if_path()', '4.3.0', 'tsf->uri()->utils()->convert_path_to_url()' );
+
+		return $tsf->uri()->utils()->convert_path_to_url( $path, $url );
+	}
+
+	/**
+	 * Returns singular custom field's canonical URL.
+	 *
+	 * @since 3.0.0
+	 * @since 4.2.0 The first parameter is now optional.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null $id The page ID.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public function get_singular_custom_canonical_url( $id = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_singular_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+
+		return $tsf->get_post_meta_item( '_genesis_canonical_uri', $id ) ?: '';
+	}
+
+	/**
+	 * Returns taxonomical custom field's canonical URL.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 The first parameter is now optional.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $term_id The term ID.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public function get_taxonomical_custom_canonical_url( $term_id = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_taxonomical_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+
+		return $tsf->get_term_meta_item( 'canonical', $term_id ) ?: '';
+	}
+
+	/**
+	 * Returns post type archive custom field's canonical URL.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $pta The post type.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public function get_post_type_archive_custom_canonical_url( $pta = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+
+		return $tsf->get_post_type_archive_meta_item( 'canonical', $pta ) ?: '';
+	}
+
+	/**
+	 * Generates shortlink URL.
+	 *
+	 * @since 2.2.2
+	 * @since 3.1.0 1. No longer accepts $post_id input. Output's based on query only.
+	 *              2. Shortened date archive URL length.
+	 *              3. Removed query parameter collisions.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string|null Escaped site Shortlink URL.
+	 */
+	public function get_shortlink() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_shortlink()', '4.3.0', 'tsf->uri()->get_shortlink()' );
+
+		return $tsf->uri()->get_shortlink_url();
 	}
 }

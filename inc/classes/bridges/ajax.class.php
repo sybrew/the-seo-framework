@@ -329,9 +329,9 @@ final class AJAX {
 					case 'twdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
-										?: $tsf->get_generated_twitter_description( $_generator_args, false );
+									   ?: Factory\Twitter::get_generated_description( $_generator_args, false );
 						} else {
-							$data[ $g ] = $tsf->get_generated_twitter_description( $_generator_args, false );
+							$data[ $g ] = Factory\Twitter::get_generated_description( $_generator_args, false );
 						}
 				}
 

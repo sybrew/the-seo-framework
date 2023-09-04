@@ -205,17 +205,20 @@ final class Ping {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
+	 * @since 4.3.0 Added parameter.
 	 *
+	 * @param string $sitemap_id The sitemap ID. Only works when the Optimized Sitemaps are enabled.
 	 * @return string The ping URL. Empty string on failure.
 	 */
-	public static function get_ping_url() {
-		return memo() ?? memo(
+	public static function get_ping_url( $sitemap_id = 'base' ) {
+		return memo( null, $sitemap_id ) ?? memo(
 			(
 				\tsf()->use_core_sitemaps()
 					? \get_sitemap_url( 'index' )
-					: Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url()
+					: Bridges\Sitemap::get_expected_sitemap_endpoint_url( $sitemap_id )
 			)
-			?: ''
+			?: '',
+			$sitemap_id,
 		);
 	}
 }

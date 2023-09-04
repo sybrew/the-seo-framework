@@ -684,14 +684,12 @@ final class Page extends Main {
 		}
 
 		if ( $this->query_cache['meta']['_genesis_canonical_uri'] ) {
-			$permalink = static::$tsf->get_canonical_url( [
-				'id'               => static::$query['id'],
-				'get_custom_field' => false,
+			$permalink = Factory\URI::get_generated_canonical_url( [
+				'id' => static::$query['id'],
 			] );
 			// We create it because filters may apply.
-			$canonical = static::$tsf->get_canonical_url( [
-				'id'               => static::$query['id'],
-				'get_custom_field' => true,
+			$canonical = Factory\URI::get_canonical_url( [
+				'id' => static::$query['id'],
 			] );
 			if ( $permalink !== $canonical ) {
 				$item['status'] = SEOBar::STATE_UNKNOWN;

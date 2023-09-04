@@ -37,7 +37,7 @@ use \The_SEO_Framework\Meta\Factory,
  *
  * @since 2.8.0
  */
-class Generate_Image extends Generate_Url {
+class Generate_Image extends User_Data {
 
 	/**
 	 * Caches current Image URL in static variable.

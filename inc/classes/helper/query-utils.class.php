@@ -40,6 +40,7 @@ class Query_Utils {
 	 * Determines whether pretty permalinks are enabled.
 	 *
 	 * @since 4.3.0
+	 * @todo consider wp_force_plain_post_permalink()
 	 *
 	 * @return bool
 	 */

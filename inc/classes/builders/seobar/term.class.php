@@ -642,16 +642,14 @@ final class Term extends Main {
 		}
 
 		if ( $this->query_cache['meta']['canonical'] ) {
-			$permalink = static::$tsf->get_canonical_url( [
-				'id'               => static::$query['id'],
-				'taxonomy'         => static::$query['taxonomy'],
-				'get_custom_field' => false,
+			$permalink = Factory\URI::get_generated_canonical_url( [
+				'id'       => static::$query['id'],
+				'taxonomy' => static::$query['taxonomy'],
 			] );
 			// We create it because filters may apply.
-			$canonical = static::$tsf->get_canonical_url( [
-				'id'               => static::$query['id'],
-				'taxonomy'         => static::$query['taxonomy'],
-				'get_custom_field' => true,
+			$canonical = Factory\URI::get_canonical_url( [
+				'id'       => static::$query['id'],
+				'taxonomy' => static::$query['taxonomy'],
 			] );
 			if ( $permalink !== $canonical ) {
 				$item['status'] = SEOBar::STATE_UNKNOWN;

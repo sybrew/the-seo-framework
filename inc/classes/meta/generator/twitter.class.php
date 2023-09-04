@@ -81,6 +81,8 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $site The Twitter site owner tag.
 			 * @param int    $id   The current page or term ID.
 			 */
@@ -116,6 +118,8 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $creator The Twitter page creator.
 			 * @param int    $id      The current page or term ID.
 			 */
@@ -151,6 +155,8 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $title The generated Twitter title.
 			 * @param int    $id    The current page or term ID.
 			 */
@@ -186,6 +192,8 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $description The generated Twitter description.
 			 * @param int    $id          The current page or term ID.
 			 */

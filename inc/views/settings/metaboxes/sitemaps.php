@@ -106,7 +106,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				HTML::description_noesc(
 					sprintf(
 						'<a href="%s" target=_blank rel=noopener>%s</a>',
-						esc_url( The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
+						esc_url( The_SEO_Framework\Bridges\Sitemap::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
 						esc_html__( 'View the base sitemap.', 'autodescription' )
 					)
 				);

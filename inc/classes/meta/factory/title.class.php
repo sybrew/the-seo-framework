@@ -41,7 +41,7 @@ use \The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->title() instead.
  */
 class Title {
 
@@ -219,7 +219,6 @@ class Title {
 		if ( null === $args ) {
 			$title = static::get_custom_title_from_query();
 		} else {
-			normalize_generation_args( $args );
 			$title = static::get_custom_title_from_args( $args );
 		}
 
@@ -275,6 +274,8 @@ class Title {
 	 */
 	public static function get_custom_title_from_args( $args ) {
 
+		normalize_generation_args( $args );
+
 		if ( $args['taxonomy'] ) {
 			$title = \tsf()->get_term_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
@@ -312,7 +313,6 @@ class Title {
 		if ( null === $args ) {
 			$title = static::generate_title_from_query();
 		} else {
-			normalize_generation_args( $args );
 			$title = static::generate_title_from_args( $args );
 		}
 
@@ -353,6 +353,8 @@ class Title {
 	 * @return string The generated title. Empty if query can't be replicated.
 	 */
 	public static function generate_title_from_args( $args ) {
+
+		normalize_generation_args( $args );
 
 		if ( $args['taxonomy'] ) {
 			$title = static::get_archive_title( \get_term( $args['id'], $args['taxonomy'] ) );
@@ -858,15 +860,15 @@ class Title {
 	public static function add_protection_status( $title, $args = null ) {
 
 		if ( null === $args ) {
-			$id    = Query::get_the_real_id();
-			$merge = Query::is_singular();
+			$id  = Query::get_the_real_id();
+			$add = Query::is_singular();
 		} else {
 			normalize_generation_args( $args );
-			$id    = $args['id'];
-			$merge = ! $args['taxonomy'] && ! $args['pta'];
+			$id  = $args['id'];
+			$add = ! $args['taxonomy'] && ! $args['pta'];
 		}
 
-		if ( ! $merge ) return $title;
+		if ( ! $add ) return $title;
 
 		$post = $id ? \get_post( $id ) : null;
 

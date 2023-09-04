@@ -8,12 +8,14 @@ namespace The_SEO_Framework\Meta\Factory;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
-
 use function \The_SEO_Framework\{
 	memo,
+	umemo,
 	Utils\normalize_generation_args,
 };
+
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -37,9 +39,579 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->uri() instead.
  */
 class URI {
+
+	/**
+	 * Gets the canonical URL for indexation.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param bool $escape Whether to escape the canonical URL.
+	 * @return string $url If indexable, a canonical URL will appear.
+	 */
+	public static function get_indexable_canonical_url( $escape = true ) {
+
+		$custom_url = static::get_custom_canonical_url();
+
+		if ( $custom_url )
+			return $custom_url;
+
+		if ( \has_filter( 'the_seo_framework_rel_canonical_output' ) ) {
+			/**
+			 * @since 2.6.5
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
+			 * @param string $url The canonical URL. Must be escaped.
+			 * @param int    $id  The current page or term ID.
+			 */
+			$url = (string) \apply_filters_deprecated(
+				'the_seo_framework_rel_canonical_output',
+				[
+					'',
+					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+				],
+				'4.3.0 of The SEO Framework',
+				'the_seo_framework_meta_render_data',
+			);
+
+			if ( $url ) return $url;
+		}
+
+		if ( str_contains( Robots::get_meta(), 'noindex' ) )
+			return '';
+
+		return static::get_generated_canonical_url( null, $escape );
+	}
+
+	/**
+	 * Returns the current canonical URL.
+	 * Removes pagination if the URL isn't obtained via the query.
+	 *
+	 * @since 3.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.2.3 Now accepts arguments publicly.
+	 * @since 4.3.0 1. No longer calls the query in the sitemap to remove pagination.
+	 *              2. Moved to \The_SEO_Framework\Meta\Factory\URI.
+	 *
+	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The Taxonomy.
+	 *    string $pta      The Post Type Archive.
+	 * }
+	 * @param bool       $escape Whether to escape the canonical URL.
+	 * @return string The canonical URL, if any.
+	 */
+	public static function get_canonical_url( $args = null, $escape = true ) {
+
+		$url = static::get_custom_canonical_url( $args, false )
+			?: static::get_generated_canonical_url( $args, false );
+
+		return $escape ? \tsf()->escape_canonical_url( $url ) : $url;
+	}
+
+	/**
+	 * Returns the custom canonical URL.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $escape Whether to escape the canonical URL.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public static function get_custom_canonical_url( $args = null, $escape = true ) {
+
+		if ( null === $args ) {
+			$url = static::get_custom_canonical_url_from_query();
+		} else {
+			$url = static::get_custom_canonical_url_from_args( $args );
+		}
+
+		return $escape ? \tsf()->escape_canonical_url( $url ) : $url;
+	}
+
+	/**
+	 * Returns the generated canonical URL.
+	 * Memoizes if $args is null.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine and memoize query.
+	 * @param bool       $escape Whether to escape the canonical URL.
+	 * @return string The custom canonical URL, if any.
+	 */
+	public static function get_generated_canonical_url( $args = null, $escape = true ) {
+
+		if ( null === $args ) {
+			$url = memo() ?? memo( static::get_generated_canonical_url_from_query() );
+		} else {
+			$url = static::get_generated_canonical_url_from_args( $args );
+		}
+
+		return $escape ? \tsf()->escape_canonical_url( $url ) : $url;
+	}
+
+	/**
+	 * Returns the custom canonical URL, based on query.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return string The custom canonical URL, if any.
+	 */
+	public static function get_custom_canonical_url_from_query() {
+
+		if ( Query::is_singular() ) {
+			$url = \tsf()->get_post_meta_item( '_genesis_canonical_uri' );
+		} elseif ( Query::is_editable_term() ) {
+			$url = \tsf()->get_term_meta_item( 'canonical' ) ?: '';
+		} elseif ( \is_post_type_archive() ) {
+			$url = \tsf()->get_post_type_archive_meta_item( 'canonical' );
+		}
+
+		return $url ?? '' ?: '';
+	}
+
+	/**
+	 * Returns the custom canonical URL, based on arguments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
+	 *    int    $id       The Post, Page or Term ID to generate the URL for.
+	 *    string $taxonomy The taxonomy.
+	 * }
+	 * @return string The custom canonical URL, if any.
+	 */
+	public static function get_custom_canonical_url_from_args( $args ) {
+
+		// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
+		normalize_generation_args( $args );
+
+		if ( $args['taxonomy'] ) {
+			$url = \tsf()->get_term_meta_item( 'canonical', $args['id'] );
+		} elseif ( $args['pta'] ) {
+			$url = \tsf()->get_post_type_archive_meta_item( 'canonical', $args['pta'] );
+		} elseif ( $args['id'] ) {
+			$url = \tsf()->get_post_meta_item( '_genesis_canonical_uri', $args['id'] );
+		}
+
+		return $url ?? '' ?: '';
+	}
+
+	/**
+	 * Gets generated canonical URL, based on query.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return string The generated canonical URL.
+	 */
+	public static function get_generated_canonical_url_from_query() {
+
+		if ( Query::is_real_front_page() ) {
+			$url = static::get_home_canonical_url();
+		} elseif ( Query::is_singular() ) {
+			$url = static::get_singular_canonical_url();
+		} elseif ( Query::is_archive() ) {
+			if ( Query::is_editable_term() ) {
+				$url = static::get_taxonomical_canonical_url();
+			} elseif ( \is_post_type_archive() ) {
+				$url = static::get_post_type_archive_canonical_url();
+			} elseif ( Query::is_author() ) {
+				$url = static::get_author_canonical_url();
+			} elseif ( \is_date() ) {
+				$url = static::get_date_canonical_url();
+			}
+		} elseif ( Query::is_search() ) {
+			$url = static::get_search_canonical_url();
+		}
+
+		return $url ?? '' ?: '';
+	}
+
+	/**
+	 * Gets generated canonical URL, based on args.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The generated canonical URL.
+	 */
+	public static function get_generated_canonical_url_from_args( $args ) {
+
+		// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
+		normalize_generation_args( $args );
+
+		if ( $args['taxonomy'] ) {
+			$url = static::get_bare_taxonomical_canonical_url( $args['id'], $args['taxonomy'] );
+		} elseif ( $args['pta'] ) {
+			$url = static::get_bare_post_type_archive_canonical_url( $args['pta'] );
+		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+			$url = static::get_bare_home_canonical_url();
+		} elseif ( $args['id'] ) {
+			$url = static::get_bare_singular_canonical_url( $args['id'] );
+		}
+
+		return $url ?? '';
+	}
+
+	/**
+	 * Returns home canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.4 1. Now adds a slash to the home URL when it's a root URL.
+	 *              2. Now skips slashing when queries have been appended to the URL.
+	 *              3. Home-as-page pagination is now supported.
+	 *
+	 * @return string The home canonical URL.
+	 */
+	public static function get_home_canonical_url() {
+
+		$url = URI\Utils::slash_root_url( Data\Blog::get_home_url() );
+
+		if ( empty( $url ) ) return '';
+
+		$page = max( Query::paged(), Query::page() );
+
+		if ( $page > 1 )
+			$url = URI\Utils::add_pagination_to_url( $url, $page, true );
+
+		return URI\Utils::set_preferred_url_scheme( $url );
+	}
+
+	/**
+	 * Returns home canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return string The home canonical URL.
+	 */
+	public static function get_bare_home_canonical_url() {
+		return URI\Utils::slash_root_url(
+			URI\Utils::set_preferred_url_scheme( Data\Blog::get_home_url() )
+		);
+	}
+
+	/**
+	 * Returns singular canonical URL.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via Query::paged().
+	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
+	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
+	 * @since 4.2.3 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
+	 * @since 4.3.0 1. Optimized for sitemap.
+	 *              2. Removed memoization thanks to optimization.
+	 *
+	 * @param int|null $post_id The page ID. Leave null to autodetermine.
+	 * @return string The singular canonical URL.
+	 */
+	public static function get_singular_canonical_url( $post_id = null ) {
+
+		if ( isset( $post_id ) )
+			return static::get_bare_singular_canonical_url( $post_id );
+
+		$url = \wp_get_canonical_url( Query::get_the_real_id() );
+
+		if ( empty( $url ) ) return '';
+
+		$page = \get_query_var( 'page', 1 ) ?: 1;
+		// Remove undesired/fake pagination. See: <https://core.trac.wordpress.org/ticket/37505>
+		if ( $page > 1 && Query::page() !== $page )
+			$url = URI\Utils::remove_pagination_from_url( $url, $page, false );
+
+		// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
+		// wp_get_canonical_url() only tests 'page'. Fix that: TODO create trac ticket.
+		if ( Query::is_singular_archive() )
+			$url = URI\Utils::add_pagination_to_url( $url, Query::paged(), true );
+
+		return URI\Utils::set_preferred_url_scheme( $url );
+	}
+
+	/**
+	 * Returns singular canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param int $post_id The post ID to get the URL from.
+	 * @return string The singular canonical URL without complex optimizations.
+	 */
+	public static function get_bare_singular_canonical_url( $post_id ) {
+
+		$url = \get_permalink( $post_id );
+
+		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+	}
+
+	/**
+	 * Returns taxonomical canonical URL.
+	 * Automatically adds pagination if the ID matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 1. Renamed from "get_taxonomial_canonical_url" (note the typo)
+	 *              2. Now works on the admin-screens.
+	 * @since 4.2.0 1. Added memoization.
+	 *              2. The parameters are now optional.
+	 * @since 4.3.0 Removed memoization thanks to optimization.
+	 *
+	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
+	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
+	 * @return string The taxonomical canonical URL, if any.
+	 */
+	public static function get_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
+
+		if ( isset( $term_id ) )
+			return static::get_bare_taxonomical_canonical_url( $term_id, $taxonomy );
+
+		$url = \get_term_link( Query::get_the_real_id(), $taxonomy );
+
+		if ( empty( $url ) || ! \is_string( $url ) )
+			return '';
+
+		return URI\Utils::set_preferred_url_scheme(
+			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		);
+	}
+
+	/**
+	 * Returns taxonomical canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param int|null $term_id  The term ID.
+	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
+	 * @return string The taxonomical canonical URL, if any.
+	 */
+	public static function get_bare_taxonomical_canonical_url( $term_id, $taxonomy = '' ) {
+
+		$url = \get_term_link( $term_id, $taxonomy );
+
+		return $url && \is_string( $url ) ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+	}
+
+	/**
+	 * Returns post type archive canonical URL.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.0 1. Deprecated first parameter as integer. Use strings or null.
+	 *              2. Now forwards post type object calling to WordPress's function.
+	 * @since 4.2.0 1. Now correctly adds pagination to the URL.
+	 *              2. Removed argument type deprecation doing it wrong warning.
+	 *
+	 * @param null|string $post_type The post type archive's post type.
+	 *                               Leave null to autodetermine query and allow pagination.
+	 * @return string The post type archive canonical URL, if any.
+	 */
+	public static function get_post_type_archive_canonical_url( $post_type = null ) {
+
+		if ( isset( $post_type ) )
+			return static::get_bare_post_type_archive_canonical_url( $post_type );
+
+		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
+
+		if ( empty( $url ) ) return '';
+
+		return URI\Utils::set_preferred_url_scheme(
+			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		);
+	}
+
+	/**
+	 * Returns post type archive canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $post_type The post type archive's post type.
+	 *                          Leave null to autodetermine query and allow pagination.
+	 * @return string The post type archive canonical URL, if any.
+	 */
+	public static function get_bare_post_type_archive_canonical_url( $post_type ) {
+
+		$url = \get_post_type_archive_link( $post_type );
+
+		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+	}
+
+	/**
+	 * Returns author canonical URL.
+	 *
+	 * @since 3.0.0
+	 * @since 4.2.0 1. The first parameter is now optional.
+	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
+	 *
+	 * @param int|null $id The author ID. Leave null to autodetermine.
+	 * @return string The author canonical URL, if any.
+	 */
+	public static function get_author_canonical_url( $id = null ) {
+
+		if ( isset( $id ) )
+			return static::get_bare_author_canonical_url( $id );
+
+		$url = \get_author_posts_url( Query::get_the_real_id() );
+
+		if ( empty( $url ) ) return '';
+
+		return URI\Utils::set_preferred_url_scheme(
+			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		);
+	}
+
+	/**
+	 * Returns author canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param int|null $id The author ID. Leave null to autodetermine.
+	 * @return string The author canonical URL, if any.
+	 */
+	public static function get_bare_author_canonical_url( $id ) {
+
+		$url = \get_author_posts_url( $id );
+
+		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+	}
+
+	/**
+	 * Returns date canonical URL.
+	 * Automatically adds pagination if the date input matches the query.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param ?int $year  The year. Leave null to autodetermine entire query.
+	 * @param ?int $month The month. If set, year must also be set.
+	 * @param ?int $day   The day. If set, month and year must also be set.
+	 * @return string The date canonical URL, if any.
+	 */
+	public static function get_date_canonical_url( $year = null, $month = null, $day = null ) {
+
+		if ( isset( $year ) )
+			return static::get_bare_date_canonical_url( $year, $month, $day );
+
+		$year  = \get_query_var( 'year' );
+		$month = \get_query_var( 'monthnum' );
+		$day   = \get_query_var( 'day' );
+
+		if ( $day ) {
+			$url = \get_day_link( $year, $month, $day );
+		} elseif ( $month ) {
+			$url = \get_month_link( $year, $month );
+		} else {
+			$url = \get_year_link( $year );
+		}
+
+		if ( empty( $url ) ) return '';
+
+		return URI\Utils::set_preferred_url_scheme(
+			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		);
+	}
+
+	/**
+	 * Returns date canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param int  $year  The year.
+	 * @param ?int $month The month.
+	 * @param ?int $day   The day.
+	 * @return string The date canonical URL, if any.
+	 */
+	public static function get_bare_date_canonical_url( $year, $month = null, $day = null ) {
+
+		if ( $day ) {
+			$url = \get_day_link( $year, $month, $day );
+		} elseif ( $month ) {
+			$url = \get_month_link( $year, $month );
+		} else {
+			$url = \get_year_link( $year );
+		}
+
+		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+	}
+
+	/**
+	 * Returns search canonical URL.
+	 * Automatically adds pagination if the input matches the query.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 1. The first parameter now defaults to null.
+	 *              2. The search term is now matched with the input query if not set,
+	 *                 instead of it being empty.
+	 *
+	 * @param string $search_query The search query. Mustn't be escaped.
+	 *                             When left empty, the current query will be used.
+	 * @return string The search canonical URL.
+	 */
+	public static function get_search_canonical_url( $search_query = null ) {
+
+		if ( isset( $search_query ) )
+			return static::get_bare_search_canonical_url( $search_query );
+
+		$url = \get_search_link( \get_search_query( false ) );
+
+		if ( empty( $url ) ) return '';
+
+		return URI\Utils::set_preferred_url_scheme(
+			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		);
+	}
+
+	/**
+	 * Returns search canonical URL without query adjustments.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $search_query The search query. Mustn't be escaped.
+	 * @return string The date canonical URL, if any.
+	 */
+	public static function get_bare_search_canonical_url( $search_query ) {
+
+		$url = \get_search_link( $search_query );
+
+		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+	}
+
+	/**
+	 * Generates Previous and Next links.
+	 *
+	 * @since 3.1.0
+	 * @since 3.2.4 1. Now correctly removes the pagination base from singular URLs.
+	 *              2. Now returns no URLs when a custom canonical URL is set.
+	 * @since 4.1.0 Removed memoization.
+	 * @since 4.1.2 1. Added back memoization.
+	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
+	 * @since 4.3.0 1. Removed memoization thanks to optimization.
+	 *
+	 * @return array Escaped site Pagination URLs: {
+	 *    string 'prev'
+	 *    string 'next'
+	 * }
+	 */
+	public static function get_paged_urls() {
+
+		$page     = max( Query::paged(), Query::page() );
+		$numpages = Query::numpages();
+
+		// If this page is not the last, create a next-URL.
+		if ( ( $page + 1 ) <= $numpages ) {
+			$url  = \URI\Utils::remove_pagination_from_url( static::get_generated_canonical_url() );
+			$next = \URI\Utils::add_pagination_to_url( $url, $page + 1 );
+		}
+
+		// If this page is not the first, create a prev-URL.
+		if ( $page > 1 ) {
+			$url ??= \URI\Utils::remove_pagination_from_url( static::get_generated_canonical_url() );
+			$prev  = \URI\Utils::add_pagination_to_url( $url, $page - 1 );
+		}
+
+		return [ $prev ?? '', $next ?? '' ];
+	}
 
 	/**
 	 * Returns the redirect URL, if any.
@@ -47,7 +619,8 @@ class URI {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
 	 *              2. Now redirects post type archives.
-	 * @since 4.3.0 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 1. Now expects an ID before getting a post meta item.
+	 *              2. Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -67,6 +640,7 @@ class URI {
 			}
 		} else {
 			normalize_generation_args( $args );
+
 			if ( $args['taxonomy'] ) {
 				$url = \tsf()->get_term_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {
@@ -77,5 +651,94 @@ class URI {
 		}
 
 		return $url ?? '' ?: '';
+	}
+
+	/**
+	 * Generates shortlink URL.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return string|null Escaped site Shortlink URL.
+	 */
+	public static function get_shortlink_url() {
+
+		if ( ! \tsf()->get_option( 'shortlink_tag' ) ) return '';
+		if ( Query::is_real_front_page() ) return '';
+
+		return static::generate_shortlink_url();
+	}
+
+	/**
+	 * Generates shortlink URL.
+	 *
+	 * @since 4.3.0
+	 * @todo Append queries of other plugins for other pages as well?
+	 *
+	 * @return string|null Escaped site Shortlink URL.
+	 */
+	public static function generate_shortlink_url() {
+
+		$home = static::get_bare_home_canonical_url();
+		$id   = Query::get_the_real_id();
+		$url  = '';
+
+		if ( Query::is_singular() ) {
+			$url = \add_query_arg( [ 'p' => $id ], $home );
+
+			// Append queries other plugins might've filtered in.
+			$url = URI\Utils::append_query_to_url(
+				$url,
+				parse_url( static::get_bare_singular_canonical_url( $id ), \PHP_URL_QUERY )
+			);
+		} elseif ( Query::is_archive() ) {
+			if ( Query::is_category() ) {
+				$url = \add_query_arg( [ 'cat' => $id ], $home );
+			} elseif ( Query::is_tag() ) {
+				$url = \add_query_arg( [ 'post_tag' => $id ], $home );
+			} elseif ( \is_date() && isset( $GLOBALS['wp_query']->query ) ) {
+				// FIXME: Trac ticket: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
+				$_query = $GLOBALS['wp_query']->query;
+				$_date  = [
+					'y' => $_query['year'] ?? '',
+					'm' => $_query['monthnum'] ?? '',
+					'd' => $_query['day'] ?? '',
+				];
+
+				$url = \add_query_arg( [ 'm' => implode( '', $_date ) ], $home );
+			} elseif ( Query::is_author() ) {
+				$url = \add_query_arg( [ 'author' => $id ], $home );
+			} elseif ( Query::is_tax() ) {
+				// Generate shortlink for object type and slug.
+				$object = \get_queried_object();
+
+				$tax  = $object->taxonomy ?? '';
+				$slug = $object->slug ?? '';
+
+				if ( $tax && $slug )
+					$url = \add_query_arg( [ $tax => $slug ], $home );
+			}
+		} elseif ( Query::is_search() ) {
+			$url = \add_query_arg( [ 's' => \get_search_query( false ) ], $home );
+		}
+
+		if ( ! $url ) return '';
+
+		$paged = Query::paged();
+		$page  = Query::page();
+
+		if ( $paged > 1 ) {
+			$url = \add_query_arg( [ 'paged' => $paged ], $url );
+		} elseif ( $page > 1 ) {
+			$url = \add_query_arg( [ 'page' => $page ], $url );
+		}
+
+		if ( Query::is_singular() ) {
+			$url = URI\Utils::append_query_to_url(
+				$url,
+				parse_url( static::get_bare_singular_canonical_url( $id ), \PHP_URL_QUERY )
+			);
+		}
+
+		return \esc_url_raw( $url, [ 'https', 'http' ] );
 	}
 }

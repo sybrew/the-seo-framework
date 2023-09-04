@@ -656,7 +656,7 @@ class Init extends Pool {
 		if ( ! $this->allow_external_redirect() ) {
 			// Only HTTP/HTTPS and home URLs are allowed.
 			$path = $this->set_url_scheme( $url, 'relative' );
-			$url  = \trailingslashit( $this->get_home_host() ) . ltrim( $path, ' /' );
+			$url  = \trailingslashit( Factory\URI\Utils::get_site_host() ) . ltrim( $path, ' /' );
 
 			// Maintain current request's scheme.
 			$scheme = Query::is_ssl() ? 'https' : 'http';
@@ -785,11 +785,9 @@ class Init extends Pool {
 		// Add extra whitespace and sitemap full URL
 		if ( $this->get_option( 'sitemaps_robots' ) ) {
 			if ( $this->get_option( 'sitemaps_output' ) ) {
-				$sitemaps = Bridges\Sitemap::get_instance();
-
-				foreach ( $sitemaps->get_sitemap_endpoint_list() as $id => $data )
+				foreach ( Bridges\Sitemap::get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
-						$output .= sprintf( "\nSitemap: %s", \esc_url( $sitemaps->get_expected_sitemap_endpoint_url( $id ) ) );
+						$output .= sprintf( "\nSitemap: %s", \esc_url( Bridges\Sitemap::get_expected_sitemap_endpoint_url( $id ) ) );
 
 				$output .= "\n";
 			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
@@ -814,7 +812,11 @@ class Init extends Pool {
 			$error  = sprintf(
 				"%s\n%s\n\n",
 				'# This is an invalid robots.txt location.',
-				'# Please visit: ' . \esc_url( \trailingslashit( $this->set_preferred_url_scheme( $this->get_home_host() ) ) . 'robots.txt' )
+				'# Please visit: ' . \esc_url(
+					\trailingslashit(
+						Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() )
+					) . 'robots.txt'
+				)
 			);
 			$output = "$error$output";
 		}

@@ -10,6 +10,9 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\Utils\clamp_sentence;
 
+use \The_SEO_Framework\Helper\Query_Utils,
+	\The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -929,7 +932,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_title_separator( $sep ) {
 
-		$sep_list = Meta\Factory\Title::get_separator_list();
+		$sep_list = Factory\Title::get_separator_list();
 
 		if ( \array_key_exists( $sep, $sep_list ) )
 			return (string) $sep;
@@ -1471,6 +1474,61 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Cleans canonical URL.
+	 * Looks at permalink settings to determine roughness of escaping.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $url A fully qualified URL.
+	 * @return string A fully qualified clean URL.
+	 */
+	public function clean_canonical_url( $url ) { // todo make s_canonical_url
+
+		if ( Query_Utils::using_pretty_permalinks() )
+			return \esc_url( $url, [ 'https', 'http' ] );
+
+		// Keep the &'s more readable when using query-parameters.
+		return \esc_url_raw( $url, [ 'https', 'http' ] );
+	}
+
+	/**
+	 * Sanitizes canonical URL.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $url A fully qualified URL.
+	 * @return string A fully qualified escaped URL.
+	 */
+	public function escape_canonical_url( $url ) {
+
+		// Escape early. This may lead to it pointing to this domain.
+		$url = \esc_url( $url, [ 'https', 'http' ] );
+
+		if ( $url && Factory\URI\Utils::url_matches_blog_domain( $url ) )
+			$url = Factory\URI\Utils::set_preferred_url_scheme( $url );
+
+		return $url ?: '';
+	}
+
+	/**
+	 * Sanitizes canonical URL.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $url A fully qualified URL.
+	 * @return string A fully qualified sanitized URL.
+	 */
+	public function s_canonical_url( $url ) {
+
+		$url = \sanitize_url( $url, [ 'https', 'http' ] );
+
+		if ( $url && Factory\URI\Utils::url_matches_blog_domain( $url ) )
+			$url = Factory\URI\Utils::set_preferred_url_scheme( $url );
+
+		return $url ?: '';
+	}
+
+	/**
 	 * Makes URLs safe and removes query args.
 	 *
 	 * @since 2.2.2
@@ -1516,11 +1574,11 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_url_relative_to_current_scheme( $url ) {
 
-		if ( $this->matches_this_domain( $url ) ) {
-			$url = $this->set_preferred_url_scheme( $url );
+		if ( Factory\URI\Utils::url_matches_blog_domain( $url ) ) {
+			$url = Factory\URI\Utils::set_preferred_url_scheme( $url );
 		} else {
 			// This also sets preferred URL scheme if path.
-			$url = $this->convert_to_url_if_path( $url );
+			$url = Factory\URI\Utils::convert_path_to_url( $url );
 		}
 
 		return $this->s_url_query( $url );
@@ -1659,7 +1717,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_twitter_card( $card ) {
 
-		if ( \in_array( $card, Meta\Factory\Twitter::get_supported_cards(), true ) )
+		if ( \in_array( $card, Factory\Twitter::get_supported_cards(), true ) )
 			return $card;
 
 		return 'summary_large_image'; // var_dump() make 'auto'?
@@ -1708,7 +1766,7 @@ class Sanitize extends Admin_Pages {
 			$url = $this->set_url_scheme( $url, 'relative' );
 
 		// Only adjust scheme if it used to be relative. Do not use `s_url_relative_to_current_scheme()`.
-		$url = $this->convert_to_url_if_path( $url );
+		$url = Factory\URI\Utils::convert_path_to_url( $url );
 
 		/**
 		 * @since 2.5.0

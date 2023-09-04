@@ -195,7 +195,7 @@ final class ListEdit extends ListTable {
 			'canonical'   => [
 				'value' => $meta['_genesis_canonical_uri'],
 				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => $tsf->get_canonical_url( $_generator_args + [ 'get_custom_field' => false ] ),
+				// 'placeholder' => Factory\URI::get_generated_canonical_url( $_generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['_genesis_noindex'],
@@ -358,7 +358,7 @@ final class ListEdit extends ListTable {
 			'canonical'   => [
 				'value' => $meta['canonical'],
 				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => $tsf->get_canonical_url( $_generator_args + [ 'get_custom_field' => false ] ),
+				// 'placeholder' => Factory\URI::get_generated_canonical_url( $_generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['noindex'],

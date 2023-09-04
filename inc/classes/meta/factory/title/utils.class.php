@@ -34,11 +34,10 @@ use \The_SEO_Framework\Helper\Query;
  * Holds utility for the Title factory.
  *
  * @since 4.3.0
- * @access private
- *         Not part of the public API.
- * @final Can't be extended.
+ * @access protected
+ * @internal Use tsf()->title()->utils() instead.
  */
-final class Utils {
+class Utils {
 
 	/**
 	 * Removes default title filters, for consistent output and sanitization.

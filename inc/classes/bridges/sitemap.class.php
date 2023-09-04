@@ -9,7 +9,8 @@ namespace The_SEO_Framework\Bridges;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Interpreters;
+	\The_SEO_Framework\Interpreters,
+	\The_SEO_Framework\Meta\Factory;
 
 use function \The_SEO_Framework\memo;
 
@@ -91,15 +92,12 @@ final class Sitemap {
 	 * @internal
 	 */
 	public function __construct() {
-
 		static $count = 0;
 		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-
-		static::$tsf = \tsf();
 	}
 
 	/**
-	 * Initializes scripts based on admin query.
+	 * Initializes sitemap output.
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Can now parse non-ASCII URLs. No longer only lowercases raw URIs.
@@ -140,7 +138,7 @@ final class Sitemap {
 
 		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
 		if ( $path_info['use_query_var'] ) {
-			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
+			foreach ( static::get_sitemap_endpoint_list() as $_id => $_data ) {
 				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
 				// Yes, we know. It's not really checking for standardized query-variables.
 				if ( preg_match( $_regex, $stripped_uri ) ) {
@@ -149,7 +147,7 @@ final class Sitemap {
 				}
 			}
 		} else {
-			foreach ( $this->get_sitemap_endpoint_list() as $_id => $_data ) {
+			foreach ( static::get_sitemap_endpoint_list() as $_id => $_data ) {
 				if ( preg_match( $_data['regex'], $stripped_uri ) ) {
 					$this->sitemap_id = $_id;
 					break;
@@ -175,7 +173,7 @@ final class Sitemap {
 		 */
 		\do_action( 'the_seo_framework_sitemap_header', $this->sitemap_id );
 
-		\call_user_func( $this->get_sitemap_endpoint_list()[ $this->sitemap_id ]['callback'], $this->sitemap_id );
+		\call_user_func( static::get_sitemap_endpoint_list()[ $this->sitemap_id ]['callback'], $this->sitemap_id );
 	}
 
 	/**
@@ -204,19 +202,20 @@ final class Sitemap {
 	 *              Polylang is being astonishingly asinine.
 	 * @since 4.1.4 Now assimilates the output using the base path, so that filter
 	 *              `the_seo_framework_sitemap_base_path` also works. Glues the
-	 *              pieces together using the `get_home_host` value.
+	 *              pieces together using the `get_site_host()` value.
+	 * @since 4.3.0 Is now static.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @param string $id The base ID. Default 'base'.
 	 * @return string|bool False if ID isn't registered; the URL otherwise.
 	 */
-	public function get_expected_sitemap_endpoint_url( $id = 'base' ) {
+	public static function get_expected_sitemap_endpoint_url( $id = 'base' ) {
 
-		$list = $this->get_sitemap_endpoint_list();
+		$list = static::get_sitemap_endpoint_list();
 
 		if ( ! isset( $list[ $id ] ) ) return false;
 
-		$host      = static::$tsf->set_preferred_url_scheme( static::$tsf->get_home_host() );
+		$host      = Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() );
 		$path_info = static::get_sitemap_base_path_info();
 
 		return \esc_url_raw(
@@ -230,11 +229,11 @@ final class Sitemap {
 	 * Returns a list of known sitemap endpoints.
 	 *
 	 * @since 4.0.0
-	 * @static array $list
+	 * @since 4.3.0 Is now static.
 	 *
 	 * @return array[] The sitemap endpoints with their callbacks.
 	 */
-	public function get_sitemap_endpoint_list() {
+	public static function get_sitemap_endpoint_list() {
 		return memo() ?? memo(
 			/**
 			 * @since 4.0.0
@@ -254,7 +253,7 @@ final class Sitemap {
 			 *      'callback' => callable     The callback for the sitemap output.
 			 *                                 Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
 			 *                                 Tip: In the callback, use
-			 *                                      `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
+			 *                                      `\The_SEO_Framework\Bridges\Sitemap::get_sitemap_endpoint_list()[$sitemap_id]`
 			 *                                      It returns the arguments you've passed in this filter; including your arbitrary indexes.
 			 *      'robots'   => bool         Whether the endpoint should be mentioned in the robots.txt file.
 			 *   }
@@ -301,7 +300,7 @@ final class Sitemap {
 	 * @return bool
 	 */
 	public function sitemap_cache_enabled() {
-		return (bool) static::$tsf->get_option( 'cache_sitemap' );
+		return (bool) \tsf()->get_option( 'cache_sitemap' );
 	}
 
 	/**
@@ -359,7 +358,7 @@ final class Sitemap {
 	public function get_transient_key( $sitemap_id = '' ) {
 
 		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
-		$ep_list    = $this->get_sitemap_endpoint_list();
+		$ep_list    = static::get_sitemap_endpoint_list();
 
 		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
 
@@ -418,7 +417,7 @@ final class Sitemap {
 	public function get_lock_key( $sitemap_id = '' ) {
 
 		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
-		$ep_list    = $this->get_sitemap_endpoint_list();
+		$ep_list    = static::get_sitemap_endpoint_list();
 
 		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
 
@@ -431,13 +430,14 @@ final class Sitemap {
 	 * Outputs a '503: Service Unavailable' header and no-cache headers.
 	 *
 	 * @since 4.1.2
+	 * @since 4.3.0 Is now static.
 	 * TODO consider instead of using this, output the previous sitemap from cache, instead? Spaghetti.
 	 *
 	 * @param int $timeout How many seconds the user has to wait. Optional. Leave 0 to send a generic message.
 	 */
-	public function output_locked_header( $timeout = 0 ) {
+	public static function output_locked_header( $timeout = 0 ) {
 
-		static::$tsf->clean_response_header();
+		\tsf()->clean_response_header();
 
 		\status_header( 503 );
 		\nocache_headers();
@@ -543,7 +543,7 @@ final class Sitemap {
 		}
 
 		// Remove output, if any.
-		static::$tsf->clean_response_header();
+		\tsf()->clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
@@ -551,7 +551,7 @@ final class Sitemap {
 		}
 
 		// Fetch sitemap content and add trailing line. Already escaped internally.
-		static::$tsf->get_view( 'sitemap/xml-sitemap', compact( 'sitemap_id' ) );
+		\tsf()->get_view( 'sitemap/xml-sitemap', compact( 'sitemap_id' ) );
 		echo "\n";
 
 		// We're done now.
@@ -571,7 +571,7 @@ final class Sitemap {
 	 */
 	public static function output_stylesheet() {
 
-		static::$tsf->clean_response_header();
+		\tsf()->clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
@@ -581,7 +581,7 @@ final class Sitemap {
 
 		Interpreters\Sitemap_XSL::prepare();
 
-		static::$tsf->get_view( 'sitemap/xsl-stylesheet' );
+		\tsf()->get_view( 'sitemap/xsl-stylesheet' );
 		exit;
 	}
 
@@ -590,16 +590,17 @@ final class Sitemap {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.3 Added a trailing newline to the stylesheet-tag for readability.
+	 * @since 4.3.0 Is now static.
 	 */
-	public function output_sitemap_header() {
+	public static function output_sitemap_header() {
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 
-		if ( static::$tsf->get_option( 'sitemap_styles' ) ) {
+		if ( \tsf()->get_option( 'sitemap_styles' ) ) {
 			printf(
 				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
 				// phpcs:ignore, WordPress.Security.EscapeOutput
-				$this->get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
+				static::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
 			);
 		}
 	}
@@ -608,8 +609,9 @@ final class Sitemap {
 	 * Returns the opening tag for the sitemap urlset.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Is now static.
 	 */
-	public function output_sitemap_urlset_open_tag() {
+	public static function output_sitemap_urlset_open_tag() {
 
 		$schemas = [
 			'xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
@@ -642,8 +644,9 @@ final class Sitemap {
 	 * Outputs the closing tag for the sitemap urlset.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Is now static.
 	 */
-	public function output_sitemap_urlset_close_tag() {
+	public static function output_sitemap_urlset_close_tag() {
 		echo '</urlset>';
 	}
 
@@ -664,10 +667,7 @@ final class Sitemap {
 		return \apply_filters(
 			'the_seo_framework_sitemap_base_path',
 			rtrim(
-				parse_url(
-					static::$tsf->get_home_url(),
-					\PHP_URL_PATH
-				) ?? '',
+				Factory\URI\Utils::get_parsed_home_url()['path'] ?? '',
 				'/'
 			)
 		);

@@ -8,8 +8,13 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query_Utils,
-	\The_SEO_Framework\Bridges;
+use \The_SEO_Framework\Bridges,
+	\The_SEO_Framework\Meta\Factory;
+
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query_Utils,
+};
 
 /**
  * The SEO Framework plugin
@@ -161,7 +166,7 @@ class Base extends Main {
 		$content = '';
 		$count   = 0;
 
-		$show_modified = (bool) static::$tsf->get_option( 'sitemaps_modified' );
+		$show_modified = (bool) \tsf()->get_option( 'sitemaps_modified' );
 
 		/**
 		 * @since 2.2.9
@@ -189,7 +194,7 @@ class Base extends Main {
 			$content .= $this->build_url_item( $_values );
 		}
 
-		$post_types = array_diff( static::$tsf->get_supported_post_types(), [ 'attachment' ] );
+		$post_types = array_diff( Post_Types::get_supported_post_types(), [ 'attachment' ] );
 
 		/**
 		 * @since 4.0.0
@@ -424,7 +429,7 @@ class Base extends Main {
 			if ( $this->is_post_included_in_sitemap( 0 ) ) {
 				// Reset.
 				$_values        = [];
-				$_values['loc'] = static::$tsf->get_homepage_permalink();
+				$_values['loc'] = Factory\URI::get_bare_home_canonical_url();
 
 				if ( $args['show_modified'] ) {
 					$latests_posts = \wp_get_recent_posts(
@@ -478,12 +483,12 @@ class Base extends Main {
 	protected function generate_url_item_values( $post_ids, $args, &$count = 0 ) {
 
 		foreach ( $post_ids as $post_id ) {
-			// Setup post cache, which is also used in is_post_included_in_sitemap() and get_canonical_url().
+			// Setup post cache, which is also used in is_post_included_in_sitemap() and get_bare_singular_canonical_url().
 			$post = \get_post( $post_id );
 
 			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
 				$_values = [
-					'loc' => static::$tsf->get_canonical_url( [ 'id' => $post_id ] ),
+					'loc' => Factory\URI::get_bare_singular_canonical_url( $post_id ),
 				];
 
 				if ( $args['show_modified'] )
@@ -499,7 +504,7 @@ class Base extends Main {
 	}
 
 	/**
-	 * Builds and returns a sitemap URL item.
+	 * Builds, escapes, and returns a sitemap URL item.
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.1 Now uses `create_xml_entry()` to parse the XML.
@@ -516,15 +521,15 @@ class Base extends Main {
 		if ( empty( $args['loc'] ) ) return '';
 
 		$xml = [
-			'loc' => $args['loc'], // Already escaped.
+			'loc' => \esc_xml( $args['loc'] ),
 		];
 
 		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {
 			static $timestamp_format;
 
-			$timestamp_format ??= static::$tsf->get_timestamp_format();
+			$timestamp_format ??= \tsf()->get_timestamp_format();
 
-			$xml['lastmod'] = static::$tsf->gmt2date( $timestamp_format, $args['lastmod'] );
+			$xml['lastmod'] = \esc_xml( \tsf()->gmt2date( $timestamp_format, $args['lastmod'] ) );
 		}
 
 		return $this->create_xml_entry( [ 'url' => $xml ], 1 );

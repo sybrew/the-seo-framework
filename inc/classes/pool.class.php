@@ -171,6 +171,28 @@ class Pool extends Legacy_API {
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @var class[] The class store. Used in favor of memo() for a chain would become expensive.
+			 */
+			private static $pool = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\Factory\URI\Utils
+			 */
+			public static function utils() {
+				return static::$pool['utils'] ??= new class extends Meta\Factory\URI\Utils {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->uri()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
 		};
 	}
 
@@ -192,6 +214,38 @@ class Pool extends Legacy_API {
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\Factory\Title\Utils
+			 */
+			public static function utils() {
+				return static::$pool['utils'] ??= new class extends Meta\Factory\Title\Utils {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->title()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\Factory\Title\Conditions
+			 */
+			public static function conditions() {
+				return static::$pool['conditions'] ??= new class extends Meta\Factory\Title\Conditions {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->title()->conditions()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
 		};
 	}
 
@@ -213,6 +267,22 @@ class Pool extends Legacy_API {
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\Factory\Description\Excerpt
+			 */
+			public static function excerpt() {
+				return static::$pool['excerpt'] ??= new class extends Meta\Factory\Description\Excerpt {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->description()->excerpt()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
 		};
 	}
 

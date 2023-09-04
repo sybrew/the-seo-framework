@@ -232,7 +232,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_visibility_tab':
-		$canonical_placeholder = $this->get_canonical_url( $_generator_args );
+		$canonical_placeholder = Factory\URI::get_generated_canonical_url( $_generator_args );
 
 		// Get robots defaults.
 		$r_defaults = Factory\Robots::generate_meta(

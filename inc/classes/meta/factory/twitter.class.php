@@ -37,7 +37,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->twitter() instead.
  */
 class Twitter {
 
@@ -174,7 +174,6 @@ class Twitter {
 		if ( null === $args ) {
 			$title = static::get_custom_title_from_query();
 		} else {
-			normalize_generation_args( $args );
 			$title = static::get_custom_title_from_args( $args );
 		}
 
@@ -229,6 +228,8 @@ class Twitter {
 	 * @return string Twitter Title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
+
+		normalize_generation_args( $args );
 
 		if ( $args['taxonomy'] ) {
 			$title = \tsf()->get_term_meta_item( 'tw_title', $args['id'] );
@@ -312,7 +313,6 @@ class Twitter {
 		if ( null === $args ) {
 			$desc = static::get_custom_description_from_query();
 		} else {
-			normalize_generation_args( $args );
 			$desc = static::get_custom_description_from_args( $args );
 		}
 
@@ -367,6 +367,8 @@ class Twitter {
 	 * @return string Twitter description.
 	 */
 	public static function get_custom_description_from_args( $args ) {
+
+		normalize_generation_args( $args );
 
 		if ( $args['taxonomy'] ) {
 			$desc = \tsf()->get_term_meta_item( 'tw_description', $args['id'] );

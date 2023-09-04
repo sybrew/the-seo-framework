@@ -34,34 +34,12 @@ use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\Sitemap\Main` from `The_SEO_Framework\Builders\Sitemap`
+ * @since 4.3.0 No longer holds the $tsf property.
  * @abstract
  *
  * @access public
  */
 abstract class Main {
-
-	/**
-	 * @var null|\The_SEO_Framework\Load
-	 */
-	protected static $tsf = null;
-
-	/**
-	 * Constructor.
-	 *
-	 * @since 4.0.0
-	 */
-	final public function __construct() {
-		static::$tsf = \tsf();
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @since 4.0.0
-	 */
-	final public function __destruct() {
-		static::$tsf = null;
-	}
 
 	/**
 	 * Prepares sitemap generation by raising the memory limit and fixing the timezone.
@@ -285,7 +263,7 @@ abstract class Main {
 		 */
 		return (int) \apply_filters(
 			'the_seo_framework_sitemap_post_limit',
-			static::$tsf->get_option( 'sitemap_query_limit' ),
+			\tsf()->get_option( 'sitemap_query_limit' ),
 			$hierarchical
 		);
 	}

@@ -6,6 +6,10 @@
 
 namespace The_SEO_Framework\Helper;
 
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use function \The_SEO_Framework\umemo;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -22,10 +26,6 @@ namespace The_SEO_Framework\Helper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-use function \The_SEO_Framework\umemo;
 
 /**
  * Holds a collection of helper methods for the WordPress query.

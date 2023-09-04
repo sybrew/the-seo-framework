@@ -38,7 +38,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->open_graph() instead.
  */
 class Open_Graph {
 
@@ -100,7 +100,7 @@ class Open_Graph {
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $escape Whether to escape the description.
 	 * @return string Open Graph Title.
 	 */
 	public static function get_title( $args = null, $escape = true ) {
@@ -118,7 +118,7 @@ class Open_Graph {
 	 * @since 4.3.0
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $escape Whether to escape the description.
 	 * @return string Open Graph Title.
 	 */
 	public static function get_custom_title( $args, $escape ) {
@@ -126,7 +126,6 @@ class Open_Graph {
 		if ( null === $args ) {
 			$title = static::get_custom_title_from_query();
 		} else {
-			normalize_generation_args( $args );
 			$title = static::get_custom_title_from_args( $args );
 		}
 
@@ -178,6 +177,8 @@ class Open_Graph {
 	 */
 	public static function get_custom_title_from_args( $args ) {
 
+		normalize_generation_args( $args );
+
 		if ( $args['taxonomy'] ) {
 			$title = \tsf()->get_term_meta_item( 'og_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
@@ -210,7 +211,7 @@ class Open_Graph {
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Open Graph Title.
 	 */
 	public static function get_generated_title( $args = null, $escape = true ) {
@@ -243,15 +244,14 @@ class Open_Graph {
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param bool       $escape Whether to escape the description.
 	 * @return string TwOpen Graphitter description.
 	 */
-	public static function get_custom_description( $args, $escape ) {
+	public static function get_custom_description( $args = null, $escape = true ) {
 
 		if ( null === $args ) {
 			$desc = static::get_custom_description_from_query();
 		} else {
-			normalize_generation_args( $args );
 			$desc = static::get_custom_description_from_args( $args );
 		}
 
@@ -302,6 +302,8 @@ class Open_Graph {
 	 * @return string Open Graph description.
 	 */
 	public static function get_custom_description_from_args( $args ) {
+
+		normalize_generation_args( $args );
 
 		if ( $args['taxonomy'] ) {
 			$desc = \tsf()->get_term_meta_item( 'og_description', $args['id'] );
@@ -401,7 +403,7 @@ class Open_Graph {
 	 * @return string
 	 */
 	public static function get_url() {
-		return \tsf()->get_current_canonical_url(); // var_dump()_
+		return URI::get_canonical_url();
 	}
 
 	/**

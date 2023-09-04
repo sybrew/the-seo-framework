@@ -179,7 +179,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = [
 			'@context' => 'https://schema.org',
 			'@type'    => 'WebSite',
-			'url'      => $this->get_homepage_permalink(),
+			'url'      => Factory\URI::get_bare_home_canonical_url(),
 		];
 
 		// The name part.
@@ -249,7 +249,7 @@ class Generate_Ldjson extends Generate_Image {
 		$data = [
 			'@context' => 'https://schema.org',
 			'@type'    => ucfirst( \esc_attr( $knowledge_type ) ),
-			'url'      => $this->get_homepage_permalink(),
+			'url'      => Factory\URI::get_bare_home_canonical_url(),
 			'name'     => $this->escape_title( $knowledge_name ),
 		];
 
@@ -323,7 +323,8 @@ class Generate_Ldjson extends Generate_Image {
 			'the_seo_framework_knowledge_logo',
 			[
 				( $get_option ? $this->get_option( 'knowledge_logo_url' ) : false )
-					?: Factory\Image\Main::get_site_icon_image_details()->current()['url'] // var_dump() use non-main!
+					 // var_dump() use non-main to get!
+					?: Factory\Image\Generator::generate_site_icon_image_details()->current()['url']
 					?: '',
 				$get_option,
 			]
@@ -775,15 +776,15 @@ class Generate_Ldjson extends Generate_Image {
 
 		switch ( $from ) {
 			case 'currentpage':
-				$url = $this->get_current_permalink();
+				$url = Factory\URI::get_canonical_url();
 				break;
 
 			case 'homepage':
-				$url = $this->get_homepage_permalink();
+				$url = Factory\URI::get_bare_home_canonical_url();
 				break;
 
 			case 'create':
-				$url = $this->get_canonical_url( $args );
+				$url = Factory\URI::get_canonical_url( $args );
 				break;
 
 			default:

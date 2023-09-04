@@ -12,6 +12,7 @@ use \The_SEO_Framework\Helper\Query;
 
 use function \The_SEO_Framework\{
 	memo,
+	umemo,
 	Utils\normalize_generation_args,
 };
 
@@ -37,7 +38,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->robots() instead.
  */
 class Robots {
 
@@ -64,7 +65,8 @@ class Robots {
 	 * @return string
 	 */
 	public static function get_meta() {
-		return memo() ?? memo(
+		return umemo( __METHOD__ ) ?? umemo(
+			__METHOD__,
 			\tsf()->is_blog_public()
 				? implode( ',', static::generate_meta() )
 				: ''

@@ -456,6 +456,8 @@ TODO _init_locale only on admin?
 	-> There's no translatable text on the front-end left, no?
 		-> There should be an issue for this.
 
+TODO why is "autodescription_title_no_blogname" always checked on the homepage?
+
 // Lacking imports:
 ^<\?php([\w\W](?!use (\\The_SEO_Framework\\(Helper|Data|Meta)\\\{).*;))*?(^(.(?!\*|\/\/))*?\\The_SEO_Framework\\.*?::)(.(?!\/\/ Lacking import OK.))*$
  // Lacking import OK.
@@ -474,6 +476,10 @@ function.*?\{([\w\W](?!tsf\(\)))*?\}
 // Mismatch deprecation notices:
 function (.*?)\(([\w\W](?!\1))*?\}
 
+// Replace tsf()->_deprecated.*\ntsf()-> with $tsf->
+1. (^.*?)\\tsf\(\)->(_deprecated.*$\n)(.*?return )\\tsf\(\)->
+2. \n$1$$tsf = \\tsf();\n$1$$tsf->$2\n$3$tsf->
+
 // Extract function names (by removing everything else)
 1. Strip: ^([\w\W](?!_deprecated_function))*?$
 2. Extract:
@@ -487,12 +493,11 @@ function (.*?)\(([\w\W](?!\1))*?\}
 		1. \* `tsf\(\)->
 		2. * `
 
-// Replace tsf()->_deprecated.*\ntsf()-> with $tsf->
-1. (^.*?)\\tsf\(\)->(_deprecated.*$\n)(.*?return )\\tsf\(\)->
-2. \n$1$$tsf = \\tsf();\n$1$$tsf->$2\n$3$tsf->
-
 // Find broken replacements
 ^(?!use|namespace|\s*\t*\*)(.(?!@|Class|new|'))*?[_A-Za-z\\]*The_SEO_Framework\\(?!has_run|ROBOTS|_|Utils)([^:{](?! as ))*$
+
+TODO find mismatch memo ?? umemo (notice extra u)
+TODO remove 3+ @since in Deprecated.class to reduce filesize.
 
 TODO remove unusued Utils\normalize_generation_args imports (and other imports..)
 TODO find new public function and filters via @since 4.3.0.*?...
@@ -500,6 +505,16 @@ TODO find repeated tsf() calls in functions.
 TODO mark subroutine methods in Factory private?
 
 TODO remove the_seo_framework_pre\the_seo_framework_before_output\the_seo_framework_after_output\the_seo_framework_pro
+
+TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."
+	-> Tell that it should be the brand name?
+
+TODO regenerate deprecations in readme below. We may have changed some things.
+	-> Also name all subpools.
+
+TODO tell the user to "expect bugs" but "we're working resolving any report asap".
+
+TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages.
 
 **Detailed log**
 
@@ -519,6 +534,10 @@ TODO remove the_seo_framework_pre\the_seo_framework_before_output\the_seo_framew
 	* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
 	* `article:modified_time` and `article:published_time` now listen to Open Graph settings, and will always try to output on single post types.
 	* No longer uses the blog tagline for the homepage, it's often too short anyway.
+	* Paginated URLs are now regardless of using a custom canonical URL or indexation status.
+		* This helps search engines find URLs to all paginated pages, improving link discovery.
+	* The shortlink URL is now also outputted on the paginated homepage.
+		* TODO test this.
 * **Improved:**
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
@@ -855,8 +874,41 @@ TODO remove the_seo_framework_pre\the_seo_framework_before_output\the_seo_framew
 				* `merge_title_branding()`, use `tsf()->title()->add_branding()` instead.
 				* `merge_title_pagination()`, use `tsf()->title()->add_pagination()` instead.
 				* `merge_title_protection()`, use `tsf()->title()->add_protection_status()` instead.
+				* `has_custom_canonical_url()`, use `tsf()->uri()->get_custom_canonical_url()` instead.
+				* `get_home_url()`, use `tsf->data()->blog()->get_home_url()` instead.
+				* `get_preferred_scheme()`, use `tsf->uri()->utils()->get_preferred_url_scheme()` instead.
+				* `set_preferred_url_scheme()`, use `tsf->uri()->utils()->set_preferred_url_scheme()` instead.
+				* `detect_site_url_scheme()`, use `uri()->utils()->detect_site_url_scheme()` instead.
+				* `set_url_scheme()`, use `uri()->utils()->set_url_scheme()` instead.
+				* `make_fully_qualified_url()`, use `uri()->utils()->make_fully_qualified_url()` instead.
+				* `get_current_canonical_url()`, use `tsf()->uri()->get_canonical_url()` instead.
+				* `get_current_permalink()`, use `tsf()->uri()->get_generated_canonical_url()` instead.
+				* `get_homepage_permalink()`, use `tsf()->uri()->get_bare_home_canonical_url()` instead.
+				* `create_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
+				* `get_home_canonical_url()`, use `tsf->uri()->get_home_canonical_url()` instead.
+				* `get_raw_home_canonical_url()`, use `tsf->uri()->get_bare_home_canonical_url()` instead.
+				* `get_singular_canonical_url()`, use `tsf()->uri()->get_singular_canonical_url()` instead.
+				* `get_taxonomical_canonical_url()`, use `tsf()->uri()->get_taxonomical_canonical_url()` instead.
+				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_post_type_archive_canonical_url()` instead.
+				* `get_author_canonical_url()`, use `tsf()->uri()->get_author_canonical_url()` instead.
+				* `get_date_canonical_url()`, use `tsf()->uri()->get_date_canonical_url()` instead.
+				* `get_search_canonical_url()`, use `tsf()->uri()->get_search_canonical_url()` instead.
+				* `add_pagination_to_url()`, use `tsf()->uri()->utils()->add_pagination_to_url()` instead.
+				* `add_url_pagination()`, use `tsf()->uri()->utils()->add_pagination_to_url()` instead.
+				* `remove_pagination_from_url()`, use `tsf->uri()->utils()->remove_pagination_from_url()` instead.
+				* `get_paged_url()`, use `tsf->uri()->get_paged_url()` instead.
+				* `get_paged_urls()`, use `tsf->uri()->get_paged_url()` instead.
+				* `get_home_host()`, use `tsf->data()->blog()->get_site_host()` instead.
+				* `append_url_query()`, use `tsf->uri()->utils()->append_url_query()` instead.
+				* `matches_this_domain()`, use `tsf->uri()->utils()->url_matches_blog_domain()` instead.
+				* `convert_to_url_if_path()`, use `tsf->uri()->utils()->convert_path_to_url()` instead.
+				* `get_singular_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
+				* `get_taxonomical_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
+				* `get_post_type_archive_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
+				* `get_shortlink()`, use `tsf->uri()->get_shortlink()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
+				* `_adjust_post_link_category()`, without deprecation (it was marked private).
 				* `render_element()`, without deprecation (it was marked protected).
 				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.

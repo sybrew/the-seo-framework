@@ -1,9 +1,12 @@
 <?php
 /**
  * @package The_SEO_Framework\Utils
+ * @subpackage The_SEO_Framework\API
  */
 
 namespace The_SEO_Framework\Utils;
+
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin

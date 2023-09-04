@@ -9,7 +9,8 @@
 
 use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+	The_SEO_Framework\Interpreters\Settings_Input as Input,
+	\The_SEO_Framework\Meta\Factory;
 
 use The_SEO_Framework\Helper\{
 	Post_Types,
@@ -252,7 +253,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 					'automatic' => sprintf(
 						/* translators: %s = HTTP or HTTPS */
 						__( 'Detect automatically (%s)', 'autodescription' ),
-						strtoupper( $this->detect_site_url_scheme() )
+						strtoupper( Factory\URI\Utils::detect_site_url_scheme() )
 					),
 					'http'      => 'HTTP',
 					'https'     => 'HTTPS',
