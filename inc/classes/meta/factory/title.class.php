@@ -790,25 +790,25 @@ class Title {
 
 		if ( null === $args ) {
 			if ( Query::is_real_front_page() ) {
-				$addition    = static::get_additions_for_front_page();
-				$seplocation = static::get_additions_location_for_front_page();
+				$addition    = static::get_addition_for_front_page();
+				$seplocation = static::get_addition_location_for_front_page();
 			}
 		} else {
 			normalize_generation_args( $args );
 
 			if ( ! $args['taxonomy'] && ! $args['pta'] && Query::is_real_front_page_by_id( $args['id'] ) ) {
-				$addition    = static::get_additions_for_front_page();
-				$seplocation = static::get_additions_location_for_front_page();
+				$addition    = static::get_addition_for_front_page();
+				$seplocation = static::get_addition_location_for_front_page();
 			}
 		}
 
 		$title    = trim( $title );
-		$addition = trim( $addition ?? static::get_additions() );
+		$addition = trim( $addition ?? static::get_addition() );
 
 		if ( $addition && $title ) {
 			$sep = static::get_separator();
 
-			if ( 'left' === ( $seplocation ?? static::get_additions_location() ) )
+			if ( 'left' === ( $seplocation ?? static::get_addition_location() ) )
 				return "$addition $sep $title";
 
 			return "$title $sep $addition";
@@ -933,13 +933,12 @@ class Title {
 
 	/**
 	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.3.0
 	 *
 	 * @return string The trimmed tagline.
 	 */
-	public static function get_additions() {
+	public static function get_addition() {
 		return Data\Blog::get_public_blog_name();
 	}
 
@@ -950,7 +949,7 @@ class Title {
 	 *
 	 * @return string The separator location.
 	 */
-	public static function get_additions_location() {
+	public static function get_addition_location() {
 		return \tsf()->get_option( 'title_location' );
 	}
 
@@ -961,7 +960,7 @@ class Title {
 	 *
 	 * @return string The Seplocation for the front page.
 	 */
-	public static function get_additions_location_for_front_page() {
+	public static function get_addition_location_for_front_page() {
 		return \tsf()->get_option( 'home_title_location' );
 	}
 
@@ -973,7 +972,7 @@ class Title {
 	 *
 	 * @return string The trimmed tagline.
 	 */
-	public static function get_additions_for_front_page() {
+	public static function get_addition_for_front_page() {
 		return memo() ?? memo(
 			\tsf()->s_title_raw(
 				\tsf()->get_option( 'homepage_title_tagline' )

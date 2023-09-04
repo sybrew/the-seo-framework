@@ -100,8 +100,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				? Factory\Title::get_custom_title( $_generator_args )
 				: Factory\Title::get_bare_generated_title( $_generator_args );
 			$title_ref_locked  = $_has_home_title;
-			$title_additions   = Factory\Title::get_additions_for_front_page();
-			$title_seplocation = Factory\Title::get_additions_location_for_front_page();
+			$title_additions   = Factory\Title::get_addition_for_front_page();
+			$title_seplocation = Factory\Title::get_addition_location_for_front_page();
 
 			// When the homepage description is set, we can safely get the custom field.
 			$default_description    = $_has_home_desc
@@ -112,7 +112,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			$default_title     = Factory\Title::get_bare_generated_title( $_generator_args );
 			$title_ref_locked  = false;
 			$title_additions   = Data\Blog::get_public_blog_name();
-			$title_seplocation = Factory\Title::get_additions_location();
+			$title_seplocation = Factory\Title::get_addition_location();
 
 			$default_description    = Factory\Description::get_generated_description( $_generator_args );
 			$description_ref_locked = false;

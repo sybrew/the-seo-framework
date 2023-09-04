@@ -34,12 +34,14 @@ namespace {
 	 *
 	 * @since 4.2.0
 	 * @see `the_seo_framework()` alias.
+	 * @see inc\classes\pool.class.php for factory API functions;
+	 *      e.g., `tsf()->query()->is_sitemap()`
 	 * @api
 	 *
-	 * @return null|object The plugin class object.
+	 * @return The_SEO_Framework\Load|The_SEO_Framework\Internal\Silencer
 	 */
 	function tsf() {
-		return The_SEO_Framework\_init_tsf();
+		return \The_SEO_Framework\_init_tsf();
 	}
 
 	/**
@@ -53,10 +55,10 @@ namespace {
 	 * @see `tsf()` alias.
 	 * @api
 	 *
-	 * @return null|object The plugin class object.
+	 * @return The_SEO_Framework\Load|The_SEO_Framework\Internal\Silencer
 	 */
 	function the_seo_framework() {
-		return The_SEO_Framework\_init_tsf();
+		return \The_SEO_Framework\_init_tsf();
 	}
 
 	/**

@@ -448,6 +448,14 @@ TODO move "Facebook" to "Open Graph", and purge fb:app_id?
 
 TODO purge "@since 4.2.0 Deprecated"
 
+TODO move clamp_sentence to something more sensible?
+	-> Utils acts as a drop-in for what PHP is lacking in their SPL.
+	-> To be fair, clamp_sentence would be a useful addition to native PHP.
+
+TODO _init_locale only on admin?
+	-> There's no translatable text on the front-end left, no?
+		-> There should be an issue for this.
+
 // Lacking imports:
 ^<\?php([\w\W](?!use (\\The_SEO_Framework\\(Helper|Data|Meta)\\\{).*;))*?(^(.(?!\*|\/\/))*?\\The_SEO_Framework\\.*?::)(.(?!\/\/ Lacking import OK.))*$
  // Lacking import OK.
@@ -826,9 +834,9 @@ TODO remove the_seo_framework_pre\the_seo_framework_before_output\the_seo_framew
 				* `use_singular_title_branding()`, with no alternative available.
 				* `use_taxonomical_title_branding()`, with no alternative available.
 				* `use_post_type_archive_title_branding()`, with no alternative available.
-				* `get_title_seplocation()`, use `tsf()->title()->get_additions_location()` instead.
-				* `get_home_title_seplocation()`, use `tsf()->title()->get_additions_location_for_front_page()` instead.
-				* `get_home_title_additions()`, use `tsf()->title()->get_additions_for_front_page()` instead.
+				* `get_title_seplocation()`, use `tsf()->title()->get_addition_location()` instead.
+				* `get_home_title_seplocation()`, use `tsf()->title()->get_addition_location_for_front_page()` instead.
+				* `get_home_title_additions()`, use `tsf()->title()->get_addition_for_front_page()` instead.
 				* `get_custom_field_title()`, use `tsf()->title()->get_custom_title()` instead.
 				* `get_generated_title()`, use `tsf()->title()->get_generated_title()` instead.
 				* `get_filtered_raw_custom_field_title()`, use `tsf()->title()->get_bare_custom_title()` instead.

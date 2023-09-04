@@ -120,8 +120,8 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 						'_defaultTitleLocked' => (bool) $_post_meta_title, // Underscore because it's non-standard API.
 						'addAdditions'        => Factory\Title\Conditions::use_title_branding( $_generator_args ),
 						'useSocialTagline'    => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
-						'additionValue'       => $this->s_title( Factory\Title::get_additions_for_front_page() ),
-						'additionPlacement'   => 'left' === Factory\Title::get_additions_location_for_front_page() ? 'before' : 'after',
+						'additionValue'       => $this->s_title( Factory\Title::get_addition_for_front_page() ),
+						'additionPlacement'   => 'left' === Factory\Title::get_addition_location_for_front_page() ? 'before' : 'after',
 						'hasLegacy'           => true,
 					],
 				]
@@ -189,7 +189,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
 		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
 		$_example_blogname  = $this->escape_title(
-			Factory\Title::get_additions_for_front_page()
+			Factory\Title::get_addition_for_front_page()
 			?: Factory\Title::get_untitled_title()
 		);
 		$_example_separator = esc_html( Factory\Title::get_separator() );

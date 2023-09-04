@@ -250,8 +250,8 @@ final class ListEdit extends ListTable {
 			$default_title       = $_has_home_title
 								 ? Factory\Title::get_custom_title( $_generator_args )
 								 : Factory\Title::get_bare_generated_title( $_generator_args );
-			$addition            = Factory\Title::get_additions_for_front_page();
-			$seplocation         = $tsf->get_additions_location_for_front_page();
+			$addition            = Factory\Title::get_addition_for_front_page();
+			$seplocation         = Factory\Title::get_addition_location_for_front_page();
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
@@ -263,7 +263,7 @@ final class ListEdit extends ListTable {
 		} else {
 			$default_title       = Factory\Title::get_bare_generated_title( $_generator_args );
 			$addition            = Data\Blog::get_public_blog_name();
-			$seplocation         = $tsf->get_additions_location();
+			$seplocation         = Factory\Title::get_addition_location();
 			$is_title_ref_locked = false;
 
 			$default_description = Factory\Description::get_generated_description( $_generator_args );
@@ -408,7 +408,7 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['taxonomy'] ) )
+		$term_prefix = Factory\Title\Conditions::use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['taxonomy'] ) )
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
@@ -421,7 +421,7 @@ final class ListEdit extends ListTable {
 			'defaultTitle'      => $tsf->s_title( Factory\Title::get_bare_generated_title( $_generator_args ) ),
 			'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
 			'additionValue'     => $tsf->s_title( Data\Blog::get_public_blog_name() ),
-			'additionPlacement' => 'left' === $tsf->get_additions_location() ? 'before' : 'after',
+			'additionPlacement' => 'left' === Factory\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];
 		$desc_data  = [

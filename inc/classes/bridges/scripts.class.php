@@ -503,7 +503,7 @@ final class Scripts {
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
 
-		$term_prefix = $tsf->use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
+		$term_prefix = Factory\Title\Conditions::use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
 			/* translators: %s: Taxonomy singular name. */
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */

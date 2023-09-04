@@ -25,10 +25,15 @@ namespace The_SEO_Framework;
  */
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 4 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf', 5 );
+\add_action( 'activate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
+\add_action( 'deactivate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_deactivation' );
+
 /**
  * Loads plugin locale 'autodescription'.
  * Files located in plugin folder `../autodescription/language/`
  *
+ * @hook plugins_loaded 4
  * @since 2.8.0
  * @since 4.0.2 Now points to the correct plugin folder for fallback MO-file loading (which was never used).
  */
@@ -43,28 +48,29 @@ function _init_locale() {
 	);
 }
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf', 5 );
 /**
  * Loads and memoizes `\The_SEO_Framework\Load` class.
  *
  * Runs at action `plugins_loaded`, priority `5`. So, use anything above 5, or any
  * action later than plugins_loaded and you can access the class and functions.
  *
+ * @hook plugins_loaded 5
  * @since 3.1.0
- * @since 4.3.0 Now returns an uncached silencer when called too early.
+ * @since 4.3.0 1. Now returns an uncached silencer when called too early.
+ *              2. No longer memoizes the class. Use `\tsf()` or `\the_seo_framework()` instead.
  * @access private
  * @see function tsf().
- * @see function tsf().
+ * @see function the_seo_framework().
  * @factory
  *
- * @return object|null The SEO Framework Facade class object. Null on failure.
+ * @return The_SEO_Framework\Load|The_SEO_Framework\Internal\Silencer
  */
 function _init_tsf() {
 
 	// Memoize the class. Do not run constructors more than once.
 	static $tsf;
 
-	if ( $tsf )
+	if ( isset( $tsf ) )
 		return $tsf;
 
 	/**
@@ -99,12 +105,14 @@ function _init_tsf() {
 		$_tsf->loaded = false;
 
 		// did_action() checks for current action too.
-		if ( \did_action( 'plugins_loaded' ) ) {
-			// Cache the silencer.
-			$tsf = $_tsf;
-		} else {
+		if ( ! \did_action( 'plugins_loaded' ) ) {
 			\_doing_it_wrong( 'tsf(), the_seo_framework(), or ' . __FUNCTION__, 'Use <code>tsf()</code> after action <code>plugins_loaded</code> priority 5.', '3.1 or The SEO Framework' );
+
+			return $_tsf;
 		}
+
+		// Cache the silencer.
+		$tsf = $_tsf;
 	}
 
 	return $tsf;
@@ -182,10 +190,10 @@ function _autoload_classes( $class ) {
 	}
 }
 
-\add_action( 'activate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_activation' );
 /**
  * Performs plugin activation actions.
  *
+ * @hook activate_autodescription/autodescription.php 10
  * @since 2.8.0
  * @access private
  */
@@ -193,10 +201,10 @@ function _do_plugin_activation() {
 	require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'activation.php';
 }
 
-\add_action( 'deactivate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, __NAMESPACE__ . '\\_do_plugin_deactivation' );
 /**
  * Performs plugin deactivation actions.
  *
+ * @hook deactivate_autodescription/autodescription.php 10
  * @since 2.8.0
  * @access private
  */

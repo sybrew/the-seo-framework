@@ -1659,8 +1659,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_twitter_card( $card ) {
 
-		if ( \array_key_exists( $card, Meta\Factory\Twitter::get_supported_cards() ) )
-			return (string) $card;
+		if ( \in_array( $card, Meta\Factory\Twitter::get_supported_cards(), true ) )
+			return $card;
 
 		return 'summary_large_image'; // var_dump() make 'auto'?
 	}

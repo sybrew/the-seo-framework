@@ -157,7 +157,7 @@ $robots_settings = [
 								'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
 								'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
 								'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
-								'additionPlacement' => 'left' === Factory\Title::get_additions_location() ? 'before' : 'after',
+								'additionPlacement' => 'left' === Factory\Title::get_addition_location() ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],
 						]

@@ -163,14 +163,14 @@ final class Conditions {
 	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
-	 * @since 3.0.4 Now checks for `Factory\Title::get_additions_for_front_page()`.
+	 * @since 3.0.4 Now checks for `Factory\Title::get_addition_for_front_page()`.
 	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @return bool
 	 */
 	private static function use_home_page_title_tagline() {
 		return \tsf()->get_option( 'homepage_tagline' )
-			&& Factory\Title::get_additions_for_front_page();
+			&& Factory\Title::get_addition_for_front_page();
 	}
 
 	/**

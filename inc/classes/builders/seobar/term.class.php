@@ -243,7 +243,7 @@ final class Term extends Main {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			if ( static::$tsf->use_generated_archive_prefix( $this->query_cache['term'] ) ) {
+			if ( Factory\Title\Conditions::use_generated_archive_prefix( $this->query_cache['term'] ) ) {
 				$item['assess']['prefixed'] = $cache['assess']['prefixed'];
 			}
 

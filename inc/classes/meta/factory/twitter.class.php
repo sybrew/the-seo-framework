@@ -67,7 +67,9 @@ class Twitter {
 		if ( 'auto' === $preferred_card ) {
 			$card = 'summary'; // TODO!
 		} else {
-			$card = static::get_supported_cards()[ $preferred_card ] ?? 'summary';
+			$card = \in_array( $preferred_card, static::get_supported_cards(), true )
+				? $preferred_card
+				: 'summary';
 		}
 
 		if ( \has_filter( 'the_seo_framework_twittercard_output' ) ) {
@@ -110,8 +112,8 @@ class Twitter {
 	 */
 	public static function get_supported_cards() {
 		return [
-			'summary'             => 'summary',
-			'summary_large_image' => 'summary-large-image',
+			'summary',
+			'summary_large_image',
 		];
 	}
 

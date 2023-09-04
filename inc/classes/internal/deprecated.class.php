@@ -6,6 +6,8 @@
 
 namespace The_SEO_Framework\Internal;
 
+var_dump( 'DEPRECATOR IS LOADED' );
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -3294,7 +3296,10 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_available_twitter_cards()', '4.3.0' );
 
-		return array_keys( $tsf->twitter()->get_supported_cards() );
+		return [
+			'summary'             => 'summary',
+			'summary_large_image' => 'summary-large-image',
+		];
 	}
 
 	/**
@@ -3841,12 +3846,12 @@ final class Deprecated {
 	public function get_title_seplocation( $home = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_title_seplocation()', '4.3.0', 'tsf()->title()->get_additions_location()' );
+		$tsf->_deprecated_function( 'tsf()->get_title_seplocation()', '4.3.0', 'tsf()->title()->get_addition_location()' );
 
 		if ( $home )
 			return $tsf->get_home_title_seplocation();
 
-		return $tsf->title()->get_additions_location();
+		return $tsf->title()->get_addition_location();
 	}
 
 	/**
@@ -3863,9 +3868,9 @@ final class Deprecated {
 	public function get_home_title_seplocation() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_title_seplocation()', '4.3.0', 'tsf()->title()->get_additions_location_for_front_page()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_title_seplocation()', '4.3.0', 'tsf()->title()->get_addition_location_for_front_page()' );
 
-		return $tsf->title()->get_additions_location_for_front_page();
+		return $tsf->title()->get_addition_location_for_front_page();
 	}
 
 	/**
@@ -3881,9 +3886,9 @@ final class Deprecated {
 	public function get_home_title_additions() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_title_additions()', '4.3.0', 'tsf()->title()->get_additions_for_front_page()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_title_additions()', '4.3.0', 'tsf()->title()->get_addition_for_front_page()' );
 
-		return $tsf->title()->get_additions_for_front_page();
+		return $tsf->title()->get_addition_for_front_page();
 	}
 
 	/**

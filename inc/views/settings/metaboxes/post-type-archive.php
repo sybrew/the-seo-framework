@@ -199,7 +199,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 						'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
 						'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
 						'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
-						'additionPlacement' => 'left' === Factory\Title::get_additions_location() ? 'before' : 'after',
+						'additionPlacement' => 'left' === Factory\Title::get_addition_location() ? 'before' : 'after',
 						'prefixValue'       => $this->s_title( $_prefix_value ),
 						'showPrefix'        => Factory\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
