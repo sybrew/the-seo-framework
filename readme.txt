@@ -546,6 +546,9 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 			* Related Core ticket is [#51117](https://core.trac.wordpress.org/ticket/51117).
 		* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
 			* Related Core ticket is [#51542](https://core.trac.wordpress.org/ticket/51542).
+		* The URL generator has been rewritten from the ground up. With that, we removed all patches for pagination and rely on our pagination tweaks now.
+			* Because of this, the sitemap generates about 10% faster (TODO bombard it without caching enabled).
+			* Because of this, the front-end generates up to 30% faster. TODO confirm URI test (we create 11 URLs?, redirect, canonical, og, prev, next, 3x+ breadcrumbs, site, search, organization)
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
@@ -587,6 +590,7 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 			* `<element><element></element></never-closing-element>etc...` matched `<element></element></never-closing-element>etc...` but now matches the second `<element>` as content (which will then be obliterated in the second pass).
 	* **Compatibility:**
 		* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
+		* Fix an issue where the sitemap was invalidated when a URL adds special query parameters with non-latin characters.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).

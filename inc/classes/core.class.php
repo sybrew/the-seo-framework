@@ -403,6 +403,7 @@ class Core {
 
 	/**
 	 * Returns timestamp format based on timestamp settings.
+	 * Note that this must be XML safe.
 	 *
 	 * @since 3.0.0
 	 * @since 4.1.4 1. Added options-override parameter.
@@ -416,6 +417,12 @@ class Core {
 
 		$get_time = $override_get_time ?? $this->uses_time_in_timestamp_format();
 
+		/**
+		 * @see For valid formats https://www.w3.org/TR/NOTE-datetime.
+		 * @since 4.1.4
+		 * @param string The full timestamp format. Must be XML safe and in ISO 8601 datetime notation.
+		 * @param bool   True if time is requested, false if only date.
+		 */
 		return \apply_filters_ref_array(
 			'the_seo_framework_timestamp_format',
 			[

@@ -13,8 +13,11 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Helper\{
+	Query,
+	Query_Utils,
+};
 
 /**
  * The SEO Framework plugin

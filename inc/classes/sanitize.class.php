@@ -1511,6 +1511,27 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
+	 * Escapes URL queries for XML.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param mixed $url The URL to escape.
+	 * @return string A value that's safe for XML use.
+	 */
+	public function esc_xml_uri( $url ) {
+
+		$q = parse_url( $url, PHP_URL_QUERY );
+
+		if ( $q ) {
+			parse_str( $q, $r );
+			// Don't replace. Tokenize. The query part might be part of the URL (in some alien environment).
+			$url = strtok( $url, '?' ) . '?' . http_build_query( $r, null, '&amp;', PHP_QUERY_RFC3986 );
+		}
+
+		return $url;
+	}
+
+	/**
 	 * Sanitizes canonical URL.
 	 *
 	 * @since 4.3.0

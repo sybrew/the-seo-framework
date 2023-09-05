@@ -137,13 +137,13 @@ final class Excerpt {
 	 */
 	private static function get_archival_excerpt( $object = null ) {
 
-		if ( $object && \is_wp_error( $object ) )
-			return '';
-
 		if ( \is_null( $object ) ) {
 			$in_the_loop = true;
 			$object      = \get_queried_object();
 		} else {
+			if ( \is_wp_error( $object ) )
+				return '';
+
 			$in_the_loop = false;
 		}
 

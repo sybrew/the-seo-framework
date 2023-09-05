@@ -521,15 +521,16 @@ class Base extends Main {
 		if ( empty( $args['loc'] ) ) return '';
 
 		$xml = [
-			'loc' => \esc_xml( $args['loc'] ),
+			'loc' => \tsf()->esc_xml_uri( $args['loc'] ),
 		];
 
 		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {
 			static $timestamp_format;
 
+			// XML safe.
 			$timestamp_format ??= \tsf()->get_timestamp_format();
 
-			$xml['lastmod'] = \esc_xml( \tsf()->gmt2date( $timestamp_format, $args['lastmod'] ) );
+			$xml['lastmod'] = \tsf()->gmt2date( $timestamp_format, $args['lastmod'] );
 		}
 
 		return $this->create_xml_entry( [ 'url' => $xml ], 1 );

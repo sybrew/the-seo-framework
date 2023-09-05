@@ -600,14 +600,14 @@ class URI {
 
 		// If this page is not the last, create a next-URL.
 		if ( ( $page + 1 ) <= $numpages ) {
-			$url  = \URI\Utils::remove_pagination_from_url( static::get_generated_canonical_url() );
-			$next = \URI\Utils::add_pagination_to_url( $url, $page + 1 );
+			$url  = URI\Utils::remove_pagination_from_url( static::get_generated_canonical_url() );
+			$next = URI\Utils::add_pagination_to_url( $url, $page + 1 );
 		}
 
 		// If this page is not the first, create a prev-URL.
 		if ( $page > 1 ) {
-			$url ??= \URI\Utils::remove_pagination_from_url( static::get_generated_canonical_url() );
-			$prev  = \URI\Utils::add_pagination_to_url( $url, $page - 1 );
+			$url ??= URI\Utils::remove_pagination_from_url( static::get_generated_canonical_url() );
+			$prev  = URI\Utils::add_pagination_to_url( $url, $page - 1 );
 		}
 
 		return [ $prev ?? '', $next ?? '' ];
