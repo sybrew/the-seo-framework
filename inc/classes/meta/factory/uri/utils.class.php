@@ -14,10 +14,7 @@ use function \The_SEO_Framework\{
 };
 
 use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Helper\{
-	Query,
-	Query_Utils,
-};
+use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -105,7 +102,7 @@ class Utils {
 	 * Slashes the root (home) URL.
 	 *
 	 * @since 4.2.2
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils
 	 *
 	 * @param string $url The root URL.
 	 * @return string The root URL plausibly with added slashes.
@@ -134,7 +131,7 @@ class Utils {
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils
 	 *
 	 * @return string The preferred URl scheme.
 	 */
@@ -168,7 +165,7 @@ class Utils {
 	 * Does not sanitize output.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils
 	 *
 	 * @param string $url The URL to set scheme for.
 	 * @return string The URL with the preferred scheme.
@@ -185,7 +182,7 @@ class Utils {
 	 * @since 3.0.0 $use_filter now defaults to false.
 	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
 	 * @since 4.0.0 Removed the deprecated parameter.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils
 	 *
 	 * @param string $url    Absolute url that includes a scheme.
 	 * @param string $scheme Optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
@@ -224,7 +221,7 @@ class Utils {
 	 *       '/path/to/folder/` will become `http:///path/to/folder/`
 	 *
 	 * @since 2.6.5
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils.
 	 * @see `$this->set_url_scheme()` to set the correct scheme.
 	 * @see `$this->convert_to_url_if_path()` to create URLs from paths.
 	 *
@@ -247,7 +244,7 @@ class Utils {
 	 *
 	 * @since 2.9.4
 	 * @since 4.1.0 Improved performance by testing an early match.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils.
 	 *
 	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.
@@ -324,7 +321,7 @@ class Utils {
 			 || Query::is_singular_archive()
 			 || Query::is_search();
 
-		if ( Query_Utils::using_pretty_permalinks() ) {
+		if ( Query\Utils::using_pretty_permalinks() ) {
 			$_query = parse_url( $url, \PHP_URL_QUERY );
 
 			// Remove queries, add them back later.
@@ -365,7 +362,7 @@ class Utils {
 	 *              5. Is now public.
 	 * @since 4.1.2 Now correctly reappends query when pagination isn't removed.
 	 * @since 4.2.0 Now properly removes pagination from search links.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\URI\Utils.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils.
 	 *
 	 * @param string    $url  The fully qualified URL to remove pagination from.
 	 * @param int|null  $page The page number to remove. If null, it will get number from query.
@@ -377,7 +374,7 @@ class Utils {
 	 */
 	public static function remove_pagination_from_url( $url, $page = null, $use_base = null ) {
 
-		if ( Query_Utils::using_pretty_permalinks() ) {
+		if ( Query\Utils::using_pretty_permalinks() ) {
 
 			$page ??= max( Query::paged(), Query::page() );
 

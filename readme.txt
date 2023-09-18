@@ -573,8 +573,8 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 			* Now, depending on the options you use and which page one visits, selectively, the required methods are loaded, reducing read times of the plugin files by about 70% (TODO confirm "boot").
 			* Now, the main object is rarely required internally, but most methods are called statically (directly). This reduces the function overhead [from 4% to 62%](https://3v4l.org/J00A0).
 				* Although, this may increase overhead by 17% due to [a quirk in PHP](https://twitter.com/SybreWaaijer/status/1703077875988009325). But, we combat this by creating as few methods as possible, at the cost of "readability" (this only affects developers not using a modern code editor).
-		* Generated image metadata are now cached per method. This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata.
-		* The image generator now only feeds data when an actual image is found; this reduces operations in subroutines, improving performance significantly.
+		* Generated image metadata are now cached per method using PHP 8's "Fiber" principle (I backported it conceptually to 7.4). This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata, and continue to make more metadata when there's demand.
+		* The image generator now only feeds data when an actual image is found; this reduces operation feedback in subroutines, improving performance significantly.
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
@@ -645,10 +645,10 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 	* Pool `tsf()->query()` is now available.
 		* All public query-related methods have been moved to that pool. E.g., `tsf()->is_product()` is now `tsf()->query()->is_product()`.
 		* Internally known as `The_SEO_Framework\Helper\Query`.
-	* Pool `tsf()->query_utils()` is now available.
-		* All public query-utility methods have been moved to that pool. E.g., `tsf()->query_supports_seo()` is now `tsf()->query_utils()->query_supports_seo()`.
-		* Internally known as `The_SEO_Framework\Helper\Query_Utils`.
-			* TODO make this query()->utils()?
+		* This pool has a sub-pool, accessible via `tsf()->query()->utils()`.
+			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Utils`.
+		* This pool has a sub-pool, accessible via `tsf()->query()->cache()`.
+			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Cache`.
 	* Pool `tsf()->post_types()` is now available.
 		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_types()->is_post_type_supported()`.
 		* Internally known as `The_SEO_Framework\Helper\Post_Types`.
@@ -867,9 +867,9 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `generate_robots_meta()`, use `tsf()->robots()->generate_meta()` instead.
 				* `is_post_type_robots_set()`, use `tsf()->robots()->is_post_type_robots_set()` instead.
 				* `is_taxonomy_robots_set()`, use `tsf()->robots()->is_taxonomy_robots_set()` instead.
-				* `query_supports_seo()`, use `tsf()->query_utils()->query_supports_seo()` instead.
-				* `is_query_exploited()`, use `tsf()->query_utils()->is_query_exploited()` instead.
-				* `has_page_on_front()`, use `tsf()->query_utils()->has_page_on_front()` instead.
+				* `query_supports_seo()`, use `tsf()->query()->utils()->query_supports_seo()` instead.
+				* `is_query_exploited()`, use `tsf()->query()->utils()->is_query_exploited()` instead.
+				* `has_page_on_front()`, use `tsf()->query()->utils()->has_page_on_front()` instead.
 				* `is_post_type_supported()`, use `tsf()->post_types()->is_post_type_supported()` instead.
 				* `is_post_type_archive_supported()`, use `tsf()->post_types()->is_post_type_archive_supported()` instead.
 				* `post_type_supports_taxonomies()`, use `tsf()->post_types()->post_type_supports_taxonomies()` instead.

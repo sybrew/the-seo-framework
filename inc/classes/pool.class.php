@@ -66,27 +66,44 @@ class Pool extends Legacy_API {
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-		};
-	}
 
-	/**
-	 * Returns the Query_Utils class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Helper\Query_Utils
-	 */
-	public static function query_utils() {
-		return static::$pool['query_utils'] ??= new class extends Helper\Query_Utils {
-			use Static_Deprecator;
+			/**
+			 * @since 4.3.0
+			 * @var class[] The class store. Used in favor of memo() for a chain would become expensive.
+			 */
+			private static $pool = [];
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-			private $colloquial_handle     = 'tsf()->query_utils()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Query\Utils
+			 */
+			public static function utils() {
+				return static::$pool['utils'] ??= new class extends Helper\Query\Utils {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->query()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Query\Cache
+			 */
+			public static function cache() {
+				return static::$pool['cache'] ??= new class extends Helper\Query\Cache {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->query()->cache()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
 		};
 	}
 

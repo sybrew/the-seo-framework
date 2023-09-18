@@ -10,7 +10,6 @@ namespace The_SEO_Framework;
 
 use \The_SEO_Framework\Helper\{
 	Query,
-	Query_Utils,
 	Taxonomies,
 };
 use \The_SEO_Framework\Meta\Factory;
@@ -196,7 +195,7 @@ class Generate_Ldjson extends User_Data {
 		// The searchbox part.
 		$pattern     = '%s{%s}';
 		$action_name = 'search_term_string';
-		$search_link = Query_Utils::using_pretty_permalinks() ? \trailingslashit( \get_search_link() ) : \get_search_link();
+		$search_link = Query\Utils::using_pretty_permalinks() ? \trailingslashit( \get_search_link() ) : \get_search_link();
 		/**
 		 * @since 2.7.0
 		 * @param string $search_url The default WordPress search URL without query parameters.

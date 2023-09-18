@@ -96,7 +96,7 @@ function array_flatten_list( $array ) {
  *              2. Reduced number of opcodes by roughly 27% by reworking it.
  *              3. Now no longer throws warnings with qubed+ arrays.
  *              4. Now no longer prevents scalar values overwriting arrays.
- * @since 4.3.0 Moved to The_SEO_Framework\Utils as a function.
+ * @since 4.3.0 Moved to \The_SEO_Framework\Utils as a function.
  *
  * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
  * @return array The merged arrays.
@@ -152,7 +152,7 @@ function array_merge_recursive_distinct( ...$arrays ) {
  *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
  * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
  * @since 4.2.7 Now considers floating numerics as one word.
- * @since 4.3.0 Moved to The_SEO_Framework\Utils as a function and renamed to clamp_sentence()
+ * @since 4.3.0 Moved to \The_SEO_Framework\Utils as a function and renamed to clamp_sentence()
  * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
  *
  * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.

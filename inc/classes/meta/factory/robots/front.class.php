@@ -16,7 +16,6 @@ use const \The_SEO_Framework\{
 use \The_SEO_Framework\Meta\Factory\Robots; // Yes, it is legal to share class and namespaces.
 use \The_SEO_Framework\Helper\{
 	Query,
-	Query_Utils,
 	Taxonomies,
 };
 
@@ -160,7 +159,7 @@ final class Front extends Factory {
 			}
 		}
 
-		exploit_protection: if ( Query_Utils::is_query_exploited() ) {
+		exploit_protection: if ( Query\Utils::is_query_exploited() ) {
 			if ( \in_array( $type, [ 'noindex', 'nofollow' ], true ) )
 				yield 'query_protection' => true;
 		}

@@ -1,14 +1,19 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Helper\Query_Utils
+ * @package The_SEO_Framework\Classes\Helper\Query\Utils
  * @subpackage The_SEO_Framework\Query
  */
 
-namespace The_SEO_Framework\Helper;
+namespace The_SEO_Framework\Helper\Query;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function \The_SEO_Framework\memo;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query, // Name conflict... how is this allowed??
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -34,7 +39,7 @@ use function \The_SEO_Framework\memo;
  * @access protected
  * @internal
  */
-class Query_Utils {
+class Utils {
 
 	/**
 	 * Determines whether pretty permalinks are enabled.
@@ -58,7 +63,7 @@ class Query_Utils {
 	 *              (they're not supported as SEO-able queries).
 	 * @since 4.3.0 1. Removed detection for JSON(P) and XML type requests,
 	 *                 because these cannot be assumed as legitimate.
-	 *              2. Moved to The_SEO_Framework\Helper\Query
+	 *              2. Moved to \The_SEO_Framework\Helper\Query
 	 *
 	 * @return bool
 	 */
@@ -140,7 +145,7 @@ class Query_Utils {
 	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
 	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -250,7 +255,7 @@ class Query_Utils {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed caching.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
 	 *
 	 * @return bool
 	 */

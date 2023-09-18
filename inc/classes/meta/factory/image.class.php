@@ -11,10 +11,7 @@ namespace The_SEO_Framework\Meta\Factory;
 use \The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Meta\Factory;
 
-use function \The_SEO_Framework\{
-	memo,
-	Utils\normalize_generation_args,
-};
+use function \The_SEO_Framework\Utils\normalize_generation_args;
 
 /**
  * The SEO Framework plugin

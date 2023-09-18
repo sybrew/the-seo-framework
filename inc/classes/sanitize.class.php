@@ -15,7 +15,6 @@ use \The_SEO_Framework\Meta\Factory;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
-	Query_Utils,
 	Taxonomies,
 };
 
@@ -1490,7 +1489,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function clean_canonical_url( $url ) { // todo make s_canonical_url
 
-		if ( Query_Utils::using_pretty_permalinks() )
+		if ( Query\Utils::using_pretty_permalinks() )
 			return \esc_url( $url, [ 'https', 'http' ] );
 
 		// Keep the &'s more readable when using query-parameters.

@@ -12,7 +12,6 @@ use \The_SEO_Framework\Front,
 
 use \The_SEO_Framework\Helper\{
 	Query,
-	Query_Utils,
 	Taxonomies,
 };
 
@@ -422,7 +421,7 @@ class Init extends Pool {
 	 */
 	public function get_document_title( $title = '' ) {
 
-		if ( ! Query_Utils::query_supports_seo() )
+		if ( ! Query\Utils::query_supports_seo() )
 			return $title;
 
 		/**
@@ -454,7 +453,7 @@ class Init extends Pool {
 	 */
 	public function get_wp_title( $title = '' ) {
 
-		if ( ! Query_Utils::query_supports_seo() )
+		if ( ! Query\Utils::query_supports_seo() )
 			return $title;
 
 		/**
@@ -574,7 +573,7 @@ class Init extends Pool {
 	 */
 	public function html_output() {
 
-		if ( Query::is_preview() || \is_customize_preview() || ! Query_Utils::query_supports_seo() ) return;
+		if ( Query::is_preview() || \is_customize_preview() || ! Query\Utils::query_supports_seo() ) return;
 
 		Front\Meta\Head::print_wrap_and_tags();
 	}
@@ -606,7 +605,7 @@ class Init extends Pool {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( Query::is_preview() || \is_customize_preview() || ! Query_Utils::query_supports_seo() ) return;
+		if ( Query::is_preview() || \is_customize_preview() || ! Query\Utils::query_supports_seo() ) return;
 
 		$url = Meta\Factory\URI::get_redirect_url();
 

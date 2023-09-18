@@ -955,7 +955,7 @@ class Title {
 	 * Returns title separator location.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The separator location.
 	 */
@@ -967,7 +967,7 @@ class Title {
 	 * Returns title separator location for the front page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The Seplocation for the front page.
 	 */
@@ -980,7 +980,7 @@ class Title {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The trimmed tagline.
 	 */
@@ -997,7 +997,7 @@ class Title {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The Separator, unescaped.
 	 */

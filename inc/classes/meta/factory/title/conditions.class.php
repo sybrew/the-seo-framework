@@ -74,7 +74,7 @@ final class Conditions {
 	 * Determines whether to add or remove title pagination additions.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -98,7 +98,7 @@ final class Conditions {
 	 * @since 3.2.2 Now differentiates from query and parameter input.
 	 * @since 4.1.0 Added the second $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @param array|null  $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -163,7 +163,7 @@ final class Conditions {
 	 *
 	 * @since 2.6.0
 	 * @since 3.0.4 Now checks for `Factory\Title::get_addition_for_front_page()`.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @return bool
 	 */
@@ -176,7 +176,7 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the post.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @param int $id The post ID. Optional.
 	 * @return bool
@@ -190,7 +190,7 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the term.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @param int $id The term ID. Optional.
 	 * @return bool
@@ -204,7 +204,7 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the pta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @param string $pta The post type archive. Optional.
 	 * @return bool
@@ -220,7 +220,7 @@ final class Conditions {
 	 * @since 3.1.0
 	 * @since 4.0.5 1: Added first parameter `$term`.
 	 *              2: Added filter.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $term The Term object. Leave null to autodermine query.
 	 * @return bool

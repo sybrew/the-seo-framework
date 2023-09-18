@@ -145,7 +145,7 @@ class Utils {
 	 * Resets default title filters, for consistent output and sanitation.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title\Conditions
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 * @internal Only to be used within Factory\Title::get_bare_unfiltered_generated_title()
 	 * @uses $this->remove_default_title_filters()
 	 */

@@ -13,7 +13,7 @@ use \The_SEO_Framework\Bridges,
 
 use \The_SEO_Framework\Helper\{
 	Post_Types,
-	Query_Utils,
+	Query,
 };
 
 /**
@@ -373,7 +373,7 @@ class Base extends Main {
 	 */
 	protected function generate_front_and_blog_url_items( $args, &$count = 0 ) {
 
-		if ( Query_Utils::has_page_on_front() ) {
+		if ( Query\Utils::has_page_on_front() ) {
 			$front_page_id = (int) \get_option( 'page_on_front' );
 			$posts_page_id = (int) \get_option( 'page_for_posts' );
 

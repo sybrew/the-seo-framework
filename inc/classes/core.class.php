@@ -117,8 +117,8 @@ class Core {
 				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
 				return \SCRIPT_DEBUG;
 			case 'pretty_permalinks':
-				$this->_inaccessible_p_or_m( 'tsf()->pretty_permalinks', 'since 4.3.0; use tsf()->query_utils()->using_pretty_permalinks()' );
-				return $this->query_utils()->using_pretty_permalinks();
+				$this->_inaccessible_p_or_m( 'tsf()->pretty_permalinks', 'since 4.3.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
+				return $this->query()->utils()->using_pretty_permalinks();
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );

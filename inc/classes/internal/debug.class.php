@@ -11,7 +11,6 @@ namespace The_SEO_Framework\Internal;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
-	Query_Utils,
 	Taxonomies,
 };
 
@@ -472,8 +471,8 @@ final class Debug {
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
 		$page_id                        = Query::get_the_real_id();
-		$is_query_exploited             = Query_Utils::is_query_exploited();
-		$query_supports_seo             = Query_Utils::query_supports_seo() ? 'yes' : 'no';
+		$is_query_exploited             = Query\Utils::is_query_exploited();
+		$query_supports_seo             = Query\Utils::query_supports_seo() ? 'yes' : 'no';
 		$is_404                         = \is_404();
 		$is_admin                       = \is_admin();
 		$is_attachment                  = Query::is_attachment();
@@ -512,7 +511,7 @@ final class Debug {
 		$is_term_meta_capable           = Query::is_editable_term();
 		$is_post_type_supported         = Post_Types::is_post_type_supported();
 		$is_post_type_archive_supported = Post_Types::is_post_type_archive_supported();
-		$has_page_on_front              = Query_Utils::has_page_on_front();
+		$has_page_on_front              = Query\Utils::has_page_on_front();
 		$is_taxonomy_supported          = Taxonomies::is_taxonomy_supported();
 		$get_post_type                  = \get_post_type();
 		$get_post_type_real_id          = Query::get_post_type_real_id();

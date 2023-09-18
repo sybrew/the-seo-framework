@@ -1,12 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Helper\Query_Memo
+ * @package The_SEO_Framework\Classes\Helper\Query\Cache
  * @subpackage The_SEO_Framework\Query
  */
 
-namespace The_SEO_Framework\Helper;
+namespace The_SEO_Framework\Helper\Query;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Helper\Query; // Name conflict... how is this allowed??
 
 /**
  * The SEO Framework plugin
@@ -32,7 +34,7 @@ namespace The_SEO_Framework\Helper;
  * @access protected
  * @internal
  */
-class Query_Cache {
+class Cache {
 
 	/**
 	 * @since 4.3.0
@@ -54,7 +56,7 @@ class Query_Cache {
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to The_SEO_Framework\Helper\Query_Cache
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query\Cache
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty queries.
@@ -94,7 +96,7 @@ class Query_Cache {
 	 *              3. Now returns false on WP CLI.
 	 * @since 3.2.2 No longer spits out errors on production websites.
 	 * @since 4.3.0 1. No longer accepts the $method parameter.
-	 *              2. Moved to The_SEO_Framework\Helper\Query_Cache
+	 *              2. Moved to \The_SEO_Framework\Helper\Query\Cache
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
 	 *
@@ -124,7 +126,7 @@ class Query_Cache {
 	 *
 	 * @since 3.0.0
 	 * @since 4.3.0 1. No longer accepts the method parameter.
-	 *              2. Moved to The_SEO_Framework\Helper\Query_Cache
+	 *              2. Moved to \The_SEO_Framework\Helper\Query\Cache
 	 *
 	 * @param string $method The original caller method.
 	 */
