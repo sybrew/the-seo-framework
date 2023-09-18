@@ -173,7 +173,7 @@ class Init extends Pool {
 		// Delete Sitemap transient on permalink structure change.
 		\add_action(
 			'load-options-permalink.php',
-			[ Bridges\Sitemap::class, '_refresh_sitemap_transient_permalink_updated' ],
+			[ Bridges\Cache::class, '_refresh_sitemap_transient_permalink_updated' ],
 			20
 		);
 
@@ -1148,11 +1148,10 @@ class Init extends Pool {
 
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
-			$image_details = current( $this->get_image_details(
+			$image_details = current( Factory\Image::get_image_details(
 				[ 'id' => $post->ID ],
 				true,
-				'oembed',
-				true
+				'oembed'
 			) );
 
 			if ( $image_details && $image_details['url'] && $image_details['width'] && $image_details['height'] ) {
@@ -1168,5 +1167,24 @@ class Init extends Pool {
 			unset( $data['author_url'], $data['author_name'] );
 
 		return $data;
+	}
+
+	/**
+	 * Adjusts category post link.
+	 *
+	 * @since 3.0.0
+	 * @since 4.0.3 Now fills in a fallback $post object when null.
+	 * @access private
+	 *
+	 * @param \WP_Term $term  The category to use in the permalink.
+	 * @param array    $terms Array of all categories (WP_Term objects) associated with the post. Unused.
+	 * @param \WP_Post $post  The post in question.
+	 * @return \WP_Term The primary term.
+	 */
+	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
+		return $this->get_primary_term(
+			( $post ?? \get_post( Query::get_the_real_ID() ) )->ID,
+			$term->taxonomy
+		) ?: $term;
 	}
 }

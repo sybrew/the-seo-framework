@@ -57,7 +57,7 @@ class Robots {
 	}
 
 	/**
-	 * Returns the robots meta value.
+	 * Returns the robots front-end meta value.
 	 * Memoizes the return value.
 	 *
 	 * @since 4.3.0
@@ -164,7 +164,7 @@ class Robots {
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Moved to Meta\Factory\Robots
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Robots
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
@@ -185,7 +185,7 @@ class Robots {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Moved to Meta\Factory\Robots
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Robots
 	 *
 	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.

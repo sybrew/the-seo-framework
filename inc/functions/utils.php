@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework\Utils;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 /**
  * The SEO Framework plugin

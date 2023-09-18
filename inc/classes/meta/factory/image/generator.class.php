@@ -48,6 +48,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the attachment page entry.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -60,25 +61,21 @@ final class Generator {
 	 */
 	public static function generate_attachment_image_details( $args = null, $size = 'full' ) {
 
-		$id = $args['id'] ?? Query::get_the_real_id();
+		$id  = $args['id'] ?? Query::get_the_real_id();
+		$url = $id ? \wp_get_attachment_image_url( $id, $size ) : '';
 
-		if ( $id ) {
+		if ( $url )
 			yield [
-				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
+				'url' => $url,
 				'id'  => $id,
 			];
-		} else {
-			yield [
-				'url' => '',
-				'id'  => 0,
-			];
-		}
 	}
 
 	/**
 	 * Generates image URLs and IDs from the featured image input.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -91,20 +88,14 @@ final class Generator {
 	 */
 	public static function generate_featured_image_details( $args = null, $size = 'full' ) {
 
-		$post_id = $args['id'] ?? Query::get_the_real_id();
-		$id      = \get_post_thumbnail_id( $post_id );
+		$id  = \get_post_thumbnail_id( $args['id'] ?? Query::get_the_real_id() );
+		$url = $id ? \wp_get_attachment_image_url( $id, $size ) : '';
 
-		if ( $id ) {
+		if ( $url )
 			yield [
-				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
+				'url' => $url,
 				'id'  => $id,
 			];
-		} else {
-			yield [
-				'url' => '',
-				'id'  => 0,
-			];
-		}
 	}
 
 	/**
@@ -135,14 +126,11 @@ final class Generator {
 
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
+				// $GLOBALS['pages'] isn't populated here -- let's not try pagination to conserve CPU usage.
 				$content = $tsf->get_post_content();
 			}
-		} else {
-			if ( $args['taxonomy'] || $args['pta'] ) {
-				$content = '';
-			} else {
-				$content = $tsf->get_post_content( $args['id'] );
-			}
+		} elseif ( ! $args['taxonomy'] && ! $args['pta'] ) {
+			$content = $tsf->get_post_content( $args['id'] );
 		}
 
 		if ( empty( $content ) ) return;
@@ -188,6 +176,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the fallback image options.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @yield array : {
@@ -197,12 +186,13 @@ final class Generator {
 	 */
 	public static function generate_fallback_image_details() {
 
-		$tsf = \tsf();
+		$url = \tsf()->get_option( 'social_image_fb_url' );
 
-		yield [
-			'url' => $tsf->get_option( 'social_image_fb_url' ) ?: '',
-			'id'  => $tsf->get_option( 'social_image_fb_id' ) ?: 0,
-		];
+		if ( $url )
+			yield [
+				'url' => $url,
+				'id'  => \tsf()->get_option( 'social_image_fb_id' ) ?: 0,
+			];
 	}
 
 	/**
@@ -211,6 +201,7 @@ final class Generator {
 	 * N.B. This output may be randomized.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -226,15 +217,19 @@ final class Generator {
 		$header = \get_custom_header();
 
 		if ( empty( $header->attachment_id ) ) { // This property isn't returned by default.
-			yield [
-				'url' => $header->url ?: '',
-				'id'  => 0,
-			];
+			if ( $header->url )
+				yield [
+					'url' => $header->url,
+					'id'  => 0,
+				];
 		} else {
-			yield [
-				'url' => \wp_get_attachment_image_url( $header->attachment_id, $size ) ?: '',
-				'id'  => $header->attachment_id,
-			];
+			$url = \wp_get_attachment_image_url( $header->attachment_id, $size );
+
+			if ( $url )
+				yield [
+					'url' => $url,
+					'id'  => $header->attachment_id,
+				];
 		}
 	}
 
@@ -242,6 +237,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the logo modification.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -255,25 +251,21 @@ final class Generator {
 	public static function generate_site_logo_image_details( $args = null, $size = 'full' ) {
 
 		// WP's _override_custom_logo_theme_mod() sets this to get_option( 'site_icon' ) instead.
-		$id = \get_theme_mod( 'custom_logo' );
+		$id  = \get_theme_mod( 'custom_logo' );
+		$url = $id ? \wp_get_attachment_image_url( $id, $size ) : '';
 
-		if ( $id ) {
+		if ( $url )
 			yield [
-				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
+				'url' => $url,
 				'id'  => $id,
 			];
-		} else {
-			yield [
-				'url' => '',
-				'id'  => 0,
-			];
-		}
 	}
 
 	/**
 	 * Generates image URLs and IDs from site icon options.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
@@ -286,18 +278,13 @@ final class Generator {
 	 */
 	public static function generate_site_icon_image_details( $args = null, $size = 'full' ) {
 
-		$id = \get_option( 'site_icon' );
+		$id  = \get_option( 'site_icon' );
+		$url = $id ? \wp_get_attachment_image_url( $id, $size ) : '';
 
-		if ( $id ) {
+		if ( $url )
 			yield [
-				'url' => \wp_get_attachment_image_url( $id, $size ) ?: '',
+				'url' => $url,
 				'id'  => $id,
 			];
-		} else {
-			yield [
-				'url' => '',
-				'id'  => 0,
-			];
-		}
 	}
 }

@@ -339,10 +339,11 @@ final class AJAX {
 				break;
 
 			case 'imageurl':
-				if ( Query::is_static_frontpage( $post_id ) && $tsf->get_option( 'homepage_social_image_url' ) ) {
-					$data[ $g ] = current( $tsf->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+				if ( Query::is_static_frontpage( $post_id ) ) {
+					$data[ $g ] = $tsf->get_option( 'homepage_social_image_url' )
+							   ?: Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
 				} else {
-					$data[ $g ] = current( $tsf->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+					$data[ $g ] = Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
 				}
 		}
 

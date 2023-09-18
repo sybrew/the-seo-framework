@@ -39,7 +39,7 @@ use \The_SEO_Framework\Meta\Factory;
  *
  * @since 2.8.0
  */
-class Generate_Ldjson extends Generate_Image {
+class Generate_Ldjson extends User_Data {
 
 	/**
 	 * Builds up JSON data.

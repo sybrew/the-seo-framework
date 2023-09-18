@@ -14,8 +14,9 @@ use function \The_SEO_Framework\{
 };
 
 use \The_SEO_Framework\Helper\{
-	Query,
 	Post_Types,
+	Query,
+	Taxonomies,
 };
 use \The_SEO_Framework\Data;
 
@@ -70,6 +71,7 @@ class Title {
 	 * @since 4.0.0 Moved the filter to a separated method.
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -105,7 +107,8 @@ class Title {
 	 * @since 4.0.0 Moved the filter to a separated method.
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved `s_title_raw()` to before the title merging, to be more in line with custom title merging.
+	 * @since 4.3.0 1. Moved `s_title_raw()` to before the title merging, to be more in line with custom title merging.
+	 *              2. Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -137,6 +140,7 @@ class Title {
 	 * @since 4.2.0 1. The first parameter can now be voided.
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -172,6 +176,7 @@ class Title {
 	 * @since 4.2.0 1. The first parameter can now be voided.
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -209,6 +214,7 @@ class Title {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -231,6 +237,7 @@ class Title {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Can now return custom post type archive titles.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The custom title.
 	 */
@@ -934,7 +941,7 @@ class Title {
 	}
 
 	/**
-	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
+	 * Returns the custom blogname from option or bloginfo.
 	 *
 	 * @since 4.3.0
 	 *
@@ -947,7 +954,8 @@ class Title {
 	/**
 	 * Returns title separator location.
 	 *
-	 * @since 4.3.0
+	 * @since 2.6.0
+	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The separator location.
 	 */
@@ -958,7 +966,8 @@ class Title {
 	/**
 	 * Returns title separator location for the front page.
 	 *
-	 * @since 4.3.0
+	 * @since 2.6.0
+	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The Seplocation for the front page.
 	 */
@@ -967,18 +976,18 @@ class Title {
 	}
 
 	/**
-	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
+	 * Returns the custom homepage additions (tagline) from option or bloginfo, when set.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 2.6.0
+	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title.
 	 *
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition_for_front_page() {
 		return memo() ?? memo(
 			\tsf()->s_title_raw(
-				\tsf()->get_option( 'homepage_title_tagline' )
-				?: Data\Blog::get_filtered_blog_description()
+				\tsf()->get_option( 'homepage_title_tagline' ) ?: Data\Blog::get_filtered_blog_description()
 			)
 		);
 	}
@@ -1000,50 +1009,8 @@ class Title {
 		return memo() ?? memo(
 			(string) \apply_filters(
 				'the_seo_framework_title_separator',
-				static::get_separator_list()[ \tsf()->get_option( 'title_separator' ) ] ?? '&#x2d;'
+				Title\Utils::get_separator_list()[ \tsf()->get_option( 'title_separator' ) ] ?? '&#x2d;'
 			)
-		);
-	}
-
-	/**
-	 * List of title separators.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Is now filterable.
-	 * @since 4.0.0 Removed the dash key.
-	 * @since 4.0.5 Added back the hyphen.
-	 * @since 4.3.0 Moved to The_SEO_Framework\Meta\Factory\Title
-	 *
-	 * @return array Title separators.
-	 */
-	public static function get_separator_list() {
-		/**
-		 * @since 3.1.0
-		 * @since 4.0.0 Removed the hyphen (then known as 'dash') key.
-		 * @since 4.0.5 Reintroduced hyphen.
-		 * @param array $list The separator list in { option_name > display_value } format.
-		 *                    The option name should be translatable within `&...;` tags.
-		 *                    'pipe' is excluded from this rule.
-		 */
-		return (array) \apply_filters(
-			'the_seo_framework_separator_list',
-			[
-				'hyphen' => '&#x2d;',
-				'pipe'   => '|',
-				'ndash'  => '&ndash;',
-				'mdash'  => '&mdash;',
-				'bull'   => '&bull;',
-				'middot' => '&middot;',
-				'lsaquo' => '&lsaquo;',
-				'rsaquo' => '&rsaquo;',
-				'frasl'  => '&frasl;',
-				'laquo'  => '&laquo;',
-				'raquo'  => '&raquo;',
-				'le'     => '&le;',
-				'ge'     => '&ge;',
-				'lt'     => '&lt;',
-				'gt'     => '&gt;',
-			]
 		);
 	}
 }

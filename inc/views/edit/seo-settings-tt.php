@@ -49,9 +49,7 @@ $_generator_args = [
 $show_og = (bool) $this->get_option( 'og_tags' );
 $show_tw = (bool) $this->get_option( 'twitter_tags' );
 
-//! Social image placeholder.
-$image_details     = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) );
-$image_placeholder = $image_details['url'] ?? '';
+$image_placeholder = Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
 
 $canonical_placeholder = Factory\URI::get_generated_canonical_url( $_generator_args );
 $robots_defaults       = Factory\Robots::generate_meta(

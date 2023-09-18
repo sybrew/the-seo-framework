@@ -187,7 +187,6 @@ class URI {
 	 */
 	public static function get_custom_canonical_url_from_args( $args ) {
 
-		// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
 		normalize_generation_args( $args );
 
 		if ( $args['taxonomy'] ) {
@@ -242,7 +241,6 @@ class URI {
 	 */
 	public static function get_generated_canonical_url_from_args( $args ) {
 
-		// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
 		normalize_generation_args( $args );
 
 		if ( $args['taxonomy'] ) {
@@ -266,6 +264,7 @@ class URI {
 	 * @since 3.2.4 1. Now adds a slash to the home URL when it's a root URL.
 	 *              2. Now skips slashing when queries have been appended to the URL.
 	 *              3. Home-as-page pagination is now supported.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @return string The home canonical URL.
 	 */
@@ -308,6 +307,7 @@ class URI {
 	 * @since 4.2.3 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
 	 * @since 4.3.0 1. Optimized for sitemap.
 	 *              2. Removed memoization thanks to optimization.
+	 *              3. Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @param int|null $post_id The page ID. Leave null to autodetermine.
 	 * @return string The singular canonical URL.
@@ -358,7 +358,8 @@ class URI {
 	 *              2. Now works on the admin-screens.
 	 * @since 4.2.0 1. Added memoization.
 	 *              2. The parameters are now optional.
-	 * @since 4.3.0 Removed memoization thanks to optimization.
+	 * @since 4.3.0 1. Removed memoization thanks to optimization.
+	 *              2. Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
 	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
@@ -403,6 +404,7 @@ class URI {
 	 *              2. Now forwards post type object calling to WordPress's function.
 	 * @since 4.2.0 1. Now correctly adds pagination to the URL.
 	 *              2. Removed argument type deprecation doing it wrong warning.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                               Leave null to autodetermine query and allow pagination.
@@ -444,6 +446,7 @@ class URI {
 	 * @since 3.0.0
 	 * @since 4.2.0 1. The first parameter is now optional.
 	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @param int|null $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
@@ -543,6 +546,7 @@ class URI {
 	 * @since 3.1.0 1. The first parameter now defaults to null.
 	 *              2. The search term is now matched with the input query if not set,
 	 *                 instead of it being empty.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @param string $search_query The search query. Mustn't be escaped.
 	 *                             When left empty, the current query will be used.
@@ -587,6 +591,7 @@ class URI {
 	 * @since 4.1.2 1. Added back memoization.
 	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
 	 * @since 4.3.0 1. Removed memoization thanks to optimization.
+	 *              2. Moved to \The_SEO_Framework\Meta\Factory\URI.
 	 *
 	 * @return array Escaped site Pagination URLs: {
 	 *    string 'prev'
@@ -678,23 +683,25 @@ class URI {
 	 */
 	public static function generate_shortlink_url() {
 
-		$home = static::get_bare_home_canonical_url();
-		$id   = Query::get_the_real_id();
-		$url  = '';
-
 		if ( Query::is_singular() ) {
-			$url = \add_query_arg( [ 'p' => $id ], $home );
-
-			// Append queries other plugins might've filtered in.
-			$url = URI\Utils::append_query_to_url(
-				$url,
-				parse_url( static::get_bare_singular_canonical_url( $id ), \PHP_URL_QUERY )
-			);
+			$query = [ 'p' => Query::get_the_real_id() ];
 		} elseif ( Query::is_archive() ) {
 			if ( Query::is_category() ) {
-				$url = \add_query_arg( [ 'cat' => $id ], $home );
+				$query = [ 'cat' => Query::get_the_real_id() ];
 			} elseif ( Query::is_tag() ) {
-				$url = \add_query_arg( [ 'post_tag' => $id ], $home );
+				$slug = \get_queried_object()->slug ?? '';
+
+				if ( $slug )
+					$query = [ 'tag' => $slug ];
+			} elseif ( Query::is_tag() || Query::is_tax() ) {
+				// Generate shortlink for object type and slug.
+				$object = \get_queried_object();
+
+				$tax  = $object->taxonomy ?? '';
+				$slug = $object->slug ?? '';
+
+				if ( $tax && $slug )
+					$query = [ $tax => $slug ];
 			} elseif ( \is_date() && isset( $GLOBALS['wp_query']->query ) ) {
 				// FIXME: Trac ticket: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
 				$_query = $GLOBALS['wp_query']->query;
@@ -704,41 +711,37 @@ class URI {
 					'd' => $_query['day'] ?? '',
 				];
 
-				$url = \add_query_arg( [ 'm' => implode( '', $_date ) ], $home );
+				$query = [ 'm' => implode( '', $_date ) ];
 			} elseif ( Query::is_author() ) {
-				$url = \add_query_arg( [ 'author' => $id ], $home );
-			} elseif ( Query::is_tax() ) {
-				// Generate shortlink for object type and slug.
-				$object = \get_queried_object();
-
-				$tax  = $object->taxonomy ?? '';
-				$slug = $object->slug ?? '';
-
-				if ( $tax && $slug )
-					$url = \add_query_arg( [ $tax => $slug ], $home );
+				$query = [ 'author' => Query::get_the_real_id() ];
 			}
 		} elseif ( Query::is_search() ) {
-			$url = \add_query_arg( [ 's' => \get_search_query( false ) ], $home );
+			$query = [ 's' => \get_search_query( false ) ];
 		}
 
-		if ( ! $url ) return '';
+		if ( empty( $query ) ) return '';
 
-		$paged = Query::paged();
 		$page  = Query::page();
+		$paged = Query::paged();
 
-		if ( $paged > 1 ) {
-			$url = \add_query_arg( [ 'paged' => $paged ], $url );
-		} elseif ( $page > 1 ) {
-			$url = \add_query_arg( [ 'page' => $page ], $url );
+		if ( $page > 1 ) {
+			$query += [ 'page' => $page ];
+		} elseif ( $paged > 1 ) {
+			$query += [ 'paged' => $paged ];
 		}
 
-		if ( Query::is_singular() ) {
-			$url = URI\Utils::append_query_to_url(
-				$url,
-				parse_url( static::get_bare_singular_canonical_url( $id ), \PHP_URL_QUERY )
-			);
-		}
+		$query       = http_build_query( $query );
+		$extra_query = parse_url( static::get_generated_canonical_url( null, false ), \PHP_URL_QUERY );
 
-		return \esc_url_raw( $url, [ 'https', 'http' ] );
+		if ( $extra_query )
+			$query .= "&$extra_query";
+
+		return \esc_url_raw(
+			URI\Utils::append_query_to_url(
+				static::get_bare_home_canonical_url(),
+				$query
+			),
+			[ 'https', 'http' ]
+		);
 	}
 }

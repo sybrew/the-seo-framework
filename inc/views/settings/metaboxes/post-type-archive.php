@@ -42,7 +42,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		?>
 		<div id=tsf-post-type-archive-header-wrap class=tsf-fields style=display:none>
 			<div id=tsf-post-type-archive-select-wrap>
-				<label for=tsf-post-type-archive-selector><?php esc_html_e( 'Select post type:', 'autodescription' ); ?></label>
+				<label for=tsf-post-type-archive-selector><?php esc_html_e( 'Select archive to edit:', 'autodescription' ); ?></label>
 				<select id=tsf-post-type-archive-selector></select>
 			</div>
 		</div>
@@ -103,7 +103,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 							[
 								sprintf(
 									/* translators: 1 = Post Type Archive name */
-									esc_html__( 'Archive of %s', 'autodescription' ),
+									esc_html__( 'Editing archive of %s', 'autodescription' ),
 									esc_html( $post_types_data[ $post_type ]['label'] )
 								),
 								esc_html( $post_type ),
@@ -353,7 +353,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
+			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( Factory\Image::get_first_generated_image_url( $_generator_args, 'social' ) ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
 			<input type=hidden name="<?php Input::field_name( $_option_map['social_image_id'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-id" value="<?= absint( $this->get_post_type_archive_meta_item( 'social_image_id', $post_type ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
 		<p class=hide-if-no-tsf-js>

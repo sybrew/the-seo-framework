@@ -8,10 +8,13 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+// Precautionary
 use function \The_SEO_Framework\{
-	memo,   // Precautionary.
-	umemo,  // Precautionary.
+	memo,
+	umemo,
 };
+
+use function \The_SEO_Framework\Utils\normalize_generation_args;
 
 /**
  * The SEO Framework plugin
@@ -34,7 +37,7 @@ use function \The_SEO_Framework\{
 /**
  * Class The_SEO_Framework\Internal\Deprecated
  *
- * Contains all deprecated functions.
+ * Contains all deprecated methods of `\tsf()`
  *
  * @since 2.8.0
  * @since 3.1.0 Removed all methods deprecated in 3.0.0.
@@ -1822,7 +1825,7 @@ final class Deprecated {
 
 		$multi = (bool) $tsf->get_option( 'multi_og_image' );
 
-		foreach ( $tsf->get_image_details_from_cache( ! $multi ) as $image ) {
+		foreach ( $tsf->get_image_details( null, ! $multi ) as $image ) {
 			$output .= \The_SEO_Framework\Interpreters\Meta::render( [
 				'property' => 'og:image',
 				'content'  => $image['url'],
@@ -2472,7 +2475,7 @@ final class Deprecated {
 
 		$output = '';
 
-		foreach ( $tsf->get_image_details_from_cache( ! $tsf->get_option( 'multi_og_image' ) ) as $image ) {
+		foreach ( $tsf->get_image_details( null, ! $tsf->get_option( 'multi_og_image' ) ) as $image ) {
 			$output .= \The_SEO_Framework\Interpreters\Meta::render( [
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
@@ -3339,9 +3342,9 @@ final class Deprecated {
 	public function get_separator_list() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_separator_list()', '4.3.0', 'tsf()->title()->get_separator_list()' );
+		$tsf->_deprecated_function( 'tsf()->get_separator_list()', '4.3.0', 'tsf()->title()->utils()->get_separator_list()' );
 
-		return $tsf->title()->get_separator_list();
+		return $tsf->title()->utils()->get_separator_list();
 	}
 
 	/**
@@ -4992,5 +4995,219 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->get_shortlink()', '4.3.0', 'tsf->uri()->get_shortlink()' );
 
 		return $tsf->uri()->get_shortlink_url();
+	}
+
+	/**
+	 * Caches current Image URL in static variable.
+	 * To be used on the front-end only.
+	 *
+	 * @since 2.2.2
+	 * @since 2.7.0 $get_id parameter has been added.
+	 * @since 4.0.0 Now uses the new image generator.
+	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
+	 *              it'll always use just one image, we read this option so we'll only
+	 *              use a single cache instance internally with the generator.
+	 *
+	 * @return string The image URL.
+	 */
+	public function get_image_from_cache() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_image_from_cache()', '4.3.0', 'tsf()->get_first_valid_image()' );
+
+		foreach ( $tsf->image()->get_image_details( null, true ) as $image ) {
+			$url = $image['url'];
+			if ( $url ) break;
+		}
+
+		return $url ?? '';
+	}
+
+	/**
+	 * Returns the image details from cache.
+	 * Only to be used within the loop, uses default parameters, inlucing the 'social' context.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.2 Added a $single parameter, which helps reduce processing power required.
+	 *              This parameter might get deprecated when we start supporting PHP 7.1+ only.
+	 * TODO yield from and memoize deeper? Iterators calling this method currently do not affect the generators.
+	 *
+	 * @param bool $single Whether to return at most a single array item.
+	 * @return array[] The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	public function get_image_details_from_cache( $single = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_image_details_from_cache()', '4.3.0', 'tsf()->get_image_details()' );
+
+		return $tsf->get_image_details( null, $single );
+	}
+
+	/**
+	 * Returns single custom field image details.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 *
+	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                           Leave null to autodetermine query.
+	 * @param bool       $single Whether to fetch one image, or multiple. Unused, reserved.
+	 * @param bool       $clean  Whether to clean the image, like stripping duplicates and erroneous items.
+	 *                           It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	public function get_custom_field_image_details( $args = null, $single = false, $clean = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_custom_field_image_details()', '4.3.0', 'tsf()->image()->get_custom_image_details()' );
+
+		return $tsf->image()->get_custom_image_details( $args, $single );
+	}
+
+	/**
+	 * Returns single or multiple generates image details.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 *
+	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 *                            Leave null to autodetermine query.
+	 * @param bool       $single  Whether to fetch one image, or multiple.
+	 * @param string     $context The filter context. Default 'social'.
+	 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
+	 *                            It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
+	 * @return array The image details array, sequential: int => {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 * }
+	 */
+	public function get_generated_image_details( $args = null, $single = false, $context = 'social', $clean = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_generated_image_details()', '4.3.0', 'tsf()->image()->get_generated_image_details()' );
+
+		return $tsf->image()->get_generated_image_details( $args, $single, $context );
+	}
+
+	/**
+	 * Adds image dimension and alt parameters to the input details, if any.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.4 1. Now returns filesizes under index `filesize`.
+	 *              2. No longer processes details when no `id` is given in `$details`.
+	 *
+	 * @param array  $details The image details array, associative: {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 * }
+	 * @param string $size    The size of the image used.
+	 * @return array The image details array, associative: {
+	 *    string url:    The image URL,
+	 *    int    id:     The image ID,
+	 *    int    width:  The image width in pixels,
+	 *    int    height: The image height in pixels,
+	 *    string alt:    The image alt tag,
+	 *    int    filesize: The image filesize in bytes,
+	 * }
+	 */
+	public function merge_extra_image_details( $details, $size = 'full' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->merge_extra_image_details()', '4.3.0', 'tsf()->image()->merge_extra_image_details()' );
+
+		return $tsf->image()->merge_extra_image_details( $details, $size );
+	}
+
+	/**
+	 * Fetches image dimensions.
+	 *
+	 * @TODO shift parameters and deprecate using the third one.
+	 * @since 4.0.0
+	 * @since 4.2.4 1. No longer relies on `$url` to fetch the correct dimensions, improving performance significantly.
+	 *              2. Renamed `$url` to `$depr`, without a deprecation notice added.
+	 *
+	 * @param int    $src_id The source ID of the image.
+	 * @param string $depr   Deprecated. Used to be the source URL of the image.
+	 * @param string $size   The size of the image used.
+	 * @return array The image dimensions, associative: {
+	 *    int width:  The image width in pixels,
+	 *    int height: The image height in pixels,
+	 * }
+	 */
+	public function get_image_dimensions( $src_id, $depr, $size ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_image_dimensions()', '4.3.0', 'tsf()->image()->utils()->get_image_dimensions()' );
+
+		return $tsf->image()->utils()->get_image_dimensions( $src_id, $size );
+	}
+
+	/**
+	 * Fetches image dimensions.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param int $src_id The source ID of the image.
+	 * @return string The image alt tag
+	 */
+	public function get_image_alt_tag( $src_id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_image_alt_tag()', '4.3.0', 'tsf()->image()->utils()->get_image_alt_tag()' );
+
+		return $tsf->image()->utils()->get_image_alt_tag( $src_id );
+	}
+
+	/**
+	 * Fetches image filesize in bytes. Requires an image (re)generated in WP 6.0 or later.
+	 *
+	 * @since 4.2.4
+	 *
+	 * @param int    $src_id The source ID of the image.
+	 * @param string $size   The size of the image used.
+	 * @return int The image filesize in bytes. Returns 0 for unprocessed/unprocessable image.
+	 */
+	public function get_image_filesize( $src_id, $size ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_image_filesize()', '4.3.0', 'tsf()->image()->utils()->get_image_filesize()' );
+
+		return $tsf->image()->utils()->get_image_filesize( $src_id, $size );
+	}
+
+	/**
+	 * Returns the largest acceptable image size's details.
+	 * Skips the original image, which may also be acceptable.
+	 *
+	 * @since 4.0.2
+	 * @since 4.2.4 Added parameter `$max_filesize` that filters images larger than it.
+	 *
+	 * @param int $id           The image ID.
+	 * @param int $max_size     The largest acceptable dimension in pixels. Accounts for both width and height.
+	 * @param int $max_filesize The largest acceptable filesize in bytes. Default 5MB (5242880).
+	 * @return false|array Returns an array (url, width, height, is_intermediate), or false, if no image is available.
+	 */
+	public function get_largest_acceptable_image_src( $id, $max_size = 4096, $max_filesize = 5242880 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_largest_acceptable_image_src()', '4.3.0', 'tsf()->image()->utils()->get_largest_image_src()' );
+
+		return $tsf->image()->utils()->get_largest_image_src( $id, $max_size, $max_filesize );
 	}
 }

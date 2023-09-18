@@ -562,9 +562,10 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 
 		// Fetch image placeholder.
 		if ( $_is_static_frontpage && $this->get_option( 'homepage_social_image_url' ) ) {
-			$image_placeholder = current( $this->get_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+			$image_placeholder = $this->get_option( 'homepage_social_image_url' )
+							  ?: Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
 		} else {
-			$image_placeholder = current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '';
+			$image_placeholder = Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
 		}
 
 		?>

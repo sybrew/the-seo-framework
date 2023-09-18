@@ -9,9 +9,6 @@ namespace The_SEO_Framework\Meta\Factory\Title;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function \The_SEO_Framework\Utils\normalize_generation_args;
-use function \The_SEO_Framework\memo;
-
-use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -38,6 +35,44 @@ use \The_SEO_Framework\Helper\Query;
  * @internal Use tsf()->title()->utils() instead.
  */
 class Utils {
+
+	/**
+	 * List of title separators.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return array Title separators.
+	 */
+	public static function get_separator_list() {
+		/**
+		 * @since 3.1.0
+		 * @since 4.0.0 Removed the hyphen (then known as 'dash') key.
+		 * @since 4.0.5 Reintroduced hyphen.
+		 * @param array $list The separator list in { option_name > display_value } format.
+		 *                    The option name should be translatable within `&...;` tags.
+		 *                    'pipe' is excluded from this rule.
+		 */
+		return (array) \apply_filters(
+			'the_seo_framework_separator_list',
+			[
+				'hyphen' => '&#x2d;',
+				'pipe'   => '|',
+				'ndash'  => '&ndash;',
+				'mdash'  => '&mdash;',
+				'bull'   => '&bull;',
+				'middot' => '&middot;',
+				'lsaquo' => '&lsaquo;',
+				'rsaquo' => '&rsaquo;',
+				'frasl'  => '&frasl;',
+				'laquo'  => '&laquo;',
+				'raquo'  => '&raquo;',
+				'le'     => '&le;',
+				'ge'     => '&ge;',
+				'lt'     => '&lt;',
+				'gt'     => '&gt;',
+			]
+		);
+	}
 
 	/**
 	 * Removes default title filters, for consistent output and sanitization.

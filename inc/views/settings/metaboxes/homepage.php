@@ -256,6 +256,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		$custom_og_desc  = '';
 		$custom_tw_title = '';
 		$custom_tw_desc  = '';
+		$custom_image    = '';
 
 		// Gets custom fields from page.
 		if ( $home_id ) {
@@ -263,7 +264,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $home_id );
 			$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
 			$custom_tw_desc  = $this->get_post_meta_item( '_twitter_description', $home_id );
+			$custom_image    = $this->get_post_meta_item( '_social_image_url', $home_id );
 		}
+
+		$image_placeholder = $custom_image ?: Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
 
 		$this->output_js_social_data(
 			'homepage_social_settings',
@@ -391,7 +395,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id=tsf_homepage_socialimage-url placeholder="<?= esc_url( current( $this->get_generated_image_details( $_generator_args, true, 'social', true ) )['url'] ?? '' ) ?>" value="<?= esc_url( $this->get_option( 'homepage_social_image_url' ) ) ?>" />
+			<input class=large-text type=url name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id=tsf_homepage_socialimage-url placeholder="<?= esc_url( $image_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'homepage_social_image_url' ) ) ?>" />
 			<input type=hidden name="<?php Input::field_name( 'homepage_social_image_id' ); ?>" id=tsf_homepage_socialimage-id value="<?= absint( $this->get_option( 'homepage_social_image_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
 		<p class=hide-if-no-tsf-js>
@@ -401,6 +405,11 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			?>
 		</p>
 		<?php
+		if ( Query_Utils::has_page_on_front() && $custom_image ) {
+			HTML::description(
+				__( 'Note: The image placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+			);
+		}
 		break;
 
 	case 'homepage_robots_tab':

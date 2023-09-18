@@ -191,7 +191,7 @@ class Legacy_API extends Core {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	// public function get_image_details( $args = null, $single = true, $context = 'social' ) {
-	// 	return static::image()->get( (array) $args + [ 'single' => $single ], $context );
-	// }
+	public function get_image_details( $args = null, $single = true, $context = 'social' ) {
+		return static::image()->get_image_details( $args, $single, $context );
+	}
 }

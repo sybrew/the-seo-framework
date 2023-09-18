@@ -421,6 +421,9 @@ class Utils {
 	/**
 	 * Appends given query to given URL.
 	 *
+	 * This is a "dumb" replacement of WordPress's add_query_arg(), but much faster
+	 * and with more straightforward query and fragment handlers.
+	 *
 	 * @since 4.3.0
 	 *
 	 * @param string $url   A fully qualified URL.
@@ -429,19 +432,16 @@ class Utils {
 	 */
 	public static function append_query_to_url( $url, $query ) {
 
-		$_fragment = parse_url( $url, \PHP_URL_FRAGMENT );
+		if ( str_contains( $url, '#' ) ) {
+			$fragment = strstr( $url, '#' );
+			$url      = str_replace( $fragment, '', $url );
+		} else {
+			$fragment = '';
+		}
 
-		if ( $_fragment )
-			$url = str_replace( "#$_fragment", '', $url );
+		if ( str_contains( $url, '?' ) )
+			return "$url&$query{$fragment}";
 
-		parse_str( $query, $results );
-
-		if ( $results )
-			$url = \add_query_arg( $results, $url );
-
-		if ( $_fragment )
-			$url .= "#$_fragment";
-
-		return $url;
+		return "$url?$query{$fragment}";
 	}
 }

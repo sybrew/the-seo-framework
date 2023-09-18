@@ -267,11 +267,10 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_image() {
 
-		$tsf = \tsf();
-
-		$multi = $tsf->get_option( 'multi_og_image' );
-
-		foreach ( $tsf->get_image_details_from_cache( ! $multi ) as $image ) {
+		foreach ( Factory\Image::get_image_details(
+			null,
+			! \tsf()->get_option( 'multi_og_image' )
+		) as $image ) {
 			yield [
 				'attributes' => [
 					'property' => 'og:image',
@@ -302,9 +301,6 @@ final class Open_Graph {
 					],
 				];
 			}
-
-			// Redundant?
-			if ( ! $multi ) break;
 		}
 	}
 

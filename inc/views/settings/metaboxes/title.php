@@ -175,7 +175,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		break;
 
 	case 'title_general_tab':
-		$title_separator         = Factory\Title::get_separator_list();
+		$title_separator         = Factory\Title\Utils::get_separator_list();
 		$default_title_separator = $this->get_option( 'title_separator' );
 
 		?>

@@ -516,6 +516,25 @@ TODO tell the user to "expect bugs" but "we're working resolving any report asap
 
 TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages.
 
+TODO update "https://kb.theseoframework.com/kb/data-stored-in-your-database/".
+
+TODO convert null === $args to isset( $args ) and switch conditions?
+	-> This is tedious (29+ instances)
+	-> 3~7% faster though https://3v4l.org/p9CMP.
+		-> probably is because we do not need to create a null object every time.
+
+TODO These are better names for filters. Use these throughout and deprecate the rest?
+	-> It'll finally save me a naming headache.
+	1. the_seo_framework_custom_image_details
+	1. the_seo_framework_generated_image_details
+	-> Candidates:
+		1. the_seo_framework_custom_field_description -> the_seo_framework_custom_description
+		1. the_seo_framework_title_from_custom_field -> the_seo_framework_custom_title
+		1. the_seo_framework_title_from_generation -> the_seo_framework_generated_title
+
+TODO test generate_shortlink_url() and URL pagination with multilingual plugins and other odd queries (wpforo et al.) and URL fragments (are there plugins that add these?).
+	-> find via wpdirectory.
+
 **Detailed log**
 
 **For everyone:**
@@ -547,13 +566,22 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 		* Sticky posts are no longer calculated when generating the sitemap, removing a redundant database query.
 			* Related Core ticket is [#51542](https://core.trac.wordpress.org/ticket/51542).
 		* The URL generator has been rewritten from the ground up. With that, we removed all patches for pagination and rely on our pagination tweaks now.
-			* Because of this, the sitemap generates about 10% faster (TODO bombard it without caching enabled).
-			* Because of this, the front-end generates up to 30% faster. TODO confirm URI test (we create 11 URLs?, redirect, canonical, og, prev, next, 3x+ breadcrumbs, site, search, organization)
+			* Because of this, the sitemap generates up to 4% faster, even after we applied a URL sanitizer patch.
+				TODO retest versus feb1ab3 -- we're bound to \tsf()-> functionality yet.
+		* The Shortlink generator has been rewritten. It no longer generates the URL before it determines it could actually use it. It also uses a much more straightforward method to append the query parameters.
+		* The main object in the plugin has been largely emptied, and is over TODO methods lighter. Or, more importantly, TODO lines of code (including comments) smaller.
+			* Now, depending on the options you use and which page one visits, selectively, the required methods are loaded, reducing read times of the plugin files by about 70% (TODO confirm "boot").
+			* Now, the main object is rarely required internally, but most methods are called statically (directly). This reduces the function overhead [from 4% to 62%](https://3v4l.org/J00A0).
+				* Although, this may increase overhead by 17% due to [a quirk in PHP](https://twitter.com/SybreWaaijer/status/1703077875988009325). But, we combat this by creating as few methods as possible, at the cost of "readability" (this only affects developers not using a modern code editor).
+		* Generated image metadata are now cached per method. This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata.
+		* The image generator now only feeds data when an actual image is found; this reduces operations in subroutines, improving performance significantly.
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
 			* A warning is displayed above the Post Type Archive settings.
 			* A warning is displayed at the Sitemap Output settings.
+	* **Accessibility:**
+		* The Custom Post Type Archive selector now better conveys that it's not an option.
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
@@ -571,6 +599,7 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 			* You should try Nordpass, for Dashlane's incompetence [shall not pass](https://www.youtube.com/watch?v=3xYXUeSmb-Y).
 		* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
 			* Most notably, the padding and border around the settings make it much easier on your eyes.
+		* If a custom social image URL is inserted in the homepage post-edit meta box, it will now also be depicted in the Homepage Settings meta box on the SEO Settings page.
 	* **Title:**
 		* Resolved an issue where the Twitter title would fall back to a custom Open Graph title when Open Graph is disabled.
 		* Resolved an issue where the incorrect Open Graph fallback title was proposed as a placeholder in the admin interface.
@@ -591,6 +620,8 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 	* **Compatibility:**
 		* Fixed a [bug in Polylang](https://github.com/polylang/polylang/issues/928) that breaks all plugins but Yoast SEO and achieves nothing but slowing down your site -- simply, by purging Polylang's egregious AJAX-handler from browser memory.
 		* Fix an issue where the sitemap was invalidated when a URL adds special query parameters with non-latin characters.
+	* **Shortlink:**
+		* The shortlink can now generate a proper tag URL. WordPress created a different endpoint for this, unlike any other taxonomy.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
@@ -613,19 +644,49 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 			* To learn more, check out methods `tsf()->query()` and trait `Static_Deprecator`. Since the method is brand new, nothing has been deprecated yet.
 	* Pool `tsf()->query()` is now available.
 		* All public query-related methods have been moved to that pool. E.g., `tsf()->is_product()` is now `tsf()->query()->is_product()`.
-		* It is a class alias of `The_SEO_Framework\Helper\Query`; but, not quite.
+		* Internally known as `The_SEO_Framework\Helper\Query`.
 	* Pool `tsf()->query_utils()` is now available.
 		* All public query-utility methods have been moved to that pool. E.g., `tsf()->query_supports_seo()` is now `tsf()->query_utils()->query_supports_seo()`.
-		* It is a class alias of `The_SEO_Framework\Helper\Query_Utils`; but, not quite.
+		* Internally known as `The_SEO_Framework\Helper\Query_Utils`.
+			* TODO make this query()->utils()?
 	* Pool `tsf()->post_types()` is now available.
 		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_types()->is_post_type_supported()`.
-		* It is a class alias of `The_SEO_Framework\Helper\Post_Types`; but, not quite.
+		* Internally known as `The_SEO_Framework\Helper\Post_Types`.
 	* Pool `tsf()->taxonomies()` is now available.
 		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->is_taxonomy_supported()` is now `tsf()->taxonomies()->is_taxonomy_supported()`.
-		* It is a class alias of `The_SEO_Framework\Helper\Taxonomies`; but, not quite.
+		* Internally known as `The_SEO_Framework\Helper\Taxonomies`.
 	* Pool `tsf()->robots()` is now available.
 		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->get_robots_meta()` is now `tsf()->robots()->get_meta()`.
-		* It is a class alias of `The_SEO_Framework\Meta\Factory\Robots`; but, not quite.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Robots`.
+	* Pool `tsf()->uri()` is now available.
+		* All public uri-related methods have been moved to that pool. E.g., `tsf()->get_custom_canonical_url()` is now `tsf()->uri()->get_custom_canonical_url()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\URI`.
+		* This pool has a sub-pool, accessible via `tsf()->uri()->utils()`.
+			* Internally known as `The_SEO_Framework\Meta\Factory\URI\Utils`.
+	* Pool `tsf()->title()` is now available.
+		* All public title-related methods have been moved to that pool. E.g., `tsf()->get_custom_title()` is now `tsf()->title()->get_custom_title()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Title`.
+		* This pool has a sub-pool, accessible via `tsf()->title()->utils()`.
+			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Utils`.
+		* This pool has a sub-pool, accessible via `tsf()->title()->conditions()`.
+			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Conditions`.
+	* Pool `tsf()->description()` is now available.
+		* All public description-related methods have been moved to that pool. E.g., `tsf()->description()` is now `tsf()->description()->get_description()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Description`.
+		* This pool has a sub-pool, accessible via `tsf()->description()->excerpt()`.
+			* Internally known as `The_SEO_Framework\Meta\Factory\Description\Excerpt`.
+	* Pool `tsf()->open_graph()` is now available.
+		* All public Open Graph-related methods have been moved to that pool. E.g., `tsf()->get_open_graph_title()` is now `tsf()->open_graph()->get_description()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Open_Graph`.
+	* Pool `tsf()->facebook()` is now available.
+		* Facebook never had a public API, but it now has new methods, e.g., `tsf()->facebook()->get_author()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Facebook`.
+	* Pool `tsf()->twitter()` is now available.
+		* All public Twitter-related methods have been moved to that pool. E.g., `tsf()->get_twitter_title()` is now `tsf()->twitter()->get_description()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Twitter`.
+	* Pool `tsf()->image()` is now available.
+		* All public Image-related methods have been moved to that pool. E.g., `tsf()->get_custom_field_image_details()` is now `tsf()->image()->get_custom_image_details()`.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Image`.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
@@ -836,7 +897,7 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 				* `get_available_twitter_cards()`, with no alternative available.
 				* `get_separator()`, use `tsf()->title()->get_separator()` instead.
 				* `get_title_separator()`, use `tsf()->title()->get_separator()` instead.
-				* `get_separator_list()`, use `tsf()->title()->get_separator_list()` instead.
+				* `get_separator_list()`, use `tsf()->title()->utils()->get_separator_list()` instead.
 				* `trim_excerpt()`, use `\The_SEO_Framework\Utils\clamp_sentence()` instead.
 				* `get_excerpt_by_id()`, use `tsf()->description()->get_singular_excerpt()` instead.
 				* `fetch_excerpt()`, use `tsf()->description()->get_singular_excerpt()` instead.
@@ -910,12 +971,22 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 				* `get_taxonomical_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
 				* `get_post_type_archive_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
 				* `get_shortlink()`, use `tsf->uri()->get_shortlink()` instead.
+				* `get_image_from_cache()`, use `tsf()->get_first_valid_image()` instead.
+				* `get_image_details_from_cache()`, use `tsf()->get_image_details()` instead.
+				* `get_custom_field_image_details()`, use `tsf()->image()->get_custom_image_details()` instead.
+				* `get_generated_image_details()`, use `tsf()->image()->get_generated_image_details()` instead.
+				* `merge_extra_image_details()`, use `tsf()->image()->merge_extra_image_details()` instead.
+				* `get_image_dimensions()`, use `tsf()->image()->utils()->get_image_dimensions()` instead.
+				* `get_image_alt_tag()`, use `tsf()->image()->utils()->get_image_alt_tag()` instead.
+				* `get_image_filesize()`, use `tsf()->image()->utils()->get_image_filesize()` instead.
+				* `get_largest_acceptable_image_src()`, use `tsf()->image()->utils()->get_largest_image_src()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
 				* `render_element()`, without deprecation (it was marked protected).
 				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
+				* `get_image_generation_params()`, has nothing to offer for the public API.
 				* Since we moved class `\The_SEO_Framework\Cache`'s functionality from this object, these are removed:
 					* `init_admin_caching_actions()`
 					* `init_post_cache_actions()`
@@ -1025,6 +1096,8 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 		* `the_seo_framework_meta_generator_pools`, this is used to **remove meta generator callback pools** preemptively.
 		* `the_seo_framework_meta_generators`, this is used to **add and remove meta generator callbacks**.
 		* `the_seo_framework_meta_render_data`, this is used to **add, remove, and tweak generated metadata** before it's sent to the browser.
+		* `the_seo_framework_custom_image_details`, this is used to change image details from custom field.
+		* `the_seo_framework_generated_image_details`, this is used to change generated image details.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 	* **Deprecated:**
@@ -1058,6 +1131,7 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 		* `the_seo_framework_use_facebook_tags`, use `the_seo_framework_meta_generator_pools` instead.
 		* `the_seo_framework_use_twitter_tags`, use `the_seo_framework_meta_generator_pools` instead.
 		* `the_seo_framework_robots_meta`, use `the_seo_framework_meta_render_data` instead.
+		* `the_seo_framework_image_details`, use `the_seo_framework_custom_image_details` or `the_seo_framework_generated_image_details` instead.
 	* **Removed:**
 		* `the_seo_framework_auto_descripton_html_method_methods`.
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").

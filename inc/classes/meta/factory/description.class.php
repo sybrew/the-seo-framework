@@ -113,6 +113,8 @@ class Description {
 	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
 	 * @since 3.2.2 Now converts HTML characters prior trimming.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Description.
+	 *
 	 * @TODO Should we enforce a minimum description length, where this result is ignored? e.g., use the input
 	 *       guidelines' 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
 	 *       This isn't truly helpful, since then search engines can truly fetch whatever with zero guidance.
@@ -231,7 +233,8 @@ class Description {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Now expects an ID before getting a post meta item.
+	 * @since 4.3.0 1. Now expects an ID before getting a post meta item.
+	 *              2. Moved to \The_SEO_Framework\Meta\Factory\Description.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.

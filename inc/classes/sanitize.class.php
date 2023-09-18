@@ -10,8 +10,14 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\Utils\clamp_sentence;
 
-use \The_SEO_Framework\Helper\Query_Utils,
-	\The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta\Factory;
+
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Query_Utils,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -932,7 +938,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_title_separator( $sep ) {
 
-		$sep_list = Factory\Title::get_separator_list();
+		$sep_list = Factory\Title\Utils::get_separator_list();
 
 		if ( \array_key_exists( $sep, $sep_list ) )
 			return (string) $sep;
@@ -1346,7 +1352,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $post_types ) ) return [];
 
-		foreach ( $this->get_forced_supported_post_types() as $forced )
+		foreach ( Post_Types::get_forced_supported_post_types() as $forced )
 			unset( $post_types[ $forced ] );
 
 		return $this->s_post_types( $post_types );
@@ -1384,7 +1390,7 @@ class Sanitize extends Admin_Pages {
 
 		if ( ! \is_array( $taxonomies ) ) return [];
 
-		foreach ( $this->get_forced_supported_taxonomies() as $forced )
+		foreach ( Taxonomies::get_forced_supported_taxonomies() as $forced )
 			unset( $taxonomies[ $forced ] );
 
 		return $this->s_taxonomies( $taxonomies );
@@ -2276,7 +2282,7 @@ class Sanitize extends Admin_Pages {
 
 		// TODO add filter for 5 * \MB_IN_BYTES; Facebook allows 8MB; Twitter 5MB (Q4 2022).
 		if ( $id && ( $width > 4096 || $height > 4096 || $filesize > 5 * \MB_IN_BYTES ) ) {
-			$new_image = $this->get_largest_acceptable_image_src( $id, 4096, 5 * \MB_IN_BYTES );
+			$new_image = Factory\Image\Utils::get_largest_image_src( $id, 4096, 5 * \MB_IN_BYTES );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 
 			if ( ! $url ) return $defaults;

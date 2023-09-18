@@ -105,6 +105,7 @@ final class Twitter {
 				],
 			];
 	}
+
 	/**
 	 * @since 4.3.0
 	 * @access protected
@@ -142,6 +143,7 @@ final class Twitter {
 				],
 			];
 	}
+
 	/**
 	 * @since 4.3.0
 	 * @access protected
@@ -179,6 +181,7 @@ final class Twitter {
 				],
 			];
 	}
+
 	/**
 	 * @since 4.3.0
 	 * @access protected
@@ -216,6 +219,7 @@ final class Twitter {
 				],
 			];
 	}
+
 	/**
 	 * @since 4.3.0
 	 * @access protected
@@ -223,11 +227,10 @@ final class Twitter {
 	 */
 	public static function generate_twitter_image() {
 
-		$tsf = \tsf();
+		// Only grab a single image. Twitter grabs the final (less favorable) image otherwise.
+		$image = current( Factory\Image::get_image_details( null, true ) );
 
-		// We always grab one image.
-		// However, !multi ensures we get the cached generator's first image.
-		foreach ( $tsf->get_image_details_from_cache( ! $tsf->get_option( 'multi_og_image' ) ) as $image ) {
+		if ( $image ) {
 			yield [
 				'attributes' => [
 					'name'    => 'twitter:image',
@@ -243,9 +246,6 @@ final class Twitter {
 					],
 				];
 			}
-
-			// Only grab a single image. Twitter grabs the final (less favorable) image otherwise.
-			break;
 		}
 	}
 }
