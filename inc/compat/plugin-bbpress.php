@@ -393,6 +393,8 @@ function _bbpress_filter_robots( $meta, $args ) {
 			$forum_id = \get_post_meta( Query::get_the_real_id(), '_bbp_forum_id', true );
 		}
 	} else {
+		// TODO add normalize_generation_args?
+
 		// Custom query, back-end or sitemap.
 		if ( empty( $args['pta'] ) && empty( $args['taxonomy'] ) ) {
 			switch ( \get_post_type( $args['id'] ) ) {

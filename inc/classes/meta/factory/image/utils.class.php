@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Meta\Factory\Title
- * @subpackage The_SEO_Framework\Meta\Title
+ * @package The_SEO_Framework\Classes\Front\Meta\Factory\Image
+ * @subpackage The_SEO_Framework\Meta\Image
  */
 
 namespace The_SEO_Framework\Meta\Factory\Image;
@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Meta\Factory\Image;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->title()->utils() instead.
+ * @internal Use tsf()->image()->utils() instead.
  */
 class Utils {
 
@@ -64,16 +64,27 @@ class Utils {
 	}
 
 	/**
-	 * Fetches image dimensions.
+	 * Fetches image alt tag.
 	 *
 	 * @since 4.3.0
 	 *
 	 * @param int $src_id The source ID of the image.
-	 * @return string The image alt tag
+	 * @return string The image alt tag.
 	 */
 	public static function get_image_alt_tag( $src_id ) {
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Fix `wp_get_attachment_image()` first.
-		return $src_id ? trim( strip_tags( \get_post_meta( $src_id, '_wp_attachment_image_alt', true ) ) ) : '';
+		return \get_post_meta( $src_id, '_wp_attachment_image_alt', true ) ?: '';
+	}
+
+	/**
+	 * Fetches image caption.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param int $src_id The source ID of the image.
+	 * @return string The image caption.
+	 */
+	public static function get_image_caption( $src_id ) {
+		return \wp_get_attachment_caption( $src_id ) ?: '';
 	}
 
 	/**
@@ -87,7 +98,7 @@ class Utils {
 	 */
 	public static function get_image_filesize( $src_id, $size ) {
 
-		$data = \wp_get_attachment_metadata( $src_id ) ?? [];
+		$data = \wp_get_attachment_metadata( $src_id ) ?: [];
 
 		return ( $data['sizes'][ $size ]['filesize'] ?? $data['filesize'] ?? 0 ) ?: 0;
 	}

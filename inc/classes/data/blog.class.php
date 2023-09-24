@@ -50,13 +50,16 @@ class Blog {
 	 * @return string $blogname The sanitized blogname.
 	 */
 	public static function get_public_blog_name() {
-		return memo()
-			?? memo( \tsf()->get_option( 'site_title' ) ?: static::get_filtered_blog_name() );
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				\tsf()->get_option( 'site_title' ) ?: static::get_filtered_blog_name()
+			);
 	}
 
 	/**
 	 * Fetches blogname (site title).
-	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
+	 * We use get_bloginfo( ..., 'display' ) because it applies filters.
 	 *
 	 * @since 4.3.0
 	 *
@@ -75,7 +78,7 @@ class Blog {
 
 	/**
 	 * Fetch blog description.
-	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
+	 * We use get_bloginfo( ..., 'display' ) because it applies filters.
 	 *
 	 * @since 4.3.0
 	 *
@@ -96,7 +99,21 @@ class Blog {
 	 *
 	 * @return string The home URL.
 	 */
-	public static function get_home_url() {
+	public static function get_front_page_url() {
 		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_home_url() );
+	}
+
+	/**
+	 * Returns the determined site language in IETF BCP 47 format.
+	 * WordPress's get_bloginfo( 'language' ) is slow; so, we memoize it here.
+	 * We do NOT use get_bloginfo( ..., 'display' ) since nothing in Core does.
+	 *
+	 * @since 4.3.0
+	 * @see https://www.w3.org/International/articles/language-tags/
+	 *
+	 * @return string $blogname The sanitized blogname.
+	 */
+	public static function get_language() {
+		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_bloginfo( 'language' ) );
 	}
 }

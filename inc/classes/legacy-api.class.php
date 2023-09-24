@@ -184,11 +184,13 @@ class Legacy_API extends Core {
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return array[] The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public function get_image_details( $args = null, $single = true, $context = 'social' ) {

@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Meta\Factory;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -26,21 +28,21 @@ namespace The_SEO_Framework\Meta\Generator;
  */
 
 /**
- * Holds structured data generators for meta tag output.
+ * Holds schema generators for meta tag output.
  *
  * @since 4.3.0
  * @access protected
  * @internal
  * @final Can't be extended.
  */
-final class Structured_Data {
+final class Schema {
 
 	/**
 	 * @since 4.3.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
-		[ __CLASS__, 'generate_structured_data' ],
+		[ __CLASS__, 'generate_schema_graph' ],
 	];
 
 	/**
@@ -48,10 +50,20 @@ final class Structured_Data {
 	 * @access protected
 	 * @generator
 	 */
-	public static function generate_structured_data() {
-		// TEMP for testing performance.
-		echo \tsf()->render_ld_json_scripts();
-		return;
-		yield;
+	public static function generate_schema_graph() {
+
+		$content = Factory\Schema::get_generated_graph_in_json();
+
+		if ( $content )
+			yield [
+				'attributes' => [
+					'type' => 'application/ld+json',
+				],
+				'tag'        => 'script',
+				'content'    => [
+					'content' => $content, // is escaped via json_encode.
+					'escape'  => false,
+				],
+			];
 	}
 }

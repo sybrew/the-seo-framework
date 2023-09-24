@@ -210,7 +210,7 @@ class URI {
 	public static function get_generated_canonical_url_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			$url = static::get_home_canonical_url();
+			$url = static::get_front_page_canonical_url();
 		} elseif ( Query::is_singular() ) {
 			$url = static::get_singular_canonical_url();
 		} elseif ( Query::is_archive() ) {
@@ -248,7 +248,7 @@ class URI {
 		} elseif ( $args['pta'] ) {
 			$url = static::get_bare_post_type_archive_canonical_url( $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-			$url = static::get_bare_home_canonical_url();
+			$url = static::get_bare_front_page_canonical_url();
 		} elseif ( $args['id'] ) {
 			$url = static::get_bare_singular_canonical_url( $args['id'] );
 		}
@@ -268,9 +268,9 @@ class URI {
 	 *
 	 * @return string The home canonical URL.
 	 */
-	public static function get_home_canonical_url() {
+	public static function get_front_page_canonical_url() {
 
-		$url = URI\Utils::slash_root_url( Data\Blog::get_home_url() );
+		$url = URI\Utils::slash_front_page_url( Data\Blog::get_front_page_url() );
 
 		if ( empty( $url ) ) return '';
 
@@ -289,9 +289,12 @@ class URI {
 	 *
 	 * @return string The home canonical URL.
 	 */
-	public static function get_bare_home_canonical_url() {
-		return URI\Utils::slash_root_url(
-			URI\Utils::set_preferred_url_scheme( Data\Blog::get_home_url() )
+	public static function get_bare_front_page_canonical_url() {
+		return umemo( __METHOD__ ) ?? umemo(
+			__METHOD__,
+			URI\Utils::slash_front_page_url(
+				URI\Utils::set_preferred_url_scheme( Data\Blog::get_front_page_url() )
+			)
 		);
 	}
 
@@ -389,7 +392,12 @@ class URI {
 	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
 	 * @return string The taxonomical canonical URL, if any.
 	 */
-	public static function get_bare_taxonomical_canonical_url( $term_id, $taxonomy = '' ) {
+	public static function get_bare_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
+
+		if ( empty( $term_id ) ) {
+			$term_id  = Query::get_the_real_id();
+			$taxonomy = Query::get_current_taxonomy();
+		}
 
 		$url = \get_term_link( $term_id, $taxonomy );
 
@@ -429,13 +437,13 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param string $post_type The post type archive's post type.
+	 * @param null|string $post_type The post type archive's post type.
 	 *                          Leave null to autodetermine query and allow pagination.
 	 * @return string The post type archive canonical URL, if any.
 	 */
-	public static function get_bare_post_type_archive_canonical_url( $post_type ) {
+	public static function get_bare_post_type_archive_canonical_url( $post_type = null ) {
 
-		$url = \get_post_type_archive_link( $post_type );
+		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
 
 		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
 	}
@@ -473,9 +481,9 @@ class URI {
 	 * @param int|null $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
 	 */
-	public static function get_bare_author_canonical_url( $id ) {
+	public static function get_bare_author_canonical_url( $id = null ) {
 
-		$url = \get_author_posts_url( $id );
+		$url = \get_author_posts_url( $id ?? Query::get_the_real_id() );
 
 		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
 	}
@@ -557,7 +565,7 @@ class URI {
 		if ( isset( $search_query ) )
 			return static::get_bare_search_canonical_url( $search_query );
 
-		$url = \get_search_link( \get_search_query( false ) );
+		$url = \get_search_link();
 
 		if ( empty( $url ) ) return '';
 
@@ -736,9 +744,9 @@ class URI {
 		if ( $extra_query )
 			$query .= "&$extra_query";
 
-		return \esc_url_raw(
+		return \sanitize_url(
 			URI\Utils::append_query_to_url(
-				static::get_bare_home_canonical_url(),
+				static::get_bare_front_page_canonical_url(),
 				$query
 			),
 			[ 'https', 'http' ]

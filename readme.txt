@@ -458,6 +458,14 @@ TODO _init_locale only on admin?
 
 TODO why is "autodescription_title_no_blogname" always checked on the homepage?
 
+TODO we deprecated Builders\Images, but have yet to write docs.
+
+TODO eradicate all static::$tsf-> calls by the end of this dev cycle.
+
+TODO eradicate get_defined_vars() or array unpacking where we can use func_get_args()
+	-> https://3v4l.org/TjjDK
+	-> https://3v4l.org/HYBT8
+
 // Lacking imports:
 ^<\?php([\w\W](?!use (\\The_SEO_Framework\\(Helper|Data|Meta)\\\{).*;))*?(^(.(?!\*|\/\/))*?\\The_SEO_Framework\\.*?::)(.(?!\/\/ Lacking import OK.))*$
  // Lacking import OK.
@@ -535,31 +543,104 @@ TODO These are better names for filters. Use these throughout and deprecate the 
 TODO test generate_shortlink_url() and URL pagination with multilingual plugins and other odd queries (wpforo et al.) and URL fragments (are there plugins that add these?).
 	-> find via wpdirectory.
 
+TODO use post_password_required()
+	-> However, this initially relies on $post->post_password -- with this set, we must assume the post isn't publicly available, thus create zero content.
+
+TODO make this 5.0?
+	-> Then shift the design refresh to 6.0, might as well.
+
+TODO rename "get_meta()" in robots to something more coherent, like get_cached_robots_meta_value()
+	-> Also, rename all functions to contain their data type in them, this is then consistent with all other Factory classes.
+		-> generate_meta() would become get_generated_robots_meta()
+
+TODO apply_filters_ref_array() should now be slower than apply_filters(), no?
+	-> This is because we have to generate an array first.
+		-> Test with 2, 3, 4, and 5 arguments.
+
+TODO if we add a new "enable Schema.org output" support button (because it's now always outputting something), we should enable it only if the user has any of the 3 toggles enabled.
+	* Or, for new users, always enabled it.
+
+TODO test fresh site.
+TODO test site without images (or where images are gone).
+
+TODO instead of .min.js and .min.js, do /min/x.js?
+	-> This only helps me; whom, well... is spending most time on the project.
+
+TODO can we bust the cache via a JS script if we detect an older version is being requested?
+	-> E.g., we flag "expected version" to each script. If it's a mismatch, bust it?
+
+TODO change folder builders/sitemap to
+	-> sitemap
+		-> optimized
+		-> core
+
+TODO deprecate the_seo_framework_fetched_description_excerpt.
+
+TODO add support for get_shortlink_url( $args )
+	-> Also add input field per post, so users can overwrite it on a per-post basis.
+		-> We could use this well for tsf.fyi.
+
+TODO test product structured data.
+	-> Also on product categories and product search.
+
+TODO test attachment pages' breadcrumb (and image data etc.).
+
+TODO Remove s_url_query(), exchange for sanitize_url()?
+
+TODO schema.org wbesite logo example doesn't reflect actual output...
+	-> Also, we can remove the ID requirement. See https://github.com/sybrew/the-seo-framework/issues/646
+
+TODO in transport, we have a mechanism to capture and cache the last term/post fetched.
+	-> This prevents expensive cleaning via WP.
+	-> Can we do this for the Data/Post and Data/Term objects?
+		-> We could use umemo( __CLASS__ . "+$post_id" )
+
 **Detailed log**
 
 **For everyone:**
 
 * **Added:**
-	* SEOPress metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
-	* On multisite, you can now inspect and edit user SEO metadata ("Authorial Info") for any users that have author capabilities on any (other) blog.
-		* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
+	* **Structured data:**
+		* The Schema.org structured data generator has been upgraded to output graphs instead of simple, separated scripts.
+			* The way we've implemented it is faster and robust than ever before, and it finally allows for rapid implementation for new types. This also means that we had to abandon all filters (see the developer notes far below).
+		* We reintroduced the connected social networks interface for Schema.org.
+			* We still do not believe this is helpful for ranking. However, there's little harm done in having it.
+		* Schema.org/WebSite is now added to every page.
+			* Schema.org/organization is added to this if the site represents an organization.
+			* Schema.org/person is added to this if the site represents a person.
+		* Schema.org/WebPage is now added to every page but 404. TODO confirm
+			* Schema.org/BreadcrumbList is added to this.
+			* Schema.org/Author is added to this if there's an author registered to the post. TODO confirm
+		* Scheam.org/BreadcrumbList has been rewritten and is now supported on all pages, not just singular posts.
+	* **Breadcrumbs:**
+		* Breadcrumb output is now supported. Since it appears they aren't coming anytime soon to the Block editor.
+			* You can use the shortcode, `[tsf_breadcrumbs separator=">"]`, which will output a breadcrumb of any kind using the separator ">".
+				* We're planning to convert it to a block once the API is stable enough.
+					* TODO isn't it already? It's quite simple, but we want to add options for the separator.
+	* **Multisite:**
+		* On multisite, you can now inspect and edit user SEO metadata ("Authorial Info") for any users that have author capabilities on any (other) blog.
+			* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
+	* **Migration:**
+		* SEOPress's metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
-	* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
+	* **Compatibility:**
+		* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
 	* The Homepage SEO Settings box's title no longer carries a warning; instead, we added a bigger, more noticable warning to every settings section when editing the homepage.
 		* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
 		* This also works around an issue where Gutenberg still doesn't understand HTML.
 		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
-	* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
-	* `article:modified_time` and `article:published_time` now listen to Open Graph settings, and will always try to output on single post types.
-	* No longer uses the blog tagline for the homepage, it's often too short anyway.
+	* **Metadata:**
+		* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
+		* `article:modified_time` and `article:published_time` now listen to Open Graph settings, and will always try to output on single post types.
+	* No longer uses the blog tagline for the homepage, it's often too short anyway. FIXME/TODO what does? Description?
 	* Paginated URLs are now regardless of using a custom canonical URL or indexation status.
 		* This helps search engines find URLs to all paginated pages, improving link discovery.
 	* The shortlink URL is now also outputted on the paginated homepage.
-		* TODO test this.
+	* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
 * **Improved:**
 	* **Performance:**
-		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696).
+		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696) (among others).
 		* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
 		* The main query is no longer performed by WordPress when loading the sitemap, removing 10 redundant database queries.
 			* Related Core ticket is [#51117](https://core.trac.wordpress.org/ticket/51117).
@@ -569,12 +650,12 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 			* Because of this, the sitemap generates up to 4% faster, even after we applied a URL sanitizer patch.
 				TODO retest versus feb1ab3 -- we're bound to \tsf()-> functionality yet.
 		* The Shortlink generator has been rewritten. It no longer generates the URL before it determines it could actually use it. It also uses a much more straightforward method to append the query parameters.
+		* The Image generator has been rewritten. It now only feeds data when an actual image is found; this reduces operation feedback in subroutines, improving performance significantly.
 		* The main object in the plugin has been largely emptied, and is over TODO methods lighter. Or, more importantly, TODO lines of code (including comments) smaller.
 			* Now, depending on the options you use and which page one visits, selectively, the required methods are loaded, reducing read times of the plugin files by about 70% (TODO confirm "boot").
 			* Now, the main object is rarely required internally, but most methods are called statically (directly). This reduces the function overhead [from 4% to 62%](https://3v4l.org/J00A0).
 				* Although, this may increase overhead by 17% due to [a quirk in PHP](https://twitter.com/SybreWaaijer/status/1703077875988009325). But, we combat this by creating as few methods as possible, at the cost of "readability" (this only affects developers not using a modern code editor).
 		* Generated image metadata are now cached per method using PHP 8's "Fiber" principle (I backported it conceptually to 7.4). This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata, and continue to make more metadata when there's demand.
-		* The image generator now only feeds data when an actual image is found; this reduces operation feedback in subroutines, improving performance significantly.
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
@@ -639,7 +720,7 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 
 * TODO: **Plugin database version is now at `4300`**
 * **Added:**
-	* Pooled objects:
+	* Pooled objects: TODO order alphabetically (also in code)
 		* We do not use pools internally (we call the query-methods directly) -- however, we **urge you to use the pool**. This is because it has a neat little feature: **Dynamic deprecation**. Whenever we choose to remove a method or property you used, your site won't crash when you update the plugin -- instead, you get a deprecation notice and a temporary fallback value.
 			* To learn more, check out methods `tsf()->query()` and trait `Static_Deprecator`. Since the method is brand new, nothing has been deprecated yet.
 	* Pool `tsf()->query()` is now available.
@@ -687,6 +768,11 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 	* Pool `tsf()->image()` is now available.
 		* All public Image-related methods have been moved to that pool. E.g., `tsf()->get_custom_field_image_details()` is now `tsf()->image()->get_custom_image_details()`.
 		* Internally known as `The_SEO_Framework\Meta\Factory\Image`.
+	* Pool `tsf()->schema()` is now available.
+		* Also contains a public property: `$entities`, a list of all supported entity class names.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Image`.
+	* Pool `tsf()->breadcrumbs()` is now available.
+		* Internally known as `The_SEO_Framework\Meta\Factory\Breadcrumbs`.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
@@ -714,6 +800,8 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* It is now `auto_description_html_method` (typo in "description").
 				* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
 			* Suboption filter `s_left_right_home` is now gone; use `s_left_right` instead.
+			* Index `knowledge_gplus`
+				* It's no longer supported since 2018; we kept it around because users could fill whatever URL in this field. But, it's time to say goodbye to this cruft.
 	* For option index `autodescription-updates-cache` (constant `THE_SEO_FRAMEWORK_SITE_CACHE`):
 		* It's now `autodescription-site-cache` and its contents will be migrated after updating.
 			* This option will now also be home to the Archive and Search Exclusion cache.
@@ -729,8 +817,9 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 	* **Added:**
 		* `The_SEO_Framework\Utils\normalize_generation_args()` is now available.
 		* `The_SEO_Framework\Utils\array_flatten_list()` is now available.
+		* `The_SEO_Framework\Utils\scrub_array()` is now available.
 		* `The_SEO_Framework\Utils\array_merge_recursive_distinct()` is now available.
-			* Fun fact: This is the only correct function of kind that exists, made bespoke by me for TSF.
+			* This is the only correct function of kind that exists, made bespoke by me for TSF.
 			* It's practically `array_merge()` for multidimensional arrays.
 	* **Changed:**
 		* `tsf()` and `the_seo_framework()` now return an uncached silencer when called to early (before `plugins_loaded`).
@@ -746,7 +835,11 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 			* **Methods added:**
 				* `detect_multilingual_plugins()`
 			* **Methods changed:**
-				* `query_supports_seo()`, removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
+				* TODO redo this list; just go by all functions within the object, ought to be easier retroactively...
+				* `query_supports_seo()`
+					1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
+					2. Added `is_customize_preview()` as unsupported.
+					3. Moved to `\The_SEO_Framework\Helper\Query`.
 				* `_init_sitemap()` is no longer called with `template_redirect`, but at `parse_request` at priority `15`. This prevents loading the main query.
 					* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed.
 					* This method is still marked as private, just wanted you document how a part prone to causing catastrophe changed.
@@ -761,7 +854,7 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `s_image_preview()` now falls back to `'large'` instead of `'standard'`.
 				* `s_left_right()` no longer falls back to option or default option, but a language-based default instead.
 				* `s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
-				* `get_title()`'s third parameter is now gone. Use `get_open_graph_title()` or `get_twitter_title()`` instead.
+				* `get_title()`'s third parameter is now gone. Use `get_open_graph_title()` or `get_twitter_title()` instead.
 			* **Methods deprecated:**
 				* `set_transient`, use WordPress's builtin namesake instead.
 				* `get_transient`, use WordPress's builtin namesake instead.
@@ -774,55 +867,55 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `is_month`, use WordPress's builtin namesake instead.
 				* `is_robots`, use WordPress's builtin namesake instead.
 				* `s_left_right_home()`, use `s_left_right()` instead. TODO we might move this.
-					* This method also no longer falls back to option or default option, but a language-based default instead.* `get_post_type_real_id`, use `tsf()->query()->get_post_type_real_id` instead.
-				* `get_admin_post_type`, use `tsf()->query()->get_admin_post_type` instead.
-				* `get_post_types_from_taxonomy`, use `tsf()->taxonomies()->get_post_types_from_taxonomy` instead.
-				* `get_the_real_id`, use `tsf()->query()->get_the_real_id` instead.
-				* `get_the_real_admin_id`, use `tsf()->query()->get_the_real_admin_id` instead.
-				* `get_the_front_page_id`, use `tsf()->query()->get_the_front_page_id` instead.
-				* `get_admin_term_id`, use `tsf()->query()->get_admin_term_id` instead.
-				* `get_current_taxonomy`, use `tsf()->query()->get_current_taxonomy` instead.
-				* `get_current_post_type`, use `tsf()->query()->get_current_post_type` instead.
-				* `is_attachment`, use `tsf()->query()->is_attachment` instead.
-				* `is_attachment_admin`, use `tsf()->query()->is_attachment_admin` instead.
-				* `is_singular_archive`, use `tsf()->query()->is_singular_archive` instead.
-				* `is_archive`, use `tsf()->query()->is_archive` instead.
-				* `is_archive_admin`, use `tsf()->query()->is_archive_admin` instead.
-				* `is_term_edit`, use `tsf()->query()->is_term_edit` instead.
-				* `is_post_edit`, use `tsf()->query()->is_post_edit` instead.
-				* `is_wp_lists_edit`, use `tsf()->query()->is_wp_lists_edit` instead.
-				* `is_profile_edit`, use `tsf()->query()->is_profile_edit` instead.
-				* `is_author`, use `tsf()->query()->is_author` instead.
-				* `is_home`, use `tsf()->query()->is_home` instead.
-				* `is_home_as_page`, use `tsf()->query()->is_home_as_page` instead.
-				* `is_category`, use `tsf()->query()->is_category` instead.
-				* `is_category_admin`, use `tsf()->query()->is_category_admin` instead.
-				* `is_real_front_page`, use `tsf()->query()->is_real_front_page` instead.
-				* `is_real_front_page_by_id`, use `tsf()->query()->is_real_front_page_by_id` instead.
-				* `is_page`, use `tsf()->query()->is_page` instead.
-				* `is_page_admin`, use `tsf()->query()->is_page_admin` instead.
-				* `is_preview`, use `tsf()->query()->is_preview` instead.
-				* `is_search`, use `tsf()->query()->is_search` instead.
-				* `is_single`, use `tsf()->query()->is_single` instead.
-				* `is_single_admin`, use `tsf()->query()->is_single_admin` instead.
-				* `is_singular`, use `tsf()->query()->is_singular` instead.
-				* `is_singular_admin`, use `tsf()->query()->is_singular_admin` instead.
-				* `is_static_frontpage`, use `tsf()->query()->is_static_frontpage` instead.
-				* `is_tag`, use `tsf()->query()->is_tag` instead.
-				* `is_tag_admin`, use `tsf()->query()->is_tag_admin` instead.
-				* `is_tax`, use `tsf()->query()->is_tax` instead.
-				* `is_shop`, use `tsf()->query()->is_shop` instead.
-				* `is_product`, use `tsf()->query()->is_product` instead.
-				* `is_product_admin`, use `tsf()->query()->is_product_admin` instead.
-				* `is_year`, use `tsf()->query()->is_year` instead.
-				* `is_ssl`, use `tsf()->query()->is_ssl` instead.
-				* `is_seo_settings_page`, use `tsf()->query()->is_seo_settings_page` instead.
-				* `is_menu_page`, use `tsf()->query()->is_menu_page` instead.
-				* `page`, use `tsf()->query()->page` instead.
-				* `paged`, use `tsf()->query()->paged` instead.
-				* `numpages`, use `tsf()->query()->numpages` instead.
-				* `is_multipage`, use `tsf()->query()->is_multipage` instead.
-				* `is_sitemap`, use `tsf()->query()->is_sitemap` instead.
+					* This method also no longer falls back to option or default option, but a language-based default instead.* `get_post_type_real_id`, use `tsf()->query()->get_post_type_real_id()` instead
+				* `get_admin_post_type`, use `tsf()->query()->get_admin_post_type()` instead
+				* `get_post_types_from_taxonomy`, use `tsf()->taxonomies()->get_post_types_from_taxonomy()` instead
+				* `get_the_real_id`, use `tsf()->query()->get_the_real_id()` instead
+				* `get_the_real_admin_id`, use `tsf()->query()->get_the_real_admin_id()` instead
+				* `get_the_front_page_id`, use `tsf()->query()->get_the_front_page_id()` instead
+				* `get_admin_term_id`, use `tsf()->query()->get_admin_term_id()` instead
+				* `get_current_taxonomy`, use `tsf()->query()->get_current_taxonomy()` instead
+				* `get_current_post_type`, use `tsf()->query()->get_current_post_type()` instead
+				* `is_attachment`, use `tsf()->query()->is_attachment()` instead
+				* `is_attachment_admin`, use `tsf()->query()->is_attachment_admin()` instead
+				* `is_singular_archive`, use `tsf()->query()->is_singular_archive()` instead
+				* `is_archive`, use `tsf()->query()->is_archive()` instead
+				* `is_archive_admin`, use `tsf()->query()->is_archive_admin()` instead
+				* `is_term_edit`, use `tsf()->query()->is_term_edit()` instead
+				* `is_post_edit`, use `tsf()->query()->is_post_edit()` instead
+				* `is_wp_lists_edit`, use `tsf()->query()->is_wp_lists_edit()` instead
+				* `is_profile_edit`, use `tsf()->query()->is_profile_edit()` instead
+				* `is_author`, use `tsf()->query()->is_author()` instead
+				* `is_home`, use `tsf()->query()->is_blog()` instead
+				* `is_home_as_page`, use `tsf()->query()->is_blog_as_page()` instead
+				* `is_category`, use `tsf()->query()->is_category()` instead
+				* `is_category_admin`, use `tsf()->query()->is_category_admin()` instead
+				* `is_real_front_page`, use `tsf()->query()->is_real_front_page()` instead
+				* `is_real_front_page_by_id`, use `tsf()->query()->is_real_front_page_by_id()` instead
+				* `is_page`, use `tsf()->query()->is_page()` instead
+				* `is_page_admin`, use `tsf()->query()->is_page_admin()` instead
+				* `is_preview`, use `tsf()->query()->is_preview()` instead
+				* `is_search`, use `tsf()->query()->is_search()` instead
+				* `is_single`, use `tsf()->query()->is_single()` instead
+				* `is_single_admin`, use `tsf()->query()->is_single_admin()` instead
+				* `is_singular`, use `tsf()->query()->is_singular()` instead
+				* `is_singular_admin`, use `tsf()->query()->is_singular_admin()` instead
+				* `is_static_frontpage`, use `tsf()->query()->is_static_frontpage()` instead
+				* `is_tag`, use `tsf()->query()->is_tag()` instead
+				* `is_tag_admin`, use `tsf()->query()->is_tag_admin()` instead
+				* `is_tax`, use `tsf()->query()->is_tax()` instead
+				* `is_shop`, use `tsf()->query()->is_shop()` instead
+				* `is_product`, use `tsf()->query()->is_product()` instead
+				* `is_product_admin`, use `tsf()->query()->is_product_admin()` instead
+				* `is_year`, use `tsf()->query()->is_year()` instead
+				* `is_ssl`, use `tsf()->query()->is_ssl()` instead
+				* `is_seo_settings_page`, use `tsf()->query()->is_seo_settings_page()` instead
+				* `is_menu_page`, use `tsf()->query()->is_menu_page()` instead
+				* `page`, use `tsf()->query()->page()` instead
+				* `paged`, use `tsf()->query()->paged()` instead
+				* `numpages`, use `tsf()->query()->numpages()` instead
+				* `is_multipage`, use `tsf()->query()->is_multipage()` instead
+				* `is_sitemap`, use `tsf()->query()->is_sitemap()` instead
 				* `advanced_query_protection`, with no alternative available.
 				* `the_description`, with no alternative available.
 				* `robots`, with no alternative available.
@@ -860,7 +953,6 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `twitter_description`, with no alternative available.
 				* `twitter_image`, with no alternative available.
 				* `use_twitter_tags`, with no alternative available.
-				* `ld_json`, with no alternative available.
 				* `array_merge_recursive_distinct`, use function `\The_SEO_Framework\Utils\array_merge_recursive_distinct()` instead.
 				* `retrieve_robots_meta_assertions()`, use `tsf()->robots()->get_collected_meta_assertions()` instead.
 				* `get_robots_meta()`, use `tsf()->robots()->get_meta()` instead.
@@ -940,7 +1032,7 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `merge_title_pagination()`, use `tsf()->title()->add_pagination()` instead.
 				* `merge_title_protection()`, use `tsf()->title()->add_protection_status()` instead.
 				* `has_custom_canonical_url()`, use `tsf()->uri()->get_custom_canonical_url()` instead.
-				* `get_home_url()`, use `tsf->data()->blog()->get_home_url()` instead.
+				* `get_home_url()`, use `tsf->data()->blog()->get_front_page_url()` instead.
 				* `get_preferred_scheme()`, use `tsf->uri()->utils()->get_preferred_url_scheme()` instead.
 				* `set_preferred_url_scheme()`, use `tsf->uri()->utils()->set_preferred_url_scheme()` instead.
 				* `detect_site_url_scheme()`, use `uri()->utils()->detect_site_url_scheme()` instead.
@@ -948,10 +1040,10 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `make_fully_qualified_url()`, use `uri()->utils()->make_fully_qualified_url()` instead.
 				* `get_current_canonical_url()`, use `tsf()->uri()->get_canonical_url()` instead.
 				* `get_current_permalink()`, use `tsf()->uri()->get_generated_canonical_url()` instead.
-				* `get_homepage_permalink()`, use `tsf()->uri()->get_bare_home_canonical_url()` instead.
+				* `get_homepage_permalink()`, use `tsf()->uri()->get_bare_front_page_canonical_url()` instead.
 				* `create_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
-				* `get_home_canonical_url()`, use `tsf->uri()->get_home_canonical_url()` instead.
-				* `get_raw_home_canonical_url()`, use `tsf->uri()->get_bare_home_canonical_url()` instead.
+				* `get_home_canonical_url()`, use `tsf->uri()->get_front_page_canonical_url()` instead.
+				* `get_raw_home_canonical_url()`, use `tsf->uri()->get_bare_front_page_canonical_url()` instead.
 				* `get_singular_canonical_url()`, use `tsf()->uri()->get_singular_canonical_url()` instead.
 				* `get_taxonomical_canonical_url()`, use `tsf()->uri()->get_taxonomical_canonical_url()` instead.
 				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_post_type_archive_canonical_url()` instead.
@@ -987,6 +1079,24 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
 				* `get_image_generation_params()`, has nothing to offer for the public API.
+				* Since we rebuilt `\The_SEO_Framework\Generate_Ldjson` and reworked the settings, these are removed:
+					* `build_json_data`
+					* `receive_json_data`
+					* `render_ld_json_scripts`
+					* `get_ld_json_website`
+					* `get_ld_json_links`
+					* `get_knowledge_logo`
+					* `get_ld_json_breadcrumbs`
+					* `get_ld_json_breadcrumbs_page`
+					* `get_ld_json_breadcrumbs_post`
+					* `get_ld_json_breadcrumb_home_crumb`
+					* `get_ld_json_breadcrumb_current`
+					* `get_schema_url_id`
+					* `ld_json_breadcrumbs_use_seo_title`
+					* `enable_ld_json_breadcrumbs`
+					* `enable_ld_json_searchbox`
+					* `enable_ld_json_knowledge`
+					* `ld_json`
 				* Since we moved class `\The_SEO_Framework\Cache`'s functionality from this object, these are removed:
 					* `init_admin_caching_actions()`
 					* `init_post_cache_actions()`
@@ -1098,8 +1208,12 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 		* `the_seo_framework_meta_render_data`, this is used to **add, remove, and tweak generated metadata** before it's sent to the browser.
 		* `the_seo_framework_custom_image_details`, this is used to change image details from custom field.
 		* `the_seo_framework_generated_image_details`, this is used to change generated image details.
+		* `the_seo_framework_schema_entity_builders`, this is used to add and remove Schema.org builders.
+		* `the_seo_framework_schema_graph_data`, this is used to adjust the Schema.org output data.
+		* `the_seo_framework_breadcrumb_list`, this is used to adjust the Breadcrumbs generation.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
+		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
 	* **Deprecated:**
 		* `the_seo_framework_googlesite_output`, with no alternative available.
 		* `the_seo_framework_bingsite_output`, with no alternative available.
@@ -1133,14 +1247,29 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 		* `the_seo_framework_robots_meta`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_image_details`, use `the_seo_framework_custom_image_details` or `the_seo_framework_generated_image_details` instead.
 	* **Removed:**
-		* `the_seo_framework_auto_descripton_html_method_methods`.
+		* **Deprecated in 4.2.0, two years later, we've now removed these filters:**
+			* `the_seo_framework_pta_title`
+			* `the_seo_framework_the_archive_title`
+			* `the_seo_framework_generated_archive_title_prefix`
+			* `the_seo_framework_load_options`
+			* `the_seo_framework_pta_description`
+		* **Because we've rewritten the Structured Data API from the ground up, these were incompatible and thus removed:**
+			* `the_seo_framework_receive_json_data`, use `the_seo_framework_schema_graph_data` instead.
+			* `the_seo_framework_use_breadcrumb_seo_title`, use title settings instead.
+				* We may in the future add options to adjust the breadcrumb titles on a per-page/term basis.
+			* `the_seo_framework_knowledge_logo`, use `the_seo_framework_image_generation_params` instead.
+			* `the_seo_framework_ld_json_breadcrumb_taxonomies`, use `the_seo_framework_breadcrumb_list` instead.
+			* `the_seo_framework_ld_json_breadcrumb_terms`, use `the_seo_framework_breadcrumb_list` instead.
+			* `the_seo_framework_json_breadcrumb_output`, use `the_seo_framework_breadcrumb_list` instead.
+			* `the_seo_framework_json_search_output`, use `the_seo_framework_breadcrumb_list` instead.
+			* `the_seo_framework_json_knowledge_output`, use `the_seo_framework_schema_graph_data` instead.
+		* `the_seo_framework_auto_descripton_html_method_methods`
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").
 			* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
 		* `the_seo_framework_delete_cache_args`, there's no functionality left that could use this.
 		* `the_seo_framework_delete_cache_{$type}`:
 			* This includes `the_seo_framework_delete_cache_excluded_post_ids`, which is gone.
 			* This also includes `the_seo_framework_delete_cache_sitemap`, which is now marked as deprecated.
-		* `the_seo_framework_load_options`, was marked as deprecated.
 		* `the_seo_framework_warn_homepage_global_title`, we now use multilingual plugin detection.
 		* `the_seo_framework_warn_homepage_global_description`, we now use multilingual plugin detection.
 		* `the_seo_framework_tell_multilingual_sitemap`, we now use multilingual plugin detection.
@@ -1156,6 +1285,7 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 		* `the_seo_framework_delete_cache_sitemap`, use `the_seo_framework_cleared_sitemap_transients` instead.
 * **Hook notes:**
 	* Excluded IDs cache is now cleared on `wp_insert_post` and `attachment_updated`, from `save_post` and `edit_attachment` respectively.
+	* `[ \tsf(), 'html_output' ]` no longer runs on `wp_head`. Instead, `[ 'The_SEO_Framework\Front\Meta\Head', 'print_wrap_and_tags' ]` is now outputted -- remaining at priority `1`.
 * **JavaScript notes:**
 * **CSS notes:**
 	* `tsf-pt` no longer has inline RTL support, but instead supports RLT built in its file.
@@ -1165,6 +1295,7 @@ TODO test generate_shortlink_url() and URL pagination with multilingual plugins 
 	* Fixed typos in code. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* Refreshed `composer.json`. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* Improved needless defense clauses. Props [Viktor Szépe](https://github.com/szepeviktor).
+	* We now try to avoid the word "home" in our code due to its ambiguity in relation to the front page and the blog page. So, we use "front" for front-page related queries, titles, etc., and "blog" otherwise.
 
 = 4.2.8 =
 

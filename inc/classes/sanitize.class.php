@@ -433,7 +433,6 @@ class Sanitize extends Admin_Pages {
 			[
 				'knowledge_facebook',
 				'knowledge_twitter',
-				'knowledge_gplus',
 				'knowledge_instagram',
 				'knowledge_youtube',
 				'knowledge_pinterest',
@@ -1493,7 +1492,7 @@ class Sanitize extends Admin_Pages {
 			return \esc_url( $url, [ 'https', 'http' ] );
 
 		// Keep the &'s more readable when using query-parameters.
-		return \esc_url_raw( $url, [ 'https', 'http' ] );
+		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
 
 	/**
@@ -1564,7 +1563,7 @@ class Sanitize extends Admin_Pages {
 	 * @return string String a safe URL without Query Arguments.
 	 */
 	public function s_url( $url ) {
-		return \esc_url_raw(
+		return \sanitize_url(
 			/**
 			 * If queries have been tokenized, take the value before the query args.
 			 * Otherwise it's empty, so take the current value.
@@ -1578,13 +1577,13 @@ class Sanitize extends Admin_Pages {
 	 *
 	 * @since 2.2.8
 	 * @since 2.8.0 Method is now public.
-	 * @TODO rename to s_url_keep_query?
+	 * @TODO rename to s_url_keep_query? -> Or just use \sanitize_url() directly.
 	 *
 	 * @param string $url A possibly unsafe URL.
 	 * @return string String a safe URL with Query Arguments.
 	 */
 	public function s_url_query( $url ) {
-		return \esc_url_raw( $url );
+		return \sanitize_url( $url );
 	}
 
 	/**
@@ -2220,15 +2219,17 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.1.4 Fixed theoretical issue where a different image could be set when width
 	 *              and height are supplied and either over 4K, but no ID is given.
 	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
+	 * @since 4.3.0 Now sanitizes the caption.
 	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
 	 *
 	 * @param array $details The image details, either associative (see $defaults) or sequential.
-	 * @return array The image details array, sequential: int => {
+	 * @return array|array[] The image details array : {
 	 *    string url:      The image URL,
 	 *    int    id:       The image ID,
 	 *    int    width:    The image width in pixels,
 	 *    int    height:   The image height in pixels,
 	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
@@ -2244,10 +2245,11 @@ class Sanitize extends Admin_Pages {
 			'width'    => 0,
 			'height'   => 0,
 			'alt'      => '',
+			'caption'  => '',
 			'filesize' => 0,
 		];
 
-		[ $url, $id, $width, $height, $alt, $filesize ] = array_values( array_merge( $defaults, $details ) );
+		[ $url, $id, $width, $height, $alt, $caption, $filesize ] = array_values( array_merge( $defaults, $details ) );
 
 		if ( ! $url ) return $defaults;
 
@@ -2297,8 +2299,11 @@ class Sanitize extends Admin_Pages {
 			// Don't "ai"-trim if under, it's unlikely to always be a sentence.
 			$alt = \strlen( $alt ) > 420 ? clamp_sentence( $alt, 0, 420 ) : $alt;
 		}
+		if ( $caption ) {
+			$caption = \wp_strip_all_tags( $caption, true );
+		}
 
-		return compact( 'url', 'id', 'width', 'height', 'alt', 'filesize' );
+		return compact( 'url', 'id', 'width', 'height', 'alt', 'caption', 'filesize' );
 	}
 
 	/**
@@ -2308,12 +2313,13 @@ class Sanitize extends Admin_Pages {
 	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
 	 *
 	 * @param array $details_array The image details, preferably sequential.
-	 * @return array The image details array, sequential: int => {
+	 * @return array[] The image details array, sequential: int => {
 	 *    string url:      The image URL,
 	 *    int    id:       The image ID,
 	 *    int    width:    The image width in pixels,
 	 *    int    height:   The image height in pixels,
 	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */

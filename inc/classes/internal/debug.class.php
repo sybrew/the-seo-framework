@@ -489,8 +489,8 @@ final class Debug {
 		$is_feed                        = \is_feed();
 		$is_robots                      = \is_robots();
 		$is_real_front_page             = Query::is_real_front_page();
-		$is_home                        = Query::is_home();
-		$is_home_as_page                = Query::is_home_as_page();
+		$is_blog                        = Query::is_blog();
+		$is_blog_as_page                = Query::is_blog_as_page();
 		$is_page                        = Query::is_page();
 		$page                           = Query::page();
 		$paged                          = Query::paged();

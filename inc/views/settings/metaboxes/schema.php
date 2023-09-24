@@ -221,13 +221,6 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				'placeholder' => "https://twitter.com/$connectedi18n",
 				'examplelink' => 'https://twitter.com/home', // No example link available.
 			],
-			'gplus'      => [
-				'option'      => 'knowledge_gplus',
-				'dashicon'    => 'dashicons-googleplus',
-				'desc'        => _x( 'Google+ Profile&#8224;', 'Google+ is dead. &#8224; is a cross, indicating that.', 'autodescription' ),
-				'placeholder' => '',
-				'examplelink' => 'https://plus.google.com/me', // Left in, as Google redirects you to their deceased information page.
-			],
 			'instagram'  => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
@@ -276,57 +269,32 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			],
 		];
 
-		$output_social_presence = false;
+		?>
+		<hr>
+		<?php
+		HTML::header_title( __( 'Connected Social Pages', 'autodescription' ) );
+		HTML::description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
+		HTML::description( __( 'Leave the fields empty if the social pages are not publicly accessible.', 'autodescription' ) );
+		HTML::description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		foreach ( $socialsites as $sc ) {
-			if ( strlen( $this->get_option( $sc['option'] ) ) ) {
-				$output_social_presence = true;
-				break;
-			}
-		}
-
-		if ( $output_social_presence ) :
 			?>
-			<hr>
+			<p>
+				<label for="<?php Input::field_id( $sc['option'] ); ?>">
+					<strong><?= esc_html( $sc['desc'] ) ?></strong>
+					<?php
+					if ( $sc['examplelink'] ) {
+						HTML::make_info(
+							__( 'View your profile.', 'autodescription' ),
+							$sc['examplelink']
+						);
+					}
+					?>
+				</label>
+			</p>
+			<p>
+				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= esc_attr( $sc['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $sc['option'] ) ) ?>" autocomplete=off />
+			</p>
 			<?php
-			HTML::header_title( __( 'Connected Social Pages', 'autodescription' ) );
-			HTML::description( __( "Don't have a page at a site or is the profile only privately accessible? Leave that field empty. Unsure? Fill it in anyway.", 'autodescription' ) );
-			HTML::description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
-			HTML::description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
-			HTML::attention_description_noesc(
-				$this->convert_markdown(
-					sprintf(
-						/* translators: %s = Learn more URL. Markdown! */
-						esc_html__( 'These settings are marked for removal. When you clear a field, it will be hidden forever. [Learn more](%s).', 'autodescription' ),
-						'https://support.google.com/knowledgepanel/answer/7534842'
-					),
-					[ 'a' ],
-					[ 'a_internal' => false ]
-				)
-			);
-
-			foreach ( $socialsites as $sc ) {
-
-				if ( ! strlen( $this->get_option( $sc['option'] ) ) ) continue;
-
-				?>
-				<p>
-					<label for="<?php Input::field_id( $sc['option'] ); ?>">
-						<strong><?= esc_html( $sc['desc'] ) ?></strong>
-						<?php
-						if ( $sc['examplelink'] ) {
-							HTML::make_info(
-								__( 'View your profile.', 'autodescription' ),
-								$sc['examplelink']
-							);
-						}
-						?>
-					</label>
-				</p>
-				<p>
-					<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= esc_attr( $sc['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $sc['option'] ) ) ?>" autocomplete=off />
-				</p>
-				<?php
-			}
-		endif; /* end $output_social_presence */
+		}
 endswitch;

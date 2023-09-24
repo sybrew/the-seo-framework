@@ -415,16 +415,10 @@ class Open_Graph {
 	 */
 	public static function get_article_published_time() {
 
-		$tsf = \tsf();
+		if ( ! \tsf()->get_option( 'post_publish_time' ) || ! Query::is_single() )
+			return '';
 
-		if ( ! $tsf->get_option( 'post_publish_time' ) || ! Query::is_single() ) return;
-
-		$post_date_gmt = \get_post( Query::get_the_real_id() )
-			->post_date_gmt ?? '0000-00-00 00:00:00';
-
-		if ( '0000-00-00 00:00:00' === $post_date_gmt ) return;
-
-		return $tsf->gmt2date( $tsf->get_timestamp_format(), $post_date_gmt );
+		return Data\Post::get_post_published_time();
 	}
 
 	/**
@@ -436,16 +430,10 @@ class Open_Graph {
 	 */
 	public static function get_article_modified_time() {
 
-		$tsf = \tsf();
+		if ( ! \tsf()->get_option( 'post_modify_time' ) || ! Query::is_single() )
+			return '';
 
-		if ( ! $tsf->get_option( 'post_modify_time' ) || ! Query::is_single() ) return;
-
-		$post_modified_gmt = \get_post( Query::get_the_real_id() )
-			->post_modified_gmt ?? '0000-00-00 00:00:00';
-
-		if ( '0000-00-00 00:00:00' === $post_modified_gmt ) return;
-
-		return $tsf->gmt2date( $tsf->get_timestamp_format(), $post_modified_gmt );
+		return Data\Post::get_post_modified_time();
 	}
 
 	/**

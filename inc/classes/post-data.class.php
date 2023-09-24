@@ -773,10 +773,12 @@ class Post_Data extends Detect {
 	 *                2. This method now converts the post meta to an integer, making the comparison work again.
 	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
 	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
+	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
+	 *              2. Now returns `null` instead of `false` on failure.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
-	 * @return \WP_Term|false The primary term. False if not set.
+	 * @return \WP_Term|null The primary term. Null if cannot be generated.
 	 */
 	public function get_primary_term( $post_id, $taxonomy ) {
 
@@ -784,8 +786,6 @@ class Post_Data extends Detect {
 		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
 
 		$primary_id = (int) \get_post_meta( $post_id, "_primary_term_{$taxonomy}", true ) ?: 0;
-
-		if ( ! $primary_id ) return memo( false, $post_id, $taxonomy );
 
 		// Users can alter the term list via quick/bulk edit, but cannot set a primary term that way.
 		// Users can also delete a term from the site that was previously assigned as primary.
@@ -795,11 +795,19 @@ class Post_Data extends Detect {
 		$terms        = \get_the_terms( $post_id, $taxonomy );
 		$primary_term = false;
 
-		// Test for is_array in the unlikely event a post's taxonomy is gone ($terms = WP_Error)
-		if ( \is_array( $terms ) ) foreach ( $terms as $term ) {
-			if ( $primary_id === (int) $term->term_id ) {
-				$primary_term = $term;
-				break;
+		if ( $terms && \is_array( $terms ) ) {
+			if ( $primary_id ) {
+				// Test for is_array in the unlikely event a post's taxonomy is gone ($terms = WP_Error)
+				foreach ( $terms as $term ) {
+					if ( $primary_id === $term->term_id ) {
+						$primary_term = $term;
+						break;
+					}
+				}
+			} else {
+				$term_ids = array_column( $terms, 'term_id' );
+				asort( $term_ids );
+				$primary_term = $terms[ array_key_first( $term_ids ) ] ?? false;
 			}
 		}
 

@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Meta\Factory\Description;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\Utils\normalize_generation_args;
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\{
+	memo,
+	Utils\normalize_generation_args,
+};
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query;
@@ -74,12 +76,12 @@ final class Excerpt {
 
 		if ( Query::is_real_front_page() ) {
 			$excerpt = static::get_singular_excerpt();
-		} elseif ( Query::is_home_as_page() ) {
+		} elseif ( Query::is_blog_as_page() ) {
 			$excerpt = static::get_blog_page_excerpt();
 		} elseif ( Query::is_singular() ) {
 			$excerpt = static::get_singular_excerpt();
 		} elseif ( Query::is_archive() ) {
-			$excerpt = static::get_archival_excerpt();
+			$excerpt = static::get_archive_excerpt();
 		}
 
 		return memo( $excerpt ?? '' ?: '' );
@@ -98,11 +100,11 @@ final class Excerpt {
 	public static function get_excerpt_from_args( $args ) {
 
 		if ( $args['taxonomy'] ) {
-			$excerpt = static::get_archival_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
+			$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
 		} elseif ( $args['pta'] ) {
-			$excerpt = static::get_archival_excerpt( \get_post_type_object( $args['pta'] ) );
+			$excerpt = static::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
 		} else {
-			if ( Query::is_home_as_page( $args['id'] ) ) {
+			if ( Query::is_blog_as_page( $args['id'] ) ) {
 				$excerpt = static::get_blog_page_excerpt();
 			} else {
 				$excerpt = static::get_singular_excerpt( $args['id'] );
@@ -135,7 +137,7 @@ final class Excerpt {
 	 * @param null|\WP_Term|\WP_Post_Type $object The term or post type object.
 	 * @return string
 	 */
-	private static function get_archival_excerpt( $object = null ) {
+	private static function get_archive_excerpt( $object = null ) {
 
 		if ( \is_null( $object ) ) {
 			$in_the_loop = true;
@@ -152,6 +154,7 @@ final class Excerpt {
 		 * @see `\tsf()->s_excerpt_raw()` to strip HTML tags neatly.
 		 * @param string                 $excerpt The short circuit excerpt.
 		 * @param \WP_Term|\WP_Post_Type $object  The Term object or post type object.
+		 * @todo deprecate and move to main fetcher.
 		 */
 		$excerpt = (string) \apply_filters_ref_array(
 			'the_seo_framework_generated_archive_excerpt',
@@ -176,6 +179,7 @@ final class Excerpt {
 				 * @since 4.2.0 Now provides the post type object description, if assigned.
 				 * @param string $excerpt The archive description excerpt.
 				 * @param \WP_Term|\WP_Post_Type $object The post type object.
+				 * @todo deprecate and move to main fetcher.
 				 */
 				$excerpt = (string) \apply_filters_ref_array(
 					'the_seo_framework_pta_description_excerpt',
@@ -190,6 +194,7 @@ final class Excerpt {
 				 * @since 4.1.0 Added the $object object parameter.
 				 * @param string $excerpt The fallback archive description excerpt.
 				 * @param \WP_Term $object    The Term object.
+				 * @todo deprecate and move to main fetcher.
 				 */
 				$excerpt = (string) \apply_filters_ref_array(
 					'the_seo_framework_fallback_archive_description_excerpt',

@@ -500,7 +500,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 		];
 
 		$esc_sql_in = function ( $var ) {
-			if ( ! is_scalar( $var ) )
+			if ( ! \is_scalar( $var ) )
 				$var = array_filter( (array) $var, 'is_scalar' );
 			return \esc_sql( $var );
 		};

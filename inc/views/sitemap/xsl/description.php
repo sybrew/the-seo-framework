@@ -40,7 +40,7 @@ if ( $this->get_option( 'sitemap_logo' ) ) {
 
 printf(
 	'<a href="%s"><h1>%s%s</h1></a>',
-	esc_url( get_home_url(), [ 'https', 'http' ] ),
+	esc_url( Data\Blog::get_front_page_url(), [ 'https', 'http' ] ),
 	wp_kses(
 		$logo,
 		[

@@ -62,7 +62,7 @@ class User_Data extends Term_Data {
 	 */
 	public function get_current_post_author_meta_item( $item, $use_cache = true ) {
 
-		$id = $this->get_current_post_author_id();
+		$id = $this->get_post_author_id();
 
 		return $id
 			? $this->get_user_meta_item( $item, $id, $use_cache )
@@ -82,7 +82,7 @@ class User_Data extends Term_Data {
 	 */
 	public function get_current_post_author_meta() {
 
-		$id = $this->get_current_post_author_id();
+		$id = $this->get_post_author_id();
 
 		return $id ? $this->get_user_meta( $id ) : null;
 	}
@@ -340,28 +340,50 @@ class User_Data extends Term_Data {
 	}
 
 	/**
-	 * Returns the current post author ID.
+	 * Returns the post author ID.
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
 	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
 	 *              2. Now always returns an integer.
 	 *
+	 * @param int $post_id The post ID to fetch the author from. Leave 0 to autodetermine.
 	 * @return int Post author ID on success, 0 on failure.
 	 */
-	public function get_current_post_author_id() {
+	public function get_post_author_id( $post_id = 0 ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo( null, $post_id ) ) return $memo;
 
-		if ( Query::is_singular() ) {
-			$post      = \get_post( Query::get_the_real_id() );
+		if ( $post_id || Query::is_singular() ) {
+			$post = \get_post( $post_id ?: Query::get_the_real_id() );
+
 			$author_id = isset( $post->post_author ) && \post_type_supports( $post->post_type, 'author' )
 				? $post->post_author
 				: 0;
 		}
 
-		return memo( $author_id ?? 0 );
+		return memo( $author_id ?? 0, $post_id );
+	}
+
+	/**
+	 * Returns the current post author ID.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *              2. Now always returns an integer.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return int Post author ID on success, 0 on failure.
+	 */
+	public function get_current_post_author_id() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_id()', '4.3.0', 'tsf()->get_post_author_id()' );
+
+		return $tsf->get_post_author_id();
 	}
 
 	/**

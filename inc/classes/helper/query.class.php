@@ -309,7 +309,7 @@ class Query {
 				\apply_filters_ref_array(
 					'the_seo_framework_is_singular_archive',
 					[
-						static::is_home_as_page( $id ),
+						static::is_blog_as_page( $id ),
 						$id,
 					]
 				),
@@ -468,13 +468,13 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.2.0 Added the first parameter to allow custom query testing.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query and renamed to is_blog.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
 	 * @return bool
 	 */
-	public static function is_home( $post = null ) {
+	public static function is_blog( $post = null ) {
 
 		if ( isset( $post ) ) {
 			$id = \is_int( $post )
@@ -491,15 +491,15 @@ class Query {
 	 * Detects the non-front blog page.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query and renamed to is_blog_as_page.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
 	 * @return bool
 	 */
-	public static function is_home_as_page( $post = null ) {
+	public static function is_blog_as_page( $post = null ) {
 		// If front is a blog, the blog is never a page.
-		return Query\Utils::has_page_on_front() ? static::is_home( $post ) : false;
+		return Query\Utils::has_page_on_front() ? static::is_blog( $post ) : false;
 	}
 
 	/**
@@ -552,6 +552,10 @@ class Query {
 	/**
 	 * Detects front page.
 	 *
+	 * Adds support for custom "show_on_front" entries.
+	 * When the homepage isn't a 'page' (tested via `is_front_page()`) or 'posts',
+	 * it isn't considered a real front page -- it could be anything custom.
+	 *
 	 * @since 2.9.0
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
 	 *
@@ -563,15 +567,13 @@ class Query {
 		if ( null !== $cache = Query\Cache::memo() )
 			return $cache;
 
-		$is_front_page = \is_front_page();
-
-		if ( ! $is_front_page ) {
-			// Elegant Themes's Extra Support: Assert home, but only when it's not registered as such.
-			$is_front_page = static::is_home() && 0 === static::get_the_real_id()
-				&& ! \in_array( \get_option( 'show_on_front' ), [ 'page', 'post' ], true );
-		}
-
-		return Query\Cache::memo( $is_front_page );
+		// Elegant Themes's Extra Support: Assert home, but only when it's registered as such.
+		return Query\Cache::memo(
+			\is_front_page()
+				?: static::is_blog()
+					&& 0 === static::get_the_real_id()
+					&& 'posts' === \get_option( 'show_on_front' )
+		);
 	}
 
 	/**

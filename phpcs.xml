@@ -12,7 +12,7 @@
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
 			<!-- Can we drop these exceptions at 3.0, perhaps use keywords may then be supported? -->
-			<property name="userNoopChecks" type="array" value="_can_load,has_run,_bootstrap_timer,memo,umemo,fmemo,normalize_generation_args,array_flatten_list,array_merge_recursive_distinct,clamp_sentence,Load,Silencer"/>
+			<property name="userNoopChecks" type="array" value="_can_load,has_run,_bootstrap_timer,memo,umemo,fmemo,normalize_generation_args,array_flatten_list,scrub_array,array_merge_recursive_distinct,clamp_sentence,Load,Silencer"/>
 		</properties>
 	</rule>
 

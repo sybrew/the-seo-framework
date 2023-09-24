@@ -503,9 +503,9 @@ final class Deprecated {
 	public function is_home( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_home()', '4.3.0', 'tsf()->query()->is_home()' );
+		$tsf->_deprecated_function( 'tsf()->is_home()', '4.3.0', 'tsf()->query()->is_blog()' );
 
-		return $tsf->query()->is_home( $post );
+		return $tsf->query()->is_blog( $post );
 	}
 
 	/**
@@ -522,9 +522,9 @@ final class Deprecated {
 	public function is_home_as_page( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_home_as_page()', '4.3.0', 'tsf()->query()->is_home_as_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_home_as_page()', '4.3.0', 'tsf()->query()->is_blog_as_page()' );
 
-		return $tsf->query()->is_home_as_page( $post );
+		return $tsf->query()->is_blog_as_page( $post );
 	}
 
 	/**
@@ -2531,38 +2531,6 @@ final class Deprecated {
 	}
 
 	/**
-	 * Renders LD+JSON Schema.org scripts.
-	 *
-	 * @since 1.2.0
-	 * @since 3.1.0 No longer returns early on search, 404 or preview.
-	 * @since 4.3.0 Deprecated.
-	 * @deprecated
-	 *
-	 * @return string The LD+json Schema.org scripts.
-	 */
-	public function ld_json() {
-
-		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->ld_json()', '4.3.0' );
-
-		/**
-		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
-		 * @deprecated
-		 * @param string $json The JSON output. Must be escaped.
-		 * @param int    $id   The current page or term ID.
-		 */
-		return (string) \apply_filters_deprecated(
-			'the_seo_framework_ldjson_scripts',
-			[
-				$tsf->render_ld_json_scripts(),
-				$tsf->query()->get_the_real_id(),
-			],
-			'4.3.0 of The SEO Framework'
-		);
-	}
-
-	/**
 	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
 	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
 	 *
@@ -4332,9 +4300,9 @@ final class Deprecated {
 	public function get_home_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_url()', '4.3.0', 'tsf->data()->blog()->get_home_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_url()', '4.3.0', 'tsf->data()->blog()->get_front_page_url()' );
 
-		return $tsf->data()->blog()->get_home_url();
+		return $tsf->data()->blog()->get_front_page_url();
 	}
 
 	/**
@@ -4500,9 +4468,9 @@ final class Deprecated {
 	public function get_homepage_permalink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '4.3.0', 'tsf()->uri()->get_bare_home_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '4.3.0', 'tsf()->uri()->get_bare_front_page_canonical_url()' );
 
-		return $tsf->uri()->get_bare_home_canonical_url();
+		return $tsf->uri()->get_bare_front_page_canonical_url();
 	}
 
 	/**
@@ -4551,9 +4519,9 @@ final class Deprecated {
 	public function get_home_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '4.3.0', 'tsf->uri()->get_home_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '4.3.0', 'tsf->uri()->get_front_page_canonical_url()' );
 
-		return $tsf->uri()->get_home_canonical_url();
+		return $tsf->uri()->get_front_page_canonical_url();
 	}
 
 	/**
@@ -4569,9 +4537,9 @@ final class Deprecated {
 	public function get_raw_home_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '4.3.0', 'tsf->uri()->get_bare_home_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '4.3.0', 'tsf->uri()->get_bare_front_page_canonical_url()' );
 
-		return $tsf->uri()->get_bare_home_canonical_url();
+		return $tsf->uri()->get_bare_front_page_canonical_url();
 	}
 
 	/**
@@ -5007,6 +4975,8 @@ final class Deprecated {
 	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
 	 *              it'll always use just one image, we read this option so we'll only
 	 *              use a single cache instance internally with the generator.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return string The image URL.
 	 */
@@ -5031,7 +5001,8 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.1.2 Added a $single parameter, which helps reduce processing power required.
 	 *              This parameter might get deprecated when we start supporting PHP 7.1+ only.
-	 * TODO yield from and memoize deeper? Iterators calling this method currently do not affect the generators.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param bool $single Whether to return at most a single array item.
 	 * @return array[] The image details array, sequential: int => {
@@ -5055,6 +5026,8 @@ final class Deprecated {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -5082,6 +5055,8 @@ final class Deprecated {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -5111,6 +5086,8 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.2.4 1. Now returns filesizes under index `filesize`.
 	 *              2. No longer processes details when no `id` is given in `$details`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param array  $details The image details array, associative: {
 	 *    string url:    The image URL,
@@ -5141,6 +5118,8 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.2.4 1. No longer relies on `$url` to fetch the correct dimensions, improving performance significantly.
 	 *              2. Renamed `$url` to `$depr`, without a deprecation notice added.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int    $src_id The source ID of the image.
 	 * @param string $depr   Deprecated. Used to be the source URL of the image.
@@ -5162,6 +5141,8 @@ final class Deprecated {
 	 * Fetches image dimensions.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int $src_id The source ID of the image.
 	 * @return string The image alt tag
@@ -5178,6 +5159,8 @@ final class Deprecated {
 	 * Fetches image filesize in bytes. Requires an image (re)generated in WP 6.0 or later.
 	 *
 	 * @since 4.2.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int    $src_id The source ID of the image.
 	 * @param string $size   The size of the image used.
@@ -5197,6 +5180,8 @@ final class Deprecated {
 	 *
 	 * @since 4.0.2
 	 * @since 4.2.4 Added parameter `$max_filesize` that filters images larger than it.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int $id           The image ID.
 	 * @param int $max_size     The largest acceptable dimension in pixels. Accounts for both width and height.

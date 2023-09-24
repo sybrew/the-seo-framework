@@ -112,6 +112,7 @@ final class Sitemap_XSL {
 	public static function _print_xsl_description( $tsf ) {
 		$tsf->get_view( 'sitemap/xsl/description' );
 	}
+
 	/**
 	 * Prints XSL content.
 	 *

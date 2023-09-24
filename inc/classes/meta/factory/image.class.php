@@ -90,11 +90,13 @@ class Image {
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return array[] The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public static function get_image_details( $args = null, $single = false, $context = 'social' ) {
@@ -102,11 +104,13 @@ class Image {
 		 * @since 4.0.5
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param array      $details The image details array, sequential: int => {
-		 *    string url:    The image URL,
-		 *    int    id:     The image ID,
-		 *    int    width:  The image width in pixels,
-		 *    int    height: The image height in pixels,
-		 *    string alt:    The image alt tag,
+		 *    string url:      The image URL,
+		 *    int    id:       The image ID,
+		 *    int    width:    The image width in pixels,
+		 *    int    height:   The image height in pixels,
+		 *    string alt:      The image alt tag,
+		 *    string caption:  The image caption,
+		 *    int    filesize: The image filesize in bytes,
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 		 *                            Is null when the query is auto-determined.
@@ -142,22 +146,26 @@ class Image {
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public static function get_custom_image_details( $args = null, $single = false ) {
 		/**
 		 * @since 4.3.0
 		 * @param array      $details The image details array, sequential: int => {
-		 *    string url:    The image URL,
-		 *    int    id:     The image ID,
-		 *    int    width:  The image width in pixels,
-		 *    int    height: The image height in pixels,
-		 *    string alt:    The image alt tag,
+		 *    string url:      The image URL,
+		 *    int    id:       The image ID,
+		 *    int    width:    The image width in pixels,
+		 *    int    height:   The image height in pixels,
+		 *    string alt:      The image alt tag,
+		 *    string caption:  The image caption,
+		 *    int    filesize: The image filesize in bytes,
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 		 *                            Is null when the query is auto-determined.
@@ -186,23 +194,27 @@ class Image {
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
-	 * @return array The image details array, sequential: int => {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 * @return array[] The image details array, sequential: int => {
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public static function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
 		 * @since 4.3.0
 		 * @param array      $details The image details array, sequential: int => {
-		 *    string url:    The image URL,
-		 *    int    id:     The image ID,
-		 *    int    width:  The image width in pixels,
-		 *    int    height: The image height in pixels,
-		 *    string alt:    The image alt tag,
+		 *    string url:      The image URL,
+		 *    int    id:       The image ID,
+		 *    int    width:    The image width in pixels,
+		 *    int    height:   The image height in pixels,
+		 *    string alt:      The image alt tag,
+		 *    string caption:  The image caption,
+		 *    int    filesize: The image filesize in bytes,
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 		 *                            Is null when the query is auto-determined.
@@ -232,11 +244,13 @@ class Image {
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public static function generate_image_details( $args = null, $context = 'social' ) {
@@ -260,11 +274,13 @@ class Image {
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @yield array The image details array {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public static function generate_custom_image_details( $args = null ) {
@@ -287,11 +303,13 @@ class Image {
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	public static function generate_generated_image_details( $args = null, $context = 'social' ) {
@@ -320,11 +338,13 @@ class Image {
 	 * @generator
 	 *
 	 * @yield array The image details array {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	private static function generate_custom_image_details_from_query() {
@@ -380,11 +400,13 @@ class Image {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 * @yield array The image details array {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
 	private static function generate_custom_image_details_from_args( $args ) {
@@ -434,7 +456,8 @@ class Image {
 	 * @since 4.0.0
 	 * @since 4.1.1 Now only the 'social' context will fetch images from the content.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Now expects an ID before testing whether an attachment is an image.
+	 * @since 4.3.0 1. Now expects an ID before testing whether an attachment is an image.
+	 *              2. Now supports 'organization' context.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                            Use null to autodetermine query.
@@ -454,43 +477,51 @@ class Image {
 
 		$generator = Image\Generator::class;
 
-		if ( null === $args ) {
-			if ( Query::is_attachment() ) {
-				$cbs = [
-					'attachment' => [ $generator, 'generate_attachment_image_details' ],
-				];
-			} elseif ( Query::is_singular() ) {
-				$cbs = [
-					'featured' => [ $generator, 'generate_featured_image_details' ],
-				];
-
-				if ( 'social' === $context )
-					$cbs['content'] = [ $generator, 'generate_content_image_details' ];
-			}
+		if ( 'organization' === $context ) {
+			$cbs = [
+				'structured_data_logo' => [ $generator, 'generate_structured_data_logo_image_details' ],
+				'logo'                 => [ $generator, 'generate_site_logo_image_details' ],
+				'icon'                 => [ $generator, 'generate_site_icon_image_details' ],
+			];
 		} else {
-			if ( ! $args['taxonomy'] && ! $args['pta'] ) {
-				if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
+			if ( null === $args ) {
+				if ( Query::is_attachment() ) {
 					$cbs = [
 						'attachment' => [ $generator, 'generate_attachment_image_details' ],
 					];
-				} else {
+				} elseif ( Query::is_singular() ) {
 					$cbs = [
 						'featured' => [ $generator, 'generate_featured_image_details' ],
 					];
-					if ( 'social' === $context ) {
+
+					if ( 'social' === $context )
 						$cbs['content'] = [ $generator, 'generate_content_image_details' ];
+				}
+			} else {
+				if ( ! $args['taxonomy'] && ! $args['pta'] ) {
+					if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
+						$cbs = [
+							'attachment' => [ $generator, 'generate_attachment_image_details' ],
+						];
+					} else {
+						$cbs = [
+							'featured' => [ $generator, 'generate_featured_image_details' ],
+						];
+						if ( 'social' === $context ) {
+							$cbs['content'] = [ $generator, 'generate_content_image_details' ];
+						}
 					}
 				}
 			}
-		}
 
-		if ( 'social' === $context )
-			$fallback = [
-				'settings' => [ $generator, 'generate_fallback_image_details' ],
-				'header'   => [ $generator, 'generate_theme_header_image_details' ],
-				'logo'     => [ $generator, 'generate_site_logo_image_details' ],
-				'icon'     => [ $generator, 'generate_site_icon_image_details' ],
-			];
+			if ( 'social' === $context )
+				$fallback = [
+					'settings' => [ $generator, 'generate_fallback_image_details' ],
+					'header'   => [ $generator, 'generate_theme_header_image_details' ],
+					'logo'     => [ $generator, 'generate_site_logo_image_details' ],
+					'icon'     => [ $generator, 'generate_site_icon_image_details' ],
+				];
+		}
 
 		/**
 		 * @since 4.0.0
@@ -539,6 +570,7 @@ class Image {
 	 *    int    width:    The image width in pixels,
 	 *    int    height:   The image height in pixels,
 	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
@@ -613,11 +645,12 @@ class Image {
 	 * }
 	 * @param string $size    The size of the image used.
 	 * @return array The image details array, associative: {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
-	 *    int    width:  The image width in pixels,
-	 *    int    height: The image height in pixels,
-	 *    string alt:    The image alt tag,
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
@@ -629,6 +662,7 @@ class Image {
 			// TODO PHP 8.1+ String unpacking in array, so we can directly add the above to it:
 			$details += [
 				'alt'      => Image\Utils::get_image_alt_tag( $details['id'] ),
+				'caption'  => Image\Utils::get_image_caption( $details['id'] ),
 				'filesize' => Image\Utils::get_image_filesize( $details['id'], $size ),
 			];
 		} else {
@@ -636,6 +670,7 @@ class Image {
 				'width'    => 0,
 				'height'   => 0,
 				'alt'      => '',
+				'caption'  => '',
 				'filesize' => 0,
 			];
 		}

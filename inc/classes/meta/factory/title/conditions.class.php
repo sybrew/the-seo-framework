@@ -8,11 +8,13 @@ namespace The_SEO_Framework\Meta\Factory\Title;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\Utils\normalize_generation_args;
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\{
+	memo,
+	Utils\normalize_generation_args,
+};
 
-use \The_SEO_Framework\Helper\Query;
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Meta\Factory;
 
 /**
  * The SEO Framework plugin

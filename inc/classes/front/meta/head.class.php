@@ -47,6 +47,8 @@ final class Head {
 	 */
 	public static function print_wrap_and_tags() {
 
+		if ( ! Query\Utils::query_supports_seo() ) return;
+
 		/**
 		 * @since 2.6.0
 		 */
@@ -62,7 +64,7 @@ final class Head {
 		 * Start the meta timer here. This also catches file inclusions,
 		 * which is also caught by the _bootstrap_timer().
 		 */
-		$init_start = hrtime( true );
+		$print_start = hrtime( true );
 
 		static::print_plugin_indicator( 'before' );
 
@@ -70,7 +72,7 @@ final class Head {
 
 		static::print_plugin_indicator(
 			'after',
-			( hrtime( true ) - $init_start ) / 1e9,
+			( hrtime( true ) - $print_start ) / 1e9,
 			$bootstrap_timer
 		);
 
@@ -98,7 +100,7 @@ final class Head {
 		// Limit processing and redundant tags on 404 and search.
 		switch ( true ) {
 			case \is_search():
-				$generator_pools = [ 'Robots', 'URI', 'Open_Graph', 'Theme_Color', 'Webmasters' ];
+				$generator_pools = [ 'Robots', 'URI', 'Open_Graph', 'Theme_Color', 'Webmasters', 'Schema' ];
 				break;
 			case \is_404():
 				$generator_pools = [ 'Robots', 'Theme_Color', 'Webmasters' ];
@@ -116,8 +118,8 @@ final class Head {
 					'Open_Graph',
 					'Facebook',
 					'Twitter',
-					'Structured_Data',
 					'Webmasters',
+					'Schema',
 				];
 		}
 
@@ -187,7 +189,7 @@ final class Head {
 
 		// Queue array_merge for improved performance.
 		foreach ( $generator_pools as $pool )
-			$generators_queue[] = ( '\The_SEO_Framework\Meta\Generator\\' . $pool )::GENERATORS;
+			$generators_queue[] = ( "\The_SEO_Framework\Meta\Generator\\$pool" )::GENERATORS;
 
 		/**
 		 * @since 4.3.0
@@ -199,7 +201,7 @@ final class Head {
 		$tag_generators = \apply_filters_ref_array(
 			'the_seo_framework_meta_generators',
 			[
-				$tag_generators = array_merge( ...$generators_queue ),
+				array_merge( ...$generators_queue ),
 				$generator_pools,
 			]
 		);
@@ -242,6 +244,7 @@ final class Head {
 	 * @since 4.0.0 Added boot timers.
 	 * @since 4.2.0 1. The annotation is translatable again (regressed in 4.0.0).
 	 *              2. Is now a protected function.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Front\Meta\Head.
 	 * @access private
 	 *
 	 * @param string $where                 Determines the position of the indicator.

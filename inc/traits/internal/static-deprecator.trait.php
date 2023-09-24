@@ -33,6 +33,7 @@ namespace The_SEO_Framework\Traits\Internal;
  * @access private
  * @see \The_SEO_Framework\Pool
  *
+ * @property class[] $subpool The class subpool store. Used in favor of memo() for a chain would become expensive.
  * @property string $colloquial_handle
  * @property array  $deprecated_methods : {
  *     @param string $name The method name => {
@@ -50,6 +51,12 @@ namespace The_SEO_Framework\Traits\Internal;
  * }
  */
 trait Static_Deprecator {
+
+	/**
+	 * @since 4.3.0
+	 * @var class[] The class subpool store. Used in favor of memo() for a chain would become expensive.
+	 */
+	private static $subpool = [];
 
 	/**
 	 * Handles unapproachable invoked properties.

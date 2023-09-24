@@ -79,7 +79,8 @@ class Robots {
 	 * @since 4.3.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
-	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
+	 *                            Leave null to autodetermine query.
+	 * @param array|null $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
 	 * }
 	 * @param int <bit>  $options The options level. {

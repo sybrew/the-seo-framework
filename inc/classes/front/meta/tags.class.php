@@ -37,9 +37,9 @@ final class Tags {
 	/**
 	 * @since 4.3.0
 	 * @var array[] The meta tags' render data defaults : {
-	 *    @param ?array  attributes A list of attributes by [ name => value ].
-	 *    @param ?string tag        The tag name. Defaults to 'meta' if left empty.
-	 *    @param ?string content    The tag's content. Leave null to not render content.
+	 *    @param ?array        attributes A list of attributes by [ name => value ].
+	 *    @param ?string       tag        The tag name. Defaults to 'meta' if left empty.
+	 *    @param ?string|array content    The tag's content. Leave null to not render content.
 	 * }
 	 */
 	private const DATA_DEFAULTS = [
@@ -57,10 +57,10 @@ final class Tags {
 	/**
 	 * @since 4.3.0
 	 * @var array[] The meta tags' render data : {
-	 *    @param ?array  attributes A list of attributes by [ name => value ].
-	 *    @param ?string tag        The tag name. Defaults to 'meta' if left empty.
-	 *    @param ?string content    The tag's content. Leave null to not render content.
-	 *    @param ?true   rendered   Private, whether the tag is rendered.
+	 *    @param ?array        attributes A list of attributes by [ name => value ].
+	 *    @param ?string       tag        The tag name. Defaults to 'meta' if left empty.
+	 *    @param ?string|array content    The tag's content. Leave null to not render content.
+	 *    @param ?true         rendered   Private, whether the tag is rendered.
 	 * }
 	 */
 	private static $tags_render_data = [];
@@ -142,12 +142,13 @@ final class Tags {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array   $attributes Associative array of tag names and tag values : {
-	 *    string $name => string $value
-	 * }
-	 * @param string  $tag        The element's tag-name.
-	 * @param ?string $content    The element's contents. If not null,
-	 *                            it will create a content-wrapping element.
+	 * @param array         $attributes Associative array of tag names and tag values : {
+	 *                          string $name => string $value
+	 *                      }
+	 * @param string        $tag        The element's tag-name.
+	 * @param ?string|array $content    The tag's content. Leave null to not render content.
+	 *                                  It will create a content-wrapping element when filled.
+	 *                                  When array, accepts keys 'content' and boolean 'escape'.
 	 */
 	public static function render(
 		$attributes = self::DATA_DEFAULTS['attributes'],
@@ -164,7 +165,7 @@ final class Tags {
 				case 'href':
 				case 'xlink:href':
 				case 'src':
-					$_secure_attr_value = \esc_url_raw( $value );
+					$_secure_attr_value = \sanitize_url( $value );
 					break;
 				default:
 					if (
@@ -183,6 +184,7 @@ final class Tags {
 						continue 2;
 					}
 
+					// This replaces more than necessary -- may we wish to exchange it.
 					$_secure_attr_value = \esc_attr( $value );
 			}
 
@@ -201,15 +203,19 @@ final class Tags {
 			);
 		}
 
-		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- render escapes.
+		// phpcs:disable, WordPress.Security.EscapeOutput -- already escaped.
 		if ( isset( $content ) ) {
 			vprintf(
 				'<%1$s%2$s>%3$s</%1$s>',
 				[
 					/** @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#syntax-tag-name> */
-					preg_replace( '/[^0-9a-zA-Z]+/', '', $tag ),
+					preg_replace( '/[^0-9a-zA-Z]+/', '', $tag ), // phpcs:ignore, WordPress.Security.EscapeOutput -- this escapes.
 					$attr,
-					\esc_html( $content ),
+					\is_array( $content )
+						? ( $content['escape'] ?? true )
+							? \esc_html( $content['content'] )
+							: $content['content']
+						: \esc_html( $content ),
 				]
 			);
 		} else {
@@ -220,6 +226,7 @@ final class Tags {
 				$attr
 			);
 		}
+		// phpcs:enable, WordPress.Security.EscapeOutput
 
 		echo "\n";
 	}

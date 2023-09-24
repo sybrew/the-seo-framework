@@ -307,7 +307,7 @@ class Init extends Pool {
 		\add_action( 'the_seo_framework_after_meta_output', [ $this, '_do_deprecated_output_hooks_after' ], 15 );
 
 		// Output meta tags.
-		\add_action( 'wp_head', [ $this, 'html_output' ], 1 );
+		\add_action( 'wp_head', [ Front\Meta\Head::class, 'print_wrap_and_tags' ], 1 );
 
 		if ( $this->get_option( 'alter_archive_query' ) )
 			$this->init_alter_archive_query();
@@ -570,11 +570,9 @@ class Init extends Pool {
 	 * @since 4.2.0 No longer sets timezone.
 	 * @since 4.2.7 No longer marked as private.
 	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
+	 * @todo deprecate.
 	 */
 	public function html_output() {
-
-		if ( Query::is_preview() || \is_customize_preview() || ! Query\Utils::query_supports_seo() ) return;
-
 		Front\Meta\Head::print_wrap_and_tags();
 	}
 
@@ -585,6 +583,7 @@ class Init extends Pool {
 	 * @since 4.2.0 1. Now invokes two actions before and after output.
 	 *              2. No longer rectifies timezones.
 	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_tags();
+	 * @todo deprecate.
 	 */
 	public function do_meta_output() {
 		Front\Meta\Head::print_tags();
@@ -605,7 +604,7 @@ class Init extends Pool {
 	 */
 	public function _init_custom_field_redirect() {
 
-		if ( Query::is_preview() || \is_customize_preview() || ! Query\Utils::query_supports_seo() ) return;
+		if ( ! Query\Utils::query_supports_seo() ) return;
 
 		$url = Meta\Factory\URI::get_redirect_url();
 
@@ -636,7 +635,7 @@ class Init extends Pool {
 		}
 
 		// All WP defined protocols are allowed.
-		$url = \esc_url_raw( $url );
+		$url = \sanitize_url( $url );
 
 		if ( empty( $url ) ) {
 			$this->_doing_it_wrong( __METHOD__, 'You need to supply an input URL.', '2.9.0' );

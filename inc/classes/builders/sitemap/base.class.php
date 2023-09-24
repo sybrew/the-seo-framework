@@ -429,7 +429,7 @@ class Base extends Main {
 			if ( $this->is_post_included_in_sitemap( 0 ) ) {
 				// Reset.
 				$_values        = [];
-				$_values['loc'] = Factory\URI::get_bare_home_canonical_url();
+				$_values['loc'] = Factory\URI::get_bare_front_page_canonical_url();
 
 				if ( $args['show_modified'] ) {
 					$latests_posts = \wp_get_recent_posts(
@@ -583,7 +583,7 @@ class Base extends Main {
 			}
 
 			// Test if URL is valid.
-			if ( ! \esc_url_raw( $url, [ 'https', 'http' ] ) ) continue;
+			if ( ! \sanitize_url( $url, [ 'https', 'http' ] ) ) continue;
 
 			// Reset.
 			$_values        = [];

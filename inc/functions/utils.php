@@ -55,7 +55,7 @@ function normalize_generation_args( &$args ) {
  * Deeply nested lists are merged as well. Won't dig associative arrays.
  *
  * E.g., this [ [ 'one' => 1 ], [ [ 'two' => 2 ], [ 'three' => [ 3, 4 ] ] ] ]
- * becomes    [ [ 'one' => 1 ], [ 'two', => 2 ], [ 'three' => [ 3, 4 ] ] ];
+ * becomes    [ [ 'one' => 1 ], [ 'two' => 2 ], [ 'three' => [ 3, 4 ] ] ];
  *
  * @link <https://3v4l.org/XBSFa>, test it here.
  *
@@ -83,6 +83,41 @@ function array_flatten_list( $array ) {
 	}
 
 	return $ret;
+}
+
+/**
+ * Scrubs multidimensional arrays into simple items when some conditions are met.
+ * 1. If the array value is empty, the index is removed.
+ * 2. If the array value is alone and of type list, it's converted to its value.
+ *
+ * Deeply nested lists are scrubbed as well.
+ *
+ * E.g., this [ [ 'a' => [ 1 ] ], [ [ 'b' => [ 2, 3 ] ], [ 'c' => [] ] ] ]
+ * becomes    [ [ 'a' => 1 ], [ 'b' => [ 2, 3 ] ] ];
+ *
+ * @link <https://3v4l.org/SDdal>, test it here.
+ *
+ * @since 4.3.0
+ *
+ * @param array $array The array to flatten. If input is not an array, it'll be casted.
+ * @return array The flattened array.
+ */
+function scrub_array( $array ) {
+
+	foreach ( $array as $key => &$item ) {
+		// Catch null and false, but keep 0 and '0'.
+		if ( empty( $item ) && 0 !== $item && '0' !== $item ) {
+			unset( $array[ $key ] );
+		} elseif ( \is_array( $item ) ) {
+			if ( isset( $item[0] ) && 1 === \count( $item ) ) {
+				$item = reset( $item );
+			} else {
+				$item = scrub_array( $item );
+			}
+		}
+	}
+
+	return $array;
 }
 
 /**

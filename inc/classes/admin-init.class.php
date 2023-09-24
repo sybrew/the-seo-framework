@@ -374,7 +374,7 @@ class Admin_Init extends Init {
 		$url = html_entity_decode( \menu_page_url( $page, false ) );
 
 		$target = \add_query_arg( array_filter( $query_args, 'strlen' ), $url );
-		$target = \esc_url_raw( $target, [ 'https', 'http' ] );
+		$target = \sanitize_url( $target, [ 'https', 'http' ] );
 
 		// Predict white screen:
 		$headers_sent = headers_sent();
@@ -440,7 +440,7 @@ class Admin_Init extends Init {
 
 		// We made this mistake ourselves. Let's test against it.
 		// We can't type $key to scalar, for PHP is dumb with that type.
-		if ( ! is_scalar( $key ) || ! \strlen( $key ) ) return;
+		if ( ! \is_scalar( $key ) || ! \strlen( $key ) ) return;
 
 		// Sanitize the key so that HTML, JS, and PHP can communicate easily via it.
 		$key = \sanitize_key( $key );

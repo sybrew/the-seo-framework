@@ -63,7 +63,8 @@ class Utils {
 	 *              (they're not supported as SEO-able queries).
 	 * @since 4.3.0 1. Removed detection for JSON(P) and XML type requests,
 	 *                 because these cannot be assumed as legitimate.
-	 *              2. Moved to \The_SEO_Framework\Helper\Query
+	 *              2. Added `\is_customize_preview()` as unsupported.
+	 *              3. Moved to `\The_SEO_Framework\Helper\Query`.
 	 *
 	 * @return bool
 	 */
@@ -76,6 +77,7 @@ class Utils {
 			case \is_feed():
 			case \wp_doing_ajax():
 			case \wp_doing_cron():
+			case \is_customize_preview():
 			case \defined( 'REST_REQUEST' ) && \REST_REQUEST:
 				$supported = false;
 				break;
@@ -241,7 +243,7 @@ class Utils {
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
 						// !Query::get_the_real_id() is already executed. Just test if home is a page.
-						if ( Query::is_home_as_page() )
+						if ( Query::is_blog_as_page() )
 							return memo( true );
 				}
 			}

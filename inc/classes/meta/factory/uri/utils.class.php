@@ -57,7 +57,7 @@ class Utils {
 	 * @return string The detected URl scheme, lowercase.
 	 */
 	public static function detect_site_url_scheme() {
-		return strtolower( static::get_parsed_home_url()['scheme'] ?? (
+		return strtolower( static::get_parsed_front_page_url()['scheme'] ?? (
 			Query::is_ssl() ? 'https' : 'http'
 		) );
 	}
@@ -76,7 +76,7 @@ class Utils {
 	 */
 	public static function get_site_host() {
 
-		$parsed_url = static::get_parsed_home_url();
+		$parsed_url = static::get_parsed_front_page_url();
 
 		$host = $parsed_url['host'] ?? '';
 
@@ -94,8 +94,8 @@ class Utils {
 	 *
 	 * @return string The home URL host.
 	 */
-	public static function get_parsed_home_url() {
-		return umemo( __METHOD__ ) ?? umemo( __METHOD__, parse_url( Data\Blog::get_home_url() ) );
+	public static function get_parsed_front_page_url() {
+		return umemo( __METHOD__ ) ?? umemo( __METHOD__, parse_url( Data\Blog::get_front_page_url() ) );
 	}
 
 	/**
@@ -107,12 +107,12 @@ class Utils {
 	 * @param string $url The root URL.
 	 * @return string The root URL plausibly with added slashes.
 	 */
-	public static function slash_root_url( $url ) {
+	public static function slash_front_page_url( $url ) {
 
 		$parsed = parse_url( $url );
 
 		// Don't slash the home URL if it's been modified by a (translation) plugin.
-		if ( ! isset( $parsed['query'] ) ) {
+		if ( empty( $parsed['query'] ) ) {
 			if ( isset( $parsed['path'] ) && '/' !== $parsed['path'] ) {
 				// Paginated URL or subdirectory.
 				$url = \user_trailingslashit( $url, 'home' );
@@ -182,23 +182,25 @@ class Utils {
 	 * @since 3.0.0 $use_filter now defaults to false.
 	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
 	 * @since 4.0.0 Removed the deprecated parameter.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\URI\Utils
+	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Factory\URI\Utils
+	 *              2. Removed support for $scheme type 'admin', 'login', 'login_post', and 'rpc'.
 	 *
 	 * @param string $url    Absolute url that includes a scheme.
-	 * @param string $scheme Optional. Scheme to give $url. Currently 'http', 'https', 'login', 'login_post', 'admin', or 'relative'.
+	 * @param string $scheme Optional. Scheme to give $url. Currently 'http', 'https', or 'relative'.
 	 * @return string url with chosen scheme.
 	 */
 	public static function set_url_scheme( $url, $scheme = null ) {
 
-		if ( empty( $scheme ) ) {
-			$scheme = Query::is_ssl() ? 'https' : 'http';
-		} elseif ( 'admin' === $scheme || 'login' === $scheme || 'login_post' === $scheme || 'rpc' === $scheme ) {
-			$scheme = Query::is_ssl() || \force_ssl_admin() ? 'https' : 'http';
-		} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
-			$scheme = Query::is_ssl() ? 'https' : 'http';
-		}
-
 		$url = static::make_fully_qualified_url( $url );
+
+		switch ( $scheme ) {
+			case 'https':
+			case 'http':
+			case 'relative':
+				break;
+			default:
+				$scheme = Query::is_ssl() ? 'https' : 'http';
+		}
 
 		if ( 'relative' === $scheme ) {
 			$url = ltrim( preg_replace( '/^\w+:\/\/[^\/]*/', '', $url ) );
@@ -258,8 +260,8 @@ class Utils {
 			   umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				static::set_url_scheme( \esc_url_raw(
-					Data\Blog::get_home_url(),
+				static::set_url_scheme( \sanitize_url(
+					Data\Blog::get_front_page_url(),
 					[ 'https', 'http' ]
 				) )
 			);
@@ -268,7 +270,7 @@ class Utils {
 		if ( 0 === stripos( $url, $home_domain ) )
 			return true;
 
-		$url = static::set_url_scheme( \esc_url_raw(
+		$url = static::set_url_scheme( \sanitize_url(
 			$url,
 			[ 'https', 'http' ]
 		) );

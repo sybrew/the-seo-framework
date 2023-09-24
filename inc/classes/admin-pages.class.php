@@ -40,7 +40,7 @@ use \The_SEO_Framework\Builders;
  *
  * @since 2.8.0
  */
-class Admin_Pages extends Generate_Ldjson {
+class Admin_Pages extends User_Data {
 
 	/**
 	 * @since 2.7.0

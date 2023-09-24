@@ -82,8 +82,6 @@ class Description {
 
 		/**
 		 * @since 2.9.0
-		 * @since 3.0.6 1. Duplicated from $this->generate_description() (deprecated)
-		 *              2. Removed all arguments but the 'id' argument.
 		 * @since 4.2.0 1. No longer gets supplied custom query arguments when in the loop.
 		 *              2. Now supports the `$args['pta']` index.
 		 * @param string     $desc The custom-field description.
@@ -150,7 +148,7 @@ class Description {
 		 * @param int        $page_id Deprecated.
 		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
 		 *                         Is null when the query is auto-determined.
-		 * @todo deprecate and shift input for new filter.
+		 * @todo deprecate and shift parameters.
 		 */
 		$excerpt = (string) \apply_filters_ref_array(
 			'the_seo_framework_fetched_description_excerpt',
@@ -211,17 +209,7 @@ class Description {
 		} elseif ( Query::is_editable_term() ) {
 			$desc = \tsf()->get_term_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
-			/**
-			 * @since 4.0.6
-			 * @since 4.2.0 Deprecated.
-			 * @deprecated Use options instead.
-			 * @param string $desc The post type archive description.
-			 */
-			$desc = (string) \apply_filters_deprecated(
-				'the_seo_framework_pta_description',
-				[ \tsf()->get_post_type_archive_meta_item( 'description' ) ?: '' ],
-				'4.2.0 of The SEO Framework'
-			);
+			$desc = \tsf()->get_post_type_archive_meta_item( 'description' );
 		}
 
 		return $desc ?? '' ?: '';

@@ -248,7 +248,6 @@ class Site_Options extends Sanitize {
 				// Knowledge sameas locations.
 				'knowledge_facebook'   => '', // Facebook Account
 				'knowledge_twitter'    => '', // Twitter Account
-				'knowledge_gplus'      => '', // Google Plus Account
 				'knowledge_instagram'  => '', // Instagram Account
 				'knowledge_youtube'    => '', // Youtube Account
 				'knowledge_linkedin'   => '', // Linkedin Account

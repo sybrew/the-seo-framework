@@ -102,36 +102,6 @@ class Post_Types {
 	}
 
 	/**
-	 * Detects if the current or inputted post type's archive is supported and not disabled.
-	 *
-	 * @since 4.2.8
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Post_Types
-	 * @uses `static::is_post_type_supported()`
-	 *
-	 * @param string $post_type Optional. The post type's archive to check.
-	 * @return bool
-	 */
-	public static function is_post_type_archive_supported( $post_type = '' ) {
-
-		$post_type = $post_type ?: Query::get_current_post_type();
-
-		/**
-		 * @since 4.2.8
-		 * @param bool   $supported           Whether the post type archive is supported.
-		 * @param string $post_type_evaluated The evaluated post type.
-		 */
-		return (bool) \apply_filters_ref_array(
-			'the_seo_framework_supported_post_type_archive',
-			[
-				$post_type
-					&& static::is_post_type_supported( $post_type )
-					&& \in_array( $post_type, static::get_public_post_type_archives(), true ),
-				$post_type,
-			]
-		);
-	}
-
-	/**
 	 * Checks (current) Post Type for having taxonomical archives.
 	 * Memoizes the return value for the input argument.
 	 *
@@ -173,6 +143,36 @@ class Post_Types {
 					[ static::class, 'is_post_type_archive_supported' ]
 				)
 			)
+		);
+	}
+
+	/**
+	 * Detects if the current or inputted post type's archive is supported and not disabled.
+	 *
+	 * @since 4.2.8
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Post_Types
+	 * @uses `static::is_post_type_supported()`
+	 *
+	 * @param string $post_type Optional. The post type's archive to check.
+	 * @return bool
+	 */
+	public static function is_post_type_archive_supported( $post_type = '' ) {
+
+		$post_type = $post_type ?: Query::get_current_post_type();
+
+		/**
+		 * @since 4.2.8
+		 * @param bool   $supported           Whether the post type archive is supported.
+		 * @param string $post_type_evaluated The evaluated post type.
+		 */
+		return (bool) \apply_filters_ref_array(
+			'the_seo_framework_supported_post_type_archive',
+			[
+				$post_type
+					&& static::is_post_type_supported( $post_type )
+					&& \in_array( $post_type, static::get_public_post_type_archives(), true ),
+				$post_type,
+			]
 		);
 	}
 

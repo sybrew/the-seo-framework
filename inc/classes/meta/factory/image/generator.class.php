@@ -287,4 +287,26 @@ final class Generator {
 				'id'  => $id,
 			];
 	}
+
+	/**
+	 * Generates logo for structured data.
+	 *
+	 * @since 4.3.0
+	 * @generator
+	 *
+	 * @yield array : {
+	 *    string url: The image URL location,
+	 *    int    id:  The image ID,
+	 * }
+	 */
+	public static function generate_structured_data_logo_image_details() {
+
+		$url = \tsf()->get_option( 'knowledge_logo_url' );
+
+		if ( $url )
+			yield [
+				'url' => $url,
+				'id'  => \tsf()->get_option( 'knowledge_logo_id' ) ?: 0,
+			];
+	}
 }

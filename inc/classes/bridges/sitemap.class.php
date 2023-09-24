@@ -218,7 +218,7 @@ final class Sitemap {
 		$host      = Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() );
 		$path_info = static::get_sitemap_base_path_info();
 
-		return \esc_url_raw(
+		return \sanitize_url(
 			$path_info['use_query_var']
 				? "$host{$path_info['path']}$id"
 				: "$host{$path_info['path']}{$list[ $id ]['endpoint']}"
@@ -667,7 +667,7 @@ final class Sitemap {
 		return \apply_filters(
 			'the_seo_framework_sitemap_base_path',
 			rtrim(
-				Factory\URI\Utils::get_parsed_home_url()['path'] ?? '',
+				Factory\URI\Utils::get_parsed_front_page_url()['path'] ?? '',
 				'/'
 			)
 		);

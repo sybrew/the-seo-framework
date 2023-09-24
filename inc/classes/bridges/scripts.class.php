@@ -173,7 +173,7 @@ final class Scripts {
 	 */
 	public static function decode_all_entities( $values ) {
 
-		if ( is_scalar( $values ) )
+		if ( \is_scalar( $values ) )
 			return static::decode_entities( $values );
 
 		foreach ( $values as &$v )
@@ -740,24 +740,11 @@ final class Scripts {
 			if ( ! Taxonomies::is_taxonomy_supported( $_t->name ) ) continue;
 
 			$singular_name   = Taxonomies::get_taxonomy_label( $_t->name );
-			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name ) ?: 0;
-
-			if ( ! $primary_term_id ) {
-				/**
-				 * This is essentially how the filter "post_link_category" gets its
-				 * primary term. However, this is without trying to support PHP 5.2.
-				 */
-				$terms = \get_the_terms( $id, $_t->name );
-				if ( $terms && ! \is_wp_error( $terms ) ) {
-					$term_ids = array_column( $terms, 'term_id' );
-					sort( $term_ids );
-					$primary_term_id = reset( $term_ids );
-				}
-			}
+			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name );
 
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,
-				'primary' => $primary_term_id,
+				'primary' => $primary_term_id, // if 0, it'll use hints from the interface.
 			] + (
 				$gutenberg ? [
 					'i18n' => [
