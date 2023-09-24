@@ -100,6 +100,7 @@ class Breadcrumbs {
 		} elseif ( Query::is_singular() ) {
 			return static::get_singular_breadcrumb_list();
 		} elseif ( Query::is_archive() ) {
+			// var_dump() make this akin to get_generated_canonical_url_from_query()?
 			return static::get_archive_breadcrumb_list();
 		} elseif ( Query::is_search() ) {
 			return static::get_search_breadcrumb_list();
@@ -108,7 +109,7 @@ class Breadcrumbs {
 		}
 
 		// Something went terribly wrong if we reach this.
-		return static::get_front_page_breadcrumb_list();
+		return [];
 	}
 
 	/**
@@ -125,19 +126,17 @@ class Breadcrumbs {
 	 */
 	private static function get_breadcrumb_list_from_args( $args ) {
 
+		// var_dump() make this akin to get_generated_canonical_url_from_args()?
 		if ( $args['taxonomy'] ) {
 			return static::get_archive_breadcrumb_list( \get_term( $args['id'], $args['taxonomy'] ) );
 		} elseif ( $args['pta'] ) {
 			return static::get_archive_breadcrumb_list( \get_post_type_object( $args['pta'] ) );
-		} else {
-			if ( Query::is_real_front_page_by_id( $args['id'] ) )
-				return static::get_front_page_breadcrumb_list();
-
-			return static::get_singular_breadcrumb_list( $args['id'] );
 		}
 
-		// Something went terribly wrong if we reach this.
-		return static::get_front_page_breadcrumb_list();
+		if ( Query::is_real_front_page_by_id( $args['id'] ) )
+			return static::get_front_page_breadcrumb_list();
+
+		return static::get_singular_breadcrumb_list( $args['id'] );
 	}
 
 	/**

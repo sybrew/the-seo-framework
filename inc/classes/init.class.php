@@ -303,9 +303,6 @@ class Init extends Pool {
 		// Prepares requisite robots headers to avoid low-quality content penalties.
 		$this->prepare_robots_headers();
 
-		\add_action( 'the_seo_framework_before_meta_output', [ $this, '_do_deprecated_output_hooks_before' ], 5 );
-		\add_action( 'the_seo_framework_after_meta_output', [ $this, '_do_deprecated_output_hooks_after' ], 15 );
-
 		// Output meta tags.
 		\add_action( 'wp_head', [ Front\Meta\Head::class, 'print_wrap_and_tags' ], 1 );
 
@@ -468,125 +465,6 @@ class Init extends Pool {
 				Query::get_the_real_id(),
 			]
 		);
-	}
-
-	/**
-	 * Outputs deprecated output hooks.
-	 *
-	 * @since 4.2.0
-	 * @access private
-	 * @TODO delete me. v5.0.0+
-	 */
-	public function _do_deprecated_output_hooks_before() {
-		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
-		/**
-		 * @since 2.6.0
-		 * @since 4.2.0 Deprecated.
-		 * @param string $before The content before the SEO output.
-		 */
-		echo \apply_filters_deprecated(
-			'the_seo_framework_pre',
-			[ '' ],
-			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_before_meta_output'
-		);
-
-		/**
-		 * @since 2.2.6
-		 * @since 4.2.0 Deprecated
-		 * @param array $functions {
-		 *    'callback' => string|array The function to call.
-		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
-		 * }
-		 */
-		$functions = (array) \apply_filters_deprecated(
-			'the_seo_framework_before_output',
-			[ [] ],
-			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_before_meta_output'
-		);
-
-		foreach ( $functions as $function ) {
-			if ( ! empty( $function['callback'] ) )
-				echo \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
-		}
-		// phpcs:enable, WordPress.Security.EscapeOutput
-	}
-
-	/**
-	 * Outputs deprecated output hooks.
-	 *
-	 * @since 4.2.0
-	 * @access private
-	 * @TODO delete me. v5.0.0+
-	 */
-	public function _do_deprecated_output_hooks_after() {
-		// phpcs:disable, WordPress.Security.EscapeOutput -- Everything we produce is escaped.
-		/**
-		 * @since 2.2.6
-		 * @since 4.2.0 Deprecated
-		 * @param array $functions {
-		 *    'callback' => string|array The function to call.
-		 *    'args'     => scalar|array Arguments. When array, each key is a new argument.
-		 * }
-		 */
-		$functions = (array) \apply_filters_deprecated(
-			'the_seo_framework_after_output',
-			[ [] ],
-			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_after_meta_output'
-		);
-
-		foreach ( $functions as $function ) {
-			if ( ! empty( $function['callback'] ) )
-				echo \call_user_func_array( $function['callback'], [ ( $function['args'] ?? null ) ] );
-		}
-
-		/**
-		 * @since 2.6.0
-		 * @since 4.2.0 Deprecated.
-		 * @param string $after The content after the SEO output.
-		 */
-		echo \apply_filters_deprecated(
-			'the_seo_framework_pro',
-			[ '' ],
-			'4.2.0 of The SEO Framework',
-			'Action the_seo_framework_after_meta_output'
-		);
-		// phpcs:enable, WordPress.Security.EscapeOutput
-	}
-
-	/**
-	 * Echos the header meta and scripts.
-	 *
-	 * @since 1.0.0
-	 * @since 2.8.0 Cache is busted on each new release.
-	 * @since 3.0.0 Now converts timezone if needed.
-	 * @since 3.1.0 1. Now no longer outputs anything on preview.
-	 *              2. Now no longer outputs anything on blocked post types.
-	 * @since 4.0.0 Now no longer outputs anything on Customizer.
-	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
-	 *              2. Now always sets timezone regardless of settings, because, again, bug.
-	 * @since 4.2.0 No longer sets timezone.
-	 * @since 4.2.7 No longer marked as private.
-	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
-	 * @todo deprecate.
-	 */
-	public function html_output() {
-		Front\Meta\Head::print_wrap_and_tags();
-	}
-
-	/**
-	 * Outputs all meta tags for the current query.
-	 *
-	 * @since 4.1.4
-	 * @since 4.2.0 1. Now invokes two actions before and after output.
-	 *              2. No longer rectifies timezones.
-	 * @since 4.3.0 Moved contents to \The_SEO_Framework\Front\Meta\Head::print_tags();
-	 * @todo deprecate.
-	 */
-	public function do_meta_output() {
-		Front\Meta\Head::print_tags();
 	}
 
 	/**

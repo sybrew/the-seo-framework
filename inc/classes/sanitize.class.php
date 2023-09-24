@@ -77,7 +77,7 @@ class Sanitize extends Admin_Pages {
 		) return memo( false );
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
-		if ( ! \current_user_can( $this->get_settings_capability() ) )
+		if ( ! \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) )
 			return memo( false );
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.

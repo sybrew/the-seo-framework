@@ -82,7 +82,10 @@ final class Load extends Site_Options {
 		}
 
 		// Register the capabilities early.
-		\add_filter( 'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, 'get_settings_capability' ] );
+		\add_filter(
+			'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			static fn() => \THE_SEO_FRAMEWORK_SETTINGS_CAP
+		);
 
 		// Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );

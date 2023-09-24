@@ -68,11 +68,6 @@ class Core {
 	final public function __set( $name, $value ) {
 
 		switch ( $name ) {
-			case 'load_options':
-				$this->_inaccessible_p_or_m( 'tsf()->load_options', 'since 4.2.0; use constant THE_SEO_FRAMEWORK_HEADLESS' );
-				$this->is_headless['settings'] = $value;
-				return;
-
 			case 'the_seo_framework_debug':
 				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
 				return false;
@@ -331,42 +326,6 @@ class Core {
 			return true;
 
 		return false;
-	}
-
-	/**
-	 * Returns the minimum role required to adjust settings.
-	 *
-	 * @since 3.0.0
-	 * @since 4.1.0 Now uses the constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` as a default return value.
-	 * @todo deprecate, use constant instead.
-	 *
-	 * @return string The minimum required capability for SEO Settings.
-	 */
-	public function get_settings_capability() {
-		/**
-		 * @since 2.6.0
-		 * @since 4.2.0 Deprecated. Define constant THE_SEO_FRAMEWORK_SETTINGS_CAP instead.
-		 * @deprecated
-		 * @param string $capability The user capability required to adjust settings.
-		 */
-		return (string) \apply_filters_deprecated(
-			'the_seo_framework_settings_capability',
-			[ \THE_SEO_FRAMEWORK_SETTINGS_CAP ],
-			'4.2.0 of The SEO Framework',
-			'constant THE_SEO_FRAMEWORK_SETTINGS_CAP'
-		);
-	}
-
-	/**
-	 * Determines if the current user can do settings.
-	 * Not cached as it's imposing security functionality.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool
-	 */
-	public function can_access_settings() {
-		return \current_user_can( $this->get_settings_capability() );
 	}
 
 	/**

@@ -17,7 +17,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 				<span>
 					<?php
 					esc_html_e( 'The SEO Settings can overwrite the fields below.', 'autodescription' );
-					if ( $this->can_access_settings() ) {
+					if ( current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP ) ) {
 						echo ' &mdash; ';
 						printf(
 							'<a href="%s" target=_blank>%s</a>',

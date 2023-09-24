@@ -5195,4 +5195,67 @@ final class Deprecated {
 
 		return $tsf->image()->utils()->get_largest_image_src( $id, $max_size, $max_filesize );
 	}
+
+	/**
+	 * Returns the minimum role required to adjust settings.
+	 *
+	 * @since 3.0.0
+	 * @since 4.1.0 Now uses the constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` as a default return value.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string The minimum required capability for SEO Settings.
+	 */
+	public function get_settings_capability() {
+		\tsf()->_deprecated_function( 'tsf()->get_settings_capability()', '4.3.0', 'constant THE_SEO_FRAMEWORK_SETTINGS_CAP' );
+		return \THE_SEO_FRAMEWORK_SETTINGS_CAP;
+	}
+
+	/**
+	 * Determines if the current user can do settings.
+	 * Not cached as it's imposing security functionality.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool
+	 */
+	public function can_access_settings() {
+		\tsf()->_deprecated_function( 'tsf()->can_access_settings()', '4.3.0', 'current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )' );
+		return \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP );
+	}
+
+	/**
+	 * Echos the header meta and scripts.
+	 *
+	 * @since 1.0.0
+	 * @since 2.8.0 Cache is busted on each new release.
+	 * @since 3.0.0 Now converts timezone if needed.
+	 * @since 3.1.0 1. Now no longer outputs anything on preview.
+	 *              2. Now no longer outputs anything on blocked post types.
+	 * @since 4.0.0 Now no longer outputs anything on Customizer.
+	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
+	 *              2. Now always sets timezone regardless of settings, because, again, bug.
+	 * @since 4.2.0 No longer sets timezone.
+	 * @since 4.2.7 No longer marked as private.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function html_output() {
+		\tsf()->_deprecated_function( 'tsf()->html_output()', '4.3.0' );
+		\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
+	}
+
+	/**
+	 * Outputs all meta tags for the current query.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.0 1. Now invokes two actions before and after output.
+	 *              2. No longer rectifies timezones.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function do_meta_output() {
+		\tsf()->_deprecated_function( 'tsf()->html_output()', '4.3.0' );
+		\The_SEO_Framework\Front\Meta\Head::print_tags();
+	}
 }

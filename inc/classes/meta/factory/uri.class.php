@@ -253,7 +253,7 @@ class URI {
 			$url = static::get_bare_singular_canonical_url( $args['id'] );
 		}
 
-		return $url ?? '';
+		return $url ?? '' ?: '';
 	}
 
 	/**

@@ -240,7 +240,7 @@ final class Scripts {
 					'data' => [
 						'nonces' => [
 							/**
-							 * Use $tsf->get_settings_capability() ?... might conflict with other nonces.
+							 * Use THE_SEO_FRAMEWORK_SETTINGS_CAP ?... might conflict with other nonces.
 							 */
 							// unused.
 							'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,

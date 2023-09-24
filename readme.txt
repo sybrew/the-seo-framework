@@ -512,8 +512,6 @@ TODO find new public function and filters via @since 4.3.0.*?...
 TODO find repeated tsf() calls in functions.
 TODO mark subroutine methods in Factory private?
 
-TODO remove the_seo_framework_pre\the_seo_framework_before_output\the_seo_framework_after_output\the_seo_framework_pro
-
 TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."
 	-> Tell that it should be the brand name?
 
@@ -595,6 +593,18 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 	-> Can we do this for the Data/Post and Data/Term objects?
 		-> We could use umemo( __CLASS__ . "+$post_id" )
 
+TODO we added `uid`. We may want to rename `taxonomy` to `tax`--making it easier to read.
+	-> normalize_generator_args() can swap the name.
+
+TODO Helper/query
+	-> Query?
+		-> cache
+		-> utils
+TODO Helper/Taxonomies
+	-> Helper/Taxonomy
+TODO Helper/Post_Types
+	-> Helper/PostType
+
 **Detailed log**
 
 **For everyone:**
@@ -622,6 +632,8 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 			* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
 	* **Migration:**
 		* SEOPress's metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
+	* **Third party support:**
+		* This plugin can now be updated via [GitHub PLugin Updater](https://git-updater.com/knowledge-base/general-usage/).
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* **Compatibility:**
@@ -1072,6 +1084,11 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 				* `get_image_alt_tag()`, use `tsf()->image()->utils()->get_image_alt_tag()` instead.
 				* `get_image_filesize()`, use `tsf()->image()->utils()->get_image_filesize()` instead.
 				* `get_largest_acceptable_image_src()`, use `tsf()->image()->utils()->get_largest_image_src()` instead.
+				* `get_settings_capability()`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
+				* `can_access_settings()`, use `current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )` instead.
+				* `html_output()` with no alternative available.
+				* `do_meta_output()` with no alternative available.
+				* TODO `get_current_post_author_id()`, use `tsf()->get_post_author_id()` instead. (this will move to Data or Query?)
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1247,13 +1264,18 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 		* `the_seo_framework_robots_meta`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_image_details`, use `the_seo_framework_custom_image_details` or `the_seo_framework_generated_image_details` instead.
 	* **Removed:**
-		* **Deprecated in 4.2.0, two years later, we've now removed these filters:**
+		* Deprecated in TSF v4.2.0, two years later, we've now removed these filters:
 			* `the_seo_framework_pta_title`
 			* `the_seo_framework_the_archive_title`
 			* `the_seo_framework_generated_archive_title_prefix`
 			* `the_seo_framework_load_options`
 			* `the_seo_framework_pta_description`
-		* **Because we've rewritten the Structured Data API from the ground up, these were incompatible and thus removed:**
+			* `the_seo_framework_pre`, use action `the_seo_framework_before_meta_output` instead.
+			* `the_seo_framework_pro`, use action `the_seo_framework_after_meta_output` instead.
+			* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta_output` instead.
+			* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta_output` instead.
+			* `the_seo_framework_settings_capability`, assign constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
+		* Because we've rewritten the Structured Data API from the ground up, these were incompatible and thus removed:
 			* `the_seo_framework_receive_json_data`, use `the_seo_framework_schema_graph_data` instead.
 			* `the_seo_framework_use_breadcrumb_seo_title`, use title settings instead.
 				* We may in the future add options to adjust the breadcrumb titles on a per-page/term basis.

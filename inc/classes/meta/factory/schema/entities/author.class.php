@@ -53,7 +53,7 @@ final class Author extends Reference {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
-	 *                         Also accepts 'author_id';
+	 *                         Also accepts 'uid', which is now.
 	 * @return int The author ID. 0 on failure.
 	 */
 	private static function get_author_id_from_args( $args ) {
@@ -61,8 +61,8 @@ final class Author extends Reference {
 		if ( null === $args ) {
 			$author_id = \tsf()->get_post_author_id();
 		} else {
-			if ( isset( $args['author_id'] ) ) {
-				$author_id = $args['author_id'];
+			if ( isset( $args['uid'] ) ) {
+				$author_id = $args['uid'];
 			} else {
 				normalize_generation_args( $args );
 
@@ -80,7 +80,7 @@ final class Author extends Reference {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
-	 *                         Also accepts 'author_id';
+	 *                         Also accepts 'uid';
 	 * @return string The entity ID for $args.
 	 */
 	public static function get_id( $args = null ) {
@@ -99,7 +99,7 @@ final class Author extends Reference {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
 	 *                         Leave null to autodetermine query.
-	 *                         Also accepts 'author_id';
+	 *                         Also accepts 'uid';
 	 * @return ?array $entity The Schema.org graph entity.
 	 */
 	public static function build( $args = null ) {
@@ -113,7 +113,7 @@ final class Author extends Reference {
 
 		$entity = [
 			'@type' => static::$type,
-			'@id'   => static::get_id( [ 'author_id' => $author_id ] ),
+			'@id'   => static::get_id( [ 'uid' => $author_id ] ),
 			'name'  => $user_data->display_name ?? '',
 			// Let's not; may invoke bad bots. Let's do this via sameas.
 			// 'url'   => Factory\URI::get_bare_author_canonical_url( $author_id ),

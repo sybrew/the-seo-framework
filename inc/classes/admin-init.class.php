@@ -458,7 +458,7 @@ class Admin_Init extends Init {
 			[
 				'screens'      => [],
 				'excl_screens' => [],
-				'capability'   => $this->get_settings_capability(),
+				'capability'   => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
 				'user'         => 0,
 				'count'        => 1,
 				'timeout'      => -1,

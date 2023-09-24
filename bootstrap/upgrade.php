@@ -600,7 +600,7 @@ function _add_upgrade_notice( $notice = '' ) {
 		],
 		[
 			'excl_screens' => [ 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes' ],
-			'capability'   => $tsf->get_settings_capability(),
+			'capability'   => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
 		]
 	);
 }

@@ -123,7 +123,7 @@ final class WebPage extends Reference {
 					$entity['datePublished'] = Data\Post::get_post_published_time( $args['id'] );
 					$entity['dateModified']  = Data\Post::get_post_modified_time( $args['id'] );
 					$entity['author']        = &Author::get_dynamic_ref( [
-						'author_id' => \tsf()->get_post_author_id( $args['id'] ),
+						'uid' => \tsf()->get_post_author_id( $args['id'] ),
 					] );
 				}
 			}

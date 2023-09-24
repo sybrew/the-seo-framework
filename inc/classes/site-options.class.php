@@ -547,7 +547,7 @@ class Site_Options extends Sanitize {
 	protected function check_options_reset() {
 
 		// Check if we're already dealing with the settings. Buggy cache might interfere, otherwise.
-		if ( ! Query::is_seo_settings_page( false ) || ! $this->can_access_settings() )
+		if ( ! Query::is_seo_settings_page( false ) || ! \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) )
 			return;
 
 		if ( $this->get_option( 'tsf-settings-reset', false ) ) {
