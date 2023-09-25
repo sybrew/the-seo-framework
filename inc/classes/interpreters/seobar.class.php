@@ -101,12 +101,12 @@ final class SEOBar {
 	 *
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
-	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
+	 *   string $tax       : Optional. If not set, this will interpret it as a post.
 	 *   string $pta       : Not implemented. Do not populate.
 	 *   string $post_type : Optional. If not set, this will be automatically filled.
 	 *                                 This parameter is ignored for taxonomies.
 	 *                                 This parameter will become obsolete once WP fixes its post cache.
-	 *                                 <https://core.trac.wordpress.org/ticket/50567>
+	 *                                 <https://core.trac.wordpress.org/ticket/50567> // var_dump() can we?
 	 * }
 	 * @return string The SEO Bar.
 	 */
@@ -114,17 +114,18 @@ final class SEOBar {
 
 		static::$query = $query + [
 			'id'        => 0,
-			'taxonomy'  => '',
+			'tax'       => $query['taxonomy'] ?? '',
+			'taxonomy'  => $query['tax'] ?? '', // Legacy fallback.
 			'pta'       => '',
 			'post_type' => '',
 		];
 
 		if ( ! static::$query['id'] ) return '';
 
-		if ( ! static::$query['taxonomy'] )
+		if ( ! static::$query['tax'] )
 			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
 
-		$builder = static::$query['taxonomy']
+		$builder = static::$query['tax']
 			? Builders\SEOBar\Term::get_instance()
 			: Builders\SEOBar\Page::get_instance();
 

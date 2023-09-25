@@ -605,6 +605,12 @@ TODO Helper/Taxonomies
 TODO Helper/Post_Types
 	-> Helper/PostType
 
+TODO we MUST add a new option for Schema.org
+	-> Shall we add subsequent toggles, for each type?
+		-> Shall we add more input fields for the user to tweak?
+			-> Shall we make a single overview, isntead of making it tabular?
+				-> And then, shall we make the URL input fields incremental, and collapse all stored URL fields that exist into them?
+
 **Detailed log**
 
 **For everyone:**

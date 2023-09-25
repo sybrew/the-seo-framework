@@ -2603,7 +2603,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
 	 * }
@@ -3469,7 +3469,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real description output.
@@ -3491,7 +3491,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The custom field description.
@@ -3519,7 +3519,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
@@ -3541,7 +3541,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Twitter description output.
@@ -3562,7 +3562,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Open Graph description output.
@@ -3603,7 +3603,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string The generated Open Graph Title.
@@ -3629,7 +3629,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string The generated Twitter Title.
@@ -3653,7 +3653,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when prefixes are allowed.
 	 */
@@ -3672,7 +3672,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
@@ -3696,7 +3696,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null  $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool|string $social Whether the title is meant for social display.
 	 *                            Also accepts string 'og' and 'twitter' for future proofing.
@@ -3782,8 +3782,8 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
 
 		return $tsf->title()->conditions()->use_title_branding( [
-			'id'       => $id ?: $tsf->query()->get_the_real_id(),
-			'taxonomy' => $tsf->query()->get_current_taxonomy(),
+			'id'  => $id ?: $tsf->query()->get_the_real_id(),
+			'tax' => $tsf->query()->get_current_taxonomy(),
 		] );
 	}
 
@@ -3880,7 +3880,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @param bool       $social Whether the title is meant for social display.
@@ -3906,7 +3906,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @param bool       $social Whether the title is meant for social display.
@@ -3930,7 +3930,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -3952,7 +3952,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -3976,7 +3976,7 @@ final class Deprecated {
 	 * @deprecated
 	 * @internal But, feel free to use it.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom field title, if it exists.
 	 */
@@ -3997,7 +3997,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated title.
 	 */
@@ -4208,7 +4208,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                          Leave null to autodetermine query.
 	 */
 	public function merge_title_branding( &$title, $args = null ) {
@@ -4249,7 +4249,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                          Leave null to autodetermine query.
 	 * @return void
 	 */
@@ -5029,7 +5029,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single Whether to fetch one image, or multiple. Unused, reserved.
 	 * @param bool       $clean  Whether to clean the image, like stripping duplicates and erroneous items.
@@ -5058,7 +5058,7 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.

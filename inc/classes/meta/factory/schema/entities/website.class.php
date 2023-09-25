@@ -54,7 +54,7 @@ final class WebSite extends Reference {
 	 * @since 4.3.0
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity. Null on failure.
 	 */
@@ -85,10 +85,12 @@ final class WebSite extends Reference {
 			];
 		}
 
-		if ( 'organization' === \tsf()->get_option( 'knowledge_type' ) ) {
-			$entity['publisher'] = &Organization::get_dynamic_ref();
-		} else {
-			$entity['publisher'] = &Person::get_dynamic_ref();
+		if ( \tsf()->get_option( 'knowledge_output' ) ) {
+			if ( 'organization' === \tsf()->get_option( 'knowledge_type' ) ) {
+				$entity['publisher'] = &Organization::get_dynamic_ref();
+			} else {
+				$entity['publisher'] = &Person::get_dynamic_ref();
+			}
 		}
 
 		return $entity;

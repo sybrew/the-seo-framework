@@ -45,7 +45,7 @@ final class Organization extends Reference {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity. Null on failure.
 	 */
@@ -58,6 +58,9 @@ final class Organization extends Reference {
 			'url'   => Factory\URI::get_bare_front_page_canonical_url(),
 		];
 
+		// TODO convert this to an incrementor, where the user is supplied more URL fields automatically.
+		// Set a max URL count to it.
+		// Punt this 'til we start making a generator spec.
 		foreach ( [
 			'knowledge_facebook',
 			'knowledge_twitter',
@@ -74,7 +77,9 @@ final class Organization extends Reference {
 				$entity['sameAs'][] = \sanitize_url( $option, [ 'https', 'http' ] );
 		}
 
-		$logo = current( Factory\Image::get_generated_image_details( $args, 'organization' ) );
+		$logo = \tsf()->get_option( 'knowledge_logo' )
+				? current( Factory\Image::get_image_details( [ 'id' => 0 ], true, 'organization' ) )
+				: [];
 
 		if ( $logo ) {
 			// If there isn't width/height, we can safely assume all other data is missing too.

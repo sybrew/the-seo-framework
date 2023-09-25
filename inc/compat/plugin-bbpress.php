@@ -42,7 +42,7 @@ use \The_SEO_Framework\Helper\Query,
  * @NOTE Do NOT call `bbp_title()` or apply filter `bbptitle` here, it'll cause an infinite loop.
  *
  * @param string     $title The title.
- * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
  *                          Is null when the query is auto-determined.
  * @return string The corrected bbPress title on bbPress pages.
  */
@@ -257,7 +257,7 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  * @access private
  *
  * @param string     $title The filter title.
- * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
  *                          Is null when the query is auto-determined.
  * @return string $title The bbPress title.
  */
@@ -290,7 +290,7 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  *
  * @param string     $excerpt The excerpt to use.
  * @param int        $page_id Deprecated.
- * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+ * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
  *                         Is null when the query is auto-determined.
  * @return string The excerpt.
  */
@@ -319,7 +319,7 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args 
  * @access private
  *
  * @param string     $desc The custom-field description.
- * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+ * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
  *                         Is null when the query is auto-determined.
  * @return string The custom description.
  */
@@ -377,7 +377,7 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
  *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
  *                         Is null when the query is auto-determined.
  * @return array
  */
@@ -396,7 +396,7 @@ function _bbpress_filter_robots( $meta, $args ) {
 		// TODO add normalize_generation_args?
 
 		// Custom query, back-end or sitemap.
-		if ( empty( $args['pta'] ) && empty( $args['taxonomy'] ) ) {
+		if ( empty( $args['pta'] ) && empty( $args['tax'] ) ) {
 			switch ( \get_post_type( $args['id'] ) ) {
 				case \bbp_get_forum_post_type():
 					$forum_id = $args['id'];
@@ -425,7 +425,7 @@ function _bbpress_filter_robots( $meta, $args ) {
  */
 function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
 
-	if ( $interpreter::$query['taxonomy'] ) return;
+	if ( $interpreter::$query['tax'] ) return;
 
 	$items = $interpreter::collect_seo_bar_items();
 

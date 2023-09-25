@@ -103,7 +103,7 @@ final class Head {
 				$generator_pools = [ 'Robots', 'URI', 'Open_Graph', 'Theme_Color', 'Webmasters', 'Schema' ];
 				break;
 			case \is_404():
-				$generator_pools = [ 'Robots', 'Theme_Color', 'Webmasters' ];
+				$generator_pools = [ 'Robots', 'Theme_Color', 'Webmasters', 'Schema' ];
 				break;
 			case Query\Utils::is_query_exploited():
 				// search and 404 cannot be exploited, hence they're tested earlier.

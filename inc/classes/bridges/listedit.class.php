@@ -335,8 +335,8 @@ final class ListEdit extends ListTable {
 		$tsf = \tsf();
 
 		$_generator_args = [
-			'id'       => $term_id,
-			'taxonomy' => $this->taxonomy,
+			'id'  => $term_id,
+			'tax' => $this->taxonomy,
 		];
 
 		$r_defaults = Factory\Robots::generate_meta(
@@ -395,7 +395,7 @@ final class ListEdit extends ListTable {
 		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 *    }
 		 * }
-		 * @param array $_generator_args The query data. Contains 'id' and 'taxonomy'.
+		 * @param array $_generator_args The query data. Contains 'id' and 'tax'.
 		 */
 		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $_generator_args ] );
 
@@ -408,11 +408,11 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		$term_prefix = Factory\Title\Conditions::use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['taxonomy'] ) )
+		$term_prefix = Factory\Title\Conditions::use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['tax'] ) )
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				Taxonomies::get_taxonomy_label( $_generator_args['taxonomy'] )
+				Taxonomies::get_taxonomy_label( $_generator_args['tax'] )
 			)
 			: '';
 

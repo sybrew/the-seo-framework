@@ -160,7 +160,7 @@ abstract class Main {
 
 		$included = ! isset( $excluded[ $post_id ] );
 
-		while ( $included ) :
+		while ( $included ) {
 			$_generator_args = [ 'id' => $post_id ];
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
@@ -178,7 +178,7 @@ abstract class Main {
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
 			$included = ! Factory\URI::get_redirect_url( $_generator_args );
 			break;
-		endwhile;
+		}
 
 		return $included;
 	}
@@ -216,10 +216,10 @@ abstract class Main {
 
 		// Yes, 90% of this code code isn't DRY. However, terms !== posts. terms == posts, though :).
 		// Really: <https://core.trac.wordpress.org/ticket/50568>
-		while ( $included ) :
+		while ( $included ) {
 			$_generator_args = [
-				'id'       => $term_id,
-				'taxonomy' => $taxonomy,
+				'id'  => $term_id,
+				'tax' => $taxonomy,
 			];
 
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
@@ -237,7 +237,7 @@ abstract class Main {
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
 			$included = ! Factory\URI::get_redirect_url( $_generator_args );
 			break;
-		endwhile;
+		}
 
 		return $included;
 	}

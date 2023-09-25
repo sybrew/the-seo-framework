@@ -87,7 +87,7 @@ function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore
  * @todo this may cause issues when the forum is on the homepage... Tell users to set the "additions".
  *
  * @param string     $title The filter title.
- * @param array|null $args  The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
  *                          Is null when the query is auto-determined.
  * @return string $title The wpForo title.
  */
@@ -115,7 +115,7 @@ function _wpforo_filter_pre_title( $title = '', $args = null ) {
  */
 function _assert_wpforo_page_seo_bar( $interpreter ) {
 
-	if ( $interpreter::$query['taxonomy'] ) return;
+	if ( $interpreter::$query['tax'] ) return;
 
 	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore, TSF.Performance.Opcodes -- is local.

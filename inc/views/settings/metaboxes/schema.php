@@ -12,7 +12,8 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Form,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta\Factory;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -168,7 +169,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			] ),
 		true );
 
-		$logo_placeholder = $this->get_knowledge_logo( false );
+		$logo_placeholder = Factory\Image::get_first_generated_image_url( [ 'id' => 0 ], 'organization' );
 		?>
 		<p>
 			<label for=knowledge_logo-url>
@@ -177,7 +178,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class=large-text type=url readonly data-readonly=1 name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'knowledge_logo_url' ) ) ?>" />
+			<input class=large-text type=url name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'knowledge_logo_url' ) ) ?>" />
 			<input type=hidden name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id=knowledge_logo-id value="<?= absint( $this->get_option( 'knowledge_logo_id' ) ) ?>" />
 		</p>
 		<p class=hide-if-no-tsf-js>

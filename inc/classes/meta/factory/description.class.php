@@ -48,7 +48,7 @@ class Description {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real description output.
@@ -66,7 +66,7 @@ class Description {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The custom field description.
@@ -85,7 +85,7 @@ class Description {
 		 * @since 4.2.0 1. No longer gets supplied custom query arguments when in the loop.
 		 *              2. Now supports the `$args['pta']` index.
 		 * @param string     $desc The custom-field description.
-		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
 		$desc = (string) \apply_filters_ref_array(
@@ -117,7 +117,7 @@ class Description {
 	 *       guidelines' 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
 	 *       This isn't truly helpful, since then search engines can truly fetch whatever with zero guidance.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
@@ -146,7 +146,7 @@ class Description {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
-		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 * @todo deprecate and shift parameters.
 		 */
@@ -173,7 +173,7 @@ class Description {
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $desc The generated description.
-		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
 		$desc = (string) \apply_filters_ref_array(
@@ -224,13 +224,13 @@ class Description {
 	 * @since 4.3.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved to \The_SEO_Framework\Meta\Factory\Description.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom description.
 	 */
 	public static function get_custom_description_from_args( $args ) {
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$desc = \tsf()->get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'description', $args['pta'] );
@@ -253,7 +253,7 @@ class Description {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool
 	 */
@@ -267,7 +267,7 @@ class Description {
 		 * @since 3.1.0 Now listens to option.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param bool       $autodescription Enable or disable the automated descriptions.
-		 * @param array|null $args            The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args            The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                                    Is null when the query is auto-determined.
 		 */
 		return (bool) \apply_filters_ref_array(

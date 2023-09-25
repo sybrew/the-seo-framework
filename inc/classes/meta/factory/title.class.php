@@ -51,7 +51,7 @@ class Title {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string The real title output.
@@ -70,7 +70,7 @@ class Title {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The unmodified title output.
 	 */
@@ -91,7 +91,7 @@ class Title {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @param bool       $social Whether the title is meant for social display.
@@ -128,7 +128,7 @@ class Title {
 	 * @since 4.3.0 1. Moved `s_title_raw()` to before the title merging, to be more in line with custom title merging.
 	 *              2. Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @param bool       $social Whether the title is meant for social display.
@@ -160,7 +160,7 @@ class Title {
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -175,7 +175,7 @@ class Title {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *
 		 * @param string     $title The title.
-		 * @param array|null $args  The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is auto-determined.
 		 */
 		return (string) \apply_filters_ref_array(
@@ -196,7 +196,7 @@ class Title {
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -212,7 +212,7 @@ class Title {
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $title The title.
-		 * @param array|null $args  The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is auto-determined.
 		 */
 		return (string) \apply_filters_ref_array(
@@ -234,7 +234,7 @@ class Title {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom field title, if it exists.
 	 */
@@ -284,14 +284,14 @@ class Title {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string The custom title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$title = \tsf()->get_term_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = \tsf()->get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
@@ -314,7 +314,7 @@ class Title {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated title.
 	 */
@@ -365,15 +365,15 @@ class Title {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array $args The query arguments. Required. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array $args The query arguments. Required. Accepts 'id', 'tax', and 'pta'.
 	 * @return string The generated title. Empty if query can't be replicated.
 	 */
 	public static function generate_title_from_args( $args ) {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
-			$title = static::get_archive_title( \get_term( $args['id'], $args['taxonomy'] ) );
+		if ( $args['tax'] ) {
+			$title = static::get_archive_title( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
 			$title = static::get_archive_title( \get_post_type_object( $args['pta'] ) );
 		} else {
@@ -759,7 +759,7 @@ class Title {
 	 * @since 4.3.0
 	 *
 	 * @param string     $title The title.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                          Leave null to autodetermine query.
 	 * @return string The title with branding.
 	 */
@@ -773,7 +773,7 @@ class Title {
 		} else {
 			normalize_generation_args( $args );
 
-			if ( ! $args['taxonomy'] && ! $args['pta'] && Query::is_real_front_page_by_id( $args['id'] ) ) {
+			if ( ! $args['tax'] && ! $args['pta'] && Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$addition    = static::get_addition_for_front_page();
 				$seplocation = static::get_addition_location_for_front_page();
 			}
@@ -828,7 +828,7 @@ class Title {
 	 * @since 4.3.0
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                          Leave null to autodetermine query.
 	 * @return string The title with possible protection status.
 	 */
@@ -840,7 +840,7 @@ class Title {
 		} else {
 			normalize_generation_args( $args );
 			$id  = $args['id'];
-			$add = ! $args['taxonomy'] && ! $args['pta'];
+			$add = ! $args['tax'] && ! $args['pta'];
 		}
 
 		if ( ! $add ) return $title;

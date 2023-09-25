@@ -72,7 +72,7 @@ final class Args extends Factory {
 		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) {
 			$qubit = null;
 
-			if ( $args['taxonomy'] ) {
+			if ( $args['tax'] ) {
 				$qubit = (int) $tsf->get_term_meta_item( $type, $args['id'] );
 			} elseif ( $args['id'] ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type", $args['id'] );
@@ -103,13 +103,13 @@ final class Args extends Factory {
 		globals:
 			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
 
-			if ( $args['taxonomy'] ) {
+			if ( $args['tax'] ) {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, $args['taxonomy'] );
+				yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, $args['tax'] );
 
 				// Store values from each post type bound to the taxonomy.
-				foreach ( Taxonomies::get_post_types_from_taxonomy( $args['taxonomy'] ) as $post_type )
+				foreach ( Taxonomies::get_post_types_from_taxonomy( $args['tax'] ) as $post_type )
 					$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
 				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
@@ -126,7 +126,7 @@ final class Args extends Factory {
 			}
 
 		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
-			if ( ! $args['taxonomy'] )
+			if ( ! $args['tax'] )
 				yield from static::assert_noindex_query_pass( 'protected' );
 		}
 
@@ -152,7 +152,7 @@ final class Args extends Factory {
 
 		switch ( $pass ) {
 			case '404':
-				yield '404' => ! static::$tsf->is_term_populated( $args['id'], $args['taxonomy'] );
+				yield '404' => ! static::$tsf->is_term_populated( $args['id'], $args['tax'] );
 				break;
 
 			case 'protected':

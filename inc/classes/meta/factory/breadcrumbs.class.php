@@ -51,7 +51,7 @@ class Breadcrumbs {
 	 * @since 4.3.0
 	 * @todo consider wp_force_plain_post_permalink()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
@@ -73,7 +73,7 @@ class Breadcrumbs {
 		 *    string url:  The breadcrumb URL.
 		 *    string name: The breadcrumb page title.
 		 * }
-		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
 		return (array) \apply_filters(
@@ -117,7 +117,7 @@ class Breadcrumbs {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
@@ -127,8 +127,8 @@ class Breadcrumbs {
 	private static function get_breadcrumb_list_from_args( $args ) {
 
 		// var_dump() make this akin to get_generated_canonical_url_from_args()?
-		if ( $args['taxonomy'] ) {
-			return static::get_archive_breadcrumb_list( \get_term( $args['id'], $args['taxonomy'] ) );
+		if ( $args['tax'] ) {
+			return static::get_archive_breadcrumb_list( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
 			return static::get_archive_breadcrumb_list( \get_post_type_object( $args['pta'] ) );
 		}
@@ -199,8 +199,8 @@ class Breadcrumbs {
 					$crumbs[] = [
 						'url'  => Factory\URI::get_bare_taxonomical_canonical_url( $ancestor_id, $taxonomy ),
 						'name' => Factory\Title::get_bare_title( [
-							'id'       => $ancestor_id,
-							'taxonomy' => $taxonomy,
+							'id'  => $ancestor_id,
+							'tax' => $taxonomy,
 						] ),
 					];
 				}
@@ -208,8 +208,8 @@ class Breadcrumbs {
 				$crumbs[] = [
 					'url'  => Factory\URI::get_bare_taxonomical_canonical_url( $primary_term_id, $taxonomy ),
 					'name' => Factory\Title::get_bare_title( [
-						'id'       => $primary_term_id,
-						'taxonomy' => $taxonomy,
+						'id'  => $primary_term_id,
+						'tax' => $taxonomy,
 					] ),
 				];
 			} elseif ( \get_post_type_object( $post_type )->has_archive ?? false ) {
@@ -260,8 +260,8 @@ class Breadcrumbs {
 					$crumbs[] = [
 						'url'  => Factory\URI::get_bare_taxonomical_canonical_url( $ancestor_id, $taxonomy ),
 						'name' => Factory\Title::get_bare_title( [
-							'id'       => $ancestor_id,
-							'taxonomy' => $taxonomy,
+							'id'  => $ancestor_id,
+							'tax' => $taxonomy,
 						] ),
 					];
 				}
@@ -304,8 +304,8 @@ class Breadcrumbs {
 				$crumbs[] = [
 					'url'  => Factory\URI::get_bare_taxonomical_canonical_url( $ancestor_id, $taxonomy ),
 					'name' => Factory\Title::get_bare_title( [
-						'id'       => $ancestor_id,
-						'taxonomy' => $taxonomy,
+						'id'  => $ancestor_id,
+						'tax' => $taxonomy,
 					] ),
 				];
 			}
@@ -313,8 +313,8 @@ class Breadcrumbs {
 			$crumbs[] = [
 				'url'  => Factory\URI::get_bare_taxonomical_canonical_url( $term_id, $taxonomy, ),
 				'name' => Factory\Title::get_bare_title( [
-					'id'       => $term_id,
-					'taxonomy' => $taxonomy,
+					'id'  => $term_id,
+					'tax' => $taxonomy,
 				] ),
 			];
 		} elseif ( $object instanceof \WP_Post_Type ) {
@@ -325,7 +325,7 @@ class Breadcrumbs {
 				] ),
 			];
 		} elseif ( $object instanceof \WP_User ) {
-			// TODO add, next to 'id', 'taxonomy', and 'pta' support, also 'user'
+			// TODO add, next to 'id', 'tax', and 'pta' support, also 'uid'
 			$crumbs[] = [
 				'url'  => Factory\URI::get_author_canonical_url( $object->id ),
 				'name' => Factory\Title::get_archive_title_from_object( $object ),

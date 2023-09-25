@@ -51,7 +51,7 @@ final class Generator {
 	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
@@ -78,7 +78,7 @@ final class Generator {
 	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
@@ -113,7 +113,7 @@ final class Generator {
 	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *       Combine query, instead of using WP API? Only do that for the first image, instead?
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @yield array : {
 	 *    string url: The image URL location,
@@ -129,7 +129,7 @@ final class Generator {
 				// $GLOBALS['pages'] isn't populated here -- let's not try pagination to conserve CPU usage.
 				$content = $tsf->get_post_content();
 			}
-		} elseif ( ! $args['taxonomy'] && ! $args['pta'] ) {
+		} elseif ( ! $args['tax'] && ! $args['pta'] ) {
 			$content = $tsf->get_post_content( $args['id'] );
 		}
 
@@ -204,7 +204,7 @@ final class Generator {
 	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
@@ -240,7 +240,7 @@ final class Generator {
 	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
@@ -268,7 +268,7 @@ final class Generator {
 	 * @since 4.3.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
 	 * @yield array : {
@@ -285,28 +285,6 @@ final class Generator {
 			yield [
 				'url' => $url,
 				'id'  => $id,
-			];
-	}
-
-	/**
-	 * Generates logo for structured data.
-	 *
-	 * @since 4.3.0
-	 * @generator
-	 *
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
-	 * }
-	 */
-	public static function generate_structured_data_logo_image_details() {
-
-		$url = \tsf()->get_option( 'knowledge_logo_url' );
-
-		if ( $url )
-			yield [
-				'url' => $url,
-				'id'  => \tsf()->get_option( 'knowledge_logo_id' ) ?: 0,
 			];
 	}
 }

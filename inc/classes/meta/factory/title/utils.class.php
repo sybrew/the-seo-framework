@@ -86,7 +86,7 @@ class Utils {
 	 * @internal Only to be used within Factory\Title::get_bare_unfiltered_generated_title()
 	 *
 	 * @param bool       $reset Whether to reset the removed filters.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                          Leave null to autodetermine query.
 	 */
 	public static function remove_default_title_filters( $reset = false, $args = null ) {
@@ -106,9 +106,9 @@ class Utils {
 			} else {
 				isset( $args ) and normalize_generation_args( $args );
 
-				if ( 'category' === $args['taxonomy'] ) {
+				if ( 'category' === $args['tax'] ) {
 					$filters = [ 'single_cat_title' ];
-				} elseif ( 'post_tag' === $args['taxonomy'] ) {
+				} elseif ( 'post_tag' === $args['tax'] ) {
 					$filters = [ 'single_tag_title' ];
 				} else {
 					$filters = [ 'single_post_title' ];

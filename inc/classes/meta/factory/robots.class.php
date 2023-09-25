@@ -78,7 +78,7 @@ class Robots {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param array|null $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
@@ -137,7 +137,7 @@ class Robots {
 		 *     'max_image_preview' : 'max-image-preview:<string>'|''
 		 *     'max_video_preview' : 'max-video-preview:<string>'|''
 		 * }
-		 * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 * @param int <bit>  $options The ignore level. {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)

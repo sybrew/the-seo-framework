@@ -61,7 +61,7 @@ final class WebPage extends Reference {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The ID.
 	 */
@@ -72,7 +72,7 @@ final class WebPage extends Reference {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity. Null on failure.
 	 */
@@ -88,7 +88,8 @@ final class WebPage extends Reference {
 			'isPartOf'    => WebSite::get_instant_ref(),
 		];
 
-		$entity['breadcrumb'] = &BreadcrumbList::get_dynamic_ref(); // TODO
+		if ( \tsf()->get_option( 'ld_json_breadcrumbs' ) )
+			$entity['breadcrumb'] = &BreadcrumbList::get_dynamic_ref();
 
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
@@ -104,19 +105,19 @@ final class WebPage extends Reference {
 				}
 			}
 
-			if ( Query::is_real_front_page() ) {
+			if ( Query::is_real_front_page() && \tsf()->get_option( 'knowledge_output' ) ) {
 				$entity['about'] = &Organization::get_dynamic_ref();
 			}
 		} else {
 			normalize_generation_args( $args );
 
-			if ( empty( $args['taxonomy'] ) && empty( $args['pta'] ) ) {
+			if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
 				$entity['potentialAction'] = [
 					'@type'  => 'ReadAction',
 					'target' => Factory\URI::get_canonical_url( $args ),
 				];
 
-				if ( Query::is_static_frontpage( $args['id'] ) )
+				if ( Query::is_static_frontpage( $args['id'] ) && \tsf()->get_option( 'knowledge_output' ) )
 					$entity['about'] = &Organization::get_dynamic_ref();
 
 				if ( Query::is_single( $args['id'] ) ) {

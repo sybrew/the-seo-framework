@@ -47,7 +47,7 @@ final class Conditions {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when prefixes are allowed.
 	 */
@@ -60,7 +60,7 @@ final class Conditions {
 		} else {
 			normalize_generation_args( $args );
 
-			if ( $args['taxonomy'] || $args['pta'] || empty( $args['id'] ) )
+			if ( $args['tax'] || $args['pta'] || empty( $args['id'] ) )
 				return false;
 
 			$id = $args['id'];
@@ -78,7 +78,7 @@ final class Conditions {
 	 * @since 3.2.4
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
@@ -102,7 +102,7 @@ final class Conditions {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Title\Conditions
 	 *
-	 * @param array|null  $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool|string $social Whether the title is meant for social display.
 	 *                            Also accepts string 'og' and 'twitter' for future proofing.
@@ -130,7 +130,7 @@ final class Conditions {
 			} else {
 				isset( $args ) and normalize_generation_args( $args );
 
-				if ( $args['taxonomy'] ) {
+				if ( $args['tax'] ) {
 					$use = static::use_taxonomical_title_branding( $args['id'] );
 				} elseif ( $args['pta'] ) {
 					$use = static::use_post_type_archive_title_branding( $args['pta'] );
@@ -146,7 +146,7 @@ final class Conditions {
 		 * @since 3.1.2
 		 * @since 4.1.0 Added the third $social parameter.
 		 * @param string     $use    Whether to use branding.
-		 * @param array|null $args   The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args   The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                           Is null when the query is auto-determined.
 		 * @param bool       $social Whether the title is meant for social display.
 		 */

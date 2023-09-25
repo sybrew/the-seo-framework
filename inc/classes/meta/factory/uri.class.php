@@ -116,7 +116,7 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the canonical URL.
 	 * @return string The custom canonical URL, if any.
@@ -138,7 +138,7 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine and memoize query.
 	 * @param bool       $escape Whether to escape the canonical URL.
 	 * @return string The custom canonical URL, if any.
@@ -189,7 +189,7 @@ class URI {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$url = \tsf()->get_term_meta_item( 'canonical', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$url = \tsf()->get_post_type_archive_meta_item( 'canonical', $args['pta'] );
@@ -235,7 +235,7 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated canonical URL.
 	 */
@@ -243,8 +243,8 @@ class URI {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
-			$url = static::get_bare_taxonomical_canonical_url( $args['id'], $args['taxonomy'] );
+		if ( $args['tax'] ) {
+			$url = static::get_bare_taxonomical_canonical_url( $args['id'], $args['tax'] );
 		} elseif ( $args['pta'] ) {
 			$url = static::get_bare_post_type_archive_canonical_url( $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
@@ -654,7 +654,7 @@ class URI {
 		} else {
 			normalize_generation_args( $args );
 
-			if ( $args['taxonomy'] ) {
+			if ( $args['tax'] ) {
 				$url = \tsf()->get_term_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {
 				$url = \tsf()->get_post_type_archive_meta_item( 'redirect', $args['pta'] );

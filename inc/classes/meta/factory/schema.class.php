@@ -53,7 +53,7 @@ class Schema {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The JSON encoded Schema.org graph, if any. Empty string on failure.
 	 */
@@ -74,7 +74,7 @@ class Schema {
 	 * @since 4.3.0
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/search-gallery
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return array The Schema.org graph, if any.
 	 */
@@ -88,7 +88,7 @@ class Schema {
 		} else {
 			normalize_generation_args( $args );
 
-			if ( ! $args['taxonomy'] && ! $args['pta'] && \tsf()->is_protected( $args['id'] ) ) {
+			if ( ! $args['tax'] && ! $args['pta'] && \tsf()->is_protected( $args['id'] ) ) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}
@@ -104,7 +104,7 @@ class Schema {
 		/**
 		 * @since 4.3.0
 		 * @param callable[] $entity_builders A list of Schema.org entity builders.
-		 * @param array|null $args            The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args            The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                                    Is null when being autodetermined.
 		 */
 		$entity_builders = \apply_filters_ref_array(
@@ -121,7 +121,7 @@ class Schema {
 			$graph[] = \call_user_func( $builder, $args );
 
 		// Fill the graph's references dynamically. Append extra graphs when given.
-		foreach ( static::$writer_queue as $id => $writer )
+		foreach ( static::$writer_queue as $writer )
 			foreach ( \call_user_func( $writer ) as $extra_graph )
 				$graph[] = $extra_graph;
 
@@ -131,7 +131,7 @@ class Schema {
 		/**
 		 * @since 4.3.0
 		 * @param array[]    $graph A sequential list of graph entities.
-		 * @param array|null $args  The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is autodetermined.
 		 */
 		$graph = \apply_filters_ref_array(

@@ -47,7 +47,7 @@ final class Excerpt {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 * @return string
 	 */
@@ -94,13 +94,13 @@ final class Excerpt {
 	 * @since 3.2.2 Fixed front-page as blog logic.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 *
-	 * @param array $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string
 	 */
 	public static function get_excerpt_from_args( $args ) {
 
-		if ( $args['taxonomy'] ) {
-			$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['taxonomy'] ) );
+		if ( $args['tax'] ) {
+			$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
 			$excerpt = static::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
 		} else {

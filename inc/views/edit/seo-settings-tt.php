@@ -42,8 +42,8 @@ $tw_title       = $meta['tw_title'];
 $tw_description = $meta['tw_description'];
 
 $_generator_args = [
-	'id'       => $term_id,
-	'taxonomy' => $taxonomy,
+	'id'  => $term_id,
+	'tax' => $taxonomy,
 ];
 
 $show_og = (bool) $this->get_option( 'og_tags' );

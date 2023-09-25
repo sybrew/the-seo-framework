@@ -46,7 +46,7 @@ class Legacy_API extends Core {
 	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string The real title output.
@@ -65,7 +65,7 @@ class Legacy_API extends Core {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Ennobled to be part of the legacy API.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string Open Graph Title.
@@ -84,7 +84,7 @@ class Legacy_API extends Core {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Ennobled to be part of the legacy API.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string Twitter Title.
@@ -101,7 +101,7 @@ class Legacy_API extends Core {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Ennobled to be part of the legacy API.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real description output.
@@ -119,7 +119,7 @@ class Legacy_API extends Core {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Ennobled to be part of the legacy API.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Open Graph description output.
@@ -138,7 +138,7 @@ class Legacy_API extends Core {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Ennobled to be part of the legacy API.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Twitter description output.
@@ -179,7 +179,7 @@ class Legacy_API extends Core {
 	 * @since 4.3.0 1. Removed the last $clean parameter. It always returns a cleaned image now.
 	 *              2. Ennobled to be part of the legacy API.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.

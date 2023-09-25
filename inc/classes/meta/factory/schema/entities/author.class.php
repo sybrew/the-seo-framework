@@ -51,7 +51,7 @@ final class Author extends Reference {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 *                         Also accepts 'uid', which is now.
 	 * @return int The author ID. 0 on failure.
@@ -66,7 +66,7 @@ final class Author extends Reference {
 			} else {
 				normalize_generation_args( $args );
 
-				if ( empty( $args['taxonomy'] ) && empty( $args['pta'] ) ) {
+				if (  empty( $args['tax'] ) && empty( $args['pta'] ) ) {
 					$author_id = \tsf()->get_post_author_id( $args['id'] );
 				}
 			}
@@ -78,7 +78,7 @@ final class Author extends Reference {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 *                         Also accepts 'uid';
 	 * @return string The entity ID for $args.
@@ -97,7 +97,7 @@ final class Author extends Reference {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
 	 *                         Also accepts 'uid';
 	 * @return ?array $entity The Schema.org graph entity.

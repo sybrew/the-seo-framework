@@ -106,12 +106,12 @@ final class Term extends Main {
 	 */
 	protected function prime_query_cache( array &$query_cache = [] ) {
 		$query_cache = [
-			'term'   => \get_term( static::$query['id'], static::$query['taxonomy'] ),
+			'term'   => \get_term( static::$query['id'], static::$query['tax'] ),
 			'meta'   => static::$tsf->get_term_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
 				'locale'       => \get_locale(),
-				'isempty'      => ! static::$tsf->is_term_populated( static::$query['id'], static::$query['taxonomy'] ),
-				'posttypes'    => Taxonomies::get_post_types_from_taxonomy( static::$query['taxonomy'] ),
+				'isempty'      => ! static::$tsf->is_term_populated( static::$query['id'], static::$query['tax'] ),
+				'posttypes'    => Taxonomies::get_post_types_from_taxonomy( static::$query['tax'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
@@ -120,8 +120,8 @@ final class Term extends Main {
 					],
 					Factory\Robots::generate_meta(
 						[
-							'id'       => static::$query['id'],
-							'taxonomy' => static::$query['taxonomy'],
+							'id'  => static::$query['id'],
+							'tax' => static::$query['tax'],
 						],
 						[ 'noindex', 'nofollow', 'noarchive' ],
 						ROBOTS_ASSERT
@@ -221,8 +221,8 @@ final class Term extends Main {
 		);
 
 		$_generator_args = [
-			'id'       => static::$query['id'],
-			'taxonomy' => static::$query['taxonomy'],
+			'id'  => static::$query['id'],
+			'tax' => static::$query['tax'],
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
@@ -415,8 +415,8 @@ final class Term extends Main {
 		);
 
 		$_generator_args = [
-			'id'       => static::$query['id'],
-			'taxonomy' => static::$query['taxonomy'],
+			'id'  => static::$query['id'],
+			'tax' => static::$query['tax'],
 		];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
@@ -627,7 +627,7 @@ final class Term extends Main {
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( ! empty( $robots_global['taxonomy']['noindex'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['taxonomy']['noindex'][ static::$query['tax'] ] ) ) {
 			// Status is already set.
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
@@ -643,13 +643,13 @@ final class Term extends Main {
 
 		if ( $this->query_cache['meta']['canonical'] ) {
 			$permalink = Factory\URI::get_generated_canonical_url( [
-				'id'       => static::$query['id'],
-				'taxonomy' => static::$query['taxonomy'],
+				'id'  => static::$query['id'],
+				'tax' => static::$query['tax'],
 			] );
 			// We create it because filters may apply.
 			$canonical = Factory\URI::get_canonical_url( [
-				'id'       => static::$query['id'],
-				'taxonomy' => static::$query['taxonomy'],
+				'id'  => static::$query['id'],
+				'tax' => static::$query['tax'],
 			] );
 			if ( $permalink !== $canonical ) {
 				$item['status'] = SEOBar::STATE_UNKNOWN;
@@ -771,7 +771,7 @@ final class Term extends Main {
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( ! empty( $robots_global['taxonomy']['nofollow'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['taxonomy']['nofollow'][ static::$query['tax'] ] ) ) {
 			// Status is already set.
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
@@ -888,7 +888,7 @@ final class Term extends Main {
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
 		}
 
-		if ( ! empty( $robots_global['taxonomy']['noarchive'][ static::$query['taxonomy'] ] ) ) {
+		if ( ! empty( $robots_global['taxonomy']['noarchive'][ static::$query['tax'] ] ) ) {
 			// Status is already set.
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}

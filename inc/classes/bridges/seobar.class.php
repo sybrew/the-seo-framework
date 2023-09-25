@@ -153,8 +153,8 @@ final class SEOBar extends ListTable {
 			$string .= $this->get_ajax_dispatch_updated_event();
 
 		return Interpreters\SEOBar::generate_bar( [
-			'id'       => $term_id,
-			'taxonomy' => $this->taxonomy,
+			'id'  => $term_id,
+			'tax' => $this->taxonomy,
 		] ) . $string;
 	}
 }

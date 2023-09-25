@@ -42,7 +42,7 @@ class Image {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return string The first valid image URL found, if any.
@@ -55,7 +55,7 @@ class Image {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return string The first valid image URL found, if any.
@@ -67,7 +67,7 @@ class Image {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return string The first valid image URL found, if any.
@@ -85,7 +85,7 @@ class Image {
 	 * @since 4.3.0 1. Now always obtains cleaned images.
 	 *              2. Moved to \The_SEO_Framework\Meta\Factory\Image.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -112,7 +112,7 @@ class Image {
 		 *    string caption:  The image caption,
 		 *    int    filesize: The image filesize in bytes,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
@@ -122,7 +122,7 @@ class Image {
 			'the_seo_framework_image_details',
 			[
 				(
-					   static::get_custom_image_details( $args, $single )
+					   static::get_custom_image_details( $args, $single, $context )
 					?: static::get_generated_image_details( $args, $single, $context )
 				),
 				$args,
@@ -140,11 +140,13 @@ class Image {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Image.
+	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Factory\Image.
+	 *              2. Now supports $context.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
+	 * @param string     $context The filter context. Default 'social'.
 	 * @return array The image details array, sequential: int => {
 	 *    string url:      The image URL,
 	 *    int    id:       The image ID,
@@ -155,7 +157,7 @@ class Image {
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
-	public static function get_custom_image_details( $args = null, $single = false ) {
+	public static function get_custom_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
 		 * @since 4.3.0
 		 * @param array      $details The image details array, sequential: int => {
@@ -167,7 +169,7 @@ class Image {
 		 *    string caption:  The image caption,
 		 *    int    filesize: The image filesize in bytes,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 */
@@ -175,8 +177,8 @@ class Image {
 			'the_seo_framework_custom_image_details',
 			[
 				$single
-					? array_filter( [ static::generate_custom_image_details( $args )->current() ] )
-					: [ ...static::generate_custom_image_details( $args ) ],
+					? array_filter( [ static::generate_custom_image_details( $args, $context )->current() ] )
+					: [ ...static::generate_custom_image_details( $args, $context ) ],
 				$args,
 				$single,
 			]
@@ -190,7 +192,7 @@ class Image {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Factory\Image.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -216,7 +218,7 @@ class Image {
 		 *    string caption:  The image caption,
 		 *    int    filesize: The image filesize in bytes,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
@@ -240,7 +242,7 @@ class Image {
 	 * @since 4.3.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
@@ -255,7 +257,7 @@ class Image {
 	 */
 	public static function generate_image_details( $args = null, $context = 'social' ) {
 
-		foreach ( static::generate_custom_image_details( $args ) as $details ) {
+		foreach ( static::generate_custom_image_details( $args, $context ) as $details ) {
 			yield $details;
 			$yielded_custom = true;
 		}
@@ -271,8 +273,9 @@ class Image {
 	 * @since 4.3.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
+	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
 	 *    string url:      The image URL,
 	 *    int    id:       The image ID,
@@ -283,12 +286,12 @@ class Image {
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
-	public static function generate_custom_image_details( $args = null ) {
+	public static function generate_custom_image_details( $args = null, $context = 'social' ) {
 
 		if ( null === $args ) {
-			yield from static::generate_custom_image_details_from_query();
+			yield from static::generate_custom_image_details_from_query( $context );
 		} else {
-			yield from static::generate_custom_image_details_from_args( $args );
+			yield from static::generate_custom_image_details_from_args( $args, $context );
 		}
 	}
 
@@ -299,7 +302,7 @@ class Image {
 	 * @since 4.3.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
@@ -337,6 +340,7 @@ class Image {
 	 * @since 4.3.0
 	 * @generator
 	 *
+	 * @param string $context The filter context. Default 'social'.
 	 * @yield array The image details array {
 	 *    string url:      The image URL,
 	 *    int    id:       The image ID,
@@ -347,41 +351,48 @@ class Image {
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
-	private static function generate_custom_image_details_from_query() {
+	private static function generate_custom_image_details_from_query( $context = 'social' ) {
 
-		if ( Query::is_real_front_page() ) {
-			if ( Query::is_static_frontpage() ) {
-				$details = [
-					'url' => \tsf()->get_option( 'homepage_social_image_url' ),
-					'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
-				];
-				if ( ! $details['url'] ) {
+		if ( 'organization' === $context ) {
+			$details = [
+				'url' => \tsf()->get_option( 'knowledge_logo_url' ),
+				'id'  => \tsf()->get_option( 'knowledge_logo_id' ),
+			];
+		} else {
+			if ( Query::is_real_front_page() ) {
+				if ( Query::is_static_frontpage() ) {
 					$details = [
-						'url' => \tsf()->get_post_meta_item( '_social_image_url' ),
-						'id'  => \tsf()->get_post_meta_item( '_social_image_id' ),
+						'url' => \tsf()->get_option( 'homepage_social_image_url' ),
+						'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
+					];
+					if ( ! $details['url'] ) {
+						$details = [
+							'url' => \tsf()->get_post_meta_item( '_social_image_url' ),
+							'id'  => \tsf()->get_post_meta_item( '_social_image_id' ),
+						];
+					}
+				} else {
+					$details = [
+						'url' => \tsf()->get_option( 'homepage_social_image_url' ),
+						'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
 					];
 				}
-			} else {
+			} elseif ( Query::is_singular() ) {
 				$details = [
-					'url' => \tsf()->get_option( 'homepage_social_image_url' ),
-					'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
+					'url' => \tsf()->get_post_meta_item( '_social_image_url' ),
+					'id'  => \tsf()->get_post_meta_item( '_social_image_id' ),
+				];
+			} elseif ( Query::is_editable_term() ) {
+				$details = [
+					'url' => \tsf()->get_term_meta_item( 'social_image_url' ),
+					'id'  => \tsf()->get_term_meta_item( 'social_image_id' ),
+				];
+			} elseif ( \is_post_type_archive() ) {
+				$details = [
+					'url' => \tsf()->get_post_type_archive_meta_item( 'social_image_url' ),
+					'id'  => \tsf()->get_post_type_archive_meta_item( 'social_image_id' ),
 				];
 			}
-		} elseif ( Query::is_singular() ) {
-			$details = [
-				'url' => \tsf()->get_post_meta_item( '_social_image_url' ),
-				'id'  => \tsf()->get_post_meta_item( '_social_image_id' ),
-			];
-		} elseif ( Query::is_editable_term() ) {
-			$details = [
-				'url' => \tsf()->get_term_meta_item( 'social_image_url' ),
-				'id'  => \tsf()->get_term_meta_item( 'social_image_id' ),
-			];
-		} elseif ( \is_post_type_archive() ) {
-			$details = [
-				'url' => \tsf()->get_post_type_archive_meta_item( 'social_image_url' ),
-				'id'  => \tsf()->get_post_type_archive_meta_item( 'social_image_id' ),
-			];
 		}
 
 		if ( ! empty( $details['url'] ) ) {
@@ -398,7 +409,8 @@ class Image {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
 	 *    string url:      The image URL,
 	 *    int    id:       The image ID,
@@ -409,37 +421,44 @@ class Image {
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
-	private static function generate_custom_image_details_from_args( $args ) {
+	private static function generate_custom_image_details_from_args( $args, $context = 'social' ) {
 
-		normalize_generation_args( $args );
+		if ( 'organization' === $context ) {
+			$details = [
+				'url' => \tsf()->get_option( 'knowledge_logo_url' ),
+				'id'  => \tsf()->get_option( 'knowledge_logo_id' ),
+			];
+		} else {
+			normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
-			$details = [
-				'url' => \tsf()->get_term_meta_item( 'social_image_url', $args['id'] ),
-				'id'  => \tsf()->get_term_meta_item( 'social_image_id', $args['id'] ),
-			];
-		} elseif ( $args['pta'] ) {
-			$details = [
-				'url' => \tsf()->get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
-				'id'  => \tsf()->get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
-			];
-		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-			$details = [
-				'url' => \tsf()->get_option( 'homepage_social_image_url' ),
-				'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
-			];
+			if ( $args['tax'] ) {
+				$details = [
+					'url' => \tsf()->get_term_meta_item( 'social_image_url', $args['id'] ),
+					'id'  => \tsf()->get_term_meta_item( 'social_image_id', $args['id'] ),
+				];
+			} elseif ( $args['pta'] ) {
+				$details = [
+					'url' => \tsf()->get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
+					'id'  => \tsf()->get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
+				];
+			} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+				$details = [
+					'url' => \tsf()->get_option( 'homepage_social_image_url' ),
+					'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
+				];
 
-			if ( $args['id'] && ! $details['url'] ) {
+				if ( $args['id'] && ! $details['url'] ) {
+					$details = [
+						'url' => \tsf()->get_post_meta_item( '_social_image_url', $args['id'] ),
+						'id'  => \tsf()->get_post_meta_item( '_social_image_id', $args['id'] ),
+					];
+				}
+			} elseif ( $args['id'] ) {
 				$details = [
 					'url' => \tsf()->get_post_meta_item( '_social_image_url', $args['id'] ),
 					'id'  => \tsf()->get_post_meta_item( '_social_image_id', $args['id'] ),
 				];
 			}
-		} elseif ( $args['id'] ) {
-			$details = [
-				'url' => \tsf()->get_post_meta_item( '_social_image_url', $args['id'] ),
-				'id'  => \tsf()->get_post_meta_item( '_social_image_id', $args['id'] ),
-			];
 		}
 
 		if ( ! empty( $details['url'] ) ) {
@@ -459,7 +478,7 @@ class Image {
 	 * @since 4.3.0 1. Now expects an ID before testing whether an attachment is an image.
 	 *              2. Now supports 'organization' context.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Use null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
@@ -479,9 +498,8 @@ class Image {
 
 		if ( 'organization' === $context ) {
 			$cbs = [
-				'structured_data_logo' => [ $generator, 'generate_structured_data_logo_image_details' ],
-				'logo'                 => [ $generator, 'generate_site_logo_image_details' ],
-				'icon'                 => [ $generator, 'generate_site_icon_image_details' ],
+				'logo' => [ $generator, 'generate_site_logo_image_details' ],
+				'icon' => [ $generator, 'generate_site_icon_image_details' ],
 			];
 		} else {
 			if ( null === $args ) {
@@ -498,7 +516,7 @@ class Image {
 						$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 				}
 			} else {
-				if ( ! $args['taxonomy'] && ! $args['pta'] ) {
+				if ( ! $args['tax'] && ! $args['pta'] ) {
 					if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
 						$cbs = [
 							'attachment' => [ $generator, 'generate_attachment_image_details' ],
@@ -532,7 +550,7 @@ class Image {
 		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
-		 * @param array|null $args    The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+		 * @param array|null $args    The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                            Is null when the query is auto-determined.
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
@@ -559,7 +577,7 @@ class Image {
 	 * @since 4.3.0
 	 * @generator
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param callable[] $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param string     $size   The image size to use.

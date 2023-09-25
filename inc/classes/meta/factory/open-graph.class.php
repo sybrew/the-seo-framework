@@ -98,7 +98,7 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string Open Graph Title.
@@ -117,7 +117,7 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string Open Graph Title.
 	 */
@@ -172,14 +172,14 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string Open Graph Title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$title = \tsf()->get_term_meta_item( 'og_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = \tsf()->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
@@ -209,7 +209,7 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Open Graph Title.
@@ -223,7 +223,7 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Open Graph description output.
@@ -242,7 +242,7 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string TwOpen Graphitter description.
@@ -298,14 +298,14 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string Open Graph description.
 	 */
 	public static function get_custom_description_from_args( $args ) {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$desc = \tsf()->get_term_meta_item( 'og_description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'og_description', $args['pta'] );
@@ -333,7 +333,7 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Open Graph description output.

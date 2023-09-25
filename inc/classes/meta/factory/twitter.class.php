@@ -146,7 +146,7 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string Twitter Title.
@@ -165,7 +165,7 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string Twitter Title.
 	 */
@@ -224,14 +224,14 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string Twitter Title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$title = \tsf()->get_term_meta_item( 'tw_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = \tsf()->get_post_type_archive_meta_item( 'tw_title', $args['pta'] );
@@ -265,7 +265,7 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string The generated Twitter Title.
@@ -280,7 +280,7 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The real Twitter description output.
@@ -299,7 +299,7 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @return string Twitter description.
@@ -359,14 +359,14 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string Twitter description.
 	 */
 	public static function get_custom_description_from_args( $args ) {
 
 		normalize_generation_args( $args );
 
-		if ( $args['taxonomy'] ) {
+		if ( $args['tax'] ) {
 			$desc = \tsf()->get_term_meta_item( 'tw_description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'tw_description', $args['pta'] );
@@ -399,7 +399,7 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @return string The generated Twitter description output.
