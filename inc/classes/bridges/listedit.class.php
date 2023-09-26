@@ -10,7 +10,7 @@ namespace The_SEO_Framework\Bridges;
 
 use \The_SEO_Framework\Interpreters\HTML,
 	\The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Helper\{
 	Query,
@@ -176,7 +176,7 @@ final class ListEdit extends ListTable {
 
 		$_generator_args = [ 'id' => $post_id ];
 
-		$r_defaults = Factory\Robots::generate_meta(
+		$r_defaults = Meta\Robots::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
@@ -195,7 +195,7 @@ final class ListEdit extends ListTable {
 			'canonical'   => [
 				'value' => $meta['_genesis_canonical_uri'],
 				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => Factory\URI::get_generated_canonical_url( $_generator_args ),
+				// 'placeholder' => Meta\URI::get_generated_canonical_url( $_generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['_genesis_noindex'],
@@ -248,25 +248,25 @@ final class ListEdit extends ListTable {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
-								 ? Factory\Title::get_custom_title( $_generator_args )
-								 : Factory\Title::get_bare_generated_title( $_generator_args );
-			$addition            = Factory\Title::get_addition_for_front_page();
-			$seplocation         = Factory\Title::get_addition_location_for_front_page();
+								 ? Meta\Title::get_custom_title( $_generator_args )
+								 : Meta\Title::get_bare_generated_title( $_generator_args );
+			$addition            = Meta\Title::get_addition_for_front_page();
+			$seplocation         = Meta\Title::get_addition_location_for_front_page();
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
 			$_has_home_desc      = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
-								 ? Factory\Description::get_custom_description( $_generator_args )
-								 : Factory\Description::get_generated_description( $_generator_args );
+								 ? Meta\Description::get_custom_description( $_generator_args )
+								 : Meta\Description::get_generated_description( $_generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
 		} else {
-			$default_title       = Factory\Title::get_bare_generated_title( $_generator_args );
+			$default_title       = Meta\Title::get_bare_generated_title( $_generator_args );
 			$addition            = Data\Blog::get_public_blog_name();
-			$seplocation         = Factory\Title::get_addition_location();
+			$seplocation         = Meta\Title::get_addition_location();
 			$is_title_ref_locked = false;
 
-			$default_description = Factory\Description::get_generated_description( $_generator_args );
+			$default_description = Meta\Description::get_generated_description( $_generator_args );
 			$is_desc_ref_locked  = false;
 		}
 
@@ -276,7 +276,7 @@ final class ListEdit extends ListTable {
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => $tsf->s_title( $default_title ),
-			'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
+			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
 			'additionValue'     => $tsf->s_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
@@ -339,7 +339,7 @@ final class ListEdit extends ListTable {
 			'tax' => $this->taxonomy,
 		];
 
-		$r_defaults = Factory\Robots::generate_meta(
+		$r_defaults = Meta\Robots::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
@@ -358,7 +358,7 @@ final class ListEdit extends ListTable {
 			'canonical'   => [
 				'value' => $meta['canonical'],
 				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => Factory\URI::get_generated_canonical_url( $_generator_args ),
+				// 'placeholder' => Meta\URI::get_generated_canonical_url( $_generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['noindex'],
@@ -408,7 +408,7 @@ final class ListEdit extends ListTable {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		$term_prefix = Factory\Title\Conditions::use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['tax'] ) )
+		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['tax'] ) )
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
@@ -418,15 +418,15 @@ final class ListEdit extends ListTable {
 
 		$title_data = [
 			'refTitleLocked'    => false,
-			'defaultTitle'      => $tsf->s_title( Factory\Title::get_bare_generated_title( $_generator_args ) ),
-			'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
+			'defaultTitle'      => $tsf->s_title( Meta\Title::get_bare_generated_title( $_generator_args ) ),
+			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
 			'additionValue'     => $tsf->s_title( Data\Blog::get_public_blog_name() ),
-			'additionPlacement' => 'left' === Factory\Title::get_addition_location() ? 'before' : 'after',
+			'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];
 		$desc_data  = [
 			'refDescriptionLocked' => false,
-			'defaultDescription'   => Factory\Description::get_generated_description( $_generator_args ),
+			'defaultDescription'   => Meta\Description::get_generated_description( $_generator_args ),
 		];
 
 		$container .= sprintf(

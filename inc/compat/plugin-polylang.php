@@ -8,20 +8,21 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 \add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\\_polylang_fix_sitemap_base_bath' );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
-\add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' );
-\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' );
-\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' );
-\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' );
+\add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' ); // var_dump()
+\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' ); // var_dump()
+\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' ); // var_dump()
+\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' ); // var_dump()
 \add_filter( 'pll_home_url_white_list', __NAMESPACE__ . '\\_polylang_allowlist_tsf_urls' );
 \add_filter( 'pll_home_url_black_list', __NAMESPACE__ . '\\_polylang_blocklist_tsf_urls' );
-\add_filter( 'the_seo_framework_rel_canonical_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 );
-\add_filter( 'the_seo_framework_ogurl_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 );
+\add_filter( 'the_seo_framework_rel_canonical_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 ); // var_dump()
+\add_filter( 'the_seo_framework_ogurl_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 ); // var_dump()
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10 );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
 
@@ -53,7 +54,7 @@ function _polylang_fix_sitemap_base_bath( $path ) {
 		// That's Polylang for you: can't trust your own code.
 		$path = rtrim(
 			parse_url(
-				\get_home_url(),
+				Data\Blog::get_front_page_url(),
 				\PHP_URL_PATH
 			) ?? '',
 			'/'

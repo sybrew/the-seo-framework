@@ -510,7 +510,7 @@ TODO remove 3+ @since in Deprecated.class to reduce filesize.
 TODO remove unusued Utils\normalize_generation_args imports (and other imports..)
 TODO find new public function and filters via @since 4.3.0.*?...
 TODO find repeated tsf() calls in functions.
-TODO mark subroutine methods in Factory private?
+TODO mark subroutine methods in Meta private?
 
 TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."
 	-> Tell that it should be the brand name?
@@ -610,6 +610,13 @@ TODO we MUST add a new option for Schema.org
 		-> Shall we add more input fields for the user to tweak?
 			-> Shall we make a single overview, isntead of making it tabular?
 				-> And then, shall we make the URL input fields incremental, and collapse all stored URL fields that exist into them?
+
+TODO when loading Gutenberg, the title is prefilled with "Untitled" -- is this intentional?
+	-> It looks jarring on a slow connection.
+
+TODO add robots.txt editor
+	-> Also move the callback to a new class.
+	-> Add this as an extension instead?
 
 **Detailed log**
 
@@ -745,9 +752,9 @@ TODO we MUST add a new option for Schema.org
 		* All public query-related methods have been moved to that pool. E.g., `tsf()->is_product()` is now `tsf()->query()->is_product()`.
 		* Internally known as `The_SEO_Framework\Helper\Query`.
 		* This pool has a sub-pool, accessible via `tsf()->query()->utils()`.
-			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Utils`.
+			* Internally known as `The_SEO_Framework\Meta\Title\Utils`.
 		* This pool has a sub-pool, accessible via `tsf()->query()->cache()`.
-			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Cache`.
+			* Internally known as `The_SEO_Framework\Meta\Title\Cache`.
 	* Pool `tsf()->post_types()` is now available.
 		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_types()->is_post_type_supported()`.
 		* Internally known as `The_SEO_Framework\Helper\Post_Types`.
@@ -756,41 +763,41 @@ TODO we MUST add a new option for Schema.org
 		* Internally known as `The_SEO_Framework\Helper\Taxonomies`.
 	* Pool `tsf()->robots()` is now available.
 		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->get_robots_meta()` is now `tsf()->robots()->get_meta()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Robots`.
+		* Internally known as `The_SEO_Framework\Meta\Robots`.
 	* Pool `tsf()->uri()` is now available.
 		* All public uri-related methods have been moved to that pool. E.g., `tsf()->get_custom_canonical_url()` is now `tsf()->uri()->get_custom_canonical_url()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\URI`.
+		* Internally known as `The_SEO_Framework\Meta\URI`.
 		* This pool has a sub-pool, accessible via `tsf()->uri()->utils()`.
-			* Internally known as `The_SEO_Framework\Meta\Factory\URI\Utils`.
+			* Internally known as `The_SEO_Framework\Meta\URI\Utils`.
 	* Pool `tsf()->title()` is now available.
 		* All public title-related methods have been moved to that pool. E.g., `tsf()->get_custom_title()` is now `tsf()->title()->get_custom_title()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Title`.
+		* Internally known as `The_SEO_Framework\Meta\Title`.
 		* This pool has a sub-pool, accessible via `tsf()->title()->utils()`.
-			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Utils`.
+			* Internally known as `The_SEO_Framework\Meta\Title\Utils`.
 		* This pool has a sub-pool, accessible via `tsf()->title()->conditions()`.
-			* Internally known as `The_SEO_Framework\Meta\Factory\Title\Conditions`.
+			* Internally known as `The_SEO_Framework\Meta\Title\Conditions`.
 	* Pool `tsf()->description()` is now available.
 		* All public description-related methods have been moved to that pool. E.g., `tsf()->description()` is now `tsf()->description()->get_description()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Description`.
+		* Internally known as `The_SEO_Framework\Meta\Description`.
 		* This pool has a sub-pool, accessible via `tsf()->description()->excerpt()`.
-			* Internally known as `The_SEO_Framework\Meta\Factory\Description\Excerpt`.
+			* Internally known as `The_SEO_Framework\Meta\Description\Excerpt`.
 	* Pool `tsf()->open_graph()` is now available.
 		* All public Open Graph-related methods have been moved to that pool. E.g., `tsf()->get_open_graph_title()` is now `tsf()->open_graph()->get_description()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Open_Graph`.
+		* Internally known as `The_SEO_Framework\Meta\Open_Graph`.
 	* Pool `tsf()->facebook()` is now available.
 		* Facebook never had a public API, but it now has new methods, e.g., `tsf()->facebook()->get_author()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Facebook`.
+		* Internally known as `The_SEO_Framework\Meta\Facebook`.
 	* Pool `tsf()->twitter()` is now available.
 		* All public Twitter-related methods have been moved to that pool. E.g., `tsf()->get_twitter_title()` is now `tsf()->twitter()->get_description()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Twitter`.
+		* Internally known as `The_SEO_Framework\Meta\Twitter`.
 	* Pool `tsf()->image()` is now available.
 		* All public Image-related methods have been moved to that pool. E.g., `tsf()->get_custom_field_image_details()` is now `tsf()->image()->get_custom_image_details()`.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Image`.
+		* Internally known as `The_SEO_Framework\Meta\Image`.
 	* Pool `tsf()->schema()` is now available.
 		* Also contains a public property: `$entities`, a list of all supported entity class names.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Image`.
+		* Internally known as `The_SEO_Framework\Meta\Image`.
 	* Pool `tsf()->breadcrumbs()` is now available.
-		* Internally known as `The_SEO_Framework\Meta\Factory\Breadcrumbs`.
+		* Internally known as `The_SEO_Framework\Meta\Breadcrumbs`.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.

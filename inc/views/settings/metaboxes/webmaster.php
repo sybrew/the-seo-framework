@@ -9,13 +9,13 @@
 
 use The_SEO_Framework\Interpreters\HTML,
 	The_SEO_Framework\Interpreters\Settings_Input as Input,
-	The_SEO_Framework\Meta\Factory;
+	The_SEO_Framework\Meta;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 	case 'webmaster_main':
-		$site_url = Factory\URI::get_bare_front_page_canonical_url();
+		$site_url = Meta\URI::get_bare_front_page_canonical_url();
 
 		$settings = [
 			'google'    => [

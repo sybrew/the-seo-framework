@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta;
 
 \add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
 
@@ -94,7 +94,7 @@ function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore
 function _wpforo_filter_pre_title( $title = '', $args = null ) {
 
 	if ( null === $args ) {
-		$sep          = Factory\Title::get_separator();
+		$sep          = Meta\Title::get_separator();
 		$wpforo_title = implode(
 			" $sep ",
 			array_filter( (array) \wpforo_meta_title( '' ), 'strlen' )

@@ -13,7 +13,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta\Factory,
+	\The_SEO_Framework\Meta,
 	\The_SEO_Framework\Helper\Query;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
@@ -111,13 +111,13 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					'state' => [
 						'refTitleLocked'      => false, // This field is the mother of all references.
 						'defaultTitle'        => $this->s_title(
-							$_post_meta_title ?: Factory\Title::get_bare_generated_title( $_generator_args )
+							$_post_meta_title ?: Meta\Title::get_bare_generated_title( $_generator_args )
 						),
 						'_defaultTitleLocked' => (bool) $_post_meta_title, // Underscore because it's non-standard API.
-						'addAdditions'        => Factory\Title\Conditions::use_title_branding( $_generator_args ),
-						'useSocialTagline'    => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
-						'additionValue'       => $this->s_title( Factory\Title::get_addition_for_front_page() ),
-						'additionPlacement'   => 'left' === Factory\Title::get_addition_location_for_front_page() ? 'before' : 'after',
+						'addAdditions'        => Meta\Title\Conditions::use_title_branding( $_generator_args ),
+						'useSocialTagline'    => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
+						'additionValue'       => $this->s_title( Meta\Title::get_addition_for_front_page() ),
+						'additionPlacement'   => 'left' === Meta\Title::get_addition_location_for_front_page() ? 'before' : 'after',
 						'hasLegacy'           => true,
 					],
 				]
@@ -160,7 +160,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 					'state' => [
 						'defaultDescription' =>
 							( $home_id ? $this->get_post_meta_item( '_genesis_description', $home_id ) : '' )
-							?: Factory\Description::get_generated_description( $_generator_args ),
+							?: Meta\Description::get_generated_description( $_generator_args ),
 						'hasLegacy'          => true,
 					],
 				]
@@ -179,16 +179,16 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 	case 'homepage_additions_tab':
 		// Fetches escaped title parts.
 		$_example_title = $this->escape_title(
-			Factory\Title::get_bare_custom_title( $_generator_args )
-			?: Factory\Title::get_bare_generated_title( $_generator_args )
+			Meta\Title::get_bare_custom_title( $_generator_args )
+			?: Meta\Title::get_bare_generated_title( $_generator_args )
 		);
 		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
 		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
 		$_example_blogname  = $this->escape_title(
-			Factory\Title::get_addition_for_front_page()
-			?: Factory\Title::get_untitled_title()
+			Meta\Title::get_addition_for_front_page()
+			?: Meta\Title::get_untitled_title()
 		);
-		$_example_separator = esc_html( Factory\Title::get_separator() );
+		$_example_separator = esc_html( Meta\Title::get_separator() );
 
 		// TODO very readable.
 		$example_left  = "<em><span class=tsf-custom-blogname-js><span class=tsf-custom-tagline-js>$_example_blogname</span><span class=tsf-sep-js> $_example_separator </span></span><span class=tsf-custom-title-js>$_example_title</span></em>";
@@ -263,17 +263,17 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 			$custom_image    = $this->get_post_meta_item( '_social_image_url', $home_id );
 		}
 
-		$image_placeholder = $custom_image ?: Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
+		$image_placeholder = $custom_image ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 
 		$this->output_js_social_data(
 			'homepage_social_settings',
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( $custom_og_title ?: Factory\Open_Graph::get_generated_title( $_generator_args, false ) ),
-						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
+						'defaultTitle' => $this->s_title( $custom_og_title ?: Meta\Open_Graph::get_generated_title( $_generator_args, false ) ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
 						'defaultDesc'  => $this->s_description(
-							$custom_og_desc ?: Factory\Open_Graph::get_generated_description( $_generator_args, false )
+							$custom_og_desc ?: Meta\Open_Graph::get_generated_description( $_generator_args, false )
 						),
 						'titlePhLock'  => (bool) $custom_og_title,
 						'descPhLock'   => (bool) $custom_og_desc,
@@ -281,10 +281,10 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( $custom_tw_title ?: Factory\Twitter::get_generated_title( $_generator_args, false ) ),
-						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
+						'defaultTitle' => $this->s_title( $custom_tw_title ?: Meta\Twitter::get_generated_title( $_generator_args, false ) ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
 						'defaultDesc'  => $this->s_description(
-							$custom_tw_desc ?: Factory\Twitter::get_generated_description( $_generator_args, false )
+							$custom_tw_desc ?: Meta\Twitter::get_generated_description( $_generator_args, false )
 						),
 						'titlePhLock'  => (bool) $custom_tw_title,
 						'descPhLock'   => (bool) $custom_tw_desc,

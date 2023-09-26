@@ -14,7 +14,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Post_Types,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -28,7 +28,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
 				'label'    => Post_Types::get_post_type_label( $post_type ),
-				'url'      => Factory\URI::get_bare_post_type_archive_canonical_url( $post_type ), // permalink!
+				'url'      => Meta\URI::get_bare_post_type_archive_canonical_url( $post_type ), // permalink!
 				'hasPosts' => $this->has_posts_in_post_type_archive( $post_type ),
 			];
 		}
@@ -189,19 +189,19 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 
 			// Skip first entry: $_full_title
 			[ , $_prefix_value, $_default_title ] =
-				Factory\Title::get_archive_title_list( $pto );
+				Meta\Title::get_archive_title_list( $pto );
 
 			$this->output_js_title_data(
 				Input::get_field_id( $_option_map['doctitle'] ),
 				[
 					'state' => [
 						'defaultTitle'      => $this->s_title( $_default_title ),
-						'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
-						'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
+						'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
+						'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
 						'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
-						'additionPlacement' => 'left' === Factory\Title::get_addition_location() ? 'before' : 'after',
+						'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 						'prefixValue'       => $this->s_title( $_prefix_value ),
-						'showPrefix'        => Factory\Title\Conditions::use_generated_archive_prefix( $pto ),
+						'showPrefix'        => Meta\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
 				]
 			);
@@ -255,7 +255,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				Input::get_field_id( $_option_map['description'] ),
 				[
 					'state' => [
-						'defaultDescription' => Factory\Description::get_generated_description( $_generator_args ),
+						'defaultDescription' => Meta\Description::get_generated_description( $_generator_args ),
 					],
 				]
 			);
@@ -269,16 +269,16 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( Factory\Open_Graph::get_generated_title( $_generator_args, false ) ),
-						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
-						'defaultDesc'  => $this->s_description( Factory\Open_Graph::get_generated_description( $_generator_args, false ) ),
+						'defaultTitle' => $this->s_title( Meta\Open_Graph::get_generated_title( $_generator_args, false ) ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
+						'defaultDesc'  => $this->s_description( Meta\Open_Graph::get_generated_description( $_generator_args, false ) ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( Factory\Twitter::get_generated_title( $_generator_args, false ) ),
-						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
-						'defaultDesc'  => $this->s_description( Factory\Twitter::get_generated_description( $_generator_args, false ) ),
+						'defaultTitle' => $this->s_title( Meta\Twitter::get_generated_title( $_generator_args, false ) ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
+						'defaultDesc'  => $this->s_description( Meta\Twitter::get_generated_description( $_generator_args, false ) ),
 					],
 				],
 			]
@@ -353,7 +353,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( Factory\Image::get_first_generated_image_url( $_generator_args, 'social' ) ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
+			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( Meta\Image::get_first_generated_image_url( $_generator_args, 'social' ) ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
 			<input type=hidden name="<?php Input::field_name( $_option_map['social_image_id'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-id" value="<?= absint( $this->get_post_type_archive_meta_item( 'social_image_id', $post_type ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
 		<p class=hide-if-no-tsf-js>
@@ -379,7 +379,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= Factory\URI::get_generated_canonical_url( $_generator_args ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= Meta\URI::get_generated_canonical_url( $_generator_args ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
 		</p>
 
 		<hr>

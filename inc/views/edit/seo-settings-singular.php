@@ -15,7 +15,7 @@ use const \The_SEO_Framework\{
 use \The_SEO_Framework\Bridges\PostSettings,
 	\The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Interpreters\{
 	HTML,
@@ -97,24 +97,24 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 
 			// When the homepage title is set, we can safely get the custom field.
 			$default_title     = $_has_home_title
-				? Factory\Title::get_custom_title( $_generator_args )
-				: Factory\Title::get_bare_generated_title( $_generator_args );
+				? Meta\Title::get_custom_title( $_generator_args )
+				: Meta\Title::get_bare_generated_title( $_generator_args );
 			$title_ref_locked  = $_has_home_title;
-			$title_additions   = Factory\Title::get_addition_for_front_page();
-			$title_seplocation = Factory\Title::get_addition_location_for_front_page();
+			$title_additions   = Meta\Title::get_addition_for_front_page();
+			$title_seplocation = Meta\Title::get_addition_location_for_front_page();
 
 			// When the homepage description is set, we can safely get the custom field.
 			$default_description    = $_has_home_desc
-				? Factory\Description::get_custom_description( $_generator_args )
-				: Factory\Description::get_generated_description( $_generator_args );
+				? Meta\Description::get_custom_description( $_generator_args )
+				: Meta\Description::get_generated_description( $_generator_args );
 			$description_ref_locked = $_has_home_desc;
 		} else {
-			$default_title     = Factory\Title::get_bare_generated_title( $_generator_args );
+			$default_title     = Meta\Title::get_bare_generated_title( $_generator_args );
 			$title_ref_locked  = false;
 			$title_additions   = Data\Blog::get_public_blog_name();
-			$title_seplocation = Factory\Title::get_addition_location();
+			$title_seplocation = Meta\Title::get_addition_location();
 
-			$default_description    = Factory\Description::get_generated_description( $_generator_args );
+			$default_description    = Meta\Description::get_generated_description( $_generator_args );
 			$description_ref_locked = false;
 		}
 
@@ -152,8 +152,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 							'state' => [
 								'refTitleLocked'    => $title_ref_locked,
 								'defaultTitle'      => $this->s_title( $default_title ),
-								'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
-								'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
+								'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
+								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
 								'additionValue'     => $this->s_title( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
 								'hasLegacy'         => true,
@@ -232,10 +232,10 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_visibility_tab':
-		$canonical_placeholder = Factory\URI::get_generated_canonical_url( $_generator_args );
+		$canonical_placeholder = Meta\URI::get_generated_canonical_url( $_generator_args );
 
 		// Get robots defaults.
-		$r_defaults = Factory\Robots::generate_meta(
+		$r_defaults = Meta\Robots::generate_meta(
 			$_generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			ROBOTS_IGNORE_SETTINGS | ROBOTS_IGNORE_PROTECTION
@@ -432,29 +432,29 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			$_social_title       = [
 				'og' => $this->get_option( 'homepage_og_title' )
 					 ?: $this->get_option( 'homepage_title' )
-					 ?: Factory\Open_Graph::get_generated_title( $_generator_args, false ),
+					 ?: Meta\Open_Graph::get_generated_title( $_generator_args, false ),
 				'tw' => $this->get_option( 'homepage_twitter_title' )
 					 ?: $this->get_option( 'homepage_og_title' )
 					 ?: $this->get_option( 'homepage_title' )
-					 ?: Factory\Twitter::get_generated_title( $_generator_args, false ),
+					 ?: Meta\Twitter::get_generated_title( $_generator_args, false ),
 			];
 			$_social_description = [
 				'og' => $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_option( 'homepage_description' )
-					 ?: Factory\Open_Graph::get_generated_description( $_generator_args, false ),
+					 ?: Meta\Open_Graph::get_generated_description( $_generator_args, false ),
 				'tw' => $this->get_option( 'homepage_twitter_description' )
 					 ?: $this->get_option( 'homepage_og_description' )
 					 ?: $this->get_option( 'homepage_description' )
-					 ?: Factory\Twitter::get_generated_description( $_generator_args, false ),
+					 ?: Meta\Twitter::get_generated_description( $_generator_args, false ),
 			];
 		} else {
 			$_social_title       = [
-				'og' => Factory\Open_Graph::get_generated_title( $_generator_args, false ),
-				'tw' => Factory\Twitter::get_generated_title( $_generator_args, false ),
+				'og' => Meta\Open_Graph::get_generated_title( $_generator_args, false ),
+				'tw' => Meta\Twitter::get_generated_title( $_generator_args, false ),
 			];
 			$_social_description = [
-				'og' => Factory\Open_Graph::get_generated_description( $_generator_args, false ),
-				'tw' => Factory\Twitter::get_generated_description( $_generator_args, false ),
+				'og' => Meta\Open_Graph::get_generated_description( $_generator_args, false ),
+				'tw' => Meta\Twitter::get_generated_description( $_generator_args, false ),
 			];
 		}
 
@@ -464,7 +464,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				'og' => [
 					'state' => [
 						'defaultTitle' => $this->s_title( $_social_title['og'] ),
-						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
 						'defaultDesc'  => $this->s_description( $_social_description['og'] ),
 						'titleLock'    => $_is_static_frontpage && $this->get_option( 'homepage_og_title' ),
 						'descLock'     => $_is_static_frontpage && $this->get_option( 'homepage_og_description' ),
@@ -473,7 +473,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				'tw' => [
 					'state' => [
 						'defaultTitle' => $this->s_title( $_social_title['tw'] ),
-						'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
 						'defaultDesc'  => $this->s_description( $_social_description['tw'] ),
 						'titleLock'    => $_is_static_frontpage && (bool) $this->get_option( 'homepage_twitter_title' ),
 						'descLock'     => $_is_static_frontpage && (bool) $this->get_option( 'homepage_twitter_description' ),
@@ -563,9 +563,9 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		// Fetch image placeholder.
 		if ( $_is_static_frontpage && $this->get_option( 'homepage_social_image_url' ) ) {
 			$image_placeholder = $this->get_option( 'homepage_social_image_url' )
-							  ?: Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
+							  ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 		} else {
-			$image_placeholder = Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
+			$image_placeholder = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 		}
 
 		?>

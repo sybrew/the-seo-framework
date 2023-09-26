@@ -58,6 +58,7 @@ function _init_wc_compat() {
 			 */
 			if ( Query::is_product() ) {
 				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
+				// var_dump() filter the new filter here.
 			}
 		}
 	);
@@ -196,7 +197,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args    The query arguments. Contains 'id' and 'taxonomy'.
+ * @param array|null $args    The query arguments. Contains 'id', 'tax', and 'pta'.
  *                            Is null when the query is auto-determined.
  * @param int <bit>  $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
@@ -215,7 +216,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 		if ( Query::is_singular() )
 			$page_id = Query::get_the_real_id();
 	} else {
-		if ( '' === $args['taxonomy'] )
+		if ( '' === $args['tax'] )
 			$page_id = $args['id'];
 	}
 
@@ -257,7 +258,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
  */
 function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 
-	if ( $interpreter::$query['taxonomy'] ) return;
+	if ( $interpreter::$query['tax'] ) return;
 
 	static $page_ids;
 
@@ -296,7 +297,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
  *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
  *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
- * @param array|null $args The query arguments. Contains 'id', 'taxonomy', and 'pta'.
+ * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
  *                         Is null when the query is auto-determined.
  * @return array $params
  */
@@ -309,8 +310,8 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 		$is_product          = Query::is_product();
 		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
 	} else {
-		if ( $args['taxonomy'] ) {
-			$is_product_category = 'product_cat' === $args['taxonomy'];
+		if ( $args['tax'] ) {
+			$is_product_category = 'product_cat' === $args['tax'];
 		} elseif ( $args['pta'] ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement.DetectedElseif
 			// TODO ? Which public non-page-PTA does WC have, actually?
 		} else {
@@ -336,7 +337,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  * @access private
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+ * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
  * @yield array : {
@@ -383,7 +384,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  * @access private
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id', 'taxonomy', and 'pta'.
+ * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
  * @yield array : {

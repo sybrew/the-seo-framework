@@ -9,7 +9,7 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 /**
  * The SEO Framework plugin
@@ -395,7 +395,7 @@ class Detect extends Admin_Init {
 	 *
 	 * @return bool Whether another Schema.org plugin is active.
 	 */
-	public function has_json_ld_plugin() {
+	public function has_json_ld_plugin() { // var_dump() reintroduce using this and create a list of plugins.
 		/**
 		 * @since 2.6.5
 		 * @param bool $detected Whether a conflicting schema plugin is detected.
@@ -653,10 +653,10 @@ class Detect extends Admin_Init {
 	public function get_robots_txt_url() {
 
 		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! $this->is_subdirectory_installation() ) {
-			$home = \trailingslashit( Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() ) );
+			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() ) );
 			$path = "{$home}robots.txt";
 		} elseif ( $this->has_robots_txt() ) {
-			$home = \trailingslashit( Factory\URI\Utils::set_preferred_url_scheme( \get_option( 'home' ) ) );
+			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( \get_option( 'home' ) ) );
 			$path = "{$home}robots.txt";
 		} else {
 			$path = '';

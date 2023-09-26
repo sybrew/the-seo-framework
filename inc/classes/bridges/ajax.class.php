@@ -9,7 +9,7 @@ namespace The_SEO_Framework\Bridges;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query;
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta;
 
 /**
  * The SEO Framework plugin
@@ -313,25 +313,25 @@ final class AJAX {
 					case 'metadescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
-									   ?: Factory\Description::get_generated_description( $_generator_args, false );
+									   ?: Meta\Description::get_generated_description( $_generator_args, false );
 						} else {
-							$data[ $g ] = Factory\Description::get_generated_description( $_generator_args, false );
+							$data[ $g ] = Meta\Description::get_generated_description( $_generator_args, false );
 						}
 						break;
 					case 'ogdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
-									   ?: Factory\Open_Graph::get_generated_description( $_generator_args, false );
+									   ?: Meta\Open_Graph::get_generated_description( $_generator_args, false );
 						} else {
-							$data[ $g ] = Factory\Open_Graph::get_generated_description( $_generator_args, false );
+							$data[ $g ] = Meta\Open_Graph::get_generated_description( $_generator_args, false );
 						}
 						break;
 					case 'twdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = $tsf->get_option( 'homepage_description' )
-									   ?: Factory\Twitter::get_generated_description( $_generator_args, false );
+									   ?: Meta\Twitter::get_generated_description( $_generator_args, false );
 						} else {
-							$data[ $g ] = Factory\Twitter::get_generated_description( $_generator_args, false );
+							$data[ $g ] = Meta\Twitter::get_generated_description( $_generator_args, false );
 						}
 				}
 
@@ -341,9 +341,9 @@ final class AJAX {
 			case 'imageurl':
 				if ( Query::is_static_frontpage( $post_id ) ) {
 					$data[ $g ] = $tsf->get_option( 'homepage_social_image_url' )
-							   ?: Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
+							   ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 				} else {
-					$data[ $g ] = Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
+					$data[ $g ] = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 				}
 		}
 

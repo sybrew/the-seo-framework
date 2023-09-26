@@ -13,7 +13,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -169,7 +169,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			] ),
 		true );
 
-		$logo_placeholder = Factory\Image::get_first_generated_image_url( [ 'id' => 0 ], 'organization' );
+		$logo_placeholder = Meta\Image::get_first_generated_image_url( [ 'id' => 0 ], 'organization' );
 		?>
 		<p>
 			<label for=knowledge_logo-url>

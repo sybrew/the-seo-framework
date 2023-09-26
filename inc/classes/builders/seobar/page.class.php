@@ -11,7 +11,7 @@ namespace The_SEO_Framework\Builders\SEOBar;
 use const \The_SEO_Framework\ROBOTS_ASSERT;
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta\Factory,
+	\The_SEO_Framework\Meta,
 	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Interpreters\SEOBar;
 
@@ -110,7 +110,7 @@ final class Page extends Main {
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					Factory\Robots::generate_meta(
+					Meta\Robots::generate_meta(
 						[ 'id' => static::$query['id'] ],
 						[ 'noindex', 'nofollow', 'noarchive' ],
 						ROBOTS_ASSERT
@@ -118,7 +118,7 @@ final class Page extends Main {
 				),
 				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
 				// The asserter should be leading, but the SEO Bar should be readable.
-				'robotsassert' => Factory\Robots::get_collected_meta_assertions(),
+				'robotsassert' => Meta\Robots::get_collected_meta_assertions(),
 			],
 		];
 	}
@@ -156,7 +156,7 @@ final class Page extends Main {
 			'page/title/defaults',
 			[
 				'params'   => [
-					'untitled'        => Factory\Title::get_untitled_title(),
+					'untitled'        => Meta\Title::get_untitled_title(),
 					'blogname_quoted' => preg_quote( Data\Blog::get_public_blog_name(), '/' ),
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
 					'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
@@ -167,7 +167,7 @@ final class Page extends Main {
 					'untitled'   => sprintf(
 						/* translators: %s = "Untitled" */
 						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
-						Factory\Title::get_untitled_title()
+						Meta\Title::get_untitled_title()
 					),
 					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
@@ -211,7 +211,7 @@ final class Page extends Main {
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$title_part = Factory\Title::get_bare_custom_title( $_generator_args );
+		$title_part = Meta\Title::get_bare_custom_title( $_generator_args );
 
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
@@ -241,7 +241,7 @@ final class Page extends Main {
 				$item['assess']['base'] = \__( "It's built using the site title.", 'autodescription' );
 			}
 
-			$title_part = Factory\Title::get_bare_generated_title( $_generator_args );
+			$title_part = Meta\Title::get_bare_generated_title( $_generator_args );
 		}
 
 		if ( ! $title_part ) {
@@ -263,16 +263,16 @@ final class Page extends Main {
 		$title = $title_part;
 
 		// Don't use cache, as this can be filtered.
-		if ( Factory\Title\Conditions::use_title_protection_status( $_generator_args ) ) {
+		if ( Meta\Title\Conditions::use_title_protection_status( $_generator_args ) ) {
 			$_title_before = $title;
 			static::$tsf->merge_title_protection( $title, $_generator_args );
 			if ( $title !== $_title_before )
 				$item['assess']['protected'] = $cache['assess']['protected'];
 		}
 
-		if ( Factory\Title\Conditions::use_title_branding( $_generator_args ) ) {
+		if ( Meta\Title\Conditions::use_title_branding( $_generator_args ) ) {
 			$_title_before = $title;
-			$title         = Factory\Title::add_branding( $title, $_generator_args );
+			$title         = Meta\Title::add_branding( $title, $_generator_args );
 
 			// Absence assertion is done after this.
 			if ( $title === $_title_before ) {
@@ -430,7 +430,7 @@ final class Page extends Main {
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$desc = Factory\Description::get_custom_description( $_generator_args, false );
+		$desc = Meta\Description::get_custom_description( $_generator_args, false );
 
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
@@ -452,7 +452,7 @@ final class Page extends Main {
 				// Further assessments must be made later. Halt assertion here to prevent confusion.
 				return $item;
 			}
-		} elseif ( ! Factory\Description::may_generate( $_generator_args ) ) {
+		} elseif ( ! Meta\Description::may_generate( $_generator_args ) ) {
 			$item = $cache['defaults']['emptynoauto'];
 
 			// No description is found. There's no need to continue parsing.
@@ -460,7 +460,7 @@ final class Page extends Main {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			$desc = Factory\Description::get_generated_description( $_generator_args, false );
+			$desc = Meta\Description::get_generated_description( $_generator_args, false );
 
 			if ( ! \strlen( $desc ) ) {
 				$item['reason'] = $cache['reason']['empty'];
@@ -684,11 +684,11 @@ final class Page extends Main {
 		}
 
 		if ( $this->query_cache['meta']['_genesis_canonical_uri'] ) {
-			$permalink = Factory\URI::get_generated_canonical_url( [
+			$permalink = Meta\URI::get_generated_canonical_url( [
 				'id' => static::$query['id'],
 			] );
 			// We create it because filters may apply.
-			$canonical = Factory\URI::get_canonical_url( [
+			$canonical = Meta\URI::get_canonical_url( [
 				'id' => static::$query['id'],
 			] );
 			if ( $permalink !== $canonical ) {

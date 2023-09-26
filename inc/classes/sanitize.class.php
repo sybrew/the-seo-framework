@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\Utils\clamp_sentence;
 
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Helper\{
 	Post_Types,
@@ -936,7 +936,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_title_separator( $sep ) {
 
-		$sep_list = Factory\Title\Utils::get_separator_list();
+		$sep_list = Meta\Title\Utils::get_separator_list();
 
 		if ( \array_key_exists( $sep, $sep_list ) )
 			return (string) $sep;
@@ -1508,8 +1508,8 @@ class Sanitize extends Admin_Pages {
 		// Escape early. This may lead to it pointing to this domain.
 		$url = \esc_url( $url, [ 'https', 'http' ] );
 
-		if ( $url && Factory\URI\Utils::url_matches_blog_domain( $url ) )
-			$url = Factory\URI\Utils::set_preferred_url_scheme( $url );
+		if ( $url && Meta\URI\Utils::url_matches_blog_domain( $url ) )
+			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
 
 		return $url ?: '';
 	}
@@ -1547,8 +1547,8 @@ class Sanitize extends Admin_Pages {
 
 		$url = \sanitize_url( $url, [ 'https', 'http' ] );
 
-		if ( $url && Factory\URI\Utils::url_matches_blog_domain( $url ) )
-			$url = Factory\URI\Utils::set_preferred_url_scheme( $url );
+		if ( $url && Meta\URI\Utils::url_matches_blog_domain( $url ) )
+			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
 
 		return $url ?: '';
 	}
@@ -1599,11 +1599,11 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_url_relative_to_current_scheme( $url ) {
 
-		if ( Factory\URI\Utils::url_matches_blog_domain( $url ) ) {
-			$url = Factory\URI\Utils::set_preferred_url_scheme( $url );
+		if ( Meta\URI\Utils::url_matches_blog_domain( $url ) ) {
+			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
 		} else {
 			// This also sets preferred URL scheme if path.
-			$url = Factory\URI\Utils::convert_path_to_url( $url );
+			$url = Meta\URI\Utils::convert_path_to_url( $url );
 		}
 
 		return $this->s_url_query( $url );
@@ -1742,7 +1742,7 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_twitter_card( $card ) {
 
-		if ( \in_array( $card, Factory\Twitter::get_supported_cards(), true ) )
+		if ( \in_array( $card, Meta\Twitter::get_supported_cards(), true ) )
 			return $card;
 
 		return 'summary_large_image'; // var_dump() make 'auto'?
@@ -1791,7 +1791,7 @@ class Sanitize extends Admin_Pages {
 			$url = $this->set_url_scheme( $url, 'relative' );
 
 		// Only adjust scheme if it used to be relative. Do not use `s_url_relative_to_current_scheme()`.
-		$url = Factory\URI\Utils::convert_path_to_url( $url );
+		$url = Meta\URI\Utils::convert_path_to_url( $url );
 
 		/**
 		 * @since 2.5.0
@@ -2283,7 +2283,7 @@ class Sanitize extends Admin_Pages {
 
 		// TODO add filter for 5 * \MB_IN_BYTES; Facebook allows 8MB; Twitter 5MB (Q4 2022).
 		if ( $id && ( $width > 4096 || $height > 4096 || $filesize > 5 * \MB_IN_BYTES ) ) {
-			$new_image = Factory\Image\Utils::get_largest_image_src( $id, 4096, 5 * \MB_IN_BYTES );
+			$new_image = Meta\Image\Utils::get_largest_image_src( $id, 4096, 5 * \MB_IN_BYTES );
 			$url       = $new_image ? $this->s_url_relative_to_current_scheme( $new_image[0] ) : '';
 
 			if ( ! $url ) return $defaults;

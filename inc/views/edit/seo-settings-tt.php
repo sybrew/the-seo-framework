@@ -16,7 +16,7 @@ use \The_SEO_Framework\Interpreters\{
 };
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta\Factory,
+	\The_SEO_Framework\Meta,
 	\The_SEO_Framework\Bridges\TermSettings;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
@@ -49,10 +49,10 @@ $_generator_args = [
 $show_og = (bool) $this->get_option( 'og_tags' );
 $show_tw = (bool) $this->get_option( 'twitter_tags' );
 
-$image_placeholder = Factory\Image::get_first_generated_image_url( $_generator_args, 'social' );
+$image_placeholder = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 
-$canonical_placeholder = Factory\URI::get_generated_canonical_url( $_generator_args );
-$robots_defaults       = Factory\Robots::generate_meta(
+$canonical_placeholder = Meta\URI::get_generated_canonical_url( $_generator_args );
+$robots_defaults       = Meta\Robots::generate_meta(
 	$_generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],
 	ROBOTS_IGNORE_SETTINGS
@@ -151,11 +151,11 @@ $robots_settings = [
 						[
 							'state' => [
 								'refTitleLocked'    => false,
-								'defaultTitle'      => $this->s_title( Factory\Title::get_bare_generated_title( $_generator_args ) ),
-								'addAdditions'      => Factory\Title\Conditions::use_title_branding( $_generator_args ),
-								'useSocialTagline'  => Factory\Title\Conditions::use_title_branding( $_generator_args, true ),
+								'defaultTitle'      => $this->s_title( Meta\Title::get_bare_generated_title( $_generator_args ) ),
+								'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
+								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
 								'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
-								'additionPlacement' => 'left' === Factory\Title::get_addition_location() ? 'before' : 'after',
+								'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],
 						]
@@ -200,7 +200,7 @@ $robots_settings = [
 					'autodescription-meta[description]',
 					[
 						'state' => [
-							'defaultDescription' => Factory\Description::get_generated_description( $_generator_args ),
+							'defaultDescription' => Meta\Description::get_generated_description( $_generator_args ),
 							'hasLegacy'          => true,
 						],
 					]
@@ -219,16 +219,16 @@ $this->output_js_social_data(
 	[
 		'og' => [
 			'state' => [
-				'defaultTitle' => $this->s_title( Factory\Open_Graph::get_generated_title( $_generator_args, false ) ),
-				'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
-				'defaultDesc'  => $this->s_description( Factory\Open_Graph::get_generated_description( $_generator_args, false ) ),
+				'defaultTitle' => $this->s_title( Meta\Open_Graph::get_generated_title( $_generator_args, false ) ),
+				'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
+				'defaultDesc'  => $this->s_description( Meta\Open_Graph::get_generated_description( $_generator_args, false ) ),
 			],
 		],
 		'tw' => [
 			'state' => [
-				'defaultTitle' => $this->s_title( Factory\Twitter::get_generated_title( $_generator_args, false ) ),
-				'addAdditions' => Factory\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
-				'defaultDesc'  => $this->s_description( Factory\Twitter::get_generated_description( $_generator_args, false ) ),
+				'defaultTitle' => $this->s_title( Meta\Twitter::get_generated_title( $_generator_args, false ) ),
+				'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
+				'defaultDesc'  => $this->s_description( Meta\Twitter::get_generated_description( $_generator_args, false ) ),
 			],
 		],
 	]

@@ -187,9 +187,9 @@ final class Head {
 		$tag_generators   = &Tags::tag_generators();
 		$generators_queue = [];
 
-		// Queue array_merge for improved performance.
+		// Queue array_merge for improved performance. Do not use __NAMESPACE__; needs to be found easily.
 		foreach ( $generator_pools as $pool )
-			$generators_queue[] = ( "\The_SEO_Framework\Meta\Generator\\$pool" )::GENERATORS;
+			$generators_queue[] = ( "\The_SEO_Framework\Front\Meta\Generator\\$pool" )::GENERATORS;
 
 		/**
 		 * @since 4.3.0

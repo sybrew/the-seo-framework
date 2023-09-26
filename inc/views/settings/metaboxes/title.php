@@ -12,14 +12,14 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'title', $instance ) ) :
 	case 'title_main':
 		$blogname = esc_html( Data\Blog::get_public_blog_name() );
-		$sep      = esc_html( Factory\Title::get_separator() );
+		$sep      = esc_html( Meta\Title::get_separator() );
 
 		$additions_left  = "<span class=tsf-title-additions-js><span class=tsf-site-title-js>$blogname</span><span class=tsf-sep-js> $sep </span></span>";
 		$additions_right = "<span class=tsf-title-additions-js><span class=tsf-sep-js> $sep </span><span class=tsf-site-title-js>$blogname</span></span>";
@@ -175,7 +175,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		break;
 
 	case 'title_general_tab':
-		$title_separator         = Factory\Title\Utils::get_separator_list();
+		$title_separator         = Meta\Title\Utils::get_separator_list();
 		$default_title_separator = $this->get_option( 'title_separator' );
 
 		?>

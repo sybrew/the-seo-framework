@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Front,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Helper\{
 	Query,
@@ -429,7 +429,7 @@ class Init extends Pool {
 		return \apply_filters_ref_array(
 			'the_seo_framework_pre_get_document_title',
 			[
-				Factory\Title::get_title(),
+				Meta\Title::get_title(),
 				Query::get_the_real_id(),
 			]
 		);
@@ -461,7 +461,7 @@ class Init extends Pool {
 		return \apply_filters_ref_array(
 			'the_seo_framework_wp_title',
 			[
-				Factory\Title::get_title(),
+				Meta\Title::get_title(),
 				Query::get_the_real_id(),
 			]
 		);
@@ -484,7 +484,7 @@ class Init extends Pool {
 
 		if ( ! Query\Utils::query_supports_seo() ) return;
 
-		$url = Meta\Factory\URI::get_redirect_url();
+		$url = Meta\URI::get_redirect_url();
 
 		if ( $url ) {
 			/**
@@ -532,7 +532,7 @@ class Init extends Pool {
 		if ( ! $this->allow_external_redirect() ) {
 			// Only HTTP/HTTPS and home URLs are allowed.
 			$path = $this->set_url_scheme( $url, 'relative' );
-			$url  = \trailingslashit( Factory\URI\Utils::get_site_host() ) . ltrim( $path, ' /' );
+			$url  = \trailingslashit( Meta\URI\Utils::get_site_host() ) . ltrim( $path, ' /' );
 
 			// Maintain current request's scheme.
 			$scheme = Query::is_ssl() ? 'https' : 'http';
@@ -690,7 +690,7 @@ class Init extends Pool {
 				'# This is an invalid robots.txt location.',
 				'# Please visit: ' . \esc_url(
 					\trailingslashit(
-						Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() )
+						Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() )
 					) . 'robots.txt'
 				)
 			);
@@ -1024,7 +1024,7 @@ class Init extends Pool {
 
 		// Don't use cache. See @WARNING in doc comment.
 		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
-			$image_details = current( Factory\Image::get_image_details(
+			$image_details = current( Meta\Image::get_image_details(
 				[ 'id' => $post->ID ],
 				true,
 				'oembed'

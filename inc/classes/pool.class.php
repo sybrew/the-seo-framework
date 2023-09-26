@@ -150,10 +150,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Robots
+	 * @return \The_SEO_Framework\Meta\Robots
 	 */
 	public static function robots() {
-		return static::$pool['robots'] ??= new class extends Meta\Factory\Robots {
+		return static::$pool['robots'] ??= new class extends Meta\Robots {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -171,10 +171,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\URI
+	 * @return \The_SEO_Framework\Meta\URI
 	 */
 	public static function uri() {
-		return static::$pool['uri'] ??= new class extends Meta\Factory\URI {
+		return static::$pool['uri'] ??= new class extends Meta\URI {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -185,10 +185,10 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Factory\URI\Utils
+			 * @return \The_SEO_Framework\Meta\URI\Utils
 			 */
 			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Factory\URI\Utils {
+				return static::$subpool['utils'] ??= new class extends Meta\URI\Utils {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -208,10 +208,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Title
+	 * @return \The_SEO_Framework\Meta\Title
 	 */
 	public static function title() {
-		return static::$pool['title'] ??= new class extends Meta\Factory\Title {
+		return static::$pool['title'] ??= new class extends Meta\Title {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -222,10 +222,10 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Factory\Title\Utils
+			 * @return \The_SEO_Framework\Meta\Title\Utils
 			 */
 			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Factory\Title\Utils {
+				return static::$subpool['utils'] ??= new class extends Meta\Title\Utils {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -238,10 +238,10 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Factory\Title\Conditions
+			 * @return \The_SEO_Framework\Meta\Title\Conditions
 			 */
 			public static function conditions() {
-				return static::$subpool['conditions'] ??= new class extends Meta\Factory\Title\Conditions {
+				return static::$subpool['conditions'] ??= new class extends Meta\Title\Conditions {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -261,10 +261,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Description
+	 * @return \The_SEO_Framework\Meta\Description
 	 */
 	public static function description() {
-		return static::$pool['description'] ??= new class extends Meta\Factory\Description {
+		return static::$pool['description'] ??= new class extends Meta\Description {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -275,10 +275,10 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Factory\Description\Excerpt
+			 * @return \The_SEO_Framework\Meta\Description\Excerpt
 			 */
 			public static function excerpt() {
-				return static::$subpool['excerpt'] ??= new class extends Meta\Factory\Description\Excerpt {
+				return static::$subpool['excerpt'] ??= new class extends Meta\Description\Excerpt {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -298,10 +298,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Open_Graph
+	 * @return \The_SEO_Framework\Meta\Open_Graph
 	 */
 	public static function open_graph() {
-		return static::$pool['open_graph'] ??= new class extends Meta\Factory\Open_Graph {
+		return static::$pool['open_graph'] ??= new class extends Meta\Open_Graph {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -319,10 +319,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Facebook
+	 * @return \The_SEO_Framework\Meta\Facebook
 	 */
 	public static function facebook() {
-		return static::$pool['facebook'] ??= new class extends Meta\Factory\Facebook {
+		return static::$pool['facebook'] ??= new class extends Meta\Facebook {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -340,10 +340,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Twitter
+	 * @return \The_SEO_Framework\Meta\Twitter
 	 */
 	public static function twitter() {
-		return static::$pool['twitter'] ??= new class extends Meta\Factory\Twitter {
+		return static::$pool['twitter'] ??= new class extends Meta\Twitter {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -361,10 +361,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Image
+	 * @return \The_SEO_Framework\Meta\Image
 	 */
 	public static function image() {
-		return static::$pool['image'] ??= new class extends Meta\Factory\Image {
+		return static::$pool['image'] ??= new class extends Meta\Image {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -375,10 +375,10 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Factory\Image\Utils
+			 * @return \The_SEO_Framework\Meta\Image\Utils
 			 */
 			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Factory\Image\Utils {
+				return static::$subpool['utils'] ??= new class extends Meta\Image\Utils {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -398,10 +398,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Breadcrumbs
+	 * @return \The_SEO_Framework\Meta\Breadcrumbs
 	 */
 	public static function breadcrumbs() {
-		return static::$pool['breadcrumbs'] ??= new class extends Meta\Factory\Breadcrumbs {
+		return static::$pool['breadcrumbs'] ??= new class extends Meta\Breadcrumbs {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -419,10 +419,10 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Meta\Factory\Schema
+	 * @return \The_SEO_Framework\Meta\Schema
 	 */
 	public static function schema() {
-		return static::$pool['schema'] ??= new class extends Meta\Factory\Schema {
+		return static::$pool['schema'] ??= new class extends Meta\Schema {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
@@ -433,24 +433,25 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @var array[string,string] A list of valid entity class names.
+			 * @readonly
+			 * @var array[string,string] A list of accessible entity class names.
 			 */
 			public $entities = [
-				'Author'         => Meta\Factory\Schema\Author::class,
-				'BreadcrumbList' => Meta\Factory\Schema\BreadcrumbList::class,
-				'Organization'   => Meta\Factory\Schema\Organization::class,
-				'Person'         => Meta\Factory\Schema\Person::class,
-				'WebPage'        => Meta\Factory\Schema\WebPage::class,
-				'WebSite'        => Meta\Factory\Schema\WebSite::class,
-				'Reference'      => Meta\Factory\Schema\Reference::class,
+				'Author'         => Meta\Schema\Author::class,
+				'BreadcrumbList' => Meta\Schema\BreadcrumbList::class,
+				'Organization'   => Meta\Schema\Organization::class,
+				'Person'         => Meta\Schema\Person::class,
+				'WebPage'        => Meta\Schema\WebPage::class,
+				'WebSite'        => Meta\Schema\WebSite::class,
+				'Reference'      => Meta\Schema\Reference::class,
 			];
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Factory\Schema\Utils
+			 * @return \The_SEO_Framework\Meta\Schema\Utils
 			 */
 			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Factory\Schema\Utils {
+				return static::$subpool['utils'] ??= new class extends Meta\Schema\Utils {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.

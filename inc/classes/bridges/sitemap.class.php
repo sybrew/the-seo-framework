@@ -10,7 +10,7 @@ namespace The_SEO_Framework\Bridges;
 
 use \The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Interpreters,
-	\The_SEO_Framework\Meta\Factory;
+	\The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\memo;
 
@@ -215,7 +215,7 @@ final class Sitemap {
 
 		if ( ! isset( $list[ $id ] ) ) return false;
 
-		$host      = Factory\URI\Utils::set_preferred_url_scheme( Factory\URI\Utils::get_site_host() );
+		$host      = Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() );
 		$path_info = static::get_sitemap_base_path_info();
 
 		return \sanitize_url(
@@ -667,7 +667,7 @@ final class Sitemap {
 		return \apply_filters(
 			'the_seo_framework_sitemap_base_path',
 			rtrim(
-				Factory\URI\Utils::get_parsed_front_page_url()['path'] ?? '',
+				Meta\URI\Utils::get_parsed_front_page_url()['path'] ?? '',
 				'/'
 			)
 		);

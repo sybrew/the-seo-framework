@@ -32,7 +32,7 @@ use \The_SEO_Framework\Helper\Query;
  * Generates the sitemap.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Factory\Image\Main
+ * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Image\Main
  *              2. Deprecated.
  * @abstract
  * @deprecated
@@ -41,4 +41,4 @@ use \The_SEO_Framework\Helper\Query;
  * @access protected
  *         Use tsf()->image() instead.
  */
-class_alias( 'The_SEO_Framework\Builders\Images', 'The_SEO_Framework\Meta\Factory\Image\Main', true );
+class_alias( 'The_SEO_Framework\Builders\Images', 'The_SEO_Framework\Meta\Image\Main', true );

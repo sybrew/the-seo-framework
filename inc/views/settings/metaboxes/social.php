@@ -12,7 +12,7 @@ use The_SEO_Framework\Bridges\SeoSettings,
 	The_SEO_Framework\Interpreters\Form,
 	The_SEO_Framework\Interpreters\Settings_Input as Input;
 
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -261,7 +261,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		$tw_creator             = $this->get_option( 'twitter_creator' );
 		$tw_creator_placeholder = _x( '@your-personal-username', 'Twitter @username', 'autodescription' );
 
-		$supported_twitter_cards = Factory\Twitter::get_supported_cards();
+		$supported_twitter_cards = Meta\Twitter::get_supported_cards();
 
 		HTML::header_title( __( 'Twitter Integration Settings', 'autodescription' ) );
 		HTML::description( __( 'Twitter post sharing works mostly through Twitter Cards, and may fall back to use Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options.', 'autodescription' ) );

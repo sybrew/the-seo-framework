@@ -13,7 +13,7 @@ use \The_SEO_Framework\Helper\{
 	Taxonomies,
 };
 
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta;
 use \The_SEO_Framework\Builders;
 
 /**
@@ -503,7 +503,7 @@ final class Scripts {
 
 		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
 
-		$term_prefix = Factory\Title\Conditions::use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
+		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
 			/* translators: %s: Taxonomy singular name. */
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
@@ -657,12 +657,12 @@ final class Scripts {
 				'data' => [
 					'states' => [
 						'titleSeparator'  => static::decode_entities( $tsf->s_title_raw(
-							Factory\Title::get_separator()
+							Meta\Title::get_separator()
 						) ),
 						'prefixPlacement' => \is_rtl() ? 'after' : 'before',
 					],
 					'params' => [
-						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( Factory\Title::get_untitled_title() ) ),
+						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( Meta\Title::get_untitled_title() ) ),
 						'stripTitleTags' => (bool) $tsf->get_option( 'title_strip_tags' ),
 					],
 					'i18n'   => [

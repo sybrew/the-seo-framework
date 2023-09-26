@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta\Factory;
+use \The_SEO_Framework\Meta;
 
 use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
 
@@ -166,7 +166,7 @@ abstract class Main {
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
 			$included = 'noindex'
 				!== (
-					Factory\Robots::generate_meta(
+					Meta\Robots::generate_meta(
 						$_generator_args,
 						[ 'noindex' ],
 						ROBOTS_IGNORE_PROTECTION
@@ -176,7 +176,7 @@ abstract class Main {
 			if ( ! $included ) break;
 
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
-			$included = ! Factory\URI::get_redirect_url( $_generator_args );
+			$included = ! Meta\URI::get_redirect_url( $_generator_args );
 			break;
 		}
 
@@ -225,7 +225,7 @@ abstract class Main {
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
 			$included = 'noindex'
 				!== (
-					Factory\Robots::generate_meta(
+					Meta\Robots::generate_meta(
 						$_generator_args,
 						[ 'noindex' ],
 						ROBOTS_IGNORE_PROTECTION
@@ -235,7 +235,7 @@ abstract class Main {
 			if ( ! $included ) break;
 
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
-			$included = ! Factory\URI::get_redirect_url( $_generator_args );
+			$included = ! Meta\URI::get_redirect_url( $_generator_args );
 			break;
 		}
 

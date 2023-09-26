@@ -5216,6 +5216,8 @@ final class Deprecated {
 	 * Not cached as it's imposing security functionality.
 	 *
 	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool
 	 */
