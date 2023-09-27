@@ -107,10 +107,10 @@ final class Term extends Main {
 	protected function prime_query_cache( array &$query_cache = [] ) {
 		$query_cache = [
 			'term'   => \get_term( static::$query['id'], static::$query['tax'] ),
-			'meta'   => static::$tsf->get_term_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
+			'meta'   => Data\Plugin\Term::get_term_meta( static::$query['id'] ),
 			'states' => [
 				'locale'       => \get_locale(),
-				'isempty'      => ! static::$tsf->is_term_populated( static::$query['id'], static::$query['tax'] ),
+				'isempty'      => ! Data\Term::is_term_populated( static::$query['id'], static::$query['tax'] ),
 				'posttypes'    => Taxonomies::get_post_types_from_taxonomy( static::$query['tax'] ),
 				'robotsmeta'   => array_merge(
 					[

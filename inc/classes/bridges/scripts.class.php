@@ -740,7 +740,7 @@ final class Scripts {
 			if ( ! Taxonomies::is_taxonomy_supported( $_t->name ) ) continue;
 
 			$singular_name   = Taxonomies::get_taxonomy_label( $_t->name );
-			$primary_term_id = $tsf->get_primary_term_id( $id, $_t->name );
+			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $id, $_t->name );
 
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,

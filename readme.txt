@@ -690,6 +690,7 @@ TODO remove tsf()->loaded?
 			* Now, the main object is rarely required internally, but most methods are called statically (directly). This reduces the function overhead [from 4% to 62%](https://3v4l.org/J00A0).
 				* Although, this may increase overhead by 17% due to [a quirk in PHP](https://twitter.com/SybreWaaijer/status/1703077875988009325). But, we combat this by creating as few methods as possible, at the cost of "readability" (this only affects developers not using a modern code editor).
 		* Generated image metadata are now cached per method using PHP 8's "Fiber" principle (I backported it conceptually to 7.4). This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata, and continue to make more metadata when there's demand.
+		* Fewer term and post meta data is stored in the plugin's memoization (up to 69 items each, nice), so there's less of a strain on memory when generating sitemaps or walking through metadata. Object caching can still work and won't be affected.
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
@@ -1125,6 +1126,17 @@ TODO remove tsf()->loaded?
 				* `tsf()->update_settings()`, use `tsf()->data()->plugin()->update_option()` instead.
 				* `tsf()->get_static_cache()`, use `tsf()->data()->plugin()->get_site_cache()` instead.
 				* `tsf()->update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
+				* `tsf()->update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
+				* `tsf()->get_term_meta_item()`, use `tsf()->data()->plugin()->term()->get_term_meta_item()` instead.
+				* `tsf()->get_term_meta()`, use `tsf()->data()->plugin()->term()->get_term_meta()` instead.
+				* `tsf()->get_term_meta_defaults()`, use `tsf()->data()->plugin()->term()->get_term_meta_defaults()` instead.
+				* `tsf()->update_single_term_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_term_meta_item()` instead.
+				* `tsf()->get_latest_category_id()`, use `tsf()->data()->term()->get_latest_category_id()` instead.
+				* `tsf()->get_latest_category_id()`, use `tsf()->data()->term()->is_term_populated()` instead.
+				* `tsf()->get_latest_category_id()`, use `tsf()->data()->post()->get_latest_post_id()` instead.
+				* `tsf()->get_primary_term()`, use `tsf()->data()->plugin()->post()->get_primary_term()` instead.
+				* `tsf()->get_primary_term_id()`, use `tsf()->data()->plugin()->post()->get_primary_term_id()` instead.
+				* `tsf()->update_primary_term_id()`, use `tsf()->data()->plugin()->post()->update_primary_term_id()` instead.
 				* TODO `get_current_post_author_id()`, use `tsf()->get_post_author_id()` instead. (this will move to Data or Query?)
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).

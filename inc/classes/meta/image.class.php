@@ -385,8 +385,8 @@ class Image {
 				];
 			} elseif ( Query::is_editable_term() ) {
 				$details = [
-					'url' => \tsf()->get_term_meta_item( 'social_image_url' ),
-					'id'  => \tsf()->get_term_meta_item( 'social_image_id' ),
+					'url' => Data\Plugin\Term::get_term_meta_item( 'social_image_url' ),
+					'id'  => Data\Plugin\Term::get_term_meta_item( 'social_image_id' ),
 				];
 			} elseif ( \is_post_type_archive() ) {
 				$details = [
@@ -434,8 +434,8 @@ class Image {
 
 			if ( $args['tax'] ) {
 				$details = [
-					'url' => \tsf()->get_term_meta_item( 'social_image_url', $args['id'] ),
-					'id'  => \tsf()->get_term_meta_item( 'social_image_id', $args['id'] ),
+					'url' => Data\Plugin\Term::get_term_meta_item( 'social_image_url', $args['id'] ),
+					'id'  => Data\Plugin\Term::get_term_meta_item( 'social_image_id', $args['id'] ),
 				];
 			} elseif ( $args['pta'] ) {
 				$details = [

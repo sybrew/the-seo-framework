@@ -76,7 +76,7 @@ final class Front extends Factory {
 			$qubit = null;
 
 			if ( Query::is_editable_term() ) {
-				$qubit = (int) $tsf->get_term_meta_item( $type );
+				$qubit = (int) Data\Plugin\Term::get_term_meta_item( $type );
 			} elseif ( Query::is_singular() ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type" );
 			} elseif ( \is_post_type_archive() ) {

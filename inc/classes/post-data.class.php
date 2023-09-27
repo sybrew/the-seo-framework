@@ -529,7 +529,7 @@ class Post_Data extends Detect {
 				$_POST[ "{$this->inpost_nonce_name}_pt_{$_taxonomy}" ] ?? '', // If empty, wp_verify_nonce will return false.
 				"{$this->inpost_nonce_field}_pt"
 			) ) { // Redundant. Fortified.
-				$this->update_primary_term_id(
+				Data\Plugin\Post::update_primary_term_id(
 					$post->ID,
 					$_taxonomy,
 					\absint( $_POST['autodescription'][ $_post_key ] ?? 0 )
@@ -538,38 +538,6 @@ class Post_Data extends Detect {
 		}
 	}
 
-	/**
-	 * Fetch latest public post/page ID.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.4.3
-	 * @since 2.9.3 1. Removed object caching.
-	 *              2. It now uses WP_Query, instead of wpdb.
-	 * @slow The queried result is not stored in WP Post's cache, which would allow
-	 *       direct access to all values of the post (if requested). This is because
-	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
-	 *
-	 * @return int Latest Post ID.
-	 */
-	public function get_latest_post_id() {
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
-
-		$query = new \WP_Query( [
-			'posts_per_page'   => 1,
-			'post_type'        => [ 'post', 'page' ],
-			'orderby'          => 'date',
-			'order'            => 'DESC',
-			'post_status'      => [ 'publish', 'future', 'pending' ],
-			'fields'           => 'ids',
-			'cache_results'    => false,
-			'suppress_filters' => true,
-			'no_found_rows'    => true,
-		] );
-
-		return memo( reset( $query->posts ) );
-	}
 
 	/**
 	 * Fetches Post content.
@@ -766,89 +734,5 @@ class Post_Data extends Detect {
 		Data\Plugin::update_site_cache( 'excluded_ids', $cache );
 
 		return $cache;
-	}
-
-	/**
-	 * Returns the primary term for post.
-	 *
-	 * @since 3.0.0
-	 * @since 4.1.5   1. Added memoization.
-	 *                2. The first and second parameters are now required.
-	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
-	 *                2. This method now converts the post meta to an integer, making the comparison work again.
-	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
-	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
-	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
-	 *              2. Now returns `null` instead of `false` on failure.
-	 *
-	 * @param int    $post_id  The post ID.
-	 * @param string $taxonomy The taxonomy name.
-	 * @return \WP_Term|null The primary term. Null if cannot be generated.
-	 */
-	public function get_primary_term( $post_id, $taxonomy ) {
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $post_id, $taxonomy ) ) return $memo;
-
-		$primary_id = (int) \get_post_meta( $post_id, "_primary_term_{$taxonomy}", true ) ?: 0;
-
-		// Users can alter the term list via quick/bulk edit, but cannot set a primary term that way.
-		// Users can also delete a term from the site that was previously assigned as primary.
-		// So, test if the term still exists for the post.
-		// Although 'get_the_terms()' is an expensive function, it memoizes, and
-		// is always called by WP before we fetch a primary term. So, 0 overhead here.
-		$terms        = \get_the_terms( $post_id, $taxonomy );
-		$primary_term = false;
-
-		if ( $terms && \is_array( $terms ) ) {
-			if ( $primary_id ) {
-				// Test for is_array in the unlikely event a post's taxonomy is gone ($terms = WP_Error)
-				foreach ( $terms as $term ) {
-					if ( $primary_id === $term->term_id ) {
-						$primary_term = $term;
-						break;
-					}
-				}
-			} else {
-				$term_ids = array_column( $terms, 'term_id' );
-				asort( $term_ids );
-				$primary_term = $terms[ array_key_first( $term_ids ) ] ?? false;
-			}
-		}
-
-		return memo( $primary_term, $post_id, $taxonomy );
-	}
-
-	/**
-	 * Returns the primary term ID for post.
-	 *
-	 * @since 3.0.0
-	 * @since 4.1.5 1. Now validates if the stored term ID's term exists (for the post or at all).
-	 *              2. The first and second parameters are now required.
-	 *
-	 * @param int    $post_id  The post ID.
-	 * @param string $taxonomy The taxonomy name.
-	 * @return int   The primary term ID. 0 if not found.
-	 */
-	public function get_primary_term_id( $post_id, $taxonomy ) {
-		return $this->get_primary_term( $post_id, $taxonomy )->term_id ?? 0;
-	}
-
-	/**
-	 * Updates the primary term ID for post.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param int|null $post_id  The post ID.
-	 * @param string   $taxonomy The taxonomy name.
-	 * @param int      $value    The new value. If empty, it will delete the entry.
-	 * @return bool True on success, false on failure.
-	 */
-	public function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
-
-		if ( ! $value )
-			return \delete_post_meta( $post_id, "_primary_term_{$taxonomy}" );
-
-		return \update_post_meta( $post_id, "_primary_term_{$taxonomy}", $value );
 	}
 }

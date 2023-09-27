@@ -344,7 +344,7 @@ final class ListEdit extends ListTable {
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
-		$meta = $tsf->get_term_meta( $term_id );
+		$meta = Data\Plugin\Term::get_term_meta( $term_id );
 
 		// NB: The indexes correspond to `autodescription-list[index]` field input names.
 		$data = [

@@ -74,7 +74,7 @@ final class Args extends Factory {
 			$qubit = null;
 
 			if ( $args['tax'] ) {
-				$qubit = (int) $tsf->get_term_meta_item( $type, $args['id'] );
+				$qubit = (int) Data\Plugin\Term::get_term_meta_item( $type, $args['id'] );
 			} elseif ( $args['id'] ) {
 				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type", $args['id'] );
 			} elseif ( $args['pta'] ) {
@@ -153,7 +153,7 @@ final class Args extends Factory {
 
 		switch ( $pass ) {
 			case '404':
-				yield '404' => ! static::$tsf->is_term_populated( $args['id'], $args['tax'] );
+				yield '404' => ! Data\Term::is_term_populated( $args['id'], $args['tax'] );
 				break;
 
 			case 'protected':

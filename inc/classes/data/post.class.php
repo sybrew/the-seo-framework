@@ -35,8 +35,41 @@ use \The_SEO_Framework\Helper\Query;
  * @since 4.3.0
  * @access protected
  * @internal
+ * @internal Use tsf()->data()->post() instead.
  */
 class Post {
+	/**
+	 * Fetch latest public post/page ID.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.4.3
+	 * @since 2.9.3 1. Removed object caching.
+	 *              2. It now uses WP_Query, instead of wpdb.
+	 * @slow The queried result is not stored in WP Post's cache, which would allow
+	 *       direct access to all values of the post (if requested). This is because
+	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
+	 *
+	 * @return int Latest Post ID.
+	 */
+	public static function get_latest_post_id() {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
+		$query = new \WP_Query( [
+			'posts_per_page'   => 1,
+			'post_type'        => [ 'post', 'page' ],
+			'orderby'          => 'date',
+			'order'            => 'DESC',
+			'post_status'      => [ 'publish', 'future', 'pending' ],
+			'fields'           => 'ids',
+			'cache_results'    => false,
+			'suppress_filters' => true,
+			'no_found_rows'    => true,
+		] );
+
+		return memo( reset( $query->posts ) );
+	}
 
 	/**
 	 * @since 4.3.0

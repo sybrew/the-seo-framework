@@ -199,7 +199,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_taxonomical_title_branding( $id = 0 ) {
-		return ! \tsf()->get_term_meta_item( 'title_no_blog_name', $id )
+		return ! Data\Plugin\Term::get_term_meta_item( 'title_no_blog_name', $id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 

@@ -166,7 +166,7 @@ class URI {
 		if ( Query::is_singular() ) {
 			$url = \tsf()->get_post_meta_item( '_genesis_canonical_uri' );
 		} elseif ( Query::is_editable_term() ) {
-			$url = \tsf()->get_term_meta_item( 'canonical' ) ?: '';
+			$url = Data\Plugin\Term::get_term_meta_item( 'canonical' ) ?: '';
 		} elseif ( \is_post_type_archive() ) {
 			$url = \tsf()->get_post_type_archive_meta_item( 'canonical' );
 		}
@@ -190,7 +190,7 @@ class URI {
 		normalize_generation_args( $args );
 
 		if ( $args['tax'] ) {
-			$url = \tsf()->get_term_meta_item( 'canonical', $args['id'] );
+			$url = Data\Plugin\Term::get_term_meta_item( 'canonical', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$url = \tsf()->get_post_type_archive_meta_item( 'canonical', $args['pta'] );
 		} elseif ( $args['id'] ) {
@@ -647,7 +647,7 @@ class URI {
 			if ( Query::is_singular() ) {
 				$url = \tsf()->get_post_meta_item( 'redirect' );
 			} elseif ( Query::is_editable_term() ) {
-				$url = \tsf()->get_term_meta_item( 'redirect' );
+				$url = Data\Plugin\Term::get_term_meta_item( 'redirect' );
 			} elseif ( \is_post_type_archive() ) {
 				$url = \tsf()->get_post_type_archive_meta_item( 'redirect' );
 			}
@@ -655,7 +655,7 @@ class URI {
 			normalize_generation_args( $args );
 
 			if ( $args['tax'] ) {
-				$url = \tsf()->get_term_meta_item( 'redirect', $args['id'] );
+				$url = Data\Plugin\Term::get_term_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {
 				$url = \tsf()->get_post_type_archive_meta_item( 'redirect', $args['pta'] );
 			} elseif ( $args['id'] ) {

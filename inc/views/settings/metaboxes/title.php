@@ -24,8 +24,8 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$additions_left  = "<span class=tsf-title-additions-js><span class=tsf-site-title-js>$blogname</span><span class=tsf-sep-js> $sep </span></span>";
 		$additions_right = "<span class=tsf-title-additions-js><span class=tsf-sep-js> $sep </span><span class=tsf-site-title-js>$blogname</span></span>";
 
-		$latest_post_id = $this->get_latest_post_id();
-		$latest_cat_id  = $this->get_latest_category_id();
+		$latest_post_id = Data\Post::get_latest_post_id();
+		$latest_cat_id  = Data\Term::get_latest_term_id( 'category' );
 
 		$post_title = $this->s_title( $this->hellip_if_over(
 			// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.

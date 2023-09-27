@@ -208,7 +208,7 @@ class Description {
 		} elseif ( Query::is_singular() ) {
 			$desc = \tsf()->get_post_meta_item( '_genesis_description' );
 		} elseif ( Query::is_editable_term() ) {
-			$desc = \tsf()->get_term_meta_item( 'description' );
+			$desc = Data\Plugin\Term::get_term_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'description' );
 		}
@@ -232,7 +232,7 @@ class Description {
 	public static function get_custom_description_from_args( $args ) {
 
 		if ( $args['tax'] ) {
-			$desc = \tsf()->get_term_meta_item( 'description', $args['id'] );
+			$desc = Data\Plugin\Term::get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {

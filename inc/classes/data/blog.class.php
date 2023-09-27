@@ -38,6 +38,7 @@ use \The_SEO_Framework\Data;
  * @since 4.3.0
  * @access protected
  * @internal
+ * @internal Use tsf()->data()->blog() instead.
  */
 class Blog {
 

@@ -13,7 +13,8 @@ use function \The_SEO_Framework\{
 	Utils\normalize_generation_args,
 };
 
-use \The_SEO_Framework\Meta;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta;
 use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomies,
@@ -188,7 +189,7 @@ class Breadcrumbs {
 			$taxonomy   = reset( $taxonomies ); // TODO make this an option; also which output they want to use.
 
 			if ( $taxonomy ) {
-				$primary_term_id = \tsf()->get_primary_term_id( $post->ID, $taxonomy );
+				$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post->ID, $taxonomy );
 				$ancestors       = \get_ancestors(
 					$primary_term_id,
 					$taxonomy,

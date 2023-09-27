@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Data\Plugin\Settings
- * @subpackage The_SEO_Framework\Data\Plugin
+ * @package The_SEO_Framework\Classes\Data\Plugin\Setup
+ * @subpackage The_SEO_Framework\Data\Plugin\Settings
  */
 
 namespace The_SEO_Framework\Data\Plugin;
@@ -33,6 +33,7 @@ use \The_SEO_Framework\Traits\Property_Refresher;
  * @since 4.3.0
  * @access protected
  * @internal
+ * @internal Use tsf()->data()->plugin()->setup() instead.
  */
 class Setup {
 	use Property_Refresher;

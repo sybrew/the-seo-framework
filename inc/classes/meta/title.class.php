@@ -271,7 +271,7 @@ class Title {
 		} elseif ( Query::is_singular() ) {
 			$title = \tsf()->get_post_meta_item( '_genesis_title' );
 		} elseif ( Query::is_editable_term() ) {
-			$title = \tsf()->get_term_meta_item( 'doctitle' );
+			$title = Data\Plugin\Term::get_term_meta_item( 'doctitle' );
 		} elseif ( \is_post_type_archive() ) {
 			$title = \tsf()->get_post_type_archive_meta_item( 'doctitle' );
 		}
@@ -292,7 +292,7 @@ class Title {
 		normalize_generation_args( $args );
 
 		if ( $args['tax'] ) {
-			$title = \tsf()->get_term_meta_item( 'doctitle', $args['id'] );
+			$title = Data\Plugin\Term::get_term_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = \tsf()->get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {

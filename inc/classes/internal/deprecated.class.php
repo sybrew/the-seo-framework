@@ -4927,7 +4927,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_taxonomical_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
 
-		return $tsf->get_term_meta_item( 'canonical', $term_id ) ?: '';
+		return $tsf->data()->plugin()->term()->get_term_meta_item( 'canonical', $term_id ) ?: '';
 	}
 
 	/**
@@ -5463,10 +5463,8 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->update_settings()', '4.3.0', 'tsf()->data()->plugin()->update_option()' );
 
-		if ( ! $settings_field ) {
-			$settings_field = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
-			return Data\Plugin::update_option( \is_array( $new_option ) ? $new_option : [ $new_option => '' ] );
-		}
+		if ( ! $settings_field )
+			return $tsf->data()->plugin()->update_option( \is_array( $new_option ) ? $new_option : [ $new_option => '' ] );
 
 		return \update_option(
 			$settings_field,
@@ -5511,6 +5509,230 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->update_static_cache()', '4.3.0', 'tsf()->data()->plugin()->update_site_cache()' );
 
-		return \tsf()->data()->plugin()->update_site_cache( $key, $value );
+		return $tsf->data()->plugin()->update_site_cache( $key, $value );
+	}
+
+	/**
+	 * Returns the term meta item by key.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.0 No longer accidentally returns an empty array on failure.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $item      The item to get.
+	 * @param int    $term_id   The Term ID.
+	 * @return mixed The term meta item. Null when not found.
+	 */
+	public function get_term_meta_item( $item, $term_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->get_term_meta_item()' );
+
+		return $tsf->data()->plugin()->term()->get_term_meta_item( $item, $term_id );
+	}
+
+	/**
+	 * Returns term meta data from ID.
+	 * Memoizes the return value for the current request.
+	 *
+	 * Returns Genesis 2.3.0+ data if no term meta data is set via compat module.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.0 Added filter.
+	 * @since 3.0.0 Added filter.
+	 * @since 3.1.0 Deprecated filter.
+	 * @since 4.0.0 1. Removed deprecated filter.
+	 *              2. Now fills in defaults.
+	 * @since 4.1.4 1. Removed deprecated filter.
+	 *              2. Now considers headlessness.
+	 * @since 4.2.0 Now returns an empty array when the term's taxonomy isn't supported.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $term_id The Term ID.
+	 * @return array The term meta data.
+	 */
+	public function get_term_meta( $term_id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->get_term_meta()' );
+
+		return $tsf->data()->plugin()->term()->get_term_meta( $term_id );
+	}
+
+	/**
+	 * Returns an array of default term options.
+	 *
+	 * @since 2.7.0
+	 * @since 3.1.0 This is now always used.
+	 * @since 4.0.0 1. Added $term_id parameter.
+	 *              2. Added 'redirect' value.
+	 *              3. Added 'title_no_blog_name' value.
+	 *              4. Removed 'saved_flag' value.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $term_id The term ID.
+	 * @return array The Term Metadata default options.
+	 */
+	public function get_term_meta_defaults( $term_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_term_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->term()->get_term_meta_defaults()' );
+
+		return $tsf->data()->plugin()->term()->get_term_meta_defaults( $term_id );
+	}
+
+	/**
+	 * Updates single term meta value.
+	 *
+	 * Note that this method can be more resource intensive than you intend it to be,
+	 * as it reprocesses all term meta.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
+	 *              2. Now continues using the filtered term object.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $item     The item to update.
+	 * @param mixed  $value    The value the item should be at.
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug.
+	 */
+	public function update_single_term_meta_item( $item, $value, $term_id, $tt_id, $taxonomy ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->update_single_term_meta_item()' );
+
+		return $tsf->data()->plugin()->post()->update_single_term_meta_item( $item, $value, $term_id, $tt_id, $taxonomy );
+	}
+
+	/**
+	 * Fetch latest public category ID.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return int Latest Category ID.
+	 */
+	public function get_latest_category_id() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '4.3.0', 'tsf()->data()->term()->get_latest_category_id()' );
+
+		return $tsf->data()->term()->get_latest_term_id( 'category' );
+	}
+
+	/**
+	 * Tests whether term is populated. Also tests the child terms.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.8
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int    $term_id The term ID.
+	 * @param string $taxonomy The term taxonomy.
+	 * @return bool True when term or child terms are populated, false otherwise.
+	 */
+	public function is_term_populated( $term_id, $taxonomy ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '4.3.0', 'tsf()->data()->term()->is_term_populated()' );
+
+		return $tsf->data()->term()->is_term_populated( $term_id, $taxonomy );
+	}
+
+	/**
+	 * Fetch latest public post/page ID.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.4.3
+	 * @since 2.9.3 1. Removed object caching.
+	 *              2. It now uses WP_Query, instead of wpdb.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return int Latest Post ID.
+	 */
+	public function get_latest_post_id() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '4.3.0', 'tsf()->data()->post()->get_latest_post_id()' );
+
+		return $tsf->data()->post()->get_latest_post_id();
+	}
+
+	/**
+	 * Returns the primary term for post.
+	 *
+	 * @since 3.0.0
+	 * @since 4.1.5   1. Added memoization.
+	 *                2. The first and second parameters are now required.
+	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
+	 *                2. This method now converts the post meta to an integer, making the comparison work again.
+	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
+	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
+	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
+	 *              2. Now returns `null` instead of `false` on failure.
+	 *              3. Deprecated.
+	 * @deprecated
+	 *
+	 * @param int    $post_id  The post ID.
+	 * @param string $taxonomy The taxonomy name.
+	 * @return \WP_Term|null The primary term. Null if cannot be generated.
+	 */
+	public function get_primary_term( $post_id, $taxonomy ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_primary_term()', '4.3.0', 'tsf()->data()->plugin()->post()->get_primary_term()' );
+
+		return $tsf->data()->plugin()->post()->get_primary_term( $post_id, $taxonomy );
+	}
+
+	/**
+	 * Returns the primary term ID for post.
+	 *
+	 * @since 3.0.0
+	 * @since 4.1.5 1. Now validates if the stored term ID's term exists (for the post or at all).
+	 *              2. The first and second parameters are now required.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int    $post_id  The post ID.
+	 * @param string $taxonomy The taxonomy name.
+	 * @return int   The primary term ID. 0 if not found.
+	 */
+	public function get_primary_term_id( $post_id, $taxonomy ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_primary_term_id()', '4.3.0', 'tsf()->data()->plugin()->post()->get_primary_term_id()' );
+
+		return $tsf->data()->plugin()->post()->get_primary_term_id( $post_id, $taxonomy );
+	}
+
+	/**
+	 * Updates the primary term ID for post.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null $post_id  The post ID.
+	 * @param string   $taxonomy The taxonomy name.
+	 * @param int      $value    The new value. If empty, it will delete the entry.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_primary_term_id()', '4.3.0', 'tsf()->data()->plugin()->post()->update_primary_term_id()' );
+
+		return $tsf->data()->plugin()->post()->update_primary_term_id( $post_id, $taxonomy, $value );
 	}
 }

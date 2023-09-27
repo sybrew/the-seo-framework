@@ -1056,7 +1056,7 @@ class Init extends Pool {
 	 * @return \WP_Term The primary term.
 	 */
 	public function _adjust_post_link_category( $term, $terms = null, $post = null ) {
-		return $this->get_primary_term(
+		return Data\Plugin\Post::get_primary_term(
 			( $post ?? \get_post( Query::get_the_real_ID() ) )->ID,
 			$term->taxonomy
 		) ?: $term;
