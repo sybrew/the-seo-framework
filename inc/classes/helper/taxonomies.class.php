@@ -13,6 +13,8 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -58,7 +60,7 @@ class Taxonomies {
 		$disabled = false;
 
 		// First, test pertaining option directly.
-		if ( $taxonomy && \tsf()->get_option( [ 'disabled_taxonomies', $taxonomy ] ) ) {
+		if ( $taxonomy && Data\Plugin::get_option( 'disabled_taxonomies', $taxonomy ) ) {
 			$disabled = true;
 		} else {
 			// Then, test some() post types.

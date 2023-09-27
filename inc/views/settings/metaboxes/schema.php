@@ -7,10 +7,10 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Bridges\SeoSettings,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Form,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
@@ -130,7 +130,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 						'person'       => __( 'A Person', 'autodescription' ),
 					]
 				);
-				$_current       = $this->get_option( 'knowledge_type' );
+				$_current       = Data\Plugin::get_option( 'knowledge_type' );
 				foreach ( $knowledge_type as $value => $name )
 					vprintf(
 						'<option value="%s" %s>%s</option>',
@@ -150,7 +150,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'knowledge_name' ); ?>" class=large-text id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= esc_attr( Data\Blog::get_public_blog_name() ) ?>" value="<?= esc_attr( $this->get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'knowledge_name' ); ?>" class=large-text id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= esc_attr( Data\Blog::get_public_blog_name() ) ?>" value="<?= esc_attr( Data\Plugin::get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
 		</p>
 		<hr>
 		<?php
@@ -178,8 +178,8 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		</p>
 		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( $this->get_option( 'knowledge_logo_url' ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id=knowledge_logo-id value="<?= absint( $this->get_option( 'knowledge_logo_id' ) ) ?>" />
+			<input class=large-text type=url name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( Data\Plugin::get_option( 'knowledge_logo_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id=knowledge_logo-id value="<?= absint( Data\Plugin::get_option( 'knowledge_logo_id' ) ) ?>" />
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
@@ -294,7 +294,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				</label>
 			</p>
 			<p>
-				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= esc_attr( $sc['placeholder'] ) ?>" value="<?= esc_attr( $this->get_option( $sc['option'] ) ) ?>" autocomplete=off />
+				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= esc_attr( $sc['placeholder'] ) ?>" value="<?= esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off />
 			</p>
 			<?php
 		}

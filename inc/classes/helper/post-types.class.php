@@ -13,6 +13,8 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -63,7 +65,7 @@ class Post_Types {
 		return \apply_filters_ref_array(
 			'the_seo_framework_post_type_disabled',
 			[
-				\tsf()->get_option( [ 'disabled_post_types', $post_type ] ),
+				Data\Plugin::get_option( 'disabled_post_types', $post_type ),
 				$post_type,
 			]
 		);

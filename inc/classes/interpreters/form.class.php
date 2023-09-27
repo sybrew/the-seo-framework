@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Interpreters;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
-
 use function \The_SEO_Framework\Utils\array_merge_recursive_distinct;
+
+use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin

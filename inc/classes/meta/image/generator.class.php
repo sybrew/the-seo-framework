@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Meta\Image;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -186,12 +187,12 @@ final class Generator {
 	 */
 	public static function generate_fallback_image_details() {
 
-		$url = \tsf()->get_option( 'social_image_fb_url' );
+		$url = Data\Plugin::get_option( 'social_image_fb_url' );
 
 		if ( $url )
 			yield [
 				'url' => $url,
-				'id'  => \tsf()->get_option( 'social_image_fb_id' ) ?: 0,
+				'id'  => Data\Plugin::get_option( 'social_image_fb_id' ) ?: 0,
 			];
 	}
 

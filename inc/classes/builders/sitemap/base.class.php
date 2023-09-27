@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Bridges,
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Bridges,
 	\The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Helper\{
@@ -166,7 +167,7 @@ class Base extends Main {
 		$content = '';
 		$count   = 0;
 
-		$show_modified = (bool) \tsf()->get_option( 'sitemaps_modified' );
+		$show_modified = (bool) Data\Plugin::get_option( 'sitemaps_modified' );
 
 		/**
 		 * @since 2.2.9

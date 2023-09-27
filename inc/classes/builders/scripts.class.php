@@ -233,8 +233,8 @@ final class Scripts {
 	 * }
 	 */
 	public static function register( $script ) {
-		// This is 350x faster than a polyfill for `array_is_list()`.
-		if ( array_values( $script ) === $script ) {
+		// This is over 350x faster than a polyfill for `array_is_list()`.
+		if ( isset( $script[0] ) && array_values( $script ) === $script ) {
 			foreach ( $script as $s ) static::register( $s );
 			return;
 		}

@@ -517,17 +517,144 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Data\Options
+			 * @return \The_SEO_Framework\Data\Plugin
 			 */
-			public static function options() {
-				return static::$subpool['options'] ??= new class extends Data\Options {
+			public static function plugin() {
+				return static::$subpool['plugin'] ??= new class extends Data\Plugin {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->data()->options()';
+					private $colloquial_handle     = 'tsf()->data()->plugin()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\Filter
+					 */
+					public static function filter() {
+						return static::$subpool['filter'] ??= new class extends Data\Plugin\Filter {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->filter()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\Helper
+					 */
+					public static function helper() {
+						return static::$subpool['helper'] ??= new class extends Data\Plugin\Helper {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->helper()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\Home
+					 */
+					public static function home() {
+						return static::$subpool['home'] ??= new class extends Data\Plugin\Home {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->home()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\Post
+					 */
+					public static function post() {
+						return static::$subpool['post'] ??= new class extends Data\Plugin\Post {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->post()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\PTA
+					 */
+					public static function pta() {
+						return static::$subpool['pta'] ??= new class extends Data\Plugin\PTA {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->pta()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\Setup
+					 */
+					public static function setup() {
+						return static::$subpool['setup'] ??= new class extends Data\Plugin\Setup {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->setup()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\Term
+					 */
+					public static function term() {
+						return static::$subpool['term'] ??= new class extends Data\Plugin\Term {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->term()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Data\Plugin\User
+					 */
+					public static function user() {
+						return static::$subpool['user'] ??= new class extends Data\Plugin\User {
+							use Static_Deprecator;
+
+							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+							private $colloquial_handle     = 'tsf()->data()->plugin()->user()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+						};
+					}
 				};
 			}
 
@@ -563,21 +690,21 @@ class Pool extends Legacy_API {
 				};
 			}
 
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Data\Transient
-			 */
-			public static function transient() {
-				return static::$subpool['transient'] ??= new class extends Data\Transient {
-					use Static_Deprecator;
+			// /**
+			//  * @since 4.3.0
+			//  * @return \The_SEO_Framework\Data\Transient
+			//  */
+			// public static function transient() {
+			// 	return static::$subpool['transient'] ??= new class extends Data\Transient {
+			// 		use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->data()->transient()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-				};
-			}
+			// 		// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			// 		private $colloquial_handle     = 'tsf()->data()->transient()';
+			// 		private $deprecated_methods    = [];
+			// 		private $deprecated_properties = [];
+			// 		// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+			// 	};
+			// }
 
 			/**
 			 * @since 4.3.0

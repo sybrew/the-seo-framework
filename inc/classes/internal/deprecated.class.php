@@ -8,13 +8,17 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-// Precautionary
+// Precautionary.
 use function \The_SEO_Framework\{
 	memo,
 	umemo,
 };
 
 use function \The_SEO_Framework\Utils\normalize_generation_args;
+
+// Precautionary.
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -32,7 +36,6 @@ use function \The_SEO_Framework\Utils\normalize_generation_args;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 /**
  * Class The_SEO_Framework\Internal\Deprecated
@@ -1184,7 +1187,7 @@ final class Deprecated {
 
 		\tsf()->_deprecated_function( 'tsf()->advanced_query_protection()', '4.3.0' );
 
-		return \The_SEO_Framework\Interpreters\Meta::render( [
+		return \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'  => 'tsf:aqp',
 			'value' => '1',
 		] );
@@ -1224,7 +1227,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'description',
 			'content' => $description,
 		] ) : '';
@@ -1251,7 +1254,7 @@ final class Deprecated {
 
 		$meta = $tsf->robots()->get_meta();
 
-		return $meta ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $meta ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'robots',
 			'content' => $meta,
 		] ) : '';
@@ -1301,7 +1304,7 @@ final class Deprecated {
 			}
 		}
 
-		return $url ? \The_SEO_Framework\Interpreters\Meta::render(
+		return $url ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
 			[
 				'rel'  => 'canonical',
 				'href' => $url,
@@ -1342,7 +1345,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $url ? \The_SEO_Framework\Interpreters\Meta::render(
+		return $url ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
 			[
 				'rel'  => 'shortlink',
 				'href' => $url,
@@ -1401,14 +1404,14 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		$output  = $prev ? \The_SEO_Framework\Interpreters\Meta::render(
+		$output  = $prev ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
 			[
 				'rel'  => 'prev',
 				'href' => $prev,
 			],
 			'link'
 		) : '';
-		$output .= $next ? \The_SEO_Framework\Interpreters\Meta::render(
+		$output .= $next ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
 			[
 				'rel'  => 'next',
 				'href' => $next,
@@ -1433,9 +1436,9 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->theme_color()', '4.3.0' );
 
-		$theme_color = $tsf->get_option( 'theme_color' );
+		$theme_color = Data\Plugin::get_option( 'theme_color' );
 
-		return $theme_color ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $theme_color ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'theme-color',
 			'content' => $theme_color,
 		] ) : '';
@@ -1465,12 +1468,12 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_googlesite_output',
 			[
-				$tsf->get_option( 'google_verification' ),
-				\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				Data\Plugin::get_option( 'google_verification' ),
+				Query::get_the_real_id(),
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'google-site-verification',
 			'content' => $code,
 		] ) : '';
@@ -1500,12 +1503,12 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_bingsite_output',
 			[
-				$tsf->get_option( 'bing_verification' ),
-				\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				Data\Plugin::get_option( 'bing_verification' ),
+				Query::get_the_real_id(),
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'msvalidate.01',
 			'content' => $code,
 		] ) : '';
@@ -1535,12 +1538,12 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_yandexsite_output',
 			[
-				$tsf->get_option( 'yandex_verification' ),
-				\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				Data\Plugin::get_option( 'yandex_verification' ),
+				Query::get_the_real_id(),
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'yandex-verification',
 			'content' => $code,
 		] ) : '';
@@ -1570,12 +1573,12 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_baidusite_output',
 			[
-				$tsf->get_option( 'baidu_verification' ),
-				\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				Data\Plugin::get_option( 'baidu_verification' ),
+				Query::get_the_real_id(),
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'baidu-site-verification',
 			'content' => $code,
 		] ) : '';
@@ -1605,12 +1608,12 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_pintsite_output',
 			[
-				$tsf->get_option( 'pint_verification' ),
-				\The_SEO_Framework\Helper\Query::get_the_real_id(),
+				Data\Plugin::get_option( 'pint_verification' ),
+				Query::get_the_real_id(),
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'p:domain_verify',
 			'content' => $code,
 		] ) : '';
@@ -1644,7 +1647,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_og_tags',
 			[
-				(bool) $tsf->get_option( 'og_tags' ),
+				(bool) Data\Plugin::get_option( 'og_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -1687,7 +1690,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $title ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $title ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:title',
 			'content'  => $title,
 		] ) : '';
@@ -1729,7 +1732,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:description',
 			'content'  => $description,
 		] ) : '';
@@ -1770,7 +1773,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $locale ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $locale ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:locale',
 			'content'  => $locale,
 		] ) : '';
@@ -1795,7 +1798,7 @@ final class Deprecated {
 
 		$type = $tsf->open_graph()->get_type();
 
-		return $type ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $type ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:type',
 			'content'  => $type,
 		] ) : '';
@@ -1823,27 +1826,27 @@ final class Deprecated {
 
 		$output = '';
 
-		$multi = (bool) $tsf->get_option( 'multi_og_image' );
+		$multi = (bool) Data\Plugin::get_option( 'multi_og_image' );
 
 		foreach ( $tsf->get_image_details( null, ! $multi ) as $image ) {
-			$output .= \The_SEO_Framework\Interpreters\Meta::render( [
+			$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 				'property' => 'og:image',
 				'content'  => $image['url'],
 			] );
 
 			if ( $image['height'] && $image['width'] ) {
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [
+				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 					'property' => 'og:image:width',
 					'content'  => $image['width'],
 				] );
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [
+				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 					'property' => 'og:image:height',
 					'content'  => $image['height'],
 				] );
 			}
 
 			if ( $image['alt'] ) {
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [
+				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 					'property' => 'og:image:alt',
 					'content'  => $image['alt'],
 				] );
@@ -1891,7 +1894,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $sitename ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $sitename ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:site_name',
 			'content'  => $sitename,
 		] ) : '';
@@ -1932,7 +1935,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $url ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $url ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:url',
 			'content'  => $url,
 		] ) : '';
@@ -1957,7 +1960,7 @@ final class Deprecated {
 
 		$time = $tsf->get_modified_time();
 
-		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'og:updated_time',
 			'content'  => $time,
 		] ) : '';
@@ -1993,14 +1996,14 @@ final class Deprecated {
 		$facebook_page = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookauthor_output',
 			[
-				$tsf->get_current_post_author_meta_item( 'facebook_page' ) ?: $tsf->get_option( 'facebook_author' ),
+				$tsf->get_current_post_author_meta_item( 'facebook_page' ) ?: Data\Plugin::get_option( 'facebook_author' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $facebook_page ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $facebook_page ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'article:author',
 			'content'  => $facebook_page,
 		] ) : '';
@@ -2035,14 +2038,14 @@ final class Deprecated {
 		$publisher = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookpublisher_output',
 			[
-				$tsf->get_option( 'facebook_publisher' ),
+				Data\Plugin::get_option( 'facebook_publisher' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $publisher ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $publisher ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'article:publisher',
 			'content'  => $publisher,
 		] ) : '';
@@ -2075,14 +2078,14 @@ final class Deprecated {
 		$app_id = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookappid_output',
 			[
-				$tsf->get_option( 'facebook_appid' ),
+				Data\Plugin::get_option( 'facebook_appid' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data', // var_dump() delete me?
 		);
 
-		return $app_id ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $app_id ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'fb:app_id',
 			'content'  => $app_id,
 		] ) : '';
@@ -2116,7 +2119,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
 			[
-				(bool) $tsf->get_option( 'facebook_tags' ),
+				(bool) Data\Plugin::get_option( 'facebook_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -2167,7 +2170,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'article:published_time',
 			'content'  => $time,
 		] ) : '';
@@ -2196,7 +2199,7 @@ final class Deprecated {
 
 		$time = $tsf->get_modified_time();
 
-		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'property' => 'article:modified_time',
 			'content'  => $time,
 		] ) : '';
@@ -2220,7 +2223,7 @@ final class Deprecated {
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
-		return (bool) $tsf->get_option( 'post_modify_time' );
+		return (bool) Data\Plugin::get_option( 'post_modify_time' );
 	}
 
 	/**
@@ -2241,7 +2244,7 @@ final class Deprecated {
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
-		return (bool) $tsf->get_option( 'post_publish_time' );
+		return (bool) Data\Plugin::get_option( 'post_publish_time' );
 	}
 
 	/**
@@ -2282,7 +2285,7 @@ final class Deprecated {
 
 		$card = $tsf->get_current_twitter_card_type();
 
-		return $card ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $card ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'twitter:card',
 			'content' => $card,
 		] ) : '';
@@ -2315,14 +2318,14 @@ final class Deprecated {
 		$site = (string) \apply_filters_deprecated(
 			'the_seo_framework_twittersite_output',
 			[
-				$tsf->get_option( 'twitter_site' ),
+				Data\Plugin::get_option( 'twitter_site' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $site ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $site ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'twitter:site',
 			'content' => $site,
 		] ) : '';
@@ -2358,14 +2361,14 @@ final class Deprecated {
 		$creator = (string) \apply_filters_deprecated(
 			'the_seo_framework_twittercreator_output',
 			[
-				$tsf->get_current_post_author_meta_item( 'twitter_page' ) ?: $tsf->get_option( 'twitter_creator' ),
+				$tsf->get_current_post_author_meta_item( 'twitter_page' ) ?: Data\Plugin::get_option( 'twitter_creator' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $creator ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $creator ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'twitter:creator',
 			'content' => $creator,
 		] ) : '';
@@ -2406,7 +2409,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $title ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $title ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'twitter:title',
 			'content' => $title,
 		] ) : '';
@@ -2447,7 +2450,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [
+		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 			'name'    => 'twitter:description',
 			'content' => $description,
 		] ) : '';
@@ -2475,14 +2478,14 @@ final class Deprecated {
 
 		$output = '';
 
-		foreach ( $tsf->get_image_details( null, ! $tsf->get_option( 'multi_og_image' ) ) as $image ) {
-			$output .= \The_SEO_Framework\Interpreters\Meta::render( [
+		foreach ( $tsf->get_image_details( null, ! Data\Plugin::get_option( 'multi_og_image' ) ) as $image ) {
+			$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
 			] );
 
 			if ( $image['alt'] ) {
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [
+				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
 					'name'    => 'twitter:image:alt',
 					'content' => $image['alt'],
 				] );
@@ -2523,7 +2526,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_twitter_tags',
 			[
-				(bool) $tsf->get_option( 'twitter_tags' ),
+				(bool) Data\Plugin::get_option( 'twitter_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -2814,7 +2817,6 @@ final class Deprecated {
 
 		return $tsf->post_types()->post_type_supports_taxonomies( $post_type );
 	}
-
 
 	/**
 	 * Returns a list of all supported post types with archives.
@@ -3428,6 +3430,8 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return string The current post's modified time
 	 */
@@ -3436,7 +3440,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_modified_time()', '4.3.0' );
 
-		$id                = \The_SEO_Framework\Helper\Query::get_the_real_id();
+		$id                = Query::get_the_real_id();
 		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 		return '0000-00-00 00:00:00' === $post_modified_gmt
@@ -3643,7 +3647,6 @@ final class Deprecated {
 		// Let's keep this bug where it fetches the custom field title first.
 		return $tsf->title()->get_title( $args, $escape, true ); // Discrepancy OK.
 	}
-
 
 	/**
 	 * Determines whether to add or remove title protection prefixes.
@@ -5032,8 +5035,6 @@ final class Deprecated {
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single Whether to fetch one image, or multiple. Unused, reserved.
-	 * @param bool       $clean  Whether to clean the image, like stripping duplicates and erroneous items.
-	 *                           It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,
 	 *    int    id:     The image ID,
@@ -5042,7 +5043,7 @@ final class Deprecated {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	public function get_custom_field_image_details( $args = null, $single = false, $clean = true ) {
+	public function get_custom_field_image_details( $args = null, $single = false ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_custom_field_image_details()', '4.3.0', 'tsf()->image()->get_custom_image_details()' );
@@ -5062,8 +5063,6 @@ final class Deprecated {
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
-	 * @param bool       $clean   Whether to clean the image, like stripping duplicates and erroneous items.
-	 *                            It's best to leave this enabled, unless you're merging the calls, and clean up yourself.
 	 * @return array The image details array, sequential: int => {
 	 *    string url:    The image URL,
 	 *    int    id:     The image ID,
@@ -5072,7 +5071,7 @@ final class Deprecated {
 	 *    string alt:    The image alt tag,
 	 * }
 	 */
-	public function get_generated_image_details( $args = null, $single = false, $context = 'social', $clean = true ) {
+	public function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_generated_image_details()', '4.3.0', 'tsf()->image()->get_generated_image_details()' );
@@ -5244,7 +5243,7 @@ final class Deprecated {
 	 */
 	public function html_output() {
 		\tsf()->_deprecated_function( 'tsf()->html_output()', '4.3.0' );
-		\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
+		\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags(); // Lacking import OK.
 	}
 
 	/**
@@ -5257,7 +5256,261 @@ final class Deprecated {
 	 * @deprecated
 	 */
 	public function do_meta_output() {
-		\tsf()->_deprecated_function( 'tsf()->html_output()', '4.3.0' );
-		\The_SEO_Framework\Front\Meta\Head::print_tags();
+		\tsf()->_deprecated_function( 'tsf()->do_meta_output()', '4.3.0' );
+		\The_SEO_Framework\Front\Meta\Head::print_tags(); // Lacking import OK.
+	}
+
+	/**
+	 * Holds default site options.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Now applies filters 'the_seo_framework_default_site_options'
+	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
+	 * @since 4.2.4 `max_image_preview` now defaults to `large`, from `standard`, matching WordPress's default.
+	 * @since 4.2.7 Added `auto_description_html_method`, defaults to `fast`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array Default site options.
+	 */
+	public function get_default_site_options() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_default_site_options()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_default_options()' );
+
+		return $tsf->data()->plugin()->setup()->get_default_options();
+	}
+
+	/**
+	 * Holds warned site options array.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.0 Removed all non-warned settings.
+	 * @since 3.1.0 Now applies the "the_seo_framework_warned_site_options" filter.
+	 * @since 4.1.0 Added robots' post type setting warnings.
+	 * @since 4.1.2 Added `ping_use_cron_prerender`.
+	 * @since 4.2.0 Now memoizes its return value.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array $options.
+	 */
+	public function get_warned_site_options() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_warned_site_options()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_warned_options()' );
+
+		return $tsf->data()->plugin()->setup()->get_warned_options();
+	}
+
+	/**
+	 * Return current option array.
+	 * Memoizes the return value, can be bypassed and reset with second parameter.
+	 *
+	 * This method does NOT merge the default post options.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.2 Added $use_current parameter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $setting The setting key.
+	 * @return array Options.
+	 */
+	public function get_all_options( $setting = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_all_options()', '4.3.0', 'tsf()->data()->plugin()->get_options()' );
+
+		if ( ! $setting )
+			return $tsf->data()->plugin()->get_options();
+
+		/**
+		 * @since 2.0.0
+		 * @since 4.1.4 1. Now considers headlessness.
+		 *              2. Now returns a 3rd parameter: boolean $headless.
+		 *
+		 * @param array  $settings The settings
+		 * @param string $setting  The settings field.
+		 * @param bool   $headless Whether the options are headless.
+		 */
+		return \apply_filters_ref_array(
+			'the_seo_framework_get_options',
+			[
+				\get_option( $setting ),
+				$setting,
+				false,
+			]
+		);
+	}
+
+	/**
+	 * Return Default SEO options from the SEO options array.
+	 *
+	 * @since 2.2.5
+	 * @since 4.2.0 1. Now supports an option index as `$key`.
+	 *              2. Removed second parameter (`$use_cache`).
+	 *              3. Now always memoizes.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string|string[] $key Required. The option name, or a map of indexes.
+	 * @return mixed The default option. Null if it's not registered.
+	 */
+	public function get_default_option( $key ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_default_option()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_default_option()' );
+
+		return $tsf->data()->plugin()->setup()->get_default_option( ...(array) $key );
+	}
+
+	/**
+	 * Return Warned SEO options from the SEO options array.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string|string[] $key Required. The option name, or a map of indexes.
+	 * @return bool True if warning is registered. False otherwise.
+	 */
+	public function get_warned_option( $key ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_warned_option()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_warned_option()' );
+
+		return $tsf->data()->plugin()->setup()->get_warned_option( ...(array) $key );
+	}
+
+	/**
+	 * Returns the option key for Post Type robots settings.
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 No longer sanitizes the input parameter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @return string
+	 */
+	public function get_robots_post_type_option_id( $type ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_robots_post_type_option_id()', '4.3.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
+
+		return $tsf->data()->plugin()->helper()->get_robots_option_index( 'post_type', $type );
+	}
+
+	/**
+	 * Returns the option key for Taxonomy robots settings.
+	 *
+	 * @since 4.1.0
+	 * @since 4.2.0 No longer sanitizes the input parameter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @return string
+	 */
+	public function get_robots_taxonomy_option_id( $type ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_robots_taxonomy_option_id()', '4.3.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
+
+		return $tsf->data()->plugin()->helper()->get_robots_option_index( 'taxonomy', $type );
+	}
+
+	/**
+	 * Updates a single SEO option.
+	 *
+	 * Can return false if option is unchanged.
+	 *
+	 * @since 2.9.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $key   The option key.
+	 * @param string $value The option value.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_option( $key = '', $value = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_option()', '4.3.0', 'tsf()->data()->plugin()->update_option()' );
+
+		return $tsf->data()->plugin()->update_option( $key, $value );
+	}
+
+	/**
+	 * Allows bulk-updating of the SEO settings.
+	 *
+	 * @since 2.7.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string|array $new_option : {
+	 *      if string: The string will act as a key for a new empty string option, e.g.,
+	 *                 'sitemap_index' becomes ['sitemap_index' => '']
+	 *      if array:  The option name(s) and value(s), e.g., ['sitemap_index' => 1]
+	 * }
+	 * @param string       $settings_field The Settings Field to update. Defaults
+	 *                                     to The SEO Framework settings field.
+	 * @return bool True on success. False on failure.
+	 */
+	public function update_settings( $new_option = '', $settings_field = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_settings()', '4.3.0', 'tsf()->data()->plugin()->update_option()' );
+
+		if ( ! $settings_field ) {
+			$settings_field = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+			return Data\Plugin::update_option( \is_array( $new_option ) ? $new_option : [ $new_option => '' ] );
+		}
+
+		return \update_option(
+			$settings_field,
+			\wp_parse_args( $new_option, \get_option( $settings_field ) )
+		);
+	}
+
+	/**
+	 * Retrieves a single caching option.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $key     The option key. Required.
+	 * @param string $default The default cache value.
+	 * @return mixed Cache value on success, $default if non-existent.
+	 */
+	public function get_static_cache( $key, $default = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_static_cache()', '4.3.0', 'tsf()->data()->plugin()->get_site_cache()' );
+
+		return \tsf()->data()->plugin()->get_site_cache( $key ) ?? $default;
+	}
+
+	/**
+	 * Updates a single caching option.
+	 *
+	 * Can return false if option is unchanged.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $key   The cache key. Required.
+	 * @param string $value The cache value. Expected to be sanitized.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_static_cache( $key, $value = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_static_cache()', '4.3.0', 'tsf()->data()->plugin()->update_site_cache()' );
+
+		return \tsf()->data()->plugin()->update_site_cache( $key, $value );
 	}
 }

@@ -7,8 +7,9 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -63,7 +64,7 @@ switch ( $this->get_view_instance( 'description', $instance ) ) :
 		);
 
 		$html_passes_select_options = '';
-		$_current                   = $this->get_option( 'auto_description_html_method' );
+		$_current                   = Data\Plugin::get_option( 'auto_description_html_method' );
 		foreach ( $html_passes_methods as $value => $name ) {
 			$html_passes_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',

@@ -263,10 +263,10 @@ class Title {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
-				$title = \tsf()->get_option( 'homepage_title' )
+				$title = Data\Plugin::get_option( 'homepage_title' )
 					  ?: \tsf()->get_post_meta_item( '_genesis_title' );
 			} else {
-				$title = \tsf()->get_option( 'homepage_title' );
+				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
 		} elseif ( Query::is_singular() ) {
 			$title = \tsf()->get_post_meta_item( '_genesis_title' );
@@ -297,10 +297,10 @@ class Title {
 			$title = \tsf()->get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$title = \tsf()->get_option( 'homepage_title' )
+				$title = Data\Plugin::get_option( 'homepage_title' )
 					  ?: \tsf()->get_post_meta_item( '_genesis_title', $args['id'] );
 			} else {
-				$title = \tsf()->get_option( 'homepage_title' );
+				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
 		} elseif ( $args['id'] ) {
 			$title = \tsf()->get_post_meta_item( '_genesis_title', $args['id'] );
@@ -928,7 +928,7 @@ class Title {
 	 * @return string The separator location.
 	 */
 	public static function get_addition_location() {
-		return \tsf()->get_option( 'title_location' );
+		return Data\Plugin::get_option( 'title_location' );
 	}
 
 	/**
@@ -940,7 +940,7 @@ class Title {
 	 * @return string The Seplocation for the front page.
 	 */
 	public static function get_addition_location_for_front_page() {
-		return \tsf()->get_option( 'home_title_location' );
+		return Data\Plugin::get_option( 'home_title_location' );
 	}
 
 	/**
@@ -955,7 +955,7 @@ class Title {
 	public static function get_addition_for_front_page() {
 		return memo() ?? memo(
 			\tsf()->s_title_raw(
-				\tsf()->get_option( 'homepage_title_tagline' ) ?: Data\Blog::get_filtered_blog_description()
+				Data\Plugin::get_option( 'homepage_title_tagline' ) ?: Data\Blog::get_filtered_blog_description()
 			)
 		);
 	}
@@ -977,7 +977,7 @@ class Title {
 		return memo() ?? memo(
 			(string) \apply_filters(
 				'the_seo_framework_title_separator',
-				Title\Utils::get_separator_list()[ \tsf()->get_option( 'title_separator' ) ] ?? '&#x2d;'
+				Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ] ?? '&#x2d;'
 			)
 		);
 	}

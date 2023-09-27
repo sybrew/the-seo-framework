@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Interpreters;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Builders;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Builders;
 
 /**
  * The SEO Framework plugin
@@ -447,7 +448,7 @@ final class SEOBar {
 
 		static $use_symbols;
 
-		$use_symbols ??= (bool) \tsf()->get_option( 'seo_bar_symbols' );
+		$use_symbols ??= (bool) Data\Plugin::get_option( 'seo_bar_symbols' );
 
 		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
 			switch ( $item['status'] ) {

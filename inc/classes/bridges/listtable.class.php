@@ -7,7 +7,7 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Helper\{
+use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,

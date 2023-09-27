@@ -8,6 +8,9 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
@@ -116,7 +119,9 @@ class Post_Data extends Detect {
 			$this->get_post_meta_defaults( $post->ID )
 		);
 
-		if ( $this->is_headless['meta'] ) {
+		$is_headless = is_headless( 'meta' );
+
+		if ( $is_headless ) {
 			$meta = [];
 		} else {
 			// Filter the post meta items based on defaults' keys.
@@ -145,7 +150,7 @@ class Post_Data extends Detect {
 			[
 				array_merge( $defaults, $meta ),
 				$post->ID,
-				$this->is_headless['meta'],
+				$is_headless,
 			]
 		);
 
@@ -706,13 +711,13 @@ class Post_Data extends Detect {
 	 */
 	public function get_excluded_ids_from_cache() {
 
-		if ( $this->is_headless['meta'] )
+		if ( is_headless( 'meta' ) )
 			return [
 				'archive' => '',
 				'search'  => '',
 			];
 
-		$cache = $this->get_static_cache( 'excluded_ids' );
+		$cache = Data\Plugin::get_site_cache( 'excluded_ids' );
 
 		if ( isset( $cache['archive'], $cache['search'] ) ) return $cache;
 
@@ -758,7 +763,7 @@ class Post_Data extends Detect {
 			$cache[ $type ] = array_filter( $cache[ $type ] );
 		}
 
-		$this->update_static_cache( 'excluded_ids', $cache );
+		Data\Plugin::update_site_cache( 'excluded_ids', $cache );
 
 		return $cache;
 	}

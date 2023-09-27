@@ -73,14 +73,14 @@ final class Page extends Main {
 					'hasrobotstxt' => static::$tsf->has_robots_txt(),
 					'blogpublic'   => static::$tsf->is_blog_public(),
 					'site'         => [
-						'noindex'   => static::$tsf->get_option( 'site_noindex' ),
-						'nofollow'  => static::$tsf->get_option( 'site_nofollow' ),
-						'noarchive' => static::$tsf->get_option( 'site_noarchive' ),
+						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
+						'nofollow'  => Data\Plugin::get_option( 'site_nofollow' ),
+						'noarchive' => Data\Plugin::get_option( 'site_noarchive' ),
 					],
 					'posttype'     => [
-						'noindex'   => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'noindex' ) ),
-						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'nofollow' ) ),
-						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'noarchive' ) ),
+						'noindex'   => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noindex' ) ),
+						'nofollow'  => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'nofollow' ) ),
+						'noarchive' => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noarchive' ) ),
 					],
 				]
 			);
@@ -218,7 +218,7 @@ final class Page extends Main {
 
 			if ( $this->query_cache['states']['ishome'] ) {
 				// Don't use cache here, only one page can have this state.
-				if ( static::$tsf->get_option( 'homepage_title' ) ) {
+				if ( Data\Plugin::get_option( 'homepage_title' ) ) {
 					$item['assess']['homepage'] = \__( 'The title inputted at the SEO Settings screen is used.', 'autodescription' );
 				} else {
 					$item['assess']['homepage'] = \__( 'The title inputted at the Edit Page screen is used.', 'autodescription' );
@@ -437,7 +437,7 @@ final class Page extends Main {
 
 			if ( $this->query_cache['states']['ishome'] ) {
 				// Don't use cache here, only one page can have this state.
-				if ( static::$tsf->get_option( 'homepage_description' ) ) {
+				if ( Data\Plugin::get_option( 'homepage_description' ) ) {
 					$item['assess']['homepage'] = \__( 'The description inputted at the SEO Settings screen is used.', 'autodescription' );
 				} else {
 					$item['assess']['homepage'] = \__( 'The description inputted at the Edit Page screen is used.', 'autodescription' );
@@ -672,7 +672,7 @@ final class Page extends Main {
 
 		if ( $this->query_cache['states']['ishome'] ) {
 			// Status is already set.
-			if ( static::$tsf->get_option( 'homepage_noindex' ) ) {
+			if ( Data\Plugin::get_option( 'homepage_noindex' ) ) {
 				// Don't use cache as this only runs once.
 				$item['assess']['homepage'] = \__( 'Indexing is discouraged for the homepage at the SEO Settings screen.', 'autodescription' );
 			}
@@ -812,7 +812,7 @@ final class Page extends Main {
 
 		if ( $this->query_cache['states']['ishome'] ) {
 			// Status is already set.
-			if ( static::$tsf->get_option( 'homepage_nofollow' ) ) {
+			if ( Data\Plugin::get_option( 'homepage_nofollow' ) ) {
 				// Don't use cache as this only runs once.
 				$item['assess']['homepage'] = \__( 'Link following is discouraged for the homepage at the SEO Settings screen.', 'autodescription' );
 			}
@@ -943,7 +943,7 @@ final class Page extends Main {
 
 		if ( $this->query_cache['states']['ishome'] ) {
 			// Status is already set.
-			if ( static::$tsf->get_option( 'homepage_noarchive' ) ) {
+			if ( Data\Plugin::get_option( 'homepage_noarchive' ) ) {
 				// Don't use cache as this only runs once.
 				$item['assess']['homepage'] = \__( 'Archiving is discouraged for the homepage at the SEO Settings screen.', 'autodescription' );
 			}

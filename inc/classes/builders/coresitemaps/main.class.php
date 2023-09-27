@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Builders\CoreSitemaps;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2020 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -116,7 +118,7 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 				break;
 			case 'users':
 				// This option is not reversible through means other than filters.
-				if ( \tsf()->get_option( 'author_noindex' ) )
+				if ( Data\Plugin::get_option( 'author_noindex' ) )
 					$provider = null;
 		}
 

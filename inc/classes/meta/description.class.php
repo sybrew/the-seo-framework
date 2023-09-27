@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query,
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
@@ -199,10 +200,10 @@ class Description {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
-				$desc = \tsf()->get_option( 'homepage_description' )
+				$desc = Data\Plugin::get_option( 'homepage_description' )
 					 ?: \tsf()->get_post_meta_item( '_genesis_description' );
 			} else {
-				$desc = \tsf()->get_option( 'homepage_description' );
+				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
 		} elseif ( Query::is_singular() ) {
 			$desc = \tsf()->get_post_meta_item( '_genesis_description' );
@@ -236,10 +237,10 @@ class Description {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$desc = \tsf()->get_option( 'homepage_description' )
+				$desc = Data\Plugin::get_option( 'homepage_description' )
 					 ?: \tsf()->get_post_meta_item( '_genesis_description', $args['id'] );
 			} else {
-				$desc = \tsf()->get_option( 'homepage_description' );
+				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
 		} elseif ( $args['id'] ) {
 			$desc = \tsf()->get_post_meta_item( '_genesis_description', $args['id'] );
@@ -273,7 +274,7 @@ class Description {
 		return (bool) \apply_filters_ref_array(
 			'the_seo_framework_enable_auto_description',
 			[
-				\tsf()->get_option( 'auto_description' ),
+				Data\Plugin::get_option( 'auto_description' ),
 				$args,
 			]
 		);

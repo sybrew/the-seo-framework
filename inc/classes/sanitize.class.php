@@ -10,8 +10,8 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\Utils\clamp_sentence;
 
-use \The_SEO_Framework\Meta;
-
+use \The_SEO_Framework\Meta,
+	\The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
@@ -114,7 +114,7 @@ class Sanitize extends Admin_Pages {
 		// \add_filter( 'pre_update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_backward_compatibility' ], 10 );
 
 		// Sets that the options are unchanged, preemptively.
-		$this->update_static_cache( 'settings_notice', 'unchanged' );
+		Data\Plugin::update_site_cache( 'settings_notice', 'unchanged' );
 		// But, if this action fires, we can assure that the settings have been changed (according to WP).
 		\add_action( 'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS, [ $this, '_set_option_updated_notice' ], 0 );
 
@@ -140,7 +140,7 @@ class Sanitize extends Admin_Pages {
 	 * @access private
 	 */
 	public function _set_option_updated_notice() {
-		$this->update_static_cache( 'settings_notice', 'updated' );
+		Data\Plugin::update_site_cache( 'settings_notice', 'updated' );
 	}
 
 	/**
@@ -387,9 +387,9 @@ class Sanitize extends Admin_Pages {
 			's_post_types',
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
-				$this->get_robots_post_type_option_id( 'noindex' ),
-				$this->get_robots_post_type_option_id( 'nofollow' ),
-				$this->get_robots_post_type_option_id( 'noarchive' ),
+				Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noindex' ),
+				Data\Plugin\Helper::get_robots_option_index( 'post_type', 'nofollow' ),
+				Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noarchive' ),
 			]
 		);
 
@@ -397,9 +397,9 @@ class Sanitize extends Admin_Pages {
 			's_taxonomies',
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
-				$this->get_robots_taxonomy_option_id( 'noindex' ),
-				$this->get_robots_taxonomy_option_id( 'nofollow' ),
-				$this->get_robots_taxonomy_option_id( 'noarchive' ),
+				Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noindex' ),
+				Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'nofollow' ),
+				Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noarchive' ),
 			]
 		);
 
@@ -564,7 +564,7 @@ class Sanitize extends Admin_Pages {
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.7.0
-	 * @see $this->get_option_filters()
+	 * @see Data\Plugin::get_option_filters()
 	 * @TODO allow for multiple filters per option? That'd speed up backward compat migration.
 	 *
 	 * @param string          $filter    Sanitization filter type
@@ -1098,7 +1098,7 @@ class Sanitize extends Admin_Pages {
 		if ( '' === $excerpt ) return '';
 
 		// Oh, how I'd like PHP 8's match()...
-		switch ( $this->get_option( 'auto_description_html_method' ) ) {
+		switch ( Data\Plugin::get_option( 'auto_description_html_method' ) ) {
 			case 'thorough':
 				$passes = 12;
 				break;
@@ -1878,12 +1878,13 @@ class Sanitize extends Admin_Pages {
 	 * Replaces backslash with entity backslash.
 	 *
 	 * @since 2.8.2
+	 * @since 4.3.0 No longer removes backslashes.
 	 *
 	 * @param string $text String with potentially unwanted \ values.
 	 * @return string A string with safe HTML encoded backslashes.
 	 */
 	public function s_bsol( $text ) {
-		return str_replace( '\\', '&#92;', stripslashes( $text ) );
+		return str_replace( '\\', '&#92;', $text );
 	}
 
 	/**
@@ -2235,8 +2236,8 @@ class Sanitize extends Admin_Pages {
 	 */
 	public function s_image_details( $details ) {
 
-		// This is 350x faster than a polyfill for `array_is_list()`.
-		if ( array_values( $details ) === $details )
+		// This is over 350x faster than a polyfill for `array_is_list()`.
+		if ( isset( $details[0] ) && array_values( $details ) === $details )
 			return $this->s_image_details_deep( $details );
 
 		$defaults = [

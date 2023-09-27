@@ -8,14 +8,15 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
-
 use function \The_SEO_Framework\{
 	memo,
 	umemo,
 	Utils\normalize_generation_args,
 	Utils\scrub_array,
 };
+
+use \The_SEO_Framework\Helper\Query;
+
 
 /**
  * The SEO Framework plugin
@@ -99,7 +100,7 @@ class Schema {
 		$builders_queue = [];
 		// Queue array_merge for improved performance.
 		foreach ( $primaries as $class )
-			$builders_queue[] = ( "\The_SEO_Framework\Meta\Schema\Entities\\$class" )::BUILDERS;
+			$builders_queue[] = ( "\The_SEO_Framework\Meta\Schema\Entities\\$class" )::BUILDERS; // Lacking import OK.
 
 		/**
 		 * @since 4.3.0

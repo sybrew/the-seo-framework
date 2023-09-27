@@ -13,9 +13,9 @@ use \The_SEO_Framework\Data;
 
 $logo = '';
 
-if ( $this->get_option( 'sitemap_logo' ) ) {
+if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 
-	$id   = $this->get_option( 'sitemap_logo_id' ) ?: get_theme_mod( 'custom_logo' ) ?: get_option( 'site_icon' );
+	$id   = Data\Plugin::get_option( 'sitemap_logo_id' ) ?: get_theme_mod( 'custom_logo' ) ?: get_option( 'site_icon' );
 	$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
 
 	/**

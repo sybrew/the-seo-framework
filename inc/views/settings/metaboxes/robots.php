@@ -7,11 +7,12 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Bridges\SeoSettings,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
-use The_SEO_Framework\Helper\{
+use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,
@@ -166,7 +167,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 			$_text_snippet_types['number'][ $_n ] = sprintf( _n( '%d character', '%d characters', $_n, 'autodescription' ), $_n );
 		}
 		$text_snippet_options = '';
-		$_current             = $this->get_option( 'max_snippet_length' );
+		$_current             = Data\Plugin::get_option( 'max_snippet_length' );
 		foreach ( $_text_snippet_types as $_type => $_values ) {
 			$_label = 'default' === $_type
 				? __( 'Standard directive', 'autodescription' )
@@ -208,7 +209,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		);
 
 		$image_preview_options = '';
-		$_current              = $this->get_option( 'max_image_preview' );
+		$_current              = Data\Plugin::get_option( 'max_image_preview' );
 		$_image_preview_types  = [
 			'none'     => _x( 'None, disallow preview', 'quantity: zero', 'autodescription' ),
 			'standard' => __( 'Thumbnail or standard size', 'autodescription' ),
@@ -252,7 +253,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 			$_video_snippet_types['number'][ $_n ] = sprintf( _n( '%d second', '%d seconds', $_n, 'autodescription' ), $_n );
 		}
 		$video_preview_options = '';
-		$_current              = $this->get_option( 'max_video_preview' );
+		$_current              = Data\Plugin::get_option( 'max_video_preview' );
 		foreach ( $_video_snippet_types as $_type => $_values ) {
 			$_label = 'default' === $_type
 				? __( 'Standard directive', 'autodescription' )
@@ -317,7 +318,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 
 		$checkboxes = [];
 
-		$pt_option_id = $this->get_robots_post_type_option_id( $ro_value );
+		$pt_option_id = Data\Plugin\Helper::get_robots_option_index( 'post_type', $ro_value );
 
 		foreach ( $post_types as $post_type ) {
 			$checkboxes[] = Input::make_checkbox( [
@@ -344,7 +345,7 @@ switch ( $this->get_view_instance( 'robots', $instance ) ) :
 		HTML::header_title( __( 'Taxonomy Settings', 'autodescription' ) );
 		HTML::description( __( "These settings apply to the taxonomies of post types. When taxonomies have all their bound post types' options checked, they will inherit their status.", 'autodescription' ) );
 
-		$tax_option_id = $this->get_robots_taxonomy_option_id( $ro_value );
+		$tax_option_id = Data\Plugin\Helper::get_robots_option_index( 'taxonomy', $ro_value );
 
 		$checkboxes = [];
 

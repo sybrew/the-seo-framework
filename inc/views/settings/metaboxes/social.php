@@ -7,14 +7,17 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
+
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Bridges\SeoSettings;
+use \The_SEO_Framework\Interpreters\{
+		HTML,
+		Form,
+		Settings_Input as Input,
+	};
 
 use \The_SEO_Framework\Meta;
-
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 switch ( $this->get_view_instance( 'social', $instance ) ) :
 	case 'social_main':
@@ -151,8 +154,8 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( 'social_image_fb_url' ); ?>" id=tsf_fb_socialimage-url value="<?= esc_url( $this->get_option( 'social_image_fb_url' ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( 'social_image_fb_id' ); ?>" id=tsf_fb_socialimage-id value="<?= absint( $this->get_option( 'social_image_fb_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
+			<input class=large-text type=url name="<?php Input::field_name( 'social_image_fb_url' ); ?>" id=tsf_fb_socialimage-url value="<?= esc_url( Data\Plugin::get_option( 'social_image_fb_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'social_image_fb_id' ); ?>" id=tsf_fb_socialimage-id value="<?= absint( Data\Plugin::get_option( 'social_image_fb_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
@@ -171,7 +174,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'theme_color' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'theme_color' ); ?>" value="<?= esc_attr( $this->get_option( 'theme_color' ) ) ?>" data-tsf-default-color="" />
+			<input type=text name="<?php Input::field_name( 'theme_color' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'theme_color' ); ?>" value="<?= esc_attr( Data\Plugin::get_option( 'theme_color' ) ) ?>" data-tsf-default-color="" />
 		</p>
 		<hr>
 		<?php
@@ -188,13 +191,13 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		break;
 
 	case 'social_facebook_tab':
-		$fb_author             = $this->get_option( 'facebook_author' );
+		$fb_author             = Data\Plugin::get_option( 'facebook_author' );
 		$fb_author_placeholder = _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
 
-		$fb_publisher             = $this->get_option( 'facebook_publisher' );
+		$fb_publisher             = Data\Plugin::get_option( 'facebook_publisher' );
 		$fb_publisher_placeholder = _x( 'https://www.facebook.com/YourBusinessProfile', 'Example Facebook Business URL', 'autodescription' );
 
-		$fb_appid             = $this->get_option( 'facebook_appid' );
+		$fb_appid             = Data\Plugin::get_option( 'facebook_appid' );
 		$fb_appid_placeholder = '123456789012345';
 
 		HTML::header_title( __( 'Facebook Integration Settings', 'autodescription' ) );
@@ -255,10 +258,10 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 		break;
 
 	case 'social_twitter_tab':
-		$tw_site             = $this->get_option( 'twitter_site' );
+		$tw_site             = Data\Plugin::get_option( 'twitter_site' );
 		$tw_site_placeholder = _x( '@your-site-username', 'Twitter @username', 'autodescription' );
 
-		$tw_creator             = $this->get_option( 'twitter_creator' );
+		$tw_creator             = Data\Plugin::get_option( 'twitter_creator' );
 		$tw_creator_placeholder = _x( '@your-personal-username', 'Twitter @username', 'autodescription' );
 
 		$supported_twitter_cards = Meta\Twitter::get_supported_cards();
@@ -285,7 +288,7 @@ switch ( $this->get_view_instance( 'social', $instance ) ) :
 			foreach ( $supported_twitter_cards as $type ) {
 				?>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'twitter_card' ); ?>" id="<?php Input::field_id( "twitter_card_{$type}" ); ?>" value="<?= esc_attr( $type ) ?>" <?php checked( $this->get_option( 'twitter_card' ), $type ); ?> />
+					<input type=radio name="<?php Input::field_name( 'twitter_card' ); ?>" id="<?php Input::field_id( "twitter_card_{$type}" ); ?>" value="<?= esc_attr( $type ) ?>" <?php checked( Data\Plugin::get_option( 'twitter_card' ), $type ); ?> />
 					<label for="<?php Input::field_id( "twitter_card_{$type}" ); ?>">
 						<span>
 							<?php

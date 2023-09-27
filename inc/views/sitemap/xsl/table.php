@@ -20,7 +20,7 @@ $url = [
 	'td' => '<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;95"><xsl:value-of select="substring($itemURL,0,93)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>',
 ];
 
-if ( $this->get_option( 'sitemaps_modified' ) ) {
+if ( \The_SEO_Framework\Data\Plugin::get_option( 'sitemaps_modified' ) ) {
 	$last_updated = [
 		'th' => sprintf( '<th>%s</th>', esc_xml( __( 'Last Updated', 'autodescription' ) ) ),
 		'td' => '<td><xsl:value-of select="$lastmod" /></td>',

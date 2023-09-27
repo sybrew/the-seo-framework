@@ -7,6 +7,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -48,9 +50,7 @@ final class PluginTable {
 
 		$tsf_links = [];
 
-		$tsf = \tsf();
-
-		if ( ! $tsf->is_headless['settings'] ) {
+		if ( ! is_headless( 'settings' ) ) {
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
 				\esc_url( \admin_url( "admin.php?page={$tsf->seo_settings_page_slug}" ) ),

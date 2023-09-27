@@ -8,9 +8,10 @@ namespace The_SEO_Framework\Builders\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta;
-
 use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
+
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta;
 
 /**
  * The SEO Framework plugin
@@ -263,7 +264,7 @@ abstract class Main {
 		 */
 		return (int) \apply_filters(
 			'the_seo_framework_sitemap_post_limit',
-			\tsf()->get_option( 'sitemap_query_limit' ),
+			Data\Plugin::get_option( 'sitemap_query_limit' ),
 			$hierarchical
 		);
 	}

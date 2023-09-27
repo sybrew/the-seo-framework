@@ -9,7 +9,7 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
-use The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query;
 
 printf(
 	'<div id=%s data-post-id=%d class=hidden></div>',

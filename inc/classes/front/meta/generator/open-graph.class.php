@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Front\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta;
 
 /**
  * The SEO Framework plugin
@@ -269,7 +270,7 @@ final class Open_Graph {
 
 		foreach ( Meta\Image::get_image_details(
 			null,
-			! \tsf()->get_option( 'multi_og_image' )
+			! Data\Plugin::get_option( 'multi_og_image' )
 		) as $image ) {
 			yield [
 				'attributes' => [

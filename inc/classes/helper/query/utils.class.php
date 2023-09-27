@@ -9,9 +9,11 @@ namespace The_SEO_Framework\Helper\Query;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function \The_SEO_Framework\memo;
+
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
-	Query, // Name conflict... how is this allowed??
+	Query, // Yes, it is legal to share class and namespaces.
 	Taxonomies,
 };
 
@@ -161,7 +163,7 @@ class Utils {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( ! \tsf()->get_option( 'advanced_query_protection' ) )
+		if ( ! Data\Plugin::get_option( 'advanced_query_protection' ) )
 			return memo( false );
 
 		// When the page ID is not 0, a real page will always be returned.

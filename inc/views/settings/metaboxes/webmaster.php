@@ -7,9 +7,10 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input,
-	The_SEO_Framework\Meta;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input,
+	\The_SEO_Framework\Meta;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -94,7 +95,7 @@ switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 					esc_attr( Input::get_field_name( $setting['setting'] ) ),
 					esc_attr( Input::get_field_id( $setting['setting'] ) ),
 					esc_attr( $setting['placeholder'] ),
-					esc_attr( $this->get_option( $setting['setting'] ) ),
+					esc_attr( Data\Plugin::get_option( $setting['setting'] ) ),
 				]
 			);
 		}

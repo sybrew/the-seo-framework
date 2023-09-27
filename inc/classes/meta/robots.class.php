@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 use function \The_SEO_Framework\{
 	memo,
@@ -172,13 +173,10 @@ class Robots {
 	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public static function is_post_type_robots_set( $type, $post_type = '' ) {
-
-		$tsf = \tsf();
-
-		return (bool) $tsf->get_option( [
-			$tsf->get_robots_post_type_option_id( $type ),
+		return (bool) Data\Plugin::get_option(
+			Data\Plugin\Helper::get_robots_option_index( 'post_type', $type ),
 			$post_type ?: Query::get_current_post_type(),
-		] );
+		);
 	}
 
 	/**
@@ -193,12 +191,9 @@ class Robots {
 	 * @return bool True if noindex, nofollow, or noarchive is set; false otherwise.
 	 */
 	public static function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
-
-		$tsf = \tsf();
-
-		return (bool) $tsf->get_option( [
-			$tsf->get_robots_taxonomy_option_id( $type ),
+		return (bool) Data\Plugin::get_option(
+			Data\Plugin\Helper::get_robots_option_index( 'taxonomy', $type ),
 			$taxonomy ?: Query::get_current_taxonomy(),
-		] );
+		);
 	}
 }

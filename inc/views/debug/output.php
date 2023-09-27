@@ -7,9 +7,8 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Internal\Debug;
-
-use The_SEO_Framework\Helper\{
+use \The_SEO_Framework\Internal\Debug;
+use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies

@@ -7,7 +7,8 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -45,19 +46,6 @@ use \The_SEO_Framework\Helper\Query;
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99, 2 );
 \add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100, 2 );
 \add_action( 'the_seo_framework_downgraded', __NAMESPACE__ . '\\_prepare_downgrade_notice', 99, 2 );
-
-/**
- * Returns the default site options.
- * Memoizes the return value.
- *
- * @since 3.1.0
- *
- * @return array The default site options.
- */
-function _upgrade_default_site_options() {
-	static $memo;
-	return $memo ??= \tsf()->get_default_site_options();
-}
 
 /**
  * Returns the version set before upgrading began.
@@ -105,9 +93,7 @@ function _previous_db_version() {
  */
 function _do_upgrade() {
 
-	$tsf = \tsf();
-
-	if ( ! $tsf->loaded || \wp_doing_ajax() ) return;
+	if ( ! \tsf()->loaded || \wp_doing_ajax() ) return;
 
 	if ( Query::is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
@@ -363,10 +349,8 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
-		$tsf = \tsf();
-
-		$tsf->register_dismissible_persistent_notice(
-			$tsf->convert_markdown(
+		\tsf()->register_dismissible_persistent_notice(
+			\tsf()->convert_markdown(
 				sprintf(
 					/* translators: %1$s = New, lower version number, surrounded in markdown-backticks. %2$s = Old, higher version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Your website has been downgraded successfully to use The SEO Framework at database version `%1$s` from `%2$s`.', 'autodescription' ),
@@ -414,12 +398,10 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
  */
 function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
-	$tsf = \tsf();
-
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully upgraded.
-		$tsf->register_dismissible_persistent_notice(
-			$tsf->convert_markdown(
+		\tsf()->register_dismissible_persistent_notice(
+			\tsf()->convert_markdown(
 				sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Thank you for updating The SEO Framework! Your website has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
@@ -447,11 +429,11 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 		// Only show notices when not in network mode, or on main site otherwise.
 		if ( ! $network_mode || \is_main_site() ) {
-			$tsf->register_dismissible_persistent_notice(
+			\tsf()->register_dismissible_persistent_notice(
 				sprintf(
 					'<p>%s</p><p>%s</p>',
 					\esc_html__( 'The SEO Framework automatically optimizes your website for search engines and social media.', 'autodescription' ),
-					$tsf->convert_markdown(
+					\tsf()->convert_markdown(
 						sprintf(
 							/* translators: %s = Link, markdown. */
 							\esc_html__( 'To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).', 'autodescription' ),
@@ -521,10 +503,10 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 			}
 		}
 
-		$found_titles and $tsf->register_dismissible_persistent_notice(
+		$found_titles and \tsf()->register_dismissible_persistent_notice(
 			sprintf(
 				'<p>%s</p>',
-				$tsf->convert_markdown(
+				\tsf()->convert_markdown(
 					sprintf(
 						/* translators: 1: SEO plugin name(s), 2: link to guide, in Markdown! */
 						\esc_html__( 'The SEO Framework detected metadata from %1$s. Whenever you are set, read our [migration guide](%2$s).', 'autodescription' ),
@@ -589,10 +571,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
  * @param string $notice The upgrade notice. Doesn't need to be escaped.
  */
 function _add_upgrade_notice( $notice = '' ) {
-
-	$tsf = \tsf();
-
-	$tsf->register_dismissible_persistent_notice(
+	\tsf()->register_dismissible_persistent_notice(
 		"SEO: $notice",
 		'upgrade-' . ( hash( 'md5', $notice ) ?: uniqid( '', true ) ), // if md5 is unregistered, it'll return false
 		[
@@ -655,11 +634,9 @@ function _do_upgrade_2802() {
  */
 function _do_upgrade_2900() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
-		$tsf = \tsf();
-
-		$card_type = trim( $tsf->get_option( 'twitter_card', false ) );
+		$card_type = trim( Data\Plugin::get_option( 'twitter_card' ) );
 		if ( 'photo' === $card_type ) {
-			$tsf->update_option( 'twitter_card', 'summary_large_image' );
+			Data\Plugin::update_option( 'twitter_card', 'summary_large_image' );
 			_add_upgrade_notice(
 				\__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
 			);
@@ -678,21 +655,19 @@ function _do_upgrade_2900() {
  */
 function _do_upgrade_3001() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
-		$tsf = \tsf();
-
 		// Only show notice if old option exists. Falls back to default upgrader otherwise.
-		$sitemap_timestamps = $tsf->get_option( 'sitemap_timestamps', false );
+		$sitemap_timestamps = Data\Plugin::get_option( 'sitemap_timestamps' );
 		if ( '' !== $sitemap_timestamps ) {
-			$tsf->update_option( 'timestamps_format', (string) (int) $sitemap_timestamps );
+			Data\Plugin::update_option( 'timestamps_format', (string) (int) $sitemap_timestamps );
 			_add_upgrade_notice(
 				\__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' )
 			);
 		} else {
-			$tsf->update_option( 'timestamps_format', '1' );
+			Data\Plugin::update_option( 'timestamps_format', '1' );
 		}
 
-		$tsf->update_option( 'display_pixel_counter', 1 );
-		$tsf->update_option( 'display_character_counter', 1 );
+		Data\Plugin::update_option( 'display_pixel_counter', 1 );
+		Data\Plugin::update_option( 'display_character_counter', 1 );
 	}
 }
 
@@ -712,17 +687,15 @@ function _do_upgrade_3001() {
  */
 function _do_upgrade_3103() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
-		$tsf = \tsf();
-
 		// Transport title separator (option name typo).
-		$tsf->update_option(
+		Data\Plugin::update_option(
 			'title_separator',
-			$tsf->get_option( 'title_seperator', false ) ?: 'hyphen' // Typo intended.
+			Data\Plugin::get_option( 'title_seperator' ) ?: 'hyphen' // Typo intended.
 		);
 
 		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-			$_attachment_option = (int) (bool) $tsf->get_option( "attachment_$r", false );
+			$_attachment_option = (int) (bool) Data\Plugin::get_option( "attachment_$r" );
 
 			$_value = [];
 
@@ -730,17 +703,17 @@ function _do_upgrade_3103() {
 			if ( $_attachment_option )
 				$_value['attachment'] = $_attachment_option;
 
-			$tsf->update_option( $tsf->get_robots_post_type_option_id( $r ), $_value );
+			Data\Plugin::update_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', $r ), $_value );
 		}
 
 		// Adds default auto description option.
-		$tsf->update_option( 'auto_description', 1 );
+		Data\Plugin::update_option( 'auto_description', 1 );
 
 		// Add default sitemap limit option.
-		$tsf->update_option( 'sitemap_query_limit', 1000 );
+		Data\Plugin::update_option( 'sitemap_query_limit', 1000 );
 
 		// Add non-default HTML stripping option. Defaulting to previous behavior.
-		$tsf->update_option( 'title_strip_tags', 0 ); // NOTE: Default is 1.
+		Data\Plugin::update_option( 'title_strip_tags', 0 ); // NOTE: Default is 1.
 	}
 }
 
@@ -758,8 +731,6 @@ function _do_upgrade_3103() {
  */
 function _do_upgrade_3300() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
-		$tsf = \tsf();
-
 		// Remove old rewrite rules.
 		unset(
 			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'],
@@ -768,24 +739,24 @@ function _do_upgrade_3300() {
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 
 		// Convert 'dash' title option to 'hyphen', silently. Nothing notably changes for the user.
-		if ( 'dash' === $tsf->get_option( 'title_separator', false ) )
-			$tsf->update_option( 'title_separator', 'hyphen' );
+		if ( 'dash' === Data\Plugin::get_option( 'title_separator' ) )
+			Data\Plugin::update_option( 'title_separator', 'hyphen' );
 
 		// Add default cron pinging option.
-		$tsf->update_option( 'ping_use_cron', 1 );
+		Data\Plugin::update_option( 'ping_use_cron', 1 );
 
-		if ( $tsf->get_option( 'ping_google', false ) || $tsf->get_option( 'ping_bing', false ) ) {
+		if ( Data\Plugin::get_option( 'ping_google' ) || Data\Plugin::get_option( 'ping_bing' ) ) {
 			_add_upgrade_notice(
 				\__( 'A cronjob is now used to ping search engines, and it alerts them to changes in your sitemap.', 'autodescription' )
 			);
 		}
 
 		// Flip the homepage title location to make it in line with all other titles.
-		$home_title_location = $tsf->get_option( 'home_title_location', false );
+		$home_title_location = Data\Plugin::get_option( 'home_title_location' );
 		if ( 'left' === $home_title_location ) {
-			$tsf->update_option( 'home_title_location', 'right' );
+			Data\Plugin::update_option( 'home_title_location', 'right' );
 		} else {
-			$tsf->update_option( 'home_title_location', 'left' );
+			Data\Plugin::update_option( 'home_title_location', 'left' );
 		}
 
 		_add_upgrade_notice(
@@ -806,14 +777,12 @@ function _do_upgrade_3300() {
  */
 function _do_upgrade_4051() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
-		$tsf = \tsf();
-
-		$tsf->update_option( 'advanced_query_protection', 0 );
-		$tsf->update_option( 'index_the_feed', 0 );
-		$tsf->update_option( 'baidu_verification', '' );
-		$tsf->update_option( 'oembed_scripts', 1 );
-		$tsf->update_option( 'oembed_remove_author', 0 );
-		$tsf->update_option( 'theme_color', '' );
+		Data\Plugin::update_option( 'advanced_query_protection', 0 );
+		Data\Plugin::update_option( 'index_the_feed', 0 );
+		Data\Plugin::update_option( 'baidu_verification', '' );
+		Data\Plugin::update_option( 'oembed_scripts', 1 );
+		Data\Plugin::update_option( 'oembed_remove_author', 0 );
+		Data\Plugin::update_option( 'theme_color', '' );
 	}
 }
 
@@ -828,12 +797,10 @@ function _do_upgrade_4051() {
  */
 function _do_upgrade_4103() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4103' ) {
-		$tsf = \tsf();
-
-		$tsf->update_option( 'disabled_taxonomies', [] );
-		$tsf->update_option( 'sitemap_logo_url', '' );
-		$tsf->update_option( 'sitemap_logo_id', 0 );
-		$tsf->update_option( 'social_title_rem_additions', 0 );
+		Data\Plugin::update_option( 'disabled_taxonomies', [] );
+		Data\Plugin::update_option( 'sitemap_logo_url', '' );
+		Data\Plugin::update_option( 'sitemap_logo_id', 0 );
+		Data\Plugin::update_option( 'social_title_rem_additions', 0 );
 
 		// Transport category_noindex/nofollow/noarchive and tag_noindex/nofollow/noarchive settings.
 		$_new_pt_option_defaults = [
@@ -846,15 +813,15 @@ function _do_upgrade_4103() {
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
 			$_value = $_new_pt_option_defaults[ $r ];
 
-			$_category_option = (int) (bool) $tsf->get_option( "category_$r", false );
-			$_post_tag_option = (int) (bool) $tsf->get_option( "tag_$r", false );
+			$_category_option = (int) (bool) Data\Plugin::get_option( "category_$r" );
+			$_post_tag_option = (int) (bool) Data\Plugin::get_option( "tag_$r" );
 
 			if ( $_category_option )
 				$_value['category'] = $_category_option;
 			if ( $_post_tag_option )
 				$_value['post_tag'] = $_post_tag_option;
 
-			$tsf->update_option( $tsf->get_robots_taxonomy_option_id( $r ), $_value );
+			Data\Plugin::update_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', $r ), $_value );
 		}
 	}
 }
@@ -869,10 +836,8 @@ function _do_upgrade_4103() {
  */
 function _do_upgrade_4110() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
-		$tsf = \tsf();
-
-		$tsf->update_option( 'oembed_use_og_title', 0 );
-		$tsf->update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
+		Data\Plugin::update_option( 'oembed_use_og_title', 0 );
+		Data\Plugin::update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
 	}
 }
 
@@ -917,11 +882,9 @@ function _do_upgrade_4270() {
  */
 function _do_upgrade_4301() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4301' ) {
-		$tsf = \tsf();
-
-		$tsf->update_option(
+		Data\Plugin::update_option(
 			'auto_description_html_method',
-			$tsf->get_option( 'auto_descripton_html_method', false ) ?: 'fast' // Typo intended
+			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast' // Typo intended
 		);
 
 		global $wpdb;

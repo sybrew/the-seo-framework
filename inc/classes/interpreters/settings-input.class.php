@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Interpreters;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -144,10 +146,8 @@ final class Settings_Input {
 			$args['label']       = \esc_html( $args['label'] );
 		}
 
-		$tsf = \tsf();
-
 		$field_id = $field_name = static::get_field_id( $args['id'] );
-		$value    = $args['value'] ?? $tsf->get_option( $args['id'] );
+		$value    = $args['value'] ?? Data\Plugin::get_option( ...(array) $args['id'] );
 
 		$cb_classes = [];
 
@@ -157,7 +157,7 @@ final class Settings_Input {
 		if ( $args['disabled'] ) {
 			$cb_classes[] = 'tsf-disabled';
 		} else {
-			array_push( $cb_classes, ...static::get_conditional_checked_classes( $args['id'] ) );
+			array_push( $cb_classes, ...static::get_conditional_checked_classes( ...(array) $args['id'] ) );
 		}
 
 		return sprintf(
@@ -165,14 +165,14 @@ final class Settings_Input {
 			vsprintf(
 				'<label for="%s"%s>%s</label>',
 				[
-					$tsf->s_field_id( $field_id ),
+					\tsf()->s_field_id( $field_id ),
 					( $args['disabled'] ? ' class=tsf-disabled' : '' ),
 					vsprintf(
 						'<input type=checkbox class="%s" name="%s" id="%s" value=1 %s%s %s /> %s',
 						[
 							\esc_attr( implode( ' ', array_filter( $cb_classes ) ) ),
-							$tsf->s_field_id( $field_name ),
-							$tsf->s_field_id( $field_id ),
+							\tsf()->s_field_id( $field_name ),
+							\tsf()->s_field_id( $field_id ),
 							\checked( $value, true, false ),
 							( $args['disabled'] ? ' disabled' : '' ),
 							HTML::make_data_attributes( $args['data'] ),
@@ -192,14 +192,13 @@ final class Settings_Input {
 	 *
 	 * @since 4.2.0
 	 *
-	 * @param string|string[] $key Required. The option name, or a map of indexes therefor.
+	 * @param string ...$key Required. The option name, or a list of indexes therefor.
 	 * @return string[] The conditional checked classes.
 	 */
-	public static function get_conditional_checked_classes( $key ) {
-		$tsf = \tsf();
+	public static function get_conditional_checked_classes( ...$key ) {
 		return [
-			$tsf->get_default_option( $key ) ? 'tsf-default-selected' : '',
-			$tsf->get_warned_option( $key ) ? 'tsf-warning-selected' : '',
+			Data\Plugin\Setup::get_default_option( ...$key ) ? 'tsf-default-selected' : '',
+			Data\Plugin\Setup::get_warned_option( ...$key ) ? 'tsf-warning-selected' : '',
 		];
 	}
 }

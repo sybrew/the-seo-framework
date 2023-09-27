@@ -8,8 +8,8 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Data;
 
 use function \The_SEO_Framework\{
 	memo,
@@ -144,10 +144,10 @@ class Open_Graph {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
-				$title = \tsf()->get_option( 'homepage_og_title' )
+				$title = Data\Plugin::get_option( 'homepage_og_title' )
 					  ?: \tsf()->get_post_meta_item( '_open_graph_title' );
 			} else {
-				$title = \tsf()->get_option( 'homepage_og_title' );
+				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
 		} elseif ( Query::is_singular() ) {
 			$title = \tsf()->get_post_meta_item( '_open_graph_title' );
@@ -185,10 +185,10 @@ class Open_Graph {
 			$title = \tsf()->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$title = \tsf()->get_option( 'homepage_og_title' )
+				$title = Data\Plugin::get_option( 'homepage_og_title' )
 					  ?: \tsf()->get_post_meta_item( '_open_graph_title', $args['id'] );
 			} else {
-				$title = \tsf()->get_option( 'homepage_og_title' );
+				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
 		} elseif ( $args['id'] ) {
 			$title = \tsf()->get_post_meta_item( '_open_graph_title', $args['id'] );
@@ -270,10 +270,10 @@ class Open_Graph {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
-				$desc = \tsf()->get_option( 'homepage_og_description' )
+				$desc = Data\Plugin::get_option( 'homepage_og_description' )
 					 ?: \tsf()->get_post_meta_item( '_open_graph_description' );
 			} else {
-				$desc = \tsf()->get_option( 'homepage_og_description' );
+				$desc = Data\Plugin::get_option( 'homepage_og_description' );
 			}
 		} elseif ( Query::is_singular() ) {
 			$desc = \tsf()->get_post_meta_item( '_open_graph_description' );
@@ -311,10 +311,10 @@ class Open_Graph {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'og_description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$desc = \tsf()->get_option( 'homepage_og_description' )
+				$desc = Data\Plugin::get_option( 'homepage_og_description' )
 					 ?: \tsf()->get_post_meta_item( '_open_graph_description', $args['id'] );
 			} else {
-				$desc = \tsf()->get_option( 'homepage_og_description' );
+				$desc = Data\Plugin::get_option( 'homepage_og_description' );
 			}
 		} elseif ( $args['id'] ) {
 			$desc = \tsf()->get_post_meta_item( '_open_graph_description', $args['id'] );
@@ -415,7 +415,7 @@ class Open_Graph {
 	 */
 	public static function get_article_published_time() {
 
-		if ( ! \tsf()->get_option( 'post_publish_time' ) || ! Query::is_single() )
+		if ( ! Data\Plugin::get_option( 'post_publish_time' ) || ! Query::is_single() )
 			return '';
 
 		return Data\Post::get_post_published_time();
@@ -430,7 +430,7 @@ class Open_Graph {
 	 */
 	public static function get_article_modified_time() {
 
-		if ( ! \tsf()->get_option( 'post_modify_time' ) || ! Query::is_single() )
+		if ( ! Data\Plugin::get_option( 'post_modify_time' ) || ! Query::is_single() )
 			return '';
 
 		return Data\Post::get_post_modified_time();

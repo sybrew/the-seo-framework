@@ -13,8 +13,8 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -141,7 +141,7 @@ class Utils {
 		if ( null !== $memo = memo() ) return $memo;
 
 		// May be 'https', 'http', or 'automatic'.
-		switch ( \tsf()->get_option( 'canonical_scheme' ) ) {
+		switch ( Data\Plugin::get_option( 'canonical_scheme' ) ) {
 			case 'https':
 				$scheme = 'https';
 				break;

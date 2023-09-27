@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Bridges;
 
 use function \The_SEO_Framework\Utils\clamp_sentence;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2020 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -123,7 +125,7 @@ final class Feed {
 		 * Don't alter already-excerpts or descriptions.
 		 * $feed_type is only set on 'the_content_feed' filter.
 		 */
-		if ( isset( $feed_type ) && $tsf->get_option( 'excerpt_the_feed' ) ) {
+		if ( isset( $feed_type ) && Data\Plugin::get_option( 'excerpt_the_feed' ) ) {
 			// Strip all code and lines, and AI-trim it.
 			$excerpt = clamp_sentence(
 				$tsf->s_excerpt_raw( $content, false ),
@@ -138,7 +140,7 @@ final class Feed {
 			$content = "<p>$excerpt</p>";
 		}
 
-		if ( $tsf->get_option( 'source_the_feed' ) ) {
+		if ( Data\Plugin::get_option( 'source_the_feed' ) ) {
 			$content .= sprintf(
 				"\n" . '<p><a href="%s" rel="nofollow">%s</a></p>', // Keep XHTML valid!
 				\esc_url( \get_permalink() ),

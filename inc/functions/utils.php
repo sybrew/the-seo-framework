@@ -70,8 +70,8 @@ function normalize_generation_args( &$args ) {
 function array_flatten_list( $array ) {
 
 	// PHP 8.1+, use `!array_is_list()`?
-	// This is 350x faster than a polyfill for `!array_is_list()`.
-	if ( [] === $array || array_values( $array ) !== $array ) return $array;
+	// This is over 350x faster than a polyfill for `!array_is_list()`.
+	if ( empty( $array ) || array_values( $array ) !== $array ) return $array;
 
 	$ret = [];
 

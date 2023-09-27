@@ -12,7 +12,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 // Styles generic.
 printf(
 	'<xsl:variable name="tableMinWidth" select="\'%s\'"/>',
-	$this->get_option( 'sitemaps_modified' ) ? '700' : '550'
+	\The_SEO_Framework\Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550'
 );
 
 $colors = $this->get_sitemap_colors();

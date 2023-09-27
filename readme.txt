@@ -468,8 +468,13 @@ TODO eradicate get_defined_vars() or array unpacking where we can use func_get_a
 
 // Lacking imports:
 ^<\?php([\w\W](?!use (\\The_SEO_Framework\\(Helper|Data|Meta)\\\{).*;))*?(^(.(?!\*|\/\/))*?\\The_SEO_Framework\\.*?::)(.(?!\/\/ Lacking import OK.))*$
- // Lacking import OK.
+// Lacking import OK.
 ^ not robust enough
+
+TODO Remove "// Lacking import OK." before release -- this is only necessary to filter in bulk for now.
+
+// Lacking Data import:
+^<\?php([\w\W](?!(use\s|\t)(\\The_SEO_Framework\\Data)))*?(^(.(?!\*|\/\/))*?Data\\[A-Za-z_\\]*::)
 
 // Lacking header:
 ^<\?php([\w\W](?!defined))*?(The SEO Framework plugin)
@@ -618,6 +623,9 @@ TODO add robots.txt editor
 	-> Also move the callback to a new class.
 	-> Add this as an extension instead?
 
+TODO remove tsf()->loaded?
+	-> At least, write a constant?
+
 **Detailed log**
 
 **For everyone:**
@@ -643,6 +651,7 @@ TODO add robots.txt editor
 	* **Multisite:**
 		* On multisite, you can now inspect and edit user SEO metadata ("Authorial Info") for any users that have author capabilities on any (other) blog.
 			* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
+		* When switching blogs on multisite, all data memoization now flushes.
 	* **Migration:**
 		* SEOPress's metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
 	* **Third party support:**
@@ -820,6 +829,9 @@ TODO add robots.txt editor
 		* **Added:**
 			* Index `auto_description_html_method`, this used to be `auto_descripton_html_method` (typo).
 			* Suboption filter `s_color_hex` is available.
+		* **Changed:**
+			* The options no longer have their slashes stripped via `stripslashes_deep`. This was done precautionary because WordPress adds slashes to everything to account for a long-discouraged PHP quirk. Resaving the options would then cause slashes to become repeated: `'` becomes `\'`, `\'` becomes `\\\'`, etc. This is now addressed.
+				* See https://www.php.net/manual/en/function.get-magic-quotes-gpc.php.
 		* **Removed**
 			* Index `auto_descripton_html_method`.
 				* It is now `auto_description_html_method` (typo in "description").
@@ -840,6 +852,7 @@ TODO add robots.txt editor
 		* Transient `tsf_exclude_0_%` was leftover from TSF 3.0 and will be deleted on upgrade.
 * **Function notes:**
 	* **Added:**
+		* `The_SEO_Framework\is_headless()` is now available. Use this in favor of `\tsf()->is_headless`, which is now deprecated.
 		* `The_SEO_Framework\Utils\normalize_generation_args()` is now available.
 		* `The_SEO_Framework\Utils\array_flatten_list()` is now available.
 		* `The_SEO_Framework\Utils\scrub_array()` is now available.
@@ -1101,6 +1114,17 @@ TODO add robots.txt editor
 				* `can_access_settings()`, use `current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )` instead.
 				* `html_output()` with no alternative available.
 				* `do_meta_output()` with no alternative available.
+				* `tsf()->get_default_site_options()`, use `tsf()->data()->plugin()->setup()->get_default_options()` instead.
+				* `tsf()->get_warned_site_options()`, use `tsf()->data()->plugin()->setup()->get_warned_options()` instead.
+				* `tsf()->get_all_options()`, use `tsf()->data()->plugin()->get_options()` instead.
+				* `tsf()->get_default_option()`, use `tsf()->data()->plugin()->setup()->get_default_option()` instead.
+				* `tsf()->get_warned_option()`, use `tsf()->data()->plugin()->setup()->get_warned_option()` instead.
+				* `tsf()->get_robots_post_type_option_id()`, use `tsf()->data()->plugin()->helper()->get_robots_option_index()` instead.
+				* `tsf()->get_robots_taxonomy_option_id()`, use `tsf()->data()->plugin()->helper()->get_robots_option_index()` instead.
+				* `tsf()->update_option()`, use `tsf()->data()->plugin()->update_option()` instead.
+				* `tsf()->update_settings()`, use `tsf()->data()->plugin()->update_option()` instead.
+				* `tsf()->get_static_cache()`, use `tsf()->data()->plugin()->get_site_cache()` instead.
+				* `tsf()->update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
 				* TODO `get_current_post_author_id()`, use `tsf()->get_post_author_id()` instead. (this will move to Data or Query?)
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
@@ -1216,6 +1240,7 @@ TODO add robots.txt editor
 				* `the_seo_framework_use_transients`, with no alternative available.
 				* `the_seo_framework_debug`, use constant `THE_SEO_FRAMEWORK_DEBUG` instead.
 				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
+				* `is_headless`, use function `The_SEO_Framework\is_headless()` instead.
 			* **Properties removed:**
 				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
 		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.

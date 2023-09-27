@@ -10,7 +10,8 @@ namespace The_SEO_Framework\Front\Meta;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -95,8 +96,6 @@ final class Head {
 		 */
 		\do_action( 'the_seo_framework_before_meta_output' );
 
-		$tsf = \tsf();
-
 		// Limit processing and redundant tags on 404 and search.
 		switch ( true ) {
 			case \is_search():
@@ -132,7 +131,7 @@ final class Head {
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_og_tags',
 			[
-				(bool) $tsf->get_option( 'og_tags' ),
+				(bool) Data\Plugin::get_option( 'og_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
@@ -149,7 +148,7 @@ final class Head {
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
 			[
-				(bool) $tsf->get_option( 'facebook_tags' ),
+				(bool) Data\Plugin::get_option( 'facebook_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
@@ -165,7 +164,7 @@ final class Head {
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_twitter_tags',
 			[
-				(bool) $tsf->get_option( 'twitter_tags' ),
+				(bool) Data\Plugin::get_option( 'twitter_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
@@ -189,7 +188,7 @@ final class Head {
 
 		// Queue array_merge for improved performance. Do not use __NAMESPACE__; needs to be found easily.
 		foreach ( $generator_pools as $pool )
-			$generators_queue[] = ( "\The_SEO_Framework\Front\Meta\Generator\\$pool" )::GENERATORS;
+			$generators_queue[] = ( "\The_SEO_Framework\Front\Meta\Generator\\$pool" )::GENERATORS; // Lacking import OK.
 
 		/**
 		 * @since 4.3.0

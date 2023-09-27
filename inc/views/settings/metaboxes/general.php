@@ -7,12 +7,13 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input,
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Bridges\SeoSettings,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input,
 	\The_SEO_Framework\Meta;
 
-use The_SEO_Framework\Helper\{
+use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,
@@ -158,7 +159,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		);
 
 		$search_query_select_options = '';
-		$_current                    = $this->get_option( 'alter_search_query_type' );
+		$_current                    = Data\Plugin::get_option( 'alter_search_query_type' );
 		foreach ( $query_types as $value => $name ) {
 			$search_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -171,7 +172,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 		}
 
 		$archive_query_select_options = '';
-		$_current                     = $this->get_option( 'alter_archive_query_type' );
+		$_current                     = Data\Plugin::get_option( 'alter_archive_query_type' );
 		foreach ( $query_types as $value => $name ) {
 			$archive_query_select_options .= vsprintf(
 				'<option value="%s" %s>%s</option>',
@@ -259,7 +260,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 					'https'     => 'HTTPS',
 				]
 			);
-			$_current     = $this->get_option( 'canonical_scheme' );
+			$_current     = Data\Plugin::get_option( 'canonical_scheme' );
 			foreach ( $scheme_types as $value => $name )
 				vprintf(
 					'<option value="%s" %s>%s</option>',
@@ -326,7 +327,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 
 			<p id=sitemaps-timestamp-format class=tsf-fields>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value=0 <?php checked( $this->get_option( 'timestamps_format' ), '0' ); ?> />
+					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value=0 <?php checked( Data\Plugin::get_option( 'timestamps_format' ), '0' ); ?> />
 					<label for="<?php Input::field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
@@ -337,7 +338,7 @@ switch ( $this->get_view_instance( 'general', $instance ) ) :
 					</label>
 				</span>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value=1 <?php checked( $this->get_option( 'timestamps_format' ), '1' ); ?> />
+					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value=1 <?php checked( Data\Plugin::get_option( 'timestamps_format' ), '1' ); ?> />
 					<label for="<?php Input::field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.

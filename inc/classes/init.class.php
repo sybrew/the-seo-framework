@@ -7,14 +7,15 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Front,
-	\The_SEO_Framework\Meta;
+use function \The_SEO_Framework\is_headless;
 
+use \The_SEO_Framework\Front,
+	\The_SEO_Framework\Meta,
+	\The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomies,
 };
-
 
 /**
  * The SEO Framework plugin
@@ -124,8 +125,8 @@ class Init extends Pool {
 		$this->init_post_caching_actions();
 
 		// Ping searchengines.
-		if ( $this->get_option( 'ping_use_cron' ) ) {
-			if ( $this->get_option( 'sitemaps_output' ) && $this->get_option( 'ping_use_cron_prerender' ) )
+		if ( Data\Plugin::get_option( 'ping_use_cron' ) ) {
+			if ( Data\Plugin::get_option( 'sitemaps_output' ) && Data\Plugin::get_option( 'ping_use_cron_prerender' ) )
 				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap\Base, 'prerender_sitemap' ] );
 
 			\add_action( 'tsf_sitemap_cron_hook', [ Bridges\Ping::class, 'ping_search_engines' ] );
@@ -178,7 +179,9 @@ class Init extends Pool {
 
 		\add_action( 'activated_plugin', [ $this, 'reset_check_plugin_conflicts' ] );
 
-		if ( ! $this->is_headless['meta'] ) {
+		$is_headless = is_headless();
+
+		if ( ! $is_headless['meta'] ) {
 			// Initialize term meta filters and actions.
 			\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
 
@@ -203,7 +206,7 @@ class Init extends Pool {
 			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
 		}
 
-		if ( ! $this->is_headless['settings'] ) {
+		if ( ! $is_headless['settings'] ) {
 			// Set up site settings and allow saving resetting them.
 			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
 
@@ -214,7 +217,7 @@ class Init extends Pool {
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
 		}
 
-		if ( ! $this->is_headless['user'] ) {
+		if ( ! $is_headless['user'] ) {
 			// Initialize user meta filters and actions.
 			\add_action( 'personal_options_update', [ $this, '_update_user_meta' ], 10, 1 );
 			\add_action( 'edit_user_profile_update', [ $this, '_update_user_meta' ], 10, 1 );
@@ -223,7 +226,7 @@ class Init extends Pool {
 			\add_action( 'current_screen', [ $this, '_init_user_edit_view' ] );
 		}
 
-		if ( \in_array( false, $this->is_headless, true ) ) {
+		if ( \in_array( false, $is_headless, true ) ) {
 			// Set up notices.
 			\add_action( 'admin_notices', [ $this, '_output_notices' ] );
 
@@ -306,14 +309,14 @@ class Init extends Pool {
 		// Output meta tags.
 		\add_action( 'wp_head', [ Front\Meta\Head::class, 'print_wrap_and_tags' ], 1 );
 
-		if ( $this->get_option( 'alter_archive_query' ) )
+		if ( Data\Plugin::get_option( 'alter_archive_query' ) )
 			$this->init_alter_archive_query();
 
-		if ( $this->get_option( 'alter_search_query' ) )
+		if ( Data\Plugin::get_option( 'alter_search_query' ) )
 			$this->init_alter_search_query();
 
 		// Modify the feed.
-		if ( $this->get_option( 'excerpt_the_feed' ) || $this->get_option( 'source_the_feed' ) ) {
+		if ( Data\Plugin::get_option( 'excerpt_the_feed' ) || Data\Plugin::get_option( 'source_the_feed' ) ) {
 			// We could use actions 'do_feed_{$feed}', but I don't trust its variability.
 			// We could use action 'rss_tag_pre', but I don't trust its availability.
 			\add_action( 'template_redirect', [ $this, '_init_feed' ], 1 );
@@ -374,19 +377,19 @@ class Init extends Pool {
 			\remove_filter( 'wp_robots', 'wp_robots_noindex_search' );
 		}
 
-		if ( $this->get_option( 'og_tags' ) ) { // independent from filter at use_og_tags--let that be deciding later.
+		if ( Data\Plugin::get_option( 'og_tags' ) ) { // independent from filter at use_og_tags--let that be deciding later.
 			// Disable Jetpack's Open Graph tags. But Sybre, compat files? Yes.
 			\add_filter( 'jetpack_enable_open_graph', '__return_false' );
 		}
 
-		if ( $this->get_option( 'twitter_tags' ) ) { // independent from filter at use_twitter_tags--let that be deciding later.
+		if ( Data\Plugin::get_option( 'twitter_tags' ) ) { // independent from filter at use_twitter_tags--let that be deciding later.
 			// Disable Jetpack's Twitter Card tags. But Sybre, compat files? Maybe.
 			\add_filter( 'jetpack_disable_twitter_cards', '__return_true' );
 			// Future, maybe. See <https://github.com/Automattic/jetpack/issues/13146#issuecomment-516841698>
 			// \add_filter( 'jetpack_enable_twitter_cards', '__return_false' );
 		}
 
-		if ( ! $this->get_option( 'oembed_scripts' ) ) {
+		if ( ! Data\Plugin::get_option( 'oembed_scripts' ) ) {
 			/**
 			 * Only hide the scripts, don't permeably purge them. This should be enough.
 			 *
@@ -659,8 +662,8 @@ class Init extends Pool {
 		$output .= (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' );
 
 		// Add extra whitespace and sitemap full URL
-		if ( $this->get_option( 'sitemaps_robots' ) ) {
-			if ( $this->get_option( 'sitemaps_output' ) ) {
+		if ( Data\Plugin::get_option( 'sitemaps_robots' ) ) {
+			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
 				foreach ( Bridges\Sitemap::get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
 						$output .= sprintf( "\nSitemap: %s", \esc_url( Bridges\Sitemap::get_expected_sitemap_endpoint_url( $id ) ) );
@@ -737,7 +740,7 @@ class Init extends Pool {
 			 */
 			\apply_filters(
 				'the_seo_framework_set_noindex_header',
-				\is_robots() || ( ! $this->get_option( 'index_the_feed' ) && \is_feed() )
+				\is_robots() || ( ! Data\Plugin::get_option( 'index_the_feed' ) && \is_feed() )
 			)
 		) {
 			$this->_output_robots_noindex_headers();
@@ -760,7 +763,7 @@ class Init extends Pool {
 	 * @since 2.9.4
 	 */
 	public function init_alter_search_query() {
-		switch ( $this->get_option( 'alter_search_query_type' ) ) {
+		switch ( Data\Plugin::get_option( 'alter_search_query_type' ) ) {
 			case 'post_query':
 				\add_filter( 'the_posts', [ $this, '_alter_search_query_post' ], 10, 2 );
 				break;
@@ -777,7 +780,7 @@ class Init extends Pool {
 	 * @since 2.9.4
 	 */
 	public function init_alter_archive_query() {
-		switch ( $this->get_option( 'alter_archive_query_type' ) ) {
+		switch ( Data\Plugin::get_option( 'alter_archive_query_type' ) ) {
 			case 'post_query':
 				\add_filter( 'the_posts', [ $this, '_alter_archive_query_post' ], 10, 2 );
 				break;
@@ -1005,8 +1008,6 @@ class Init extends Pool {
 	/**
 	 * Alters the oEmbed response data.
 	 *
-	 * @WARNING: WordPress can switch blogs as this filter runs. So, check all options again, without cache!
-	 *           This should only happen at `/oembed/1.0/proxy`.
 	 * @hook oembed_response_data 10
 	 * @since 4.0.5
 	 * @since 4.1.1 Now also alters titles and images.
@@ -1018,12 +1019,10 @@ class Init extends Pool {
 	 */
 	public function _alter_oembed_response_data( $data, $post ) {
 
-		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_use_og_title', false ) )
+		if ( Data\Plugin::get_option( 'oembed_use_og_title' ) )
 			$data['title'] = $this->get_open_graph_title( [ 'id' => $post->ID ] ) ?: $data['title'];
 
-		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_use_social_image', false ) ) {
+		if ( Data\Plugin::get_option( 'oembed_use_social_image' ) ) {
 			$image_details = current( Meta\Image::get_image_details(
 				[ 'id' => $post->ID ],
 				true,
@@ -1038,8 +1037,7 @@ class Init extends Pool {
 			}
 		}
 
-		// Don't use cache. See @WARNING in doc comment.
-		if ( $this->get_option( 'oembed_remove_author', false ) )
+		if ( Data\Plugin::get_option( 'oembed_remove_author' ) )
 			unset( $data['author_url'], $data['author_name'] );
 
 		return $data;

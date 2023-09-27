@@ -9,7 +9,8 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Interpreters\Form;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Interpreters\Form;
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
@@ -60,9 +61,9 @@ $robots_settings = [
 				<span class=title><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></span>
 			</label>
 			<?php
-			$this->get_option( 'display_character_counter' )
+			Data\Plugin::get_option( 'display_character_counter' )
 				and Form::output_character_counter_wrap( 'autodescription-quick[doctitle]' );
-			$this->get_option( 'display_pixel_counter' )
+			Data\Plugin::get_option( 'display_pixel_counter' )
 				and Form::output_pixel_counter_wrap( 'autodescription-quick[doctitle]', 'title' );
 			?>
 			<div class="tsf-pad-input tsf-title-wrap">
@@ -77,9 +78,9 @@ $robots_settings = [
 				<span class=title><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></span>
 			</label>
 			<?php
-			$this->get_option( 'display_character_counter' )
+			Data\Plugin::get_option( 'display_character_counter' )
 				and Form::output_character_counter_wrap( 'autodescription-quick[description]' );
-			$this->get_option( 'display_pixel_counter' )
+			Data\Plugin::get_option( 'display_pixel_counter' )
 				and Form::output_pixel_counter_wrap( 'autodescription-quick[description]', 'description' );
 			?>
 			<div class=tsf-pad-input>

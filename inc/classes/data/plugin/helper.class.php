@@ -1,14 +1,12 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Front\Meta\Generator
- * @subpackage The_SEO_Framework\Meta
+ * @package The_SEO_Framework\Classes\Data\Plugin\Helper
+ * @subpackage The_SEO_Framework\Data\Plugin
  */
 
-namespace The_SEO_Framework\Front\Meta\Generator;
+namespace The_SEO_Framework\Data\Plugin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
-
-use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -28,38 +26,32 @@ use \The_SEO_Framework\Data;
  */
 
 /**
- * Holds theme color generators for meta tag output.
+ * Holds a collection of data helper methods for TSF.
  *
  * @since 4.3.0
  * @access protected
  * @internal
- * @final Can't be extended.
  */
-final class Theme_Color {
+class Helper {
 
 	/**
+	 * Returns the option key for robots settings.
+	 *
 	 * @since 4.3.0
-	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
+	 *
+	 * @param string $field Accepts 'post_type' and 'taxonomy'
+	 * @param string $type  Accepts 'noindex', 'nofollow', 'noarchive'.
+	 * @return string
 	 */
-	public const GENERATORS = [
-		[ __CLASS__, 'generate_theme_color' ],
-	];
+	public static function get_robots_option_index( $field, $type ) {
 
-	/**
-	 * @since 4.3.0
-	 * @access protected
-	 * @generator
-	 */
-	public static function generate_theme_color() {
+		switch ( $field ) {
+			case 'post_type':
+				return "{$type}_post_types";
+			case 'taxonomy':
+				return "{$type}_taxonomies";
+		}
 
-		$theme_color = Data\Plugin::get_option( 'theme_color' );
-
-		if ( $theme_color )
-			yield [
-				'attributes' => [
-					'name'    => 'theme-color',
-					'content' => $theme_color,
-				],
-			];
+		return '';
 	}
 }

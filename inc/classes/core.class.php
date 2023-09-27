@@ -8,6 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -102,18 +106,21 @@ class Core {
 	final public function __get( $name ) {
 
 		switch ( $name ) {
-			case 'the_seo_framework_use_transients':
-				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_use_transients', 'since 4.3.0; with no alternative available' );
-				return true;
-			case 'the_seo_framework_debug':
-				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
-				return \THE_SEO_FRAMEWORK_DEBUG;
-			case 'script_debug':
-				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
-				return \SCRIPT_DEBUG;
+			case 'is_headless':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use function \The_SEO_Framework\is_headless()' );
+				return is_headless();
 			case 'pretty_permalinks':
-				$this->_inaccessible_p_or_m( 'tsf()->pretty_permalinks', 'since 4.3.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
 				return $this->query()->utils()->using_pretty_permalinks();
+			case 'script_debug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant SCRIPT_DEBUG' );
+				return \SCRIPT_DEBUG;
+			case 'the_seo_framework_debug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				return \THE_SEO_FRAMEWORK_DEBUG;
+			case 'the_seo_framework_use_transients':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; with no alternative available' );
+				return true;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
@@ -200,7 +207,7 @@ class Core {
 	 *                           Each array key is converted to a variable with its value attached.
 	 * @param string   $instance The instance suffix to call back upon.
 	 */
-	public function get_view( $view, $__args = [], $instance = 'main' ) {
+	public function get_view( $view, $__args = [], $instance = 'main' ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- includes.
 
 		// A faster extract().
 		foreach ( $__args as $__k => $__v )
@@ -336,7 +343,7 @@ class Core {
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function get_seo_settings_page_url() {
-		return $this->is_headless['settings']
+		return is_headless( 'settings' )
 			? ''
 			: \esc_url(
 				html_entity_decode(
@@ -399,7 +406,7 @@ class Core {
 	 * @return bool True if time is used. False otherwise.
 	 */
 	public function uses_time_in_timestamp_format() {
-		return '1' === $this->get_option( 'timestamps_format' );
+		return '1' === Data\Plugin::get_option( 'timestamps_format' );
 	}
 
 	/**
@@ -586,8 +593,8 @@ class Core {
 				'accent' => '#00a0d2',
 			];
 		} else {
-			$main   = $this->s_color_hex( $this->get_option( 'sitemap_color_main' ) );
-			$accent = $this->s_color_hex( $this->get_option( 'sitemap_color_accent' ) );
+			$main   = $this->s_color_hex( Data\Plugin::get_option( 'sitemap_color_main' ) );
+			$accent = $this->s_color_hex( Data\Plugin::get_option( 'sitemap_color_accent' ) );
 
 			$options = [
 				'main'   => $main ? "#$main" : '',

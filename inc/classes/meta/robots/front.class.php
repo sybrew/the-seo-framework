@@ -13,6 +13,7 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
 use \The_SEO_Framework\Helper\{
 	Query,
@@ -103,21 +104,21 @@ final class Front extends Factory {
 		}
 
 		globals:
-			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
+			yield 'globals_site' => (bool) Data\Plugin::get_option( "site_$type" );
 
 			if ( Query::is_real_front_page() ) {
-				yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
+				yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
 			} else {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
 				if ( Query::is_archive() ) {
 					if ( Query::is_author() ) {
-						yield 'globals_author' => (bool) $tsf->get_option( "author_$type" );
+						yield 'globals_author' => (bool) Data\Plugin::get_option( "author_$type" );
 					} elseif ( \is_date() ) {
-						yield 'globals_date' => (bool) $tsf->get_option( "date_$type" );
+						yield 'globals_date' => (bool) Data\Plugin::get_option( "date_$type" );
 					}
 				} elseif ( Query::is_search() ) {
-					yield 'globals_search' => (bool) $tsf->get_option( "search_$type" );
+					yield 'globals_search' => (bool) Data\Plugin::get_option( "search_$type" );
 				}
 			}
 
@@ -182,7 +183,7 @@ final class Front extends Factory {
 		switch ( $pass ) {
 			case 'paged_home':
 				yield 'paged_home' =>
-					static::$tsf->get_option( 'home_paged_noindex' ) && ( Query::page() > 1 || Query::paged() > 1 );
+					Data\Plugin::get_option( 'home_paged_noindex' ) && ( Query::page() > 1 || Query::paged() > 1 );
 				break;
 
 			case '404':
@@ -233,7 +234,7 @@ final class Front extends Factory {
 
 			case 'paged':
 				// Advanced Query Protection protects further against pagination attacks. No need to have that here.
-				yield 'paged' => static::$tsf->get_option( 'paged_noindex' ) && Query::paged() > 1;
+				yield 'paged' => Data\Plugin::get_option( 'paged_noindex' ) && Query::paged() > 1;
 				break;
 
 			case 'protected':

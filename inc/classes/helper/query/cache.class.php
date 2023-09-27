@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Helper\Query;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query; // Name conflict... how is this allowed??
+use \The_SEO_Framework\Helper\Query; // Yes, it is legal to share class and namespaces.
 
 /**
  * The SEO Framework plugin

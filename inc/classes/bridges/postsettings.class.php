@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 use \The_SEO_Framework\Helper\Query;
 
 /**
@@ -78,7 +80,7 @@ final class PostSettings {
 
 		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, '_add_postbox_class' ] );
 
-		if ( ! \tsf()->is_headless['settings'] && Query::is_static_frontpage( Query::get_the_real_id() ) ) {
+		if ( ! is_headless( 'settings' ) && Query::is_static_frontpage( Query::get_the_real_id() ) ) {
 			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', [ static::class, '_homepage_warning' ] );
 			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', [ static::class, '_homepage_warning' ] );
 			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', [ static::class, '_homepage_warning' ] );

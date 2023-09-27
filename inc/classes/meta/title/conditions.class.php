@@ -13,7 +13,8 @@ use function \The_SEO_Framework\{
 	Utils\normalize_generation_args,
 };
 
-use \The_SEO_Framework\Helper\Query,
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Meta;
 
 /**
@@ -111,7 +112,7 @@ final class Conditions {
 	public static function use_title_branding( $args = null, $social = false ) {
 
 		// If social, test its option first.
-		$use = $social ? ! \tsf()->get_option( 'social_title_rem_additions' ) : true;
+		$use = $social ? ! Data\Plugin::get_option( 'social_title_rem_additions' ) : true;
 
 		// Reevaluate from general title settings, overriding social.
 		if ( $use ) {
@@ -125,7 +126,7 @@ final class Conditions {
 				} elseif ( \is_post_type_archive() ) {
 					$use = static::use_post_type_archive_title_branding();
 				} else {
-					$use = ! \tsf()->get_option( 'title_rem_additions' );
+					$use = ! Data\Plugin::get_option( 'title_rem_additions' );
 				}
 			} else {
 				isset( $args ) and normalize_generation_args( $args );
@@ -170,7 +171,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_home_page_title_tagline() {
-		return \tsf()->get_option( 'homepage_tagline' )
+		return Data\Plugin::get_option( 'homepage_tagline' )
 			&& Meta\Title::get_addition_for_front_page();
 	}
 
@@ -185,7 +186,7 @@ final class Conditions {
 	 */
 	private static function use_singular_title_branding( $id = 0 ) {
 		return ! \tsf()->get_post_meta_item( '_tsf_title_no_blogname', $id )
-			&& ! \tsf()->get_option( 'title_rem_additions' );
+			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 
 	/**
@@ -199,7 +200,7 @@ final class Conditions {
 	 */
 	private static function use_taxonomical_title_branding( $id = 0 ) {
 		return ! \tsf()->get_term_meta_item( 'title_no_blog_name', $id )
-			&& ! \tsf()->get_option( 'title_rem_additions' );
+			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 
 	/**
@@ -213,7 +214,7 @@ final class Conditions {
 	 */
 	private static function use_post_type_archive_title_branding( $pta = '' ) {
 		return ! \tsf()->get_post_type_archive_meta_item( 'title_no_blog_name', $pta )
-			&& ! \tsf()->get_option( 'title_rem_additions' );
+			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 
 	/**
@@ -236,7 +237,7 @@ final class Conditions {
 		return \apply_filters_ref_array(
 			'the_seo_framework_use_archive_prefix',
 			[
-				! \tsf()->get_option( 'title_rem_prefixes' ),
+				! Data\Plugin::get_option( 'title_rem_prefixes' ),
 				$term ?? \get_queried_object(),
 			]
 		);

@@ -13,6 +13,8 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -53,7 +55,7 @@ class Blog {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				\tsf()->get_option( 'site_title' ) ?: static::get_filtered_blog_name()
+				Data\Plugin::get_option( 'site_title' ) ?: static::get_filtered_blog_name()
 			);
 	}
 

@@ -11,7 +11,6 @@ namespace The_SEO_Framework\Bridges;
 use \The_SEO_Framework\Interpreters\HTML,
 	\The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
-
 use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomies,
@@ -246,7 +245,7 @@ final class ListEdit extends ListTable {
 
 		if ( Query::is_static_frontpage( $_generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
-			$_has_home_title     = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_title' ) );
+			$_has_home_title     = (bool) $tsf->escape_title( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
 								 ? Meta\Title::get_custom_title( $_generator_args )
 								 : Meta\Title::get_bare_generated_title( $_generator_args );
@@ -255,7 +254,7 @@ final class ListEdit extends ListTable {
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
-			$_has_home_desc      = (bool) $tsf->escape_title( $tsf->get_option( 'homepage_description' ) );
+			$_has_home_desc      = (bool) $tsf->escape_title( Data\Plugin::get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
 								 ? Meta\Description::get_custom_description( $_generator_args )
 								 : Meta\Description::get_generated_description( $_generator_args );

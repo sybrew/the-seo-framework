@@ -13,8 +13,9 @@ use \The_SEO_Framework\Helper\{
 	Taxonomies,
 };
 
-use \The_SEO_Framework\Meta;
-use \The_SEO_Framework\Builders;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Meta,
+	\The_SEO_Framework\Builders;
 
 /**
  * The SEO Framework plugin
@@ -88,7 +89,7 @@ final class Scripts {
 			$scripts[] = static::get_primaryterm_scripts();
 			$scripts[] = static::get_ays_scripts();
 
-			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
 
 			if ( $tsf->is_gutenberg_page() )
@@ -103,14 +104,14 @@ final class Scripts {
 			$scripts[] = static::get_social_scripts();
 			$scripts[] = static::get_ays_scripts();
 
-			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
 		} elseif ( Query::is_wp_lists_edit() ) {
 			$scripts[] = static::get_list_edit_scripts();
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 
-			if ( $tsf->get_option( 'display_pixel_counter' ) || $tsf->get_option( 'display_character_counter' ) )
+			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
 		} elseif ( Query::is_seo_settings_page() ) {
 			static::prepare_media_scripts();
@@ -433,10 +434,10 @@ final class Scripts {
 		$is_static_frontpage = Query::is_static_frontpage( $id );
 
 		if ( $is_static_frontpage ) {
-			$additions_forced_disabled = ! $tsf->get_option( 'homepage_tagline' );
+			$additions_forced_disabled = ! Data\Plugin::get_option( 'homepage_tagline' );
 			$additions_forced_enabled  = ! $additions_forced_disabled;
 		} else {
-			$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
+			$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
 			$additions_forced_enabled  = false;
 		}
 
@@ -498,10 +499,9 @@ final class Scripts {
 	 */
 	public static function get_term_edit_scripts() {
 
-		$tsf      = \tsf();
 		$taxonomy = Query::get_current_taxonomy();
 
-		$additions_forced_disabled = (bool) $tsf->get_option( 'title_rem_additions' );
+		$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
 
 		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
 			/* translators: %s: Taxonomy singular name. */
@@ -663,7 +663,7 @@ final class Scripts {
 					],
 					'params' => [
 						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( Meta\Title::get_untitled_title() ) ),
-						'stripTitleTags' => (bool) $tsf->get_option( 'title_strip_tags' ),
+						'stripTitleTags' => (bool) Data\Plugin::get_option( 'title_strip_tags' ),
 					],
 					'i18n'   => [
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.

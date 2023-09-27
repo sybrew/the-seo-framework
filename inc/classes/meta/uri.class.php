@@ -676,7 +676,7 @@ class URI {
 	public static function get_shortlink_url() {
 
 		if (
-			   ! \tsf()->get_option( 'shortlink_tag' )
+			   ! Data\Plugin::get_option( 'shortlink_tag' )
 			|| Query::is_real_front_page() // var_dump() if we have an input, we need to remove test for "get_custom".
 		) return '';
 

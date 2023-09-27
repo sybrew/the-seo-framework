@@ -13,6 +13,7 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
 use \The_SEO_Framework\Helper\{
 	Query,
@@ -101,7 +102,7 @@ final class Args extends Factory {
 		}
 
 		globals:
-			yield 'globals_site' => (bool) $tsf->get_option( "site_$type" );
+			yield 'globals_site' => (bool) Data\Plugin::get_option( "site_$type" );
 
 			if ( $args['tax'] ) {
 				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
@@ -119,7 +120,7 @@ final class Args extends Factory {
 			} else {
 				// $args['id'] can be empty, pointing to a plausible homepage query.
 				if ( Query::is_real_front_page_by_id( $args['id'] ) )
-					yield 'globals_homepage' => (bool) $tsf->get_option( "homepage_$type" );
+					yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
 
 				if ( $args['id'] )
 					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );

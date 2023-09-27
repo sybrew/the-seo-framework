@@ -9,6 +9,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -37,24 +39,6 @@ namespace The_SEO_Framework;
  * @since 4.1.4 Removed protected property $use_object_cache.
  */
 final class Load extends Site_Options {
-
-	/**
-	 * @since 4.1.4
-	 * @access protected
-	 *         DO NOT OVERWRITE, it should be 'immutable'. <https://wiki.php.net/rfc/immutability>
-	 *         Feel free to read.
-	 *         Use constant `THE_SEO_FRAMEWORK_HEADLESS` instead.
-	 * @var array $is_headless Whether headless TSF is enabled: {
-	 *      'meta'     => bool True to disable post/term-meta-data storing/fetching.
-	 *      'settings' => bool True to disable non-default setting.
-	 *      'user'     => bool True to disable SEO user-meta-data storing/fetching.
-	 *    }
-	 */
-	public $is_headless = [
-		'meta'     => false,
-		'settings' => false,
-		'user'     => false,
-	];
 
 	/**
 	 * Constructor, setup debug vars and then load parent constructor.
@@ -89,21 +73,6 @@ final class Load extends Site_Options {
 
 		// Load plugin at init 0.
 		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
-
-		// Set headless property via augmenting the consant.
-		if ( \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) ) {
-			$this->is_headless = [
-				'meta'     => true,
-				'settings' => true,
-				'user'     => true,
-			];
-
-			\is_array( \THE_SEO_FRAMEWORK_HEADLESS )
-				and $this->is_headless = array_map(
-					'wp_validate_boolean',
-					array_merge( $this->is_headless, \THE_SEO_FRAMEWORK_HEADLESS )
-				);
-		}
 	}
 
 	/**

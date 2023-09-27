@@ -95,6 +95,51 @@ namespace {
 }
 
 namespace The_SEO_Framework {
+
+	/**
+	 * Tells the headless state of the plugin.
+	 *
+	 * @since 4.3.0
+	 * @api
+	 *
+	 * @param ?string $type The type of headless mode to request.
+	 * @return bool|array $is_headless Whether headless TSF is enabled by $type, or otherwise all values: {
+	 *   'meta'     => bool True to disable post/term-meta-data storing/fetching.
+	 *   'settings' => bool True to disable non-default setting.
+	 *   'user'     => bool True to disable SEO user-meta-data storing/fetching.
+	 * }
+	 */
+	function is_headless( $type = null ) {
+
+		static $is_headless;
+
+		if ( ! isset( $is_headless ) ) {
+			if ( \defined( 'THE_SEO_FRAMEWORK_HEADLESS' ) ) {
+				$is_headless = [
+					'meta'     => true,
+					'settings' => true,
+					'user'     => true,
+				];
+
+				\is_array( \THE_SEO_FRAMEWORK_HEADLESS )
+					and $is_headless = array_map(
+						'wp_validate_boolean',
+						array_merge( $is_headless, \THE_SEO_FRAMEWORK_HEADLESS )
+					);
+			} else {
+				$is_headless = [
+					'meta'     => false,
+					'settings' => false,
+					'user'     => false,
+				];
+			}
+		}
+
+		return isset( $type )
+			? $is_headless[ $type ] ?? false
+			: $is_headless;
+	}
+
 	/**
 	 * Determines if the method or function has already run.
 	 *

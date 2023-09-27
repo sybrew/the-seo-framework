@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query,
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\Utils\normalize_generation_args;
@@ -355,15 +356,15 @@ class Image {
 
 		if ( 'organization' === $context ) {
 			$details = [
-				'url' => \tsf()->get_option( 'knowledge_logo_url' ),
-				'id'  => \tsf()->get_option( 'knowledge_logo_id' ),
+				'url' => Data\Plugin::get_option( 'knowledge_logo_url' ),
+				'id'  => Data\Plugin::get_option( 'knowledge_logo_id' ),
 			];
 		} else {
 			if ( Query::is_real_front_page() ) {
 				if ( Query::is_static_frontpage() ) {
 					$details = [
-						'url' => \tsf()->get_option( 'homepage_social_image_url' ),
-						'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
+						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
 					];
 					if ( ! $details['url'] ) {
 						$details = [
@@ -373,8 +374,8 @@ class Image {
 					}
 				} else {
 					$details = [
-						'url' => \tsf()->get_option( 'homepage_social_image_url' ),
-						'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
+						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
 					];
 				}
 			} elseif ( Query::is_singular() ) {
@@ -425,8 +426,8 @@ class Image {
 
 		if ( 'organization' === $context ) {
 			$details = [
-				'url' => \tsf()->get_option( 'knowledge_logo_url' ),
-				'id'  => \tsf()->get_option( 'knowledge_logo_id' ),
+				'url' => Data\Plugin::get_option( 'knowledge_logo_url' ),
+				'id'  => Data\Plugin::get_option( 'knowledge_logo_id' ),
 			];
 		} else {
 			normalize_generation_args( $args );
@@ -443,8 +444,8 @@ class Image {
 				];
 			} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$details = [
-					'url' => \tsf()->get_option( 'homepage_social_image_url' ),
-					'id'  => \tsf()->get_option( 'homepage_social_image_id' ),
+					'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+					'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
 				];
 
 				if ( $args['id'] && ! $details['url'] ) {

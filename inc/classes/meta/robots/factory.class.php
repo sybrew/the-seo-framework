@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -154,7 +156,7 @@ class Factory {
 		if ( 'max_snippet' === $type )
 			$option = 'max_snippet_length';
 
-		$tsf->get_option( 'set_copyright_directives' )
-			and yield 'globals_copyright' => $tsf->get_option( $option );
+		Data\Plugin::get_option( 'set_copyright_directives' )
+			and yield 'globals_copyright' => Data\Plugin::get_option( $option );
 	}
 }

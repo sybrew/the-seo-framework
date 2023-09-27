@@ -8,11 +8,12 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query,
+use function \The_SEO_Framework\memo;
+
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Interpreters,
 	\The_SEO_Framework\Meta;
-
-use function \The_SEO_Framework\memo;
 
 /**
  * The SEO Framework plugin
@@ -300,7 +301,7 @@ final class Sitemap {
 	 * @return bool
 	 */
 	public function sitemap_cache_enabled() {
-		return (bool) \tsf()->get_option( 'cache_sitemap' );
+		return (bool) Data\Plugin::get_option( 'cache_sitemap' );
 	}
 
 	/**
@@ -318,10 +319,8 @@ final class Sitemap {
 
 		Cache::clear_sitemap_transients();
 
-		$tsf = \tsf();
-
-		$ping_use_cron           = $tsf->get_option( 'ping_use_cron' );
-		$ping_use_cron_prerender = $tsf->get_option( 'ping_use_cron_prerender' );
+		$ping_use_cron           = Data\Plugin::get_option( 'ping_use_cron' );
+		$ping_use_cron_prerender = Data\Plugin::get_option( 'ping_use_cron_prerender' );
 
 		/**
 		 * @since 4.1.1
@@ -596,7 +595,7 @@ final class Sitemap {
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 
-		if ( \tsf()->get_option( 'sitemap_styles' ) ) {
+		if ( Data\Plugin::get_option( 'sitemap_styles' ) ) {
 			printf(
 				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
 				// phpcs:ignore, WordPress.Security.EscapeOutput

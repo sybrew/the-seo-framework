@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -48,7 +50,7 @@ class Facebook {
 		$tsf = \tsf();
 
 		return $tsf->get_current_post_author_meta_item( 'facebook_page' )
-			?: $tsf->get_option( 'facebook_author' );
+			?: Data\Plugin::get_option( 'facebook_author' );
 	}
 
 	/**
@@ -62,7 +64,7 @@ class Facebook {
 
 		if ( 'article' !== Open_Graph::get_type() ) return;
 
-		return \tsf()->get_option( 'facebook_publisher' );
+		return Data\Plugin::get_option( 'facebook_publisher' );
 	}
 
 	/**
@@ -73,6 +75,6 @@ class Facebook {
 	 * @return string
 	 */
 	public static function get_app_id() {
-		return \tsf()->get_option( 'facebook_appid' );
+		return Data\Plugin::get_option( 'facebook_appid' );
 	}
 }

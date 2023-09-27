@@ -7,9 +7,9 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Bridges\SeoSettings,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
@@ -176,7 +176,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 
 	case 'title_general_tab':
 		$title_separator         = Meta\Title\Utils::get_separator_list();
-		$default_title_separator = $this->get_option( 'title_separator' );
+		$default_title_separator = Data\Plugin::get_option( 'title_separator' );
 
 		?>
 		<fieldset>
@@ -239,7 +239,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_option( 'site_title' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin::get_option( 'site_title' ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( __( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );
@@ -256,7 +256,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			<legend><?php HTML::header_title( __( 'Site Title Location', 'autodescription' ) ); ?></legend>
 			<p id=tsf-title-location class=tsf-fields>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_left' ); ?>" value=left <?php checked( $this->get_option( 'title_location' ), 'left' ); ?> />
+					<input type=radio name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_left' ); ?>" value=left <?php checked( Data\Plugin::get_option( 'title_location' ), 'left' ); ?> />
 					<label for="<?php Input::field_id( 'title_location_left' ); ?>">
 						<span><?php esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
@@ -266,7 +266,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 					</label>
 				</span>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_right' ); ?>" value=right <?php checked( $this->get_option( 'title_location' ), 'right' ); ?> />
+					<input type=radio name="<?php Input::field_name( 'title_location' ); ?>" id="<?php Input::field_id( 'title_location_right' ); ?>" value=right <?php checked( Data\Plugin::get_option( 'title_location' ), 'right' ); ?> />
 					<label for="<?php Input::field_id( 'title_location_right' ); ?>">
 						<span><?php esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php

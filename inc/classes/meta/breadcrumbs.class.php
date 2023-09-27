@@ -8,15 +8,15 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomies,
-};
-use \The_SEO_Framework\Meta;
-
 use function \The_SEO_Framework\{
 	memo,
 	Utils\normalize_generation_args,
+};
+
+use \The_SEO_Framework\Meta;
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
 };
 
 /**

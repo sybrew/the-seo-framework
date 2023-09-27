@@ -7,6 +7,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -58,7 +60,7 @@ final class Cache {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function clear_excluded_post_ids_cache() {
-		return \tsf()->update_static_cache( 'excluded_ids', [] );
+		return Data\Plugin::update_site_cache( 'excluded_ids', [] );
 	}
 
 	/**

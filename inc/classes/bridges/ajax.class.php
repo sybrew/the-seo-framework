@@ -8,8 +8,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
-use \The_SEO_Framework\Meta;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -51,8 +51,7 @@ final class AJAX {
 	 */
 	public static function _wp_ajax_dismiss_notice() {
 
-		$tsf = \tsf();
-		$tsf->clean_response_header();
+		\tsf()->clean_response_header();
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = $_POST['tsf_dismiss_key'] ?? '';
@@ -60,17 +59,17 @@ final class AJAX {
 		if ( ! $key )
 			\wp_send_json_error( null, 400 );
 
-		$notices = $tsf->get_static_cache( 'persistent_notices', [] );
+		$notices = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) {
 			// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
 			\wp_send_json_error( null, 409 );
 		}
 
 		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-		|| ! \check_ajax_referer( $tsf->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false ) )
+		|| ! \check_ajax_referer( \tsf()->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false ) )
 			\wp_die( -1, 403 );
 
-		$tsf->clear_persistent_notice( $key );
+		\tsf()->clear_persistent_notice( $key );
 		\wp_send_json_success( null, 200 );
 	}
 
@@ -312,7 +311,7 @@ final class AJAX {
 				switch ( $g ) {
 					case 'metadescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+							$data[ $g ] = Data\Plugin::get_option( 'homepage_description' )
 									   ?: Meta\Description::get_generated_description( $_generator_args, false );
 						} else {
 							$data[ $g ] = Meta\Description::get_generated_description( $_generator_args, false );
@@ -320,7 +319,7 @@ final class AJAX {
 						break;
 					case 'ogdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+							$data[ $g ] = Data\Plugin::get_option( 'homepage_description' )
 									   ?: Meta\Open_Graph::get_generated_description( $_generator_args, false );
 						} else {
 							$data[ $g ] = Meta\Open_Graph::get_generated_description( $_generator_args, false );
@@ -328,7 +327,7 @@ final class AJAX {
 						break;
 					case 'twdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = $tsf->get_option( 'homepage_description' )
+							$data[ $g ] = Data\Plugin::get_option( 'homepage_description' )
 									   ?: Meta\Twitter::get_generated_description( $_generator_args, false );
 						} else {
 							$data[ $g ] = Meta\Twitter::get_generated_description( $_generator_args, false );
@@ -340,7 +339,7 @@ final class AJAX {
 
 			case 'imageurl':
 				if ( Query::is_static_frontpage( $post_id ) ) {
-					$data[ $g ] = $tsf->get_option( 'homepage_social_image_url' )
+					$data[ $g ] = Data\Plugin::get_option( 'homepage_social_image_url' )
 							   ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 				} else {
 					$data[ $g ] = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );

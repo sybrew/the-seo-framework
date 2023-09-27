@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Meta\Title;
 
 use function \The_SEO_Framework\Utils\normalize_generation_args;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -121,7 +123,7 @@ class Utils {
 			 */
 			$functions = [ 'wptexturize' ];
 
-			if ( ! \tsf()->get_option( 'title_strip_tags' ) )
+			if ( ! Data\Plugin::get_option( 'title_strip_tags' ) )
 				$functions[] = 'strip_tags';
 
 			foreach ( $filters as $filter ) {

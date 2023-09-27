@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 use \The_SEO_Framework\Helper\Query;
 
 /**
@@ -122,10 +124,12 @@ class User_Data extends Term_Data {
 			$this->get_user_meta_defaults( $user_id )
 		);
 
-		if ( $this->is_headless['user'] ) {
+		$is_headless = is_headless();
+
+		if ( $is_headless['user'] ) {
 			$meta = [];
 
-			if ( \in_array( false, $this->is_headless, true ) ) {
+			if ( \in_array( false, $is_headless, true ) ) {
 				// Some data is still used for the interface elsewhere. Let's retrieve that at least.
 				// We filter out the rest because that's 'not supported' or otherwise 'immutable' in headless-mode.
 				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
@@ -135,7 +139,7 @@ class User_Data extends Term_Data {
 					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
 
 					foreach ( $supports as $support_type ) {
-						if ( $this->is_headless[ $support_type ] ) continue;
+						if ( $is_headless[ $support_type ] ) continue;
 
 						$meta[ $meta_key ] = $_meta[ $meta_key ];
 						continue 2;
@@ -158,7 +162,7 @@ class User_Data extends Term_Data {
 			[
 				array_merge( $defaults, $meta ),
 				$user_id,
-				$this->is_headless['user'],
+				$is_headless['user'],
 			]
 		);
 

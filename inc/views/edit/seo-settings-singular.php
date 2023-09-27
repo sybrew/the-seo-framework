@@ -70,7 +70,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		break;
 
 	case 'inpost_general_tab':
-		if ( $this->get_option( 'display_seo_bar_metabox' ) ) {
+		if ( Data\Plugin::get_option( 'display_seo_bar_metabox' ) ) {
 			?>
 			<div class="tsf-flex-setting tsf-flex" id=tsf-doing-it-right-wrap>
 				<div class="tsf-flex-setting-label tsf-flex">
@@ -92,8 +92,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		}
 
 		if ( $_is_static_frontpage ) {
-			$_has_home_title = (bool) $this->escape_title( $this->get_option( 'homepage_title' ) );
-			$_has_home_desc  = (bool) $this->escape_title( $this->get_option( 'homepage_description' ) );
+			$_has_home_title = (bool) $this->escape_title( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_desc  = (bool) $this->escape_title( Data\Plugin::get_option( 'homepage_description' ) );
 
 			// When the homepage title is set, we can safely get the custom field.
 			$default_title     = $_has_home_title
@@ -134,9 +134,9 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						</div>
 					</label>
 					<?php
-					$this->get_option( 'display_character_counter' )
+					Data\Plugin::get_option( 'display_character_counter' )
 						and Form::output_character_counter_wrap( 'autodescription_title' );
-					$this->get_option( 'display_pixel_counter' )
+					Data\Plugin::get_option( 'display_pixel_counter' )
 						and Form::output_pixel_counter_wrap( 'autodescription_title', 'title' );
 					?>
 				</div>
@@ -204,9 +204,9 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						</div>
 					</label>
 					<?php
-					$this->get_option( 'display_character_counter' )
+					Data\Plugin::get_option( 'display_character_counter' )
 						and Form::output_character_counter_wrap( 'autodescription_description' );
-					$this->get_option( 'display_pixel_counter' )
+					Data\Plugin::get_option( 'display_pixel_counter' )
 						and Form::output_pixel_counter_wrap( 'autodescription_description', 'description' );
 					?>
 				</div>
@@ -362,8 +362,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		</div>
 
 		<?php
-		$can_do_archive_query = The_SEO_Framework\Helper\Post_Types::post_type_supports_taxonomies() && $this->get_option( 'alter_archive_query' );
-		$can_do_search_query  = (bool) $this->get_option( 'alter_search_query' );
+		$can_do_archive_query = The_SEO_Framework\Helper\Post_Types::post_type_supports_taxonomies() && Data\Plugin::get_option( 'alter_archive_query' );
+		$can_do_search_query  = (bool) Data\Plugin::get_option( 'alter_search_query' );
 		?>
 
 		<?php if ( $can_do_archive_query || $can_do_search_query ) : ?>
@@ -425,26 +425,26 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 
 	case 'inpost_social_tab':
 		// Yes, this is hacky, but we don't want to lose the user's input.
-		$show_og = (bool) $this->get_option( 'og_tags' );
-		$show_tw = (bool) $this->get_option( 'twitter_tags' );
+		$show_og = (bool) Data\Plugin::get_option( 'og_tags' );
+		$show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
 
 		if ( $_is_static_frontpage ) {
 			$_social_title       = [
-				'og' => $this->get_option( 'homepage_og_title' )
-					 ?: $this->get_option( 'homepage_title' )
+				'og' => Data\Plugin::get_option( 'homepage_og_title' )
+					 ?: Data\Plugin::get_option( 'homepage_title' )
 					 ?: Meta\Open_Graph::get_generated_title( $_generator_args, false ),
-				'tw' => $this->get_option( 'homepage_twitter_title' )
-					 ?: $this->get_option( 'homepage_og_title' )
-					 ?: $this->get_option( 'homepage_title' )
+				'tw' => Data\Plugin::get_option( 'homepage_twitter_title' )
+					 ?: Data\Plugin::get_option( 'homepage_og_title' )
+					 ?: Data\Plugin::get_option( 'homepage_title' )
 					 ?: Meta\Twitter::get_generated_title( $_generator_args, false ),
 			];
 			$_social_description = [
-				'og' => $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_option( 'homepage_description' )
+				'og' => Data\Plugin::get_option( 'homepage_og_description' )
+					 ?: Data\Plugin::get_option( 'homepage_description' )
 					 ?: Meta\Open_Graph::get_generated_description( $_generator_args, false ),
-				'tw' => $this->get_option( 'homepage_twitter_description' )
-					 ?: $this->get_option( 'homepage_og_description' )
-					 ?: $this->get_option( 'homepage_description' )
+				'tw' => Data\Plugin::get_option( 'homepage_twitter_description' )
+					 ?: Data\Plugin::get_option( 'homepage_og_description' )
+					 ?: Data\Plugin::get_option( 'homepage_description' )
 					 ?: Meta\Twitter::get_generated_description( $_generator_args, false ),
 			];
 		} else {
@@ -466,8 +466,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						'defaultTitle' => $this->s_title( $_social_title['og'] ),
 						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
 						'defaultDesc'  => $this->s_description( $_social_description['og'] ),
-						'titleLock'    => $_is_static_frontpage && $this->get_option( 'homepage_og_title' ),
-						'descLock'     => $_is_static_frontpage && $this->get_option( 'homepage_og_description' ),
+						'titleLock'    => $_is_static_frontpage && Data\Plugin::get_option( 'homepage_og_title' ),
+						'descLock'     => $_is_static_frontpage && Data\Plugin::get_option( 'homepage_og_description' ),
 					],
 				],
 				'tw' => [
@@ -475,8 +475,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						'defaultTitle' => $this->s_title( $_social_title['tw'] ),
 						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
 						'defaultDesc'  => $this->s_description( $_social_description['tw'] ),
-						'titleLock'    => $_is_static_frontpage && (bool) $this->get_option( 'homepage_twitter_title' ),
-						'descLock'     => $_is_static_frontpage && (bool) $this->get_option( 'homepage_twitter_description' ),
+						'titleLock'    => $_is_static_frontpage && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
+						'descLock'     => $_is_static_frontpage && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
 					],
 				],
 			]
@@ -490,7 +490,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						<div><strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
-					$this->get_option( 'display_character_counter' )
+					Data\Plugin::get_option( 'display_character_counter' )
 						and Form::output_character_counter_wrap( 'autodescription_og_title' );
 					?>
 				</div>
@@ -509,7 +509,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						<div><strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
-					$this->get_option( 'display_character_counter' )
+					Data\Plugin::get_option( 'display_character_counter' )
 						and Form::output_character_counter_wrap( 'autodescription_og_description' );
 					?>
 				</div>
@@ -526,7 +526,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						<div><strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
-					$this->get_option( 'display_character_counter' )
+					Data\Plugin::get_option( 'display_character_counter' )
 						and Form::output_character_counter_wrap( 'autodescription_twitter_title' );
 					?>
 				</div>
@@ -545,7 +545,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						<div><strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
-					$this->get_option( 'display_character_counter' )
+					Data\Plugin::get_option( 'display_character_counter' )
 						and Form::output_character_counter_wrap( 'autodescription_twitter_description' );
 					?>
 				</div>
@@ -561,8 +561,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		<?php
 
 		// Fetch image placeholder.
-		if ( $_is_static_frontpage && $this->get_option( 'homepage_social_image_url' ) ) {
-			$image_placeholder = $this->get_option( 'homepage_social_image_url' )
+		if ( $_is_static_frontpage && Data\Plugin::get_option( 'homepage_social_image_url' ) ) {
+			$image_placeholder = Data\Plugin::get_option( 'homepage_social_image_url' )
 							  ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 		} else {
 			$image_placeholder = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );

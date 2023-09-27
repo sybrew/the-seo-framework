@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Front\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -54,7 +56,7 @@ final class Webmasters {
 	 */
 	public static function generate_google_verification() {
 
-		$code = \tsf()->get_option( 'google_verification' );
+		$code = Data\Plugin::get_option( 'google_verification' );
 
 		if ( \has_filter( 'the_seo_framework_googlesite_output' ) ) {
 			/**
@@ -91,7 +93,7 @@ final class Webmasters {
 	 */
 	public static function generate_bing_verification() {
 
-		$code = \tsf()->get_option( 'bing_verification' );
+		$code = Data\Plugin::get_option( 'bing_verification' );
 
 		if ( \has_filter( 'the_seo_framework_bingsite_output' ) ) {
 			/**
@@ -128,7 +130,7 @@ final class Webmasters {
 	 */
 	public static function generate_yandex_verification() {
 
-		$code = \tsf()->get_option( 'yandex_verification' );
+		$code = Data\Plugin::get_option( 'yandex_verification' );
 
 		if ( \has_filter( 'the_seo_framework_yandexsite_output' ) ) {
 			/**
@@ -165,7 +167,7 @@ final class Webmasters {
 	 */
 	public static function generate_baidu_verification() {
 
-		$code = \tsf()->get_option( 'baidu_verification' );
+		$code = Data\Plugin::get_option( 'baidu_verification' );
 
 		if ( \has_filter( 'the_seo_framework_yandexsite_output' ) ) {
 			/**
@@ -202,7 +204,7 @@ final class Webmasters {
 	 */
 	public static function generate_pinterest_verification() {
 
-		$code = \tsf()->get_option( 'pint_verification' );
+		$code = Data\Plugin::get_option( 'pint_verification' );
 
 		if ( \has_filter( 'the_seo_framework_pintsite_output' ) ) {
 			/**

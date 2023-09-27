@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomies,
@@ -96,7 +98,9 @@ class Term_Data extends Post_Data {
 			$this->get_term_meta_defaults( $term->term_id )
 		);
 
-		if ( $this->is_headless['meta'] ) {
+		$is_headless = is_headless( 'meta' );
+
+		if ( $is_headless ) {
 			$meta = [];
 		} else {
 			// Unlike get_post_meta(), we need not filter here.
@@ -118,7 +122,7 @@ class Term_Data extends Post_Data {
 			[
 				array_merge( $defaults, $meta ),
 				$term->term_id,
-				$this->is_headless['meta'],
+				$is_headless,
 			]
 		);
 

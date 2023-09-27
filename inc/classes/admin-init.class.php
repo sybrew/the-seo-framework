@@ -8,11 +8,14 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,
 };
+use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -48,7 +51,7 @@ class Admin_Init extends Init {
 	 * @access private
 	 */
 	public function _init_seo_bar_tables() {
-		if ( $this->get_option( 'display_seo_bar_tables' ) )
+		if ( Data\Plugin::get_option( 'display_seo_bar_tables' ) )
 			new Bridges\SEOBar;
 	}
 
@@ -77,8 +80,8 @@ class Admin_Init extends Init {
 		$post_id = $post->ID ?? false;
 
 		if ( $post_id ) {
-			$search_exclude  = $this->get_option( 'alter_search_query' ) && $this->get_post_meta_item( 'exclude_local_search', $post_id );
-			$archive_exclude = $this->get_option( 'alter_archive_query' ) && $this->get_post_meta_item( 'exclude_from_archive', $post_id );
+			$search_exclude  = Data\Plugin::get_option( 'alter_search_query' ) && $this->get_post_meta_item( 'exclude_local_search', $post_id );
+			$archive_exclude = Data\Plugin::get_option( 'alter_archive_query' ) && $this->get_post_meta_item( 'exclude_from_archive', $post_id );
 
 			if ( $search_exclude )
 				$states[] = \esc_html__( 'No Search', 'autodescription' );
@@ -105,9 +108,9 @@ class Admin_Init extends Init {
 		if (
 			   Query::is_seo_settings_page()
 			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
-			|| $this->get_static_cache( 'persistent_notices', [] )
+			|| Data\Plugin::get_site_cache( 'persistent_notices' )
 			|| (
-				! $this->is_headless['meta'] && (
+				! is_headless( 'meta' ) && (
 					   ( Query::is_archive_admin() && Taxonomies::is_taxonomy_supported() )
 					|| ( Query::is_singular_admin() && Post_Types::is_post_type_supported() )
 				)
@@ -476,10 +479,10 @@ class Admin_Init extends Init {
 		if ( $conditions['timeout'] > -1 )
 			$conditions['timeout'] += time();
 
-		$notices         = $this->get_static_cache( 'persistent_notices', [] );
+		$notices         = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
 		$notices[ $key ] = compact( 'message', 'args', 'conditions' );
 
-		$this->update_static_cache( 'persistent_notices', $notices );
+		Data\Plugin::update_site_cache( 'persistent_notices', $notices );
 	}
 
 	/**
@@ -502,10 +505,10 @@ class Admin_Init extends Init {
 		if ( ! $count ) {
 			$this->clear_persistent_notice( $key );
 		} elseif ( $_count_before !== $count ) {
-			$notices = $this->get_static_cache( 'persistent_notices' );
+			$notices = Data\Plugin::get_site_cache( 'persistent_notices' );
 			if ( isset( $notices[ $key ]['conditions']['count'] ) ) {
 				$notices[ $key ]['conditions']['count'] = $count;
-				$this->update_static_cache( 'persistent_notices', $notices );
+				Data\Plugin::update_site_cache( 'persistent_notices', $notices );
 			} else {
 				// Notice didn't conform. Remove it.
 				$this->clear_persistent_notice( $key );
@@ -522,11 +525,12 @@ class Admin_Init extends Init {
 	 * @return bool True on success, false on failure.
 	 */
 	public function clear_persistent_notice( $key ) {
-		// TODO We could make a oneliner using array_diff_key?: array_diff_key( cache, [ $key ] )
-		$notices = $this->get_static_cache( 'persistent_notices', [] );
+
+		$notices = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
+
 		unset( $notices[ $key ] );
 
-		return $this->update_static_cache( 'persistent_notices', $notices );
+		return Data\Plugin::update_site_cache( 'persistent_notices', $notices );
 	}
 
 	/**
@@ -537,7 +541,7 @@ class Admin_Init extends Init {
 	 * @return bool True on success, false on failure.
 	 */
 	public function clear_all_persistent_notices() {
-		return $this->update_static_cache( 'persistent_notices', [] );
+		return Data\Plugin::update_site_cache( 'persistent_notices', [] );
 	}
 
 	/**
@@ -568,7 +572,8 @@ class Admin_Init extends Init {
 
 		if ( ! $key ) return;
 
-		$notices = $this->get_static_cache( 'persistent_notices', [] );
+		$notices = Data\Plugin::get_site_cache( 'persistent_notices' );
+
 		// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;
 

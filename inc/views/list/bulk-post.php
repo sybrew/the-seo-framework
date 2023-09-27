@@ -6,7 +6,7 @@
  * POST index: autodescription-bulk
  */
 
-use The_SEO_Framework\Interpreters\Form;
+use \The_SEO_Framework\Interpreters\Form;
 
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.

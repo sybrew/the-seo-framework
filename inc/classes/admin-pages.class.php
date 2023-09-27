@@ -8,13 +8,16 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 use \The_SEO_Framework\Helper\{
 	Taxonomies,
 	Post_Types,
 	Query,
 };
 
-use \The_SEO_Framework\Builders;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Builders;
 
 /**
  * The SEO Framework plugin
@@ -120,7 +123,7 @@ class Admin_Pages extends User_Data {
 	 */
 	public function get_admin_issue_count() {
 
-		if ( $this->is_headless['settings'] ) return 0;
+		if ( is_headless( 'settings' ) ) return 0;
 
 		/**
 		 * @since 4.2.8
@@ -259,7 +262,7 @@ class Admin_Pages extends User_Data {
 	 */
 	public function _do_settings_page_notices() {
 
-		$notice = $this->get_static_cache( 'settings_notice' );
+		$notice = Data\Plugin::get_site_cache( 'settings_notice' );
 
 		if ( ! $notice ) return;
 
@@ -287,7 +290,7 @@ class Admin_Pages extends User_Data {
 				$type    = 'error';
 		}
 
-		$this->update_static_cache( 'settings_notice', '' );
+		Data\Plugin::update_site_cache( 'settings_notice', '' );
 
 		$message and $this->do_dismissible_notice( $message, $type ?: 'updated' );
 	}
@@ -300,13 +303,13 @@ class Admin_Pages extends User_Data {
 	 */
 	public function _output_notices() {
 
-		if ( $this->get_static_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
+		if ( Data\Plugin::get_site_cache( 'check_seo_plugin_conflicts' ) && \current_user_can( 'activate_plugins' ) ) {
 			$this->detect_seo_plugins()
 				and $this->do_dismissible_notice(
 					\__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
 					'warning'
 				);
-			$this->update_static_cache( 'check_seo_plugin_conflicts', 0 );
+			Data\Plugin::update_site_cache( 'check_seo_plugin_conflicts', 0 );
 		}
 
 		$this->output_dismissible_persistent_notices();
@@ -420,7 +423,7 @@ class Admin_Pages extends User_Data {
 	 */
 	protected function output_dismissible_persistent_notices() {
 
-		$notices    = $this->get_static_cache( 'persistent_notices', [] );
+		$notices    = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
 		$screenbase = \get_current_screen()->base ?? '';
 
 		// Ideally, we don't want to output more than one on no-js. Alas, we can't anticipate the importance and order of the notices.

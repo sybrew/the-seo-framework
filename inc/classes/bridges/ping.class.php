@@ -10,7 +10,8 @@ namespace The_SEO_Framework\Bridges;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Bridges;
+use \The_SEO_Framework\Bridges,
+	\The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -116,7 +117,7 @@ final class Ping {
 
 		$tsf = \tsf();
 
-		if ( $tsf->get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
+		if ( Data\Plugin::get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
 
 		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
 		if ( Bridges\Sitemap::get_instance()->is_sitemap_locked() ) {
@@ -133,10 +134,10 @@ final class Ping {
 			 */
 			\do_action( 'the_seo_framework_before_ping_search_engines', static::class );
 
-			if ( $tsf->get_option( 'ping_google' ) )
+			if ( Data\Plugin::get_option( 'ping_google' ) )
 				static::ping_google();
 
-			if ( $tsf->get_option( 'ping_bing' ) )
+			if ( Data\Plugin::get_option( 'ping_bing' ) )
 				static::ping_bing();
 
 			/**

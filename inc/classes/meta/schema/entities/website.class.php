@@ -69,7 +69,7 @@ final class WebSite extends Reference {
 			'inLanguage'  => Data\Blog::get_language(),
 		];
 
-		if ( \tsf()->get_option( 'ld_json_searchbox' ) ) {
+		if ( Data\Plugin::get_option( 'ld_json_searchbox' ) ) {
 			// No reference because this isn't shared.
 			$entity['potentialAction'] = [
 				'@type'       => 'SearchAction',
@@ -85,8 +85,8 @@ final class WebSite extends Reference {
 			];
 		}
 
-		if ( \tsf()->get_option( 'knowledge_output' ) ) {
-			if ( 'organization' === \tsf()->get_option( 'knowledge_type' ) ) {
+		if ( Data\Plugin::get_option( 'knowledge_output' ) ) {
+			if ( 'organization' === Data\Plugin::get_option( 'knowledge_type' ) ) {
 				$entity['publisher'] = &Organization::get_dynamic_ref();
 			} else {
 				$entity['publisher'] = &Person::get_dynamic_ref();

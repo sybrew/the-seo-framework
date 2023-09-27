@@ -54,7 +54,7 @@ final class Organization extends Reference {
 		$entity = [
 			'@type' => static::$type,
 			'@id'   => static::get_id(),
-			'name'  => \tsf()->get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name(),
+			'name'  => Data\Plugin::get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name(),
 			'url'   => Meta\URI::get_bare_front_page_canonical_url(),
 		];
 
@@ -71,13 +71,13 @@ final class Organization extends Reference {
 			'knowledge_soundcloud',
 			'knowledge_tumblr',
 		] as $option ) {
-			$option = \tsf()->get_option( $option );
+			$option = Data\Plugin::get_option( $option );
 
 			if ( $option )
 				$entity['sameAs'][] = \sanitize_url( $option, [ 'https', 'http' ] );
 		}
 
-		$logo = \tsf()->get_option( 'knowledge_logo' )
+		$logo = Data\Plugin::get_option( 'knowledge_logo' )
 				? current( Meta\Image::get_image_details( [ 'id' => 0 ], true, 'organization' ) )
 				: [];
 

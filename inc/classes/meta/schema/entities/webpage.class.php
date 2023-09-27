@@ -88,7 +88,7 @@ final class WebPage extends Reference {
 			'isPartOf'    => WebSite::get_instant_ref(),
 		];
 
-		if ( \tsf()->get_option( 'ld_json_breadcrumbs' ) )
+		if ( Data\Plugin::get_option( 'ld_json_breadcrumbs' ) )
 			$entity['breadcrumb'] = &BreadcrumbList::get_dynamic_ref();
 
 		if ( null === $args ) {
@@ -105,7 +105,7 @@ final class WebPage extends Reference {
 				}
 			}
 
-			if ( Query::is_real_front_page() && \tsf()->get_option( 'knowledge_output' ) ) {
+			if ( Query::is_real_front_page() && Data\Plugin::get_option( 'knowledge_output' ) ) {
 				$entity['about'] = &Organization::get_dynamic_ref();
 			}
 		} else {
@@ -117,7 +117,7 @@ final class WebPage extends Reference {
 					'target' => Meta\URI::get_canonical_url( $args ),
 				];
 
-				if ( Query::is_static_frontpage( $args['id'] ) && \tsf()->get_option( 'knowledge_output' ) )
+				if ( Query::is_static_frontpage( $args['id'] ) && Data\Plugin::get_option( 'knowledge_output' ) )
 					$entity['about'] = &Organization::get_dynamic_ref();
 
 				if ( Query::is_single( $args['id'] ) ) {

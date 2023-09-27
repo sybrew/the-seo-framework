@@ -7,7 +7,6 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-
 use const \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 
 use \The_SEO_Framework\Interpreters\{
@@ -46,8 +45,8 @@ $_generator_args = [
 	'tax' => $taxonomy,
 ];
 
-$show_og = (bool) $this->get_option( 'og_tags' );
-$show_tw = (bool) $this->get_option( 'twitter_tags' );
+$show_og = (bool) Data\Plugin::get_option( 'og_tags' );
+$show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
 
 $image_placeholder = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 
@@ -107,7 +106,7 @@ $robots_settings = [
 <table class="form-table tsf-term-meta">
 	<tbody>
 		<?php
-		if ( $this->get_option( 'display_seo_bar_metabox' ) ) {
+		if ( Data\Plugin::get_option( 'display_seo_bar_metabox' ) ) {
 			?>
 			<tr class=form-field>
 				<th scope=row valign=top><?php esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
@@ -135,9 +134,9 @@ $robots_settings = [
 					?>
 				</label>
 				<?php
-				$this->get_option( 'display_character_counter' )
+				Data\Plugin::get_option( 'display_character_counter' )
 					and Form::output_character_counter_wrap( 'autodescription-meta[doctitle]' );
-				$this->get_option( 'display_pixel_counter' )
+				Data\Plugin::get_option( 'display_pixel_counter' )
 					and Form::output_pixel_counter_wrap( 'autodescription-meta[doctitle]', 'title' );
 				?>
 			</th>
@@ -186,9 +185,9 @@ $robots_settings = [
 					?>
 				</label>
 				<?php
-				$this->get_option( 'display_character_counter' )
+				Data\Plugin::get_option( 'display_character_counter' )
 					and Form::output_character_counter_wrap( 'autodescription-meta[description]' );
-				$this->get_option( 'display_pixel_counter' )
+				Data\Plugin::get_option( 'display_pixel_counter' )
 					and Form::output_pixel_counter_wrap( 'autodescription-meta[description]', 'description' );
 				?>
 			</th>
@@ -243,7 +242,7 @@ $this->output_js_social_data(
 					<strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong>
 				</label>
 				<?php
-				$this->get_option( 'display_character_counter' )
+				Data\Plugin::get_option( 'display_character_counter' )
 					and Form::output_character_counter_wrap( 'autodescription-meta[og_title]' );
 				?>
 			</th>
@@ -260,7 +259,7 @@ $this->output_js_social_data(
 					<strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong>
 				</label>
 				<?php
-				$this->get_option( 'display_character_counter' )
+				Data\Plugin::get_option( 'display_character_counter' )
 					and Form::output_character_counter_wrap( 'autodescription-meta[og_description]' );
 				?>
 			</th>
@@ -275,7 +274,7 @@ $this->output_js_social_data(
 					<strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
 				</label>
 				<?php
-				$this->get_option( 'display_character_counter' )
+				Data\Plugin::get_option( 'display_character_counter' )
 					and Form::output_character_counter_wrap( 'autodescription-meta[tw_title]' );
 				?>
 			</th>
@@ -292,7 +291,7 @@ $this->output_js_social_data(
 					<strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
 				</label>
 				<?php
-				$this->get_option( 'display_character_counter' )
+				Data\Plugin::get_option( 'display_character_counter' )
 					and Form::output_character_counter_wrap( 'autodescription-meta[tw_description]' );
 				?>
 			</th>

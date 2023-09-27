@@ -77,19 +77,19 @@ final class Term extends Main {
 					'hasrobotstxt' => static::$tsf->has_robots_txt(),
 					'blogpublic'   => static::$tsf->is_blog_public(),
 					'site'         => [
-						'noindex'   => static::$tsf->get_option( 'site_noindex' ),
-						'nofollow'  => static::$tsf->get_option( 'site_nofollow' ),
-						'noarchive' => static::$tsf->get_option( 'site_noarchive' ),
+						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
+						'nofollow'  => Data\Plugin::get_option( 'site_nofollow' ),
+						'noarchive' => Data\Plugin::get_option( 'site_noarchive' ),
 					],
 					'posttype'     => [
-						'noindex'   => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'noindex' ) ),
-						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'nofollow' ) ),
-						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_post_type_option_id( 'noarchive' ) ),
+						'noindex'   => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noindex' ) ),
+						'nofollow'  => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'nofollow' ) ),
+						'noarchive' => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noarchive' ) ),
 					],
 					'taxonomy'     => [
-						'noindex'   => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'noindex' ) ),
-						'nofollow'  => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'nofollow' ) ),
-						'noarchive' => static::$tsf->get_option( static::$tsf->get_robots_taxonomy_option_id( 'noarchive' ) ),
+						'noindex'   => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noindex' ) ),
+						'nofollow'  => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'nofollow' ) ),
+						'noarchive' => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noarchive' ) ),
 					],
 				]
 			);

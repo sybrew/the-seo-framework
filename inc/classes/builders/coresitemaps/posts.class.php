@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Builders\CoreSitemaps;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2020 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -95,7 +97,7 @@ class Posts extends \WP_Sitemaps_Posts {
 		 */
 		$tsf              = \tsf();
 		$main             = Main::get_instance();
-		$show_modified    = (bool) $tsf->get_option( 'sitemaps_modified' );
+		$show_modified    = (bool) Data\Plugin::get_option( 'sitemaps_modified' );
 		$timestamp_format = $tsf->get_timestamp_format();
 
 		/*

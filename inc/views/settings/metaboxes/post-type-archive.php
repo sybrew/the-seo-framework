@@ -7,10 +7,10 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-use The_SEO_Framework\Bridges\SeoSettings,
-	The_SEO_Framework\Interpreters\HTML,
-	The_SEO_Framework\Interpreters\Form,
-	The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Bridges\SeoSettings,
+	\The_SEO_Framework\Interpreters\HTML,
+	\The_SEO_Framework\Interpreters\Form,
+	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Post_Types,
@@ -174,12 +174,12 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
 		Form::output_character_counter_wrap(
 			Input::get_field_id( $_option_map['doctitle'] ),
-			(bool) $this->get_option( 'display_character_counter' )
+			(bool) Data\Plugin::get_option( 'display_character_counter' )
 		);
 		Form::output_pixel_counter_wrap(
 			Input::get_field_id( $_option_map['doctitle'] ),
 			'title',
-			(bool) $this->get_option( 'display_pixel_counter' )
+			(bool) Data\Plugin::get_option( 'display_pixel_counter' )
 		);
 		?>
 		<p class=tsf-title-wrap>
@@ -244,8 +244,8 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['description'] ), (bool) $this->get_option( 'display_character_counter' ) );
-		Form::output_pixel_counter_wrap( Input::get_field_id( $_option_map['description'] ), 'description', (bool) $this->get_option( 'display_pixel_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_pixel_counter_wrap( Input::get_field_id( $_option_map['description'] ), 'description', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
 		?>
 		<p>
 			<textarea name="<?php Input::field_name( $_option_map['description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['description'] ); ?>" rows=3 cols=70><?= esc_attr( $this->get_post_type_archive_meta_item( 'description', $post_type ) ) ?></textarea>
@@ -292,7 +292,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_title'] ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
 			<input type=text name="<?php Input::field_name( $_option_map['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'og_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogTitle />
@@ -305,7 +305,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_description'] ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
 			<textarea name="<?php Input::field_name( $_option_map['og_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogDesc><?= esc_attr( $this->get_post_type_archive_meta_item( 'og_description', $post_type ) ) ?></textarea>
@@ -320,7 +320,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_title'] ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
 			<input type=text name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'tw_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twTitle />
@@ -333,7 +333,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_description'] ), (bool) $this->get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
 			<textarea name="<?php Input::field_name( $_option_map['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twDesc><?= esc_attr( $this->get_post_type_archive_meta_item( 'tw_description', $post_type ) ) ?></textarea>

@@ -9,7 +9,8 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta;
+	\The_SEO_Framework\Meta,
+	\The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -487,7 +488,7 @@ class Detect extends Admin_Init {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( $this->get_option( 'sitemaps_output' ) )
+		if ( Data\Plugin::get_option( 'sitemaps_output' ) )
 			return memo( false );
 
 		$wp_sitemaps_server = \wp_sitemaps_get_server();
@@ -637,7 +638,7 @@ class Detect extends Admin_Init {
 	 * @return bool
 	 */
 	public function can_run_sitemap() {
-		return $this->get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
+		return Data\Plugin::get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
 	}
 
 	/**
@@ -693,7 +694,7 @@ class Detect extends Admin_Init {
 	 * @since 4.3.0
 	 */
 	public function reset_check_plugin_conflicts() {
-		$this->update_static_cache( 'check_seo_plugin_conflicts', 1 );
+		Data\Plugin::update_site_cache( 'check_seo_plugin_conflicts', 1 );
 	}
 
 	/**

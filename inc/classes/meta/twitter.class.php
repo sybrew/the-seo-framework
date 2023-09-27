@@ -8,7 +8,8 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 use function \The_SEO_Framework\{
 	memo,
@@ -49,8 +50,8 @@ class Twitter {
 	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
 	 */
 	public static function fallback_to_open_graph() {
-		static $can;
-		return $can ??= \tsf()->get_option( 'og_tags' );
+		static $fallback;
+		return $fallback ??= Data\Plugin::get_option( 'og_tags' );
 	}
 
 	/**
@@ -62,7 +63,7 @@ class Twitter {
 	 */
 	public static function get_card_type() {
 
-		$preferred_card = \tsf()->get_option( 'twitter_card' );
+		$preferred_card = Data\Plugin::get_option( 'twitter_card' );
 
 		if ( 'auto' === $preferred_card ) {
 			$card = 'summary'; // TODO!
@@ -125,7 +126,7 @@ class Twitter {
 	 * @return string
 	 */
 	public static function get_site() {
-		return \tsf()->get_option( 'twitter_site' );
+		return Data\Plugin::get_option( 'twitter_site' );
 	}
 
 	/**
@@ -137,7 +138,7 @@ class Twitter {
 	 */
 	public static function get_creator() {
 		return \tsf()->get_current_post_author_meta_item( 'twitter_page' )
-			?: \tsf()->get_option( 'twitter_creator' );
+			?: Data\Plugin::get_option( 'twitter_creator' );
 	}
 
 	/**
@@ -192,10 +193,10 @@ class Twitter {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
-				$title = \tsf()->get_option( 'homepage_twitter_title' )
+				$title = Data\Plugin::get_option( 'homepage_twitter_title' )
 					  ?: \tsf()->get_post_meta_item( '_twitter_title' );
 			} else {
-				$title = \tsf()->get_option( 'homepage_twitter_title' );
+				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
 		} elseif ( Query::is_singular() ) {
 			$title = \tsf()->get_post_meta_item( '_twitter_title' );
@@ -237,10 +238,10 @@ class Twitter {
 			$title = \tsf()->get_post_type_archive_meta_item( 'tw_title', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$title = \tsf()->get_option( 'homepage_twitter_title' )
+				$title = Data\Plugin::get_option( 'homepage_twitter_title' )
 					  ?: \tsf()->get_post_meta_item( '_twitter_title', $args['id'] );
 			} else {
-				$title = \tsf()->get_option( 'homepage_twitter_title' );
+				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
 		} elseif ( $args['id'] ) {
 			$title = \tsf()->get_post_meta_item( '_twitter_title', $args['id'] );
@@ -327,10 +328,10 @@ class Twitter {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
-				$desc = \tsf()->get_option( 'homepage_twitter_description' )
+				$desc = Data\Plugin::get_option( 'homepage_twitter_description' )
 					 ?: \tsf()->get_post_meta_item( '_twitter_description' );
 			} else {
-				$desc = \tsf()->get_option( 'homepage_twitter_description' );
+				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
 		} elseif ( Query::is_singular() ) {
 			$desc = \tsf()->get_post_meta_item( '_twitter_description' );
@@ -372,10 +373,10 @@ class Twitter {
 			$desc = \tsf()->get_post_type_archive_meta_item( 'tw_description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$desc = \tsf()->get_option( 'homepage_twitter_description' )
+				$desc = Data\Plugin::get_option( 'homepage_twitter_description' )
 					 ?: \tsf()->get_post_meta_item( '_twitter_description', $args['id'] );
 			} else {
-				$desc = \tsf()->get_option( 'homepage_twitter_description' );
+				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
 		} elseif ( $args['id'] ) {
 			$desc = \tsf()->get_post_meta_item( '_twitter_description', $args['id'] );
