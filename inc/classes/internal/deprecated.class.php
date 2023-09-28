@@ -59,7 +59,7 @@ final class Deprecated {
 	 * Prevents setting of transients when they're disabled.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated
+	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
@@ -81,7 +81,7 @@ final class Deprecated {
 	 * N.B. not all transient settings make use of this function, bypassing the constant check.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated
+	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $transient Transient name. Expected to not be SQL-escaped.
@@ -1212,7 +1212,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated description.
 		 * @param int    $id          The page or term ID.
@@ -1280,7 +1280,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.5
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $url The canonical URL. Must be escaped.
 		 * @param int    $id  The current page or term ID.
@@ -1330,7 +1330,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $url The generated shortlink URL.
 		 * @param int    $id  The current post or term ID.
@@ -1373,7 +1373,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $next The next-page URL.
 		 * @param int    $id   The current post or term ID.
@@ -1389,7 +1389,7 @@ final class Deprecated {
 		);
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $next The previous-page URL.
 		 * @param int    $id   The current post or term ID.
@@ -1460,7 +1460,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Google verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1495,7 +1495,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Bing verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1530,7 +1530,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Yandex verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1565,7 +1565,7 @@ final class Deprecated {
 
 		/**
 		 * @since 4.0.5
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Baidu verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1600,7 +1600,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Pinterest verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1640,7 +1640,7 @@ final class Deprecated {
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param bool $use_open_graph
 		 */
@@ -1675,7 +1675,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $title The generated Open Graph title.
 		 * @param int    $id    The page or term ID.
@@ -1717,7 +1717,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated Open Graph description.
 		 * @param int    $id          The page or term ID.
@@ -1758,7 +1758,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $locale The generated locale field.
 		 * @param int    $id     The page or term ID.
@@ -1879,7 +1879,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $sitename The generated Open Graph site name.
 		 * @param int    $id       The page or term ID.
@@ -1920,7 +1920,7 @@ final class Deprecated {
 
 		/**
 		 * @since 2.9.3
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $url The canonical/Open Graph URL. Must be escaped.
 		 * @param int    $id  The current page or term ID.
@@ -1988,7 +1988,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $facebook_page The generated Facebook author page URL.
 		 * @param int    $id            The current page or term ID.
@@ -2030,7 +2030,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $publisher The Facebook publisher page URL.
 		 * @param int    $id        The current page or term ID.
@@ -2070,7 +2070,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $app_id The Facebook app ID.
 		 * @param int    $id     The current page or term ID.
@@ -2112,7 +2112,7 @@ final class Deprecated {
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param bool $use_facebook
 		 */
@@ -2155,7 +2155,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $time The article published time.
 		 * @param int    $id   The current page or term ID.
@@ -2310,7 +2310,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $site The Twitter site owner tag.
 		 * @param int    $id   The current page or term ID.
@@ -2353,7 +2353,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $creator The Twitter page creator.
 		 * @param int    $id      The current page or term ID.
@@ -2394,7 +2394,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $title The generated Twitter title.
 		 * @param int    $id    The current page or term ID.
@@ -2435,7 +2435,7 @@ final class Deprecated {
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated Twitter description.
 		 * @param int    $id          The current page or term ID.
@@ -2519,7 +2519,7 @@ final class Deprecated {
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
+		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param bool $use_twitter_card
 		 */
@@ -3448,7 +3448,7 @@ final class Deprecated {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 4.3.0 Deprecated.
 			 * @deprecated
 			 * @param string $time The article modified time.
 			 * @param int    $id   The current page or term ID.
@@ -5942,5 +5942,238 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->get_user_id()', '4.3.0', 'tsf()->query()->get_current_user_id()' );
 
 		return $tsf->query()->get_current_user_id();
+	}
+
+	/**
+	 * Fetches Post content.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 No longer applies WordPress's default filters.
+	 * @since 4.2.8 Now tests for post type support of 'editor' before parsing the content.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
+	 * @return string The post content.
+	 */
+	public function get_post_content( $post = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_content()', '4.3.0', 'tsf()->data()->post()->get_post_content()' );
+
+		return $tsf->data()->post()->get_post_content( $post );
+	}
+
+	/**
+	 * Determines whether the post has a page builder that renders content dynamically attached to it.
+	 * Doesn't use plugin detection features as some builders might be incorporated within themes.
+	 *
+	 * Detects the following builders:
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $post_id The post ID to check.
+	 * @return bool
+	 */
+	public function uses_non_html_page_builder( $post_id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->uses_non_html_page_builder()', '4.3.0', 'tsf()->data()->post()->uses_non_html_page_builder()' );
+
+		return $tsf->data()->post()->uses_non_html_page_builder( $post_id );
+	}
+
+	/**
+	 * Determines if the current post is protected or private.
+	 * Only works on singular pages.
+	 *
+	 * @since 2.8.0
+	 * @since 3.0.0 1. No longer checks for current query.
+	 *              2. Input parameter now default to null.
+	 *                 This currently doesn't affect how it works.
+	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
+	 * @return bool True if protected or private, false otherwise.
+	 */
+	public function is_protected( $post = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_protected()', '4.3.0', 'tsf()->data()->post()->is_protected()' );
+
+		return $tsf->data()->post()->is_protected( $post );
+	}
+
+	/**
+	 * Determines if the current post has a password.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
+	 * @return bool True if protected, false otherwise.
+	 */
+	public function is_password_protected( $post = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_password_protected()', '4.3.0', 'tsf()->data()->post()->is_password_protected()' );
+
+		return $tsf->data()->post()->is_password_protected( $post );
+	}
+
+	/**
+	 * Determines if the current post is private.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
+	 * @return bool True if private, false otherwise.
+	 */
+	public function is_private( $post = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_private()', '4.3.0', 'tsf()->data()->post()->is_private()' );
+
+		return $tsf->data()->post()->is_private( $post );
+	}
+
+	/**
+	 * Determines if the current post is a draft.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
+	 * @return bool True if draft, false otherwise.
+	 */
+	public function is_draft( $post = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_draft()', '4.3.0', 'tsf()->data()->post()->is_draft()' );
+
+		return $tsf->data()->post()->is_draft( $post );
+	}
+
+	/**
+	 * Returns a post SEO meta item by key.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.1 Now obtains the real ID when none is supplied.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $item    The item to get.
+	 * @param int    $post_id The post ID.
+	 * @return mixed The post meta item's value. Null when item isn't registered.
+	 */
+	public function get_post_meta_item( $item, $post_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->get_post_meta_item()' );
+
+		return $tsf->data()->plugin()->post()->get_post_meta_item( $item, $post_id );
+	}
+
+	/**
+	 * Returns all registered custom SEO fields for a post.
+	 * Memoizes the return value.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 Now tests for valid post ID in the post object.
+	 * @since 4.1.4 1. Now returns an empty array when the post type isn't supported.
+	 *              2. Now considers headlessness.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $post_id The post ID.
+	 * @return array The post meta.
+	 */
+	public function get_post_meta( $post_id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->get_post_meta()' );
+
+		return $tsf->data()->plugin()->post()->get_post_meta( $post_id );
+	}
+
+	/**
+	 * Returns the post meta defaults.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $post_id The post ID.
+	 * @return array The default post meta.
+	 */
+	public function get_post_meta_defaults( $post_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->post()->get_post_meta_defaults()' );
+
+		return $tsf->data()->plugin()->post()->get_post_meta_defaults( $post_id );
+	}
+
+	/**
+	 * Updates single post meta value.
+	 *
+	 * Note that this method can be more resource intensive than you intend it to be,
+	 * as it reprocesses all post meta.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string           $item  The item to update.
+	 * @param mixed            $value The value the item should be at.
+	 * @param \WP_Post|integer $post  The post object or post ID.
+	 */
+	public function update_single_post_meta_item( $item, $value, $post ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_single_post_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->update_single_post_meta_item()' );
+
+		return $tsf->data()->plugin()->post()->update_single_post_meta_item( $item, $value, $post );
+	}
+
+	/**
+	 * Save post meta / custom field data for a singular post type.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.4 Removed deprecated filter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param \WP_Post|integer $post The post object or post ID.
+	 * @param array            $data The post meta fields, will be merged with the defaults.
+	 */
+	public function save_post_meta( $post, $data ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->save_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->save_post_meta()' );
+
+		return $tsf->data()->plugin()->post()->save_post_meta( $post, $data );
 	}
 }

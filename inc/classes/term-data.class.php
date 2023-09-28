@@ -76,37 +76,6 @@ class Term_Data extends Post_Data {
 	}
 
 	/**
-	 * Overwrites all of the term meta on term-edit.
-	 *
-	 * @since 4.0.0
-	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
-	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 Removed second parameter $tt_id.
-	 *
-	 * @param int    $term_id  Term ID.
-	 * @param string $taxonomy Taxonomy slug.
-	 * @return void
-	 */
-	protected function update_term_edit_term_meta( $term_id, $taxonomy ) {
-
-		$term = \get_term( $term_id, $taxonomy );
-
-		// Check again against ambiguous injection...
-		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
-		if (
-			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
-			|| ! \current_user_can( 'edit_term', $term->term_id )
-			|| ! isset( $_POST['_wpnonce'] )
-			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
-		) return;
-
-		$data = (array) $_POST['autodescription-meta'];
-
-		// Trim, sanitize, and save the metadata.
-		Data\Plugin\Term::save_term_meta( $term->term_id, $data );
-	}
-
-	/**
 	 * Overwrites a part of the term meta on quick-edit.
 	 *
 	 * @since 4.0.0
@@ -136,6 +105,37 @@ class Term_Data extends Post_Data {
 			Data\Plugin\Term::get_term_meta( $term->term_id, false ),
 			(array) $_POST['autodescription-quick']
 		);
+
+		// Trim, sanitize, and save the metadata.
+		Data\Plugin\Term::save_term_meta( $term->term_id, $data );
+	}
+
+	/**
+	 * Overwrites all of the term meta on term-edit.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
+	 *              2. Now continues using the filtered term object.
+	 * @since 4.3.0 Removed second parameter $tt_id.
+	 *
+	 * @param int    $term_id  Term ID.
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return void
+	 */
+	protected function update_term_edit_term_meta( $term_id, $taxonomy ) {
+
+		$term = \get_term( $term_id, $taxonomy );
+
+		// Check again against ambiguous injection...
+		// Note, however: function wp_update_term() already performs all these checks for us before firing this callback's action.
+		if (
+			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
+			|| ! \current_user_can( 'edit_term', $term->term_id )
+			|| ! isset( $_POST['_wpnonce'] )
+			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
+		) return;
+
+		$data = (array) $_POST['autodescription-meta'];
 
 		// Trim, sanitize, and save the metadata.
 		Data\Plugin\Term::save_term_meta( $term->term_id, $data );

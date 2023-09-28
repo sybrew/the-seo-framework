@@ -8,7 +8,12 @@ namespace The_SEO_Framework\Data\Plugin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\is_headless;
+
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -38,9 +43,230 @@ class Post {
 
 	/**
 	 * @since 4.3.0
+	 * @var array[] Stored post meta data.
+	 */
+	private static $post_meta = [];
+
+	/**
+	 * @since 4.3.0
 	 * @var array[] Stored primary term IDs.
 	 */
 	private static $primary_term = [];
+
+	/**
+	 * Returns a post SEO meta item by key.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.1 Now obtains the real ID when none is supplied.
+	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 *
+	 * @param string $item      The item to get.
+	 * @param int    $post_id   The post ID.
+	 * @return mixed The post meta item's value. Null when item isn't registered.
+	 */
+	public static function get_post_meta_item( $item, $post_id = 0 ) {
+
+		$post_id = $post_id ?: Query::get_the_real_id();
+
+		return $post_id
+			? static::get_post_meta( $post_id )[ $item ] ?? null
+			: null;
+	}
+
+	/**
+	 * Returns all registered custom SEO fields for a post.
+	 * Memoizes the return value.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 Now tests for valid post ID in the post object.
+	 * @since 4.1.4 1. Now returns an empty array when the post type isn't supported.
+	 *              2. Now considers headlessness.
+	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 *
+	 * @param int $post_id The post ID.
+	 * @return array The post meta.
+	 */
+	public static function get_post_meta( $post_id = 0 ) {
+
+		$post_id = $post_id ?: Query::get_the_real_id();
+
+		if ( isset( static::$post_meta[ $post_id ] ) )
+			return static::$post_meta[ $post_id ];
+
+		// We test post type support for "post_query"-queries might get past this point.
+		if ( empty( $post_id ) || ! Post_Types::is_post_type_supported( \get_post( $post_id )->post_type ) )
+			return static::$post_meta[ $post_id ] = [];
+
+		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
+		if ( \count( static::$post_meta ) > 69 )
+			static::$post_meta = \array_slice( static::$post_meta, 0, 7, true );
+
+		// We need this early to filter keys from post meta.
+		$defaults    = static::get_post_meta_defaults( $post_id );
+		$is_headless = is_headless( 'meta' );
+
+		if ( $is_headless ) {
+			$meta = [];
+		} else {
+			// Filter the post meta items based on defaults' keys.
+			// Fix: <https://github.com/sybrew/the-seo-framework/issues/185>
+			$meta = array_intersect_key(
+				\get_post_meta( $post_id ), // Gets all post meta. This is a discrepancy with get_term_meta()!
+				$defaults,
+			);
+
+			// WP converts all entries to arrays, because we got ALL entries. Disarray!
+			foreach ( $meta as &$value )
+				$value = $value[0];
+		}
+
+		/**
+		 * @since 4.0.5
+		 * @since 4.1.4 1. Now considers headlessness.
+		 *              2. Now returns a 3rd parameter: boolean $headless.
+		 * @note Do not delete/unset/add indexes! It'll cause errors.
+		 * @param array $meta    The current post meta.
+		 * @param int   $post_id The post ID.
+		 * @param bool  $headless Whether the meta are headless.
+		 */
+		return static::$post_meta[ $post_id ] = \apply_filters(
+			'the_seo_framework_post_meta',
+			array_merge( $defaults, $meta ),
+			$post_id,
+			$is_headless,
+		);
+	}
+
+	/**
+	 * Returns the post meta defaults.
+	 *
+	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
+	 * this is done for performance reasons, so we can cache here, instead of relying on
+	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 *
+	 * @param int $post_id The post ID.
+	 * @return array The default post meta.
+	 */
+	public static function get_post_meta_defaults( $post_id = 0 ) {
+		/**
+		 * @since 4.1.4
+		 * @since 4.2.0 1. Now corrects the $post_id when none is supplied.
+		 *              2. No longer returns the third parameter.
+		 * @param array    $defaults
+		 * @param integer  $post_id Post ID.
+		 * @param \WP_Post $post    Post object.
+		 */
+		return (array) \apply_filters(
+			'the_seo_framework_post_meta_defaults',
+			[
+				'_genesis_title'          => '',
+				'_tsf_title_no_blogname'  => 0, // The prefix I should've used from the start...
+				'_genesis_description'    => '',
+				'_genesis_canonical_uri'  => '',
+				'redirect'                => '', //! Will be displayed in custom fields when set...
+				'_social_image_url'       => '',
+				'_social_image_id'        => 0,
+				'_genesis_noindex'        => 0,
+				'_genesis_nofollow'       => 0,
+				'_genesis_noarchive'      => 0,
+				'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
+				'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
+				'_open_graph_title'       => '',
+				'_open_graph_description' => '',
+				'_twitter_title'          => '',
+				'_twitter_description'    => '',
+			],
+			$post_id ?: Query::get_the_real_id(),
+		);
+	}
+
+	/**
+	 * Updates single post meta value.
+	 *
+	 * Note that this method can be more resource intensive than you intend it to be,
+	 * as it reprocesses all post meta.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 * @uses Data\Plugin\Post::save_post_meta() to process all data.
+	 *
+	 * @param string  $item    The item to update.
+	 * @param mixed   $value   The value the item should be at.
+	 * @param integer $post_id The post ID. Also accepts Post objects.
+	 */
+	public static function update_single_post_meta_item( $item, $value, $post_id ) {
+
+		$post_id = \get_post( $post_id )->ID ?? null;
+
+		if ( empty( $post_id ) ) return;
+
+		$meta          = static::get_post_meta( $post_id );
+		$meta[ $item ] = $value;
+
+		static::save_post_meta( $post_id, $meta );
+	}
+
+	/**
+	 * Save post meta / custom field data for a singular post type.
+	 *
+	 * @since 4.0.0
+	 * @since 4.1.4 Removed deprecated filter.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 *
+	 * @param integer $post_id The post ID. Also accepts Post objects.
+	 * @param array   $data    The post meta fields, will be merged with the defaults.
+	 */
+	public static function save_post_meta( $post_id, $data ) {
+
+		$post_id = \get_post( $post_id )->ID ?? null;
+
+		if ( empty( $post_id ) ) return;
+
+		/**
+		 * @NOTE Do not remove indexes. In the future, we'll store all data,
+		 *       even if empty, to ensure defaults don't override them.
+		 *       So, set an empty value if you wish to delete them.
+		 * @see https://github.com/sybrew/the-seo-framework/issues/185
+		 * @since 4.0.0
+		 * @since 4.3.0 The second parameter is now an integer, instead of Post object.
+		 * @param array $data The data that's going to be saved.
+		 * @param int   $post The post object.
+		 */
+		$data = (array) \apply_filters(
+			'the_seo_framework_save_post_meta',
+			\tsf()->s_post_meta( array_merge(
+				static::get_post_meta_defaults( $post_id ),
+				$data
+			) ),
+			$post_id,
+		);
+
+		// Cycle through $data, insert value or delete field
+		foreach ( (array) $data as $field => $value ) {
+			// Save $value, or delete if the $value is empty.
+			// We can safely assume no one-zero/qubit options pass through here thanks to sanitization earlier--alleviating database weight.
+			if ( $value || ( \is_string( $value ) && \strlen( $value ) ) ) {
+				\update_post_meta( $post_id, $field, $value );
+			} else {
+				// All empty values are deleted here, even if they never existed... is this the best way to handle this?
+				// This is fine for as long as we merge the getter values with the defaults.
+				\delete_post_meta( $post_id, $field );
+			}
+		}
+	}
 
 	/**
 	 * Returns the primary term for post.
@@ -54,23 +280,29 @@ class Post {
 	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
 	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
 	 *              2. Now returns `null` instead of `false` on failure.
-	 *              3. Moved to `The_SEO_Framework\Data\Plugin\Post`
-	 * @FIXME should this be considered with headless?
+	 *              3. Now considers headlessness.
+	 *              4. Moved to `The_SEO_Framework\Data\Plugin\Post`.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
-	 * @return \WP_Term|null The primary term. Null if cannot be generated.
+	 * @return ?\WP_Term The primary term. Null if cannot be generated.
 	 */
 	public static function get_primary_term( $post_id, $taxonomy ) {
 
 		if ( isset( static::$primary_term[ $post_id ][ $taxonomy ] ) )
 			return static::$primary_term[ $post_id ][ $taxonomy ];
 
-		// Trim truth when exceeding nice numbers. This way, we won't overload memory in memoization.
+		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$primary_term ) > 69 )
-			array_splice( static::$primary_term, 42 );
+			static::$primary_term = \array_slice( static::$primary_term, 0, 7, true );
 
-		$primary_id = (int) \get_post_meta( $post_id, "_primary_term_{$taxonomy}", true ) ?: 0;
+		$is_headless = is_headless( 'meta' );
+
+		if ( $is_headless ) {
+			$primary_id = 0;
+		} else {
+			$primary_id = (int) \get_post_meta( $post_id, "_primary_term_{$taxonomy}", true ) ?: 0;
+		}
 
 		// Users can alter the term list via quick/bulk edit, but cannot set a primary term that way.
 		// Users can also delete a term from the site that was previously assigned as primary.
@@ -96,7 +328,20 @@ class Post {
 			}
 		}
 
-		return static::$primary_term[ $post_id ][ $taxonomy ] = $primary_term;
+		/**
+		 * @since 4.3.0
+		 * @param ?\WP_Term $primary_term The primary term. Null if cannot be generated.
+		 * @param int       $post_id     The post ID.
+		 * @param string    $taxonomy    The taxonomy name.
+		 * @param bool      $is_headless Whether the meta are headless.
+		 */
+		return static::$primary_term[ $post_id ][ $taxonomy ] = \apply_filters(
+			'the_seo_framework_primary_term',
+			$primary_term,
+			$post_id,
+			$taxonomy,
+			$is_headless,
+		);
 	}
 
 	/**

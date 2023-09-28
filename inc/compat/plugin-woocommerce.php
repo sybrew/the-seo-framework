@@ -9,7 +9,8 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
 use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Builders;
+	\The_SEO_Framework\Builders,
+	\The_SEO_Framework\Data;
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 \add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
@@ -234,12 +235,10 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// This current page isn't a WC cart/checkout/myaccount page.
 	if ( ! \in_array( $page_id, $page_ids, true ) ) return $meta;
 
-	$tsf = \tsf();
-
 	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
 	if (
 		   $options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
-		|| 0 === $tsf->s_qubit( $tsf->get_post_meta_item( '_genesis_noindex', $page_id ) )
+		|| 0 === \tsf()->s_qubit( Data\Plugin\Post::get_post_meta_item( '_genesis_noindex', $page_id ) )
 	) {
 		$meta['noindex'] = 'noindex';
 	}

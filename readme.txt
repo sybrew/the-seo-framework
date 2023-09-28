@@ -628,6 +628,12 @@ TODO remove tsf()->loaded?
 
 TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
 
+TODO reconsider Bridges\Cache
+TODO get_post_meta* -> get_meta
+	-> also get_term_meta*
+	-> also get_post_type_archive_meta
+	-> also get_user_meta*
+
 **Detailed log**
 
 **For everyone:**
@@ -740,6 +746,8 @@ TODO add trailing commas on all multi-line code (about 100 instances, so it's fi
 		* Fix an issue where the sitemap was invalidated when a URL adds special query parameters with non-latin characters.
 	* **Shortlink:**
 		* The shortlink can now generate a proper tag URL. WordPress created a different endpoint for this, unlike any other taxonomy.
+	* **Headless mode:**
+		* Primary terms are now ignored when `meta` is headless.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
@@ -1150,6 +1158,17 @@ TODO add trailing commas on all multi-line code (about 100 instances, so it's fi
 				* `tsf()->get_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
 				* `tsf()->get_current_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
 				* `tsf()->get_user_id()`, use `tsf()->query()->get_current_user_id()` instead.
+				* `tsf()->get_post_content()`, use `tsf()->data()->post()->get_post_content()` instead.
+				* `tsf()->uses_non_html_page_builder()`, use `tsf()->data()->post()->uses_non_html_page_builder()` instead.
+				* `tsf()->is_protected()`, use `tsf()->data()->post()->is_protected()` instead.
+				* `tsf()->is_password_protected()`, use `tsf()->data()->post()->is_password_protected()` instead.
+				* `tsf()->is_private()`, use `tsf()->data()->post()->is_private()` instead.
+				* `tsf()->is_draft()`, use `tsf()->data()->post()->is_draft()` instead.
+				* `tsf()->get_post_meta_item()`, use `tsf()->data()->plugin()->post()->get_post_meta_item()` instead.
+				* `tsf()->get_post_meta()`, use `tsf()->data()->plugin()->post()->get_post_meta()` instead.
+				* `tsf()->get_post_meta_defaults()`, use `tsf()->data()->plugin()->post()->get_post_meta_defaults()` instead.
+				* `tsf()->update_single_post_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_post_meta_item()` instead.
+				* `tsf()->save_post_meta()`, use `tsf()->data()->plugin()->post()->save_post_meta()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1290,9 +1309,12 @@ TODO add trailing commas on all multi-line code (about 100 instances, so it's fi
 		* `the_seo_framework_schema_entity_builders`, this is used to add and remove Schema.org builders.
 		* `the_seo_framework_schema_graph_data`, this is used to adjust the Schema.org output data.
 		* `the_seo_framework_breadcrumb_list`, this is used to adjust the Breadcrumbs generation.
+		* `the_seo_framework_primary_term`, this is used to adjust the primary term.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
+		* `the_seo_framework_save_post_meta`, the second parameter is now an integer, instead of Post object.
+			* If you cannot save posts any longer after updating... well, there's your problem. We found no evidence of this being used in the wild.
 	* **Deprecated:**
 		* `the_seo_framework_googlesite_output`, with no alternative available.
 		* `the_seo_framework_bingsite_output`, with no alternative available.

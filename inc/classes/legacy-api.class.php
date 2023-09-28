@@ -214,7 +214,7 @@ class Legacy_API extends Core {
 	 *    int    filesize: The image filesize in bytes,
 	 * }
 	 */
-	public function get_image_details( $args = null, $single = true, $context = 'social' ) {
+	public static function get_image_details( $args = null, $single = true, $context = 'social' ) {
 		return static::image()->get_image_details( $args, $single, $context );
 	}
 }

@@ -227,14 +227,14 @@ final class Excerpt {
 		$post = \get_post( $id ?? Query::get_the_real_id() );
 
 		// If the post is protected, don't generate a description.
-		if ( \tsf()->is_protected( $post ) ) return '';
+		if ( Data\Post::is_protected( $post ) ) return '';
 
 		if ( ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' ) ) {
 			$excerpt = $post->post_excerpt;
-		} elseif ( ! empty( $post->post_content ) && ! \tsf()->uses_non_html_page_builder( $post->ID ) ) {
+		} elseif ( ! Data\Post::uses_non_html_page_builder( $post->ID ) ) {
 			// We should actually get the parsed content here... but that can be heavy on the server.
 			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
-			$excerpt = \tsf()->get_post_content( $post );
+			$excerpt = Data\Post::get_post_content( $post );
 
 			if ( $excerpt )
 				$excerpt = \tsf()->strip_paragraph_urls( \tsf()->strip_newline_urls( $excerpt ) );

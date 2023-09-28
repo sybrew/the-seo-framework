@@ -13,9 +13,8 @@ use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
-	memo,
 	Utils\normalize_generation_args,
-	Utils\clamp_sentence
+	Utils\clamp_sentence,
 };
 
 /**
@@ -201,12 +200,12 @@ class Description {
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' )
-					 ?: \tsf()->get_post_meta_item( '_genesis_description' );
+					 ?: Data\Plugin\Post::get_post_meta_item( '_genesis_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
 		} elseif ( Query::is_singular() ) {
-			$desc = \tsf()->get_post_meta_item( '_genesis_description' );
+			$desc = Data\Plugin\Post::get_post_meta_item( '_genesis_description' );
 		} elseif ( Query::is_editable_term() ) {
 			$desc = Data\Plugin\Term::get_term_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
@@ -238,12 +237,12 @@ class Description {
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' )
-					 ?: \tsf()->get_post_meta_item( '_genesis_description', $args['id'] );
+					 ?: Data\Plugin\Post::get_post_meta_item( '_genesis_description', $args['id'] );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
 		} elseif ( $args['id'] ) {
-			$desc = \tsf()->get_post_meta_item( '_genesis_description', $args['id'] );
+			$desc = Data\Plugin\Post::get_post_meta_item( '_genesis_description', $args['id'] );
 		}
 
 		return $desc ?? '' ?: '';

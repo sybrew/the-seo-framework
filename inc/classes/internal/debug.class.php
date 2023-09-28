@@ -520,7 +520,7 @@ final class Debug {
 		$current_post_type              = Query::get_current_post_type();
 		$is_taxonomy_disabled           = Taxonomies::is_taxonomy_disabled();
 		$is_post_type_archive           = \is_post_type_archive();
-		$is_protected                   = $tsf->is_protected( $page_id );
+		$is_protected                   = Data\Post::is_protected( $page_id );
 		$wp_doing_ajax                  = \wp_doing_ajax();
 		$wp_doing_cron                  = \wp_doing_cron();
 		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST;

@@ -77,17 +77,22 @@ class Admin_Init extends Init {
 	 */
 	public function _add_post_state( $states = [], $post = null ) {
 
-		$post_id = $post->ID ?? false;
+		$post_id = $post->ID ?? null;
 
 		if ( $post_id ) {
-			$search_exclude  = Data\Plugin::get_option( 'alter_search_query' ) && $this->get_post_meta_item( 'exclude_local_search', $post_id );
-			$archive_exclude = Data\Plugin::get_option( 'alter_archive_query' ) && $this->get_post_meta_item( 'exclude_from_archive', $post_id );
-
-			if ( $search_exclude )
+			if (
+				   Data\Plugin::get_option( 'alter_search_query' )
+				&& Data\Plugin\Post::get_post_meta_item( 'exclude_local_search', $post_id )
+			) {
 				$states[] = \esc_html__( 'No Search', 'autodescription' );
+			}
 
-			if ( $archive_exclude )
+			if (
+				   Data\Plugin::get_option( 'alter_archive_query' )
+				&& Data\Plugin\Post::get_post_meta_item( 'exclude_from_archive', $post_id )
+			) {
 				$states[] = \esc_html__( 'No Archive', 'autodescription' );
+			}
 		}
 
 		return $states;

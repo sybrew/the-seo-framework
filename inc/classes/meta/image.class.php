@@ -368,8 +368,8 @@ class Image {
 					];
 					if ( ! $details['url'] ) {
 						$details = [
-							'url' => \tsf()->get_post_meta_item( '_social_image_url' ),
-							'id'  => \tsf()->get_post_meta_item( '_social_image_id' ),
+							'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url' ),
+							'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id' ),
 						];
 					}
 				} else {
@@ -380,8 +380,8 @@ class Image {
 				}
 			} elseif ( Query::is_singular() ) {
 				$details = [
-					'url' => \tsf()->get_post_meta_item( '_social_image_url' ),
-					'id'  => \tsf()->get_post_meta_item( '_social_image_id' ),
+					'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url' ),
+					'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id' ),
 				];
 			} elseif ( Query::is_editable_term() ) {
 				$details = [
@@ -450,14 +450,14 @@ class Image {
 
 				if ( $args['id'] && ! $details['url'] ) {
 					$details = [
-						'url' => \tsf()->get_post_meta_item( '_social_image_url', $args['id'] ),
-						'id'  => \tsf()->get_post_meta_item( '_social_image_id', $args['id'] ),
+						'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url', $args['id'] ),
+						'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id', $args['id'] ),
 					];
 				}
 			} elseif ( $args['id'] ) {
 				$details = [
-					'url' => \tsf()->get_post_meta_item( '_social_image_url', $args['id'] ),
-					'id'  => \tsf()->get_post_meta_item( '_social_image_id', $args['id'] ),
+					'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url', $args['id'] ),
+					'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id', $args['id'] ),
 				];
 			}
 		}

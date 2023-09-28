@@ -264,12 +264,12 @@ class Title {
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
 				$title = Data\Plugin::get_option( 'homepage_title' )
-					  ?: \tsf()->get_post_meta_item( '_genesis_title' );
+					  ?: Data\Plugin\Post::get_post_meta_item( '_genesis_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
 		} elseif ( Query::is_singular() ) {
-			$title = \tsf()->get_post_meta_item( '_genesis_title' );
+			$title = Data\Plugin\Post::get_post_meta_item( '_genesis_title' );
 		} elseif ( Query::is_editable_term() ) {
 			$title = Data\Plugin\Term::get_term_meta_item( 'doctitle' );
 		} elseif ( \is_post_type_archive() ) {
@@ -298,12 +298,12 @@ class Title {
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$title = Data\Plugin::get_option( 'homepage_title' )
-					  ?: \tsf()->get_post_meta_item( '_genesis_title', $args['id'] );
+					  ?: Data\Plugin\Post::get_post_meta_item( '_genesis_title', $args['id'] );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
 		} elseif ( $args['id'] ) {
-			$title = \tsf()->get_post_meta_item( '_genesis_title', $args['id'] );
+			$title = Data\Plugin\Post::get_post_meta_item( '_genesis_title', $args['id'] );
 		}
 
 		return $title ?? '' ?: '';

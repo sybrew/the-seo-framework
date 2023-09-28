@@ -128,7 +128,7 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
 	// Skip if we're not dealing with the wpForo page.
-	if ( ! \has_shortcode( \tsf()->get_post_content( $interpreter::$query['id'] ), 'wpforo' ) ) return;
+	if ( ! \has_shortcode( Data\Post::get_post_content( $interpreter::$query['id'] ), 'wpforo' ) ) return;
 
 	foreach ( $items as $id => &$item ) {
 		switch ( $id ) {

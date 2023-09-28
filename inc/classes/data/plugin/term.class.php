@@ -43,32 +43,9 @@ class Term {
 
 	/**
 	 * @since 4.3.0
-	 * @var array[] The latest term meta data.
+	 * @var array[] Stored term meta data.
 	 */
 	private static $term_meta = [];
-
-	/**
-	 * @since 4.3.0
-	 * @var array The default term metadata. : {
-	 *    string $meta_key: mixed Data
-	 * }
-	 */
-	private static $term_meta_defaults = [
-		'doctitle'           => '',
-		'title_no_blog_name' => 0,
-		'description'        => '',
-		'og_title'           => '',
-		'og_description'     => '',
-		'tw_title'           => '',
-		'tw_description'     => '',
-		'social_image_url'   => '',
-		'social_image_id'    => 0,
-		'canonical'          => '',
-		'noindex'            => 0,
-		'nofollow'           => 0,
-		'noarchive'          => 0,
-		'redirect'           => '',
-	];
 
 	/**
 	 * Returns the term meta item by key.
@@ -112,7 +89,7 @@ class Term {
 	 * @param int $term_id The Term ID.
 	 * @return array The term meta data.
 	 */
-	public static function get_term_meta( $term_id ) {
+	public static function get_term_meta( $term_id = 0 ) {
 
 		$term_id = $term_id ?: Query::get_the_real_id();
 
@@ -123,17 +100,15 @@ class Term {
 		if ( empty( $term_id ) || ! Taxonomies::is_taxonomy_supported( \get_term( $term_id )->taxonomy ?? '' ) )
 			return static::$term_meta[ $term_id ] = [];
 
-		// Trim truth when exceeding nice numbers. This way, we won't overload memory in memoization.
+		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$term_meta ) > 69 )
-			array_splice( static::$term_meta, 42 );
+			static::$term_meta = \array_slice( static::$term_meta, 0, 7, true );
 
 		$is_headless = is_headless( 'meta' );
 
 		if ( $is_headless ) {
 			$meta = [];
 		} else {
-			// Unlike get_post_meta(), we need not filter here.
-			// See: <https://github.com/sybrew/the-seo-framework/issues/185>
 			$meta = \get_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, true ) ?: [];
 		}
 
@@ -142,20 +117,18 @@ class Term {
 		 * @since 4.1.4 1. Now considers headlessness.
 		 *              2. Now returns a 3rd parameter: boolean $headless.
 		 * @note Do not delete/unset/add indexes! It'll cause errors.
-		 * @param array $meta    The current term meta.
-		 * @param int   $term_id The term ID.
-		 * @param bool  $headless Whether the meta are headless.
+		 * @param array $meta        The current term meta.
+		 * @param int   $term_id     The term ID.
+		 * @param bool  $is_headless Whether the meta are headless.
 		 */
-		return static::$term_meta[ $term_id ] = \apply_filters_ref_array(
+		return static::$term_meta[ $term_id ] = \apply_filters(
 			'the_seo_framework_term_meta',
-			[
-				array_merge(
-					static::get_term_meta_defaults( $term_id ),
-					$meta,
-				),
-				$term_id,
-				$is_headless,
-			]
+			array_merge(
+				static::get_term_meta_defaults( $term_id ),
+				$meta,
+			),
+			$term_id,
+			$is_headless,
 		);
 	}
 
@@ -179,12 +152,25 @@ class Term {
 		 * @param array $defaults
 		 * @param int   $term_id The current term ID.
 		 */
-		return (array) \apply_filters_ref_array(
+		return (array) \apply_filters(
 			'the_seo_framework_term_meta_defaults',
 			[
-				static::$term_meta_defaults,
-				$term_id ?: Query::get_the_real_id(),
-			]
+				'doctitle'           => '',
+				'title_no_blog_name' => 0,
+				'description'        => '',
+				'og_title'           => '',
+				'og_description'     => '',
+				'tw_title'           => '',
+				'tw_description'     => '',
+				'social_image_url'   => '',
+				'social_image_id'    => 0,
+				'canonical'          => '',
+				'noindex'            => 0,
+				'nofollow'           => 0,
+				'noarchive'          => 0,
+				'redirect'           => '',
+			],
+			$term_id ?: Query::get_the_real_id(),
 		);
 	}
 
@@ -205,9 +191,7 @@ class Term {
 	 */
 	public static function update_single_term_meta_item( $item, $value, $term_id ) {
 
-		// Make sure the term exists before we go through another hoop of fetching all data.
-		$term    = \get_term( $term_id );
-		$term_id = $term->term_id ?? null;
+		$term_id = \get_term( $term_id )->term_id ?? null;
 
 		if ( empty( $term_id ) ) return;
 
@@ -231,8 +215,7 @@ class Term {
 	 */
 	public static function save_term_meta( $term_id, $data ) {
 
-		$term    = \get_term( $term_id );
-		$term_id = $term->term_id ?? null;
+		$term_id = \get_term( $term_id )->term_id ?? null;
 
 		if ( empty( $term_id ) ) return;
 
@@ -244,15 +227,13 @@ class Term {
 		 * @param array  $data     The data that's going to be saved.
 		 * @param int    $term_id  The term ID.
 		 */
-		$data = (array) \apply_filters_ref_array(
+		$data = (array) \apply_filters(
 			'the_seo_framework_save_term_data',
-			[
-				\tsf()->s_term_meta( array_merge(
-					static::get_term_meta_defaults( $term_id ),
-					$data,
-				) ),
-				$term_id,
-			]
+			\tsf()->s_term_meta( array_merge(
+				static::get_term_meta_defaults( $term_id ),
+				$data,
+			) ),
+			$term_id,
 		);
 
 		unset( static::$term_meta[ $term_id ] );

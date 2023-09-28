@@ -63,8 +63,7 @@ final class Args extends Factory {
 	 */
 	protected static function assert_no( $type ) {
 
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf/static::$args hereinafter.
-		$tsf  = static::$tsf;
+		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$args hereinafter.
 		$args = static::$args;
 
 		$asserting_noindex = 'noindex' === $type;
@@ -76,9 +75,9 @@ final class Args extends Factory {
 			if ( $args['tax'] ) {
 				$qubit = (int) Data\Plugin\Term::get_term_meta_item( $type, $args['id'] );
 			} elseif ( $args['id'] ) {
-				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type", $args['id'] );
+				$qubit = (int) Data\Plugin\Post::get_post_meta_item( "_genesis_$type", $args['id'] );
 			} elseif ( $args['pta'] ) {
-				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type, $args['pta'] );
+				$qubit = (int) static::$tsf->get_post_type_archive_meta_item( $type, $args['pta'] );
 			}
 
 			switch ( isset( $qubit ) ) {
@@ -158,7 +157,7 @@ final class Args extends Factory {
 
 			case 'protected':
 				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
-				yield 'protected' => static::$tsf->is_protected( $args['id'] );
+				yield 'protected' => Data\Post::is_protected( $args['id'] );
 		}
 	}
 }

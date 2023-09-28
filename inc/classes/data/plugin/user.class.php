@@ -40,34 +40,9 @@ class User {
 
 	/**
 	 * @since 4.3.0
-	 * @var array[] The latest user meta data.
+	 * @var array[] Stored user meta data.
 	 */
 	private static $user_meta = [];
-
-	/**
-	 * @since 4.3.0
-	 * @var array The default user metadata. : {
-	 *    string $meta_key: mixed Data
-	 * }
-	 */
-	private static $user_meta_defaults = [
-		'counter_type'  => 3,
-		'facebook_page' => '',
-		'twitter_page'  => '',
-	];
-
-	/**
-	 * @since 4.3.0
-	 * @var array The headless meta keys. : {
-	 *    string $meta_key => string[] $supports
-	 * }
-	 */
-	private static $headless_support = [
-		'counter_type' => [
-			'meta',
-			'settings',
-		],
-	];
 
 	/**
 	 * Returns the current post's author meta item by key.
@@ -156,26 +131,32 @@ class User {
 		if ( empty( $user_id ) )
 			return static::$user_meta[ $user_id ] = [];
 
-		// Trim truth when exceeding nice numbers. This way, we won't overload memory in memoization.
+		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$user_meta ) > 69 )
-			array_splice( static::$user_meta, 42 );
+			static::$user_meta = \array_slice( static::$user_meta, 0, 7, true );
 
 		$is_headless = is_headless();
 
 		if ( $is_headless['user'] ) {
+			// We filter out everything that's 'not supported' or otherwise 'immutable' in headless-mode.
 			$meta = [];
 
 			if ( \in_array( false, $is_headless, true ) ) {
-				// Some data is still used for the interface elsewhere. Let's retrieve that at least.
-				// We filter out the rest because that's 'not supported' or otherwise 'immutable' in headless-mode.
 				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
+				// The counter type is still supported for meta and settings.
+				// Retrieve those items if either type (meta/settings) isn't headless.
+				$non_headless_meta = [
+					'counter_type' => [
+						'meta',
+						'settings',
+					],
+				];
 
-				foreach ( static::$headless_support as $meta_key => $supports ) {
-
+				foreach ( $non_headless_meta as $meta_key => $meta_types ) {
 					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
 
-					foreach ( $supports as $support_type ) {
-						if ( $is_headless[ $support_type ] ) continue;
+					foreach ( $meta_types as $meta_type ) {
+						if ( $is_headless[ $meta_type ] ) continue;
 
 						$meta[ $meta_key ] = $_meta[ $meta_key ];
 						continue 2;
@@ -189,20 +170,19 @@ class User {
 		/**
 		 * @since 4.1.4
 		 * @note Do not delete/unset/add indexes! It'll cause errors.
-		 * @param array $meta    The current user meta.
-		 * @param int   $user_id The user ID.
-		 * @param bool  $headless Whether the meta are headless.
+		 * @param array $meta        The current user meta.
+		 *                           If headless, it may still contain administration settings.
+		 * @param int   $user_id     The user ID.
+		 * @param bool  $is_headless Whether the meta are headless.
 		 */
-		return static::$user_meta[ $user_id ] = \apply_filters_ref_array(
+		return static::$user_meta[ $user_id ] = \apply_filters(
 			'the_seo_framework_user_meta',
-			[
-				array_merge(
-					static::get_user_meta_defaults( $user_id ),
-					$meta,
-				),
-				$user_id,
-				$is_headless['user'],
-			]
+			array_merge(
+				static::get_user_meta_defaults( $user_id ),
+				$meta,
+			),
+			$user_id,
+			$is_headless['user'],
 		);
 	}
 
@@ -221,12 +201,14 @@ class User {
 		 * @param array $defaults
 		 * @param int   $user_id
 		 */
-		return (array) \apply_filters_ref_array(
+		return (array) \apply_filters(
 			'the_seo_framework_user_meta_defaults',
 			[
-				static::$user_meta_defaults,
-				$user_id ?: Query::get_current_user_id(),
-			]
+				'counter_type'  => 3,
+				'facebook_page' => '',
+				'twitter_page'  => '',
+			],
+			$user_id ?: Query::get_current_user_id(),
 		);
 	}
 
@@ -278,15 +260,13 @@ class User {
 		 * @param array  $data     The data that's going to be saved.
 		 * @param int    $user_id  The user ID.
 		 */
-		$data = (array) \apply_filters_ref_array(
+		$data = (array) \apply_filters(
 			'the_seo_framework_save_user_data',
-			[
-				\tsf()->s_user_meta( array_merge(
-					static::get_user_meta_defaults( $user_id ),
-					$data,
-				) ),
-				$user->ID,
-			]
+			\tsf()->s_user_meta( array_merge(
+				static::get_user_meta_defaults( $user_id ),
+				$data,
+			) ),
+			$user->ID,
 		);
 
 		unset( static::$user_meta[ $user_id ] );

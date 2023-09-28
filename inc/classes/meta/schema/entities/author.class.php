@@ -14,7 +14,8 @@ use function \The_SEO_Framework\Utils\{
 };
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+	\The_SEO_Framework\Meta,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -59,7 +60,7 @@ final class Author extends Reference {
 	private static function get_author_id_from_args( $args ) {
 
 		if ( null === $args ) {
-			$author_id = \tsf()->get_post_author_id();
+			$author_id = Query::get_post_author_id();
 		} else {
 			if ( isset( $args['uid'] ) ) {
 				$author_id = $args['uid'];
@@ -67,7 +68,7 @@ final class Author extends Reference {
 				normalize_generation_args( $args );
 
 				if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
-					$author_id = \tsf()->get_post_author_id( $args['id'] );
+					$author_id = Query::get_post_author_id( $args['id'] );
 				}
 			}
 		}
@@ -109,7 +110,7 @@ final class Author extends Reference {
 		if ( empty( $author_id ) ) return null;
 
 		$user_data = \get_userdata( $author_id );
-		$user_meta = \Data\Plugin\User::get_user_meta( $author_id );
+		$user_meta = Data\Plugin\User::get_user_meta( $author_id );
 
 		$entity = [
 			'@type' => static::$type,

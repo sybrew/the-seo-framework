@@ -9,7 +9,6 @@ namespace The_SEO_Framework\Meta;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function \The_SEO_Framework\{
-	memo,
 	umemo,
 	Utils\normalize_generation_args,
 };
@@ -146,7 +145,7 @@ class URI {
 	public static function get_generated_canonical_url( $args = null, $escape = true ) {
 
 		if ( null === $args ) {
-			$url = memo() ?? memo( static::get_generated_canonical_url_from_query() );
+			$url = static::get_generated_canonical_url_from_query();
 		} else {
 			$url = static::get_generated_canonical_url_from_args( $args );
 		}
@@ -164,7 +163,7 @@ class URI {
 	public static function get_custom_canonical_url_from_query() {
 
 		if ( Query::is_singular() ) {
-			$url = \tsf()->get_post_meta_item( '_genesis_canonical_uri' );
+			$url = Data\Plugin\Post::get_post_meta_item( '_genesis_canonical_uri' );
 		} elseif ( Query::is_editable_term() ) {
 			$url = Data\Plugin\Term::get_term_meta_item( 'canonical' ) ?: '';
 		} elseif ( \is_post_type_archive() ) {
@@ -194,7 +193,7 @@ class URI {
 		} elseif ( $args['pta'] ) {
 			$url = \tsf()->get_post_type_archive_meta_item( 'canonical', $args['pta'] );
 		} elseif ( $args['id'] ) {
-			$url = \tsf()->get_post_meta_item( '_genesis_canonical_uri', $args['id'] );
+			$url = Data\Plugin\Post::get_post_meta_item( '_genesis_canonical_uri', $args['id'] );
 		}
 
 		return $url ?? '' ?: '';
@@ -645,7 +644,7 @@ class URI {
 
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
-				$url = \tsf()->get_post_meta_item( 'redirect' );
+				$url = Data\Plugin\Post::get_post_meta_item( 'redirect' );
 			} elseif ( Query::is_editable_term() ) {
 				$url = Data\Plugin\Term::get_term_meta_item( 'redirect' );
 			} elseif ( \is_post_type_archive() ) {
@@ -659,7 +658,7 @@ class URI {
 			} elseif ( $args['pta'] ) {
 				$url = \tsf()->get_post_type_archive_meta_item( 'redirect', $args['pta'] );
 			} elseif ( $args['id'] ) {
-				$url = \tsf()->get_post_meta_item( 'redirect', $args['id'] );
+				$url = Data\Plugin\Post::get_post_meta_item( 'redirect', $args['id'] );
 			}
 		}
 

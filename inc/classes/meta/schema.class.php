@@ -15,8 +15,8 @@ use function \The_SEO_Framework\{
 	Utils\scrub_array,
 };
 
-use \The_SEO_Framework\Helper\Query;
-
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -82,14 +82,14 @@ class Schema {
 	public static function get_generated_graph( $args = null ) {
 
 		if ( null === $args ) {
-			if ( \tsf()->is_protected() ) {
+			if ( Data\Post::is_protected() ) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}
 		} else {
 			normalize_generation_args( $args );
 
-			if ( ! $args['tax'] && ! $args['pta'] && \tsf()->is_protected( $args['id'] ) ) {
+			if ( ! $args['tax'] && ! $args['pta'] && Data\Post::is_protected( $args['id'] ) ) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}

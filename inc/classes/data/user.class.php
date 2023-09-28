@@ -77,6 +77,7 @@ class User {
 				if ( $user_has_cap ) break;
 			}
 
+			// Return early -- we already check "this" blog.
 			return $user_has_cap ?? false;
 		}
 

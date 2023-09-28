@@ -171,8 +171,6 @@ final class ListEdit extends ListTable {
 			|| ! \current_user_can( 'edit_post', $post_id )
 		) return;
 
-		$tsf = \tsf();
-
 		$_generator_args = [ 'id' => $post_id ];
 
 		$r_defaults = Meta\Robots::generate_meta(
@@ -181,7 +179,7 @@ final class ListEdit extends ListTable {
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
-		$meta = $tsf->get_post_meta( $post_id );
+		$meta = Data\Plugin\Post::get_post_meta( $post_id );
 
 		// NB: The indexes correspond to `autodescription-list[index]` field input names.
 		$data = [
@@ -245,7 +243,7 @@ final class ListEdit extends ListTable {
 
 		if ( Query::is_static_frontpage( $_generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
-			$_has_home_title     = (bool) $tsf->escape_title( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_title     = (bool) \tsf()->escape_title( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
 								 ? Meta\Title::get_custom_title( $_generator_args )
 								 : Meta\Title::get_bare_generated_title( $_generator_args );
@@ -254,7 +252,7 @@ final class ListEdit extends ListTable {
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
-			$_has_home_desc      = (bool) $tsf->escape_title( Data\Plugin::get_option( 'homepage_description' ) );
+			$_has_home_desc      = (bool) \tsf()->escape_title( Data\Plugin::get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
 								 ? Meta\Description::get_custom_description( $_generator_args )
 								 : Meta\Description::get_generated_description( $_generator_args );
@@ -274,9 +272,9 @@ final class ListEdit extends ListTable {
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
-			'defaultTitle'      => $tsf->s_title( $default_title ),
+			'defaultTitle'      => \tsf()->s_title( $default_title ),
 			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
-			'additionValue'     => $tsf->s_title( $addition ),
+			'additionValue'     => \tsf()->s_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
 		$desc_data  = [

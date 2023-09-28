@@ -98,12 +98,12 @@ final class Page extends Main {
 	protected function prime_query_cache( array &$query_cache = [] ) {
 		$query_cache = [
 			'post'   => \get_post( static::$query['id'] ),
-			'meta'   => static::$tsf->get_post_meta( static::$query['id'], true ), // Use TSF cache--TSF initializes it anyway.
+			'meta'   => Data\Plugin\Post::get_post_meta( static::$query['id'] ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
 				'ishome'       => Query::is_real_front_page_by_id( static::$query['id'] ),
 				'locale'       => \get_locale(),
-				'isprotected'  => static::$tsf->is_protected( static::$query['id'] ),
-				'isdraft'      => static::$tsf->is_draft( static::$query['id'] ),
+				'isprotected'  => Data\Post::is_protected( static::$query['id'] ),
+				'isdraft'      => Data\Post::is_draft( static::$query['id'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
@@ -469,10 +469,10 @@ final class Page extends Main {
 				// TODO consider alternative? "It TRIED to build it from...."?
 				unset( $item['assess']['base'] );
 
-				if ( static::$tsf->uses_non_html_page_builder( static::$query['id'] ) ) {
+				if ( Data\Post::uses_non_html_page_builder( static::$query['id'] ) ) {
 					$item['status']          = SEOBar::STATE_UNKNOWN;
 					$item['assess']['empty'] = $cache['assess']['builder'];
-				} elseif ( static::$tsf->is_protected( static::$query['id'] ) ) {
+				} elseif ( Data\Post::is_protected( static::$query['id'] ) ) {
 					$item['status']          = SEOBar::STATE_UNKNOWN;
 					$item['assess']['empty'] = $cache['assess']['protected'];
 				} else {

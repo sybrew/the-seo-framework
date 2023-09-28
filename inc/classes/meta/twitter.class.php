@@ -194,12 +194,12 @@ class Twitter {
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' )
-					  ?: \tsf()->get_post_meta_item( '_twitter_title' );
+					  ?: Data\Plugin\Post::get_post_meta_item( '_twitter_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
 		} elseif ( Query::is_singular() ) {
-			$title = \tsf()->get_post_meta_item( '_twitter_title' );
+			$title = Data\Plugin\Post::get_post_meta_item( '_twitter_title' );
 		} elseif ( Query::is_editable_term() ) {
 			$title = Data\Plugin\Term::get_term_meta_item( 'tw_title' );
 		} elseif ( \is_post_type_archive() ) {
@@ -239,12 +239,12 @@ class Twitter {
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' )
-					  ?: \tsf()->get_post_meta_item( '_twitter_title', $args['id'] );
+					  ?: Data\Plugin\Post::get_post_meta_item( '_twitter_title', $args['id'] );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
 		} elseif ( $args['id'] ) {
-			$title = \tsf()->get_post_meta_item( '_twitter_title', $args['id'] );
+			$title = Data\Plugin\Post::get_post_meta_item( '_twitter_title', $args['id'] );
 		}
 
 		if ( isset( $title ) ) {
@@ -329,12 +329,12 @@ class Twitter {
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_frontpage() ) {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' )
-					 ?: \tsf()->get_post_meta_item( '_twitter_description' );
+					 ?: Data\Plugin\Post::get_post_meta_item( '_twitter_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
 		} elseif ( Query::is_singular() ) {
-			$desc = \tsf()->get_post_meta_item( '_twitter_description' );
+			$desc = Data\Plugin\Post::get_post_meta_item( '_twitter_description' );
 		} elseif ( Query::is_editable_term() ) {
 			$desc = Data\Plugin\Term::get_term_meta_item( 'tw_description' );
 		} elseif ( \is_post_type_archive() ) {
@@ -374,12 +374,12 @@ class Twitter {
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' )
-					 ?: \tsf()->get_post_meta_item( '_twitter_description', $args['id'] );
+					 ?: Data\Plugin\Post::get_post_meta_item( '_twitter_description', $args['id'] );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
 		} elseif ( $args['id'] ) {
-			$desc = \tsf()->get_post_meta_item( '_twitter_description', $args['id'] );
+			$desc = Data\Plugin\Post::get_post_meta_item( '_twitter_description', $args['id'] );
 		}
 
 		if ( isset( $desc ) ) {

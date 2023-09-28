@@ -123,15 +123,13 @@ final class Generator {
 	 */
 	public static function generate_content_image_details( $args = null ) {
 
-		$tsf = \tsf();
-
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
 				// $GLOBALS['pages'] isn't populated here -- let's not try pagination to conserve CPU usage.
-				$content = $tsf->get_post_content();
+				$content = Data\Post::get_post_content();
 			}
 		} elseif ( ! $args['tax'] && ! $args['pta'] ) {
-			$content = $tsf->get_post_content( $args['id'] );
+			$content = Data\Post::get_post_content( $args['id'] );
 		}
 
 		if ( empty( $content ) ) return;
@@ -139,7 +137,7 @@ final class Generator {
 		// \strlen( '<img src=a>' ) === 11; yes, that's a valid self-closing tag with a relative source.
 		if ( \strlen( $content ) > 10 && false !== stripos( $content, '<img ' ) ) {
 			// Clear what might have unfavourable images.
-			$content = $tsf->strip_tags_cs(
+			$content = \tsf()->strip_tags_cs(
 				$content,
 				[
 					'space' => [],

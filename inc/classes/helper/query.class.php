@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Helper;
 
 use function \The_SEO_Framework\umemo;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -1098,7 +1100,7 @@ class Query {
 			$post = \get_post( static::get_the_real_id() );
 
 		if ( ( $post ?? null ) instanceof \WP_Post ) {
-			$content = \tsf()->get_post_content( $post );
+			$content = Data\Post::get_post_content( $post );
 
 			if ( str_contains( $content, '<!--nextpage-->' ) ) {
 				$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );

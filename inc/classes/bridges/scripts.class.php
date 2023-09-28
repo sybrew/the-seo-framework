@@ -379,8 +379,6 @@ final class Scripts {
 	 */
 	public static function get_seo_settings_scripts() {
 
-		$tsf = \tsf();
-
 		$front_id = Query::get_the_front_page_id();
 
 		return [
@@ -406,13 +404,13 @@ final class Scripts {
 					'name' => 'tsfSettingsL10n',
 					'data' => [
 						'states' => [
-							'isFrontPrivate'   => $front_id && $tsf->is_private( $front_id ),
-							'isFrontProtected' => $front_id && $tsf->is_password_protected( $front_id ),
+							'isFrontPrivate'   => $front_id && Data\Post::is_private( $front_id ),
+							'isFrontProtected' => $front_id && Data\Post::is_password_protected( $front_id ),
 						],
 					],
 				],
 				'tmpl'     => [
-					'file' => $tsf->get_view_location( 'templates/settings/settings' ),
+					'file' => \tsf()->get_view_location( 'templates/settings/settings' ),
 				],
 			],
 		];
@@ -428,8 +426,7 @@ final class Scripts {
 	 */
 	public static function get_post_edit_scripts() {
 
-		$tsf = \tsf();
-		$id  = Query::get_the_real_id();
+		$id = Query::get_the_real_id();
 
 		$is_static_frontpage = Query::is_static_frontpage( $id );
 
@@ -472,9 +469,9 @@ final class Scripts {
 					'name' => 'tsfPostL10n',
 					'data' => [
 						'states' => [
-							'isPrivate'       => $tsf->is_private( $id ),
-							'isProtected'     => $tsf->is_password_protected( $id ),
-							'isGutenbergPage' => $tsf->is_gutenberg_page(),
+							'isPrivate'       => Data\Post::is_private( $id ),
+							'isProtected'     => Data\Post::is_password_protected( $id ),
+							'isGutenbergPage' => \tsf()->is_gutenberg_page(),
 							'id'              => (int) $id,
 						],
 						'params' => [

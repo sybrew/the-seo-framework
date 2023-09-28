@@ -185,7 +185,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_singular_title_branding( $id = 0 ) {
-		return ! \tsf()->get_post_meta_item( '_tsf_title_no_blogname', $id )
+		return ! Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname', $id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 

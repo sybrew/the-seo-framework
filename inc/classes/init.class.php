@@ -12,7 +12,9 @@ use function \The_SEO_Framework\is_headless;
 use \The_SEO_Framework\Front,
 	\The_SEO_Framework\Meta,
 	\The_SEO_Framework\Data;
+
 use \The_SEO_Framework\Helper\{
+	Post_Types,
 	Query,
 	Taxonomies,
 };
@@ -179,16 +181,16 @@ class Init extends Pool {
 
 		\add_action( 'activated_plugin', [ $this, 'reset_check_plugin_conflicts' ] );
 
-		$is_headless = is_headless();
+		$headless = is_headless();
 
-		if ( ! $is_headless['meta'] ) {
+		if ( ! $headless['meta'] ) {
 			// Initialize term meta filters and actions.
 			\add_action( 'edit_term', [ $this, '_update_term_meta' ], 10, 3 );
 
 			// Initialize term meta filters and actions.
-			\add_action( 'save_post', [ $this, '_update_post_meta' ], 1, 2 );
+			\add_action( 'save_post', [ $this, '_update_post_meta' ], 1 );
 			\add_action( 'edit_attachment', [ $this, '_update_attachment_meta' ], 1 );
-			\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1, 2 );
+			\add_action( 'save_post', [ $this, '_save_inpost_primary_term' ], 1 );
 
 			// Enqueue Post meta boxes.
 			\add_action( 'add_meta_boxes', [ $this, '_init_post_edit_view' ], 5, 1 );
@@ -206,7 +208,7 @@ class Init extends Pool {
 			\add_action( 'admin_init', [ $this, '_init_list_edit' ] );
 		}
 
-		if ( ! $is_headless['settings'] ) {
+		if ( ! $headless['settings'] ) {
 			// Set up site settings and allow saving resetting them.
 			\add_action( 'admin_init', [ $this, 'register_settings' ], 5 );
 
@@ -217,7 +219,7 @@ class Init extends Pool {
 			\add_action( 'admin_menu', [ $this, 'add_menu_link' ] );
 		}
 
-		if ( ! $is_headless['user'] ) {
+		if ( ! $headless['user'] ) {
 			// Initialize user meta filters and actions.
 			\add_action( 'personal_options_update', [ $this, '_update_user_meta' ], 10, 1 );
 			\add_action( 'edit_user_profile_update', [ $this, '_update_user_meta' ], 10, 1 );
@@ -226,7 +228,7 @@ class Init extends Pool {
 			\add_action( 'current_screen', [ $this, '_init_user_edit_view' ] );
 		}
 
-		if ( \in_array( false, $is_headless, true ) ) {
+		if ( \in_array( false, $headless, true ) ) {
 			// Set up notices.
 			\add_action( 'admin_notices', [ $this, '_output_notices' ] );
 
@@ -792,6 +794,78 @@ class Init extends Pool {
 	}
 
 	/**
+	 * Builds and returns the excluded post IDs.
+	 *
+	 * Memoizes the database request.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Now no longer crashes on database errors.
+	 * @since 4.1.4 1. Now tests against post type exclusions.
+	 *              2. Now considers headlessness. This method runs only on the front-end.
+	 * @since 4.3.0 Now uses the static cache methods instead of non-expiring-transients.
+	 *
+	 * @return array : { 'archive', 'search' }
+	 */
+	public function get_excluded_ids_from_cache() {
+
+		if ( is_headless( 'meta' ) )
+			return [
+				'archive' => '',
+				'search'  => '',
+			];
+
+		$cache = Data\Plugin::get_site_cache( 'excluded_ids' );
+
+		if ( isset( $cache['archive'], $cache['search'] ) ) return $cache;
+
+		global $wpdb;
+
+		$supported_post_types = Post_Types::get_supported_post_types();
+		$public_post_types    = Post_Types::get_public_post_types();
+
+		$join  = '';
+		$where = '';
+		if ( $supported_post_types !== $public_post_types ) {
+			// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
+			$post_type__in = "'" . implode( "','", array_map( 'esc_sql', $supported_post_types ) ) . "'";
+
+			// This is as fast as I could make it. Yes, it uses IN, but only on a (tiny) subset of data.
+			$join  = "LEFT JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID";
+			$where = "AND {$wpdb->posts}.post_type IN ($post_type__in)";
+		}
+
+		// Two separated equals queries are faster than a single IN with 'meta_key'.
+		// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
+		$cache = [
+			'archive' => $wpdb->get_results(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where"
+			),
+			'search'  => $wpdb->get_results(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where"
+			),
+		];
+		// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		foreach ( [ 'archive', 'search' ] as $type ) {
+			array_walk(
+				$cache[ $type ],
+				static function ( &$v ) {
+					if ( isset( $v->meta_value, $v->post_id ) && $v->meta_value ) {
+						$v = (int) $v->post_id;
+					} else {
+						$v = false;
+					}
+				}
+			);
+			$cache[ $type ] = array_filter( $cache[ $type ] );
+		}
+
+		Data\Plugin::update_site_cache( 'excluded_ids', $cache );
+
+		return $cache;
+	}
+
+	/**
 	 * Alters search query.
 	 *
 	 * @since 2.9.4
@@ -881,7 +955,7 @@ class Init extends Pool {
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_post_meta_item( 'exclude_local_search', $post->ID ) )
+				if ( Data\Plugin\Post::get_post_meta_item( 'exclude_local_search', $post->ID ) )
 					unset( $posts[ $n ] );
 			}
 			// Reset numeric index.
@@ -908,7 +982,7 @@ class Init extends Pool {
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( $this->get_post_meta_item( 'exclude_from_archive', $post->ID ) )
+				if ( Data\Plugin\Post::get_post_meta_item( 'exclude_from_archive', $post->ID ) )
 					unset( $posts[ $n ] );
 			}
 			// Reset numeric index.

@@ -102,7 +102,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<p class=tsf-title-wrap>
 			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin::get_option( 'homepage_title' ) ) ?>" autocomplete=off />
 			<?php
-			$_post_meta_title = ( $home_id ? $this->get_post_meta_item( '_genesis_title', $home_id ) : '' );
+			$_post_meta_title = ( $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_title', $home_id ) : '' );
 
 			$this->output_js_title_elements(); // legacy
 			$this->output_js_title_data(
@@ -127,7 +127,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		<?php
 		HTML::description( __( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
 
-		if ( $home_id && $this->get_post_meta_item( '_genesis_title', $home_id ) )
+		if ( $home_id && Data\Plugin\Post::get_post_meta_item( '_genesis_title', $home_id ) )
 			HTML::description( __( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 
 		?>
@@ -159,7 +159,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 				[
 					'state' => [
 						'defaultDescription' =>
-							( $home_id ? $this->get_post_meta_item( '_genesis_description', $home_id ) : '' )
+							( $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_description', $home_id ) : '' )
 							?: Meta\Description::get_generated_description( $_generator_args ),
 						'hasLegacy'          => true,
 					],
@@ -169,7 +169,7 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		</p>
 		<?php
 
-		if ( $home_id && $this->get_post_meta_item( '_genesis_description', $home_id ) ) {
+		if ( $home_id && Data\Plugin\Post::get_post_meta_item( '_genesis_description', $home_id ) ) {
 			HTML::description(
 				__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -256,11 +256,11 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 
 		// Gets custom fields from page.
 		if ( $home_id ) {
-			$custom_og_title = $this->get_post_meta_item( '_open_graph_title', $home_id );
-			$custom_og_desc  = $this->get_post_meta_item( '_open_graph_description', $home_id );
-			$custom_tw_title = $this->get_post_meta_item( '_twitter_title', $home_id );
-			$custom_tw_desc  = $this->get_post_meta_item( '_twitter_description', $home_id );
-			$custom_image    = $this->get_post_meta_item( '_social_image_url', $home_id );
+			$custom_og_title = Data\Plugin\Post::get_post_meta_item( '_open_graph_title', $home_id );
+			$custom_og_desc  = Data\Plugin\Post::get_post_meta_item( '_open_graph_description', $home_id );
+			$custom_tw_title = Data\Plugin\Post::get_post_meta_item( '_twitter_title', $home_id );
+			$custom_tw_desc  = Data\Plugin\Post::get_post_meta_item( '_twitter_description', $home_id );
+			$custom_image    = Data\Plugin\Post::get_post_meta_item( '_social_image_url', $home_id );
 		}
 
 		$image_placeholder = $custom_image ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
@@ -409,9 +409,9 @@ switch ( $this->get_view_instance( 'homepage', $instance ) ) :
 		break;
 
 	case 'homepage_robots_tab':
-		$noindex_post   = $home_id ? $this->get_post_meta_item( '_genesis_noindex', $home_id ) : '';
-		$nofollow_post  = $home_id ? $this->get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
-		$noarchive_post = $home_id ? $this->get_post_meta_item( '_genesis_noarchive', $home_id ) : '';
+		$noindex_post   = $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_noindex', $home_id ) : '';
+		$nofollow_post  = $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
+		$noarchive_post = $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_noarchive', $home_id ) : '';
 
 		$checked_home = '';
 		/**

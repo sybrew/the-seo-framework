@@ -65,9 +65,6 @@ final class Front extends Factory {
 	 */
 	protected static function assert_no( $type ) {
 
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf hereinafter.
-		$tsf = static::$tsf;
-
 		$asserting_noindex = 'noindex' === $type;
 
 		// We assert options here for a jump to meta_settings might be unaware.
@@ -78,9 +75,9 @@ final class Front extends Factory {
 			if ( Query::is_editable_term() ) {
 				$qubit = (int) Data\Plugin\Term::get_term_meta_item( $type );
 			} elseif ( Query::is_singular() ) {
-				$qubit = (int) $tsf->get_post_meta_item( "_genesis_$type" );
+				$qubit = (int) Data\Plugin\Post::get_post_meta_item( "_genesis_$type" );
 			} elseif ( \is_post_type_archive() ) {
-				$qubit = (int) $tsf->get_post_type_archive_meta_item( $type );
+				$qubit = (int) static::$tsf->get_post_type_archive_meta_item( $type );
 			}
 
 			switch ( isset( $qubit ) ) {
@@ -239,7 +236,7 @@ final class Front extends Factory {
 
 			case 'protected':
 				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
-				yield 'protected' => static::$tsf->is_protected( Query::get_the_real_id() );
+				yield 'protected' => Data\Post::is_protected( Query::get_the_real_id() );
 				break;
 
 			case 'cpage':
