@@ -66,7 +66,7 @@ final class Author extends Reference {
 			} else {
 				normalize_generation_args( $args );
 
-				if (  empty( $args['tax'] ) && empty( $args['pta'] ) ) {
+				if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
 					$author_id = \tsf()->get_post_author_id( $args['id'] );
 				}
 			}
@@ -109,7 +109,7 @@ final class Author extends Reference {
 		if ( empty( $author_id ) ) return null;
 
 		$user_data = \get_userdata( $author_id );
-		$user_meta = \tsf()->get_user_meta( $author_id );
+		$user_meta = \Data\Plugin\User::get_user_meta( $author_id );
 
 		$entity = [
 			'@type' => static::$type,
@@ -124,7 +124,7 @@ final class Author extends Reference {
 		if ( $user_meta['twitter_page'] )
 			$entity['sameAs'][] = \sanitize_url( 'https://twitter.com/' . ltrim( $user_meta['twitter_page'], '@' ) );
 
-		if ( $user_data->description )
+		if ( ! empty( $user_data->description ) )
 			$entity['description'] = clamp_sentence( \wp_strip_all_tags( $user_data->description ), 1, 250 );
 
 		return $entity;

@@ -137,7 +137,7 @@ class Twitter {
 	 * @return string
 	 */
 	public static function get_creator() {
-		return \tsf()->get_current_post_author_meta_item( 'twitter_page' )
+		return Data\Plugin\User::get_current_post_author_meta_item( 'twitter_page' )
 			?: Data\Plugin::get_option( 'twitter_creator' );
 	}
 

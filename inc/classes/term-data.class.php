@@ -44,6 +44,7 @@ class Term_Data extends Post_Data {
 	/**
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
+	 * @hook edit_term 10
 	 * @since 2.7.0
 	 * @since 4.0.0 1. Renamed from `update_term_meta`
 	 *              2. noindex, nofollow, noarchive are now converted to qubits.
@@ -66,9 +67,9 @@ class Term_Data extends Post_Data {
 		// phpcs:disable, WordPress.Security.NonceVerification
 
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
-			$this->update_quick_edit_term_meta( $term_id, $tt_id, $taxonomy );
+			$this->update_quick_edit_term_meta( $term_id, $taxonomy );
 		} elseif ( ! empty( $_POST['autodescription-meta'] ) ) {
-			$this->update_term_edit_term_meta( $term_id, $tt_id, $taxonomy );
+			$this->update_term_edit_term_meta( $term_id, $taxonomy );
 		}
 
 		// phpcs:enable, WordPress.Security.NonceVerification
@@ -80,13 +81,13 @@ class Term_Data extends Post_Data {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
+	 * @since 4.3.0 Removed second parameter $tt_id.
 	 *
 	 * @param int    $term_id  Term ID.
-	 * @param int    $tt_id    Term taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void
 	 */
-	protected function update_term_edit_term_meta( $term_id, $tt_id, $taxonomy ) {
+	protected function update_term_edit_term_meta( $term_id, $taxonomy ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 
@@ -102,7 +103,7 @@ class Term_Data extends Post_Data {
 		$data = (array) $_POST['autodescription-meta'];
 
 		// Trim, sanitize, and save the metadata.
-		Data\Plugin\Term::save_term_meta( $term->term_id, $tt_id, $taxonomy, $data );
+		Data\Plugin\Term::save_term_meta( $term->term_id, $data );
 	}
 
 	/**
@@ -111,13 +112,13 @@ class Term_Data extends Post_Data {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
+	 * @since 4.3.0 Removed second parameter $tt_id.
 	 *
 	 * @param int    $term_id  Term ID.
-	 * @param int    $tt_id    Term taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void
 	 */
-	protected function update_quick_edit_term_meta( $term_id, $tt_id, $taxonomy ) {
+	protected function update_quick_edit_term_meta( $term_id, $taxonomy ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 
@@ -137,6 +138,6 @@ class Term_Data extends Post_Data {
 		);
 
 		// Trim, sanitize, and save the metadata.
-		Data\Plugin\Term::save_term_meta( $term->term_id, $tt_id, $taxonomy, $data );
+		Data\Plugin\Term::save_term_meta( $term->term_id, $data );
 	}
 }

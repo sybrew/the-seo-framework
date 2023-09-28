@@ -42,7 +42,7 @@ class Query {
 	 *
 	 * @since 4.0.5
 	 * @since 4.2.0 Now supports common archives without relying on the first post.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return string|false Post type on success, false on failure.
@@ -74,7 +74,7 @@ class Query {
 	 * Returns the post type name from current screen.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return string
@@ -89,7 +89,7 @@ class Query {
 	 *
 	 * @since 2.5.0
 	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param bool $use_cache Whether to use the cache or not.
 	 * @return int|false The ID.
@@ -138,7 +138,7 @@ class Query {
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Removed WP 3.9 compat
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return int The admin ID.
 	 */
@@ -162,7 +162,7 @@ class Query {
 	 * Returns the front page ID, if home is a page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return int the ID.
 	 */
@@ -181,7 +181,7 @@ class Query {
 	 * @since 2.6.6 Moved from class The_SEO_Framework_Term_Data.
 	 * @since 3.1.0 1. Removed WP 4.5 compat. Now uses global $tag_ID.
 	 *              2. Removed caching
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global int $tag_ID
 	 *
 	 * TODO consider making the function name id -> ID.
@@ -205,7 +205,7 @@ class Query {
 	 * @since 3.0.0
 	 * @since 3.1.0 1. Now works in the admin.
 	 *              2. Added memoization.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return string The queried taxonomy type.
@@ -243,7 +243,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now reliably works on admin screens.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param mixed $attachment Attachment ID, title, slug, or array of such.
 	 * @return bool
@@ -264,7 +264,7 @@ class Query {
 	 * Detects attachments within the admin area.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @see static::is_attachment()
 	 * @global \WP_Screen $current_screen;
 	 *
@@ -283,7 +283,7 @@ class Query {
 	 *              2. Added caching.
 	 *              3. Now has a first parameter `$post`.
 	 * @since 4.0.6 Added a short-circuit on current-requests for `is_singular()`.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool
@@ -321,7 +321,7 @@ class Query {
 	 * Detects archive pages. Also in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool
@@ -359,7 +359,7 @@ class Query {
 	 * Extends default WordPress is_archive() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is archive
@@ -379,7 +379,7 @@ class Query {
 	 * Detects Term edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool True if on Term Edit screen. False otherwise.
@@ -392,7 +392,7 @@ class Query {
 	 * Detects Post edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool We're on Post Edit screen.
@@ -405,7 +405,7 @@ class Query {
 	 * Detects Post or Archive Lists in Admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool We're on the edit screen.
@@ -448,7 +448,7 @@ class Query {
 	 * Detects author archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @uses static::is_archive()
 	 *
 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
@@ -468,7 +468,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.2.0 Added the first parameter to allow custom query testing.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query and renamed to is_blog.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query. and renamed to is_blog.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
@@ -491,7 +491,7 @@ class Query {
 	 * Detects the non-front blog page.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query and renamed to is_blog_as_page.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query. and renamed to is_blog_as_page.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
@@ -506,7 +506,7 @@ class Query {
 	 * Detects category archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @uses static::is_archive()
 	 *
 	 * @param mixed $category Optional. Category ID, name, slug, or array of Category IDs, names, and slugs.
@@ -527,7 +527,7 @@ class Query {
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress's built-in category.
 	 * @since 4.0.0 Removed caching.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool Post Type is category
 	 */
@@ -557,7 +557,7 @@ class Query {
 	 * it isn't considered a real front page -- it could be anything custom.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool
 	 */
@@ -587,7 +587,7 @@ class Query {
 	 * @see static::is_static_frontpage(), which adds an "is homepage static" check.
 	 *
 	 * @since 3.2.2
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param int $id The tested ID.
 	 * @return bool
@@ -602,7 +602,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @api not used internally, polar opposite of is_single().
 	 * @uses static::is_singular()
 	 *
@@ -631,7 +631,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, although redundant.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @see static::is_page()
 	 *
 	 * @return bool
@@ -650,7 +650,7 @@ class Query {
 	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
 	 *              3. Added current_user_can() check.
 	 *              4. Added wp_verify_nonce() check.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool
 	 */
@@ -677,7 +677,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 2.9.4 Now always returns false in admin.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool
 	 */
@@ -691,7 +691,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @uses The_SEO_Framework_Query::is_single_admin()
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
@@ -716,7 +716,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.0 Now no longer returns true on categories and tags.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @see The_SEO_Framework_Query::is_single()
 	 *
 	 * @return bool
@@ -735,7 +735,7 @@ class Query {
 	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
 	 * @since 4.0.0 No longer processes integers as input.
 	 * @since 4.2.4 No longer tests type of $post_types.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @uses static::is_singular_admin()
 	 *
 	 * @param string|string[] $post_types Optional. Post type or array of post types. Default empty string.
@@ -760,7 +760,7 @@ class Query {
 	 * @since 2.5.2
 	 * @since 3.1.0 Added $post_id parameter. When used, it'll only check for it.
 	 * @since 4.0.0 Removed first parameter.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool Post Type is singular
@@ -781,7 +781,7 @@ class Query {
 	 *
 	 * @since 2.3.8
 	 * @since 4.1.4 Added memoization.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
 	 * @return bool True when homepage is static and given/current ID matches.
@@ -802,7 +802,7 @@ class Query {
 	 * Detects tag archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @uses static::is_archive()
 	 *
 	 * @param mixed $tag Optional. Tag ID, name, slug, or array of Tag IDs, names, and slugs.
@@ -824,7 +824,7 @@ class Query {
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress's built-in tag.
 	 * @since 4.0.0 Removed caching.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool Post Type is tag.
 	 */
@@ -836,8 +836,7 @@ class Query {
 	 * Detects taxonomy archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
-	 *
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @TODO add is_tax_admin() ?
 	 *
 	 * @param string|array     $taxonomy Optional. Taxonomy slug or slugs.
@@ -854,7 +853,7 @@ class Query {
 	 *
 	 * @since 4.0.5
 	 * @since 4.1.4 Added memoization.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool
@@ -878,7 +877,7 @@ class Query {
 	 *
 	 * @since 4.0.5
 	 * @since 4.1.4 Added memoization.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 	 * @return bool True if on a WooCommerce Product page.
@@ -906,7 +905,7 @@ class Query {
 	 *
 	 * @since 4.0.5
 	 * @since 4.1.4 Added memoization.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool
 	 */
@@ -927,7 +926,7 @@ class Query {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool True if SSL, false otherwise.
 	 */
@@ -943,7 +942,7 @@ class Query {
 	 * @since 2.6.0
 	 * @since 2.7.0 Added secure parameter.
 	 * @since 2.9.0 If $secure is false, the cache is no longer used.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @see static::is_menu_page() for security notification.
 	 *
 	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
@@ -975,7 +974,7 @@ class Query {
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 Added pageslug parameter.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global string $page_hook the current page hook.
 	 *
 	 * @param string $pagehook The menu pagehook to compare to.
@@ -1007,7 +1006,7 @@ class Query {
 	 *              2. Now always returns 1 on the admin screens.
 	 * @since 4.2.8 Now returns the last page on pagination overflow,
 	 *              but only when we're on a paginated static frontpage.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return int (R>0) $page Always a positive number.
 	 */
@@ -1044,7 +1043,7 @@ class Query {
 	 * @since 2.6.0
 	 * @since 3.2.4 1. Added overflow protection.
 	 *              2. Now always returns 1 on the admin screens.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return int (R>0) $paged Always a positive number.
 	 */
@@ -1077,7 +1076,7 @@ class Query {
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.4 Now only returns "1" in the admin.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return int
@@ -1145,7 +1144,7 @@ class Query {
 	 * @since 3.1.0 1. Now also works on archives.
 	 *              2. Now is public.
 	 * @since 3.2.4 Now always returns false on the admin pages.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @return bool True if multipage.
 	 */
@@ -1159,12 +1158,61 @@ class Query {
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.0 Now memoizes instead of populating class properties.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
 	 *
 	 * @param bool $set Whether to set "doing sitemap".
 	 * @return bool
 	 */
 	public static function is_sitemap( $set = false ) {
 		return umemo( __METHOD__, $set ?: null ) ?? false;
+	}
+
+	/**
+	 * Returns the post author ID.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *              2. Now always returns an integer.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
+	 *
+	 * @param int $post_id The post ID to fetch the author from. Leave 0 to autodetermine.
+	 * @return int Post author ID on success, 0 on failure.
+	 */
+	public static function get_post_author_id( $post_id = 0 ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $memo = Query\Cache::memo( null, $post_id ) )
+			return $memo;
+
+		if ( $post_id || Query::is_singular() ) {
+			$post = \get_post( $post_id ?: Query::get_the_real_id() );
+
+			$author_id = isset( $post->post_author ) && \post_type_supports( $post->post_type, 'author' )
+				? $post->post_author
+				: 0;
+		}
+
+		return Query\Cache::memo( $author_id ?? 0, $post_id );
+	}
+
+	/**
+	 * Sets up user ID and returns it if user is found.
+	 * To be used in AJAX, back-end and front-end.
+	 *
+	 * @since 2.7.0
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query.
+	 *
+	 * @return int The user ID. 0 if user is not found.
+	 */
+	public static function get_current_user_id() {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $memo = Query\Cache::memo() )
+			return $memo;
+
+		$user = \wp_get_current_user();
+
+		return Query\Cache::memo( $user->exists() ? (int) $user->ID : 0 );
 	}
 }

@@ -626,6 +626,8 @@ TODO add robots.txt editor
 TODO remove tsf()->loaded?
 	-> At least, write a constant?
 
+TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
+
 **Detailed log**
 
 **For everyone:**
@@ -1130,14 +1132,24 @@ TODO remove tsf()->loaded?
 				* `tsf()->get_term_meta_item()`, use `tsf()->data()->plugin()->term()->get_term_meta_item()` instead.
 				* `tsf()->get_term_meta()`, use `tsf()->data()->plugin()->term()->get_term_meta()` instead.
 				* `tsf()->get_term_meta_defaults()`, use `tsf()->data()->plugin()->term()->get_term_meta_defaults()` instead.
-				* `tsf()->update_single_term_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_term_meta_item()` instead.
+				* `tsf()->update_single_term_meta_item()`, use `tsf()->data()->plugin()->term()->update_single_term_meta_item()` instead.
 				* `tsf()->get_latest_category_id()`, use `tsf()->data()->term()->get_latest_category_id()` instead.
 				* `tsf()->get_latest_category_id()`, use `tsf()->data()->term()->is_term_populated()` instead.
-				* `tsf()->get_latest_category_id()`, use `tsf()->data()->post()->get_latest_post_id()` instead.
+				* `tsf()->get_latest_post_id()`, use `tsf()->data()->post()->get_latest_post_id()` instead.
 				* `tsf()->get_primary_term()`, use `tsf()->data()->plugin()->post()->get_primary_term()` instead.
 				* `tsf()->get_primary_term_id()`, use `tsf()->data()->plugin()->post()->get_primary_term_id()` instead.
 				* `tsf()->update_primary_term_id()`, use `tsf()->data()->plugin()->post()->update_primary_term_id()` instead.
-				* TODO `get_current_post_author_id()`, use `tsf()->get_post_author_id()` instead. (this will move to Data or Query?)
+				* `tsf()->save_term_meta()`, use `tsf()->data()->plugin()->term()->save_term_meta()` instead.
+				* `tsf()->get_user_meta_item()`, use `tsf()->data()->plugin()->user()->get_user_meta_item()` instead.
+				* `tsf()->get_current_post_author_meta_item()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta_item()` instead.
+				* `tsf()->get_current_post_author_meta()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta()` instead.
+				* `tsf()->get_user_meta()`, use `tsf()->data()->plugin()->user()->get_user_meta()` instead.
+				* `tsf()->get_user_meta_defaults()`, use `tsf()->data()->plugin()->user()->get_user_meta_defaults()` instead.
+				* `tsf()->update_single_user_meta_item()`, use `tsf()->data()->plugin()->user()->update_single_user_meta_item()` instead.
+				* `tsf()->save_user_meta()`, use `tsf()->data()->plugin()->user()->save_user_meta()` instead.
+				* `tsf()->get_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
+				* `tsf()->get_current_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
+				* `tsf()->get_user_id()`, use `tsf()->query()->get_current_user_id()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

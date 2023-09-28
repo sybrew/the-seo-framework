@@ -1,0 +1,326 @@
+<?php
+/**
+ * @package The_SEO_Framework\Classes\Data\Plugin\User
+ * @subpackage The_SEO_Framework\Data\Plugin
+ */
+
+namespace The_SEO_Framework\Data\Plugin;
+
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use function \The_SEO_Framework\is_headless;
+
+use \The_SEO_Framework\Helper\Query;
+
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Holds a collection of User data interface methods for TSF.
+ *
+ * @since 4.3.0
+ * @access protected
+ * @internal Use tsf()->data()->plugin->user() instead.
+ */
+class User {
+
+	/**
+	 * @since 4.3.0
+	 * @var array[] The latest user meta data.
+	 */
+	private static $user_meta = [];
+
+	/**
+	 * @since 4.3.0
+	 * @var array The default user metadata. : {
+	 *    string $meta_key: mixed Data
+	 * }
+	 */
+	private static $user_meta_defaults = [
+		'counter_type'  => 3,
+		'facebook_page' => '',
+		'twitter_page'  => '',
+	];
+
+	/**
+	 * @since 4.3.0
+	 * @var array The headless meta keys. : {
+	 *    string $meta_key => string[] $supports
+	 * }
+	 */
+	private static $headless_support = [
+		'counter_type' => [
+			'meta',
+			'settings',
+		],
+	];
+
+	/**
+	 * Returns the current post's author meta item by key.
+	 * Won't fall back to the logged in user's data.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.8 Now returns null when no post author can be established.
+	 * @since 4.3.0 1. Removed the second `$use_cache` parameter.
+	 *              2. Moved to \The_SEO_Framework\Data\Plugin\User.
+	 *
+	 * @param string $item The user meta item to get. Required.
+	 * @return ?mixed The author meta item. Null when no author is found.
+	 */
+	public static function get_current_post_author_meta_item( $item ) {
+
+		$user_id = Query::get_post_author_id();
+
+		return $user_id
+			? static::get_user_meta_item( $item, $user_id )
+			: null;
+	}
+
+	/**
+	 * Returns and caches author meta for the current query.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.7 Removed redundant memoization.
+	 * @since 4.2.8 Now returns null when no post author can be established.
+	 * @ignore Unused internally. Public API.
+	 *
+	 * @return ?array The current author meta, null when no author is set.
+	 */
+	public static function get_current_post_author_meta() {
+
+		$user_id = Query::get_post_author_id();
+
+		return $user_id
+			? static::get_user_meta( $user_id )
+			: null;
+	}
+
+	/**
+	 * Returns the user meta item by key.
+	 * Will fall back to the CURRENT LOGGED IN user's metadata.
+	 *
+	 * @since 4.1.4
+	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 *              2. Moved to \The_SEO_Framework\Data\Plugin\User.
+	 *
+	 * @param string $item      The user meta item to get. Required.
+	 * @param int    $user_id   The user ID. Optional.
+	 * @return mixed The user meta item. Null when not found.
+	 */
+	public static function get_user_meta_item( $item, $user_id = 0 ) {
+
+		$user_id = $user_id ?: Query::get_current_user_id();
+
+		return $user_id
+			? static::get_user_meta( $user_id )[ $item ] ?? null
+			: null;
+	}
+
+	/**
+	 * Fetches usermeta set by The SEO Framework.
+	 * Memoizes the return value, can be bypassed.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.0 Always returns array, even if no value is assigned.
+	 * @since 4.1.4 1. Now returns default values when custom values are missing.
+	 *              2. Now listens to headlessness.
+	 *              3. Deprecated the third argument, and moved it to the second.
+	 * @since 4.3.0 1. Removed the second `$depr` and third `$use_cache` parameter.
+	 *              2. Moved to \The_SEO_Framework\Data\Plugin\User.
+	 *
+	 * @param int $user_id The user ID.
+	 * @return array The user SEO meta data.
+	 */
+	public static function get_user_meta( $user_id = 0 ) {
+
+		$user_id = $user_id ?: Query::get_current_user_id();
+
+		if ( isset( static::$user_meta[ $user_id ] ) )
+			return static::$user_meta[ $user_id ];
+
+		if ( empty( $user_id ) )
+			return static::$user_meta[ $user_id ] = [];
+
+		// Trim truth when exceeding nice numbers. This way, we won't overload memory in memoization.
+		if ( \count( static::$user_meta ) > 69 )
+			array_splice( static::$user_meta, 42 );
+
+		$is_headless = is_headless();
+
+		if ( $is_headless['user'] ) {
+			$meta = [];
+
+			if ( \in_array( false, $is_headless, true ) ) {
+				// Some data is still used for the interface elsewhere. Let's retrieve that at least.
+				// We filter out the rest because that's 'not supported' or otherwise 'immutable' in headless-mode.
+				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
+
+				foreach ( static::$headless_support as $meta_key => $supports ) {
+
+					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
+
+					foreach ( $supports as $support_type ) {
+						if ( $is_headless[ $support_type ] ) continue;
+
+						$meta[ $meta_key ] = $_meta[ $meta_key ];
+						continue 2;
+					}
+				}
+			}
+		} else {
+			$meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
+		}
+
+		/**
+		 * @since 4.1.4
+		 * @note Do not delete/unset/add indexes! It'll cause errors.
+		 * @param array $meta    The current user meta.
+		 * @param int   $user_id The user ID.
+		 * @param bool  $headless Whether the meta are headless.
+		 */
+		return static::$user_meta[ $user_id ] = \apply_filters_ref_array(
+			'the_seo_framework_user_meta',
+			[
+				array_merge(
+					static::get_user_meta_defaults( $user_id ),
+					$meta,
+				),
+				$user_id,
+				$is_headless['user'],
+			]
+		);
+	}
+
+	/**
+	 * Returns an array of default user meta.
+	 *
+	 * @since 4.1.4
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\User.
+	 *
+	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
+	 * @return array The user meta defaults.
+	 */
+	public static function get_user_meta_defaults( $user_id = 0 ) {
+		/**
+		 * @since 4.1.4
+		 * @param array $defaults
+		 * @param int   $user_id
+		 */
+		return (array) \apply_filters_ref_array(
+			'the_seo_framework_user_meta_defaults',
+			[
+				static::$user_meta_defaults,
+				$user_id ?: Query::get_current_user_id(),
+			]
+		);
+	}
+
+	/**
+	 * Updates user TSF-meta option.
+	 *
+	 * @since 4.1.4
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\User.
+	 *
+	 * @param int    $user_id The user ID.
+	 * @param string $item    The user's SEO meta item to update.
+	 * @param mixed  $value   The option value.
+	 */
+	public static function update_single_user_meta_item( $user_id, $item, $value ) {
+
+		// Make sure the user exists before we go through another hoop of fetching all data.
+		$user    = \get_userdata( $user_id );
+		$user_id = $user->ID ?? null;
+
+		if ( empty( $user_id ) ) return;
+
+		$meta          = static::get_user_meta( $user_id );
+		$meta[ $item ] = $value;
+
+		static::save_user_meta( $user_id, $meta );
+	}
+
+	/**
+	 * Updates users meta from input.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.0 No longer returns the update success state.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\User.
+	 *
+	 * @param int   $user_id The user ID.
+	 * @param array $data    The data to save.
+	 */
+	public static function save_user_meta( $user_id, $data ) {
+
+		$user    = \get_userdata( $user_id );
+		$user_id = $user->ID ?? null;
+
+		if ( empty( $user_id ) ) return;
+
+		/**
+		 * @NOTE Do not remove indexes. We store all data, even if empty,
+		 *       to ensure defaults don't override them.
+		 * @since 4.1.4
+		 * @param array  $data     The data that's going to be saved.
+		 * @param int    $user_id  The user ID.
+		 */
+		$data = (array) \apply_filters_ref_array(
+			'the_seo_framework_save_user_data',
+			[
+				\tsf()->s_user_meta( array_merge(
+					static::get_user_meta_defaults( $user_id ),
+					$data,
+				) ),
+				$user->ID,
+			]
+		);
+
+		unset( static::$user_meta[ $user_id ] );
+
+		\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+	}
+
+	/**
+	 * Deletes term meta.
+	 * Deletes only the default data keys as set by `get_user_meta_defaults()`
+	 * or everything when no custom keys are set.
+	 *
+	 * @since 4.3.0
+	 * @ignore Unused internally. Public API.
+	 *
+	 * @param int $user_id The user ID.
+	 */
+	public static function delete_user_meta( $user_id ) {
+
+		// If this results in an empty data string, all data has already been removed by WP core.
+		$data = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true );
+
+		if ( \is_array( $data ) ) {
+			foreach ( static::get_user_meta_defaults( $user_id ) as $key => $value )
+				unset( $data[ $key ] );
+		}
+
+		unset( static::$user_meta[ $user_id ] );
+
+		// Only delete when no values are left, because someone else might've filtered it.
+		if ( empty( $data ) ) {
+			\delete_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS );
+		} else {
+			\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+		}
+	}
+}

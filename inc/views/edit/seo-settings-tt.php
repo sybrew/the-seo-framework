@@ -22,7 +22,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 // Fetch Term ID and taxonomy.
 $term_id = $term->term_id;
-$meta    = $this->get_term_meta( $term_id );
+$meta    = Data\Plugin\Term::get_term_meta( $term_id );
 
 $title       = $meta['doctitle'];
 $description = $meta['description'];

@@ -47,9 +47,7 @@ class Facebook {
 
 		if ( 'article' !== Open_Graph::get_type() ) return;
 
-		$tsf = \tsf();
-
-		return $tsf->get_current_post_author_meta_item( 'facebook_page' )
+		return Data\Plugin\User::get_current_post_author_meta_item( 'facebook_page' )
 			?: Data\Plugin::get_option( 'facebook_author' );
 	}
 

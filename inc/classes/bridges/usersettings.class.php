@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Bridges;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -46,7 +48,7 @@ final class UserSettings {
 	 */
 	public static function _prepare_setting_fields( $user ) {
 
-		if ( ! \tsf()->user_has_author_info_cap_on_network( $user ) )
+		if ( ! Data\User::user_has_author_info_cap_on_network( $user ) )
 			return;
 
 		static::add_user_author_fields( $user );

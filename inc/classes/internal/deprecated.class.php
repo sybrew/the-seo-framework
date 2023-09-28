@@ -1996,7 +1996,7 @@ final class Deprecated {
 		$facebook_page = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookauthor_output',
 			[
-				$tsf->get_current_post_author_meta_item( 'facebook_page' ) ?: Data\Plugin::get_option( 'facebook_author' ),
+				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'facebook_page' ) ?: Data\Plugin::get_option( 'facebook_author' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -2361,7 +2361,7 @@ final class Deprecated {
 		$creator = (string) \apply_filters_deprecated(
 			'the_seo_framework_twittercreator_output',
 			[
-				$tsf->get_current_post_author_meta_item( 'twitter_page' ) ?: Data\Plugin::get_option( 'twitter_creator' ),
+				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'twitter_page' ) ?: Data\Plugin::get_option( 'twitter_creator' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -5596,18 +5596,36 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param string $item     The item to update.
-	 * @param mixed  $value    The value the item should be at.
-	 * @param int    $term_id  Term ID.
-	 * @param int    $tt_id    Term taxonomy ID.
-	 * @param string $taxonomy Taxonomy slug.
+	 * @param string $item    The item to update.
+	 * @param mixed  $value   The value the item should be at.
+	 * @param int    $term_id Term ID.
 	 */
-	public function update_single_term_meta_item( $item, $value, $term_id, $tt_id, $taxonomy ) {
+	public function update_single_term_meta_item( $item, $value, $term_id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->update_single_term_meta_item()' );
+
+		return $tsf->data()->plugin()->term()->update_single_term_meta_item( $item, $value, $term_id );
+	}
+
+	/**
+	 * Updates term meta from input.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
+	 *              2. Now continues using the filtered term object.
+	 *
+	 * @param int    $term_id  Term ID.
+	 * @param int    $tt_id    Term Taxonomy ID.
+	 * @param string $taxonomy Taxonomy slug.
+	 * @param array  $data     The data to save.
+	 */
+	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->update_single_term_meta_item()' );
 
-		return $tsf->data()->plugin()->post()->update_single_term_meta_item( $item, $value, $term_id, $tt_id, $taxonomy );
+		return $tsf->data()->plugin()->term()->save_term_meta( $term_id, $data );
 	}
 
 	/**
@@ -5663,7 +5681,7 @@ final class Deprecated {
 	public function get_latest_post_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '4.3.0', 'tsf()->data()->post()->get_latest_post_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_latest_post_id()', '4.3.0', 'tsf()->data()->post()->get_latest_post_id()' );
 
 		return $tsf->data()->post()->get_latest_post_id();
 	}
@@ -5734,5 +5752,195 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->update_primary_term_id()', '4.3.0', 'tsf()->data()->plugin()->post()->update_primary_term_id()' );
 
 		return $tsf->data()->plugin()->post()->update_primary_term_id( $post_id, $taxonomy, $value );
+	}
+
+	/**
+	 * Returns the user meta item by key.
+	 *
+	 * @since 4.1.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $item      The item to get. Required.
+	 * @param int    $user_id   The user ID. Optional.
+	 * @return mixed The user meta item. Null when not found.
+	 */
+	public function get_user_meta_item( $item, $user_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->get_user_meta_item()' );
+
+		return $tsf->data()->plugin()->user()->get_user_meta_item( $item, $user_id );
+	}
+
+	/**
+	 * Returns the author meta item by key.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.8 Now returns null when no post author can be established.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $item      The item to get. Required.
+	 * @return mixed The author meta item. Null when not found.
+	 */
+	public function get_current_post_author_meta_item( $item ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->get_current_post_author_meta_item()' );
+
+		return $tsf->data()->plugin()->user()->get_current_post_author_meta_item( $item );
+	}
+
+	/**
+	 * Returns and caches author meta for the current query.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.7 Removed redundant memoization.
+	 * @since 4.2.8 Now returns null when no post author can be established.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return ?array The current author meta, null when no author is set.
+	 */
+	public function get_current_post_author_meta() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->get_current_post_author_meta()' );
+
+		return $tsf->data()->plugin()->user()->get_current_post_author_meta();
+	}
+
+	/**
+	 * Fetches usermeta set by The SEO Framework.
+	 * Memoizes the return value, can be bypassed.
+	 *
+	 * @since 2.7.0
+	 * @since 2.8.0 Always returns array, even if no value is assigned.
+	 * @since 4.1.4 1. Now returns default values when custom values are missing.
+	 *              2. Now listens to headlessness.
+	 *              3. Deprecated the third argument, and moved it to the second.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $user_id The user ID.
+	 * @return array The user SEO meta data.
+	 */
+	public function get_user_meta( $user_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->get_user_meta()' );
+
+		return $tsf->data()->plugin()->user()->get_user_meta( $user_id );
+	}
+
+	/**
+	 * Returns an array of default user meta.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
+	 * @return array The user meta defaults.
+	 */
+	public function get_user_meta_defaults( $user_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_user_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->user()->get_user_meta_defaults()' );
+
+		return $tsf->data()->plugin()->user()->get_user_meta_defaults( $user_id );
+	}
+
+	/**
+	 * Updates user TSF-meta option.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @param int    $user_id The user ID.
+	 * @param string $option  The user's SEO metadata to update.
+	 * @param mixed  $value   The option value.
+	 */
+	public function update_single_user_meta_item( $user_id, $option, $value ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->update_single_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->update_single_user_meta_item()' );
+
+		return $tsf->data()->plugin()->user()->update_single_user_meta_item( $user_id, $option, $value );
+	}
+
+	/**
+	 * Updates users meta from input.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.0 No longer returns the update success state.
+	 *
+	 * @param int   $user_id The user ID.
+	 * @param array $data    The data to save.
+	 */
+	public function save_user_meta( $user_id, $data ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->save_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->save_user_meta()' );
+
+		return $tsf->data()->plugin()->user()->save_user_meta( $user_id, $data );
+	}
+
+	/**
+	 * Returns the post author ID.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *              2. Now always returns an integer.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $post_id The post ID to fetch the author from. Leave 0 to autodetermine.
+	 * @return int Post author ID on success, 0 on failure.
+	 */
+	public function get_post_author_id( $post_id = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_author_id()', '4.3.0', 'tsf()->query()->get_post_author_id()' );
+
+		return $tsf->query()->get_post_author_id( $post_id );
+	}
+
+	/**
+	 * Returns the current post author ID.
+	 * Memoizes the return value for the current request.
+	 *
+	 * @since 3.0.0
+	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
+	 *              2. Now always returns an integer.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return int Post author ID on success, 0 on failure.
+	 */
+	public function get_current_post_author_id() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_id()', '4.3.0', 'tsf()->query()->get_post_author_id()' );
+
+		return $tsf->query()->get_post_author_id();
+	}
+
+	/**
+	 * Sets up user ID and returns it if user is found.
+	 * To be used in AJAX, back-end and front-end.
+	 *
+	 * @since 2.7.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return int The user ID. 0 if user is not found.
+	 */
+	public function get_user_id() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_user_id()', '4.3.0', 'tsf()->query()->get_current_user_id()' );
+
+		return $tsf->query()->get_current_user_id();
 	}
 }

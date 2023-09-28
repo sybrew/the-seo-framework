@@ -9,19 +9,21 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
+use \The_SEO_Framework\Data;
+
 $fields = [
 	'tsf-user-meta[facebook_page]' => [
 		'name'        => __( 'Facebook profile page', 'autodescription' ),
 		'type'        => 'url',
 		'placeholder' => _x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
-		'value'       => $this->get_user_meta_item( 'facebook_page', $user->ID ),
+		'value'       => Data\Plugin\User::get_user_meta_item( 'facebook_page', $user->ID ),
 		'class'       => '',
 	],
 	'tsf-user-meta[twitter_page]'  => [
 		'name'        => __( 'Twitter profile name', 'autodescription' ),
 		'type'        => 'text',
 		'placeholder' => _x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
-		'value'       => $this->get_user_meta_item( 'twitter_page', $user->ID ),
+		'value'       => Data\Plugin\User::get_user_meta_item( 'twitter_page', $user->ID ),
 		'class'       => 'ltr',
 	],
 ];
