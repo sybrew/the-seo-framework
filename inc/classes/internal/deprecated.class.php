@@ -4945,7 +4945,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
 
-		return $tsf->get_post_type_archive_meta_item( 'canonical', $pta ) ?: '';
+		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_item( 'canonical', $pta ) ?: '';
 	}
 
 	/**
@@ -5488,7 +5488,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_static_cache()', '4.3.0', 'tsf()->data()->plugin()->get_site_cache()' );
 
-		return \tsf()->data()->plugin()->get_site_cache( $key ) ?? $default;
+		return $tsf->data()->plugin()->get_site_cache( $key ) ?? $default;
 	}
 
 	/**
@@ -6175,5 +6175,82 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->save_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->save_post_meta()' );
 
 		return $tsf->data()->plugin()->post()->save_post_meta( $post, $data );
+	}
+
+	/**
+	 * Returns all post type archive meta.
+	 *
+	 * We do not test whether a post type is supported, for it'll conflict with data-fills on the
+	 * SEO settings page. This meta should never get called on the front-end if the post type is
+	 * disabled, anyway, for we never query post types externally, aside from the SEO settings page.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type The post type.
+	 * @return array The post type archive's meta item's values.
+	 */
+	public function get_post_type_archive_meta( $post_type ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta()' );
+
+		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta( $post_type );
+	}
+
+	/**
+	 * Returns a single post type archive item's value.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $item      The item to get.
+	 * @param string $post_type The post type.
+	 * @return ?mixed The post type archive's meta item value. Null when item isn't registered.
+	 */
+	public function get_post_type_archive_meta_item( $item, $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_item()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()' );
+
+		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_item( $item, $post_type );
+	}
+
+	/**
+	 * Returns an array of all public post type archive option defaults.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array[] The Post Type Archive Metadata default options
+	 *                 of all public Post Type archives.
+	 */
+	public function get_all_post_type_archive_meta_defaults() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_all_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()' );
+
+		return $tsf->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults();
+	}
+
+	/**
+	 * Returns an array of default post type archive meta.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $post_type The post type.
+	 * @return array The Post Type Archive Metadata default options.
+	 */
+	public function get_post_type_archive_meta_defaults( $post_type = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()' );
+
+		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_defaults( $post_type );
 	}
 }

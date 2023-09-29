@@ -273,7 +273,7 @@ class Title {
 		} elseif ( Query::is_editable_term() ) {
 			$title = Data\Plugin\Term::get_term_meta_item( 'doctitle' );
 		} elseif ( \is_post_type_archive() ) {
-			$title = \tsf()->get_post_type_archive_meta_item( 'doctitle' );
+			$title = Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle' );
 		}
 
 		return $title ?? '' ?: '';
@@ -294,7 +294,7 @@ class Title {
 		if ( $args['tax'] ) {
 			$title = Data\Plugin\Term::get_term_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$title = \tsf()->get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
+			$title = Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$title = Data\Plugin::get_option( 'homepage_title' )

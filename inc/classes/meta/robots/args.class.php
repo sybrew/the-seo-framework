@@ -77,7 +77,7 @@ final class Args extends Factory {
 			} elseif ( $args['id'] ) {
 				$qubit = (int) Data\Plugin\Post::get_post_meta_item( "_genesis_$type", $args['id'] );
 			} elseif ( $args['pta'] ) {
-				$qubit = (int) static::$tsf->get_post_type_archive_meta_item( $type, $args['pta'] );
+				$qubit = (int) Data\Plugin\PTA::get_post_type_archive_meta_item( $type, $args['pta'] );
 			}
 
 			switch ( isset( $qubit ) ) {

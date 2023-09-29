@@ -55,8 +55,8 @@ class Term {
 	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Term.
 	 *
-	 * @param string $item      The item to get.
-	 * @param int    $term_id   The Term ID.
+	 * @param string $item    The item to get.
+	 * @param int    $term_id The Term ID.
 	 * @return mixed The term meta item. Null when not found.
 	 */
 	public static function get_term_meta_item( $item, $term_id = 0 ) {

@@ -390,8 +390,8 @@ class Image {
 				];
 			} elseif ( \is_post_type_archive() ) {
 				$details = [
-					'url' => \tsf()->get_post_type_archive_meta_item( 'social_image_url' ),
-					'id'  => \tsf()->get_post_type_archive_meta_item( 'social_image_id' ),
+					'url' => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url' ),
+					'id'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id' ),
 				];
 			}
 		}
@@ -439,8 +439,8 @@ class Image {
 				];
 			} elseif ( $args['pta'] ) {
 				$details = [
-					'url' => \tsf()->get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
-					'id'  => \tsf()->get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
+					'url' => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
+					'id'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
 				];
 			} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$details = [

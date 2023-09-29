@@ -273,7 +273,7 @@ class Breadcrumbs {
 				];
 			} elseif ( \is_post_type_archive() ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_post_type_archive_canonical_url( $object->name ),
+					'url'  => Meta\URI::get_bare_post_type_archive_canonical_url(),
 					'name' => Meta\Title::get_bare_title(),
 				];
 			} elseif ( Query::is_author() ) {

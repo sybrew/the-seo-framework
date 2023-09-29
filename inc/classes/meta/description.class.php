@@ -209,7 +209,7 @@ class Description {
 		} elseif ( Query::is_editable_term() ) {
 			$desc = Data\Plugin\Term::get_term_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
-			$desc = \tsf()->get_post_type_archive_meta_item( 'description' );
+			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'description' );
 		}
 
 		return $desc ?? '' ?: '';
@@ -233,7 +233,7 @@ class Description {
 		if ( $args['tax'] ) {
 			$desc = Data\Plugin\Term::get_term_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$desc = \tsf()->get_post_type_archive_meta_item( 'description', $args['pta'] );
+			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' )

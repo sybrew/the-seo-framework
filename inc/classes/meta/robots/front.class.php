@@ -77,7 +77,7 @@ final class Front extends Factory {
 			} elseif ( Query::is_singular() ) {
 				$qubit = (int) Data\Plugin\Post::get_post_meta_item( "_genesis_$type" );
 			} elseif ( \is_post_type_archive() ) {
-				$qubit = (int) static::$tsf->get_post_type_archive_meta_item( $type );
+				$qubit = (int) Data\Plugin\PTA::get_post_type_archive_meta_item( $type );
 			}
 
 			switch ( isset( $qubit ) ) {

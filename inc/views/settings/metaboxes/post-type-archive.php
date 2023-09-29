@@ -48,21 +48,19 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</div>
 		<?php
 		$i = 0;
+
+		/**
+		 * This data isn't read, only the keys are used -- there are more filters affecting the default output
+		 * That ultimately lead to the data this method feeds.
+		 */
+		$pta_defaults = Data\Plugin\PTA::get_all_post_type_archive_meta_defaults();
+
 		foreach ( $post_types as $post_type ) {
 			$_generator_args = [ 'pta' => $post_type ];
+			$_option_map     = [];
 
-			// Create `[ 'doctitle' => [ 'pta', $post_type ] ];`
-			$_option_map = array_fill_keys(
-				array_keys( $this->get_unfiltered_post_type_archive_meta_defaults() ),
-				[ 'pta', $post_type ]
-			);
-			// Create: `[ 'doctitle' => [ 'pta', $post_type, 'doctitle' ] ];`
-			array_walk(
-				$_option_map,
-				static function ( &$input_id, $key ) {
-					$input_id = array_merge( $input_id, [ $key ] );
-				}
-			);
+			foreach ( $pta_defaults[ $post_type ] as $_option => $_default )
+				$_option_map[ $_option ] = [ 'pta', $post_type, $_option ];
 
 			$tabs = [
 				'general'    => [
@@ -183,7 +181,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'doctitle', $post_type ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle', $post_type ) ) ?>" autocomplete=off />
 			<?php
 			$pto = get_post_type_object( $post_type );
 
@@ -220,7 +218,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				Input::make_checkbox( [
 					'id'     => $_option_map['title_no_blog_name'],
 					'label'  => esc_html__( 'Remove the site title?', 'autodescription' ) . " $info",
-					'value'  => $this->get_post_type_archive_meta_item( 'title_no_blog_name', $post_type ),
+					'value'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'title_no_blog_name', $post_type ),
 					'escape' => false,
 				] ),
 				true
@@ -248,7 +246,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_pixel_counter_wrap( Input::get_field_id( $_option_map['description'] ), 'description', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( $_option_map['description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['description'] ); ?>" rows=3 cols=70><?= esc_attr( $this->get_post_type_archive_meta_item( 'description', $post_type ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( $_option_map['description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['description'] ); ?>" rows=3 cols=70><?= esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'description', $post_type ) ) ?></textarea>
 			<?php
 			$this->output_js_description_elements(); // legacy
 			$this->output_js_description_data(
@@ -295,7 +293,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $_option_map['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'og_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( $_option_map['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogTitle />
 		</p>
 
 		<p>
@@ -308,7 +306,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( $_option_map['og_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogDesc><?= esc_attr( $this->get_post_type_archive_meta_item( 'og_description', $post_type ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( $_option_map['og_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogDesc><?= esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_description', $post_type ) ) ?></textarea>
 		</p>
 
 		<hr>
@@ -323,7 +321,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( $this->get_post_type_archive_meta_item( 'tw_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twTitle />
 		</p>
 
 		<p>
@@ -336,7 +334,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( $_option_map['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twDesc><?= esc_attr( $this->get_post_type_archive_meta_item( 'tw_description', $post_type ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( $_option_map['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twDesc><?= esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_description', $post_type ) ) ?></textarea>
 		</p>
 
 		<hr>
@@ -353,8 +351,8 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( Meta\Image::get_first_generated_image_url( $_generator_args, 'social' ) ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( $_option_map['social_image_id'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-id" value="<?= absint( $this->get_post_type_archive_meta_item( 'social_image_id', $post_type ) ) ?>" disabled class=tsf-enable-media-if-js />
+			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( Meta\Image::get_first_generated_image_url( $_generator_args, 'social' ) ) ?>" value="<?= esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( $_option_map['social_image_id'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-id" value="<?= absint( Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id', $post_type ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
@@ -379,7 +377,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= Meta\URI::get_generated_canonical_url( $_generator_args ) ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= Meta\URI::get_generated_canonical_url( $_generator_args ) ?>" value="<?= esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
 		</p>
 
 		<hr>
@@ -391,7 +389,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				'label'       => __( 'Indexing', 'autodescription' ),
 				'_defaultOn'  => 'index',
 				'_defaultOff' => 'noindex',
-				'_value'      => $this->get_post_type_archive_meta_item( 'noindex', $post_type ),
+				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'noindex', $post_type ),
 				'_info'       => [
 					__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
@@ -403,7 +401,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				'label'       => __( 'Link following', 'autodescription' ),
 				'_defaultOn'  => 'follow',
 				'_defaultOff' => 'nofollow',
-				'_value'      => $this->get_post_type_archive_meta_item( 'nofollow', $post_type ),
+				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'nofollow', $post_type ),
 				'_info'       => [
 					__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
@@ -415,7 +413,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				'label'       => __( 'Archiving', 'autodescription' ),
 				'_defaultOn'  => 'archive',
 				'_defaultOff' => 'noarchive',
-				'_value'      => $this->get_post_type_archive_meta_item( 'noarchive', $post_type ),
+				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'noarchive', $post_type ),
 				'_info'       => [
 					__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
@@ -479,7 +477,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $_option_map['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['redirect'] ); ?>" value="<?= esc_url( $this->get_post_type_archive_meta_item( 'redirect', $post_type ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $_option_map['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['redirect'] ); ?>" value="<?= esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect', $post_type ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 endswitch;

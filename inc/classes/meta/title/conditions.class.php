@@ -213,7 +213,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_post_type_archive_title_branding( $pta = '' ) {
-		return ! \tsf()->get_post_type_archive_meta_item( 'title_no_blog_name', $pta )
+		return ! Data\Plugin\PTA::get_post_type_archive_meta_item( 'title_no_blog_name', $pta )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 

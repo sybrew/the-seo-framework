@@ -633,6 +633,15 @@ TODO get_post_meta* -> get_meta
 	-> also get_term_meta*
 	-> also get_post_type_archive_meta
 	-> also get_user_meta*
+		-> get_term_meta_defaults -> "get_default_meta"
+
+TODO instead of removing Elementor library from public posts types, force noindex on them?
+	-> Because we already excluded them, they're unlikely to be found by crawlers, though.
+	-> Having them still included will add a bunch of metadata fields to the admin; perhaps we should allow them on the front-end, and noindex them on the back-end?
+		-> Or we could use wp_robots filters? It's their mess, though.
+
+TODO make multiline deprecation notices over .{120,}
+	_deprecated_function.{100,}
 
 **Detailed log**
 
@@ -835,6 +844,7 @@ TODO get_post_meta* -> get_meta
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
 	* The `<font>` tag is deprecated, so we updated the tag and its to `<span>` in the debug panels.
 		* These Easter eggs were fun while they lasted.
+	* Resolved an issue where Post Type Archive metadata could still be obtained after the post type is set to not be supported by TSF.
 * **Option notes:**
 	* For option index `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* **Added:**
@@ -1169,6 +1179,10 @@ TODO get_post_meta* -> get_meta
 				* `tsf()->get_post_meta_defaults()`, use `tsf()->data()->plugin()->post()->get_post_meta_defaults()` instead.
 				* `tsf()->update_single_post_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_post_meta_item()` instead.
 				* `tsf()->save_post_meta()`, use `tsf()->data()->plugin()->post()->save_post_meta()` instead.
+				* `tsf()->get_post_type_archive_meta()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta()` instead.
+				* `tsf()->get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()` instead.
+				* `tsf()->get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
+				* `tsf()->get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

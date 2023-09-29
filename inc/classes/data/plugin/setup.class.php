@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Data\Plugin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 use \The_SEO_Framework\Traits\Property_Refresher;
 
 /**
@@ -200,10 +202,10 @@ class Setup {
 				'home_paged_noindex' => 0, // Every second or later homepage noindex
 
 				// Robots copyright.
-				'set_copyright_directives' => 1,          // Allow copyright directive settings.
-				'max_snippet_length'       => -1,         // Max text-snippet length. -1 = unlimited, 0 = disabled, R>0 = characters.
-				'max_image_preview'        => 'large',    // Max image-preview size. 'none', 'standard', 'large'.
-				'max_video_preview'        => -1,         // Max video-preview size. -1 = unlimited, 0 = disabled, R>0 = seconds.
+				'set_copyright_directives' => 1,       // Allow copyright directive settings.
+				'max_snippet_length'       => -1,      // Max text-snippet length. -1 = unlimited, 0 = disabled, R>0 = characters.
+				'max_image_preview'        => 'large', // Max image-preview size. 'none', 'standard', 'large'.
+				'max_video_preview'        => -1,      // Max video-preview size. -1 = unlimited, 0 = disabled, R>0 = seconds.
 
 				// Robots home.
 				'homepage_noindex'   => 0, // Homepage robots noindex
@@ -226,8 +228,8 @@ class Setup {
 				'homepage_social_image_url' => '',
 				'homepage_social_image_id'  => 0,
 
-				// Post Type Archives.
-				'pta' => \tsf()->get_all_post_type_archive_meta_defaults(), // All of it. See \tsf()->get_post_type_archive_meta(), which calls this index.
+				// Post Type Archives. Prefill all of it for easy filtering, even though it's dynamically populated.
+				'pta' => Data\Plugin\PTA::get_all_post_type_archive_meta_defaults(),
 
 				// Relationships.
 				'shortlink_tag'       => 0, // Adds shortlink tag

@@ -154,7 +154,7 @@ class Open_Graph {
 		} elseif ( Query::is_editable_term() ) {
 			$title = Data\Plugin\Term::get_term_meta_item( 'og_title' );
 		} elseif ( \is_post_type_archive() ) {
-			$title = \tsf()->get_post_type_archive_meta_item( 'og_title' );
+			$title = Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title' );
 		}
 
 		if ( isset( $title ) ) {
@@ -182,7 +182,7 @@ class Open_Graph {
 		if ( $args['tax'] ) {
 			$title = Data\Plugin\Term::get_term_meta_item( 'og_title', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$title = \tsf()->get_post_type_archive_meta_item( 'og_title', $args['pta'] );
+			$title = Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$title = Data\Plugin::get_option( 'homepage_og_title' )
@@ -280,7 +280,7 @@ class Open_Graph {
 		} elseif ( Query::is_editable_term() ) {
 			$desc = Data\Plugin\Term::get_term_meta_item( 'og_description' );
 		} elseif ( \is_post_type_archive() ) {
-			$desc = \tsf()->get_post_type_archive_meta_item( 'og_description' );
+			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_description' );
 		}
 
 		if ( isset( $desc ) ) {
@@ -308,7 +308,7 @@ class Open_Graph {
 		if ( $args['tax'] ) {
 			$desc = Data\Plugin\Term::get_term_meta_item( 'og_description', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$desc = \tsf()->get_post_type_archive_meta_item( 'og_description', $args['pta'] );
+			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = Data\Plugin::get_option( 'homepage_og_description' )
