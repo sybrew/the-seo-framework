@@ -63,7 +63,7 @@ final class Head {
 		$bootstrap_timer = \The_SEO_Framework\_bootstrap_timer();
 		/**
 		 * Start the meta timer here. This also catches file inclusions,
-		 * which is also caught by the _bootstrap_timer().
+		 * which _bootstrap_timer() also reads; hence, we separate them.
 		 */
 		$print_start = hrtime( true );
 

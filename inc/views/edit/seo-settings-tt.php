@@ -50,7 +50,7 @@ $show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
 
 $image_placeholder = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 
-$canonical_placeholder = Meta\URI::get_generated_canonical_url( $_generator_args );
+$canonical_placeholder = Meta\URI::get_generated_url( $_generator_args );
 $robots_defaults       = Meta\Robots::generate_meta(
 	$_generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],

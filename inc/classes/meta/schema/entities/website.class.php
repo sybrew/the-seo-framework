@@ -63,7 +63,7 @@ final class WebSite extends Reference {
 		$entity = [
 			'@type'       => &static::$type,
 			'@id'         => static::get_id(),
-			'url'         => Meta\URI::get_bare_front_page_canonical_url(),
+			'url'         => Meta\URI::get_bare_front_page_url(),
 			'name'        => Data\Blog::get_public_blog_name(),
 			'description' => Data\Blog::get_filtered_blog_description(),
 			'inLanguage'  => Data\Blog::get_language(),
@@ -78,7 +78,7 @@ final class WebSite extends Reference {
 					'urlTemplate' => str_replace(
 						'tsf_search_term_string',
 						'{search_term_string}',
-						Meta\URI::get_bare_search_canonical_url( 'tsf_search_term_string' )
+						Meta\URI::get_bare_search_url( 'tsf_search_term_string' )
 					),
 				],
 				'query-input' => 'required name=search_term_string',

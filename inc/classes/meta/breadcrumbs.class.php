@@ -101,7 +101,7 @@ class Breadcrumbs {
 		} elseif ( Query::is_singular() ) {
 			return static::get_singular_breadcrumb_list();
 		} elseif ( Query::is_archive() ) {
-			// var_dump() make this akin to get_generated_canonical_url_from_query()?
+			// var_dump() make this akin to get_generated_url_from_query()?
 			return static::get_archive_breadcrumb_list();
 		} elseif ( Query::is_search() ) {
 			return static::get_search_breadcrumb_list();
@@ -127,7 +127,7 @@ class Breadcrumbs {
 	 */
 	private static function get_breadcrumb_list_from_args( $args ) {
 
-		// var_dump() make this akin to get_generated_canonical_url_from_args()?
+		// var_dump() make this akin to get_generated_url_from_args()?
 		if ( $args['tax'] ) {
 			return static::get_archive_breadcrumb_list( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
@@ -180,7 +180,7 @@ class Breadcrumbs {
 			// get_post_ancestors() has no filter. get_ancestors() isn't used for posts in WP.
 			foreach ( array_reverse( $post->ancestors ) as $ancestor_id ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_singular_canonical_url( $ancestor_id ),
+					'url'  => Meta\URI::get_bare_singular_url( $ancestor_id ),
 					'name' => Meta\Title::get_bare_title( [ 'id' => $ancestor_id ] ),
 				];
 			}
@@ -198,7 +198,7 @@ class Breadcrumbs {
 
 				foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
 					$crumbs[] = [
-						'url'  => Meta\URI::get_bare_taxonomical_canonical_url( $ancestor_id, $taxonomy ),
+						'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
 						'name' => Meta\Title::get_bare_title( [
 							'id'  => $ancestor_id,
 							'tax' => $taxonomy,
@@ -207,7 +207,7 @@ class Breadcrumbs {
 				}
 
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_taxonomical_canonical_url( $primary_term_id, $taxonomy ),
+					'url'  => Meta\URI::get_bare_term_url( $primary_term_id, $taxonomy ),
 					'name' => Meta\Title::get_bare_title( [
 						'id'  => $primary_term_id,
 						'tax' => $taxonomy,
@@ -215,14 +215,14 @@ class Breadcrumbs {
 				];
 			} elseif ( \get_post_type_object( $post_type )->has_archive ?? false ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_post_type_archive_canonical_url( $post_type ),
+					'url'  => Meta\URI::get_bare_post_type_archive_url( $post_type ),
 					'name' => Meta\Title::get_bare_title( [ 'pta' => $post_type ] ),
 				];
 			}
 		}
 
 		$crumbs[] = [
-			'url'  => Meta\URI::get_bare_singular_canonical_url( $post->ID ),
+			'url'  => Meta\URI::get_bare_singular_url( $post->ID ),
 			'name' => Meta\Title::get_bare_title( [ 'id' => $post->ID ] ),
 		];
 
@@ -259,7 +259,7 @@ class Breadcrumbs {
 
 				foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
 					$crumbs[] = [
-						'url'  => Meta\URI::get_bare_taxonomical_canonical_url( $ancestor_id, $taxonomy ),
+						'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
 						'name' => Meta\Title::get_bare_title( [
 							'id'  => $ancestor_id,
 							'tax' => $taxonomy,
@@ -268,17 +268,17 @@ class Breadcrumbs {
 				}
 
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_taxonomical_canonical_url(),
+					'url'  => Meta\URI::get_bare_term_url(),
 					'name' => Meta\Title::get_bare_title(),
 				];
 			} elseif ( \is_post_type_archive() ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_post_type_archive_canonical_url(),
+					'url'  => Meta\URI::get_bare_post_type_archive_url(),
 					'name' => Meta\Title::get_bare_title(),
 				];
 			} elseif ( Query::is_author() ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_author_canonical_url(),
+					'url'  => Meta\URI::get_bare_author_url(),
 					'name' => Meta\Title::get_bare_title(),
 				];
 			} elseif ( \is_date() ) {
@@ -287,7 +287,7 @@ class Breadcrumbs {
 				$day   = \get_query_var( 'day' );
 
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_date_canonical_url( $year, $month, $day ),
+					'url'  => Meta\URI::get_bare_date_url( $year, $month, $day ),
 					'name' => Meta\Title::get_bare_title(),
 				];
 			}
@@ -303,7 +303,7 @@ class Breadcrumbs {
 
 			foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_taxonomical_canonical_url( $ancestor_id, $taxonomy ),
+					'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
 					'name' => Meta\Title::get_bare_title( [
 						'id'  => $ancestor_id,
 						'tax' => $taxonomy,
@@ -312,7 +312,7 @@ class Breadcrumbs {
 			}
 
 			$crumbs[] = [
-				'url'  => Meta\URI::get_bare_taxonomical_canonical_url( $term_id, $taxonomy, ),
+				'url'  => Meta\URI::get_bare_term_url( $term_id, $taxonomy ),
 				'name' => Meta\Title::get_bare_title( [
 					'id'  => $term_id,
 					'tax' => $taxonomy,
@@ -320,7 +320,7 @@ class Breadcrumbs {
 			];
 		} elseif ( $object instanceof \WP_Post_Type ) {
 			$crumbs[] = [
-				'url'  => Meta\URI::get_post_type_archive_canonical_url( $object->name ),
+				'url'  => Meta\URI::get_post_type_archive_url( $object->name ),
 				'name' => Meta\Title::get_bare_title( [
 					'pta' => $object->name,
 				] ),
@@ -328,7 +328,7 @@ class Breadcrumbs {
 		} elseif ( $object instanceof \WP_User ) {
 			// TODO add, next to 'id', 'tax', and 'pta' support, also 'uid'
 			$crumbs[] = [
-				'url'  => Meta\URI::get_author_canonical_url( $object->id ),
+				'url'  => Meta\URI::get_author_url( $object->id ),
 				'name' => Meta\Title::get_archive_title_from_object( $object ),
 			];
 		}
@@ -353,7 +353,7 @@ class Breadcrumbs {
 		return [
 			static::get_front_breadcrumb(),
 			[
-				'url'  => Meta\URI::get_search_canonical_url(),
+				'url'  => Meta\URI::get_search_url(),
 				'name' => Meta\Title::get_search_query_title(),
 			],
 		];
@@ -391,7 +391,7 @@ class Breadcrumbs {
 	 */
 	private static function get_front_breadcrumb() {
 		return [
-			'url'  => Meta\URI::get_bare_front_page_canonical_url(),
+			'url'  => Meta\URI::get_bare_front_page_url(),
 			'name' => Meta\Title::get_front_page_title(),
 		];
 	}

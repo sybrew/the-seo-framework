@@ -684,7 +684,7 @@ final class Page extends Main {
 		}
 
 		if ( $this->query_cache['meta']['_genesis_canonical_uri'] ) {
-			$permalink = Meta\URI::get_generated_canonical_url( [
+			$permalink = Meta\URI::get_generated_url( [
 				'id' => static::$query['id'],
 			] );
 			// We create it because filters may apply.

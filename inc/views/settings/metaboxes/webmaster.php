@@ -16,7 +16,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 switch ( $this->get_view_instance( 'webmaster', $instance ) ) :
 	case 'webmaster_main':
-		$site_url = Meta\URI::get_bare_front_page_canonical_url();
+		$site_url = Meta\URI::get_bare_front_page_url();
 
 		$settings = [
 			'google'    => [

@@ -650,6 +650,10 @@ TODO Also see https://wordpress.org/support/topic/canonicals-in-sitemap/ -- we s
 TODO Remove all "$escape" parameters from the meta generators, and always _sanitize_ where data is generated. Let the dev escape when necessary.
 	-> This saves a jump, and actually improved performance.
 
+TODO make canonical URL placeholder work in _output_column_contents_for_post()
+	-> Also make the Indexing react to the Password/Private states.
+		-> This already works for the title.
+
 **Detailed log**
 
 **For everyone:**
@@ -900,7 +904,7 @@ TODO Remove all "$escape" parameters from the meta generators, and always _sanit
 		* For class `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 			* **Methods added:**
 				* `detect_multilingual_plugins()`
-			* **Methods ennobled:** This means that the methods are now part of the legacy API and will be maintained forevermore.
+			* **Methods ennobled:** These are now part of the legacy API and will be maintained indefinitely.
 				* `get_option()`
 				* `get_options()`
 				* `update_option()`
@@ -1117,17 +1121,17 @@ TODO Remove all "$escape" parameters from the meta generators, and always _sanit
 				* `set_url_scheme()`, use `uri()->utils()->set_url_scheme()` instead.
 				* `make_fully_qualified_url()`, use `uri()->utils()->make_fully_qualified_url()` instead.
 				* `get_current_canonical_url()`, use `tsf()->uri()->get_canonical_url()` instead.
-				* `get_current_permalink()`, use `tsf()->uri()->get_generated_canonical_url()` instead.
-				* `get_homepage_permalink()`, use `tsf()->uri()->get_bare_front_page_canonical_url()` instead.
+				* `get_current_permalink()`, use `tsf()->uri()->get_generated_permalink()` instead.
+				* `get_homepage_permalink()`, use `tsf()->uri()->get_bare_front_page_url()` instead.
 				* `create_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
-				* `get_home_canonical_url()`, use `tsf->uri()->get_front_page_canonical_url()` instead.
-				* `get_raw_home_canonical_url()`, use `tsf->uri()->get_bare_front_page_canonical_url()` instead.
-				* `get_singular_canonical_url()`, use `tsf()->uri()->get_singular_canonical_url()` instead.
-				* `get_taxonomical_canonical_url()`, use `tsf()->uri()->get_taxonomical_canonical_url()` instead.
-				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_post_type_archive_canonical_url()` instead.
-				* `get_author_canonical_url()`, use `tsf()->uri()->get_author_canonical_url()` instead.
-				* `get_date_canonical_url()`, use `tsf()->uri()->get_date_canonical_url()` instead.
-				* `get_search_canonical_url()`, use `tsf()->uri()->get_search_canonical_url()` instead.
+				* `get_home_canonical_url()`, use `tsf->uri()->get_front_page_url()` instead.
+				* `get_raw_home_canonical_url()`, use `tsf->uri()->get_bare_front_page_url()` instead.
+				* `get_singular_canonical_url()`, use `tsf()->uri()->get_singular_url()` instead.
+				* `get_taxonomical_canonical_url()`, use `tsf()->uri()->get_term_url()` instead.
+				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_post_type_archive_url()` instead.
+				* `get_author_canonical_url()`, use `tsf()->uri()->get_author_url()` instead.
+				* `get_date_canonical_url()`, use `tsf()->uri()->get_date_url()` instead.
+				* `get_search_canonical_url()`, use `tsf()->uri()->get_search_url()` instead.
 				* `add_pagination_to_url()`, use `tsf()->uri()->utils()->add_pagination_to_url()` instead.
 				* `add_url_pagination()`, use `tsf()->uri()->utils()->add_pagination_to_url()` instead.
 				* `remove_pagination_from_url()`, use `tsf->uri()->utils()->remove_pagination_from_url()` instead.

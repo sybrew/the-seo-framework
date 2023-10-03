@@ -12,7 +12,6 @@ use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query;
 
 use function \The_SEO_Framework\{
-	memo,
 	umemo,
 	Utils\normalize_generation_args,
 };

@@ -430,7 +430,7 @@ class Base extends Main {
 			if ( $this->is_post_included_in_sitemap( 0 ) ) {
 				// Reset.
 				$_values        = [];
-				$_values['loc'] = Meta\URI::get_bare_front_page_canonical_url();
+				$_values['loc'] = Meta\URI::get_bare_front_page_url();
 
 				if ( $args['show_modified'] ) {
 					$latests_posts = \wp_get_recent_posts(
@@ -484,12 +484,12 @@ class Base extends Main {
 	protected function generate_url_item_values( $post_ids, $args, &$count = 0 ) {
 
 		foreach ( $post_ids as $post_id ) {
-			// Setup post cache, which is also used in is_post_included_in_sitemap() and get_bare_singular_canonical_url().
+			// Setup post cache, which is also used in is_post_included_in_sitemap() and get_bare_singular_url().
 			$post = \get_post( $post_id );
 
 			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
 				$_values = [
-					'loc' => Meta\URI::get_bare_singular_canonical_url( $post_id ),
+					'loc' => Meta\URI::get_bare_singular_url( $post_id ),
 				];
 
 				if ( $args['show_modified'] )

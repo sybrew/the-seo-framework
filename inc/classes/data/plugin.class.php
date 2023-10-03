@@ -67,7 +67,7 @@ class Plugin {
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
-	 *                       When empty, it'll return all options. You should use get_all_options() instead.
+	 *                       When empty, it'll return all options. You should use get_options() instead.
 	 * @return mixed The TSF option value. Null when not found.
 	 */
 	public static function get_option( ...$key ) {
@@ -120,7 +120,8 @@ class Plugin {
 	/**
 	 * Updates options. Also updates the option cache if the settings aren't headless.
 	 *
-	 * @since 4.3.0
+	 * @since 2.9.0
+	 * @since 4.3.0 Moved to `The_SEO_Framework\Data`.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -134,6 +135,8 @@ class Plugin {
 			\is_array( $option ) ? $option : [ $option => $value ]
 		);
 
+		// The current request is still headless -- so do not update the state.
+		// The next request may have filtered this value, or the update was blocked.
 		if ( ! is_headless( 'settings' ) )
 			static::$options = $options;
 

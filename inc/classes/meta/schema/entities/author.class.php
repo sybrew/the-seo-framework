@@ -91,7 +91,7 @@ final class Author extends Reference {
 		if ( empty( $author_id ) )
 			return '';
 
-		return Meta\URI::get_bare_front_page_canonical_url()
+		return Meta\URI::get_bare_front_page_url()
 			. '#/schema/' . current( (array) static::$type ) . '/' . \wp_hash( "tsf+$author_id" );
 	}
 
@@ -117,7 +117,7 @@ final class Author extends Reference {
 			'@id'   => static::get_id( [ 'uid' => $author_id ] ),
 			'name'  => $user_data->display_name ?? '',
 			// Let's not; may invoke bad bots. Let's do this via sameas.
-			// 'url'   => Meta\URI::get_bare_author_canonical_url( $author_id ),
+			// 'url'   => Meta\URI::get_bare_author_url( $author_id ),
 		];
 
 		if ( $user_meta['facebook_page'] )

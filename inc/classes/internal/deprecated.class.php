@@ -4453,9 +4453,9 @@ final class Deprecated {
 	public function get_current_permalink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_permalink()', '4.3.0', 'tsf()->uri()->get_generated_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_permalink()', '4.3.0', 'tsf()->uri()->get_generated_url()' );
 
-		return $tsf->uri()->get_generated_canonical_url();
+		return $tsf->uri()->get_generated_url();
 	}
 
 	/**
@@ -4471,9 +4471,9 @@ final class Deprecated {
 	public function get_homepage_permalink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '4.3.0', 'tsf()->uri()->get_bare_front_page_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '4.3.0', 'tsf()->uri()->get_bare_front_page_url()' );
 
-		return $tsf->uri()->get_bare_front_page_canonical_url();
+		return $tsf->uri()->get_bare_front_page_url();
 	}
 
 	/**
@@ -4522,9 +4522,9 @@ final class Deprecated {
 	public function get_home_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '4.3.0', 'tsf->uri()->get_front_page_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '4.3.0', 'tsf->uri()->get_front_page_url()' );
 
-		return $tsf->uri()->get_front_page_canonical_url();
+		return $tsf->uri()->get_front_page_url();
 	}
 
 	/**
@@ -4540,9 +4540,9 @@ final class Deprecated {
 	public function get_raw_home_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '4.3.0', 'tsf->uri()->get_bare_front_page_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '4.3.0', 'tsf->uri()->get_bare_front_page_url()' );
 
-		return $tsf->uri()->get_bare_front_page_canonical_url();
+		return $tsf->uri()->get_bare_front_page_url();
 	}
 
 	/**
@@ -4564,9 +4564,9 @@ final class Deprecated {
 	public function get_singular_canonical_url( $post_id = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_singular_canonical_url()', '4.3.0', 'tsf()->uri()->get_singular_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_singular_canonical_url()', '4.3.0', 'tsf()->uri()->get_singular_url()' );
 
-		return $tsf->uri()->get_singular_canonical_url( $post_id );
+		return $tsf->uri()->get_singular_url( $post_id );
 	}
 
 	/**
@@ -4588,9 +4588,9 @@ final class Deprecated {
 	public function get_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_taxonomical_canonical_url()', '4.3.0', 'tsf()->uri()->get_taxonomical_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_taxonomical_canonical_url()', '4.3.0', 'tsf()->uri()->get_term_url()' );
 
-		return $tsf->uri()->get_taxonomical_canonical_url( $term_id, $taxonomy );
+		return $tsf->uri()->get_term_url( $term_id, $taxonomy );
 	}
 
 	/**
@@ -4609,9 +4609,9 @@ final class Deprecated {
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '4.3.0', 'tsf()->uri()->get_post_type_archive_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '4.3.0', 'tsf()->uri()->get_post_type_archive_url()' );
 
-		return $tsf->uri()->get_post_type_archive_canonical_url( $post_type );
+		return $tsf->uri()->get_post_type_archive_url( $post_type );
 	}
 
 	/**
@@ -4630,9 +4630,9 @@ final class Deprecated {
 	public function get_author_canonical_url( $id = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_author_canonical_url()', '4.3.0', 'tsf()->uri()->get_author_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_author_canonical_url()', '4.3.0', 'tsf()->uri()->get_author_url()' );
 
-		return $tsf->uri()->get_author_canonical_url( $id );
+		return $tsf->uri()->get_author_url( $id );
 	}
 
 	/**
@@ -4651,9 +4651,9 @@ final class Deprecated {
 	public function get_date_canonical_url( $year, $month = null, $day = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_date_canonical_url()', '4.3.0', 'tsf()->uri()->get_date_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_date_canonical_url()', '4.3.0', 'tsf()->uri()->get_date_url()' );
 
-		return $tsf->uri()->get_date_canonical_url( $year, $month, $day );
+		return $tsf->uri()->get_date_url( $year, $month, $day );
 	}
 
 	/**
@@ -4674,9 +4674,9 @@ final class Deprecated {
 	public function get_search_canonical_url( $search_query = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_search_canonical_url()', '4.3.0', 'tsf()->uri()->get_search_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_search_canonical_url()', '4.3.0', 'tsf()->uri()->get_search_url()' );
 
-		return $tsf->uri()->get_search_canonical_url( $search_query );
+		return $tsf->uri()->get_search_url( $search_query );
 	}
 
 	/**

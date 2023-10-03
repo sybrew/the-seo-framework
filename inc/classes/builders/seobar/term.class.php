@@ -642,7 +642,7 @@ final class Term extends Main {
 		}
 
 		if ( $this->query_cache['meta']['canonical'] ) {
-			$permalink = Meta\URI::get_generated_canonical_url( [
+			$permalink = Meta\URI::get_generated_url( [
 				'id'  => static::$query['id'],
 				'tax' => static::$query['tax'],
 			] );
