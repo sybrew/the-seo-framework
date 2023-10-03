@@ -243,7 +243,7 @@ final class ListEdit extends ListTable {
 
 		if ( Query::is_static_frontpage( $_generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
-			$_has_home_title     = (bool) \tsf()->escape_title( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_title     = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
 								 ? Meta\Title::get_custom_title( $_generator_args )
 								 : Meta\Title::get_bare_generated_title( $_generator_args );
@@ -252,14 +252,14 @@ final class ListEdit extends ListTable {
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
-			$_has_home_desc      = (bool) \tsf()->escape_title( Data\Plugin::get_option( 'homepage_description' ) );
+			$_has_home_desc      = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
 								 ? Meta\Description::get_custom_description( $_generator_args )
 								 : Meta\Description::get_generated_description( $_generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
 		} else {
 			$default_title       = Meta\Title::get_bare_generated_title( $_generator_args );
-			$addition            = Data\Blog::get_public_blog_name();
+			$addition            = Meta\Title::get_addition();
 			$seplocation         = Meta\Title::get_addition_location();
 			$is_title_ref_locked = false;
 
@@ -272,9 +272,9 @@ final class ListEdit extends ListTable {
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
-			'defaultTitle'      => \tsf()->s_title( $default_title ),
+			'defaultTitle'      => \tsf()->escape_title( $default_title ),
 			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
-			'additionValue'     => \tsf()->s_title( $addition ),
+			'additionValue'     => \tsf()->escape_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
 		$desc_data  = [
@@ -328,8 +328,6 @@ final class ListEdit extends ListTable {
 
 		if ( $this->column_name !== $column_name )          return $string;
 		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;
-
-		$tsf = \tsf();
 
 		$_generator_args = [
 			'id'  => $term_id,
@@ -415,9 +413,9 @@ final class ListEdit extends ListTable {
 
 		$title_data = [
 			'refTitleLocked'    => false,
-			'defaultTitle'      => $tsf->s_title( Meta\Title::get_bare_generated_title( $_generator_args ) ),
+			'defaultTitle'      => \tsf()->escape_title( Meta\Title::get_bare_generated_title( $_generator_args ) ),
 			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
-			'additionValue'     => $tsf->s_title( Data\Blog::get_public_blog_name() ),
+			'additionValue'     => \tsf()->escape_title( Meta\Title::get_addition() ),
 			'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];

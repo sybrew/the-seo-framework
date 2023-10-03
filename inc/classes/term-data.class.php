@@ -103,7 +103,7 @@ class Term_Data extends Post_Data {
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
 			Data\Plugin\Term::get_term_meta( $term->term_id, false ),
-			(array) $_POST['autodescription-quick']
+			(array) \wp_unslash( $_POST['autodescription-quick'] )
 		);
 
 		// Trim, sanitize, and save the metadata.
@@ -135,9 +135,10 @@ class Term_Data extends Post_Data {
 			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
 		) return;
 
-		$data = (array) $_POST['autodescription-meta'];
-
 		// Trim, sanitize, and save the metadata.
-		Data\Plugin\Term::save_term_meta( $term->term_id, $data );
+		Data\Plugin\Term::save_term_meta(
+			$term->term_id,
+			(array) \wp_unslash( $_POST['autodescription-meta'] ),
+		);
 	}
 }

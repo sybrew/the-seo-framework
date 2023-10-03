@@ -98,17 +98,13 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string Open Graph Title.
 	 */
-	public static function get_title( $args = null, $escape = true ) {
-
-		$title = static::get_custom_title( $args, false )
-			  ?: static::get_generated_title( $args, false );
-
-		return $escape ? \tsf()->escape_title( $title ) : $title;
+	public static function get_title( $args = null ) {
+		return static::get_custom_title( $args, true )
+			?: static::get_generated_title( $args, true );
 	}
 
 	/**
@@ -117,19 +113,13 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string Open Graph Title.
 	 */
-	public static function get_custom_title( $args, $escape ) {
-
-		if ( null === $args ) {
-			$title = static::get_custom_title_from_query();
-		} else {
-			$title = static::get_custom_title_from_args( $args );
-		}
-
-		return $escape ? \tsf()->escape_title( $title ) : $title;
+	public static function get_custom_title( $args ) {
+		return isset( $args )
+			? static::get_custom_title_from_args( $args )
+			: static::get_custom_title_from_query();
 	}
 
 	/**
@@ -157,13 +147,12 @@ class Open_Graph {
 			$title = Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title' );
 		}
 
-		if ( isset( $title ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $title
-				?: Title::get_custom_title( null, false, true ); // var_dump() move the filter to _from_query?
-		}
+		if ( ! isset( $title ) ) return '';
+		if ( \strlen( $title ) )
+			return \tsf()->sanitize_text( $title );
 
-		return '';
+		// At least there was an attempt made to fetch a title when we reach this. Try harder.
+		return Title::get_custom_title( null, true );
 	}
 
 	/**
@@ -194,13 +183,12 @@ class Open_Graph {
 			$title = Data\Plugin\Post::get_post_meta_item( '_open_graph_title', $args['id'] );
 		}
 
-		if ( isset( $title ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $title
-				?: Title::get_custom_title( $args, false, true ); // var_dump() move the filter to _from_args?
-		}
+		if ( ! isset( $title ) ) return '';
+		if ( \strlen( $title ) )
+			return \tsf()->sanitize_text( $title );
 
-		return '';
+		// At least there was an attempt made to fetch a title when we reach this. Try harder.
+		return Title::get_custom_title( $args, true );
 	}
 
 	/**
@@ -209,13 +197,12 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Open Graph Title.
 	 */
-	public static function get_generated_title( $args = null, $escape = true ) {
-		return Title::get_generated_title( $args, $escape, true );
+	public static function get_generated_title( $args = null ) {
+		return Title::get_generated_title( $args, true );
 	}
 
 	/**
@@ -223,17 +210,13 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The real Open Graph description output.
 	 */
-	public static function get_description( $args = null, $escape = true ) {
-
-		$desc = static::get_custom_description( $args, false )
-			 ?: static::get_generated_description( $args, false );
-
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+	public static function get_description( $args = null ) {
+		return static::get_custom_description( $args )
+			?: static::get_generated_description( $args );
 	}
 
 	/**
@@ -242,20 +225,14 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string TwOpen Graphitter description.
 	 */
-	public static function get_custom_description( $args = null, $escape = true ) {
-
-		if ( null === $args ) {
-			$desc = static::get_custom_description_from_query();
-		} else {
-			$desc = static::get_custom_description_from_args( $args );
-		}
-
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+	public static function get_custom_description( $args = null ) {
+		return isset( $args )
+			? static::get_custom_description_from_args( $args )
+			: static::get_custom_description_from_query();
 	}
 
 	/**
@@ -283,13 +260,12 @@ class Open_Graph {
 			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_description' );
 		}
 
-		if ( isset( $desc ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $desc
-				?: Description::get_custom_description( null, false ); // var_dump() move the filter to _from_query?
-		}
+		if ( ! isset( $desc ) ) return '';
+		if ( \strlen( $desc ) )
+			return \tsf()->sanitize_text( $desc );
 
-		return '';
+		// At least there was an attempt made to fetch a description when we reach this. Try harder.
+		return Description::get_custom_description();
 	}
 
 	/**
@@ -320,12 +296,12 @@ class Open_Graph {
 			$desc = Data\Plugin\Post::get_post_meta_item( '_open_graph_description', $args['id'] );
 		}
 
-		if ( isset( $desc ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $desc ?: Description::get_custom_description( $args, false );  // var_dump() move the filter to _from_tags?
-		}
+		if ( ! isset( $desc ) ) return '';
+		if ( \strlen( $desc ) )
+			return \tsf()->sanitize_text( $desc );
 
-		return $desc ?? '' ?: '';
+		// At least there was an attempt made to fetch a description when we reach this. Try harder.
+		return Description::get_custom_description( $args );
 	}
 
 	/**
@@ -333,13 +309,12 @@ class Open_Graph {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Open Graph description output.
 	 */
-	public static function get_generated_description( $args = null, $escape = true ) {
-		return Description::get_generated_description( $args, $escape, 'opengraph' );
+	public static function get_generated_description( $args = null ) {
+		return Description::get_generated_description( $args, 'opengraph' );
 	}
 
 	/**

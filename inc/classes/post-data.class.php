@@ -134,10 +134,11 @@ class Post_Data extends Detect {
 			|| ! \wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action )
 		) return;
 
-		$data = (array) $_POST['autodescription'];
-
 		// Perform nonce check and save fields.
-		Data\Plugin\Post::save_post_meta( $post_id, $data );
+		Data\Plugin\Post::save_post_meta(
+			$post_id,
+			(array) \wp_unslash( $_POST['autodescription'] ),
+		);
 	}
 
 	/**
@@ -164,7 +165,7 @@ class Post_Data extends Detect {
 
 		$new_data = [];
 
-		foreach ( (array) $_POST['autodescription-quick'] as $key => $value ) {
+		foreach ( (array) \wp_unslash( $_POST['autodescription-quick'] ) as $key => $value ) {
 			switch ( $key ) {
 				case 'doctitle':
 					$new_data['_genesis_title'] = $value;

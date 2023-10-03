@@ -269,7 +269,7 @@ class User {
 			$user->ID,
 		);
 
-		unset( static::$user_meta[ $user_id ] );
+		static::$user_meta[ $user_id ] = $data;
 
 		\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
 	}
@@ -294,6 +294,7 @@ class User {
 				unset( $data[ $key ] );
 		}
 
+		// Always unset. We must refill defaults later.
 		unset( static::$user_meta[ $user_id ] );
 
 		// Only delete when no values are left, because someone else might've filtered it.

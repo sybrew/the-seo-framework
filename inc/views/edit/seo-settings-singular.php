@@ -92,8 +92,8 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		}
 
 		if ( $_is_static_frontpage ) {
-			$_has_home_title = (bool) $this->escape_title( Data\Plugin::get_option( 'homepage_title' ) );
-			$_has_home_desc  = (bool) $this->escape_title( Data\Plugin::get_option( 'homepage_description' ) );
+			$_has_home_title = (bool) $this->escape_text( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_desc  = (bool) $this->escape_text( Data\Plugin::get_option( 'homepage_description' ) );
 
 			// When the homepage title is set, we can safely get the custom field.
 			$default_title     = $_has_home_title
@@ -111,7 +111,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 		} else {
 			$default_title     = Meta\Title::get_bare_generated_title( $_generator_args );
 			$title_ref_locked  = false;
-			$title_additions   = Data\Blog::get_public_blog_name();
+			$title_additions   = Meta\Title::get_addition();
 			$title_seplocation = Meta\Title::get_addition_location();
 
 			$default_description    = Meta\Description::get_generated_description( $_generator_args );
@@ -143,7 +143,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= $this->esc_attr_preserve_amp( Data\Plugin\Post::get_post_meta_item( '_genesis_title' ) ) ?>" autocomplete=off data-form-type=other />
+					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -151,10 +151,10 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 						[
 							'state' => [
 								'refTitleLocked'    => $title_ref_locked,
-								'defaultTitle'      => $this->s_title( $default_title ),
+								'defaultTitle'      => $this->escape_text( $default_title ),
 								'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
 								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
-								'additionValue'     => $this->s_title( $title_additions ),
+								'additionValue'     => $this->escape_text( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],
@@ -212,14 +212,14 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= $this->esc_attr_preserve_amp( Data\Plugin\Post::get_post_meta_item( '_genesis_description' ) ) ?></textarea>
+				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= $this->escape_text( $this->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_description' ) ) ) ?></textarea>
 				<?php
 				$this->output_js_description_elements(); // legacy
 				$this->output_js_description_data(
 					'autodescription_description',
 					[
 						'state' => [
-							'defaultDescription'   => $this->s_description( $default_description ),
+							'defaultDescription'   => $this->escape_text( $this->sanitize_text( $default_description ) ),
 							'refDescriptionLocked' => $description_ref_locked,
 							'hasLegacy'            => true,
 						],
@@ -432,29 +432,29 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			$_social_title       = [
 				'og' => Data\Plugin::get_option( 'homepage_og_title' )
 					 ?: Data\Plugin::get_option( 'homepage_title' )
-					 ?: Meta\Open_Graph::get_generated_title( $_generator_args, false ),
+					 ?: Meta\Open_Graph::get_generated_title( $_generator_args ),
 				'tw' => Data\Plugin::get_option( 'homepage_twitter_title' )
 					 ?: Data\Plugin::get_option( 'homepage_og_title' )
 					 ?: Data\Plugin::get_option( 'homepage_title' )
-					 ?: Meta\Twitter::get_generated_title( $_generator_args, false ),
+					 ?: Meta\Twitter::get_generated_title( $_generator_args ),
 			];
 			$_social_description = [
 				'og' => Data\Plugin::get_option( 'homepage_og_description' )
 					 ?: Data\Plugin::get_option( 'homepage_description' )
-					 ?: Meta\Open_Graph::get_generated_description( $_generator_args, false ),
+					 ?: Meta\Open_Graph::get_generated_description( $_generator_args ),
 				'tw' => Data\Plugin::get_option( 'homepage_twitter_description' )
 					 ?: Data\Plugin::get_option( 'homepage_og_description' )
 					 ?: Data\Plugin::get_option( 'homepage_description' )
-					 ?: Meta\Twitter::get_generated_description( $_generator_args, false ),
+					 ?: Meta\Twitter::get_generated_description( $_generator_args ),
 			];
 		} else {
 			$_social_title       = [
-				'og' => Meta\Open_Graph::get_generated_title( $_generator_args, false ),
-				'tw' => Meta\Twitter::get_generated_title( $_generator_args, false ),
+				'og' => Meta\Open_Graph::get_generated_title( $_generator_args ),
+				'tw' => Meta\Twitter::get_generated_title( $_generator_args ),
 			];
 			$_social_description = [
-				'og' => Meta\Open_Graph::get_generated_description( $_generator_args, false ),
-				'tw' => Meta\Twitter::get_generated_description( $_generator_args, false ),
+				'og' => Meta\Open_Graph::get_generated_description( $_generator_args ),
+				'tw' => Meta\Twitter::get_generated_description( $_generator_args ),
 			];
 		}
 
@@ -463,18 +463,18 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( $_social_title['og'] ),
+						'defaultTitle' => $this->escape_text( $this->sanitize_text( $_social_title['og'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
-						'defaultDesc'  => $this->s_description( $_social_description['og'] ),
+						'defaultDesc'  => $this->escape_text( $this->sanitize_text( $_social_description['og'] ) ),
 						'titleLock'    => $_is_static_frontpage && Data\Plugin::get_option( 'homepage_og_title' ),
 						'descLock'     => $_is_static_frontpage && Data\Plugin::get_option( 'homepage_og_description' ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( $_social_title['tw'] ),
+						'defaultTitle' => $this->escape_text( $this->sanitize_text( $_social_title['tw'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
-						'defaultDesc'  => $this->s_description( $_social_description['tw'] ),
+						'defaultDesc'  => $this->escape_text( $this->sanitize_text( $_social_description['tw'] ) ),
 						'titleLock'    => $_is_static_frontpage && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
 						'descLock'     => $_is_static_frontpage && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
 					],
@@ -497,7 +497,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= $this->esc_attr_preserve_amp( Data\Plugin\Post::get_post_meta_item( '_open_graph_title' ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_open_graph_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
 				</div>
 			</div>
 		</div>
@@ -515,7 +515,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= $this->esc_attr_preserve_amp( Data\Plugin\Post::get_post_meta_item( '_open_graph_description' ) ) ?></textarea>
+				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= $this->escape_text( $this->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_open_graph_description' ) ) ) ?></textarea>
 			</div>
 		</div>
 
@@ -533,7 +533,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= $this->esc_attr_preserve_amp( Data\Plugin\Post::get_post_meta_item( '_twitter_title' ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_twitter_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
 				</div>
 			</div>
 		</div>
@@ -553,7 +553,7 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
-					echo $this->esc_attr_preserve_amp( Data\Plugin\Post::get_post_meta_item( '_twitter_description' ) );
+					echo $this->escape_text( $this->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_twitter_description' ) ) );
 				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
 				?></textarea>
 			</div>

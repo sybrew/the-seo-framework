@@ -196,7 +196,7 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
-			's_description_raw',
+			's_description_raw', // TODO replace this with sanitize_text
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'homepage_description',
@@ -206,7 +206,7 @@ class Sanitize extends Admin_Pages {
 		);
 
 		$this->add_option_filter(
-			's_title_raw',
+			's_title_raw', // TODO replace this with sanitize_text
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
 				'site_title',
@@ -790,18 +790,15 @@ class Sanitize extends Admin_Pages {
 				case 'doctitle':
 				case 'og_title':
 				case 'tw_title':
-					$value = $this->s_title_raw( $value );
-					continue 2;
-
 				case 'description':
 				case 'og_description':
 				case 'tw_description':
-					$value = $this->s_description_raw( $value );
+					$value = $this->sanitize_text( $value );
 					continue 2;
 
 				case 'canonical':
 				case 'social_image_url':
-					$value = $this->s_url_query( $value );
+					$value = \sanitize_url( $value );
 					continue 2;
 
 				case 'social_image_id':
@@ -846,18 +843,15 @@ class Sanitize extends Admin_Pages {
 				case '_genesis_title':
 				case '_open_graph_title':
 				case '_twitter_title':
-					$value = $this->s_title_raw( $value );
-					continue 2;
-
 				case '_genesis_description':
 				case '_open_graph_description':
 				case '_twitter_description':
-					$value = $this->s_description_raw( $value );
+					$value = $this->sanitize_text( $value );
 					continue 2;
 
 				case '_genesis_canonical_uri':
 				case '_social_image_url':
-					$value = $this->s_url_query( $value );
+					$value = \sanitize_url( $value );
 					continue 2;
 
 				case '_social_image_id':
@@ -945,29 +939,6 @@ class Sanitize extends Admin_Pages {
 	}
 
 	/**
-	 * Escapes and beautifies description.
-	 *
-	 * @since 2.5.2
-	 * @since 4.3.0 The first parameter is now required.
-	 *
-	 * @param string $description The description to escape and beautify.
-	 * @return string Escaped and beautified description.
-	 */
-	public function escape_description( $description ) {
-		return trim(
-			\capital_P_dangit(
-				\esc_html(
-					\convert_chars(
-						\wptexturize(
-							$description
-						)
-					)
-				)
-			)
-		);
-	}
-
-	/**
 	 * Returns an one-line sanitized description and escapes it.
 	 *
 	 * @since 2.5.0
@@ -980,10 +951,31 @@ class Sanitize extends Admin_Pages {
 	 * @param string $description The Description.
 	 * @return string One line sanitized description.
 	 */
-	public function s_description( $description ) {
+	public function s_description( $description ) { // remove me?
 		return $this->escape_description(
 			$this->s_description_raw(
 				$description
+			)
+		);
+	}
+
+	/**
+	 * Escapes and beautifies description.
+	 *
+	 * @since 2.5.2
+	 * @since 4.3.0 The first parameter is now required.
+	 *
+	 * @param string $description The description to escape and beautify.
+	 * @return string Escaped and beautified description.
+	 */
+	public function escape_description( $description ) { // deprecate for escape_text
+		return trim(
+			\esc_html(
+				\convert_chars(
+					\wptexturize(
+						\capital_P_dangit( $description )
+					)
+				)
 			)
 		);
 	}
@@ -1000,7 +992,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $description The Description.
 	 * @return string One line sanitized description.
 	 */
-	public function s_description_raw( $description ) {
+	public function s_description_raw( $description ) { // deprecate for sanitize_text
 		return $this->s_dupe_space(
 			$this->s_bsol(
 				$this->s_hyphen(
@@ -1008,6 +1000,119 @@ class Sanitize extends Admin_Pages {
 						$this->s_singleline(
 							$this->s_nbsp(
 								(string) $description
+							)
+						)
+					)
+				)
+			)
+		);
+	}
+
+	/**
+	 * Escapes text without losing special characters.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $text The text to escape.
+	 * @return string The escaped text.
+	 */
+	public function escape_text( $text ) {
+		return \esc_html(
+			\convert_chars(
+				\wptexturize(
+					$text
+				)
+			)
+		);
+	}
+
+	/**
+	 * Escapes value via json_encode.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param mixed $value   The value to encode.
+	 * @param int   $options Extra JSON encoding options
+	 * @return string|false The HTML-attribute-escaped JSON-encoded text.
+	 */
+	public function escape_json_encode_attr( $value, $options = 0 ) {
+
+		$charset = \get_option( 'blog_charset' ) ?: null;
+
+		switch ( $charset ) {
+			case 'utf8':
+			case 'utf-8':
+			case 'UTF8':
+				$charset = 'UTF-8';
+		}
+
+		return htmlspecialchars(
+			json_encode(
+				$value,
+				\JSON_UNESCAPED_SLASHES
+				| \JSON_HEX_TAG
+				| \JSON_HEX_APOS
+				| \JSON_HEX_QUOT
+				| \JSON_HEX_AMP
+				| \JSON_UNESCAPED_UNICODE
+				| \JSON_INVALID_UTF8_IGNORE
+				| $options
+			),
+			\ENT_QUOTES,
+			$charset,
+		);
+	}
+
+	/**
+	 * Escapes value via json_encode.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param mixed $value   The value to encode.
+	 * @param int   $options Extra JSON encoding options
+	 * @return string|false The HTML-escaped JSON-encoded text.
+	 */
+	public function escape_json_encode( $value, $options = 0 ) {
+		return json_encode(
+			$value,
+			\JSON_UNESCAPED_SLASHES
+			| \JSON_HEX_TAG
+			| \JSON_HEX_APOS
+			| \JSON_HEX_QUOT
+			| \JSON_HEX_AMP
+			| \JSON_UNESCAPED_UNICODE
+			| \JSON_INVALID_UTF8_IGNORE
+			| $options
+		);
+	}
+
+	/**
+	 * Returns single-line, trimmed text without dupliacated spaces, nbsp, or tabs.
+	 * Does NOT escape.
+	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
+	 * Also adds a capital P, whatever that means.
+	 * Prepares the output for escaping without losing data.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $text The text.
+	 * @return string One line sanitized text.
+	 */
+	public function sanitize_text( $text ) {
+
+		if ( empty( $text ) ) return '';
+
+		return trim(
+			\capital_P_dangit(
+				$this->s_dupe_space(
+					$this->s_bsol(
+						$this->s_hyphen(
+							$this->s_tabs(
+								$this->s_singleline(
+									$this->s_nbsp(
+										(string) $text
+									)
+								)
 							)
 						)
 					)
@@ -1084,7 +1189,8 @@ class Sanitize extends Admin_Pages {
 	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
 	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
 	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
-	 * @since 4.3.0 The first parameter is now required.
+	 * @since 4.3.0 1. The first parameter is now required.
+	 *              2. Now returns an empty string when something falsesque is returned.
 	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
@@ -1092,10 +1198,10 @@ class Sanitize extends Admin_Pages {
 	 * @param bool   $escape           Whether to escape the excerpt.
 	 * @return string The escaped Excerpt.
 	 */
-	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) {
+	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) { // remove $escape.
 
-		// No need to parse an empty excerpt. TODO consider not parsing '0' as well?
-		if ( '' === $excerpt ) return '';
+		// No need to parse an empty excerpt.
+		if ( empty( $excerpt ) ) return '';
 
 		// Oh, how I'd like PHP 8's match()...
 		switch ( Data\Plugin::get_option( 'auto_description_html_method' ) ) {
@@ -1130,9 +1236,9 @@ class Sanitize extends Admin_Pages {
 		}
 
 		if ( $escape )
-			return $this->s_description( $excerpt );
+			return $this->escape_text( $this->sanitize_text( $excerpt ) );
 
-		return $this->s_description_raw( $excerpt );
+		return $this->sanitize_text( $excerpt );
 	}
 
 	/**
@@ -1146,8 +1252,25 @@ class Sanitize extends Admin_Pages {
 	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
 	 * @return string The unescaped Excerpt.
 	 */
-	public function s_excerpt_raw( $excerpt, $allow_shortcodes = true ) {
+	public function s_excerpt_raw( $excerpt, $allow_shortcodes = true ) { // make sanitize_excerpt
 		return $this->s_excerpt( $excerpt, $allow_shortcodes, false );
+	}
+
+	/**
+	 * Returns a sanitized and trimmed title.
+	 *
+	 * @since 2.5.2
+	 * @since 2.8.0 Method is now public.
+	 *
+	 * @param string $title The input Title.
+	 * @return string Sanitized and trimmed title.
+	 */
+	public function s_title( $title ) { // remove me?
+		return $this->escape_title(
+			$this->s_title_raw(
+				$title
+			)
+		);
 	}
 
 	/**
@@ -1160,36 +1283,17 @@ class Sanitize extends Admin_Pages {
 	 * @param bool   $trim  Whether to trim the title from whitespaces.
 	 * @return string Escaped and beautified title.
 	 */
-	public function escape_title( $title, $trim = true ) {
+	public function escape_title( $title, $trim = true ) { // deprecate for escape_text
 
-		$title = \capital_P_dangit(
-			\esc_html(
-				\convert_chars(
-					\wptexturize(
-						$title
-					)
+		$title = \esc_html(
+			\convert_chars(
+				\wptexturize(
+					\capital_P_dangit( $title )
 				)
 			)
 		);
 
 		return $trim ? trim( $title ) : $title;
-	}
-
-	/**
-	 * Returns a sanitized and trimmed title.
-	 *
-	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
-	 *
-	 * @param string $title The input Title.
-	 * @return string Sanitized and trimmed title.
-	 */
-	public function s_title( $title ) {
-		return $this->escape_title(
-			$this->s_title_raw(
-				$title
-			)
-		);
 	}
 
 	/**
@@ -1204,7 +1308,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $title The input Title.
 	 * @return string Sanitized, beautified and trimmed title.
 	 */
-	public function s_title_raw( $title ) {
+	public function s_title_raw( $title ) { // deprecate for sanitize_text
 		return $this->s_dupe_space(
 			$this->s_bsol(
 				$this->s_hyphen(
@@ -1895,7 +1999,7 @@ class Sanitize extends Admin_Pages {
 	 * @param string $text String with potentially wanted \ values.
 	 * @return string A string with safe HTML encoded backslashes.
 	 */
-	public function s_bsol_raw( $text ) {
+	public function s_bsol_raw( $text ) { // var_dump() merge with s_bsol()
 		return str_replace( '\\', '&#92;', $text );
 	}
 
@@ -1997,7 +2101,7 @@ class Sanitize extends Admin_Pages {
 	 * @see \WP_Embed::autoembed()
 	 *
 	 * @param string $content The content to look for embed.
-	 * @return string $content Without single-lined URLs.
+	 * @return string $content Content without single-lined URLs.
 	 */
 	public function strip_newline_urls( $content ) {
 		return preg_replace( '/^(?!\r|\n)\s*?(https?:\/\/[^\s<>"]+)(\s*)$/mi', '', $content );
@@ -2012,7 +2116,7 @@ class Sanitize extends Admin_Pages {
 	 * @see \WP_Embed::autoembed()
 	 *
 	 * @param string $content The content to look for embed.
-	 * @return string $content Without the paragraphs containing simple URLs.
+	 * @return string $content Content without the paragraphs containing solely URLs.
 	 */
 	public function strip_paragraph_urls( $content ) {
 		// TODO maybe later, this would be faster: '/<p\b[^>]*>\s*https?:\/\/[^\s<>"]+\s*<\/p>/i'

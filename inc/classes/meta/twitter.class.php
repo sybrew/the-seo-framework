@@ -147,17 +147,13 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string Twitter Title.
 	 */
-	public static function get_title( $args = null, $escape = true ) {
-
-		$title = static::get_custom_title( $args, false )
-			  ?: static::get_generated_title( $args, false );
-
-		return $escape ? \tsf()->escape_title( $title ) : $title;
+	public static function get_title( $args = null ) {
+		return static::get_custom_title( $args )
+			?: static::get_generated_title( $args );
 	}
 
 	/**
@@ -166,19 +162,13 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string Twitter Title.
 	 */
-	public static function get_custom_title( $args, $escape ) {
-
-		if ( null === $args ) {
-			$title = static::get_custom_title_from_query();
-		} else {
-			$title = static::get_custom_title_from_args( $args );
-		}
-
-		return $escape ? \tsf()->escape_title( $title ) : $title;
+	public static function get_custom_title( $args ) {
+		return isset( $args )
+			? static::get_custom_title_from_args( $args )
+			: static::get_custom_title_from_query();
 	}
 
 	/**
@@ -206,17 +196,14 @@ class Twitter {
 			$title = Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_title' );
 		}
 
-		if ( isset( $title ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $title
-				?: (
-					static::fallback_to_open_graph()
-						? Open_Graph::get_custom_title_from_query()
-						: Title::get_custom_title( null, false, true )  // var_dump() move the filter to _from_query?
-				);
-		}
+		if ( ! isset( $title ) ) return '';
+		if ( \strlen( $title ) )
+			return \tsf()->sanitize_text( $title );
 
-		return '';
+		// At least there was an attempt made to fetch a title when we reach this. Try harder.
+		return static::fallback_to_open_graph()
+			? Open_Graph::get_custom_title_from_query()
+			: Title::get_custom_title( null, true );
 	}
 
 	/**
@@ -247,17 +234,14 @@ class Twitter {
 			$title = Data\Plugin\Post::get_post_meta_item( '_twitter_title', $args['id'] );
 		}
 
-		if ( isset( $title ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $title
-				?: (
-					static::fallback_to_open_graph()
-						? Open_Graph::get_custom_title_from_args( $args )
-						: Title::get_custom_title( $args, false, true ) // var_dump() move the filter to _from_args?
-				);
-		}
+		if ( ! isset( $title ) ) return '';
+		if ( \strlen( $title ) )
+			return \tsf()->sanitize_text( $title );
 
-		return '';
+		// At least there was an attempt made to fetch a title when we reach this. Try harder.
+		return static::fallback_to_open_graph()
+			? Open_Graph::get_custom_title_from_args( $args )
+			: Title::get_custom_title( $args, true );
 	}
 
 	/**
@@ -266,13 +250,12 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Twitter Title.
 	 */
-	public static function get_generated_title( $args = null, $escape = true ) {
-		return Title::get_generated_title( $args, $escape, true );
+	public static function get_generated_title( $args = null ) {
+		return Title::get_generated_title( $args, true );
 	}
 
 	/**
@@ -281,17 +264,13 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The real Twitter description output.
 	 */
-	public static function get_description( $args = null, $escape = true ) {
-
-		$desc = static::get_custom_description( $args, false )
-			 ?: static::get_generated_description( $args, false );
-
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+	public static function get_description( $args = null ) {
+		return static::get_custom_description( $args )
+			?: static::get_generated_description( $args );
 	}
 
 	/**
@@ -300,20 +279,14 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string Twitter description.
 	 */
-	public static function get_custom_description( $args, $escape ) {
-
-		if ( null === $args ) {
-			$desc = static::get_custom_description_from_query();
-		} else {
-			$desc = static::get_custom_description_from_args( $args );
-		}
-
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+	public static function get_custom_description( $args ) {
+		return isset( $args )
+			? static::get_custom_description_from_args( $args )
+			: static::get_custom_description_from_query();
 	}
 
 	/**
@@ -341,17 +314,14 @@ class Twitter {
 			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_description' );
 		}
 
-		if ( isset( $desc ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $desc
-				?: (
-					static::fallback_to_open_graph()
-						? Open_Graph::get_custom_description_from_query()
-						: Description::get_custom_description( null, false ) // var_dump() move the filter to _from_query?
-				);
-		}
+		if ( ! isset( $desc ) ) return '';
+		if ( \strlen( $desc ) )
+			return \tsf()->sanitize_text( $desc );
 
-		return '';
+		// At least there was an attempt made to fetch a title when we reach this. Try harder.
+		return static::fallback_to_open_graph()
+			? Open_Graph::get_custom_description_from_query()
+			: Description::get_custom_description();
 	}
 
 	/**
@@ -382,17 +352,14 @@ class Twitter {
 			$desc = Data\Plugin\Post::get_post_meta_item( '_twitter_description', $args['id'] );
 		}
 
-		if ( isset( $desc ) ) {
-			// At least there was an attempt made to fetch one when we reach this.
-			return $desc
-				?: (
-					static::fallback_to_open_graph()
-						? Open_Graph::get_custom_description_from_args( $args )
-						: Description::get_custom_description( $args, false )  // var_dump() move the filter to _from_tags?
-				);
-		}
+		if ( ! isset( $desc ) ) return '';
+		if ( \strlen( $desc ) )
+			return \tsf()->sanitize_text( $desc );
 
-		return '';
+		// At least there was an attempt made to fetch a title when we reach this. Try harder.
+		return static::fallback_to_open_graph()
+			? Open_Graph::get_custom_description_from_args( $args )
+			: Title::get_custom_description( $args );
 	}
 
 	/**
@@ -400,12 +367,11 @@ class Twitter {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Twitter description output.
 	 */
-	public static function get_generated_description( $args = null, $escape = true ) {
-		return Description::get_generated_description( $args, $escape, 'twitter' );
+	public static function get_generated_description( $args = null ) {
+		return Description::get_generated_description( $args, 'twitter' );
 	}
 }

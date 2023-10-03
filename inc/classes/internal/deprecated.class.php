@@ -3473,17 +3473,16 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The real description output.
 	 */
-	public function get_description( $args = null, $escape = true ) {
+	public function get_description( $args = null ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_description()', '4.3.0', 'tsf()->description()->get_description()' );
 
-		return $tsf->description()->get_description( $args, $escape );
+		return $tsf->description()->get_description( $args );
 	}
 
 	/**
@@ -3495,17 +3494,16 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The custom field description.
 	 */
-	public function get_description_from_custom_field( $args = null, $escape = true ) {
+	public function get_description_from_custom_field( $args = null ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_description_from_custom_field()', '4.3.0', 'tsf()->description()->get_custom_description()' );
 
-		return $tsf->description()->get_custom_description( $args, $escape );
+		return $tsf->description()->get_custom_description( $args );
 	}
 
 	/**
@@ -3545,17 +3543,16 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Twitter description output.
 	 */
-	public function get_generated_twitter_description( $args = null, $escape = true ) {
+	public function get_generated_twitter_description( $args = null ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_description()', '4.3.0', 'tsf()->twitter()->get_generated_description()' );
 
-		return $tsf->twitter()->get_generated_description( $args, $escape );
+		return $tsf->twitter()->get_generated_description( $args );
 	}
 
 	/**
@@ -3566,17 +3563,16 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Open Graph description output.
 	 */
-	public function get_generated_open_graph_description( $args = null, $escape = true ) {
+	public function get_generated_open_graph_description( $args = null ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_description()', '4.3.0', 'tsf()->open_graph()->get_generated_description()' );
 
-		return $tsf->open_graph()->get_generated_description( $args, $escape );
+		return $tsf->open_graph()->get_generated_description( $args );
 	}
 
 	/**
@@ -3607,19 +3603,18 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Open Graph Title.
 	 */
-	public function get_generated_open_graph_title( $args = null, $escape = true ) {
+	public function get_generated_open_graph_title( $args = null ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_title()', '4.3.0', 'tsf()->open_graph()->get_generated_title()' );
 
 		// Discrepancy: The interface always hid this bug of using the wrong callback.
 		// Let's keep this bug where it fetches the custom field title first.
-		return $tsf->title()->get_title( $args, $escape, true ); // Discrepancy OK.
+		return $tsf->title()->get_title( $args, true ); // Discrepancy OK.
 	}
 
 	/**
@@ -3633,19 +3628,18 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The generated Twitter Title.
 	 */
-	public function get_generated_twitter_title( $args = null, $escape = true ) {
+	public function get_generated_twitter_title( $args = null ) {
 
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_title()', '4.3.0', 'tsf()->twitter()->get_generated_title()' );
 
 		// Discrepancy: The interface always hid this bug of using the wrong callback.
 		// Let's keep this bug where it fetches the custom field title first.
-		return $tsf->title()->get_title( $args, $escape, true ); // Discrepancy OK.
+		return $tsf->title()->get_title( $args, true ); // Discrepancy OK.
 	}
 
 	/**
@@ -3894,7 +3888,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_custom_field_title()', '4.3.0', 'tsf()->title()->get_custom_title()' );
 
-		return $tsf->title()->get_custom_title( $args, $escape, $social );
+		return $tsf->title()->get_custom_title( $args, $social );
 	}
 
 	/**
@@ -3920,7 +3914,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_generated_title()', '4.3.0', 'tsf()->title()->get_generated_title()' );
 
-		return $tsf->title()->get_generated_title( $args, $escape, $social );
+		return $tsf->title()->get_generated_title( $args, $social );
 	}
 
 	/**

@@ -142,7 +142,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->esc_attr_preserve_amp( $title ) ?>" size=40 autocomplete=off data-form-type=other />
+					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= $this->escape_text( $this->sanitize_text( $title ) ) ?>" size=40 autocomplete=off data-form-type=other />
 					<?php
 					$this->output_js_title_elements(); // legacy
 					$this->output_js_title_data(
@@ -150,10 +150,10 @@ $robots_settings = [
 						[
 							'state' => [
 								'refTitleLocked'    => false,
-								'defaultTitle'      => $this->s_title( Meta\Title::get_bare_generated_title( $_generator_args ) ),
+								'defaultTitle'      => $this->escape_text( Meta\Title::get_bare_generated_title( $_generator_args ) ),
 								'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
 								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
-								'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
+								'additionValue'     => $this->escape_text( Meta\Title::get_addition() ),
 								'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 								'hasLegacy'         => true,
 							],
@@ -192,14 +192,16 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= $this->esc_attr_preserve_amp( $description ) ?></textarea>
+				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= $this->escape_text( $this->sanitize_text( $description ) ) ?></textarea>
 				<?php
 				$this->output_js_description_elements(); // legacy
 				$this->output_js_description_data(
 					'autodescription-meta[description]',
 					[
 						'state' => [
-							'defaultDescription' => Meta\Description::get_generated_description( $_generator_args ),
+							'defaultDescription' => $this->escape_text(
+								Meta\Description::get_generated_description( $_generator_args )
+							),
 							'hasLegacy'          => true,
 						],
 					]
@@ -218,16 +220,16 @@ $this->output_js_social_data(
 	[
 		'og' => [
 			'state' => [
-				'defaultTitle' => $this->s_title( Meta\Open_Graph::get_generated_title( $_generator_args, false ) ),
+				'defaultTitle' => $this->escape_text( Meta\Open_Graph::get_generated_title( $_generator_args ) ),
 				'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
-				'defaultDesc'  => $this->s_description( Meta\Open_Graph::get_generated_description( $_generator_args, false ) ),
+				'defaultDesc'  => $this->escape_text( Meta\Open_Graph::get_generated_description( $_generator_args ) ),
 			],
 		],
 		'tw' => [
 			'state' => [
-				'defaultTitle' => $this->s_title( Meta\Twitter::get_generated_title( $_generator_args, false ) ),
+				'defaultTitle' => $this->escape_text( Meta\Twitter::get_generated_title( $_generator_args ) ),
 				'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
-				'defaultDesc'  => $this->s_description( Meta\Twitter::get_generated_description( $_generator_args, false ) ),
+				'defaultDesc'  => $this->escape_text( Meta\Twitter::get_generated_description( $_generator_args ) ),
 			],
 		],
 	]
@@ -248,7 +250,7 @@ $this->output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-og-title-wrap>
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->esc_attr_preserve_amp( $og_title ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= $this->escape_text( $this->sanitize_text( $og_title ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
 				</div>
 			</td>
 		</tr>
@@ -264,7 +266,7 @@ $this->output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?= $this->esc_attr_preserve_amp( $og_description ) ?></textarea>
+				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?= $this->escape_text( $this->sanitize_text( $og_description ) ) ?></textarea>
 			</td>
 		</tr>
 
@@ -280,7 +282,7 @@ $this->output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-tw-title-wrap>
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->esc_attr_preserve_amp( $tw_title ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= $this->escape_text( $this->sanitize_text( $tw_title ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
 				</div>
 			</td>
 		</tr>
@@ -296,7 +298,7 @@ $this->output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?= $this->esc_attr_preserve_amp( $tw_description ) ?></textarea>
+				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?= $this->escape_text( $this->sanitize_text( $tw_description ) ) ?></textarea>
 			</td>
 		</tr>
 

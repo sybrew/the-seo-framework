@@ -307,7 +307,7 @@ final class Term extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				static::$tsf->s_title( $title ),
+				static::$tsf->escape_text( static::$tsf->sanitize_text( $title ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -421,7 +421,7 @@ final class Term extends Main {
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$desc = Meta\Description::get_custom_description( $_generator_args, false );
+		$desc = Meta\Description::get_custom_description( $_generator_args );
 
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
@@ -442,7 +442,7 @@ final class Term extends Main {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			$desc = Meta\Description::get_generated_description( $_generator_args, false );
+			$desc = Meta\Description::get_generated_description( $_generator_args );
 
 			if ( ! \strlen( $desc ) ) {
 				$item['status'] = SEOBar::STATE_UNDEFINED;
@@ -498,7 +498,7 @@ final class Term extends Main {
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				static::$tsf->s_description( $desc ),
+				static::$tsf->escape_text( static::$tsf->sanitize_text( $desc ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)

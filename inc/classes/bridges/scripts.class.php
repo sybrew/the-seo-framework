@@ -638,9 +638,6 @@ final class Scripts {
 	 * @return array The script params.
 	 */
 	public static function get_title_scripts() {
-
-		$tsf = \tsf();
-
 		return [
 			'id'       => 'tsf-title',
 			'type'     => 'js',
@@ -653,13 +650,11 @@ final class Scripts {
 				'name' => 'tsfTitleL10n',
 				'data' => [
 					'states' => [
-						'titleSeparator'  => static::decode_entities( $tsf->s_title_raw(
-							Meta\Title::get_separator()
-						) ),
+						'titleSeparator'  => static::decode_entities( Meta\Title::get_separator() ),
 						'prefixPlacement' => \is_rtl() ? 'after' : 'before',
 					],
 					'params' => [
-						'untitledTitle'  => static::decode_entities( $tsf->s_title_raw( Meta\Title::get_untitled_title() ) ),
+						'untitledTitle'  => static::decode_entities( Meta\Title::get_untitled_title() ),
 						'stripTitleTags' => (bool) Data\Plugin::get_option( 'title_strip_tags' ),
 					],
 					'i18n'   => [

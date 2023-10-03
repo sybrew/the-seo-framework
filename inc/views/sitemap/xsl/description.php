@@ -52,7 +52,7 @@ printf(
 		]
 	),
 	esc_xml(
-		$this->s_title_raw( Data\Blog::get_public_blog_name() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) )
+		$this->sanitize_text( Data\Blog::get_public_blog_name() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) )
 	)
 );
 ?>

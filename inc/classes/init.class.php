@@ -416,6 +416,7 @@ class Init extends Pool {
 	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
+	 * @since 4.3.0 Now escapes the filter output.
 	 * @see $this->get_title()
 	 *
 	 * @param string $title The filterable title.
@@ -431,13 +432,13 @@ class Init extends Pool {
 		 * @param string $title The generated title.
 		 * @param int    $id    The page or term ID.
 		 */
-		return \apply_filters_ref_array(
+		return \esc_attr( \apply_filters_ref_array(
 			'the_seo_framework_pre_get_document_title',
 			[
 				Meta\Title::get_title(),
 				Query::get_the_real_id(),
 			]
-		);
+		) );
 	}
 
 	/**
@@ -448,6 +449,7 @@ class Init extends Pool {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Removed extraneous, unused parameters.
+	 * @since 4.3.0 Now escapes the filter output.
 	 * @see $this->get_title()
 	 *
 	 * @param string $title The filterable title.
@@ -463,13 +465,13 @@ class Init extends Pool {
 		 * @param string $title The generated title.
 		 * @param int    $id    The page or term ID.
 		 */
-		return \apply_filters_ref_array(
+		return \esc_attr( \apply_filters_ref_array(
 			'the_seo_framework_wp_title',
 			[
 				Meta\Title::get_title(),
 				Query::get_the_real_id(),
 			]
-		);
+		) );
 	}
 
 	/**

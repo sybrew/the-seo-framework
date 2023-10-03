@@ -236,7 +236,7 @@ class Term {
 			$term_id,
 		);
 
-		unset( static::$term_meta[ $term_id ] );
+		static::$term_meta[ $term_id ] = $data;
 
 		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
 		\update_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
@@ -264,6 +264,7 @@ class Term {
 				unset( $data[ $key ] );
 		}
 
+		// Always unset. We must refill defaults later.
 		unset( static::$term_meta[ $term_id ] );
 
 		// Only delete when no values are left, because someone else might've filtered it.

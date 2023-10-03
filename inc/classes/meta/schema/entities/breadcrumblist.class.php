@@ -59,8 +59,8 @@ final class BreadcrumbList extends Reference {
 			$list_items[] = [
 				'@type'    => 'ListItem',
 				'position' => $i + 1, // Let's not create 0
-				'item'     => \tsf()->s_url_query( $item['url'] ),
-				'name'     => \tsf()->s_title_raw( $item['name'] ),
+				'item'     => \esc_url( $item['url'] ),
+				'name'     => \tsf()->escape_text( $item['name'] ),
 			];
 		}
 

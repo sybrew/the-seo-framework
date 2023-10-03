@@ -74,7 +74,7 @@ final class Excerpt {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( Query::is_real_front_page() ) {
+		if ( Query::is_static_frontpage() ) {
 			$excerpt = static::get_singular_excerpt();
 		} elseif ( Query::is_blog_as_page() ) {
 			$excerpt = static::get_blog_page_excerpt();
@@ -111,7 +111,7 @@ final class Excerpt {
 			}
 		}
 
-		return $excerpt ?? '' ?: '';
+		return $excerpt ?? '';
 	}
 
 	/**
@@ -170,7 +170,7 @@ final class Excerpt {
 			if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
 				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
-				$excerpt = \tsf()->s_description_raw( $object->description ?? '' );
+				$excerpt = $object->description ?? '';
 			} elseif ( Query::is_author() ) {
 				$excerpt = \tsf()->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
 			} elseif ( \is_post_type_archive() ) {
@@ -184,7 +184,7 @@ final class Excerpt {
 				$excerpt = (string) \apply_filters_ref_array(
 					'the_seo_framework_pta_description_excerpt',
 					[
-						\tsf()->s_description_raw( $object->description ?? '' ),
+						$object->description ?? '',
 						$object,
 					]
 				);
@@ -205,7 +205,7 @@ final class Excerpt {
 				);
 			}
 		} else {
-			$excerpt = \tsf()->s_description_raw( $object->description ?? '' );
+			$excerpt = $object->description ?? '';
 		}
 
 		return $excerpt;
@@ -240,6 +240,8 @@ final class Excerpt {
 				$excerpt = \tsf()->strip_paragraph_urls( \tsf()->strip_newline_urls( $excerpt ) );
 		}
 
-		return empty( $excerpt ) ? '' : \tsf()->s_excerpt_raw( $excerpt );
+		if ( empty( $excerpt ) ) return '';
+
+		return \tsf()->s_excerpt_raw( $excerpt );
 	}
 }

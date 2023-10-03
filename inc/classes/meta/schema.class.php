@@ -63,7 +63,10 @@ class Schema {
 		$graph = static::get_generated_graph( $args );
 
 		return $graph
-			? (string) json_encode( $graph, \JSON_UNESCAPED_SLASHES | ( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 ) )
+			? (string) \tsf()->escape_json_encode(
+				$graph,
+				( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 )
+			)
 			: '';
 	}
 

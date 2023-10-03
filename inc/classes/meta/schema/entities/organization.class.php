@@ -54,7 +54,7 @@ final class Organization extends Reference {
 		$entity = [
 			'@type' => static::$type,
 			'@id'   => static::get_id(),
-			'name'  => Data\Plugin::get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name(),
+			'name'  => \tsf()->sanitize_text( Data\Plugin::get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name() ),
 			'url'   => Meta\URI::get_bare_front_page_url(),
 		];
 

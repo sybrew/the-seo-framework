@@ -27,18 +27,17 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 		$latest_post_id = Data\Post::get_latest_post_id();
 		$latest_cat_id  = Data\Term::get_latest_term_id( 'category' );
 
-		$post_title = $this->s_title( $this->hellip_if_over(
-			// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
-			esc_html( strip_tags( get_the_title( $latest_post_id ) ) ?: __( 'Example Post', 'autodescription' ) ),
+		$post_title = $this->escape_text( $this->hellip_if_over(
+			Meta\Title::get_post_title( $latest_post_id ) ?: __( 'Example Post', 'autodescription' ),
 			60
 		) );
 
-		$cat_prefix = $this->s_title( _x( 'Category:', 'category archive title prefix', 'default' ) );
-		$cat_title  = $this->s_title( $this->hellip_if_over(
-			// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- We don't expect users to set scripts in titles.
-			strip_tags( get_cat_name( $latest_cat_id ) ?: __( 'Example Category', 'autodescription' ) ),
+		$cat_prefix = $this->escape_text( _x( 'Category:', 'category archive title prefix', 'default' ) );
+		$cat_title  = $this->escape_text( $this->hellip_if_over(
+			Meta\Title::get_term_title( get_term( $latest_cat_id ) ) ?: __( 'Example Category', 'autodescription' ),
 			60 - strlen( $cat_prefix )
 		) );
+
 		$cat_title_full = sprintf(
 			/* translators: 1: Title prefix. 2: Title. */
 			esc_html_x( '%1$s %2$s', 'archive title', 'default' ),
@@ -239,7 +238,7 @@ switch ( $this->get_view_instance( 'title', $instance ) ) :
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= esc_attr( $this->s_title_raw( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin::get_option( 'site_title' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= $this->escape_text( $this->sanitize_text( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin::get_option( 'site_title' ) ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( __( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );

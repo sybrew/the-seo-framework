@@ -254,6 +254,8 @@ class Post {
 			$post_id,
 		);
 
+		static::$post_meta[ $post_id ] = $data;
+
 		// Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
 			// Save $value, or delete if the $value is empty.

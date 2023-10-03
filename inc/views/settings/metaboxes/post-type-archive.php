@@ -181,7 +181,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle', $post_type ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle', $post_type ) ) ) ?>" autocomplete=off />
 			<?php
 			$pto = get_post_type_object( $post_type );
 
@@ -193,12 +193,12 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				Input::get_field_id( $_option_map['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => $this->s_title( $_default_title ),
+						'defaultTitle'      => $this->escape_text( $_default_title ),
 						'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
 						'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
-						'additionValue'     => $this->s_title( Data\Blog::get_public_blog_name() ),
+						'additionValue'     => $this->escape_text( Meta\Title::get_addition() ),
 						'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
-						'prefixValue'       => $this->s_title( $_prefix_value ),
+						'prefixValue'       => $this->escape_text( $_prefix_value ),
 						'showPrefix'        => Meta\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
 				]
@@ -253,7 +253,9 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				Input::get_field_id( $_option_map['description'] ),
 				[
 					'state' => [
-						'defaultDescription' => Meta\Description::get_generated_description( $_generator_args ),
+						'defaultDescription' => $this->escape_text(
+							Meta\Description::get_generated_description( $_generator_args )
+						),
 					],
 				]
 			);
@@ -267,16 +269,16 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( Meta\Open_Graph::get_generated_title( $_generator_args, false ) ),
+						'defaultTitle' => $this->escape_text( Meta\Open_Graph::get_generated_title( $_generator_args ) ),
 						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
-						'defaultDesc'  => $this->s_description( Meta\Open_Graph::get_generated_description( $_generator_args, false ) ),
+						'defaultDesc'  => $this->escape_text( Meta\Open_Graph::get_generated_description( $_generator_args ) ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => $this->s_title( Meta\Twitter::get_generated_title( $_generator_args, false ) ),
+						'defaultTitle' => $this->escape_text( Meta\Twitter::get_generated_title( $_generator_args ) ),
 						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
-						'defaultDesc'  => $this->s_description( Meta\Twitter::get_generated_description( $_generator_args, false ) ),
+						'defaultDesc'  => $this->escape_text( Meta\Twitter::get_generated_description( $_generator_args ) ),
 					],
 				],
 			]
@@ -293,7 +295,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $_option_map['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( $_option_map['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_title'] ); ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title', $post_type ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogTitle />
 		</p>
 
 		<p>
@@ -321,7 +323,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?= $this->esc_attr_preserve_amp( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_title', $post_type ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_title', $post_type ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twTitle />
 		</p>
 
 		<p>

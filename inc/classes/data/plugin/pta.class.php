@@ -50,6 +50,16 @@ class PTA {
 	private static $pta_meta = [];
 
 	/**
+	 * Flushes all PTA runtime cache.
+	 *
+	 * @since 4.3.0
+	 * @internal
+	 */
+	public static function flush_cache() {
+		static::$pta_meta = [];
+	}
+
+	/**
 	 * Returns a single post type archive item's value.
 	 *
 	 * @since 4.2.0

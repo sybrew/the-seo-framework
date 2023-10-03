@@ -79,15 +79,15 @@ class Legacy_API extends Core {
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
-	 *              2. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
+	 *              2. Removed the second parameter, the output is always sanitized now.
+	 *              3. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
-	 * @return string The real title output.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The meta title output.
 	 */
-	public static function get_title( $args = null, $escape = true ) {
-		return static::title()->get_title( $args, $escape );
+	public static function get_title( $args = null ) {
+		return static::title()->get_title( $args );
 	}
 
 	/**
@@ -98,15 +98,15 @@ class Legacy_API extends Core {
 	 * @since 3.1.0 1. The first parameter now expects an array.
 	 *              2. Now tries to get the homepage social title.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
-	 * @return string Open Graph Title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The Open Graph title output.
 	 */
-	public static function get_open_graph_title( $args = null, $escape = true ) {
-		return static::open_graph()->get_title( $args, $escape );
+	public static function get_open_graph_title( $args = null ) {
+		return static::open_graph()->get_title( $args );
 	}
 
 	/**
@@ -117,15 +117,15 @@ class Legacy_API extends Core {
 	 * @since 3.1.0 1. The first parameter now expects an array.
 	 *              2. Now tries to get the homepage social titles.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the title.
-	 * @return string Twitter Title.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The Twitter title output.
 	 */
-	public static function get_twitter_title( $args = null, $escape = true ) {
-		return static::twitter()->get_title( $args, $escape );
+	public static function get_twitter_title( $args = null ) {
+		return static::twitter()->get_title( $args );
 	}
 
 	/**
@@ -134,15 +134,15 @@ class Legacy_API extends Core {
 	 * @since 3.0.6
 	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
-	 * @return string The real description output.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The meta description output.
 	 */
-	public static function get_description( $args = null, $escape = true ) {
-		return static::description()->get_description( $args, $escape );
+	public static function get_description( $args = null ) {
+		return static::description()->get_description( $args );
 	}
 
 	/**
@@ -152,15 +152,15 @@ class Legacy_API extends Core {
 	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.
 	 *              2. The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
-	 * @return string The real Open Graph description output.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The Open Graph description output.
 	 */
-	public static function get_open_graph_description( $args = null, $escape = true ) {
-		return static::open_graph()->get_description( $args, $escape );
+	public static function get_open_graph_description( $args = null ) {
+		return static::open_graph()->get_description( $args );
 	}
 
 	/**
@@ -171,15 +171,15 @@ class Legacy_API extends Core {
 	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.
 	 *              2. The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
-	 * @return string The real Twitter description output.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The Twitter description output.
 	 */
-	public static function get_twitter_description( $args = null, $escape = true ) {
-		return static::twitter()->get_description( $args, $escape );
+	public static function get_twitter_description( $args = null ) {
+		return static::twitter()->get_description( $args );
 	}
 
 	/**
@@ -199,7 +199,7 @@ class Legacy_API extends Core {
 	 *    string $taxonomy The taxonomy.
 	 *    string $pta      The pta.
 	 * }
-	 * @return string The canonical URL, if any.
+	 * @return string The canonical URL output.
 	 */
 	public static function get_canonical_url( $args = null ) {
 		return static::uri()->get_canonical_url( $args );

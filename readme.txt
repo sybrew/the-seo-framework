@@ -700,6 +700,7 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* This helps search engines find URLs to all paginated pages, improving link discovery.
 	* The shortlink URL is now also outputted on the paginated homepage.
 	* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
+	* All meta generation methods are now assumed to return (pre-)sanitized data. You must still escape the data when printing to screen.
 * **Improved:**
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696) (among others).
@@ -863,6 +864,7 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 			* Suboption filter `s_color_hex` is available.
 		* **Changed:**
 			* The options no longer have their slashes stripped via `stripslashes_deep`. This was done precautionary because WordPress adds slashes to everything to account for a long-discouraged PHP quirk. Resaving the options would then cause slashes to become repeated: `'` becomes `\'`, `\'` becomes `\\\'`, etc. This is now addressed.
+				* WordPress addressed this issue in their [options API](https://github.com/WordPress/wordpress-develop/blob/6.3.1/src/wp-admin/options.php#L320), about which I was unaware.
 				* See https://www.php.net/manual/en/function.get-magic-quotes-gpc.php.
 		* **Removed**
 			* Index `auto_descripton_html_method`.
@@ -875,6 +877,11 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* It's now `autodescription-site-cache` and its contents will be migrated after updating.
 			* This option will now also be home to the Archive and Search Exclusion cache.
 		* This option will be **removed** on upgrade. If you downgrade, it will be repopulated, and there should be no issues with that.
+* **Meta notes:**
+	* For term index `autodescription-term-settings` (constant `THE_SEO_FRAMEWORK_TERM_OPTIONS`):
+		* Although the options were properly unslashed by WordPress, we did nothing of the like for terms. Now, term data is unslashed before saving, for both regular term and quick-edit saving. This means `\` will remain `\`, and won't become `\\` ad infinitum.
+	* For the post meta:
+		* Just like with term meta, you can now store backward solidi (`\`) without breakage.
 * **Transient notes:**
 	* **Added:**
 		* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
@@ -1349,11 +1356,13 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* `the_seo_framework_schema_graph_data`, this is used to adjust the Schema.org output data.
 		* `the_seo_framework_breadcrumb_list`, this is used to adjust the Breadcrumbs generation.
 		* `the_seo_framework_primary_term`, this is used to adjust the primary term.
+		* `the_seo_framework_description_excerpt`, this is used to adjust the description excerpt.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
 		* `the_seo_framework_save_post_meta`, the second parameter is now an integer, instead of Post object.
 			* If you cannot save posts any longer after updating... well, there's your problem. We found no evidence of this being used in the wild.
+		* `the_seo_framework_generated_description`, added third parameter `$type`.
 	* **Deprecated:**
 		* `the_seo_framework_googlesite_output`, with no alternative available.
 		* `the_seo_framework_bingsite_output`, with no alternative available.
@@ -1386,6 +1395,7 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* `the_seo_framework_use_twitter_tags`, use `the_seo_framework_meta_generator_pools` instead.
 		* `the_seo_framework_robots_meta`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_image_details`, use `the_seo_framework_custom_image_details` or `the_seo_framework_generated_image_details` instead.
+		* `the_seo_framework_fetched_description_excerpt`, use `the_seo_framework_description_excerpt` instead.
 	* **Removed:**
 		* Deprecated in TSF v4.2.0, two years later, we've now removed these filters:
 			* `the_seo_framework_pta_title`

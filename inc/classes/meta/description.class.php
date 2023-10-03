@@ -13,6 +13,7 @@ use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
+	memo,
 	Utils\normalize_generation_args,
 	Utils\clamp_sentence,
 };
@@ -48,17 +49,13 @@ class Description {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The real description output.
 	 */
-	public static function get_description( $args = null, $escape = true ) {
-
-		$desc = static::get_custom_description( $args, false )
-			 ?: static::get_generated_description( $args, false );
-
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+	public static function get_description( $args = null ) {
+		return static::get_custom_description( $args )
+			?: static::get_generated_description( $args );
 	}
 
 	/**
@@ -66,12 +63,11 @@ class Description {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The custom field description.
 	 */
-	public static function get_custom_description( $args = null, $escape = true ) {
+	public static function get_custom_description( $args = null ) {
 
 		if ( null === $args ) {
 			$desc = static::get_custom_description_from_query();
@@ -88,15 +84,11 @@ class Description {
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
-		$desc = (string) \apply_filters_ref_array(
+		return \tsf()->sanitize_text( (string) \apply_filters(
 			'the_seo_framework_custom_field_description',
-			[
-				$desc,
-				$args,
-			]
-		);
-
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+			$desc,
+			$args,
+		) );
 	}
 
 	/**
@@ -111,19 +103,16 @@ class Description {
 	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
 	 * @since 3.2.2 Now converts HTML characters prior trimming.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Description.
+	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Description.
+	 *              2. Removed the second $escape parameter.
+	 *              3. Moved the third parameter to the second.
 	 *
-	 * @TODO Should we enforce a minimum description length, where this result is ignored? e.g., use the input
-	 *       guidelines' 'lower' value as a minimum, so that TSF won't ever generate "bad" descriptions?
-	 *       This isn't truly helpful, since then search engines can truly fetch whatever with zero guidance.
-	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the description.
-	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
+	 * @param string     $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
 	 * @return string The generated description output.
 	 */
-	public static function get_generated_description( $args = null, $escape = true, $type = 'search' ) {
+	public static function get_generated_description( $args = null, $type = 'search' ) {
 
 		if ( ! static::may_generate( $args ) ) return '';
 
@@ -138,31 +127,51 @@ class Description {
 
 		isset( $args ) and normalize_generation_args( $args );
 
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $args, $type ) ) return $memo;
+
 		/**
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
 		 * @since 4.0.0 1. Deprecated second parameter.
 		 *              2. Added third parameter: $args.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
+		 * @since 4.3.0 Deprecated.
+		 * @deprecated
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
-		 * @todo deprecate and shift parameters.
 		 */
-		$excerpt = (string) \apply_filters_ref_array(
+		$excerpt = (string) \apply_filters_deprecated(
 			'the_seo_framework_fetched_description_excerpt',
 			[
 				Description\Excerpt::get_excerpt( $args ),
 				0,
 				$args,
-			]
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_description_excerpt',
+		);
+
+		/**
+		 * @since 4.3.0
+		 * @param string     $excerpt The excerpt to use.
+		 * @param array|null $args    The query arguments. Contains 'id', 'tax', and 'pta'.
+		 *                            Is null when the query is auto-determined.
+		 * @param string     $type    Type of description. Accepts 'search', 'opengraph', 'twitter'.
+		 */
+		$excerpt = (string) \apply_filters(
+			'the_seo_framework_description_excerpt',
+			$excerpt,
+			$args,
+			$type,
 		);
 
 		// This page has a generated description that's far too short: https://theseoframework.com/em-changelog/1-0-0-amplified-seo/.
 		// A direct directory-'site:' query will accept the description outputted--anything else will ignore it...
 		// We should not work around that, because it won't direct in the slightest what to display.
-		$excerpt = clamp_sentence(
+		$desc = clamp_sentence(
 			$excerpt,
 			0,
 			\tsf()->get_input_guidelines()['description'][ $type ]['chars']['goodUpper']
@@ -172,19 +181,24 @@ class Description {
 		 * @since 2.9.0
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
+		 * @since 4.3.0 Added third parameter `$type`.
 		 * @param string     $desc The generated description.
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
+		 * @param string     $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
 		 */
-		$desc = (string) \apply_filters_ref_array(
+		$desc = (string) \apply_filters(
 			'the_seo_framework_generated_description',
-			[
-				$excerpt,
-				$args,
-			]
+			$desc,
+			$args,
+			$type,
 		);
 
-		return $escape ? \tsf()->escape_description( $desc ) : $desc;
+		return memo(
+			\tsf()->sanitize_text( $desc ),
+			$args,
+			$type,
+		);
 	}
 
 	/**
@@ -212,7 +226,7 @@ class Description {
 			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'description' );
 		}
 
-		return $desc ?? '' ?: '';
+		return \tsf()->sanitize_text( $desc );
 	}
 
 	/**
@@ -245,7 +259,7 @@ class Description {
 			$desc = Data\Plugin\Post::get_post_meta_item( '_genesis_description', $args['id'] );
 		}
 
-		return $desc ?? '' ?: '';
+		return \tsf()->sanitize_text( $desc );
 	}
 
 	/**

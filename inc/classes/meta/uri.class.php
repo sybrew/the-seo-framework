@@ -47,10 +47,9 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param bool $escape Whether to escape the canonical URL.
 	 * @return string $url If indexable, a canonical URL will appear.
 	 */
-	public static function get_indexable_canonical_url( $escape = true ) {
+	public static function get_indexable_canonical_url() {
 
 		$custom_url = static::get_custom_canonical_url();
 
@@ -81,7 +80,7 @@ class URI {
 		if ( str_contains( Robots::get_meta(), 'noindex' ) )
 			return '';
 
-		return static::get_generated_url( null, $escape );
+		return static::get_generated_url();
 	}
 
 	/**
@@ -93,21 +92,18 @@ class URI {
 	 * @since 4.2.3 Now accepts arguments publicly.
 	 * @since 4.3.0 1. No longer calls the query in the sitemap to remove pagination.
 	 *              2. Moved to \The_SEO_Framework\Meta\URI.
+	 *              3. Now always returns a sanitized URL.
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
 	 *    string $taxonomy The Taxonomy.
 	 *    string $pta      The Post Type Archive.
 	 * }
-	 * @param bool       $escape Whether to escape the canonical URL.
 	 * @return string The canonical URL, if any.
 	 */
-	public static function get_canonical_url( $args = null, $escape = true ) {
-
-		$url = static::get_custom_canonical_url( $args, false )
-			?: static::get_generated_url( $args, false );
-
-		return $escape ? \tsf()->clean_canonical_url( $url ) : $url;
+	public static function get_canonical_url( $args = null ) {
+		return static::get_custom_canonical_url( $args )
+			?: static::get_generated_url( $args );
 	}
 
 	/**
@@ -115,20 +111,14 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $escape Whether to escape the canonical URL.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The custom canonical URL, if any.
 	 */
-	public static function get_custom_canonical_url( $args = null, $escape = true ) {
-
-		if ( null === $args ) {
-			$url = static::get_custom_canonical_url_from_query();
-		} else {
-			$url = static::get_custom_canonical_url_from_args( $args );
-		}
-
-		return $escape ? \tsf()->clean_canonical_url( $url ) : $url;
+	public static function get_custom_canonical_url( $args = null ) {
+		return isset( $args )
+			? static::get_custom_canonical_url_from_args( $args )
+			: static::get_custom_canonical_url_from_query();
 	}
 
 	/**
@@ -137,20 +127,14 @@ class URI {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
-	 *                           Leave null to autodetermine and memoize query.
-	 * @param bool       $escape Whether to escape the canonical URL.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 *                         Leave null to autodetermine and memoize query.
 	 * @return string The custom canonical URL, if any.
 	 */
-	public static function get_generated_url( $args = null, $escape = true ) {
-
-		if ( null === $args ) {
-			$url = static::get_generated_url_from_query();
-		} else {
-			$url = static::get_generated_url_from_args( $args );
-		}
-
-		return $escape ? \tsf()->clean_canonical_url( $url ) : $url;
+	public static function get_generated_url( $args = null ) {
+		return isset( $args )
+			? static::get_generated_url_from_args( $args )
+			: static::get_generated_url_from_query();
 	}
 
 	/**
@@ -175,7 +159,7 @@ class URI {
 		if ( Meta\URI\Utils::url_matches_blog_domain( $url ) )
 			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
 
-		return $url;
+		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
 
 	/**
@@ -206,7 +190,7 @@ class URI {
 		if ( Meta\URI\Utils::url_matches_blog_domain( $url ) )
 			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
 
-		return $url;
+		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
 
 	/**
@@ -284,7 +268,10 @@ class URI {
 		if ( $page > 1 )
 			$url = URI\Utils::add_pagination_to_url( $url, $page, true );
 
-		return URI\Utils::set_preferred_url_scheme( $url );
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -297,8 +284,11 @@ class URI {
 	public static function get_bare_front_page_url() {
 		return umemo( __METHOD__ ) ?? umemo(
 			__METHOD__,
-			URI\Utils::slash_front_page_url(
-				URI\Utils::set_preferred_url_scheme( Data\Blog::get_front_page_url() )
+			\sanitize_url(
+				URI\Utils::slash_front_page_url(
+					URI\Utils::set_preferred_url_scheme( Data\Blog::get_front_page_url() )
+				),
+				[ 'https', 'http' ]
 			)
 		);
 	}
@@ -316,7 +306,9 @@ class URI {
 		if ( isset( $post_id ) )
 			return static::get_bare_singular_url( $post_id );
 
-		$url = \get_permalink( $post_id );
+		$url = \get_permalink( Query::get_the_real_id() );
+
+		if ( empty( $url ) ) return '';
 
 		if ( Query::is_singular_archive() ) {
 			// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
@@ -331,7 +323,10 @@ class URI {
 				$url = URI\Utils::add_pagination_to_url( $url, $page, false );
 		}
 
-		return URI\Utils::set_preferred_url_scheme( $url );
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -346,7 +341,12 @@ class URI {
 
 		$url = \get_permalink( $post_id );
 
-		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+		if ( empty( $url ) ) return '';
+
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -369,8 +369,11 @@ class URI {
 		if ( empty( $url ) || ! \is_string( $url ) )
 			return '';
 
-		return URI\Utils::set_preferred_url_scheme(
-			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme(
+				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+			),
+			[ 'https', 'http' ]
 		);
 	}
 
@@ -392,7 +395,13 @@ class URI {
 
 		$url = \get_term_link( $term_id, $taxonomy );
 
-		return $url && \is_string( $url ) ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+		if ( empty( $url ) || ! \is_string( $url ) )
+			return '';
+
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -413,8 +422,11 @@ class URI {
 
 		if ( empty( $url ) ) return '';
 
-		return URI\Utils::set_preferred_url_scheme(
-			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme(
+				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+			),
+			[ 'https', 'http' ]
 		);
 	}
 
@@ -431,7 +443,12 @@ class URI {
 
 		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
 
-		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+		if ( empty( $url ) ) return '';
+
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -454,8 +471,11 @@ class URI {
 
 		if ( empty( $url ) ) return '';
 
-		return URI\Utils::set_preferred_url_scheme(
-			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme(
+				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+			),
+			[ 'https', 'http' ]
 		);
 	}
 
@@ -471,7 +491,12 @@ class URI {
 
 		$url = \get_author_posts_url( $id ?? Query::get_the_real_id() );
 
-		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+		if ( empty( $url ) ) return '';
+
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -504,8 +529,11 @@ class URI {
 
 		if ( empty( $url ) ) return '';
 
-		return URI\Utils::set_preferred_url_scheme(
-			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme(
+				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+			),
+			[ 'https', 'http' ]
 		);
 	}
 
@@ -529,7 +557,12 @@ class URI {
 			$url = \get_year_link( $year );
 		}
 
-		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+		if ( empty( $url ) ) return '';
+
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -555,8 +588,11 @@ class URI {
 
 		if ( empty( $url ) ) return '';
 
-		return URI\Utils::set_preferred_url_scheme(
-			URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme(
+				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
+			),
+			[ 'https', 'http' ]
 		);
 	}
 
@@ -572,7 +608,12 @@ class URI {
 
 		$url = \get_search_link( $search_query );
 
-		return $url ? URI\Utils::set_preferred_url_scheme( $url ) : '';
+		if ( empty( $url ) ) return '';
+
+		return \sanitize_url(
+			URI\Utils::set_preferred_url_scheme( $url ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**
@@ -599,17 +640,30 @@ class URI {
 
 		// If this page is not the last, create a next-URL.
 		if ( ( $page + 1 ) <= $numpages ) {
-			$url  = URI\Utils::remove_pagination_from_url( static::get_generated_url() );
-			$next = URI\Utils::add_pagination_to_url( $url, $page + 1 );
+			$url = URI\Utils::remove_pagination_from_url( static::get_generated_url() );
+
+			if ( $url )
+				$next = \sanitize_url(
+					URI\Utils::add_pagination_to_url( $url, $page + 1 ),
+					[ 'https', 'http' ]
+				);
 		}
 
 		// If this page is not the first, create a prev-URL.
 		if ( $page > 1 ) {
 			$url ??= URI\Utils::remove_pagination_from_url( static::get_generated_url() );
-			$prev  = URI\Utils::add_pagination_to_url( $url, $page - 1 );
+
+			if ( $url )
+				$prev = \sanitize_url(
+					URI\Utils::add_pagination_to_url( $url, $page - 1 ),
+					[ 'https', 'http' ]
+				);
 		}
 
-		return [ $prev ?? '', $next ?? '' ];
+		return [
+			$prev ?? '',
+			$next ?? '',
+		];
 	}
 
 	/**
@@ -649,7 +703,9 @@ class URI {
 			}
 		}
 
-		return $url ?? '' ?: '';
+		if ( empty( $url ) ) return '';
+
+		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
 
 	/**
@@ -727,7 +783,7 @@ class URI {
 		}
 
 		$query       = http_build_query( $query );
-		$extra_query = parse_url( static::get_generated_url( null, false ), \PHP_URL_QUERY );
+		$extra_query = parse_url( static::get_generated_url( null ), \PHP_URL_QUERY );
 
 		if ( $extra_query )
 			$query .= "&$extra_query";

@@ -264,11 +264,10 @@ final class AJAX {
 	 */
 	public static function _wp_ajax_get_post_data() {
 
-		$tsf = \tsf();
-		$tsf->clean_response_header();
+		\tsf()->clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
-		$tsf->_check_tsf_ajax_referer( 'edit_posts' );
+		\tsf()->_check_tsf_ajax_referer( 'edit_posts' );
 
 		$post_id = \absint( $_POST['post_id'] );
 
@@ -302,7 +301,7 @@ final class AJAX {
 
 		foreach ( $get as $g ) switch ( $g ) {
 			case 'seobar':
-				$data[ $g ] = $tsf->get_generated_seo_bar( $_generator_args );
+				$data[ $g ] = \tsf()->get_generated_seo_bar( $_generator_args );
 				break;
 
 			case 'metadescription':
@@ -311,35 +310,35 @@ final class AJAX {
 				switch ( $g ) {
 					case 'metadescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = Data\Plugin::get_option( 'homepage_description' )
-									   ?: Meta\Description::get_generated_description( $_generator_args, false );
+							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
+									   ?: Meta\Description::get_generated_description( $_generator_args );
 						} else {
-							$data[ $g ] = Meta\Description::get_generated_description( $_generator_args, false );
+							$data[ $g ] = Meta\Description::get_generated_description( $_generator_args );
 						}
 						break;
 					case 'ogdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = Data\Plugin::get_option( 'homepage_description' )
-									   ?: Meta\Open_Graph::get_generated_description( $_generator_args, false );
+							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
+									   ?: Meta\Open_Graph::get_generated_description( $_generator_args );
 						} else {
-							$data[ $g ] = Meta\Open_Graph::get_generated_description( $_generator_args, false );
+							$data[ $g ] = Meta\Open_Graph::get_generated_description( $_generator_args );
 						}
 						break;
 					case 'twdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
-							$data[ $g ] = Data\Plugin::get_option( 'homepage_description' )
-									   ?: Meta\Twitter::get_generated_description( $_generator_args, false );
+							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
+									   ?: Meta\Twitter::get_generated_description( $_generator_args );
 						} else {
-							$data[ $g ] = Meta\Twitter::get_generated_description( $_generator_args, false );
+							$data[ $g ] = Meta\Twitter::get_generated_description( $_generator_args );
 						}
 				}
 
-				$data[ $g ] = $tsf->s_description( $data[ $g ] );
+				$data[ $g ] = \tsf()->escape_description( $data[ $g ] );
 				break;
 
 			case 'imageurl':
 				if ( Query::is_static_frontpage( $post_id ) ) {
-					$data[ $g ] = Data\Plugin::get_option( 'homepage_social_image_url' )
+					$data[ $g ] = \sanitize_url( Data\Plugin::get_option( 'homepage_social_image_url' ) )
 							   ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
 				} else {
 					$data[ $g ] = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );

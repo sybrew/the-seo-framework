@@ -142,6 +142,8 @@ class Plugin {
 
 		\tsf()->init_sanitizer_filters();
 
+		Plugin\PTA::flush_cache();
+
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $options );
 	}
 
