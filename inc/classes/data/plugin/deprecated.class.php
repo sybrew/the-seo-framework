@@ -49,7 +49,7 @@ final class Deprecated {
 	 * @since 4.3.0
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
-	 *                       When empty, it'll return all options. You should use get_all_options() instead.
+	 *                       When empty, the function will return an unexpected value, but likely null.
 	 * @return mixed
 	 */
 	public static function get_deprecated_option( ...$key ) {

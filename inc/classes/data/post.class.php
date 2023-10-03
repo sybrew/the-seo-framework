@@ -42,6 +42,24 @@ class Post {
 	/**
 	 * Fetches Post content.
 	 *
+	 * @since 4.3.0
+	 *
+	 * @param \WP_Post|int $post The Post or Post ID.
+	 * @return string The post content.
+	 */
+	public static function get_post_excerpt( $post = null ) {
+
+		$post = \get_post( $post ?: Query::get_the_real_id() );
+
+		// '0' is not deemed content. Return empty string for it's a slippery slope.
+		return ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' )
+			? $post->post_excerpt
+			: '';
+	}
+
+	/**
+	 * Fetches Post content.
+	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 No longer applies WordPress's default filters.
 	 * @since 4.2.8 Now tests for post type support of 'editor' before parsing the content.

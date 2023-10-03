@@ -50,11 +50,25 @@ class Legacy_API extends Core {
 	 *
 	 * @param string|string[] $key Option name, or a map of indexes therefor.
 	 *                             If you send an empty array, you'll get all options.
-	 *                             Don't do that; use get_all_options() instead.
+	 *                             Don't do that; use get_options() instead.
 	 * @return ?mixed The TSF option value. Null when not found.
 	 */
 	public static function get_option( $key ) {
 		return static::data()->plugin()->get_option( ...(array) $key );
+	}
+
+	/**
+	 * Updates options. Also updates the option cache if the settings aren't headless.
+	 *
+	 * @since 2.9.0
+	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 *
+	 * @param string|array $option The option key, or an array of key and value pairs.
+	 * @param mixed        $value  The option value. Ignored when $option is an array.
+	 * @return bool True on succesful update, false otherwise.
+	 */
+	public static function update_option( $option, $value = '' ) {
+		return static::data()->plugin()->update_option( $option, $value );
 	}
 
 	/**

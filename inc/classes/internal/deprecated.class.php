@@ -4498,7 +4498,7 @@ final class Deprecated {
 	public function create_canonical_url( $args = [] ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->create_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->create_canonical_url()', '4.3.0', 'tsf->uri()->get_canonical_url() or tsf->uri()->get_custom_canonical_url()' );
 
 		if ( empty( $args['get_custom_field'] ) )
 			return $tsf->uri()->get_generated_canonical_url( $args ?: null );
@@ -5320,10 +5320,10 @@ final class Deprecated {
 	public function get_all_options( $setting = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_all_options()', '4.3.0', 'tsf()->data()->plugin()->get_options()' );
+		$tsf->_deprecated_function( 'tsf()->get_all_options()', '4.3.0', 'tsf()->get_options()' );
 
 		if ( ! $setting )
-			return $tsf->data()->plugin()->get_options();
+			return $tsf->get_options();
 
 		/**
 		 * @since 2.0.0
@@ -5419,27 +5419,6 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->get_robots_taxonomy_option_id()', '4.3.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
 
 		return $tsf->data()->plugin()->helper()->get_robots_option_index( 'taxonomy', $type );
-	}
-
-	/**
-	 * Updates a single SEO option.
-	 *
-	 * Can return false if option is unchanged.
-	 *
-	 * @since 2.9.0
-	 * @since 4.3.0 Deprecated.
-	 * @deprecated
-	 *
-	 * @param string $key   The option key.
-	 * @param string $value The option value.
-	 * @return bool True on success, false on failure.
-	 */
-	public function update_option( $key = '', $value = '' ) {
-
-		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_option()', '4.3.0', 'tsf()->data()->plugin()->update_option()' );
-
-		return $tsf->data()->plugin()->update_option( $key, $value );
 	}
 
 	/**

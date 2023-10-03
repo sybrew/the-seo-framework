@@ -78,7 +78,7 @@ class Admin_Pages extends User_Data {
 				'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
 				'menu_title' => \esc_html__( 'SEO', 'autodescription' ) . ( $issue_badge ?? '' ),
 				'capability' => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
-				'menu_slug'  => $this->seo_settings_page_slug,
+				'menu_slug'  => \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG,
 				'callback'   => [ $this, '_output_settings_wrap' ],
 				'icon'       => 'dashicons-search',
 				'position'   => '90.9001',

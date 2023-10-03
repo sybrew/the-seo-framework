@@ -108,6 +108,12 @@ final class WebPage extends Reference {
 			if ( Query::is_real_front_page() && Data\Plugin::get_option( 'knowledge_output' ) ) {
 				$entity['about'] = &Organization::get_dynamic_ref();
 			}
+
+			if ( Query::is_archive() || Query::is_singular_archive() ) {
+				static::$type = 'CollectionPage';
+			} elseif ( Query::is_search() ) {
+				static::$type = [ 'CollectionPage', 'SearchResultsPage' ];
+			}
 		} else {
 			normalize_generation_args( $args );
 

@@ -73,10 +73,13 @@ class Core {
 
 		switch ( $name ) {
 			case 'the_seo_framework_debug':
-				$this->_inaccessible_p_or_m( 'tsf()->the_seo_framework_debug', 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant THE_SEO_FRAMEWORK_DEBUG' );
 				return false;
 			case 'script_debug':
-				$this->_inaccessible_p_or_m( 'tsf()->script_debug', 'since 4.3.0; use constant SCRIPT_DEBUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant SCRIPT_DEBUG' );
+				return false;
+			case 'seo_settings_page_slug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
 				return false;
 		}
 
@@ -121,6 +124,9 @@ class Core {
 			case 'the_seo_framework_use_transients':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; with no alternative available' );
 				return true;
+			case 'seo_settings_page_slug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
+				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
@@ -347,7 +353,7 @@ class Core {
 			? ''
 			: \esc_url(
 				html_entity_decode(
-					\menu_page_url( $this->seo_settings_page_slug, false )
+					\menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false )
 				),
 				[ 'https', 'http' ]
 			);

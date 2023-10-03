@@ -15,7 +15,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 if ( function_exists( 'tsf_extension_manager' )
 	&& in_array(
 		tsf_extension_manager()->seo_extensions_page_slug ?? null,
-		array_column( $GLOBALS['submenu'][ $this->seo_settings_page_slug ] ?? [], 2 ),
+		array_column( $GLOBALS['submenu'][ \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG ] ?? [], 2 ),
 		true
 	)
 ) {

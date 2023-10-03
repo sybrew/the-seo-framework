@@ -323,7 +323,7 @@ final class Open_Graph {
 			 * @param string $time The article published time.
 			 * @param int    $id   The current page or term ID.
 			 */
-			$time = (string) \apply_filters_ref_array(
+			$time = (string) \apply_filters_deprecated(
 				'the_seo_framework_publishedtime_output',
 				[
 					$time,
@@ -360,7 +360,7 @@ final class Open_Graph {
 			 * @param string $time The article modified time.
 			 * @param int    $id   The current page or term ID.
 			 */
-			$time = (string) \apply_filters_ref_array(
+			$time = (string) \apply_filters_deprecated(
 				'the_seo_framework_modifiedtime_output',
 				[
 					$time,

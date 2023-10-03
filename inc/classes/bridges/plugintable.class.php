@@ -53,7 +53,7 @@ final class PluginTable {
 		if ( ! is_headless( 'settings' ) ) {
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
-				\esc_url( \admin_url( 'admin.php?page=' . \tsf()->seo_settings_page_slug ) ),
+				\esc_url( \admin_url( 'admin.php?page=' . \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG ) ),
 				\esc_html__( 'Settings', 'autodescription' )
 			);
 		}

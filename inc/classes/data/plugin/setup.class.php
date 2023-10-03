@@ -65,7 +65,7 @@ class Setup {
 	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
-	 *                       When empty, it'll return all options. You should use get_all_options() instead.
+	 *                       When empty, it'll return all options. You should use get_default_options() instead.
 	 * @return mixed The default option. Null if it's not registered.
 	 */
 	public static function get_default_option( ...$key ) {
@@ -86,7 +86,7 @@ class Setup {
 	 *              2. Moved to `The_SEO_Framework\Data\Setup`.
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
-	 *                       When empty, it'll return all options. You should use get_all_options() instead.
+	 *                       When empty, it'll return all options. You should use get_warned_options() instead.
 	 * @return bool True if warning is registered. False otherwise.
 	 */
 	public static function get_warned_option( ...$key ) {

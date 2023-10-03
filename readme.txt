@@ -643,6 +643,13 @@ TODO instead of removing Elementor library from public posts types, force noinde
 TODO make multiline deprecation notices over .{120,}
 	_deprecated_function.{100,}
 
+TODO rename get_*_canonical_url() functions to get_generated_\*_permalink()
+	-> The real canonical URL is gathered from the settings, and falls back to the generated URL.
+TODO Also see https://wordpress.org/support/topic/canonicals-in-sitemap/ -- we should use the canonical URLs in the sitemap.
+
+TODO Remove all "$escape" parameters from the meta generators, and always _sanitize_ where data is generated. Let the dev escape when necessary.
+	-> This saves a jump, and actually improved performance.
+
 **Detailed log**
 
 **For everyone:**
@@ -893,6 +900,18 @@ TODO make multiline deprecation notices over .{120,}
 		* For class `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 			* **Methods added:**
 				* `detect_multilingual_plugins()`
+			* **Methods ennobled:** This means that the methods are now part of the legacy API and will be maintained forevermore.
+				* `get_option()`
+				* `get_options()`
+				* `update_option()`
+				* `get_title()`
+				* `get_open_graph_title()`
+				* `get_twitter_title()`
+				* `get_description()`
+				* `get_open_graph_description()`
+				* `get_twitter_description()`
+				* `get_canonical_url()`
+				* `get_image_details()`
 			* **Methods changed:**
 				* TODO redo this list; just go by all functions within the object, ought to be easier retroactively...
 				* `query_supports_seo()`
@@ -1135,54 +1154,53 @@ TODO make multiline deprecation notices over .{120,}
 				* `can_access_settings()`, use `current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )` instead.
 				* `html_output()` with no alternative available.
 				* `do_meta_output()` with no alternative available.
-				* `tsf()->get_default_site_options()`, use `tsf()->data()->plugin()->setup()->get_default_options()` instead.
-				* `tsf()->get_warned_site_options()`, use `tsf()->data()->plugin()->setup()->get_warned_options()` instead.
-				* `tsf()->get_all_options()`, use `tsf()->data()->plugin()->get_options()` instead.
-				* `tsf()->get_default_option()`, use `tsf()->data()->plugin()->setup()->get_default_option()` instead.
-				* `tsf()->get_warned_option()`, use `tsf()->data()->plugin()->setup()->get_warned_option()` instead.
-				* `tsf()->get_robots_post_type_option_id()`, use `tsf()->data()->plugin()->helper()->get_robots_option_index()` instead.
-				* `tsf()->get_robots_taxonomy_option_id()`, use `tsf()->data()->plugin()->helper()->get_robots_option_index()` instead.
-				* `tsf()->update_option()`, use `tsf()->data()->plugin()->update_option()` instead.
-				* `tsf()->update_settings()`, use `tsf()->data()->plugin()->update_option()` instead.
-				* `tsf()->get_static_cache()`, use `tsf()->data()->plugin()->get_site_cache()` instead.
-				* `tsf()->update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
-				* `tsf()->update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
-				* `tsf()->get_term_meta_item()`, use `tsf()->data()->plugin()->term()->get_term_meta_item()` instead.
-				* `tsf()->get_term_meta()`, use `tsf()->data()->plugin()->term()->get_term_meta()` instead.
-				* `tsf()->get_term_meta_defaults()`, use `tsf()->data()->plugin()->term()->get_term_meta_defaults()` instead.
-				* `tsf()->update_single_term_meta_item()`, use `tsf()->data()->plugin()->term()->update_single_term_meta_item()` instead.
-				* `tsf()->get_latest_category_id()`, use `tsf()->data()->term()->get_latest_category_id()` instead.
-				* `tsf()->get_latest_category_id()`, use `tsf()->data()->term()->is_term_populated()` instead.
-				* `tsf()->get_latest_post_id()`, use `tsf()->data()->post()->get_latest_post_id()` instead.
-				* `tsf()->get_primary_term()`, use `tsf()->data()->plugin()->post()->get_primary_term()` instead.
-				* `tsf()->get_primary_term_id()`, use `tsf()->data()->plugin()->post()->get_primary_term_id()` instead.
-				* `tsf()->update_primary_term_id()`, use `tsf()->data()->plugin()->post()->update_primary_term_id()` instead.
-				* `tsf()->save_term_meta()`, use `tsf()->data()->plugin()->term()->save_term_meta()` instead.
-				* `tsf()->get_user_meta_item()`, use `tsf()->data()->plugin()->user()->get_user_meta_item()` instead.
-				* `tsf()->get_current_post_author_meta_item()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta_item()` instead.
-				* `tsf()->get_current_post_author_meta()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta()` instead.
-				* `tsf()->get_user_meta()`, use `tsf()->data()->plugin()->user()->get_user_meta()` instead.
-				* `tsf()->get_user_meta_defaults()`, use `tsf()->data()->plugin()->user()->get_user_meta_defaults()` instead.
-				* `tsf()->update_single_user_meta_item()`, use `tsf()->data()->plugin()->user()->update_single_user_meta_item()` instead.
-				* `tsf()->save_user_meta()`, use `tsf()->data()->plugin()->user()->save_user_meta()` instead.
-				* `tsf()->get_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
-				* `tsf()->get_current_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
-				* `tsf()->get_user_id()`, use `tsf()->query()->get_current_user_id()` instead.
-				* `tsf()->get_post_content()`, use `tsf()->data()->post()->get_post_content()` instead.
-				* `tsf()->uses_non_html_page_builder()`, use `tsf()->data()->post()->uses_non_html_page_builder()` instead.
-				* `tsf()->is_protected()`, use `tsf()->data()->post()->is_protected()` instead.
-				* `tsf()->is_password_protected()`, use `tsf()->data()->post()->is_password_protected()` instead.
-				* `tsf()->is_private()`, use `tsf()->data()->post()->is_private()` instead.
-				* `tsf()->is_draft()`, use `tsf()->data()->post()->is_draft()` instead.
-				* `tsf()->get_post_meta_item()`, use `tsf()->data()->plugin()->post()->get_post_meta_item()` instead.
-				* `tsf()->get_post_meta()`, use `tsf()->data()->plugin()->post()->get_post_meta()` instead.
-				* `tsf()->get_post_meta_defaults()`, use `tsf()->data()->plugin()->post()->get_post_meta_defaults()` instead.
-				* `tsf()->update_single_post_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_post_meta_item()` instead.
-				* `tsf()->save_post_meta()`, use `tsf()->data()->plugin()->post()->save_post_meta()` instead.
-				* `tsf()->get_post_type_archive_meta()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta()` instead.
-				* `tsf()->get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()` instead.
-				* `tsf()->get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
-				* `tsf()->get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
+				* `get_default_site_options()`, use `tsf()->data()->plugin()->setup()->get_default_options()` instead.
+				* `get_warned_site_options()`, use `tsf()->data()->plugin()->setup()->get_warned_options()` instead.
+				* `get_all_options()`, use `tsf()->data()->plugin()->get_options()` instead.
+				* `get_default_option()`, use `tsf()->data()->plugin()->setup()->get_default_option()` instead.
+				* `get_warned_option()`, use `tsf()->data()->plugin()->setup()->get_warned_option()` instead.
+				* `get_robots_post_type_option_id()`, use `tsf()->data()->plugin()->helper()->get_robots_option_index()` instead.
+				* `get_robots_taxonomy_option_id()`, use `tsf()->data()->plugin()->helper()->get_robots_option_index()` instead.
+				* `update_settings()`, use `tsf()->data()->plugin()->update_option()` instead.
+				* `get_static_cache()`, use `tsf()->data()->plugin()->get_site_cache()` instead.
+				* `update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
+				* `update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
+				* `get_term_meta_item()`, use `tsf()->data()->plugin()->term()->get_term_meta_item()` instead.
+				* `get_term_meta()`, use `tsf()->data()->plugin()->term()->get_term_meta()` instead.
+				* `get_term_meta_defaults()`, use `tsf()->data()->plugin()->term()->get_term_meta_defaults()` instead.
+				* `update_single_term_meta_item()`, use `tsf()->data()->plugin()->term()->update_single_term_meta_item()` instead.
+				* `get_latest_category_id()`, use `tsf()->data()->term()->get_latest_category_id()` instead.
+				* `get_latest_category_id()`, use `tsf()->data()->term()->is_term_populated()` instead.
+				* `get_latest_post_id()`, use `tsf()->data()->post()->get_latest_post_id()` instead.
+				* `get_primary_term()`, use `tsf()->data()->plugin()->post()->get_primary_term()` instead.
+				* `get_primary_term_id()`, use `tsf()->data()->plugin()->post()->get_primary_term_id()` instead.
+				* `update_primary_term_id()`, use `tsf()->data()->plugin()->post()->update_primary_term_id()` instead.
+				* `save_term_meta()`, use `tsf()->data()->plugin()->term()->save_term_meta()` instead.
+				* `get_user_meta_item()`, use `tsf()->data()->plugin()->user()->get_user_meta_item()` instead.
+				* `get_current_post_author_meta_item()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta_item()` instead.
+				* `get_current_post_author_meta()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta()` instead.
+				* `get_user_meta()`, use `tsf()->data()->plugin()->user()->get_user_meta()` instead.
+				* `get_user_meta_defaults()`, use `tsf()->data()->plugin()->user()->get_user_meta_defaults()` instead.
+				* `update_single_user_meta_item()`, use `tsf()->data()->plugin()->user()->update_single_user_meta_item()` instead.
+				* `save_user_meta()`, use `tsf()->data()->plugin()->user()->save_user_meta()` instead.
+				* `get_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
+				* `get_current_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
+				* `get_user_id()`, use `tsf()->query()->get_current_user_id()` instead.
+				* `get_post_content()`, use `tsf()->data()->post()->get_post_content()` instead.
+				* `uses_non_html_page_builder()`, use `tsf()->data()->post()->uses_non_html_page_builder()` instead.
+				* `is_protected()`, use `tsf()->data()->post()->is_protected()` instead.
+				* `is_password_protected()`, use `tsf()->data()->post()->is_password_protected()` instead.
+				* `is_private()`, use `tsf()->data()->post()->is_private()` instead.
+				* `is_draft()`, use `tsf()->data()->post()->is_draft()` instead.
+				* `get_post_meta_item()`, use `tsf()->data()->plugin()->post()->get_post_meta_item()` instead.
+				* `get_post_meta()`, use `tsf()->data()->plugin()->post()->get_post_meta()` instead.
+				* `get_post_meta_defaults()`, use `tsf()->data()->plugin()->post()->get_post_meta_defaults()` instead.
+				* `update_single_post_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_post_meta_item()` instead.
+				* `save_post_meta()`, use `tsf()->data()->plugin()->post()->save_post_meta()` instead.
+				* `get_post_type_archive_meta()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta()` instead.
+				* `get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()` instead.
+				* `get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
+				* `get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1298,10 +1316,13 @@ TODO make multiline deprecation notices over .{120,}
 				* `the_seo_framework_debug`, use constant `THE_SEO_FRAMEWORK_DEBUG` instead.
 				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
 				* `is_headless`, use function `The_SEO_Framework\is_headless()` instead.
+				* `seo_settings_page_slug`, use constant `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` instead.
 			* **Properties removed:**
 				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
 		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.
 * **Constant notes:**
+	* **Added:**
+		* `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` is now available.
 	* **Changed:**
 		* `THE_SEO_FRAMEWORK_DEBUG` is now always available at `plugins_loaded`.
 	* **Removed:**

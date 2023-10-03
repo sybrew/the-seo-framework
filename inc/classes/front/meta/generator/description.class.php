@@ -61,7 +61,7 @@ final class Description {
 			 * @param string $description The generated description.
 			 * @param int    $id          The page or term ID.
 			 */
-			$description = (string) \apply_filters_ref_array(
+			$description = (string) \apply_filters_deprecated(
 				'the_seo_framework_description_output',
 				[
 					$description,

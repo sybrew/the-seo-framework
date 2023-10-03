@@ -43,16 +43,6 @@ use \The_SEO_Framework\Helper\{
 class Site_Options extends Sanitize {
 
 	/**
-	 * Hold the SEO Settings Page ID for this plugin.
-	 *
-	 * @since 2.2.2
-	 * @since 2.7.0 Renamed var from page_id and made public.
-	 *
-	 * @var string The page ID
-	 */
-	public $seo_settings_page_slug = 'theseoframework-settings';
-
-	/**
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
@@ -100,7 +90,7 @@ class Site_Options extends Sanitize {
 			} else {
 				Data\Plugin::update_site_cache( 'settings_notice', 'error' );
 			}
-			$this->admin_redirect( $this->seo_settings_page_slug );
+			$this->admin_redirect( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
 			exit;
 		}
 	}

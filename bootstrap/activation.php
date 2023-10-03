@@ -32,13 +32,14 @@ $tsf->reset_check_plugin_conflicts();
 
 turn_on_autoloading: {
 	// Turns on auto loading for The SEO Framework's main options.
-	$options = $tsf->get_all_options();
+	$options = \The_SEO_Framework\Data\Plugin::get_options();
 	$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
 	\remove_all_filters( "pre_update_option_{$setting}" );
 	\remove_all_actions( "update_option_{$setting}" );
 	\remove_all_filters( "sanitize_option_{$setting}" );
 
+	// TODO WP 6.4+ use wp_set_option_autoload() instead of setting a fake change.
 	$temp_options = $options;
 	// Write a small difference, so the change will be forwarded to the database.
 	if ( \is_array( $temp_options ) )

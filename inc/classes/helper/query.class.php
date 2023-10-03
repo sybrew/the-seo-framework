@@ -956,7 +956,7 @@ class Query {
 			return false;
 
 		if ( ! $secure )
-			return static::is_menu_page( \tsf()->seo_settings_page_hook, \tsf()->seo_settings_page_slug );
+			return static::is_menu_page( \tsf()->seo_settings_page_hook, \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
 
 		return Query\Cache::memo()
 			?? Query\Cache::memo( static::is_menu_page( \tsf()->seo_settings_page_hook ) );

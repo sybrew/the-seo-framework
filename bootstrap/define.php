@@ -70,6 +70,15 @@ namespace The_SEO_Framework;
 	or \define( 'THE_SEO_FRAMEWORK_DEBUG', false );
 
 /**
+ * The plugin's main settings page slug.
+ *
+ * @since 4.3.0
+ * @param bool
+ */
+\defined( 'THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' )
+	or \define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG', 'theseoframework-settings' );
+
+/**
  * The plugin options database option_name key.
  *
  * Used for storing the SEO options array.
