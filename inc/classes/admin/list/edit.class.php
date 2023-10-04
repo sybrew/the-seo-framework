@@ -1,10 +1,9 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\ListEdit
- * @subpackage The_SEO_Framework\Admin\Edit\List
+ * @package The_SEO_Framework\Classes\Admin\List\Edit
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin\List;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -37,11 +36,12 @@ use \The_SEO_Framework\Helper\{
  * Prepares the List Edit view interface.
  *
  * @since 4.0.0
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\List`
  * @access protected
  * @internal
  * @final Can't be extended.
  */
-final class ListEdit extends ListTable {
+final class Edit extends Table {
 
 	/**
 	 * @since 4.0.0

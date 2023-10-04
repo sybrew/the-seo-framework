@@ -905,7 +905,18 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 			* This will prevent TSF from acting sporadically when other plugins hook into TSF too early.
 * **Object notes:**
 	* **New objects:**
-		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods.
+		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods. TODO make this private or add a functional EP interface?
+		* Class `The_SEO_Framework\Admin\Script\Loader` is new. TODO make this private?
+		* Class `The_SEO_Framework\Admin\Script\Registry` is new. TODO make this private?
+		* Class `The_SEO_Framework\Admin\SEOBar\Builder` is new. TODO make this private?
+	* **Deprecated objects:**
+		* Class `The_SEO_Framework\Bridges\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Loader` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
+		* Class `The_SEO_Framework\Builders\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Registry` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
+		* Class `The_SEO_Framework\Interpreters\SEOBar` is now deprecated. Use `The_SEO_Framework\Admin\SEOBar\Builder` instead. TODO add a functional EP? e.g. `tsf()->seobar()`
+	* **Removed objects:**
+		* Class `The_SEO_Framework\Builders\Images` is now gone without deprecation.
+			* It was a helper class with complex generators. We doubt anyone used this directly.
+		* Class `The_SEO_Framework\Builders\Sitemap\Main` is now gone. It was deprecated since TSF 4.2.0.
 	* **Existing objects:**
 		* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
 		* For class `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
@@ -1436,6 +1447,8 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
+	* **Changed:**
+		* `the_seo_framework_seo_bar`, added the builder's instance as the third parameter.
 	* **Deprecated:**
 		* `the_seo_framework_delete_cache_sitemap`, use `the_seo_framework_cleared_sitemap_transients` instead.
 * **Hook notes:**

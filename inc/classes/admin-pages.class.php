@@ -348,7 +348,7 @@ class Admin_Pages extends User_Data {
 		if ( ! \wp_doing_ajax() ) {
 			// Make sure the scripts are loaded.
 			$this->init_admin_scripts();
-			Builders\Scripts::footer_enqueue();
+			Admin\Script\Registry::footer_enqueue();
 		}
 
 		switch ( $type ) {
@@ -453,7 +453,7 @@ class Admin_Pages extends User_Data {
 	 * Returns the SEO Bar.
 	 *
 	 * @since 4.0.0
-	 * @uses \The_SEO_Framework\Interpreters\SEOBar::generate_bar();
+	 * @uses \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar();
 	 *
 	 * @param array $query : {
 	 *   int    $id        : Required. The current post or term ID.
@@ -464,7 +464,7 @@ class Admin_Pages extends User_Data {
 	 * @return string The generated SEO bar, in HTML.
 	 */
 	public function get_generated_seo_bar( $query ) {
-		return Interpreters\SEOBar::generate_bar( $query );
+		return \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar( $query );
 	}
 
 	/**

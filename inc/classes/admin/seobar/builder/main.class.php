@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\SEOBar\Main
+ * @package The_SEO_Framework\Classes\Admin\SEOBar\Builder\Main
  * @subpackage The_SEO_Framework\SEOBar
  */
 
-namespace The_SEO_Framework\Builders\SEOBar;
+namespace The_SEO_Framework\Admin\SEOBar\Builder;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -30,15 +30,17 @@ namespace The_SEO_Framework\Builders\SEOBar;
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\SEOBar\Main` from `The_SEO_Framework\Builders\SeoBar`
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`
+ *
  * Mind the late static binding. We use "self" if the variable is shared between instances.
  * We use "static" if the variable isn't shared between instances.
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
  * @access private
- *      Use \The_SEO_Framework\Interpreters\SEOBar::generate_bar() instead.
+ *      Use \The_SEO_Framework\IAdmin\SEOBar\Builder::generate_bar() instead.
  * @internal
  * @abstract Implements test_{$*}, see property $tests and method `_run_test()` for what * may be.
- * @see \The_SEO_Framework\Interpreters\SEOBar
+ * @see \The_SEO_Framework\Admin\SEOBar\Builder
  */
 abstract class Main {
 

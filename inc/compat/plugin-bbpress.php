@@ -25,7 +25,7 @@ use \The_SEO_Framework\Helper\Query,
 \add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description', 10, 2 );
 \add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
 \add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 3 );
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar' );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar', 10, 2 );
 
 /**
  * Override's The SEO Framework's auto-generated title with bbPress's on bbPress queries.
@@ -422,8 +422,9 @@ function _bbpress_filter_robots( $meta, $args ) {
  * @access private
  *
  * @param string $interpreter The interpreter class name.
+ * @param object $builder     The builder's class instance.
  */
-function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
+function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $buiilder ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
@@ -446,7 +447,7 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter ) {
 	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status'] =
 		0 !== \tsf()->s_qubit(
-			Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
+			$builder->get_query_cache()['meta']['_genesis_noindex']
 		)
 			? $interpreter::STATE_OKAY
 			: $interpreter::STATE_UNKNOWN;

@@ -19,7 +19,7 @@ use \The_SEO_Framework\Helper\Query,
 \add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
 \add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
 \add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar' );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar', 10, 2 );
 \add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
 \add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
 
@@ -254,8 +254,9 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
  * @access private
  *
  * @param string $interpreter The interpreter class name.
+ * @param object $builder     The builder's class instance.
  */
-function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
+function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
@@ -274,7 +275,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter ) {
 	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status']               =
 		0 !== \tsf()->s_qubit(
-			Builders\SEOBar\Page::get_instance()->get_query_cache()['meta']['_genesis_noindex']
+			$builder->get_query_cache()['meta']['_genesis_noindex']
 		)
 			? $interpreter::STATE_OKAY
 			: $interpreter::STATE_UNKNOWN;

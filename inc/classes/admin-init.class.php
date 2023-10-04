@@ -52,7 +52,7 @@ class Admin_Init extends Init {
 	 */
 	public function _init_seo_bar_tables() {
 		if ( Data\Plugin::get_option( 'display_seo_bar_tables' ) )
-			new Bridges\SEOBar;
+			new Admin\SEOBar\ListTable;
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Admin_Init extends Init {
 	 * @access private
 	 */
 	public function _init_list_edit() {
-		new Bridges\ListEdit;
+		new Admin\List\Edit;
 	}
 
 	/**
@@ -138,7 +138,7 @@ class Admin_Init extends Init {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		Bridges\Scripts::_init();
+		Admin\Script\Loader::_init();
 	}
 
 	/**

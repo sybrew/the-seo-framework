@@ -1,14 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\SEOBar
+ * @package The_SEO_Framework\Classes\Admin\SEOBar\List
  * @subpackage The_SEO_Framework\SEOBar
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Interpreters;
+use \The_SEO_Framework\Admin\List;
 
 /**
  * The SEO Framework plugin
@@ -30,13 +30,15 @@ use \The_SEO_Framework\Interpreters;
 /**
  * Loads the SEO Bar for administrative tables.
  *
+ * List is a reserved keyword in PHP, so we use ListTable.
+ * PHP should deprecate list() and array().
+ *
  * @since 4.0.0
- * @uses \The_SEO_Framework\Interpreters\SEOBar
- * @see \The_SEO_Framework\Interpreters\SEOBar to generate a bar.
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar`
  *
  * @access private
  */
-final class SEOBar extends ListTable {
+final class ListTable extends List\Table {
 
 	/**
 	 * @since 4.0.0
@@ -120,7 +122,7 @@ final class SEOBar extends ListTable {
 		if ( $this->column_name !== $column_name ) return;
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput
-		echo Interpreters\SEOBar::generate_bar( [
+		echo Builder::generate_bar( [
 			'id'        => $post_id,
 			'post_type' => $this->post_type,
 		] );
@@ -152,7 +154,7 @@ final class SEOBar extends ListTable {
 		if ( $this->doing_ajax )
 			$string .= $this->get_ajax_dispatch_updated_event();
 
-		return Interpreters\SEOBar::generate_bar( [
+		return Builder::generate_bar( [
 			'id'  => $term_id,
 			'tax' => $this->taxonomy,
 		] ) . $string;

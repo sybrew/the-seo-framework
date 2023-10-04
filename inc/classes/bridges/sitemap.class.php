@@ -12,7 +12,6 @@ use function \The_SEO_Framework\memo;
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Interpreters,
 	\The_SEO_Framework\Meta;
 
 /**
@@ -578,7 +577,7 @@ final class Sitemap {
 			header( 'Cache-Control: max-age=1800', true );
 		}
 
-		Interpreters\Sitemap_XSL::prepare();
+		\The_SEO_Framework\Interpreters\Sitemap_XSL::prepare();
 
 		\tsf()->get_view( 'sitemap/xsl-stylesheet' );
 		exit;

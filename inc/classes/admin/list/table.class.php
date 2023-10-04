@@ -1,9 +1,9 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\ListTable
+ * @package The_SEO_Framework\Classes\Admin\List\Table
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin\List;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -43,10 +43,11 @@ use \The_SEO_Framework\Helper\{
  * Totally negligible.
  *
  * @since 4.0.0
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\List`
  * @access private
  * @abstract
  */
-abstract class ListTable {
+abstract class Table {
 
 	/**
 	 * @since 4.0.0

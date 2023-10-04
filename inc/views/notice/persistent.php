@@ -10,7 +10,7 @@
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
 
 use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Builders;
+	\The_SEO_Framework\Admin\Script;
 
 if ( ! $message ) return;
 
@@ -18,7 +18,7 @@ $sanitized_key = sanitize_key( $key );
 
 // Make sure the scripts are loaded.
 $this->init_admin_scripts();
-Builders\Scripts::footer_enqueue();
+Script\Registry::footer_enqueue();
 
 switch ( $args['type'] ) {
 	case 'warning':
