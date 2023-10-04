@@ -8,6 +8,7 @@
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Sitemap,
 	\The_SEO_Framework\Bridges\SeoSettings,
 	\The_SEO_Framework\Interpreters\HTML,
 	\The_SEO_Framework\Interpreters\Form,
@@ -107,7 +108,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				HTML::description_noesc(
 					sprintf(
 						'<a href="%s" target=_blank rel=noopener>%s</a>',
-						esc_url( The_SEO_Framework\Bridges\Sitemap::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
+						esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
 						esc_html__( 'View the base sitemap.', 'autodescription' )
 					)
 				);

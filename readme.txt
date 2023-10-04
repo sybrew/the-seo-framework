@@ -389,9 +389,6 @@ If we go through with 4.3.0, consider removing deprecated filters (filters_depre
 TODO add vertical expand title input?
 	-> This helps with Gutenberg's atrocious sidebar.
 
-TODO remove every case of wp_parse_args()?
-	-> It's bad practise over array_merge(), since it juggles types.
-
 TODO add performance timer next to every Performance setting?
 	-> Perform a simple site query and see what the impact is?
 		-> Do not do this automatically! This may hamper someone's ability to even change this setting.
@@ -401,7 +398,7 @@ TODO at "Schema.org Settings", we say "Enable...", "Enable..." and then "Output.
 	-> Use "Output" for anythign that outputs code, and "Enable" for a feature that adjusts already outputted code?
 TODO Searchbox -> Search box
 
-TODO test if TSF breadcrumbs are still gone from WC products
+TODO test if TSF JSON breadcrumbs are still gone from WC products
 
 TODO when setting primary term in bulk edit, make sure that the post has at least 2 terms attached.
 	(why isn't this listed as a feature neither on our pricing page nor this page at all??)
@@ -422,21 +419,12 @@ TODO what about get_image_dimensions()
 	-> Are we going to move this to a new generator class?
 		-> If so, we can remove the deprecation altogether.
 
-TODO remove inc\classes\builders\sitemap.class.php
 TODO mark update_settings as private?
 TODO cache_json_data makes no sense.
 
-TODO remove $use_cache support in get_option(), but have its cache be updated dynamically instead?
-	-> This may require us to work with traits, which is perfect.
-	-> See Extensions_Options_Cache / Extension_Options
-
 TODO remove leftover var_dump()
 
-TODO deprecate all filters in the generator pools.
-	-> Suggest using the_seo_framework_meta_render_data instead.
-
-TODO if Open Graph is disabled, but still has data, will Twitter Card still fall back to that data?
-	-> If so... ugh. Should we even bother; does the JS already consider this? No one reported this as an issue.
+TODO test the_seo_framework_meta_render_data
 
 TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
 	* Also list all methods affected.
@@ -446,17 +434,14 @@ TODO list all methods available in every pool? Zzz.
 
 TODO move "Facebook" to "Open Graph", and purge fb:app_id?
 
-TODO purge "@since 4.2.0 Deprecated"
-
 TODO move clamp_sentence to something more sensible?
 	-> Utils acts as a drop-in for what PHP is lacking in their SPL.
 	-> To be fair, clamp_sentence would be a useful addition to native PHP.
 
 TODO _init_locale only on admin?
 	-> There's no translatable text on the front-end left, no?
+		-> There is... the HTML header.
 		-> There should be an issue for this.
-
-TODO why is "autodescription_title_no_blogname" always checked on the homepage?
 
 TODO we deprecated Builders\Images, but have yet to write docs.
 
@@ -556,10 +541,6 @@ TODO rename "get_meta()" in robots to something more coherent, like get_cached_r
 	-> Also, rename all functions to contain their data type in them, this is then consistent with all other Factory classes.
 		-> generate_meta() would become get_generated_robots_meta()
 
-TODO apply_filters_ref_array() should now be slower than apply_filters(), no?
-	-> This is because we have to generate an array first.
-		-> Test with 2, 3, 4, and 5 arguments.
-
 TODO if we add a new "enable Schema.org output" support button (because it's now always outputting something), we should enable it only if the user has any of the 3 toggles enabled.
 	* Or, for new users, always enabled it.
 
@@ -571,11 +552,6 @@ TODO instead of .min.js and .min.js, do /min/x.js?
 
 TODO can we bust the cache via a JS script if we detect an older version is being requested?
 	-> E.g., we flag "expected version" to each script. If it's a mismatch, bust it?
-
-TODO change folder builders/sitemap to
-	-> sitemap
-		-> optimized
-		-> core
 
 TODO deprecate the_seo_framework_fetched_description_excerpt.
 
@@ -600,6 +576,8 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 
 TODO we added `uid`. We may want to rename `taxonomy` to `tax`--making it easier to read.
 	-> normalize_generator_args() can swap the name.
+
+TODO remove output_js_title_elements and the polyfills in JS
 
 TODO Helper/query
 	-> Query?
@@ -627,8 +605,8 @@ TODO remove tsf()->loaded?
 	-> At least, write a constant?
 
 TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
+	-> Also remove all _ref_array?
 
-TODO reconsider Bridges\Cache
 TODO get_post_meta* -> get_meta
 	-> also get_term_meta*
 	-> also get_post_type_archive_meta
@@ -745,6 +723,7 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* The SEO Settings meta box is now also styled correctly inside the Block Editor for other post types than 'post' when positioned under the content.
 			* Most notably, the padding and border around the settings make it much easier on your eyes.
 		* If a custom social image URL is inserted in the homepage post-edit meta box, it will now also be depicted in the Homepage Settings meta box on the SEO Settings page.
+		* Resolved an issue where the homepage's Post SEO Settings "Remove the site title?" automatically got checked after updating the page. Even though this hadn't an effect on the output, switching the homepage would cause unwonted and unanticipated behavior.
 	* **Title:**
 		* Resolved an issue where the Twitter title would fall back to a custom Open Graph title when Open Graph is disabled.
 		* Resolved an issue where the incorrect Open Graph fallback title was proposed as a placeholder in the admin interface.
@@ -913,6 +892,8 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* Class `The_SEO_Framework\Bridges\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Loader` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
 		* Class `The_SEO_Framework\Builders\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Registry` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
 		* Class `The_SEO_Framework\Interpreters\SEOBar` is now deprecated. Use `The_SEO_Framework\Admin\SEOBar\Builder` instead. TODO add a functional EP? e.g. `tsf()->seobar()`
+		* Class `The_SEO_Framework\Builders\Sitemap\Main` is now deprecated. Use `The_SEO_Framework\Sitemap\Optimized\Main` instead.
+			* However, nothing useful is left in this class. TODO add a functional EP? e.g. `tsf()->sitemap()->store()` and `tsf()->sitemap()->registry()`
 	* **Removed objects:**
 		* Class `The_SEO_Framework\Builders\Images` is now gone without deprecation.
 			* It was a helper class with complex generators. We doubt anyone used this directly.
@@ -1118,7 +1099,7 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 				* `get_filtered_raw_custom_field_title()`, use `tsf()->title()->get_bare_custom_title()` instead.
 				* `get_filtered_raw_generated_title()`, use `tsf()->title()->get_bare_generated_title()` instead.
 				* `get_raw_custom_field_title()`, use `tsf()->title()->get_bare_unfiltered_custom_title()` instead.
-				* `get_raw_generated_title()`, use `tsf()->title()->get_bare_unfiltered_generated_title()` instead.
+				* `get_raw_generated_title()`, use `tsf()->title()->get_bare_generated_title()` instead.
 				* `get_static_front_page_title()`, use `tsf()->title()->get_front_page_title()` instead.
 				* `get_generated_archive_title()`, use `tsf()->title()->get_archive_title()` instead.
 				* `get_raw_generated_archive_title_items()`, use `tsf()->title()->get_archive_title_list()` instead.
@@ -1256,20 +1237,20 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 					* `delete_main_cache()`
 					* `delete_post_cache()`
 					* `delete_excluded_ids_cache()`
-						* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_excluded_post_ids_cache()`.
+						* This has been moved to `The_SEO_Framework\Sitemap\Store::clear_excluded_post_ids_cache()`. TODO this went all over the place, validate.
 					* `delete_excluded_post_ids_transient()`
 					* `delete_cache()`
 					* `get_exclusion_transient_name()`
 					* `get_sitemap_transient_name()`
-						* This has been moved to `The_SEO_Framework\Bridges\Sitemap::get_transient_key()`.
+						* This has been moved to `The_SEO_Framework\Sitemap\Store::get_transient_key()`.
 					* `generate_cache_key()`
 					* `generate_cache_key_by_type()`
 					* `add_cache_key_suffix()`
-						* This has been moved to `The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix()`.
+						* This has been moved to `The_SEO_Framework\Sitemap\Store::build_unique_cache_key_suffix()`.
 					* `delete_sitemap_transient_permalink_updated`
-						* This has been moved to `The_SEO_Framework\Bridges\Cache::_refresh_sitemap_transient_permalink_updated()`, but not part of the public API.
+						* This has been moved to `The_SEO_Framework\Sitemap\Store::_refresh_sitemap_transient_permalink_updated()`, but not part of the public API.
 					* `delete_sitemap_transient()`
-						* This has been moved to `The_SEO_Framework\Bridges\Cache::clear_sitemap_transients()`.
+						* This has been moved to `The_SEO_Framework\Sitemap\Store::clear_sitemap_transients()`.
 				* Deprecated in TSF v4.2.0, the following deprecated methods of the `The_SEO_Framework\Load` object (`tsf()`) are no longer available:
 					* `append_php_query()`
 					* `get_legacy_header_filters_output()`

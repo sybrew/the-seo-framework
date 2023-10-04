@@ -4,11 +4,12 @@
  * @subpackage The_SEO_Framework\Classes\Builders\Sitemap
  */
 
-namespace The_SEO_Framework\Builders\CoreSitemaps;
+namespace The_SEO_Framework\Sitemap\WP;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -31,41 +32,12 @@ use \The_SEO_Framework\Data;
  * Augments the WordPress Core sitemap.
  *
  * @since 4.1.2
+ * @since 4.3.0 1. Moved to `\The_SEO_Framework\Sitemap\WP`
+ *              2. No longer extends `\The_SEO_Framework\Sitemap\Optimized\Main`.
  *
  * @access private
  */
-class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
-
-	/**
-	 * @since 4.1.2
-	 * @var \The_SEO_Framework\Builders\Sitemap\Main
-	 */
-	private static $instance;
-
-	/**
-	 * Returns this instance.
-	 *
-	 * @since 4.1.2
-	 *
-	 * @return \The_SEO_Framework\Builders\Sitemap\Main $instance
-	 */
-	public static function get_instance() {
-		return static::$instance ?: ( static::$instance = new static );
-	}
-
-	/**
-	 * Generate sitemap.xml content.
-	 *
-	 * @since 4.1.2
-	 * @abstract
-	 * @ignore
-	 * @override
-	 *
-	 * @return string The sitemap content.
-	 */
-	public function build_sitemap() {
-		return '';
-	}
+class Main {
 
 	/**
 	 * Sets "doing sitemap" in TSF if preliminary conditions pass.
@@ -134,6 +106,6 @@ class Main extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 * @return string The sitemap query limit.
 	 */
 	public static function _filter_max_urls() {
-		return static::get_instance()->get_sitemap_post_limit();
+		return Sitemap\Store::get_sitemap_post_limit();
 	}
 }

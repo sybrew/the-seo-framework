@@ -4,7 +4,7 @@
  * @subpackage The_SEO_Framework\Sitemap
  */
 
-use \The_SEO_Framework\Bridges,
+use \The_SEO_Framework\Sitemap,
 	\The_SEO_Framework\Builders,
 	\The_SEO_Framework\Data;
 
@@ -15,7 +15,7 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 
 THE_SEO_FRAMEWORK_DEBUG and $timer_start = hrtime( true );
 
-$sitemap_bridge = Bridges\Sitemap::get_instance();
+$sitemap_bridge = Sitemap\Registry::get_instance();
 
 $sitemap_bridge::output_sitemap_header();
 
@@ -26,7 +26,7 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 
 $sitemap_bridge::output_sitemap_urlset_open_tag();
 
-$sitemap_base = new Builders\Sitemap\Base;
+$sitemap_base = new Sitemap\Optimized\Base;
 // phpcs:ignore, WordPress.Security.EscapeOutput
 echo $sitemap_base->generate_sitemap( $sitemap_id );
 

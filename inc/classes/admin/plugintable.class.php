@@ -1,9 +1,9 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\PluginTable
+ * @package The_SEO_Framework\Classes\Admin\PluginTable
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -77,6 +77,7 @@ final class PluginTable {
 	 *
 	 * @since 3.2.4
 	 * @since 4.1.4 Moved to PluginTable.
+	 * @since 4.3.0 Exchanged API docs for GitHub link. Simplified translations.
 	 * @access private
 	 *
 	 * @param string[] $plugin_meta An array of the plugin's metadata,
@@ -90,41 +91,28 @@ final class PluginTable {
 		if ( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
 			return $plugin_meta;
 
-		$plugins = \get_plugins();
-		$_get_em = empty( $plugins['the-seo-framework-extension-manager/the-seo-framework-extension-manager.php'] );
-
 		return array_merge(
 			$plugin_meta,
 			[
-				'support' => vsprintf(
+				'support' => sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
-					[
-						'https://tsf.fyi/support',
-						\esc_html__( 'Get support', 'autodescription' ),
-					]
+					'https://tsf.fyi/support',
+					\esc_html__( 'Support', 'autodescription' ),
 				),
-				'docs'    => vsprintf(
+				'docs'    => sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
-					[
-						'https://tsf.fyi/docs',
-						\esc_html__( 'View documentation', 'autodescription' ),
-					]
+					'https://tsf.fyi/docs',
+					\esc_html__( 'Documentation', 'autodescription' ),
 				),
-				'API'     => vsprintf(
+				'Git'     => sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
-					[
-						'https://tsf.fyi/docs/api',
-						\esc_html__( 'View API docs', 'autodescription' ),
-					]
+					'https://tsf.fyi/github',
+					'GitHub',
 				),
-				'EM'      => vsprintf(
+				'EM'      => sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
-					[
-						'https://tsf.fyi/extension-manager',
-						$_get_em
-							? \esc_html_x( 'Get Extension Manager', 'Extension Manager is a product name; do not translate it.', 'autodescription' )
-							: 'Extension Manager',
-					]
+					'https://tsf.fyi/extension-manager',
+					'Extension Manager',
 				),
 			]
 		);

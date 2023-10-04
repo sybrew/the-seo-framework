@@ -4,9 +4,11 @@
  * @subpackage WordPress\Sitemaps
  */
 
-namespace The_SEO_Framework\Builders\CoreSitemaps;
+namespace The_SEO_Framework\Sitemap\WP;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -29,6 +31,7 @@ namespace The_SEO_Framework\Builders\CoreSitemaps;
  * Augments the WordPress Core 'taxonomies' sitemap.
  *
  * @since 4.1.2
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\WP`
  *
  * @access private
  */
@@ -92,13 +95,11 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 
 		$taxonomy_terms = new \WP_Term_Query( $args );
 
-		$main = Main::get_instance();
-
 		foreach ( $taxonomy_terms->terms ?? [] as $term ) {
 			/**
 			 * @augmented This if-statement prevents including the term in the sitemap when conditions apply.
 			 */
-			if ( ! $main->is_term_included_in_sitemap( $term->term_id, $taxonomy ) )
+			if ( ! Sitemap\Store::is_term_included_in_sitemap( $term->term_id, $taxonomy ) )
 				continue;
 
 			$term_link = \get_term_link( $term, $taxonomy );

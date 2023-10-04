@@ -4,11 +4,12 @@
  * @subpackage WordPress\Sitemaps
  */
 
-namespace The_SEO_Framework\Builders\CoreSitemaps;
+namespace The_SEO_Framework\Sitemap\WP;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -31,6 +32,7 @@ use \The_SEO_Framework\Data;
  * Augments the WordPress Core 'posts' sitemap.
  *
  * @since 4.1.2
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\WP`
  *
  * @access private
  */
@@ -95,10 +97,8 @@ class Posts extends \WP_Sitemaps_Posts {
 		/**
 		 * @augmented This differs from the inherented.
 		 */
-		$tsf              = \tsf();
-		$main             = Main::get_instance();
 		$show_modified    = (bool) Data\Plugin::get_option( 'sitemaps_modified' );
-		$timestamp_format = $tsf->get_timestamp_format();
+		$timestamp_format = \tsf()->get_timestamp_format();
 
 		/*
 		 * Add a URL for the homepage in the pages sitemap.
@@ -108,7 +108,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			/**
 			 * @augmented This if-statement prevents including the homepage as blog in the sitemap when conditions apply.
 			 */
-			if ( $main->is_post_included_in_sitemap( 0 ) ) {
+			if ( Sitemap\Store::is_post_included_in_sitemap( 0 ) ) {
 				// Extract the data needed for home URL to add to the array.
 				$sitemap_entry = [
 					'loc' => \home_url( '/' ),
@@ -159,7 +159,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			/**
 			 * @augmented This if-statement prevents including the post in the sitemap when conditions apply.
 			 */
-			if ( ! $main->is_post_included_in_sitemap( $post->ID ) )
+			if ( ! Sitemap\Store::is_post_included_in_sitemap( $post->ID ) )
 				continue;
 
 			$sitemap_entry = [
@@ -173,7 +173,7 @@ class Posts extends \WP_Sitemaps_Posts {
 				$lastmod = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 				if ( '0000-00-00 00:00:00' !== $lastmod )
-					$sitemap_entry['lastmod'] = $tsf->gmt2date( $timestamp_format, $lastmod );
+					$sitemap_entry['lastmod'] = \tsf()->gmt2date( $timestamp_format, $lastmod );
 			}
 
 			/**

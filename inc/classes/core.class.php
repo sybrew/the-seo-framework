@@ -35,7 +35,9 @@ use \The_SEO_Framework\Data;
  * Initializes the plugin & Holds plugin core functions.
  *
  * @since 2.8.0
- * @since 4.2.0 Deprecated $load_options
+ * @since 4.3.0 1. Deprecated $the_seo_framework_debug
+ *              2. Deprecated $script_debug
+ *              3. Deprecated $seo_settings_page_slug
  */
 class Core {
 
@@ -395,12 +397,10 @@ class Core {
 		 * @param string The full timestamp format. Must be XML safe and in ISO 8601 datetime notation.
 		 * @param bool   True if time is requested, false if only date.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_timestamp_format',
-			[
-				$get_time ? 'Y-m-d\TH:iP' : 'Y-m-d',
-				$get_time,
-			]
+			$get_time ? 'Y-m-d\TH:iP' : 'Y-m-d',
+			$get_time,
 		);
 	}
 

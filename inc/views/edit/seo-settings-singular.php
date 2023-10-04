@@ -166,18 +166,19 @@ switch ( $this->get_view_instance( 'inpost', $instance ) ) :
 				<div class=tsf-checkbox-wrapper>
 					<label for=autodescription_title_no_blogname>
 						<?php
+						$title_no_blogname_value = Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname' );
 						if ( $_is_static_frontpage ) {
 							// Disable the input, and hide the previously stored value.
 							?>
-							<input type=checkbox id=autodescription_title_no_blogname value=1 <?php checked( Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> disabled />
-							<input type=hidden name="autodescription[_tsf_title_no_blogname]" value=1 <?php checked( Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
+							<input type=checkbox id=autodescription_title_no_blogname value=1 <?php checked( $title_no_blogname_value ); ?> disabled />
+							<input type=hidden name="autodescription[_tsf_title_no_blogname]" value="<?= (int) $title_no_blogname_value ?>" />
 							<?php
 							esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
 							HTML::make_info( __( 'For the homepage, this option must be managed on the SEO Settings page.', 'autodescription' ) );
 						} else {
 							?>
-							<input type=checkbox name="autodescription[_tsf_title_no_blogname]" id=autodescription_title_no_blogname value=1 <?php checked( Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname' ) ); ?> />
+							<input type=checkbox name="autodescription[_tsf_title_no_blogname]" id=autodescription_title_no_blogname value=1 <?php checked( $title_no_blogname_value ); ?> />
 							<?php
 							esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';

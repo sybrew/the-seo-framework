@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Scripts', '4.3.0', 'tsf()->image()' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Scripts', '4.3.0', 'The_SEO_Framework\Admin\Script\Registry' );
 /**
  * Registers and outputs admin GUI scripts. Auto-invokes everything the moment
  * this file is required.
@@ -34,7 +34,7 @@ namespace The_SEO_Framework\Builders;
  * This handles admin-ONLY scripts for now.
  *
  * @since 3.1.0
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\Script
+ * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\Script\Registry
  *              2. Deprecated.
  * @deprecated
  * @ignore

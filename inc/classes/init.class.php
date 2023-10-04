@@ -129,10 +129,10 @@ class Init extends Pool {
 		// Ping searchengines.
 		if ( Data\Plugin::get_option( 'ping_use_cron' ) ) {
 			if ( Data\Plugin::get_option( 'sitemaps_output' ) && Data\Plugin::get_option( 'ping_use_cron_prerender' ) )
-				\add_action( 'tsf_sitemap_cron_hook_before', [ new Builders\Sitemap\Base, 'prerender_sitemap' ] );
+				\add_action( 'tsf_sitemap_cron_hook_before', [ new Sitemap\Optimized\Base, 'prerender_sitemap' ] );
 
-			\add_action( 'tsf_sitemap_cron_hook', [ Bridges\Ping::class, 'ping_search_engines' ] );
-			\add_action( 'tsf_sitemap_cron_hook_retry', [ Bridges\Ping::class, 'retry_ping_search_engines' ] );
+			\add_action( 'tsf_sitemap_cron_hook', [ Sitemap\Ping::class, 'ping_search_engines' ] );
+			\add_action( 'tsf_sitemap_cron_hook_retry', [ Sitemap\Ping::class, 'retry_ping_search_engines' ] );
 		}
 	}
 
@@ -175,7 +175,7 @@ class Init extends Pool {
 		// Delete Sitemap transient on permalink structure change.
 		\add_action(
 			'load-options-permalink.php',
-			[ Bridges\Cache::class, '_refresh_sitemap_transient_permalink_updated' ],
+			[ Sitemap\Store::class, '_refresh_sitemap_transient_permalink_updated' ],
 			20
 		);
 
@@ -242,13 +242,13 @@ class Init extends Pool {
 		// Add plugin links to the plugin activation page.
 		\add_filter(
 			'plugin_action_links_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
-			[ '\The_SEO_Framework\Bridges\PluginTable', '_add_plugin_action_links' ],
+			[ Admin\PluginTable::class, '_add_plugin_action_links' ],
 			10,
 			2
 		);
 		\add_filter(
 			'plugin_row_meta',
-			[ '\The_SEO_Framework\Bridges\PluginTable', '_add_plugin_row_meta' ],
+			[ Admin\PluginTable::class, '_add_plugin_row_meta' ],
 			10,
 			2
 		);
@@ -296,10 +296,10 @@ class Init extends Pool {
 		} else {
 			// Augment Core sitemaps. Can't hook into `wp_sitemaps_init` as we're augmenting the providers before that.
 			// It's not a bridge, don't treat it like one: clean me up?
-			\add_filter( 'wp_sitemaps_add_provider', [ Builders\CoreSitemaps\Main::class, '_filter_add_provider' ], 9, 2 );
-			\add_filter( 'wp_sitemaps_max_urls', [ Builders\CoreSitemaps\Main::class, '_filter_max_urls' ], 9 );
+			\add_filter( 'wp_sitemaps_add_provider', [ Sitemap\WP\Main::class, '_filter_add_provider' ], 9, 2 );
+			\add_filter( 'wp_sitemaps_max_urls', [ Sitemap\WP\Main::class, '_filter_max_urls' ], 9 );
 			// We miss the proper hooks. https://github.com/sybrew/the-seo-framework/issues/610#issuecomment-1300191500
-			\add_filter( 'wp_sitemaps_posts_query_args', [ Builders\CoreSitemaps\Main::class, '_trick_filter_doing_sitemap' ], 11 );
+			\add_filter( 'wp_sitemaps_posts_query_args', [ Sitemap\WP\Main::class, '_trick_filter_doing_sitemap' ], 11 );
 		}
 
 		// Initialize 301 redirects.
@@ -567,7 +567,7 @@ class Init extends Pool {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		$refresh_sitemap_callback = [ Bridges\Cache::class, '_refresh_sitemap_on_post_change' ];
+		$refresh_sitemap_callback = [ Sitemap\Store::class, '_refresh_sitemap_on_post_change' ];
 
 		// Can-be cron actions.
 		\add_action( 'publish_post', $refresh_sitemap_callback );
@@ -579,7 +579,7 @@ class Init extends Pool {
 		\add_action( 'post_updated', $refresh_sitemap_callback );
 		\add_action( 'page_updated', $refresh_sitemap_callback );
 
-		$clear_excluded_callback = [ Bridges\Cache::class, 'clear_excluded_post_ids_cache' ];
+		$clear_excluded_callback = [ $this, 'clear_excluded_post_ids_cache' ];
 
 		// Excluded IDs cache.
 		\add_action( 'wp_insert_post', $clear_excluded_callback );
@@ -593,7 +593,7 @@ class Init extends Pool {
 	 * @access private
 	 */
 	public function _init_sitemap() {
-		Bridges\Sitemap::get_instance()->_init();
+		Sitemap\Registry::get_instance()->_init();
 	}
 
 	/**
@@ -668,9 +668,9 @@ class Init extends Pool {
 		// Add extra whitespace and sitemap full URL
 		if ( Data\Plugin::get_option( 'sitemaps_robots' ) ) {
 			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
-				foreach ( Bridges\Sitemap::get_sitemap_endpoint_list() as $id => $data )
+				foreach ( Sitemap\Registry::get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
-						$output .= sprintf( "\nSitemap: %s", \esc_url( Bridges\Sitemap::get_expected_sitemap_endpoint_url( $id ) ) );
+						$output .= sprintf( "\nSitemap: %s", \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) ) );
 
 				$output .= "\n";
 			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
@@ -793,6 +793,17 @@ class Init extends Pool {
 			default:
 				\add_action( 'pre_get_posts', [ $this, '_alter_archive_query_in' ], 9999, 1 );
 		}
+	}
+
+	/**
+	 * Clears static excluded IDs cache.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function clear_excluded_post_ids_cache() {
+		return Data\Plugin::update_site_cache( 'excluded_ids', [] );
 	}
 
 	/**

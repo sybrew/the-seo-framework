@@ -113,7 +113,7 @@ class Detect extends Admin_Init {
 		 * @since 4.3.0 Added index 'multilingual'
 		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
-		return (array) \apply_filters_ref_array( 'the_seo_framework_conflicting_plugins', [ $conflicting_plugins ] );
+		return (array) \apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
 	}
 
 	/**
@@ -131,12 +131,10 @@ class Detect extends Admin_Init {
 		 * @param array  $conflicting_plugins Conflicting plugins
 		 * @param string $type                The type of plugins to get.
 		*/
-		return (array) \apply_filters_ref_array(
+		return (array) \apply_filters(
 			'the_seo_framework_conflicting_plugins_type',
-			[
-				$this->conflicting_plugins()[ $type ] ?? [],
-				$type,
-			]
+			$this->conflicting_plugins()[ $type ] ?? [],
+			$type,
 		);
 	}
 
@@ -298,13 +296,11 @@ class Detect extends Admin_Init {
 			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
 			 * @param string $plugin      The plugin that's been detected.
 			 */
-			$conflicting_plugin && \apply_filters_ref_array(
+			$conflicting_plugin && \apply_filters(
 				'the_seo_framework_seo_plugin_detected',
-				[
-					true,
-					key( $conflicting_plugin ),
-					reset( $conflicting_plugin ),
-				]
+				true,
+				key( $conflicting_plugin ),
+				reset( $conflicting_plugin ),
 			)
 		);
 	}
@@ -338,13 +334,11 @@ class Detect extends Admin_Init {
 			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
 			 * @param string $plugin      The plugin that's been detected.
 			 */
-			$conflicting_plugin && \apply_filters_ref_array(
+			$conflicting_plugin && \apply_filters(
 				'the_seo_framework_og_plugin_detected',
-				[
-					true,
-					key( $conflicting_plugin ),
-					reset( $conflicting_plugin ),
-				]
+				true,
+				key( $conflicting_plugin ),
+				reset( $conflicting_plugin ),
 			)
 		);
 	}
@@ -376,13 +370,11 @@ class Detect extends Admin_Init {
 			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
 			 * @param string $plugin      The plugin that's been detected.
 			 */
-			$conflicting_plugin && \apply_filters_ref_array(
+			$conflicting_plugin && \apply_filters(
 				'the_seo_framework_twittercard_plugin_detected',
-				[
-					true,
-					key( $conflicting_plugin ),
-					reset( $conflicting_plugin ),
-				]
+				true,
+				key( $conflicting_plugin ),
+				reset( $conflicting_plugin ),
 			)
 		);
 	}
@@ -431,13 +423,11 @@ class Detect extends Admin_Init {
 			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
 			 * @param string $plugin      The plugin that's been detected.
 			 */
-			$conflicting_plugin && \apply_filters_ref_array(
+			$conflicting_plugin && \apply_filters(
 				'the_seo_framework_sitemap_plugin_detected',
-				[
-					true,
-					key( $conflicting_plugin ),
-					reset( $conflicting_plugin ),
-				]
+				true,
+				key( $conflicting_plugin ),
+				reset( $conflicting_plugin ),
 			)
 		);
 	}
@@ -464,13 +454,11 @@ class Detect extends Admin_Init {
 			 * @param string $plugin_name The plugin name as defined in `$this->conflicting_plugins()`.
 			 * @param string $plugin      The plugin that's been detected.
 			 */
-			$conflicting_plugin && \apply_filters_ref_array(
+			$conflicting_plugin && \apply_filters(
 				'the_seo_framework_multilingual_plugin_detected',
-				[
-					true,
-					key( $conflicting_plugin ),
-					reset( $conflicting_plugin ),
-				]
+				true,
+				key( $conflicting_plugin ),
+				reset( $conflicting_plugin ),
 			)
 		);
 	}

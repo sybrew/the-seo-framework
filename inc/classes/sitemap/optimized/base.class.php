@@ -1,15 +1,15 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Builders\Sitemap\Base
+ * @package The_SEO_Framework\Classes\Sitemap\Optimized\Base
  * @subpackage The_SEO_Framework\Sitemap
  */
 
-namespace The_SEO_Framework\Builders\Sitemap;
+namespace The_SEO_Framework\Sitemap\Optimized;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Bridges,
+	\The_SEO_Framework\Sitemap,
 	\The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Helper\{
@@ -39,6 +39,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\Sitemap\Base` from `The_SEO_Framework\Builders\Sitemap_Base`
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\Optimized`
  *
  * @access private
  */
@@ -72,7 +73,7 @@ class Base extends Main {
 	 */
 	public function prerender_sitemap( $sitemap_id = 'base' ) {
 
-		$bridge = Bridges\Sitemap::get_instance();
+		$bridge = Sitemap\Registry::get_instance();
 
 		if ( ! $bridge->sitemap_cache_enabled() ) return;
 
@@ -109,7 +110,7 @@ class Base extends Main {
 	 */
 	public function generate_sitemap( $sitemap_id = 'base' ) {
 
-		$bridge           = Bridges\Sitemap::get_instance();
+		$bridge           = Sitemap\Registry::get_instance();
 		$_caching_enabled = $bridge->sitemap_cache_enabled();
 
 		$sitemap_content = $_caching_enabled
@@ -160,7 +161,7 @@ class Base extends Main {
 
 		/**
 		 * @since 4.2.7
-		 * @param \The_SEO_Framework\Builders\Sitemap\Base
+		 * @param \The_SEO_Framework\Sitemap\Optimized\Base
 		 */
 		\do_action( 'the_seo_framework_build_sitemap_base', $this );
 
@@ -316,7 +317,7 @@ class Base extends Main {
 			compact( 'show_modified', 'total_items' ),
 			$count
 		) as $_values ) {
-			$content .= $this->build_url_item( $_values );
+			$content .= static::build_url_item( $_values );
 		}
 
 		/**
@@ -328,7 +329,7 @@ class Base extends Main {
 				compact( 'show_modified', 'count' ),
 				$count
 			) as $_values ) {
-				$content .= $this->build_url_item( $_values );
+				$content .= static::build_url_item( $_values );
 			}
 		}
 
@@ -509,6 +510,7 @@ class Base extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.1 Now uses `create_xml_entry()` to parse the XML.
+	 * @since 4.3.0 Is now static.
 	 *
 	 * @param array $args : {
 	 *   string               $loc      : The item's URI.
@@ -517,7 +519,7 @@ class Base extends Main {
 	 * }
 	 * @return string The sitemap item.
 	 */
-	protected function build_url_item( $args ) {
+	protected static function build_url_item( $args ) {
 
 		if ( empty( $args['loc'] ) ) return '';
 
@@ -534,7 +536,7 @@ class Base extends Main {
 			$xml['lastmod'] = \tsf()->gmt2date( $timestamp_format, $args['lastmod'] );
 		}
 
-		return $this->create_xml_entry( [ 'url' => $xml ], 1 );
+		return static::create_xml_entry( [ 'url' => $xml ], 1 );
 	}
 
 	/**

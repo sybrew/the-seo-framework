@@ -1,17 +1,16 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\Ping
+ * @package The_SEO_Framework\Classes\Sitemap\Ping
  * @subpackage The_SEO_Framework\Sitemap
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Bridges,
-	\The_SEO_Framework\Data;
+use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -34,7 +33,7 @@ use \The_SEO_Framework\Bridges,
  * Pings search engines.
  *
  * @since 4.0.0
- * @uses \The_SEO_Framework\Bridges\Sitemap.
+ * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap
  * @access protected
  * @final Can't be extended.
  */
@@ -104,7 +103,6 @@ final class Ping {
 	 * @since 2.2.9
 	 * @since 2.8.0 Only worked when the blog was not public...
 	 * @since 3.1.0 Now allows one ping per language.
-	 *              @uses \The_SEO_Framework\Bridges\Cache::build_unique_cache_key_suffix()
 	 * @since 3.2.3 1. Now works as intended again.
 	 *              2. Removed Easter egg.
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
@@ -120,11 +118,11 @@ final class Ping {
 		if ( Data\Plugin::get_option( 'site_noindex' ) || ! $tsf->is_blog_public() ) return;
 
 		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
-		if ( Bridges\Sitemap::get_instance()->is_sitemap_locked() ) {
+		if ( Registry::get_instance()->is_sitemap_locked() ) {
 			static::engage_pinging_retry_cron( [ 'id' => 'base' ] );
 			return;
 		}
-		$transient = Bridges\Cache::build_unique_cache_key_suffix( 'tsf_throttle_ping' );
+		$transient = Store::build_unique_cache_key_suffix( 'tsf_throttle_ping' );
 
 		// Uses legacy get_transient to bypass TSF's transient filters and prevent ping spam.
 		if ( false === \get_transient( $transient ) ) {
@@ -216,7 +214,7 @@ final class Ping {
 			(
 				\tsf()->use_core_sitemaps()
 					? \get_sitemap_url( 'index' )
-					: Bridges\Sitemap::get_expected_sitemap_endpoint_url( $sitemap_id )
+					: Registry::get_expected_sitemap_endpoint_url( $sitemap_id )
 			)
 			?: '',
 			$sitemap_id,

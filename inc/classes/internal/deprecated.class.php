@@ -4001,9 +4001,9 @@ final class Deprecated {
 	public function get_raw_generated_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_generated_title()', '4.3.0', 'tsf()->title()->get_bare_unfiltered_generated_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_generated_title()', '4.3.0', 'tsf()->title()->get_bare_generated_title()' );
 
-		return $tsf->title()->get_bare_unfiltered_generated_title( $args );
+		return $tsf->title()->get_bare_generated_title( $args );
 	}
 
 	/**
