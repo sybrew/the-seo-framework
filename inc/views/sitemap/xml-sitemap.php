@@ -49,5 +49,5 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 	echo "\n<!-- Freed memory prior to generation: ", number_format( $sitemap_bridge::get_freed_memory( true ) / KB_IN_BYTES, 3 ), ' kB -->';
 	echo "\n<!-- Sitemap generation time: ", number_format( ( hrtime( true ) - $timer_start ) / 1e9, 6 ), ' seconds -->';
 	echo "\n<!-- Sitemap caching enabled: ", ( Data\Plugin::get_option( 'cache_sitemap' ) ? 'yes' : 'no' ), ' -->';
-	echo "\n<!-- Sitemap transient key: ", esc_html( $sitemap_bridge->get_transient_key() ), ' -->';
+	echo "\n<!-- Sitemap transient key: ", esc_html( Sitemap\Cache::get_sitemap_cache_key( $sitemap_id ) ), ' -->';
 }

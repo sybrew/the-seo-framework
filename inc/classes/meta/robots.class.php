@@ -67,7 +67,7 @@ class Robots {
 	public static function get_meta() {
 		return umemo( __METHOD__ ) ?? umemo(
 			__METHOD__,
-			\tsf()->is_blog_public()
+			Data\Blog::is_blog_public()
 				? implode( ',', static::generate_meta() )
 				: ''
 		);

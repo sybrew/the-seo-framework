@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Sitemap\Store
+ * @package The_SEO_Framework\Classes\Sitemap\Utils
  * @subpackage The_SEO_Framework\Sitemap
  */
 
@@ -31,110 +31,13 @@ use \The_SEO_Framework\Data,
  */
 
 /**
- * Handles the data and caching interface for sitemaps.
+ * Various utility functionality for sitemaps.
  *
  * @since 4.3.0
- * @access public
- * @internal
- * @final Can't be extended.
+ * @access protected
+ * @internal Use tsf()->sitemap()->utils() instead.
  */
-final class Store {
-
-	/**
-	 * Returns a unique cache key suffix per blog and language.
-	 *
-	 * @since 4.3.0
-	 *
-	 * @param string $key The cache key.
-	 * @return string The cache key with blog ID and locale appended.
-	 */
-	public static function build_unique_cache_key_suffix( $key ) {
-
-		// Do not memoize: May change at runtime.
-		$locale = \get_locale();
-
-		return "{$key}_{$GLOBALS['blog_id']}_{$locale}";
-	}
-
-	/**
-	 * Refreshes sitemaps on post change.
-	 *
-	 * @since 4.3.0
-	 * @access private
-	 *
-	 * @param int $post_id The Post ID that has been updated.
-	 * @return bool True on success, false on failure.
-	 */
-	public static function _refresh_sitemap_on_post_change( $post_id ) {
-
-		// Don't refresh sitemap on revision.
-		if ( ! $post_id || \wp_is_post_revision( $post_id ) ) return false;
-
-		return Registry::refresh_sitemaps();
-	}
-
-	/**
-	 * Checks whether the permalink structure is updated.
-	 *
-	 * @since 4.3.0
-	 * @access private
-	 *
-	 * @return bool Whether if sitemap transient is deleted.
-	 */
-	public static function _refresh_sitemap_transient_permalink_updated() {
-
-		if (
-			   ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) )
-			&& \check_admin_referer( 'update-permalink' )
-		) {
-				return Registry::refresh_sitemaps();
-		}
-
-		return false;
-	}
-
-	/**
-	 * Clears sitemap transients.
-	 *
-	 * @since 4.3.0
-	 */
-	public static function clear_sitemap_transients() {
-
-		$sitemap = Registry::get_instance();
-
-		foreach ( $sitemap->get_sitemap_endpoint_list() as $id => $data ) {
-			$transient = $sitemap->get_transient_key( $id );
-
-			if ( $transient )
-				\delete_transient( $transient );
-		}
-
-		/**
-		 * @since 4.3.0
-		 */
-		\do_action( 'the_seo_framework_cleared_sitemap_transients' );
-
-		/**
-		 * @since 3.1.0
-		 * @since 4.3.0 Deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
-		 *
-		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
-		 * @param int    $id      The post, page or TT ID. Defaults to Query::get_the_real_id().
-		 * @param array  $args    Additional arguments. They can overwrite $type and $id.
-		 * @param array  $success Whether the action cleared. Set to always be true since deprecation.
-		 */
-		\do_action_deprecated(
-			'the_seo_framework_delete_cache_sitemap',
-			[
-				'sitemap',
-				0,
-				[ 'type' => 'sitemap' ],
-				[ true ],
-			],
-			'4.3.0 of The SEO Framework',
-			'the_seo_framework_cleared_sitemap_transients'
-		);
-	}
+class Utils {
 
 	/**
 	 * Returns the sitemap post query limit.
@@ -263,5 +166,74 @@ final class Store {
 		}
 
 		return $included;
+	}
+
+	/**
+	 * Returns sitemap color scheme.
+	 *
+	 * @since 2.8.0
+	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Utils.
+	 *
+	 * @param bool $get_defaults Whether to get the default colors.
+	 * @return array The sitemap colors.
+	 */
+	public static function get_sitemap_colors( $get_defaults = false ) {
+
+		$defaults = [
+			'main'   => '#222222',
+			'accent' => '#00a0d2',
+		];
+
+		if ( $get_defaults )
+			return $defaults;
+
+		$main   = \tsf()->s_color_hex( Data\Plugin::get_option( 'sitemap_color_main' ) );
+		$accent = \tsf()->s_color_hex( Data\Plugin::get_option( 'sitemap_color_accent' ) );
+
+		return array_merge(
+			$defaults,
+			array_filter( [
+				'main'   => $main ? "#$main" : '',
+				'accent' => $accent ? "#$accent" : '',
+			] )
+		);
+	}
+
+	/**
+	 * Tells whether WP 5.5 Core Sitemaps are used.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.2
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Utils.
+	 *
+	 * @return bool
+	 */
+	public function use_core_sitemaps() {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
+		if ( Data\Plugin::get_option( 'sitemaps_output' ) )
+			return memo( false );
+
+		$wp_sitemaps_server = \wp_sitemaps_get_server();
+
+		return memo(
+			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
+				&& $wp_sitemaps_server->sitemaps_enabled()
+		);
+	}
+
+	/**
+	 * Determines whether we can output sitemap or not based on options and blog status.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return bool
+	 */
+	public function may_output_optimized_sitemap() {
+		return Data\Plugin::get_option( 'sitemaps_output' )
+			&& ! Data\Blog::is_current_blog_spam_or_deleted();
 	}
 }

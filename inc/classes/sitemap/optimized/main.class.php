@@ -148,9 +148,13 @@ abstract class Main {
 	 */
 	final public function is_post_included_in_sitemap( $post_id ) {
 
-		\tsf()->_deprecated_function( __METHOD__, '4.3.0', '\The_SEO_Framework\Sitemap\Store::is_post_included_in_sitemap()' );
+		\tsf()->_deprecated_function(
+			__METHOD__,
+			'4.3.0',
+			'tsf()->sitemap()->utils()->is_post_included_in_sitemap()'
+		);
 
-		return Sitemap\Store::is_post_included_in_sitemap( $post_id );
+		return Sitemap\Utils::is_post_included_in_sitemap( $post_id );
 	}
 
 	/**
@@ -168,9 +172,13 @@ abstract class Main {
 	 */
 	final public function is_term_included_in_sitemap( $term_id, $taxonomy ) {
 
-		\tsf()->_deprecated_function( __METHOD__, '4.3.0', '\The_SEO_Framework\Sitemap\Store::is_term_included_in_sitemap()' );
+		\tsf()->_deprecated_function(
+			__METHOD__,
+			'4.3.0',
+			'tsf()->sitemap()->utils()->is_term_included_in_sitemap()'
+		);
 
-		return Sitemap\Store::is_term_included_in_sitemap( $term_id, $taxonomy );
+		return Sitemap\Utils::is_term_included_in_sitemap( $term_id, $taxonomy );
 	}
 
 	/**
@@ -186,8 +194,12 @@ abstract class Main {
 	 */
 	final protected function get_sitemap_post_limit( $hierarchical = false ) {
 
-		\tsf()->_deprecated_function( __METHOD__, '4.3.0', '\The_SEO_Framework\Sitemap\Store::get_sitemap_post_limit()' );
+		\tsf()->_deprecated_function(
+			__METHOD__,
+			'4.3.0',
+			'tsf()->sitemap()->utils()->get_sitemap_post_limit()'
+		);
 
-		return Sitemap\Store::get_sitemap_post_limit( $hierarchical );
+		return Sitemap\Utils::get_sitemap_post_limit( $hierarchical );
 	}
 }

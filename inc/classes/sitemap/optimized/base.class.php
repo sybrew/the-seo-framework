@@ -73,26 +73,24 @@ class Base extends Main {
 	 */
 	public function prerender_sitemap( $sitemap_id = 'base' ) {
 
-		$bridge = Sitemap\Registry::get_instance();
-
-		if ( ! $bridge->sitemap_cache_enabled() ) return;
+		if ( ! Sitemap\Cache::is_sitemap_cache_enabled() ) return;
 
 		// Don't prerender if the sitemap is already generated.
-		if ( false !== $bridge->get_cached_sitemap( $sitemap_id ) ) return;
+		if ( false !== Sitemap\Cache::get_cached_sitemap_content( $sitemap_id ) ) return;
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 		if ( 0 !== $ini_max_execution_time )
 			set_time_limit( max( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS ) );
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
-		if ( ! $bridge->lock_sitemap( $sitemap_id ) ) return;
+		if ( ! Sitemap\Lock::lock_sitemap( $sitemap_id ) ) return;
 
 		$this->prepare_generation();
 		$this->base_is_prerendering = true;
 
-		$bridge->cache_sitemap( $this->build_sitemap(), $sitemap_id );
+		Sitemap\Cache::cache_sitemap_content( $this->build_sitemap(), $sitemap_id );
 
-		$bridge->unlock_sitemap( $sitemap_id );
+		Sitemap\Lock::unlock_sitemap( $sitemap_id );
 
 		$this->shutdown_generation();
 		$this->base_is_regenerated = true;
@@ -110,16 +108,16 @@ class Base extends Main {
 	 */
 	public function generate_sitemap( $sitemap_id = 'base' ) {
 
-		$bridge           = Sitemap\Registry::get_instance();
-		$_caching_enabled = $bridge->sitemap_cache_enabled();
+		$_caching_enabled = Sitemap\Cache::is_sitemap_cache_enabled();
 
 		$sitemap_content = $_caching_enabled
-			? $bridge->get_cached_sitemap( $sitemap_id )
+			? Sitemap\Cache::get_cached_sitemap_content( $sitemap_id )
 			: false;
 
 		if ( false === $sitemap_content ) {
+
 			$this->prepare_generation();
-			$_caching_enabled && $bridge->lock_sitemap( $sitemap_id );
+			$_caching_enabled && Sitemap\Lock::lock_sitemap( $sitemap_id );
 
 			$sitemap_content = $this->build_sitemap();
 
@@ -127,8 +125,8 @@ class Base extends Main {
 			$this->base_is_regenerated = true;
 
 			if ( $_caching_enabled ) {
-				$bridge->cache_sitemap( $sitemap_content, $sitemap_id );
-				$bridge->unlock_sitemap( $sitemap_id );
+				Sitemap\Cache::cache_sitemap_content( $sitemap_content, $sitemap_id );
+				Sitemap\Lock::unlock_sitemap( $sitemap_id );
 			}
 		}
 
@@ -225,7 +223,7 @@ class Base extends Main {
 				(int) \get_option( 'page_for_posts' ),
 			] );
 
-			$_hierarchical_posts_limit = $this->get_sitemap_post_limit( true );
+			$_hierarchical_posts_limit = Sitemap\Utils::get_sitemap_post_limit( true );
 
 			/**
 			 * @since 4.0.0
@@ -268,7 +266,7 @@ class Base extends Main {
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_nhpt_query_args',
 				[
-					'posts_per_page' => $this->get_sitemap_post_limit( false ),
+					'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( false ),
 					'post_type'      => $non_hierarchical_post_types,
 					'orderby'        => 'lastmod',
 					'order'          => 'DESC',
@@ -387,7 +385,7 @@ class Base extends Main {
 				);
 			}
 
-			if ( $posts_page_id && $this->is_post_included_in_sitemap( $posts_page_id ) ) {
+			if ( $posts_page_id && Sitemap\Utils::is_post_included_in_sitemap( $posts_page_id ) ) {
 				foreach ( $this->generate_url_item_values(
 					[ $posts_page_id ],
 					$args,
@@ -428,7 +426,7 @@ class Base extends Main {
 			}
 		} else {
 			// Blog page as front. Unique; cannot go through generate_url_item_values().
-			if ( $this->is_post_included_in_sitemap( 0 ) ) {
+			if ( Sitemap\Utils::is_post_included_in_sitemap( 0 ) ) {
 				// Reset.
 				$_values        = [];
 				$_values['loc'] = Meta\URI::get_bare_front_page_url();
@@ -488,7 +486,7 @@ class Base extends Main {
 			// Setup post cache, which is also used in is_post_included_in_sitemap() and get_bare_singular_url().
 			$post = \get_post( $post_id );
 
-			if ( $this->is_post_included_in_sitemap( $post_id ) ) {
+			if ( Sitemap\Utils::is_post_included_in_sitemap( $post_id ) ) {
 				$_values = [
 					'loc' => Meta\URI::get_bare_singular_url( $post_id ),
 				];

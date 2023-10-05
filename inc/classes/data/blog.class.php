@@ -37,7 +37,6 @@ use \The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- * @internal
  * @internal Use tsf()->data()->blog() instead.
  */
 class Blog {
@@ -118,5 +117,66 @@ class Blog {
 	 */
 	public static function get_language() {
 		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_bloginfo( 'language' ) );
+	}
+
+	/**
+	 * Checks if blog is public through WordPress core settings.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.6.0
+	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 *
+	 * @return bool True is blog is public.
+	 */
+	public static function is_blog_public() {
+		return memo() ?? memo( (bool) \get_option( 'blog_public' ) );
+	}
+
+	/**
+	 * Whether the current blog is spam or deleted.
+	 * Multisite Only.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Now uses get_site()
+	 * @since 3.1.1 Now checks for `is_multisite()`, to prevent a crash with Divi's compatibility injection.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 *
+	 * @return bool Current blog is spam.
+	 */
+	public static function is_current_blog_spam_or_deleted() {
+
+		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() )
+			return false;
+
+		$site = \get_site();
+
+		if ( $site instanceof \WP_Site && ( '1' === $site->spam || '1' === $site->deleted ) )
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * Determines if the current installation is on a subdirectory.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.9.0
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 *
+	 * @return bool
+	 */
+	public static function is_subdirectory_installation() {
+		return memo() ?? memo(
+			(bool) \strlen(
+				ltrim(
+					parse_url(
+						\get_option( 'home' ),
+						\PHP_URL_PATH
+					) ?? '',
+					' \\/'
+				)
+			)
+		);
 	}
 }

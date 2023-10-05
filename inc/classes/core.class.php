@@ -308,42 +308,6 @@ class Core {
 	}
 
 	/**
-	 * Checks if blog is public through WordPress core settings.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.6.0
-	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
-	 *
-	 * @return bool True is blog is public.
-	 */
-	public function is_blog_public() {
-		return memo() ?? memo( (bool) \get_option( 'blog_public' ) );
-	}
-
-	/**
-	 * Whether the current blog is spam or deleted.
-	 * Multisite Only.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Now uses get_site()
-	 * @since 3.1.1 Now checks for `is_multisite()`, to prevent a crash with Divi's compatibility injection.
-	 *
-	 * @return bool Current blog is spam.
-	 */
-	public function current_blog_is_spam_or_deleted() {
-
-		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() )
-			return false;
-
-		$site = \get_site();
-
-		if ( $site instanceof \WP_Site && ( '1' === $site->spam || '1' === $site->deleted ) )
-			return true;
-
-		return false;
-	}
-
-	/**
 	 * Returns the SEO Settings page URL.
 	 *
 	 * @since 4.1.4
@@ -580,39 +544,6 @@ class Core {
 		}
 
 		return vsprintf( '%02x%02x%02x', [ $gr, $gg, $gb ] );
-	}
-
-	/**
-	 * Returns sitemap color scheme.
-	 *
-	 * @since 2.8.0
-	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
-	 *
-	 * @param bool $get_defaults Whether to get the default colors.
-	 * @return array The sitemap colors.
-	 */
-	public function get_sitemap_colors( $get_defaults = false ) {
-
-		if ( $get_defaults ) {
-			$colors = [
-				'main'   => '#222222',
-				'accent' => '#00a0d2',
-			];
-		} else {
-			$main   = $this->s_color_hex( Data\Plugin::get_option( 'sitemap_color_main' ) );
-			$accent = $this->s_color_hex( Data\Plugin::get_option( 'sitemap_color_accent' ) );
-
-			$options = [
-				'main'   => $main ? "#$main" : '',
-				'accent' => $accent ? "#$accent" : '',
-			];
-
-			$options = array_filter( $options );
-
-			$colors = array_merge( $this->get_sitemap_colors( true ), $options );
-		}
-
-		return $colors;
 	}
 
 	/**

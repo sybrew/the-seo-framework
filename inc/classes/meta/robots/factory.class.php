@@ -51,12 +51,6 @@ class Factory {
 
 	/**
 	 * @since 4.2.0
-	 * @var \The_SEO_Framework\Load The SEO Framework class.
-	 */
-	protected static $tsf;
-
-	/**
-	 * @since 4.2.0
 	 * @var array|null Null to autodetermine query, otherwise the query arguments. : {
 	 *    int    $id       The Post, Page or Term ID to generate robots for.
 	 *    string $taxonomy The taxonomy.
@@ -69,15 +63,6 @@ class Factory {
 	 * @var int Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
 	 */
 	protected static $options;
-
-	/**
-	 * Constructor, does nothing but instigate TSF.
-	 *
-	 * @since 4.2.0
-	 */
-	public function __construct() {
-		static::$tsf ??= \tsf();
-	}
 
 	/**
 	 * Sets parameters.
@@ -148,15 +133,10 @@ class Factory {
 	 */
 	final protected static function assert_copyright( $type ) {
 
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf hereinafter.
-		$tsf = static::$tsf;
-
-		$option = $type;
-
 		if ( 'max_snippet' === $type )
-			$option = 'max_snippet_length';
+			$type = 'max_snippet_length';
 
 		Data\Plugin::get_option( 'set_copyright_directives' )
-			and yield 'globals_copyright' => Data\Plugin::get_option( $option );
+			and yield 'globals_copyright' => Data\Plugin::get_option( $type );
 	}
 }

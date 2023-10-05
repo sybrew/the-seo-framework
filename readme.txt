@@ -445,7 +445,7 @@ TODO _init_locale only on admin?
 
 TODO we deprecated Builders\Images, but have yet to write docs.
 
-TODO eradicate all static::$tsf-> calls by the end of this dev cycle.
+TODO eradicate all static::$tsf()-> calls by the end of this dev cycle.
 
 TODO eradicate get_defined_vars() or array unpacking where we can use func_get_args()
 	-> https://3v4l.org/TjjDK
@@ -474,9 +474,9 @@ function.*?\{([\w\W](?!tsf\(\)))*?\}
 // Mismatch deprecation notices:
 function (.*?)\(([\w\W](?!\1))*?\}
 
-// Replace tsf()->_deprecated.*\ntsf()-> with $tsf->
+// Replace tsf()->_deprecated.*\ntsf()-> with $tsf()->
 1. (^.*?)\\tsf\(\)->(_deprecated.*$\n)(.*?return )\\tsf\(\)->
-2. \n$1$$tsf = \\tsf();\n$1$$tsf->$2\n$3$tsf->
+2. \n$1$$tsf = \\tsf();\n$1$$tsf()->$2\n$3$tsf()->
 
 // Extract function names (by removing everything else)
 1. Strip: ^([\w\W](?!_deprecated_function))*?$
@@ -818,6 +818,16 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* Internally known as `The_SEO_Framework\Meta\Image`.
 	* Pool `tsf()->breadcrumbs()` is now available.
 		* Internally known as `The_SEO_Framework\Meta\Breadcrumbs`.
+	* Pool `tsf()->sitemap()` is now available.
+		* Unlike all other pools, this is a Closure where it stores only subpools.
+		* This pool has a sub-pool, accessible via `tsf()->sitemap()->cache()`.
+			* Internally known as `The_SEO_Framework\Sitemap\Cache`.
+		* This pool has a sub-pool, accessible via `tsf()->sitemap()->ping()`.
+			* Internally known as `The_SEO_Framework\Sitemap\Ping`.
+		* This pool has a sub-pool, accessible via `tsf()->sitemap()->lock()`.
+			* Internally known as `The_SEO_Framework\Sitemap\Lock`.
+		* This pool has a sub-pool, accessible via `tsf()->sitemap()->utils()`.
+			* Internally known as `The_SEO_Framework\Sitemap\Utils`.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
@@ -921,9 +931,9 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 					1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 					2. Added `is_customize_preview()` as unsupported.
 					3. Moved to `\The_SEO_Framework\Helper\Query`.
-				* `_init_sitemap()` is no longer called with `template_redirect`, but at `parse_request` at priority `15`. This prevents loading the main query.
+				* `_init_sitemap()` is no longer called with `template_redirect`, but at `parse_request` at priority `15`, now using callback `[ Sitemap\Registry::class, '_init' ]`. This prevents loading the main query.
 					* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed.
-					* This method is still marked as private, just wanted you document how a part prone to causing catastrophe changed.
+					* This new method is still marked as private; I just wanted to document how a part prone to causing catastrophe has changed.
 				* `escape_description()` now requires a first parameter.
 				* `s_excerpt()` now requires a first parameter.
 				* `s_excerpt_raw()` now requires a first parameter.
@@ -1113,18 +1123,18 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 				* `merge_title_pagination()`, use `tsf()->title()->add_pagination()` instead.
 				* `merge_title_protection()`, use `tsf()->title()->add_protection_status()` instead.
 				* `has_custom_canonical_url()`, use `tsf()->uri()->get_custom_canonical_url()` instead.
-				* `get_home_url()`, use `tsf->data()->blog()->get_front_page_url()` instead.
-				* `get_preferred_scheme()`, use `tsf->uri()->utils()->get_preferred_url_scheme()` instead.
-				* `set_preferred_url_scheme()`, use `tsf->uri()->utils()->set_preferred_url_scheme()` instead.
+				* `get_home_url()`, use `tsf()->data()->blog()->get_front_page_url()` instead.
+				* `get_preferred_scheme()`, use `tsf()->uri()->utils()->get_preferred_url_scheme()` instead.
+				* `set_preferred_url_scheme()`, use `tsf()->uri()->utils()->set_preferred_url_scheme()` instead.
 				* `detect_site_url_scheme()`, use `uri()->utils()->detect_site_url_scheme()` instead.
 				* `set_url_scheme()`, use `uri()->utils()->set_url_scheme()` instead.
 				* `make_fully_qualified_url()`, use `uri()->utils()->make_fully_qualified_url()` instead.
 				* `get_current_canonical_url()`, use `tsf()->uri()->get_canonical_url()` instead.
 				* `get_current_permalink()`, use `tsf()->uri()->get_generated_permalink()` instead.
 				* `get_homepage_permalink()`, use `tsf()->uri()->get_bare_front_page_url()` instead.
-				* `create_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
-				* `get_home_canonical_url()`, use `tsf->uri()->get_front_page_url()` instead.
-				* `get_raw_home_canonical_url()`, use `tsf->uri()->get_bare_front_page_url()` instead.
+				* `create_canonical_url()`, use `tsf()->uri()->get_canonical_url()` or `tsf()->uri()->get_custom_canonical_url()` instead.
+				* `get_home_canonical_url()`, use `tsf()->uri()->get_front_page_url()` instead.
+				* `get_raw_home_canonical_url()`, use `tsf()->uri()->get_bare_front_page_url()` instead.
 				* `get_singular_canonical_url()`, use `tsf()->uri()->get_singular_url()` instead.
 				* `get_taxonomical_canonical_url()`, use `tsf()->uri()->get_term_url()` instead.
 				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_post_type_archive_url()` instead.
@@ -1133,17 +1143,17 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 				* `get_search_canonical_url()`, use `tsf()->uri()->get_search_url()` instead.
 				* `add_pagination_to_url()`, use `tsf()->uri()->utils()->add_pagination_to_url()` instead.
 				* `add_url_pagination()`, use `tsf()->uri()->utils()->add_pagination_to_url()` instead.
-				* `remove_pagination_from_url()`, use `tsf->uri()->utils()->remove_pagination_from_url()` instead.
-				* `get_paged_url()`, use `tsf->uri()->get_paged_url()` instead.
-				* `get_paged_urls()`, use `tsf->uri()->get_paged_url()` instead.
-				* `get_home_host()`, use `tsf->data()->blog()->get_site_host()` instead.
-				* `append_url_query()`, use `tsf->uri()->utils()->append_url_query()` instead.
-				* `matches_this_domain()`, use `tsf->uri()->utils()->url_matches_blog_domain()` instead.
-				* `convert_to_url_if_path()`, use `tsf->uri()->utils()->convert_path_to_url()` instead.
-				* `get_singular_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
-				* `get_taxonomical_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
-				* `get_post_type_archive_custom_canonical_url()`, use `tsf->uri()->get_custom_canonical_url()` instead.
-				* `get_shortlink()`, use `tsf->uri()->get_shortlink()` instead.
+				* `remove_pagination_from_url()`, use `tsf()->uri()->utils()->remove_pagination_from_url()` instead.
+				* `get_paged_url()`, use `tsf()->uri()->get_paged_url()` instead.
+				* `get_paged_urls()`, use `tsf()->uri()->get_paged_url()` instead.
+				* `get_home_host()`, use `tsf()->data()->blog()->get_site_host()` instead.
+				* `append_url_query()`, use `tsf()->uri()->utils()->append_url_query()` instead.
+				* `matches_this_domain()`, use `tsf()->uri()->utils()->url_matches_blog_domain()` instead.
+				* `convert_to_url_if_path()`, use `tsf()->uri()->utils()->convert_path_to_url()` instead.
+				* `get_singular_custom_canonical_url()`, use `tsf()->uri()->get_custom_canonical_url()` instead.
+				* `get_taxonomical_custom_canonical_url()`, use `tsf()->uri()->get_custom_canonical_url()` instead.
+				* `get_post_type_archive_custom_canonical_url()`, use `tsf()->uri()->get_custom_canonical_url()` instead.
+				* `get_shortlink()`, use `tsf()->uri()->get_shortlink()` instead.
 				* `get_image_from_cache()`, use `tsf()->get_first_valid_image()` instead.
 				* `get_image_details_from_cache()`, use `tsf()->get_image_details()` instead.
 				* `get_custom_field_image_details()`, use `tsf()->image()->get_custom_image_details()` instead.
@@ -1204,6 +1214,12 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 				* `get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()` instead.
 				* `get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
 				* `get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
+				* `tsf()->get_sitemap_colors()`, use `tsf()->sitemap()->utils()->get_sitemap_colors()` instead.
+				* `tsf()->is_blog_public()`, use `tsf()->data()->blog()->is_blog_public()` instead.
+				* `tsf()->current_blog_is_spam_or_deleted()`, use `tsf()->data()->blog()->is_current_blog_spam_or_deleted()` instead.
+				* `tsf()->is_subdirectory_installation()`, use `tsf()->data()->blog()->is_subdirectory_installation()` instead.
+				* `tsf()->use_core_sitemaps()`, use `tsf()->sitemap()->utils()->use_core_sitemaps()` instead.
+				* `tsf()->can_run_sitemap()`, use `tsf()->sitemap()->utils()->may_output_optimized_sitemap()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1233,24 +1249,23 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 					* `init_admin_caching_actions()`
 					* `init_post_cache_actions()`
 					* `set_plugin_check_caches()`
-						* This is now `tsf()->reset_check_plugin_conflicts()`.
+						* This is now `tsf()->reset_check_plugin_conflicts()`. TODO it won't be for long.
 					* `delete_main_cache()`
 					* `delete_post_cache()`
-					* `delete_excluded_ids_cache()`
-						* This has been moved to `The_SEO_Framework\Sitemap\Store::clear_excluded_post_ids_cache()`. TODO this went all over the place, validate.
+					* TODO `delete_excluded_ids_cache()` this is now clear_excluded_post_ids_cache, let's put it in a good location.
+						* This has been moved to `The_SEO_Framework\Sitemap\Cache::clear_excluded_post_ids_cache()`. TODO this went all over the place, validate.
 					* `delete_excluded_post_ids_transient()`
 					* `delete_cache()`
 					* `get_exclusion_transient_name()`
 					* `get_sitemap_transient_name()`
-						* This has been moved to `The_SEO_Framework\Sitemap\Store::get_transient_key()`.
+						* This has been moved to `tsf()->sitemap()->cache()->get_sitemap_cache_key()`.
 					* `generate_cache_key()`
 					* `generate_cache_key_by_type()`
 					* `add_cache_key_suffix()`
-						* This has been moved to `The_SEO_Framework\Sitemap\Store::build_unique_cache_key_suffix()`.
+						* This has been moved to `tsf()->sitemap()->cache()->build_sitemap_cache_key()`.
 					* `delete_sitemap_transient_permalink_updated`
-						* This has been moved to `The_SEO_Framework\Sitemap\Store::_refresh_sitemap_transient_permalink_updated()`, but not part of the public API.
 					* `delete_sitemap_transient()`
-						* This has been moved to `The_SEO_Framework\Sitemap\Store::clear_sitemap_transients()`.
+						* This has been moved to `tsf()->sitemap()->cache()->clear_sitemap_caches()`.
 				* Deprecated in TSF v4.2.0, the following deprecated methods of the `The_SEO_Framework\Load` object (`tsf()`) are no longer available:
 					* `append_php_query()`
 					* `get_legacy_header_filters_output()`

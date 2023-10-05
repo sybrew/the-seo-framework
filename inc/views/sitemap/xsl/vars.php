@@ -15,7 +15,7 @@ printf(
 	\The_SEO_Framework\Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550'
 );
 
-$colors = $this->get_sitemap_colors();
+$colors = \The_SEO_Framework\Sitemap\Utils::get_sitemap_colors();
 
 // phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
 printf(

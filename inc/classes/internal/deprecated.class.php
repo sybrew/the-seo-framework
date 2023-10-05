@@ -1187,7 +1187,7 @@ final class Deprecated {
 
 		\tsf()->_deprecated_function( 'tsf()->advanced_query_protection()', '4.3.0' );
 
-		return \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'  => 'tsf:aqp',
 			'value' => '1',
 		] );
@@ -1227,7 +1227,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'description',
 			'content' => $description,
 		] ) : '';
@@ -1250,11 +1250,11 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->robots()', '4.3.0' );
 
 		// Don't do anything if the blog isn't set to public.
-		if ( false === $tsf->is_blog_public() ) return '';
+		if ( false === Data\Blog::is_blog_public() ) return '';
 
 		$meta = $tsf->robots()->get_meta();
 
-		return $meta ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $meta ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'robots',
 			'content' => $meta,
 		] ) : '';
@@ -1304,7 +1304,7 @@ final class Deprecated {
 			}
 		}
 
-		return $url ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
+		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
 			[
 				'rel'  => 'canonical',
 				'href' => $url,
@@ -1345,7 +1345,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $url ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
+		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
 			[
 				'rel'  => 'shortlink',
 				'href' => $url,
@@ -1404,14 +1404,14 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		$output  = $prev ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
+		$output  = $prev ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
 			[
 				'rel'  => 'prev',
 				'href' => $prev,
 			],
 			'link'
 		) : '';
-		$output .= $next ? \The_SEO_Framework\Interpreters\Meta::render( // Lacking import OK.
+		$output .= $next ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
 			[
 				'rel'  => 'next',
 				'href' => $next,
@@ -1438,7 +1438,7 @@ final class Deprecated {
 
 		$theme_color = Data\Plugin::get_option( 'theme_color' );
 
-		return $theme_color ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $theme_color ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'theme-color',
 			'content' => $theme_color,
 		] ) : '';
@@ -1473,7 +1473,7 @@ final class Deprecated {
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'google-site-verification',
 			'content' => $code,
 		] ) : '';
@@ -1508,7 +1508,7 @@ final class Deprecated {
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'msvalidate.01',
 			'content' => $code,
 		] ) : '';
@@ -1543,7 +1543,7 @@ final class Deprecated {
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'yandex-verification',
 			'content' => $code,
 		] ) : '';
@@ -1578,7 +1578,7 @@ final class Deprecated {
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'baidu-site-verification',
 			'content' => $code,
 		] ) : '';
@@ -1613,7 +1613,7 @@ final class Deprecated {
 			]
 		);
 
-		return $code ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'p:domain_verify',
 			'content' => $code,
 		] ) : '';
@@ -1690,7 +1690,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $title ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $title ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:title',
 			'content'  => $title,
 		] ) : '';
@@ -1732,7 +1732,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:description',
 			'content'  => $description,
 		] ) : '';
@@ -1773,7 +1773,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $locale ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $locale ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:locale',
 			'content'  => $locale,
 		] ) : '';
@@ -1798,7 +1798,7 @@ final class Deprecated {
 
 		$type = $tsf->open_graph()->get_type();
 
-		return $type ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $type ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:type',
 			'content'  => $type,
 		] ) : '';
@@ -1829,24 +1829,24 @@ final class Deprecated {
 		$multi = (bool) Data\Plugin::get_option( 'multi_og_image' );
 
 		foreach ( $tsf->get_image_details( null, ! $multi ) as $image ) {
-			$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 				'property' => 'og:image',
 				'content'  => $image['url'],
 			] );
 
 			if ( $image['height'] && $image['width'] ) {
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 					'property' => 'og:image:width',
 					'content'  => $image['width'],
 				] );
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 					'property' => 'og:image:height',
 					'content'  => $image['height'],
 				] );
 			}
 
 			if ( $image['alt'] ) {
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 					'property' => 'og:image:alt',
 					'content'  => $image['alt'],
 				] );
@@ -1894,7 +1894,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $sitename ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $sitename ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:site_name',
 			'content'  => $sitename,
 		] ) : '';
@@ -1935,7 +1935,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $url ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:url',
 			'content'  => $url,
 		] ) : '';
@@ -1960,7 +1960,7 @@ final class Deprecated {
 
 		$time = $tsf->get_modified_time();
 
-		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'og:updated_time',
 			'content'  => $time,
 		] ) : '';
@@ -2003,7 +2003,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $facebook_page ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $facebook_page ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'article:author',
 			'content'  => $facebook_page,
 		] ) : '';
@@ -2045,7 +2045,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $publisher ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $publisher ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'article:publisher',
 			'content'  => $publisher,
 		] ) : '';
@@ -2085,7 +2085,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data', // var_dump() delete me?
 		);
 
-		return $app_id ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $app_id ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'fb:app_id',
 			'content'  => $app_id,
 		] ) : '';
@@ -2170,7 +2170,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'article:published_time',
 			'content'  => $time,
 		] ) : '';
@@ -2199,7 +2199,7 @@ final class Deprecated {
 
 		$time = $tsf->get_modified_time();
 
-		return $time ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'property' => 'article:modified_time',
 			'content'  => $time,
 		] ) : '';
@@ -2285,7 +2285,7 @@ final class Deprecated {
 
 		$card = $tsf->get_current_twitter_card_type();
 
-		return $card ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $card ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'twitter:card',
 			'content' => $card,
 		] ) : '';
@@ -2325,7 +2325,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $site ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $site ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'twitter:site',
 			'content' => $site,
 		] ) : '';
@@ -2368,7 +2368,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $creator ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $creator ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'twitter:creator',
 			'content' => $creator,
 		] ) : '';
@@ -2409,7 +2409,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $title ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $title ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'twitter:title',
 			'content' => $title,
 		] ) : '';
@@ -2450,7 +2450,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'twitter:description',
 			'content' => $description,
 		] ) : '';
@@ -2479,13 +2479,13 @@ final class Deprecated {
 		$output = '';
 
 		foreach ( $tsf->get_image_details( null, ! Data\Plugin::get_option( 'multi_og_image' ) ) as $image ) {
-			$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
 			] );
 
 			if ( $image['alt'] ) {
-				$output .= \The_SEO_Framework\Interpreters\Meta::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 					'name'    => 'twitter:image:alt',
 					'content' => $image['alt'],
 				] );
@@ -4495,7 +4495,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->create_canonical_url()', '4.3.0', 'tsf->uri()->get_canonical_url() or tsf->uri()->get_custom_canonical_url()' );
 
 		if ( empty( $args['get_custom_field'] ) )
-			return $tsf->uri()->get_generated_canonical_url( $args ?: null );
+			return $tsf->uri()->get_canonical_url( $args ?: null );
 
 		return $tsf->uri()->get_custom_canonical_url( $args ?: null );
 	}
@@ -6225,5 +6225,117 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()' );
 
 		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_defaults( $post_type );
+	}
+
+	/**
+	 * Returns sitemap color scheme.
+	 *
+	 * @since 2.8.0
+	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param bool $get_defaults Whether to get the default colors.
+	 * @return array The sitemap colors.
+	 */
+	public function get_sitemap_colors( $get_defaults = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_sitemap_colors()', '4.3.0', 'tsf()->sitemap()->utils()->get_sitemap_colors()' );
+
+		return $tsf->sitemap()->utils()->get_sitemap_colors( $get_defaults );
+	}
+
+	/**
+	 * Checks if blog is public through WordPress core settings.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.6.0
+	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool True is blog is public.
+	 */
+	public function is_blog_public() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_blog_public()', '4.3.0', 'tsf()->data()->blog()->is_blog_public()' );
+
+		return $tsf->data()->blog()->is_blog_public();
+	}
+
+	/**
+	 * Whether the current blog is spam or deleted.
+	 * Multisite Only.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 Now uses get_site()
+	 * @since 3.1.1 Now checks for `is_multisite()`, to prevent a crash with Divi's compatibility injection.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool Current blog is spam.
+	 */
+	public function current_blog_is_spam_or_deleted() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->current_blog_is_spam_or_deleted()', '4.3.0', 'tsf()->data()->blog()->is_current_blog_spam_or_deleted()' );
+
+		return $tsf->data()->blog()->is_current_blog_spam_or_deleted();
+	}
+
+	/**
+	 * Determines if the current installation is on a subdirectory.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.9.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function is_subdirectory_installation() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_subdirectory_installation()', '4.3.0', 'tsf()->data()->blog()->is_subdirectory_installation()' );
+
+		return $tsf->data()->blog()->is_subdirectory_installation();
+	}
+
+	/**
+	 * Tells whether WP 5.5 Core Sitemaps are used.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.1.2
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function use_core_sitemaps() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->use_core_sitemaps()', '4.3.0', 'tsf()->sitemap()->utils()->use_core_sitemaps()' );
+
+		return $tsf->sitemap()->utils()->use_core_sitemaps();
+	}
+
+	/**
+	 * Determines whether we can output sitemap or not based on options and blog status.
+	 *
+	 * @since 2.6.0
+	 * @since 2.9.2 No longer checks for plain and ugly permalinks.
+	 * @since 4.0.0 Removed caching.
+	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Utils.
+	 *
+	 * @return bool
+	 */
+	public function can_run_sitemap() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->can_run_sitemap()', '4.3.0', 'tsf()->sitemap()->utils()->may_output_optimized_sitemap()' );
+
+		return $tsf->sitemap()->utils()->may_output_optimized_sitemap();
 	}
 }

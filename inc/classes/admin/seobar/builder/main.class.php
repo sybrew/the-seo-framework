@@ -55,13 +55,6 @@ abstract class Main {
 	/**
 	 * @since 4.0.0
 	 * Shared between instances.
-	 * @var \The_SEO_Framework\Load
-	 */
-	protected static $tsf;
-
-	/**
-	 * @since 4.0.0
-	 * Shared between instances.
 	 * @var array $cache A non-volatile caching status. Holds post type settings,
 	 *                   among other things, to be used in generation.
 	 */
@@ -95,7 +88,6 @@ abstract class Main {
 	 * @since 4.0.0
 	 */
 	final protected function __construct() {
-		self::$tsf ??= \tsf();
 		$this->prime_cache();
 	}
 

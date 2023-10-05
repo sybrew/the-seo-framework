@@ -114,7 +114,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				);
 				// TODO In settings generator (TSF 5.0): Overwrite this section for Polylang/WPML and output each sitemap language link respectively.
 				// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
-			} elseif ( $this->use_core_sitemaps() ) {
+			} elseif ( Sitemap\Utils::use_core_sitemaps() ) {
 				$_index_url = get_sitemap_url( 'index' );
 				if ( $_index_url )
 					HTML::description_noesc(
@@ -187,7 +187,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 			);
 			echo '<hr>';
 		} elseif ( ! $robots_url ) {
-			if ( $this->is_subdirectory_installation() ) {
+			if ( Data\Blog::is_subdirectory_installation() ) {
 				HTML::attention_description(
 					__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
 				);
@@ -337,8 +337,8 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 		<hr>
 		<?php
 
-		$current_colors = $this->get_sitemap_colors();
-		$default_colors = $this->get_sitemap_colors( true );
+		$current_colors = Sitemap\Utils::get_sitemap_colors();
+		$default_colors = Sitemap\Utils::get_sitemap_colors( true );
 
 		?>
 		<p>

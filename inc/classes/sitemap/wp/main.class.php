@@ -106,6 +106,6 @@ class Main {
 	 * @return string The sitemap query limit.
 	 */
 	public static function _filter_max_urls() {
-		return Sitemap\Store::get_sitemap_post_limit();
+		return Sitemap\Utils::get_sitemap_post_limit();
 	}
 }

@@ -68,15 +68,15 @@ final class Term extends Main {
 		static::get_cache( 'general/i18n/inputguidelines' )
 			or static::set_cache(
 				'general/i18n/inputguidelines',
-				static::$tsf->get_input_guidelines_i18n()
+				\tsf()->get_input_guidelines_i18n()
 			);
 
 		static::get_cache( 'general/detect/robotsglobal' )
 			or static::set_cache(
 				'general/detect/robotsglobal',
 				[
-					'hasrobotstxt' => static::$tsf->has_robots_txt(),
-					'blogpublic'   => static::$tsf->is_blog_public(),
+					'hasrobotstxt' => \tsf()->has_robots_txt(),
+					'blogpublic'   => Data\Blog::is_blog_public(),
 					'site'         => [
 						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
 						'nofollow'  => Data\Plugin::get_option( 'site_nofollow' ),
@@ -233,7 +233,7 @@ final class Term extends Main {
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
 
-			if ( static::$tsf->has_unprocessed_syntax( $title_part, false ) ) {
+			if ( \tsf()->has_unprocessed_syntax( $title_part, false ) ) {
 				$item['status']           = Builder::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
@@ -308,13 +308,13 @@ final class Term extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				static::$tsf->escape_text( static::$tsf->sanitize_text( $title ) ),
+				\tsf()->escape_text( \tsf()->sanitize_text( $title ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
 		);
 
-		$guidelines      = static::$tsf->get_input_guidelines( $this->query_cache['states']['locale'] )['title']['search']['chars'];
+		$guidelines      = \tsf()->get_input_guidelines( $this->query_cache['states']['locale'] )['title']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
 
 		if ( $title_len < $guidelines['lower'] ) {
@@ -427,7 +427,7 @@ final class Term extends Main {
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
 
-			if ( static::$tsf->has_unprocessed_syntax( $desc ) ) {
+			if ( \tsf()->has_unprocessed_syntax( $desc ) ) {
 				$item['status']           = Builder::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
@@ -461,7 +461,7 @@ final class Term extends Main {
 		}
 
 		// Fetch words that are outputted more than 3 times.
-		$repeated_words = static::$tsf->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
+		$repeated_words = \tsf()->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
 
 		if ( $repeated_words ) {
 			$dupes = [];
@@ -494,12 +494,12 @@ final class Term extends Main {
 			}
 		}
 
-		$guidelines      = static::$tsf->get_input_guidelines( $this->query_cache['states']['locale'] )['description']['search']['chars'];
+		$guidelines      = \tsf()->get_input_guidelines( $this->query_cache['states']['locale'] )['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				static::$tsf->escape_text( static::$tsf->sanitize_text( $desc ) ),
+				\tsf()->escape_text( \tsf()->sanitize_text( $desc ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -633,7 +633,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noindex'] ) ) {
+		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
@@ -777,7 +777,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['nofollow'] ) ) {
+		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
@@ -894,7 +894,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['noarchive'] ) ) {
+		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.

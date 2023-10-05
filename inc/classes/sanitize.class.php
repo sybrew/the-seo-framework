@@ -107,7 +107,7 @@ class Sanitize extends Admin_Pages {
 		$this->init_sanitizer_filters();
 
 		// Delete main cache directly, for when the options don't change. Don't invoke actions.
-		Sitemap\Store::clear_sitemap_transients();
+		Sitemap\Cache::clear_sitemap_caches();
 		$this->clear_excluded_post_ids_cache();
 
 		// Set backward compatibility. This runs after the sanitization.

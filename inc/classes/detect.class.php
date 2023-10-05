@@ -464,30 +464,6 @@ class Detect extends Admin_Init {
 	}
 
 	/**
-	 * Tells whether WP 5.5 Core Sitemaps are used.
-	 * Memoizes the return value.
-	 *
-	 * @since 4.1.2
-	 *
-	 * @return bool
-	 */
-	public function use_core_sitemaps() {
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
-
-		if ( Data\Plugin::get_option( 'sitemaps_output' ) )
-			return memo( false );
-
-		$wp_sitemaps_server = \wp_sitemaps_get_server();
-
-		return memo(
-			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
-				&& $wp_sitemaps_server->sitemaps_enabled()
-		);
-	}
-
-	/**
 	 * Detects presence of a page builder that renders content dynamically.
 	 *
 	 * Detects the following builders:
@@ -617,19 +593,6 @@ class Detect extends Admin_Init {
 	}
 
 	/**
-	 * Determines whether we can output sitemap or not based on options and blog status.
-	 *
-	 * @since 2.6.0
-	 * @since 2.9.2 No longer checks for plain and ugly permalinks.
-	 * @since 4.0.0 Removed caching.
-	 *
-	 * @return bool
-	 */
-	public function can_run_sitemap() {
-		return Data\Plugin::get_option( 'sitemaps_output' ) && ! $this->current_blog_is_spam_or_deleted();
-	}
-
-	/**
 	 * Returns the robots.txt location URL.
 	 * Only allows root domains.
 	 *
@@ -641,7 +604,7 @@ class Detect extends Admin_Init {
 	 */
 	public function get_robots_txt_url() {
 
-		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! $this->is_subdirectory_installation() ) {
+		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! Data\Blog::is_subdirectory_installation() ) {
 			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() ) );
 			$path = "{$home}robots.txt";
 		} elseif ( $this->has_robots_txt() ) {
@@ -652,28 +615,6 @@ class Detect extends Admin_Init {
 		}
 
 		return $path;
-	}
-
-	/**
-	 * Determines if the current installation is on a subdirectory.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.9.0
-	 *
-	 * @return bool
-	 */
-	public function is_subdirectory_installation() {
-		return memo() ?? memo(
-			(bool) \strlen(
-				ltrim(
-					parse_url(
-						\get_option( 'home' ),
-						\PHP_URL_PATH
-					) ?? '',
-					' \\/'
-				)
-			)
-		);
 	}
 
 	/**

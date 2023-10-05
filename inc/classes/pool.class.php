@@ -445,22 +445,6 @@ class Pool extends Legacy_API {
 				'WebSite'        => Meta\Schema\WebSite::class,
 				'Reference'      => Meta\Schema\Reference::class,
 			];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Schema\Utils
-			 */
-			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Schema\Utils {
-					use Static_Deprecator;
-
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->schema()->utils()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-				};
-			}
 		};
 	}
 
@@ -493,22 +477,6 @@ class Pool extends Legacy_API {
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->blog()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Data\Network
-			 */
-			public static function network() {
-				return static::$subpool['network'] ??= new class extends Data\Network {
-					use Static_Deprecator;
-
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->data()->network()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
@@ -690,22 +658,6 @@ class Pool extends Legacy_API {
 				};
 			}
 
-			// /**
-			//  * @since 4.3.0
-			//  * @return \The_SEO_Framework\Data\Transient
-			//  */
-			// public static function transient() {
-			// 	return static::$subpool['transient'] ??= new class extends Data\Transient {
-			// 		use Static_Deprecator;
-
-			// 		// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-			// 		private $colloquial_handle     = 'tsf()->data()->transient()';
-			// 		private $deprecated_methods    = [];
-			// 		private $deprecated_properties = [];
-			// 		// phpcs:enable, Squiz.Commenting.VariableComment.Missing
-			// 	};
-			// }
-
 			/**
 			 * @since 4.3.0
 			 * @return \The_SEO_Framework\Data\User
@@ -716,6 +668,90 @@ class Pool extends Legacy_API {
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->user()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns the Post_Types class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \Closure An anononymous class with subclasses.
+	 */
+	public function sitemap() {
+		return static::$pool['sitemap'] ??= new class {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->sitemap()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Cache
+			 */
+			public static function cache() {
+				return static::$subpool['cache'] ??= new class extends Sitemap\Cache {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->sitemap()->cache()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Ping
+			 */
+			public static function ping() {
+				return static::$subpool['ping'] ??= new class extends Sitemap\Ping {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->sitemap()->ping()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Lock
+			 */
+			public static function lock() {
+				return static::$subpool['lock'] ??= new class extends Sitemap\Lock {
+					use Static_Deprecator;
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->sitemap()->lock()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Utils
+			 */
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends Sitemap\Utils {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->sitemap()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing

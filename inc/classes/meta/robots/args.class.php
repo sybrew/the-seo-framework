@@ -146,8 +146,7 @@ final class Args extends Factory {
 	 */
 	private static function assert_noindex_query_pass( $pass ) {
 
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$tsf/static::$args hereinafter.
-		// $tsf  = static::$tsf;
+		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$args hereinafter.
 		$args = static::$args;
 
 		switch ( $pass ) {

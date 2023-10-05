@@ -64,15 +64,15 @@ final class Page extends Main {
 		static::get_cache( 'general/i18n/inputguidelines' )
 			or static::set_cache(
 				'general/i18n/inputguidelines',
-				static::$tsf->get_input_guidelines_i18n()
+				\tsf()->get_input_guidelines_i18n()
 			);
 
 		static::get_cache( 'general/detect/robotsglobal' )
 			or static::set_cache(
 				'general/detect/robotsglobal',
 				[
-					'hasrobotstxt' => static::$tsf->has_robots_txt(),
-					'blogpublic'   => static::$tsf->is_blog_public(),
+					'hasrobotstxt' => \tsf()->has_robots_txt(),
+					'blogpublic'   => Data\Blog::is_blog_public(),
 					'site'         => [
 						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
 						'nofollow'  => Data\Plugin::get_option( 'site_nofollow' ),
@@ -226,7 +226,7 @@ final class Page extends Main {
 				}
 			}
 
-			if ( static::$tsf->has_unprocessed_syntax( $title_part ) ) {
+			if ( \tsf()->has_unprocessed_syntax( $title_part ) ) {
 				$item['status']           = Builder::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
@@ -266,7 +266,7 @@ final class Page extends Main {
 		// Don't use cache, as this can be filtered.
 		if ( Meta\Title\Conditions::use_title_protection_status( $_generator_args ) ) {
 			$_title_before = $title;
-			static::$tsf->merge_title_protection( $title, $_generator_args );
+			\tsf()->merge_title_protection( $title, $_generator_args );
 			if ( $title !== $_title_before )
 				$item['assess']['protected'] = $cache['assess']['protected'];
 		}
@@ -317,13 +317,13 @@ final class Page extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				static::$tsf->escape_text( static::$tsf->sanitize_text( $title ) ),
+				\tsf()->escape_text( \tsf()->sanitize_text( $title ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
 		);
 
-		$guidelines      = static::$tsf->get_input_guidelines( $this->query_cache['states']['locale'] )['title']['search']['chars'];
+		$guidelines      = \tsf()->get_input_guidelines( $this->query_cache['states']['locale'] )['title']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
 
 		if ( $title_len < $guidelines['lower'] ) {
@@ -445,7 +445,7 @@ final class Page extends Main {
 				}
 			}
 
-			if ( static::$tsf->has_unprocessed_syntax( $desc ) ) {
+			if ( \tsf()->has_unprocessed_syntax( $desc ) ) {
 				$item['status']           = Builder::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
@@ -492,7 +492,7 @@ final class Page extends Main {
 		}
 
 		// Fetch words that are outputted more than 3 times.
-		$repeated_words = static::$tsf->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
+		$repeated_words = \tsf()->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
 
 		if ( $repeated_words ) {
 			$dupes = [];
@@ -525,12 +525,12 @@ final class Page extends Main {
 			}
 		}
 
-		$guidelines      = static::$tsf->get_input_guidelines( $this->query_cache['states']['locale'] )['description']['search']['chars'];
+		$guidelines      = \tsf()->get_input_guidelines( $this->query_cache['states']['locale'] )['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				static::$tsf->escape_text( static::$tsf->sanitize_text( $desc ) ),
+				\tsf()->escape_text( \tsf()->sanitize_text( $desc ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -700,7 +700,7 @@ final class Page extends Main {
 			}
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
+		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
@@ -824,7 +824,7 @@ final class Page extends Main {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
+		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
@@ -955,7 +955,7 @@ final class Page extends Main {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== static::$tsf->s_qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
+		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.

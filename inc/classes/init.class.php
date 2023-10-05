@@ -175,7 +175,7 @@ class Init extends Pool {
 		// Delete Sitemap transient on permalink structure change.
 		\add_action(
 			'load-options-permalink.php',
-			[ Sitemap\Store::class, '_refresh_sitemap_transient_permalink_updated' ],
+			[ Sitemap\Registry::class, '_refresh_sitemap_transient_permalink_updated' ],
 			20
 		);
 
@@ -290,8 +290,8 @@ class Init extends Pool {
 		\remove_action( 'wp_head', 'wp_generator' );
 
 		// Prepares sitemap or stylesheet output.
-		if ( $this->can_run_sitemap() ) {
-			\add_action( 'parse_request', [ $this, '_init_sitemap' ], 15 );
+		if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
+			\add_action( 'parse_request', [ Sitemap\Registry::class, '_init' ], 15 );
 			\add_filter( 'wp_sitemaps_enabled', '__return_false' );
 		} else {
 			// Augment Core sitemaps. Can't hook into `wp_sitemaps_init` as we're augmenting the providers before that.
@@ -567,7 +567,7 @@ class Init extends Pool {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		$refresh_sitemap_callback = [ Sitemap\Store::class, '_refresh_sitemap_on_post_change' ];
+		$refresh_sitemap_callback = [ Sitemap\Registry::class, '_refresh_sitemap_on_post_change' ];
 
 		// Can-be cron actions.
 		\add_action( 'publish_post', $refresh_sitemap_callback );
@@ -584,16 +584,6 @@ class Init extends Pool {
 		// Excluded IDs cache.
 		\add_action( 'wp_insert_post', $clear_excluded_callback );
 		\add_action( 'attachment_updated', $clear_excluded_callback );
-	}
-
-	/**
-	 * Prepares sitemap output.
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 */
-	public function _init_sitemap() {
-		Sitemap\Registry::get_instance()->_init();
 	}
 
 	/**
@@ -674,7 +664,7 @@ class Init extends Pool {
 
 				$output .= "\n";
 			} elseif ( ! $this->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
-				if ( $this->use_core_sitemaps() ) {
+				if ( Sitemap\Utils::use_core_sitemaps() ) {
 					$wp_sitemaps_server = \wp_sitemaps_get_server();
 					if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
 						// This method augments the output--it doesn't overwrite it.

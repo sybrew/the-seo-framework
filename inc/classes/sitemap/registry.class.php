@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\{
+	memo,
+	has_run,
+};
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query,
@@ -36,8 +39,8 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.0.0
  * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap and renamed to Registry.
- * @access protected
- * @final Can't be extended.
+ * @access private
+ * @internal Use tsf()->sitemap() instead. This class isn't in that pool, however.
  */
 final class Registry {
 
@@ -48,16 +51,24 @@ final class Registry {
 	private static $instance;
 
 	/**
-	 * @since 4.0.0
-	 * @var null|\The_SEO_Framework\Load
-	 */
-	private static $tsf = null;
-
-	/**
+	 * Deprecation handler for Extension Manager.
+	 *
 	 * @since 4.3.0
-	 * @var string The sitemap ID.
+	 * @access private
+	 *
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
+	 * @return mixed|void
 	 */
-	public $sitemap_id = '';
+	public function __call( $name, $arguments ) {
+
+		switch ( $name ) {
+			case 'sitemap_cache_enabled':
+				return Cache::is_sitemap_cache_enabled();
+		}
+
+		return null;
+	}
 
 	/**
 	 * Returns this instance.
@@ -83,29 +94,15 @@ final class Registry {
 	}
 
 	/**
-	 * The constructor. Can't be instantiated externally from this file.
-	 * Kills PHP on subsequent duplicated request. Enforces singleton.
-	 *
-	 * This probably autoloads at action "template_redirect", priority "1".
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 * @internal
-	 */
-	public function __construct() {
-		static $count = 0;
-		0 === $count++ or \wp_die( 'Don\'t instance <code>' . __CLASS__ . '</code>.' );
-	}
-
-	/**
 	 * Initializes sitemap output.
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Can now parse non-ASCII URLs. No longer only lowercases raw URIs.
+	 * @since 4.3.0 Is now static.
 	 * @access private
 	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
-	public function _init() {
+	public static function _init() {
 
 		// The raw path(+query) of the requested URI.
 		// TODO consider reverse proxies, as WP()->parse_request() seems to do.
@@ -143,20 +140,21 @@ final class Registry {
 				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
 				// Yes, we know. It's not really checking for standardized query-variables.
 				if ( preg_match( $_regex, $stripped_uri ) ) {
-					$this->sitemap_id = $_id;
+					$sitemap_id = $_id;
 					break;
 				}
 			}
 		} else {
 			foreach ( static::get_sitemap_endpoint_list() as $_id => $_data ) {
 				if ( preg_match( $_data['regex'], $stripped_uri ) ) {
-					$this->sitemap_id = $_id;
+					$sitemap_id = $_id;
 					break;
 				}
 			}
 		}
 
-		if ( ! $this->sitemap_id ) return;
+		// No matched sitemap ID is found.
+		if ( empty( $sitemap_id ) ) return;
 
 		// Register we're on a sitemap.
 		Query::is_sitemap( true );
@@ -172,9 +170,9 @@ final class Registry {
 		 * @since 4.0.0
 		 * @param string $sitemap_id The sitemap ID. See `static::get_sitemap_endpoint_list()`.
 		 */
-		\do_action( 'the_seo_framework_sitemap_header', $this->sitemap_id );
+		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
 
-		\call_user_func( static::get_sitemap_endpoint_list()[ $this->sitemap_id ]['callback'], $this->sitemap_id );
+		\call_user_func( static::get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
 	}
 
 	/**
@@ -293,20 +291,7 @@ final class Registry {
 	}
 
 	/**
-	 * Tells whether sitemap caching is enabled by user.
-	 *
-	 * @since 4.1.2
-	 * @todo convert this to "is_" and make static.
-	 *
-	 * @return bool
-	 */
-	public function sitemap_cache_enabled() {
-		return (bool) Data\Plugin::get_option( 'cache_sitemap' );
-	}
-
-	/**
 	 * Deletes transients for sitemaps. Also engages pings for or pings search engines.
-	 *
 	 * Can only run once per request.
 	 *
 	 * @since 4.3.0
@@ -315,9 +300,9 @@ final class Registry {
 	 */
 	public static function refresh_sitemaps() {
 
-		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return false;
+		if ( has_run( __METHOD__ ) ) return false;
 
-		Store::clear_sitemap_transients();
+		Cache::clear_sitemap_caches();
 
 		$ping_use_cron           = Data\Plugin::get_option( 'ping_use_cron' );
 		$ping_use_cron_prerender = Data\Plugin::get_option( 'ping_use_cron_prerender' );
@@ -346,174 +331,40 @@ final class Registry {
 	}
 
 	/**
-	 * Returns the sitemap's storage transient name.
+	 * Refreshes sitemaps on post change.
 	 *
 	 * @since 4.3.0
+	 * @access private
 	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 * @return string|false The sitemap transient store key.
-	 */
-	public function get_transient_key( $sitemap_id = '' ) {
-
-		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
-		$ep_list    = static::get_sitemap_endpoint_list();
-
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
-
-		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
-
-		return Store::build_unique_cache_key_suffix( "tsf_sitemap_{$cache_key}" );
-	}
-
-	/**
-	 * Stores the sitemap in transient cache.
-	 *
-	 * @since 4.3.0
-	 *
-	 * @param string $content    The sitemap content
-	 * @param string $sitemap_id The sitemap ID.
-	 * @param int    $expiration The sitemap's cache timeout.
+	 * @param int $post_id The Post ID that has been updated.
 	 * @return bool True on success, false on failure.
 	 */
-	public function cache_sitemap( $content, $sitemap_id = '', $expiration = \WEEK_IN_SECONDS ) {
+	public static function _refresh_sitemap_on_post_change( $post_id ) {
 
-		$transient_key = $this->get_transient_key( $sitemap_id );
+		// Don't refresh sitemap on revision.
+		if ( ! $post_id || \wp_is_post_revision( $post_id ) ) return false;
 
-		if ( ! $transient_key ) return false;
-
-		return \set_transient( $transient_key, $content, $expiration );
+		return static::refresh_sitemaps();
 	}
 
 	/**
-	 * Returns the sitemap from transient cache.
+	 * Checks whether the permalink structure is updated.
 	 *
 	 * @since 4.3.0
+	 * @access private
 	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 * @return string|false The sitemap from cache. False is not set.
+	 * @return bool Whether if sitemap transient is deleted.
 	 */
-	public function get_cached_sitemap( $sitemap_id = '' ) {
+	public static function _refresh_sitemap_transient_permalink_updated() {
 
-		$transient_key = $this->get_transient_key( $sitemap_id );
-
-		if ( ! $transient_key ) return false;
-
-		return \get_transient( $transient_key );
-	}
-
-	/**
-	 * Returns the sitemap's lock cache ID.
-	 *
-	 * @since 4.1.2
-	 * @since 4.3.0 The first parameter is now optional.
-	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 * @return string|false The sitemap lock key. False when key is invalid.
-	 */
-	public function get_lock_key( $sitemap_id = '' ) {
-
-		$sitemap_id = $sitemap_id ?: $this->sitemap_id;
-		$ep_list    = static::get_sitemap_endpoint_list();
-
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
-
-		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
-
-		return Store::build_unique_cache_key_suffix( 'tsf_sitemap_lock' ) . "_{$lock_id}";
-	}
-
-	/**
-	 * Outputs a '503: Service Unavailable' header and no-cache headers.
-	 *
-	 * @since 4.1.2
-	 * @since 4.3.0 Is now static.
-	 * TODO consider instead of using this, output the previous sitemap from cache, instead? Spaghetti.
-	 *
-	 * @param int $timeout How many seconds the user has to wait. Optional. Leave 0 to send a generic message.
-	 */
-	public static function output_locked_header( $timeout = 0 ) {
-
-		\tsf()->clean_response_header();
-
-		\status_header( 503 );
-		\nocache_headers();
-
-		if ( $timeout ) {
-			printf(
-				'Sitemap is locked for %d seconds. Try again later.',
-				(int) ( $timeout - time() )
-			);
-		} else {
-			echo 'Sitemap is locked temporarily. Try again later.';
+		if (
+			   ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) )
+			&& \check_admin_referer( 'update-permalink' )
+		) {
+				return static::refresh_sitemaps();
 		}
 
-		echo "\n";
-		exit;
-	}
-
-	/**
-	 * Locks a sitemap for the current blog & locale and $sitemap_id, preferably
-	 * at least as long as PHP is allowed to run.
-	 *
-	 * @since 4.1.2
-	 * @since 4.2.1 Now considers "unlimited" execution time (0) that'd've prevented locks altogether.
-	 * @since 4.3.0 The first parameter is now optional.
-	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool True on success, false on failure.
-	 */
-	public function lock_sitemap( $sitemap_id = '' ) {
-
-		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
-
-		if ( ! $lock_key ) return false;
-
-		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
-
-		if ( 0 === $ini_max_execution_time ) { // Unlimited. Let's still put a limit on the lock.
-			$timeout = 3 * \MINUTE_IN_SECONDS;
-		} else {
-			// This is rather at most as PHP will run. However, 3 minutes to generate a sitemap is already ludicrous.
-			$timeout = (int) min( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS );
-		}
-
-		return \set_transient(
-			$lock_key,
-			time() + $timeout,
-			$timeout
-		);
-	}
-
-	/**
-	 * Unlocks a sitemap for the current blog & locale and $sitemap_id.
-	 *
-	 * @since 4.1.2
-	 * @since 4.3.0 The first parameter is now optional.
-	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool True on success, false on failure.
-	 */
-	public function unlock_sitemap( $sitemap_id = '' ) {
-
-		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
-
-		return $lock_key ? \delete_transient( $lock_key ) : false;
-	}
-
-	/**
-	 * Tells whether a sitemap is locked for the current blog & locale and $sitemap_id.
-	 *
-	 * @since 4.1.2
-	 * @since 4.3.0 The first parameter is now optional.
-	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 * @return bool|int False if not locked, the lock UNIX release time otherwise.
-	 */
-	public function is_sitemap_locked( $sitemap_id = '' ) {
-
-		$lock_key = $this->get_lock_key( $sitemap_id ?: $this->sitemap_id );
-
-		return $lock_key ? \get_transient( $lock_key ) : false;
+		return false;
 	}
 
 	/**
@@ -531,10 +382,8 @@ final class Registry {
 	 */
 	public static function output_base_sitemap( $sitemap_id = 'base' ) {
 
-		$locked_timeout = static::get_instance()->is_sitemap_locked( $sitemap_id );
-
-		if ( false !== $locked_timeout ) {
-			static::get_instance()->output_locked_header( $locked_timeout );
+		if ( Lock::is_sitemap_locked( $sitemap_id ) ) {
+			Lock::output_locked_header( $sitemap_id );
 			exit;
 		}
 

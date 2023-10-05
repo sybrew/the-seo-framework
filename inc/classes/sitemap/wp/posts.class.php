@@ -108,7 +108,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			/**
 			 * @augmented This if-statement prevents including the homepage as blog in the sitemap when conditions apply.
 			 */
-			if ( Sitemap\Store::is_post_included_in_sitemap( 0 ) ) {
+			if ( Sitemap\Utils::is_post_included_in_sitemap( 0 ) ) {
 				// Extract the data needed for home URL to add to the array.
 				$sitemap_entry = [
 					'loc' => \home_url( '/' ),
@@ -159,7 +159,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			/**
 			 * @augmented This if-statement prevents including the post in the sitemap when conditions apply.
 			 */
-			if ( ! Sitemap\Store::is_post_included_in_sitemap( $post->ID ) )
+			if ( ! Sitemap\Utils::is_post_included_in_sitemap( $post->ID ) )
 				continue;
 
 			$sitemap_entry = [
