@@ -209,7 +209,7 @@ class Utils {
 	 *
 	 * @return bool
 	 */
-	public function use_core_sitemaps() {
+	public static function use_core_sitemaps() {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
@@ -232,7 +232,7 @@ class Utils {
 	 *
 	 * @return bool
 	 */
-	public function may_output_optimized_sitemap() {
+	public static function may_output_optimized_sitemap() {
 		return Data\Plugin::get_option( 'sitemaps_output' )
 			&& ! Data\Blog::is_current_blog_spam_or_deleted();
 	}

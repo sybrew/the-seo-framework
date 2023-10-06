@@ -37,4 +37,54 @@ namespace The_SEO_Framework\Bridges;
  * @access protected
  * @final Can't be extended.
  */
-class_alias( 'The_SEO_Framework\Sitemap\Registry', 'The_SEO_Framework\Bridges\Sitemap', true );
+class Sitemap extends \The_SEO_Framework\Sitemap\Registry {
+
+	/**
+	 * @since 4.0.0
+	 * @var \The_SEO_Framework\Sitemap\Registry
+	 */
+	private static $instance;
+
+	/**
+	 * Returns this instance.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return \The_SEO_Framework\Sitemap\Registry $instance
+	 */
+	public static function get_instance() {
+		return static::$instance ??= new static;
+	}
+
+	/**
+	 * Prepares the class and loads constructor.
+	 *
+	 * Use this if the actions need to be registered early, but nothing else of
+	 * this class is needed yet.
+	 *
+	 * @since 4.0.0
+	 */
+	public static function prepare() {
+		static::get_instance();
+	}
+
+	/**
+	 * Deprecation handler for Extension Manager.
+	 *
+	 * @since 4.3.0
+	 * @access private
+	 *
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
+	 * @return mixed|void
+	 */
+	public function __call( $name, $arguments ) {
+
+		switch ( $name ) {
+			case 'sitemap_cache_enabled':
+				return Cache::is_sitemap_cache_enabled();
+		}
+
+		return null;
+	}
+}

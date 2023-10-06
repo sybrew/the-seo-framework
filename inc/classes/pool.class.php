@@ -744,6 +744,21 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Registry
+			 */
+			public static function registry() {
+				return static::$subpool['registry'] ??= new class extends Sitemap\Registry {
+					use Static_Deprecator;
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->sitemap()->registry()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
 			 * @return \The_SEO_Framework\Sitemap\Utils
 			 */
 			public static function utils() {

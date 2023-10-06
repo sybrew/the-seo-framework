@@ -27,7 +27,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 				 * @since 3.1.0
 				 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 				 */
-				do_action( 'the_seo_framework_xsl_head', $this );
+				do_action( 'the_seo_framework_xsl_head', tsf() );
 				?>
 			</head>
 			<body class="<?= is_rtl() ? 'rtl' : 'ltr' ?>">
@@ -38,7 +38,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 						 * @since 3.1.0
 						 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 						 */
-						do_action( 'the_seo_framework_xsl_description', $this );
+						do_action( 'the_seo_framework_xsl_description', tsf() );
 						?>
 					</div>
 				</div>
@@ -49,7 +49,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 						 * @since 3.1.0
 						 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 						 */
-						do_action( 'the_seo_framework_xsl_content', $this );
+						do_action( 'the_seo_framework_xsl_content', tsf() );
 						?>
 					</div>
 				</div>
@@ -60,7 +60,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 						 * @since 3.1.0
 						 * @param \The_SEO_Framework\Load $this Alias of `tsf()`
 						 */
-						do_action( 'the_seo_framework_xsl_footer', $this );
+						do_action( 'the_seo_framework_xsl_footer', tsf() );
 						?>
 					</div>
 				</div>

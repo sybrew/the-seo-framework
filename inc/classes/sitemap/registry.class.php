@@ -39,59 +39,10 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.0.0
  * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap and renamed to Registry.
- * @access private
- * @internal Use tsf()->sitemap() instead. This class isn't in that pool, however.
+ * @access protected
+ * @internal Use tsf()->sitemap()->registry() instead.
  */
-final class Registry {
-
-	/**
-	 * @since 4.0.0
-	 * @var \The_SEO_Framework\Sitemap\Registry
-	 */
-	private static $instance;
-
-	/**
-	 * Deprecation handler for Extension Manager.
-	 *
-	 * @since 4.3.0
-	 * @access private
-	 *
-	 * @param string $name      The method name.
-	 * @param array  $arguments The method arguments.
-	 * @return mixed|void
-	 */
-	public function __call( $name, $arguments ) {
-
-		switch ( $name ) {
-			case 'sitemap_cache_enabled':
-				return Cache::is_sitemap_cache_enabled();
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns this instance.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @return \The_SEO_Framework\Sitemap\Registry $instance
-	 */
-	public static function get_instance() {
-		return static::$instance ??= new static;
-	}
-
-	/**
-	 * Prepares the class and loads constructor.
-	 *
-	 * Use this if the actions need to be registered early, but nothing else of
-	 * this class is needed yet.
-	 *
-	 * @since 4.0.0
-	 */
-	public static function prepare() {
-		static::get_instance();
-	}
+class Registry {
 
 	/**
 	 * Initializes sitemap output.
@@ -100,7 +51,6 @@ final class Registry {
 	 * @since 4.0.2 Can now parse non-ASCII URLs. No longer only lowercases raw URIs.
 	 * @since 4.3.0 Is now static.
 	 * @access private
-	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
 	public static function _init() {
 
@@ -424,7 +374,7 @@ final class Registry {
 			header( 'Cache-Control: max-age=1800', true );
 		}
 
-		\The_SEO_Framework\Interpreters\Sitemap_XSL::prepare();
+		Optimized\XSL::hook();
 
 		\tsf()->get_view( 'sitemap/xsl-stylesheet' );
 		exit;

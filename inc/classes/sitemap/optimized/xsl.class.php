@@ -1,14 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Interpreters\Sitemap\XSL
- * @subpackage The_SEO_Framework\Sitemap\XSL
+ * @package The_SEO_Framework\Classes\Sitemap\Optimized\XSL
+ * @subpackage The_SEO_Framework\Sitemap
  */
 
-namespace The_SEO_Framework\Interpreters;
+namespace The_SEO_Framework\Sitemap\Optimized;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2021 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -31,18 +31,19 @@ use function \The_SEO_Framework\umemo;
  * Interprets the Sitemap Stylesheet of the optimized Sitemap.
  *
  * @since 4.2.0
+ * @since 4.3.0 Moved to `The_SEO_Framework\Sitemap\Optimized`.
  *
  * @access private
  * @final Can't be extended.
  */
-final class Sitemap_XSL {
+final class XSL {
 
 	/**
-	 * Prepares the sitemap stylesheet: loads all actions.
+	 * Loads all hooks for the stylesheet.
 	 *
-	 * @since 4.2.0
+	 * @since 4.3.0
 	 */
-	public static function prepare() {
+	public static function hook() {
 
 		$class = static::class;
 
