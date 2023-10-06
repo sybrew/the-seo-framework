@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Builders\Core_Sitemaps
- * @subpackage The_SEO_Framework\Classes\Builders\Sitemap
+ * @package The_SEO_Framework\Classes\Sitemap\WP\Filter
+ * @subpackage WordPress\Sitemaps
  */
 
 namespace The_SEO_Framework\Sitemap\WP;
@@ -32,12 +32,12 @@ use \The_SEO_Framework\Data,
  * Augments the WordPress Core sitemap.
  *
  * @since 4.1.2
- * @since 4.3.0 1. Moved to `\The_SEO_Framework\Sitemap\WP`
+ * @since 4.3.0 1. Moved to `\The_SEO_Framework\Sitemap\WP` and renamed to Filter.
  *              2. No longer extends `\The_SEO_Framework\Sitemap\Optimized\Main`.
  *
  * @access private
  */
-class Main {
+class Filter {
 
 	/**
 	 * Sets "doing sitemap" in TSF if preliminary conditions pass.

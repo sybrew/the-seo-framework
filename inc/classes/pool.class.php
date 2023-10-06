@@ -98,6 +98,22 @@ class Pool extends Legacy_API {
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Query\Exclusion
+			 */
+			public static function exclusion() {
+				return static::$subpool['exclusion'] ??= new class extends Helper\Query\Exclusion {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->query()->exclusion()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
 		};
 	}
 
@@ -668,6 +684,43 @@ class Pool extends Legacy_API {
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->user()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns the Image API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\RobotsTXT\Main
+	 */
+	public static function robots_txt() {
+		return static::$pool['robots_txt'] ??= new class extends RobotsTXT\Main {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->robots_txt()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\RobotsTXT\Utils
+			 */
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends RobotsTXT\Utils {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->robots_txt()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing

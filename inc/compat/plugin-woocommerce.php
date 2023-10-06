@@ -8,9 +8,11 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
 
-use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Builders,
-	\The_SEO_Framework\Data;
+use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Builders,
+	Data,
+};
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
 \add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
@@ -37,16 +39,14 @@ use \The_SEO_Framework\Helper\Query,
  * @uses \is_product()
  */
 function _init_wc_compat() {
-	$tsf = \tsf();
-
 	// Adjust the product link acknowledging the primary category.
-	\add_filter( 'wc_product_post_type_link_product_cat', [ $tsf, '_adjust_post_link_category' ], 10, 3 );
+	\add_filter( 'wc_product_post_type_link_product_cat', [ Query\Filter::class, 'filter_post_link_category' ], 10, 3 );
 
 	// Adjust the structured-data breadcrumb primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
-	\add_filter( 'woocommerce_breadcrumb_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
+	\add_filter( 'woocommerce_breadcrumb_main_term', [ Query\Filter::class, 'filter_post_link_category' ], 10, 2 );
 
 	// Adjust the widget's tree primary term. Coincidentally(?), it uses the same filter structure; although, it misses the $post object.
-	\add_filter( 'woocommerce_product_categories_widget_main_term', [ $tsf, '_adjust_post_link_category' ], 10, 2 );
+	\add_filter( 'woocommerce_product_categories_widget_main_term', [ Query\Filter::class, 'filter_post_link_category' ], 10, 2 );
 
 	\remove_filter( 'wp_robots', 'wc_page_no_robots' );
 

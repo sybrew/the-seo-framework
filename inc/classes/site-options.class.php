@@ -8,8 +8,6 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
-
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
@@ -85,7 +83,7 @@ class Site_Options extends Sanitize {
 			return;
 
 		if ( Data\Plugin::get_option( 'tsf-settings-reset' ) ) {
-			if ( \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $this->get_default_site_options() ) ) {
+			if ( \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, Data\Plugin\Setup::get_default_options() ) ) {
 				Data\Plugin::update_site_cache( 'settings_notice', 'reset' );
 			} else {
 				Data\Plugin::update_site_cache( 'settings_notice', 'error' );

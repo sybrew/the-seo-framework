@@ -35,7 +35,7 @@ use \The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- *         Use tsf()->query() instead, which pooled this class.
+ * @internal Use tsf()->query() instead, which pooled this class.
  */
 class Query {
 

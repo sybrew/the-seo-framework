@@ -12,6 +12,7 @@ use const \The_SEO_Framework\ROBOTS_ASSERT;
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta,
+	\The_SEO_Framework\RobotsTXT,
 	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Admin\SEOBar\Builder;
 
@@ -71,7 +72,7 @@ final class Page extends Main {
 			or static::set_cache(
 				'general/detect/robotsglobal',
 				[
-					'hasrobotstxt' => \tsf()->has_robots_txt(),
+					'hasrobotstxt' => RobotsTXT\Utils::has_root_robots_txt(),
 					'blogpublic'   => Data\Blog::is_blog_public(),
 					'site'         => [
 						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
@@ -688,7 +689,6 @@ final class Page extends Main {
 			$permalink = Meta\URI::get_generated_url( [
 				'id' => static::$query['id'],
 			] );
-			// We create it because filters may apply.
 			$canonical = Meta\URI::get_canonical_url( [
 				'id' => static::$query['id'],
 			] );

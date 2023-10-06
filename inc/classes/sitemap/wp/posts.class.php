@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Builders\Core_Sitemaps
+ * @package The_SEO_Framework\Classes\Sitemap\WP\Posts
  * @subpackage WordPress\Sitemaps
  */
 

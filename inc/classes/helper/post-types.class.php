@@ -37,7 +37,7 @@ use \The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- * @internal
+ * @internal Use tsf()->post_types() instead, which pooled this class.
  */
 class Post_Types {
 

@@ -56,13 +56,13 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Initializes List Edit tables.
+	 * Initializes Lists Edit tables.
 	 *
 	 * @since 4.0.0
 	 * @access private
 	 */
 	public function _init_list_edit() {
-		new Admin\List\Edit;
+		new Admin\Lists\Edit;
 	}
 
 	/**
@@ -373,7 +373,7 @@ class Admin_Init extends Init {
 	 *               (key => value). Default is an empty array.
 	 * @return null Return early if first argument is false.
 	 */
-	public function admin_redirect( $page, $query_args = [] ) {
+	public function admin_redirect( $page, $query_args = [] ) { // TODO make redirect_to_admin_page
 
 		if ( empty( $page ) ) return;
 

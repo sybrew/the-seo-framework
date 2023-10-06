@@ -17,6 +17,7 @@ use \The_SEO_Framework\Helper\{
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta,
+	\The_SEO_Framework\RobotsTXT,
 	\The_SEO_Framework\Admin\SEOBar\Builder;
 
 /**
@@ -75,7 +76,7 @@ final class Term extends Main {
 			or static::set_cache(
 				'general/detect/robotsglobal',
 				[
-					'hasrobotstxt' => \tsf()->has_robots_txt(),
+					'hasrobotstxt' => RobotsTXT\Utils::has_root_robots_txt(),
 					'blogpublic'   => Data\Blog::is_blog_public(),
 					'site'         => [
 						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
@@ -647,7 +648,6 @@ final class Term extends Main {
 				'id'  => static::$query['id'],
 				'tax' => static::$query['tax'],
 			] );
-			// We create it because filters may apply.
 			$canonical = Meta\URI::get_canonical_url( [
 				'id'  => static::$query['id'],
 				'tax' => static::$query['tax'],

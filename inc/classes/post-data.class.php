@@ -8,8 +8,6 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
-
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,

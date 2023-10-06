@@ -41,6 +41,7 @@ use \The_SEO_Framework\Data,
  * @internal Use tsf()->uri()->utils() instead.
  */
 class Utils {
+
 	/**
 	 * Detects site's URL scheme from site options.
 	 * Falls back to is_ssl() when the hom misconfigured via wp-config.php

@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Sitemap;
 
 use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
 
+use function \The_SEO_Framework\memo;
+
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
 
@@ -235,5 +237,29 @@ class Utils {
 	public static function may_output_optimized_sitemap() {
 		return Data\Plugin::get_option( 'sitemaps_output' )
 			&& ! Data\Blog::is_current_blog_spam_or_deleted();
+	}
+
+	/**
+	 * Detects presence of sitemap.xml in root folder.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.5.2
+	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\Utils`
+	 *
+	 * @return bool Whether the sitemap.xml file exists.
+	 */
+	public static function has_root_sitemap_xml() {
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
+		// Ensure get_home_path() is declared.
+		if ( ! \function_exists( '\\get_home_path' ) )
+			require_once \ABSPATH . 'wp-admin/includes/file.php';
+
+		$path = \get_home_path() . 'sitemap.xml';
+
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
+		return memo( file_exists( $path ) );
 	}
 }

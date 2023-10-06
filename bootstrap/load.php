@@ -56,22 +56,13 @@ function _init_locale() {
  *
  * @hook plugins_loaded 5
  * @since 3.1.0
- * @since 4.3.0 1. Now returns an uncached silencer when called too early.
- *              2. No longer memoizes the class. Use `\tsf()` or `\the_seo_framework()` instead.
+ * @since 4.3.0 No longer memoizes the class. Use `\tsf()` or `\the_seo_framework()` instead.
  * @access private
  * @see function tsf().
  * @see function the_seo_framework().
  * @factory
- *
- * @return The_SEO_Framework\Load|The_SEO_Framework\Internal\Silencer
  */
 function _init_tsf() {
-
-	// Memoize the class. Do not run constructors more than once.
-	static $tsf;
-
-	if ( isset( $tsf ) )
-		return $tsf;
 
 	/**
 	 * @since 2.3.7
@@ -81,13 +72,14 @@ function _init_tsf() {
 		   \apply_filters( 'the_seo_framework_load', true )
 		&& \did_action( 'plugins_loaded' )
 	) {
-		$tsf         = new Load();
+		$tsf         = Load::get_instance();
 		$tsf->loaded = true;
 
 		$tsf->_load_early_compat_files();
 
+		Hook::setup();
+
 		if ( \is_admin() ) {
-			//! TODO: admin-only loader?
 			/**
 			 * @since 3.1.0
 			 * Runs after TSF is loaded in the admin.
@@ -101,21 +93,11 @@ function _init_tsf() {
 		 */
 		\do_action( 'the_seo_framework_loaded' );
 	} else {
-		$_tsf         = new Internal\Silencer();
-		$_tsf->loaded = false;
-
 		// did_action() checks for current action too.
 		if ( ! \did_action( 'plugins_loaded' ) ) {
 			\_doing_it_wrong( 'tsf(), the_seo_framework(), or ' . __FUNCTION__, 'Use <code>tsf()</code> after action <code>plugins_loaded</code> priority 5.', '3.1 or The SEO Framework' );
-
-			return $_tsf;
 		}
-
-		// Cache the silencer.
-		$tsf = $_tsf;
 	}
-
-	return $tsf;
 }
 
 spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );

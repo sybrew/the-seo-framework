@@ -1,14 +1,15 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\AJAX
+ * @package The_SEO_Framework\Classes\Admin\AJAX
  * @subpackage The_SEO_Framework\Feed
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper,
 	\The_SEO_Framework\Helper\Query;
 
 /**
@@ -35,6 +36,7 @@ use \The_SEO_Framework\Data,
  * they're with their relatives.
  *
  * @since 4.1.4
+ * @since 4.3.0 Moved to \The_SEO_Framework\Admin\AJAX
  * @access private
  * @final Can't be extended.
  */
@@ -44,14 +46,13 @@ final class AJAX {
 	 * Clears persistent notice on user request (clicked Dismiss icon) via AJAX.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
 	 * @since 4.2.0 Now cleans response header.
 	 * Security check OK.
 	 * @access private
 	 */
 	public static function _wp_ajax_dismiss_notice() {
 
-		\tsf()->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = $_POST['tsf_dismiss_key'] ?? '';
@@ -77,7 +78,6 @@ final class AJAX {
 	 * Handles counter option update on AJAX request for users that can edit posts.
 	 *
 	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
-	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
 	 * @since 4.2.0 1. Now uses wp.ajax instead of $.ajax.
 	 *              2. No longer tests if settings-saving was successful.
 	 * @securitycheck 3.0.0 OK.
@@ -85,11 +85,10 @@ final class AJAX {
 	 */
 	public static function _wp_ajax_update_counter_type() {
 
-		$tsf = \tsf();
-		$tsf->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
-		$tsf->_check_tsf_ajax_referer( 'edit_posts' );
+		\tsf()->_check_tsf_ajax_referer( 'edit_posts' );
 
 		// If current user isn't allowed to edit posts, don't do anything and kill PHP.
 		if ( ! \current_user_can( 'edit_posts' ) )
@@ -137,7 +136,6 @@ final class AJAX {
 	 *           4. It no longer accepts a default context.
 	 *
 	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
-	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
 	 * @since 4.2.0 Now cleans response header.
 	 * @since 4.2.5 1. Backported cropping support for WebP (WP 5.9).
 	 *              2. Backported title, description, alt tag, and excerpt preservation (WP 6.0).
@@ -146,11 +144,10 @@ final class AJAX {
 	 */
 	public static function _wp_ajax_crop_image() {
 
-		$tsf = \tsf();
-		$tsf->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
-		$tsf->_check_tsf_ajax_referer( 'upload_files' );
+		\tsf()->_check_tsf_ajax_referer( 'upload_files' );
 
 		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
@@ -258,13 +255,12 @@ final class AJAX {
 	 * Gets an SEO Bar for AJAX during edit-post.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.4 Moved to \The_SEO_Framework\Bridges\AJAX and made static.
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
 	 * @access private
 	 */
 	public static function _wp_ajax_get_post_data() {
 
-		\tsf()->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
 		\tsf()->_check_tsf_ajax_referer( 'edit_posts' );

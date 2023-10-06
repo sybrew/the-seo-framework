@@ -118,7 +118,7 @@ final class Ping {
 		if ( Data\Plugin::get_option( 'site_noindex' ) || ! Data\Blog::is_blog_public() ) return;
 
 		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
-		if ( Lock::is_sitemap_locked() ) {
+		if ( Lock::is_sitemap_locked( 'base' ) ) {
 			static::engage_pinging_retry_cron( [ 'id' => 'base' ] );
 			return;
 		}

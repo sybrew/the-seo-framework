@@ -14,6 +14,7 @@ use function \The_SEO_Framework\{
 };
 
 use \The_SEO_Framework\Data,
+	\The_SEO_Framework\Helper,
 	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Meta;
 
@@ -337,8 +338,7 @@ class Registry {
 			exit;
 		}
 
-		// Remove output, if any.
-		\tsf()->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
@@ -366,7 +366,7 @@ class Registry {
 	 */
 	public static function output_stylesheet() {
 
-		\tsf()->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );

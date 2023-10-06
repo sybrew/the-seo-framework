@@ -156,27 +156,6 @@ class Core {
 	}
 
 	/**
-	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
-	 *
-	 * @since 2.8.0
-	 * @since 2.9.0 Now flushes all levels rather than just the latest one.
-	 * @since 4.0.0 Is now public.
-	 *
-	 * @return bool True on clear. False otherwise.
-	 */
-	public function clean_response_header() {
-
-		$level = ob_get_level();
-
-		if ( $level ) {
-			while ( $level-- ) ob_end_clean();
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Includes compatibility files, only once per request.
 	 *
 	 * @since 2.8.0

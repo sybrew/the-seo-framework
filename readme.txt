@@ -587,6 +587,7 @@ TODO Helper/Taxonomies
 	-> Helper/Taxonomy
 TODO Helper/Post_Types
 	-> Helper/PostType
+What about "Helper/Filter/Taxonomies"?
 
 TODO we MUST add a new option for Schema.org
 	-> Shall we add subsequent toggles, for each type?
@@ -631,6 +632,14 @@ TODO Remove all "$escape" parameters from the meta generators, and always _sanit
 TODO make canonical URL placeholder work in _output_column_contents_for_post()
 	-> Also make the Indexing react to the Password/Private states.
 		-> This already works for the title.
+
+TODO dump get_instance from Feed and SEOBar\Builder
+	-> Nothing in the Builder is related to the instance...
+
+TODO dump prepare() methods, it's dumb.
+
+TODO run all deprecation methods one last time
+	We should be able to loop over them quite easily.
 
 **Detailed log**
 
@@ -771,10 +780,12 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 	* Pool `tsf()->query()` is now available.
 		* All public query-related methods have been moved to that pool. E.g., `tsf()->is_product()` is now `tsf()->query()->is_product()`.
 		* Internally known as `The_SEO_Framework\Helper\Query`.
-		* This pool has a sub-pool, accessible via `tsf()->query()->utils()`.
-			* Internally known as `The_SEO_Framework\Meta\Title\Utils`.
 		* This pool has a sub-pool, accessible via `tsf()->query()->cache()`.
 			* Internally known as `The_SEO_Framework\Meta\Title\Cache`.
+		* This pool has a sub-pool, accessible via `tsf()->query()->exclusion()`.
+			* Internally known as `The_SEO_Framework\Meta\Title\Exclusion`.
+		* This pool has a sub-pool, accessible via `tsf()->query()->utils()`.
+			* Internally known as `The_SEO_Framework\Meta\Title\Utils`.
 	* Pool `tsf()->post_types()` is now available.
 		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_types()->is_post_type_supported()`.
 		* Internally known as `The_SEO_Framework\Helper\Post_Types`.
@@ -818,6 +829,11 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 		* Internally known as `The_SEO_Framework\Meta\Image`.
 	* Pool `tsf()->breadcrumbs()` is now available.
 		* Internally known as `The_SEO_Framework\Meta\Breadcrumbs`.
+	* Pool `tsf()->robots_txt()` is now available.
+		* All public robots.txt-related methods have been moved to that pool. E.g. `tsf()->robots_txt()->get_robots_txt()`
+		* Internally known as `The_SEO_Framework\RobotsTXT\Main`.
+		* This pool has a sub-pool, accessible via `tsf()->robots_txt()->utils()`.
+			* Internally known as `The_SEO_Framework\RobotsTXT\Utils`.
 	* Pool `tsf()->sitemap()` is now available.
 		* Unlike all other pools, this is a Closure where it stores only subpools.
 		* This pool has a sub-pool, accessible via `tsf()->sitemap()->cache()`.
@@ -826,6 +842,8 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 			* Internally known as `The_SEO_Framework\Sitemap\Ping`.
 		* This pool has a sub-pool, accessible via `tsf()->sitemap()->lock()`.
 			* Internally known as `The_SEO_Framework\Sitemap\Lock`.
+		* This pool has a sub-pool, accessible via `tsf()->sitemap()->registry()`.
+			* Internally known as `The_SEO_Framework\Sitemap\Registry`.
 		* This pool has a sub-pool, accessible via `tsf()->sitemap()->utils()`.
 			* Internally known as `The_SEO_Framework\Sitemap\Utils`.
 * **Improved:**
@@ -888,10 +906,7 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 			* This is the only correct function of kind that exists, made bespoke by me for TSF.
 			* It's practically `array_merge()` for multidimensional arrays.
 	* **Changed:**
-		* `tsf()` and `the_seo_framework()` now return an uncached silencer when called to early (before `plugins_loaded`).
-			* All calls made to this object return void.
-			* This may cause fatal errors in rare cases.
-			* This will prevent TSF from acting sporadically when other plugins hook into TSF too early.
+		* `tsf()` and `the_seo_framework()` will now always return TSF's object -- even if the plugin isn't fully initialized. We can now do this because the hook loader has been moved from the class instance.
 * **Object notes:**
 	* **New objects:**
 		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods. TODO make this private or add a functional EP interface?
@@ -911,8 +926,10 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 	* **Existing objects:**
 		* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
 		* For class `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
+			* **This class can no longer be instantiated via the new keyword.**
 			* **Methods added:**
-				* `detect_multilingual_plugins()`
+				* `detect_multilingual_plugins()` TODO ehh, this will vanish.
+				* `get_instance()`. But you should use `tsf()` instead.
 			* **Methods ennobled:** These are now part of the legacy API and will be maintained indefinitely.
 				* `get_option()`
 				* `get_options()`
@@ -1252,8 +1269,8 @@ TODO make canonical URL placeholder work in _output_column_contents_for_post()
 						* This is now `tsf()->reset_check_plugin_conflicts()`. TODO it won't be for long.
 					* `delete_main_cache()`
 					* `delete_post_cache()`
-					* TODO `delete_excluded_ids_cache()` this is now clear_excluded_post_ids_cache, let's put it in a good location.
-						* This has been moved to `The_SEO_Framework\Sitemap\Cache::clear_excluded_post_ids_cache()`. TODO this went all over the place, validate.
+					* `delete_excluded_ids_cache()`
+						* This has been moved to `tsf()->query()->exclusion()->clear_excluded_post_ids_cache()`.
 					* `delete_excluded_post_ids_transient()`
 					* `delete_cache()`
 					* `get_exclusion_transient_name()`

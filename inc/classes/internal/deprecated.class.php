@@ -6327,7 +6327,8 @@ final class Deprecated {
 	 * @since 2.6.0
 	 * @since 2.9.2 No longer checks for plain and ugly permalinks.
 	 * @since 4.0.0 Removed caching.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Utils.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool
 	 */
@@ -6337,5 +6338,264 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->can_run_sitemap()', '4.3.0', 'tsf()->sitemap()->utils()->may_output_optimized_sitemap()' );
 
 		return $tsf->sitemap()->utils()->may_output_optimized_sitemap();
+	}
+
+	/**
+	 * A true legacy. Ran the plugin on the front-end.
+	 *
+	 * @since 1.0.0
+	 * @since 2.8.0 Silently deprecated. Displaying legacy roots.
+	 * @since 4.3.0 Deprecated forever.
+	 * @deprecated
+	 */
+	public function autodescription_run() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->autodescription_run()', '4.3.0' );
+
+		\The_SEO_Framework\Hook::init_tsf();
+	}
+
+	/**
+	 * Initializes the plugin actions and filters.
+	 *
+	 * @since 2.8.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_the_seo_framework() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_the_seo_framework()', '4.3.0' );
+
+		\The_SEO_Framework\Hook::init_tsf();
+	}
+
+	/**
+	 * Initializes the plugin front- and back-end actions.
+	 *
+	 * @since 2.8.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_global_actions() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_global_actions()', '4.3.0' );
+
+		if ( \wp_doing_cron() )
+			\The_SEO_Framework\Hook::init_cron_actions();
+
+		if ( \wp_doing_ajax() )
+			\The_SEO_Framework\Hook::init_ajax_actions();
+	}
+
+	/**
+	 * Initializes the plugin front- and back-end filters.
+	 *
+	 * @since 2.8.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_global_filters() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_global_filters()', '4.3.0' );
+
+		\The_SEO_Framework\Hook::init_global_filters();
+	}
+
+	/**
+	 * Initializes Admin Menu actions.
+	 *
+	 * @since 2.7.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_admin_actions() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_admin_actions()', '4.3.0' );
+
+		\The_SEO_Framework\Hook::init_admin_actions();
+	}
+
+	/**
+	 * Initializes search query adjustments.
+	 *
+	 * @since 2.9.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_alter_search_query() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_alter_search_query()', '4.3.0' );
+
+		\The_SEO_Framework\Hook::init_alter_search_query();
+	}
+
+	/**
+	 * Initializes archive query adjustments.
+	 *
+	 * @since 2.9.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_alter_archive_query() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_alter_archive_query()', '4.3.0' );
+
+		\The_SEO_Framework\Hook::init_alter_archive_query();
+	}
+
+	/**
+	 * Detects presence of robots.txt in root folder.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.5.2
+	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool Whether the robots.txt file exists.
+	 */
+	public function has_robots_txt() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->has_robots_txt()', '4.3.0', 'tsf()->robots_txt()->utils()->has_root_robots_txt()' );
+
+		return $tsf->robots_txt()->utils()->has_root_robots_txt();
+	}
+
+	/**
+	 * Returns the robots.txt location URL.
+	 * Only allows root domains.
+	 *
+	 * @since 2.9.2
+	 * @since 4.0.2 Now uses the preferred URL scheme.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return string URL location of robots.txt. Unescaped.
+	 */
+	public function get_robots_txt_url() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_robots_txt_url()', '4.3.0', 'tsf()->robots_txt()->utils()->get_robots_txt_url()' );
+
+		return $tsf->robots_txt()->utils()->get_robots_txt_url();
+	}
+
+	/**
+	 * Detects presence of sitemap.xml in root folder.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.5.2
+	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool Whether the sitemap.xml file exists.
+	 */
+	public function has_sitemap_xml() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->has_sitemap_xml()', '4.3.0', 'tsf()->sitemap()->utils()->has_root_sitemap_xml()' );
+
+		return $tsf->sitemap()->utils()->has_root_sitemap_xml();
+	}
+
+	/**
+	 * Edits the robots.txt output.
+	 * Requires the site not to have a robots.txt file in the root directory.
+	 *
+	 * This methods completely hijacks default output, intentionally.
+	 *
+	 * The robots.txt file should be left as default, so to improve SEO.
+	 * The Robots Exclusion Protocol encourages you not to use this file for
+	 * non-administrative endpoints. Use the robots meta tags (and headers) instead.
+	 *
+	 * @since 2.2.9
+	 * @since 2.9.3 Casts $public to string for check.
+	 * @since 4.0.5 1. The output is now filterable.
+	 *              2. Improved invalid location test.
+	 *              3. No longer shortcircuits on non-public sites.
+	 *              4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
+	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
+	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
+	 * @since 4.1.4 Removed object caching support.
+	 * @since 4.3.0 Deprecated. Even though access was marked private, we still found some used this (including us).
+	 * @deprecated
+	 * @uses robots_txt filter located at WP core
+	 * @access private
+	 *
+	 * @return string Robots.txt output.
+	 */
+	public function robots_txt() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->robots_txt()', '4.3.0', 'tsf()->robots_txt()->get_robots_txt' );
+
+		return $tsf->robots_txt()->get_robots_txt();
+	}
+
+	/**
+	 * Deletes excluded post IDs cache.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function delete_excluded_ids_cache() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->delete_excluded_ids_cache()', '4.3.0', 'tsf()->query()->exclusion()->clear_excluded_post_ids_cache()' );
+
+		return $tsf->query()->exclusion()->clear_excluded_post_ids_cache();
+	}
+
+	/**
+	 * Builds and returns the excluded post IDs.
+	 *
+	 * Memoizes the database request.
+	 *
+	 * @since 3.0.0
+	 * @since 3.1.0 Now no longer crashes on database errors.
+	 * @since 4.1.4 1. Now tests against post type exclusions.
+	 *              2. Now considers headlessness. This method runs only on the front-end.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array : { 'archive', 'search' }
+	 */
+	public function get_excluded_ids_from_cache() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_excluded_ids_from_cache()', '4.3.0', 'tsf()->query()->exclusion()->get_excluded_ids_from_cache()' );
+
+		return $tsf->query()->exclusion()->get_excluded_ids_from_cache();
+	}
+
+	/**
+	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.0 Now flushes all levels rather than just the latest one.
+	 * @since 4.0.0 Is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool True on clear. False otherwise.
+	 */
+	public function clean_response_header() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->clean_response_header()', '4.3.0' );
+
+		return \The_SEO_Framework\Helper\Headers::clean_response_header();
 	}
 }

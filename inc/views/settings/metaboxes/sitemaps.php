@@ -9,6 +9,7 @@
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Sitemap,
+	\The_SEO_Framework\RobotsTXT,
 	\The_SEO_Framework\Bridges\SeoSettings,
 	\The_SEO_Framework\Interpreters\HTML,
 	\The_SEO_Framework\Interpreters\Form,
@@ -60,7 +61,7 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 
 	case 'sitemaps_general_tab':
 		$has_sitemap_plugin = $this->detect_sitemap_plugin();
-		$sitemap_detected   = $this->has_sitemap_xml();
+		$sitemap_detected   = Sitemap\Utils::has_root_sitemap_xml();
 
 		HTML::header_title( __( 'Sitemap Integration Settings', 'autodescription' ) );
 		HTML::description( __( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. It helps search engines find new and updated content quickly.', 'autodescription' ) );
@@ -177,11 +178,11 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 
 	case 'sitemaps_robots_tab':
 		$show_settings = true;
-		$robots_url    = $this->get_robots_txt_url();
+		$robots_url    = RobotsTXT\Utils::get_robots_txt_url();
 
 		HTML::header_title( __( 'Robots.txt Settings', 'autodescription' ) );
 
-		if ( $this->has_robots_txt() ) {
+		if ( RobotsTXT\Utils::has_root_robots_txt() ) {
 			HTML::attention_description(
 				__( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' )
 			);
@@ -227,8 +228,6 @@ switch ( $this->get_view_instance( 'sitemaps', $instance ) ) :
 				true
 			);
 		}
-
-		$robots_url = $this->get_robots_txt_url();
 
 		if ( $robots_url ) {
 			HTML::description_noesc(

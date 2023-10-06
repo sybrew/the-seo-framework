@@ -10,7 +10,7 @@ namespace The_SEO_Framework\Data\Plugin;
 
 use function \The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Data; // Yes, it is legal to share class and namespaces.
+use \The_SEO_Framework\Data;
 
 use \The_SEO_Framework\Helper\{
 	Post_Types,

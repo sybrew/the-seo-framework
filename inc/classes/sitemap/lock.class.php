@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -64,7 +66,7 @@ class Lock {
 	 */
 	public static function output_locked_header( $sitemap_id ) {
 
-		\tsf()->clean_response_header();
+		Helper\Headers::clean_response_header();
 
 		\status_header( 503 );
 		\nocache_headers();

@@ -325,7 +325,10 @@ final class Builder {
 				$item['reason'],
 				sprintf(
 					'<ol>%s</ol>',
-					array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] )
+					implode(
+						'',
+						array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] )
+					),
 				)
 			);
 

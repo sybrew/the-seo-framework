@@ -1,9 +1,9 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\List\Edit
+ * @package The_SEO_Framework\Classes\Admin\Lists\Edit
  */
 
-namespace The_SEO_Framework\Admin\List;
+namespace The_SEO_Framework\Admin\Lists;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -36,7 +36,7 @@ use \The_SEO_Framework\Helper\{
  * Prepares the List Edit view interface.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\List`
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Lists`
  * @access protected
  * @internal
  * @final Can't be extended.

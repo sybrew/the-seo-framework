@@ -33,15 +33,16 @@ namespace {
 	 * unforeseen issues.
 	 *
 	 * @since 4.2.0
+	 * @since 4.3.0 Now always returns TSF's object.
 	 * @see `the_seo_framework()` alias.
 	 * @see inc\classes\pool.class.php for factory API functions;
 	 *      e.g., `tsf()->query()->is_sitemap()`
 	 * @api
 	 *
-	 * @return The_SEO_Framework\Load|The_SEO_Framework\Internal\Silencer
+	 * @return The_SEO_Framework\Load
 	 */
 	function tsf() {
-		return \The_SEO_Framework\_init_tsf();
+		return \The_SEO_Framework\Load::get_instance();
 	}
 
 	/**
@@ -52,13 +53,14 @@ namespace {
 	 * unforeseen issues.
 	 *
 	 * @since 2.2.5
+	 * @since 4.3.0 Now always returns TSF's object.
 	 * @see `tsf()` alias.
 	 * @api
 	 *
-	 * @return The_SEO_Framework\Load|The_SEO_Framework\Internal\Silencer
+	 * @return The_SEO_Framework\Load
 	 */
 	function the_seo_framework() {
-		return \The_SEO_Framework\_init_tsf();
+		return \The_SEO_Framework\Load::get_instance();
 	}
 
 	/**

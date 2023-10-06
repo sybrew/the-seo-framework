@@ -495,52 +495,6 @@ class Detect extends Admin_Init {
 	}
 
 	/**
-	 * Detects presence of robots.txt in root folder.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.5.2
-	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
-	 *
-	 * @return bool Whether the robots.txt file exists.
-	 */
-	public function has_robots_txt() {
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
-
-		// Ensure get_home_path() is declared.
-		if ( ! \function_exists( '\\get_home_path' ) )
-			require_once \ABSPATH . 'wp-admin/includes/file.php';
-
-		$path = \get_home_path() . 'robots.txt';
-
-		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
-		return memo( file_exists( $path ) );
-	}
-
-	/**
-	 * Detects presence of sitemap.xml in root folder.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.5.2
-	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
-	 *
-	 * @return bool Whether the sitemap.xml file exists.
-	 */
-	public function has_sitemap_xml() {
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
-
-		// Ensure get_home_path() is declared.
-		if ( ! \function_exists( '\\get_home_path' ) )
-			require_once \ABSPATH . 'wp-admin/includes/file.php';
-
-		$path = \get_home_path() . 'sitemap.xml';
-
-		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
-		return memo( file_exists( $path ) );
-	}
-
-	/**
 	 * Tests if the post type archive of said post type contains public posts.
 	 * Memoizes the return value.
 	 *
@@ -590,31 +544,6 @@ class Detect extends Admin_Init {
 			return \is_gutenberg_page();
 
 		return false;
-	}
-
-	/**
-	 * Returns the robots.txt location URL.
-	 * Only allows root domains.
-	 *
-	 * @since 2.9.2
-	 * @since 4.0.2 Now uses the preferred URL scheme.
-	 * @global \WP_Rewrite $wp_rewrite
-	 *
-	 * @return string URL location of robots.txt. Unescaped.
-	 */
-	public function get_robots_txt_url() {
-
-		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! Data\Blog::is_subdirectory_installation() ) {
-			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() ) );
-			$path = "{$home}robots.txt";
-		} elseif ( $this->has_robots_txt() ) {
-			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( \get_option( 'home' ) ) );
-			$path = "{$home}robots.txt";
-		} else {
-			$path = '';
-		}
-
-		return $path;
 	}
 
 	/**

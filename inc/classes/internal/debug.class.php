@@ -49,42 +49,6 @@ use function \The_SEO_Framework\memo;
 final class Debug {
 
 	/**
-	 * @since 2.8.0
-	 * @var object|null $instance This object instance.
-	 */
-	private static $instance = null;
-
-	/**
-	 * Constructor.
-	 */
-	protected function __construct() {}
-
-	/**
-	 * Sets the class instance.
-	 *
-	 * @since 3.1.0
-	 * @access private
-	 */
-	public static function _set_instance() {
-		static::$instance ??= new static;
-	}
-
-	/**
-	 * Gets the class instance. It's set when it's null.
-	 *
-	 * @since 2.8.0
-	 *
-	 * @return object The current instance.
-	 */
-	public static function get_instance() {
-
-		if ( \is_null( static::$instance ) )
-			static::_set_instance();
-
-		return static::$instance;
-	}
-
-	/**
 	 * Mark a function as deprecated and inform when it has been used.
 	 *
 	 * Taken from WordPress core, but added extra parameters and linguistic alterations.
@@ -101,7 +65,7 @@ final class Debug {
 	 * @param string $replacement  Optional. The function that should have been called. Default null.
 	 *                             Expected to be escaped.
 	 */
-	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
+	public static function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 		/**
 		 * Fires when a deprecated function is called.
 		 *
@@ -143,7 +107,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error(), $message, \E_USER_DEPRECATED ),
+				static::combobulate_error_message( static::get_error(), $message, \E_USER_DEPRECATED ),
 				\E_USER_DEPRECATED
 			);
 		}
@@ -165,7 +129,7 @@ final class Debug {
 	 * @param string $message  A message explaining what has been done incorrectly. Must be escaped.
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
-	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
+	public static function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 		/**
 		 * Fires when the given function is being used incorrectly.
 		 *
@@ -200,7 +164,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error(), $message, \E_USER_NOTICE ),
+				static::combobulate_error_message( static::get_error(), $message, \E_USER_NOTICE ),
 				\E_USER_NOTICE
 			);
 		}
@@ -221,7 +185,7 @@ final class Debug {
 	 * @param string $message A message explaining what has been done incorrectly.
 	 * @param string $handle  The method handler.
 	 */
-	public function _inaccessible_p_or_m( $p_or_m, $message = '', $handle = 'tsf()' ) {
+	public static function _inaccessible_p_or_m( $p_or_m, $message = '', $handle = 'tsf()' ) {
 
 		/**
 		 * Fires when the inaccessible property or method is being used.
@@ -252,7 +216,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				$this->combobulate_error_message( $this->get_error(), $message, \E_USER_WARNING ),
+				static::combobulate_error_message( static::get_error(), $message, \E_USER_WARNING ),
 				\E_USER_WARNING
 			);
 		}
@@ -269,11 +233,10 @@ final class Debug {
 	 * @since 4.1.1 Reworked to work with any error handler.
 	 * @since 4.3.0 Now actualyl used my brain and added an automated object searcher instead of guessing.
 	 * @see PHP debug_backtrace()
-	 * @see $this->combobulate_error_message()
 	 *
 	 * @return array The erroneous caller data
 	 */
-	protected function get_error() {
+	private static function get_error() {
 
 		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 6 );
 
@@ -311,7 +274,7 @@ final class Debug {
 	 * @param string $message The error message. May contain HTML. Expected to be escaped.
 	 * @param int    $code    The error handler code.
 	 */
-	protected function combobulate_error_message( $error, $message, $code ) {
+	private static function combobulate_error_message( $error, $message, $code ) {
 
 		switch ( $code ) {
 			case \E_USER_ERROR:
@@ -346,10 +309,10 @@ final class Debug {
 	 * Echos debug output.
 	 *
 	 * @since 2.6.0
-	 * @since 2.8.0 is now static.
+	 * @since 4.3.0 is now static.
 	 * @access private
 	 */
-	public function _debug_output() {
+	public static function _do_debug_output() {
 		\tsf()->get_view( 'debug/output' );
 	}
 
@@ -361,7 +324,7 @@ final class Debug {
 	 */
 	public static function _output_debug_header() {
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- callee escapes.
-		echo static::get_instance()->get_debug_header_output();
+		echo static::get_debug_header_output();
 	}
 
 	/**
@@ -414,7 +377,7 @@ final class Debug {
 	 */
 	public static function _output_debug_query() {
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- This escapes.
-		echo static::$instance->get_debug_query_output();
+		echo static::get_debug_query_output();
 	}
 
 	/**
@@ -425,7 +388,7 @@ final class Debug {
 	 */
 	public static function _output_debug_query_from_cache() {
 		// phpcs:ignore, WordPress.Security.EscapeOutput -- This escapes.
-		echo static::$instance->get_debug_query_output_from_cache();
+		echo static::get_debug_query_output_from_cache();
 	}
 
 	/**
@@ -434,8 +397,8 @@ final class Debug {
 	 * @since 3.1.0 Introduced in 2.8.0, but the name changed.
 	 * @access private
 	 */
-	public function _set_debug_query_output_cache() {
-		$this->get_debug_query_output_from_cache();
+	public static function _set_debug_query_output_cache() {
+		static::get_debug_query_output_from_cache();
 	}
 
 	/**
@@ -447,8 +410,8 @@ final class Debug {
 	 *
 	 * @return string Wrapped Query State debug output.
 	 */
-	protected function get_debug_query_output_from_cache() {
-		return memo() ?? memo( $this->get_debug_query_output( 'yup' ) );
+	private static function get_debug_query_output_from_cache() {
+		return memo() ?? memo( static::get_debug_query_output( 'yup' ) );
 	}
 
 	/**
@@ -461,7 +424,7 @@ final class Debug {
 	 * @param string $cache_version 'yup' or 'nope'
 	 * @return string Wrapped Query State debug output.
 	 */
-	protected function get_debug_query_output( $cache_version = 'nope' ) {
+	private static function get_debug_query_output( $cache_version = 'nope' ) {
 
 		// Start timer.
 		$_t = hrtime( true );

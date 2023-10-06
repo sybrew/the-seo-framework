@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\SEOBar\List
+ * @package The_SEO_Framework\Classes\Admin\SEOBar\ListTable
  * @subpackage The_SEO_Framework\SEOBar
  */
 
@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin\List;
+use \The_SEO_Framework\Admin\Lists;
 
 /**
  * The SEO Framework plugin
@@ -38,7 +38,7 @@ use \The_SEO_Framework\Admin\List;
  *
  * @access private
  */
-final class ListTable extends List\Table {
+final class ListTable extends Lists\Table {
 
 	/**
 	 * @since 4.0.0

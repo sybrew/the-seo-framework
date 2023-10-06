@@ -9,8 +9,6 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -41,38 +39,38 @@ use function \The_SEO_Framework\is_headless;
 final class Load extends Site_Options {
 
 	/**
-	 * Constructor, setup debug vars and then load parent constructor.
+	 * @since 4.3.0
+	 * @var \The_SEO_Framework\Load This instance.
+	 */
+	private static $instance;
+
+	/**
+	 * Instance getter.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return null If called twice or more.
+	 */
+	public static function get_instance() {
+		return static::$instance ??= new self;
+	}
+
+	/**
+	 * Constructor, does nothing useful anymore.
 	 *
 	 * @since 2.8.0
 	 * @since 4.0.0 Now informs developer of invalid class instancing.
 	 * @since 4.1.4.Now constructs headlessness.
+	 * @since 4.3.0 Is now protected. Use `tsf()` or `the_seo_framework()` instead.
 	 *
 	 * @return null If called twice or more.
 	 */
-	public function __construct() {
-
+	protected function __construct() {
 		if ( has_run( __METHOD__ ) ) {
 			// Don't construct twice, warn developer.
 			$this->_doing_it_wrong( __METHOD__, 'Do not instance this class. Use function <code>tsf()</code> instead.', '3.1.0' );
 			return null;
 		}
-
-		if ( \THE_SEO_FRAMEWORK_DEBUG ) {
-			$debug_instance = Internal\Debug::get_instance();
-
-			\add_action( 'the_seo_framework_do_before_output', [ $debug_instance, '_set_debug_query_output_cache' ] );
-			\add_action( 'admin_footer', [ $debug_instance, '_debug_output' ] );
-			\add_action( 'wp_footer', [ $debug_instance, '_debug_output' ] );
-		}
-
-		// Register the capabilities early.
-		\add_filter(
-			'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			static fn() => \THE_SEO_FRAMEWORK_SETTINGS_CAP
-		);
-
-		// Load plugin at init 0.
-		\add_action( 'init', [ $this, 'init_the_seo_framework' ], 0 );
 	}
 
 	/**
@@ -148,7 +146,7 @@ final class Load extends Site_Options {
 	 */
 	public function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 		// phpcs:ignore -- Wrong asserts, copied method name.
-		Internal\Debug::get_instance()->_deprecated_function( $function, $version, $replacement );
+		Internal\Debug::_deprecated_function( $function, $version, $replacement );
 	}
 
 	/**
@@ -165,7 +163,7 @@ final class Load extends Site_Options {
 	 */
 	public function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 		// phpcs:ignore -- Wrong asserts, copied method name.
-		Internal\Debug::get_instance()->_doing_it_wrong( $function, $message, $version );
+		Internal\Debug::_doing_it_wrong( $function, $message, $version );
 	}
 
 	/**
@@ -180,6 +178,6 @@ final class Load extends Site_Options {
 	 * @param string $handle  The method handler.
 	 */
 	public function _inaccessible_p_or_m( $p_or_m, $message = '', $handle = 'tsf()' ) {
-		Internal\Debug::get_instance()->_inaccessible_p_or_m( $p_or_m, $message, $handle );
+		Internal\Debug::_inaccessible_p_or_m( $p_or_m, $message, $handle );
 	}
 }
