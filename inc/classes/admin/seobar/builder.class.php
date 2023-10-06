@@ -32,7 +32,8 @@ use \The_SEO_Framework\Data,
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar`
+ * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\SEOBar`
+ *              2. The entire class is now static.
  * @see \tsf()->get_generated_seo_bar( $args ) for easy access.
  *
  * @access protected
@@ -61,18 +62,6 @@ final class Builder {
 
 	/**
 	 * @since 4.0.0
-	 * @var mixed $query The current SEO Bar's query items.
-	 */
-	public static $query = [];
-
-	/**
-	 * @since 4.0.0
-	 * @var \The_SEO_Framework\Admin\SEOBar\Builder $instance The instance.
-	 */
-	private static $instance;
-
-	/**
-	 * @since 4.0.0
 	 * @var array $item The current SEO Bar item list. {
 	 *    string $symbol : The displayed symbol that identifies your bar.
 	 *    string $title  : The title of the assessment.
@@ -85,15 +74,10 @@ final class Builder {
 	private static $items = [];
 
 	/**
-	 * Returns this instance.
-	 *
 	 * @since 4.0.0
-	 *
-	 * @return static
+	 * @var mixed $query The current SEO Bar's query items.
 	 */
-	private static function get_instance() {
-		return static::$instance ??= new static;
-	}
+	public static $query = [];
 
 	/**
 	 * Generates the SEO Bar.
@@ -114,7 +98,10 @@ final class Builder {
 	 */
 	public static function generate_bar( $query ) {
 
-		static::$query = $query + [
+		// Link the input query for action hooks.
+		static::$query = &$query;
+
+		$query += [
 			'id'        => 0,
 			'tax'       => $query['taxonomy'] ?? '',
 			'taxonomy'  => $query['tax'] ?? '', // Legacy fallback.
@@ -122,17 +109,33 @@ final class Builder {
 			'post_type' => '',
 		];
 
-		if ( ! static::$query['id'] ) return '';
+		if ( ! $query['id'] ) return '';
 
-		if ( ! static::$query['tax'] )
-			static::$query['post_type'] = static::$query['post_type'] ?: \get_post_type( static::$query['id'] );
+		if ( ! $query['tax'] )
+			$query['post_type'] = $query['post_type'] ?: \get_post_type( $query['id'] );
 
-		$builder = static::$query['tax']
+		$builder = $query['tax']
 			? Builder\Term::get_instance()
 			: Builder\Page::get_instance();
 
-		$instance = static::get_instance();
-		$instance->store_seo_bar_items( $builder );
+		/**
+		 * Adjust interpreter and builder items here, before the tests have run.
+		 *
+		 * The only use we can think of here is removing items from `$builder::$tests`,
+		 * and reading `$builder::$query{_cache}`. Do not add tests here. Do not alter the query.
+		 *
+		 * @link Example: https://gist.github.com/sybrew/03dd428deadc860309879e1d5208e1c4
+		 * @see related (recommended) action 'the_seo_framework_seo_bar'
+		 * @since 4.0.0
+		 * @param string                                       $interpreter The current class name.
+		 * @param \The_SEO_Framework\Admin\SEOBar\Builder\Main $builder     The builder object.
+		 */
+		\do_action( 'the_seo_framework_prepare_seo_bar', static::class, $builder );
+
+		$items = &static::collect_seo_bar_items();
+
+		foreach ( $builder->_run_all_tests( $query ) as $key => $data )
+			$items[ $key ] = $data;
 
 		/**
 		 * Add or adjust SEO Bar items here, after the tests have run.
@@ -145,10 +148,10 @@ final class Builder {
 		 */
 		\do_action( 'the_seo_framework_seo_bar', static::class, $builder );
 
-		$bar = $instance->create_seo_bar( static::$items );
+		$bar = static::create_seo_bar( static::$items );
 
 		// There's no need to leak memory.
-		$instance->clear_seo_bar_items();
+		static::$items = [];
 		$builder->clear_query_cache();
 
 		return $bar;
@@ -222,46 +225,6 @@ final class Builder {
 	}
 
 	/**
-	 * Clears the SEO Bar items.
-	 *
-	 * @since 4.0.0
-	 */
-	private function clear_seo_bar_items() {
-		static::$items = [];
-	}
-
-	/**
-	 * Stores the SEO Bar items.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.4 Offloaded the builder's instantiation.
-	 * @factory
-	 *
-	 * @param \The_SEO_Framework\Admin\SEOBar\Builder\Main $builder The builder instance.
-	 */
-	private function store_seo_bar_items( $builder ) {
-
-		/**
-		 * Adjust interpreter and builder items here, before the tests have run.
-		 *
-		 * The only use we can think of here is removing items from `$builder::$tests`,
-		 * and reading `$builder::$query{_cache}`. Do not add tests here. Do not alter the query.
-		 *
-		 * @link Example: https://gist.github.com/sybrew/03dd428deadc860309879e1d5208e1c4
-		 * @see related (recommended) action 'the_seo_framework_seo_bar'
-		 * @since 4.0.0
-		 * @param string                                       $interpreter The current class name.
-		 * @param \The_SEO_Framework\Admin\SEOBar\Builder\Main $builder     The builder object.
-		 */
-		\do_action( 'the_seo_framework_prepare_seo_bar', static::class, $builder );
-
-		$items = &$this->collect_seo_bar_items();
-
-		foreach ( $builder->_run_all_tests( static::$query ) as $key => $data )
-			$items[ $key ] = $data;
-	}
-
-	/**
 	 * Converts registered items to a full HTML SEO Bar.
 	 *
 	 * @since 4.0.0
@@ -271,11 +234,11 @@ final class Builder {
 	 * @param iterable $items The SEO Bar items.
 	 * @return string The SEO Bar
 	 */
-	private function create_seo_bar( $items ) {
+	private static function create_seo_bar( $items ) {
 
 		$blocks = [];
 
-		foreach ( $this->generate_seo_bar_blocks( $items ) as $block )
+		foreach ( static::generate_seo_bar_blocks( $items ) as $block )
 			$blocks[] = $block;
 
 		// Always return the wrap, may it be filled in via JS in the future.
@@ -299,182 +262,105 @@ final class Builder {
 	 * @param iterable $items The SEO Bar items.
 	 * @yield The SEO Bar HTML item.
 	 */
-	private function generate_seo_bar_blocks( $items ) {
-		foreach ( $items as $item )
-			yield vsprintf(
-				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
-				[
-					$this->interpret_status_to_class_suffix( $item ),
-					\esc_attr( $this->build_item_description( $item, 'aria' ) ),
-					\esc_attr( $this->build_item_description( $item, 'html' ) ),
-					\esc_html( $this->interpret_status_to_symbol( $item ) ),
-				]
-			);
-	}
+	private static function generate_seo_bar_blocks( $items ) {
 
-	/**
-	 * Builds the SEO Bar item description, in either HTML or plaintext.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 Removed accidental duplicated call to enumerate_assessment_list()
-	 *
-	 * @param array  $item See `$this->register_seo_bar_item()`
-	 * @param string $type The description type. Accepts 'html' or 'aria'.
-	 * @return string The SEO Bar item description.
-	 */
-	private function build_item_description( $item, $type ) {
-
-		static $gettext = null;
-		if ( null === $gettext ) {
-			$gettext = [
-				/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
-				'aria' => \_x( '%1$s: %2$s %3$s', 'SEO Bar ARIA assessment enumeration', 'autodescription' ),
-			];
-		}
-
-		if ( 'aria' === $type ) {
-			return sprintf(
-				$gettext['aria'],
-				$item['title'],
-				$item['reason'],
-				$this->enumerate_assessment_list( $item )
-			);
-		} else {
-			$assess = '<ol>';
-			foreach ( $item['assess'] as $_a ) {
-				$assess .= "<li>$_a</li>";
-			}
-			$assess .= '</ol>';
-
-			return sprintf(
-				'<strong>%s:</strong> %s<br>%s',
-				$item['title'],
-				$item['reason'],
-				$assess
-			);
-		}
-	}
-
-	/**
-	 * Enumerates the assessments in a plaintext format.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @param array $item See `$this->register_seo_bar_item()`
-	 * @return string The SEO Bar item assessment, in plaintext.
-	 */
-	private function enumerate_assessment_list( $item ) {
-
-		$count       = \count( $item['assess'] );
-		$assessments = [];
-
-		static $gettext = null;
-
-		if ( null === $gettext ) {
-			$gettext = [
-				/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
-				'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
-				/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
-				'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
-				'assessment'  => \__( 'Assessment', 'autodescription' ),
-				'assessments' => \__( 'Assessments', 'autodescription' ),
-			];
-		}
-
-		if ( $count < 2 ) {
-			$assessments[] = reset( $item['assess'] );
-		} else {
-			$i = 0;
-			foreach ( $item['assess'] as $text ) {
-				$assessments[] = sprintf( $gettext['enum'], ++$i, $text );
-			}
-		}
-
-		return sprintf(
-			$gettext['list'],
-			$count < 2 ? $gettext['assessment'] : $gettext['assessments'],
-			implode( ' ', $assessments )
-		);
-	}
-
-	/**
-	 * Interprets binary status to a SEO Bar HTML class suffix.
-	 *
-	 * TODO instead of going over them in a switch, allow adding the binary data?
-	 *      This would meant hat we use the & logical operator, instead.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 1. Added 'undefined' support.
-	 *              2. Now defaults to 'undefined'.
-	 *
-	 * @param array $item See `$this->register_seo_bar_item()`
-	 * @return string The HTML class-suffix.
-	 */
-	private function interpret_status_to_class_suffix( $item ) {
-
-		switch ( $item['status'] ) {
-			case static::STATE_GOOD:
-				$status = 'good';
-				break;
-
-			case static::STATE_OKAY:
-				$status = 'okay';
-				break;
-
-			case static::STATE_BAD:
-				$status = 'bad';
-				break;
-
-			case static::STATE_UNKNOWN:
-				$status = 'unknown';
-				break;
-
-			case static::STATE_UNDEFINED:
-			default:
-				$status = 'undefined';
-		}
-
-		return $status;
-	}
-
-	/**
-	 * Enumerates the assessments in a plaintext format.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.0 1. Added 'undefined' support.
-	 *              2. Now defaults to 'undefined'.
-	 *
-	 * @param array $item See `$this->register_seo_bar_item()`
-	 * @return string The SEO Bar item assessment, in plaintext.
-	 */
-	private function interpret_status_to_symbol( $item ) {
-
+		static $gettext;
 		static $use_symbols;
+
+		$gettext ??= [
+			/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
+			'aria'        => \_x( '%1$s: %2$s %3$s', 'SEO Bar ARIA assessment enumeration', 'autodescription' ),
+			/* translators: 1 = Assessment number (mind the %d (D)), 2 = Assessment explanation */
+			'enum'        => \_x( '%1$d: %2$s', 'assessment enumeration', 'autodescription' ),
+			/* translators: 1 = 'Assessment(s)', 2 = A list of assessments. */
+			'list'        => \_x( '%1$s: %2$s', 'assessment list', 'autodescription' ),
+			'assessment'  => \__( 'Assessment', 'autodescription' ),
+			'assessments' => \__( 'Assessments', 'autodescription' ),
+		];
 
 		$use_symbols ??= (bool) Data\Plugin::get_option( 'seo_bar_symbols' );
 
-		if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
+		foreach ( $items as $item ) {
+
 			switch ( $item['status'] ) {
+				case static::STATE_GOOD:
+					$status = 'good';
+					break;
 				case static::STATE_OKAY:
-					$symbol = '!?';
+					$status = 'okay';
 					break;
-
 				case static::STATE_BAD:
-					$symbol = '!!';
+					$status = 'bad';
 					break;
-
 				case static::STATE_UNKNOWN:
-					$symbol = '??';
+					$status = 'unknown';
 					break;
-
 				case static::STATE_UNDEFINED:
 				default:
-					$symbol = '--';
+					$status = 'undefined';
 			}
 
-			return $symbol;
-		}
+			if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
+				switch ( $item['status'] ) {
+					case static::STATE_OKAY:
+						$symbol = '!?';
+						break;
+					case static::STATE_BAD:
+						$symbol = '!!';
+						break;
+					case static::STATE_UNKNOWN:
+						$symbol = '??';
+						break;
+					case static::STATE_UNDEFINED:
+					default:
+						$symbol = '--';
+				}
+			} else {
+				$symbol = $item['symbol'];
+			}
 
-		return $item['symbol'];
+			$html = sprintf(
+				'<strong>%s:</strong> %s<br>%s',
+				$item['title'],
+				$item['reason'],
+				sprintf(
+					'<ol>%s</ol>',
+					array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] )
+				)
+			);
+
+			$count       = \count( $item['assess'] );
+			$assessments = [];
+
+			if ( $count < 2 ) {
+				$assessments[] = reset( $item['assess'] );
+			} else {
+				$i = 0;
+				foreach ( $item['assess'] as $text ) {
+					$assessments[] = sprintf( $gettext['enum'], ++$i, $text );
+				}
+			}
+
+			$aria = sprintf(
+				$gettext['aria'],
+				$item['title'],
+				$item['reason'],
+				sprintf(
+					$gettext['list'],
+					$count < 2 ? $gettext['assessment'] : $gettext['assessments'],
+					implode( ' ', $assessments )
+				),
+			);
+
+			yield vsprintf(
+				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
+				[
+					$status,
+					\esc_attr( $aria ),
+					\esc_attr( $html ),
+					\esc_html( $symbol ),
+				]
+			);
+		}
 	}
 }

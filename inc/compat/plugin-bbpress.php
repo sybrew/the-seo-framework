@@ -424,7 +424,7 @@ function _bbpress_filter_robots( $meta, $args ) {
  * @param string $interpreter The interpreter class name.
  * @param object $builder     The builder's class instance.
  */
-function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $buiilder ) {
+function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
