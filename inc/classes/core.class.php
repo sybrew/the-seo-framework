@@ -38,20 +38,9 @@ use \The_SEO_Framework\Data;
  * @since 4.3.0 1. Deprecated $the_seo_framework_debug
  *              2. Deprecated $script_debug
  *              3. Deprecated $seo_settings_page_slug
+ *              4. Deprecated $loaded
  */
 class Core {
-
-	/**
-	 * Tells if this plugin is loaded.
-	 *
-	 * @NOTE: Only `\The_SEO_Framework\_init_tsf()` should adjust this.
-	 *
-	 * @since 3.1.0
-	 * @access protected
-	 *         Don't alter this variable!!!
-	 * @var boolean $loaded
-	 */
-	public $loaded = false;
 
 	/**
 	 * Calling any top file without __construct() is forbidden.
@@ -129,6 +118,9 @@ class Core {
 			case 'seo_settings_page_slug':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
 				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
+			case 'loaded':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you may drop the loaded check.' );
+				return true;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
@@ -153,32 +145,6 @@ class Core {
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
 
 		$this->_inaccessible_p_or_m( "tsf()->$name()" );
-	}
-
-	/**
-	 * Includes compatibility files, only once per request.
-	 *
-	 * @since 2.8.0
-	 * @access private
-	 *
-	 * @param string $what The vendor/plugin/theme name for the compatibility.
-	 * @param string $type The compatibility type. Be it 'plugin' or 'theme'.
-	 * @return bool True on success, false on failure. Files are expected not to return any values.
-	 */
-	public function _include_compat( $what, $type = 'plugin' ) {
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $what, $type ) ) return $memo;
-		unset( $memo );
-
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
-		$_secret = $this->create_view_secret( uniqid( '', true ) );
-
-		return memo(
-			(bool) require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . "$type-$what.php",
-			$what,
-			$type
-		);
 	}
 
 	/**

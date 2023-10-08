@@ -1246,13 +1246,6 @@ TODO add "try it in playground" button/link at the top of the readme.
 				* `is_subdirectory_installation()`, use `tsf()->data()->blog()->is_subdirectory_installation()` instead.
 				* `use_core_sitemaps()`, use `tsf()->sitemap()->utils()->use_core_sitemaps()` instead.
 				* `can_run_sitemap()`, use `tsf()->sitemap()->utils()->may_output_optimized_sitemap()` instead.
-				* `autodescription_run()`, with no alternative available.
-				* `init_the_seo_framework()`, with no alternative available.
-				* `init_global_actions()`, with no alternative available.
-				* `init_global_filters()`, with no alternative available.
-				* `init_admin_actions()`, with no alternative available.
-				* `init_alter_search_query()`, with no alternative available.
-				* `init_alter_archive_query()`, with no alternative available.
 				* `has_robots_txt()`, use `tsf()->robots_txt()->utils()->has_root_robots_txt()` instead.
 				* `get_robots_txt_url()`, use `tsf()->robots_txt()->utils()->get_robots_txt_url()` instead.
 				* `has_sitemap_xml()`, use `tsf()->sitemap()->utils()->has_root_sitemap_xml()` instead.
@@ -1267,6 +1260,14 @@ TODO add "try it in playground" button/link at the top of the readme.
 				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
 				* `get_image_generation_params()`, has nothing to offer for the public API.
+				* Since we rebuilt the class initialization, these methods are no longer available:
+					* `autodescription_run()`
+					* `init_the_seo_framework()`
+					* `init_global_actions()`
+					* `init_global_filters()`
+					* `init_admin_actions()`
+					* `init_alter_search_query()`
+					* `init_alter_archive_query()`
 				* Since we rebuilt `\The_SEO_Framework\Generate_Ldjson` and reworked the settings, these are removed:
 					* `build_json_data`
 					* `receive_json_data`
@@ -1375,6 +1376,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
 				* `is_headless`, use function `The_SEO_Framework\is_headless()` instead.
 				* `seo_settings_page_slug`, use constant `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` instead.
+				* `loaded`, this check is no longer necessary.
 			* **Properties removed:**
 				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
 		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.

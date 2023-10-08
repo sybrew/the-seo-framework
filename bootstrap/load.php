@@ -1,6 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Bootstrap
+ * @package The_SEO_Framework
+ * @subpackage The_SEO_Framework\Bootstrap
  */
 
 namespace The_SEO_Framework;
@@ -23,6 +24,8 @@ namespace The_SEO_Framework;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 4 );
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf', 5 );
@@ -72,12 +75,74 @@ function _init_tsf() {
 		   \apply_filters( 'the_seo_framework_load', true )
 		&& \did_action( 'plugins_loaded' )
 	) {
-		$tsf         = Load::get_instance();
-		$tsf->loaded = true;
+		if ( THE_SEO_FRAMEWORK_DEBUG )
+			require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load-debug.php';
 
-		$tsf->_load_early_compat_files();
+		// Register the required settings capability early.
+		\add_filter(
+			'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			fn() => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
+		);
 
-		Hook::setup();
+		\add_action(
+			'init',
+			function () {
+				require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-compat.php';
+
+				/**
+				 * @since 2.8.0
+				 * Runs before the plugin is initialized.
+				 */
+				\do_action( 'the_seo_framework_init' );
+
+				require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init.php';
+
+				if ( \is_admin() || \wp_doing_cron() ) {
+					/**
+					 * @since 2.8.0
+					 * Runs before the plugin is initialized in the admin screens.
+					 */
+					\do_action( 'the_seo_framework_admin_init' );
+
+					require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-admin.php';
+
+					if ( \wp_doing_ajax() ) {
+						require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-admin-ajax.php';
+					} elseif ( \wp_doing_cron() ) {
+						require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-cron.php';
+					}
+
+					/**
+					 * @since 2.9.4
+					 * Runs after the plugin is initialized in the admin screens.
+					 * Use this to remove actions.
+					 */
+					\do_action( 'the_seo_framework_after_admin_init' );
+				} else {
+					/**
+					 * @since 2.8.0
+					 * Runs before the plugin is initialized on the front-end.
+					 */
+					\do_action( 'the_seo_framework_front_init' );
+
+					require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-front.php';
+
+					/**
+					 * @since 2.9.4
+					 * Runs before the plugin is initialized on the front-end.
+					 * Use this to remove actions.
+					 */
+					\do_action( 'the_seo_framework_after_front_init' );
+				}
+
+				/**
+				 * @since 3.1.0
+				 * Runs after the plugin is initialized.
+				 * Use this to remove filters and actions.
+				 */
+				\do_action( 'the_seo_framework_after_init' );
+			}
+		);
 
 		if ( \is_admin() ) {
 			/**
@@ -100,7 +165,6 @@ function _init_tsf() {
 	}
 }
 
-spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
 /**
  * Autoloads all class files. To be used when requiring access to all or any of
  * the plugin classes.
@@ -135,8 +199,6 @@ function _autoload_classes( $class ) {
 	if ( $_timenow ) {
 		$_bootstrap_timer = hrtime( true );
 		$_timenow         = false;
-	} else {
-		$_bootstrap_timer = 0;
 	}
 
 	$_class_parts   = explode( '\\', str_replace( '_', '-', $class ) );
@@ -166,7 +228,7 @@ function _autoload_classes( $class ) {
 		require \THE_SEO_FRAMEWORK_DIR_PATH_CLASS . "{$file}.class.php";
 	}
 
-	if ( $_bootstrap_timer ) {
+	if ( isset( $_bootstrap_timer ) ) {
 		_bootstrap_timer( ( hrtime( true ) - $_bootstrap_timer ) / 1e9 );
 		$_timenow = true;
 	}
