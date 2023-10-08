@@ -473,6 +473,8 @@ function.*?\{([\w\W](?!tsf\(\)))*?\}
 
 // Mismatch deprecation notices:
 function (.*?)\(([\w\W](?!\1))*?\}
+function (.*?)\(([\w\W](?!\1\())*?\}
+
 
 // Replace tsf()->_deprecated.*\ntsf()-> with $tsf()->
 1. (^.*?)\\tsf\(\)->(_deprecated.*$\n)(.*?return )\\tsf\(\)->
@@ -625,6 +627,7 @@ TODO make multiline deprecation notices over .{120,}
 TODO rename get_*_canonical_url() functions to get_generated_\*_permalink()
 	-> The real canonical URL is gathered from the settings, and falls back to the generated URL.
 TODO Also see https://wordpress.org/support/topic/canonicals-in-sitemap/ -- we should use the canonical URLs in the sitemap.
+	-> Will perform a very expensive query for prefered URL schemes...
 
 TODO Remove all "$escape" parameters from the meta generators, and always _sanitize_ where data is generated. Let the dev escape when necessary.
 	-> This saves a jump, and actually improved performance.
@@ -640,6 +643,12 @@ TODO dump prepare() methods, it's dumb.
 
 TODO run all deprecation methods one last time
 	We should be able to loop over them quite easily.
+
+TODO make the Hook class functional, and add it to bootstrap?
+
+TODO for get_largest_image_src, should we try to maintain the ratio?
+
+TODO add "try it in playground" button/link at the top of the readme.
 
 **Detailed log**
 
@@ -1231,12 +1240,26 @@ TODO run all deprecation methods one last time
 				* `get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()` instead.
 				* `get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
 				* `get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
-				* `tsf()->get_sitemap_colors()`, use `tsf()->sitemap()->utils()->get_sitemap_colors()` instead.
-				* `tsf()->is_blog_public()`, use `tsf()->data()->blog()->is_blog_public()` instead.
-				* `tsf()->current_blog_is_spam_or_deleted()`, use `tsf()->data()->blog()->is_current_blog_spam_or_deleted()` instead.
-				* `tsf()->is_subdirectory_installation()`, use `tsf()->data()->blog()->is_subdirectory_installation()` instead.
-				* `tsf()->use_core_sitemaps()`, use `tsf()->sitemap()->utils()->use_core_sitemaps()` instead.
-				* `tsf()->can_run_sitemap()`, use `tsf()->sitemap()->utils()->may_output_optimized_sitemap()` instead.
+				* `get_sitemap_colors()`, use `tsf()->sitemap()->utils()->get_sitemap_colors()` instead.
+				* `is_blog_public()`, use `tsf()->data()->blog()->is_blog_public()` instead.
+				* `current_blog_is_spam_or_deleted()`, use `tsf()->data()->blog()->is_current_blog_spam_or_deleted()` instead.
+				* `is_subdirectory_installation()`, use `tsf()->data()->blog()->is_subdirectory_installation()` instead.
+				* `use_core_sitemaps()`, use `tsf()->sitemap()->utils()->use_core_sitemaps()` instead.
+				* `can_run_sitemap()`, use `tsf()->sitemap()->utils()->may_output_optimized_sitemap()` instead.
+				* `autodescription_run()`, with no alternative available.
+				* `init_the_seo_framework()`, with no alternative available.
+				* `init_global_actions()`, with no alternative available.
+				* `init_global_filters()`, with no alternative available.
+				* `init_admin_actions()`, with no alternative available.
+				* `init_alter_search_query()`, with no alternative available.
+				* `init_alter_archive_query()`, with no alternative available.
+				* `has_robots_txt()`, use `tsf()->robots_txt()->utils()->has_root_robots_txt()` instead.
+				* `get_robots_txt_url()`, use `tsf()->robots_txt()->utils()->get_robots_txt_url()` instead.
+				* `has_sitemap_xml()`, use `tsf()->sitemap()->utils()->has_root_sitemap_xml()` instead.
+				* `robots_txt()`, use `tsf()->robots_txt()->get_robots_txt` instead.
+				* `delete_excluded_ids_cache()`, use `tsf()->query()->exclusion()->clear_excluded_post_ids_cache()` instead.
+				* `get_excluded_ids_from_cache()`, use `tsf()->query()->exclusion()->get_excluded_ids_from_cache()` instead.
+				* `clean_response_header()`, with no alternative available.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

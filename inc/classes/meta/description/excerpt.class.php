@@ -52,13 +52,9 @@ final class Excerpt {
 	 * @return string
 	 */
 	public static function get_excerpt( $args = null ) {
-
-		if ( null === $args )
-			return static::get_excerpt_from_query();
-
-		normalize_generation_args( $args );
-
-		return static::get_excerpt_from_args( $args );
+		return isset( $args )
+			? static::get_excerpt_from_args( $args )
+			: static::get_excerpt_from_query();
 	}
 
 	/**
@@ -66,6 +62,7 @@ final class Excerpt {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Flipped order of query tests.
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Meta\Description\Excerpt`.
 	 *
 	 * @return string
 	 */
@@ -93,11 +90,14 @@ final class Excerpt {
 	 * @since 3.1.0
 	 * @since 3.2.2 Fixed front-page as blog logic.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Meta\Description\Excerpt`.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string
 	 */
 	public static function get_excerpt_from_args( $args ) {
+
+		normalize_generation_args( $args );
 
 		if ( $args['tax'] ) {
 			$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );

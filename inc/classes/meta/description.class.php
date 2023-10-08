@@ -195,7 +195,7 @@ class Description {
 		);
 
 		return memo(
-			\tsf()->sanitize_text( $desc ),
+			\strlen( $desc ) ? \tsf()->sanitize_text( $desc ) : '',
 			$args,
 			$type,
 		);
@@ -226,7 +226,10 @@ class Description {
 			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'description' );
 		}
 
-		return \tsf()->sanitize_text( $desc );
+		if ( isset( $desc ) && \strlen( $desc ) )
+			return \tsf()->sanitize_text( $desc );
+
+		return '';
 	}
 
 	/**
@@ -259,7 +262,10 @@ class Description {
 			$desc = Data\Plugin\Post::get_post_meta_item( '_genesis_description', $args['id'] );
 		}
 
-		return \tsf()->sanitize_text( $desc );
+		if ( isset( $desc ) && \strlen( $desc ) )
+			return \tsf()->sanitize_text( $desc );
+
+		return '';
 	}
 
 	/**

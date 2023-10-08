@@ -129,12 +129,13 @@ class Utils {
 
 			if (
 					isset( $_d['width'], $_d['height'] )
+				&& $_d['width'] > $law
 				&& $_d['width'] <= $max_size
 				&& $_d['height'] <= $max_size
-				&& $_d['width'] > $law
 			) {
 				$law  = $_d['width'];
 				$size = $_s;
+				// Keep looping to find the largest acceptable width ($law).
 			}
 		}
 

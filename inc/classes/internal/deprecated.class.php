@@ -1636,7 +1636,7 @@ final class Deprecated {
 	public function use_og_tags() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->pint_site_output()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->use_og_tags()', '4.3.0' );
 
 		/**
 		 * @since 3.1.4
@@ -1820,7 +1820,7 @@ final class Deprecated {
 	public function og_image() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_type()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_image()', '4.3.0' );
 
 		if ( ! $tsf->use_og_tags() ) return '';
 
