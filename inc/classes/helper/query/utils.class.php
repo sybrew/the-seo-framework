@@ -67,6 +67,8 @@ class Utils {
 	 *                 because these cannot be assumed as legitimate.
 	 *              2. Added `\is_customize_preview()` as unsupported.
 	 *              3. Moved to `\The_SEO_Framework\Helper\Query`.
+	 *              4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`,
+	 *                 this is now being handled by `_init_tsf()`.
 	 *
 	 * @return bool
 	 */
@@ -77,8 +79,6 @@ class Utils {
 
 		switch ( true ) {
 			case \is_feed():
-			case \wp_doing_ajax():
-			case \wp_doing_cron():
 			case \is_customize_preview():
 			case \defined( 'REST_REQUEST' ) && \REST_REQUEST:
 				$supported = false;

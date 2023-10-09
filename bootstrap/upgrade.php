@@ -42,10 +42,10 @@ use \The_SEO_Framework\Helper\Query,
 
 // phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 
-\add_action( 'init', __NAMESPACE__ . '\\_do_upgrade', 20 );
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_notice', 99, 2 );
-\add_action( 'the_seo_framework_upgraded', __NAMESPACE__ . '\\_prepare_upgrade_suggestion', 100, 2 );
-\add_action( 'the_seo_framework_downgraded', __NAMESPACE__ . '\\_prepare_downgrade_notice', 99, 2 );
+\add_action( 'init', 'The_SEO_Framework\Bootstrap\_do_upgrade', 20 );
+\add_action( 'the_seo_framework_upgraded', 'The_SEO_Framework\Bootstrap\_prepare_upgrade_notice', 99, 2 );
+\add_action( 'the_seo_framework_upgraded', 'The_SEO_Framework\Bootstrap\_prepare_upgrade_suggestion', 100, 2 );
+\add_action( 'the_seo_framework_downgraded', 'The_SEO_Framework\Bootstrap\_prepare_downgrade_notice', 99, 2 );
 
 /**
  * Returns the version set before upgrading began.
@@ -110,7 +110,7 @@ function _do_upgrade() {
 	// Register this AFTER the lock is set. Otherwise, it may clear the lock in another thread.
 	// This releases the lock when the upgrade crashes or when we forget to unlock it...
 	// ...if the database connection is still valid; otherwise, we'll have to wait for the $timeout to pass.
-	register_shutdown_function( __NAMESPACE__ . '\\_release_upgrade_lock' );
+	register_shutdown_function( 'The_SEO_Framework\Bootstrap\_release_upgrade_lock' );
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
@@ -205,7 +205,7 @@ function _upgrade( $previous_version ) {
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
-			( __NAMESPACE__ . "\\_do_upgrade_{$_version}" )(); // This is an undocumented method for variable functions.
+			( "The_SEO_Framework\\Bootstrap\\_do_upgrade_{$_version}" )(); // This is an undocumented method for variable functions.
 			$current_version = _set_version( $_version );
 		}
 	}

@@ -82,7 +82,7 @@ class Sitemap extends \The_SEO_Framework\Sitemap\Registry {
 
 		switch ( $name ) {
 			case 'sitemap_cache_enabled':
-				return Cache::is_sitemap_cache_enabled();
+				return \The_SEO_Framework\Sitemap\Cache::is_sitemap_cache_enabled();
 		}
 
 		return null;

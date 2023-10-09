@@ -742,6 +742,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 			* Most notably, the padding and border around the settings make it much easier on your eyes.
 		* If a custom social image URL is inserted in the homepage post-edit meta box, it will now also be depicted in the Homepage Settings meta box on the SEO Settings page.
 		* Resolved an issue where the homepage's Post SEO Settings "Remove the site title?" automatically got checked after updating the page. Even though this hadn't an effect on the output, switching the homepage would cause unwonted and unanticipated behavior.
+		* Resolved an issue where an asynchronous update state (such as changing counter types) would seem to load infinitely, but it should've actually indicated updating has failed.
 	* **Title:**
 		* Resolved an issue where the Twitter title would fall back to a custom Open Graph title when Open Graph is disabled.
 		* Resolved an issue where the incorrect Open Graph fallback title was proposed as a placeholder in the admin interface.
@@ -957,6 +958,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 					1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 					2. Added `is_customize_preview()` as unsupported.
 					3. Moved to `\The_SEO_Framework\Helper\Query`.
+					4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`, this is now being handled by `_init_tsf()`.
 				* `_init_sitemap()` is no longer called with `template_redirect`, but at `parse_request` at priority `15`, now using callback `[ Sitemap\Registry::class, '_init' ]`. This prevents loading the main query.
 					* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed.
 					* This new method is still marked as private; I just wanted to document how a part prone to causing catastrophe has changed.
@@ -1492,7 +1494,9 @@ TODO add "try it in playground" button/link at the top of the readme.
 * **Hook notes:**
 	* Excluded IDs cache is now cleared on `wp_insert_post` and `attachment_updated`, from `save_post` and `edit_attachment` respectively.
 	* `[ \tsf(), 'html_output' ]` no longer runs on `wp_head`. Instead, `[ 'The_SEO_Framework\Front\Meta\Head', 'print_wrap_and_tags' ]` is now outputted -- remaining at priority `1`.
+	* `_init_tsf` no longer runs on `plugins_loaded`, but on `init`. Use filter `the_seo_framework_load` instead.
 * **JavaScript notes:**
+	* ...
 * **CSS notes:**
 	* `tsf-pt` no longer has inline RTL support, but instead supports RLT built in its file.
 * **Other:**

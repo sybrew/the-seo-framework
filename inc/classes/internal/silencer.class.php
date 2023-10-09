@@ -43,9 +43,8 @@ final class Silencer {
 	/**
 	 * Tells if this plugin is loaded.
 	 *
-	 * @NOTE: Only `\The_SEO_Framework\_init_tsf()` should adjust this.
-	 *
 	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated (silently here, shh).
 	 * @access protected
 	 *         Don't alter this variable.
 	 * @var boolean $loaded
