@@ -121,6 +121,12 @@ class Core {
 			case 'loaded':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you may drop the loaded check.' );
 				return true;
+			case 'inpost_nonce_name':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				return Data\Admin\Post::$nonce_name;
+			case 'inpost_nonce_field':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				return Data\Admin\Post::$nonce_action;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );

@@ -58,12 +58,12 @@ $headless = is_headless();
 
 if ( ! $headless['meta'] ) {
 	// Initialize term meta filters and actions.
-	\add_action( 'edit_term', [ \tsf(), '_update_term_meta' ], 10, 3 );
+	\add_action( 'edit_term', [ Data\Admin\Term::class, '_update_term_meta' ], 10, 3 );
 
 	// Initialize term meta filters and actions.
-	\add_action( 'save_post', [ \tsf(), '_update_post_meta' ], 1 );
-	\add_action( 'edit_attachment', [ \tsf(), '_update_attachment_meta' ], 1 );
-	\add_action( 'save_post', [ \tsf(), '_save_inpost_primary_term' ], 1 );
+	\add_action( 'save_post', [ Data\Admin\Post::class, '_update_post_meta' ], 1 );
+	\add_action( 'edit_attachment', [ Data\Admin\Post::class, '_update_attachment_meta' ], 1 );
+	\add_action( 'save_post', [ Data\Admin\Post::class, '_save_inpost_primary_term' ], 1 );
 
 	// Enqueue Post meta boxes.
 	\add_action( 'add_meta_boxes', [ \tsf(), '_init_post_edit_view' ], 5, 1 );
@@ -94,8 +94,8 @@ if ( ! $headless['settings'] ) {
 
 if ( ! $headless['user'] ) {
 	// Initialize user meta filters and actions.
-	\add_action( 'personal_options_update', [ \tsf(), '_update_user_meta' ], 10, 1 );
-	\add_action( 'edit_user_profile_update', [ \tsf(), '_update_user_meta' ], 10, 1 );
+	\add_action( 'personal_options_update', [ Data\Admin\User::class, '_update_user_meta' ], 10, 1 );
+	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, '_update_user_meta' ], 10, 1 );
 
 	// Enqueue user meta output.
 	\add_action( 'current_screen', [ \tsf(), '_init_user_edit_view' ] );

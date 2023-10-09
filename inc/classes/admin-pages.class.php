@@ -43,7 +43,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 2.8.0
  */
-class Admin_Pages extends User_Data {
+class Admin_Pages extends Detect {
 
 	/**
 	 * @since 2.7.0

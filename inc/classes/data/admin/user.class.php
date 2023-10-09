@@ -1,19 +1,18 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Facade\User_Data
+ * @package The_SEO_Framework\Classes\Data\Admin\User
  * @subpackage The_SEO_Framework\Data
  */
 
-namespace The_SEO_Framework;
+namespace The_SEO_Framework\Data\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -29,27 +28,30 @@ use \The_SEO_Framework\Data,
  */
 
 /**
- * Class The_SEO_Framework\User_Data
+ * Holds a collection of data saving methods for users.
  *
- * Holds and maintains User data.
- *
- * @since 3.0.0
+ * @since 4.3.0
+ * @access private
  */
-class User_Data extends Term_Data {
+class User {
 
 	/**
 	 * Saves user profile fields.
 	 *
+	 * @hook personal_options_update 10
+	 * @hook edit_user_profile_update 10
 	 * @since 4.1.4
 	 * @since 4.2.0 Now repopulates not-posted user metadata.
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\User`.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.
 	 */
-	public function _update_user_meta( $user_id ) {
+	public static function _update_user_meta( $user_id ) {
 
 		if ( empty( $_POST ) ) return;
 
+		// Redundant. Before hooks fire, this is already checked.
 		\check_admin_referer( "update-user_{$user_id}" );
 		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 

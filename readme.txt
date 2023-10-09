@@ -604,9 +604,6 @@ TODO add robots.txt editor
 	-> Also move the callback to a new class.
 	-> Add this as an extension instead?
 
-TODO remove tsf()->loaded?
-	-> At least, write a constant?
-
 TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
 	-> Also remove all _ref_array?
 
@@ -1379,6 +1376,8 @@ TODO add "try it in playground" button/link at the top of the readme.
 				* `is_headless`, use function `The_SEO_Framework\is_headless()` instead.
 				* `seo_settings_page_slug`, use constant `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` instead.
 				* `loaded`, this check is no longer necessary.
+				* `inpost_nonce_name`, you should make a custom check.
+				* `inpost_nonce_field`, you should make a custom check.
 			* **Properties removed:**
 				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
 		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.

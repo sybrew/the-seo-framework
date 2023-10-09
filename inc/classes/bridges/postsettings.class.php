@@ -10,7 +10,8 @@ namespace The_SEO_Framework\Bridges;
 
 use function \The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query,
+	\The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -108,10 +109,9 @@ final class PostSettings {
 	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
 
 		$vars = get_defined_vars();
-		$tsf  = \tsf();
 
-		$tsf->get_view( 'edit/wrap-nav', $vars );
-		$tsf->get_view( 'edit/wrap-content', $vars );
+		\tsf()->get_view( 'edit/wrap-nav', $vars );
+		\tsf()->get_view( 'edit/wrap-content', $vars );
 	}
 
 	/**
@@ -121,19 +121,17 @@ final class PostSettings {
 	 */
 	public static function _meta_box() {
 
-		$tsf = \tsf();
-
-		\wp_nonce_field( $tsf->inpost_nonce_field, $tsf->inpost_nonce_name );
+		\wp_nonce_field( Data\Admin\Post::$nonce_action, Data\Admin\Post::$nonce_name );
 
 		/**
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 
-		$tsf->is_gutenberg_page()
-			and $tsf->get_view( 'edit/seo-settings-singular-gutenberg-data' );
+		\tsf()->is_gutenberg_page()
+			and \tsf()->get_view( 'edit/seo-settings-singular-gutenberg-data' );
 
-		$tsf->get_view( 'edit/seo-settings-singular' );
+		\tsf()->get_view( 'edit/seo-settings-singular' );
 
 		/**
 		 * @since 2.9.0

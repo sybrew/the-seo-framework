@@ -9,15 +9,13 @@
 
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-$tsf = tsf();
-
 ?>
 <script type=text/html id=tmpl-tsf-primary-term-selector>
 	<input type=hidden id="autodescription[_primary_term_{{data.taxonomy.name}}]" name="autodescription[_primary_term_{{data.taxonomy.name}}]" value="{{data.taxonomy.primary}}">
 	<?php
 	wp_nonce_field(
-		$tsf->inpost_nonce_field . '_pt',
-		$tsf->inpost_nonce_name . '_pt_{{data.taxonomy.name}}'
+		\The_SEO_Framework\Data\Admin\Post::$nonce_action . '_pt',
+		\The_SEO_Framework\Data\Admin\Post::$nonce_name . '_pt_{{data.taxonomy.name}}'
 	);
 	?>
 </script>

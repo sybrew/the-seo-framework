@@ -74,7 +74,7 @@ final class Head {
 		static::print_plugin_indicator(
 			'after',
 			( hrtime( true ) - $print_start ) / 1e9,
-			$bootstrap_timer
+			$bootstrap_timer,
 		);
 
 		/**

@@ -1,21 +1,18 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Facade\Term_Data
+ * @package The_SEO_Framework\Classes\Data\Admin\Term
  * @subpackage The_SEO_Framework\Data
  */
 
-namespace The_SEO_Framework;
+namespace The_SEO_Framework\Data\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomies,
-};
+use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -31,13 +28,12 @@ use \The_SEO_Framework\Helper\{
  */
 
 /**
- * Class The_SEO_Framework\Term_Data
+ * Holds a collection of data saving methods for terms.
  *
- * Holds Term and Taxonomy data.
- *
- * @since 2.8.0
+ * @since 4.3.0
+ * @access private
  */
-class Term_Data extends Post_Data {
+class Term {
 
 	/**
 	 * Sanitizes and saves term meta data when a term is altered.
@@ -53,7 +49,7 @@ class Term_Data extends Post_Data {
 	 *              7. Now uses the current term meta to set new values.
 	 *              8. No longer deletes meta from abstracting plugins on save when they're deactivated.
 	 *              9. Now allows updating during `WP_AJAX`.
-	 * @securitycheck 3.0.0 OK.
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 * @access private
 	 *         Use Data\Plugin\Term::save_term_meta() instead.
 	 *
@@ -61,13 +57,13 @@ class Term_Data extends Post_Data {
 	 * @param int    $tt_id    Term taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 */
-	public function _update_term_meta( $term_id, $tt_id, $taxonomy ) {
+	public static function _update_term_meta( $term_id, $tt_id, $taxonomy ) {
 		// phpcs:disable, WordPress.Security.NonceVerification
 
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
-			$this->update_quick_edit_term_meta( $term_id, $taxonomy );
+			static::update_quick_edit_term_meta( $term_id, $taxonomy );
 		} elseif ( ! empty( $_POST['autodescription-meta'] ) ) {
-			$this->update_term_edit_term_meta( $term_id, $taxonomy );
+			static::update_term_edit_term_meta( $term_id, $taxonomy );
 		}
 
 		// phpcs:enable, WordPress.Security.NonceVerification
@@ -79,13 +75,14 @@ class Term_Data extends Post_Data {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 Removed second parameter $tt_id.
+	 * @since 4.3.0 1. Removed second parameter $tt_id.
+	 *              2. Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void
 	 */
-	protected function update_quick_edit_term_meta( $term_id, $taxonomy ) {
+	private static function update_quick_edit_term_meta( $term_id, $taxonomy ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 
@@ -114,13 +111,14 @@ class Term_Data extends Post_Data {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 Removed second parameter $tt_id.
+	 * @since 4.3.0 1. Removed second parameter $tt_id.
+	 *              2. Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void
 	 */
-	protected function update_term_edit_term_meta( $term_id, $taxonomy ) {
+	private static function update_term_edit_term_meta( $term_id, $taxonomy ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 
