@@ -6483,9 +6483,25 @@ final class Deprecated {
 	 */
 	public function clean_response_header() {
 
-		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->clean_response_header()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->clean_response_header()', '4.3.0' );
 
 		return \The_SEO_Framework\Helper\Headers::clean_response_header();
+	}
+
+	/**
+	 * Registers admin scripts and styles.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 First parameter is now deprecated.
+	 * @since 4.0.0 First parameter is now removed.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_admin_scripts() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->init_admin_scripts()', '4.3.0', 'tsf()->load_admin_scripts()' );
+
+		return $tsf->load_admin_scripts();
 	}
 }

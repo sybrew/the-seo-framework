@@ -8,14 +8,15 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\memo;
+
+use \The_SEO_Framework\Admin;
+
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,
 };
-
-use function \The_SEO_Framework\memo;
-
 // phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
 /**
@@ -313,7 +314,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _do_debug_output() {
-		\tsf()->get_view( 'debug/output' );
+		Admin\Template::output_view( 'debug/output' );
 	}
 
 	/**

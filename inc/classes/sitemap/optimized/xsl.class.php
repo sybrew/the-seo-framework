@@ -43,23 +43,21 @@ final class XSL {
 	 *
 	 * @since 4.3.0
 	 */
-	public static function hook() {
-
-		$class = static::class;
+	public static function register_hooks() {
 
 		// Adds site icon tags to the sitemap stylesheet.
 		\add_action( 'the_seo_framework_xsl_head', 'wp_site_icon', 99 );
 
-		\add_action( 'the_seo_framework_xsl_head', "$class::_print_xsl_global_variables", 0 );
-		\add_action( 'the_seo_framework_xsl_head', "$class::_print_xsl_title" );
-		\add_action( 'the_seo_framework_xsl_head', "$class::_print_xsl_styles" );
+		\add_action( 'the_seo_framework_xsl_head', [ static::class, '_print_xsl_global_variables' ], 0 );
+		\add_action( 'the_seo_framework_xsl_head', [ static::class, '_print_xsl_title' ] );
+		\add_action( 'the_seo_framework_xsl_head', [ static::class, '_print_xsl_styles' ] );
 
-		\add_action( 'the_seo_framework_xsl_description', "$class::_print_xsl_description" );
+		\add_action( 'the_seo_framework_xsl_description', [ static::class, '_print_xsl_description' ] );
 
-		\add_action( 'the_seo_framework_xsl_content', "$class::_print_xsl_content" );
+		\add_action( 'the_seo_framework_xsl_content', [ static::class, '_print_xsl_content' ] );
 
-		\add_action( 'the_seo_framework_xsl_footer', "$class::_print_xsl_footer" );
-		\add_action( 'site_icon_meta_tags', "$class::_convert_site_icon_meta_tags", PHP_INT_MAX );
+		\add_action( 'the_seo_framework_xsl_footer', [ static::class, '_print_xsl_footer' ] );
+		\add_action( 'site_icon_meta_tags', [ static::class, '_convert_site_icon_meta_tags' ], PHP_INT_MAX );
 	}
 
 	/**
@@ -69,10 +67,9 @@ final class XSL {
 	 * @since 4.2.0 1. $tableMinWidth no longer adds 'px'.
 	 *              2. Moved to class.
 	 * @access private
-	 * @param \The_SEO_Framework\Load $tsf tsf() object.
 	 */
-	public static function _print_xsl_global_variables( $tsf ) {
-		$tsf->get_view( 'sitemap/xsl/vars' );
+	public static function _print_xsl_global_variables() {
+		Admin\Template::output_view( 'sitemap/xsl/vars' );
 	}
 
 	/**
@@ -82,10 +79,9 @@ final class XSL {
 	 * @since 4.0.0 Now uses a consistent titling scheme.
 	 * @since 4.2.0 Moved to class
 	 * @access private
-	 * @param \The_SEO_Framework\Load $tsf tsf() object.
 	 */
-	public static function _print_xsl_title( $tsf ) {
-		$tsf->get_view( 'sitemap/xsl/title' );
+	public static function _print_xsl_title() {
+		Admin\Template::output_view( 'sitemap/xsl/title' );
 	}
 
 	/**
@@ -95,10 +91,9 @@ final class XSL {
 	 * @since 4.2.0 1. Centered sitemap.
 	 *              2. Moved to class.
 	 * @access private
-	 * @param \The_SEO_Framework\Load $tsf tsf() object.
 	 */
-	public static function _print_xsl_styles( $tsf ) {
-		$tsf->get_view( 'sitemap/xsl/styles' );
+	public static function _print_xsl_styles() {
+		Admin\Template::output_view( 'sitemap/xsl/styles' );
 	}
 
 	/**
@@ -106,12 +101,10 @@ final class XSL {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Moved to class;
-	 *
 	 * @access private
-	 * @param \The_SEO_Framework\Load $tsf tsf() object.
 	 */
-	public static function _print_xsl_description( $tsf ) {
-		$tsf->get_view( 'sitemap/xsl/description' );
+	public static function _print_xsl_description() {
+		Admin\Template::output_view( 'sitemap/xsl/description' );
 	}
 
 	/**
@@ -119,11 +112,10 @@ final class XSL {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Moved to class.
-	 *
-	 * @param \The_SEO_Framework\Load $tsf tsf() object.
+	 * @access private
 	 */
-	public static function _print_xsl_content( $tsf ) {
-		$tsf->get_view( 'sitemap/xsl/table' );
+	public static function _print_xsl_content() {
+		Admin\Template::output_view( 'sitemap/xsl/table' );
 	}
 
 	/**
@@ -132,16 +124,14 @@ final class XSL {
 	 * @since 3.1.0
 	 * @since 4.2.0 Moved to class
 	 * @access private
-	 *
-	 * @param \The_SEO_Framework\Load $tsf tsf() object.
 	 */
-	public static function _print_xsl_footer( $tsf ) {
+	public static function _print_xsl_footer() {
 		/**
 		 * @since 2.8.0
 		 * @param bool $indicator
 		 */
 		\apply_filters( 'the_seo_framework_indicator_sitemap', true )
-			and $tsf->get_view( 'sitemap/xsl/footer' );
+			and Admin\Template::output_view( 'sitemap/xsl/footer' );
 	}
 
 	/**
@@ -150,6 +140,7 @@ final class XSL {
 	 *
 	 * @since 3.1.4
 	 * @since 4.2.0 Moved to class.
+	 * @access private
 	 *
 	 * @param array $tags Site Icon meta elements.
 	 * @return array The converted meta tags.

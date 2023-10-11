@@ -4,24 +4,42 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+namespace The_SEO_Framework;
 
-use \The_SEO_Framework\Bridges\SeoSettings,
-	\The_SEO_Framework\Interpreters\HTML,
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
+
+use \The_SEO_Framework\Interpreters\HTML,
 	\The_SEO_Framework\Interpreters\Form,
 	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Post_Types,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\Helper\Post_Types;
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// See _post_type_archive_metabox et al.
+[ $instance ] = $view_args;
 
 // Fetch the required instance within this file.
-switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
-	case 'post_type_archive_main':
-		$_settings_class = SeoSettings::class;
+switch ( $instance ) :
+	case 'main':
+		$_settings_class = Admin\Settings\Plugin::class;
 		$post_types      = Post_Types::get_public_post_type_archives();
 
 		$post_types_data = [];
@@ -29,7 +47,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			$post_types_data[ $post_type ] = [
 				'label'    => Post_Types::get_post_type_label( $post_type ),
 				'url'      => Meta\URI::get_bare_post_type_archive_url( $post_type ), // permalink!
-				'hasPosts' => $this->has_posts_in_post_type_archive( $post_type ),
+				'hasPosts' => \tsf()->has_posts_in_post_type_archive( $post_type ),
 			];
 		}
 
@@ -42,44 +60,44 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		?>
 		<div id=tsf-post-type-archive-header-wrap class=tsf-fields style=display:none>
 			<div id=tsf-post-type-archive-select-wrap>
-				<label for=tsf-post-type-archive-selector><?php esc_html_e( 'Select archive to edit:', 'autodescription' ); ?></label>
+				<label for=tsf-post-type-archive-selector><?php \esc_html_e( 'Select archive to edit:', 'autodescription' ); ?></label>
 				<select id=tsf-post-type-archive-selector></select>
 			</div>
 		</div>
 		<?php
-		$i = 0;
-
 		/**
 		 * This data isn't read, only the keys are used -- there are more filters affecting the default output
 		 * That ultimately lead to the data this method feeds.
 		 */
-		$pta_defaults = Data\Plugin\PTA::get_all_post_type_archive_meta_defaults();
+		$pta_defaults    = Data\Plugin\PTA::get_all_post_type_archive_meta_defaults();
+		$post_type_index = 0;
 
 		foreach ( $post_types as $post_type ) {
-			$_generator_args = [ 'pta' => $post_type ];
-			$_option_map     = [];
+			$generator_args = [ 'pta' => $post_type ];
+			$options        = [];
 
 			foreach ( $pta_defaults[ $post_type ] as $_option => $_default )
-				$_option_map[ $_option ] = [ 'pta', $post_type, $_option ];
+				$options[ $_option ] = [ 'pta', $post_type, $_option ];
 
+			$args = compact( 'post_type', 'generator_args', 'options' );
 			$tabs = [
 				'general'    => [
-					'name'     => __( 'General', 'autodescription' ),
+					'name'     => \__( 'General', 'autodescription' ),
 					'callback' => [ $_settings_class, '_post_type_archive_metabox_general_tab' ],
 					'dashicon' => 'admin-generic',
-					'args'     => compact( 'post_type', '_generator_args', '_option_map' ),
+					'args'     => $args,
 				],
 				'social'     => [
-					'name'     => __( 'Social', 'autodescription' ),
+					'name'     => \__( 'Social', 'autodescription' ),
 					'callback' => [ $_settings_class, '_post_type_archive_metabox_social_tab' ],
 					'dashicon' => 'share',
-					'args'     => compact( 'post_type', '_generator_args', '_option_map' ),
+					'args'     => $args,
 				],
 				'visibility' => [
-					'name'     => __( 'Visibility', 'autodescription' ),
+					'name'     => \__( 'Visibility', 'autodescription' ),
 					'callback' => [ $_settings_class, '_post_type_archive_metabox_visibility_tab' ],
 					'dashicon' => 'visibility',
-					'args'     => compact( 'post_type', '_generator_args', '_option_map' ),
+					'args'     => $args,
 				],
 			];
 
@@ -87,7 +105,7 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			printf(
 				'<div class="tsf-post-type-archive-wrap%s" %s>',
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Shut it, noob.
-				$i ? ' hide-if-tsf-js' : '',
+				$post_type_index ? ' hide-if-tsf-js' : '',
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
 				HTML::make_data_attributes( [ 'postType' => $post_type ] )
 			);
@@ -101,14 +119,14 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 							[
 								sprintf(
 									/* translators: 1 = Post Type Archive name */
-									esc_html__( 'Editing archive of %s', 'autodescription' ),
-									esc_html( $post_types_data[ $post_type ]['label'] )
+									\esc_html__( 'Editing archive of %s', 'autodescription' ),
+									\esc_html( $post_types_data[ $post_type ]['label'] )
 								),
-								esc_html( $post_type ),
+								\esc_html( $post_type ),
 								sprintf(
 									'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
-									esc_url( $post_types_data[ $post_type ]['url'] ),
-									esc_html__( 'View archive', 'autodescription' )
+									\esc_url( $post_types_data[ $post_type ]['url'] ),
+									\esc_html__( 'View archive', 'autodescription' )
 								),
 							]
 						)
@@ -118,26 +136,26 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				<div class="tsf-post-type-archive-if-excluded hidden">
 					<?php
 					HTML::attention_description(
-						__( "This post type is excluded, so settings won't have any effect.", 'autodescription' )
+						\__( "This post type is excluded, so settings won't have any effect.", 'autodescription' )
 					)
 					?>
 				</div>
 				<div class=tsf-post-type-archive-if-not-excluded>
 					<?php
-					if ( $this->detect_multilingual_plugins() ) {
+					if ( \tsf()->detect_multilingual_plugins() ) {
 						HTML::attention(
-							__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' )
+							\__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' )
 						);
 					}
 
-					SeoSettings::_nav_tab_wrapper(
+					Admin\Settings\Plugin::_nav_tab_wrapper(
 						"post_type_archive_{$post_type}",
 						/**
 						 * @since 4.2.0
 						 * @param array   $tabs      The default tabs.
 						 * @param strring $post_type The post type archive's name.
 						 */
-						(array) apply_filters_ref_array(
+						(array) \apply_filters_ref_array(
 							'the_seo_framework_post_type_archive_settings_tabs',
 							[
 								$tabs,
@@ -150,19 +168,20 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			</div>
 			<?php
 			// Output only the first time.
-			$i++ or print( '<hr class=hide-if-tsf-js>' );
+			$post_type_index++ or print( '<hr class=hide-if-tsf-js>' );
 		}
 		break;
 
-	case 'post_type_archive_general_tab':
+	case 'general':
+		[ , $args ] = $view_args;
 		?>
 		<p>
-			<label for="<?php Input::field_id( $_option_map['doctitle'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['doctitle'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Meta Title', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
 					HTML::make_info(
-						__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
+						\__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/appearance/title-link'
 					);
 				?>
@@ -171,34 +190,34 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
 		Form::output_character_counter_wrap(
-			Input::get_field_id( $_option_map['doctitle'] ),
+			Input::get_field_id( $args['options']['doctitle'] ),
 			(bool) Data\Plugin::get_option( 'display_character_counter' )
 		);
 		Form::output_pixel_counter_wrap(
-			Input::get_field_id( $_option_map['doctitle'] ),
+			Input::get_field_id( $args['options']['doctitle'] ),
 			'title',
 			(bool) Data\Plugin::get_option( 'display_pixel_counter' )
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( $_option_map['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['doctitle'] ); ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle', $post_type ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off />
 			<?php
-			$pto = get_post_type_object( $post_type );
+			$pto = \get_post_type_object( $args['post_type'] );
 
 			// Skip first entry: $_full_title
 			[ , $_prefix_value, $_default_title ] =
 				Meta\Title::get_archive_title_list( $pto );
 
-			$this->output_js_title_data(
-				Input::get_field_id( $_option_map['doctitle'] ),
+			\tsf()->output_js_title_data(
+				Input::get_field_id( $args['options']['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => $this->escape_text( $_default_title ),
-						'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
-						'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $_generator_args, true ),
-						'additionValue'     => $this->escape_text( Meta\Title::get_addition() ),
+						'defaultTitle'      => \tsf()->escape_text( $_default_title ),
+						'addAdditions'      => Meta\Title\Conditions::use_title_branding( $args['generator_args'] ),
+						'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $args['generator_args'], true ),
+						'additionValue'     => \tsf()->escape_text( Meta\Title::get_addition() ),
 						'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
-						'prefixValue'       => $this->escape_text( $_prefix_value ),
+						'prefixValue'       => \tsf()->escape_text( $_prefix_value ),
 						'showPrefix'        => Meta\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
 				]
@@ -209,16 +228,16 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<div class=tsf-title-tagline-toggle>
 		<?php
 			$info = HTML::make_info(
-				__( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ),
+				\__( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ),
 				'',
 				false
 			);
 
 			HTML::wrap_fields(
 				Input::make_checkbox( [
-					'id'     => $_option_map['title_no_blog_name'],
-					'label'  => esc_html__( 'Remove the site title?', 'autodescription' ) . " $info",
-					'value'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'title_no_blog_name', $post_type ),
+					'id'     => $args['options']['title_no_blog_name'],
+					'label'  => \esc_html__( 'Remove the site title?', 'autodescription' ) . " $info",
+					'value'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'title_no_blog_name', $args['post_type'] ),
 					'escape' => false,
 				] ),
 				true
@@ -229,12 +248,12 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Input::field_id( $_option_map['description'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['description'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Meta Description', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
 					HTML::make_info(
-						__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
+						\__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/appearance/snippet'
 					);
 				?>
@@ -242,19 +261,19 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
-		Form::output_pixel_counter_wrap( Input::get_field_id( $_option_map['description'] ), 'description', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_pixel_counter_wrap( Input::get_field_id( $args['options']['description'] ), 'description', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( $_option_map['description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['description'] ); ?>" rows=3 cols=70><?= esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'description', $post_type ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( $args['options']['description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['description'] ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'description', $args['post_type'] ) ) ?></textarea>
 			<?php
-			$this->output_js_description_elements(); // legacy
-			$this->output_js_description_data(
-				Input::get_field_id( $_option_map['description'] ),
+			\tsf()->output_js_description_elements(); // legacy
+			\tsf()->output_js_description_data(
+				Input::get_field_id( $args['options']['description'] ),
 				[
 					'state' => [
-						'defaultDescription' => $this->escape_text(
-							Meta\Description::get_generated_description( $_generator_args )
+						'defaultDescription' => \tsf()->escape_text(
+							Meta\Description::get_generated_description( $args['generator_args'] )
 						),
 					],
 				]
@@ -263,22 +282,23 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		</p>
 		<?php
 		break;
-	case 'post_type_archive_social_tab':
-		$this->output_js_social_data(
-			"pta_social_settings_{$post_type}",
+	case 'social':
+		[ , $args ] = $view_args;
+		\tsf()->output_js_social_data(
+			"pta_social_settings_{$args['post_type']}",
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => $this->escape_text( Meta\Open_Graph::get_generated_title( $_generator_args ) ),
-						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'og' ),
-						'defaultDesc'  => $this->escape_text( Meta\Open_Graph::get_generated_description( $_generator_args ) ),
+						'defaultTitle' => \tsf()->escape_text( Meta\Open_Graph::get_generated_title( $args['generator_args'] ) ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $args['generator_args'], 'og' ),
+						'defaultDesc'  => \tsf()->escape_text( Meta\Open_Graph::get_generated_description( $args['generator_args'] ) ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => $this->escape_text( Meta\Twitter::get_generated_title( $_generator_args ) ),
-						'addAdditions' => Meta\Title\Conditions::use_title_branding( $_generator_args, 'twitter' ),
-						'defaultDesc'  => $this->escape_text( Meta\Twitter::get_generated_description( $_generator_args ) ),
+						'defaultTitle' => \tsf()->escape_text( Meta\Twitter::get_generated_title( $args['generator_args'] ) ),
+						'addAdditions' => Meta\Title\Conditions::use_title_branding( $args['generator_args'], 'twitter' ),
+						'defaultDesc'  => \tsf()->escape_text( Meta\Twitter::get_generated_description( $args['generator_args'] ) ),
 					],
 				],
 			]
@@ -286,100 +306,101 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 
 		?>
 		<p>
-			<label for="<?php Input::field_id( $_option_map['og_title'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['og_title'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $_option_map['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_title'] ); ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title', $post_type ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle />
 		</p>
 
 		<p>
-			<label for="<?php Input::field_id( $_option_map['og_description'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['og_description'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['og_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( $_option_map['og_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['og_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=ogDesc><?= esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_description', $post_type ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( $args['options']['og_description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogDesc><?= \esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'og_description', $args['post_type'] ) ) ?></textarea>
 		</p>
 
 		<hr>
 
 		<p>
-			<label for="<?php Input::field_id( $_option_map['tw_title'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['tw_title'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $_option_map['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_title'] ); ?>" value="<?= $this->escape_text( $this->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_title', $post_type ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle />
 		</p>
 
 		<p>
-			<label for="<?php Input::field_id( $_option_map['tw_description'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['tw_description'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $_option_map['tw_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( $_option_map['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= esc_attr( "pta_social_settings_{$post_type}" ) ?> data-tsf-social-type=twDesc><?= esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_description', $post_type ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( $args['options']['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twDesc><?= \esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'tw_description', $args['post_type'] ) ) ?></textarea>
 		</p>
 
 		<hr>
 
 		<p>
-			<label for="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url">
-				<strong><?php esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
+			<label for="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-url">
+				<strong><?php \esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong>
 				<?php
 				HTML::make_info(
-					__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
+					\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
 					'https://developers.facebook.com/docs/sharing/best-practices#images'
 				);
 				?>
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( $_option_map['social_image_url'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-url" placeholder="<?= esc_url( Meta\Image::get_first_generated_image_url( $_generator_args, 'social' ) ) ?>" value="<?= esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url', $post_type ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( $_option_map['social_image_id'] ); ?>" id="<?= esc_attr( "tsf_pta_socialimage_{$post_type}" ) ?>-id" value="<?= absint( Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id', $post_type ) ) ?>" disabled class=tsf-enable-media-if-js />
+			<input class=large-text type=url name="<?php Input::field_name( $args['options']['social_image_url'] ); ?>" id="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-url" placeholder="<?= \esc_url( Meta\Image::get_first_generated_image_url( $args['generator_args'], 'social' ) ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url', $args['post_type'] ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( $args['options']['social_image_id'] ); ?>" id="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-id" value="<?= \absint( Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id', $args['post_type'] ) ) ?>" disabled class=tsf-enable-media-if-js />
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-			echo Form::get_image_uploader_form( [ 'id' => "tsf_pta_socialimage_{$post_type}" ] );
+			echo Form::get_image_uploader_form( [ 'id' => "tsf_pta_socialimage_{$args['post_type']}" ] );
 			?>
 		</p>
 		<?php
 		break;
-	case 'post_type_archive_visibility_tab':
+	case 'visibility':
+		[ , $args ] = $view_args;
 		?>
 		<p>
-			<label for="<?php Input::field_id( $_option_map['canonical'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['canonical'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
 					HTML::make_info(
-						__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
+						\__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
 					);
 				?>
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $_option_map['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['canonical'] ); ?>" placeholder="<?= Meta\URI::get_generated_url( $_generator_args ) ?>" value="<?= esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'canonical', $post_type ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= Meta\URI::get_generated_url( $args['generator_args'] ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off />
 		</p>
 
 		<hr>
@@ -388,44 +409,44 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			'noindex'   => [
 				'force_on'    => 'index',
 				'force_off'   => 'noindex',
-				'label'       => __( 'Indexing', 'autodescription' ),
+				'label'       => \__( 'Indexing', 'autodescription' ),
 				'_defaultOn'  => 'index',
 				'_defaultOff' => 'noindex',
-				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'noindex', $post_type ),
+				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'noindex', $args['post_type'] ),
 				'_info'       => [
-					__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
+					\__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
 				],
 			],
 			'nofollow'  => [
 				'force_on'    => 'follow',
 				'force_off'   => 'nofollow',
-				'label'       => __( 'Link following', 'autodescription' ),
+				'label'       => \__( 'Link following', 'autodescription' ),
 				'_defaultOn'  => 'follow',
 				'_defaultOff' => 'nofollow',
-				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'nofollow', $post_type ),
+				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'nofollow', $args['post_type'] ),
 				'_info'       => [
-					__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
+					\__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
 				],
 			],
 			'noarchive' => [
 				'force_on'    => 'archive',
 				'force_off'   => 'noarchive',
-				'label'       => __( 'Archiving', 'autodescription' ),
+				'label'       => \__( 'Archiving', 'autodescription' ),
 				'_defaultOn'  => 'archive',
 				'_defaultOff' => 'noarchive',
-				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'noarchive', $post_type ),
+				'_value'      => Data\Plugin\PTA::get_post_type_archive_meta_item( 'noarchive', $args['post_type'] ),
 				'_info'       => [
-					__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
+					\__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
 					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 				],
 			],
 		];
 
 		/* translators: %s = default option value */
-		$_default_i18n         = __( 'Default (%s)', 'autodescription' );
-		$_default_unknown_i18n = __( 'Default (unknown)', 'autodescription' );
+		$_default_i18n         = \__( 'Default (%s)', 'autodescription' );
+		$_default_unknown_i18n = \__( 'Default (unknown)', 'autodescription' );
 
 		foreach ( $robots_settings as $_r_type => $_rs ) {
 			// phpcs:enable, WordPress.Security.EscapeOutput
@@ -433,8 +454,8 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 				vsprintf(
 					'<p><label for="%1$s"><strong>%2$s</strong> %3$s</label></p>',
 					[
-						Input::get_field_id( $_option_map[ $_r_type ] ),
-						esc_html( $_rs['label'] ),
+						Input::get_field_id( $args['options'][ $_r_type ] ),
+						\esc_html( $_rs['label'] ),
 						HTML::make_info(
 							$_rs['_info'][0],
 							$_rs['_info'][1] ?? '',
@@ -446,9 +467,9 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 			);
 			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 			echo Form::make_single_select_form( [
-				'id'      => Input::get_field_id( $_option_map[ $_r_type ] ),
+				'id'      => Input::get_field_id( $args['options'][ $_r_type ] ),
 				'class'   => 'tsf-select-block',
-				'name'    => Input::get_field_name( $_option_map[ $_r_type ] ),
+				'name'    => Input::get_field_name( $args['options'][ $_r_type ] ),
 				'label'   => '',
 				'options' => [
 					0  => $_default_unknown_i18n,
@@ -467,19 +488,19 @@ switch ( $this->get_view_instance( 'post_type_archive', $instance ) ) :
 		<hr>
 
 		<p>
-			<label for="<?php Input::field_id( $_option_map['redirect'] ); ?>" class=tsf-toblock>
-				<strong><?php esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
+			<label for="<?php Input::field_id( $args['options']['redirect'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
 				<?php
 					echo ' ';
 					HTML::make_info(
-						__( 'This will force visitors to go to another URL.', 'autodescription' ),
+						\__( 'This will force visitors to go to another URL.', 'autodescription' ),
 						'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
 					);
 				?>
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $_option_map['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $_option_map['redirect'] ); ?>" value="<?= esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect', $post_type ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $args['options']['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['redirect'] ); ?>" value="<?= \esc_url( Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect', $args['post_type'] ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 endswitch;

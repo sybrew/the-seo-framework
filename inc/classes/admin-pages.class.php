@@ -16,9 +16,6 @@ use \The_SEO_Framework\Helper\{
 	Query,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Builders;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -107,10 +104,6 @@ class Admin_Pages extends Detect {
 			$menu['menu_slug'],
 			$menu['callback']
 		);
-
-		// Enqueue scripts
-		\add_action( "admin_print_scripts-{$this->seo_settings_page_hook}", [ $this, '_init_admin_scripts' ], 11 );
-		\add_action( "load-{$this->seo_settings_page_hook}", [ $this, '_register_seo_settings_meta_boxes' ] );
 	}
 
 	/**
@@ -157,17 +150,6 @@ class Admin_Pages extends Detect {
 	}
 
 	/**
-	 * Registers the meta boxes early, so WordPress recognizes them for user-settings.
-	 *
-	 * @since 4.0.0
-	 * @see $this->_output_settings_wrap()
-	 * @access private
-	 */
-	public function _register_seo_settings_meta_boxes() {
-		Bridges\SeoSettings::_register_seo_settings_meta_boxes();
-	}
-
-	/**
 	 * Outputs the SEO Settings page wrap.
 	 *
 	 * @since 4.0.0
@@ -175,12 +157,14 @@ class Admin_Pages extends Detect {
 	 */
 	public function _output_settings_wrap() {
 
+		Admin\Settings\Plugin::_register_seo_settings_meta_boxes();
+
 		\add_action(
 			"{$this->seo_settings_page_hook}_settings_page_boxes",
-			[ Bridges\SeoSettings::class, '_output_columns' ]
+			[ Admin\Settings\Plugin::class, '_output_columns' ]
 		);
 
-		Bridges\SeoSettings::_output_wrap();
+		Admin\Settings\Plugin::_output_wrap();
 	}
 
 	/**
@@ -204,7 +188,7 @@ class Admin_Pages extends Detect {
 		if ( $show_seobox )
 			\add_action(
 				'add_meta_boxes',
-				[ Bridges\PostSettings::class, '_prepare_meta_box' ]
+				[ Admin\Settings\Post::class, '_prepare_meta_box' ]
 			);
 	}
 
@@ -230,7 +214,7 @@ class Admin_Pages extends Detect {
 
 		\add_action(
 			"{$taxonomy}_edit_form",
-			[ Bridges\TermSettings::class, '_prepare_setting_fields' ],
+			[ Admin\Settings\Term::class, '_prepare_setting_fields' ],
 			$priority,
 			2
 		);
@@ -249,8 +233,8 @@ class Admin_Pages extends Detect {
 		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
 		// if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
 
-		\add_action( 'show_user_profile', [ Bridges\UserSettings::class, '_prepare_setting_fields' ], 0, 1 );
-		\add_action( 'edit_user_profile', [ Bridges\UserSettings::class, '_prepare_setting_fields' ], 0, 1 );
+		\add_action( 'show_user_profile', [ Admin\Settings\User::class, '_prepare_setting_fields' ], 0, 1 );
+		\add_action( 'edit_user_profile', [ Admin\Settings\User::class, '_prepare_setting_fields' ], 0, 1 );
 	}
 
 	/**
@@ -308,7 +292,7 @@ class Admin_Pages extends Detect {
 				and $this->do_dismissible_notice(
 					\__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
 					'warning'
-				);
+				); // var_dump() make persistent, run twice.
 			Data\Plugin::update_site_cache( 'check_seo_plugin_conflicts', 0 );
 		}
 
@@ -399,6 +383,7 @@ class Admin_Pages extends Detect {
 	 * Echos dismissible persistent notice to screen.
 	 *
 	 * @since 4.1.0
+	 * @since 4.3.0 Converted input variables to view_args.
 	 *
 	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
 	 * @param string $key        The unique notice key used to dismiss notices.
@@ -408,8 +393,8 @@ class Admin_Pages extends Detect {
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
 	 * }
 	 */
-	protected function output_dismissible_persistent_notice( $message, $key, $args ) { // phpcs:ignore,VariableAnalysis.CodeAnalysis
-		$this->get_view( 'notice/persistent', get_defined_vars() );
+	protected function output_dismissible_persistent_notice( $message, $key, $args ) {
+		Admin\Template::output_view( 'notice/persistent', $message, $key, $args );
 	}
 
 	/**

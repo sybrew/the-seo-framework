@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query;
 

@@ -8,8 +8,12 @@ namespace The_SEO_Framework\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper,
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
+
+use \The_SEO_Framework\Helper,
 	\The_SEO_Framework\Helper\Query;
 
 /**
@@ -36,7 +40,7 @@ use \The_SEO_Framework\Data,
  * they're with their relatives.
  *
  * @since 4.1.4
- * @since 4.3.0 Moved to \The_SEO_Framework\Admin\AJAX
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin`
  * @access private
  * @final Can't be extended.
  */
@@ -291,13 +295,13 @@ final class AJAX {
 			)
 		);
 
-		$_generator_args = [ 'id' => $post_id ];
+		$generator_args = [ 'id' => $post_id ];
 
 		$data = [];
 
 		foreach ( $get as $g ) switch ( $g ) {
 			case 'seobar':
-				$data[ $g ] = \tsf()->get_generated_seo_bar( $_generator_args );
+				$data[ $g ] = \tsf()->get_generated_seo_bar( $generator_args );
 				break;
 
 			case 'metadescription':
@@ -307,25 +311,25 @@ final class AJAX {
 					case 'metadescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
-									   ?: Meta\Description::get_generated_description( $_generator_args );
+									   ?: Meta\Description::get_generated_description( $generator_args );
 						} else {
-							$data[ $g ] = Meta\Description::get_generated_description( $_generator_args );
+							$data[ $g ] = Meta\Description::get_generated_description( $generator_args );
 						}
 						break;
 					case 'ogdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
-									   ?: Meta\Open_Graph::get_generated_description( $_generator_args );
+									   ?: Meta\Open_Graph::get_generated_description( $generator_args );
 						} else {
-							$data[ $g ] = Meta\Open_Graph::get_generated_description( $_generator_args );
+							$data[ $g ] = Meta\Open_Graph::get_generated_description( $generator_args );
 						}
 						break;
 					case 'twdescription':
 						if ( Query::is_static_frontpage( $post_id ) ) {
 							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
-									   ?: Meta\Twitter::get_generated_description( $_generator_args );
+									   ?: Meta\Twitter::get_generated_description( $generator_args );
 						} else {
-							$data[ $g ] = Meta\Twitter::get_generated_description( $_generator_args );
+							$data[ $g ] = Meta\Twitter::get_generated_description( $generator_args );
 						}
 				}
 
@@ -335,9 +339,9 @@ final class AJAX {
 			case 'imageurl':
 				if ( Query::is_static_frontpage( $post_id ) ) {
 					$data[ $g ] = \sanitize_url( Data\Plugin::get_option( 'homepage_social_image_url' ) )
-							   ?: Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
+							   ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 				} else {
-					$data[ $g ] = Meta\Image::get_first_generated_image_url( $_generator_args, 'social' );
+					$data[ $g ] = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 				}
 		}
 

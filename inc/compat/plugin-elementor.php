@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 \add_filter( 'the_seo_framework_public_post_types', __NAMESPACE__ . '\\_elementor_fix_dumb_post_types' );
 

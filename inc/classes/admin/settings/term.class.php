@@ -1,12 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\TermSettings
+ * @package The_SEO_Framework\Classes\Admin\Settings\Post
  * @subpackage The_SEO_Framework\Admin\Edit\Term
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use \The_SEO_Framework\Admin;
 
 /**
  * The SEO Framework plugin
@@ -29,11 +31,13 @@ namespace The_SEO_Framework\Bridges;
  * Prepares the Term Settings view interface.
  *
  * @since 4.0.0
- * @access protected
+ * @since 4.3.0 1. Renamed from `TermSettings` to `Term`.
+ *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
+ * @access private
  * @internal
  * @final Can't be extended.
  */
-final class TermSettings {
+final class Term {
 
 	/**
 	 * Prepares the setting fields.
@@ -44,7 +48,7 @@ final class TermSettings {
 	 * @param string   $taxonomy Current taxonomy slug.
 	 */
 	public static function _prepare_setting_fields( $term, $taxonomy ) {
-		static::_output_setting_fields( $term, $taxonomy );
+		static::output_setting_fields( $term, $taxonomy );
 	}
 
 	/**
@@ -55,12 +59,12 @@ final class TermSettings {
 	 * @param \WP_Term $term     Current taxonomy term object.
 	 * @param string   $taxonomy Current taxonomy slug.
 	 */
-	public static function _output_setting_fields( $term, $taxonomy ) { // phpcs:ignore,VariableAnalysis
+	private static function output_setting_fields( $term, $taxonomy ) {
 		/**
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
-		\tsf()->get_view( 'edit/seo-settings-tt', get_defined_vars() );
+		Admin\Template::output_view( 'edit/seo-settings-tt', $term, $taxonomy );
 		/**
 		 * @since 2.9.0
 		 */

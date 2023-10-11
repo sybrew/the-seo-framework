@@ -4,10 +4,28 @@
  * @subpackage The_SEO_Framework\Admin\Edit\Inpost
  */
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+namespace The_SEO_Framework;
+
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 ?>
 <div class="tsf-flex-setting tsf-flex" id=tsf-is-homepage-warning>
@@ -16,13 +34,13 @@ defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secr
 			<div class="tsf-flex-setting-input-item tsf-flex">
 				<span>
 					<?php
-					esc_html_e( 'The SEO Settings can overwrite the fields below.', 'autodescription' );
-					if ( current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP ) ) {
+					\esc_html_e( 'The SEO Settings can overwrite the fields below.', 'autodescription' );
+					if ( \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) ) {
 						echo ' &mdash; ';
 						printf(
 							'<a href="%s" target=_blank>%s</a>',
-							esc_url( $this->get_seo_settings_page_url() . '#autodescription-homepage-settings' ),
-							esc_html__( 'Edit Homepage Settings instead.', 'autodescription' )
+							\esc_url( \tsf()->get_seo_settings_page_url() . '#autodescription-homepage-settings' ),
+							\esc_html__( 'Edit Homepage Settings instead.', 'autodescription' )
 						);
 					}
 					?>

@@ -4,19 +4,35 @@
  * @subpackage The_SEO_Framework\Sitemap\XSL
  */
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+namespace The_SEO_Framework;
+
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
-
-use \The_SEO_Framework\Data;
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 $logo = '';
 
 if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 
-	$id   = Data\Plugin::get_option( 'sitemap_logo_id' ) ?: get_theme_mod( 'custom_logo' ) ?: get_option( 'site_icon' );
-	$_src = $id ? wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
+	$id   = Data\Plugin::get_option( 'sitemap_logo_id' ) ?: \get_theme_mod( 'custom_logo' ) ?: \get_option( 'site_icon' );
+	$_src = $id ? \wp_get_attachment_image_src( $id, [ 29, 29 ] ) : []; // Magic number "SITEMAP_LOGO_PX"
 
 	/**
 	 * @since 2.8.0
@@ -26,22 +42,22 @@ if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 	 *    2 => int    The height in px,
 	 * }
 	 */
-	$_src = (array) apply_filters( 'the_seo_framework_sitemap_logo', $_src );
+	$_src = (array) \apply_filters( 'the_seo_framework_sitemap_logo', $_src );
 
 	if ( ! empty( $_src[0] ) ) {
 		$logo = sprintf(
 			'<img src="%s" width="%s" height="%s" />',
-			esc_url( $_src[0] ),
-			esc_attr( $_src[1] ?? '' ),
-			esc_attr( $_src[2] ?? '' )
+			\esc_url( $_src[0] ),
+			\esc_attr( $_src[1] ?? '' ),
+			\esc_attr( $_src[2] ?? '' )
 		);
 	}
 }
 
 printf(
 	'<a href="%s"><h1>%s%s</h1></a>',
-	esc_url( Data\Blog::get_front_page_url(), [ 'https', 'http' ] ),
-	wp_kses(
+	\esc_url( Data\Blog::get_front_page_url(), [ 'https', 'http' ] ),
+	\wp_kses(
 		$logo,
 		[
 			'img' => [
@@ -51,8 +67,10 @@ printf(
 			],
 		]
 	),
-	esc_xml(
-		$this->sanitize_text( Data\Blog::get_public_blog_name() . ' &mdash; ' . __( 'XML Sitemap', 'autodescription' ) )
+	\esc_xml(
+		\tsf()->sanitize_text(
+			Data\Blog::get_public_blog_name() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' )
+		)
 	)
 );
 ?>
@@ -60,9 +78,9 @@ printf(
 <p>
 	<?php
 	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
-	echo $this->convert_markdown(
+	echo \tsf()->convert_markdown(
 		/* translators: URLs are in Markdown. Don't forget to localize the URLs. */
-		esc_xml( __( 'This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ) ),
+		\esc_xml( \__( 'This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ) ),
 		[ 'a' ],
 		[ 'a_internal' => false ]
 	);
@@ -71,9 +89,9 @@ printf(
 <p>
 	<?php
 	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
-	$this->convert_markdown(
+	\tsf()->convert_markdown(
 		/* translators: URLs are in Markdown. Don't localize this URL. */
-		esc_xml( __( 'You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/).', 'autodescription' ) ),
+		\esc_xml( \__( 'You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/).', 'autodescription' ) ),
 		[ 'a' ],
 		[ 'a_internal' => false ]
 	);

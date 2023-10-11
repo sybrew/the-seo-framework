@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Builders;
@@ -16,7 +16,7 @@ use \The_SEO_Framework\Helper\Query,
  *
  * @since 2.3.5
  */
-\add_filter( 'bbp_title', [ $this, 'get_document_title' ], 99, 3 );
+\add_filter( 'bbp_title', [ \tsf(), 'get_document_title' ], 99, 3 );
 
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_title', 10, 2 );
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );

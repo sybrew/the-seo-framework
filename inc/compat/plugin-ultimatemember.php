@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 // At 9999 the user query should be registered (um\core\Rewrite::locate_user_profile). So, we use 9999+1 = 100000.
 \add_action( 'template_redirect', __NAMESPACE__ . '\\_um_reinstate_title_support', 100000 );

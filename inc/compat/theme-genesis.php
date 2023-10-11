@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \tsf()->_verify_include_secret( $_secret ) or die;
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 \add_filter( 'genesis_detect_seo_plugins', __NAMESPACE__ . '\\_disable_genesis_seo', 10, 1 );
 \add_filter( 'the_seo_framework_term_meta_defaults', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );

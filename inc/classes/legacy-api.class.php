@@ -231,4 +231,16 @@ class Legacy_API extends Core {
 	public static function get_image_details( $args = null, $single = true, $context = 'social' ) {
 		return static::image()->get_image_details( $args, $single, $context );
 	}
+
+	/**
+	 * Loads all admin scripts.
+	 *
+	 * May load more depending on the page requested.
+	 * `tsf` and `tsf-tt` will always be available.
+	 *
+	 * @since 4.3.0
+	 */
+	public static function load_admin_scripts() {
+		Admin\Script\Registry::register_scripts_and_hooks();
+	}
 }

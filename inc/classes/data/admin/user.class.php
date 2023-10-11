@@ -42,14 +42,15 @@ class User {
 	 * @hook edit_user_profile_update 10
 	 * @since 4.1.4
 	 * @since 4.2.0 Now repopulates not-posted user metadata.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\User`.
+	 * @since 4.3.0 1. Now tests if our POST data is set at all before acting.
+	 *              2. Moved to `\The_SEO_Framework\Data\Admin\User`.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.
 	 */
 	public static function _update_user_meta( $user_id ) {
 
-		if ( empty( $_POST ) ) return;
+		if ( empty( $_POST['tsf-user-meta'] ) ) return;
 
 		// Redundant. Before hooks fire, this is already checked.
 		\check_admin_referer( "update-user_{$user_id}" );

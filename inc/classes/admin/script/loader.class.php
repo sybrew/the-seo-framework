@@ -8,14 +8,17 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\has_run;
+
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+	Meta,
+};
 use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomies,
 };
-
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta,
-	\The_SEO_Framework\Builders;
 
 /**
  * The SEO Framework plugin
@@ -42,33 +45,23 @@ use \The_SEO_Framework\Data,
  * - states may and are expected to be changed, like a page title.
  * - params shouldn't change, like the page ID.
  *
- * @since 4.0.0
+ * @since 4.3.0
  * @see \The_SEO_Framework\Admin\Script\Registry
  * @access protected
- * @final Can't be extended.
+ * @final
  */
 final class Loader {
 
 	/**
-	 * Prepares the class and loads constructor.
-	 *
-	 * Use this if the actions need to be registered early, but nothing else of
-	 * this class is needed yet.
-	 *
-	 * @since 4.0.0
-	 * @ignore
-	 * @deprecated
-	 */
-	public static function prepare() {}
-
-	/**
 	 * Initializes scripts based on admin query.
 	 *
-	 * @since 4.0.0
+	 * @since 4.3.0
 	 * @access private
 	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
-	public static function _init() {
+	public static function init() {
+
+		if ( has_run( __METHOD__ ) ) return;
 
 		$scripts = [
 			static::get_tsf_scripts(),
@@ -408,7 +401,7 @@ final class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => \tsf()->get_view_location( 'templates/settings/settings' ),
+					'file' => Admin\Template::get_view_location( 'templates/settings/settings' ),
 				],
 			],
 		];
@@ -791,7 +784,7 @@ final class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => \tsf()->get_view_location( 'templates/inpost/primary-term-selector' ),
+					'file' => Admin\Template::get_view_location( 'templates/inpost/primary-term-selector' ),
 				],
 			],
 		];

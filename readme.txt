@@ -539,10 +539,6 @@ TODO use post_password_required()
 TODO make this 5.0?
 	-> Then shift the design refresh to 6.0, might as well.
 
-TODO rename "get_meta()" in robots to something more coherent, like get_cached_robots_meta_value()
-	-> Also, rename all functions to contain their data type in them, this is then consistent with all other Factory classes.
-		-> generate_meta() would become get_generated_robots_meta()
-
 TODO if we add a new "enable Schema.org output" support button (because it's now always outputting something), we should enable it only if the user has any of the 3 toggles enabled.
 	* Or, for new users, always enabled it.
 
@@ -610,8 +606,14 @@ TODO add trailing commas on all multi-line code (about 100 instances, so it's fi
 TODO get_post_meta* -> get_meta
 	-> also get_term_meta*
 	-> also get_post_type_archive_meta
+		-> get_post_type_archive_meta_item :/
 	-> also get_user_meta*
 		-> get_term_meta_defaults -> "get_default_meta"
+TODO get_post/term/user_meta -> add to legacy api?
+
+TODO rename "get_meta()" in robots to something more coherent, like get_cached_robots_meta_value()
+	-> Also, rename all functions to contain their data type in them, this is then consistent with all other Factory classes.
+		-> generate_meta() would become get_generated_robots_meta()
 
 TODO instead of removing Elementor library from public posts types, force noindex on them?
 	-> Because we already excluded them, they're unlikely to be found by crawlers, though.
@@ -621,13 +623,9 @@ TODO instead of removing Elementor library from public posts types, force noinde
 TODO make multiline deprecation notices over .{120,}
 	_deprecated_function.{100,}
 
-TODO rename get_*_canonical_url() functions to get_generated_\*_permalink()
-	-> The real canonical URL is gathered from the settings, and falls back to the generated URL.
-TODO Also see https://wordpress.org/support/topic/canonicals-in-sitemap/ -- we should use the canonical URLs in the sitemap.
-	-> Will perform a very expensive query for prefered URL schemes...
-
 TODO Remove all "$escape" parameters from the meta generators, and always _sanitize_ where data is generated. Let the dev escape when necessary.
 	-> This saves a jump, and actually improved performance.
+		-> s_excerpt is still a candidate.
 
 TODO make canonical URL placeholder work in _output_column_contents_for_post()
 	-> Also make the Indexing react to the Password/Private states.
@@ -646,6 +644,12 @@ TODO make the Hook class functional, and add it to bootstrap?
 TODO for get_largest_image_src, should we try to maintain the ratio?
 
 TODO add "try it in playground" button/link at the top of the readme.
+
+TODO test `^ [^\*]` (rogue spaces).
+
+TODO remove @final keyword, it's redundant.
+
+TODO can we affect Gutenberg's URL by switching the primary category?
 
 **Detailed log**
 
@@ -865,6 +869,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 	* When `tsf()` or `the_seo_framework()` are called too early (before `plugins_loaded`), they'll return a silencer class.
 	* Twitter cards are no longer validated whether a card type is provided.
 		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
+	* When scripts are enqueued, it is now automatically determined whether late-enqueuing in the footer is necessary.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
@@ -925,7 +930,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 		* Class `The_SEO_Framework\Builders\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Registry` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
 		* Class `The_SEO_Framework\Interpreters\SEOBar` is now deprecated. Use `The_SEO_Framework\Admin\SEOBar\Builder` instead. TODO add a functional EP? e.g. `tsf()->seobar()`
 		* Class `The_SEO_Framework\Builders\Sitemap\Main` is now deprecated. Use `The_SEO_Framework\Sitemap\Optimized\Main` instead.
-			* However, nothing useful is left in this class. TODO add a functional EP? e.g. `tsf()->sitemap()->store()` and `tsf()->sitemap()->registry()`
+			* However, nothing useful is left in this class. TODO add a functional EP? e.g. `tsf()->sitemap()->store()` and `tsf()->sitemap()->registry()`.
 	* **Removed objects:**
 		* Class `The_SEO_Framework\Builders\Images` is now gone without deprecation.
 			* It was a helper class with complex generators. We doubt anyone used this directly.
@@ -939,7 +944,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 				* `get_instance()`. But you should use `tsf()` instead.
 			* **Methods ennobled:** These are now part of the legacy API and will be maintained indefinitely.
 				* `get_option()`
-				* `get_options()`
+				* `get_options()` (new!)
 				* `update_option()`
 				* `get_title()`
 				* `get_open_graph_title()`
@@ -949,6 +954,7 @@ TODO add "try it in playground" button/link at the top of the readme.
 				* `get_twitter_description()`
 				* `get_canonical_url()`
 				* `get_image_details()`
+				* `load_admin_scripts()` (new!)
 			* **Methods changed:**
 				* TODO redo this list; just go by all functions within the object, ought to be easier retroactively...
 				* `query_supports_seo()`
@@ -1407,6 +1413,8 @@ TODO add "try it in playground" button/link at the top of the readme.
 		* `the_seo_framework_breadcrumb_list`, this is used to adjust the Breadcrumbs generation.
 		* `the_seo_framework_primary_term`, this is used to adjust the primary term.
 		* `the_seo_framework_description_excerpt`, this is used to adjust the description excerpt.
+		* `the_seo_framework_register_scripts`, this is used to engage the script loader on a custom TSF page.
+			* This must be filtered before `admin_enqueue_scripts` (e.g., at `load-{$plugin_page}`). If that's not possible, use `tsf()->load_admin_scripts()` instead to enforce loading.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
@@ -1488,6 +1496,8 @@ TODO add "try it in playground" button/link at the top of the readme.
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
 	* **Changed:**
 		* `the_seo_framework_seo_bar`, added the builder's instance as the third parameter.
+		* `the_seo_framework_tab_content`, now uses `'args'` instead of `'params'` for its first parameter's indexes.
+			* I didn't deprecate this because I don't think anyone uses it.
 	* **Deprecated:**
 		* `the_seo_framework_delete_cache_sitemap`, use `the_seo_framework_cleared_sitemap_transients` instead.
 * **Hook notes:**

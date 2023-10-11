@@ -30,6 +30,7 @@ use function \The_SEO_Framework\is_headless;
  * Prepares the List Edit view interface.
  *
  * @since 4.1.4
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Admin`
  * @access protected
  * @internal
  * @final Can't be extended.

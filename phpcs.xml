@@ -24,7 +24,7 @@
 
 	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
 		<properties>
-			<property name="validUndefinedVariableNames" type="string" value="this _secret"/>
+			<property name="validUndefinedVariableRegexp" type="string" value="/secret|view_args/"/>
 		</properties>
 	</rule>
 

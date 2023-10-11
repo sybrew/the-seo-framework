@@ -109,7 +109,7 @@ if ( \in_array( false, $headless, true ) ) {
 	\add_action( 'admin_init', [ \tsf(), '_dismiss_notice' ] );
 
 	// Enqueues admin scripts.
-	\add_action( 'admin_enqueue_scripts', [ \tsf(), '_init_admin_scripts' ], 0, 1 );
+	\add_action( 'admin_enqueue_scripts', [ Admin\Script\Registry::class, '_init' ], 0, 1 );
 }
 
 // Add plugin links to the plugin activation page.

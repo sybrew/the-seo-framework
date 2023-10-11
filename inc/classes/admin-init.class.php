@@ -99,49 +99,6 @@ class Admin_Init extends Init {
 	}
 
 	/**
-	 * Prepares scripts in the admin area.
-	 *
-	 * @since 3.1.0
-	 * @since 4.0.0 Now discerns autoloading between taxonomies and singular types.
-	 * @since 4.1.0 Now invokes autoloading when persistent scripts are enqueued (regardless of validity).
-	 * @since 4.1.2 Now autoenqueues on edit.php and edit-tags.php regardless of SEO Bar output (for quick/bulk-edit support).
-	 * @since 4.1.4 Now considers headlessness.
-	 * @access private
-	 */
-	public function _init_admin_scripts() {
-
-		if (
-			   Query::is_seo_settings_page()
-			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
-			|| Data\Plugin::get_site_cache( 'persistent_notices' )
-			|| (
-				! is_headless( 'meta' ) && (
-					   ( Query::is_archive_admin() && Taxonomies::is_taxonomy_supported() )
-					|| ( Query::is_singular_admin() && Post_Types::is_post_type_supported() )
-				)
-			)
-		) {
-			$this->init_admin_scripts();
-		}
-	}
-
-	/**
-	 * Registers admin scripts and styles.
-	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 First parameter is now deprecated.
-	 * @since 4.0.0 First parameter is now removed.
-	 *
-	 * @return void Early if already enqueued.
-	 */
-	public function init_admin_scripts() {
-
-		if ( has_run( __METHOD__ ) ) return;
-
-		Admin\Script\Loader::_init();
-	}
-
-	/**
 	 * Returns the title and description input guideline table, for
 	 * (Google) search, Open Graph, and Twitter.
 	 *
@@ -391,11 +348,12 @@ class Admin_Init extends Init {
 
 		// White screen of death for non-debugging users. Let's make it friendlier.
 		if ( $headers_sent && $target ) {
-			$headers_list = headers_list();
-			$location     = sprintf( 'Location: %s', \wp_sanitize_redirect( $target ) );
-
 			// Test if WordPress's redirect header is sent. Bail if true.
-			if ( \in_array( $location, $headers_list, true ) ) exit;
+			if ( \in_array(
+				'Location: ' . \wp_sanitize_redirect( $target ),
+				headers_list(),
+				true
+			) ) exit;
 
 			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
 			printf(

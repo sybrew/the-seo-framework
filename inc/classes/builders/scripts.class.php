@@ -39,4 +39,19 @@ namespace The_SEO_Framework\Builders;
  * @deprecated
  * @ignore
  */
-class_alias( 'The_SEO_Framework\Admin\Script\Registry', 'The_SEO_Framework\Builders\Scripts', true );
+class Scripts extends \The_SEO_Framework\Admin\Script\Registry {
+	/**
+	 * Prepares the class and loads constructor.
+	 *
+	 * Use this if the actions need to be registered early, but nothing else of
+	 * this class is needed yet.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @ignore
+	 * @deprecated
+	 */
+	public static function prepare() {
+		static::register_scripts_and_hooks();
+	}
+}

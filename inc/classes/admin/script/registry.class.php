@@ -8,9 +8,18 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\umemo;
+use function \The_SEO_Framework\{
+	has_run,
+	umemo,
+	is_headless,
+};
 
-Registry::prepare();
+use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+	Taxonomies,
+};
 
 /**
  * The SEO Framework plugin
@@ -86,24 +95,50 @@ final class Registry {
 	private static $include_secret;
 
 	/**
-	 * @since 4.3.0
-	 * @var bool True when loaded.
-	 */
-	private static $loaded = false;
-
-	/**
-	 * Prepares the class and loads constructor.
-	 *
-	 * Use this if the actions need to be registered early, but nothing else of
-	 * this class is needed yet.
+	 * Registers the script hooks when TSF is deemed to be loaded.
 	 *
 	 * @hook admin_enqueue_scripts 0
-	 * @since 3.1.0
-	 * @internal
+	 * @since 4.3.0
+	 *
+	 * @access private
 	 */
-	public static function prepare() {
+	public static function _init() {
 
-		if ( static::$loaded ) return;
+		$register = (
+			   Query::is_seo_settings_page()
+			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
+			|| Data\Plugin::get_site_cache( 'persistent_notices' )
+			|| (
+				! is_headless( 'meta' ) && (
+					   ( Query::is_archive_admin() && Taxonomies::is_taxonomy_supported() )
+					|| ( Query::is_singular_admin() && Post_Types::is_post_type_supported() )
+				)
+			)
+		);
+
+		/**
+		 * @since 4.3.0
+		 * @param bool $register Whether to register scripts and hooks.
+		 */
+		if ( \apply_filters( 'the_seo_framework_register_scripts', $register ) )
+			static::register_scripts_and_hooks();
+	}
+
+	/**
+	 * Registers all scripts and necessary hooks.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @access public
+	 */
+	public static function register_scripts_and_hooks() {
+
+		if ( has_run( __METHOD__ ) ) return;
+
+		Loader::init();
+
+		if ( \did_action( 'in_admin_header' ) )
+			static::footer_enqueue();
 
 		// These fail when called in the body.
 		\add_filter( 'admin_body_class', [ static::class, '_add_body_class' ] );
@@ -111,9 +146,32 @@ final class Registry {
 
 		\add_action( 'admin_enqueue_scripts', [ static::class, '_prepare_admin_scripts' ], 1 ); // Magic number: we likely run at priority 0. Add 1.
 		\add_action( 'admin_footer', [ static::class, '_output_templates' ], 999 ); // Magic number: later is less likely to collide?
-
-		static::$loaded = true;
 	}
+
+	/**
+	 * Enqueues all known registered scripts, styles, and templates.
+	 *
+	 * @since 3.1.0
+	 */
+	public static function enqueue() {
+		static::_prepare_admin_scripts();
+		static::_output_templates();
+	}
+
+	/**
+	 * Enqueues all known registers scripts, styles, and templates,
+	 * in the footer, right before WordPress's last script-outputting call.
+	 *
+	 * @since 4.1.2
+	 * @see ABSPATH.wp-admin/admin-footer.php
+	 */
+	public static function footer_enqueue() {
+
+		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
+
+		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
+	}
+
 
 	/**
 	 * Adds admin-body classes.
@@ -170,30 +228,6 @@ final class Registry {
 	 */
 	public static function get_status_of( $id, $type ) {
 		return static::$queue[ $type ][ $id ] ?? 0b0;
-	}
-
-	/**
-	 * Enqueues all known registered scripts, styles, and templates.
-	 *
-	 * @since 3.1.0
-	 */
-	public static function enqueue() {
-		static::_prepare_admin_scripts();
-		static::_output_templates();
-	}
-
-	/**
-	 * Enqueues all known registers scripts, styles, and templates,
-	 * in the footer, right before WordPress's last script-outputting call.
-	 *
-	 * @since 4.1.2
-	 * @see ABSPATH.wp-admin/admin-footer.php
-	 */
-	public static function footer_enqueue() {
-
-		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
-
-		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}
 
 	/**

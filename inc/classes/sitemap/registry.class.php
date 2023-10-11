@@ -13,10 +13,13 @@ use function \The_SEO_Framework\{
 	has_run,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper,
-	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+	Meta,
+};
+use \The_SEO_Framework\Helper,
+	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -346,7 +349,7 @@ class Registry {
 		}
 
 		// Fetch sitemap content and add trailing line. Already escaped internally.
-		\tsf()->get_view( 'sitemap/xml-sitemap', compact( 'sitemap_id' ) );
+		Admin\Template::output_view( 'sitemap/xml-sitemap', $sitemap_id );
 		echo "\n";
 
 		// We're done now.
@@ -374,9 +377,9 @@ class Registry {
 			header( 'Cache-Control: max-age=1800', true );
 		}
 
-		Optimized\XSL::hook();
+		Optimized\XSL::register_hooks();
 
-		\tsf()->get_view( 'sitemap/xsl-stylesheet' );
+		Admin\Template::output_view( 'sitemap/xsl-stylesheet' );
 		exit;
 	}
 

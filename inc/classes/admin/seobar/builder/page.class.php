@@ -209,11 +209,11 @@ final class Page extends Main {
 			]
 		);
 
-		$_generator_args = [ 'id' => static::$query['id'] ];
+		$generator_args = [ 'id' => static::$query['id'] ];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$title_part = Meta\Title::get_bare_custom_title( $_generator_args );
+		$title_part = Meta\Title::get_bare_custom_title( $generator_args );
 
 		if ( \strlen( $title_part ) ) {
 			$item = $cache['defaults']['custom'];
@@ -243,7 +243,7 @@ final class Page extends Main {
 				$item['assess']['base'] = \__( "It's built using the site title.", 'autodescription' );
 			}
 
-			$title_part = Meta\Title::get_bare_generated_title( $_generator_args );
+			$title_part = Meta\Title::get_bare_generated_title( $generator_args );
 		}
 
 		if ( ! $title_part ) {
@@ -265,16 +265,16 @@ final class Page extends Main {
 		$title = $title_part;
 
 		// Don't use cache, as this can be filtered.
-		if ( Meta\Title\Conditions::use_title_protection_status( $_generator_args ) ) {
+		if ( Meta\Title\Conditions::use_title_protection_status( $generator_args ) ) {
 			$_title_before = $title;
-			\tsf()->merge_title_protection( $title, $_generator_args );
+			\tsf()->merge_title_protection( $title, $generator_args );
 			if ( $title !== $_title_before )
 				$item['assess']['protected'] = $cache['assess']['protected'];
 		}
 
-		if ( Meta\Title\Conditions::use_title_branding( $_generator_args ) ) {
+		if ( Meta\Title\Conditions::use_title_branding( $generator_args ) ) {
 			$_title_before = $title;
-			$title         = Meta\Title::add_branding( $title, $_generator_args );
+			$title         = Meta\Title::add_branding( $title, $generator_args );
 
 			// Absence assertion is done after this.
 			if ( $title === $_title_before ) {
@@ -428,11 +428,11 @@ final class Page extends Main {
 			]
 		);
 
-		$_generator_args = [ 'id' => static::$query['id'] ];
+		$generator_args = [ 'id' => static::$query['id'] ];
 
 		// TODO instead of getting values from the options API, why don't we store the parameters and allow them to be modified?
 		// This way, we can implement real-time live-edit AJAX SEO bar items...
-		$desc = Meta\Description::get_custom_description( $_generator_args );
+		$desc = Meta\Description::get_custom_description( $generator_args );
 
 		if ( \strlen( $desc ) ) {
 			$item = $cache['defaults']['custom'];
@@ -454,7 +454,7 @@ final class Page extends Main {
 				// Further assessments must be made later. Halt assertion here to prevent confusion.
 				return $item;
 			}
-		} elseif ( ! Meta\Description::may_generate( $_generator_args ) ) {
+		} elseif ( ! Meta\Description::may_generate( $generator_args ) ) {
 			$item = $cache['defaults']['emptynoauto'];
 
 			// No description is found. There's no need to continue parsing.
@@ -462,7 +462,7 @@ final class Page extends Main {
 		} else {
 			$item = $cache['defaults']['generated'];
 
-			$desc = Meta\Description::get_generated_description( $_generator_args );
+			$desc = Meta\Description::get_generated_description( $generator_args );
 
 			if ( ! \strlen( $desc ) ) {
 				$item['reason'] = $cache['reason']['empty'];

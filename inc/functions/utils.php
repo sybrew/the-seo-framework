@@ -62,7 +62,7 @@ function normalize_generation_args( &$args ) {
  * @link <https://3v4l.org/XBSFa>, test it here.
  *
  * @since 4.2.7
- * @since 4.3.0 Moved to \Utils\ArrayProcessor and is now public.
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Utils` and is now public.
  *
  * @param array $array The array to flatten. If input is not an array, it'll be casted.
  * @return array The flattened array.

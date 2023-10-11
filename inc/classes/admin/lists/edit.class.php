@@ -7,9 +7,12 @@ namespace The_SEO_Framework\Admin\Lists;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\Interpreters\HTML;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+	Meta,
+};
 use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomies,
@@ -129,7 +132,7 @@ final class Edit extends Table {
 		if ( $taxonomy ) {
 			// Not yet.
 		} else {
-			\tsf()->get_view( 'list/bulk-post', get_defined_vars() );
+			Admin\Template::output_view( 'list/bulk-post', $post_type, $taxonomy );
 		}
 	}
 
@@ -148,9 +151,9 @@ final class Edit extends Table {
 		if ( $this->column_name !== $column_name ) return;
 
 		if ( $taxonomy ) {
-			\tsf()->get_view( 'list/quick-term', get_defined_vars() );
+			Admin\Template::output_view( 'list/quick-term', $post_type, $taxonomy );
 		} else {
-			\tsf()->get_view( 'list/quick-post', get_defined_vars() );
+			Admin\Template::output_view( 'list/quick-post', $post_type, $taxonomy );
 		}
 	}
 
@@ -171,10 +174,10 @@ final class Edit extends Table {
 			|| ! \current_user_can( 'edit_post', $post_id )
 		) return;
 
-		$_generator_args = [ 'id' => $post_id ];
+		$generator_args = [ 'id' => $post_id ];
 
 		$r_defaults = Meta\Robots::generate_meta(
-			$_generator_args,
+			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
@@ -192,7 +195,7 @@ final class Edit extends Table {
 			'canonical'   => [
 				'value' => $meta['_genesis_canonical_uri'],
 				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => Meta\URI::get_generated_url( $_generator_args ),
+				// 'placeholder' => Meta\URI::get_generated_url( $generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['_genesis_noindex'],
@@ -229,9 +232,9 @@ final class Edit extends Table {
 		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 *    }
 		 * }
-		 * @param array $_generator_args The query data. Contains 'id' or 'taxonomy'.
+		 * @param array $generator_args The query data. Contains 'id' or 'taxonomy'.
 		 */
-		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $_generator_args ] );
+		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $generator_args ] );
 
 		printf(
 			// '<span class=hidden id=%s data-le="%s"></span>',
@@ -241,12 +244,12 @@ final class Edit extends Table {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		if ( Query::is_static_frontpage( $_generator_args['id'] ) ) {
+		if ( Query::is_static_frontpage( $generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
-								 ? Meta\Title::get_custom_title( $_generator_args )
-								 : Meta\Title::get_bare_generated_title( $_generator_args );
+								 ? Meta\Title::get_custom_title( $generator_args )
+								 : Meta\Title::get_bare_generated_title( $generator_args );
 			$addition            = Meta\Title::get_addition_for_front_page();
 			$seplocation         = Meta\Title::get_addition_location_for_front_page();
 			$is_title_ref_locked = $_has_home_title;
@@ -254,26 +257,26 @@ final class Edit extends Table {
 			// When the homepage description is set, we can safely get the custom field.
 			$_has_home_desc      = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
-								 ? Meta\Description::get_custom_description( $_generator_args )
-								 : Meta\Description::get_generated_description( $_generator_args );
+								 ? Meta\Description::get_custom_description( $generator_args )
+								 : Meta\Description::get_generated_description( $generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
 		} else {
-			$default_title       = Meta\Title::get_bare_generated_title( $_generator_args );
+			$default_title       = Meta\Title::get_bare_generated_title( $generator_args );
 			$addition            = Meta\Title::get_addition();
 			$seplocation         = Meta\Title::get_addition_location();
 			$is_title_ref_locked = false;
 
-			$default_description = Meta\Description::get_generated_description( $_generator_args );
+			$default_description = Meta\Description::get_generated_description( $generator_args );
 			$is_desc_ref_locked  = false;
 		}
 
 		$post_data  = [
-			'isFront' => Query::is_static_frontpage( $_generator_args['id'] ),
+			'isFront' => Query::is_static_frontpage( $generator_args['id'] ),
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => \tsf()->escape_title( $default_title ),
-			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
+			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $generator_args ),
 			'additionValue'     => \tsf()->escape_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
@@ -329,13 +332,13 @@ final class Edit extends Table {
 		if ( $this->column_name !== $column_name )          return $string;
 		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;
 
-		$_generator_args = [
+		$generator_args = [
 			'id'  => $term_id,
 			'tax' => $this->taxonomy,
 		];
 
 		$r_defaults = Meta\Robots::generate_meta(
-			$_generator_args,
+			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
@@ -353,7 +356,7 @@ final class Edit extends Table {
 			'canonical'   => [
 				'value' => $meta['canonical'],
 				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => Meta\URI::get_generated_url( $_generator_args ),
+				// 'placeholder' => Meta\URI::get_generated_url( $generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['noindex'],
@@ -390,9 +393,9 @@ final class Edit extends Table {
 		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 *    }
 		 * }
-		 * @param array $_generator_args The query data. Contains 'id' and 'tax'.
+		 * @param array $generator_args The query data. Contains 'id' and 'tax'.
 		 */
-		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $_generator_args ] );
+		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $generator_args ] );
 
 		$container = '';
 
@@ -403,25 +406,25 @@ final class Edit extends Table {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $_generator_args['id'], $_generator_args['tax'] ) )
+		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $generator_args['id'], $generator_args['tax'] ) )
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				Taxonomies::get_taxonomy_label( $_generator_args['tax'] )
+				Taxonomies::get_taxonomy_label( $generator_args['tax'] )
 			)
 			: '';
 
 		$title_data = [
 			'refTitleLocked'    => false,
-			'defaultTitle'      => \tsf()->escape_title( Meta\Title::get_bare_generated_title( $_generator_args ) ),
-			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $_generator_args ),
+			'defaultTitle'      => \tsf()->escape_title( Meta\Title::get_bare_generated_title( $generator_args ) ),
+			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $generator_args ),
 			'additionValue'     => \tsf()->escape_title( Meta\Title::get_addition() ),
 			'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];
 		$desc_data  = [
 			'refDescriptionLocked' => false,
-			'defaultDescription'   => Meta\Description::get_generated_description( $_generator_args ),
+			'defaultDescription'   => Meta\Description::get_generated_description( $generator_args ),
 		];
 
 		$container .= sprintf(

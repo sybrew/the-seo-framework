@@ -37,4 +37,17 @@ namespace The_SEO_Framework\Bridges;
  * @access protected
  * @final Can't be extended.
  */
-class_alias( 'The_SEO_Framework\Admin\Script\Loader', 'The_SEO_Framework\Bridges\Scripts', true );
+class Scripts extends \The_SEO_Framework\Admin\Script\Loader {
+	/**
+	 * Prepares the class and loads constructor.
+	 *
+	 * Use this if the actions need to be registered early, but nothing else of
+	 * this class is needed yet.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @ignore
+	 * @deprecated
+	 */
+	public static function prepare() {}
+}

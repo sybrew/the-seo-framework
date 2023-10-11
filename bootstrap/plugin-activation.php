@@ -7,6 +7,8 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -24,13 +26,9 @@ namespace The_SEO_Framework\Bootstrap;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$tsf = \tsf();
+\tsf()->reset_check_plugin_conflicts();
 
-if ( ! $tsf->loaded ) return;
-
-$tsf->reset_check_plugin_conflicts();
-
-turn_on_autoloading: {
+turn_on_autoloading: if ( ! is_headless( 'settings' ) ) {
 	// Turns on auto loading for The SEO Framework's main options.
 	$options = \The_SEO_Framework\Data\Plugin::get_options();
 	$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;

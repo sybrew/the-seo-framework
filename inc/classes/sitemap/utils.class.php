@@ -94,13 +94,13 @@ class Utils {
 		$included = ! isset( $excluded[ $post_id ] );
 
 		while ( $included ) {
-			$_generator_args = [ 'id' => $post_id ];
+			$generator_args = [ 'id' => $post_id ];
 
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
 			$included = 'noindex'
 				!== (
 					Meta\Robots::generate_meta(
-						$_generator_args,
+						$generator_args,
 						[ 'noindex' ],
 						ROBOTS_IGNORE_PROTECTION
 					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
@@ -109,7 +109,7 @@ class Utils {
 			if ( ! $included ) break;
 
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
-			$included = ! Meta\URI::get_redirect_url( $_generator_args );
+			$included = ! Meta\URI::get_redirect_url( $generator_args );
 			break;
 		}
 
@@ -145,7 +145,7 @@ class Utils {
 		// Yes, 90% of this code code isn't DRY. However, terms !== posts. terms == posts, though :).
 		// Really: <https://core.trac.wordpress.org/ticket/50568>
 		while ( $included ) {
-			$_generator_args = [
+			$generator_args = [
 				'id'  => $term_id,
 				'tax' => $taxonomy,
 			];
@@ -154,7 +154,7 @@ class Utils {
 			$included = 'noindex'
 				!== (
 					Meta\Robots::generate_meta(
-						$_generator_args,
+						$generator_args,
 						[ 'noindex' ],
 						ROBOTS_IGNORE_PROTECTION
 					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
@@ -163,7 +163,7 @@ class Utils {
 			if ( ! $included ) break;
 
 			// This is less likely than a "noindex," even though it's faster to process, we put it later.
-			$included = ! Meta\URI::get_redirect_url( $_generator_args );
+			$included = ! Meta\URI::get_redirect_url( $generator_args );
 			break;
 		}
 

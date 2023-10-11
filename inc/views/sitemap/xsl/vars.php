@@ -4,52 +4,70 @@
  * @subpackage The_SEO_Framework\Sitemap\XSL
  */
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+namespace The_SEO_Framework;
+
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 // Styles generic.
 printf(
 	'<xsl:variable name="tableMinWidth" select="\'%s\'"/>',
-	\The_SEO_Framework\Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550'
+	Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550'
 );
 
-$colors = \The_SEO_Framework\Sitemap\Utils::get_sitemap_colors();
+$colors = Sitemap\Utils::get_sitemap_colors();
 
 // phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
 printf(
 	'<xsl:variable name="colorMain" select="\'%s\'"/>',
-	'#' . $this->s_color_hex(
+	'#' . \tsf()->s_color_hex(
 		/**
 		 * @since 2.8.0
 		 * @since 3.1.0 It now filters the mail color, instead of accent.
 		 * @param string $colorMain A hexadecimal color.
 		 */
-		apply_filters( 'the_seo_framework_sitemap_color_main', $colors['main'] )
+		\apply_filters( 'the_seo_framework_sitemap_color_main', $colors['main'] )
 	)
 );
 printf(
 	'<xsl:variable name="colorAccent" select="\'%s\'"/>',
-	'#' . $this->s_color_hex(
+	'#' . \tsf()->s_color_hex(
 		/**
 		 * @since 2.8.0
 		 * @since 3.1.0 It now filters the accent color, instead of main.
 		 * @param string $colorAccent A hexadecimal color.
 		 */
-		apply_filters( 'the_seo_framework_sitemap_color_accent', $colors['accent'] )
+		\apply_filters( 'the_seo_framework_sitemap_color_accent', $colors['accent'] )
 	)
 );
 printf(
 	'<xsl:variable name="relativeFontColor" select="\'%s\'"/>',
-	'#' . $this->s_color_hex(
+	'#' . \tsf()->s_color_hex(
 		/**
 		 * @since 2.8.0
 		 * @param string $relativeFontColor A hexadecimal color.
 		 */
-		apply_filters(
+		\apply_filters(
 			'the_seo_framework_sitemap_relative_font_color',
-			$this->get_relative_fontcolor( $colors['main'] )
+			\tsf()->get_relative_fontcolor( $colors['main'] )
 		)
 	)
 );

@@ -1198,7 +1198,7 @@ class Sanitize extends Admin_Pages {
 	 * @param bool   $escape           Whether to escape the excerpt.
 	 * @return string The escaped Excerpt.
 	 */
-	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) { // remove $escape.
+	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) { // var_dump() remove $escape.
 
 		// No need to parse an empty excerpt.
 		if ( empty( $excerpt ) ) return '';
@@ -2027,7 +2027,7 @@ class Sanitize extends Admin_Pages {
 	 * Sanitizes sitemap's min/max post value.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Also sanitizes the default fallback value now.
+	 * @since 4.3.0 Now also sanitizes the default fallback value.
 	 *
 	 * @param int $limit Integer with potentially unwanted values.
 	 * @return int A limited integer 1<=R<=50000.

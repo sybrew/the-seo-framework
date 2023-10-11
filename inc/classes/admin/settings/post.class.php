@@ -1,17 +1,21 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Bridges\PostSettings
+ * @package The_SEO_Framework\Classes\Admin\Settings\Post
  * @subpackage The_SEO_Framework\Admin\Edit\Post
  */
 
-namespace The_SEO_Framework\Bridges;
+namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function \The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+};
+
+use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -36,11 +40,13 @@ use \The_SEO_Framework\Helper\Query,
  * TODO carry over what we implemented in TSFEM, and make that the standard.
  *
  * @since 4.0.0
- * @access protected
+ * @since 4.3.0 1. Renamed from `PostSettings` to `Post`.
+ *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
+ * @access private
  * @internal
  * @final Can't be extended.
  */
-final class PostSettings {
+final class Post {
 
 	/**
 	 * Registers the meta box for the Post edit screens.
@@ -93,10 +99,11 @@ final class PostSettings {
 	 * Outputs Tabs and settings content.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Removed third parameter: $use_tabs.
 	 * @access private
 	 *
-	 * @param string $id      The nav-tab ID.
-	 * @param array  $tabs    The tab content {
+	 * @param string $id   The nav-tab ID.
+	 * @param array  $tabs The tab content {
 	 *    string tab ID => array : {
 	 *       string   name     : Tab name.
 	 *       callable callback : Output function.
@@ -104,14 +111,13 @@ final class PostSettings {
 	 *       mixed    args     : Optional callback function args.
 	 *    }
 	 * }
-	 * @param bool   $use_tabs Whether to output tabs, only works when $tabs count is greater than 1.
 	 */
-	public static function _flex_nav_tab_wrapper( $id, $tabs = [], $use_tabs = true ) {
+	public static function _flex_nav_tab_wrapper( $id, $tabs = [] ) {
 
 		$vars = get_defined_vars();
 
-		\tsf()->get_view( 'edit/wrap-nav', $vars );
-		\tsf()->get_view( 'edit/wrap-content', $vars );
+		Admin\Template::output_view( 'edit/wrap-nav', $id, $tabs );
+		Admin\Template::output_view( 'edit/wrap-content', $id, $tabs );
 	}
 
 	/**
@@ -129,9 +135,9 @@ final class PostSettings {
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 
 		\tsf()->is_gutenberg_page()
-			and \tsf()->get_view( 'edit/seo-settings-singular-gutenberg-data' );
+			and Admin\Template::output_view( 'edit/seo-settings-singular-gutenberg-data' );
 
-		\tsf()->get_view( 'edit/seo-settings-singular' );
+		Admin\Template::output_view( 'edit/seo-settings-singular', 'main' );
 
 		/**
 		 * @since 2.9.0
@@ -162,7 +168,7 @@ final class PostSettings {
 	 * @since 4.3.0
 	 */
 	public static function _homepage_warning() {
-		\tsf()->get_view( 'edit/seo-settings-singular-homepage-warning' );
+		Admin\Template::output_view( 'edit/seo-settings-singular-homepage-warning' );
 	}
 
 	/**
@@ -175,7 +181,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
-		\tsf()->get_view( 'edit/seo-settings-singular', [], 'general_tab' );
+		Admin\Template::output_view( 'edit/seo-settings-singular', 'general' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -192,7 +198,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
-		\tsf()->get_view( 'edit/seo-settings-singular', [], 'visibility_tab' );
+		Admin\Template::output_view( 'edit/seo-settings-singular', 'visibility' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -209,7 +215,7 @@ final class PostSettings {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
-		\tsf()->get_view( 'edit/seo-settings-singular', [], 'social_tab' );
+		Admin\Template::output_view( 'edit/seo-settings-singular', 'social' );
 		/**
 		 * @since 2.9.0
 		 */

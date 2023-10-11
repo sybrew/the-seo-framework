@@ -4,74 +4,89 @@
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+namespace The_SEO_Framework;
 
-use \The_SEO_Framework\Bridges\SeoSettings,
-	\The_SEO_Framework\Interpreters\HTML,
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
+
+use \The_SEO_Framework\Interpreters\HTML,
 	\The_SEO_Framework\Interpreters\Form,
 	\The_SEO_Framework\Interpreters\Settings_Input as Input;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2016 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-switch ( $this->get_view_instance( 'schema', $instance ) ) :
-	case 'schema_main':
-		HTML::header_title( __( 'Schema.org Output Settings', 'autodescription' ) );
+// See _title_metabox et al.
+[ $instance ] = $view_args;
 
-		if ( $this->has_json_ld_plugin() )
-			HTML::attention_description( __( 'Another Schema.org plugin has been detected. These markup settings might conflict.', 'autodescription' ) );
+switch ( $instance ) :
+	case 'main':
+		HTML::header_title( \__( 'Schema.org Output Settings', 'autodescription' ) );
 
-		HTML::description( __( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
-		HTML::description( __( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
-		HTML::description( __( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
+		if ( \tsf()->has_json_ld_plugin() )
+			HTML::attention_description( \__( 'Another Schema.org plugin has been detected. These markup settings might conflict.', 'autodescription' ) );
 
-		$_settings_class = SeoSettings::class;
+		HTML::description( \__( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );
+		HTML::description( \__( 'When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications.', 'autodescription' ) );
+		HTML::description( \__( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
 
 		$tabs = [
 			'structure' => [
-				'name'     => __( 'Structure', 'autodescription' ),
-				'callback' => [ $_settings_class, '_schema_metabox_structure_tab' ],
+				'name'     => \__( 'Structure', 'autodescription' ),
+				'callback' => [ Admin\Settings\Plugin::class, '_schema_metabox_structure_tab' ],
 				'dashicon' => 'admin-multisite',
 			],
 			'presence'  => [
-				'name'     => __( 'Presence', 'autodescription' ),
-				'callback' => [ $_settings_class, '_schema_metabox_presence_tab' ],
+				'name'     => \__( 'Presence', 'autodescription' ),
+				'callback' => [ Admin\Settings\Plugin::class, '_schema_metabox_presence_tab' ],
 				'dashicon' => 'networking',
 			],
 		];
 
-		SeoSettings::_nav_tab_wrapper(
+		Admin\Settings\Plugin::_nav_tab_wrapper(
 			'schema',
 			/**
 			 * @since 2.8.0
 			 * @param array $defaults The default tabs.
 			 */
-			(array) apply_filters( 'the_seo_framework_schema_settings_tabs', $tabs )
+			(array) \apply_filters( 'the_seo_framework_schema_settings_tabs', $tabs )
 		);
 		break;
 
-	case 'schema_structure_tab':
-		HTML::header_title( __( 'Site Structure Options', 'autodescription' ) );
-		HTML::description( __( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
-		HTML::description( __( "For example, search engines display your pages' URLs when listed in the search results. These options allow you to enhance those URLs output.", 'autodescription' ) );
+	case 'structure':
+		HTML::header_title( \__( 'Site Structure Options', 'autodescription' ) );
+		HTML::description( \__( 'The site structure Schema.org output allows search engines to gain knowledge on how your website is built.', 'autodescription' ) );
+		HTML::description( \__( "For example, search engines display your pages' URLs when listed in the search results. These options allow you to enhance those URLs output.", 'autodescription' ) );
 		?>
 		<hr>
 		<?php
-		HTML::header_title( __( 'Breadcrumbs', 'autodescription' ) );
-		HTML::description( __( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the search results when available.", 'autodescription' ) );
+		HTML::header_title( \__( 'Breadcrumbs', 'autodescription' ) );
+		HTML::description( \__( "Breadcrumb trails indicate page positions in the site's hierarchy. Using the following option will show the hierarchy within the search results when available.", 'autodescription' ) );
 
 		$info = HTML::make_info(
-			__( 'Learn how this data is used.', 'autodescription' ),
+			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/structured-data/breadcrumb',
 			false
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'ld_json_breadcrumbs',
-				'label'  => esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . " $info",
+				'label'  => \esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -79,38 +94,38 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		?>
 		<hr>
-		<h4><?= esc_html( _x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ) ?></h4>
+		<h4><?= \esc_html( \_x( 'Sitelinks Searchbox', 'Product name', 'autodescription' ) ) ?></h4>
 		<?php
-		HTML::description( __( 'When Search users search for your brand name, the following option allows them to search through this website directly from the search results.', 'autodescription' ) );
+		HTML::description( \__( 'When Search users search for your brand name, the following option allows them to search through this website directly from the search results.', 'autodescription' ) );
 
 		$info = HTML::make_info(
-			__( 'Learn how this data is used.', 'autodescription' ),
+			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/structured-data/sitelinks-searchbox',
 			false
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'ld_json_searchbox',
-				'label'  => esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . " $info",
+				'label'  => \esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
 		);
 		break;
 
-	case 'schema_presence_tab':
-		HTML::header_title( __( 'Authorized Presence Options', 'autodescription' ) );
-		HTML::description( __( 'The authorized presence Schema.org output helps search engine users find ways to interact with this website.', 'autodescription' ) );
+	case 'presence':
+		HTML::header_title( \__( 'Authorized Presence Options', 'autodescription' ) );
+		HTML::description( \__( 'The authorized presence Schema.org output helps search engine users find ways to interact with this website.', 'autodescription' ) );
 
 		$info = HTML::make_info(
-			__( 'Learn how this data is used.', 'autodescription' ),
+			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/beginner/establish-business-details',
 			false
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'knowledge_output',
-				'label'  => esc_html__( 'Output Authorized Presence?', 'autodescription' ) . " $info",
+				'label'  => \esc_html__( 'Output Authorized Presence?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 			true
@@ -118,16 +133,16 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		?>
 		<hr>
 
-		<?php HTML::header_title( __( 'About this website', 'autodescription' ) ); ?>
+		<?php HTML::header_title( \__( 'About this website', 'autodescription' ) ); ?>
 		<p>
-			<label for="<?php Input::field_id( 'knowledge_type' ); ?>"><?= esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ) ?></label>
+			<label for="<?php Input::field_id( 'knowledge_type' ); ?>"><?= \esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ) ?></label>
 			<select name="<?php Input::field_name( 'knowledge_type' ); ?>" id="<?php Input::field_id( 'knowledge_type' ); ?>">
 				<?php
-				$knowledge_type = (array) apply_filters(
+				$knowledge_type = (array) \apply_filters(
 					'the_seo_framework_knowledge_types',
 					[
-						'organization' => __( 'An Organization', 'autodescription' ),
-						'person'       => __( 'A Person', 'autodescription' ),
+						'organization' => \__( 'An Organization', 'autodescription' ),
+						'person'       => \__( 'A Person', 'autodescription' ),
 					]
 				);
 				$_current       = Data\Plugin::get_option( 'knowledge_type' );
@@ -135,9 +150,9 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 					vprintf(
 						'<option value="%s" %s>%s</option>',
 						[
-							esc_attr( $value ),
-							selected( $_current, esc_attr( $value ), false ),
-							esc_html( $name ),
+							\esc_attr( $value ),
+							\selected( $_current, \esc_attr( $value ), false ),
+							\esc_html( $name ),
 						]
 					);
 				?>
@@ -146,25 +161,25 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'knowledge_name' ); ?>">
-				<strong><?php esc_html_e( 'The organization or personal name', 'autodescription' ); ?></strong>
+				<strong><?php \esc_html_e( 'The organization or personal name', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'knowledge_name' ); ?>" class=large-text id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= esc_attr( Data\Blog::get_public_blog_name() ) ?>" value="<?= esc_attr( Data\Plugin::get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'knowledge_name' ); ?>" class=large-text id="<?php Input::field_id( 'knowledge_name' ); ?>" placeholder="<?= \esc_attr( Data\Blog::get_public_blog_name() ) ?>" value="<?= \esc_attr( Data\Plugin::get_option( 'knowledge_name' ) ) ?>" autocomplete=off />
 		</p>
 		<hr>
 		<?php
-		HTML::header_title( __( 'Website logo', 'autodescription' ) );
-		HTML::description( esc_html__( 'These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere.', 'autodescription' ) );
+		HTML::header_title( \__( 'Website logo', 'autodescription' ) );
+		HTML::description( \esc_html__( 'These options are used when this site represents an organization. When no logo is outputted, search engine will look elsewhere.', 'autodescription' ) );
 		$info = HTML::make_info(
-			__( 'Learn how this data is used.', 'autodescription' ),
+			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/structured-data/logo',
 			false
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'knowledge_logo',
-				'label'  => esc_html__( 'Enable logo?', 'autodescription' ) . " $info",
+				'label'  => \esc_html__( 'Enable logo?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
 		true );
@@ -173,13 +188,13 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		?>
 		<p>
 			<label for=knowledge_logo-url>
-				<strong><?php esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
+				<strong><?php \esc_html_e( 'Logo URL', 'autodescription' ); ?></strong>
 			</label>
 		</p>
-		<p class="hide-if-tsf-js attention"><?php esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
+		<p class="hide-if-tsf-js attention"><?php \esc_html_e( 'Setting a logo requires JavaScript.', 'autodescription' ); ?></p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= esc_url( $logo_placeholder ) ?>" value="<?= esc_url( Data\Plugin::get_option( 'knowledge_logo_url' ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id=knowledge_logo-id value="<?= absint( Data\Plugin::get_option( 'knowledge_logo_id' ) ) ?>" />
+			<input class=large-text type=url name="<?php Input::field_name( 'knowledge_logo_url' ); ?>" id=knowledge_logo-url placeholder="<?= \esc_url( $logo_placeholder ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'knowledge_logo_url' ) ) ?>" />
+			<input type=hidden name="<?php Input::field_name( 'knowledge_logo_id' ); ?>" id=knowledge_logo-id value="<?= \absint( Data\Plugin::get_option( 'knowledge_logo_id' ) ) ?>" />
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
@@ -196,14 +211,14 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				],
 				'i18n' => [
 					'button_title' => '',
-					'button_text'  => __( 'Select Logo', 'autodescription' ),
+					'button_text'  => \__( 'Select Logo', 'autodescription' ),
 				],
 			] );
 			?>
 		</p>
 		<?php
 
-		$connectedi18n = _x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
+		$connectedi18n = \_x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
 		/**
 		 * @todo maybe genericons?
 		 */
@@ -211,35 +226,35 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			'facebook'   => [
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
-				'desc'        => __( 'Facebook Page', 'autodescription' ),
+				'desc'        => \__( 'Facebook Page', 'autodescription' ),
 				'placeholder' => "https://www.facebook.com/$connectedi18n",
 				'examplelink' => 'https://www.facebook.com/me',
 			],
 			'twitter'    => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
-				'desc'        => __( 'Twitter Profile', 'autodescription' ),
+				'desc'        => \__( 'Twitter Profile', 'autodescription' ),
 				'placeholder' => "https://twitter.com/$connectedi18n",
 				'examplelink' => 'https://twitter.com/home', // No example link available.
 			],
 			'instagram'  => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
-				'desc'        => __( 'Instagram Profile', 'autodescription' ),
+				'desc'        => \__( 'Instagram Profile', 'autodescription' ),
 				'placeholder' => "https://instagram.com/$connectedi18n",
 				'examplelink' => 'https://instagram.com/', // No example link available.
 			],
 			'youtube'    => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
-				'desc'        => __( 'Youtube Profile', 'autodescription' ),
+				'desc'        => \__( 'Youtube Profile', 'autodescription' ),
 				'placeholder' => "https://www.youtube.com/channel/$connectedi18n",
 				'examplelink' => 'https://www.youtube.com/user/%2f', // Yes a double slash.
 			],
 			'linkedin'   => [
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
-				'desc'        => __( 'LinkedIn Profile', 'autodescription' ),
+				'desc'        => \__( 'LinkedIn Profile', 'autodescription' ),
 				/**
 				 * TODO switch to /in/ insteadof /company/ when knowledge-type is personal?
 				 * Note that this feature is DEPRECATED. https://developers.google.com/search/docs/data-types/social-profile
@@ -250,21 +265,21 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 			'pinterest'  => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
-				'desc'        => __( 'Pinterest Profile', 'autodescription' ),
+				'desc'        => \__( 'Pinterest Profile', 'autodescription' ),
 				'placeholder' => "https://www.pinterest.com/$connectedi18n/",
 				'examplelink' => 'https://www.pinterest.com/me/',
 			],
 			'soundcloud' => [
 				'option'      => 'knowledge_soundcloud',
 				'dashicon'    => 'genericon-cloud', // I know, it's not the real one. D:
-				'desc'        => __( 'SoundCloud Profile', 'autodescription' ),
+				'desc'        => \__( 'SoundCloud Profile', 'autodescription' ),
 				'placeholder' => "https://soundcloud.com/$connectedi18n",
 				'examplelink' => 'https://soundcloud.com/you',
 			],
 			'tumblr'     => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
-				'desc'        => __( 'Tumblr Blog', 'autodescription' ),
+				'desc'        => \__( 'Tumblr Blog', 'autodescription' ),
 				'placeholder' => "https://www.tumblr.com/blog/$connectedi18n",
 				'examplelink' => 'https://www.tumblr.com/dashboard',  // No example link available.
 			],
@@ -273,20 +288,20 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 		?>
 		<hr>
 		<?php
-		HTML::header_title( __( 'Connected Social Pages', 'autodescription' ) );
-		HTML::description( __( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
-		HTML::description( __( 'Leave the fields empty if the social pages are not publicly accessible.', 'autodescription' ) );
-		HTML::description( __( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
+		HTML::header_title( \__( 'Connected Social Pages', 'autodescription' ) );
+		HTML::description( \__( 'Add links that lead directly to the connected social pages of this website.', 'autodescription' ) );
+		HTML::description( \__( 'Leave the fields empty if the social pages are not publicly accessible.', 'autodescription' ) );
+		HTML::description( \__( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		foreach ( $socialsites as $sc ) {
 			?>
 			<p>
 				<label for="<?php Input::field_id( $sc['option'] ); ?>">
-					<strong><?= esc_html( $sc['desc'] ) ?></strong>
+					<strong><?= \esc_html( $sc['desc'] ) ?></strong>
 					<?php
 					if ( $sc['examplelink'] ) {
 						HTML::make_info(
-							__( 'View your profile.', 'autodescription' ),
+							\__( 'View your profile.', 'autodescription' ),
 							$sc['examplelink']
 						);
 					}
@@ -294,7 +309,7 @@ switch ( $this->get_view_instance( 'schema', $instance ) ) :
 				</label>
 			</p>
 			<p>
-				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= esc_attr( $sc['placeholder'] ) ?>" value="<?= esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off />
+				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= \esc_attr( $sc['placeholder'] ) ?>" value="<?= \esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off />
 			</p>
 			<?php
 		}

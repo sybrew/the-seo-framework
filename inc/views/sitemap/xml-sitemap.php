@@ -4,14 +4,31 @@
  * @subpackage The_SEO_Framework\Sitemap
  */
 
-use \The_SEO_Framework\Sitemap,
-	\The_SEO_Framework\Builders,
-	\The_SEO_Framework\Data;
+namespace The_SEO_Framework;
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and tsf()->_verify_include_secret( $_secret ) or die;
+/**
+ * The SEO Framework plugin
+ * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// See output_base_sitemap et al.
+[ $sitemap_id ] = $view_args;
 
 THE_SEO_FRAMEWORK_DEBUG and $timer_start = hrtime( true );
 
@@ -31,9 +48,9 @@ echo $sitemap_base->generate_sitemap( $sitemap_id );
 Sitemap\Registry::output_sitemap_urlset_close_tag();
 
 if ( $sitemap_base->base_is_regenerated ) {
-	echo "\n<!-- ", esc_html__( 'Sitemap is generated for this view', 'autodescription' ), ' -->';
+	echo "\n<!-- ", \esc_html__( 'Sitemap is generated for this view', 'autodescription' ), ' -->';
 } else {
-	echo "\n<!-- ", esc_html__( 'Sitemap is served from cache', 'autodescription' ), ' -->';
+	echo "\n<!-- ", \esc_html__( 'Sitemap is served from cache', 'autodescription' ), ' -->';
 }
 
 // Destruct class.
@@ -47,5 +64,5 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 	echo "\n<!-- Freed memory prior to generation: ", number_format( Sitemap\Registry::get_freed_memory( true ) / KB_IN_BYTES, 3 ), ' kB -->';
 	echo "\n<!-- Sitemap generation time: ", number_format( ( hrtime( true ) - $timer_start ) / 1e9, 6 ), ' seconds -->';
 	echo "\n<!-- Sitemap caching enabled: ", ( Data\Plugin::get_option( 'cache_sitemap' ) ? 'yes' : 'no' ), ' -->';
-	echo "\n<!-- Sitemap transient key: ", esc_html( Sitemap\Cache::get_sitemap_cache_key( $sitemap_id ) ), ' -->';
+	echo "\n<!-- Sitemap transient key: ", \esc_html( Sitemap\Cache::get_sitemap_cache_key( $sitemap_id ) ), ' -->';
 }
