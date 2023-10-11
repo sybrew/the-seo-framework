@@ -26,7 +26,7 @@ namespace The_SEO_Framework\Helper;
  */
 
 /**
- * Holds a collection of helper methods for Headers.
+ * Holds a collection of helper methods for HTTP Headers.
  *
  * @since 4.3.0
  * @access private

@@ -59,6 +59,7 @@ final class Post {
 	 *                 This because Gutenberg is inconsistent with metabox display and escapes HTML incorrectly.
 	 *              3. Now registers homepage warnings in the primary tabs.
 	 *              4. Now adds postbox class to non-posts as well.
+	 *              5. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
 	 * @access private
 	 */
 	public static function _prepare_meta_box() {
@@ -99,7 +100,8 @@ final class Post {
 	 * Outputs Tabs and settings content.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Removed third parameter: $use_tabs.
+	 * @since 4.3.0 1. Removed third parameter: $use_tabs.
+	 *              2. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
 	 * @access private
 	 *
 	 * @param string $id   The nav-tab ID.
@@ -149,6 +151,7 @@ final class Post {
 	 * Adds a Gutenberg/Block-editor box class.
 	 *
 	 * @since 4.0.5
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
 	 * @access private
 	 *
 	 * @param array $classes The registered postbox classes.
@@ -175,6 +178,7 @@ final class Post {
 	 * Outputs the Post SEO box general tab.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
 	 */
 	public static function _general_tab() {
 		/**
@@ -192,6 +196,7 @@ final class Post {
 	 * Outputs the Post SEO box visibility tab.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
 	 */
 	public static function _visibility_tab() {
 		/**
@@ -209,6 +214,7 @@ final class Post {
 	 * Outputs the Post SEO box social tab.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
 	 */
 	public static function _social_tab() {
 		/**

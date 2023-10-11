@@ -1258,6 +1258,7 @@ TODO can we affect Gutenberg's URL by switching the primary category?
 				* `delete_excluded_ids_cache()`, use `tsf()->query()->exclusion()->clear_excluded_post_ids_cache()` instead.
 				* `get_excluded_ids_from_cache()`, use `tsf()->query()->exclusion()->get_excluded_ids_from_cache()` instead.
 				* `clean_response_header()`, with no alternative available.
+				* `init_admin_scripts()`, use `tsf()->load_admin_scripts()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

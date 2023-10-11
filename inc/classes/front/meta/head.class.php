@@ -197,12 +197,10 @@ final class Head {
 		 * @param string[]   $generator_pools A list of tag pools requested for the current query.
 		 *                                    The tag pool names correspond directly to the classes'.
 		 */
-		$tag_generators = \apply_filters_ref_array(
+		$tag_generators = \apply_filters(
 			'the_seo_framework_meta_generators',
-			[
-				array_merge( ...$generators_queue ),
-				$generator_pools,
-			]
+			array_merge( ...$generators_queue ),
+			$generator_pools,
 		);
 
 		Tags::fill_render_data_from_registered_generators();
@@ -218,12 +216,10 @@ final class Head {
 		 * @param callable[] $tag_generators A list of meta tag generator callbacks.
 		 *                                   The generators may offload work to other generators.
 		 */
-		$tags_render_data = \apply_filters_ref_array(
+		$tags_render_data = \apply_filters( // phpcs:ignore, Generic.Formatting -- bug in PHPCS.
 			'the_seo_framework_meta_render_data',
-			[
-				$tags_render_data = &Tags::tags_render_data(),
-				$tag_generators,
-			]
+			$tags_render_data = &Tags::tags_render_data(),
+			$tag_generators,
 		);
 
 		// Now output everything.

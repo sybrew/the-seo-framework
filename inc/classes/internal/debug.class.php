@@ -143,10 +143,7 @@ final class Debug {
 		\do_action( 'doing_it_wrong_run', $function, $message, $version );
 
 		/**
-		 * Filter whether to trigger an error for _doing_it_wrong() calls.
-		 *
 		 * @since WP Core 3.1.0
-		 *
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
 		if ( \WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
