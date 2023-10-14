@@ -52,21 +52,22 @@ use \The_SEO_Framework\Helper\{
  * @see \WP_Dependencies
  * @see \The_SEO_Framework\Admin\Script\Loader
  * @access private
- * @final Can't be extended.
  */
-final class Registry {
+class Registry {
 
 	/**
 	 * Codes to maintain the internal state of the scripts. This state might not reflect
 	 * the actual load state. See \WP_Dependencies instead.
 	 *
 	 * @since 3.1.0
+	 * @access private
+	 *         There's a PHP bug preventing us from making this private during the deprecation phase.
 	 * @internal
 	 * @var int <bit 01>  REGISTERED
 	 * @var int <bit 10>  LOADED     (rather, enqueued)
 	 */
-	private const REGISTERED = 0b01;
-	private const LOADED     = 0b10;
+	public const REGISTERED = 0b01;
+	public const LOADED     = 0b10;
 
 	/**
 	 * @since 3.1.0

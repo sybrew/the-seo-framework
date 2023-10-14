@@ -6354,9 +6354,9 @@ final class Deprecated {
 	public function has_robots_txt() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->has_robots_txt()', '4.3.0', 'tsf()->robots_txt()->utils()->has_root_robots_txt()' );
+		$tsf->_deprecated_function( 'tsf()->has_robots_txt()', '4.3.0', 'tsf()->robotstxt()->utils()->has_root_robots_txt()' );
 
-		return $tsf->robots_txt()->utils()->has_root_robots_txt();
+		return $tsf->robotstxt()->utils()->has_root_robots_txt();
 	}
 
 	/**
@@ -6373,9 +6373,9 @@ final class Deprecated {
 	public function get_robots_txt_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_robots_txt_url()', '4.3.0', 'tsf()->robots_txt()->utils()->get_robots_txt_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_robots_txt_url()', '4.3.0', 'tsf()->robotstxt()->utils()->get_robots_txt_url()' );
 
-		return $tsf->robots_txt()->utils()->get_robots_txt_url();
+		return $tsf->robotstxt()->utils()->get_robots_txt_url();
 	}
 
 	/**
@@ -6426,9 +6426,9 @@ final class Deprecated {
 	public function robots_txt() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->robots_txt()', '4.3.0', 'tsf()->robots_txt()->get_robots_txt' );
+		$tsf->_deprecated_function( 'tsf()->robots_txt()', '4.3.0', 'tsf()->robotstxt()->get_robots_txt' );
 
-		return $tsf->robots_txt()->get_robots_txt();
+		return $tsf->robotstxt()->get_robots_txt();
 	}
 
 	/**

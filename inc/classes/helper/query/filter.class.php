@@ -52,8 +52,8 @@ final class Filter {
 	 */
 	public static function filter_post_link_category( $term, $terms = null, $post = null ) {
 		return Data\Plugin\Post::get_primary_term(
-			( $post ?? \get_post( Query::get_the_real_ID() ) )->ID,
+			$post->ID ?? Query::get_the_real_ID(),
 			$term->taxonomy,
-		) ?: $term;
+		) ?? $term;
 	}
 }

@@ -18,25 +18,16 @@ namespace The_SEO_Framework;
  * @since 2.8.0
  * @access private
  *
- * @param array $plugins The plugins to detect. Overwritten as this filter will fire the
- *                       detection, regardless of other SEO plugins.
  * @return array
  */
-function _disable_genesis_seo( $plugins ) {
-
-	$plugins = [
-		'classes'   => [
-			'\\The_SEO_Framework\\Load',
-		],
-		'functions' => [
-			'the_seo_framework',
-		],
+function _disable_genesis_seo() {
+	return [
+		'classes'   => [],
+		'functions' => [],
 		'constants' => [
-			'THE_SEO_FRAMEWORK_VERSION',
+			'THE_SEO_FRAMEWORK_PRESENT',
 		],
 	];
-
-	return $plugins;
 }
 
 /**

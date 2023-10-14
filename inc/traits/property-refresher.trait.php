@@ -80,7 +80,7 @@ trait Property_Refresher {
 	 */
 	public static function refresh_static_properties() {
 		foreach ( get_class_vars( __CLASS__ ) as $key => $initial )
-			if ( isset( static::$marked_for_refresh[ $property ], static::${$key} ) )
+			if ( isset( static::$marked_for_refresh[ $key ], static::${$key} ) )
 				static::${$key} = $initial;
 	}
 }

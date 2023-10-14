@@ -693,7 +693,7 @@ class Pool extends Legacy_API {
 	}
 
 	/**
-	 * Returns the Image API class as instantiated object with deprecation capabilities.
+	 * Returns the Robots TXT API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
@@ -701,12 +701,12 @@ class Pool extends Legacy_API {
 	 *
 	 * @return \The_SEO_Framework\RobotsTXT\Main
 	 */
-	public static function robots_txt() {
-		return static::$pool['robots_txt'] ??= new class extends RobotsTXT\Main {
+	public static function robotstxt() {
+		return static::$pool['robotstxt'] ??= new class extends RobotsTXT\Main {
 			use Static_Deprecator;
 
 			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-			private $colloquial_handle     = 'tsf()->robots_txt()';
+			private $colloquial_handle     = 'tsf()->robotstxt()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
@@ -720,7 +720,7 @@ class Pool extends Legacy_API {
 					use Static_Deprecator;
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->robots_txt()->utils()';
+					private $colloquial_handle     = 'tsf()->robotstxt()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing

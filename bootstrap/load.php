@@ -71,6 +71,8 @@ function _load_tsf() {
 		if ( THE_SEO_FRAMEWORK_DEBUG )
 			require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load-debug.php';
 
+		require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-compat.php';
+
 		// Register the required settings capability early.
 		\add_filter(
 			'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
@@ -106,8 +108,6 @@ function _load_tsf() {
  * @access private
  */
 function _init_tsf() {
-
-	require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-compat.php';
 
 	/**
 	 * @since 2.8.0

@@ -121,7 +121,7 @@ class Post {
 			// Filter the post meta items based on defaults' keys.
 			// Fix: <https://github.com/sybrew/the-seo-framework/issues/185>
 			$meta = array_intersect_key(
-				\get_post_meta( $post_id ), // Gets all post meta. This is a discrepancy with get_term_meta()!
+				\get_post_meta( $post_id ) ?: [], // Gets all post meta. This is a discrepancy with get_term_meta()!
 				$defaults,
 			);
 
@@ -312,7 +312,7 @@ class Post {
 		// Although 'get_the_terms()' is an expensive function, it memoizes, and
 		// is always called by WP before we fetch a primary term. So, 0 overhead here.
 		$terms        = \get_the_terms( $post_id, $taxonomy );
-		$primary_term = false;
+		$primary_term = null;
 
 		if ( $terms && \is_array( $terms ) ) {
 			if ( $primary_id ) {
@@ -326,7 +326,7 @@ class Post {
 			} else {
 				$term_ids = array_column( $terms, 'term_id' );
 				asort( $term_ids );
-				$primary_term = $terms[ array_key_first( $term_ids ) ] ?? false;
+				$primary_term = $terms[ array_key_first( $term_ids ) ] ?? null;
 			}
 		}
 

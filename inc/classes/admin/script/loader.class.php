@@ -48,10 +48,8 @@ use \The_SEO_Framework\Helper\{
  * @since 4.3.0
  * @see \The_SEO_Framework\Admin\Script\Registry
  * @access protected
- * @final
  */
-final class Loader {
-
+class Loader {
 	/**
 	 * Initializes scripts based on admin query.
 	 *

@@ -8,9 +8,13 @@ namespace The_SEO_Framework\RobotsTXT;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+	Sitemap,
+};
+
+use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -34,7 +38,7 @@ use \The_SEO_Framework\Helper\Query,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->robots_txt() instead, which pooled this class.
+ * @internal Use tsf()->robotstxt() instead, which pooled this class.
  */
 class Main {
 
@@ -45,7 +49,7 @@ class Main {
 	 * This methods completely hijacks default output, intentionally.
 	 *
 	 * The robots.txt file should be left as default, so to improve SEO.
-	 * The Robots Exclusion Protocol encourages you not to use this file for
+	 * The Robots Exclusion Protocol encourages you not to use robots.txt for
 	 * non-administrative endpoints. Use the robots meta tags (and headers) instead.
 	 *
 	 * @since 2.2.9

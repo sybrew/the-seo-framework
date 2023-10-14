@@ -36,7 +36,7 @@ use \The_SEO_Framework\Helper\Query,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->robots_txt()->utils() instead, which pooled this class.
+ * @internal Use tsf()->robotstxt()->utils() instead, which pooled this class.
  */
 class Utils {
 

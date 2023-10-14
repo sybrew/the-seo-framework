@@ -651,6 +651,11 @@ TODO remove @final keyword, it's redundant.
 
 TODO can we affect Gutenberg's URL by switching the primary category?
 
+TODO detect query exploitation early, and send "no cache" headers?
+	-> see rest_send_nocache_headers.
+
+TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core func to determine file.
+
 **Detailed log**
 
 **For everyone:**
@@ -698,6 +703,7 @@ TODO can we affect Gutenberg's URL by switching the primary category?
 	* The shortlink URL is now also outputted on the paginated homepage.
 	* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
 	* All meta generation methods are now assumed to return (pre-)sanitized data. You must still escape the data when printing to screen.
+	* The plugin compatibility loader now tests common filenames instead of function, constant, or class's presence.
 * **Improved:**
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696) (among others).
@@ -840,10 +846,10 @@ TODO can we affect Gutenberg's URL by switching the primary category?
 		* Internally known as `The_SEO_Framework\Meta\Image`.
 	* Pool `tsf()->breadcrumbs()` is now available.
 		* Internally known as `The_SEO_Framework\Meta\Breadcrumbs`.
-	* Pool `tsf()->robots_txt()` is now available.
-		* All public robots.txt-related methods have been moved to that pool. E.g. `tsf()->robots_txt()->get_robots_txt()`
+	* Pool `tsf()->robotstxt()` is now available.
+		* All public robots.txt-related methods have been moved to that pool. E.g. `tsf()->robotstxt()->get_robots_txt()`
 		* Internally known as `The_SEO_Framework\RobotsTXT\Main`.
-		* This pool has a sub-pool, accessible via `tsf()->robots_txt()->utils()`.
+		* This pool has a sub-pool, accessible via `tsf()->robotstxt()->utils()`.
 			* Internally known as `The_SEO_Framework\RobotsTXT\Utils`.
 	* Pool `tsf()->sitemap()` is now available.
 		* Unlike all other pools, this is a Closure where it stores only subpools.
@@ -1251,10 +1257,10 @@ TODO can we affect Gutenberg's URL by switching the primary category?
 				* `is_subdirectory_installation()`, use `tsf()->data()->blog()->is_subdirectory_installation()` instead.
 				* `use_core_sitemaps()`, use `tsf()->sitemap()->utils()->use_core_sitemaps()` instead.
 				* `can_run_sitemap()`, use `tsf()->sitemap()->utils()->may_output_optimized_sitemap()` instead.
-				* `has_robots_txt()`, use `tsf()->robots_txt()->utils()->has_root_robots_txt()` instead.
-				* `get_robots_txt_url()`, use `tsf()->robots_txt()->utils()->get_robots_txt_url()` instead.
+				* `has_robots_txt()`, use `tsf()->robotstxt()->utils()->has_root_robots_txt()` instead.
+				* `get_robots_txt_url()`, use `tsf()->robotstxt()->utils()->get_robots_txt_url()` instead.
 				* `has_sitemap_xml()`, use `tsf()->sitemap()->utils()->has_root_sitemap_xml()` instead.
-				* `robots_txt()`, use `tsf()->robots_txt()->get_robots_txt` instead.
+				* `robots_txt()`, use `tsf()->robotstxt()->get_robots_txt()` instead.
 				* `delete_excluded_ids_cache()`, use `tsf()->query()->exclusion()->clear_excluded_post_ids_cache()` instead.
 				* `get_excluded_ids_from_cache()`, use `tsf()->query()->exclusion()->get_excluded_ids_from_cache()` instead.
 				* `clean_response_header()`, with no alternative available.
