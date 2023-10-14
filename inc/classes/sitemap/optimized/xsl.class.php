@@ -32,9 +32,7 @@ use function \The_SEO_Framework\umemo;
  *
  * @since 4.2.0
  * @since 4.3.0 Moved to `The_SEO_Framework\Sitemap\Optimized`.
- *
  * @access private
- * @final Can't be extended.
  */
 final class XSL {
 

@@ -55,22 +55,20 @@ $_is_static_frontpage = Query::is_static_frontpage( $post_id );
 
 switch ( $instance ) :
 	case 'main':
-		$post_settings_class = Admin\Settings\Post::class;
-
 		$default_tabs = [
 			'general'    => [
 				'name'     => \__( 'General', 'autodescription' ),
-				'callback' => "$post_settings_class::_general_tab",
+				'callback' => [ Admin\Settings\Post::class, 'general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
 			'social'     => [
 				'name'     => \__( 'Social', 'autodescription' ),
-				'callback' => "$post_settings_class::_social_tab",
+				'callback' => [ Admin\Settings\Post::class, 'social_tab' ],
 				'dashicon' => 'share',
 			],
 			'visibility' => [
 				'name'     => \__( 'Visibility', 'autodescription' ),
-				'callback' => "$post_settings_class::_visibility_tab",
+				'callback' => [ Admin\Settings\Post::class, 'visibility_tab' ],
 				'dashicon' => 'visibility',
 			],
 		];
@@ -105,8 +103,8 @@ switch ( $instance ) :
 				</div>
 				<div class="tsf-flex-setting-input tsf-flex">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
-					echo \tsf()->get_generated_seo_bar( $generator_args );
+					// phpcs:ignore, WordPress.Security.EscapeOutput -- generate_bar() escapes.
+					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
 					?>
 				</div>
 			</div>
@@ -167,7 +165,6 @@ switch ( $instance ) :
 				<div class=tsf-title-wrap>
 					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
-					\tsf()->output_js_title_elements(); // legacy
 					\tsf()->output_js_title_data(
 						'autodescription_title',
 						[
@@ -178,7 +175,6 @@ switch ( $instance ) :
 								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $generator_args, true ),
 								'additionValue'     => \tsf()->escape_text( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
-								'hasLegacy'         => true,
 							],
 						]
 					);
@@ -237,14 +233,12 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_description' ) ) ) ?></textarea>
 				<?php
-				\tsf()->output_js_description_elements(); // legacy
 				\tsf()->output_js_description_data(
 					'autodescription_description',
 					[
 						'state' => [
 							'defaultDescription'   => \tsf()->escape_text( \tsf()->sanitize_text( $default_description ) ),
 							'refDescriptionLocked' => $description_ref_locked,
-							'hasLegacy'            => true,
 						],
 					]
 				);

@@ -41,13 +41,11 @@ use \The_SEO_Framework\Data,
  * Generates the SEO Bar for terms.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\SEOBar\Term` from `The_SEO_Framework\Builders\SeoBar_Term`
+ * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\SeoBar_Term`
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`
  *
  * @access private
- * @internal
- * @see SEOBar
- *      Use Builder::generate_bar() instead.
+ * @see \The_SEO_Framework\Admin\SEOBar\Builder
  */
 final class Term extends Main {
 

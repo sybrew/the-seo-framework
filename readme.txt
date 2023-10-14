@@ -575,8 +575,6 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 TODO we added `uid`. We may want to rename `taxonomy` to `tax`--making it easier to read.
 	-> normalize_generator_args() can swap the name.
 
-TODO remove output_js_title_elements and the polyfills in JS
-
 TODO Helper/query
 	-> Query?
 		-> cache
@@ -627,7 +625,7 @@ TODO Remove all "$escape" parameters from the meta generators, and always _sanit
 	-> This saves a jump, and actually improved performance.
 		-> s_excerpt is still a candidate.
 
-TODO make canonical URL placeholder work in _output_column_contents_for_post()
+TODO make canonical URL placeholder work in output_column_contents_for_post()
 	-> Also make the Indexing react to the Password/Private states.
 		-> This already works for the title.
 
@@ -647,14 +645,23 @@ TODO add "try it in playground" button/link at the top of the readme.
 
 TODO test `^ [^\*]` (rogue spaces).
 
-TODO remove @final keyword, it's redundant.
-
 TODO can we affect Gutenberg's URL by switching the primary category?
 
 TODO detect query exploitation early, and send "no cache" headers?
 	-> see rest_send_nocache_headers.
 
-TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core func to determine file.
+TODO list all new public classes and their methods in the changelog.
+	-> i.e. those without @access private
+
+TODO convert The_SEO_Framework\Meta\Robots\Main from singleton to static
+	-> It must be either instantiatable, or static.
+		-> ->set()->get() is fun though
+
+TODO remove all underscored functions in private classes.
+
+TODO tell the world that "The language is set from content" in "Polylang -> Settings -> URL Modifications" should not be used.
+	-> get_locale() doesn't respect language changes.
+	-> All others settings work fine.
 
 **Detailed log**
 
@@ -730,6 +737,8 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 			* A warning is displayed at the Sitemap Output settings.
 	* **Accessibility:**
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
+	* **Redirects:**
+		* When an invalid URL is supplied by the admin in the redirect field, the plugin now displays a generic HTTP error code 400 (Bad Request), instead of showing the page.
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
@@ -928,9 +937,6 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 * **Object notes:**
 	* **New objects:**
 		* Class `The_SEO_Framework\Bridges\Cache` is new. It provides a collection of static caching interface methods. TODO make this private or add a functional EP interface?
-		* Class `The_SEO_Framework\Admin\Script\Loader` is new. TODO make this private?
-		* Class `The_SEO_Framework\Admin\Script\Registry` is new. TODO make this private?
-		* Class `The_SEO_Framework\Admin\SEOBar\Builder` is new. TODO make this private?
 	* **Deprecated objects:**
 		* Class `The_SEO_Framework\Bridges\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Loader` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
 		* Class `The_SEO_Framework\Builders\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Registry` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
@@ -961,6 +967,8 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 				* `get_canonical_url()`
 				* `get_image_details()`
 				* `load_admin_scripts()` (new!)
+				* `print_seo_meta_tags()` (new!)
+				* `convert_markdown()`
 			* **Methods changed:**
 				* TODO redo this list; just go by all functions within the object, ought to be easier retroactively...
 				* `query_supports_seo()`
@@ -1202,8 +1210,8 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 				* `get_largest_acceptable_image_src()`, use `tsf()->image()->utils()->get_largest_image_src()` instead.
 				* `get_settings_capability()`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 				* `can_access_settings()`, use `current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )` instead.
-				* `html_output()` with no alternative available.
-				* `do_meta_output()` with no alternative available.
+				* `html_output()`, use `tsf()->print_seo_meta_tags()` instead.
+				* `do_meta_output()`, with no alternative available.
 				* `get_default_site_options()`, use `tsf()->data()->plugin()->setup()->get_default_options()` instead.
 				* `get_warned_site_options()`, use `tsf()->data()->plugin()->setup()->get_warned_options()` instead.
 				* `get_all_options()`, use `tsf()->data()->plugin()->get_options()` instead.
@@ -1265,6 +1273,12 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 				* `get_excluded_ids_from_cache()`, use `tsf()->query()->exclusion()->get_excluded_ids_from_cache()` instead.
 				* `clean_response_header()`, with no alternative available.
 				* `init_admin_scripts()`, use `tsf()->load_admin_scripts()` instead.
+				* `get_generated_seo_bar()`, with no alternative available.
+				* `do_redirect()`, use `wp_safe_redirect()` instead.
+				* `allow_external_redirect()`, with no alternative available.
+				* `get_document_title()`, with no alternative available.
+				* `get_wp_title()`, with no alternative available.
+				* `get_seo_settings_page_url()`, with no alternative available.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1402,6 +1416,8 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 	* **Removed:**
 		* `THE_SEO_FRAMEWORK_DISABLE_TRANSIENTS`, for it is no longer used.
 * **Filter notes:**
+	* **Note:**
+		* **Almost all internal hook callbacks in this plugin have a new name.** If you removed a filter in TSF, it may now reappear. Please check your hooks.
 	* **Added:**
 		* `the_seo_framework_auto_description_html_method_methods`, this used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
 		* `the_seo_framework_multilingual_plugin_detected` TODO this will be rewritten -- confirm if this still exists.
@@ -1461,6 +1477,7 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 		* `the_seo_framework_robots_meta`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_image_details`, use `the_seo_framework_custom_image_details` or `the_seo_framework_generated_image_details` instead.
 		* `the_seo_framework_fetched_description_excerpt`, use `the_seo_framework_description_excerpt` instead.
+		* `the_seo_framework_manipulate_title`, use `the_seo_framework_overwrite_titles` instead.
 	* **Removed:**
 		* Deprecated in TSF v4.2.0, two years later, we've now removed these filters:
 			* `the_seo_framework_pta_title`
@@ -1498,6 +1515,7 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 		* `the_seo_framework_user_options`, use WP options API instead to alter user metadata name `'autodescription-user-settings'`.
 		* `the_seo_framework_site_cache`, use WP options API instead to alter option name `'autodescription-site-cache'`.
 		* `the_seo_framework_available_twitter_cards`, we couldn't make it work in the new API.
+		* `the_seo_framework_wp_title`, this was for WP 4.4 titles. Use `the_seo_framework_pre_get_document_title` instead.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
@@ -1512,7 +1530,10 @@ TODO _polylang_blocklist_tsf_urls use __FILE__ or some relative plugin path Core
 	* `[ \tsf(), 'html_output' ]` no longer runs on `wp_head`. Instead, `[ 'The_SEO_Framework\Front\Meta\Head', 'print_wrap_and_tags' ]` is now outputted -- remaining at priority `1`.
 	* `_init_tsf` no longer runs on `plugins_loaded`, but on `init`. Use filter `the_seo_framework_load` instead.
 * **JavaScript notes:**
-	* ...
+	* HTML element with ID `tsf-description-reference` is no longer available. Use `tsf-description-reference_{$type}` instead.
+		* `$type` can be: `autodescription_description`, `autodescription-meta[description]`, `autodescription-quick[description]`, `autodescription-site-settings[homepage_description]`, or `tsf-description-reference_autodescription-site-settings[pta][%s][description]` (where `%s` is the post type).
+	* HTML element with ID `tsf-title-reference` is no longer available. Use `tsf-title-reference_{$type}` instead.
+		* See above for `$type` hints, where `description` is replaced with `title` in every instance.
 * **CSS notes:**
 	* `tsf-pt` no longer has inline RTL support, but instead supports RLT built in its file.
 * **Other:**

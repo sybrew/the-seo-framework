@@ -47,7 +47,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.3.0
  * @see \The_SEO_Framework\Admin\Script\Registry
- * @access protected
+ * @access private
  */
 class Loader {
 	/**
@@ -55,7 +55,6 @@ class Loader {
 	 *
 	 * @since 4.3.0
 	 * @access private
-	 * @internal This always runs; build your own loader from the public methods, instead.
 	 */
 	public static function init() {
 

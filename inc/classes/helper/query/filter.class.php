@@ -33,7 +33,6 @@ use \The_SEO_Framework\Helper\Query; // Yes, it is legal to share class and name
  *
  * @since 4.3.0
  * @access private
- * @internal
  */
 final class Filter {
 

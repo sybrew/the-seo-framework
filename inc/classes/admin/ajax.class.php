@@ -9,6 +9,7 @@ namespace The_SEO_Framework\Admin;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
+	Admin,
 	Data,
 	Meta,
 };
@@ -42,7 +43,6 @@ use \The_SEO_Framework\Helper,
  * @since 4.1.4
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin`
  * @access private
- * @final Can't be extended.
  */
 final class AJAX {
 
@@ -51,10 +51,10 @@ final class AJAX {
 	 *
 	 * @since 4.1.0
 	 * @since 4.2.0 Now cleans response header.
-	 * Security check OK.
+	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
-	public static function _wp_ajax_dismiss_notice() {
+	public static function dismiss_notice() {
 
 		Helper\Headers::clean_response_header();
 
@@ -84,10 +84,10 @@ final class AJAX {
 	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
 	 * @since 4.2.0 1. Now uses wp.ajax instead of $.ajax.
 	 *              2. No longer tests if settings-saving was successful.
-	 * @securitycheck 3.0.0 OK.
+	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
-	public static function _wp_ajax_update_counter_type() {
+	public static function update_counter_type() {
 
 		Helper\Headers::clean_response_header();
 
@@ -143,10 +143,10 @@ final class AJAX {
 	 * @since 4.2.0 Now cleans response header.
 	 * @since 4.2.5 1. Backported cropping support for WebP (WP 5.9).
 	 *              2. Backported title, description, alt tag, and excerpt preservation (WP 6.0).
-	 * @securitycheck 4.2.5 OK.
+	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
-	public static function _wp_ajax_crop_image() {
+	public static function crop_image() {
 
 		Helper\Headers::clean_response_header();
 
@@ -260,9 +260,10 @@ final class AJAX {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
+	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
-	public static function _wp_ajax_get_post_data() {
+	public static function get_post_data() {
 
 		Helper\Headers::clean_response_header();
 
@@ -301,7 +302,7 @@ final class AJAX {
 
 		foreach ( $get as $g ) switch ( $g ) {
 			case 'seobar':
-				$data[ $g ] = \tsf()->get_generated_seo_bar( $generator_args );
+				$data[ $g ] = Admin\SEOBar\Builder::generate_bar( $generator_args );
 				break;
 
 			case 'metadescription':

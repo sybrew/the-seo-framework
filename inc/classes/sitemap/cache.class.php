@@ -33,7 +33,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->sitemap()->cache() instead.
+ *         Use tsf()->sitemap()->cache() instead.
  */
 class Cache {
 
@@ -46,11 +46,7 @@ class Cache {
 	 * @return string The cache key with blog ID and locale appended.
 	 */
 	public static function build_sitemap_cache_key( $key ) {
-
-		// Do not memoize: May change at runtime.
-		$locale = \get_locale();
-
-		return "{$key}_{$GLOBALS['blog_id']}_{$locale}";
+		return "{$key}_{$GLOBALS['blog_id']}_" . \get_locale();
 	}
 
 	/**
@@ -117,7 +113,7 @@ class Cache {
 
 		$ep_list = Registry::get_sitemap_endpoint_list();
 
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
+		if ( empty( $ep_list[ $sitemap_id ] ) ) return false;
 
 		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
 

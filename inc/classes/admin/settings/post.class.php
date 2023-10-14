@@ -15,7 +15,10 @@ use \The_SEO_Framework\{
 	Data,
 };
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Post_Types,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -43,14 +46,13 @@ use \The_SEO_Framework\Helper\Query;
  * @since 4.3.0 1. Renamed from `PostSettings` to `Post`.
  *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
  * @access private
- * @internal
- * @final Can't be extended.
  */
 final class Post {
 
 	/**
-	 * Registers the meta box for the Post edit screens.
+	 * Prepares post edit view, like outputting the fields.
 	 *
+	 * @hook add_meta_boxes 10
 	 * @since 4.0.0
 	 * @since 4.0.5 Now registers custom postbox classes.
 	 * @since 4.2.8 No longer uses the post type label for the meta box title.
@@ -60,9 +62,20 @@ final class Post {
 	 *              3. Now registers homepage warnings in the primary tabs.
 	 *              4. Now adds postbox class to non-posts as well.
 	 *              5. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
-	 * @access private
+	 *
+	 * @param string $post_type The current post type.
 	 */
-	public static function _prepare_meta_box() {
+	public static function prepare_meta_box( $post_type ) {
+
+		/**
+		 * @since 2.0.0
+		 * @param bool $show_seobox Whether to show the SEO meta box.
+		 */
+		if (
+			   ! Query::is_post_edit()
+			|| ! Post_Types::is_post_type_supported( $post_type )
+			|| ! \apply_filters( 'the_seo_framework_seobox_output', true )
+		) return;
 
 		$box_id = 'tsf-inpost-box';
 
@@ -86,12 +99,13 @@ final class Post {
 
 		$screen_id = \get_current_screen()->id;
 
-		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, '_add_postbox_class' ] );
+		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, 'add_postbox_class' ] );
 
 		if ( ! is_headless( 'settings' ) && Query::is_static_frontpage( Query::get_the_real_id() ) ) {
-			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', [ static::class, '_homepage_warning' ] );
-			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', [ static::class, '_homepage_warning' ] );
-			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', [ static::class, '_homepage_warning' ] );
+			$output_homepage_warning = [ static::class, 'output_homepage_warning' ];
+			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', $output_homepage_warning );
+			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', $output_homepage_warning );
+			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', $output_homepage_warning );
 		}
 	}
 
@@ -151,13 +165,14 @@ final class Post {
 	 * Adds a Gutenberg/Block-editor box class.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 *              2. Renamed from `_add_postbox_class`.
 	 * @access private
 	 *
 	 * @param array $classes The registered postbox classes.
 	 * @return array
 	 */
-	public static function _add_postbox_class( $classes = [] ) {
+	public static function add_postbox_class( $classes = [] ) {
 
 		if ( \tsf()->is_gutenberg_page() )
 			$classes[] = 'tsf-is-block-editor';
@@ -170,7 +185,7 @@ final class Post {
 	 *
 	 * @since 4.3.0
 	 */
-	public static function _homepage_warning() {
+	public static function output_homepage_warning() {
 		Admin\Template::output_view( 'edit/seo-settings-singular-homepage-warning' );
 	}
 
@@ -178,9 +193,10 @@ final class Post {
 	 * Outputs the Post SEO box general tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 *              2. Renamed from `_general_tab`.
 	 */
-	public static function _general_tab() {
+	public static function general_tab() {
 		/**
 		 * @since 2.9.0
 		 */
@@ -196,9 +212,10 @@ final class Post {
 	 * Outputs the Post SEO box visibility tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 *              2. Renamed from `_visibility_tab`.
 	 */
-	public static function _visibility_tab() {
+	public static function visibility_tab() {
 		/**
 		 * @since 2.9.0
 		 */
@@ -214,9 +231,10 @@ final class Post {
 	 * Outputs the Post SEO box social tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 *              2. Renamed from `_social_tab`.
 	 */
-	public static function _social_tab() {
+	public static function social_tab() {
 		/**
 		 * @since 2.9.0
 		 */

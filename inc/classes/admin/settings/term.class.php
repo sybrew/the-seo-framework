@@ -10,6 +10,11 @@ namespace The_SEO_Framework\Admin\Settings;
 
 use \The_SEO_Framework\Admin;
 
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomies,
+};
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -34,21 +39,34 @@ use \The_SEO_Framework\Admin;
  * @since 4.3.0 1. Renamed from `TermSettings` to `Term`.
  *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
  * @access private
- * @internal
- * @final Can't be extended.
  */
 final class Term {
 
 	/**
 	 * Prepares the setting fields.
 	 *
-	 * @since 4.0.0
-	 *
-	 * @param \WP_Term $term     Current taxonomy term object.
-	 * @param string   $taxonomy Current taxonomy slug.
+	 * @since 4.3.0
+	 * @hook current_screen 10
 	 */
-	public static function _prepare_setting_fields( $term, $taxonomy ) {
-		static::output_setting_fields( $term, $taxonomy );
+	public static function prepare_setting_fields() {
+
+		if ( ! Query::is_term_edit() ) return;
+
+		$taxonomy = Query::get_current_taxonomy();
+
+		if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) ) return;
+
+		\add_action(
+			"{$taxonomy}_edit_form",
+			[ static::class, 'output_setting_fields' ],
+			/**
+			 * @since 2.6.0
+			 * @param int $priority The meta box term priority.
+			 *                      Defaults to a high priority, this box is seen soon below the default edit inputs.
+			 */
+			(int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 ),
+			2
+		);
 	}
 
 	/**
@@ -59,7 +77,7 @@ final class Term {
 	 * @param \WP_Term $term     Current taxonomy term object.
 	 * @param string   $taxonomy Current taxonomy slug.
 	 */
-	private static function output_setting_fields( $term, $taxonomy ) {
+	public static function output_setting_fields( $term, $taxonomy ) {
 		/**
 		 * @since 2.9.0
 		 */

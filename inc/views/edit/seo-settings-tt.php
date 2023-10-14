@@ -129,8 +129,8 @@ $robots_settings = [
 				<th scope=row valign=top><?php \esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 				<td>
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput -- get_generated_seo_bar() escapes.
-					echo \tsf()->get_generated_seo_bar( $generator_args );
+					// phpcs:ignore, WordPress.Security.EscapeOutput -- generate_bar() escapes.
+					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
 					?>
 				</td>
 			</tr>
@@ -161,7 +161,6 @@ $robots_settings = [
 				<div class=tsf-title-wrap>
 					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( $title ) ) ?>" size=40 autocomplete=off data-form-type=other />
 					<?php
-					\tsf()->output_js_title_elements(); // legacy
 					\tsf()->output_js_title_data(
 						'autodescription-meta[doctitle]',
 						[
@@ -172,7 +171,6 @@ $robots_settings = [
 								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $generator_args, true ),
 								'additionValue'     => \tsf()->escape_text( Meta\Title::get_addition() ),
 								'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
-								'hasLegacy'         => true,
 							],
 						]
 					);
@@ -211,7 +209,6 @@ $robots_settings = [
 			<td>
 				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= \tsf()->escape_text( \tsf()->sanitize_text( $description ) ) ?></textarea>
 				<?php
-				\tsf()->output_js_description_elements(); // legacy
 				\tsf()->output_js_description_data(
 					'autodescription-meta[description]',
 					[
@@ -219,7 +216,6 @@ $robots_settings = [
 							'defaultDescription' => \tsf()->escape_text(
 								Meta\Description::get_generated_description( $generator_args )
 							),
-							'hasLegacy'          => true,
 						],
 					]
 				);

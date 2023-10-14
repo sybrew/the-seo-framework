@@ -38,7 +38,7 @@ use \The_SEO_Framework\Helper\Query;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->robotstxt() instead, which pooled this class.
+ *         Use tsf()->robotstxt() instead.
  */
 class Main {
 
@@ -57,7 +57,7 @@ class Main {
 	 * @since 4.0.5 1. The output is now filterable.
 	 *              2. Improved invalid location test.
 	 *              3. No longer shortcircuits on non-public sites.
-	 *              4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
+	 *              4. Now marked as private.
 	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
 	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
 	 * @since 4.1.4 Removed object caching support.

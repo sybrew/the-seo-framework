@@ -38,7 +38,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->description()->excerpt() instead.
+ *         Use tsf()->description()->excerpt() instead.
  */
 final class Excerpt {
 

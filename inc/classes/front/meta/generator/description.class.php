@@ -31,9 +31,7 @@ use \The_SEO_Framework\Meta;
  * Holds description generators for meta tag output.
  *
  * @since 4.3.0
- * @access protected
- * @internal
- * @final Can't be extended.
+ * @access private
  */
 final class Description {
 

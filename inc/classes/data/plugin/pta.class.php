@@ -39,7 +39,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->data()->plugin->pta() instead.
+ *         Use tsf()->data()->plugin->pta() instead.
  */
 class PTA {
 
@@ -53,7 +53,8 @@ class PTA {
 	 * Flushes all PTA runtime cache.
 	 *
 	 * @since 4.3.0
-	 * @internal
+	 * @access private
+	 * @see \The_SEO_Framework\Data\Option::update_option()
 	 */
 	public static function flush_cache() {
 		static::$pta_meta = [];

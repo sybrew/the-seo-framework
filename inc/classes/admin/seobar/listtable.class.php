@@ -35,7 +35,6 @@ use \The_SEO_Framework\Admin\Lists;
  *
  * @since 4.0.0
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar`
- *
  * @access private
  */
 final class ListTable extends Lists\Table {
@@ -47,19 +46,31 @@ final class ListTable extends Lists\Table {
 	private $column_name = 'tsf-seo-bar-wrap';
 
 	/**
+	 * Setups class and prepares quick edit.
+	 *
+	 * @hook admin_init 10
+	 * @since 4.3.0
+	 */
+	public static function init_seo_bar() {
+		new self;
+	}
+
+	/**
 	 * Adds SEO column on edit(-tags).php
 	 *
 	 * Also determines where the column should be placed. Preferred before comments, then data, then tags.
 	 * When none found, it will add the column to the end.
 	 *
+	 * @hook manage_{$screen_id}_columns 10
+	 * @hook manage_edit-{$taxonomy}_columns 1
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_add_column`.
 	 * @abstract
 	 *
 	 * @param array $columns The existing columns.
 	 * @return array $columns The adjusted columns.
 	 */
-	public function _add_column( $columns ) {
+	public function add_column( $columns ) {
 
 		$seocolumn = [ $this->column_name => 'SEO' ];
 
@@ -110,18 +121,20 @@ final class ListTable extends Lists\Table {
 	/**
 	 * Outputs the SEO Bar for posts and pages.
 	 *
+	 * @hook manage_posts_custom_column 1
+	 * @hook manage_pages_custom_column 1
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_output_column_contents_for_post`.
 	 * @abstract
 	 *
 	 * @param string $column_name The name of the column to display.
 	 * @param int    $post_id     The current post ID.
 	 */
-	public function _output_column_contents_for_post( $column_name, $post_id ) {
+	public function output_column_contents_for_post( $column_name, $post_id ) {
 
 		if ( $this->column_name !== $column_name ) return;
 
-		// phpcs:ignore, WordPress.Security.EscapeOutput
+		// phpcs:ignore, WordPress.Security.EscapeOutput -- generate_bar escapes.
 		echo Builder::generate_bar( [
 			'id'        => $post_id,
 			'post_type' => $this->post_type,
@@ -134,10 +147,11 @@ final class ListTable extends Lists\Table {
 	/**
 	 * Returns the SEO Bar for terms.
 	 *
+	 * @hook manage_{$taxonomy}_custom_column 1
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_output_column_contents_for_term`.
 	 * @abstract
-	 * @NOTE Unlike _output_column_contents_for_post(), this is a filter callback.
+	 * @NOTE Unlike output_column_contents_for_post(), this is a filter callback.
 	 *       Because of this, the first parameter is a useless string, which must be extended.
 	 *       Discrepancy: https://core.trac.wordpress.org/ticket/33521
 	 *       With this, the proper function name should be "_get..." or "_add...", but not "_output.."
@@ -147,7 +161,7 @@ final class ListTable extends Lists\Table {
 	 * @param string $term_id     Term ID.
 	 * @return string
 	 */
-	public function _output_column_contents_for_term( $string, $column_name, $term_id ) {
+	public function output_column_contents_for_term( $string, $column_name, $term_id ) {
 
 		if ( $this->column_name !== $column_name ) return $string;
 

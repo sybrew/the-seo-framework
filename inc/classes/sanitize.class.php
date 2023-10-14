@@ -10,8 +10,6 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\Utils\clamp_sentence;
 
-use \The_SEO_Framework\Meta,
-	\The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
@@ -55,7 +53,6 @@ class Sanitize extends Admin_Pages {
 	 * @since 3.1.0 Removed settings field existence check.
 	 * @since 4.0.0 Added redundant user capability check.
 	 * @since 4.1.0 Is now a protected method.
-	 * @securitycheck 3.0.0 OK.
 	 *
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
@@ -80,11 +77,11 @@ class Sanitize extends Admin_Pages {
 		if ( ! \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) )
 			return memo( false );
 
-		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
-		// This also checks the nonce: `_wpnonce`.
-		\check_admin_referer( \THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options' );
-
-		return memo( true );
+		// Even though the following function will die on failure, let's cache its results directly.
+		return memo(
+			// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
+			(bool) \check_admin_referer( \THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options', '_wpnonce' )
+		);
 	}
 
 	/**
@@ -1891,8 +1888,8 @@ class Sanitize extends Admin_Pages {
 			return '';
 
 		// This is also checked when performing a redirect.
-		if ( ! $this->allow_external_redirect() )
-			$url = $this->set_url_scheme( $url, 'relative' );
+		if ( ! Helper\Redirect::allow_external_redirect() )
+			$url = Meta\URI\Utils::set_url_scheme( $url, 'relative' );
 
 		// Only adjust scheme if it used to be relative. Do not use `s_url_relative_to_current_scheme()`.
 		$url = Meta\URI\Utils::convert_path_to_url( $url );
@@ -1906,8 +1903,8 @@ class Sanitize extends Admin_Pages {
 			/**
 			 * Remove queries from the URL
 			 *
-			 * Returns plain Home URL if $this->allow_external_redirect() is set to false and only a query has been supplied
-			 * But that's okay. The URL was rogue anyway :)
+			 * Returns the plain Home URL if Helper\Redirect::allow_external_redirect() is set to false
+			 * and only a query has been supplied. But that's okay. The URL was rogue anyway :)
 			 */
 			return $this->s_url( $url );
 		}

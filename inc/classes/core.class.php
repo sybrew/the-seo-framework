@@ -154,40 +154,6 @@ class Core {
 	}
 
 	/**
-	 * Whether to allow external redirect through the 301 redirect option.
-	 * Memoizes the return value.
-	 *
-	 * @since 2.6.0
-	 *
-	 * @return bool Whether external redirect is allowed.
-	 */
-	public function allow_external_redirect() {
-		/**
-		 * @since 2.1.0
-		 * @param bool $allowed Whether external redirect is allowed.
-		 */
-		return memo() ?? memo( (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true ) );
-	}
-
-	/**
-	 * Returns the SEO Settings page URL.
-	 *
-	 * @since 4.1.4
-	 *
-	 * @return string The escaped SEO Settings page URL.
-	 */
-	public function get_seo_settings_page_url() {
-		return is_headless( 'settings' )
-			? ''
-			: \esc_url(
-				html_entity_decode(
-					\menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false )
-				),
-				[ 'https', 'http' ]
-			);
-	}
-
-	/**
 	 * Converts time from GMT input to given format.
 	 *
 	 * @since 2.7.0
@@ -406,29 +372,6 @@ class Core {
 		}
 
 		return vsprintf( '%02x%02x%02x', [ $gr, $gg, $gb ] );
-	}
-
-	/**
-	 * Converts markdown text into HTML.
-	 * Does not support list or block elements. Only inline statements.
-	 *
-	 * @since 2.8.0
-	 * @since 2.9.0 1. Removed word boundary requirement for strong.
-	 *              2. Now lets regex count their numeric values in string.
-	 *              3. Fixed header 1~6 calculation.
-	 * @since 2.9.3 Added $args parameter.
-	 * @since 4.0.3 Added a workaround for connected em/strong elements.
-	 * @since 4.1.4 Offloaded to `The_SEO_Framework\Interpreters\Markdown::convert()`
-	 * @link https://wordpress.org/plugins/about/readme.txt
-	 *
-	 * @param string $text    The text that might contain markdown. Expected to be escaped.
-	 * @param array  $convert The markdown style types wished to be converted.
-	 *                        If left empty, it will convert all.
-	 * @param array  $args    The function arguments.
-	 * @return string The markdown converted text.
-	 */
-	public function convert_markdown( $text, $convert = [], $args = [] ) {
-		return Interpreters\Markdown::convert( $text, $convert, $args );
 	}
 
 	/**

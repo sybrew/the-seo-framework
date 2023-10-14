@@ -34,7 +34,7 @@ use \The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->title()->utils() instead.
+ *         Use tsf()->title()->utils() instead.
  */
 class Utils {
 

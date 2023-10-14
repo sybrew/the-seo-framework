@@ -36,7 +36,6 @@ use \The_SEO_Framework\Data,
  * @since 4.1.0
  * @since 4.3.0 Moved to `\The_SEO_Framework\Front\Feed`
  * @access private
- * @final Can't be extended.
  */
 final class Feed {
 
@@ -44,7 +43,6 @@ final class Feed {
 	 * Sets the X-Robots-Tag headers for feeds.
 	 *
 	 * @since 4.3.0
-	 * @access private
 	 */
 	public static function output_robots_noindex_headers_on_feed() {
 		\is_feed() and Helper\Headers::output_robots_noindex_headers();
@@ -57,7 +55,6 @@ final class Feed {
 	 * a nofollow backlink at the end of the feed.
 	 *
 	 * @since 4.3.0
-	 * @access private
 	 *
 	 * @param string      $content   The feed's content.
 	 * @param null|string $feed_type The feed type (not used in excerpted content)

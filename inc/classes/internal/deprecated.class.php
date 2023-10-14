@@ -78,8 +78,6 @@ final class Deprecated {
 	 * or transients have been disabled through a constant, then the transient
 	 * will be false.
 	 *
-	 * N.B. not all transient settings make use of this function, bypassing the constant check.
-	 *
 	 * @since 2.6.0
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
@@ -170,7 +168,6 @@ final class Deprecated {
 
 	/**
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.5.0
 	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
@@ -246,7 +243,6 @@ final class Deprecated {
 
 	/**
 	 * Returns the current taxonomy, if any.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 1. Now works in the admin.
@@ -987,7 +983,6 @@ final class Deprecated {
 
 	/**
 	 * Determines if SSL is used.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.8.0
 	 * @since 4.3.0 Deprecated.
@@ -1026,15 +1021,6 @@ final class Deprecated {
 
 	/**
 	 * Checks the screen base file through global $page_hook or $_GET.
-	 *
-	 * NOTE: Usage of $pageslug might be insecure. Check all variables and don't
-	 * perform lasting actions like saving to the database before `admin_init`!
-	 *
-	 * The second "insecure" parameter is actually secured by WordPress (read on...).
-	 * However, we can't verify its integrity, WordPress has to. It's also checked
-	 * against too late.
-	 * It's secure enough for loading files; nevertheless, it shouldn't be used
-	 * when passing sensitive data.
 	 *
 	 * @since 2.2.2
 	 * @since 2.7.0 Added pageslug parameter.
@@ -1621,7 +1607,6 @@ final class Deprecated {
 
 	/**
 	 * Determines whether we can use Open Graph tags on the front-end.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
@@ -2093,7 +2078,6 @@ final class Deprecated {
 
 	/**
 	 * Determines whether we can use Facebook tags on the front-end.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed cache.
@@ -2249,7 +2233,6 @@ final class Deprecated {
 
 	/**
 	 * Returns the current Twitter card type.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.8.2
 	 * @since 3.1.0 Filter has been moved to generate_twitter_card_type()
@@ -2500,7 +2483,6 @@ final class Deprecated {
 
 	/**
 	 * Determines whether we can use Twitter tags on the front-end.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 2.8.2 Now also considers Twitter card type output.
@@ -2581,7 +2563,6 @@ final class Deprecated {
 
 	/**
 	 * Returns the robots meta array.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.2.4
 	 * @since 4.3.0 Deprecated.
@@ -2693,31 +2674,6 @@ final class Deprecated {
 
 	/**
 	 * Determines when paged/page is exploited.
-	 * Memoizes the return value.
-	 *
-	 * Google is acting "smart" nowadays, and follows everything that remotely resembles a link. Therefore, unintentional
-	 * queries can occur in WordPress. WordPress deals with this well, alas, the query parser (WP_Query::parse_query)
-	 * doesn't rectify the mixed signals it receives. Instead, it only sanitizes it, resulting in a combobulated mess.
-	 * Ultimately, this leads to non-existing blog archives, among other failures.
-	 *
-	 * Example 1: `/?p=nonnumeric` will cause an issue. We will see a non-existing blog page. `is_home` is true, but
-	 * `page_id` leads to 0 while the database expects the blog page to be another page. So, `is_posts_page` is
-	 * incorrectly false. This is mitigated via the canonical URL, but that MUST output, thus overriding otherwise chosen
-	 * and expected behavior.
-	 *
-	 * Example 2: `/page/2/?p=nonnumeric` will cause a bigger issue. What happens is that `is_home` will again be true,
-	 * but so will `is_paged`. `paged` will be set to `2` (as per example URL). The page ID will again be set to `0`,
-	 * which is completely false. The canonical URL will be malformed. Even more so, Google can ignore the canonical URL,
-	 * so we MUST output noindex.
-	 *
-	 * Example 3: `/page/2/?X=nonnumeric` will also cause the same issues as in example 2. Where X can be:
-	 * `page_id`, `attachment_id`, `year`, `monthnum`, `day`, `w`, `m`, and of course `p`.
-	 *
-	 * Example 4: `/?hour=nonnumeric`, the same issue as Example 1. The canonical URL is malformed, noindex is set, and
-	 * link relationships will be active. A complete mess. `minute` and `second` are also affected the same way.
-	 *
-	 * Example 5: `/page/2/?p=0`, this is the trickiest. It's indicative of a paginated blog, but also the homepage. When
-	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query.
 	 *
 	 * @since 4.0.5
 	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
@@ -2820,7 +2776,6 @@ final class Deprecated {
 
 	/**
 	 * Returns a list of all supported post types with archives.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
 	 * @since 4.2.8 Now filters via `tsf()->is_post_type_archive_supported()`.
@@ -2839,7 +2794,6 @@ final class Deprecated {
 
 	/**
 	 * Gets all post types that have PTA and could possibly support SEO.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
 	 * @since 4.2.8 Added filter `the_seo_framework_public_post_type_archives`.
@@ -3088,7 +3042,6 @@ final class Deprecated {
 
 	/**
 	 * Returns Open Graph type value.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.8.0
 	 * @since 4.3.0 Deprecated.
@@ -3130,7 +3083,6 @@ final class Deprecated {
 
 	/**
 	 * Fetches public blogname (site title).
-	 * Memoizes the return value.
 	 *
 	 * Do not consider this function safe for printing!
 	 *
@@ -3153,10 +3105,6 @@ final class Deprecated {
 	/**
 	 * Fetches blogname (site title).
 	 *
-	 * Do not consider this function safe for printing!
-	 *
-	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
-	 *
 	 * @since 4.2.0
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
@@ -3173,11 +3121,6 @@ final class Deprecated {
 
 	/**
 	 * Fetch blog description.
-	 * Memoizes the return value.
-	 *
-	 * Do not consider this function safe for printing!
-	 *
-	 * We use get_bloginfo( ..., 'display' ), even though it escapes needlessly, because it applies filters.
 	 *
 	 * @since 2.5.2
 	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
@@ -3281,7 +3224,6 @@ final class Deprecated {
 
 	/**
 	 * Gets Title Separator.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 4.3.0 Deprecated.
@@ -3427,7 +3369,6 @@ final class Deprecated {
 
 	/**
 	 * Returns the post's modified time.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.1.4
 	 * @since 4.3.0 Deprecated.
@@ -3851,7 +3792,6 @@ final class Deprecated {
 
 	/**
 	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
 	 * @since 4.3.0 Deprecated.
@@ -3971,7 +3911,6 @@ final class Deprecated {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @internal But, feel free to use it.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -4305,7 +4244,6 @@ final class Deprecated {
 	/**
 	 * Returns preferred $url scheme.
 	 * Which can automatically be detected when not set, based on the site URL setting.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
@@ -4414,7 +4352,6 @@ final class Deprecated {
 
 	/**
 	 * Caches and returns the current URL.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 4.3.0 Deprecated.
@@ -4435,7 +4372,6 @@ final class Deprecated {
 	 * This link excludes any pagination. Great for structured data.
 	 *
 	 * Does not work for unregistered pages, like search, 404, date, author, and CPTA.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 3.1.0 Now properly generates taxonomical URLs.
@@ -4454,7 +4390,6 @@ final class Deprecated {
 
 	/**
 	 * Caches and returns the homepage URL.
-	 * Memoizes the return value.
 	 *
 	 * @since 3.0.0
 	 * @since 4.3.0 Deprecated.
@@ -4811,7 +4746,6 @@ final class Deprecated {
 	/**
 	 * Fetches home URL host. Like "wordpress.org".
 	 * If this fails, you're going to have a bad time.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.7.0
 	 * @since 2.9.2 1. Now considers port too.
@@ -4993,7 +4927,6 @@ final class Deprecated {
 	/**
 	 * Returns the image details from cache.
 	 * Only to be used within the loop, uses default parameters, inlucing the 'social' context.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.2 Added a $single parameter, which helps reduce processing power required.
@@ -5236,8 +5169,11 @@ final class Deprecated {
 	 * @deprecated
 	 */
 	public function html_output() {
-		\tsf()->_deprecated_function( 'tsf()->html_output()', '4.3.0' );
-		\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags(); // Lacking import OK.
+
+		$tsf = \tsf();
+
+		$tsf->_deprecated_function( 'tsf()->html_output()', '4.3.0', 'tsf()->print_seo_meta_tags()' );
+		$tsf->print_seo_meta_tags();
 	}
 
 	/**
@@ -5603,7 +5539,6 @@ final class Deprecated {
 
 	/**
 	 * Fetch latest public category ID.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
 	 * @since 4.3.0 Deprecated.
@@ -5621,7 +5556,6 @@ final class Deprecated {
 
 	/**
 	 * Tests whether term is populated. Also tests the child terms.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.2.8
 	 * @since 4.3.0 Deprecated.
@@ -5641,7 +5575,6 @@ final class Deprecated {
 
 	/**
 	 * Fetch latest public post/page ID.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.4.3
 	 * @since 2.9.3 1. Removed object caching.
@@ -6063,11 +5996,6 @@ final class Deprecated {
 
 	/**
 	 * Returns all registered custom SEO fields for a post.
-	 * Memoizes the return value.
-	 *
-	 * Unlike other post meta calls, no \WP_Post object is accepted as an input value,
-	 * this is done for performance reasons, so we can cache here, instead of relying on
-	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Now tests for valid post ID in the post object.
@@ -6248,7 +6176,6 @@ final class Deprecated {
 
 	/**
 	 * Checks if blog is public through WordPress core settings.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
 	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
@@ -6287,7 +6214,6 @@ final class Deprecated {
 
 	/**
 	 * Determines if the current installation is on a subdirectory.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
 	 * @since 4.3.0 Deprecated.
@@ -6305,7 +6231,6 @@ final class Deprecated {
 
 	/**
 	 * Tells whether WP 5.5 Core Sitemaps are used.
-	 * Memoizes the return value.
 	 *
 	 * @since 4.1.2
 	 * @since 4.3.0 Deprecated.
@@ -6342,7 +6267,6 @@ final class Deprecated {
 
 	/**
 	 * Detects presence of robots.txt in root folder.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
 	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
@@ -6380,7 +6304,6 @@ final class Deprecated {
 
 	/**
 	 * Detects presence of sitemap.xml in root folder.
-	 * Memoizes the return value.
 	 *
 	 * @since 2.5.2
 	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
@@ -6401,25 +6324,17 @@ final class Deprecated {
 	 * Edits the robots.txt output.
 	 * Requires the site not to have a robots.txt file in the root directory.
 	 *
-	 * This methods completely hijacks default output, intentionally.
-	 *
-	 * The robots.txt file should be left as default, so to improve SEO.
-	 * The Robots Exclusion Protocol encourages you not to use this file for
-	 * non-administrative endpoints. Use the robots meta tags (and headers) instead.
-	 *
 	 * @since 2.2.9
 	 * @since 2.9.3 Casts $public to string for check.
 	 * @since 4.0.5 1. The output is now filterable.
 	 *              2. Improved invalid location test.
 	 *              3. No longer shortcircuits on non-public sites.
-	 *              4. Now marked as private. Will be renamed to `_robots_txt()` in the future.
+	 *              4. Now marked as private.
 	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
 	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
 	 * @since 4.1.4 Removed object caching support.
 	 * @since 4.3.0 Deprecated. Even though access was marked private, we still found some used this (including us).
 	 * @deprecated
-	 * @uses robots_txt filter located at WP core
-	 * @access private
 	 *
 	 * @return string Robots.txt output.
 	 */
@@ -6503,5 +6418,122 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->init_admin_scripts()', '4.3.0', 'tsf()->load_admin_scripts()' );
 
 		return $tsf->load_admin_scripts();
+	}
+
+	/**
+	 * Returns the SEO Bar.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $query : {
+	 *   int    $id        : Required. The current post or term ID.
+	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
+	 *   string $post_type : Optional. If not set, this will be automatically filled.
+	 *                                 This parameter is ignored for taxonomies.
+	 * }
+	 * @return string The generated SEO bar, in HTML.
+	 */
+	public function get_generated_seo_bar( $query ) {
+
+		\tsf()->_deprecated_function( 'tsf()->get_generated_seo_bar()', '4.3.0' );
+
+		return \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar( $query );
+	}
+
+	/**
+	 * Redirects vistor to input $url.
+	 *
+	 * @since 2.9.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url The redirection URL.
+	 */
+	public function do_redirect( $url = '' ) {
+
+		\tsf()->_deprecated_function( 'tsf()->do_redirect()', '4.3.0', 'wp_safe_redirect()' );
+
+		return \The_SEO_Framework\Front\Redirect::do_redirect( $url );
+	}
+
+	/**
+	 * Whether to allow external redirect through the 301 redirect option.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.6.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool Whether external redirect is allowed.
+	 */
+	public function allow_external_redirect() {
+
+		\tsf()->_deprecated_function( 'tsf()->allow_external_redirect()', '4.3.0' );
+
+		return \The_SEO_Framework\Helper\Redirect::allow_external_redirect();
+	}
+
+	/**
+	 * Returns the document title.
+	 *
+	 * This method serves as a callback for filter `pre_get_document_title`.
+	 * Use tsf()->get_title() instead.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Now escapes the filter output.
+	 * @see $this->get_title()
+	 *
+	 * @param string $title The filterable title.
+	 * @return string The document title
+	 */
+	public function get_document_title( $title = '' ) {
+
+		\tsf()->_deprecated_function( 'tsf()->get_document_title()', '4.3.0' );
+
+		return \The_SEO_Framework\Front\Title::set_document_title( $title );
+	}
+
+	/**
+	 * Returns the document title.
+	 *
+	 * This method serves as a callback for filter `wp_title`.
+	 * Use tsf()->get_title() instead.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 Removed extraneous, unused parameters.
+	 * @since 4.3.0 Now escapes the filter output.
+	 * @see $this->get_title()
+	 *
+	 * @param string $title The filterable title.
+	 * @return string $title
+	 */
+	public function get_wp_title( $title = '' ) {
+
+		\tsf()->_deprecated_function( 'tsf()->get_wp_title()', '4.3.0' );
+
+		return \The_SEO_Framework\Front\Title::set_document_title( $title );
+	}
+
+	/**
+	 * Returns the SEO Settings page URL.
+	 *
+	 * @since 4.1.4
+	 *
+	 * @return string The escaped SEO Settings page URL.
+	 */
+	public function get_seo_settings_page_url() {
+
+		\tsf()->_deprecated_function( 'tsf()->get_seo_settings_page_url()', '4.3.0' );
+
+		return \the_seo_framework\is_headless( 'settings' )
+			? ''
+			: \esc_url(
+				html_entity_decode(
+					\menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false )
+				),
+				[ 'https', 'http' ]
+			);
 	}
 }

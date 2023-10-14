@@ -58,27 +58,29 @@ $headless = is_headless();
 
 if ( ! $headless['meta'] ) {
 	// Initialize term meta filters and actions.
-	\add_action( 'edit_term', [ Data\Admin\Term::class, '_update_term_meta' ], 10, 3 );
+	\add_action( 'edit_term', [ Data\Admin\Term::class, 'update_meta' ], 10, 3 );
 
 	// Initialize term meta filters and actions.
-	\add_action( 'save_post', [ Data\Admin\Post::class, '_update_post_meta' ], 1 );
-	\add_action( 'edit_attachment', [ Data\Admin\Post::class, '_update_attachment_meta' ], 1 );
-	\add_action( 'save_post', [ Data\Admin\Post::class, '_save_inpost_primary_term' ], 1 );
+	\add_action( 'save_post', [ Data\Admin\Post::class, 'update_meta' ], 1 );
+	\add_action( 'edit_attachment', [ Data\Admin\Post::class, 'update_meta' ], 1 );
+	\add_action( 'save_post', [ Data\Admin\Post::class, 'update_primary_term' ], 1 );
 
 	// Enqueue Post meta boxes.
-	\add_action( 'add_meta_boxes', [ \tsf(), '_init_post_edit_view' ], 5, 1 );
+	\add_action( 'add_meta_boxes', [ Admin\Settings\Post::class, 'prepare_meta_box' ], 10 );
 
-	// Enqueue Term meta output.
-	\add_action( 'current_screen', [ \tsf(), '_init_term_edit_view' ] );
+	// Enqueue Term meta output. Terms don't have proper catch-all hooks, so this loads on every page:
+	\add_action( 'current_screen', [ Admin\Settings\Term::class, 'prepare_setting_fields' ] );
 
 	// Adds post states to list view tables.
-	\add_filter( 'display_post_states', [ \tsf(), '_add_post_state' ], 10, 2 );
+	\add_filter( 'display_post_states', [ Admin\Lists\PostStates::class, 'add_post_state' ], 10, 2 );
 
-	// Initialize the SEO Bar for tables.
-	\add_action( 'admin_init', [ \tsf(), '_init_seo_bar_tables' ] );
+	// Initialize quick and bulk edit for posts and terms.
+	\add_action( 'admin_init', [ Admin\Settings\ListEdit::class, 'init_quick_and_bulk_edit' ] );
 
-	// Initialize List Edit for tables.
-	\add_action( 'admin_init', [ \tsf(), '_init_list_edit' ] );
+	if ( Data\Plugin::get_option( 'display_seo_bar_tables' ) ) {
+		// Initialize the SEO Bar for tables.
+		\add_action( 'admin_init', [ Admin\SEOBar\ListTable::class, 'init_seo_bar' ] );
+	}
 }
 
 if ( ! $headless['settings'] ) {
@@ -94,11 +96,11 @@ if ( ! $headless['settings'] ) {
 
 if ( ! $headless['user'] ) {
 	// Initialize user meta filters and actions.
-	\add_action( 'personal_options_update', [ Data\Admin\User::class, '_update_user_meta' ], 10, 1 );
-	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, '_update_user_meta' ], 10, 1 );
+	\add_action( 'show_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
+	\add_action( 'edit_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
 
-	// Enqueue user meta output.
-	\add_action( 'current_screen', [ \tsf(), '_init_user_edit_view' ] );
+	\add_action( 'personal_options_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );
+	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );
 }
 
 if ( \in_array( false, $headless, true ) ) {
@@ -115,13 +117,13 @@ if ( \in_array( false, $headless, true ) ) {
 // Add plugin links to the plugin activation page.
 \add_filter(
 	'plugin_action_links_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
-	[ Admin\PluginTable::class, '_add_plugin_action_links' ],
+	[ Admin\PluginTable::class, 'add_plugin_action_links' ],
 	10,
 	2
 );
 \add_filter(
 	'plugin_row_meta',
-	[ Admin\PluginTable::class, '_add_plugin_row_meta' ],
+	[ Admin\PluginTable::class, 'add_plugin_row_meta' ],
 	10,
 	2
 );

@@ -37,7 +37,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->sitemap()->utils() instead.
+ *         Use tsf()->sitemap()->utils() instead.
  */
 class Utils {
 

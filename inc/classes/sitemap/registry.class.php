@@ -42,9 +42,10 @@ use \The_SEO_Framework\Helper,
  * Prepares sitemap output.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap and renamed to Registry.
+ * @since 4.3.0 1. Renamed from `Sitemap`.
+ *              2. Moved to `\The_SEO_Framework\Sitemap`.
  * @access protected
- * @internal Use tsf()->sitemap()->registry() instead.
+ *         Use tsf()->sitemap()->registry() instead.
  */
 class Registry {
 
@@ -287,6 +288,12 @@ class Registry {
 	/**
 	 * Refreshes sitemaps on post change.
 	 *
+	 * @hook publish_post 10
+	 * @hook publish_page 10
+	 * @hook deleted_post 10
+	 * @hook deleted_page 10
+	 * @hook post_updated 10
+	 * @hook page_updated 10
 	 * @since 4.3.0
 	 * @access private
 	 *
@@ -304,6 +311,7 @@ class Registry {
 	/**
 	 * Checks whether the permalink structure is updated.
 	 *
+	 * @hook load-options-permalink.php 20
 	 * @since 4.3.0
 	 * @access private
 	 *
@@ -315,7 +323,7 @@ class Registry {
 			   ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) )
 			&& \check_admin_referer( 'update-permalink' )
 		) {
-				return static::refresh_sitemaps();
+			return static::refresh_sitemaps();
 		}
 
 		return false;

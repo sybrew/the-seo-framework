@@ -37,21 +37,21 @@ use \The_SEO_Framework\{
  * @since 4.3.0 1. Renamed from `UserSettings` to `User`.
  *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
  * @access private
- * @internal
- * @final Can't be extended.
  */
 final class User {
 
 	/**
 	 * Prepares the user setting fields.
 	 *
+	 * @hook show_user_profile 0
+	 * @hook edit_user_profile 0
 	 * @since 4.1.4
-	 * @since 4.3.0 Now asserts if user has capability on any multisite network's blog.
-	 * @access private
+	 * @since 4.3.0 1. Now asserts if user has capability on any multisite network's blog.
+	 *              2. Renamed from `_prepare_setting_fields`.
 	 *
 	 * @param \WP_User $user WP_User object.
 	 */
-	public static function _prepare_setting_fields( $user ) {
+	public static function prepare_setting_fields( $user ) {
 
 		if ( ! Data\User::user_has_author_info_cap_on_network( $user ) )
 			return;

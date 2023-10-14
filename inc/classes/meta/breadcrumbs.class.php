@@ -42,7 +42,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->breadcrumbs() instead. var_dump() create me.
+ *         Use tsf()->breadcrumbs() instead.
  */
 class Breadcrumbs {
 

@@ -39,7 +39,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->title()->conditions() instead.
+ *         Use tsf()->title()->conditions() instead.
  */
 final class Conditions {
 

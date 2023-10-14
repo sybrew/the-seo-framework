@@ -38,7 +38,7 @@ turn_off_autoloading: if ( ! is_headless( 'settings' ) ) {
 	$temp_options = $options;
 	// Write a small difference, so the change will be forwarded to the database.
 	if ( \is_array( $temp_options ) )
-		$temp_options['update_buster'] = (int) time();
+		$temp_options['update_buster'] = time();
 
 	$_success = \update_option( $setting, $temp_options, 'no' );
 	if ( $_success )

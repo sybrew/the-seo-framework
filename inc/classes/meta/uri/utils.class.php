@@ -38,7 +38,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->uri()->utils() instead.
+ *         Use tsf()->uri()->utils() instead.
  */
 class Utils {
 
@@ -96,7 +96,8 @@ class Utils {
 	 * @return string The home URL host.
 	 */
 	public static function get_parsed_front_page_url() {
-		return umemo( __METHOD__ ) ?? umemo( __METHOD__, parse_url( Data\Blog::get_front_page_url() ) );
+		return umemo( __METHOD__ )
+			?? umemo( __METHOD__, parse_url( Data\Blog::get_front_page_url() ) );
 	}
 
 	/**
@@ -225,8 +226,8 @@ class Utils {
 	 *
 	 * @since 2.6.5
 	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils.
-	 * @see `$this->set_url_scheme()` to set the correct scheme.
-	 * @see `$this->convert_to_url_if_path()` to create URLs from paths.
+	 * @see `static::set_url_scheme()` to set the correct scheme.
+	 * @see `static::convert_path_to_url()` to create URLs from paths.
 	 *
 	 * @param string $url Required the current maybe not fully qualified URL.
 	 * @return string $url

@@ -39,13 +39,15 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->query()->exclusion() instead, which pooled this class.
+ *         Use tsf()->query()->exclusion() instead.
  */
 class Exclusion {
 
 	/**
 	 * Clears static excluded IDs cache.
 	 *
+	 * @hook wp_insert_post 10
+	 * @hook attachment_updated 10
 	 * @since 4.3.0
 	 *
 	 * @return bool True on success, false on failure.

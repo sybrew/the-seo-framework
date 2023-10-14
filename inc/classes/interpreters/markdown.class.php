@@ -35,8 +35,6 @@ namespace The_SEO_Framework\Interpreters;
  *
  * @access protected
  *         Everything in this class is subject to change or deletion.
- * @internal
- * @final Can't be extended.
  */
 final class Markdown {
 

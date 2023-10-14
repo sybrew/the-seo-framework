@@ -38,7 +38,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->twitter() instead.
+ *         Use tsf()->twitter() instead.
  */
 class Twitter {
 

@@ -62,9 +62,8 @@ class Registry {
 	 * @since 3.1.0
 	 * @access private
 	 *         There's a PHP bug preventing us from making this private during the deprecation phase.
-	 * @internal
-	 * @var int <bit 01>  REGISTERED
-	 * @var int <bit 10>  LOADED     (rather, enqueued)
+	 * @var int <bit 01> REGISTERED
+	 * @var int <bit 10> LOADED     (rather, enqueued)
 	 */
 	public const REGISTERED = 0b01;
 	public const LOADED     = 0b10;
@@ -179,8 +178,6 @@ class Registry {
 	 *
 	 * @since 4.0.0
 	 * @since 4.3.0 Is now static.
-	 * @access private
-	 * @internal
 	 *
 	 * @param string $classes Space-separated list of CSS classes.
 	 * @return string
@@ -196,8 +193,6 @@ class Registry {
 	 * @since 4.0.0
 	 * @since 4.0.5 Put the const assignment on front, so it's prone to fail earlier.
 	 * @since 4.3.0 Is now static.
-	 * @access private
-	 * @internal
 	 */
 	public static function _print_tsfjs_script() {
 		echo "<script>(()=>{const a=0;document.body.classList.replace('tsf-no-js','tsf-js')})()</script>";
@@ -208,8 +203,6 @@ class Registry {
 	 *
 	 * @since 3.1.0
 	 * @since 4.3.0 Is now static.
-	 * @access private
-	 * @internal
 	 */
 	public static function _prepare_admin_scripts() {
 		static::forward_known_scripts();
@@ -597,8 +590,6 @@ class Registry {
 	 * @since 3.2.2 Now clears outputted templates, so to prevent duplications.
 	 * @since 4.1.2 Now clears templates right before outputting them, so to prevent a plausible infinite loop.
 	 * @since 4.3.0 Is now static.
-	 * @access private
-	 * @internal
 	 */
 	public static function _output_templates() {
 		foreach ( static::$templates as $id => $templates ) {

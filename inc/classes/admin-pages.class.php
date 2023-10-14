@@ -168,76 +168,6 @@ class Admin_Pages extends Detect {
 	}
 
 	/**
-	 * Prepares post edit view, like outputting the fields.
-	 *
-	 * @hook add_meta_boxes 5
-	 * @since 4.0.0
-	 *
-	 * @param string $post_type The current post type.
-	 */
-	public function _init_post_edit_view( $post_type ) {
-
-		if ( ! Query::is_post_edit() || ! Post_Types::is_post_type_supported( $post_type ) ) return;
-
-		/**
-		 * @since 2.0.0
-		 * @param bool $show_seobox Whether to show the SEO meta box.
-		 */
-		$show_seobox = (bool) \apply_filters( 'the_seo_framework_seobox_output', true );
-
-		if ( $show_seobox )
-			\add_action(
-				'add_meta_boxes',
-				[ Admin\Settings\Post::class, '_prepare_meta_box' ]
-			);
-	}
-
-	/**
-	 * Prepares term edit view, like outputting the fields.
-	 *
-	 * @since 4.0.0
-	 */
-	public function _init_term_edit_view() {
-
-		if ( ! Query::is_term_edit() ) return;
-
-		$taxonomy = Query::get_current_taxonomy();
-
-		if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) ) return;
-
-		/**
-		 * @since 2.6.0
-		 * @param int $priority The meta box term priority.
-		 *                      Defaults to a high priority, this box is seen soon below the default edit inputs.
-		 */
-		$priority = (int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 );
-
-		\add_action(
-			"{$taxonomy}_edit_form",
-			[ Admin\Settings\Term::class, '_prepare_setting_fields' ],
-			$priority,
-			2
-		);
-	}
-
-	/**
-	 * Prepares profile/user edit view, like outputting the SEO fields.
-	 *
-	 * @since 4.1.4
-	 * @access private
-	 */
-	public function _init_user_edit_view() {
-
-		if ( ! Query::is_profile_edit() ) return;
-
-		// WordPress made a mess of this. We can't reliably get a user future-proof. Load class for all users; check there.
-		// if ( ! $user->has_cap( \THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP ) ) return;
-
-		\add_action( 'show_user_profile', [ Admin\Settings\User::class, '_prepare_setting_fields' ], 0, 1 );
-		\add_action( 'edit_user_profile', [ Admin\Settings\User::class, '_prepare_setting_fields' ], 0, 1 );
-	}
-
-	/**
 	 * Outputs notices on SEO setting changes.
 	 *
 	 * @since 4.0.0
@@ -435,39 +365,6 @@ class Admin_Pages extends Detect {
 	}
 
 	/**
-	 * Returns the SEO Bar.
-	 *
-	 * @since 4.0.0
-	 * @uses \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar();
-	 *
-	 * @param array $query : {
-	 *   int    $id        : Required. The current post or term ID.
-	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
-	 *   string $post_type : Optional. If not set, this will be automatically filled.
-	 *                                 This parameter is ignored for taxonomies.
-	 * }
-	 * @return string The generated SEO bar, in HTML.
-	 */
-	public function get_generated_seo_bar( $query ) {
-		return \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar( $query );
-	}
-
-	/**
-	 * Outputs floating and reference title HTML elements for JavaScript.
-	 *
-	 * Do not use. Legacy item output for backward compatibility.
-	 *
-	 * @since 3.0.4
-	 * @since 4.1.0 Now only outputs the legacy reference and noadditions reference.
-	 * @since 4.1.2 Now prevents wp-emoji.js parsing the reference.
-	 * @ignore
-	 * @todo deprecate
-	 */
-	public function output_js_title_elements() {
-		echo '<span data-ignore-me=legacy id=tsf-title-reference class="tsf-title-reference wp-exclude-emoji hidden" data-do-not-use=legacy></span>';
-	}
-
-	/**
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
@@ -514,20 +411,6 @@ class Admin_Pages extends Detect {
 				Interpreters\HTML::make_data_attributes( [ 'settings' => $settings ] ),
 			]
 		);
-	}
-
-	/**
-	 * Outputs reference description HTML elements for JavaScript.
-	 *
-	 * Do not use. Legacy item output for backward compatibility.
-	 *
-	 * @since 3.0.4
-	 * @since 4.1.2 Now prevents wp-emoji.js parsing the reference.
-	 * @ignore
-	 * @todo deprecate
-	 */
-	public function output_js_description_elements() {
-		echo '<span data-ignore-me=legacy id=tsf-description-reference class="tsf-description-reference wp-exclude-emoji hidden" data-do-not-use=legacy></span>';
 	}
 
 	/**

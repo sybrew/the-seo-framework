@@ -34,9 +34,7 @@ use function \The_SEO_Framework\umemo;
  *
  * @since 4.2.0
  * @since 4.3.0 Moved to Meta\Robots from Builders\Robots
- * @access protected
- *         Instantiation of class is not part of the public API.
- * @final Can't be extended.
+ * @access private
  */
 final class Main {
 
@@ -60,6 +58,12 @@ final class Main {
 	 * @var Main This instance.
 	 */
 	private static $instance;
+
+	/**
+	 * @since 4.3.0
+	 * @var array[] The collected assertions
+	 */
+	private $assertions = [];
 
 	/**
 	 * @since 4.2.0
@@ -193,8 +197,7 @@ final class Main {
 	 * @return array The collected assertions. Returned by reference.
 	 */
 	public function &collect_assertions() {
-		static $collection = [];
-		return $collection;
+		return $this->collection;
 	}
 
 	/**

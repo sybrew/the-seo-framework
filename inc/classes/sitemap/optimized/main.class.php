@@ -33,11 +33,9 @@ use \The_SEO_Framework\Data,
  * Generates the sitemap.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\Sitemap\Main` from `The_SEO_Framework\Builders\Sitemap`
- * @since 4.3.0 1. No longer holds the $tsf property.
- *              2. Moved to `\The_SEO_Framework\Sitemap\Optimized`
- * @abstract
- *
+ * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\Sitemap`
+ * @since 4.3.0 1. No longer holds the `$tsf` property.
+ *              2. Moved to `\The_SEO_Framework\Sitemap\Optimized`.
  * @access public
  */
 abstract class Main {
@@ -68,7 +66,6 @@ abstract class Main {
 	 *
 	 * @since 4.1.2
 	 * @abstract
-	 * TODO consider adding ...$args?
 	 *
 	 * @return string The sitemap content.
 	 */
@@ -87,7 +84,6 @@ abstract class Main {
 	 * Returns the sitemap content.
 	 *
 	 * @since 4.0.0
-	 * @abstract
 	 *
 	 * @return string The sitemap content.
 	 */

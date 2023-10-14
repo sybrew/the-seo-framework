@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Meta\Image;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->image()->utils() instead.
+ *         Use tsf()->image()->utils() instead.
  */
 class Utils {
 

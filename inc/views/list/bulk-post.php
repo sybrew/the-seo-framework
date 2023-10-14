@@ -31,7 +31,7 @@ use \The_SEO_Framework\Interpreters\Form;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// See _display_bulk_edit_fields
+// See display_bulk_edit_fields
 [ $post_type, $taxonomy ] = $view_args;
 
 $robots_settings = [

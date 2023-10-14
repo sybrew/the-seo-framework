@@ -30,11 +30,10 @@ namespace The_SEO_Framework\Builders\Sitemap;
  * Generates the sitemap.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\Sitemap\Main` from `The_SEO_Framework\Builders\Sitemap`
+ * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\Sitemap`
  * @since 4.3.0 Deprecated.
- * @abstract
  * @deprecated
- * @access public
+ * @access protected
  */
 abstract class Main extends \The_SEO_Framework\Sitemap\Optimized\Main {
 

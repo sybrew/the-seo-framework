@@ -30,10 +30,8 @@ namespace The_SEO_Framework\Interpreters;
  *
  * @since 4.1.4
  *
- * @access protected
+ * @access private
  *         Everything in this class is subject to change or deletion.
- * @internal
- * @final Can't be extended.
  */
 final class HTML {
 
@@ -242,7 +240,6 @@ final class HTML {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 No longer adds an extra space in front of the return value when no data is generated.
-	 * @internal
 	 *
 	 * @param iterable $data : {
 	 *    string $k => mixed $v

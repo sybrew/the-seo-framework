@@ -1,12 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Data\Plugin\Helper
- * @subpackage The_SEO_Framework\Data\Plugin
+ * @package The_SEO_Framework\Classes\Helper\Redirect
+ * @subpackage The_SEO_Framework\Query
  */
 
-namespace The_SEO_Framework\Data\Plugin;
+namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
+
+use function \The_SEO_Framework\memo;
 
 /**
  * The SEO Framework plugin
@@ -26,32 +28,27 @@ namespace The_SEO_Framework\Data\Plugin;
  */
 
 /**
- * Holds a collection of data helper methods for TSF.
+ * Holds a collection of helper methods for HTTP Redirects.
  *
  * @since 4.3.0
- * @access protected
- *         Use tsf()->data()->plugin->helper() instead.
+ * @access private
  */
-class Helper {
+class Redirect {
 
 	/**
-	 * Returns the option key for robots settings.
+	 * Whether to allow external redirect through the 301 redirect option.
+	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 2.6.0
+	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Redirect`
 	 *
-	 * @param string $field Accepts 'post_type' and 'taxonomy'
-	 * @param string $type  Accepts 'noindex', 'nofollow', 'noarchive'.
-	 * @return string
+	 * @return bool Whether external redirect is allowed.
 	 */
-	public static function get_robots_option_index( $field, $type ) {
-
-		switch ( $field ) {
-			case 'post_type':
-				return "{$type}_post_types";
-			case 'taxonomy':
-				return "{$type}_taxonomies";
-		}
-
-		return '';
+	public static function allow_external_redirect() {
+		/**
+		 * @since 2.1.0
+		 * @param bool $allowed Whether external redirect is allowed.
+		 */
+		return memo() ?? memo( (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true ) );
 	}
 }

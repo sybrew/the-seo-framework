@@ -33,14 +33,11 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access private
- *         Not part of the public API.
- * @final Can't be extended.
  */
 final class Generator {
 
 	/**
 	 * @since 4.1.4
-	 * @internal
 	 * @var int MAX_CONTENT_IMAGES The maximum number of images to get from the content.
 	 */
 	private const MAX_CONTENT_IMAGES = 5;

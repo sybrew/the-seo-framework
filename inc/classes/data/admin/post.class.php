@@ -49,48 +49,31 @@ class Post {
 	public static $nonce_action = 'tsf_singular_nonce_action';
 
 	/**
-	 * Saves the SEO settings when we save an attachment.
-	 *
-	 * This is a passthrough method for `_update_post_meta()`.
-	 * Sanity checks are handled deeper.
-	 *
-	 * @hook edit_attachment 1
-	 * @since 3.0.6
-	 * @since 4.0.0 Renamed from `inattachment_seo_save`
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Post`.
-	 * @access private
-	 *
-	 * @param int $post_id The post ID.
-	 * @return void
-	 */
-	public static function _update_attachment_meta( $post_id ) {
-		static::_update_post_meta( $post_id );
-	}
-
-	/**
 	 * Saves the Post SEO Meta settings on quick-edit, bulk-edit, or post-edit.
 	 *
 	 * @hook save_post 1
+	 * @hook edit_attachment 1
 	 * @since 2.0.0
 	 * @since 2.9.3 Added 'exclude_from_archive'.
 	 * @since 4.0.0 1. Renamed from `inpost_seo_save`
 	 *              2. Now allows updating during `WP_CRON`.
 	 *              3. Now allows updating during `WP_AJAX`.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 *              2. Renamed from `_update_post_meta`.
 	 * @access private
 	 *
 	 * @param int $post_id The post ID.
 	 */
-	public static function _update_post_meta( $post_id ) {
+	public static function update_meta( $post_id ) {
 		// phpcs:disable, WordPress.Security.NonceVerification
 
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
-			static::update_quick_edit_post_meta( $post_id );
+			static::update_via_quick_edit( $post_id );
 		} elseif ( ! empty( $_REQUEST['autodescription-bulk'] ) ) {
 			// This is sent via GET. Keep using $_REQUEST for future-compatibility.
-			static::update_bulk_edit_post_meta( $post_id );
+			static::update_via_bulk_edit( $post_id );
 		} elseif ( ! empty( $_POST['autodescription'] ) ) {
-			static::update_post_edit_post_meta( $post_id );
+			static::update_via_post_edit( $post_id );
 		}
 
 		// phpcs:enable, WordPress.Security.NonceVerification
@@ -103,12 +86,13 @@ class Post {
 	 * @since 3.0.0
 	 * @since 4.0.0 1. Now allows updating during `WP_CRON`.
 	 *              2. Now allows updating during `WP_AJAX`.
-	 * @securitycheck 4.1.0 OK.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 *              2. Renamed from `_save_inpost_primary_term`.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
-	public static function _save_inpost_primary_term( $post_id ) {
+	public static function update_primary_term( $post_id ) {
 
 		// The 'autodescription' index should only be used when using the editor.
 		// Quick and bulk-edit should be halted here.
@@ -153,12 +137,13 @@ class Post {
 	 * Overwrites all of the post meta on post-edit.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 *              2. Renamed from `update_post_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
-	private static function update_post_edit_post_meta( $post_id ) {
+	private static function update_via_post_edit( $post_id ) {
 
 		$post_id = \get_post( $post_id )->ID ?? null;
 
@@ -192,12 +177,13 @@ class Post {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Allowed title and description parsing.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 *              2. Renamed from `update_quick_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
-	private static function update_quick_edit_post_meta( $post_id ) {
+	private static function update_via_quick_edit( $post_id ) {
 
 		$post_id = \get_post( $post_id )->ID ?? null;
 
@@ -248,12 +234,13 @@ class Post {
 	 * Overwrites a park of the post meta on bulk-edit.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 *              2. Renamed from `update_bulk_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
-	private static function update_bulk_edit_post_meta( $post_id ) {
+	private static function update_via_bulk_edit( $post_id ) {
 
 		$post_id = \get_post( $post_id )->ID ?? null;
 

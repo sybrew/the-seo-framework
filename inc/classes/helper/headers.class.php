@@ -30,7 +30,6 @@ namespace The_SEO_Framework\Helper;
  *
  * @since 4.3.0
  * @access private
- * @internal
  */
 class Headers {
 

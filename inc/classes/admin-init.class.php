@@ -42,61 +42,7 @@ use \The_SEO_Framework\Data;
  *
  * @since 2.8.0
  */
-class Admin_Init extends Init {
-
-	/**
-	 * Initializes SEO Bar tables.
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 */
-	public function _init_seo_bar_tables() {
-		if ( Data\Plugin::get_option( 'display_seo_bar_tables' ) )
-			new Admin\SEOBar\ListTable;
-	}
-
-	/**
-	 * Initializes Lists Edit tables.
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 */
-	public function _init_list_edit() {
-		new Admin\Lists\Edit;
-	}
-
-	/**
-	 * Adds post states for the post/page edit.php query.
-	 *
-	 * @since 4.0.0
-	 * @access private
-	 *
-	 * @param array    $states The current post states array
-	 * @param \WP_Post $post   The Post Object.
-	 * @return array Adjusted $states
-	 */
-	public function _add_post_state( $states = [], $post = null ) {
-
-		$post_id = $post->ID ?? null;
-
-		if ( $post_id ) {
-			if (
-				   Data\Plugin::get_option( 'alter_search_query' )
-				&& Data\Plugin\Post::get_post_meta_item( 'exclude_local_search', $post_id )
-			) {
-				$states[] = \esc_html__( 'No Search', 'autodescription' );
-			}
-
-			if (
-				   Data\Plugin::get_option( 'alter_archive_query' )
-				&& Data\Plugin\Post::get_post_meta_item( 'exclude_from_archive', $post_id )
-			) {
-				$states[] = \esc_html__( 'No Archive', 'autodescription' );
-			}
-		}
-
-		return $states;
-	}
+class Admin_Init extends Pool {
 
 	/**
 	 * Returns the title and description input guideline table, for

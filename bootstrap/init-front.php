@@ -56,7 +56,7 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 }
 
 // Initialize 301 redirects.
-\add_action( 'template_redirect', [ \tsf(), '_init_custom_field_redirect' ] );
+\add_action( 'template_redirect', [ Front\Redirect::class, 'init_meta_setting_redirect' ] );
 
 // Prepares requisite robots headers to avoid low-quality content penalties.
 \add_action( 'do_robots', [ Headers::class, 'output_robots_noindex_headers' ] );
@@ -114,21 +114,25 @@ if ( \apply_filters( 'the_seo_framework_overwrite_titles', true ) ) {
 	\remove_all_filters( 'pre_get_document_title', false );
 
 	// New WordPress 4.4.0 filter. Hurray! It's also much faster :)
-	\add_filter( 'pre_get_document_title', [ \tsf(), 'get_document_title' ], 10 );
+	\add_filter( 'pre_get_document_title', [ Front\Title::class, 'set_document_title' ], 10 );
 
 	/**
 	 * @since 2.4.1
 	 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
-	 *
-	 * TODO remove this block? -- it's been 7 years...
+	 * TODO remove this code? -- it's been 8 years...
 	 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
 	 */
-	if ( \apply_filters( 'the_seo_framework_manipulate_title', true ) ) {
+	if ( \apply_filters_deprecated(
+		'the_seo_framework_manipulate_title',
+		[
+			true,
+		],
+		'4.3.0 of The SEO Framework',
+		'the_seo_framework_overwrite_titles',
+	) ) {
 		\remove_all_filters( 'wp_title', false );
 		// Override WordPress Title
-		\add_filter( 'wp_title', [ \tsf(), 'get_wp_title' ], 9 );
-		// Override WooThemes Title TODO move this to wc compat file.
-		\add_filter( 'woo_title', [ \tsf(), 'get_document_title' ], 99 );
+		\add_filter( 'wp_title', [ Front\Title::class, 'set_document_title' ], 9 );
 	}
 }
 
@@ -140,18 +144,6 @@ if ( \apply_filters( 'the_seo_framework_kill_core_robots', true ) ) {
 	\remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' );
 	// Reconsider readding this to "supported" queries only?
 	\remove_filter( 'wp_robots', 'wp_robots_noindex_search' );
-}
-
-if ( Data\Plugin::get_option( 'og_tags' ) ) { // independent from filter at use_og_tags--let that be deciding later.
-	// Disable Jetpack's Open Graph tags. But Sybre, compat files? Yes.
-	\add_filter( 'jetpack_enable_open_graph', '__return_false' );
-}
-
-if ( Data\Plugin::get_option( 'twitter_tags' ) ) { // independent from filter at use_twitter_tags--let that be deciding later.
-	// Disable Jetpack's Twitter Card tags. But Sybre, compat files? Maybe.
-	\add_filter( 'jetpack_disable_twitter_cards', '__return_true' );
-	// Future, maybe. See <https://github.com/Automattic/jetpack/issues/13146#issuecomment-516841698>
-	// \add_filter( 'jetpack_enable_twitter_cards', '__return_false' );
 }
 
 if ( ! Data\Plugin::get_option( 'oembed_scripts' ) ) {
@@ -169,4 +161,4 @@ if ( ! Data\Plugin::get_option( 'oembed_scripts' ) ) {
  * Careful, WordPress can switch blogs when this filter runs. So, run this always,
  * and assess options (uncached!) therein.
  */
-\add_filter( 'oembed_response_data', [ \tsf(), '_alter_oembed_response_data' ], 10, 2 );
+\add_filter( 'oembed_response_data', [ Front\OEmbed::class, 'alter_response_data' ], 10, 2 );

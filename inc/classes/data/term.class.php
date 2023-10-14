@@ -34,8 +34,7 @@ use \The_SEO_Framework\Helper\Query;
  *
  * @since 4.3.0
  * @access protected
- * @internal
- * @internal Use tsf()->data()->term() instead.
+ *         Use tsf()->data()->term() instead.
  */
 class Term {
 

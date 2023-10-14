@@ -30,9 +30,7 @@ use function \The_SEO_Framework\memo;
  * Holds API interfaces for screen views/templates.
  *
  * @since 4.3.0
- * @access protected
- * @internal
- * @final Can't be extended.
+ * @access private
  */
 final class Template {
 

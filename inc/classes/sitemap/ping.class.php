@@ -33,9 +33,9 @@ use \The_SEO_Framework\Data;
  * Holds search engine sitemap pinging functionality.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap`
  * @access protected
- * @internal Use tsf()->sitemap()->ping() instead.
+ *         Use tsf()->sitemap()->ping() instead.
  */
 final class Ping {
 

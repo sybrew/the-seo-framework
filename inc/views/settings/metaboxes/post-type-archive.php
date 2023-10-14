@@ -267,7 +267,6 @@ switch ( $instance ) :
 		<p>
 			<textarea name="<?php Input::field_name( $args['options']['description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['description'] ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin\PTA::get_post_type_archive_meta_item( 'description', $args['post_type'] ) ) ?></textarea>
 			<?php
-			\tsf()->output_js_description_elements(); // legacy
 			\tsf()->output_js_description_data(
 				Input::get_field_id( $args['options']['description'] ),
 				[

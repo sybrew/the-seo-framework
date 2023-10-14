@@ -35,7 +35,6 @@ namespace The_SEO_Framework\Bridges;
  * @deprecated
  * @ignore
  * @access protected
- * @final Can't be extended.
  */
 class Sitemap extends \The_SEO_Framework\Sitemap\Registry {
 

@@ -29,17 +29,16 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
  * Generates the SEO Bar.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\SEOBar\Main` from `The_SEO_Framework\Builders\SeoBar`
+ * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\SeoBar`
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`
  *
  * Mind the late static binding. We use "self" if the variable is shared between instances.
  * We use "static" if the variable isn't shared between instances.
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
+ * Implements test_{$*}, see property $tests and method `_run_test()` for what $* may be.
+ *
  * @access private
- *      Use \The_SEO_Framework\IAdmin\SEOBar\Builder::generate_bar() instead.
- * @internal
- * @abstract Implements test_{$*}, see property $tests and method `_run_test()` for what * may be.
  * @see \The_SEO_Framework\Admin\SEOBar\Builder
  */
 abstract class Main {
@@ -208,7 +207,6 @@ abstract class Main {
 	 * Primes the cache.
 	 *
 	 * @since 4.0.0
-	 * @abstract
 	 */
 	abstract protected function prime_cache();
 
@@ -217,7 +215,6 @@ abstract class Main {
 	 * It's best to overwrite the cache whenever you generate a new SEO Bar.
 	 *
 	 * @since 4.0.0
-	 * @abstract
 	 *
 	 * @param array $query_cache The current query cache. Passed by reference.
 	 */
@@ -227,7 +224,6 @@ abstract class Main {
 	 * Tests for blocking redirection.
 	 *
 	 * @since 4.0.0
-	 * @abstract
 	 *
 	 * @return bool True if there's a blocking redirect, false otherwise.
 	 */

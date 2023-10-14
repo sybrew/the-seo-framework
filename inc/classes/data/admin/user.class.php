@@ -44,11 +44,12 @@ class User {
 	 * @since 4.2.0 Now repopulates not-posted user metadata.
 	 * @since 4.3.0 1. Now tests if our POST data is set at all before acting.
 	 *              2. Moved to `\The_SEO_Framework\Data\Admin\User`.
+	 *              3. Renamed from `_update_user_meta`.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.
 	 */
-	public static function _update_user_meta( $user_id ) {
+	public static function update_meta( $user_id ) {
 
 		if ( empty( $_POST['tsf-user-meta'] ) ) return;
 

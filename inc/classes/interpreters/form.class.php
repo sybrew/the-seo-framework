@@ -36,8 +36,6 @@ use \The_SEO_Framework\Helper\Query;
  *
  * @access protected
  *         Everything in this class is subject to change or deletion.
- * @internal
- * @final Can't be extended.
  */
 final class Form {
 

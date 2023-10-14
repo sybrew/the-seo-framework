@@ -43,8 +43,6 @@ use \The_SEO_Framework\Helper\{
  * @since 4.2.0
  * @since 4.3.0 Moved to Meta\Robots from Builders\Robots
  * @access private
- *         Not part of the public API.
- * @final Can't be extended.
  */
 final class Args extends Factory {
 

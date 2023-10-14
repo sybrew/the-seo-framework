@@ -38,8 +38,8 @@ use \The_SEO_Framework\Helper\{
  * Generates the base sitemap.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\Sitemap\Base` from `The_SEO_Framework\Builders\Sitemap_Base`
- * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\Optimized`
+ * @since 4.2.0 Renamed from `\The_SEO_Framework\Builders\Sitemap_Base`.
+ * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\Optimized`.
  *
  * @access private
  */

@@ -34,11 +34,7 @@ use \The_SEO_Framework\Data,
  * @since 4.0.0
  * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\SEOBar`
  *              2. The entire class is now static.
- * @see \tsf()->get_generated_seo_bar( $args ) for easy access.
- *
- * @access protected
- *         Note that you can't instance this class. Only static methods and properties are accessible.
- * @final Can't be extended.
+ * @access private
  */
 final class Builder {
 

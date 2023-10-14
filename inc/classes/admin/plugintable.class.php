@@ -27,13 +27,11 @@ use function \The_SEO_Framework\is_headless;
  */
 
 /**
- * Prepares the List Edit view interface.
+ * Prepares the Plugin Table view interface.
  *
  * @since 4.1.4
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin`
- * @access protected
- * @internal
- * @final Can't be extended.
+ * @access private
  */
 final class PluginTable {
 
@@ -47,7 +45,7 @@ final class PluginTable {
 	 * @param array $links The current links.
 	 * @return array The plugin links.
 	 */
-	public static function _add_plugin_action_links( $links = [] ) {
+	public static function add_plugin_action_links( $links = [] ) {
 
 		$tsf_links = [];
 
@@ -87,7 +85,7 @@ final class PluginTable {
 	 * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
 	 * @return array $plugin_meta
 	 */
-	public static function _add_plugin_row_meta( $plugin_meta, $plugin_file ) {
+	public static function add_plugin_row_meta( $plugin_meta, $plugin_file ) {
 
 		if ( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME !== $plugin_file )
 			return $plugin_meta;

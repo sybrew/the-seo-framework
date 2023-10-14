@@ -35,11 +35,7 @@ use \The_SEO_Framework\Data,
  * @since 4.0.0
  * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\SEOBar\Builder
  *              2. Deprecated.
- * @see \tsf()->get_generated_seo_bar( $args ) for easy access.
- * @access public
- *         Note that you can't instance this class. Only static methods and properties are accessible.
+ * @access protected
  * @deprecated
- * @ignore
- * @final Can't be extended.
  */
 class_alias( 'The_SEO_Framework\Admin\SEOBar\Builder', 'The_SEO_Framework\Interpreters\SEOBar', true );

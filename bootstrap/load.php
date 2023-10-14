@@ -115,7 +115,7 @@ function _init_tsf() {
 	 */
 	\do_action( 'the_seo_framework_init' );
 
-	require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init.php';
+	require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-global.php';
 
 	if ( \is_admin() || \wp_doing_cron() ) {
 		/**

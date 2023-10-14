@@ -38,7 +38,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->open_graph() instead.
+ *         Use tsf()->open_graph() instead.
  */
 class Open_Graph {
 

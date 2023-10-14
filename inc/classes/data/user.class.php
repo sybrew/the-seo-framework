@@ -30,8 +30,7 @@ namespace The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- * @internal
- * @internal Use tsf()->data()->user() instead.
+ *         Use tsf()->data()->user() instead.
  */
 class User {
 

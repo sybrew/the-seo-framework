@@ -45,7 +45,6 @@ use \The_SEO_Framework\Helper\{
  * @since 4.0.0
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Lists`
  * @access private
- * @abstract
  */
 abstract class Table {
 
@@ -133,7 +132,7 @@ abstract class Table {
 		$post_type = stripslashes( $_POST['post_type'] );
 		$pto       = $post_type ? \get_post_type_object( $post_type ) : false;
 
-		// TODO shouldn't we just use `edit_post`? See _output_column_contents_for_post && get_post_type_capabilities
+		// TODO shouldn't we just use `edit_post`? See output_column_contents_for_post && get_post_type_capabilities
 		if ( $pto && \current_user_can( "edit_{$pto->capability_type}", (int) $_POST['post_ID'] ) )
 			$this->init_columns_ajax();
 	}
@@ -142,7 +141,6 @@ abstract class Table {
 	 * Initializes columns for adding a tag or category.
 	 *
 	 * @since 4.0.0
-	 * @securitycheck 3.0.0 OK.
 	 * @access private
 	 */
 	public function _prepare_columns_wp_ajax_inline_save_tax() {
@@ -185,15 +183,15 @@ abstract class Table {
 		$this->taxonomy  = $taxonomy;
 
 		if ( $taxonomy )
-			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, '_output_column_contents_for_term' ], 1, 3 );
+			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, 'output_column_contents_for_term' ], 1, 3 );
 
-		\add_filter( "manage_{$screen->id}_columns", [ $this, '_add_column' ], 10, 1 );
+		\add_filter( "manage_{$screen->id}_columns", [ $this, 'add_column' ], 10, 1 );
 		/**
 		 * Always load pages and posts.
 		 * Many CPT plugins rely on these.
 		 */
-		\add_action( 'manage_posts_custom_column', [ $this, '_output_column_contents_for_post' ], 1, 2 );
-		\add_action( 'manage_pages_custom_column', [ $this, '_output_column_contents_for_post' ], 1, 2 );
+		\add_action( 'manage_posts_custom_column', [ $this, 'output_column_contents_for_post' ], 1, 2 );
+		\add_action( 'manage_pages_custom_column', [ $this, 'output_column_contents_for_post' ], 1, 2 );
 	}
 
 	/**
@@ -231,18 +229,18 @@ abstract class Table {
 
 		// Not elseif; either request.
 		if ( $taxonomy )
-			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, '_output_column_contents_for_term' ], 1, 3 );
+			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, 'output_column_contents_for_term' ], 1, 3 );
 
 		if ( $screen_id ) {
 			// Everything but inline-save-tax action.
-			\add_filter( "manage_{$screen_id}_columns", [ $this, '_add_column' ], 10, 1 );
+			\add_filter( "manage_{$screen_id}_columns", [ $this, 'add_column' ], 10, 1 );
 
 			/**
 			 * Always load pages and posts.
 			 * Many CPT plugins rely on these.
 			 */
-			\add_action( 'manage_posts_custom_column', [ $this, '_output_column_contents_for_post' ], 1, 2 );
-			\add_action( 'manage_pages_custom_column', [ $this, '_output_column_contents_for_post' ], 1, 2 );
+			\add_action( 'manage_posts_custom_column', [ $this, 'output_column_contents_for_post' ], 1, 2 );
+			\add_action( 'manage_pages_custom_column', [ $this, 'output_column_contents_for_post' ], 1, 2 );
 		} elseif ( $taxonomy ) {
 			/**
 			 * Action "inline-save-tax" does not POST 'screen'.
@@ -250,7 +248,7 @@ abstract class Table {
 			 * @see WP Core wp_ajax_inline_save_tax():
 			 *    `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => "edit-$taxonomy" ) );`
 			 */
-			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, '_add_column' ], 1, 1 );
+			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, 'add_column' ], 1, 1 );
 		}
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
@@ -275,34 +273,39 @@ abstract class Table {
 	/**
 	 * Add column on edit(-tags).php
 	 *
+	 * @hook manage_{$screen_id}_columns 10
+	 * @hook manage_edit-{$taxonomy}_columns 1
 	 * @since 4.0.0
+	 * @since 4.3.0 Renamed from `_add_column`.
 	 * @access private
-	 * @abstract
 	 *
 	 * @param array $columns The existing columns.
 	 * @return array $columns The adjusted columns.
 	 */
-	abstract public function _add_column( $columns );
+	abstract public function add_column( $columns );
 
 	/**
 	 * Outputs the contents for a column on post overview screens.
 	 *
+	 * @hook manage_posts_custom_column 1
+	 * @hook manage_pages_custom_column 1
 	 * @since 4.0.0
+	 * @since 4.3.0 Renamed from `_output_column_contents_for_post`.
 	 * @access private
-	 * @abstract
 	 *
 	 * @param string $column_name The name of the column to display.
 	 * @param int    $post_id     The current post ID.
 	 */
-	abstract public function _output_column_contents_for_post( $column_name, $post_id );
+	abstract public function output_column_contents_for_post( $column_name, $post_id );
 
 	/**
 	 * Returns the contents for a column on tax screens.
 	 *
+	 * @hook manage_{$taxonomy}_custom_column 1
 	 * @since 4.0.0
+	 * @since 4.3.0 Renamed from `_output_column_contents_for_term`.
 	 * @access private
-	 * @abstract
-	 * @NOTE Unlike _output_column_contents_for_post(), this is a filter callback.
+	 * @NOTE Unlike output_column_contents_for_post(), this is a filter callback.
 	 *       Because of this, the first parameter is a useless string, which must be extended.
 	 *       Discrepancy: https://core.trac.wordpress.org/ticket/33521
 	 *       With this, the proper function name should be "_get..." or "_add...", but not "_output.."
@@ -312,5 +315,5 @@ abstract class Table {
 	 * @param string $term_id     Term ID.
 	 * @return string The column contents.
 	 */
-	abstract public function _output_column_contents_for_term( $string, $column_name, $term_id );
+	abstract public function output_column_contents_for_term( $string, $column_name, $term_id );
 }

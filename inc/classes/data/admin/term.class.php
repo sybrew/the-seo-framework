@@ -49,7 +49,8 @@ class Term {
 	 *              7. Now uses the current term meta to set new values.
 	 *              8. No longer deletes meta from abstracting plugins on save when they're deactivated.
 	 *              9. Now allows updating during `WP_AJAX`.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Data\Admin\Term`.
+	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Term`.
+	 *              2. Renamed from `_update_term_meta`.
 	 * @access private
 	 *         Use Data\Plugin\Term::save_term_meta() instead.
 	 *
@@ -57,15 +58,13 @@ class Term {
 	 * @param int    $tt_id    Term taxonomy ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 */
-	public static function _update_term_meta( $term_id, $tt_id, $taxonomy ) {
-		// phpcs:disable, WordPress.Security.NonceVerification
-
+	public static function update_meta( $term_id, $tt_id, $taxonomy ) {
+		// phpcs:disable, WordPress.Security.NonceVerification -- deferred.
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
-			static::update_quick_edit_term_meta( $term_id, $taxonomy );
+			static::update_via_quick_edit( $term_id, $taxonomy );
 		} elseif ( ! empty( $_POST['autodescription-meta'] ) ) {
-			static::update_term_edit_term_meta( $term_id, $taxonomy );
+			static::update_via_term_edit( $term_id, $taxonomy );
 		}
-
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
@@ -77,12 +76,13 @@ class Term {
 	 *              2. Now continues using the filtered term object.
 	 * @since 4.3.0 1. Removed second parameter $tt_id.
 	 *              2. Moved to `\The_SEO_Framework\Data\Admin\Term`.
+	 *              3. Renamed from `update_quick_edit_term_meta`.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void
 	 */
-	private static function update_quick_edit_term_meta( $term_id, $taxonomy ) {
+	private static function update_via_quick_edit( $term_id, $taxonomy ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 
@@ -113,12 +113,13 @@ class Term {
 	 *              2. Now continues using the filtered term object.
 	 * @since 4.3.0 1. Removed second parameter $tt_id.
 	 *              2. Moved to `\The_SEO_Framework\Data\Admin\Term`.
+	 *              3. Renamed from `update_term_edit_term_meta`.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Taxonomy slug.
 	 * @return void
 	 */
-	private static function update_term_edit_term_meta( $term_id, $taxonomy ) {
+	private static function update_via_term_edit( $term_id, $taxonomy ) {
 
 		$term = \get_term( $term_id, $taxonomy );
 

@@ -36,7 +36,7 @@ use function \The_SEO_Framework\Utils\normalize_generation_args;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->image() instead.
+ *         Use tsf()->image() instead.
  */
 class Image {
 

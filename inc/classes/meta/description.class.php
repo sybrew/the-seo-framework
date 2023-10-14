@@ -40,7 +40,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->description() instead.
+ *         Use tsf()->description() instead.
  */
 class Description {
 

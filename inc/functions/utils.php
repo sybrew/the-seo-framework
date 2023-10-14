@@ -189,7 +189,8 @@ function array_merge_recursive_distinct( ...$arrays ) {
  *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
  * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
  * @since 4.2.7 Now considers floating numerics as one word.
- * @since 4.3.0 Moved to \The_SEO_Framework\Utils as a function and renamed to clamp_sentence()
+ * @since 4.3.0 1. Renamed from `trim_excerpt()`.
+ *              2. \Moved to \The_SEO_Framework\Utils as a function.
  * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
  *
  * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.

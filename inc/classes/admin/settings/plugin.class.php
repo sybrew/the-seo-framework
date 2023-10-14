@@ -37,8 +37,6 @@ use \The_SEO_Framework\Admin;
  * @since 4.3.0 1. Renamed from `SeoSettings` to `Plugin`.
  *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
  * @access private
- * @internal
- * @final Can't be extended.
  */
 final class Plugin {
 

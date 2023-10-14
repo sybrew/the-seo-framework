@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Front\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function \The_SEO_Framework\{
+	memo,
+	_bootstrap_timer,
+};
 
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query;
@@ -35,8 +38,6 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal
- * @final Can't be extended.
  */
 final class Head {
 
@@ -58,9 +59,9 @@ final class Head {
 		/**
 		 * The bootstrap timer keeps adding when metadata is strapping.
 		 * This causes both timers to increase simultaneously.
-		 * We catch the bootstrap here, and let the meta-timer take over.
+		 * We catch the bootstrap's value here, and let the meta-print-timer take over.
 		 */
-		$bootstrap_timer = \The_SEO_Framework\_bootstrap_timer();
+		$bootstrap_timer = _bootstrap_timer();
 		/**
 		 * Start the meta timer here. This also catches file inclusions,
 		 * which _bootstrap_timer() also reads; hence, we separate them.
@@ -208,10 +209,10 @@ final class Head {
 		/**
 		 * @since 4.3.0
 		 * @param array[] $tags_render_data  The meta tags' render data : {
-		 *    @param ?array  attributes A list of attributes by [ name => value ].
-		 *    @param ?string tag        The tag name. Defaults to 'meta' if left empty.
-		 *    @param ?string content    The tag's content. Leave null to not render content.
-		 *    @param ?true   rendered   Do not write; tells whether the tag is rendered.
+		 *    ?array  attributes A list of attributes by [ name => value ].
+		 *    ?string tag        The tag name. Defaults to 'meta' if left empty.
+		 *    ?string content    The tag's content. Leave null to not render content.
+		 *    ?true   rendered   Do not write; tells whether the tag is rendered.
 		 * }
 		 * @param callable[] $tag_generators A list of meta tag generator callbacks.
 		 *                                   The generators may offload work to other generators.

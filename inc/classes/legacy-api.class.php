@@ -243,4 +243,37 @@ class Legacy_API extends Core {
 	public static function load_admin_scripts() {
 		Admin\Script\Registry::register_scripts_and_hooks();
 	}
+
+	/**
+	 * Prints all tags.
+	 *
+	 * @since 4.3.0
+	 */
+	public static function print_seo_meta_tags() {
+		Front\Meta\Head::print_wrap_and_tags();
+	}
+
+	/**
+	 * Converts markdown text into HTML.
+	 * Does not support list or block elements. Only inline statements.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.0 1. Removed word boundary requirement for strong.
+	 *              2. Now lets regex count their numeric values in string.
+	 *              3. Fixed header 1~6 calculation.
+	 * @since 2.9.3 Added $args parameter.
+	 * @since 4.0.3 Added a workaround for connected em/strong elements.
+	 * @since 4.1.4 Offloaded to `The_SEO_Framework\Interpreters\Markdown::convert()`
+	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @link https://wordpress.org/plugins/about/readme.txt
+	 *
+	 * @param string $text    The text that might contain markdown. Expected to be escaped.
+	 * @param array  $convert The markdown style types wished to be converted.
+	 *                        If left empty, it will convert all.
+	 * @param array  $args    The function arguments.
+	 * @return string The markdown converted text.
+	 */
+	public function convert_markdown( $text, $convert = [], $args = [] ) {
+		return Interpreters\Markdown::convert( $text, $convert, $args );
+	}
 }

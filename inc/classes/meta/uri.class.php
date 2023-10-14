@@ -38,7 +38,7 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->uri() instead.
+ *         Use tsf()->uri() instead.
  */
 class URI {
 

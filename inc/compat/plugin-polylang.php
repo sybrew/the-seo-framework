@@ -11,7 +11,6 @@ namespace The_SEO_Framework;
 use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query;
 
-\add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\\_polylang_fix_sitemap_base_bath' );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
@@ -19,50 +18,9 @@ use \The_SEO_Framework\Data,
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' ); // var_dump()
 \add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' ); // var_dump()
 \add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' ); // var_dump()
-\add_filter( 'pll_home_url_white_list', __NAMESPACE__ . '\\_polylang_allowlist_tsf_urls' );
-\add_filter( 'pll_home_url_black_list', __NAMESPACE__ . '\\_polylang_blocklist_tsf_urls' );
-\add_filter( 'the_seo_framework_rel_canonical_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 ); // var_dump()
-\add_filter( 'the_seo_framework_ogurl_output', __NAMESPACE__ . '\\_polylang_fix_home_url', 10, 1 ); // var_dump()
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10 );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
 
-/**
- * Sets the correct Polylang base path language when using cookie-based language settings.
- * This resolves an issue where the sitemap would otherwise return a 404 error after a
- * cookie has been set.
- *
- * This function uses the same methods as the main filter.
- * HOWEVER, because of the languid asinine catabolic implementation of the black/block-list in Polylang,
- * this method returns a different value. It's truly astounding how one cannot trust the API.
- *
- * @hook the_seo_framework_sitemap_base_path 10
- * @since 4.1.2
- * @access private
- *
- * @param string $path The home path.
- * @return string Polylang-aware home path.
- */
-function _polylang_fix_sitemap_base_bath( $path ) {
-
-	$_options = \get_option( 'polylang' );
-
-	// If not 0, Polylang can differentiate languages by (sub)domain/directory name early.
-	// There's no need to interfere in those cases.
-	if ( isset( $_options['force_lang'] ) && 0 == $_options['force_lang'] ) { // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
-		// Polylang determines language sporadically from content: can't be trusted.
-		// NOTE: Thanks to '_polylang_blocklist_tsf_urls', this yields a different value albeit the same code.
-		// That's Polylang for you: can't trust your own code.
-		$path = rtrim(
-			parse_url(
-				Data\Blog::get_front_page_url(),
-				\PHP_URL_PATH
-			) ?? '',
-			'/'
-		);
-	}
-
-	return $path;
-}
 
 /**
  * Sets the correct Polylang query language for the sitemap based on the 'lang' GET parameter.
@@ -182,60 +140,6 @@ function pll__( $string ) {
 			return \pll__( $string );
 
 	return $string;
-}
-
-/**
- * Accompany the most broken and asinine idea in WordPress's history.
- * Adds The SEO Framework's files to their allowlist of autoincompatible doom.
- *
- * @hook pll_home_url_white_list 10
- * @since 3.2.4
- * @since 4.1.0 Renamed function and parameters to something racially neutral.
- * @access private
- *
- * @param array $allowlist The wildcard file parts that are allowlisted.
- * @return array
- */
-function _polylang_allowlist_tsf_urls( $allowlist ) {
-	$allowlist[] = [ 'file' => 'autodescription/inc' ];
-	return $allowlist;
-}
-
-/**
- * Accompany the most broken and asinine idea in WordPress's history.
- * ...and stop messing with the rewrite system while doing so.
- * Also, you should add support for class methods. Stop living in the PHP 4 era.
- *
- * @hook pll_home_url_black_list 10
- * @since 3.2.4
- * @since 4.1.0 Renamed function and parameters to something racially neutral.
- * @since 4.1.2 Prefixed function name with _polylang.
- * @access private
- *
- * @param array $blocklist The wildcard file parts that are blocklisted.
- * @return array
- */
-function _polylang_blocklist_tsf_urls( $blocklist ) {
-	$blocklist[] = [ 'file' => 'autodescription/inc/compat/plugin-polylang.php' ];
-	return $blocklist;
-}
-
-/**
- * Adds a trailing slash to whatever's deemed as the homepage URL.
- * This fixes user_trailingslashit() issues.
- *
- * @hook the_seo_framework_rel_canonical_output 10
- * @hook the_seo_framework_ogurl_output 10
- * @since 3.2.4
- * @since 4.1.2 Prefixed function name with _polylang.
- * @since 4.2.0 No longer uses the second parameter, and relies on the query to find the homepage, instead.
- * @access private
- *
- * @param string $url The url to fix.
- * @return string The fixed home URL.
- */
-function _polylang_fix_home_url( $url ) {
-	return Query::is_real_front_page() && \get_option( 'permalink_structure' ) ? \trailingslashit( $url ) : $url;
 }
 
 /**

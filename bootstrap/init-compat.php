@@ -32,19 +32,20 @@ if ( \tsf()->is_theme( 'genesis' ) )
 	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-genesis.php';
 
 foreach (
-	array_intersect(
+	array_intersect_key(
 		[
 			'bbpress/bbpress.php'                      => 'bbpress',
 			'buddypress/buddypress.php'                => 'buddypress',
 			'easy-digital-downloads/easy-digital-downloads.php' => 'edd',
 			'elementor/elementor.php'                  => 'elementor',
+			'jetpack/jetpack.php'                      => 'jetpack',
 			'polylang/polylang.php'                    => 'polylang',
 			'sitepress-multilingual-cms/sitepress.php' => 'wpml',
 			'ultimate-member/ultimate-member.php'      => 'ultimatemember',
 			'wpforo/wpforo.php'                        => 'wpforo',
 			'woocommerce/woocommerce.php'              => 'woocommerce',
 		],
-		\tsf()->active_plugins(),
+		array_flip( \tsf()->active_plugins() ),
 	)
 	as $_plugin
 ) {

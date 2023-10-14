@@ -29,8 +29,7 @@ namespace The_SEO_Framework\Front\Meta;
  * Interprets the meta tags from human readable PHP to machine readable HTML.
  *
  * @since 4.3.0
- *
- * @final Can't be extended.
+ * @access private
  */
 final class Tags {
 

@@ -119,7 +119,6 @@ switch ( $instance ) :
 			<?php
 			$_post_meta_title = $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_title', $home_id ) ) : '';
 
-			\tsf()->output_js_title_elements(); // legacy
 			\tsf()->output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
 				[
@@ -133,7 +132,6 @@ switch ( $instance ) :
 						'useSocialTagline'    => Meta\Title\Conditions::use_title_branding( $generator_args, true ),
 						'additionValue'       => \tsf()->escape_text( Meta\Title::get_addition_for_front_page() ),
 						'additionPlacement'   => 'left' === Meta\Title::get_addition_location_for_front_page() ? 'before' : 'after',
-						'hasLegacy'           => true,
 					],
 				]
 			);
@@ -168,7 +166,6 @@ switch ( $instance ) :
 		<p>
 			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_description' ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin::get_option( 'homepage_description' ) ) ?></textarea>
 			<?php
-			\tsf()->output_js_description_elements(); // legacy
 			\tsf()->output_js_description_data(
 				Input::get_field_id( 'homepage_description' ),
 				[
@@ -177,7 +174,6 @@ switch ( $instance ) :
 							( $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_description', $home_id ) ) : '' )
 							?: Meta\Description::get_generated_description( $generator_args )
 						),
-						'hasLegacy'          => true,
 					],
 				]
 			);

@@ -32,7 +32,7 @@ use \The_SEO_Framework\Data;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->facebook() instead.
+ *         Use tsf()->facebook() instead.
  */
 class Facebook {
 

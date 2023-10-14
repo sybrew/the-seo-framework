@@ -32,7 +32,7 @@ use \The_SEO_Framework\Helper;
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->sitemap()->lock() instead.
+ *         Use tsf()->sitemap()->lock() instead.
  */
 class Lock {
 

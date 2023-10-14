@@ -38,7 +38,7 @@ use function \The_SEO_Framework\{
  *
  * @since 4.3.0
  * @access protected
- * @internal Use tsf()->robots() instead.
+ *         Use tsf()->robots() instead.
  */
 class Robots {
 

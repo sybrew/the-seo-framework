@@ -34,8 +34,7 @@ use \The_SEO_Framework\Traits\Property_Refresher;
  *
  * @since 4.3.0
  * @access protected
- * @internal
- * @internal Use tsf()->data()->plugin() instead.
+ *         Use tsf()->data()->plugin() instead.
  */
 class Plugin {
 	use Property_Refresher;

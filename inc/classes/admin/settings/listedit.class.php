@@ -1,12 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\Lists\Edit
+ * @package The_SEO_Framework\Classes\Admin\Settings\ListEdit
+ * @subpackage The_SEO_Framework\Admin\Edit
  */
 
-namespace The_SEO_Framework\Admin\Lists;
+namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Admin\Lists;
 use \The_SEO_Framework\Interpreters\HTML;
 use \The_SEO_Framework\{
 	Admin,
@@ -40,11 +42,9 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.0.0
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Lists`
- * @access protected
- * @internal
- * @final Can't be extended.
+ * @access private
  */
-final class Edit extends Table {
+final class ListEdit extends Lists\Table {
 
 	/**
 	 * @since 4.0.0
@@ -53,46 +53,51 @@ final class Edit extends Table {
 	private $column_name = 'tsf-quick-edit';
 
 	/**
-	 * Constructor, sets column name and calls parent.
+	 * Setups class and prepares quick edit.
 	 *
-	 * @since 4.0.0
+	 * @hook admin_init 10
+	 * @since 4.3.0
 	 */
-	public function __construct() {
-		parent::__construct();
+	public static function init_quick_and_bulk_edit() {
 
-		\add_filter( 'hidden_columns', [ $this, '_hide_quick_edit_column' ], 10, 1 );
-		\add_action( 'current_screen', [ $this, '_prepare_edit_box' ] );
+		$instance = new self;
+
+		\add_action( 'current_screen', [ $instance, 'prepare_edit_box' ] );
+		\add_filter( 'hidden_columns', [ $instance, 'hide_quick_edit_column' ], 10, 1 );
 	}
 
 	/**
 	 * Prepares the quick/bulk edit output.
 	 *
+	 * @hook current_screen 10
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `prepare_edit_box`.
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 */
-	public function _prepare_edit_box( $screen ) {
+	public function prepare_edit_box( $screen ) {
 
 		if ( empty( $screen->taxonomy ) ) {
 			// WordPress doesn't support this feature yet for taxonomies.
 			// Exclude it for when the time may come and faulty fields are displayed.
 			// Mind the "2".
-			\add_action( 'bulk_edit_custom_box', [ $this, '_display_bulk_edit_fields' ], 10, 2 );
+			\add_action( 'bulk_edit_custom_box', [ $this, 'display_bulk_edit_fields' ], 10, 2 );
 		}
-		\add_action( 'quick_edit_custom_box', [ $this, '_display_quick_edit_fields' ], 10, 3 );
+
+		\add_action( 'quick_edit_custom_box', [ $this, 'display_quick_edit_fields' ], 10, 3 );
 	}
 
 	/**
 	 * Permanently hides quick/bulk-edit column.
 	 *
+	 * @hook hidden_columns 10
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_hide_quick_edit_column`.
 	 *
 	 * @param array $hidden The existing hidden columns.
 	 * @return array $columns the column data
 	 */
-	public function _hide_quick_edit_column( $hidden ) {
+	public function hide_quick_edit_column( $hidden ) {
 		$hidden[] = $this->column_name;
 		return $hidden;
 	}
@@ -101,14 +106,16 @@ final class Edit extends Table {
 	 * Adds hidden column to access quick/bulk-edit.
 	 * This column is a dummy, but it's required to display quick/bulk edit items.
 	 *
+	 * @hook manage_{$screen_id}_columns 10
+	 * @hook manage_edit-{$taxonomy}_columns 1
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_add_column`.
 	 * @abstract
 	 *
 	 * @param array $columns The existing columns
 	 * @return array $columns the column data
 	 */
-	public function _add_column( $columns ) {
+	public function add_column( $columns ) {
 		// Don't set a title, otherwise it's displayed in the screen settings.
 		$columns[ $this->column_name ] = '';
 		return $columns;
@@ -117,14 +124,15 @@ final class Edit extends Table {
 	/**
 	 * Displays the SEO bulk edit fields.
 	 *
+	 * @hook bulk_edit_custom_box 10
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_display_bulk_edit_fields`.
 	 *
 	 * @param string $column_name Name of the column to edit.
 	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
 	 * @param string $taxonomy    The taxonomy name, if any.
 	 */
-	public function _display_bulk_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
+	public function display_bulk_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
 
 		if ( $this->column_name !== $column_name ) return;
 
@@ -139,14 +147,15 @@ final class Edit extends Table {
 	/**
 	 * Displays the SEO quick edit fields.
 	 *
+	 * @hook quick_edit_custom_box 10
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_display_quick_edit_fields`.
 	 *
 	 * @param string $column_name Name of the column to edit.
 	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
 	 * @param string $taxonomy    The taxonomy name, if any.
 	 */
-	public function _display_quick_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
+	public function display_quick_edit_fields( $column_name, $post_type, $taxonomy = '' ) {
 
 		if ( $this->column_name !== $column_name ) return;
 
@@ -160,14 +169,16 @@ final class Edit extends Table {
 	/**
 	 * Outputs the quick edit data for posts and pages.
 	 *
+	 * @hook manage_posts_custom_column 1
+	 * @hook manage_pages_custom_column 1
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_output_column_contents_for_post`.
 	 * @abstract
 	 *
 	 * @param string $column_name The name of the column to display.
 	 * @param int    $post_id     The current post ID.
 	 */
-	public function _output_column_contents_for_post( $column_name, $post_id ) {
+	public function output_column_contents_for_post( $column_name, $post_id ) {
 
 		if (
 			   $this->column_name !== $column_name
@@ -314,9 +325,10 @@ final class Edit extends Table {
 	/**
 	 * Returns the quick edit data for terms.
 	 *
+	 * @hook manage_{$taxonomy}_custom_column 1
 	 * @since 4.0.0
 	 * @since 4.2.0 Now properly populates use_generated_archive_prefix() with a \WP_Term object.
-	 * @access private
+	 * @since 4.3.0 Renamed from `_output_column_contents_for_term`.
 	 * @abstract
 	 * @NOTE Unlike `_output_column_post_data()`, this is a filter callback.
 	 *       Because of this, the first parameter is a useless string, which must be extended.
@@ -327,7 +339,7 @@ final class Edit extends Table {
 	 * @param string $term_id     Term ID.
 	 * @return string
 	 */
-	public function _output_column_contents_for_term( $string, $column_name, $term_id ) {
+	public function output_column_contents_for_term( $string, $column_name, $term_id ) {
 
 		if ( $this->column_name !== $column_name )          return $string;
 		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;

@@ -37,13 +37,11 @@ use \The_SEO_Framework\Data,
  * Generates the SEO Bar for posts.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed to `The_SEO_Framework\Builders\SEOBar\Page` from `The_SEO_Framework\Builders\SeoBar_Page`
+ * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\SeoBar_Page`
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`
  *
  * @access private
- * @internal
- * @see SEOBar
- *      Use Builder::generate_bar() instead.
+ * @see \The_SEO_Framework\Admin\SEOBar\Builder
  */
 final class Page extends Main {
 
