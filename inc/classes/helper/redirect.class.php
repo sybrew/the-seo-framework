@@ -40,7 +40,7 @@ class Redirect {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Redirect`
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool Whether external redirect is allowed.
 	 */

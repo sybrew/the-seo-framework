@@ -51,7 +51,7 @@ final class Excerpt {
 	 *                         Leave null to autodetermine query.
 	 * @return string
 	 */
-	public static function get_excerpt( $args = null ) {
+	public static function get_post_excerpt( $args = null ) {
 		return isset( $args )
 			? static::get_excerpt_from_args( $args )
 			: static::get_excerpt_from_query();
@@ -60,9 +60,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for the current query.
 	 *
-	 * @since 3.1.0
-	 * @since 4.2.0 Flipped order of query tests.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Meta\Description\Excerpt`.
+	 * @since 4.3.0
 	 *
 	 * @return string
 	 */
@@ -71,7 +69,7 @@ final class Excerpt {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( Query::is_static_frontpage() ) {
+		if ( Query::is_static_front_page() ) {
 			$excerpt = static::get_singular_excerpt();
 		} elseif ( Query::is_blog_as_page() ) {
 			$excerpt = static::get_blog_page_excerpt();
@@ -87,10 +85,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for the current query.
 	 *
-	 * @since 3.1.0
-	 * @since 3.2.2 Fixed front-page as blog logic.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Meta\Description\Excerpt`.
+	 * @since 4.3.0
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @return string
@@ -229,12 +224,12 @@ final class Excerpt {
 		// If the post is protected, don't generate a description.
 		if ( Data\Post::is_protected( $post ) ) return '';
 
-		$excerpt = Data\Post::get_post_excerpt( $post );
+		$excerpt = Data\Post::get_excerpt( $post );
 
 		if ( empty( $excerpt ) && ! Data\Post::uses_non_html_page_builder( $post->ID ) ) {
 			// We should actually get the parsed content here... but that can be heavy on the server.
 			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
-			$excerpt = Data\Post::get_post_content( $post );
+			$excerpt = Data\Post::get_content( $post );
 
 			if ( $excerpt )
 				$excerpt = \tsf()->strip_paragraph_urls( \tsf()->strip_newline_urls( $excerpt ) );

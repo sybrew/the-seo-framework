@@ -193,7 +193,7 @@ class Image {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Image.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -363,7 +363,7 @@ class Image {
 			];
 		} else {
 			if ( Query::is_real_front_page() ) {
-				if ( Query::is_static_frontpage() ) {
+				if ( Query::is_static_front_page() ) {
 					$details = [
 						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
 						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),

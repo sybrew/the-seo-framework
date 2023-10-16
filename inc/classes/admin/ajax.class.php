@@ -41,7 +41,7 @@ use \The_SEO_Framework\Helper,
  * they're with their relatives.
  *
  * @since 4.1.4
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin`
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`
  * @access private
  */
 final class AJAX {
@@ -312,7 +312,7 @@ final class AJAX {
 			case 'twdescription':
 				switch ( $g ) {
 					case 'metadescription':
-						if ( Query::is_static_frontpage( $post_id ) ) {
+						if ( Query::is_static_front_page( $post_id ) ) {
 							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
 									   ?: Meta\Description::get_generated_description( $generator_args );
 						} else {
@@ -320,7 +320,7 @@ final class AJAX {
 						}
 						break;
 					case 'ogdescription':
-						if ( Query::is_static_frontpage( $post_id ) ) {
+						if ( Query::is_static_front_page( $post_id ) ) {
 							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
 									   ?: Meta\Open_Graph::get_generated_description( $generator_args );
 						} else {
@@ -328,7 +328,7 @@ final class AJAX {
 						}
 						break;
 					case 'twdescription':
-						if ( Query::is_static_frontpage( $post_id ) ) {
+						if ( Query::is_static_front_page( $post_id ) ) {
 							$data[ $g ] = \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) )
 									   ?: Meta\Twitter::get_generated_description( $generator_args );
 						} else {
@@ -340,7 +340,7 @@ final class AJAX {
 				break;
 
 			case 'imageurl':
-				if ( Query::is_static_frontpage( $post_id ) ) {
+				if ( Query::is_static_front_page( $post_id ) ) {
 					$data[ $g ] = \sanitize_url( Data\Plugin::get_option( 'homepage_social_image_url' ) )
 							   ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 				} else {

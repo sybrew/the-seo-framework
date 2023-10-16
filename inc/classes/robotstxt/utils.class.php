@@ -10,9 +10,11 @@ namespace The_SEO_Framework\RobotsTXT;
 
 use function \The_SEO_Framework\umemo;
 
-use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -44,9 +46,7 @@ class Utils {
 	 * Detects presence of robots.txt in root folder.
 	 * Memoizes the return value.
 	 *
-	 * @since 2.5.2
-	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\RobotsTXT\Utils`.
+	 * @since 4.3.0
 	 *
 	 * @return bool Whether the robots.txt file exists.
 	 */
@@ -70,7 +70,7 @@ class Utils {
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.2 Now uses the preferred URL scheme.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\RobotsTXT\Utils`.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string URL location of robots.txt. Unescaped.
 	 */

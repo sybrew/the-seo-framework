@@ -28,12 +28,12 @@ namespace The_SEO_Framework;
 // Ping searchengines.
 if ( Data\Plugin::get_option( 'ping_use_cron' ) ) {
 	if (
-			Data\Plugin::get_option( 'sitemaps_output' )
+		   Data\Plugin::get_option( 'sitemaps_output' )
 		&& Data\Plugin::get_option( 'ping_use_cron_prerender' )
 	) {
 		\add_action(
 			'tsf_sitemap_cron_hook_before',
-			[ new Sitemap\Optimized\Base, 'prerender_sitemap' ] // var_dump() make static
+			[ Sitemap\Optimized\Base::class, 'prerender_sitemap' ]
 		);
 	}
 

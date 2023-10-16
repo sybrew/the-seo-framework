@@ -123,10 +123,10 @@ final class Generator {
 		if ( null === $args ) {
 			if ( Query::is_singular() ) {
 				// $GLOBALS['pages'] isn't populated here -- let's not try pagination to conserve CPU usage.
-				$content = Data\Post::get_post_content();
+				$content = Data\Post::get_content();
 			}
 		} elseif ( ! $args['tax'] && ! $args['pta'] ) {
-			$content = Data\Post::get_post_content( $args['id'] );
+			$content = Data\Post::get_content( $args['id'] );
 		}
 
 		if ( empty( $content ) ) return;

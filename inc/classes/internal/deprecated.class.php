@@ -847,9 +847,9 @@ final class Deprecated {
 	public function is_static_frontpage( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_static_frontpage()', '4.3.0', 'tsf()->query()->is_static_frontpage()' );
+		$tsf->_deprecated_function( 'tsf()->is_static_frontpage()', '4.3.0', 'tsf()->query()->is_static_front_page()' );
 
-		return $tsf->query()->is_static_frontpage( $id );
+		return $tsf->query()->is_static_front_page( $id );
 	}
 
 	/**
@@ -1236,7 +1236,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->robots()', '4.3.0' );
 
 		// Don't do anything if the blog isn't set to public.
-		if ( false === Data\Blog::is_blog_public() ) return '';
+		if ( false === $tsf->data()->blog()->is_public() ) return '';
 
 		$meta = $tsf->robots()->get_meta();
 
@@ -2142,7 +2142,7 @@ final class Deprecated {
 		$time = (string) \apply_filters_deprecated(
 			'the_seo_framework_publishedtime_output',
 			[
-				$tsf->data()->post()->get_post_published_time(),
+				$tsf->data()->post()->get_published_time(),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -3362,9 +3362,9 @@ final class Deprecated {
 	public function fetch_excerpt( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->excerpt()->get_excerpt()' );
+		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->excerpt()->get_post_excerpt()' );
 
-		return $tsf->description()->excerpt()->get_excerpt(
+		return $tsf->description()->excerpt()->get_post_excerpt(
 			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null
 		);
 	}
@@ -3394,7 +3394,7 @@ final class Deprecated {
 		return (string) \apply_filters_deprecated(
 			'the_seo_framework_modifiedtime_output',
 			[
-				$tsf->data()->post()->get_post_modified_time(),
+				$tsf->data()->post()->get_modified_time(),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -3595,9 +3595,9 @@ final class Deprecated {
 	public function use_title_protection( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_title_protection()', '4.3.0', 'tsf()->title()->conditions()->use_title_protection_status()' );
+		$tsf->_deprecated_function( 'tsf()->use_title_protection()', '4.3.0', 'tsf()->title()->conditions()->use_protection_status()' );
 
-		return $tsf->title()->conditions()->use_title_protection_status( $args );
+		return $tsf->title()->conditions()->use_protection_status( $args );
 	}
 
 	/**
@@ -3614,9 +3614,9 @@ final class Deprecated {
 	public function use_title_pagination( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_title_pagination()', '4.3.0', 'tsf()->title()->conditions()->use_title_pagination()' );
+		$tsf->_deprecated_function( 'tsf()->use_title_pagination()', '4.3.0', 'tsf()->title()->conditions()->use_pagination()' );
 
-		return $tsf->title()->conditions()->use_title_pagination( $args );
+		return $tsf->title()->conditions()->use_pagination( $args );
 	}
 
 	/**
@@ -3640,9 +3640,9 @@ final class Deprecated {
 	public function use_title_branding( $args = null, $social = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
 
-		return $tsf->title()->conditions()->use_title_branding( $args, $social );
+		return $tsf->title()->conditions()->use_branding( $args, $social );
 	}
 
 	/**
@@ -3678,9 +3678,9 @@ final class Deprecated {
 	public function use_home_page_title_tagline() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
 
-		return $tsf->title()->conditions()->use_title_branding();
+		return $tsf->title()->conditions()->use_branding( [ 'id' => $tsf->query()->get_the_front_page_id() ] );
 	}
 
 	/**
@@ -3696,9 +3696,9 @@ final class Deprecated {
 	public function use_singular_title_branding( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_singular_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_singular_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
 
-		return $tsf->title()->conditions()->use_title_branding( [ 'id' => $id ] );
+		return $tsf->title()->conditions()->use_branding( [ 'id' => $id ] );
 	}
 
 	/**
@@ -3714,9 +3714,9 @@ final class Deprecated {
 	public function use_taxonomical_title_branding( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
 
-		return $tsf->title()->conditions()->use_title_branding( [
+		return $tsf->title()->conditions()->use_branding( [
 			'id'  => $id ?: $tsf->query()->get_the_real_id(),
 			'tax' => $tsf->query()->get_current_taxonomy(),
 		] );
@@ -3735,9 +3735,9 @@ final class Deprecated {
 	public function use_post_type_archive_title_branding( $pta = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_title_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
 
-		return $tsf->title()->conditions()->use_title_branding( [
+		return $tsf->title()->conditions()->use_branding( [
 			'pta' => $pta ?: $tsf->query()->get_current_post_type(),
 		] );
 	}
@@ -5872,9 +5872,9 @@ final class Deprecated {
 	public function get_post_content( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_content()', '4.3.0', 'tsf()->data()->post()->get_post_content()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_content()', '4.3.0', 'tsf()->data()->post()->get_content()' );
 
-		return $tsf->data()->post()->get_post_content( $post );
+		return $tsf->data()->post()->get_content( $post );
 	}
 
 	/**
@@ -6194,9 +6194,9 @@ final class Deprecated {
 	public function is_blog_public() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_blog_public()', '4.3.0', 'tsf()->data()->blog()->is_blog_public()' );
+		$tsf->_deprecated_function( 'tsf()->is_blog_public()', '4.3.0', 'tsf()->data()->blog()->is_public()' );
 
-		return $tsf->data()->blog()->is_blog_public();
+		return $tsf->data()->blog()->is_public();
 	}
 
 	/**
@@ -6214,9 +6214,9 @@ final class Deprecated {
 	public function current_blog_is_spam_or_deleted() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->current_blog_is_spam_or_deleted()', '4.3.0', 'tsf()->data()->blog()->is_current_blog_spam_or_deleted()' );
+		$tsf->_deprecated_function( 'tsf()->current_blog_is_spam_or_deleted()', '4.3.0', 'tsf()->data()->blog()->is_spam_or_deleted()' );
 
-		return $tsf->data()->blog()->is_current_blog_spam_or_deleted();
+		return $tsf->data()->blog()->is_spam_or_deleted();
 	}
 
 	/**

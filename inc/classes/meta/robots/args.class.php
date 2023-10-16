@@ -41,7 +41,7 @@ use \The_SEO_Framework\Helper\{
  * Engine for robots generator by arguments.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved to Meta\Robots from Builders\Robots
+ * @since 4.3.0 Moved from `The_SEO_Framework\Builders\Robots`.
  * @access private
  */
 final class Args extends Factory {

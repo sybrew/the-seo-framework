@@ -236,11 +236,7 @@ final class Head {
 	 * Returns the plugin hidden HTML indicators.
 	 * Memoizes the filter outputs.
 	 *
-	 * @since 2.9.2
-	 * @since 4.0.0 Added boot timers.
-	 * @since 4.2.0 1. The annotation is translatable again (regressed in 4.0.0).
-	 *              2. Is now a protected function.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Front\Meta\Head.
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @param string $where                 Determines the position of the indicator.

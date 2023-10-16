@@ -415,7 +415,7 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
  *
  * We only filter the admin area to prevent any unforseeable issues on the front-end.
  * This is because the shop page is singular, singular_archive, shop, and post_type_archive,
- * and can even be is_static_frontpage (but not is_real_front_page if queried /shop/ instead of /).
+ * and can even be is_static_front_page (but not is_real_front_page if queried /shop/ instead of /).
  *
  * @hook the_seo_framework_public_post_type_archives 10
  * @since 4.2.8

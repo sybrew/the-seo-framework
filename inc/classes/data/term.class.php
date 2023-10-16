@@ -72,7 +72,7 @@ class Term {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Term
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int    $term_id The term ID.
 	 * @param string $taxonomy The term taxonomy.

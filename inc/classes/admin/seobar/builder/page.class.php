@@ -40,8 +40,8 @@ use \The_SEO_Framework\{
  * Generates the SEO Bar for posts.
  *
  * @since 4.0.0
- * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\SeoBar_Page`
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`
+ * @since 4.2.0 Renamed from `SeoBar_Page`.
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\SEOBar`.
  *
  * @access private
  * @see \The_SEO_Framework\Admin\SEOBar\Builder
@@ -74,7 +74,7 @@ final class Page extends Main {
 				'general/detect/robotsglobal',
 				[
 					'hasrobotstxt' => RobotsTXT\Utils::has_root_robots_txt(),
-					'blogpublic'   => Data\Blog::is_blog_public(),
+					'blogpublic'   => Data\Blog::is_public(),
 					'site'         => [
 						'noindex'   => Data\Plugin::get_option( 'site_noindex' ),
 						'nofollow'  => Data\Plugin::get_option( 'site_nofollow' ),
@@ -266,14 +266,14 @@ final class Page extends Main {
 		$title = $title_part;
 
 		// Don't use cache, as this can be filtered.
-		if ( Meta\Title\Conditions::use_title_protection_status( $generator_args ) ) {
+		if ( Meta\Title\Conditions::use_protection_status( $generator_args ) ) {
 			$_title_before = $title;
 			\tsf()->merge_title_protection( $title, $generator_args );
 			if ( $title !== $_title_before )
 				$item['assess']['protected'] = $cache['assess']['protected'];
 		}
 
-		if ( Meta\Title\Conditions::use_title_branding( $generator_args ) ) {
+		if ( Meta\Title\Conditions::use_branding( $generator_args ) ) {
 			$_title_before = $title;
 			$title         = Meta\Title::add_branding( $title, $generator_args );
 

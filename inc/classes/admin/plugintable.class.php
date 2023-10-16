@@ -30,7 +30,7 @@ use function \The_SEO_Framework\is_headless;
  * Prepares the Plugin Table view interface.
  *
  * @since 4.1.4
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin`
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`
  * @access private
  */
 final class PluginTable {

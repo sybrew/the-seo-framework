@@ -39,9 +39,7 @@ final class Filter {
 	/**
 	 * Adjusts category post link.
 	 *
-	 * @since 3.0.0
-	 * @since 4.0.3 Now fills in a fallback $post object when null.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Query\Filter`
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @param \WP_Term $term  The category to use in the permalink.

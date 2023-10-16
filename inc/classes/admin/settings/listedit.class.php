@@ -40,7 +40,7 @@ use \The_SEO_Framework\Helper\{
  * Prepares the List Edit view interface.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Lists`
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
 final class ListEdit extends Admin\Lists\Table {
@@ -254,7 +254,7 @@ final class ListEdit extends Admin\Lists\Table {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		if ( Query::is_static_frontpage( $generator_args['id'] ) ) {
+		if ( Query::is_static_front_page( $generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
@@ -281,12 +281,12 @@ final class ListEdit extends Admin\Lists\Table {
 		}
 
 		$post_data  = [
-			'isFront' => Query::is_static_frontpage( $generator_args['id'] ),
+			'isFront' => Query::is_static_front_page( $generator_args['id'] ),
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => \tsf()->escape_title( $default_title ),
-			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $generator_args ),
+			'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
 			'additionValue'     => \tsf()->escape_title( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
@@ -428,7 +428,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$title_data = [
 			'refTitleLocked'    => false,
 			'defaultTitle'      => \tsf()->escape_title( Meta\Title::get_bare_generated_title( $generator_args ) ),
-			'addAdditions'      => Meta\Title\Conditions::use_title_branding( $generator_args ),
+			'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
 			'additionValue'     => \tsf()->escape_title( Meta\Title::get_addition() ),
 			'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,

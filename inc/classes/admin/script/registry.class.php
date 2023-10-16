@@ -49,7 +49,8 @@ use \The_SEO_Framework\Helper\{
  * This handles admin-ONLY scripts for now.
  *
  * @since 3.1.0
- * @since 4.3.0 Moved to `The_SEO_Framework\Admin\Script`
+ * @since 4.3.0 1. Moved from `\The_SEO_Framework\Builders`.
+ *              2. Renamed from `Scripts`.
  * @see \WP_Styles
  * @see \WP_Scripts
  * @see \WP_Dependencies

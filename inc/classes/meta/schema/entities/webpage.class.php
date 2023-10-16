@@ -99,8 +99,8 @@ final class WebPage extends Reference {
 				];
 
 				if ( Query::is_single() ) {
-					$entity['datePublished'] = Data\Post::get_post_published_time();
-					$entity['dateModified']  = Data\Post::get_post_modified_time();
+					$entity['datePublished'] = Data\Post::get_published_time();
+					$entity['dateModified']  = Data\Post::get_modified_time();
 					$entity['author']        = &Author::get_dynamic_ref();
 				}
 			}
@@ -123,12 +123,12 @@ final class WebPage extends Reference {
 					'target' => Meta\URI::get_canonical_url( $args ),
 				];
 
-				if ( Query::is_static_frontpage( $args['id'] ) && Data\Plugin::get_option( 'knowledge_output' ) )
+				if ( Query::is_static_front_page( $args['id'] ) && Data\Plugin::get_option( 'knowledge_output' ) )
 					$entity['about'] = &Organization::get_dynamic_ref();
 
 				if ( Query::is_single( $args['id'] ) ) {
-					$entity['datePublished'] = Data\Post::get_post_published_time( $args['id'] );
-					$entity['dateModified']  = Data\Post::get_post_modified_time( $args['id'] );
+					$entity['datePublished'] = Data\Post::get_published_time( $args['id'] );
+					$entity['dateModified']  = Data\Post::get_modified_time( $args['id'] );
 					$entity['author']        = &Author::get_dynamic_ref( [
 						'uid' => Query::get_post_author_id( $args['id'] ),
 					] );

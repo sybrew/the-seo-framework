@@ -182,7 +182,7 @@ class Twitter {
 	public static function get_custom_title_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			if ( Query::is_static_frontpage() ) {
+			if ( Query::is_static_front_page() ) {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' )
 					  ?: Data\Plugin\Post::get_post_meta_item( '_twitter_title' );
 			} else {
@@ -300,7 +300,7 @@ class Twitter {
 	public static function get_custom_description_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			if ( Query::is_static_frontpage() ) {
+			if ( Query::is_static_front_page() ) {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' )
 					 ?: Data\Plugin\Post::get_post_meta_item( '_twitter_description' );
 			} else {

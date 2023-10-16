@@ -8,10 +8,11 @@ namespace The_SEO_Framework\Sitemap\Optimized;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Sitemap,
-	\The_SEO_Framework\Meta;
-
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+	Sitemap,
+};
 use \The_SEO_Framework\Helper\{
 	Format\Time,
 	Post_Types,
@@ -40,7 +41,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `\The_SEO_Framework\Builders\Sitemap_Base`.
- * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\Optimized`.
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\Sitemap`.
  *
  * @access private
  */
@@ -67,12 +68,13 @@ class Base extends Main {
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now no longer lowers the PHP execution time limit from unlimited to 3 minutes.
-	 * @since 4.3.0 Can now prerender sitemap on a $sitemap_id basis.
+	 * @since 4.3.0 1. Can now prerender sitemap on a $sitemap_id basis.
+	 *              2. Is now static.
 	 *
 	 * @param string $sitemap_id The sitemap ID to prerender.
 	 * @return void Early if the sitemap's already generated.
 	 */
-	public function prerender_sitemap( $sitemap_id = 'base' ) {
+	public static function prerender_sitemap( $sitemap_id = 'base' ) {
 
 		if ( ! Sitemap\Cache::is_sitemap_cache_enabled() ) return;
 
@@ -86,15 +88,17 @@ class Base extends Main {
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
 		if ( ! Sitemap\Lock::lock_sitemap( $sitemap_id ) ) return;
 
-		$this->prepare_generation();
-		$this->base_is_prerendering = true;
+		$sitemap_base = new self(); // var_dump() make static -- why would we need more than 1 sitemap instance anyway
 
-		Sitemap\Cache::cache_sitemap_content( $this->build_sitemap(), $sitemap_id );
+		$sitemap_base->prepare_generation();
+		$sitemap_base->base_is_prerendering = true;
+
+		Sitemap\Cache::cache_sitemap_content( $sitemap_base->build_sitemap(), $sitemap_id );
 
 		Sitemap\Lock::unlock_sitemap( $sitemap_id );
 
-		$this->shutdown_generation();
-		$this->base_is_regenerated = true;
+		$sitemap_base->shutdown_generation();
+		$sitemap_base->base_is_regenerated = true;
 	}
 
 	/**

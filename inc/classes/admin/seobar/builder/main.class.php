@@ -28,15 +28,16 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 /**
  * Generates the SEO Bar.
  *
- * @since 4.0.0
- * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\SeoBar`
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`
- *
  * Mind the late static binding. We use "self" if the variable is shared between instances.
  * We use "static" if the variable isn't shared between instances.
+ *
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
  * Implements test_{$*}, see property $tests and method `_run_test()` for what $* may be.
+ *
+ * @since 4.0.0
+ * @since 4.2.0 Renamed from `SeoBar`.
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\SEOBar`.
  *
  * @access private
  * @see \The_SEO_Framework\Admin\SEOBar\Builder

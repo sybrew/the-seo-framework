@@ -151,7 +151,7 @@ class Exclusion {
 	 * @since 4.2.0 Improved supported taxonomy loop.
 	 * @since 4.2.6 Added check for `did_action( 'wp_loaded' )` early, before queries are tested and cached.
 	 * @since 4.2.7 No longer affects the sitemap query.
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Query\Exclusion`
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool
@@ -221,7 +221,7 @@ class Exclusion {
 	 * Alters search results after database query.
 	 *
 	 * @since 2.9.4
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Query\Exclusion`
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -250,7 +250,7 @@ class Exclusion {
 	 *
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Query\Exclusion`
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
@@ -284,7 +284,7 @@ class Exclusion {
 	 * Alters archive results after database query.
 	 *
 	 * @since 2.9.4
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Query\Exclusion`
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -313,7 +313,7 @@ class Exclusion {
 	 *
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Helper\Query\Exclusion`
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *

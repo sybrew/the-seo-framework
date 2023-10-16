@@ -13,9 +13,11 @@ use function \The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -52,7 +54,7 @@ final class Conditions {
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when prefixes are allowed.
 	 */
-	public static function use_title_protection_status( $args = null ) {
+	public static function use_protection_status( $args = null ) {
 
 		if ( null === $args ) {
 			if ( ! Query::is_singular() ) return false;
@@ -83,7 +85,7 @@ final class Conditions {
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
-	public static function use_title_pagination( $args = null ) {
+	public static function use_pagination( $args = null ) {
 
 		// Only add pagination if the query is autodetermined, and on a real page.
 		if ( isset( $args ) || \is_404() || \is_admin() )
@@ -109,7 +111,7 @@ final class Conditions {
 	 *                            Also accepts string 'og' and 'twitter' for future proofing.
 	 * @return bool True when additions are allowed.
 	 */
-	public static function use_title_branding( $args = null, $social = false ) {
+	public static function use_branding( $args = null, $social = false ) {
 
 		// If social, test its option first.
 		$use = $social ? ! Data\Plugin::get_option( 'social_title_rem_additions' ) : true;
@@ -118,13 +120,13 @@ final class Conditions {
 		if ( $use ) {
 			if ( null === $args ) {
 				if ( Query::is_real_front_page() ) {
-					$use = static::use_home_page_title_tagline();
+					$use = static::use_front_page_tagline();
 				} elseif ( Query::is_singular() ) {
-					$use = static::use_singular_title_branding();
+					$use = static::use_post_branding();
 				} elseif ( Query::is_editable_term() ) {
-					$use = static::use_taxonomical_title_branding();
+					$use = static::use_term_branding();
 				} elseif ( \is_post_type_archive() ) {
-					$use = static::use_post_type_archive_title_branding();
+					$use = static::use_pta_branding();
 				} else {
 					$use = ! Data\Plugin::get_option( 'title_rem_additions' );
 				}
@@ -132,13 +134,13 @@ final class Conditions {
 				isset( $args ) and normalize_generation_args( $args );
 
 				if ( $args['tax'] ) {
-					$use = static::use_taxonomical_title_branding( $args['id'] );
+					$use = static::use_term_branding( $args['id'] );
 				} elseif ( $args['pta'] ) {
-					$use = static::use_post_type_archive_title_branding( $args['pta'] );
+					$use = static::use_pta_branding( $args['pta'] );
 				} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-					$use = static::use_home_page_title_tagline();
+					$use = static::use_front_page_tagline();
 				} else {
-					$use = static::use_singular_title_branding( $args['id'] );
+					$use = static::use_post_branding( $args['id'] );
 				}
 			}
 		}
@@ -164,13 +166,11 @@ final class Conditions {
 	/**
 	 * Determines whether to add homepage tagline.
 	 *
-	 * @since 2.6.0
-	 * @since 3.0.4 Now checks for `Meta\Title::get_addition_for_front_page()`.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 4.3.0
 	 *
 	 * @return bool
 	 */
-	private static function use_home_page_title_tagline() {
+	private static function use_front_page_tagline() {
 		return Data\Plugin::get_option( 'homepage_tagline' )
 			&& Meta\Title::get_addition_for_front_page();
 	}
@@ -184,7 +184,7 @@ final class Conditions {
 	 * @param int $id The post ID. Optional.
 	 * @return bool
 	 */
-	private static function use_singular_title_branding( $id = 0 ) {
+	private static function use_post_branding( $id = 0 ) {
 		return ! Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname', $id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
@@ -198,21 +198,20 @@ final class Conditions {
 	 * @param int $id The term ID. Optional.
 	 * @return bool
 	 */
-	private static function use_taxonomical_title_branding( $id = 0 ) {
+	private static function use_term_branding( $id = 0 ) {
 		return ! Data\Plugin\Term::get_term_meta_item( 'title_no_blog_name', $id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 
 	/**
-	 * Determines whether to add the title tagline for the pta.
+	 * Determines whether to add the title tagline for the post type archive.
 	 *
-	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 4.3.0
 	 *
 	 * @param string $pta The post type archive. Optional.
 	 * @return bool
 	 */
-	private static function use_post_type_archive_title_branding( $pta = '' ) {
+	private static function use_pta_branding( $pta = '' ) {
 		return ! Data\Plugin\PTA::get_post_type_archive_meta_item( 'title_no_blog_name', $pta )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
@@ -223,7 +222,7 @@ final class Conditions {
 	 * @since 3.1.0
 	 * @since 4.0.5 1: Added first parameter `$term`.
 	 *              2: Added filter.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $term The Term object. Leave null to autodermine query.
 	 * @return bool

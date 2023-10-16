@@ -417,9 +417,9 @@ class Loader {
 
 		$id = Query::get_the_real_id();
 
-		$is_static_frontpage = Query::is_static_frontpage( $id );
+		$is_static_front_page = Query::is_static_front_page( $id );
 
-		if ( $is_static_frontpage ) {
+		if ( $is_static_front_page ) {
 			$additions_forced_disabled = ! Data\Plugin::get_option( 'homepage_tagline' );
 			$additions_forced_enabled  = ! $additions_forced_disabled;
 		} else {
@@ -464,7 +464,7 @@ class Loader {
 							'id'              => (int) $id,
 						],
 						'params' => [
-							'isFront'                 => $is_static_frontpage,
+							'isFront'                 => $is_static_front_page,
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,
 						],

@@ -133,8 +133,8 @@ switch ( $instance ) :
 							$_post_meta_title ?: Meta\Title::get_bare_generated_title( $generator_args )
 						),
 						'_defaultTitleLocked' => (bool) $_post_meta_title, // Underscore because it's non-standard API.
-						'addAdditions'        => Meta\Title\Conditions::use_title_branding( $generator_args ),
-						'useSocialTagline'    => Meta\Title\Conditions::use_title_branding( $generator_args, true ),
+						'addAdditions'        => Meta\Title\Conditions::use_branding( $generator_args ),
+						'useSocialTagline'    => Meta\Title\Conditions::use_branding( $generator_args, true ),
 						'additionValue'       => \tsf()->escape_text( Meta\Title::get_addition_for_front_page() ),
 						'additionPlacement'   => 'left' === Meta\Title::get_addition_location_for_front_page() ? 'before' : 'after',
 					],
@@ -290,7 +290,7 @@ switch ( $instance ) :
 						'defaultTitle' => \tsf()->escape_text(
 							$custom_og_title ?: Meta\Open_Graph::get_generated_title( $generator_args )
 						),
-						'addAdditions' => Meta\Title\Conditions::use_title_branding( $generator_args, 'og' ),
+						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 						'defaultDesc'  => \tsf()->escape_text(
 							$custom_og_desc ?: Meta\Open_Graph::get_generated_description( $generator_args )
 						),
@@ -303,7 +303,7 @@ switch ( $instance ) :
 						'defaultTitle' => \tsf()->escape_text(
 							$custom_tw_title ?: Meta\Twitter::get_generated_title( $generator_args )
 						),
-						'addAdditions' => Meta\Title\Conditions::use_title_branding( $generator_args, 'twitter' ),
+						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 						'defaultDesc'  => \tsf()->escape_text(
 							$custom_tw_desc ?: Meta\Twitter::get_generated_description( $generator_args )
 						),

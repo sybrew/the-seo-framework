@@ -175,7 +175,7 @@ class Utils {
 	 *
 	 * @since 2.8.0
 	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Utils.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param bool $get_defaults Whether to get the default colors.
 	 * @return array The sitemap colors.
@@ -207,7 +207,7 @@ class Utils {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Utils.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool
 	 */
@@ -236,16 +236,14 @@ class Utils {
 	 */
 	public static function may_output_optimized_sitemap() {
 		return Data\Plugin::get_option( 'sitemaps_output' )
-			&& ! Data\Blog::is_current_blog_spam_or_deleted();
+			&& ! Data\Blog::is_spam_or_deleted();
 	}
 
 	/**
 	 * Detects presence of sitemap.xml in root folder.
 	 * Memoizes the return value.
 	 *
-	 * @since 2.5.2
-	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\Utils`
+	 * @since 4.3.0
 	 *
 	 * @return bool Whether the sitemap.xml file exists.
 	 */

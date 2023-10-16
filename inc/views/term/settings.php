@@ -167,8 +167,8 @@ $robots_settings = [
 							'state' => [
 								'refTitleLocked'    => false,
 								'defaultTitle'      => \tsf()->escape_text( Meta\Title::get_bare_generated_title( $generator_args ) ),
-								'addAdditions'      => Meta\Title\Conditions::use_title_branding( $generator_args ),
-								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $generator_args, true ),
+								'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
+								'useSocialTagline'  => Meta\Title\Conditions::use_branding( $generator_args, true ),
 								'additionValue'     => \tsf()->escape_text( Meta\Title::get_addition() ),
 								'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 							],
@@ -234,14 +234,14 @@ $robots_settings = [
 		'og' => [
 			'state' => [
 				'defaultTitle' => \tsf()->escape_text( Meta\Open_Graph::get_generated_title( $generator_args ) ),
-				'addAdditions' => Meta\Title\Conditions::use_title_branding( $generator_args, 'og' ),
+				'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 				'defaultDesc'  => \tsf()->escape_text( Meta\Open_Graph::get_generated_description( $generator_args ) ),
 			],
 		],
 		'tw' => [
 			'state' => [
 				'defaultTitle' => \tsf()->escape_text( Meta\Twitter::get_generated_title( $generator_args ) ),
-				'addAdditions' => Meta\Title\Conditions::use_title_branding( $generator_args, 'twitter' ),
+				'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 				'defaultDesc'  => \tsf()->escape_text( Meta\Twitter::get_generated_description( $generator_args ) ),
 			],
 		],

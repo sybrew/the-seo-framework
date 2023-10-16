@@ -98,13 +98,13 @@ class Title {
 		// Allow 0 to be the title.
 		if ( ! \strlen( $title ) ) return '';
 
-		if ( Title\Conditions::use_title_protection_status( $args ) )
+		if ( Title\Conditions::use_protection_status( $args ) )
 			$title = static::add_protection_status( $title, $args );
 
-		if ( Title\Conditions::use_title_pagination( $args ) )
+		if ( Title\Conditions::use_pagination( $args ) )
 			$title = static::add_pagination( $title );
 
-		if ( Title\Conditions::use_title_branding( $args, $social ) )
+		if ( Title\Conditions::use_branding( $args, $social ) )
 			$title = static::add_branding( $title, $args );
 
 		return $title;
@@ -134,13 +134,13 @@ class Title {
 		// We should always get something from here.
 		$title = static::get_bare_generated_title( $args );
 
-		if ( Title\Conditions::use_title_protection_status( $args ) )
+		if ( Title\Conditions::use_protection_status( $args ) )
 			$title = static::add_protection_status( $title, $args );
 
-		if ( Title\Conditions::use_title_pagination( $args ) )
+		if ( Title\Conditions::use_pagination( $args ) )
 			$title = static::add_pagination( $title );
 
-		if ( Title\Conditions::use_title_branding( $args, $social ) )
+		if ( Title\Conditions::use_branding( $args, $social ) )
 			$title = static::add_branding( $title, $args );
 
 		return $title;
@@ -266,7 +266,7 @@ class Title {
 	public static function get_custom_title_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			if ( Query::is_static_frontpage() ) {
+			if ( Query::is_static_front_page() ) {
 				$title = Data\Plugin::get_option( 'homepage_title' )
 					  ?: Data\Plugin\Post::get_post_meta_item( '_genesis_title' );
 			} else {

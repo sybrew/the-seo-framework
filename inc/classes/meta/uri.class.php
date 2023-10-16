@@ -454,10 +454,7 @@ class URI {
 	/**
 	 * Returns author canonical URL.
 	 *
-	 * @since 3.0.0
-	 * @since 4.2.0 1. The first parameter is now optional.
-	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI.
+	 * @since 4.3.0
 	 *
 	 * @param int|null $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
@@ -569,11 +566,7 @@ class URI {
 	 * Returns search canonical URL.
 	 * Automatically adds pagination if the input matches the query.
 	 *
-	 * @since 3.0.0
-	 * @since 3.1.0 1. The first parameter now defaults to null.
-	 *              2. The search term is now matched with the input query if not set,
-	 *                 instead of it being empty.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI.
+	 * @since 4.3.0
 	 *
 	 * @param string $search_query The search query. Mustn't be escaped.
 	 *                             When left empty, the current query will be used.

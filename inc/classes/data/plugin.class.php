@@ -120,7 +120,7 @@ class Plugin {
 	 * Updates options. Also updates the option cache if the settings aren't headless.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Data`.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.

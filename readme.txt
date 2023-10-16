@@ -903,7 +903,7 @@ TODO also do "renamed to", should be "renamed from".
 				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_user_meta_item()` is now `tsf()->data()->plugin()->user()->get_user_meta_item()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\User`.
 		* This pool has a sub-pool, accessible via `tsf()->data()->post()`.
-			* All public WordPress post-related methods have been moved to that pool. E.g., `tsf()->get_post_excerpt()` is now `tsf()->data()->post()->get_post_excerpt()`.
+			* All public WordPress post-related methods have been moved to that pool. E.g., `tsf()->get_post_content()` is now `tsf()->data()->post()->get_content()`.
 			* Internally known as `The_SEO_Framework\Data\Post`.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
@@ -1004,7 +1004,7 @@ TODO also do "renamed to", should be "renamed from".
 					2. Added `is_customize_preview()` as unsupported.
 					3. Moved to `\The_SEO_Framework\Helper\Query`.
 					4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`, this is now being handled by `_init_tsf()`.
-				* `_init_sitemap()` is no longer called with `template_redirect`, but at `parse_request` at priority `15`, now using callback `[ Sitemap\Registry::class, '_init' ]`. This prevents loading the main query.
+				* `_init_sitemap()` is no longer called act action `template_redirect`, but at `parse_request` at priority `15`, now using callback `[ Sitemap\Registry::class, '_init' ]`. This prevents loading the main query.
 					* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed.
 					* This new method is still marked as private; I just wanted to document how a part prone to causing catastrophe has changed.
 				* `escape_description()` now requires a first parameter.
@@ -1020,104 +1020,105 @@ TODO also do "renamed to", should be "renamed from".
 				* `s_twitter_card()` no longer falls to the default option, but `'summary_large_image'`.
 				* `get_title()`'s third parameter is now gone. Use `get_open_graph_title()` or `get_twitter_title()` instead.
 			* **Methods deprecated:**
-				* `set_transient`, use WordPress's builtin namesake instead.
-				* `get_transient`, use WordPress's builtin namesake instead.
+				* `set_transient()`, use WordPress's builtin namesake instead.
+				* `get_transient()`, use WordPress's builtin namesake instead.
 				* `is_404`, use WordPress's builtin namesake instead.
-				* `is_admin`, use WordPress's builtin namesake instead.
-				* `is_customize_preview`, use WordPress's builtin namesake instead.
-				* `is_date`, use WordPress's builtin namesake instead.
-				* `is_day`, use WordPress's builtin namesake instead.
-				* `is_feed`, use WordPress's builtin namesake instead.
-				* `is_month`, use WordPress's builtin namesake instead.
-				* `is_robots`, use WordPress's builtin namesake instead.
+				* `is_admin()`, use WordPress's builtin namesake instead.
+				* `is_customize_preview()`, use WordPress's builtin namesake instead.
+				* `is_date()`, use WordPress's builtin namesake instead.
+				* `is_day()`, use WordPress's builtin namesake instead.
+				* `is_feed()`, use WordPress's builtin namesake instead.
+				* `is_month()`, use WordPress's builtin namesake instead.
+				* `is_robots()`, use WordPress's builtin namesake instead.
 				* `s_left_right_home()`, use `s_left_right()` instead. TODO we might move this.
-					* This method also no longer falls back to option or default option, but a language-based default instead.* `get_post_type_real_id`, use `tsf()->query()->get_post_type_real_id()` instead
-				* `get_admin_post_type`, use `tsf()->query()->get_admin_post_type()` instead
-				* `get_post_types_from_taxonomy`, use `tsf()->taxonomies()->get_post_types_from_taxonomy()` instead
-				* `get_the_real_id`, use `tsf()->query()->get_the_real_id()` instead
-				* `get_the_real_admin_id`, use `tsf()->query()->get_the_real_admin_id()` instead
-				* `get_the_front_page_id`, use `tsf()->query()->get_the_front_page_id()` instead
-				* `get_admin_term_id`, use `tsf()->query()->get_admin_term_id()` instead
-				* `get_current_taxonomy`, use `tsf()->query()->get_current_taxonomy()` instead
-				* `get_current_post_type`, use `tsf()->query()->get_current_post_type()` instead
-				* `is_attachment`, use `tsf()->query()->is_attachment()` instead
-				* `is_attachment_admin`, use `tsf()->query()->is_attachment_admin()` instead
-				* `is_singular_archive`, use `tsf()->query()->is_singular_archive()` instead
-				* `is_archive`, use `tsf()->query()->is_archive()` instead
-				* `is_archive_admin`, use `tsf()->query()->is_archive_admin()` instead
-				* `is_term_edit`, use `tsf()->query()->is_term_edit()` instead
-				* `is_post_edit`, use `tsf()->query()->is_post_edit()` instead
-				* `is_wp_lists_edit`, use `tsf()->query()->is_wp_lists_edit()` instead
-				* `is_profile_edit`, use `tsf()->query()->is_profile_edit()` instead
-				* `is_author`, use `tsf()->query()->is_author()` instead
-				* `is_home`, use `tsf()->query()->is_blog()` instead
-				* `is_home_as_page`, use `tsf()->query()->is_blog_as_page()` instead
-				* `is_category`, use `tsf()->query()->is_category()` instead
-				* `is_category_admin`, use `tsf()->query()->is_category_admin()` instead
-				* `is_real_front_page`, use `tsf()->query()->is_real_front_page()` instead
-				* `is_real_front_page_by_id`, use `tsf()->query()->is_real_front_page_by_id()` instead
-				* `is_page`, use `tsf()->query()->is_page()` instead
-				* `is_page_admin`, use `tsf()->query()->is_page_admin()` instead
-				* `is_preview`, use `tsf()->query()->is_preview()` instead
-				* `is_search`, use `tsf()->query()->is_search()` instead
-				* `is_single`, use `tsf()->query()->is_single()` instead
-				* `is_single_admin`, use `tsf()->query()->is_single_admin()` instead
-				* `is_singular`, use `tsf()->query()->is_singular()` instead
-				* `is_singular_admin`, use `tsf()->query()->is_singular_admin()` instead
-				* `is_static_frontpage`, use `tsf()->query()->is_static_frontpage()` instead
-				* `is_tag`, use `tsf()->query()->is_tag()` instead
-				* `is_tag_admin`, use `tsf()->query()->is_tag_admin()` instead
-				* `is_tax`, use `tsf()->query()->is_tax()` instead
-				* `is_shop`, use `tsf()->query()->is_shop()` instead
-				* `is_product`, use `tsf()->query()->is_product()` instead
-				* `is_product_admin`, use `tsf()->query()->is_product_admin()` instead
-				* `is_year`, use `tsf()->query()->is_year()` instead
-				* `is_ssl`, use `tsf()->query()->is_ssl()` instead
-				* `is_seo_settings_page`, use `tsf()->query()->is_seo_settings_page()` instead
-				* `is_menu_page`, use `tsf()->query()->is_menu_page()` instead
-				* `page`, use `tsf()->query()->page()` instead
-				* `paged`, use `tsf()->query()->paged()` instead
-				* `numpages`, use `tsf()->query()->numpages()` instead
-				* `is_multipage`, use `tsf()->query()->is_multipage()` instead
-				* `is_sitemap`, use `tsf()->query()->is_sitemap()` instead
-				* `advanced_query_protection`, with no alternative available.
-				* `the_description`, with no alternative available.
-				* `robots`, with no alternative available.
-				* `canonical`, with no alternative available.
-				* `shortlink`, with no alternative available.
-				* `paged_urls`, with no alternative available.
-				* `theme_color`, with no alternative available.
-				* `google_site_output`, with no alternative available.
-				* `bing_site_output`, with no alternative available.
-				* `yandex_site_output`, with no alternative available.
-				* `baidu_site_output`, with no alternative available.
-				* `pint_site_output`, with no alternative available.
-				* `use_og_tags`, with no alternative available.
-				* `og_title`, with no alternative available.
-				* `og_description`, with no alternative available.
-				* `og_locale`, with no alternative available.
-				* `og_type`, with no alternative available.
-				* `og_image`, with no alternative available.
-				* `og_sitename`, with no alternative available.
-				* `og_url`, with no alternative available.
-				* `og_updated_time`, with no alternative available.
-				* `facebook_author`, with no alternative available.
-				* `facebook_publisher`, with no alternative available.
-				* `facebook_app_id`, with no alternative available.
-				* `use_facebook_tags`, with no alternative available.
-				* `article_published_time`, with no alternative available.
-				* `article_modified_time`, with no alternative available.
-				* `output_modified_time`, with no alternative available.
-				* `output_published_time`, with no alternative available.
-				* `get_current_twitter_card_type`, with no alternative available.
-				* `twitter_card`, with no alternative available.
-				* `twitter_site`, with no alternative available.
-				* `twitter_creator`, with no alternative available.
-				* `twitter_title`, with no alternative available.
-				* `twitter_description`, with no alternative available.
-				* `twitter_image`, with no alternative available.
-				* `use_twitter_tags`, with no alternative available.
-				* `array_merge_recursive_distinct`, use `tsf()->format()->arrays()->array_merge_recursive_distinct()` instead.
+					* This method also no longer falls back to option or default option, but a language-based default instead.
+				* `get_post_type_real_id()`, use `tsf()->query()->get_post_type_real_id()` instead
+				* `get_admin_post_type()`, use `tsf()->query()->get_admin_post_type()` instead
+				* `get_post_types_from_taxonomy()`, use `tsf()->taxonomies()->get_post_types_from_taxonomy()` instead
+				* `get_the_real_id()`, use `tsf()->query()->get_the_real_id()` instead
+				* `get_the_real_admin_id()`, use `tsf()->query()->get_the_real_admin_id()` instead
+				* `get_the_front_page_id()`, use `tsf()->query()->get_the_front_page_id()` instead
+				* `get_admin_term_id()`, use `tsf()->query()->get_admin_term_id()` instead
+				* `get_current_taxonomy()`, use `tsf()->query()->get_current_taxonomy()` instead
+				* `get_current_post_type()`, use `tsf()->query()->get_current_post_type()` instead
+				* `is_attachment()`, use `tsf()->query()->is_attachment()` instead
+				* `is_attachment_admin()`, use `tsf()->query()->is_attachment_admin()` instead
+				* `is_singular_archive()`, use `tsf()->query()->is_singular_archive()` instead
+				* `is_archive()`, use `tsf()->query()->is_archive()` instead
+				* `is_archive_admin()`, use `tsf()->query()->is_archive_admin()` instead
+				* `is_term_edit()`, use `tsf()->query()->is_term_edit()` instead
+				* `is_post_edit()`, use `tsf()->query()->is_post_edit()` instead
+				* `is_wp_lists_edit()`, use `tsf()->query()->is_wp_lists_edit()` instead
+				* `is_profile_edit()`, use `tsf()->query()->is_profile_edit()` instead
+				* `is_author()`, use `tsf()->query()->is_author()` instead
+				* `is_home()`, use `tsf()->query()->is_blog()` instead
+				* `is_home_as_page()`, use `tsf()->query()->is_blog_as_page()` instead
+				* `is_category()`, use `tsf()->query()->is_category()` instead
+				* `is_category_admin()`, use `tsf()->query()->is_category_admin()` instead
+				* `is_real_front_page()`, use `tsf()->query()->is_real_front_page()` instead
+				* `is_real_front_page_by_id()`, use `tsf()->query()->is_real_front_page_by_id()` instead
+				* `is_page()`, use `tsf()->query()->is_page()` instead
+				* `is_page_admin()`, use `tsf()->query()->is_page_admin()` instead
+				* `is_preview()`, use `tsf()->query()->is_preview()` instead
+				* `is_search()`, use `tsf()->query()->is_search()` instead
+				* `is_single()`, use `tsf()->query()->is_single()` instead
+				* `is_single_admin()`, use `tsf()->query()->is_single_admin()` instead
+				* `is_singular()`, use `tsf()->query()->is_singular()` instead
+				* `is_singular_admin()`, use `tsf()->query()->is_singular_admin()` instead
+				* `is_static_frontpage()`, use `tsf()->query()->is_static_front_page()` instead
+				* `is_tag()`, use `tsf()->query()->is_tag()` instead
+				* `is_tag_admin()`, use `tsf()->query()->is_tag_admin()` instead
+				* `is_tax()`, use `tsf()->query()->is_tax()` instead
+				* `is_shop()`, use `tsf()->query()->is_shop()` instead
+				* `is_product()`, use `tsf()->query()->is_product()` instead
+				* `is_product_admin()`, use `tsf()->query()->is_product_admin()` instead
+				* `is_year()`, use `tsf()->query()->is_year()` instead
+				* `is_ssl()`, use `tsf()->query()->is_ssl()` instead
+				* `is_seo_settings_page()`, use `tsf()->query()->is_seo_settings_page()` instead
+				* `is_menu_page()`, use `tsf()->query()->is_menu_page()` instead
+				* `page()`, use `tsf()->query()->page()` instead
+				* `paged()`, use `tsf()->query()->paged()` instead
+				* `numpages()`, use `tsf()->query()->numpages()` instead
+				* `is_multipage()`, use `tsf()->query()->is_multipage()` instead
+				* `is_sitemap()`, use `tsf()->query()->is_sitemap()` instead
+				* `advanced_query_protection()`, with no alternative available.
+				* `the_description()`, with no alternative available.
+				* `robots()`, with no alternative available.
+				* `canonical()`, with no alternative available.
+				* `shortlink()`, with no alternative available.
+				* `paged_urls()`, with no alternative available.
+				* `theme_color()`, with no alternative available.
+				* `google_site_output()`, with no alternative available.
+				* `bing_site_output()`, with no alternative available.
+				* `yandex_site_output()`, with no alternative available.
+				* `baidu_site_output()`, with no alternative available.
+				* `pint_site_output()`, with no alternative available.
+				* `use_og_tags()`, with no alternative available.
+				* `og_title()`, with no alternative available.
+				* `og_description()`, with no alternative available.
+				* `og_locale()`, with no alternative available.
+				* `og_type()`, with no alternative available.
+				* `og_image()`, with no alternative available.
+				* `og_sitename()`, with no alternative available.
+				* `og_url()`, with no alternative available.
+				* `og_updated_time()`, with no alternative available.
+				* `facebook_author()`, with no alternative available.
+				* `facebook_publisher()`, with no alternative available.
+				* `facebook_app_id()`, with no alternative available.
+				* `use_facebook_tags()`, with no alternative available.
+				* `article_published_time()`, with no alternative available.
+				* `article_modified_time()`, with no alternative available.
+				* `output_modified_time()`, with no alternative available.
+				* `output_published_time()`, with no alternative available.
+				* `get_current_twitter_card_type()`, with no alternative available.
+				* `twitter_card()`, with no alternative available.
+				* `twitter_site()`, with no alternative available.
+				* `twitter_creator()`, with no alternative available.
+				* `twitter_title()`, with no alternative available.
+				* `twitter_description()`, with no alternative available.
+				* `twitter_image()`, with no alternative available.
+				* `use_twitter_tags()`, with no alternative available.
+				* `array_merge_recursive_distinct()`, use `tsf()->format()->arrays()->array_merge_recursive_distinct()` instead.
 				* `retrieve_robots_meta_assertions()`, use `tsf()->robots()->get_collected_meta_assertions()` instead.
 				* `get_robots_meta()`, use `tsf()->robots()->get_meta()` instead.
 				* `generate_robots_meta()`, use `tsf()->robots()->generate_meta()` instead.
@@ -1166,14 +1167,14 @@ TODO also do "renamed to", should be "renamed from".
 				* `supported_social_locales()`, use `tsf()->open_graph()->get_supported_locales()` instead.
 				* `get_generated_open_graph_title()`, use `tsf()->open_graph()->get_generated_title()` instead.
 				* `get_generated_twitter_title()`, use `tsf()->twitter()->get_generated_title()` instead.
-				* `use_title_protection()`, with no alternative available.
-				* `use_title_pagination()`, with no alternative available.
-				* `use_title_branding()`, with no alternative available.
-				* `use_generated_archive_prefix()`, with no alternative available.
-				* `use_home_page_title_tagline()`, with no alternative available.
-				* `use_singular_title_branding()`, with no alternative available.
-				* `use_taxonomical_title_branding()`, with no alternative available.
-				* `use_post_type_archive_title_branding()`, with no alternative available.
+				* `use_title_protection()`, use `tsf()->title()->conditions()->use_protection_status()` instead.
+				* `use_title_pagination()`, use `tsf()->title()->conditions()->use_pagination()` instead.
+				* `use_title_branding()`, use `tsf()->title()->conditions()->use_branding()` instead.
+				* `use_generated_archive_prefix()`, use `tsf()->title()->conditions()->use_generated_archive_prefix()` instead.
+				* `use_home_page_title_tagline()`, use `tsf()->title()->conditions()->use_branding()` instead.
+				* `use_singular_title_branding()`, use `tsf()->title()->conditions()->use_branding()` instead.
+				* `use_taxonomical_title_branding()`, use `tsf()->title()->conditions()->use_branding()` instead.
+				* `use_post_type_archive_title_branding()`, use `tsf()->title()->conditions()->use_branding()` instead.
 				* `get_title_seplocation()`, use `tsf()->title()->get_addition_location()` instead.
 				* `get_home_title_seplocation()`, use `tsf()->title()->get_addition_location_for_front_page()` instead.
 				* `get_home_title_additions()`, use `tsf()->title()->get_addition_for_front_page()` instead.
@@ -1272,7 +1273,7 @@ TODO also do "renamed to", should be "renamed from".
 				* `get_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
 				* `get_current_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
 				* `get_user_id()`, use `tsf()->query()->get_current_user_id()` instead.
-				* `get_post_content()`, use `tsf()->data()->post()->get_post_content()` instead.
+				* `get_post_content()`, use `tsf()->data()->post()->get_content()` instead.
 				* `uses_non_html_page_builder()`, use `tsf()->data()->post()->uses_non_html_page_builder()` instead.
 				* `is_protected()`, use `tsf()->data()->post()->is_protected()` instead.
 				* `is_password_protected()`, use `tsf()->data()->post()->is_password_protected()` instead.
@@ -1288,8 +1289,8 @@ TODO also do "renamed to", should be "renamed from".
 				* `get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
 				* `get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
 				* `get_sitemap_colors()`, use `tsf()->sitemap()->utils()->get_sitemap_colors()` instead.
-				* `is_blog_public()`, use `tsf()->data()->blog()->is_blog_public()` instead.
-				* `current_blog_is_spam_or_deleted()`, use `tsf()->data()->blog()->is_current_blog_spam_or_deleted()` instead.
+				* `is_blog_public()`, use `tsf()->data()->blog()->is_public()` instead.
+				* `current_blog_is_spam_or_deleted()`, use `tsf()->data()->blog()->is_spam_or_deleted()` instead.
 				* `is_subdirectory_installation()`, use `tsf()->data()->blog()->is_subdirectory_installation()` instead.
 				* `use_core_sitemaps()`, use `tsf()->sitemap()->utils()->use_core_sitemaps()` instead.
 				* `can_run_sitemap()`, use `tsf()->sitemap()->utils()->may_output_optimized_sitemap()` instead.

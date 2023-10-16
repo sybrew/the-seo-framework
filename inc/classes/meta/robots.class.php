@@ -67,7 +67,7 @@ class Robots {
 	public static function get_meta() {
 		return umemo( __METHOD__ ) ?? umemo(
 			__METHOD__,
-			Data\Blog::is_blog_public()
+			Data\Blog::is_public()
 				? implode( ',', static::generate_meta() )
 				: ''
 		);
@@ -165,7 +165,7 @@ class Robots {
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Robots
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
@@ -183,7 +183,7 @@ class Robots {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Robots
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.

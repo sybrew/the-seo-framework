@@ -96,8 +96,7 @@ class Blog {
 	 * plugins filter `home_url`.
 	 * Memoized.
 	 *
-	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 * @since 4.3.0
 	 *
 	 * @return string The home URL.
 	 */
@@ -123,13 +122,11 @@ class Blog {
 	 * Checks if blog is public through WordPress core settings.
 	 * Memoizes the return value.
 	 *
-	 * @since 2.6.0
-	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 * @since 4.3.0
 	 *
 	 * @return bool True is blog is public.
 	 */
-	public static function is_blog_public() {
+	public static function is_public() {
 		return memo() ?? memo( (bool) \get_option( 'blog_public' ) );
 	}
 
@@ -137,14 +134,11 @@ class Blog {
 	 * Whether the current blog is spam or deleted.
 	 * Multisite Only.
 	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 Now uses get_site()
-	 * @since 3.1.1 Now checks for `is_multisite()`, to prevent a crash with Divi's compatibility injection.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 * @since 4.3.0
 	 *
 	 * @return bool Current blog is spam.
 	 */
-	public static function is_current_blog_spam_or_deleted() {
+	public static function is_spam_or_deleted() {
 
 		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() )
 			return false;
@@ -162,7 +156,7 @@ class Blog {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Blog
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool
 	 */

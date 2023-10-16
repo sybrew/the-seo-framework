@@ -31,7 +31,8 @@ use function \The_SEO_Framework\umemo;
  * Interprets the Sitemap Stylesheet of the optimized Sitemap.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved to `The_SEO_Framework\Sitemap\Optimized`.
+ * @since 4.3.0 1. Moved to `\The_SEO_Framework\Interpreters`.
+ *              2. Renamed from `Sitemap_XSL`.
  * @access private
  */
 final class XSL {

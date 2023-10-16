@@ -49,7 +49,7 @@ class Post {
 	 * @param \WP_Post|int $post The Post or Post ID.
 	 * @return string The post content.
 	 */
-	public static function get_post_excerpt( $post = null ) {
+	public static function get_excerpt( $post = null ) {
 
 		$post = \get_post( $post ?: Query::get_the_real_id() );
 
@@ -62,15 +62,12 @@ class Post {
 	/**
 	 * Fetches Post content.
 	 *
-	 * @since 2.6.0
-	 * @since 3.1.0 No longer applies WordPress's default filters.
-	 * @since 4.2.8 Now tests for post type support of 'editor' before parsing the content.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Post.
+	 * @since 4.3.0
 	 *
 	 * @param \WP_Post|int $post The Post or Post ID.
 	 * @return string The post content.
 	 */
-	public static function get_post_content( $post = null ) {
+	public static function get_content( $post = null ) {
 
 		$post = \get_post( $post ?: Query::get_the_real_id() );
 
@@ -235,7 +232,7 @@ class Post {
 	 * @param ?int $id The post ID. Leave null to autodetermine.
 	 * @return string The post published time according to settings.
 	 */
-	public static function get_post_published_time( $id = null ) {
+	public static function get_published_time( $id = null ) {
 		return Time::convert_to_preferred_format(
 			\get_post( $id ?? Query::get_the_real_id() )->post_date_gmt ?? ''
 		);
@@ -249,7 +246,7 @@ class Post {
 	 * @param ?int $id The post ID. Leave null to autodetermine.
 	 * @return string The post modified time according to settings.
 	 */
-	public static function get_post_modified_time( $id = null ) {
+	public static function get_modified_time( $id = null ) {
 		return Time::convert_to_preferred_format(
 			\get_post( $id ?? Query::get_the_real_id() )->post_modified_gmt ?? ''
 		);

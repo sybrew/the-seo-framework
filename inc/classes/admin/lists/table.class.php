@@ -43,7 +43,8 @@ use \The_SEO_Framework\Helper\{
  * Totally negligible.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Lists`
+ * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+ *              2. Renamed from `ListTable`.
  * @access private
  */
 abstract class Table {

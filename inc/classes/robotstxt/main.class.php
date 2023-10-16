@@ -10,11 +10,10 @@ namespace The_SEO_Framework\RobotsTXT;
 
 use \The_SEO_Framework\{
 	Data,
+	Helper\Query,
 	Meta,
 	Sitemap,
 };
-
-use \The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -52,16 +51,7 @@ class Main {
 	 * The Robots Exclusion Protocol encourages you not to use robots.txt for
 	 * non-administrative endpoints. Use the robots meta tags (and headers) instead.
 	 *
-	 * @since 2.2.9
-	 * @since 2.9.3 Casts $public to string for check.
-	 * @since 4.0.5 1. The output is now filterable.
-	 *              2. Improved invalid location test.
-	 *              3. No longer shortcircuits on non-public sites.
-	 *              4. Now marked as private.
-	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
-	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
-	 * @since 4.1.4 Removed object caching support.
-	 * @since 4.3.0 Moved to `\The_SEO_Framework\RobotsTXT\Main`.
+	 * @since 4.3.0
 	 * @uses robots_txt filter located at WP core
 	 * @access private
 	 * @TODO rework into a workable standard...
@@ -111,7 +101,7 @@ class Main {
 					$wp_sitemaps_server = \wp_sitemaps_get_server();
 					if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
 						// This method augments the output--it doesn't overwrite it.
-						$output = \wp_sitemaps_get_server()->add_robots( $output, Data\Blog::is_blog_public() );
+						$output = \wp_sitemaps_get_server()->add_robots( $output, Data\Blog::is_public() );
 					}
 				}
 			}

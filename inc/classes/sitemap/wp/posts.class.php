@@ -32,7 +32,7 @@ use \The_SEO_Framework\Data,
  * Augments the WordPress Core 'posts' sitemap.
  *
  * @since 4.1.2
- * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap\WP`
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\CoreSitemaps`.
  *
  * @access private
  */

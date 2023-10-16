@@ -84,7 +84,8 @@ class Utils {
 	 *
 	 * @since 3.1.0
 	 * @since 4.1.0 Added a second parameter, $args, to help soften the burden of this method.
-	 * @since 4.3.0 Now handles filters with a priority of 0. Only a theoretical bug, so not in changelog.
+	 * @since 4.3.0 1. Now handles filters with a priority of 0. Only a theoretical bug, so not in changelog.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 * @internal Only to be used within Meta\Title::get_bare_unfiltered_generated_title()
 	 *
 	 * @param bool       $reset Whether to reset the removed filters.
@@ -147,7 +148,7 @@ class Utils {
 	 * Resets default title filters, for consistent output and sanitation.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @internal Only to be used within Meta\Title::get_bare_unfiltered_generated_title()
 	 * @uses $this->remove_default_title_filters()
 	 */

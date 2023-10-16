@@ -148,7 +148,7 @@ class Description {
 		$excerpt = (string) \apply_filters_deprecated(
 			'the_seo_framework_fetched_description_excerpt',
 			[
-				Description\Excerpt::get_excerpt( $args ),
+				Description\Excerpt::get_post_excerpt( $args ),
 				0,
 				$args,
 			],
@@ -214,7 +214,7 @@ class Description {
 	public static function get_custom_description_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			if ( Query::is_static_frontpage() ) {
+			if ( Query::is_static_front_page() ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' )
 					 ?: Data\Plugin\Post::get_post_meta_item( '_genesis_description' );
 			} else {

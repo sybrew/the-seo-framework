@@ -103,8 +103,7 @@ class Utils {
 	/**
 	 * Slashes the root (home) URL.
 	 *
-	 * @since 4.2.2
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils
+	 * @since 4.3.0
 	 *
 	 * @param string $url The root URL.
 	 * @return string The root URL plausibly with added slashes.
@@ -131,9 +130,7 @@ class Utils {
 	 * Which can automatically be detected when not set, based on the site URL setting.
 	 * Memoizes the return value.
 	 *
-	 * @since 3.0.0
-	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils
+	 * @since 4.3.0
 	 *
 	 * @return string The preferred URl scheme.
 	 */
@@ -167,7 +164,7 @@ class Utils {
 	 * Does not sanitize output.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $url The URL to set scheme for.
 	 * @return string The URL with the preferred scheme.
@@ -184,7 +181,7 @@ class Utils {
 	 * @since 3.0.0 $use_filter now defaults to false.
 	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
 	 * @since 4.0.0 Removed the deprecated parameter.
-	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\URI\Utils
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Removed support for $scheme type 'admin', 'login', 'login_post', and 'rpc'.
 	 *
 	 * @param string $url    Absolute url that includes a scheme.
@@ -225,7 +222,7 @@ class Utils {
 	 *       '/path/to/folder/` will become `http:///path/to/folder/`
 	 *
 	 * @since 2.6.5
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @see `static::set_url_scheme()` to set the correct scheme.
 	 * @see `static::convert_path_to_url()` to create URLs from paths.
 	 *
@@ -246,9 +243,7 @@ class Utils {
 	/**
 	 * Tests if input URL matches current domain.
 	 *
-	 * @since 2.9.4
-	 * @since 4.1.0 Improved performance by testing an early match.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils.
+	 * @since 4.3.0
 	 *
 	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.
@@ -303,6 +298,7 @@ class Utils {
 	 * Adds pagination to input URL.
 	 *
 	 * @since 4.2.3
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $url      The fully qualified URL.
 	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
@@ -366,7 +362,7 @@ class Utils {
 	 *              5. Is now public.
 	 * @since 4.1.2 Now correctly reappends query when pagination isn't removed.
 	 * @since 4.2.0 Now properly removes pagination from search links.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\URI\Utils.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string    $url  The fully qualified URL to remove pagination from.
 	 * @param int|null  $page The page number to remove. If null, it will get number from query.

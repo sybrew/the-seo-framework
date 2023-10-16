@@ -460,7 +460,7 @@ final class Debug {
 		$is_search                      = Query::is_search();
 		$is_single                      = Query::is_single();
 		$is_singular                    = Query::is_singular();
-		$is_static_frontpage            = Query::is_static_frontpage();
+		$is_static_front_page            = Query::is_static_front_page();
 		$is_tag                         = Query::is_tag();
 		$is_tax                         = Query::is_tax();
 		$is_shop                        = Query::is_shop();

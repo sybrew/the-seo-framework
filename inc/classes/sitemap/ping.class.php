@@ -33,7 +33,7 @@ use \The_SEO_Framework\Data;
  * Holds search engine sitemap pinging functionality.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Sitemap`
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`.
  * @access protected
  *         Use tsf()->sitemap()->ping() instead.
  */
@@ -45,7 +45,6 @@ final class Ping {
 	 * @since 4.0.0
 	 * @since 4.1.0 Now returns whether the cron engagement was successful.
 	 * @since 4.1.2 Now registers before and after cron hooks. They should run subsequentially when successful.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Ping.
 	 * @see static::engage_pinging_retry_cron()
 	 *
 	 * @return bool True on success, false on failure.
@@ -65,7 +64,6 @@ final class Ping {
 	 * Retries a cronjob-based ping, via another hook.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Ping.
 	 * @uses \WP_CRON_LOCK_TIMEOUT, default 60 (seconds).
 	 *
 	 * @param array $args Optional. Array containing each separate argument to pass to the hook's callback function.
@@ -87,7 +85,6 @@ final class Ping {
 	 *       Alternatively, hitch with `the_seo_framework_ping_search_engines`.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Ping.
 	 *
 	 * @param array $args Array from ping hook.
 	 */
@@ -109,13 +106,12 @@ final class Ping {
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @since 4.0.2 Added action.
 	 * @since 4.1.1 Added another action.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Ping.
 	 *
 	 * @return void Early if blog is not public.
 	 */
 	public static function ping_search_engines() {
 
-		if ( Data\Plugin::get_option( 'site_noindex' ) || ! Data\Blog::is_blog_public() ) return;
+		if ( Data\Plugin::get_option( 'site_noindex' ) || ! Data\Blog::is_public() ) return;
 
 		// Check for sitemap lock. If TSF's default sitemap isn't used, this should return false.
 		if ( Lock::is_sitemap_locked( 'base' ) ) {
@@ -163,7 +159,6 @@ final class Ping {
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @since 4.0.3 Google now redirects to HTTPS. Updated URL scheme to accommodate.
 	 * @since 4.1.2 Now fetches WP Sitemaps' index URL when it's enabled.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Ping.
 	 * @link https://developers.google.com/search/docs/advanced/crawling/ask-google-to-recrawl
 	 */
 	public static function ping_google() {
@@ -186,7 +181,6 @@ final class Ping {
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
 	 * @since 4.0.3 Bing now redirects to HTTPS. Updated URL scheme to accommodate.
 	 * @since 4.1.2 Now fetches WP Sitemaps' index URL when it's enabled.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Sitemap\Ping.
 	 * @link https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed
 	 */
 	public static function ping_bing() {
@@ -206,8 +200,7 @@ final class Ping {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Sitemap\Ping.
-	 *              2. Added first `$sitemap_id` parameter.
+	 * @since 4.3.0 Added first `$sitemap_id` parameter.
 	 *
 	 * @param string $sitemap_id The sitemap ID. Only works when the Optimized Sitemaps are enabled.
 	 * @return string The ping URL. Empty string on failure.

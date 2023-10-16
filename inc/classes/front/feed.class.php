@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
  * Prepares feed mofifications.
  *
  * @since 4.1.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Front\Feed`
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
 final class Feed {

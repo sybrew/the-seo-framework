@@ -43,7 +43,8 @@ final class Template {
 	/**
 	 * Outputs a template.
 	 *
-	 * The secret is scoped to the instance so the static function cannot bypass it.
+	 * Adds a `$secret` to the file to prevent including without this class.
+	 * This make file inclusions difficult when the plugin is dormant (deactivated).
 	 *
 	 * @since 4.3.0
 	 * @access private
@@ -64,7 +65,8 @@ final class Template {
 	 * Outputs a template via absolute file location.
 	 * This function is considered insecure for dynamically created paths.
 	 *
-	 * The secret is scoped to the instance so the static function cannot bypass it.
+	 * Adds a `$secret` to the file to prevent including without this class.
+	 * This make file inclusions difficult when the plugin is dormant (deactivated).
 	 *
 	 * @since 4.3.0
 	 * @access private
@@ -84,7 +86,7 @@ final class Template {
 	 * Gets view location. Forces a path on our Views folder.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Admin\Template`.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private
 	 *
 	 * @param string $file The file name.
@@ -106,8 +108,7 @@ final class Template {
 	/**
 	 * Verifies view secret.
 	 *
-	 * @since 4.1.1
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Admin\Template`.
+	 * @since 4.3.0
 	 * @access private
 	 *
 	 * @param string $value The value to match against secret.

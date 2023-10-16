@@ -55,8 +55,7 @@ class Cache {
 	 * The first parameter might not get retrieved in a later call, for this method
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
-	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Helper\Query\Cache
+	 * @since 4.3.0
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty queries.
@@ -96,7 +95,7 @@ class Cache {
 	 *              3. Now returns false on WP CLI.
 	 * @since 3.2.2 No longer spits out errors on production websites.
 	 * @since 4.3.0 1. No longer accepts the $method parameter.
-	 *              2. Moved to \The_SEO_Framework\Helper\Query\Cache
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
 	 *
@@ -126,7 +125,7 @@ class Cache {
 	 *
 	 * @since 3.0.0
 	 * @since 4.3.0 1. No longer accepts the method parameter.
-	 *              2. Moved to \The_SEO_Framework\Helper\Query\Cache
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $method The original caller method.
 	 */

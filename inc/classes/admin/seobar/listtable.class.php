@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin\Lists;
+use \The_SEO_Framework\Admin;
 
 /**
  * The SEO Framework plugin
@@ -34,10 +34,11 @@ use \The_SEO_Framework\Admin\Lists;
  * PHP should deprecate list() and array().
  *
  * @since 4.0.0
- * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\SEOBar`
+ * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+ *              2. Renamed from `SEOBar`.
  * @access private
  */
-final class ListTable extends Lists\Table {
+final class ListTable extends Admin\Lists\Table {
 
 	/**
 	 * @since 4.0.0

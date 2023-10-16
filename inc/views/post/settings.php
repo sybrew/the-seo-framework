@@ -51,7 +51,7 @@ $post_id = Query::get_the_real_id(); // We also have access to object $post at t
 
 $generator_args = [ 'id' => $post_id ];
 
-$_is_static_frontpage = Query::is_static_frontpage( $post_id );
+$is_static_front_page = Query::is_static_front_page( $post_id );
 
 switch ( $instance ) :
 	case 'main':
@@ -111,7 +111,7 @@ switch ( $instance ) :
 			<?php
 		}
 
-		if ( $_is_static_frontpage ) {
+		if ( $is_static_front_page ) {
 			$_has_home_title = (bool) \tsf()->escape_text( Data\Plugin::get_option( 'homepage_title' ) );
 			$_has_home_desc  = (bool) \tsf()->escape_text( Data\Plugin::get_option( 'homepage_description' ) );
 
@@ -171,8 +171,8 @@ switch ( $instance ) :
 							'state' => [
 								'refTitleLocked'    => $title_ref_locked,
 								'defaultTitle'      => \tsf()->escape_text( $default_title ),
-								'addAdditions'      => Meta\Title\Conditions::use_title_branding( $generator_args ),
-								'useSocialTagline'  => Meta\Title\Conditions::use_title_branding( $generator_args, true ),
+								'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
+								'useSocialTagline'  => Meta\Title\Conditions::use_branding( $generator_args, true ),
 								'additionValue'     => \tsf()->escape_text( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
 							],
@@ -185,7 +185,7 @@ switch ( $instance ) :
 					<label for=autodescription_title_no_blogname>
 						<?php
 						$title_no_blogname_value = Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname' );
-						if ( $_is_static_frontpage ) {
+						if ( $is_static_front_page ) {
 							// Disable the input, and hide the previously stored value.
 							?>
 							<input type=checkbox id=autodescription_title_no_blogname value=1 <?php \checked( $title_no_blogname_value ); ?> disabled />
@@ -321,7 +321,7 @@ switch ( $instance ) :
 						</div>
 					</div>
 					<?php
-					if ( $_is_static_frontpage ) {
+					if ( $is_static_front_page ) {
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description attention">%s</span></div>',
 							\esc_html__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' )
@@ -445,7 +445,7 @@ switch ( $instance ) :
 		$show_og = (bool) Data\Plugin::get_option( 'og_tags' );
 		$show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
 
-		if ( $_is_static_frontpage ) {
+		if ( $is_static_front_page ) {
 			$_social_title       = [
 				'og' => Data\Plugin::get_option( 'homepage_og_title' )
 					 ?: Data\Plugin::get_option( 'homepage_title' )
@@ -481,19 +481,19 @@ switch ( $instance ) :
 				'og' => [
 					'state' => [
 						'defaultTitle' => \tsf()->escape_text( \tsf()->sanitize_text( $_social_title['og'] ) ),
-						'addAdditions' => Meta\Title\Conditions::use_title_branding( $generator_args, 'og' ),
+						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 						'defaultDesc'  => \tsf()->escape_text( \tsf()->sanitize_text( $_social_description['og'] ) ),
-						'titleLock'    => $_is_static_frontpage && Data\Plugin::get_option( 'homepage_og_title' ),
-						'descLock'     => $_is_static_frontpage && Data\Plugin::get_option( 'homepage_og_description' ),
+						'titleLock'    => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_title' ),
+						'descLock'     => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_description' ),
 					],
 				],
 				'tw' => [
 					'state' => [
 						'defaultTitle' => \tsf()->escape_text( \tsf()->sanitize_text( $_social_title['tw'] ) ),
-						'addAdditions' => Meta\Title\Conditions::use_title_branding( $generator_args, 'twitter' ),
+						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 						'defaultDesc'  => \tsf()->escape_text( \tsf()->sanitize_text( $_social_description['tw'] ) ),
-						'titleLock'    => $_is_static_frontpage && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
-						'descLock'     => $_is_static_frontpage && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
+						'titleLock'    => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
+						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
 					],
 				],
 			]
@@ -578,7 +578,7 @@ switch ( $instance ) :
 		<?php
 
 		// Fetch image placeholder.
-		if ( $_is_static_frontpage && Data\Plugin::get_option( 'homepage_social_image_url' ) ) {
+		if ( $is_static_front_page && Data\Plugin::get_option( 'homepage_social_image_url' ) ) {
 			$image_placeholder = Data\Plugin::get_option( 'homepage_social_image_url' )
 							  ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 		} else {
