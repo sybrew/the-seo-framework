@@ -82,7 +82,7 @@ final class Term {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
-		Admin\Template::output_view( 'edit/seo-settings-tt', $term, $taxonomy );
+		Admin\Template::output_view( 'term/settings', $term, $taxonomy );
 		/**
 		 * @since 2.9.0
 		 */

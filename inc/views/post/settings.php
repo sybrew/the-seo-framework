@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Edit
- * @subpackage The_SEO_Framework\Admin\Edit\Inpost
+ * @package The_SEO_Framework\Views\Post
+ * @subpackage The_SEO_Framework\Admin\Post
  */
 
 namespace The_SEO_Framework;
@@ -12,14 +12,14 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_SETTINGS,
 	ROBOTS_IGNORE_PROTECTION,
 };
+
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	Form,
+	HTML,
+};
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
-};
-
-use \The_SEO_Framework\Interpreters\{
-	HTML,
-	Form,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.

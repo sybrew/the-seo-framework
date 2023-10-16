@@ -10,6 +10,7 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\is_headless;
 
+use \The_SEO_Framework\Admin\Settings\Layout\HTML;
 use \The_SEO_Framework\Helper\{
 	Taxonomies,
 	Post_Types,
@@ -261,7 +262,7 @@ class Admin_Pages extends Detect {
 
 		if ( ! \wp_doing_ajax() ) {
 			// Make sure the scripts are loaded.
-			$this->init_admin_scripts();
+			Admin\Script\Registry::register_scripts_and_hooks();
 			Admin\Script\Registry::footer_enqueue();
 		}
 
@@ -389,7 +390,7 @@ class Admin_Pages extends Detect {
 			[
 				\esc_attr( $id ),
 				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-				Interpreters\HTML::make_data_attributes( $data ),
+				HTML::make_data_attributes( $data ),
 			]
 		);
 	}
@@ -408,7 +409,7 @@ class Admin_Pages extends Detect {
 			[
 				\esc_attr( $group ),
 				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-				Interpreters\HTML::make_data_attributes( [ 'settings' => $settings ] ),
+				HTML::make_data_attributes( [ 'settings' => $settings ] ),
 			]
 		);
 	}
@@ -434,7 +435,7 @@ class Admin_Pages extends Detect {
 			[
 				\esc_attr( $id ),
 				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-				Interpreters\HTML::make_data_attributes( $data ),
+				HTML::make_data_attributes( $data ),
 			]
 		);
 	}

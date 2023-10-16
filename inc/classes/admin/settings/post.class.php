@@ -132,8 +132,8 @@ final class Post {
 
 		$vars = get_defined_vars();
 
-		Admin\Template::output_view( 'edit/wrap-nav', $id, $tabs );
-		Admin\Template::output_view( 'edit/wrap-content', $id, $tabs );
+		Admin\Template::output_view( 'post/wrap-nav', $id, $tabs );
+		Admin\Template::output_view( 'post/wrap-content', $id, $tabs );
 	}
 
 	/**
@@ -151,9 +151,9 @@ final class Post {
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 
 		\tsf()->is_gutenberg_page()
-			and Admin\Template::output_view( 'edit/seo-settings-singular-gutenberg-data' );
+			and Admin\Template::output_view( 'post/gutenberg-data' );
 
-		Admin\Template::output_view( 'edit/seo-settings-singular', 'main' );
+		Admin\Template::output_view( 'post/settings', 'main' );
 
 		/**
 		 * @since 2.9.0
@@ -186,7 +186,7 @@ final class Post {
 	 * @since 4.3.0
 	 */
 	public static function output_homepage_warning() {
-		Admin\Template::output_view( 'edit/seo-settings-singular-homepage-warning' );
+		Admin\Template::output_view( 'post/homepage-warning' );
 	}
 
 	/**
@@ -201,7 +201,7 @@ final class Post {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
-		Admin\Template::output_view( 'edit/seo-settings-singular', 'general' );
+		Admin\Template::output_view( 'post/settings', 'general' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -220,7 +220,7 @@ final class Post {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
-		Admin\Template::output_view( 'edit/seo-settings-singular', 'visibility' );
+		Admin\Template::output_view( 'post/settings', 'visibility' );
 		/**
 		 * @since 2.9.0
 		 */
@@ -239,7 +239,7 @@ final class Post {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
-		Admin\Template::output_view( 'edit/seo-settings-singular', 'social' );
+		Admin\Template::output_view( 'post/settings', 'social' );
 		/**
 		 * @since 2.9.0
 		 */

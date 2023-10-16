@@ -14,7 +14,7 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
-use function \The_SEO_Framework\Utils\normalize_generation_args;
+use function \The_SEO_Framework\normalize_generation_args;
 
 // Precautionary.
 use \The_SEO_Framework\Data,
@@ -1422,7 +1422,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->theme_color()', '4.3.0' );
 
-		$theme_color = Data\Plugin::get_option( 'theme_color' );
+		$theme_color = $tsf->data()->plugin()->get_option( 'theme_color' );
 
 		return $theme_color ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'    => 'theme-color',
@@ -1454,8 +1454,8 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_googlesite_output',
 			[
-				Data\Plugin::get_option( 'google_verification' ),
-				Query::get_the_real_id(),
+				$tsf->data()->plugin()->get_option( 'google_verification' ),
+				$tsf->query()->get_the_real_id(),
 			]
 		);
 
@@ -1489,8 +1489,8 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_bingsite_output',
 			[
-				Data\Plugin::get_option( 'bing_verification' ),
-				Query::get_the_real_id(),
+				$tsf->data()->plugin()->get_option( 'bing_verification' ),
+				$tsf->query()->get_the_real_id(),
 			]
 		);
 
@@ -1524,8 +1524,8 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_yandexsite_output',
 			[
-				Data\Plugin::get_option( 'yandex_verification' ),
-				Query::get_the_real_id(),
+				$tsf->data()->plugin()->get_option( 'yandex_verification' ),
+				$tsf->query()->get_the_real_id(),
 			]
 		);
 
@@ -1559,8 +1559,8 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_baidusite_output',
 			[
-				Data\Plugin::get_option( 'baidu_verification' ),
-				Query::get_the_real_id(),
+				$tsf->data()->plugin()->get_option( 'baidu_verification' ),
+				$tsf->query()->get_the_real_id(),
 			]
 		);
 
@@ -1594,8 +1594,8 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_pintsite_output',
 			[
-				Data\Plugin::get_option( 'pint_verification' ),
-				Query::get_the_real_id(),
+				$tsf->data()->plugin()->get_option( 'pint_verification' ),
+				$tsf->query()->get_the_real_id(),
 			]
 		);
 
@@ -1632,7 +1632,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_og_tags',
 			[
-				(bool) Data\Plugin::get_option( 'og_tags' ),
+				(bool) $tsf->data()->plugin()->get_option( 'og_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -1811,7 +1811,7 @@ final class Deprecated {
 
 		$output = '';
 
-		$multi = (bool) Data\Plugin::get_option( 'multi_og_image' );
+		$multi = (bool) $tsf->data()->plugin()->get_option( 'multi_og_image' );
 
 		foreach ( $tsf->get_image_details( null, ! $multi ) as $image ) {
 			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
@@ -1981,7 +1981,8 @@ final class Deprecated {
 		$facebook_page = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookauthor_output',
 			[
-				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'facebook_page' ) ?: Data\Plugin::get_option( 'facebook_author' ),
+				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'facebook_page' )
+					?: $tsf->data()->plugin()->get_option( 'facebook_author' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -2023,7 +2024,7 @@ final class Deprecated {
 		$publisher = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookpublisher_output',
 			[
-				Data\Plugin::get_option( 'facebook_publisher' ),
+				$tsf->data()->plugin()->get_option( 'facebook_publisher' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -2063,7 +2064,7 @@ final class Deprecated {
 		$app_id = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookappid_output',
 			[
-				Data\Plugin::get_option( 'facebook_appid' ),
+				$tsf->data()->plugin()->get_option( 'facebook_appid' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -2103,7 +2104,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
 			[
-				(bool) Data\Plugin::get_option( 'facebook_tags' ),
+				(bool) $tsf->data()->plugin()->get_option( 'facebook_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -2130,12 +2131,6 @@ final class Deprecated {
 
 		if ( ! $tsf->output_published_time() ) return '';
 
-		$id            = $tsf->query()->get_the_real_id();
-		$post_date_gmt = \get_post( $id )->post_date_gmt ?? '0000-00-00 00:00:00';
-
-		if ( '0000-00-00 00:00:00' === $post_date_gmt )
-			return '';
-
 		/**
 		 * @since 2.3.0
 		 * @since 2.7.0 Added output within filter.
@@ -2147,8 +2142,8 @@ final class Deprecated {
 		$time = (string) \apply_filters_deprecated(
 			'the_seo_framework_publishedtime_output',
 			[
-				$tsf->gmt2date( $tsf->get_timestamp_format(), $post_date_gmt ),
-				$id,
+				$tsf->data()->post()->get_post_published_time(),
+				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
@@ -2207,7 +2202,7 @@ final class Deprecated {
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
-		return (bool) Data\Plugin::get_option( 'post_modify_time' );
+		return (bool) $tsf->data()->plugin()->get_option( 'post_modify_time' );
 	}
 
 	/**
@@ -2228,7 +2223,7 @@ final class Deprecated {
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
-		return (bool) Data\Plugin::get_option( 'post_publish_time' );
+		return (bool) $tsf->data()->plugin()->get_option( 'post_publish_time' );
 	}
 
 	/**
@@ -2301,7 +2296,7 @@ final class Deprecated {
 		$site = (string) \apply_filters_deprecated(
 			'the_seo_framework_twittersite_output',
 			[
-				Data\Plugin::get_option( 'twitter_site' ),
+				$tsf->data()->plugin()->get_option( 'twitter_site' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -2344,7 +2339,8 @@ final class Deprecated {
 		$creator = (string) \apply_filters_deprecated(
 			'the_seo_framework_twittercreator_output',
 			[
-				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'twitter_page' ) ?: Data\Plugin::get_option( 'twitter_creator' ),
+				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'twitter_page' )
+					?: $tsf->data()->plugin()->get_option( 'twitter_creator' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'4.3.0 of The SEO Framework',
@@ -2461,7 +2457,7 @@ final class Deprecated {
 
 		$output = '';
 
-		foreach ( $tsf->get_image_details( null, ! Data\Plugin::get_option( 'multi_og_image' ) ) as $image ) {
+		foreach ( $tsf->get_image_details( null, ! $tsf->data()->plugin()->get_option( 'multi_og_image' ) ) as $image ) {
 			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
@@ -2508,7 +2504,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_twitter_tags',
 			[
-				(bool) Data\Plugin::get_option( 'twitter_tags' ),
+				(bool) $tsf->data()->plugin()->get_option( 'twitter_tags' ),
 			],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -2533,12 +2529,15 @@ final class Deprecated {
 	 * @return array The merged arrays.
 	 */
 	public function array_merge_recursive_distinct( ...$arrays ) {
-		\tsf()->_deprecated_function(
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function(
 			'tsf()->array_merge_recursive_distinct()',
 			'4.3.0',
-			'function \The_SEO_Framework\Utils\array_merge_recursive_distinct()'
+			'tsf()->format()->array()->array_merge_recursive_distinct()'
 		);
-		return \The_SEO_Framework\Utils\array_merge_recursive_distinct( ...$arrays );
+
+		return $tsf->format()->array()->array_merge_recursive_distinct( ...$arrays );
 	}
 
 	/**
@@ -3307,8 +3306,11 @@ final class Deprecated {
 	 * @return string The trimmed excerpt with encoded entities. Needs escaping prior printing.
 	 */
 	public function trim_excerpt( $excerpt, $min_char_length = 1, $max_char_length = 4096 ) {
-		\tsf()->_deprecated_function( 'tsf()->trim_excerpt()', '4.3.0', 'function \The_SEO_Framework\Utils\clamp_sentence()' );
-		return \The_SEO_Framework\Utils\clamp_sentence( $excerpt, $min_char_length, $max_char_length );
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->trim_excerpt()', '4.3.0', 'tsf()->format()->strings()->clamp_sentence()' );
+
+		return $tsf->format()->strings()->clamp_sentence( $excerpt, $min_char_length, $max_char_length );
 	}
 
 	/**
@@ -3381,28 +3383,23 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_modified_time()', '4.3.0' );
 
-		$id                = Query::get_the_real_id();
-		$post_modified_gmt = \get_post( $id )->post_modified_gmt ?? '0000-00-00 00:00:00';
-
-		return '0000-00-00 00:00:00' === $post_modified_gmt
-			? ''
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
-			 * @deprecated
-			 * @param string $time The article modified time.
-			 * @param int    $id   The current page or term ID.
-			 */
-			: (string) \apply_filters_deprecated(
-				'the_seo_framework_modifiedtime_output',
-				[
-					$tsf->gmt2date( $tsf->get_timestamp_format(), $post_modified_gmt ),
-					$id,
-				],
-				'4.3.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
+		/**
+		 * @since 2.3.0
+		 * @since 2.7.0 Added output within filter.
+		 * @since 4.3.0 Deprecated.
+		 * @deprecated
+		 * @param string $time The article modified time.
+		 * @param int    $id   The current page or term ID.
+		 */
+		return (string) \apply_filters_deprecated(
+			'the_seo_framework_modifiedtime_output',
+			[
+				$tsf->data()->post()->get_post_modified_time(),
+				$tsf->query()->get_the_real_id(),
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_render_data',
+		);
 	}
 
 	/**
@@ -4530,6 +4527,8 @@ final class Deprecated {
 	 *              2. Now forwards post type object calling to WordPress's function.
 	 * @since 4.2.0 1. Now correctly adds pagination to the URL.
 	 *              2. Removed argument type deprecation doing it wrong warning.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                               Leave null to autodetermine query and allow pagination.
@@ -4836,7 +4835,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_singular_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
 
-		return $tsf->get_post_meta_item( '_genesis_canonical_uri', $id ) ?: '';
+		return $tsf->data()->plugin()->post()->get_post_meta_item( '_genesis_canonical_uri', $id ) ?: '';
 	}
 
 	/**
@@ -5186,7 +5185,7 @@ final class Deprecated {
 	 * @deprecated
 	 */
 	public function do_meta_output() {
-		\tsf()->_deprecated_function( 'tsf()->do_meta_output()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->do_meta_output()', '4.3.0', 'tsf()->print_seo_meta_tags()' );
 		\The_SEO_Framework\Front\Meta\Head::print_tags(); // Lacking import OK.
 	}
 
@@ -5523,6 +5522,8 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term Taxonomy ID.
@@ -5745,6 +5746,8 @@ final class Deprecated {
 	 * Returns an array of default user meta.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
 	 * @return array The user meta defaults.
@@ -5761,6 +5764,8 @@ final class Deprecated {
 	 * Updates user TSF-meta option.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int    $user_id The user ID.
 	 * @param string $option  The user's SEO metadata to update.
@@ -5779,6 +5784,8 @@ final class Deprecated {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.0 No longer returns the update success state.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int   $user_id The user ID.
 	 * @param array $data    The data to save.
@@ -6482,8 +6489,9 @@ final class Deprecated {
 	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Now escapes the filter output.
-	 * @see $this->get_title()
+	 * @since 4.3.0 1. Now escapes the filter output.
+	 *              2. Deprecated.
+	 * @deprecated
 	 *
 	 * @param string $title The filterable title.
 	 * @return string The document title
@@ -6503,8 +6511,9 @@ final class Deprecated {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Removed extraneous, unused parameters.
-	 * @since 4.3.0 Now escapes the filter output.
-	 * @see $this->get_title()
+	 * @since 4.3.0 1. Now escapes the filter output.
+	 *              2. Deprecated.
+	 * @deprecated
 	 *
 	 * @param string $title The filterable title.
 	 * @return string $title
@@ -6520,6 +6529,8 @@ final class Deprecated {
 	 * Returns the SEO Settings page URL.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return string The escaped SEO Settings page URL.
 	 */
@@ -6535,5 +6546,172 @@ final class Deprecated {
 				),
 				[ 'https', 'http' ]
 			);
+	}
+
+	/**
+	 * Converts markdown text into HTML.
+	 * Does not support list or block elements. Only inline statements.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.0 1. Removed word boundary requirement for strong.
+	 *              2. Now lets regex count their numeric values in string.
+	 *              3. Fixed header 1~6 calculation.
+	 * @since 2.9.3 Added $args parameter.
+	 * @since 4.0.3 Added a workaround for connected em/strong elements.
+	 * @since 4.1.4 Offloaded to `The_SEO_Framework\Interpreters\Markdown::convert()`
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @link https://wordpress.org/plugins/about/readme.txt
+	 *
+	 * @param string $text    The text that might contain markdown. Expected to be escaped.
+	 * @param array  $convert The markdown style types wished to be converted.
+	 *                        If left empty, it will convert all.
+	 * @param array  $args    The function arguments.
+	 * @return string The markdown converted text.
+	 */
+	public function convert_markdown( $text, $convert = [], $args = [] ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->convert_markdown()', '4.3.0', 'tsf()->format()->markdown()->convert()' );
+
+		return $tsf->format()->markdown()->convert( $text, $convert, $args );
+	}
+
+	/**
+	 * Converts time from GMT input to given format.
+	 *
+	 * @since 2.7.0
+	 * @since 4.0.4 Now uses `gmdate()` instead of `date()`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $format The datetime format.
+	 * @param string $time The GMT time. Expects timezone to be omitted.
+	 * @return string The converted time. Empty string if no $time is given.
+	 */
+	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
+
+		\tsf()->_deprecated_function( 'tsf()->gmt2date()', '4.3.0', 'gmdate' );
+
+		return gmdate( $format, strtotime( "$time GMT" ) );
+	}
+
+	/**
+	 * Returns timestamp format based on timestamp settings.
+	 * Note that this must be XML safe.
+	 *
+	 * @since 3.0.0
+	 * @since 4.1.4 1. Added options-override parameter.
+	 *              2. Added return value filter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param null|bool $override_get_time Whether to override the $get_time from option value.
+	 * @return string The timestamp format used in PHP date.
+	 */
+	public function get_timestamp_format( $override_get_time = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_timestamp_format()', '4.3.0', 'tsf()->format()->time()->get_preferred_format()' );
+
+		if ( isset( $override_get_time ) && '1' !== $override_get_time ) {
+			$get_time = $override_get_time;
+			/**
+			 * @see For valid formats https://www.w3.org/TR/NOTE-datetime.
+			 * @since 4.1.4
+			 * @param string The full timestamp format. Must be XML safe and in ISO 8601 datetime notation.
+			 * @param bool   True if time is requested, false if only date.
+			 */
+			return \apply_filters(
+				'the_seo_framework_timestamp_format',
+				$get_time ? 'Y-m-d\TH:iP' : 'Y-m-d',
+				$get_time,
+			);
+		}
+
+		return $tsf->format()->time()->get_preferred_format();
+	}
+
+	/**
+	 * Determines if time is used in the timestamp format.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool True if time is used. False otherwise.
+	 */
+	public function uses_time_in_timestamp_format() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->uses_time_in_timestamp_format()', '4.3.0', "tsf()->data()->plugin()->get_option( 'timestamp_format' )" );
+
+		return '1' === $tsf->data()->plugin()->get_option( 'timestamp_format' );
+	}
+
+	/**
+	 * Shortens string and adds ellipses when over a threshold in length.
+	 *
+	 * @since 3.1.0
+	 * @since 4.2.0 No longer prepends a space before the hellip.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $string The string to test and maybe trim
+	 * @param int    $over   The character limit. Must be over 0 to have effect.
+	 *                       Bug: If 1 is given, the returned string length will be 3.
+	 *                       Bug: If 2 is given, the returned string will only consist of the hellip.
+	 * @return string
+	 */
+	public function hellip_if_over( $string, $over = 0 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->hellip_if_over()', '4.3.0', 'tsf()->format()->strings()->hellip_if_over' );
+
+		return $tsf->format()->strings()->hellip_if_over( $string, $over );
+	}
+
+	/**
+	 * Counts words encounters from input string.
+	 * Case insensitive. Returns first encounter of each word if found multiple times.
+	 *
+	 * Will only return words that are above set input thresholds.
+	 *
+	 * @since 2.7.0
+	 * @since 3.1.0 This method now uses PHP 5.4+ encoding, capable of UTF-8 interpreting,
+	 *              instead of relying on PHP's incomplete encoding table.
+	 *              This does mean that the functionality is crippled when the PHP
+	 *              installation isn't unicode compatible; this is unlikely.
+	 * @since 4.0.0 1. Now expects PCRE UTF-8 encoding support.
+	 *              2. Moved input-parameter alterting filters outside of this function.
+	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
+	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
+	 *              and recognizes those as whole words.
+	 * @since 4.3.0 1. Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $string Required. The string to count words in.
+	 * @param int    $dupe_count       Minimum amount of words to encounter in the string.
+	 *                                 Set to 0 to count all words longer than $short_length.
+	 * @param int    $dupe_short       Minimum amount of words to encounter in the string that fall under the
+	 *                                 $short_length. Set to 0 to consider all words with $amount.
+	 * @param int    $short_length     The maximum string length of a word to pass for $dupe_short
+	 *                                 instead of $count. Set to 0 to ignore $count, and use $dupe_short only.
+	 * @return array Containing arrays of words with their count.
+	 */
+	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_word_count()', '4.3.0', 'tsf()->format()->strings()->get_word_count' );
+
+		return $tsf->format()->strings()->get_word_count(
+			$string,
+			[
+				'filter_under'       => $dupe_count,
+				'filter_short_under' => $dupe_short,
+				'short_word_length'  => $short_length,
+			]
+		);
 	}
 }

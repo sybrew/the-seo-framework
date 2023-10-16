@@ -10,7 +10,10 @@ namespace The_SEO_Framework\Data;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Format\Time,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -233,14 +236,9 @@ class Post {
 	 * @return string The post published time according to settings.
 	 */
 	public static function get_post_published_time( $id = null ) {
-
-		$post_date_gmt = \get_post( $id ?? Query::get_the_real_id() )
-			->post_date_gmt ?? '0000-00-00 00:00:00';
-
-		if ( '0000-00-00 00:00:00' === $post_date_gmt )
-			return '';
-
-		return \tsf()->gmt2date( \tsf()->get_timestamp_format(), $post_date_gmt );
+		return Time::convert_to_preferred_format(
+			\get_post( $id ?? Query::get_the_real_id() )->post_date_gmt ?? ''
+		);
 	}
 
 	/**
@@ -252,13 +250,8 @@ class Post {
 	 * @return string The post modified time according to settings.
 	 */
 	public static function get_post_modified_time( $id = null ) {
-
-		$post_modified_gmt = \get_post( $id ?? Query::get_the_real_id() )
-			->post_modified_gmt ?? '0000-00-00 00:00:00';
-
-		if ( '0000-00-00 00:00:00' === $post_modified_gmt )
-			return '';
-
-		return \tsf()->gmt2date( \tsf()->get_timestamp_format(), $post_modified_gmt );
+		return Time::convert_to_preferred_format(
+			\get_post( $id ?? Query::get_the_real_id() )->post_modified_gmt ?? ''
+		);
 	}
 }

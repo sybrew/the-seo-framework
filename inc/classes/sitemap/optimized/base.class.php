@@ -13,6 +13,7 @@ use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Meta;
 
 use \The_SEO_Framework\Helper\{
+	Format\Time,
 	Post_Types,
 	Query,
 };
@@ -526,12 +527,8 @@ class Base extends Main {
 		];
 
 		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {
-			static $timestamp_format;
-
 			// XML safe.
-			$timestamp_format ??= \tsf()->get_timestamp_format();
-
-			$xml['lastmod'] = \tsf()->gmt2date( $timestamp_format, $args['lastmod'] );
+			$xml['lastmod'] = Time::convert_to_preferred_format( $args['lastmod'] );
 		}
 
 		return static::create_xml_entry( [ 'url' => $xml ], 1 );

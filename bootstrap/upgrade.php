@@ -7,8 +7,11 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Data;
+use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Helper\{
+	Format\Markdown,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -350,7 +353,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
 		\tsf()->register_dismissible_persistent_notice(
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				sprintf(
 					/* translators: %1$s = New, lower version number, surrounded in markdown-backticks. %2$s = Old, higher version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Your website has been downgraded successfully to use The SEO Framework at database version `%1$s` from `%2$s`.', 'autodescription' ),
@@ -401,7 +404,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully upgraded.
 		\tsf()->register_dismissible_persistent_notice(
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Thank you for updating The SEO Framework! Your website has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
@@ -433,7 +436,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				sprintf(
 					'<p>%s</p><p>%s</p>',
 					\esc_html__( 'The SEO Framework automatically optimizes your website for search engines and social media.', 'autodescription' ),
-					\tsf()->convert_markdown(
+					Markdown::convert(
 						sprintf(
 							/* translators: %s = Link, markdown. */
 							\esc_html__( 'To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).', 'autodescription' ),
@@ -506,7 +509,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 		$found_titles and \tsf()->register_dismissible_persistent_notice(
 			sprintf(
 				'<p>%s</p>',
-				\tsf()->convert_markdown(
+				Markdown::convert(
 					sprintf(
 						/* translators: 1: SEO plugin name(s), 2: link to guide, in Markdown! */
 						\esc_html__( 'The SEO Framework detected metadata from %1$s. Whenever you are set, read our [migration guide](%2$s).', 'autodescription' ),

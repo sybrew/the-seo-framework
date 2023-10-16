@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Edit
- * @subpackage The_SEO_Framework\Admin\Edit\Post
+ * @package The_SEO_Framework\Views\Post
+ * @subpackage The_SEO_Framework\Admin\Post
  */
 
 namespace The_SEO_Framework;

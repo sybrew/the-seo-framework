@@ -8,11 +8,16 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Interpreters\Form,
-	\The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	Form,
+	HTML,
+	Input,
+};
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Format\Markdown,
+	Query,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -46,7 +51,7 @@ switch ( $instance ) :
 		if ( \tsf()->detect_multilingual_plugins() ) {
 			$_multilingual_warning = \esc_html__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' );
 			if ( $home_id ) {
-				$_multilingual_warning .= '<br>' . \tsf()->convert_markdown(
+				$_multilingual_warning .= '<br>' . Markdown::convert(
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						\esc_html__( 'Edit the fields on the [homepage](%s).', 'autodescription' ),
@@ -453,7 +458,7 @@ switch ( $instance ) :
 		$i_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
 			\esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Apply `noindex` to the homepage?', 'autodescription' ),
 				[ 'code' ]
@@ -469,7 +474,7 @@ switch ( $instance ) :
 		$f_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
 			\esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Apply `nofollow` to the homepage?', 'autodescription' ),
 				[ 'code' ]
@@ -485,7 +490,7 @@ switch ( $instance ) :
 		$a_label = sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
 			\esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Apply `noarchive` to the homepage?', 'autodescription' ),
 				[ 'code' ]
@@ -523,7 +528,7 @@ switch ( $instance ) :
 
 		if ( Query\Utils::has_page_on_front() ) {
 			HTML::description_noesc(
-				\tsf()->convert_markdown(
+				Markdown::convert(
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						\esc_html__( 'Note: These options may be overwritten by the [page settings](%s).', 'autodescription' ),
@@ -544,7 +549,7 @@ switch ( $instance ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'home_paged_noindex',
-				'label'  => \tsf()->convert_markdown(
+				'label'  => Markdown::convert(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					\esc_html__( 'Apply `noindex` to every second or later page on the homepage?', 'autodescription' ),
 					[ 'code' ]

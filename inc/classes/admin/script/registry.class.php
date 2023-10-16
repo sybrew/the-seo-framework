@@ -14,7 +14,10 @@ use function \The_SEO_Framework\{
 	is_headless,
 };
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+};
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
@@ -85,14 +88,6 @@ class Registry {
 	 * @var array $queue     The queued scripts state.
 	 */
 	private static $queue = [];
-
-	/**
-	 * @since 3.1.0
-	 * @since 3.2.2 Is now a private variable.
-	 * @see static::verify()
-	 * @var string|null $include_secret The inclusion secret generated on tab load.
-	 */
-	private static $include_secret;
 
 	/**
 	 * Registers the script hooks when TSF is deemed to be loaded.
@@ -167,7 +162,7 @@ class Registry {
 	 */
 	public static function footer_enqueue() {
 
-		if ( \The_SEO_Framework\has_run( __METHOD__ ) ) return;
+		if ( has_run( __METHOD__ ) ) return;
 
 		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}
@@ -302,23 +297,6 @@ class Registry {
 
 		if ( ( $status & static::REGISTERED ) && ! ( $status & static::LOADED ) )
 			static::load_script( $id, $type );
-	}
-
-	/**
-	 * Verifies template view inclusion secret.
-	 *
-	 * @since 3.1.0
-	 * @see static::output_view()
-	 * @uses static::$include_secret
-	 *
-	 * @example template file header:
-	 * `defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \The_SEO_Framework\Admin\Script\Registry::verify( $_secret ) or die;`
-	 *
-	 * @param string $secret The passed secret.
-	 * @return bool True on success, false on failure.
-	 */
-	public static function verify( $secret ) {
-		return $secret && static::$include_secret === $secret;
 	}
 
 	/**
@@ -598,37 +576,8 @@ class Registry {
 				unset( static::$templates[ $id ] );
 
 				foreach ( $templates as $t )
-					static::output_view( $t[0], $t[1] );
+					Admin\Template::output_absolute_view( $t[0], $t[1] );
 			}
 		}
-	}
-
-	/**
-	 * Outputs tab view, whilst trying to prevent third-party interference on views.
-	 *
-	 * There's a secret key generated on each tab load. This key can be accessed
-	 * in the view through `$_secret`, and be sent back to this class.
-	 *
-	 * @see static::verify( $secret )
-	 *
-	 * @since 3.1.0
-	 * @since 3.2.4 Enabled entropy to prevent system sleep.
-	 * @since 4.3.0 Is now static.
-	 * @uses static::$include_secret
-	 *
-	 * @param string   $file The file location.
-	 * @param iterable $args The registered view arguments.
-	 */
-	private static function output_view( $file, $args ) {
-
-		foreach ( $args as $_key => $_val )
-			$$_key = $_val;
-		unset( $_key, $_val, $args );
-
-		// Prevents private-includes hijacking.
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- Read the include?
-		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
-		include $file;
-		static::$include_secret = null;
 	}
 }

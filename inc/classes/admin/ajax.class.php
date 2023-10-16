@@ -70,8 +70,10 @@ final class AJAX {
 			\wp_send_json_error( null, 409 );
 		}
 
-		if ( ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-		|| ! \check_ajax_referer( \tsf()->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false ) )
+		if (
+			   ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
+			|| ! \check_ajax_referer( \tsf()->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false )
+		)
 			\wp_die( -1, 403 );
 
 		\tsf()->clear_persistent_notice( $key );

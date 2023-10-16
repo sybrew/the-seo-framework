@@ -16,6 +16,7 @@ use \The_SEO_Framework\{
 	Meta,
 };
 use \The_SEO_Framework\Helper\{
+	Format\Arrays,
 	Query,
 	Taxonomies,
 };
@@ -130,7 +131,7 @@ class Loader {
 			'the_seo_framework_scripts',
 			[
 				// Flattening is 3% of this method's total time, we can improve by simplifying the getters above like do_meta_output().
-				\The_SEO_Framework\Utils\array_flatten_list( $scripts ),
+				Arrays::flatten_list( $scripts ),
 				Registry::class,
 				Loader::class,
 			]

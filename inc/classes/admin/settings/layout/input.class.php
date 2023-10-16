@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Interpreters\Settings_Input
+ * @package The_SEO_Framework\Admin\Settings\Layout\Input
  * @subpackage The_SEO_Framework\Admin\Settings
  */
 
-namespace The_SEO_Framework\Interpreters;
+namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -32,11 +32,13 @@ use \The_SEO_Framework\Data;
  * Meant for the SEO Settings page, only.
  *
  * @since 4.2.0
+ * @since 4.3.0 1. Moved from `\The_SEO_Framework\Interpreters`.
+ *              2. Renamed from `Settings_Input`.
  *
- * @access protected
+ * @access private
  *         Everything in this class is subject to change or deletion.
  */
-final class Settings_Input {
+class Input {
 
 	/**
 	 * Helper function that constructs id attributes for use in form fields.
@@ -125,19 +127,16 @@ final class Settings_Input {
 	 */
 	public static function make_checkbox( $args = [] ) {
 
-		$args = array_merge(
-			[
-				'id'          => '',
-				'class'       => '',
-				'label'       => '',
-				'value'       => null,
-				'description' => '',
-				'data'        => [],
-				'escape'      => true,
-				'disabled'    => false,
-			],
-			$args
-		);
+		$args += [
+			'id'          => '',
+			'class'       => '',
+			'label'       => '',
+			'value'       => null,
+			'description' => '',
+			'data'        => [],
+			'escape'      => true,
+			'disabled'    => false,
+		];
 
 		if ( $args['escape'] ) {
 			$args['description'] = \esc_html( $args['description'] );

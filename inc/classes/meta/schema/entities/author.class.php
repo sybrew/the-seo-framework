@@ -8,14 +8,14 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\Utils\{
-	normalize_generation_args,
-	clamp_sentence,
-};
+use function \The_SEO_Framework\Utils\normalize_generation_args;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Meta,
+	Data,
+	Helper\Query,
+	Helper\Format\Strings,
+};
 
 /**
  * The SEO Framework plugin
@@ -126,7 +126,11 @@ final class Author extends Reference {
 			$entity['sameAs'][] = \sanitize_url( 'https://twitter.com/' . ltrim( $user_meta['twitter_page'], '@' ) );
 
 		if ( ! empty( $user_data->description ) )
-			$entity['description'] = clamp_sentence( \wp_strip_all_tags( $user_data->description ), 1, 250 );
+			$entity['description'] = Strings::clamp_sentence(
+				\wp_strip_all_tags( $user_data->description ),
+				1,
+				250
+			);
 
 		return $entity;
 	}

@@ -11,12 +11,15 @@ namespace The_SEO_Framework\Meta;
 use function \The_SEO_Framework\{
 	memo,
 	umemo,
-	Utils\normalize_generation_args,
+	normalize_generation_args,
 	Utils\scrub_array,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Data;
+use \The_SEO_Framework\Helper\{
+	Format\Arrays,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -150,7 +153,7 @@ class Schema {
 
 		return [
 			'@context' => 'https://schema.org',
-			'@graph'   => scrub_array( $graph ),
+			'@graph'   => Arrays::scrub( $graph ),
 		];
 	}
 

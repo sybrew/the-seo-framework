@@ -12,7 +12,7 @@ use \The_SEO_Framework\Data,
 	\The_SEO_Framework\Helper\Query,
 	\The_SEO_Framework\Meta;
 
-use function \The_SEO_Framework\Utils\normalize_generation_args;
+use function \The_SEO_Framework\normalize_generation_args;
 
 /**
  * The SEO Framework plugin
@@ -104,6 +104,8 @@ class Image {
 		/**
 		 * @since 4.0.5
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
+		 * @since 4.3.0 Deprecated.
+		 * @deprecated
 		 * @param array      $details The image details array, sequential: int => {
 		 *    string url:      The image URL,
 		 *    int    id:       The image ID,

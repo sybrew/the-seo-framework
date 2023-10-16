@@ -730,7 +730,7 @@ class Pool extends Legacy_API {
 	}
 
 	/**
-	 * Returns the Post_Types class as instantiated object with deprecation capabilities.
+	 * Returns a pool of Sitemap classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
@@ -820,6 +820,138 @@ class Pool extends Legacy_API {
 
 					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->sitemap()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns a pool of Format classes as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \Closure An anononymous class with subclasses.
+	 */
+	public function format() {
+		return static::$pool['format'] ??= new class {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->format()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Markdown
+			 */
+			public static function markdown() {
+				return static::$subpool['markdown'] ??= new class extends Helper\Format\Markdown {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->format()->markdown()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Time
+			 */
+			public static function time() {
+				return static::$subpool['time'] ??= new class extends Helper\Format\Time {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->format()->time()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Strings
+			 */
+			public static function strings() {
+				return static::$subpool['strings'] ??= new class extends Helper\Format\Strings {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->format()->strings()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Arrays
+			 */
+			public static function arrays() {
+				return static::$subpool['arrays'] ??= new class extends Helper\Format\Arrays {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->format()->arrays()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns a pool of Layout classes as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \Closure An anononymous class with subclasses.
+	 */
+	public function layout() {
+		return static::$pool['layout'] ??= new class {
+			use Static_Deprecator;
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+			 */
+			public static function html() {
+				return static::$subpool['html'] ??= new class extends Admin\Settings\Layout\HTML {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->layout()->html()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+			 */
+			public static function form() {
+				return static::$subpool['form'] ??= new class extends Admin\Settings\Layout\Form {
+					use Static_Deprecator;
+
+					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+					private $colloquial_handle     = 'tsf()->layout()->form()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 					// phpcs:enable, Squiz.Commenting.VariableComment.Missing

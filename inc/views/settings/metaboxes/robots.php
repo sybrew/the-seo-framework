@@ -8,10 +8,12 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Interpreters\Settings_Input as Input;
-
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	HTML,
+	Input,
+};
 use \The_SEO_Framework\Helper\{
+	Format\Markdown,
 	Post_Types,
 	Query,
 	Taxonomies,
@@ -152,7 +154,7 @@ switch ( $instance ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'paged_noindex',
-				'label'  => \tsf()->convert_markdown(
+				'label'  => Markdown::convert(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					\esc_html__( 'Apply `noindex` to every second or later archive page?', 'autodescription' ),
 					[ 'code' ]

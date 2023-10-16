@@ -8,14 +8,16 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+	Helper\Query,
+	Helper\Format\Strings,
+};
 
 use function \The_SEO_Framework\{
 	memo,
-	Utils\normalize_generation_args,
-	Utils\clamp_sentence,
+	normalize_generation_args,
 };
 
 /**
@@ -171,9 +173,9 @@ class Description {
 		// This page has a generated description that's far too short: https://theseoframework.com/em-changelog/1-0-0-amplified-seo/.
 		// A direct directory-'site:' query will accept the description outputted--anything else will ignore it...
 		// We should not work around that, because it won't direct in the slightest what to display.
-		$desc = clamp_sentence(
+		$desc = Strings::clamp_sentence(
 			$excerpt,
-			0,
+			1,
 			\tsf()->get_input_guidelines()['description'][ $type ]['chars']['goodUpper']
 		);
 

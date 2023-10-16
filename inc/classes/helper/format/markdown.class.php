@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Interpreters\Markdown
- * @subpackage The_SEO_Framework\Admin\Settings
+ * @package The_SEO_Framework\Classes\Helper\Format\Markdown
+ * @subpackage The_SEO_Framework\Formatting
  */
 
-namespace The_SEO_Framework\Interpreters;
+namespace The_SEO_Framework\Helper\Format;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -26,17 +26,17 @@ namespace The_SEO_Framework\Interpreters;
  */
 
 /**
- * Interprets anything you send here into Markdown. Or so it should.
+ * Holds methods for Markdown conversion.
  *
  * @since 4.1.4
- * @note Use `tsf()->convert_markdown() for easy access.
+ * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
  *
  * @NOTE to self: This is also used in XHTML configurations. Keep it strict!
  *
  * @access protected
- *         Everything in this class is subject to change or deletion.
+ *         Use tsf()->format()->markdown() instead.
  */
-final class Markdown {
+class Markdown {
 
 	/**
 	 * Converts markdown text into HTML.
@@ -46,12 +46,13 @@ final class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text    The text that might contain markdown. Expected to be escaped.
 	 * @param array  $convert The markdown style types wished to be converted.
 	 *                        If left empty, it will convert all.
-	 * @param array  $args    The function arguments.
+	 * @param array  $args    The function arguments. Accepts boolean 'a_internal'.
 	 * @return string The markdown converted text.
 	 */
 	public static function convert( $text, $convert = [], $args = [] ) {
@@ -65,8 +66,7 @@ final class Markdown {
 		if ( \strlen( $text ) < 3 )
 			return '';
 
-		// Merge defaults with $args.
-		$args = array_merge( [ 'a_internal' => false ], $args );
+		$args += [ 'a_internal' => false ];
 
 		/**
 		 * The conversion list's keys are per reference only.
@@ -126,6 +126,7 @@ final class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -151,6 +152,7 @@ final class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -175,6 +177,7 @@ final class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -199,6 +202,7 @@ final class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -221,6 +225,7 @@ final class Markdown {
 	 * Makes header h1~6 elements.
 	 *
 	 * @since 4.1.4
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @param string $type The header type. Accepts `/h[1-6]{1}/`.
@@ -253,6 +258,7 @@ final class Markdown {
 	 * @since 4.1.4
 	 * @since 4.2.8 1. No longer blocks text with either { or } from being parsed.
 	 *              2. No longer blocks URLs with either ( or ) from being parsed.
+	 * @since 4.3.0 Moved from `The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text     The input text.
 	 * @param bool   $internal Whether the link is internal (_self) or external (_blank).

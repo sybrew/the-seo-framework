@@ -1,17 +1,16 @@
 <?php
 /**
  * @package The_SEO_Framework\Classes\Admin\Settings\ListEdit
- * @subpackage The_SEO_Framework\Admin\Edit
+ * @subpackage The_SEO_Framework\Admin\Edit\List
  */
 
 namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin\Lists;
-use \The_SEO_Framework\Interpreters\HTML;
 use \The_SEO_Framework\{
 	Admin,
+	Admin\Settings\Layout\HTML,
 	Data,
 	Meta,
 };
@@ -44,7 +43,7 @@ use \The_SEO_Framework\Helper\{
  * @since 4.3.0 Moved to `\The_SEO_Framework\Admin\Lists`
  * @access private
  */
-final class ListEdit extends Lists\Table {
+final class ListEdit extends Admin\Lists\Table {
 
 	/**
 	 * @since 4.0.0

@@ -56,6 +56,8 @@ final class Description {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $description The generated description.
 			 * @param int    $id          The page or term ID.
 			 */

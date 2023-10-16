@@ -10,7 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
 	memo,
-	Utils\normalize_generation_args,
+	normalize_generation_args,
 };
 
 use \The_SEO_Framework\Data,

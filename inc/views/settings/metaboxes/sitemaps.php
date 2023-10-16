@@ -8,9 +8,12 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Interpreters\Form,
-	\The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	Form,
+	HTML,
+	Input,
+};
+use \The_SEO_Framework\Helper\Format\Markdown;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -82,7 +85,7 @@ switch ( $instance ) :
 		HTML::description( \__( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. It helps search engines find new and updated content quickly.', 'autodescription' ) );
 
 		HTML::description_noesc(
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				sprintf(
 					/* translators: %s = Learn more URL. Markdown! */
 					\esc_html__( 'The sitemap does not contribute to ranking; [it can only help with indexing](%s). Search engines process smaller, less complicated sitemaps quicker, which shortens the time required for indexing pages.', 'autodescription' ),
@@ -145,7 +148,7 @@ switch ( $instance ) :
 			if ( \tsf()->detect_multilingual_plugins() ) {
 				HTML::attention_noesc(
 					// Markdown escapes.
-					\tsf()->convert_markdown(
+					Markdown::convert(
 						sprintf(
 							/* translators: %s = Documentation URL in markdown */
 							\esc_html__( 'A multilingual plugin has been detected, so your site may have multiple sitemaps. [Learn more](%s).', 'autodescription' ),
@@ -213,7 +216,7 @@ switch ( $instance ) :
 					\__( "Note: You're using the plain permalink structure; so, no robots.txt file can be generated.", 'autodescription' )
 				);
 				HTML::description_noesc(
-					\tsf()->convert_markdown(
+					Markdown::convert(
 						sprintf(
 							/* translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is! */
 							\esc_html__( 'Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`.', 'autodescription' ),
@@ -262,7 +265,7 @@ switch ( $instance ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'sitemaps_modified',
-				'label'  => \tsf()->convert_markdown(
+				'label'  => Markdown::convert(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					\esc_html__( 'Add `<lastmod>` to the sitemap?', 'autodescription' ),
 					[ 'code' ]

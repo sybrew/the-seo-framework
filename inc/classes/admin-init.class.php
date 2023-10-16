@@ -11,6 +11,7 @@ namespace The_SEO_Framework;
 use function \The_SEO_Framework\is_headless;
 
 use \The_SEO_Framework\Helper\{
+	Format\Markdown,
 	Post_Types,
 	Query,
 	Taxonomies,
@@ -304,7 +305,7 @@ class Admin_Init extends Pool {
 			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
 			printf(
 				'<p><strong>%s</strong></p>',
-				$this->convert_markdown(
+				Markdown::convert(
 					sprintf(
 						/* translators: %s = Redirect URL markdown */
 						\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
@@ -357,26 +358,20 @@ class Admin_Init extends Pool {
 		// Sanitize the key so that HTML, JS, and PHP can communicate easily via it.
 		$key = \sanitize_key( $key );
 
-		$args = array_merge(
-			[
-				'type'   => 'updated',
-				'icon'   => true,
-				'escape' => true,
-			],
-			$args
-		);
+		$args += [
+			'type'   => 'updated',
+			'icon'   => true,
+			'escape' => true,
+		];
 
-		$conditions = array_merge(
-			[
-				'screens'      => [],
-				'excl_screens' => [],
-				'capability'   => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
-				'user'         => 0,
-				'count'        => 1,
-				'timeout'      => -1,
-			],
-			$conditions
-		);
+		$conditions += [
+			'screens'      => [],
+			'excl_screens' => [],
+			'capability'   => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
+			'user'         => 0,
+			'count'        => 1,
+			'timeout'      => -1,
+		];
 
 		// Required key for security.
 		if ( ! $conditions['capability'] ) return;
@@ -472,7 +467,7 @@ class Admin_Init extends Pool {
 	 * Clears persistent notice on user request (clicked Dismiss icon) via the no-JS form.
 	 *
 	 * @since 4.1.0
-	 * Security check OK.
+	 * var_dump() equalize with AJAX::dismiss_notice() and combine
 	 */
 	public function _dismiss_notice() {
 
@@ -489,9 +484,8 @@ class Admin_Init extends Pool {
 		if (
 			   ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
 			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'] ?? '', $this->_get_dismiss_notice_nonce_action( $key ) )
-		) {
+		)
 			\wp_die( -1, 403 );
-		}
 
 		$this->clear_persistent_notice( $key );
 	}

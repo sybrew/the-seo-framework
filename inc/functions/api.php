@@ -143,6 +143,33 @@ namespace The_SEO_Framework {
 	}
 
 	/**
+	 * Normalizes generation args to prevent PHP warnings.
+	 * This is the standard way TSF determines the type of query.
+	 *
+	 * @since 4.3.0
+	 * @see https://github.com/sybrew/the-seo-framework/issues/640#issuecomment-1703260744.
+	 *      We made an exception about passing by reference for this function.
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to have queries be autodetermined.
+	 *                         Passed by reference.
+	 */
+	function normalize_generation_args( &$args ) {
+
+		if ( \is_array( $args ) ) {
+			$args += [
+				'id'       => 0,
+				'tax'      => $args['taxonomy'] ?? '',
+				'taxonomy' => $args['tax'] ?? '', // Legacy support.
+				'pta'      => '',
+				'uid'      => 0,
+			];
+		} else {
+			$args = null;
+		}
+	}
+
+	/**
 	 * Determines if the method or function has already run.
 	 *
 	 * @since 4.2.3

@@ -14,6 +14,7 @@ use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,
+	Format\Strings,
 };
 
 /**
@@ -2399,7 +2400,7 @@ class Sanitize extends Admin_Pages {
 			$alt = \wp_strip_all_tags( $alt );
 			// 420: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/summary.html
 			// Don't "ai"-trim if under, it's unlikely to always be a sentence.
-			$alt = \strlen( $alt ) > 420 ? clamp_sentence( $alt, 0, 420 ) : $alt;
+			$alt = \strlen( $alt ) > 420 ? Strings::clamp_sentence( $alt, 0, 420 ) : $alt;
 		}
 		if ( $caption ) {
 			$caption = \wp_strip_all_tags( $caption, true );

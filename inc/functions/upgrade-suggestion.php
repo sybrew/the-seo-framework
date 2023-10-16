@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Suggestion;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Helper\Format\Markdown;
+
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 
 /**
@@ -94,10 +96,8 @@ function _prepare( $previous_version, $current_version ) {
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
 	if ( $previous_version < '4270' && $current_version < '4280' ) {
-		$tsf = \tsf();
-
-		$tsf->register_dismissible_persistent_notice(
-			$tsf->convert_markdown(
+		\tsf()->register_dismissible_persistent_notice(
+			Markdown::convert(
 				sprintf(
 					'<p>The SEO Framework: [Cyber Sale &ndash; 50%% off](%s). This notification will self-destruct when the sale ends, or when you dismiss it.</p>',
 					'https://theseoframework.com/?p=3527'

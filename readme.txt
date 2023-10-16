@@ -320,10 +320,6 @@ TODO Four new classes:
 		3. Post_Data
 		4. Term_Data
 
-TODO Move views\edit to something less ambiguous and confusing:
-	-> Views\Terms
-	-> Views\Posts
-
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
 	- Also make twitter card default to summary when a square image is posted.
@@ -434,10 +430,6 @@ TODO list all methods available in every pool? Zzz.
 
 TODO move "Facebook" to "Open Graph", and purge fb:app_id?
 
-TODO move clamp_sentence to something more sensible?
-	-> Utils acts as a drop-in for what PHP is lacking in their SPL.
-	-> To be fair, clamp_sentence would be a useful addition to native PHP.
-
 TODO _init_locale only on admin?
 	-> There's no translatable text on the front-end left, no?
 		-> There is... the HTML header.
@@ -499,7 +491,7 @@ function (.*?)\(([\w\W](?!\1\())*?\}
 TODO find mismatch memo ?? umemo (notice extra u)
 TODO remove 3+ @since in Deprecated.class to reduce filesize.
 
-TODO remove unusued Utils\normalize_generation_args imports (and other imports..)
+TODO remove unusued \The_SEO_Framework\normalize_generation_args imports (and other imports..)
 TODO find new public function and filters via @since 4.3.0.*?...
 TODO find repeated tsf() calls in functions.
 TODO mark subroutine methods in Meta private?
@@ -663,6 +655,10 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 	-> get_locale() doesn't respect language changes.
 	-> All others settings work fine.
 
+TODO all "Moved to" should be "Moved from"
+	-> Find origins! 164 times... ugh (most are from \The_SEO_Framework\Load, however).
+TODO also do "renamed to", should be "renamed from".
+
 **Detailed log**
 
 **For everyone:**
@@ -730,6 +726,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 				* Although, this may increase overhead by 17% due to [a quirk in PHP](https://twitter.com/SybreWaaijer/status/1703077875988009325). But, we combat this by creating as few methods as possible, at the cost of "readability" (this only affects developers not using a modern code editor).
 		* Generated image metadata are now cached per method using PHP 8's "Fiber" principle (I backported it conceptually to 7.4). This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata, and continue to make more metadata when there's demand.
 		* Fewer term and post meta data is stored in the plugin's memoization (up to 69 items each, nice), so there's less of a strain on memory when generating sitemaps or walking through metadata. Object caching can still work and won't be affected.
+		* The SEO Bar no longer asserts the length of every word in a description but only those that are encountered too often, speeding up post list performance significantly.
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
@@ -861,7 +858,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 		* This pool has a sub-pool, accessible via `tsf()->robotstxt()->utils()`.
 			* Internally known as `The_SEO_Framework\RobotsTXT\Utils`.
 	* Pool `tsf()->sitemap()` is now available.
-		* Unlike all other pools, this is a Closure where it stores only subpools.
+		* Unlike most other pools, this is a Closure where it stores only subpools.
 		* This pool has a sub-pool, accessible via `tsf()->sitemap()->cache()`.
 			* Internally known as `The_SEO_Framework\Sitemap\Cache`.
 		* This pool has a sub-pool, accessible via `tsf()->sitemap()->ping()`.
@@ -872,6 +869,42 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 			* Internally known as `The_SEO_Framework\Sitemap\Registry`.
 		* This pool has a sub-pool, accessible via `tsf()->sitemap()->utils()`.
 			* Internally known as `The_SEO_Framework\Sitemap\Utils`.
+	* Pool `tsf()->format()` is now available.
+		* Unlike most other pools, this is a Closure where it stores only subpools.
+		* This pool has a sub-pool, accessible via `tsf()->format()->markdown()`.
+			* Internally known as `The_SEO_Framework\Helper\Format\Markdown`.
+		* This pool has a sub-pool, accessible via `tsf()->format()->time()`.
+			* Internally known as `The_SEO_Framework\Helper\Format\Time`.
+	* Pool `tsf()->data()` is now available.
+		* Unlike most other pools, this is a Closure where it stores only subpools.
+		* This pool has a sub-pool, accessible via `tsf()->data()->blog()`.
+			* All public WordPress blog-related methods have been moved to that pool. E.g., `tsf()->get_blogname()` is now `tsf()->data()->blog()->get_public_blog_name()`.
+			* Internally known as `The_SEO_Framework\Data\Blog`.
+		* This pool has a sub-pool, accessible via `tsf()->data()->plugin()`.
+			* All public TSF-related storage methods have been moved to that pool. E.g., `tsf()->get_all_options()` is now `tsf()->data()->plugin()->get_options()`.
+				* However, two of its methods have been ennobled to be part of the legacy API. So, you can use `tsf()->get_option()` and `tsf()->update_option()`.
+			* Internally known as `The_SEO_Framework\Data\Plugin`.
+			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->helper()`.
+				* All public TSF-related storage helper methods have been moved to that pool. E.g., `tsf()->get_robots_option_index()` is now `tsf()->data()->plugin()->helper()->get_robots_post_type_option_id()`.
+				* Internally known as `The_SEO_Framework\Data\Plugin\Helper`.
+			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->post()`.
+				* All public TSF-related Post storage methods have been moved to that pool. E.g., `tsf()->get_post_meta_item()` is now `tsf()->data()->plugin()->post()->get_post_meta_item()`.
+				* Internally known as `The_SEO_Framework\Data\Plugin\Post`.
+			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->pta()`.
+				* All public TSF-related Post Type Archive storage methods have been moved to that pool. E.g., `tsf()->get_post_type_archive_meta_item()` is now `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()`.
+				* Internally known as `The_SEO_Framework\Data\Plugin\PTA`.
+			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->setup()`.
+				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_default_site_options()` is now `tsf()->data()->plugin()->setup()->get_default_options()`.
+				* Internally known as `The_SEO_Framework\Data\Plugin\Setup`.
+			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->term()`.
+				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_term_meta_item()` is now `tsf()->data()->plugin()->term()->get_term_meta_item()`.
+				* Internally known as `The_SEO_Framework\Data\Plugin\Term`.
+			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->user()`.
+				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_user_meta_item()` is now `tsf()->data()->plugin()->user()->get_user_meta_item()`.
+				* Internally known as `The_SEO_Framework\Data\Plugin\User`.
+		* This pool has a sub-pool, accessible via `tsf()->data()->post()`.
+			* All public WordPress post-related methods have been moved to that pool. E.g., `tsf()->get_post_excerpt()` is now `tsf()->data()->post()->get_post_excerpt()`.
+			* Internally known as `The_SEO_Framework\Data\Post`.
 * **Improved:**
 	* Method `tsf()->__set()` now protects against fatal errors on PHP 8.2 or later.
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
@@ -885,6 +918,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 	* Twitter cards are no longer validated whether a card type is provided.
 		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
 	* When scripts are enqueued, it is now automatically determined whether late-enqueuing in the footer is necessary.
+	* Script templates no longer forward arguments by name, but put them sequentially in variable `$view_args` instead.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
@@ -926,12 +960,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 * **Function notes:**
 	* **Added:**
 		* `The_SEO_Framework\is_headless()` is now available. Use this in favor of `\tsf()->is_headless`, which is now deprecated.
-		* `The_SEO_Framework\Utils\normalize_generation_args()` is now available.
-		* `The_SEO_Framework\Utils\array_flatten_list()` is now available.
-		* `The_SEO_Framework\Utils\scrub_array()` is now available.
-		* `The_SEO_Framework\Utils\array_merge_recursive_distinct()` is now available.
-			* This is the only correct function of kind that exists, made bespoke by me for TSF.
-			* It's practically `array_merge()` for multidimensional arrays.
+		* `The_SEO_Framework\normalize_generation_args()` is now available.
 	* **Changed:**
 		* `tsf()` and `the_seo_framework()` will now always return TSF's object -- even if the plugin isn't fully initialized. We can now do this because the hook loader has been moved from the class instance.
 * **Object notes:**
@@ -968,7 +997,6 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 				* `get_image_details()`
 				* `load_admin_scripts()` (new!)
 				* `print_seo_meta_tags()` (new!)
-				* `convert_markdown()`
 			* **Methods changed:**
 				* TODO redo this list; just go by all functions within the object, ought to be easier retroactively...
 				* `query_supports_seo()`
@@ -1089,7 +1117,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 				* `twitter_description`, with no alternative available.
 				* `twitter_image`, with no alternative available.
 				* `use_twitter_tags`, with no alternative available.
-				* `array_merge_recursive_distinct`, use function `\The_SEO_Framework\Utils\array_merge_recursive_distinct()` instead.
+				* `array_merge_recursive_distinct`, use `tsf()->format()->arrays()->array_merge_recursive_distinct()` instead.
 				* `retrieve_robots_meta_assertions()`, use `tsf()->robots()->get_collected_meta_assertions()` instead.
 				* `get_robots_meta()`, use `tsf()->robots()->get_meta()` instead.
 				* `generate_robots_meta()`, use `tsf()->robots()->generate_meta()` instead.
@@ -1126,7 +1154,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 				* `get_separator()`, use `tsf()->title()->get_separator()` instead.
 				* `get_title_separator()`, use `tsf()->title()->get_separator()` instead.
 				* `get_separator_list()`, use `tsf()->title()->utils()->get_separator_list()` instead.
-				* `trim_excerpt()`, use `\The_SEO_Framework\Utils\clamp_sentence()` instead.
+				* `trim_excerpt()`, use `tsf()->format()->strings()->clamp_sentence()` instead.
 				* `get_excerpt_by_id()`, use `tsf()->description()->get_singular_excerpt()` instead.
 				* `fetch_excerpt()`, use `tsf()->description()->get_singular_excerpt()` instead.
 				* `get_modified_time()`, with no alternative available.
@@ -1211,7 +1239,7 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 				* `get_settings_capability()`, use constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
 				* `can_access_settings()`, use `current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )` instead.
 				* `html_output()`, use `tsf()->print_seo_meta_tags()` instead.
-				* `do_meta_output()`, with no alternative available.
+				* `do_meta_output()`, use `tsf()->print_seo_meta_tags()` instead.
 				* `get_default_site_options()`, use `tsf()->data()->plugin()->setup()->get_default_options()` instead.
 				* `get_warned_site_options()`, use `tsf()->data()->plugin()->setup()->get_warned_options()` instead.
 				* `get_all_options()`, use `tsf()->data()->plugin()->get_options()` instead.
@@ -1279,6 +1307,12 @@ TODO tell the world that "The language is set from content" in "Polylang -> Sett
 				* `get_document_title()`, with no alternative available.
 				* `get_wp_title()`, with no alternative available.
 				* `get_seo_settings_page_url()`, with no alternative available.
+				* `convert_markdown()`, use `tsf()->format()->markdown()->convert()` instead.
+				* `gmt2date()`, use `gmdate` instead.
+				* `get_timestamp_format()`, use `tsf()->format()->time()->get_preferred_format()` instead.
+				* `uses_time_in_timestamp_format()`, with no alternative available.
+				* `hellip_if_over()`, use `tsf()->format()->strings()->hellip_if_over` instead.
+				* `get_word_count()`, use `tsf()->format()->strings()->get_word_count` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

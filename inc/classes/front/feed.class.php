@@ -8,10 +8,11 @@ namespace The_SEO_Framework\Front;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\Utils\clamp_sentence;
-
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper;
+use \The_SEO_Framework\{
+	Data,
+	Helper,
+	Helper\Format\Strings,
+};
 
 /**
  * The SEO Framework plugin
@@ -71,9 +72,9 @@ final class Feed {
 		 */
 		if ( isset( $feed_type ) && Data\Plugin::get_option( 'excerpt_the_feed' ) ) {
 			// Strip all code and lines, and AI-trim it.
-			$excerpt = clamp_sentence(
+			$excerpt = Strings::clamp_sentence(
 				\tsf()->s_excerpt_raw( $content, false ),
-				0,
+				1,
 				/**
 				 * @since 2.5.2
 				 * @param int $max_len The maximum feed (multibyte) string length.

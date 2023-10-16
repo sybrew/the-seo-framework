@@ -8,9 +8,12 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	HTML,
+	Input,
+};
 use \The_SEO_Framework\Helper\{
+	Format\Markdown,
 	Post_Types,
 	Query,
 	Taxonomies,
@@ -298,7 +301,7 @@ switch ( $instance ) :
 
 		$prev_next_posts_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_posts',
-			'label'  => \tsf()->convert_markdown(
+			'label'  => Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Add `rel` link tags to posts and pages?', 'autodescription' ),
 				[ 'code' ]
@@ -308,7 +311,7 @@ switch ( $instance ) :
 
 		$prev_next_archives_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_archives',
-			'label'  => \tsf()->convert_markdown(
+			'label'  => Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Add `rel` link tags to archives?', 'autodescription' ),
 				[ 'code' ]
@@ -318,7 +321,7 @@ switch ( $instance ) :
 
 		$prev_next_frontpage_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_frontpage',
-			'label'  => \tsf()->convert_markdown(
+			'label'  => Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Add `rel` link tags to the homepage?', 'autodescription' ),
 				[ 'code' ]
@@ -330,8 +333,11 @@ switch ( $instance ) :
 		break;
 
 	case 'timestamps':
-		$timestamp_0 = gmdate( \tsf()->get_timestamp_format( false ) );
-		$timestamp_1 = gmdate( \tsf()->get_timestamp_format( true ) );
+		/**
+		 * @see The_SEO_Framework\Helper\Format\Time::get_preferred_format()
+		 */
+		$timestamp_date     = gmdate( 'Y-m-d' );
+		$timestamp_datetime = gmdate( 'Y-m-d\TH:iP' );
 
 		HTML::header_title( \__( 'Timestamp Settings', 'autodescription' ) );
 		HTML::description( \__( 'Timestamps help indicate when a page has been published and modified.', 'autodescription' ) );
@@ -348,7 +354,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
-						echo HTML::code_wrap( $timestamp_0 ), ' ', HTML::make_info(
+						echo HTML::code_wrap( $timestamp_date ), ' ', HTML::make_info(
 							\__( 'This outputs the complete date.', 'autodescription' )
 						);
 						?>
@@ -359,7 +365,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
-						echo HTML::code_wrap( $timestamp_1 ), ' ', HTML::make_info(
+						echo HTML::code_wrap( $timestamp_datetime ), ' ', HTML::make_info(
 							\__( 'This outputs the complete date including hours, minutes, and timezone.', 'autodescription' )
 						);
 						?>
@@ -374,7 +380,7 @@ switch ( $instance ) :
 		HTML::header_title( \__( 'Exclusion Settings', 'autodescription' ) );
 		HTML::description( \__( 'When checked, these options will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types and taxonomies. This will allow search engines to crawl the post type and taxonomies without advanced restrictions or directions.', 'autodescription' ) );
 		HTML::attention_description_noesc(
-			\tsf()->convert_markdown(
+			Markdown::convert(
 				/* translators: backticks are code wraps. Markdown! */
 				\esc_html__( "These options should not need changing when post types and taxonomies are registered correctly. When they aren't, consider applying `noindex` to purge them from search engines, instead.", 'autodescription' ),
 				[ 'code' ]

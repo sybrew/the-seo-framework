@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
+use \The_SEO_Framework\Helper\Format\Markdown;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
@@ -78,7 +80,7 @@ printf(
 <p>
 	<?php
 	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
-	echo \tsf()->convert_markdown(
+	echo Markdown::convert(
 		/* translators: URLs are in Markdown. Don't forget to localize the URLs. */
 		\esc_xml( \__( 'This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ) ),
 		[ 'a' ],
@@ -89,7 +91,7 @@ printf(
 <p>
 	<?php
 	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
-	\tsf()->convert_markdown(
+	Markdown::convert(
 		/* translators: URLs are in Markdown. Don't localize this URL. */
 		\esc_xml( \__( 'You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/).', 'autodescription' ) ),
 		[ 'a' ],

@@ -57,7 +57,27 @@ final class Template {
 		$secret = static::$secret = uniqid( '', true );
 
 		// This will crash on PHP 8+ if the view isn't resolved. That's good.
-		include static::get_view_location( $file );
+		require static::get_view_location( $file );
+	}
+
+	/**
+	 * Outputs a template via absolute file location.
+	 * This function is considered insecure for dynamically created paths.
+	 *
+	 * The secret is scoped to the instance so the static function cannot bypass it.
+	 *
+	 * @since 4.3.0
+	 * @access private
+	 *
+	 * @param string $file         The absolute view file name.
+	 * @param array  ...$view_args The arguments to be supplied to the file.
+	 */
+	public static function output_absolute_view( $file, ...$view_args ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis -- includes.
+
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis -- includes.
+		$secret = static::$secret = uniqid( '', true );
+
+		require $file;
 	}
 
 	/**

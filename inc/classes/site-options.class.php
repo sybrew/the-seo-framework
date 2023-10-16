@@ -51,7 +51,7 @@ class Site_Options extends Sanitize {
 	 *
 	 * @return void Early if settings can't be registered.
 	 */
-	public function register_settings() {
+	public function register_settings() { // move to bootstrap?
 
 		\register_setting( \THE_SEO_FRAMEWORK_SITE_OPTIONS, \THE_SEO_FRAMEWORK_SITE_OPTIONS );
 		\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS )

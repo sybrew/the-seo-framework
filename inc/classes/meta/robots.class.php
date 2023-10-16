@@ -13,7 +13,7 @@ use \The_SEO_Framework\Data,
 
 use function \The_SEO_Framework\{
 	umemo,
-	Utils\normalize_generation_args,
+	normalize_generation_args,
 };
 
 /**

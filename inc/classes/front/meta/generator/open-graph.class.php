@@ -317,7 +317,8 @@ final class Open_Graph {
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
 			 * @since 2.9.3
-			 * @since 4.3.0 Deprecated
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $time The article published time.
 			 * @param int    $id   The current page or term ID.
 			 */
@@ -354,7 +355,8 @@ final class Open_Graph {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 4.3.0 Deprecated.
+			 * @deprecated
 			 * @param string $time The article modified time.
 			 * @param int    $id   The current page or term ID.
 			 */

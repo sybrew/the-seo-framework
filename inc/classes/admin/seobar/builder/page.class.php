@@ -10,11 +10,14 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 
 use const \The_SEO_Framework\ROBOTS_ASSERT;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta,
-	\The_SEO_Framework\RobotsTXT,
-	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Admin\SEOBar\Builder;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+	RobotsTXT,
+	Helper\Format\Strings,
+	Helper\Query,
+	Admin\SEOBar\Builder,
+};
 
 /**
  * The SEO Framework plugin
@@ -375,7 +378,7 @@ final class Page extends Main {
 					'estimated'  => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 					/**
 					 * @since 2.6.0
-					 * @param int $dupe_short The minimum stringlength of words to find as dupes.
+					 * @param int $short_word_length The minimum stringlength of words to find as dupes.
 					 */
 					'dupe_short' => (int) \apply_filters( 'the_seo_framework_bother_me_desc_length', 3 ),
 				],
@@ -491,7 +494,7 @@ final class Page extends Main {
 		}
 
 		// Fetch words that are outputted more than 3 times.
-		$repeated_words = \tsf()->get_word_count( $desc, 3, 5, $cache['params']['dupe_short'] );
+		$repeated_words = Strings::get_word_count( $desc, [ 'short_word_length' => $cache['params']['dupe_short'] ] );
 
 		if ( $repeated_words ) {
 			$dupes = [];

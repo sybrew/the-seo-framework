@@ -71,7 +71,7 @@ final class User {
 		 * @since 4.1.4
 		 */
 		\do_action( 'the_seo_framework_before_author_fields' );
-		Admin\Template::output_view( 'profile/author', $user );
+		Admin\Template::output_view( 'profile/settings', $user );
 		/**
 		 * @since 4.1.4
 		 */

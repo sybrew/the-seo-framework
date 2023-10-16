@@ -118,6 +118,8 @@ if ( \apply_filters( 'the_seo_framework_overwrite_titles', true ) ) {
 
 	/**
 	 * @since 2.4.1
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
 	 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
 	 * TODO remove this code? -- it's been 8 years...
 	 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>

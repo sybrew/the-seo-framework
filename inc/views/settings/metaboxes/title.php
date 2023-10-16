@@ -8,8 +8,14 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Interpreters\HTML,
-	\The_SEO_Framework\Interpreters\Settings_Input as Input;
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	HTML,
+	Input,
+};
+use \The_SEO_Framework\Helper\Format\{
+	Markdown,
+	Strings,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -44,13 +50,13 @@ switch ( $instance ) :
 		$latest_post_id = Data\Post::get_latest_post_id();
 		$latest_cat_id  = Data\Term::get_latest_term_id( 'category' );
 
-		$post_title = \tsf()->escape_text( \tsf()->hellip_if_over(
+		$post_title = \tsf()->escape_text( Strings::hellip_if_over(
 			Meta\Title::get_post_title( $latest_post_id ) ?: \__( 'Example Post', 'autodescription' ),
 			60
 		) );
 
 		$cat_prefix = \tsf()->escape_text( \_x( 'Category:', 'category archive title prefix', 'default' ) );
-		$cat_title  = \tsf()->escape_text( \tsf()->hellip_if_over(
+		$cat_title  = \tsf()->escape_text( Strings::hellip_if_over(
 			Meta\Title::get_term_title( \get_term( $latest_cat_id ) ) ?: \__( 'Example Category', 'autodescription' ),
 			60 - \strlen( $cat_prefix )
 		) );
@@ -137,7 +143,7 @@ switch ( $instance ) :
 			</h4>
 			<?php
 			HTML::description_noesc(
-				\tsf()->convert_markdown(
+				Markdown::convert(
 					sprintf(
 						/* translators: 1: Extension name, 2: Extension link. Markdown!  */
 						\esc_html__( "The current theme doesn't support a feature that allows predictable output of titles. Consider installing [%1\$s](%2\$s) when you notice the title output in the browser-tab isn't as you have configured.", 'autodescription' ),

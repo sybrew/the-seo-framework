@@ -8,11 +8,12 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Interpreters\{
-	HTML,
+use \The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
-	Settings_Input as Input,
+	HTML,
+	Input,
 };
+use \The_SEO_Framework\Helper\Format\Markdown;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -417,7 +418,7 @@ switch ( $instance ) :
 			[
 				Input::make_checkbox( [
 					'id'     => 'post_publish_time',
-					'label'  => \tsf()->convert_markdown(
+					'label'  => Markdown::convert(
 						/* translators: the backticks are Markdown! Preserve them as-is! */
 						\esc_html__( 'Add `article:published_time` to posts?', 'autodescription' ),
 						[ 'code' ]
@@ -426,7 +427,7 @@ switch ( $instance ) :
 				] ),
 				Input::make_checkbox( [
 					'id'     => 'post_modify_time',
-					'label'  => \tsf()->convert_markdown(
+					'label'  => Markdown::convert(
 						/* translators: the backticks are Markdown! Preserve them as-is! */
 						\esc_html__( 'Add `article:modified_time` to posts?', 'autodescription' ),
 						[ 'code' ]

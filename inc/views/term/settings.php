@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Views\Edit
- * @subpackage The_SEO_Framework\Admin\Edit\Term
+ * @package The_SEO_Framework\Views\Term
+ * @subpackage The_SEO_Framework\Admin\Term
  */
 
 namespace The_SEO_Framework;
@@ -10,9 +10,9 @@ namespace The_SEO_Framework;
 
 use const \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 
-use \The_SEO_Framework\Interpreters\{
-	HTML,
+use \The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
+	HTML,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.

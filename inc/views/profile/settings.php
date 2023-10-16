@@ -1,7 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework\Views\Profile
- * @subpackage The_SEO_Framework\Admin\Edit\User
+ * @subpackage The_SEO_Framework\Admin\User
  */
 
 namespace The_SEO_Framework;
@@ -9,11 +9,6 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
 use const \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
-
-use \The_SEO_Framework\Interpreters\{
-	HTML,
-	Form,
-};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
