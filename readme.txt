@@ -588,17 +588,7 @@ TODO add robots.txt editor
 TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
 	-> Also remove all _ref_array?
 
-TODO get_post_meta* -> get_meta
-	-> also get_term_meta*
-	-> also get_post_type_archive_meta
-		-> get_post_type_archive_meta_item :/
-	-> also get_user_meta*
-		-> get_term_meta_defaults -> "get_default_meta"
 TODO get_post/term/user_meta -> add to legacy api?
-
-TODO rename "get_meta()" in robots to something more coherent, like get_cached_robots_meta_value()
-	-> Also, rename all functions to contain their data type in them, this is then consistent with all other Factory classes.
-		-> generate_meta() would become get_generated_robots_meta()
 
 TODO instead of removing Elementor library from public posts types, force noindex on them?
 	-> Because we already excluded them, they're unlikely to be found by crawlers, though.
@@ -662,6 +652,9 @@ TODO fix wrong multi-line if-statement indents, find them via:
 
 TODO add settings check  wp_attachment_pages_enabled (the attachments are still "public")
 	See https://make.wordpress.org/core/2023/10/16/changes-to-attachment-pages/
+
+TODO create a visual map of the plugin's class+method structure of before vs after?
+	-> This way, you can see how TSF's facade object has 300 methods.
 
 **Detailed log**
 
@@ -740,6 +733,8 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
 	* **Redirects:**
 		* When an invalid URL is supplied by the admin in the redirect field, the plugin now displays a generic HTTP error code 400 (Bad Request), instead of showing the page.
+	* **Other:**
+		* Touched up Link's face.
 * **Fixed:**
 	* Even if WordPress can't fulfill a JSON-type request, WordPress will falsely report it's parsing JSON-formatted content. Caching plugins ignore this, and create a copy of this JSON-type response as a regular page, with the content altered -- [learn more](https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/#post-16559784). TSF no longer stops outputting SEO metadata when a JSON-type is requested by a visitor, so caching plugins won't accidentally store copies without metadata any longer.
 		* Akin to `is_admin()`, unexpected behavior will occur in WordPress, themes, and plugins when sending JSON headers. We deem this a security issue, although Automattic thinks differently (hence, Jetpack is still vulnerable to `/?_jsonp=hi`, and so are hundreds of other plugins). Because we treated this as a security issue, we had to wait for Automattic to report back.
@@ -892,19 +887,19 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* All public TSF-related storage helper methods have been moved to that pool. E.g., `tsf()->get_robots_option_index()` is now `tsf()->data()->plugin()->helper()->get_robots_post_type_option_id()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\Helper`.
 			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->post()`.
-				* All public TSF-related Post storage methods have been moved to that pool. E.g., `tsf()->get_post_meta_item()` is now `tsf()->data()->plugin()->post()->get_post_meta_item()`.
+				* All public TSF-related Post storage methods have been moved to that pool. E.g., `tsf()->get_post_meta_item()` is now `tsf()->data()->plugin()->post()->get_meta_item()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\Post`.
 			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->pta()`.
-				* All public TSF-related Post Type Archive storage methods have been moved to that pool. E.g., `tsf()->get_post_type_archive_meta_item()` is now `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()`.
+				* All public TSF-related Post Type Archive storage methods have been moved to that pool. E.g., `tsf()->get_post_type_archive_meta_item()` is now `tsf()->data()->plugin()->pta()->get_meta_item()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\PTA`.
 			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->setup()`.
 				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_default_site_options()` is now `tsf()->data()->plugin()->setup()->get_default_options()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\Setup`.
 			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->term()`.
-				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_term_meta_item()` is now `tsf()->data()->plugin()->term()->get_term_meta_item()`.
+				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_term_meta_item()` is now `tsf()->data()->plugin()->term()->get_meta_item()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\Term`.
 			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->user()`.
-				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_user_meta_item()` is now `tsf()->data()->plugin()->user()->get_user_meta_item()`.
+				* All public TSF-related Plugin Setup storage methods have been moved to that pool. E.g., `tsf()->get_user_meta_item()` is now `tsf()->data()->plugin()->user()->get_meta_item()`.
 				* Internally known as `The_SEO_Framework\Data\Plugin\User`.
 		* This pool has a sub-pool, accessible via `tsf()->data()->post()`.
 			* All public WordPress post-related methods have been moved to that pool. E.g., `tsf()->get_post_content()` is now `tsf()->data()->post()->get_content()`.
@@ -1126,7 +1121,7 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `array_merge_recursive_distinct()`, use `tsf()->format()->arrays()->array_merge_recursive_distinct()` instead.
 				* `retrieve_robots_meta_assertions()`, use `tsf()->robots()->get_collected_meta_assertions()` instead.
 				* `get_robots_meta()`, use `tsf()->robots()->get_meta()` instead.
-				* `generate_robots_meta()`, use `tsf()->robots()->generate_meta()` instead.
+				* `generate_robots_meta()`, use `tsf()->robots()->get_generated_meta()` instead.
 				* `is_post_type_robots_set()`, use `tsf()->robots()->is_post_type_robots_set()` instead.
 				* `is_taxonomy_robots_set()`, use `tsf()->robots()->is_taxonomy_robots_set()` instead.
 				* `query_supports_seo()`, use `tsf()->query()->utils()->query_supports_seo()` instead.
@@ -1257,24 +1252,25 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `get_static_cache()`, use `tsf()->data()->plugin()->get_site_cache()` instead.
 				* `update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
 				* `update_static_cache()`, use `tsf()->data()->plugin()->update_site_cache()` instead.
-				* `get_term_meta_item()`, use `tsf()->data()->plugin()->term()->get_term_meta_item()` instead.
-				* `get_term_meta()`, use `tsf()->data()->plugin()->term()->get_term_meta()` instead.
-				* `get_term_meta_defaults()`, use `tsf()->data()->plugin()->term()->get_term_meta_defaults()` instead.
-				* `update_single_term_meta_item()`, use `tsf()->data()->plugin()->term()->update_single_term_meta_item()` instead.
+				* `get_term_meta_item()`, use `tsf()->data()->plugin()->term()->get_meta_item()` instead.
+				* `get_term_meta()`, use `tsf()->data()->plugin()->term()->get_meta()` instead.
+				* `get_term_meta_defaults()`, use `tsf()->data()->plugin()->term()->get_default_meta()` instead.
+				* `update_single_term_meta_item()`, use `tsf()->data()->plugin()->term()->update_single_meta_item()` instead.
 				* `get_latest_category_id()`, use `tsf()->data()->term()->get_latest_category_id()` instead.
 				* `get_latest_category_id()`, use `tsf()->data()->term()->is_term_populated()` instead.
 				* `get_latest_post_id()`, use `tsf()->data()->post()->get_latest_post_id()` instead.
 				* `get_primary_term()`, use `tsf()->data()->plugin()->post()->get_primary_term()` instead.
 				* `get_primary_term_id()`, use `tsf()->data()->plugin()->post()->get_primary_term_id()` instead.
 				* `update_primary_term_id()`, use `tsf()->data()->plugin()->post()->update_primary_term_id()` instead.
-				* `save_term_meta()`, use `tsf()->data()->plugin()->term()->save_term_meta()` instead.
-				* `get_user_meta_item()`, use `tsf()->data()->plugin()->user()->get_user_meta_item()` instead.
+				* `save_term_meta()`, use `tsf()->data()->plugin()->term()->save_meta()` instead.
+				* `delete_term_meta()`, use `tsf()->data()->plugin()->term()->delete_meta()` instead.
+				* `get_user_meta_item()`, use `tsf()->data()->plugin()->user()->get_meta_item()` instead.
 				* `get_current_post_author_meta_item()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta_item()` instead.
 				* `get_current_post_author_meta()`, use `tsf()->data()->plugin()->user()->get_current_post_author_meta()` instead.
-				* `get_user_meta()`, use `tsf()->data()->plugin()->user()->get_user_meta()` instead.
-				* `get_user_meta_defaults()`, use `tsf()->data()->plugin()->user()->get_user_meta_defaults()` instead.
-				* `update_single_user_meta_item()`, use `tsf()->data()->plugin()->user()->update_single_user_meta_item()` instead.
-				* `save_user_meta()`, use `tsf()->data()->plugin()->user()->save_user_meta()` instead.
+				* `get_user_meta()`, use `tsf()->data()->plugin()->user()->get_meta()` instead.
+				* `get_user_meta_defaults()`, use `tsf()->data()->plugin()->user()->get_default_meta()` instead.
+				* `update_single_user_meta_item()`, use `tsf()->data()->plugin()->user()->update_single_meta_item()` instead.
+				* `save_user_meta()`, use `tsf()->data()->plugin()->user()->save_meta()` instead.
 				* `get_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
 				* `get_current_post_author_id()`, use `tsf()->query()->get_post_author_id()` instead.
 				* `get_user_id()`, use `tsf()->query()->get_current_user_id()` instead.
@@ -1284,15 +1280,15 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `is_password_protected()`, use `tsf()->data()->post()->is_password_protected()` instead.
 				* `is_private()`, use `tsf()->data()->post()->is_private()` instead.
 				* `is_draft()`, use `tsf()->data()->post()->is_draft()` instead.
-				* `get_post_meta_item()`, use `tsf()->data()->plugin()->post()->get_post_meta_item()` instead.
-				* `get_post_meta()`, use `tsf()->data()->plugin()->post()->get_post_meta()` instead.
-				* `get_post_meta_defaults()`, use `tsf()->data()->plugin()->post()->get_post_meta_defaults()` instead.
-				* `update_single_post_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_post_meta_item()` instead.
-				* `save_post_meta()`, use `tsf()->data()->plugin()->post()->save_post_meta()` instead.
-				* `get_post_type_archive_meta()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta()` instead.
-				* `get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()` instead.
-				* `get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()` instead.
-				* `get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()` instead.
+				* `get_post_meta_item()`, use `tsf()->data()->plugin()->post()->get_meta_item()` instead.
+				* `get_post_meta()`, use `tsf()->data()->plugin()->post()->get_meta()` instead.
+				* `get_post_meta_defaults()`, use `tsf()->data()->plugin()->post()->get_default_meta()` instead.
+				* `update_single_post_meta_item()`, use `tsf()->data()->plugin()->post()->update_single_meta_item()` instead.
+				* `save_post_meta()`, use `tsf()->data()->plugin()->post()->save_meta()` instead.
+				* `get_post_type_archive_meta()`, use `tsf()->data()->plugin()->pta()->get_meta()` instead.
+				* `get_post_type_archive_meta_item()`, use `tsf()->data()->plugin()->pta()->get_meta_item()` instead.
+				* `get_all_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_all_default_meta()` instead.
+				* `get_post_type_archive_meta_defaults()`, use `tsf()->data()->plugin()->pta()->get_default_meta()` instead.
 				* `get_sitemap_colors()`, use `tsf()->sitemap()->utils()->get_sitemap_colors()` instead.
 				* `is_blog_public()`, use `tsf()->data()->blog()->is_public()` instead.
 				* `current_blog_is_spam_or_deleted()`, use `tsf()->data()->blog()->is_spam_or_deleted()` instead.
@@ -1314,7 +1310,7 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `get_wp_title()`, with no alternative available.
 				* `get_seo_settings_page_url()`, with no alternative available.
 				* `convert_markdown()`, use `tsf()->format()->markdown()->convert()` instead.
-				* `gmt2date()`, use `gmdate` instead.
+				* `gmt2date()`, use function `gmdate()` instead.
 				* `get_timestamp_format()`, use `tsf()->format()->time()->get_preferred_format()` instead.
 				* `uses_time_in_timestamp_format()`, with no alternative available.
 				* `hellip_if_over()`, use `tsf()->format()->strings()->hellip_if_over()` instead.

@@ -39,7 +39,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 
 // Fetch Term ID and taxonomy.
 $term_id = $term->term_id;
-$meta    = Data\Plugin\Term::get_term_meta( $term_id );
+$meta    = Data\Plugin\Term::get_meta( $term_id );
 
 $title       = $meta['doctitle'];
 $description = $meta['description'];
@@ -68,7 +68,7 @@ $show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
 $image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 
 $canonical_placeholder = Meta\URI::get_generated_url( $generator_args );
-$robots_defaults       = Meta\Robots::generate_meta(
+$robots_defaults       = Meta\Robots::get_generated_meta(
 	$generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],
 	ROBOTS_IGNORE_SETTINGS
@@ -177,7 +177,7 @@ $robots_settings = [
 					?>
 				</div>
 				<label for="autodescription-meta[title_no_blog_name]" class=tsf-term-checkbox-wrap>
-					<input type=checkbox name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value=1 <?php \checked( Data\Plugin\Term::get_term_meta_item( 'title_no_blog_name' ) ); ?> />
+					<input type=checkbox name="autodescription-meta[title_no_blog_name]" id="autodescription-meta[title_no_blog_name]" value=1 <?php \checked( Data\Plugin\Term::get_meta_item( 'title_no_blog_name' ) ); ?> />
 					<?php
 					\esc_html_e( 'Remove the site title?', 'autodescription' );
 					echo ' ';

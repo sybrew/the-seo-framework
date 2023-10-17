@@ -4835,7 +4835,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_singular_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
 
-		return $tsf->data()->plugin()->post()->get_post_meta_item( '_genesis_canonical_uri', $id ) ?: '';
+		return $tsf->data()->plugin()->post()->get_meta_item( '_genesis_canonical_uri', $id ) ?: '';
 	}
 
 	/**
@@ -4854,7 +4854,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_taxonomical_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
 
-		return $tsf->data()->plugin()->term()->get_term_meta_item( 'canonical', $term_id ) ?: '';
+		return $tsf->data()->plugin()->term()->get_meta_item( 'canonical', $term_id ) ?: '';
 	}
 
 	/**
@@ -4872,7 +4872,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
 
-		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_item( 'canonical', $pta ) ?: '';
+		return $tsf->data()->plugin()->pta()->get_meta_item( 'canonical', $pta ) ?: '';
 	}
 
 	/**
@@ -5435,9 +5435,9 @@ final class Deprecated {
 	public function get_term_meta_item( $item, $term_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->get_term_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->get_meta_item()' );
 
-		return $tsf->data()->plugin()->term()->get_term_meta_item( $item, $term_id );
+		return $tsf->data()->plugin()->term()->get_meta_item( $item, $term_id );
 	}
 
 	/**
@@ -5464,9 +5464,9 @@ final class Deprecated {
 	public function get_term_meta( $term_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->get_term_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->get_meta()' );
 
-		return $tsf->data()->plugin()->term()->get_term_meta( $term_id );
+		return $tsf->data()->plugin()->term()->get_meta( $term_id );
 	}
 
 	/**
@@ -5487,9 +5487,9 @@ final class Deprecated {
 	public function get_term_meta_defaults( $term_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_term_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->term()->get_term_meta_defaults()' );
+		$tsf->_deprecated_function( 'tsf()->get_term_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->term()->get_default_meta()' );
 
-		return $tsf->data()->plugin()->term()->get_term_meta_defaults( $term_id );
+		return $tsf->data()->plugin()->term()->get_default_meta( $term_id );
 	}
 
 	/**
@@ -5511,9 +5511,9 @@ final class Deprecated {
 	public function update_single_term_meta_item( $item, $value, $term_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->update_single_term_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->update_single_meta_item()' );
 
-		return $tsf->data()->plugin()->term()->update_single_term_meta_item( $item, $value, $term_id );
+		return $tsf->data()->plugin()->term()->update_single_meta_item( $item, $value, $term_id );
 	}
 
 	/**
@@ -5533,9 +5533,26 @@ final class Deprecated {
 	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->update_single_term_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->save_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->save_meta()' );
 
-		return $tsf->data()->plugin()->term()->save_term_meta( $term_id, $data );
+		return $tsf->data()->plugin()->term()->save_meta( $term_id, $data );
+	}
+
+	/**
+	 * Deletes term meta.
+	 * Deletes only the default data keys; or everything when only that is present.
+	 *
+	 * @since 2.7.0
+	 * @since 4.0.0 Removed 2nd, unused, parameter.
+	 *
+	 * @param int $term_id Term ID.
+	 */
+	public function delete_term_meta( $term_id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->delete_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->delete_meta()' );
+
+		return $tsf->data()->plugin()->term()->delete_meta( $term_id );
 	}
 
 	/**
@@ -5675,9 +5692,9 @@ final class Deprecated {
 	public function get_user_meta_item( $item, $user_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->get_user_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->get_meta_item()' );
 
-		return $tsf->data()->plugin()->user()->get_user_meta_item( $item, $user_id );
+		return $tsf->data()->plugin()->user()->get_meta_item( $item, $user_id );
 	}
 
 	/**
@@ -5737,9 +5754,9 @@ final class Deprecated {
 	public function get_user_meta( $user_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->get_user_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->get_meta()' );
 
-		return $tsf->data()->plugin()->user()->get_user_meta( $user_id );
+		return $tsf->data()->plugin()->user()->get_meta( $user_id );
 	}
 
 	/**
@@ -5755,9 +5772,9 @@ final class Deprecated {
 	public function get_user_meta_defaults( $user_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->user()->get_user_meta_defaults()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->user()->get_default_meta()' );
 
-		return $tsf->data()->plugin()->user()->get_user_meta_defaults( $user_id );
+		return $tsf->data()->plugin()->user()->get_default_meta( $user_id );
 	}
 
 	/**
@@ -5774,9 +5791,9 @@ final class Deprecated {
 	public function update_single_user_meta_item( $user_id, $option, $value ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_single_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->update_single_user_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->update_single_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->update_single_meta_item()' );
 
-		return $tsf->data()->plugin()->user()->update_single_user_meta_item( $user_id, $option, $value );
+		return $tsf->data()->plugin()->user()->update_single_meta_item( $user_id, $option, $value );
 	}
 
 	/**
@@ -5793,9 +5810,9 @@ final class Deprecated {
 	public function save_user_meta( $user_id, $data ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->save_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->save_user_meta()' );
+		$tsf->_deprecated_function( 'tsf()->save_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->save_meta()' );
 
-		return $tsf->data()->plugin()->user()->save_user_meta( $user_id, $data );
+		return $tsf->data()->plugin()->user()->save_meta( $user_id, $data );
 	}
 
 	/**
@@ -5996,9 +6013,9 @@ final class Deprecated {
 	public function get_post_meta_item( $item, $post_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->get_post_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->get_meta_item()' );
 
-		return $tsf->data()->plugin()->post()->get_post_meta_item( $item, $post_id );
+		return $tsf->data()->plugin()->post()->get_meta_item( $item, $post_id );
 	}
 
 	/**
@@ -6017,9 +6034,9 @@ final class Deprecated {
 	public function get_post_meta( $post_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->get_post_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->get_meta()' );
 
-		return $tsf->data()->plugin()->post()->get_post_meta( $post_id );
+		return $tsf->data()->plugin()->post()->get_meta( $post_id );
 	}
 
 	/**
@@ -6039,9 +6056,9 @@ final class Deprecated {
 	public function get_post_meta_defaults( $post_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->post()->get_post_meta_defaults()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->post()->get_default_meta()' );
 
-		return $tsf->data()->plugin()->post()->get_post_meta_defaults( $post_id );
+		return $tsf->data()->plugin()->post()->get_default_meta( $post_id );
 	}
 
 	/**
@@ -6080,9 +6097,9 @@ final class Deprecated {
 	public function save_post_meta( $post, $data ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->save_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->save_post_meta()' );
+		$tsf->_deprecated_function( 'tsf()->save_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->save_meta()' );
 
-		return $tsf->data()->plugin()->post()->save_post_meta( $post, $data );
+		return $tsf->data()->plugin()->post()->save_meta( $post, $data );
 	}
 
 	/**
@@ -6102,9 +6119,9 @@ final class Deprecated {
 	public function get_post_type_archive_meta( $post_type ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_meta()' );
 
-		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta( $post_type );
+		return $tsf->data()->plugin()->pta()->get_meta( $post_type );
 	}
 
 	/**
@@ -6121,9 +6138,9 @@ final class Deprecated {
 	public function get_post_type_archive_meta_item( $item, $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_item()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_item()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_meta_item()' );
 
-		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_item( $item, $post_type );
+		return $tsf->data()->plugin()->pta()->get_meta_item( $item, $post_type );
 	}
 
 	/**
@@ -6139,9 +6156,9 @@ final class Deprecated {
 	public function get_all_post_type_archive_meta_defaults() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_all_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults()' );
+		$tsf->_deprecated_function( 'tsf()->get_all_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_all_default_meta()' );
 
-		return $tsf->data()->plugin()->pta()->get_all_post_type_archive_meta_defaults();
+		return $tsf->data()->plugin()->pta()->get_all_default_meta();
 	}
 
 	/**
@@ -6157,9 +6174,9 @@ final class Deprecated {
 	public function get_post_type_archive_meta_defaults( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_post_type_archive_meta_defaults()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_default_meta()' );
 
-		return $tsf->data()->plugin()->pta()->get_post_type_archive_meta_defaults( $post_type );
+		return $tsf->data()->plugin()->pta()->get_default_meta( $post_type );
 	}
 
 	/**
@@ -6591,7 +6608,7 @@ final class Deprecated {
 	 */
 	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
 
-		\tsf()->_deprecated_function( 'tsf()->gmt2date()', '4.3.0', 'gmdate' );
+		\tsf()->_deprecated_function( 'tsf()->gmt2date()', '4.3.0', 'gmdate()' );
 
 		return gmdate( $format, strtotime( "$time GMT" ) );
 	}

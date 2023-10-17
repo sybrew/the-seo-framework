@@ -47,7 +47,7 @@ class PTA {
 	 * @since 4.3.0
 	 * @var array[] Stored pta meta data.
 	 */
-	private static $pta_meta = [];
+	private static $meta_memo = [];
 
 	/**
 	 * Flushes all PTA runtime cache.
@@ -57,7 +57,7 @@ class PTA {
 	 * @see \The_SEO_Framework\Data\Option::update_option()
 	 */
 	public static function flush_cache() {
-		static::$pta_meta = [];
+		static::$meta_memo = [];
 	}
 
 	/**
@@ -65,18 +65,19 @@ class PTA {
 	 *
 	 * @since 4.2.0
 	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\PTA.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Renamed from `get_post_type_archive_meta_item`.
 	 *
 	 * @param string $item      The item to get.
 	 * @param string $post_type The post type.
 	 * @return ?mixed The post type archive's meta item value. Null when item isn't registered.
 	 */
-	public static function get_post_type_archive_meta_item( $item, $post_type = '' ) {
+	public static function get_meta_item( $item, $post_type = '' ) {
 
 		$post_type = $post_type ?: Query::get_current_post_type();
 
 		return $post_type
-			? static::get_post_type_archive_meta( $post_type )[ $item ] ?? null
+			? static::get_meta( $post_type )[ $item ] ?? null
 			: null;
 	}
 
@@ -90,25 +91,26 @@ class PTA {
 	 * @since 4.2.0
 	 * @since 4.3.0 1. The first parameter may now be empty to autodetermine post type.
 	 *              2. Removed the second `$use_cache` parameter.
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\PTA.
+	 *              3. Moved from `\The_SEO_Framework\Load`.
+	 *              4. Renamed from `get_post_type_archive_meta`.
 	 *
 	 * @param string $post_type The post type.
 	 * @return array The post type archive's meta item's values.
 	 */
-	public static function get_post_type_archive_meta( $post_type = '' ) {
+	public static function get_meta( $post_type = '' ) {
 
 		$post_type = $post_type ?: Query::get_current_post_type();
 
-		if ( isset( static::$pta_meta[ $post_type ] ) )
-			return static::$pta_meta[ $post_type ];
+		if ( isset( static::$meta_memo[ $post_type ] ) )
+			return static::$meta_memo[ $post_type ];
 
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post_type ) || ! Post_Types::is_post_type_supported( $post_type ) )
-			return static::$pta_meta[ $post_type ] = [];
+			return static::$meta_memo[ $post_type ] = [];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
-		if ( \count( static::$pta_meta ) > 69 )
-			static::$pta_meta = \array_slice( static::$pta_meta, 0, 7, true );
+		if ( \count( static::$meta_memo ) > 69 )
+			static::$meta_memo = \array_slice( static::$meta_memo, 0, 7, true );
 
 		// Yes, we abide by "settings". WordPress never gave us Post Type Archive settings-pages.
 		$is_headless = is_headless( 'settings' );
@@ -126,10 +128,10 @@ class PTA {
 		 * @param int   $post_type The post type.
 		 * @param bool  $headless  Whether the meta are headless.
 		 */
-		return static::$pta_meta[ $post_type ] = \apply_filters(
+		return static::$meta_memo[ $post_type ] = \apply_filters(
 			'the_seo_framework_post_type_archive_meta',
 			array_merge(
-				static::get_post_type_archive_meta_defaults( $post_type ),
+				static::get_default_meta( $post_type ),
 				$meta
 			),
 			$post_type,
@@ -141,17 +143,18 @@ class PTA {
 	 * Returns an array of all public post type archive option defaults.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\PTA.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `get_all_post_type_archive_meta_defaults`.
 	 *
 	 * @return array[] The Post Type Archive Metadata default options
 	 *                 of all public Post Type archives.
 	 */
-	public static function get_all_post_type_archive_meta_defaults() {
+	public static function get_all_default_meta() {
 
 		$defaults = [];
 
 		foreach ( Post_Types::get_public_post_type_archives() as $pta )
-			$defaults[ $pta ] = static::get_post_type_archive_meta_defaults( $pta );
+			$defaults[ $pta ] = static::get_default_meta( $pta );
 
 		return $defaults;
 	}
@@ -160,12 +163,13 @@ class PTA {
 	 * Returns an array of default post type archive meta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\PTA.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `get_post_type_archive_meta_defaults`.
 	 *
 	 * @param int $post_type The post type.
 	 * @return array The Post Type Archive Metadata default options.
 	 */
-	public static function get_post_type_archive_meta_defaults( $post_type = '' ) {
+	public static function get_default_meta( $post_type = '' ) {
 		/**
 		 * @since 4.2.0
 		 * @param array $defaults

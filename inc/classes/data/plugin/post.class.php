@@ -45,13 +45,13 @@ class Post {
 	 * @since 4.3.0
 	 * @var array[] Stored post meta data.
 	 */
-	private static $post_meta = [];
+	private static $meta_memo = [];
 
 	/**
 	 * @since 4.3.0
-	 * @var array[] Stored primary term IDs.
+	 * @var array[] Stored primary term IDs cache.
 	 */
-	private static $primary_term = [];
+	private static $pt_memo = [];
 
 	/**
 	 * Returns a post SEO meta item by key.
@@ -63,18 +63,19 @@ class Post {
 	 * @since 4.0.0
 	 * @since 4.0.1 Now obtains the real ID when none is supplied.
 	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Renamed from `get_post_meta_item`.
 	 *
 	 * @param string $item      The item to get.
 	 * @param int    $post_id   The post ID.
 	 * @return mixed The post meta item's value. Null when item isn't registered.
 	 */
-	public static function get_post_meta_item( $item, $post_id = 0 ) {
+	public static function get_meta_item( $item, $post_id = 0 ) {
 
 		$post_id = $post_id ?: Query::get_the_real_id();
 
 		return $post_id
-			? static::get_post_meta( $post_id )[ $item ] ?? null
+			? static::get_meta( $post_id )[ $item ] ?? null
 			: null;
 	}
 
@@ -91,28 +92,29 @@ class Post {
 	 * @since 4.1.4 1. Now returns an empty array when the post type isn't supported.
 	 *              2. Now considers headlessness.
 	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Renamed from `get_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return array The post meta.
 	 */
-	public static function get_post_meta( $post_id = 0 ) {
+	public static function get_meta( $post_id = 0 ) {
 
 		$post_id = $post_id ?: Query::get_the_real_id();
 
-		if ( isset( static::$post_meta[ $post_id ] ) )
-			return static::$post_meta[ $post_id ];
+		if ( isset( static::$meta_memo[ $post_id ] ) )
+			return static::$meta_memo[ $post_id ];
 
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post_id ) || ! Post_Types::is_post_type_supported( \get_post( $post_id )->post_type ) )
-			return static::$post_meta[ $post_id ] = [];
+			return static::$meta_memo[ $post_id ] = [];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
-		if ( \count( static::$post_meta ) > 69 )
-			static::$post_meta = \array_slice( static::$post_meta, 0, 7, true );
+		if ( \count( static::$meta_memo ) > 69 )
+			static::$meta_memo = \array_slice( static::$meta_memo, 0, 7, true );
 
 		// We need this early to filter keys from post meta.
-		$defaults    = static::get_post_meta_defaults( $post_id );
+		$defaults    = static::get_default_meta( $post_id );
 		$is_headless = is_headless( 'meta' );
 
 		if ( $is_headless ) {
@@ -139,7 +141,7 @@ class Post {
 		 * @param int   $post_id The post ID.
 		 * @param bool  $headless Whether the meta are headless.
 		 */
-		return static::$post_meta[ $post_id ] = \apply_filters(
+		return static::$meta_memo[ $post_id ] = \apply_filters(
 			'the_seo_framework_post_meta',
 			array_merge( $defaults, $meta ),
 			$post_id,
@@ -155,12 +157,13 @@ class Post {
 	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `get_post_meta_defaults`.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return array The default post meta.
 	 */
-	public static function get_post_meta_defaults( $post_id = 0 ) {
+	public static function get_default_meta( $post_id = 0 ) {
 		/**
 		 * @since 4.1.4
 		 * @since 4.2.0 1. Now corrects the $post_id when none is supplied.
@@ -200,23 +203,23 @@ class Post {
 	 * as it reprocesses all post meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Post.
-	 * @uses Data\Plugin\Post::save_post_meta() to process all data.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `update_single_post_meta_item`.
 	 *
 	 * @param string  $item    The item to update.
 	 * @param mixed   $value   The value the item should be at.
 	 * @param integer $post_id The post ID. Also accepts Post objects.
 	 */
-	public static function update_single_post_meta_item( $item, $value, $post_id ) {
+	public static function update_single_meta_item( $item, $value, $post_id ) {
 
 		$post_id = \get_post( $post_id )->ID ?? null;
 
 		if ( empty( $post_id ) ) return;
 
-		$meta          = static::get_post_meta( $post_id );
+		$meta          = static::get_meta( $post_id );
 		$meta[ $item ] = $value;
 
-		static::save_post_meta( $post_id, $meta );
+		static::save_meta( $post_id, $meta );
 	}
 
 	/**
@@ -224,12 +227,13 @@ class Post {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Removed deprecated filter.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Post.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `save_post_meta`.
 	 *
 	 * @param integer $post_id The post ID. Also accepts Post objects.
 	 * @param array   $data    The post meta fields, will be merged with the defaults.
 	 */
-	public static function save_post_meta( $post_id, $data ) {
+	public static function save_meta( $post_id, $data ) {
 
 		$post_id = \get_post( $post_id )->ID ?? null;
 
@@ -248,13 +252,13 @@ class Post {
 		$data = (array) \apply_filters(
 			'the_seo_framework_save_post_meta',
 			\tsf()->s_post_meta( array_merge(
-				static::get_post_meta_defaults( $post_id ),
+				static::get_default_meta( $post_id ),
 				$data
 			) ),
 			$post_id,
 		);
 
-		static::$post_meta[ $post_id ] = $data;
+		static::$meta_memo[ $post_id ] = $data;
 
 		// Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
@@ -291,12 +295,12 @@ class Post {
 	 */
 	public static function get_primary_term( $post_id, $taxonomy ) {
 
-		if ( isset( static::$primary_term[ $post_id ][ $taxonomy ] ) )
-			return static::$primary_term[ $post_id ][ $taxonomy ];
+		if ( isset( static::$pt_memo[ $post_id ][ $taxonomy ] ) )
+			return static::$pt_memo[ $post_id ][ $taxonomy ];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
-		if ( \count( static::$primary_term ) > 69 )
-			static::$primary_term = \array_slice( static::$primary_term, 0, 7, true );
+		if ( \count( static::$pt_memo ) > 69 )
+			static::$pt_memo = \array_slice( static::$pt_memo, 0, 7, true );
 
 		$is_headless = is_headless( 'meta' );
 
@@ -337,7 +341,7 @@ class Post {
 		 * @param string    $taxonomy    The taxonomy name.
 		 * @param bool      $is_headless Whether the meta are headless.
 		 */
-		return static::$primary_term[ $post_id ][ $taxonomy ] = \apply_filters(
+		return static::$pt_memo[ $post_id ][ $taxonomy ] = \apply_filters(
 			'the_seo_framework_primary_term',
 			$primary_term,
 			$post_id,
@@ -376,7 +380,7 @@ class Post {
 	public static function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
 
 		// Unset and don't refill -- we store a simple number; we don't want to get the entire term here.
-		unset( static::$primary_term[ $post_id ?? \get_the_id() ] );
+		unset( static::$pt_memo[ $post_id ?? \get_the_id() ] );
 
 		if ( empty( $value ) )
 			return \delete_post_meta( $post_id, "_primary_term_{$taxonomy}" );

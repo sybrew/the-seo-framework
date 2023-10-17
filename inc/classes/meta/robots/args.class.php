@@ -71,11 +71,11 @@ final class Args extends Factory {
 			$qubit = null;
 
 			if ( $args['tax'] ) {
-				$qubit = (int) Data\Plugin\Term::get_term_meta_item( $type, $args['id'] );
+				$qubit = (int) Data\Plugin\Term::get_meta_item( $type, $args['id'] );
 			} elseif ( $args['id'] ) {
-				$qubit = (int) Data\Plugin\Post::get_post_meta_item( "_genesis_$type", $args['id'] );
+				$qubit = (int) Data\Plugin\Post::get_meta_item( "_genesis_$type", $args['id'] );
 			} elseif ( $args['pta'] ) {
-				$qubit = (int) Data\Plugin\PTA::get_post_type_archive_meta_item( $type, $args['pta'] );
+				$qubit = (int) Data\Plugin\PTA::get_meta_item( $type, $args['pta'] );
 			}
 
 			switch ( isset( $qubit ) ) {

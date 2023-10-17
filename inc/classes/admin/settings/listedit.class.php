@@ -186,13 +186,13 @@ final class ListEdit extends Admin\Lists\Table {
 
 		$generator_args = [ 'id' => $post_id ];
 
-		$r_defaults = Meta\Robots::generate_meta(
+		$r_defaults = Meta\Robots::get_generated_meta(
 			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
-		$meta = Data\Plugin\Post::get_post_meta( $post_id );
+		$meta = Data\Plugin\Post::get_meta( $post_id );
 
 		// NB: The indexes correspond to `autodescription-list[index]` field input names.
 		$data = [
@@ -348,13 +348,13 @@ final class ListEdit extends Admin\Lists\Table {
 			'tax' => $this->taxonomy,
 		];
 
-		$r_defaults = Meta\Robots::generate_meta(
+		$r_defaults = Meta\Robots::get_generated_meta(
 			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
 		);
 
-		$meta = Data\Plugin\Term::get_term_meta( $term_id );
+		$meta = Data\Plugin\Term::get_meta( $term_id );
 
 		// NB: The indexes correspond to `autodescription-list[index]` field input names.
 		$data = [

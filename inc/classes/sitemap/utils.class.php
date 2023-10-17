@@ -99,7 +99,7 @@ class Utils {
 			// ROBOTS_IGNORE_PROTECTION as we don't need to test 'private' ('post_status'=>'publish'), nor 'password' ('has_password'=>false)
 			$included = 'noindex'
 				!== (
-					Meta\Robots::generate_meta(
+					Meta\Robots::get_generated_meta(
 						$generator_args,
 						[ 'noindex' ],
 						ROBOTS_IGNORE_PROTECTION
@@ -153,7 +153,7 @@ class Utils {
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
 			$included = 'noindex'
 				!== (
-					Meta\Robots::generate_meta(
+					Meta\Robots::get_generated_meta(
 						$generator_args,
 						[ 'noindex' ],
 						ROBOTS_IGNORE_PROTECTION

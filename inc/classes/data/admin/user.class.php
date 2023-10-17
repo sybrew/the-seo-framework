@@ -62,10 +62,10 @@ class User {
 		// We won't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
-			Data\Plugin\User::get_user_meta( $user_id ),
+			Data\Plugin\User::get_meta( $user_id ),
 			(array) ( $_POST['tsf-user-meta'] ?? [] )
 		);
 
-		Data\Plugin\User::save_user_meta( $user_id, $data );
+		Data\Plugin\User::save_meta( $user_id, $data );
 	}
 }

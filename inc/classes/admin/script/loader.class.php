@@ -820,7 +820,7 @@ class Loader {
 					'name' => 'tsfCL10n',
 					'data' => [
 						'guidelines'  => Guidelines::get_text_size_guidelines(),
-						'counterType' => \absint( Data\Plugin\User::get_user_meta_item( 'counter_type' ) ),
+						'counterType' => \absint( Data\Plugin\User::get_meta_item( 'counter_type' ) ),
 						'i18n'        => [
 							'guidelines' => Guidelines::get_text_size_guidelines_i18n(),
 							/* translators: Pixel counter. 1: number (value), 2: number (guideline) */

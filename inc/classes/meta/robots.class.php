@@ -68,7 +68,7 @@ class Robots {
 		return umemo( __METHOD__ ) ?? umemo(
 			__METHOD__,
 			Data\Blog::is_public()
-				? implode( ',', static::generate_meta() )
+				? implode( ',', static::get_generated_meta() )
 				: ''
 		);
 	}
@@ -76,7 +76,9 @@ class Robots {
 	/**
 	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
-	 * @since 4.3.0
+	 * @since 3.2.4
+	 * @since 4.3.0 1. Renamed from `get_robots_meta()`
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -93,7 +95,7 @@ class Robots {
 	 *    string index : string value
 	 * }
 	 */
-	public static function generate_meta( $args = null, $get = null, $options = 0b00 ) {
+	public static function get_generated_meta( $args = null, $get = null, $options = 0b00 ) {
 
 		// Sitemap function: We always normalize arguments here, for `isset( $args ) and` will add a jump.
 		normalize_generation_args( $args );

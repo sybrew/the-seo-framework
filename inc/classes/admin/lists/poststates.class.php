@@ -50,14 +50,14 @@ final class PostStates {
 
 		if (
 			   Data\Plugin::get_option( 'alter_search_query' )
-			&& Data\Plugin\Post::get_post_meta_item( 'exclude_local_search', $post->ID )
+			&& Data\Plugin\Post::get_meta_item( 'exclude_local_search', $post->ID )
 		) {
 			$post_states[] = \esc_html__( 'No Search', 'autodescription' );
 		}
 
 		if (
 			   Data\Plugin::get_option( 'alter_archive_query' )
-			&& Data\Plugin\Post::get_post_meta_item( 'exclude_from_archive', $post->ID )
+			&& Data\Plugin\Post::get_meta_item( 'exclude_from_archive', $post->ID )
 		) {
 			$post_states[] = \esc_html__( 'No Archive', 'autodescription' );
 		}

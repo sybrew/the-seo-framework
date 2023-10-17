@@ -102,7 +102,7 @@ final class Page extends Main {
 	protected function prime_query_cache( array &$query_cache = [] ) {
 		$query_cache = [
 			'post'   => \get_post( static::$query['id'] ),
-			'meta'   => Data\Plugin\Post::get_post_meta( static::$query['id'] ), // Use TSF cache--TSF initializes it anyway.
+			'meta'   => Data\Plugin\Post::get_meta( static::$query['id'] ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
 				'ishome'       => Query::is_real_front_page_by_id( static::$query['id'] ),
 				'locale'       => \get_locale(),
@@ -114,7 +114,7 @@ final class Page extends Main {
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					Meta\Robots::generate_meta(
+					Meta\Robots::get_generated_meta(
 						[ 'id' => static::$query['id'] ],
 						[ 'noindex', 'nofollow', 'noarchive' ],
 						ROBOTS_ASSERT

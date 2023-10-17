@@ -110,7 +110,7 @@ final class Term extends Main {
 	protected function prime_query_cache( array &$query_cache = [] ) {
 		$query_cache = [
 			'term'   => \get_term( static::$query['id'], static::$query['tax'] ),
-			'meta'   => Data\Plugin\Term::get_term_meta( static::$query['id'] ),
+			'meta'   => Data\Plugin\Term::get_meta( static::$query['id'] ),
 			'states' => [
 				'locale'       => \get_locale(),
 				'isempty'      => ! Data\Term::is_term_populated( static::$query['id'], static::$query['tax'] ),
@@ -121,7 +121,7 @@ final class Term extends Main {
 						'nofollow'  => false,
 						'noarchive' => false,
 					],
-					Meta\Robots::generate_meta(
+					Meta\Robots::get_generated_meta(
 						[
 							'id'  => static::$query['id'],
 							'tax' => static::$query['tax'],

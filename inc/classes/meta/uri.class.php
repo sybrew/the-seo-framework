@@ -147,11 +147,11 @@ class URI {
 	public static function get_custom_canonical_url_from_query() {
 
 		if ( Query::is_singular() ) {
-			$url = Data\Plugin\Post::get_post_meta_item( '_genesis_canonical_uri' );
+			$url = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri' );
 		} elseif ( Query::is_editable_term() ) {
-			$url = Data\Plugin\Term::get_term_meta_item( 'canonical' ) ?: '';
+			$url = Data\Plugin\Term::get_meta_item( 'canonical' ) ?: '';
 		} elseif ( \is_post_type_archive() ) {
-			$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'canonical' );
+			$url = Data\Plugin\PTA::get_meta_item( 'canonical' );
 		}
 
 		if ( empty( $url ) ) return '';
@@ -178,11 +178,11 @@ class URI {
 		normalize_generation_args( $args );
 
 		if ( $args['tax'] ) {
-			$url = Data\Plugin\Term::get_term_meta_item( 'canonical', $args['id'] );
+			$url = Data\Plugin\Term::get_meta_item( 'canonical', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'canonical', $args['pta'] );
+			$url = Data\Plugin\PTA::get_meta_item( 'canonical', $args['pta'] );
 		} elseif ( $args['id'] ) {
-			$url = Data\Plugin\Post::get_post_meta_item( '_genesis_canonical_uri', $args['id'] );
+			$url = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $args['id'] );
 		}
 
 		if ( empty( $url ) ) return '';
@@ -680,19 +680,19 @@ class URI {
 			normalize_generation_args( $args );
 
 			if ( $args['tax'] ) {
-				$url = Data\Plugin\Term::get_term_meta_item( 'redirect', $args['id'] );
+				$url = Data\Plugin\Term::get_meta_item( 'redirect', $args['id'] );
 			} elseif ( $args['pta'] ) {
-				$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect', $args['pta'] );
+				$url = Data\Plugin\PTA::get_meta_item( 'redirect', $args['pta'] );
 			} elseif ( $args['id'] ) {
-				$url = Data\Plugin\Post::get_post_meta_item( 'redirect', $args['id'] );
+				$url = Data\Plugin\Post::get_meta_item( 'redirect', $args['id'] );
 			}
 		} else {
 			if ( Query::is_singular() ) {
-				$url = Data\Plugin\Post::get_post_meta_item( 'redirect' );
+				$url = Data\Plugin\Post::get_meta_item( 'redirect' );
 			} elseif ( Query::is_editable_term() ) {
-				$url = Data\Plugin\Term::get_term_meta_item( 'redirect' );
+				$url = Data\Plugin\Term::get_meta_item( 'redirect' );
 			} elseif ( \is_post_type_archive() ) {
-				$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect' );
+				$url = Data\Plugin\PTA::get_meta_item( 'redirect' );
 			}
 		}
 

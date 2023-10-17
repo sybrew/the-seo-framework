@@ -122,7 +122,7 @@ switch ( $instance ) :
 		<p class=tsf-title-wrap>
 			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
 			<?php
-			$_post_meta_title = $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_title', $home_id ) ) : '';
+			$_post_meta_title = $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
 			\tsf()->output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
@@ -145,7 +145,7 @@ switch ( $instance ) :
 		<?php
 		HTML::description( \__( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
 
-		if ( $home_id && Data\Plugin\Post::get_post_meta_item( '_genesis_title', $home_id ) )
+		if ( $home_id && Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) )
 			HTML::description( \__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 
 		?>
@@ -176,7 +176,7 @@ switch ( $instance ) :
 				[
 					'state' => [
 						'defaultDescription' => \tsf()->escape_text(
-							( $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_genesis_description', $home_id ) ) : '' )
+							( $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : '' )
 							?: Meta\Description::get_generated_description( $generator_args )
 						),
 					],
@@ -186,7 +186,7 @@ switch ( $instance ) :
 		</p>
 		<?php
 
-		if ( $home_id && Data\Plugin\Post::get_post_meta_item( '_genesis_description', $home_id ) ) {
+		if ( $home_id && Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) {
 			HTML::description(
 				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -273,11 +273,11 @@ switch ( $instance ) :
 
 		// Gets custom fields from page.
 		if ( $home_id ) {
-			$custom_og_title = \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_open_graph_title', $home_id ) );
-			$custom_og_desc  = \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_open_graph_description', $home_id ) );
-			$custom_tw_title = \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_twitter_title', $home_id ) );
-			$custom_tw_desc  = \tsf()->sanitize_text( Data\Plugin\Post::get_post_meta_item( '_twitter_description', $home_id ) );
-			$custom_image    = \sanitize_url( Data\Plugin\Post::get_post_meta_item( '_social_image_url', $home_id ) );
+			$custom_og_title = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_open_graph_title', $home_id ) );
+			$custom_og_desc  = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
+			$custom_tw_title = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
+			$custom_tw_desc  = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_twitter_description', $home_id ) );
+			$custom_image    = \sanitize_url( Data\Plugin\Post::get_meta_item( '_social_image_url', $home_id ) );
 		}
 
 		$image_placeholder = $custom_image ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
@@ -430,9 +430,9 @@ switch ( $instance ) :
 		break;
 
 	case 'robots':
-		$noindex_post   = $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_noindex', $home_id ) : '';
-		$nofollow_post  = $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_nofollow', $home_id ) : '';
-		$noarchive_post = $home_id ? Data\Plugin\Post::get_post_meta_item( '_genesis_noarchive', $home_id ) : '';
+		$noindex_post   = $home_id ? Data\Plugin\Post::get_meta_item( '_genesis_noindex', $home_id ) : '';
+		$nofollow_post  = $home_id ? Data\Plugin\Post::get_meta_item( '_genesis_nofollow', $home_id ) : '';
+		$noarchive_post = $home_id ? Data\Plugin\Post::get_meta_item( '_genesis_noarchive', $home_id ) : '';
 
 		$checked_home = '';
 		/**

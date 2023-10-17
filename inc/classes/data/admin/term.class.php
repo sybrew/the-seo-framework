@@ -52,7 +52,7 @@ class Term {
 	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 *              2. Renamed from `_update_term_meta`.
 	 * @access private
-	 *         Use Data\Plugin\Term::save_term_meta() instead.
+	 *         Use Data\Plugin\Term::save_meta() instead.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -97,12 +97,12 @@ class Term {
 		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
-			Data\Plugin\Term::get_term_meta( $term->term_id, false ),
+			Data\Plugin\Term::get_meta( $term->term_id, false ),
 			(array) \wp_unslash( $_POST['autodescription-quick'] )
 		);
 
 		// Trim, sanitize, and save the metadata.
-		Data\Plugin\Term::save_term_meta( $term->term_id, $data );
+		Data\Plugin\Term::save_meta( $term->term_id, $data );
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Term {
 		) return;
 
 		// Trim, sanitize, and save the metadata.
-		Data\Plugin\Term::save_term_meta(
+		Data\Plugin\Term::save_meta(
 			$term->term_id,
 			(array) \wp_unslash( $_POST['autodescription-meta'] ),
 		);

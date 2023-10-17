@@ -331,7 +331,7 @@ function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
 
 	if ( \bbp_is_topic_tag() ) {
 		// Always overwrite, even when none is found.
-		$desc = Data\Plugin\Term::get_term_meta( \get_queried_object_id() )['description'] ?? '';
+		$desc = Data\Plugin\Term::get_meta( \get_queried_object_id() )['description'] ?? '';
 	}
 
 	return $desc;

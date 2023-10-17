@@ -185,7 +185,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_post_branding( $id = 0 ) {
-		return ! Data\Plugin\Post::get_post_meta_item( '_tsf_title_no_blogname', $id )
+		return ! Data\Plugin\Post::get_meta_item( '_tsf_title_no_blogname', $id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 
@@ -199,7 +199,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_term_branding( $id = 0 ) {
-		return ! Data\Plugin\Term::get_term_meta_item( 'title_no_blog_name', $id )
+		return ! Data\Plugin\Term::get_meta_item( 'title_no_blog_name', $id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 
@@ -212,7 +212,7 @@ final class Conditions {
 	 * @return bool
 	 */
 	private static function use_pta_branding( $pta = '' ) {
-		return ! Data\Plugin\PTA::get_post_type_archive_meta_item( 'title_no_blog_name', $pta )
+		return ! Data\Plugin\PTA::get_meta_item( 'title_no_blog_name', $pta )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 

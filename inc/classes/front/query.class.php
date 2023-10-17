@@ -58,7 +58,7 @@ final class Query {
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( Data\Plugin\Post::get_post_meta_item( 'exclude_local_search', $post->ID ) )
+				if ( Data\Plugin\Post::get_meta_item( 'exclude_local_search', $post->ID ) )
 					unset( $posts[ $n ] );
 			}
 			// Reset numeric index.
@@ -123,7 +123,7 @@ final class Query {
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
-				if ( Data\Plugin\Post::get_post_meta_item( 'exclude_from_archive', $post->ID ) )
+				if ( Data\Plugin\Post::get_meta_item( 'exclude_from_archive', $post->ID ) )
 					unset( $posts[ $n ] );
 			}
 			// Reset numeric index.

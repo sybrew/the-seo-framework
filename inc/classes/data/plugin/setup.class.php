@@ -228,7 +228,7 @@ class Setup {
 				'homepage_social_image_id'  => 0,
 
 				// Post Type Archives. Prefill all of it for easy filtering, even though it's dynamically populated.
-				'pta' => Data\Plugin\PTA::get_all_post_type_archive_meta_defaults(),
+				'pta' => Data\Plugin\PTA::get_all_default_meta(),
 
 				// Relationships.
 				'shortlink_tag'       => 0, // Adds shortlink tag

@@ -45,7 +45,7 @@ class Term {
 	 * @since 4.3.0
 	 * @var array[] Stored term meta data.
 	 */
-	private static $term_meta = [];
+	private static $meta_memo = [];
 
 	/**
 	 * Returns the term meta item by key.
@@ -53,18 +53,19 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.2.0 No longer accidentally returns an empty array on failure.
 	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Term.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Renamed from `get_term_meta_item`.
 	 *
 	 * @param string $item    The item to get.
 	 * @param int    $term_id The Term ID.
 	 * @return mixed The term meta item. Null when not found.
 	 */
-	public static function get_term_meta_item( $item, $term_id = 0 ) {
+	public static function get_meta_item( $item, $term_id = 0 ) {
 
 		$term_id = $term_id ?: Query::get_the_real_id();
 
 		return $term_id
-			? static::get_term_meta( $term_id )[ $item ] ?? null
+			? static::get_meta( $term_id )[ $item ] ?? null
 			: null;
 	}
 
@@ -84,25 +85,26 @@ class Term {
 	 *              2. Now considers headlessness.
 	 * @since 4.2.0 Now returns an empty array when the term's taxonomy isn't supported.
 	 * @since 4.3.0 1. Removed the second `$use_cache` parameter.
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Term.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Renamed from `get_term_meta`.
 	 *
 	 * @param int $term_id The Term ID.
 	 * @return array The term meta data.
 	 */
-	public static function get_term_meta( $term_id = 0 ) {
+	public static function get_meta( $term_id = 0 ) {
 
 		$term_id = $term_id ?: Query::get_the_real_id();
 
-		if ( isset( static::$term_meta[ $term_id ] ) )
-			return static::$term_meta[ $term_id ];
+		if ( isset( static::$meta_memo[ $term_id ] ) )
+			return static::$meta_memo[ $term_id ];
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
 		if ( empty( $term_id ) || ! Taxonomies::is_taxonomy_supported( \get_term( $term_id )->taxonomy ?? '' ) )
-			return static::$term_meta[ $term_id ] = [];
+			return static::$meta_memo[ $term_id ] = [];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
-		if ( \count( static::$term_meta ) > 69 )
-			static::$term_meta = \array_slice( static::$term_meta, 0, 7, true );
+		if ( \count( static::$meta_memo ) > 69 )
+			static::$meta_memo = \array_slice( static::$meta_memo, 0, 7, true );
 
 		$is_headless = is_headless( 'meta' );
 
@@ -121,10 +123,10 @@ class Term {
 		 * @param int   $term_id     The term ID.
 		 * @param bool  $is_headless Whether the meta are headless.
 		 */
-		return static::$term_meta[ $term_id ] = \apply_filters(
+		return static::$meta_memo[ $term_id ] = \apply_filters(
 			'the_seo_framework_term_meta',
 			array_merge(
-				static::get_term_meta_defaults( $term_id ),
+				static::get_default_meta( $term_id ),
 				$meta,
 			),
 			$term_id,
@@ -141,12 +143,13 @@ class Term {
 	 *              2. Added 'redirect' value.
 	 *              3. Added 'title_no_blog_name' value.
 	 *              4. Removed 'saved_flag' value.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Term.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `get_term_meta_defaults`.
 	 *
 	 * @param int $term_id The term ID.
 	 * @return array The Term Metadata default options.
 	 */
-	public static function get_term_meta_defaults( $term_id = 0 ) {
+	public static function get_default_meta( $term_id = 0 ) {
 		/**
 		 * @since 2.1.8
 		 * @param array $defaults
@@ -183,22 +186,23 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Term.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `update_single_term_meta_item`.
 	 *
 	 * @param string $item     The item to update.
 	 * @param mixed  $value    The value the item should be at.
 	 * @param int    $term_id  Term ID.
 	 */
-	public static function update_single_term_meta_item( $item, $value, $term_id ) {
+	public static function update_single_meta_item( $item, $value, $term_id ) {
 
 		$term_id = \get_term( $term_id )->term_id ?? null;
 
 		if ( empty( $term_id ) ) return;
 
-		$meta          = static::get_term_meta( $term_id, false );
+		$meta          = static::get_meta( $term_id, false );
 		$meta[ $item ] = $value;
 
-		static::save_term_meta( $term_id, $meta );
+		static::save_meta( $term_id, $meta );
 	}
 
 	/**
@@ -207,13 +211,14 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 1. Removed 3rd and 4th parameters ($tt_id and $taxonomy)
-	 *              2. Moved to \The_SEO_Framework\Data\Plugin\Term.
+	 * @since 4.3.0 1. Removed 3rd and 4th parameters ($tt_id and $taxonomy).
+	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Renamed from `save_term_meta`.
 	 *
 	 * @param int   $term_id Term ID.
 	 * @param array $data    The data to save.
 	 */
-	public static function save_term_meta( $term_id, $data ) {
+	public static function save_meta( $term_id, $data ) {
 
 		$term_id = \get_term( $term_id )->term_id ?? null;
 
@@ -230,13 +235,13 @@ class Term {
 		$data = (array) \apply_filters(
 			'the_seo_framework_save_term_data',
 			\tsf()->s_term_meta( array_merge(
-				static::get_term_meta_defaults( $term_id ),
+				static::get_default_meta( $term_id ),
 				$data,
 			) ),
 			$term_id,
 		);
 
-		static::$term_meta[ $term_id ] = $data;
+		static::$meta_memo[ $term_id ] = $data;
 
 		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
 		\update_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
@@ -244,28 +249,29 @@ class Term {
 
 	/**
 	 * Deletes term meta.
-	 * Deletes only the default data keys as set by `get_term_meta_defaults()`
+	 * Deletes only the default data keys as set by `get_default_meta()`
 	 * or everything when no custom keys are set.
 	 *
 	 * @since 2.7.0
 	 * @since 4.0.0 Removed 2nd, unused, parameter.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Plugin\Term.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `delete_term_meta`.
 	 * @ignore Unused internally. Public API.
 	 *
 	 * @param int $term_id Term ID.
 	 */
-	public static function delete_term_meta( $term_id ) {
+	public static function delete_meta( $term_id ) {
 
 		// If this results in an empty data string, all data has already been removed by WP core.
 		$data = \get_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, true );
 
 		if ( \is_array( $data ) ) {
-			foreach ( static::get_term_meta_defaults( $term_id ) as $key => $value )
+			foreach ( static::get_default_meta( $term_id ) as $key => $value )
 				unset( $data[ $key ] );
 		}
 
 		// Always unset. We must refill defaults later.
-		unset( static::$term_meta[ $term_id ] );
+		unset( static::$meta_memo[ $term_id ] );
 
 		// Only delete when no values are left, because someone else might've filtered it.
 		if ( empty( $data ) ) {

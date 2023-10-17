@@ -166,7 +166,7 @@ class Post {
 		) return;
 
 		// Perform nonce check and save fields.
-		Data\Plugin\Post::save_post_meta(
+		Data\Plugin\Post::save_meta(
 			$post_id,
 			(array) \wp_unslash( $_POST['autodescription'] ),
 		);
@@ -223,11 +223,11 @@ class Post {
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
-			Data\Plugin\Post::get_post_meta( $post_id ),
+			Data\Plugin\Post::get_meta( $post_id ),
 			$new_data,
 		);
 
-		Data\Plugin\Post::save_post_meta( $post_id, $data );
+		Data\Plugin\Post::save_meta( $post_id, $data );
 	}
 
 	/**
@@ -277,10 +277,10 @@ class Post {
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
-			Data\Plugin\Post::get_post_meta( $post_id ),
+			Data\Plugin\Post::get_meta( $post_id ),
 			$new_data,
 		);
 
-		Data\Plugin\Post::save_post_meta( $post_id, $data );
+		Data\Plugin\Post::save_meta( $post_id, $data );
 	}
 }

@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\Utils\normalize_generation_args;
+use function \The_SEO_Framework\normalize_generation_args;
 
 use \The_SEO_Framework\{
 	Meta,
@@ -108,7 +108,7 @@ final class Author extends Reference {
 		if ( empty( $author_id ) ) return null;
 
 		$user_data = \get_userdata( $author_id );
-		$user_meta = Data\Plugin\User::get_user_meta( $author_id );
+		$user_meta = Data\Plugin\User::get_meta( $author_id );
 
 		$entity = [
 			'@type' => static::$type,

@@ -370,8 +370,8 @@ class Image {
 					];
 					if ( ! $details['url'] ) {
 						$details = [
-							'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url' ),
-							'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id' ),
+							'url' => Data\Plugin\Post::get_meta_item( '_social_image_url' ),
+							'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id' ),
 						];
 					}
 				} else {
@@ -382,18 +382,18 @@ class Image {
 				}
 			} elseif ( Query::is_singular() ) {
 				$details = [
-					'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url' ),
-					'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id' ),
+					'url' => Data\Plugin\Post::get_meta_item( '_social_image_url' ),
+					'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id' ),
 				];
 			} elseif ( Query::is_editable_term() ) {
 				$details = [
-					'url' => Data\Plugin\Term::get_term_meta_item( 'social_image_url' ),
-					'id'  => Data\Plugin\Term::get_term_meta_item( 'social_image_id' ),
+					'url' => Data\Plugin\Term::get_meta_item( 'social_image_url' ),
+					'id'  => Data\Plugin\Term::get_meta_item( 'social_image_id' ),
 				];
 			} elseif ( \is_post_type_archive() ) {
 				$details = [
-					'url' => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url' ),
-					'id'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id' ),
+					'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url' ),
+					'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id' ),
 				];
 			}
 		}
@@ -436,13 +436,13 @@ class Image {
 
 			if ( $args['tax'] ) {
 				$details = [
-					'url' => Data\Plugin\Term::get_term_meta_item( 'social_image_url', $args['id'] ),
-					'id'  => Data\Plugin\Term::get_term_meta_item( 'social_image_id', $args['id'] ),
+					'url' => Data\Plugin\Term::get_meta_item( 'social_image_url', $args['id'] ),
+					'id'  => Data\Plugin\Term::get_meta_item( 'social_image_id', $args['id'] ),
 				];
 			} elseif ( $args['pta'] ) {
 				$details = [
-					'url' => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_url', $args['pta'] ),
-					'id'  => Data\Plugin\PTA::get_post_type_archive_meta_item( 'social_image_id', $args['pta'] ),
+					'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
+					'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
 				];
 			} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$details = [
@@ -452,14 +452,14 @@ class Image {
 
 				if ( $args['id'] && ! $details['url'] ) {
 					$details = [
-						'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url', $args['id'] ),
-						'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id', $args['id'] ),
+						'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
+						'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
 					];
 				}
 			} elseif ( $args['id'] ) {
 				$details = [
-					'url' => Data\Plugin\Post::get_post_meta_item( '_social_image_url', $args['id'] ),
-					'id'  => Data\Plugin\Post::get_post_meta_item( '_social_image_id', $args['id'] ),
+					'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
+					'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
 				];
 			}
 		}

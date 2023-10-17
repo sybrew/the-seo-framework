@@ -107,7 +107,7 @@ final class AJAX {
 		if ( isset( $_POST['val'] ) ) {
 			$value = (int) $_POST['val'];
 		} else {
-			$value = Data\Plugin\User::get_user_meta_item( 'counter_type' ) + 1;
+			$value = Data\Plugin\User::get_meta_item( 'counter_type' ) + 1;
 		}
 		$value = \absint( $value );
 
@@ -115,7 +115,7 @@ final class AJAX {
 			$value = 0;
 
 		// Update the option and get results of action.
-		Data\Plugin\User::update_single_user_meta_item( Query::get_current_user_id(), 'counter_type', $value );
+		Data\Plugin\User::update_single_meta_item( Query::get_current_user_id(), 'counter_type', $value );
 
 		// Encode and echo results. Requires JSON decode within JS.
 		\wp_send_json_success( [

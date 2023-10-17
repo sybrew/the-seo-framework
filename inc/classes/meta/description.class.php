@@ -217,16 +217,16 @@ class Description {
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' )
-					 ?: Data\Plugin\Post::get_post_meta_item( '_genesis_description' );
+					 ?: Data\Plugin\Post::get_meta_item( '_genesis_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
 		} elseif ( Query::is_singular() ) {
-			$desc = Data\Plugin\Post::get_post_meta_item( '_genesis_description' );
+			$desc = Data\Plugin\Post::get_meta_item( '_genesis_description' );
 		} elseif ( Query::is_editable_term() ) {
-			$desc = Data\Plugin\Term::get_term_meta_item( 'description' );
+			$desc = Data\Plugin\Term::get_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
-			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'description' );
+			$desc = Data\Plugin\PTA::get_meta_item( 'description' );
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
@@ -251,18 +251,18 @@ class Description {
 	public static function get_custom_description_from_args( $args ) {
 
 		if ( $args['tax'] ) {
-			$desc = Data\Plugin\Term::get_term_meta_item( 'description', $args['id'] );
+			$desc = Data\Plugin\Term::get_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
-			$desc = Data\Plugin\PTA::get_post_type_archive_meta_item( 'description', $args['pta'] );
+			$desc = Data\Plugin\PTA::get_meta_item( 'description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' )
-					 ?: Data\Plugin\Post::get_post_meta_item( '_genesis_description', $args['id'] );
+					 ?: Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
 		} elseif ( $args['id'] ) {
-			$desc = Data\Plugin\Post::get_post_meta_item( '_genesis_description', $args['id'] );
+			$desc = Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
