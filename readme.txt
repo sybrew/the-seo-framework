@@ -659,6 +659,15 @@ TODO all "Moved to" should be "Moved from"
 	-> Find origins! 164 times... ugh (most are from \The_SEO_Framework\Load, however).
 TODO also do "renamed to", should be "renamed from".
 
+TODO Test all deprecation of same kind accidentally updated via ctrl+shift+h
+	e.g. tsf()->the_same_thing() use tsf()->the_same_thing() instead.
+
+TODO fix wrong multi-line if-statement indents, find them via:
+	if \(\n\t*[a-z].*?\)\n\t[\|&]
+
+TODO add settings check  wp_attachment_pages_enabled (the attachments are still "public")
+	See https://make.wordpress.org/core/2023/10/16/changes-to-attachment-pages/
+
 **Detailed log**
 
 **For everyone:**

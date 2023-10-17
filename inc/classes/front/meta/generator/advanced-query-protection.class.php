@@ -43,7 +43,6 @@ final class Advanced_Query_Protection {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_advanced_query_protection() {

@@ -49,7 +49,6 @@ final class Webmasters {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_google_verification() {
@@ -86,7 +85,6 @@ final class Webmasters {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_bing_verification() {
@@ -123,7 +121,6 @@ final class Webmasters {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_yandex_verification() {
@@ -160,7 +157,6 @@ final class Webmasters {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_baidu_verification() {
@@ -197,7 +193,6 @@ final class Webmasters {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_pinterest_verification() {

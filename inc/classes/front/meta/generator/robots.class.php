@@ -45,7 +45,6 @@ final class Robots {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_robots() {

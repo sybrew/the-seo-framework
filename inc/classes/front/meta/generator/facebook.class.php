@@ -47,7 +47,6 @@ final class Facebook {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_article_author() {
@@ -85,7 +84,6 @@ final class Facebook {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_article_publisher() {
@@ -123,7 +121,6 @@ final class Facebook {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_facebook_app_id() {

@@ -68,24 +68,24 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 if ( Data\Plugin::get_option( 'alter_archive_query' ) ) {
 	switch ( Data\Plugin::get_option( 'alter_archive_query_type' ) ) {
 		case 'post_query':
-			\add_filter( 'the_posts', [ Query\Exclusion::class, '_alter_archive_query_post' ], 10, 2 );
+			\add_filter( 'the_posts', [ Front\Query::class, 'alter_archive_query_post' ], 10, 2 );
 			break;
 
 		case 'in_query':
 		default:
-			\add_action( 'pre_get_posts', [ Query\Exclusion::class, '_alter_archive_query_in' ], 9999, 1 );
+			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_archive_query_in' ], 9999, 1 );
 	}
 }
 
 if ( Data\Plugin::get_option( 'alter_search_query' ) ) {
 	switch ( Data\Plugin::get_option( 'alter_search_query_type' ) ) {
 		case 'post_query':
-			\add_filter( 'the_posts', [ Query\Exclusion::class, '_alter_search_query_post' ], 10, 2 );
+			\add_filter( 'the_posts', [ Front\Query::class, 'alter_search_query_post' ], 10, 2 );
 			break;
 
 		case 'in_query':
 		default:
-			\add_action( 'pre_get_posts', [ Query\Exclusion::class, '_alter_search_query_in' ], 9999, 1 );
+			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_search_query_in' ], 9999, 1 );
 	}
 }
 
@@ -94,7 +94,7 @@ if ( ! Data\Plugin::get_option( 'index_the_feed' ) )
 
 // Modify the feed.
 if (
-		Data\Plugin::get_option( 'excerpt_the_feed' )
+	   Data\Plugin::get_option( 'excerpt_the_feed' )
 	|| Data\Plugin::get_option( 'source_the_feed' )
 ) {
 	// Alter the content feed.

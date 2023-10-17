@@ -47,7 +47,6 @@ final class URI {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_canonical_url() {
@@ -66,7 +65,6 @@ final class URI {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_pagination_urls() {
@@ -131,7 +129,6 @@ final class URI {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_shortlink() {

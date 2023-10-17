@@ -50,7 +50,6 @@ final class Twitter {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_twitter_card() {
@@ -68,7 +67,6 @@ final class Twitter {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_twitter_site() {
@@ -106,7 +104,6 @@ final class Twitter {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_twitter_creator() {
@@ -144,7 +141,6 @@ final class Twitter {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_twitter_title() {
@@ -182,7 +178,6 @@ final class Twitter {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_twitter_description() {
@@ -220,7 +215,6 @@ final class Twitter {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_twitter_image() {

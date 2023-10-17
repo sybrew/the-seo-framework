@@ -45,7 +45,6 @@ final class Theme_Color {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_theme_color() {

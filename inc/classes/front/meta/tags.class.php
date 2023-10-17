@@ -68,7 +68,6 @@ final class Tags {
 	 * Returns the registered callbacks by reference.
 	 *
 	 * @since 4.3.0
-	 * @access protected
 	 * @see filter the_seo_framework_meta_generators.
 	 *
 	 * @return callable[] Callbacks, passed by reference.
@@ -81,7 +80,6 @@ final class Tags {
 	 * Returns the registered tag render data by reference.
 	 *
 	 * @since 4.3.0
-	 * @access protected
 	 * @see filter the_seo_framework_meta_render_data.
 	 *
 	 * @return array[] The meta tags, passed by reference.

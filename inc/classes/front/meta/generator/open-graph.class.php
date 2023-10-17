@@ -54,7 +54,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_type() {
@@ -72,7 +71,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_locale() {
@@ -110,7 +108,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_site_name() {
@@ -148,7 +145,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_title() {
@@ -186,7 +182,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_description() {
@@ -224,7 +219,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_url() {
@@ -261,7 +255,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_open_graph_image() {
@@ -305,7 +298,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_article_published_time() {
@@ -344,7 +336,6 @@ final class Open_Graph {
 
 	/**
 	 * @since 4.3.0
-	 * @access protected
 	 * @generator
 	 */
 	public static function generate_article_modified_time() {
