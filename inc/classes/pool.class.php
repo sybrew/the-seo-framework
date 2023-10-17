@@ -730,6 +730,27 @@ class Pool extends Legacy_API {
 	}
 
 	/**
+	 * Returns the Guidelines API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\RobotsTXT\Main
+	 */
+	public static function guidelines() {
+		return static::$pool['guidelines'] ??= new class extends Helper\Guidelines {
+			use Static_Deprecator;
+
+			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+			private $colloquial_handle     = 'tsf()->guidelines()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+		};
+	}
+
+	/**
 	 * Returns a pool of Sitemap classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *

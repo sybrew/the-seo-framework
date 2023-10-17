@@ -11,6 +11,7 @@ namespace The_SEO_Framework\Meta;
 use \The_SEO_Framework\{
 	Data,
 	Meta,
+	Helper\Guidelines,
 	Helper\Query,
 	Helper\Format\Strings,
 };
@@ -71,11 +72,11 @@ class Description {
 	 */
 	public static function get_custom_description( $args = null ) {
 
-		if ( null === $args ) {
-			$desc = static::get_custom_description_from_query();
-		} else {
+		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 			$desc = static::get_custom_description_from_args( $args );
+		} else {
+			$desc = static::get_custom_description_from_query();
 		}
 
 		/**
@@ -176,7 +177,7 @@ class Description {
 		$desc = Strings::clamp_sentence(
 			$excerpt,
 			1,
-			\tsf()->get_input_guidelines()['description'][ $type ]['chars']['goodUpper']
+			Guidelines::get_text_size_guidelines()['description'][ $type ]['chars']['goodUpper'],
 		);
 
 		/**

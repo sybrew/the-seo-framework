@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\get_query_type_from_args;
+
 use \The_SEO_Framework\Helper\Query;
 use \The_SEO_Framework\{
 	Builders,
@@ -213,12 +215,12 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// Nothing to do here...
 	if ( 'noindex' === $meta['noindex'] ) return $meta;
 
-	if ( null === $args ) {
+	if ( isset( $args ) ) {
+		if ( 'single' === get_query_type_from_args( $args ) )
+			$page_id = $args['id'];
+	} else {
 		if ( Query::is_singular() )
 			$page_id = Query::get_the_real_id();
-	} else {
-		if ( '' === $args['tax'] )
-			$page_id = $args['id'];
 	}
 
 	// No page_id was found: unsupported query.
@@ -306,16 +308,19 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 	$is_product          = false;
 	$is_product_category = false;
 
-	if ( null === $args ) {
-		$is_product          = Query::is_product();
-		$is_product_category = \function_exists( '\\is_product_category' ) && \is_product_category();
+	if ( isset( $args ) ) {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'term':
+				$is_product_category = 'product_cat' === $args['tax'];
+				break;
+			case 'single':
+				$is_product = Query::is_product( $args['id'] );
+		}
 	} else {
-		if ( $args['tax'] ) {
-			$is_product_category = 'product_cat' === $args['tax'];
-		} elseif ( $args['pta'] ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement.DetectedElseif
-			// TODO ? Which public non-page-PTA does WC have, actually?
-		} else {
-			$is_product = Query::is_product( $args['id'] );
+		if ( Query::is_product() ) {
+			$is_product = true;
+		} elseif ( \function_exists( '\\is_product_category' ) && \is_product_category() ) {
+			$is_product_category = true;
 		}
 	}
 

@@ -676,15 +676,7 @@ class URI {
 	 */
 	public static function get_redirect_url( $args = null ) {
 
-		if ( null === $args ) {
-			if ( Query::is_singular() ) {
-				$url = Data\Plugin\Post::get_post_meta_item( 'redirect' );
-			} elseif ( Query::is_editable_term() ) {
-				$url = Data\Plugin\Term::get_term_meta_item( 'redirect' );
-			} elseif ( \is_post_type_archive() ) {
-				$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect' );
-			}
-		} else {
+		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
 			if ( $args['tax'] ) {
@@ -693,6 +685,14 @@ class URI {
 				$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect', $args['pta'] );
 			} elseif ( $args['id'] ) {
 				$url = Data\Plugin\Post::get_post_meta_item( 'redirect', $args['id'] );
+			}
+		} else {
+			if ( Query::is_singular() ) {
+				$url = Data\Plugin\Post::get_post_meta_item( 'redirect' );
+			} elseif ( Query::is_editable_term() ) {
+				$url = Data\Plugin\Term::get_term_meta_item( 'redirect' );
+			} elseif ( \is_post_type_archive() ) {
+				$url = Data\Plugin\PTA::get_post_type_archive_meta_item( 'redirect' );
 			}
 		}
 

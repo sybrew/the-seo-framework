@@ -291,10 +291,10 @@ class Image {
 	 */
 	public static function generate_custom_image_details( $args = null, $context = 'social' ) {
 
-		if ( null === $args ) {
-			yield from static::generate_custom_image_details_from_query( $context );
-		} else {
+		if ( isset( $args ) ) {
 			yield from static::generate_custom_image_details_from_args( $args, $context );
+		} else {
+			yield from static::generate_custom_image_details_from_query( $context );
 		}
 	}
 
@@ -505,20 +505,7 @@ class Image {
 				'icon' => [ $generator, 'generate_site_icon_image_details' ],
 			];
 		} else {
-			if ( null === $args ) {
-				if ( Query::is_attachment() ) {
-					$cbs = [
-						'attachment' => [ $generator, 'generate_attachment_image_details' ],
-					];
-				} elseif ( Query::is_singular() ) {
-					$cbs = [
-						'featured' => [ $generator, 'generate_featured_image_details' ],
-					];
-
-					if ( 'social' === $context )
-						$cbs['content'] = [ $generator, 'generate_content_image_details' ];
-				}
-			} else {
+			if ( isset( $args ) ) {
 				if ( ! $args['tax'] && ! $args['pta'] ) {
 					if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
 						$cbs = [
@@ -532,6 +519,19 @@ class Image {
 							$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 						}
 					}
+				}
+			} else {
+				if ( Query::is_attachment() ) {
+					$cbs = [
+						'attachment' => [ $generator, 'generate_attachment_image_details' ],
+					];
+				} elseif ( Query::is_singular() ) {
+					$cbs = [
+						'featured' => [ $generator, 'generate_featured_image_details' ],
+					];
+
+					if ( 'social' === $context )
+						$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 				}
 			}
 
@@ -597,7 +597,18 @@ class Image {
 	 */
 	private static function generate_image_from_callbacks( $args, $cbs, $size, $single ) {
 
-		if ( null === $args ) {
+		if ( isset( $args ) ) {
+			foreach ( $cbs as $cb ) {
+				foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
+					$details = \tsf()->s_image_details( static::merge_extra_image_details( $details, $size ) );
+
+					if ( $details['url'] ) {
+						yield $details;
+						if ( $single ) break 2;
+					}
+				}
+			}
+		} else {
 			// Memoize the query.
 			static $m;
 
@@ -639,17 +650,6 @@ class Image {
 					}
 
 					$fiber->next();
-				}
-			}
-		} else {
-			foreach ( $cbs as $cb ) {
-				foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
-					$details = \tsf()->s_image_details( static::merge_extra_image_details( $details, $size ) );
-
-					if ( $details['url'] ) {
-						yield $details;
-						if ( $single ) break 2;
-					}
 				}
 			}
 		}

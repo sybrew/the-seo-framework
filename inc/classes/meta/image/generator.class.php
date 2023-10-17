@@ -120,13 +120,13 @@ final class Generator {
 	 */
 	public static function generate_content_image_details( $args = null ) {
 
-		if ( null === $args ) {
-			if ( Query::is_singular() ) {
-				// $GLOBALS['pages'] isn't populated here -- let's not try pagination to conserve CPU usage.
-				$content = Data\Post::get_content();
+		if ( isset( $args ) ) {
+			if ( ! $args['tax'] && ! $args['pta'] ) {
+				$content = Data\Post::get_content( $args['id'] );
 			}
-		} elseif ( ! $args['tax'] && ! $args['pta'] ) {
-			$content = Data\Post::get_content( $args['id'] );
+		} elseif ( Query::is_singular() ) {
+			// $GLOBALS['pages'] isn't populated here -- let's not try pagination to conserve CPU usage.
+			$content = Data\Post::get_content();
 		}
 
 		if ( empty( $content ) ) return;

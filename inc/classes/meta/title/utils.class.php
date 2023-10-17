@@ -103,11 +103,8 @@ class Utils {
 			// Reset filters.
 			$filtered = [];
 		} else {
-
-			if ( null === $args ) {
-				$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
-			} else {
-				isset( $args ) and normalize_generation_args( $args );
+			if ( isset( $args ) ) {
+				normalize_generation_args( $args );
 
 				if ( 'category' === $args['tax'] ) {
 					$filters = [ 'single_cat_title' ];
@@ -116,6 +113,8 @@ class Utils {
 				} else {
 					$filters = [ 'single_post_title' ];
 				}
+			} else {
+				$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];
 			}
 
 			/**

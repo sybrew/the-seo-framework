@@ -61,11 +61,11 @@ class Breadcrumbs {
 	 */
 	public static function get_breadcrumb_list( $args = null ) {
 
-		if ( null === $args ) {
-			$list = memo() ?? memo( static::get_breadcrumb_list_from_query() );
-		} else {
+		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 			$list = static::get_breadcrumb_list_from_args( $args );
+		} else {
+			$list = memo() ?? memo( static::get_breadcrumb_list_from_query() );
 		}
 
 		/**

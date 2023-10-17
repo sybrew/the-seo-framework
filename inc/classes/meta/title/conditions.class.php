@@ -56,17 +56,17 @@ final class Conditions {
 	 */
 	public static function use_protection_status( $args = null ) {
 
-		if ( null === $args ) {
-			if ( ! Query::is_singular() ) return false;
-
-			$id = Query::get_the_real_id();
-		} else {
+		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( $args['tax'] || $args['pta'] || empty( $args['id'] ) )
+			if ( empty( $args['id'] ) || $args['tax'] || $args['pta'] || $args['uid'] )
 				return false;
 
 			$id = $args['id'];
+		} else {
+			if ( ! Query::is_singular() ) return false;
+
+			$id = Query::get_the_real_id();
 		}
 
 		$post = \get_post( $id );
@@ -118,7 +118,19 @@ final class Conditions {
 
 		// Reevaluate from general title settings, overriding social.
 		if ( $use ) {
-			if ( null === $args ) {
+			if ( isset( $args ) ) {
+				normalize_generation_args( $args );
+
+				if ( $args['tax'] ) {
+					$use = static::use_term_branding( $args['id'] );
+				} elseif ( $args['pta'] ) {
+					$use = static::use_pta_branding( $args['pta'] );
+				} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+					$use = static::use_front_page_tagline();
+				} else {
+					$use = static::use_post_branding( $args['id'] );
+				}
+			} else {
 				if ( Query::is_real_front_page() ) {
 					$use = static::use_front_page_tagline();
 				} elseif ( Query::is_singular() ) {
@@ -129,18 +141,6 @@ final class Conditions {
 					$use = static::use_pta_branding();
 				} else {
 					$use = ! Data\Plugin::get_option( 'title_rem_additions' );
-				}
-			} else {
-				isset( $args ) and normalize_generation_args( $args );
-
-				if ( $args['tax'] ) {
-					$use = static::use_term_branding( $args['id'] );
-				} elseif ( $args['pta'] ) {
-					$use = static::use_pta_branding( $args['pta'] );
-				} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-					$use = static::use_front_page_tagline();
-				} else {
-					$use = static::use_post_branding( $args['id'] );
 				}
 			}
 		}

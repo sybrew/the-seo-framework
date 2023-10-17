@@ -146,6 +146,8 @@ namespace The_SEO_Framework {
 	 * Normalizes generation args to prevent PHP warnings.
 	 * This is the standard way TSF determines the type of query.
 	 *
+	 * 'uid' is reserved. It is already used in Author::build(), however.
+	 *
 	 * @since 4.3.0
 	 * @see https://github.com/sybrew/the-seo-framework/issues/640#issuecomment-1703260744.
 	 *      We made an exception about passing by reference for this function.
@@ -167,6 +169,30 @@ namespace The_SEO_Framework {
 		} else {
 			$args = null;
 		}
+	}
+
+	/**
+	 * Determines the type of request from the arguments.
+	 *
+	 * @since 4.3.0
+	 * @param array $args The query arguments. Expects indexes 'id', 'tax', 'pta', and 'uid'.
+	 * @return string The query type: 'user', 'pta', 'homeblog', 'term', or 'single'.
+	 */
+	function get_query_type_from_args( $args ) {
+
+		if ( empty( $args['id'] ) ) {
+			if ( $args['uid'] )
+				return 'user';
+
+			if ( $args['pta'] )
+				return 'pta';
+
+			return 'homeblog'; // home as page is 'single'!
+		} elseif ( $args['tax'] ) {
+			return 'term';
+		}
+
+		return 'single';
 	}
 
 	/**

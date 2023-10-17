@@ -6666,7 +6666,7 @@ final class Deprecated {
 	public function hellip_if_over( $string, $over = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->hellip_if_over()', '4.3.0', 'tsf()->format()->strings()->hellip_if_over' );
+		$tsf->_deprecated_function( 'tsf()->hellip_if_over()', '4.3.0', 'tsf()->format()->strings()->hellip_if_over()' );
 
 		return $tsf->format()->strings()->hellip_if_over( $string, $over );
 	}
@@ -6703,7 +6703,7 @@ final class Deprecated {
 	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_word_count()', '4.3.0', 'tsf()->format()->strings()->get_word_count' );
+		$tsf->_deprecated_function( 'tsf()->get_word_count()', '4.3.0', 'tsf()->format()->strings()->get_word_count()' );
 
 		return $tsf->format()->strings()->get_word_count(
 			$string,
@@ -6713,5 +6713,40 @@ final class Deprecated {
 				'short_word_length'  => $short_length,
 			]
 		);
+	}
+
+	/**
+	 * Returns the title and description input guideline table, for
+	 * (Google) search, Open Graph, and Twitter.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 1. Now gives different values for various WordPress locales.
+	 *              2. Added $locale input parameter.
+	 *
+	 * @param ?string $locale The locale to test. If empty, it will be auto-determined.
+	 * @return array
+	 */
+	public function get_input_guidelines( $locale = null ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_input_guidelines()', '4.3.0', 'tsf()->guidelines()->get_text_size_guidelines()' );
+
+		return $tsf->guidelines()->get_text_size_guidelines( $locale );
+	}
+
+	/**
+	 * Returns the title and description input guideline explanatory table.
+	 *
+	 * @since 3.1.0
+	 * @since 4.0.0 Now added a short leading-dot version for ARIA labels.
+	 *
+	 * @return array
+	 */
+	public function get_input_guidelines_i18n() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_input_guidelines_i18n()', '4.3.0', 'tsf()->guidelines()->get_text_size_guidelines_i18n()' );
+
+		return $tsf->guidelines()->get_input_guidelines_i18n();
 	}
 }

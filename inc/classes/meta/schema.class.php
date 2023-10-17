@@ -87,15 +87,15 @@ class Schema {
 	 */
 	public static function get_generated_graph( $args = null ) {
 
-		if ( null === $args ) {
-			if ( Data\Post::is_protected() ) {
+		if ( isset( $args ) ) {
+			normalize_generation_args( $args );
+
+			if ( ! $args['tax'] && ! $args['pta'] && Data\Post::is_protected( $args['id'] ) ) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}
 		} else {
-			normalize_generation_args( $args );
-
-			if ( ! $args['tax'] && ! $args['pta'] && Data\Post::is_protected( $args['id'] ) ) {
+			if ( Data\Post::is_protected() ) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}

@@ -161,11 +161,11 @@ class Title {
 	 */
 	public static function get_bare_custom_title( $args = null ) {
 
-		if ( null === $args ) {
-			$title = static::get_custom_title_from_query();
-		} else {
+		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 			$title = static::get_custom_title_from_args( $args );
+		} else {
+			$title = static::get_custom_title_from_query();
 		}
 
 		/**
@@ -765,15 +765,15 @@ class Title {
 	 */
 	public static function add_branding( $title, $args = null ) {
 
-		if ( null === $args ) {
-			if ( Query::is_real_front_page() ) {
+		if ( isset( $args ) ) {
+			normalize_generation_args( $args );
+
+			if ( ! $args['tax'] && ! $args['pta'] && Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$addition    = static::get_addition_for_front_page();
 				$seplocation = static::get_addition_location_for_front_page();
 			}
 		} else {
-			normalize_generation_args( $args );
-
-			if ( ! $args['tax'] && ! $args['pta'] && Query::is_real_front_page_by_id( $args['id'] ) ) {
+			if ( Query::is_real_front_page() ) {
 				$addition    = static::get_addition_for_front_page();
 				$seplocation = static::get_addition_location_for_front_page();
 			}
@@ -834,13 +834,13 @@ class Title {
 	 */
 	public static function add_protection_status( $title, $args = null ) {
 
-		if ( null === $args ) {
-			$id  = Query::get_the_real_id();
-			$add = Query::is_singular();
-		} else {
+		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 			$id  = $args['id'];
 			$add = ! $args['tax'] && ! $args['pta'];
+		} else {
+			$id  = Query::get_the_real_id();
+			$add = Query::is_singular();
 		}
 
 		if ( ! $add ) return $title;

@@ -91,7 +91,27 @@ final class WebPage extends Reference {
 		if ( Data\Plugin::get_option( 'ld_json_breadcrumbs' ) )
 			$entity['breadcrumb'] = &BreadcrumbList::get_dynamic_ref();
 
-		if ( null === $args ) {
+		if ( isset( $args ) ) {
+			normalize_generation_args( $args );
+
+			if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
+				$entity['potentialAction'] = [
+					'@type'  => 'ReadAction',
+					'target' => Meta\URI::get_canonical_url( $args ),
+				];
+
+				if ( Query::is_static_front_page( $args['id'] ) && Data\Plugin::get_option( 'knowledge_output' ) )
+					$entity['about'] = &Organization::get_dynamic_ref();
+
+				if ( Query::is_single( $args['id'] ) ) {
+					$entity['datePublished'] = Data\Post::get_published_time( $args['id'] );
+					$entity['dateModified']  = Data\Post::get_modified_time( $args['id'] );
+					$entity['author']        = &Author::get_dynamic_ref( [
+						'uid' => Query::get_post_author_id( $args['id'] ),
+					] );
+				}
+			}
+		} else {
 			if ( Query::is_singular() ) {
 				$entity['potentialAction'] = [
 					'@type'  => 'ReadAction',
@@ -113,26 +133,6 @@ final class WebPage extends Reference {
 				static::$type = 'CollectionPage';
 			} elseif ( Query::is_search() ) {
 				static::$type = [ 'CollectionPage', 'SearchResultsPage' ];
-			}
-		} else {
-			normalize_generation_args( $args );
-
-			if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
-				$entity['potentialAction'] = [
-					'@type'  => 'ReadAction',
-					'target' => Meta\URI::get_canonical_url( $args ),
-				];
-
-				if ( Query::is_static_front_page( $args['id'] ) && Data\Plugin::get_option( 'knowledge_output' ) )
-					$entity['about'] = &Organization::get_dynamic_ref();
-
-				if ( Query::is_single( $args['id'] ) ) {
-					$entity['datePublished'] = Data\Post::get_published_time( $args['id'] );
-					$entity['dateModified']  = Data\Post::get_modified_time( $args['id'] );
-					$entity['author']        = &Author::get_dynamic_ref( [
-						'uid' => Query::get_post_author_id( $args['id'] ),
-					] );
-				}
 			}
 		}
 

@@ -59,18 +59,16 @@ final class Author extends Reference {
 	 */
 	private static function get_author_id_from_args( $args ) {
 
-		if ( null === $args ) {
-			$author_id = Query::get_post_author_id();
-		} else {
-			if ( isset( $args['uid'] ) ) {
-				$author_id = $args['uid'];
-			} else {
-				normalize_generation_args( $args );
+		if ( isset( $args ) ) {
+			normalize_generation_args( $args );
 
-				if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
-					$author_id = Query::get_post_author_id( $args['id'] );
-				}
+			if ( $args['uid'] ) {
+				$author_id = $args['uid'];
+			} elseif ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
+				$author_id = Query::get_post_author_id( $args['id'] );
 			}
+		} else {
+			$author_id = Query::get_post_author_id();
 		}
 
 		return $author_id ?? 0;

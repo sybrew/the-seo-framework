@@ -14,10 +14,13 @@ use \The_SEO_Framework\{
 	Data,
 	Meta,
 	RobotsTXT,
-	Helper\Format\Strings,
-	Helper\Query,
-	Helper\Taxonomies,
 	Admin\SEOBar\Builder,
+};
+use \The_SEO_Framework\Helper\{
+	Guidelines,
+	Format\Strings,
+	Query,
+	Taxonomies,
 };
 
 /**
@@ -64,10 +67,10 @@ final class Term extends Main {
 	 */
 	protected function prime_cache() {
 		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
-		static::get_cache( 'general/i18n/inputguidelines' )
+		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
-				'general/i18n/inputguidelines',
-				\tsf()->get_input_guidelines_i18n()
+				'general/i18n/textsizeguidelines',
+				Guidelines::get_text_size_guidelines_i18n()
 			);
 
 		static::get_cache( 'general/detect/robotsglobal' )
@@ -313,8 +316,10 @@ final class Term extends Main {
 			)
 		);
 
-		$guidelines      = \tsf()->get_input_guidelines( $this->query_cache['states']['locale'] )['title']['search']['chars'];
-		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
+		$guidelines      = Guidelines::get_text_size_guidelines(
+			$this->query_cache['states']['locale']
+		)['title']['search']['chars'];
+		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
 		if ( $title_len < $guidelines['lower'] ) {
 			$item['status'] = Builder::STATE_BAD;
@@ -493,8 +498,10 @@ final class Term extends Main {
 			}
 		}
 
-		$guidelines      = \tsf()->get_input_guidelines( $this->query_cache['states']['locale'] )['description']['search']['chars'];
-		$guidelines_i18n = static::get_cache( 'general/i18n/inputguidelines' );
+		$guidelines      = Guidelines::get_text_size_guidelines(
+			$this->query_cache['states']['locale']
+		)['description']['search']['chars'];
+		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
 		$desc_len = mb_strlen(
 			html_entity_decode(

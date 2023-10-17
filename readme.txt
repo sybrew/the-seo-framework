@@ -508,11 +508,6 @@ TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages
 
 TODO update "https://kb.theseoframework.com/kb/data-stored-in-your-database/".
 
-TODO convert null === $args to isset( $args ) and switch conditions?
-	-> This is tedious (29+ instances)
-	-> 3~7% faster though https://3v4l.org/p9CMP.
-		-> probably is because we do not need to create a null object every time.
-
 TODO These are better names for filters. Use these throughout and deprecate the rest?
 	-> It'll finally save me a naming headache.
 	1. the_seo_framework_custom_image_details
@@ -970,6 +965,7 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 	* **Added:**
 		* `The_SEO_Framework\is_headless()` is now available. Use this in favor of `\tsf()->is_headless`, which is now deprecated.
 		* `The_SEO_Framework\normalize_generation_args()` is now available.
+		* `The_SEO_Framework\get_query_type_from_args()` is now available. This is to quickly determine the type from all generation arguments.
 	* **Changed:**
 		* `tsf()` and `the_seo_framework()` will now always return TSF's object -- even if the plugin isn't fully initialized. We can now do this because the hook loader has been moved from the class instance.
 * **Object notes:**
@@ -986,8 +982,8 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 			* It was a helper class with complex generators. We doubt anyone used this directly.
 		* Class `The_SEO_Framework\Builders\Sitemap\Main` is now gone. It was deprecated since TSF 4.2.0.
 	* **Existing objects:**
-		* Class `\The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
-		* For class `\The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
+		* Class `The_SEO_Framework\Internal\Debug` is now marked private. It was never meant to be public.
+		* For class `The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 			* **This class can no longer be instantiated via the new keyword.**
 			* **Methods added:**
 				* `detect_multilingual_plugins()` TODO ehh, this will vanish.
@@ -1011,7 +1007,7 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `query_supports_seo()`
 					1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 					2. Added `is_customize_preview()` as unsupported.
-					3. Moved to `\The_SEO_Framework\Helper\Query`.
+					3. Moved to `The_SEO_Framework\Helper\Query`.
 					4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`, this is now being handled by `_init_tsf()`.
 				* `_init_sitemap()` is no longer called act action `template_redirect`, but at `parse_request` at priority `15`, now using callback `[ Sitemap\Registry::class, '_init' ]`. This prevents loading the main query.
 					* This makes loading the sitemap anywhere from barely noticeable to thousands of times faster, depending on which other plugins and themes you have installed.
@@ -1321,8 +1317,10 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `gmt2date()`, use `gmdate` instead.
 				* `get_timestamp_format()`, use `tsf()->format()->time()->get_preferred_format()` instead.
 				* `uses_time_in_timestamp_format()`, with no alternative available.
-				* `hellip_if_over()`, use `tsf()->format()->strings()->hellip_if_over` instead.
-				* `get_word_count()`, use `tsf()->format()->strings()->get_word_count` instead.
+				* `hellip_if_over()`, use `tsf()->format()->strings()->hellip_if_over()` instead.
+				* `get_word_count()`, use `tsf()->format()->strings()->get_word_count()` instead.
+				* `get_input_guidelines()`, use `tsf()->guidelines()->get_text_size_guidelines()` instead.
+				* `get_input_guidelines_i18n()`, use `tsf()->guidelines()->get_text_size_guidelines_i18n()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1338,7 +1336,7 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 					* `init_admin_actions()`
 					* `init_alter_search_query()`
 					* `init_alter_archive_query()`
-				* Since we rebuilt `\The_SEO_Framework\Generate_Ldjson` and reworked the settings, these are removed:
+				* Since we rebuilt `The_SEO_Framework\Generate_Ldjson` and reworked the settings, these are removed:
 					* `build_json_data`
 					* `receive_json_data`
 					* `render_ld_json_scripts`
@@ -1356,7 +1354,7 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 					* `enable_ld_json_searchbox`
 					* `enable_ld_json_knowledge`
 					* `ld_json`
-				* Since we moved class `\The_SEO_Framework\Cache`'s functionality from this object, these are removed:
+				* Since we moved class `The_SEO_Framework\Cache`'s functionality from this object, these are removed:
 					* `init_admin_caching_actions()`
 					* `init_post_cache_actions()`
 					* `set_plugin_check_caches()`
@@ -1451,7 +1449,8 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 				* `inpost_nonce_field`, you should make a custom check.
 			* **Properties removed:**
 				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
-		* Class `\The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.
+		* Class `The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.
+			TODO list all others
 * **Constant notes:**
 	* **Added:**
 		* `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` is now available.

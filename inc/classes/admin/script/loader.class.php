@@ -16,6 +16,7 @@ use \The_SEO_Framework\{
 	Meta,
 };
 use \The_SEO_Framework\Helper\{
+	Guidelines,
 	Format\Arrays,
 	Query,
 	Taxonomies,
@@ -818,10 +819,10 @@ class Loader {
 				'l10n'     => [
 					'name' => 'tsfCL10n',
 					'data' => [
-						'guidelines'  => \tsf()->get_input_guidelines(),
+						'guidelines'  => Guidelines::get_text_size_guidelines(),
 						'counterType' => \absint( Data\Plugin\User::get_user_meta_item( 'counter_type' ) ),
 						'i18n'        => [
-							'guidelines' => \tsf()->get_input_guidelines_i18n(),
+							'guidelines' => Guidelines::get_text_size_guidelines_i18n(),
 							/* translators: Pixel counter. 1: number (value), 2: number (guideline) */
 							'pixelsUsed' => \esc_attr__( '%1$d out of %2$d pixels are used.', 'autodescription' ),
 						],
