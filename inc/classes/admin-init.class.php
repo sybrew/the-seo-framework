@@ -46,26 +46,6 @@ use \The_SEO_Framework\Data;
 class Admin_Init extends Pool {
 
 	/**
-	 * Checks ajax referred set by set_js_nonces based on capability.
-	 *
-	 * Performs die() on failure.
-	 *
-	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
-	 * @access private
-	 *         It uses an internally and manually created prefix.
-	 * @uses WP Core check_ajax_referer()
-	 * @see @link https://developer.wordpress.org/reference/functions/check_ajax_referer/
-	 *
-	 * @param string $capability The capability that was required for the nonce check to be created.
-	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
-	 *                   and generated between 0-12 hours ago, 2 if the nonce is
-	 *                   valid and generated between 12-24 hours ago.
-	 */
-	public function _check_tsf_ajax_referer( $capability ) {
-		return \check_ajax_referer( "tsf-ajax-$capability", 'nonce', true );
-	}
-
-	/**
 	 * Redirect the user to an admin page, and add query args to the URL string
 	 * for alerts, etc.
 	 *

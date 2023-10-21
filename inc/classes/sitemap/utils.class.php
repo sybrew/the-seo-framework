@@ -33,7 +33,7 @@ use \The_SEO_Framework\Data,
  */
 
 /**
- * Various utility functionality for sitemaps.
+ * Holds various utility functionality for sitemaps.
  *
  * @since 4.3.0
  * @access protected

@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin\AJAX;
+use \The_SEO_Framework\Admin\Script\AJAX;
 
 /**
  * The SEO Framework plugin

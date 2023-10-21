@@ -1,10 +1,10 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\AJAX
- * @subpackage The_SEO_Framework\Feed
+ * @package The_SEO_Framework\Classes\Admin\Script\AJAX
+ * @subpackage The_SEO_Framework\Scripts
  */
 
-namespace The_SEO_Framework\Admin;
+namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
@@ -93,12 +93,8 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
-		\tsf()->_check_tsf_ajax_referer( 'edit_posts' );
-
-		// If current user isn't allowed to edit posts, don't do anything and kill PHP.
-		if ( ! \current_user_can( 'edit_posts' ) )
-			\wp_send_json_error();
+		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_referer() does this.
+		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		/**
 		 * Count up, reset to 0 if needed. We have 4 options: 0, 1, 2, 3
@@ -152,10 +148,10 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer does this.
-		\tsf()->_check_tsf_ajax_referer( 'upload_files' );
+		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_referer does this.
+		Utils::check_ajax_capability_referer( 'upload_files' );
 
-		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
+		if ( ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
 
 		$attachment_id = \absint( $_POST['id'] );
@@ -269,8 +265,8 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- _check_tsf_ajax_referer() does this.
-		\tsf()->_check_tsf_ajax_referer( 'edit_posts' );
+		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_referer() does this.
+		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		$post_id = \absint( $_POST['post_id'] );
 

@@ -52,6 +52,7 @@ use \The_SEO_Framework\Helper\{
  * @access private
  */
 class Loader {
+
 	/**
 	 * Initializes scripts based on admin query.
 	 *
@@ -142,38 +143,6 @@ class Loader {
 	}
 
 	/**
-	 * Decodes entities of a string.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @param mixed $value If string, it'll be decoded.
-	 * @return mixed
-	 */
-	public static function decode_entities( $value ) {
-		return $value && \is_string( $value ) ? html_entity_decode( $value, \ENT_QUOTES, 'UTF-8' ) : $value;
-	}
-
-	/**
-	 * Decodes all entities of the input.
-	 *
-	 * @since 4.0.0
-	 * @uses static::decode_entities();
-	 *
-	 * @param mixed $values The entries to decode.
-	 * @return mixed
-	 */
-	public static function decode_all_entities( $values ) {
-
-		if ( \is_scalar( $values ) )
-			return static::decode_entities( $values );
-
-		foreach ( $values as &$v )
-			$v = static::decode_entities( $v );
-
-		return $values;
-	}
-
-	/**
 	 * Prepares WordPress Media scripts.
 	 *
 	 * @since 4.0.0
@@ -232,12 +201,12 @@ class Loader {
 						'nonces' => [
 							/**
 							 * Use THE_SEO_FRAMEWORK_SETTINGS_CAP ?... might conflict with other nonces.
+							 * -> Just add it to the end, if it matches the existing ones, that's fine (just double work).
+							 * If we do this, also add it to "states" or something.
 							 */
-							// unused.
-							'manage_options' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsf-ajax-manage_options' ) : false,
-							// unused.
-							'upload_files'   => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
-							'edit_posts'     => \current_user_can( 'edit_posts' ) ? \wp_create_nonce( 'tsf-ajax-edit_posts' ) : false,
+							'manage_options' => Utils::create_ajax_capability_nonce( 'manage_options' ), // unused
+							'upload_files'   => Utils::create_ajax_capability_nonce( 'upload_files' ), // unused
+							'edit_posts'     => Utils::create_ajax_capability_nonce( 'edit_posts' ),
 						],
 						'states' => [
 							'debug' => \SCRIPT_DEBUG,
@@ -523,7 +492,7 @@ class Loader {
 					'data' => [
 						'params' => [
 							'additionsForcedDisabled' => $additions_forced_disabled,
-							'termPrefix'              => static::decode_entities( $term_prefix ),
+							'termPrefix'              => Utils::decode_entities( $term_prefix ),
 						],
 					],
 				],
@@ -613,7 +582,7 @@ class Loader {
 							'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
 						],
 					],
-					'nonce'  => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsf-ajax-upload_files' ) : false,
+					'nonce'  => Utils::create_ajax_capability_nonce( 'upload_files' ),
 				],
 			],
 		];
@@ -640,18 +609,18 @@ class Loader {
 				'name' => 'tsfTitleL10n',
 				'data' => [
 					'states' => [
-						'titleSeparator'  => static::decode_entities( Meta\Title::get_separator() ),
+						'titleSeparator'  => Utils::decode_entities( Meta\Title::get_separator() ),
 						'prefixPlacement' => \is_rtl() ? 'after' : 'before',
 					],
 					'params' => [
-						'untitledTitle'  => static::decode_entities( Meta\Title::get_untitled_title() ),
+						'untitledTitle'  => Utils::decode_entities( Meta\Title::get_untitled_title() ),
 						'stripTitleTags' => (bool) Data\Plugin::get_option( 'title_strip_tags' ),
 					],
 					'i18n'   => [
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-						'privateTitle'   => static::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
+						'privateTitle'   => Utils::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
 						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
-						'protectedTitle' => static::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
+						'protectedTitle' => Utils::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
 					],
 				],
 			],

@@ -488,6 +488,9 @@ function (.*?)\(([\w\W](?!\1\())*?\}
 // Find broken replacements
 ^(?!use|namespace|\s*\t*\*)(.(?!@|Class|new|'))*?[_A-Za-z\\]*The_SEO_Framework\\(?!has_run|ROBOTS|_|Utils)([^:{](?! as ))*$
 
+// Do not import and rename, that'll cause headaches down the line. Find the renaming imports via:
+^use .*?\\\{[\w\W]* as [^\}]*\};
+
 TODO find mismatch memo ?? umemo (notice extra u)
 TODO remove 3+ @since in Deprecated.class to reduce filesize.
 
