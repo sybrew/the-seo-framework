@@ -124,7 +124,7 @@ switch ( $instance ) :
 			<?php
 			$_post_meta_title = $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
-			\tsf()->output_js_title_data(
+			Input::output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
 				[
 					'state' => [
@@ -171,7 +171,7 @@ switch ( $instance ) :
 		<p>
 			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_description' ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin::get_option( 'homepage_description' ) ) ?></textarea>
 			<?php
-			\tsf()->output_js_description_data(
+			Input::output_js_description_data(
 				Input::get_field_id( 'homepage_description' ),
 				[
 					'state' => [
@@ -282,7 +282,7 @@ switch ( $instance ) :
 
 		$image_placeholder = $custom_image ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 
-		\tsf()->output_js_social_data(
+		Input::output_js_social_data(
 			'homepage_social_settings',
 			[
 				'og' => [

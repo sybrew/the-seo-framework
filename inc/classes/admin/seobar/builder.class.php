@@ -260,8 +260,7 @@ final class Builder {
 	 */
 	private static function generate_seo_bar_blocks( $items ) {
 
-		static $gettext;
-		static $use_symbols;
+		static $gettext, $use_symbols;
 
 		$gettext ??= [
 			/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */

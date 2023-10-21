@@ -1320,6 +1320,9 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* `get_word_count()`, use `tsf()->format()->strings()->get_word_count()` instead.
 				* `get_input_guidelines()`, use `tsf()->guidelines()->get_text_size_guidelines()` instead.
 				* `get_input_guidelines_i18n()`, use `tsf()->guidelines()->get_text_size_guidelines_i18n()` instead.
+				* `output_js_title_data()`, with no alternative available.
+				* `output_js_social_data()`, with no alternative available.
+				* `output_js_description_data()`, with no alternative available.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

@@ -13,6 +13,7 @@ use const \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 use \The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
+	Input,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -161,7 +162,7 @@ $robots_settings = [
 				<div class=tsf-title-wrap>
 					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( $title ) ) ?>" size=40 autocomplete=off data-form-type=other />
 					<?php
-					\tsf()->output_js_title_data(
+					Input::output_js_title_data(
 						'autodescription-meta[doctitle]',
 						[
 							'state' => [
@@ -209,7 +210,7 @@ $robots_settings = [
 			<td>
 				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= \tsf()->escape_text( \tsf()->sanitize_text( $description ) ) ?></textarea>
 				<?php
-				\tsf()->output_js_description_data(
+				Input::output_js_description_data(
 					'autodescription-meta[description]',
 					[
 						'state' => [
@@ -228,7 +229,7 @@ $robots_settings = [
 <h2><?php \esc_html_e( 'Social SEO Settings', 'autodescription' ); ?></h2>
 <?php
 
-\tsf()->output_js_social_data(
+Input::output_js_social_data(
 	'autodescription_social_tt',
 	[
 		'og' => [

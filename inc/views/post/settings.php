@@ -16,6 +16,7 @@ use const \The_SEO_Framework\{
 use \The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
+	Input,
 };
 use \The_SEO_Framework\Helper\{
 	Post_Types,
@@ -165,7 +166,7 @@ switch ( $instance ) :
 				<div class=tsf-title-wrap>
 					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
-					\tsf()->output_js_title_data(
+					Input::output_js_title_data(
 						'autodescription_title',
 						[
 							'state' => [
@@ -233,7 +234,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_description' ) ) ) ?></textarea>
 				<?php
-				\tsf()->output_js_description_data(
+				Input::output_js_description_data(
 					'autodescription_description',
 					[
 						'state' => [
@@ -475,7 +476,7 @@ switch ( $instance ) :
 			];
 		}
 
-		\tsf()->output_js_social_data(
+		Input::output_js_social_data(
 			'autodescription_social_singular',
 			[
 				'og' => [

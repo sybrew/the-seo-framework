@@ -210,7 +210,7 @@ switch ( $instance ) :
 			[ , $_prefix_value, $_default_title ] =
 				Meta\Title::get_archive_title_list( $pto );
 
-			\tsf()->output_js_title_data(
+			Input::output_js_title_data(
 				Input::get_field_id( $args['options']['doctitle'] ),
 				[
 					'state' => [
@@ -269,7 +269,7 @@ switch ( $instance ) :
 		<p>
 			<textarea name="<?php Input::field_name( $args['options']['description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['description'] ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin\PTA::get_meta_item( 'description', $args['post_type'] ) ) ?></textarea>
 			<?php
-			\tsf()->output_js_description_data(
+			Input::output_js_description_data(
 				Input::get_field_id( $args['options']['description'] ),
 				[
 					'state' => [
@@ -285,7 +285,7 @@ switch ( $instance ) :
 		break;
 	case 'social':
 		[ , $args ] = $view_args;
-		\tsf()->output_js_social_data(
+		Input::output_js_social_data(
 			"pta_social_settings_{$args['post_type']}",
 			[
 				'og' => [

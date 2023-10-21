@@ -10,7 +10,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\Form;
+use \The_SEO_Framework\Admin\Settings\Layout\{
+	Form,
+	Input,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -89,7 +92,7 @@ $robots_settings = [
 			<div class="tsf-pad-input tsf-title-wrap">
 				<input type=text id=autodescription-quick[doctitle] name=autodescription-quick[doctitle] value />
 				<?php
-				\tsf()->output_js_title_data( 'autodescription-quick[doctitle]', [] );
+				Input::output_js_title_data( 'autodescription-quick[doctitle]', [] );
 				?>
 			</div>
 		</div>
@@ -106,7 +109,7 @@ $robots_settings = [
 			<div class=tsf-pad-input>
 				<textarea id=autodescription-quick[description] name=autodescription-quick[description] rows=3 cols=22></textarea>
 				<?php
-				\tsf()->output_js_description_data( 'autodescription-quick[description]', [] );
+				Input::output_js_description_data( 'autodescription-quick[description]', [] );
 				?>
 			</div>
 		</div>

@@ -6766,4 +6766,51 @@ final class Deprecated {
 
 		return $tsf->guidelines()->get_input_guidelines_i18n();
 	}
+
+	/**
+	 * Outputs reference description HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 4.1.0
+	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $id The input ID.
+	 * @param array  $data The input data.
+	 */
+	public function output_js_title_data( $id, $data ) {
+		\tsf()->_deprecated_function( 'tsf()->output_js_title_data()', '4.3.0' );
+		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_title_data( $id, $data );
+	}
+
+	/**
+	 * Outputs reference social HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string       $group    The social input group ID.
+	 * @param array[og,tw] $settings The input settings data.
+	 */
+	public function output_js_social_data( $group, $settings ) {
+		\tsf()->_deprecated_function( 'tsf()->output_js_social_data()', '4.3.0' );
+		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_social_data( $group, $settings );
+	}
+
+	/**
+	 * Outputs reference description HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 4.1.0
+	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $id   The description input ID.
+	 * @param array  $data The input data.
+	 */
+	public function output_js_description_data( $id, $data ) {
+		\tsf()->_deprecated_function( 'tsf()->output_js_description_data()', '4.3.0' );
+		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_social_data( $id, $data );
+	}
 }
