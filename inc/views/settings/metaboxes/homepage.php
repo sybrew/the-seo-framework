@@ -15,6 +15,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 };
 
 use \The_SEO_Framework\Helper\{
+	Compatibility,
 	Format\Markdown,
 	Query,
 };
@@ -48,7 +49,7 @@ switch ( $instance ) :
 	case 'main':
 		HTML::description( \__( 'These settings will take precedence over the settings set within the homepage edit screen, if any.', 'autodescription' ) );
 
-		if ( \tsf()->detect_multilingual_plugins() ) {
+		if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
 			$_multilingual_warning = \esc_html__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' );
 			if ( $home_id ) {
 				$_multilingual_warning .= '<br>' . Markdown::convert(

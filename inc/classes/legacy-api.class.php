@@ -33,8 +33,14 @@ use function \The_SEO_Framework\memo;
  * Holds various functions that relay to the new APIs.
  *
  * @since 4.3.0
+ * You can access these methods via `tsf()` and `the_seo_framework()`.
  */
-class Legacy_API extends Core {
+class Legacy_API {
+
+	/**
+	 * Calling any top file without __construct() is forbidden.
+	 */
+	private function __construct() { }
 
 	/**
 	 * Return SEO options from the SEO options database.

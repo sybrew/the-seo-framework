@@ -54,4 +54,25 @@ class Scripts extends \The_SEO_Framework\Admin\Script\Registry {
 	public static function prepare() {
 		static::register_scripts_and_hooks();
 	}
+
+	/**
+	 * Verifies template view inclusion secret.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @ignore
+	 * @deprecated
+	 *
+	 * @example template file header:
+	 * `defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;`
+	 *
+	 * @param string $secret The passed secret.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function verify( $secret ) { // phpcs:ignore, deprecated.
+		// \The_SEO_Framework\Admin\Template::verify_secret( $secret );
+		// They've been given $_secret, not $secret. This is not a security issue.
+		// For an explanation, see `\The_SEO_Framework\Admin\Template::output_view()`.
+		return true;
+	}
 }

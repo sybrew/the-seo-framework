@@ -13,8 +13,10 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-
-use \The_SEO_Framework\Helper\Post_Types;
+use \The_SEO_Framework\Helper\{
+	Compatibility,
+	Post_Types,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -144,7 +146,7 @@ switch ( $instance ) :
 				</div>
 				<div class=tsf-post-type-archive-if-not-excluded>
 					<?php
-					if ( \tsf()->detect_multilingual_plugins() ) {
+					if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
 						HTML::attention(
 							\__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' )
 						);

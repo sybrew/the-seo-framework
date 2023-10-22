@@ -90,9 +90,6 @@ trait Static_Deprecator {
 				),
 				$this->colloquial_handle
 			);
-
-			if ( $deprecated['fallback'] )
-				return $deprecated['fallback'];
 		} else {
 			/**
 			 * For now, no deprecation is being handled; as no properties have been deprecated. Just removed.

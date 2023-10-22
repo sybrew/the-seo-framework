@@ -13,7 +13,10 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Helper\Format\Markdown;
+use \The_SEO_Framework\Helper\{
+	Compatibility,
+	Format\Markdown,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -81,6 +84,7 @@ switch ( $instance ) :
 		HTML::header_title( \__( 'Social Meta Tags Settings', 'autodescription' ) );
 		HTML::description( \__( 'Output various meta tags for social site integration, among other third-party services.', 'autodescription' ) );
 
+		$active_conflicting_plugins_types = Compatibility::get_active_conflicting_plugin_types();
 		?>
 		<hr>
 		<?php
@@ -94,7 +98,7 @@ switch ( $instance ) :
 			] ),
 			true
 		);
-		if ( \tsf()->detect_og_plugin() )
+		if ( $active_conflicting_plugins_types['open_graph'] )
 			HTML::attention_description( \__( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
 		// Echo Facebook Tags checkbox.
@@ -116,7 +120,7 @@ switch ( $instance ) :
 			] ),
 			true
 		);
-		if ( \tsf()->detect_twitter_card_plugin() )
+		if ( $active_conflicting_plugins_types['twitter_card'] )
 			HTML::attention_description( \__( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
 		// Echo oEmbed scripts checkboxes.

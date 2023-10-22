@@ -42,7 +42,7 @@ if ( \function_exists( 'tsf_extension_manager' )
 		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
 	);
 } else {
-	$_extensions_button = \tsf()->_display_extension_suggestions() ? sprintf(
+	$_extensions_button = Admin\Utils::display_extension_suggestions() ? sprintf(
 		'<a href="%s" class=button rel="noreferrer noopener" target=_blank>%s</a>',
 		'https://theseoframework.com/?p=3599',
 		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )

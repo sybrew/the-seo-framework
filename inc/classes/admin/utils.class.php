@@ -99,4 +99,19 @@ class Utils {
 
 		exit;
 	}
+
+	/**
+	 * Whether to display Extension Manager suggestions to the user based on several conditions.
+	 *
+	 * @since 4.2.4
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `_display_extension_suggestions`.
+	 * @uses TSF_DISABLE_SUGGESTIONS Set that to true if you don't like us.
+	 *
+	 * @return bool
+	 */
+	public static function display_extension_suggestions() {
+		return \current_user_can( 'install_plugins' )
+			&& ! ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && \TSF_DISABLE_SUGGESTIONS );
+	}
 }

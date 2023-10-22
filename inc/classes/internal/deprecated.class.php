@@ -7140,4 +7140,109 @@ final class Deprecated {
 
 		return $tsf->data()->blog()->get_active_plugins();
 	}
+
+	/**
+	 * Filterable list of conflicting plugins.
+	 *
+	 * @since 2.6.0
+	 * @credits Jetpack for most code.
+	 *
+	 * @return array List of conflicting plugins.
+	 */
+	public function conflicting_plugins() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->conflicting_plugins()', '4.3.0' );
+
+		return \The_SEO_Framework\Helper\get_conflicting_plugins();
+	}
+
+	/**
+	 * Fetches type of conflicting plugins.
+	 *
+	 * @since 2.6.0
+	 * @since 4.2.0 Now always runs the filter, even when $type is not registered.
+	 *
+	 * @param string $type The Key from $this->conflicting_plugins()
+	 * @return array
+	 */
+	public function get_conflicting_plugins( $type = 'seo_tools' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_conflicting_plugins()', '4.3.0' );
+
+		return \The_SEO_Framework\Helper\get_conflicting_plugins()[ $type ] ?? [];
+	}
+
+	/**
+	 * Determines if other SEO plugins are active.
+	 * Memoizes the return value.
+	 *
+	 * @since 1.3.0
+	 * @since 2.6.0 Uses new style detection.
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 *
+	 * @return bool SEO plugin detected.
+	 */
+	public function detect_seo_plugins() {
+		\tsf()->_deprecated_function( 'tsf()->detect_seo_plugins()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['seo_tools'];
+	}
+
+	/**
+	 * Determines if other Open Graph or SEO plugins are active.
+	 * Memoizes the return value.
+	 *
+	 * @since 1.3.0
+	 * @since 2.8.0 No longer checks for old style filter.
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 *
+	 * @return bool True if OG or SEO plugin detected.
+	 */
+	public function detect_og_plugin() {
+		\tsf()->_deprecated_function( 'tsf()->detect_og_plugin()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['open_graph'];
+	}
+
+	/**
+	 * Determines if other Twitter Card plugins are active.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.6.0
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 *
+	 * @return bool Twitter Card plugin detected.
+	 */
+	public function detect_twitter_card_plugin() {
+		\tsf()->_deprecated_function( 'tsf()->detect_twitter_card_plugin()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['twitter_card'];
+	}
+
+	/**
+	 * Determines if other Schema.org LD+Json plugins are active.
+	 *
+	 * @since 1.3.0
+	 * @since 2.6.1 Always return false. Let other plugin authors decide its value.
+	 * @TODO Make a list of plugins, so the users are well-informed.
+	 *
+	 * @return bool Whether another Schema.org plugin is active.
+	 */
+	public function has_json_ld_plugin() {
+		\tsf()->_deprecated_function( 'tsf()->has_json_ld_plugin()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['schema'];
+	}
+
+	/**
+	 * Determines if other Sitemap plugins are active.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.1.0
+	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 *
+	 * @return bool
+	 */
+	public function detect_sitemap_plugin() {
+		\tsf()->_deprecated_function( 'tsf()->detect_sitemap_plugin()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['sitemaps'];
+	}
 }

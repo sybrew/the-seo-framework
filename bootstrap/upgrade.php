@@ -7,7 +7,10 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+};
 use \The_SEO_Framework\Helper\{
 	Format\Markdown,
 	Query,
@@ -352,7 +355,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
-		\tsf()->register_dismissible_persistent_notice(
+		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
 				sprintf(
 					/* translators: %1$s = New, lower version number, surrounded in markdown-backticks. %2$s = Old, higher version number, surrounded in markdown-backticks. */
@@ -403,7 +406,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully upgraded.
-		\tsf()->register_dismissible_persistent_notice(
+		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
 				sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
@@ -432,7 +435,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 		// Only show notices when not in network mode, or on main site otherwise.
 		if ( ! $network_mode || \is_main_site() ) {
-			\tsf()->register_dismissible_persistent_notice(
+			Admin\Notice\Persistent::register_notice(
 				sprintf(
 					'<p>%s</p><p>%s</p>',
 					\esc_html__( 'The SEO Framework automatically optimizes your website for search engines and social media.', 'autodescription' ),
@@ -506,7 +509,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 			}
 		}
 
-		$found_titles and \tsf()->register_dismissible_persistent_notice(
+		$found_titles and Admin\Notice\Persistent::register_notice(
 			sprintf(
 				'<p>%s</p>',
 				Markdown::convert(
@@ -574,7 +577,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
  * @param string $notice The upgrade notice. Doesn't need to be escaped.
  */
 function _add_upgrade_notice( $notice = '' ) {
-	\tsf()->register_dismissible_persistent_notice(
+	Admin\Notice\Persistent::register_notice(
 		"SEO: $notice",
 		'upgrade-' . ( hash( 'md5', $notice ) ?: uniqid( '', true ) ), // if md5 is unregistered, it'll return false
 		[

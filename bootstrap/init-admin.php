@@ -56,6 +56,7 @@ $clear_excluded_callback = [ Query\Exclusion::class, 'clear_excluded_post_ids_ca
 );
 
 \add_action( 'activated_plugin', [ Compatibility::class, 'try_plugin_conflict_notification' ] );
+\add_action( 'deactivated_plugin', [ Compatibility::class, 'clear_plugin_conflict_notification' ] );
 
 $headless = is_headless();
 

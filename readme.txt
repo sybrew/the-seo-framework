@@ -701,6 +701,9 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* A warning is displayed above the homepage settings.
 			* A warning is displayed above the Post Type Archive settings.
 			* A warning is displayed at the Sitemap Output settings.
+		* When another SEO plugin is active, and you activate a plugin, now a persistent notice is outputted to warn that you shouldn't mix SEO plugins.
+			* This notice is shown at most 3 times, to admins that can activate plugins, on the edit, edit-tags, plugins, dashboard, or The SEO Framework settings screens.
+			* This notice will clear when you deactivate a plugin, or when it has been shown 3 times.
 	* **Accessibility:**
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
 		* When resetting the SEO Settings, a clearer change-notice is sent.
@@ -975,7 +978,6 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* For class `The_SEO_Framework\Load` (callable via `tsf()` and `the_seo_framework()`):
 			* **This class can no longer be instantiated via the new keyword.**
 			* **Methods added:**
-				* `detect_multilingual_plugins()` TODO ehh, this will vanish.
 				* `get_instance()`. But you should use `tsf()` instead.
 			* **Methods ennobled:** These are now part of the legacy API and will be maintained indefinitely.
 				* `get_option()`
@@ -1328,6 +1330,13 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* `add_option_filter()`, with no alternative available.
 				* `get_relative_fontcolor()`, use `tsf()->format()->color()->get_relative_fontcolor()` instead.
 				* `active_plugins()`, use `tsf()->data()->blog()->get_active_plugins()` instead.
+				* `conflicting_plugins()`, with no alternative available.
+				* `get_conflicting_plugins()`, with no alternative available.
+				* `detect_seo_plugins()`, with no alternative available.
+				* `detect_og_plugin()`, with no alternative available.
+				* `detect_twitter_card_plugin()`, with no alternative available.
+				* `has_json_ld_plugin()`, with no alternative available.
+				* `detect_sitemap_plugin()`, with no alternative available.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1533,6 +1542,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* `the_seo_framework_image_details`, use `the_seo_framework_custom_image_details` or `the_seo_framework_generated_image_details` instead.
 		* `the_seo_framework_fetched_description_excerpt`, use `the_seo_framework_description_excerpt` instead.
 		* `the_seo_framework_manipulate_title`, use `the_seo_framework_overwrite_titles` instead.
+		* `the_seo_framework_conflicting_plugins_type`, use `the_seo_framework_conflicting_plugins` instead.
 	* **Removed:**
 		* Deprecated in TSF v4.2.0, two years later, we've now removed these filters:
 			* `the_seo_framework_pta_title`
@@ -1545,6 +1555,13 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* `the_seo_framework_before_output`, use action `the_seo_framework_before_meta_output` instead.
 			* `the_seo_framework_after_output`, use action `the_seo_framework_after_meta_output` instead.
 			* `the_seo_framework_settings_capability`, assign constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` instead.
+		* Because we've refactored the plugin detection system, the following filters weren't compatible and thus removed:
+			* `the_seo_framework_seo_plugin_detected`, use `the_seo_framework_conflicting_plugins` instead.
+			* `the_seo_framework_og_plugin_detected`, use `the_seo_framework_conflicting_plugins` instead.
+			* `the_seo_framework_twittercard_plugin_detected`, use `the_seo_framework_conflicting_plugins` instead.
+			* `the_seo_framework_ldjson_plugin_detected`, use `the_seo_framework_conflicting_plugins` instead.
+			* `the_seo_framework_sitemap_plugin_detected`, use `the_seo_framework_conflicting_plugins` instead.
+			* `the_seo_framework_multilingual_plugin_detected`, use `the_seo_framework_conflicting_plugins` instead.
 		* Because we've rewritten the Structured Data API from the ground up, these were incompatible and thus removed:
 			* `the_seo_framework_receive_json_data`, use `the_seo_framework_schema_graph_data` instead.
 			* `the_seo_framework_use_breadcrumb_seo_title`, use title settings instead.
@@ -1553,7 +1570,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* `the_seo_framework_ld_json_breadcrumb_taxonomies`, use `the_seo_framework_breadcrumb_list` instead.
 			* `the_seo_framework_ld_json_breadcrumb_terms`, use `the_seo_framework_breadcrumb_list` instead.
 			* `the_seo_framework_json_breadcrumb_output`, use `the_seo_framework_breadcrumb_list` instead.
-			* `the_seo_framework_json_search_output`, use `the_seo_framework_breadcrumb_list` instead.
+			* `the_seo_framework_json_search_output`, use `the_seo_framework_schema_graph_data` instead.
 			* `the_seo_framework_json_knowledge_output`, use `the_seo_framework_schema_graph_data` instead.
 		* `the_seo_framework_auto_descripton_html_method_methods`
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").

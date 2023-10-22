@@ -9,6 +9,9 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\is_headless;
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -35,6 +38,16 @@ namespace The_SEO_Framework;
  * @since 4.0.0 No longer implements an interface. It's implied.
  * @since 4.1.0 Now extends `Cache` instead of `Feed`.
  * @since 4.1.4 Removed protected property $use_object_cache.
+ * @since 4.3.0 1. Deprecated $inpost_nonce_field
+ *              2. Deprecated $inpost_nonce_name
+ *              3. Deprecated $is_headless
+ *              4. Deprecated $loaded
+ *              5. Deprecated $lpretty_permalinksoaded
+ *              6. Deprecated $script_debug
+ *              7. Deprecated $seo_settings_page_slug
+ *              8. Deprecated $seo_settings_page_hook
+ *              9. Deprecated $the_seo_framework_debug
+ *              10. Deprecated $the_seo_framework_use_transients
  */
 final class Load extends Sanitize {
 
@@ -64,6 +77,112 @@ final class Load extends Sanitize {
 	 * @since 4.3.0 Is now protected. Use `tsf()` or `the_seo_framework()` instead.
 	 */
 	protected function __construct() { }
+
+	/**
+	 * Handles unapproachable invoked properties.
+	 *
+	 * Makes sure deprecated properties are still overwritten.
+	 * If the property never existed, default PHP behavior is invoked.
+	 *
+	 * @since 2.8.0
+	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
+	 * @since 4.3.0 Now protects against fatal errors on PHP 8.2 or later.
+	 *
+	 * @param string $name  The property name.
+	 * @param mixed  $value The property value.
+	 */
+	public function __set( $name, $value ) {
+
+		switch ( $name ) {
+			case 'the_seo_framework_debug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant THE_SEO_FRAMEWORK_DEBUG' );
+				return false;
+			case 'script_debug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant SCRIPT_DEBUG' );
+				return false;
+			case 'seo_settings_page_slug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
+				return false;
+		}
+
+		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
+
+		// Invoke default behavior: Write variable if it's not protected.
+		if ( property_exists( $this, $name ) )
+			$this->$name = $value;
+	}
+
+	/**
+	 * Handles unapproachable invoked properties.
+	 *
+	 * Makes sure deprecated properties are still accessible.
+	 *
+	 * @since 2.7.0
+	 * @since 3.1.0 Removed known deprecations.
+	 * @since 3.2.2 This method no longer invokes PHP errors, nor returns protected values.
+	 * @since 4.3.0 Removed 'load_option' deprecation.
+	 *
+	 * @param string $name The property name.
+	 * @return mixed
+	 */
+	public function __get( $name ) {
+
+		switch ( $name ) {
+			case 'inpost_nonce_field':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				return Data\Admin\Post::$nonce_action;
+			case 'inpost_nonce_name':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				return Data\Admin\Post::$nonce_name;
+			case 'is_headless':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use function \The_SEO_Framework\is_headless()' );
+				return is_headless();
+			case 'loaded':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you may drop the loaded check.' );
+				return true;
+			case 'pretty_permalinks':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
+				return $this->query()->utils()->using_pretty_permalinks();
+			case 'script_debug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant SCRIPT_DEBUG' );
+				return \SCRIPT_DEBUG;
+			case 'seo_settings_page_slug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG or The_SEO_Framework\Admin::get_top_menu_args()' );
+				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
+			case 'seo_settings_page_hook':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use `tsf()->admin()->menu()->get_page_hook_name()` instead.' );
+				return Admin\Menu::get_page_hook_name();
+			case 'the_seo_framework_debug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				return \THE_SEO_FRAMEWORK_DEBUG;
+			case 'the_seo_framework_use_transients':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; with no alternative available' );
+				return true;
+		}
+
+		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
+	}
+
+	/**
+	 * Handles unapproachable invoked methods.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
+	 * @return mixed|void
+	 */
+	public function __call( $name, $arguments ) {
+
+		static $depr_class = null;
+
+		$depr_class ??= new Internal\Deprecated;
+
+		if ( \is_callable( [ $depr_class, $name ] ) )
+			return \call_user_func_array( [ $depr_class, $name ], $arguments );
+
+		$this->_inaccessible_p_or_m( "tsf()->$name()" );
+	}
 
 	/**
 	 * Marks a function as deprecated and inform when it has been used.

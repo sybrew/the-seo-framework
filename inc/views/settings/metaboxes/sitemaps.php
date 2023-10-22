@@ -13,7 +13,10 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Helper\Format\Markdown;
+use \The_SEO_Framework\Helper\{
+	Compatibility,
+	Format\Markdown,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -78,7 +81,7 @@ switch ( $instance ) :
 		break;
 
 	case 'general':
-		$has_sitemap_plugin = \tsf()->detect_sitemap_plugin();
+		$has_sitemap_plugin = Compatibility::get_active_conflicting_plugin_types()['sitemaps'];
 		$sitemap_detected   = Sitemap\Utils::has_root_sitemap_xml();
 
 		HTML::header_title( \__( 'Sitemap Integration Settings', 'autodescription' ) );
@@ -145,7 +148,7 @@ switch ( $instance ) :
 					);
 			}
 
-			if ( \tsf()->detect_multilingual_plugins() ) {
+			if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
 				HTML::attention_noesc(
 					// Markdown escapes.
 					Markdown::convert(

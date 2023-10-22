@@ -35,8 +35,9 @@ use \The_SEO_Framework\Admin; // Yes, it ios legal to share class and namespace.
  *         Use tsf()->admin()->notice() instead.
  */
 class Notice {
+
 	/**
-	 * Echos generated dismissible notice.
+	 * Prints a generated dismissible notice.
 	 *
 	 * @since 2.7.0
 	 * @since 4.1.2 Added the $inline parameter.

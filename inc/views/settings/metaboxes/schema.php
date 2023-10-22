@@ -13,6 +13,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
+use \The_SEO_Framework\Helper\Compatibility;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -40,7 +41,7 @@ switch ( $instance ) :
 	case 'main':
 		HTML::header_title( \__( 'Schema.org Output Settings', 'autodescription' ) );
 
-		if ( \tsf()->has_json_ld_plugin() )
+		if ( Compatibility::get_active_conflicting_plugin_types()['schema'] )
 			HTML::attention_description( \__( 'Another Schema.org plugin has been detected. These markup settings might conflict.', 'autodescription' ) );
 
 		HTML::description( \__( 'The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website.', 'autodescription' ) );

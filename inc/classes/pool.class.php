@@ -39,6 +39,7 @@ use \The_SEO_Framework\Traits\Internal\Static_Deprecator;
  *
  * @since 4.3.0
  * @link https://en.wikipedia.org/wiki/Object_pool_pattern
+ * You can access these methods via `tsf()` and `the_seo_framework()`.
  */
 class Pool extends Legacy_API {
 

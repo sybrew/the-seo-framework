@@ -10,6 +10,7 @@ namespace The_SEO_Framework\RobotsTXT;
 
 use \The_SEO_Framework\{
 	Data,
+	Helper\Compatibility,
 	Helper\Query,
 	Meta,
 	Sitemap,
@@ -96,13 +97,12 @@ class Main {
 						$output .= sprintf( "\nSitemap: %s", \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) ) );
 
 				$output .= "\n";
-			} elseif ( ! \tsf()->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat. var_dump() why?
-				if ( Sitemap\Utils::use_core_sitemaps() ) {
-					$wp_sitemaps_server = \wp_sitemaps_get_server();
-					if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
-						// This method augments the output--it doesn't overwrite it.
-						$output = \wp_sitemaps_get_server()->add_robots( $output, Data\Blog::is_public() );
-					}
+			} elseif ( ! Compatibility::get_active_conflicting_plugin_types()['sitemaps'] && Sitemap\Utils::use_core_sitemaps() ) {
+				$wp_sitemaps_server = \wp_sitemaps_get_server();
+
+				if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
+					// This method augments the output--it doesn't overwrite it.
+					$output = \wp_sitemaps_get_server()->add_robots( $output, Data\Blog::is_public() );
 				}
 			}
 		}
