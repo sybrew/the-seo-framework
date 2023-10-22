@@ -9,6 +9,8 @@ namespace The_SEO_Framework\Bootstrap;
 
 use function \The_SEO_Framework\is_headless;
 
+use \The_SEO_Framework\Helper\Compatibility;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -26,24 +28,36 @@ use function \The_SEO_Framework\is_headless;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->reset_check_plugin_conflicts();
+Compatibility::try_plugin_conflict_notification();
 
 turn_on_autoloading: if ( ! is_headless( 'settings' ) ) {
-	// Turns on auto loading for The SEO Framework's main options.
-	$options = \The_SEO_Framework\Data\Plugin::get_options();
-	$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+	// WP 6.4+, turns on auto loading for The SEO Framework's main options.
+	if ( \function_exists( 'wp_set_options_autoload' ) ) {
+		$options = [];
 
-	\remove_all_filters( "pre_update_option_{$setting}" );
-	\remove_all_actions( "update_option_{$setting}" );
-	\remove_all_filters( "sanitize_option_{$setting}" );
+		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) )
+			$options[] = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-	// TODO WP 6.4+ use wp_set_option_autoload() instead of setting a fake change.
-	$temp_options = $options;
-	// Write a small difference, so the change will be forwarded to the database.
-	if ( \is_array( $temp_options ) )
-		$temp_options['update_buster'] = time();
+		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
+			$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
 
-	$_success = \update_option( $setting, $temp_options, 'yes' );
-	if ( $_success )
-		\update_option( $setting, $options, 'yes' );
+		\wp_set_options_autoload( $options, 'yes' );
+	} elseif ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) ) {
+		// Turns on auto loading for The SEO Framework's main options.
+		$options = \The_SEO_Framework\Data\Plugin::get_options();
+		$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+
+		\remove_all_filters( "pre_update_option_{$setting}" );
+		\remove_all_actions( "update_option_{$setting}" );
+		\remove_all_filters( "sanitize_option_{$setting}" );
+
+		$temp_options = $options;
+
+		if ( \is_array( $temp_options ) )
+			$temp_options['update_buster'] = time();
+
+		$_success = \update_option( $setting, $temp_options, 'yes' );
+		if ( $_success )
+			\update_option( $setting, $options, 'yes' );
+	}
 }

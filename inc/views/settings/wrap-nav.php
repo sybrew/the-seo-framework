@@ -27,7 +27,7 @@ namespace The_SEO_Framework;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// See _nav_tab_wrapper
+// See nav_tab_wrapper
 [ $id, $tabs ] = $view_args;
 
 /**

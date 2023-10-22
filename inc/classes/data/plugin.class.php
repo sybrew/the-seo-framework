@@ -139,8 +139,6 @@ class Plugin {
 		if ( ! is_headless( 'settings' ) )
 			static::$options = $options;
 
-		\tsf()->init_sanitizer_filters();
-
 		Plugin\PTA::flush_cache();
 
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $options );
@@ -178,8 +176,7 @@ class Plugin {
 	}
 
 	/**
-	 * Updates static caching options.
-	 *
+	 * Updates static caching option.
 	 * Can return false if cache is unchanged.
 	 *
 	 * @since 4.3.0
@@ -195,6 +192,26 @@ class Plugin {
 			\get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ),
 			\is_array( $cache ) ? $cache : [ $cache => $value ]
 		);
+
+		static::$site_cache = $site_cache;
+
+		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
+	}
+
+	/**
+	 * Deletes static caching option indexes.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string|string[] $cache The cache key, or an array of keys to delete.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function delete_site_cache( $cache ) {
+
+		$site_cache = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE );
+
+		foreach ( (array) $cache as $key )
+			unset( $site_cache[ $key ] );
 
 		static::$site_cache = $site_cache;
 

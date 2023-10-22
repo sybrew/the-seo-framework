@@ -124,7 +124,7 @@ switch ( $instance ) :
 			],
 		];
 
-		Admin\Settings\Plugin::_nav_tab_wrapper(
+		Admin\Settings\Plugin::nav_tab_wrapper(
 			'robots',
 			/**
 			 * @since 2.2.4

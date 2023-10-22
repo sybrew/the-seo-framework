@@ -21,7 +21,6 @@ use \The_SEO_Framework\Data,
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10 );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
 
-
 /**
  * Sets the correct Polylang query language for the sitemap based on the 'lang' GET parameter.
  *
@@ -35,7 +34,7 @@ use \The_SEO_Framework\Data,
  */
 function _polylang_set_sitemap_language() {
 
-	if ( ! \function_exists( '\\PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
+	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
 
 	// phpcs:ignore, WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
 	$lang = $_GET['lang'] ?? '';
@@ -135,7 +134,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * @return string
  */
 function pll__( $string ) {
-	if ( \function_exists( '\\PLL' ) && \function_exists( '\\pll__' ) )
+	if ( \function_exists( 'PLL' ) && \function_exists( 'pll__' ) )
 		if ( \PLL() instanceof \PLL_Frontend )
 			return \pll__( $string );
 

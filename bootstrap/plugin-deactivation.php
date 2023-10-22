@@ -27,20 +27,16 @@ use function \The_SEO_Framework\is_headless;
  */
 
 turn_off_autoloading: if ( ! is_headless( 'settings' ) ) {
-	$options = \The_SEO_Framework\Data\Plugin::get_options();
-	$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+	// WP 6.4+, turns off auto loading for The SEO Framework's main options.
+	if ( \function_exists( 'wp_set_options_autoload' ) ) {
+		$options = [];
 
-	\remove_all_filters( "pre_update_option_{$setting}" );
-	\remove_all_actions( "update_option_{$setting}" );
-	\remove_all_filters( "sanitize_option_{$setting}" );
+		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) )
+			$options[] = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-	// TODO WP 6.4+ use wp_set_option_autoload() instead of setting a fake change.
-	$temp_options = $options;
-	// Write a small difference, so the change will be forwarded to the database.
-	if ( \is_array( $temp_options ) )
-		$temp_options['update_buster'] = time();
+		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
+			$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
 
-	$_success = \update_option( $setting, $temp_options, 'no' );
-	if ( $_success )
-		\update_option( $setting, $options, 'no' );
+		\wp_set_options_autoload( $options, 'no' );
+	}
 }

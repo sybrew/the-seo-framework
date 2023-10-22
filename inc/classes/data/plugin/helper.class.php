@@ -35,13 +35,11 @@ namespace The_SEO_Framework\Data\Plugin;
 class Helper {
 
 	/**
-	 * Returns the option key for robots settings.
-	 *
 	 * @since 4.3.0
 	 *
 	 * @param string $field Accepts 'post_type' and 'taxonomy'
 	 * @param string $type  Accepts 'noindex', 'nofollow', 'noarchive'.
-	 * @return string
+	 * @return string The option key for robots settings. Empty string on failure.
 	 */
 	public static function get_robots_option_index( $field, $type ) {
 

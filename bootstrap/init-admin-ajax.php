@@ -27,6 +27,11 @@ use \The_SEO_Framework\Admin\Script\AJAX;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * We do not test for headlessness here.
+ * These callbacks respond to only registered actions, and those do check headlessness.
+ */
+
 // Admin AJAX for notice dismissal.
 \add_action( 'wp_ajax_tsf_dismiss_notice', [ AJAX::class, 'dismiss_notice' ] );
 

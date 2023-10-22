@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
+use Helper\Format;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
@@ -67,7 +69,7 @@ printf(
 		 */
 		\apply_filters(
 			'the_seo_framework_sitemap_relative_font_color',
-			\tsf()->get_relative_fontcolor( $colors['main'] )
+			Format\Color::get_relative_fontcolor( $colors['main'] )
 		)
 	)
 );

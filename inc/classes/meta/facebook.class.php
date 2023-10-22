@@ -37,11 +37,9 @@ use \The_SEO_Framework\Data;
 class Facebook {
 
 	/**
-	 * Returns the Facebook author's value if API type is 'article'.
-	 *
 	 * @since 4.3.0
 	 *
-	 * @return string
+	 * @return string Facebook author's value if API type is 'article'.
 	 */
 	public static function get_author() {
 
@@ -52,11 +50,9 @@ class Facebook {
 	}
 
 	/**
-	 * Returns the Facebook publisher value if API type is 'article'.
-	 *
 	 * @since 4.3.0
 	 *
-	 * @return string
+	 * @return string Facebook publisher value if API type is 'article'.
 	 */
 	public static function get_publisher() {
 
@@ -66,11 +62,9 @@ class Facebook {
 	}
 
 	/**
-	 * Returns the Facebook publisher value if API type is 'article'.
-	 *
 	 * @since 4.3.0
 	 *
-	 * @return string
+	 * @return string Facebook app ID.
 	 */
 	public static function get_app_id() {
 		return Data\Plugin::get_option( 'facebook_appid' );

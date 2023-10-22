@@ -249,6 +249,7 @@ class Registry {
 	 * Deletes transients for sitemaps. Also engages pings for or pings search engines.
 	 * Can only run once per request.
 	 *
+	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
 	 * @since 4.3.0
 	 *
 	 * @return bool True on success, false on failure.

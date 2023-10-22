@@ -45,7 +45,7 @@ foreach (
 			'wpforo/wpforo.php'                        => 'wpforo',
 			'woocommerce/woocommerce.php'              => 'woocommerce',
 		],
-		array_flip( \tsf()->active_plugins() ),
+		array_flip( Data\Blog::get_active_plugins() ),
 	)
 	as $_plugin
 ) {

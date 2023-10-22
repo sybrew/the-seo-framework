@@ -85,7 +85,7 @@ function _is_shop( $post = null ) {
 
 		$is_shop = (int) \get_option( 'woocommerce_shop_page_id' ) === $id;
 	} else {
-		$is_shop = ! \is_admin() && \function_exists( '\\is_shop' ) && \is_shop();
+		$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
 	}
 
 	return $is_shop;
@@ -162,7 +162,7 @@ function _set_wc_is_product( $is_product, $post ) {
 	if ( $post )
 		return 'product' === \get_post_type( $post );
 
-	return \function_exists( '\\is_product' ) && \is_product();
+	return \function_exists( 'is_product' ) && \is_product();
 }
 
 /**
@@ -229,7 +229,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	static $page_ids;
 
 	if ( ! isset( $page_ids ) ) {
-		if ( ! \function_exists( '\\wc_get_page_id' ) ) return $meta;
+		if ( ! \function_exists( 'wc_get_page_id' ) ) return $meta;
 
 		$page_ids = array_filter( [ \wc_get_page_id( 'cart' ), \wc_get_page_id( 'checkout' ), \wc_get_page_id( 'myaccount' ) ] );
 	}
@@ -319,7 +319,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 	} else {
 		if ( Query::is_product() ) {
 			$is_product = true;
-		} elseif ( \function_exists( '\\is_product_category' ) && \is_product_category() ) {
+		} elseif ( \function_exists( 'is_product_category' ) && \is_product_category() ) {
 			$is_product_category = true;
 		}
 	}

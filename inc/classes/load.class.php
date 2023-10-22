@@ -36,7 +36,7 @@ namespace The_SEO_Framework;
  * @since 4.1.0 Now extends `Cache` instead of `Feed`.
  * @since 4.1.4 Removed protected property $use_object_cache.
  */
-final class Load extends Site_Options {
+final class Load extends Sanitize {
 
 	/**
 	 * @since 4.3.0

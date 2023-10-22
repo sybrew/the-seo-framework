@@ -369,7 +369,7 @@ class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => Admin\Template::get_view_location( 'templates/settings/settings' ),
+					'file' => Admin\Template::get_view_location( 'templates/settings/warnings' ),
 				],
 			],
 		];

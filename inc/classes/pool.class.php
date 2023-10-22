@@ -48,6 +48,8 @@ class Pool extends Legacy_API {
 	 */
 	private static $pool = [];
 
+	// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+
 	/**
 	 * Returns the Query class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
@@ -61,11 +63,9 @@ class Pool extends Legacy_API {
 		return static::$pool['query'] ??= new class extends Helper\Query {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->query()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -75,11 +75,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['utils'] ??= new class extends Helper\Query\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->query()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -91,11 +89,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['cache'] ??= new class extends Helper\Query\Cache {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->query()->cache()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -107,11 +103,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['exclusion'] ??= new class extends Helper\Query\Exclusion {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->query()->exclusion()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -130,11 +124,9 @@ class Pool extends Legacy_API {
 		return static::$pool['post_types'] ??= new class extends Helper\Post_Types {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->post_types()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -151,11 +143,9 @@ class Pool extends Legacy_API {
 		return static::$pool['taxonomies'] ??= new class extends Helper\Taxonomies {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->taxonomies()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -172,11 +162,9 @@ class Pool extends Legacy_API {
 		return static::$pool['robots'] ??= new class extends Meta\Robots {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->robots()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -193,11 +181,9 @@ class Pool extends Legacy_API {
 		return static::$pool['uri'] ??= new class extends Meta\URI {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->uri()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -207,11 +193,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['utils'] ??= new class extends Meta\URI\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->uri()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -230,11 +214,9 @@ class Pool extends Legacy_API {
 		return static::$pool['title'] ??= new class extends Meta\Title {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->title()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -244,11 +226,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['utils'] ??= new class extends Meta\Title\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->title()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -260,11 +240,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['conditions'] ??= new class extends Meta\Title\Conditions {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->title()->conditions()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -283,11 +261,9 @@ class Pool extends Legacy_API {
 		return static::$pool['description'] ??= new class extends Meta\Description {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->description()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -297,11 +273,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['excerpt'] ??= new class extends Meta\Description\Excerpt {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->description()->excerpt()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -320,11 +294,9 @@ class Pool extends Legacy_API {
 		return static::$pool['open_graph'] ??= new class extends Meta\Open_Graph {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->open_graph()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -341,11 +313,9 @@ class Pool extends Legacy_API {
 		return static::$pool['facebook'] ??= new class extends Meta\Facebook {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->facebook()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -362,11 +332,9 @@ class Pool extends Legacy_API {
 		return static::$pool['twitter'] ??= new class extends Meta\Twitter {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->twitter()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -383,11 +351,9 @@ class Pool extends Legacy_API {
 		return static::$pool['image'] ??= new class extends Meta\Image {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->image()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -397,11 +363,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['utils'] ??= new class extends Meta\Image\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->image()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -420,11 +384,9 @@ class Pool extends Legacy_API {
 		return static::$pool['breadcrumbs'] ??= new class extends Meta\Breadcrumbs {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->breadcrumbs()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -441,11 +403,9 @@ class Pool extends Legacy_API {
 		return static::$pool['schema'] ??= new class extends Meta\Schema {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->schema()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -477,11 +437,9 @@ class Pool extends Legacy_API {
 		return static::$pool['data'] ??= new class {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->data()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -491,11 +449,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['blog'] ??= new class extends Data\Blog {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->blog()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -507,11 +463,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['plugin'] ??= new class extends Data\Plugin {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->plugin()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 					/**
 					 * @since 4.3.0
@@ -521,11 +475,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['filter'] ??= new class extends Data\Plugin\Filter {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->filter()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 					/**
@@ -536,11 +488,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['helper'] ??= new class extends Data\Plugin\Helper {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->helper()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 
@@ -552,11 +502,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['home'] ??= new class extends Data\Plugin\Home {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->home()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 
@@ -568,11 +516,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['post'] ??= new class extends Data\Plugin\Post {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->post()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 
@@ -584,11 +530,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['pta'] ??= new class extends Data\Plugin\PTA {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->pta()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 
@@ -600,11 +544,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['setup'] ??= new class extends Data\Plugin\Setup {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->setup()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 
@@ -616,11 +558,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['term'] ??= new class extends Data\Plugin\Term {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->term()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 
@@ -632,11 +572,9 @@ class Pool extends Legacy_API {
 						return static::$subpool['user'] ??= new class extends Data\Plugin\User {
 							use Static_Deprecator;
 
-							// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 							private $colloquial_handle     = 'tsf()->data()->plugin()->user()';
 							private $deprecated_methods    = [];
 							private $deprecated_properties = [];
-							// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 						};
 					}
 				};
@@ -650,11 +588,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['post'] ??= new class extends Data\Post {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->post()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -666,11 +602,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['term'] ??= new class extends Data\Term {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->term()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -682,11 +616,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['user'] ??= new class extends Data\User {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->data()->user()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -705,11 +637,9 @@ class Pool extends Legacy_API {
 		return static::$pool['robotstxt'] ??= new class extends RobotsTXT\Main {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->robotstxt()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -719,11 +649,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['utils'] ??= new class extends RobotsTXT\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->robotstxt()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -742,11 +670,9 @@ class Pool extends Legacy_API {
 		return static::$pool['guidelines'] ??= new class extends Helper\Guidelines {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->guidelines()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 		};
 	}
 
@@ -763,11 +689,9 @@ class Pool extends Legacy_API {
 		return static::$pool['sitemap'] ??= new class {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->sitemap()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -777,11 +701,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['cache'] ??= new class extends Sitemap\Cache {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->sitemap()->cache()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -793,11 +715,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['ping'] ??= new class extends Sitemap\Ping {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->sitemap()->ping()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -808,11 +728,9 @@ class Pool extends Legacy_API {
 			public static function lock() {
 				return static::$subpool['lock'] ??= new class extends Sitemap\Lock {
 					use Static_Deprecator;
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->sitemap()->lock()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -823,11 +741,9 @@ class Pool extends Legacy_API {
 			public static function registry() {
 				return static::$subpool['registry'] ??= new class extends Sitemap\Registry {
 					use Static_Deprecator;
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->sitemap()->registry()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -839,11 +755,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['utils'] ??= new class extends Sitemap\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->sitemap()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 		};
@@ -862,11 +776,9 @@ class Pool extends Legacy_API {
 		return static::$pool['format'] ??= new class {
 			use Static_Deprecator;
 
-			// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 			private $colloquial_handle     = 'tsf()->format()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-			// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 
 			/**
 			 * @since 4.3.0
@@ -876,11 +788,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['markdown'] ??= new class extends Helper\Format\Markdown {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->format()->markdown()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -892,11 +802,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['time'] ??= new class extends Helper\Format\Time {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->format()->time()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -908,11 +816,9 @@ class Pool extends Legacy_API {
 				return static::$subpool['strings'] ??= new class extends Helper\Format\Strings {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->format()->strings()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
 				};
 			}
 
@@ -924,11 +830,23 @@ class Pool extends Legacy_API {
 				return static::$subpool['arrays'] ??= new class extends Helper\Format\Arrays {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 					private $colloquial_handle     = 'tsf()->format()->arrays()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Color
+			 */
+			public static function color() {
+				return static::$subpool['color'] ??= new class extends Helper\Format\Color {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->format()->color()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
 				};
 			}
 		};
@@ -943,23 +861,49 @@ class Pool extends Legacy_API {
 	 *
 	 * @return \Closure An anononymous class with subclasses.
 	 */
-	public function layout() {
+	public function admin() {
 		return static::$pool['layout'] ??= new class {
 			use Static_Deprecator;
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+			 * @return \The_SEO_Framework\Admin\Menu
 			 */
-			public static function html() {
-				return static::$subpool['html'] ??= new class extends Admin\Settings\Layout\HTML {
+			public static function menu() {
+				return static::$subpool['menu'] ??= new class extends Admin\Menu {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->layout()->html()';
+					private $colloquial_handle     = 'tsf()->admin()->menu()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Admin\Notice
+			 */
+			public static function notice() {
+				return static::$subpool['notice'] ??= new class extends Admin\Notice {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->admin()->notice()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Admin\Notice\Persistent
+					 */
+					public static function persistent() {
+						return static::$subpool['exclusion'] ??= new class extends Admin\Notice\Persistent {
+							use Static_Deprecator;
+
+							private $colloquial_handle     = 'tsf()->admin()->notice()->persistent()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+						};
+					}
 				};
 			}
 
@@ -967,15 +911,51 @@ class Pool extends Legacy_API {
 			 * @since 4.3.0
 			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
 			 */
-			public static function form() {
-				return static::$subpool['form'] ??= new class extends Admin\Settings\Layout\Form {
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends Admin\Utils {
 					use Static_Deprecator;
 
-					// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
-					private $colloquial_handle     = 'tsf()->layout()->form()';
+					private $colloquial_handle     = 'tsf()->admin()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-					// phpcs:enable, Squiz.Commenting.VariableComment.Missing
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \Closure An anononymous class with subclasses.
+			 */
+			public static function layout() {
+				return static::$subpool['layout'] ??= new class {
+					use Static_Deprecator;
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+					 */
+					public static function html() {
+						return static::$subpool['html'] ??= new class extends Admin\Settings\Layout\HTML {
+							use Static_Deprecator;
+
+							private $colloquial_handle     = 'tsf()->admin()->layout()->html()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+					 */
+					public static function form() {
+						return static::$subpool['form'] ??= new class extends Admin\Settings\Layout\Form {
+							use Static_Deprecator;
+
+							private $colloquial_handle     = 'tsf()->admin()->layout()->form()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+						};
+					}
 				};
 			}
 		};

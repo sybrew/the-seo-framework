@@ -10,7 +10,10 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\{
+	Compatibility,
+	Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -52,7 +55,7 @@ $clear_excluded_callback = [ Query\Exclusion::class, 'clear_excluded_post_ids_ca
 	20
 );
 
-\add_action( 'activated_plugin', [ \tsf(), 'reset_check_plugin_conflicts' ] );
+\add_action( 'activated_plugin', [ Compatibility::class, 'try_plugin_conflict_notification' ] );
 
 $headless = is_headless();
 
@@ -84,14 +87,12 @@ if ( ! $headless['meta'] ) {
 }
 
 if ( ! $headless['settings'] ) {
-	// Set up site settings and allow saving resetting them.
-	\add_action( 'admin_init', [ \tsf(), 'register_settings' ], 5 );
+	// Register settings and manage saving thereof.
+	\add_action( 'admin_init', [ Data\Admin\Plugin::class, 'register_settings' ], 0 );
 
-	// Loads setting notices.
-	\add_action( 'the_seo_framework_setting_notices', [ \tsf(), '_do_settings_page_notices' ] );
+	\add_action( 'admin_action_update', [ Data\Admin\Plugin::class, 'prepare_settings_update' ] );
 
-	// Add menu links and register $this->seo_settings_page_hook
-	\add_action( 'admin_menu', [ \tsf(), 'add_menu_link' ] );
+	\add_action( 'admin_menu', [ Admin\Menu::class, 'register_top_menu_page' ] );
 }
 
 if ( ! $headless['user'] ) {
@@ -105,10 +106,10 @@ if ( ! $headless['user'] ) {
 
 if ( \in_array( false, $headless, true ) ) {
 	// Set up notices.
-	\add_action( 'admin_notices', [ \tsf(), '_output_notices' ] );
+	\add_action( 'admin_notices', [ Admin\Notice\Persistent::class, '_output_notices' ] );
 
-	// Fallback HTML-only notice dismissal.
-	\add_action( 'admin_init', [ \tsf(), '_dismiss_notice' ] );
+	// Fallback HTML-only notice dismissal. See init-admin-ajax.php for the AJAX callback.
+	\add_action( 'admin_init', [ Admin\Notice\Persistent::class, '_dismiss_notice' ] );
 
 	// Enqueues admin scripts.
 	\add_action( 'admin_enqueue_scripts', [ Admin\Script\Registry::class, '_init' ], 0, 1 );

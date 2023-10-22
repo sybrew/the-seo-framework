@@ -29,7 +29,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\HTML;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// See output_dismissible_persistent_notice
+// See _output_dismissible_persistent_notices
 [ $message, $key, $args ] = $view_args;
 
 /**
@@ -64,7 +64,7 @@ switch ( $args['type'] ) {
 
 $dismiss_title_i18n = \__( 'Dismiss this notice', 'default' );
 
-$nonce_action = \tsf()->_get_dismiss_notice_nonce_action( $sanitized_key ); // var_dump() also create nonce_name>?
+$nonce_action = Admin\Notice\Persistent::_get_dismiss_nonce_action( $sanitized_key ); // var_dump() also create nonce_name>?
 
 $button_js = sprintf(
 	'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s" %s></a>',

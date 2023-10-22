@@ -8,8 +8,11 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Post_Types;
-use \The_SEO_Framework\Admin;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+	Helper\Post_Types,
+};
 
 /**
  * The SEO Framework plugin
@@ -35,18 +38,40 @@ use \The_SEO_Framework\Admin;
  *
  * @since 4.0.0
  * @since 4.3.0 1. Renamed from `SeoSettings` to `Plugin`.
- *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
+ *              2. Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
 final class Plugin {
 
 	/**
+	 * Outputs the SEO Settings page wrap.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 */
+	public static function prepare_settings_wrap() {
+
+		static::register_seo_settings_meta_boxes();
+
+		\add_action(
+			Admin\Menu::get_page_hook_name() . '_settings_page_boxes',
+			[ static::class, 'output_columns' ]
+		);
+		\add_action(
+			'the_seo_framework_setting_notices',
+			[ static::class, 'output_notices' ]
+		);
+
+		static::output_wrap();
+	}
+
+	/**
 	 * Registers meta boxes on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_register_seo_settings_meta_boxes`.
 	 */
-	public static function _register_seo_settings_meta_boxes() {
+	public static function register_seo_settings_meta_boxes() {
 
 		/**
 		 * Various meta box filters.
@@ -68,16 +93,14 @@ final class Plugin {
 		$sitemap           = (bool) \apply_filters( 'the_seo_framework_sitemap_metabox', true );
 		$feed              = (bool) \apply_filters( 'the_seo_framework_feed_metabox', true );
 
-		$settings_page_hook = \tsf()->seo_settings_page_hook;
-
-		$class = static::class;
+		$settings_page_hook = Admin\Menu::get_page_hook_name();
 
 		// General Meta Box
 		if ( $general )
 			\add_meta_box(
 				'autodescription-general-settings',
 				\esc_html__( 'General Settings', 'autodescription' ),
-				"$class::_general_metabox",
+				[ static::class, '_general_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -87,7 +110,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-title-settings',
 				\esc_html__( 'Title Settings', 'autodescription' ),
-				"$class::_title_metabox",
+				[ static::class, '_title_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -97,7 +120,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-description-settings',
 				\esc_html__( 'Description Meta Settings', 'autodescription' ),
-				"$class::_description_metabox",
+				[ static::class, '_description_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -107,7 +130,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-homepage-settings',
 				\esc_html__( 'Homepage Settings', 'autodescription' ),
-				"$class::_homepage_metabox",
+				[ static::class, '_homepage_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -116,7 +139,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-post-type-archive-settings',
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),
-				"$class::_post_type_archive_metabox",
+				[ static::class, '_post_type_archive_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -126,7 +149,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-social-settings',
 				\esc_html__( 'Social Meta Settings', 'autodescription' ),
-				"$class::_social_metabox",
+				[ static::class, '_social_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -136,7 +159,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-schema-settings',
 				\esc_html__( 'Schema.org Settings', 'autodescription' ),
-				"$class::_schema_metabox",
+				[ static::class, '_schema_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -146,7 +169,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-robots-settings',
 				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
-				"$class::_robots_metabox",
+				[ static::class, '_robots_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -156,7 +179,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-webmaster-settings',
 				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
-				"$class::_webmaster_metabox",
+				[ static::class, '_webmaster_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -166,7 +189,7 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-sitemap-settings',
 				\esc_html__( 'Sitemap Settings', 'autodescription' ),
-				"$class::_sitemaps_metabox",
+				[ static::class, '_sitemaps_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
@@ -176,43 +199,19 @@ final class Plugin {
 			\add_meta_box(
 				'autodescription-feed-settings',
 				\esc_html__( 'Feed Settings', 'autodescription' ),
-				"$class::_feed_metabox",
+				[ static::class, '_feed_metabox' ],
 				$settings_page_hook,
 				'main'
 			);
 	}
 
 	/**
-	 * Setting nav tab wrappers.
-	 * Outputs Tabs and settings content.
-	 *
-	 * @since 4.0.0
-	 * @since 4.3.0 Removed third parameter: $use_tabs.
-	 * @access private
-	 *
-	 * @param string $id   The nav-tab ID.
-	 * @param array  $tabs The tab content {
-	 *    string tab ID => array : {
-	 *       string   name     : Tab name.
-	 *       callable callback : Output function.
-	 *       string   dashicon : The dashicon to use.
-	 *       mixed    args     : Optional callback function args. These arguments
-	 *                           will be extracted to variables in scope of the view.
-	 *    }
-	 * }
-	 */
-	public static function _nav_tab_wrapper( $id, $tabs = [] ) {
-		Admin\Template::output_view( 'settings/wrap-nav', $id, $tabs );
-		Admin\Template::output_view( 'settings/wrap-content', $id, $tabs );
-	}
-
-	/**
 	 * Outputs SEO Settings page wrap.
 	 *
 	 * @since 4.0.0
-	 * @access private
+	 * @since 4.3.0 Renamed from `_output_wrap`.
 	 */
-	public static function _output_wrap() {
+	public static function output_wrap() {
 		/**
 		 * @since 3.0.0
 		 */
@@ -228,17 +227,53 @@ final class Plugin {
 	 * Outputs SEO Settings columns.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Renamed from `_output_columns`.
+	 */
+	public static function output_columns() {
+		Admin\Template::output_view( 'settings/columns' );
+	}
+
+	/**
+	 * Outputs notices on SEO setting changes.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.5 This is no longer a static function.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `_do_settings_page_notices`.
 	 * @access private
 	 */
-	public static function _output_columns() {
-		Admin\Template::output_view( 'settings/columns' );
+	public static function output_notices() {
+		Admin\Template::output_view( 'settings/notice' );
+	}
+
+	/**
+	 * Setting nav tab wrappers.
+	 * Outputs Tabs and settings content.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 1. Removed third parameter: $use_tabs.
+	 *              2. Renamed from `_nav_tab_wrapper`.
+	 *
+	 * @param string $id   The nav-tab ID.
+	 * @param array  $tabs The tab content {
+	 *    string tab ID => array : {
+	 *       string   name     : Tab name.
+	 *       callable callback : Output function.
+	 *       string   dashicon : The dashicon to use.
+	 *       mixed    args     : Optional callback function args. These arguments
+	 *                           will be extracted to variables in scope of the view.
+	 *    }
+	 * }
+	 */
+	public static function nav_tab_wrapper( $id, $tabs = [] ) {
+		Admin\Template::output_view( 'settings/wrap-nav', $id, $tabs );
+		Admin\Template::output_view( 'settings/wrap-content', $id, $tabs );
 	}
 
 	/**
 	 * Outputs General Settings meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _general_metabox() {
 		/**
@@ -256,7 +291,6 @@ final class Plugin {
 	 * Outputs General Settings meta box general tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_general_tab() {
@@ -267,7 +301,6 @@ final class Plugin {
 	 * Outputs General Settings meta box layout tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_layout_tab() {
@@ -278,7 +311,6 @@ final class Plugin {
 	 * Outputs General Settings meta box performance tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_performance_tab() {
@@ -289,7 +321,6 @@ final class Plugin {
 	 * Outputs General Settings meta box canonical tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_canonical_tab() {
@@ -300,7 +331,6 @@ final class Plugin {
 	 * Outputs General Settings meta box timestamps tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_timestamps_tab() {
@@ -311,7 +341,6 @@ final class Plugin {
 	 * Outputs General Settings meta box exclusions tab.
 	 *
 	 * @since 4.1.0
-	 * @access private
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_exclusions_tab() {
@@ -322,7 +351,6 @@ final class Plugin {
 	 * Title meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _title_metabox() {
 		/**
@@ -340,7 +368,6 @@ final class Plugin {
 	 * Title meta box general tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 */
 	public static function _title_metabox_general_tab() {
@@ -351,7 +378,6 @@ final class Plugin {
 	 * Title meta box general tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 *
 	 * @param array $args The variables to pass to the meta box tab.
@@ -364,7 +390,6 @@ final class Plugin {
 	 * Title meta box prefixes tab.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 */
 	public static function _title_metabox_prefixes_tab() {
@@ -375,7 +400,6 @@ final class Plugin {
 	 * Description meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _description_metabox() {
 		/**
@@ -393,7 +417,6 @@ final class Plugin {
 	 * Robots meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _robots_metabox() {
 		/**
@@ -411,7 +434,6 @@ final class Plugin {
 	 * Robots Meta Box General Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 */
 	public static function _robots_metabox_general_tab() {
@@ -422,7 +444,6 @@ final class Plugin {
 	 * Robots Meta Box "No-: Index/Follow/Archive" Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 *
 	 * @param array $args The variables to pass to the meta box tab.
@@ -435,7 +456,6 @@ final class Plugin {
 	 * Outputs the Homepage meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _homepage_metabox() {
 		/**
@@ -453,7 +473,6 @@ final class Plugin {
 	 * Homepage meta box General Tab Output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_general_tab() {
@@ -464,7 +483,6 @@ final class Plugin {
 	 * Homepage meta box Additions Tab Output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_additions_tab() {
@@ -475,7 +493,6 @@ final class Plugin {
 	 * Homepage meta box Robots Tab Output
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_robots_tab() {
@@ -486,7 +503,6 @@ final class Plugin {
 	 * Homepage meta box Social Tab Output
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_social_tab() {
@@ -497,7 +513,6 @@ final class Plugin {
 	 * Post Type Archive meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.2.0
-	 * @access private
 	 */
 	public static function _post_type_archive_metabox() {
 		/**
@@ -515,7 +530,6 @@ final class Plugin {
 	 * Social Meta Box General Tab output.
 	 *
 	 * @since 4.2.0
-	 * @access private
 	 *
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
@@ -527,7 +541,6 @@ final class Plugin {
 	 * Post Type Archive meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.2.0
-	 * @access private
 	 *
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
@@ -539,7 +552,6 @@ final class Plugin {
 	 * Post Type Archive meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.2.0
-	 * @access private
 	 *
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
@@ -551,7 +563,6 @@ final class Plugin {
 	 * Social meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _social_metabox() {
 		/**
@@ -569,7 +580,6 @@ final class Plugin {
 	 * Social Meta Box General Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_general_tab() {
@@ -580,7 +590,6 @@ final class Plugin {
 	 * Social Meta Box Facebook Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_facebook_tab() {
@@ -591,7 +600,6 @@ final class Plugin {
 	 * Social Meta Box Twitter Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_twitter_tab() {
@@ -602,7 +610,6 @@ final class Plugin {
 	 * Social Meta Box oEmbed Tab output.
 	 *
 	 * @since 4.0.5
-	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_oembed_tab() {
@@ -613,7 +620,6 @@ final class Plugin {
 	 * Social Meta Box PostDates Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_postdates_tab() {
@@ -624,7 +630,6 @@ final class Plugin {
 	 * Webmaster meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _webmaster_metabox() {
 		/**
@@ -642,7 +647,6 @@ final class Plugin {
 	 * Sitemaps meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox() {
@@ -661,7 +665,6 @@ final class Plugin {
 	 * Sitemaps Meta Box General Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_general_tab() {
@@ -672,7 +675,6 @@ final class Plugin {
 	 * Sitemaps Meta Box Robots Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_robots_tab() {
@@ -683,7 +685,6 @@ final class Plugin {
 	 * Sitemaps Meta Box Metadata Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_metadata_tab() {
@@ -694,7 +695,6 @@ final class Plugin {
 	 * Sitemaps Meta Box Notify Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_notify_tab() {
@@ -705,7 +705,6 @@ final class Plugin {
 	 * Sitemaps Meta Box Style Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_style_tab() {
@@ -716,7 +715,6 @@ final class Plugin {
 	 * Feed meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _feed_metabox() {
 		/**
@@ -734,7 +732,6 @@ final class Plugin {
 	 * Schema meta box on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 */
 	public static function _schema_metabox() {
 		/**
@@ -752,7 +749,6 @@ final class Plugin {
 	 * Schema Meta Box Structure Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_structure_tab() {
@@ -763,7 +759,6 @@ final class Plugin {
 	 * Schema Meta Box Presence Tab output.
 	 *
 	 * @since 4.0.0
-	 * @access private
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_presence_tab() {

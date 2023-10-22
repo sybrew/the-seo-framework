@@ -34,7 +34,7 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
  * @NOTE This and the methods herein will likely be deprecated in the future.
  *
  * @access protected
- *         Use tsf()->layout()->html() instead.
+ *         Use tsf()->admin()->layout()->html() instead.
  */
 class HTML {
 

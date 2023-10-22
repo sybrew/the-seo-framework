@@ -275,15 +275,6 @@ TODO implement "@hook wp_action" in every function with a callback.
 		E.g.: @hook ~ wp_action
 	-> Then, we can remove unused variables (often tagged with "Unused.").
 
-TODO all "s_" methods are a mixed bag of:
-	1. Option filters without default fallback.
-	2. Option filters with default fallback. (get_default_option)
-	3. Option filters with current AND default fallback. (get_option, get_default_option)
-	4. Non-option filters.
--> We should overhaul this in a major update?
-	-> Or, do it now? We're the only ones making thorough use of this, and assume a default only for selectable options.
-		-> Therefore, we can safely assume no one falls back to the default for "text"-based options, which is often what users filter.
-
 TODO the detect.*?plugins() functions use a foreach loop and then in_array() -- this can be slow, consider array_intersect instead?
 	-> Test performance.
 
@@ -295,30 +286,6 @@ TODO DONE (still check assigments below): make 4.3.0 instead of 4.2.9?
 
 TODO since the sitemap loads so early now, can we get rid of clean_up_globals()?
 	-> Test with 50 plugins and some "premium theme" active, and see if they slip through.
-
-TODO two new classes:
-	1. Option_Filter (See below "Four new classes")
-		-> Maintain index of all options to be sanitized.
-			-> Load early, so we can sanitize whatever tries to update the option.
-		-> Should work with class "Option"?
-			-> Falls back to default on failure for every option?
-				-> How do we determine failure? Out of range?
-		-> Relays to Sanitize
-	2. Sanitize
-	TODO Or The_SEO_Framework\Security?
-		1. The_SEO_Framework\Security\Input
-			Or \Sanitize
-		2. The_SEO_Framework\Security\Output
-			Or \Escape
-TODO Four new classes:
-	0. The_SEO_Framework\Data\
-		1. Options
-			x. \Filter
-				Or \Validate
-			-> See Sanitize above?
-		2. User_Options
-		3. Post_Data
-		4. Term_Data
 
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
@@ -707,6 +674,8 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 	* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
 	* All meta generation methods are now assumed to return (pre-)sanitized data. You must still escape the data when printing to screen.
 	* The plugin compatibility loader now tests common filenames instead of function, constant, or class's presence.
+	* When activating or deactivating the plugin, only on WordPress 6.4 or later the options will now toggle from autoloading on and off.
+		* It will still toggle on for older versions of WordPress.
 * **Improved:**
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696) (among others).
@@ -734,6 +703,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* A warning is displayed at the Sitemap Output settings.
 	* **Accessibility:**
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
+		* When resetting the SEO Settings, a clearer change-notice is sent.
 	* **Redirects:**
 		* When an invalid URL is supplied by the admin in the redirect field, the plugin now displays a generic HTTP error code 400 (Bad Request), instead of showing the page.
 	* **Other:**
@@ -789,6 +759,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
 	* Open Graph tag `og:updated_time` is no longer outputted, it is inferred from `article:modified_time`.
 	* TODO remove `fb:app_id` -- even though users will get warnings and annoy us?
+		-> Yes, remove this. The sanitization also no longer makes sense.
 
 **For translators:**
 
@@ -877,6 +848,26 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* Internally known as `The_SEO_Framework\Helper\Format\Markdown`.
 		* This pool has a sub-pool, accessible via `tsf()->format()->time()`.
 			* Internally known as `The_SEO_Framework\Helper\Format\Time`.
+		* This pool has a sub-pool, accessible via `tsf()->format()->arrays()`.
+			* Internally known as `The_SEO_Framework\Helper\Format\Arrays`.
+		* This pool has a sub-pool, accessible via `tsf()->format()->strings()`.
+			* Internally known as `The_SEO_Framework\Helper\Format\Strings`.
+		* This pool has a sub-pool, accessible via `tsf()->format()->color()`.
+			* Internally known as `The_SEO_Framework\Helper\Format\Color`.
+	* Pool `tsf()->admin()` is now available.
+		* Unlike most other pools, this is a Closure where it stores only subpools.
+		* This pool has a sub-pool, accessible via `tsf()->admin()->menu()`.
+			* Internally known as `The_SEO_Framework\Admin\Menu`.
+		* This pool has a sub-pool, accessible via `tsf()->admin()->notice()`.
+			* Internally known as `The_SEO_Framework\Admin\Notice`.
+			* This pool has a sub-pool, accessible via `tsf()->admin()->notice()->persistent()`.
+				* Internally known as `The_SEO_Framework\Admin\Notice\Persistent`.
+		* This pool has a sub-pool, accessible via `tsf()->admin()->layout()`.
+			* Unlike most other sub-pools, this is a Closure where it stores only subpools.
+			* This pool has a sub-pool, accessible via `tsf()->admin()->layout()->html()`.
+				* Internally known as `The_SEO_Framework\Admin\Settings\Layout\HTML`.
+			* This pool has a sub-pool, accessible via `tsf()->admin()->layout()->form()`.
+				* Internally known as `The_SEO_Framework\Admin\Settings\Layout\Form`.
 	* Pool `tsf()->data()` is now available.
 		* Unlike most other pools, this is a Closure where it stores only subpools.
 		* This pool has a sub-pool, accessible via `tsf()->data()->blog()`.
@@ -1323,6 +1314,20 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* `output_js_title_data()`, with no alternative available.
 				* `output_js_social_data()`, with no alternative available.
 				* `output_js_description_data()`, with no alternative available.
+				* `add_menu_link()`, use `tsf()->admin()->menu()->register_top_menu_page()` instead.
+				* `get_admin_issue_count()`, use `tsf()->admin()->menu()->get_top_menu_issue_count()` instead.
+				* `get_admin_menu_issue_badge()`, use `tsf()->admin()->menu()->get_issue_badge()` instead.
+				* `admin_redirect()`, use `tsf()->admin()->utils()->redirect()` instead.
+				* `register_dismissible_persistent_notice()`, use `tsf()->admin()->notice()->persistent()->register_notice()` instead.
+				* `count_down_persistent_notice()`, use `tsf()->admin()->notice()->persistent()->count_down_notice()` instead.
+				* `clear_persistent_notice()`, use `tsf()->admin()->notice()->persistent()->clear_notice()` instead.
+				* `clear_all_persistent_notices()`, use `tsf()->admin()->notice()->persistent()->clear_all_notices()` instead.
+				* `generate_dismissible_notice()`, use `tsf()->admin()->notice()->generate_notice()` instead.
+				* `do_dismissible_notice()`, use `tsf()->admin()->notice()->output_notice()` instead.
+				* `register_settings()`, with no alternative available.
+				* `add_option_filter()`, with no alternative available.
+				* `get_relative_fontcolor()`, use `tsf()->format()->color()->get_relative_fontcolor()` instead.
+				* `active_plugins()`, use `tsf()->data()->blog()->get_active_plugins()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1330,6 +1335,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* `array_flatten_list()`, without deprecation (it was marked protected).
 				* `init_debug_vars()`, was never meant to be public.
 				* `get_image_generation_params()`, has nothing to offer for the public API.
+				* `set_plugin_check_caches()`, without deprecation (we now handle it without a cached check).
 				* Since we rebuilt the class initialization, these methods are no longer available:
 					* `autodescription_run()`
 					* `init_the_seo_framework()`
@@ -1359,8 +1365,6 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* Since we moved class `The_SEO_Framework\Cache`'s functionality from this object, these are removed:
 					* `init_admin_caching_actions()`
 					* `init_post_cache_actions()`
-					* `set_plugin_check_caches()`
-						* This is now `tsf()->reset_check_plugin_conflicts()`. TODO it won't be for long.
 					* `delete_main_cache()`
 					* `delete_post_cache()`
 					* `delete_excluded_ids_cache()`
@@ -1377,6 +1381,9 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 					* `delete_sitemap_transient_permalink_updated`
 					* `delete_sitemap_transient()`
 						* This has been moved to `tsf()->sitemap()->cache()->clear_sitemap_caches()`.
+				* Since we rebuilt `The_SEO_Framework\Sanitize` and reworked the settings, these are removed:
+					`sanitize()`
+					`add_option_filter()`
 				* Deprecated in TSF v4.2.0, the following deprecated methods of the `The_SEO_Framework\Load` object (`tsf()`) are no longer available:
 					* `append_php_query()`
 					* `get_legacy_header_filters_output()`
@@ -1441,14 +1448,16 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 					* `get_warned_settings()`
 					* `get_safe_schema_image()`
 			* **Properties deprecated:**
-				* `the_seo_framework_use_transients`, with no alternative available.
-				* `the_seo_framework_debug`, use constant `THE_SEO_FRAMEWORK_DEBUG` instead.
-				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
-				* `is_headless`, use function `The_SEO_Framework\is_headless()` instead.
-				* `seo_settings_page_slug`, use constant `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` instead.
-				* `loaded`, this check is no longer necessary.
-				* `inpost_nonce_name`, you should make a custom check.
 				* `inpost_nonce_field`, you should make a custom check.
+				* `inpost_nonce_name`, you should make a custom check.
+				* `is_headless`, use function `The_SEO_Framework\is_headless()` instead.
+				* `loaded`, this check is no longer necessary.
+				* `pretty_permalinks`, use `tsf()->query()->utils()->using_pretty_permalinks()` instead.
+				* `script_debug`, use constant `SCRIPT_DEBUG` instead.
+				* `seo_settings_page_slug`, use constant `THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG` or `The_SEO_Framework\Admin::get_top_menu_args()` instead.
+				* `seo_settings_page_hook`, use `tsf()->admin()->menu()->get_page_hook_name()` instead.
+				* `the_seo_framework_debug`, use constant `THE_SEO_FRAMEWORK_DEBUG` instead.
+				* `the_seo_framework_use_transients`, with no alternative available.
 			* **Properties removed:**
 				* Deprecated in TSF v4.2.0, `load_options` is no longer available.
 		* Class `The_SEO_Framework\Cache` is dropped from the god object `tsf()` and deleted.
@@ -1483,6 +1492,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* `the_seo_framework_description_excerpt`, this is used to adjust the description excerpt.
 		* `the_seo_framework_register_scripts`, this is used to engage the script loader on a custom TSF page.
 			* This must be filtered before `admin_enqueue_scripts` (e.g., at `load-{$plugin_page}`). If that's not possible, use `tsf()->load_admin_scripts()` instead to enforce loading.
+		* `the_seo_framework_settings_update_sanitizers`, this allows you to change sanitization callbacks on option-update.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
@@ -1561,6 +1571,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* `the_seo_framework_site_cache`, use WP options API instead to alter option name `'autodescription-site-cache'`.
 		* `the_seo_framework_available_twitter_cards`, we couldn't make it work in the new API.
 		* `the_seo_framework_wp_title`, this was for WP 4.4 titles. Use `the_seo_framework_pre_get_document_title` instead.
+		* `the_seo_framework_available_sanitizer_filters`, we changed how we update settings, so the older filters are no longer compatible. Use `'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS` instead.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.

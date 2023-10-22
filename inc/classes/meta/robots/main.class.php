@@ -33,7 +33,7 @@ use function \The_SEO_Framework\umemo;
  * Generates robots meta.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved from `The_SEO_Framework\Builders\Robots`.
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\Robots`.
  * @access private
  */
 final class Main {

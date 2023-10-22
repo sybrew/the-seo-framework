@@ -39,7 +39,7 @@ use \The_SEO_Framework\Helper\{
  * @NOTE This and the methods herein will likely be deprecated in the future.
  *
  * @access protected
- *         Use tsf()->layout()->form() instead.
+ *         Use tsf()->admin()->layout()->form() instead.
  */
 class Form {
 

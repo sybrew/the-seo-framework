@@ -41,7 +41,7 @@ use \The_SEO_Framework\Helper\{
  * Engine for robots generator via front-end query.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved from `The_SEO_Framework\Builders\Robots`.
+ * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\Robots`.
  * @access private
  */
 final class Front extends Factory {

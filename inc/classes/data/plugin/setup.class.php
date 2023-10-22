@@ -8,9 +8,10 @@ namespace The_SEO_Framework\Data\Plugin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
-
-use \The_SEO_Framework\Traits\Property_Refresher;
+use \The_SEO_Framework\{
+	Data,
+	Traits\Property_Refresher,
+};
 
 /**
  * The SEO Framework plugin
@@ -52,6 +53,23 @@ class Setup {
 	private static $warned_options;
 
 	/**
+	 * Resets the options and flushes all pertaining caches for the current request.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public static function reset_options() {
+
+		$success = \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, static::get_default_options() );
+
+		if ( $success )
+			Data\Plugin::refresh_static_properties();
+
+		return $success;
+	}
+
+	/**
 	 * Returns selected default option. Null on failure.
 	 *
 	 * @since 2.2.5
@@ -60,8 +78,6 @@ class Setup {
 	 *              3. Now always memoizes.
 	 * @since 4.3.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
 	 *              2. Moved to `The_SEO_Framework\Data\Setup`.
-	 * @uses $this->get_default_settings() Return option from the options table and cache result.
-	 * @uses THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
 	 *                       When empty, it'll return all options. You should use get_default_options() instead.

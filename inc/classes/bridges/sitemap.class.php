@@ -77,7 +77,7 @@ class Sitemap extends \The_SEO_Framework\Sitemap\Registry {
 	 * @param array  $arguments The method arguments.
 	 * @return mixed|void
 	 */
-	public function __call( $name, $arguments ) {
+	public function __call( $name, $arguments ) { // phpcs:ignore -- spl interface
 
 		switch ( $name ) {
 			case 'sitemap_cache_enabled':

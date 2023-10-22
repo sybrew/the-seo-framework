@@ -71,7 +71,7 @@ function _prepare( $previous_version, $current_version ) {
 	if ( ! \is_main_site() ) return;
 
 	$show_sale = true;
-	if ( \function_exists( '\\tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
+	if ( \function_exists( 'tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
 		$show_sale = ! \tsf_extension_manager()->is_connected_user();
 	}
 	if ( $show_sale ) {

@@ -47,6 +47,7 @@ class Exclusion {
 	 *
 	 * @hook wp_insert_post 10
 	 * @hook attachment_updated 10
+	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
 	 * @since 4.3.0
 	 *
 	 * @return bool True on success, false on failure.

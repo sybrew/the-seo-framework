@@ -96,7 +96,7 @@ class Main {
 						$output .= sprintf( "\nSitemap: %s", \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) ) );
 
 				$output .= "\n";
-			} elseif ( ! \tsf()->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat.
+			} elseif ( ! \tsf()->detect_sitemap_plugin() ) { // detect_sitemap_plugin() temp backward compat. var_dump() why?
 				if ( Sitemap\Utils::use_core_sitemaps() ) {
 					$wp_sitemaps_server = \wp_sitemaps_get_server();
 					if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
@@ -107,9 +107,8 @@ class Main {
 			}
 		}
 
-		$raw_uri = rawurldecode(
-			stripslashes( $_SERVER['REQUEST_URI'] )
-		) ?: '/robots.txt';
+		$raw_uri = rawurldecode( stripslashes( $_SERVER['REQUEST_URI'] ) )
+				?: '/robots.txt';
 
 		// Simple test for invalid directory depth. Even //robots.txt is an invalid location.
 		if ( strrpos( $raw_uri, '/' ) > 0 ) {

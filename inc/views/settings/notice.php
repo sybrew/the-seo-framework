@@ -12,7 +12,7 @@ namespace The_SEO_Framework;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2017 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -27,32 +27,34 @@ namespace The_SEO_Framework;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$hook_name = Admin\Menu::get_page_hook_name();
+$notice = Data\Plugin::get_site_cache( 'settings_notice' );
 
-?>
-<div class="metabox-holder columns-2">
-	<div class=postbox-container-1>
-		<?php
-		\do_action( 'the_seo_framework_before_siteadmin_metaboxes', $hook_name );
+if ( ! $notice ) return;
 
-		\do_meta_boxes( $hook_name, 'main', null );
+$message = '';
+$type    = '';
 
-		if ( isset( $GLOBALS['wp_meta_boxes'][ $hook_name ]['main_extra'] ) )
-			\do_meta_boxes( $hook_name, 'main_extra', null );
+switch ( $notice ) {
+	case 'updated':
+		$message = \__( 'SEO settings are saved, and the caches have been flushed.', 'autodescription' );
+		$type    = 'updated';
+		break;
 
-		\do_action( 'the_seo_framework_after_siteadmin_metaboxes', $hook_name );
-		?>
-	</div>
-	<div class=postbox-container-2>
-		<?php
-		\do_action( 'the_seo_framework_before_siteadmin_metaboxes_side', $hook_name );
+	case 'unchanged':
+		$message = \__( 'No SEO settings were changed, but the caches have been flushed.', 'autodescription' );
+		$type    = 'info';
+		break;
 
-		/**
-		 * @TODO fill this in...? Is this even styled?
-		 */
+	case 'reset':
+		$message = \__( 'SEO settings are reset, and the caches have been flushed.', 'autodescription' );
+		$type    = 'warning';
+		break;
 
-		\do_action( 'the_seo_framework_after_siteadmin_metaboxes_side', $hook_name );
-		?>
-	</div>
-</div>
-<?php
+	case 'error':
+		$message = \__( 'An unknown error occurred saving SEO settings.', 'autodescription' );
+		$type    = 'error';
+}
+
+Data\Plugin::update_site_cache( 'settings_notice', '' );
+
+$message and Admin\Notice::output_notice( $message, [ 'type' => $type ] );

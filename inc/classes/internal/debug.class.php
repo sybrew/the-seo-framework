@@ -11,7 +11,6 @@ namespace The_SEO_Framework\Internal;
 use function \The_SEO_Framework\memo;
 
 use \The_SEO_Framework\Admin;
-
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,

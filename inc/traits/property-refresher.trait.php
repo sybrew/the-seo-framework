@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Traits;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function \The_SEO_Framework\has_run;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -53,7 +55,7 @@ trait Property_Refresher {
 
 		static::$marked_for_refresh[ $property ] = 0b1;
 
-		if ( \The_SEO_Framework\has_run( __CLASS__ . __METHOD__ ) ) return;
+		if ( has_run( __CLASS__ . __METHOD__ ) ) return;
 
 		\add_action( 'switch_blog', [ __CLASS__, '_do_switch_blog_flush' ], 10, 2 );
 	}

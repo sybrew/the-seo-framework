@@ -13,7 +13,10 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Data,
+	Traits\Property_Refresher,
+};
 
 /**
  * The SEO Framework plugin
@@ -40,6 +43,7 @@ use \The_SEO_Framework\Data;
  *         Use tsf()->data()->blog() instead.
  */
 class Blog {
+	use Property_Refresher;
 
 	/**
 	 * Fetches public blogname (site title).
@@ -140,7 +144,7 @@ class Blog {
 	 */
 	public static function is_spam_or_deleted() {
 
-		if ( ! \function_exists( '\\get_site' ) || ! \is_multisite() )
+		if ( ! \function_exists( 'get_site' ) || ! \is_multisite() )
 			return false;
 
 		$site = \get_site();
@@ -172,5 +176,35 @@ class Blog {
 				)
 			)
 		);
+	}
+
+	/**
+	 * Returns list of active plugins.
+	 *
+	 * @since 2.6.1
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `active_plugins`.
+	 *              3. Optimized code and removed memoization.
+	 * @credits Jetpack for some code.
+	 *
+	 * @return array List of active plugins.
+	 */
+	public static function get_active_plugins() {
+
+		$active_plugins = (array) \get_option( 'active_plugins', [] );
+
+		if ( \is_multisite() ) {
+			// Due to legacy code, active_sitewide_plugins stores them in the keys,
+			// whereas active_plugins stores them in the values. array_keys() resolves the disparity.
+			$plugins = array_merge(
+				$plugins,
+				array_keys( \get_site_option( 'active_sitewide_plugins', [] ) )
+			);
+
+			// $plugins is already sorted at `activate_plugin`.
+			sort( $active_plugins );
+		}
+
+		return $active_plugins;
 	}
 }

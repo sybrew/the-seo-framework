@@ -72,11 +72,12 @@ final class AJAX {
 
 		if (
 			   ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-			|| ! \check_ajax_referer( \tsf()->_get_dismiss_notice_nonce_action( $key ), 'tsf_dismiss_nonce', false )
-		)
+			|| ! \check_ajax_referer( Admin\Notice\Persistent::_get_dismiss_nonce_action( $key ), 'tsf_dismiss_nonce', false )
+		) {
 			\wp_die( -1, 403 );
+		}
 
-		\tsf()->clear_persistent_notice( $key );
+		Admin\Notice\Persistent::clear_notice( $key );
 		\wp_send_json_success( null, 200 );
 	}
 
@@ -190,7 +191,7 @@ final class AJAX {
 				$url              = str_replace( $parent_basename, $cropped_basename, $parent_url );
 
 				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- See https://core.trac.wordpress.org/ticket/42480
-				$size       = \function_exists( '\\wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
+				$size       = \function_exists( 'wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
 				$image_type = $size ? $size['mime'] : 'image/jpeg';
 
 				// Get the original image's post to pre-populate the cropped image.

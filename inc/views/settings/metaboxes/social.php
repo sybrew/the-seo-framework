@@ -67,7 +67,7 @@ switch ( $instance ) :
 			],
 		];
 
-		Admin\Settings\Plugin::_nav_tab_wrapper(
+		Admin\Settings\Plugin::nav_tab_wrapper(
 			'social',
 			/**
 			 * @since 2.2.2

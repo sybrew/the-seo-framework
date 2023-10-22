@@ -150,7 +150,7 @@ switch ( $instance ) :
 						);
 					}
 
-					Admin\Settings\Plugin::_nav_tab_wrapper(
+					Admin\Settings\Plugin::nav_tab_wrapper(
 						"post_type_archive_{$post_type}",
 						/**
 						 * @since 4.2.0

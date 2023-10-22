@@ -19,6 +19,7 @@ use \The_SEO_Framework\{
 	Data,
 };
 use \The_SEO_Framework\Helper\{
+	Format,
 	Post_Types,
 	Query,
 	Taxonomies,
@@ -167,7 +168,6 @@ class Registry {
 
 		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}
-
 
 	/**
 	 * Adds admin-body classes.
@@ -511,13 +511,13 @@ class Registry {
 
 			$_conversion_table = [
 				'{{$bg}}'               => $_colors[0],
-				'{{$rel_bg}}'           => "#{$tsf->get_relative_fontcolor( $_colors[0] )}",
+				'{{$rel_bg}}'           => '#' . Format\Color::get_relative_fontcolor( $_colors[0] ),
 				'{{$bg_accent}}'        => $_colors[1],
-				'{{$rel_bg_accent}}'    => "#{$tsf->get_relative_fontcolor( $_colors[1] )}",
+				'{{$rel_bg_accent}}'    => '#' . Format\Color::get_relative_fontcolor( $_colors[1] ),
 				'{{$color}}'            => $_colors[2],
-				'{{$rel_color}}'        => "#{$tsf->get_relative_fontcolor( $_colors[2] )}",
+				'{{$rel_color}}'        => '#' . Format\Color::get_relative_fontcolor( $_colors[2] ),
 				'{{$color_accent}}'     => $_colors[3],
-				'{{$rel_color_accent}}' => "#{$tsf->get_relative_fontcolor( $_colors[3] )}",
+				'{{$rel_color_accent}}' => '#' . Format\Color::get_relative_fontcolor( $_colors[3] ),
 			];
 
 			$conversions = umemo(

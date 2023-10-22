@@ -26,7 +26,7 @@ use \The_SEO_Framework\Meta;
  */
 function _wpforo_fix_page() {
 
-	if ( \is_admin() || ! \function_exists( '\\is_wpforo_page' ) || ! \is_wpforo_page() ) return;
+	if ( \is_admin() || ! \function_exists( 'is_wpforo_page' ) || ! \is_wpforo_page() ) return;
 
 	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore, TSF.Performance.Opcodes -- is local.
 		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
@@ -72,7 +72,7 @@ function _wpforo_disable_tsf_html_output() {
  * @return string
  */
 function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
-	return \function_exists( '\\wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
+	return \function_exists( 'wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
 }
 
 /**
@@ -168,7 +168,7 @@ function _wpforo_seo_meta_enabled() {
 	return memo() ?? memo(
 		// Unreliable in WPForo 2.0.0~2.1.6 (latest version at time of recording). Therefore, assume "true" if null.
 		// See https://wordpress.org/support/topic/wpforo_setting-seo-doesnt-work/.
-		\function_exists( '\\wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_meta' ) ?? true )
+		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_meta' ) ?? true )
 	);
 }
 
@@ -184,6 +184,6 @@ function _wpforo_seo_title_enabled() {
 	return memo() ?? memo(
 		// Unreliable in WPForo 2.0.0~2.1.6 (latest version at time of recording). Therefore, assume "true" if null.
 		// See https://wordpress.org/support/topic/wpforo_setting-seo-doesnt-work/.
-		\function_exists( '\\wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_title' ) ?? true )
+		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_title' ) ?? true )
 	);
 }

@@ -10,7 +10,10 @@ namespace The_SEO_Framework\Helper;
 
 use function \The_SEO_Framework\umemo;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+};
 
 /**
  * The SEO Framework plugin
@@ -956,10 +959,10 @@ class Query {
 			return false;
 
 		if ( ! $secure )
-			return static::is_menu_page( \tsf()->seo_settings_page_hook, \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
+			return static::is_menu_page( Admin\Menu::get_page_hook_name(), \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
 
 		return Query\Cache::memo()
-			?? Query\Cache::memo( static::is_menu_page( \tsf()->seo_settings_page_hook ) );
+			?? Query\Cache::memo( static::is_menu_page( Admin\Menu::get_page_hook_name() ) );
 	}
 
 	/**

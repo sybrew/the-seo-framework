@@ -42,7 +42,7 @@ use \The_SEO_Framework\Helper\{
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// See _description_metabox et al.
+// See meta_box et al.
 [ $instance ] = $view_args;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -86,7 +86,7 @@ switch ( $instance ) :
 		$tabs = (array) \apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, null );
 
 		echo '<div class="tsf-flex tsf-flex-inside-wrap">';
-		Admin\Settings\Post::_flex_nav_tab_wrapper( 'inpost', $tabs );
+		Admin\Settings\Post::flex_nav_tab_wrapper( 'inpost', $tabs );
 		echo '</div>';
 		break;
 

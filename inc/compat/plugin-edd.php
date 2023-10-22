@@ -26,7 +26,7 @@ use \The_SEO_Framework\Helper\Query;
  */
 function _set_edd_is_product( $is_product, $post ) {
 
-	if ( $is_product || ! \function_exists( '\\edd_get_download' ) ) return $is_product;
+	if ( $is_product || ! \function_exists( 'edd_get_download' ) ) return $is_product;
 
 	$download = \edd_get_download(
 		$post ? \get_post( $post ) : Query::get_the_real_id()

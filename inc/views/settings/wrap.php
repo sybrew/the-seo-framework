@@ -69,6 +69,8 @@ $_reset_button = \get_submit_button(
 	]
 );
 
+$hook_name = Admin\Menu::get_page_hook_name();
+
 ?>
 <div class="wrap tsf-metaboxes">
 	<form method=post action=options.php autocomplete=off data-form-type=other>
@@ -95,7 +97,7 @@ $_reset_button = \get_submit_button(
 		</div>
 
 		<?php
-		\do_action( \tsf()->seo_settings_page_hook . '_settings_page_boxes', \tsf()->seo_settings_page_hook );
+		\do_action( "{$hook_name}_settings_page_boxes", $hook_name );
 		?>
 
 		<div class=tsf-bottom-wrap>
@@ -120,7 +122,7 @@ $_reset_button = \get_submit_button(
 		// close postboxes that should be closed
 		$( '.if-js-closed' ).removeClass( 'if-js-closed' ).addClass( 'closed' );
 		// postboxes setup
-		postboxes.add_postbox_toggles('<?= \esc_js( \tsf()->seo_settings_page_hook ) ?>');
+		postboxes.add_postbox_toggles('<?= \esc_js( $hook_name ) ?>');
 	} );
 	//]]>
 </script>

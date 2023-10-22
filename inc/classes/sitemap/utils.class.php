@@ -252,7 +252,7 @@ class Utils {
 		if ( null !== $memo = memo() ) return $memo;
 
 		// Ensure get_home_path() is declared.
-		if ( ! \function_exists( '\\get_home_path' ) )
+		if ( ! \function_exists( 'get_home_path' ) )
 			require_once \ABSPATH . 'wp-admin/includes/file.php';
 
 		$path = \get_home_path() . 'sitemap.xml';

@@ -36,7 +36,7 @@ use \The_SEO_Framework\Helper\Query,
  *
  * @since 2.8.0
  */
-class Detect extends Admin_Init {
+class Detect extends Pool {
 
 	/**
 	 * Returns list of active plugins.
@@ -286,7 +286,7 @@ class Detect extends Admin_Init {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'seo_tools' ), $this->active_plugins() );
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'seo_tools' ), Data\Blog::get_active_plugins() );
 
 		return memo(
 			/**
@@ -324,7 +324,7 @@ class Detect extends Admin_Init {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'open_graph' ), $this->active_plugins() );
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'open_graph' ), Data\Blog::get_active_plugins() );
 
 		return memo(
 			/**
@@ -361,7 +361,7 @@ class Detect extends Admin_Init {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'twitter_card' ), $this->active_plugins() );
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'twitter_card' ), Data\Blog::get_active_plugins() );
 
 		return memo(
 			/**
@@ -414,7 +414,7 @@ class Detect extends Admin_Init {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'sitemaps' ), $this->active_plugins() );
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'sitemaps' ), Data\Blog::get_active_plugins() );
 
 		return memo(
 			/**
@@ -445,7 +445,7 @@ class Detect extends Admin_Init {
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'multilingual' ), $this->active_plugins() );
+		$conflicting_plugin = array_intersect( $this->get_conflicting_plugins( 'multilingual' ), Data\Blog::get_active_plugins() );
 
 		return memo(
 			/**
@@ -537,22 +537,13 @@ class Detect extends Admin_Init {
 	 * @return bool
 	 */
 	public function is_gutenberg_page() {
-		if ( \function_exists( '\\use_block_editor_for_post' ) )
+		if ( \function_exists( 'use_block_editor_for_post' ) )
 			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
 
-		if ( \function_exists( '\\is_gutenberg_page' ) )
+		if ( \function_exists( 'is_gutenberg_page' ) )
 			return \is_gutenberg_page();
 
 		return false;
-	}
-
-	/**
-	 * Registers plugin cache checks on plugin activation.
-	 *
-	 * @since 4.3.0
-	 */
-	public function reset_check_plugin_conflicts() {
-		Data\Plugin::update_site_cache( 'check_seo_plugin_conflicts', 1 );
 	}
 
 	/**

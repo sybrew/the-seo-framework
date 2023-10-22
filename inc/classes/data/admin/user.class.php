@@ -53,9 +53,10 @@ class User {
 
 		if ( empty( $_POST['tsf-user-meta'] ) ) return;
 
+		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
+
 		// Redundant. Before hooks fire, this is already checked.
 		\check_admin_referer( "update-user_{$user_id}" );
-		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
 		if ( ! Data\User::user_has_author_info_cap_on_network( $user_id ) ) return;
 

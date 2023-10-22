@@ -90,7 +90,7 @@ switch ( $instance ) :
 			],
 		];
 
-		Admin\Settings\Plugin::_nav_tab_wrapper(
+		Admin\Settings\Plugin::nav_tab_wrapper(
 			'homepage',
 			/**
 			 * @since 2.6.0

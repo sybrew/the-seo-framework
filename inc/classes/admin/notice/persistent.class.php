@@ -1,26 +1,22 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Facade\Admin_Init
- * @subpackage The_SEO_Framework\Admin
+ * @package The_SEO_Framework\Classes\Admin\Notice\Persistent
+ * @subpackage The_SEO_Framework\Admin\Notice
  */
 
-namespace The_SEO_Framework;
+namespace The_SEO_Framework\Admin\Notice;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
-
-use \The_SEO_Framework\Helper\{
-	Format\Markdown,
-	Post_Types,
-	Query,
-	Taxonomies,
+use \The_SEO_Framework\{
+	Admin,
+	Data,
+	Helper\Query,
 };
-use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -36,81 +32,21 @@ use \The_SEO_Framework\Data;
  */
 
 /**
- * Class The_SEO_Framework\Admin_Init
+ * Holds persistent notices functionality.
  *
- * Initializes the plugin for the wp-admin screens.
- * Enqueues CSS and Javascript.
- *
- * @since 2.8.0
+ * @since 4.3.0
+ * @access protected
+ *         Use tsf()->admin()->notice()->persistent() instead.
  */
-class Admin_Init extends Pool {
-
-	/**
-	 * Redirect the user to an admin page, and add query args to the URL string
-	 * for alerts, etc.
-	 *
-	 * @since 2.2.2
-	 * @since 2.9.2 Added user-friendly exception handling.
-	 * @since 2.9.3 1. Query arguments work again (regression 2.9.2).
-	 *              2. Now only accepts http and https protocols.
-	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
-	 * @TODO WP 5.2/5.4 will cause this method to never run on wp_die().
-	 *       We should further investigate the cause and remove WP's blockade. This is a corner-case, however.
-	 *
-	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.
-	 * @param array  $query_args Optional. Associative array of query string arguments
-	 *               (key => value). Default is an empty array.
-	 * @return null Return early if first argument is false.
-	 */
-	public function admin_redirect( $page, $query_args = [] ) { // TODO make redirect_to_admin_page
-
-		if ( empty( $page ) ) return;
-
-		// This can be empty... so $target will be empty. TODO test for $success and bail?
-		// Might cause security issues... we _must_ exit, always? Show warning?
-		$url = html_entity_decode( \menu_page_url( $page, false ) );
-
-		$target = \add_query_arg( array_filter( $query_args, 'strlen' ), $url );
-		$target = \sanitize_url( $target, [ 'https', 'http' ] );
-
-		// Predict white screen:
-		$headers_sent = headers_sent();
-
-		\wp_safe_redirect( $target, 302 );
-
-		// White screen of death for non-debugging users. Let's make it friendlier.
-		if ( $headers_sent && $target ) {
-			// Test if WordPress's redirect header is sent. Bail if true.
-			if ( \in_array(
-				'Location: ' . \wp_sanitize_redirect( $target ),
-				headers_list(),
-				true
-			) ) exit;
-
-			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
-			printf(
-				'<p><strong>%s</strong></p>',
-				Markdown::convert(
-					sprintf(
-						/* translators: %s = Redirect URL markdown */
-						\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
-						\esc_url( $target )
-					),
-					[ 'a' ],
-					[ 'a_internal' => true ]
-				)
-			);
-		}
-
-		exit;
-	}
+class Persistent {
 
 	/**
 	 * Registers dismissible persistent notice, that'll respawn during page load until dismissed or otherwise expired.
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.3 Now handles timeout values below -1 gracefully, by purging the whole notification gracelessly.
-	 * @uses $this->generate_dismissible_persistent_notice()
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `register_dismissible_persistent_notice`.
 	 *
 	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
 	 *                           When the message contains HTML, it must start with a <p> tag,
@@ -134,7 +70,7 @@ class Admin_Init extends Pool {
 	 *                              Do not input non-integer values (such as `false`), for those might cause adverse events.
 	 * }
 	 */
-	public function register_dismissible_persistent_notice( $message, $key, $args = [], $conditions = [] ) {
+	public static function register_notice( $message, $key, $args = [], $conditions = [] ) {
 
 		// We made this mistake ourselves. Let's test against it.
 		// We can't type $key to scalar, for PHP is dumb with that type.
@@ -179,12 +115,13 @@ class Admin_Init extends Pool {
 	 * When the threshold is reached, the notice is deleted.
 	 *
 	 * @since 4.1.0
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $key   The notice key.
 	 * @param int    $count The number of counts the notice has left. Passed by reference.
 	 *                      When -1 (permanent notice), nothing happens.
 	 */
-	public function count_down_persistent_notice( $key, &$count ) {
+	public static function count_down_notice( $key, &$count ) {
 
 		$_count_before = $count;
 
@@ -192,7 +129,7 @@ class Admin_Init extends Pool {
 			--$count;
 
 		if ( ! $count ) {
-			$this->clear_persistent_notice( $key );
+			static::clear_notice( $key );
 		} elseif ( $_count_before !== $count ) {
 			$notices = Data\Plugin::get_site_cache( 'persistent_notices' );
 			if ( isset( $notices[ $key ]['conditions']['count'] ) ) {
@@ -200,7 +137,7 @@ class Admin_Init extends Pool {
 				Data\Plugin::update_site_cache( 'persistent_notices', $notices );
 			} else {
 				// Notice didn't conform. Remove it.
-				$this->clear_persistent_notice( $key );
+				static::clear_notice( $key );
 			}
 		}
 	}
@@ -209,11 +146,12 @@ class Admin_Init extends Pool {
 	 * Clears a persistent notice by key.
 	 *
 	 * @since 4.1.0
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $key The notice key.
 	 * @return bool True on success, false on failure.
 	 */
-	public function clear_persistent_notice( $key ) {
+	public static function clear_notice( $key ) {
 
 		$notices = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
 
@@ -226,10 +164,11 @@ class Admin_Init extends Pool {
 	 * Clears all registered persistent notices. Useful after upgrade.
 	 *
 	 * @since 4.1.0
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
-	public function clear_all_persistent_notices() {
+	public static function clear_all_notices() {
 		return Data\Plugin::update_site_cache( 'persistent_notices', [] );
 	}
 
@@ -239,22 +178,62 @@ class Admin_Init extends Pool {
 	 * @since 4.1.0
 	 * @since 4.1.4 1. Now 'public', marked private.
 	 *              2. Now uses underscores instead of dashes.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `_get_dismiss_notice_nonce_action`.
 	 * @access private
 	 *
 	 * @param string $key The notice key.
 	 * @return string The sanitized nonce action.
 	 */
-	public function _get_dismiss_notice_nonce_action( $key ) {
+	public static function _get_dismiss_nonce_action( $key ) {
 		return \sanitize_key( "tsf_notice_nonce_$key" );
+	}
+
+	/**
+	 * Outputs registered dismissible persistent notice.
+	 *
+	 * @since 4.1.0
+	 * @since 4.1.2 Now only ignores timeout values of -1 to test against.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `output_dismissible_persistent_notices`.
+	 * @access private
+	 */
+	public static function _output_notices() {
+
+		$notices    = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
+		$screenbase = \get_current_screen()->base ?? '';
+
+		// Ideally, we don't want to output more than one on no-js. Alas, we can't anticipate the importance and order of the notices.
+		foreach ( $notices as $key => $notice ) {
+			$cond = $notice['conditions'];
+
+			if (
+				   ! \current_user_can( $cond['capability'] )
+				|| ( $cond['user'] && Query::get_current_user_id() !== $cond['user'] )
+				|| ( $cond['screens'] && ! \in_array( $screenbase, $cond['screens'], true ) )
+				|| ( $cond['excl_screens'] && \in_array( $screenbase, $cond['excl_screens'], true ) )
+			) continue;
+
+			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
+				static::clear_notice( $key );
+				continue;
+			}
+
+			Admin\Template::output_view( 'notice/persistent', $notice['message'], $key, $notice['args'] );
+
+			static::count_down_notice( $key, $cond['count'] );
+		}
 	}
 
 	/**
 	 * Clears persistent notice on user request (clicked Dismiss icon) via the no-JS form.
 	 *
 	 * @since 4.1.0
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @access private
 	 * var_dump() equalize with AJAX::dismiss_notice() and combine
 	 */
-	public function _dismiss_notice() {
+	public static function _dismiss_notice() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = \sanitize_key( $_POST['tsf-notice-submit'] ?? '' );
@@ -267,12 +246,13 @@ class Admin_Init extends Pool {
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;
 
 		if (
-			   ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'] ?? '', $this->_get_dismiss_notice_nonce_action( $key ) )
+			   empty( $_POST['tsf_notice_nonce'] )
+			|| ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
+			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'], static::get_dismiss_notice_nonce_action( $key ) )
 		) {
 			\wp_die( -1, 403 );
 		}
 
-		$this->clear_persistent_notice( $key );
+		static::clear_notice( $key );
 	}
 }

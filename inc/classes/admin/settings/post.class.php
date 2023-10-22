@@ -44,7 +44,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.0.0
  * @since 4.3.0 1. Renamed from `PostSettings` to `Post`.
- *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
+ *              2. Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
 final class Post {
@@ -61,7 +61,7 @@ final class Post {
 	 *                 This because Gutenberg is inconsistent with metabox display and escapes HTML incorrectly.
 	 *              3. Now registers homepage warnings in the primary tabs.
 	 *              4. Now adds postbox class to non-posts as well.
-	 *              5. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 *              5. Moved from `\The_SEO_Framework\The_SEO_Framework\Bridges\PostSettings`.
 	 *
 	 * @param string $post_type The current post type.
 	 */
@@ -79,10 +79,12 @@ final class Post {
 
 		$box_id = 'tsf-inpost-box';
 
+		// TODO add the_seo_framework_post_metabox_args, and deprecate filters below?
+		// -> We'll concede to using Gutenberg, one day, dismissing this.
 		\add_meta_box(
 			$box_id,
 			\esc_html__( 'SEO Settings', 'autodescription' ),
-			[ static::class, '_meta_box' ],
+			[ static::class, 'meta_box' ],
 			null, // We used to forward hook $post_type, which redundantly forces WP to regenerate the current screen type.
 			/**
 			 * @since 2.9.0
@@ -115,8 +117,8 @@ final class Post {
 	 *
 	 * @since 4.0.0
 	 * @since 4.3.0 1. Removed third parameter: $use_tabs.
-	 *              2. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
-	 * @access private
+	 *              2. Moved from `\The_SEO_Framework\Bridges`.
+	 *              3. Renamed from `_flex_nav_tab_wrapper`.
 	 *
 	 * @param string $id   The nav-tab ID.
 	 * @param array  $tabs The tab content {
@@ -128,7 +130,7 @@ final class Post {
 	 *    }
 	 * }
 	 */
-	public static function _flex_nav_tab_wrapper( $id, $tabs = [] ) {
+	public static function flex_nav_tab_wrapper( $id, $tabs = [] ) {
 
 		$vars = get_defined_vars();
 
@@ -140,8 +142,10 @@ final class Post {
 	 * Outputs the meta box.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+	 *              2. Renamed from `_meta_box`.
 	 */
-	public static function _meta_box() {
+	public static function meta_box() {
 
 		\wp_nonce_field( Data\Admin\Post::$nonce_action, Data\Admin\Post::$nonce_name );
 
@@ -165,9 +169,8 @@ final class Post {
 	 * Adds a Gutenberg/Block-editor box class.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_add_postbox_class`.
-	 * @access private
 	 *
 	 * @param array $classes The registered postbox classes.
 	 * @return array
@@ -193,7 +196,7 @@ final class Post {
 	 * Outputs the Post SEO box general tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_general_tab`.
 	 */
 	public static function general_tab() {
@@ -212,7 +215,7 @@ final class Post {
 	 * Outputs the Post SEO box visibility tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_visibility_tab`.
 	 */
 	public static function visibility_tab() {
@@ -231,7 +234,7 @@ final class Post {
 	 * Outputs the Post SEO box social tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Post`.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_social_tab`.
 	 */
 	public static function social_tab() {

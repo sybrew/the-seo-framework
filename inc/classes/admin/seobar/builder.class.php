@@ -32,8 +32,9 @@ use \The_SEO_Framework\Data,
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved to `\The_SEO_Framework\Admin\SEOBar`
- *              2. The entire class is now static.
+ * @since 4.3.0 1. Moved from `\The_SEO_Framework\Interpreters`
+ *              2. Renamed from `SEOBar`.
+ *              3. The entire class is now static.
  * @access private
  */
 final class Builder {

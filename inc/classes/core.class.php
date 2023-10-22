@@ -100,33 +100,36 @@ class Core {
 	final public function __get( $name ) {
 
 		switch ( $name ) {
+			case 'inpost_nonce_field':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				return Data\Admin\Post::$nonce_action;
+			case 'inpost_nonce_name':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				return Data\Admin\Post::$nonce_name;
 			case 'is_headless':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use function \The_SEO_Framework\is_headless()' );
 				return is_headless();
+			case 'loaded':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you may drop the loaded check.' );
+				return true;
 			case 'pretty_permalinks':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
 				return $this->query()->utils()->using_pretty_permalinks();
 			case 'script_debug':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant SCRIPT_DEBUG' );
 				return \SCRIPT_DEBUG;
+			case 'seo_settings_page_slug':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG or The_SEO_Framework\Admin::get_top_menu_args()' );
+				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
+			case 'seo_settings_page_hook':
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use `tsf()->admin()->menu()->get_page_hook_name()` instead.' );
+				return Admin\Menu::get_page_hook_name();
 			case 'the_seo_framework_debug':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
 				return \THE_SEO_FRAMEWORK_DEBUG;
 			case 'the_seo_framework_use_transients':
 				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; with no alternative available' );
 				return true;
-			case 'seo_settings_page_slug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
-				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
-			case 'loaded':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you may drop the loaded check.' );
-				return true;
-			case 'inpost_nonce_name':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
-				return Data\Admin\Post::$nonce_name;
-			case 'inpost_nonce_field':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
-				return Data\Admin\Post::$nonce_action;
 		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
@@ -151,72 +154,6 @@ class Core {
 			return \call_user_func_array( [ $depr_class, $name ], $arguments );
 
 		$this->_inaccessible_p_or_m( "tsf()->$name()" );
-	}
-
-	/**
-	 * Calculates the relative font color according to the background, grayscale.
-	 *
-	 * @since 2.8.0
-	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
-	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
-	 * @since 3.0.4 Now uses WCAG's relative luminance formula.
-	 * @since 4.2.0 Optimized code, but it now has some rounding changes at the end. This could
-	 *              offset the returned values by 1/255th.
-	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
-	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
-	 *
-	 * @param string $hex The 3 to 6+ character RGB hex. The '#' prefix may be added.
-	 *                    RGBA/RRGGBBAA is supported, but the Alpha channels won't be returned.
-	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
-	 */
-	public function get_relative_fontcolor( $hex = '' ) {
-
-		// TODO: To support RGBA, we must fill to 4 or 8 via sprintf `%0{1,2}x`
-		// But doing this will add processing requirements for something we do not need... yet.
-		$hex = ltrim( $hex, '#' );
-
-		// Convert hex to usable numerics.
-		[ $r, $g, $b ] = array_map(
-			'hexdec',
-			str_split(
-				// rgb[..] == rrggbb[..].
-				\strlen( $hex ) >= 6 ? $hex : "$hex[0]$hex[0]$hex[1]$hex[1]$hex[2]$hex[2]",
-				2
-			)
-		);
-
-		$get_relative_luminance = static function ( $v ) {
-			// Convert hex to 0~1 float.
-			$v /= 0xFF;
-
-			if ( $v > .03928 ) {
-				$lum = ( ( $v + .055 ) / 1.055 ) ** 2.4;
-			} else {
-				$lum = $v / 12.92;
-			}
-			return $lum;
-		};
-
-		// Calc relative Luminance using sRGB.
-		$rl = .2126 * $get_relative_luminance( $r )
-			+ .7152 * $get_relative_luminance( $g )
-			+ .0722 * $get_relative_luminance( $b );
-
-		// Build light greyscale using relative contrast.
-		// Rounding is required for bitwise operation (PHP8.1+).
-		// printf will round anyway when floats are detected. Diff in #opcodes should be minimal.
-		$gr = round( $r * .2989 / 8 * $rl );
-		$gg = round( $g * .5870 / 8 * $rl );
-		$gb = round( $b * .1140 / 8 * $rl );
-
-		// Invert grayscela if they pass the relative luminance midpoint.
-		if ( $rl < .5 ) {
-			$gr ^= 0xFF;
-			$gg ^= 0xFF;
-			$gb ^= 0xFF;
-		}
-
-		return vsprintf( '%02x%02x%02x', [ $gr, $gg, $gb ] );
 	}
 
 	/**

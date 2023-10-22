@@ -6813,4 +6813,331 @@ final class Deprecated {
 		\tsf()->_deprecated_function( 'tsf()->output_js_description_data()', '4.3.0' );
 		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_social_data( $id, $data );
 	}
+
+	/**
+	 * Adds menu links under "settings" in the wp-admin dashboard
+	 *
+	 * @since 2.2.2
+	 * @since 2.9.2 Added static cache so the method can only run once.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function add_menu_link() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->add_menu_link()', '4.3.0', 'tsf()->admin()->menu()->register_top_menu_page()' );
+
+		$tsf->admin()->menu()->register_top_menu_page();
+	}
+
+	/**
+	 * Returns the number of issues registered.
+	 * Always returns 0 when the settings are headless.
+	 *
+	 * @since 4.2.8
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return int The registered issue count.
+	 */
+	public function get_admin_issue_count() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_admin_issue_count()', '4.3.0', 'tsf()->admin()->menu()->get_top_menu_issue_count()' );
+
+		return $tsf->admin()->menu()->get_top_menu_issue_count();
+	}
+
+	/**
+	 * Returns formatted text for the notice count to be displayed in the admin menu as a number.
+	 *
+	 * @since 4.2.8
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $issue_count The issue count.
+	 * @return string The issue count badge.
+	 */
+	public function get_admin_menu_issue_badge( $issue_count ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_admin_menu_issue_badge()', '4.3.0', 'tsf()->admin()->menu()->get_issue_badge()' );
+
+		return $tsf->admin()->menu()->get_issue_badge( $issue_count );
+	}
+
+	/**
+	 * Redirect the user to an admin page, and add query args to the URL string
+	 * for alerts, etc.
+	 *
+	 * @since 2.2.2
+	 * @since 2.9.2 Added user-friendly exception handling.
+	 * @since 2.9.3 1. Query arguments work again (regression 2.9.2).
+	 *              2. Now only accepts http and https protocols.
+	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.
+	 * @param array  $query_args Optional. Associative array of query string arguments
+	 *               (key => value). Default is an empty array.
+	 */
+	public function admin_redirect( $page, $query_args = [] ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->admin_redirect()', '4.3.0', 'tsf()->admin()->utils()->redirect()' );
+
+		$tsf->admin()->utils()->redirect( $page, $query_args );
+	}
+
+	/**
+	 * Registers dismissible persistent notice, that'll respawn during page load until dismissed or otherwise expired.
+	 *
+	 * @since 4.1.0
+	 * @since 4.1.3 Now handles timeout values below -1 gracefully, by purging the whole notification gracelessly.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
+	 *                           When the message contains HTML, it must start with a <p> tag,
+	 *                           or it will be added for you--regardless of proper semantics.
+	 * @param string $key        The notice key. Must be unique--prevents double-registering of the notice, and allows for
+	 *                           deregistering of the notice.
+	 * @param array  $args       : {
+	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'icon'   => bool   Optional. Whether to enable icon. Default true.
+	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 * }
+	 * @param array  $conditions : {
+	 *     'capability'   => string Required. The user capability required for the notice to display. Defaults to settings capability.
+	 *     'screens'      => array  Optional. The screen bases the notice may be displayed on. When left empty, it'll output on any page.
+	 *     'excl_screens' => array  Optional. The screen bases the notice may NOT be displayed on. When left empty, only `screens` applies.
+	 *     'user'         => int    Optional. The user ID to display the notice for. Capability will not be ignored.
+	 *     'count'        => int    Optional. The number of times the persistent notice may appear (for everyone allowed to see it).
+	 *                              Set to -1 for unlimited. When -1, the notice must be removed from display manually.
+	 *     'timeout'      => int    Optional. The number of seconds the notice should remain valid for display. Set to -1 to disable check.
+	 *                              When the timeout is below -1, then the notification will not be outputted.
+	 *                              Do not input non-integer values (such as `false`), for those might cause adverse events.
+	 * }
+	 */
+	public function register_dismissible_persistent_notice( $message, $key, $args = [], $conditions = [] ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->register_dismissible_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->register_notice()' );
+
+		$tsf->admin()->notice()->persistent()->register_notice( $message, $key, $args, $conditions );
+	}
+
+	/**
+	 * Lowers the persistent notice display count.
+	 * When the threshold is reached, the notice is deleted.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $key   The notice key.
+	 * @param int    $count The number of counts the notice has left. Passed by reference.
+	 *                      When -1 (permanent notice), nothing happens.
+	 */
+	public function count_down_persistent_notice( $key, &$count ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->count_down_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->count_down_notice()' );
+
+		$tsf->admin()->notice()->persistent()->count_down_notice( $key, $count );
+	}
+
+	/**
+	 * Clears a persistent notice by key.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $key The notice key.
+	 * @return bool True on success, false on failure.
+	 */
+	public function clear_persistent_notice( $key ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->clear_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->clear_notice()' );
+
+		return $tsf->admin()->notice()->persistent()->clear_notice( $key );
+	}
+
+	/**
+	 * Clears all registered persistent notices. Useful after upgrade.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function clear_all_persistent_notices() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->clear_all_persistent_notices()', '4.3.0', 'tsf()->admin()->notice()->persistent()->clear_all_notices()' );
+
+		return $tsf->admin()->notice()->persistent()->clear_all_notices();
+	}
+
+	/**
+	 * Generates dismissible notice.
+	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 *
+	 * @since 2.6.0
+	 * @since 3.0.6 The messages are no longer auto-styled to "strong".
+	 * @since 4.0.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
+	 * @since 4.0.3 1. Keyboard navigation is now supported on the dismiss icon.
+	 *              2. The info notice type is now supported.
+	 * @since 4.1.0 Now semantically wraps the content with HTML.
+	 * @since 4.1.2 1. No longer invokes the script loader during AJAX-requests.
+	 *              2. Now accepts empty messages, so that AJAX-invoked generators can grab a notice wrapper.
+	 *              3. Added the inline parameter.
+	 *              4. Now enqueues scripts in the footer, so templates won't spam the header.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 *                        When the message contains HTML, it must start with a <p> tag,
+	 *                        or it will be added for you--regardless of proper semantics.
+	 * @param string $type   The notice type : 'updated', 'error', 'warning', 'info'. Expected to be escaped.
+	 * @param bool   $icon   Whether to add an accessibility icon.
+	 * @param bool   $escape Whether to escape the whole output.
+	 * @param bool   $inline Whether WordPress should be allowed to move it.
+	 * @return string The dismissible error notice.
+	 */
+	public function generate_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true, $inline = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->generate_dismissible_notice()', '4.3.0', 'tsf()->admin()->notice()->generate_notice()' );
+
+		return $tsf->admin()->notice()->generate_notice(
+			$message,
+			[
+				'type'   => $type,
+				'icon'   => $icon,
+				'escape' => $escape,
+				'inline' => $inline,
+			],
+		);
+	}
+
+	/**
+	 * Echos generated dismissible notice.
+	 *
+	 * @since 2.7.0
+	 * @since 4.1.2 Added the $inline parameter.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type    The notice type : 'updated', 'error', 'warning', 'info'. Expected to be escaped.
+	 * @param bool   $icon    Whether to add an accessibility icon.
+	 * @param bool   $escape  Whether to escape the whole output.
+	 * @param bool   $inline Whether WordPress should be allowed to move it.
+	 */
+	public function do_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true, $inline = false ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->do_dismissible_notice()', '4.3.0', 'tsf()->admin()->notice()->output_notice()' );
+
+		return $tsf->admin()->notice()->output_notice(
+			$message,
+			[
+				'type'   => $type,
+				'icon'   => $icon,
+				'escape' => $escape,
+				'inline' => $inline,
+			],
+		);
+	}
+
+	/**
+	 * Register the database settings for storage.
+	 *
+	 * @since 2.2.2
+	 * @since 2.9.0 Removed reset options check, see check_options_reset().
+	 * @since 3.1.0 Removed settings field existence check.
+	 * @since 4.0.0 Now checks if the option exists before adding it. Shaves 20μs...
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return void Early if settings can't be registered.
+	 */
+	public function register_settings() {
+		\tsf()->_deprecated_function( 'tsf()->register_settings()', '4.3.0' );
+		\The_SEO_Framework\Data\Admin\Plugin::register_settings();
+	}
+
+	/**
+	 * Updates the database version to the defined one.
+	 *
+	 * This prevents errors when users go back to an earlier version, where options
+	 * might be different from a future (or past, since v4.1.0) one.
+	 *
+	 * @since 3.0.6
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function update_db_version() {
+		\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
+	}
+
+	/**
+	 * Registers each of the settings with a sanitization filter type.
+	 *
+	 * @since 2.8.0
+	 * @since 3.1.0 Added caching, preventing duplicate registrations.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 */
+	public function init_sanitizer_filters() {
+		\tsf()->_deprecated_function( 'tsf()->add_option_filter()', '4.3.0' );
+		\The_SEO_Framework\Data\Plugin\Sanitize::register_filters_jit();
+	}
+
+	/**
+	 * Calculates the relative font color according to the background, grayscale.
+	 *
+	 * @since 2.8.0
+	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
+	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
+	 * @since 3.0.4 Now uses WCAG's relative luminance formula.
+	 * @since 4.2.0 Optimized code, but it now has some rounding changes at the end. This could
+	 *              offset the returned values by 1/255th.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $hex The 3 to 6+ character RGB hex. The '#' prefix may be added.
+	 *                    RGBA/RRGGBBAA is supported, but the Alpha channels won't be returned.
+	 * @return string The hexadecimal RGB relative font color, without '#' prefix.
+	 */
+	public function get_relative_fontcolor( $hex = '' ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->get_relative_fontcolor()', '4.3.0', 'tsf()->format()->color()->get_relative_fontcolor()' );
+
+		return $tsf->format()->color()->get_relative_fontcolor( $hex );
+	}
+
+	/**
+	 * Returns list of active plugins.
+	 * Memoizes the return value.
+	 *
+	 * @since 2.6.1
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return array List of active plugins.
+	 */
+	public function active_plugins() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->active_plugins()', '4.3.0', 'tsf()->data()->blog()->get_active_plugins()' );
+
+		return $tsf->data()->blog()->get_active_plugins();
+	}
 }

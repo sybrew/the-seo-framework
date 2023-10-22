@@ -593,7 +593,7 @@ function _add_upgrade_notice( $notice = '' ) {
  * @since 3.1.0
  */
 function _do_upgrade_1() {
-	\tsf()->register_settings();
+	Data\Admin\Plugin::register_settings();
 }
 
 /**
