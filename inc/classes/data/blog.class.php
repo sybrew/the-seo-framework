@@ -196,8 +196,8 @@ class Blog {
 		if ( \is_multisite() ) {
 			// Due to legacy code, active_sitewide_plugins stores them in the keys,
 			// whereas active_plugins stores them in the values. array_keys() resolves the disparity.
-			$plugins = array_merge(
-				$plugins,
+			$active_plugins = array_merge(
+				$active_plugins,
 				array_keys( \get_site_option( 'active_sitewide_plugins', [] ) )
 			);
 
