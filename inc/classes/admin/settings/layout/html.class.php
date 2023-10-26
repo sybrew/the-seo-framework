@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use \The_SEO_Framework\Data;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2021 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -259,11 +261,11 @@ class HTML {
 				strtolower( preg_replace(
 					'/([A-Z])/',
 					'-$1',
-					preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					preg_replace( '/[^a-z\d_-]/i', '', $k )
 				) ), // dash case.
 				\is_scalar( $v )
 					? \esc_attr( $v )
-					: \tsf()->escape_json_encode_attr( $v )
+					: Data\Filter\Escape::json_encode_attribute( $v )
 			);
 		}
 

@@ -32,7 +32,9 @@ use \The_SEO_Framework\Data;
 /**
  * Facade final class The_SEO_Framework\Load
  *
- * Extending upon parent classes.
+ * This class is unused internally, but is part of the public API.
+ * It is accessible via function `tsf()`.
+ * Do not call this class directly.
  *
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
@@ -48,8 +50,9 @@ use \The_SEO_Framework\Data;
  *              8. Deprecated $seo_settings_page_hook
  *              9. Deprecated $the_seo_framework_debug
  *              10. Deprecated $the_seo_framework_use_transients
+ * @api
  */
-final class Load extends Sanitize {
+final class Load extends Detect {
 
 	/**
 	 * @since 4.3.0

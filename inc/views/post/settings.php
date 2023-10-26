@@ -113,8 +113,8 @@ switch ( $instance ) :
 		}
 
 		if ( $is_static_front_page ) {
-			$_has_home_title = (bool) \tsf()->escape_text( Data\Plugin::get_option( 'homepage_title' ) );
-			$_has_home_desc  = (bool) \tsf()->escape_text( Data\Plugin::get_option( 'homepage_description' ) );
+			$_has_home_title = (bool) Data\Plugin::get_option( 'homepage_title' );
+			$_has_home_desc  = (bool) Data\Plugin::get_option( 'homepage_description' );
 
 			// When the homepage title is set, we can safely get the custom field.
 			$default_title     = $_has_home_title
@@ -164,17 +164,17 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
+					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
 					Input::output_js_title_data(
 						'autodescription_title',
 						[
 							'state' => [
 								'refTitleLocked'    => $title_ref_locked,
-								'defaultTitle'      => \tsf()->escape_text( $default_title ),
+								'defaultTitle'      => \esc_html( $default_title ), // var_dump() remove these?
 								'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
 								'useSocialTagline'  => Meta\Title\Conditions::use_branding( $generator_args, true ),
-								'additionValue'     => \tsf()->escape_text( $title_additions ),
+								'additionValue'     => \esc_html( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
 							],
 						]
@@ -232,13 +232,13 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_description' ) ) ) ?></textarea>
+				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description' ) ) ) ?></textarea>
 				<?php
 				Input::output_js_description_data(
 					'autodescription_description',
 					[
 						'state' => [
-							'defaultDescription'   => \tsf()->escape_text( \tsf()->sanitize_text( $default_description ) ),
+							'defaultDescription'   => \esc_html( Data\Filter\Sanitize::metadata_content( $default_description ) ),
 							'refDescriptionLocked' => $description_ref_locked,
 						],
 					]
@@ -481,18 +481,18 @@ switch ( $instance ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => \tsf()->escape_text( \tsf()->sanitize_text( $_social_title['og'] ) ),
+						'defaultTitle' => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_title['og'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
-						'defaultDesc'  => \tsf()->escape_text( \tsf()->sanitize_text( $_social_description['og'] ) ),
+						'defaultDesc'  => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_description['og'] ) ),
 						'titleLock'    => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_title' ),
 						'descLock'     => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_description' ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => \tsf()->escape_text( \tsf()->sanitize_text( $_social_title['tw'] ) ),
+						'defaultTitle' => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_title['tw'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
-						'defaultDesc'  => \tsf()->escape_text( \tsf()->sanitize_text( $_social_description['tw'] ) ),
+						'defaultDesc'  => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_description['tw'] ) ),
 						'titleLock'    => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
 						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
 					],
@@ -515,7 +515,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_open_graph_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
 				</div>
 			</div>
 		</div>
@@ -533,7 +533,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_open_graph_description' ) ) ) ?></textarea>
+				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description' ) ) ) ?></textarea>
 			</div>
 		</div>
 
@@ -551,7 +551,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_twitter_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
 				</div>
 			</div>
 		</div>
@@ -571,7 +571,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
-					echo \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_twitter_description' ) ) );
+					echo \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description' ) ) );
 				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
 				?></textarea>
 			</div>

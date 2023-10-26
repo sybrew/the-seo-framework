@@ -38,7 +38,6 @@ use \The_SEO_Framework\Helper\Query,
  */
 class Detect extends Pool {
 
-
 	/**
 	 * Detect active plugin by constant, class or function existence.
 	 *

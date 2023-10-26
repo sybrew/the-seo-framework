@@ -172,7 +172,6 @@ class User {
 
 		/**
 		 * @since 4.1.4
-		 * @note Do not delete/unset/add indexes! It'll cause errors.
 		 * @param array $meta        The current user meta.
 		 *                           If headless, it may still contain administration settings.
 		 * @param int   $user_id     The user ID.
@@ -260,22 +259,21 @@ class User {
 		if ( empty( $user_id ) ) return;
 
 		/**
-		 * @NOTE Do not remove indexes. We store all data, even if empty,
-		 *       to ensure defaults don't override them.
 		 * @since 4.1.4
+		 * @since 4.3.0 No longer sends pre-sanitized data to the filter.
 		 * @param array  $data     The data that's going to be saved.
 		 * @param int    $user_id  The user ID.
 		 */
 		$data = (array) \apply_filters(
 			'the_seo_framework_save_user_data',
-			\tsf()->s_user_meta( array_merge(
+			array_merge(
 				static::get_default_meta( $user_id ),
 				$data,
-			) ),
+			),
 			$user->ID,
 		);
 
-		static::$meta_memo[ $user_id ] = $data;
+		unset( static::$meta_memo[ $user_id ] );
 
 		\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
 	}

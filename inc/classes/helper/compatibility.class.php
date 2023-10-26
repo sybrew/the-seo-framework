@@ -134,6 +134,7 @@ class Compatibility {
 				/**
 				 * @since 2.6.1
 				 * @since 4.3.0 Deprecated. Use `the_seo_framework_conflicting_plugins` instead.
+				 * @deprecated
 				 * @param array  $conflicting_plugins Conflicting plugins
 				 * @param string $type                The type of plugins to get.
 				*/
@@ -183,12 +184,15 @@ class Compatibility {
 				$conflicting_types[ $type ] = true;
 
 		if ( $conflicting_types['seo_tools'] ) {
-			$conflicting_types += [
-				'sitemaps'     => true,
-				'open_graph'   => true,
-				'twitter_card' => true,
-				'schema'       => true,
-			];
+			$conflicting_types = array_merge(
+				$conflicting_types,
+				[
+					'sitemaps'     => true,
+					'open_graph'   => true,
+					'twitter_card' => true,
+					'schema'       => true,
+				]
+			);
 		}
 
 		return memo( $conflicting_types );

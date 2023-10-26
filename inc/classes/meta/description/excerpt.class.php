@@ -13,8 +13,11 @@ use function \The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+	Helper\Format,
+};
 
 /**
  * The SEO Framework plugin
@@ -120,7 +123,7 @@ final class Excerpt {
 		return sprintf(
 			/* translators: %s = Blog page title. Front-end output. */
 			\__( 'Latest posts: %s', 'autodescription' ),
-			\tsf()->get_filtered_raw_generated_title( [ 'id' => (int) \get_option( 'page_for_posts' ) ] )
+			Data\Blog::get_public_blog_name(),
 		);
 	}
 
@@ -167,7 +170,9 @@ final class Excerpt {
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
 				$excerpt = $object->description ?? '';
 			} elseif ( Query::is_author() ) {
-				$excerpt = \tsf()->s_excerpt_raw( \get_the_author_meta( 'description', (int) \get_query_var( 'author' ) ) );
+				$excerpt = Format\HTML::extract_content(
+					\get_the_author_meta( 'description', (int) \get_query_var( 'author' ) )
+				);
 			} elseif ( \is_post_type_archive() ) {
 				/**
 				 * @since 4.0.6
@@ -232,11 +237,11 @@ final class Excerpt {
 			$excerpt = Data\Post::get_content( $post );
 
 			if ( $excerpt )
-				$excerpt = \tsf()->strip_paragraph_urls( \tsf()->strip_newline_urls( $excerpt ) );
+				$excerpt = Format\HTML::strip_paragraph_urls( Format\HTML::strip_newline_urls( $excerpt ) );
 		}
 
 		if ( empty( $excerpt ) ) return '';
 
-		return \tsf()->s_excerpt_raw( $excerpt );
+		return Format\HTML::extract_content( $excerpt );
 	}
 }

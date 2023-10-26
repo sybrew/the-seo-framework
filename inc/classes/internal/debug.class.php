@@ -10,7 +10,10 @@ namespace The_SEO_Framework\Internal;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Admin;
+use \The_SEO_Framework\{
+	Admin,
+	Front,
+};
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
@@ -335,20 +338,18 @@ final class Debug {
 	 */
 	protected function get_debug_header_output() {
 
-		$tsf = \tsf();
-
 		if ( \is_admin() && ! Query::is_term_edit() && ! Query::is_post_edit() && ! Query::is_seo_settings_page( true ) )
 			return;
 
 		if ( Query::is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', [ $tsf, 'get_the_front_page_id' ] );
+			\add_filter( 'the_seo_framework_current_object_id', static fn () => Query::get_the_front_page_id() );
 
 		// Start timer.
 		$t = hrtime( true );
 
-		// I hate ob_*.
+		// I hate ob_* for this stuff.
 		ob_start();
-		$tsf->html_output();
+		Front\Meta\Head::print_wrap_and_tags();
 		$output = ob_get_clean();
 
 		$timer = '<div style="font-family:unset;display:inline-block;width:100%;padding:20px;border-bottom:1px solid #ccc;">Generated in: ' . number_format( ( hrtime( true ) - $t ) / 1e9, 5 ) . ' seconds</div>';
@@ -426,13 +427,11 @@ final class Debug {
 		// Start timer.
 		$_t = hrtime( true );
 
-		$tsf = \tsf();
-
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
 		$page_id                        = Query::get_the_real_id();
 		$is_query_exploited             = Query\Utils::is_query_exploited();
-		$query_supports_seo             = Query\Utils::query_supports_seo() ? 'yes' : 'no';
+		$query_supports_seo             = Query\Utils::query_supports_seo();
 		$is_404                         = \is_404();
 		$is_admin                       = \is_admin();
 		$is_attachment                  = Query::is_attachment();
@@ -493,7 +492,7 @@ final class Debug {
 		$vars = get_defined_vars();
 
 		// Don't debug the class object nor timer.
-		unset( $vars['tsf'], $vars['timer'], $vars['_t'] );
+		unset( $vars['timer'], $vars['_t'] );
 
 		$current     = array_filter( $vars );
 		$not_current = array_diff_key( $vars, $current );

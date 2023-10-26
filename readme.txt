@@ -343,10 +343,6 @@ TODO 'show-if-tsf-js'
 
 TODO update doc "actions" (also update doc "constants" for TSFEM)
 
-TODO get_generated_title() uses s_title_raw while get_custom_field_title() doesn't. Why?
-		-> Probably because we apply s_title_raw before we store the data.
-	TODO Particularily of concern is that this happens AFTER the branding etc.
-
 If we go through with 4.3.0, consider removing deprecated filters (filters_deprecated)
 
 TODO add vertical expand title input?
@@ -568,10 +564,6 @@ TODO instead of removing Elementor library from public posts types, force noinde
 TODO make multiline deprecation notices over .{120,}
 	_deprecated_function.{100,}
 
-TODO Remove all "$escape" parameters from the meta generators, and always _sanitize_ where data is generated. Let the dev escape when necessary.
-	-> This saves a jump, and actually improved performance.
-		-> s_excerpt is still a candidate.
-
 TODO make canonical URL placeholder work in output_column_contents_for_post()
 	-> Also make the Indexing react to the Password/Private states.
 		-> This already works for the title.
@@ -626,6 +618,33 @@ TODO add settings check  wp_attachment_pages_enabled (the attachments are still 
 TODO create a visual map of the plugin's class+method structure of before vs after?
 	-> This way, you can see how TSF's facade object has 300 methods.
 
+TODO since we now sanitize images when we obtain then, we may accidentally fetch duplicates.
+	-> When more than one image is obtained by the generator, filter it against the stack:
+		1. Match duplicated URLs and strip if found.
+			array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
+		2. Match duplicated IDs and strip if found; note that 0 === 0 and 0 == false, so don't use this:
+			array_unique( array_filter( array_column( $cleaned_details, 'id' ) ) )
+
+TODO in deprecated, use public API as much as possible? e.g. `tsf()->query()` instead of `\The_SEO_Framework\Helper\Query`
+	-> This helps prevent crashing thanks to the fallback in Static_Deprecator.
+
+TODO move URI\Utils to Format\URI?
+	-> Also Image\Utils to Format\Image
+
+
+// TODO in canonical_scheme, set an error if an incorrect option is selected:
+	"The canonical scheme setting did not appear to be correct. Please select..."
+	-> We'd need an option generator for that to capture errors automatically on a per-setting basis.
+		-> We can then name every option properly, and predefine error notices.
+		-> We now return the "old value" -- but that may not be sanitized according to our latest standards.
+			-> Still, if we allowed that to happen, then we didn't upgrade the options properly.
+		-> Make issue.
+
+TODO make issue: We should upgrade the twitter profile inputs to become fully qualified URLs.
+	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.
+
+TODO we allow saving of "0" now, but we'll discard it when we read it.
+
 **Detailed log**
 
 **For everyone:**
@@ -664,7 +683,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
 		* This also works around an issue where Gutenberg still doesn't understand HTML.
 		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
-	* **Metadata:**
+	* **Meta tags:**
 		* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
 		* `article:modified_time` and `article:published_time` now listen to Open Graph settings, and will always try to output on single post types.
 	* No longer uses the blog tagline for the homepage, it's often too short anyway. FIXME/TODO what does? Description?
@@ -676,7 +695,11 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 	* The plugin compatibility loader now tests common filenames instead of function, constant, or class's presence.
 	* When activating or deactivating the plugin, only on WordPress 6.4 or later the options will now toggle from autoloading on and off.
 		* It will still toggle on for older versions of WordPress.
+	* When a dropdown option fails sanitization, it will revert back to the last known option, instead of an arbitrary default.
+	* We no longer allow unregistered settings to be stored in TSF's option meta. During the upgrade, all unregistered settings will be deleted automatically as a side-effect of registering new defaults.
 * **Improved:**
+	* **Localization:**
+		* Repeated spacing in metadata are now replaced using the same space character inputted, instead of a default space character.
 	* **Performance:**
 		* The plugin is faster now due to [new](https://twitter.com/SybreWaaijer/status/1654101713714831361) [coding](https://twitter.com/SybreWaaijer/status/1678409334626172928) [standards](https://twitter.com/SybreWaaijer/status/1678412864200093696) (among others).
 		* Multiple types of homepages are no longer tested when fetching custom metadata, improving performance when viewing the administrative post list.
@@ -696,6 +719,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* Generated image metadata are now cached per method using PHP 8's "Fiber" principle (I backported it conceptually to 7.4). This way, the generation of image metadata no longer relies on the type of image requested (Twitter, Open Graph, Structured Data), but may always benefit from already generated image metadata, and continue to make more metadata when there's demand.
 		* Fewer term and post meta data is stored in the plugin's memoization (up to 69 items each, nice), so there's less of a strain on memory when generating sitemaps or walking through metadata. Object caching can still work and won't be affected.
 		* The SEO Bar no longer asserts the length of every word in a description but only those that are encountered too often, speeding up post list performance significantly.
+		* The description generator no longer tries to find the first character separator recursively when there are none.
 	* **Compatibility:**
 		* A new multilingual plugin conflict detection is implemented. Polylang, WPML, TranslatePress, and WPGlobus are detected by default as potentially conflicting. When a potentially conflicting multilingual plugin is detected:
 			* A warning is displayed above the homepage settings.
@@ -857,6 +881,8 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* Internally known as `The_SEO_Framework\Helper\Format\Strings`.
 		* This pool has a sub-pool, accessible via `tsf()->format()->color()`.
 			* Internally known as `The_SEO_Framework\Helper\Format\Color`.
+		* This pool has a sub-pool, accessible via `tsf()->format()->html()`.
+			* Internally known as `The_SEO_Framework\Helper\Format\HTML`.
 	* Pool `tsf()->admin()` is now available.
 		* Unlike most other pools, this is a Closure where it stores only subpools.
 		* This pool has a sub-pool, accessible via `tsf()->admin()->menu()`.
@@ -915,6 +941,11 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
 	* When scripts are enqueued, it is now automatically determined whether late-enqueuing in the footer is necessary.
 	* Script templates no longer forward arguments by name, but put them sequentially in variable `$view_args` instead.
+	* Almost all of the plugin's data is now sanitized when using the WordPress option or meta APIs, instead of only when using TSF's APIs. The exception is post metadata, which we'll address next major update ([learn more](https://github.com/sybrew/the-seo-framework/issues/185)).
+		* Migration plugins might be affected if they use the default WordPress option/meta API calls that invoke any of these hooks:
+			* `'sanitize_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS`,
+			* `'sanitize_term_meta_' . THE_SEO_FRAMEWORK_TERM_OPTIONS`.
+			* `'sanitize_user_meta_' . THE_SEO_FRAMEWORK_USER_OPTIONS`.
 * **Fixed:**
 	* Resolved PHP warning when editing a post type with altered term type availability.
 	* Resolved PHP warning when editing a user with editor capabilities on the primary network's site via WordPress Multisite user-edit interface.
@@ -934,7 +965,6 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 			* Index `auto_descripton_html_method`.
 				* It is now `auto_description_html_method` (typo in "description").
 				* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
-			* Suboption filter `s_left_right_home` is now gone; use `s_left_right` instead.
 			* Index `knowledge_gplus`
 				* It's no longer supported since 2018; we kept it around because users could fill whatever URL in this field. But, it's time to say goodbye to this cruft.
 	* For option index `autodescription-updates-cache` (constant `THE_SEO_FRAMEWORK_SITE_CACHE`):
@@ -1026,8 +1056,6 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* `is_feed()`, use WordPress's builtin namesake instead.
 				* `is_month()`, use WordPress's builtin namesake instead.
 				* `is_robots()`, use WordPress's builtin namesake instead.
-				* `s_left_right_home()`, use `s_left_right()` instead. TODO we might move this.
-					* This method also no longer falls back to option or default option, but a language-based default instead.
 				* `get_post_type_real_id()`, use `tsf()->query()->get_post_type_real_id()` instead
 				* `get_admin_post_type()`, use `tsf()->query()->get_admin_post_type()` instead
 				* `get_post_types_from_taxonomy()`, use `tsf()->taxonomies()->get_post_types_from_taxonomy()` instead
@@ -1337,6 +1365,65 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 				* `detect_twitter_card_plugin()`, with no alternative available.
 				* `has_json_ld_plugin()`, with no alternative available.
 				* `detect_sitemap_plugin()`, with no alternative available.
+				* `s_email_address()`, use `sanitize_email()` instead.
+				* `s_safe_html()`, use `wp_kses_post()` instead.
+				* `s_no_html()`, use `strip_tags()` instead.
+				* `s_no_html_space()`, with no alternative available.
+				* `s_url_query()`, use `sanitize_url()` instead.
+				* `s_url()`, with no alternative available.
+				* `clean_canonical_url()`, use `esc_url()` instead.
+				* `s_field_id()`, use `tsf()->escape()->option_name_attribute()` instead.
+				* `s_description()`, with no alternative available.
+				* `escape_description()`, use `esc_html()` instead.
+				* `s_title()`, with no alternative available.
+				* `escape_title()`, use `esc_html()` instead.
+				* `esc_attr_preserve_amp()`, use `esc_attr()` instead.
+				* `strip_newline_urls()`, use `tsf()->format()->html()->strip_newline_urls()` instead.
+				* `strip_paragraph_urls()`, use `tsf()->format()->html()->strip_paragraph_urls()` instead.
+				* `strip_tags_cs()`, use `tsf()->format()->html()->strip_tags_cs()` instead.
+				* `s_excerpt()`, use `tsf()->format()->html()->extract_content()` instead.
+				* `s_excerpt_raw()`, use `tsf()->format()->html()->extract_content()` instead.
+				* `s_description_raw()`, use `tsf()->sanitize()->metadata_content()` instead.
+				* `s_singleline()`, use `tsf()->sanitize()->newline_to_space()` instead.
+				* `s_dupe_space()`, use `tsf()->sanitize()->remove_repeated_spacing()` instead.
+				* `s_tabs()`, use `tsf()->sanitize()->tab_to_space()` instead.
+				* `s_qubit()`, use `tsf()->sanitize()->qubit()` instead.
+				* `s_one_zero()`, use `tsf()->sanitize()->boolean_integer()` instead.
+				* `s_numeric_string()`, use `tsf()->sanitize()->numeric_string()` instead.
+				* `s_absint()`, use `absint()` instead.
+				* `s_absint()`, use `tsf()->sanitize()->rgb_hex()` instead.
+				* `s_hyphen()`, use `tsf()->sanitize()->lone_hyphen_to_entity()` instead.
+				* `s_nbsp()`, use `tsf()->sanitize()->nbsp_to_space()` instead.
+				* `s_bsol()`, use `tsf()->sanitize()->backward_solidus_to_entity()` instead.
+				* `s_bsol_raw()`, use `tsf()->sanitize()->backward_solidus_to_entity()` instead.
+				* `s_title_raw()`, use `tsf()->sanitize()->metadata_content()` instead.
+				* `s_image_details()`, use `tsf()->sanitize()->image_details()` instead.
+				* `s_twitter_name()`, use `tsf()->sanitize()->twitter_profile_handle()` instead.
+				* `s_facebook_profile()`, use `tsf()->sanitize()->facebook_profile_link()` instead.
+				* `s_image_details_deep()`, use `tsf()->sanitize()->image_details()` instead.
+				* `s_redirect_url()`, use `tsf()->sanitize()->redirect_url()` instead.
+				* `s_url_relative_to_current_scheme()`, use `tsf()->uri()->utils()->make_absolute_current_scheme_url()` instead.
+				* `s_url_relative_to_current_scheme()`, use `tsf()->uri()->utils()->get_relative_part_from_url()` instead.
+				* `s_term_meta()`, with no alternative available.
+				* `s_post_meta()`, with no alternative available.
+				* `s_user_meta()`, with no alternative available.
+				* `s_all_post_type_archive_meta()`, with no alternative available.
+				* `s_post_type_archive_meta()`, with no alternative available.
+				* `s_canonical_scheme()`, with no alternative available.
+				* `s_min_max_sitemap()`, with no alternative available.
+				* `s_twitter_card()`, with no alternative available.
+				* `s_image_preview()`, with no alternative available.
+				* `s_snippet_length()`, with no alternative available.
+				* `s_snippet_length()`, with no alternative available.
+				* `s_knowledge_type()`, with no alternative available.
+				* `s_disabled_post_types()`, with no alternative available.
+				* `s_post_types()`, with no alternative available.
+				* `s_disabled_taxonomies()`, with no alternative available.
+				* `s_taxonomies()`, with no alternative available.
+				* `s_left_right()`, with no alternative available.
+				* `s_left_right_home()`, with no alternative available.
+				* `s_alter_query_type()`, with no alternative available.
+				* `s_description_html_method()`, with no alternative available.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).
@@ -1505,9 +1592,16 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
-		* `the_seo_framework_save_post_meta`, the second parameter is now an integer, instead of Post object.
-			* If you cannot save posts any longer after updating... well, there's your problem. We found no evidence of this being used in the wild.
+		* `the_seo_framework_save_post_meta`
+			1. The second parameter is now an integer, instead of Post object.
+				* If you cannot save posts any longer after updating... well, there's your problem. We found no evidence of this being used in the wild.
+			2. No longer sends pre-sanitized data to the filter.
 		* `the_seo_framework_generated_description`, added third parameter `$type`.
+		* `the_seo_framework_allow_excerpt_shortcode_tags`, added second parameter `$args`.
+		* `the_seo_framework_save_term_data`
+			1. Removed 3rd and 4th parameters (`$tt_id` and `$taxonomy`).
+			2. No longer sends pre-sanitized data to the filter.
+		* `the_seo_framework_save_user_data`, no longer sends pre-sanitized data to the filter.
 	* **Deprecated:**
 		* `the_seo_framework_googlesite_output`, with no alternative available.
 		* `the_seo_framework_bingsite_output`, with no alternative available.
@@ -1588,7 +1682,8 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 		* `the_seo_framework_site_cache`, use WP options API instead to alter option name `'autodescription-site-cache'`.
 		* `the_seo_framework_available_twitter_cards`, we couldn't make it work in the new API.
 		* `the_seo_framework_wp_title`, this was for WP 4.4 titles. Use `the_seo_framework_pre_get_document_title` instead.
-		* `the_seo_framework_available_sanitizer_filters`, we changed how we update settings, so the older filters are no longer compatible. Use `'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS` instead.
+		* `the_seo_framework_available_sanitizer_filters`, we changed how we update settings, so the older filters are no longer compatible. Use `'sanitize_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS` instead.
+		* `the_seo_framework_301_noqueries`, we changed how we update settings, and this filter was no longer compatible. Use applicable option filters instead, like `'sanitize_option_' . THE_SEO_FRAMEWORK_SITE_OPTIONS`, `'sanitize_post_meta_redirect'`, and `'sanitize_term_meta_' . THE_SEO_FRAMEWORK_TERM_OPTIONS`.
 * **Action notes:**
 	* **Added:**
 		* `the_seo_framework_cleared_sitemap_transients`, used when sitemap transients are (probably) cleared.
@@ -1616,6 +1711,7 @@ TODO create a visual map of the plugin's class+method structure of before vs aft
 	* Refreshed `composer.json`. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* Improved needless defense clauses. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* We now try to avoid the word "home" in our code due to its ambiguity in relation to the front page and the blog page. So, we use "front" for front-page related queries, titles, etc., and "blog" otherwise.
+	* We no longer use `$escape` parameters in our code. You must escape as late as possible and not trust us blindly.
 
 = 4.2.8 =
 

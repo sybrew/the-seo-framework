@@ -41,7 +41,7 @@ $fields = [
 		'class'       => '',
 	],
 	'tsf-user-meta[twitter_page]'  => [
-		'name'        => \__( 'Twitter profile name', 'autodescription' ),
+		'name'        => \__( 'Twitter profile handle', 'autodescription' ),
 		'type'        => 'text',
 		'placeholder' => \_x( '@your-personal-username', 'Twitter @username', 'autodescription' ),
 		'value'       => Data\Plugin\User::get_meta_item( 'twitter_page', $user->ID ),

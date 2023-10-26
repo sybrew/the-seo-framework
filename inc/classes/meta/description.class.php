@@ -8,17 +8,19 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
-	Data,
-	Meta,
-	Helper\Guidelines,
-	Helper\Query,
-	Helper\Format\Strings,
-};
-
 use function \The_SEO_Framework\{
 	memo,
 	normalize_generation_args,
+};
+
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
+use \The_SEO_Framework\Helper\{
+	Guidelines,
+	Query,
+	Format\Strings,
 };
 
 /**
@@ -87,7 +89,7 @@ class Description {
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
-		return \tsf()->sanitize_text( (string) \apply_filters(
+		return Data\Filter\Sanitize::metadata_content( (string) \apply_filters(
 			'the_seo_framework_custom_field_description',
 			$desc,
 			$args,
@@ -107,7 +109,7 @@ class Description {
 	 * @since 3.2.2 Now converts HTML characters prior trimming.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Description.
-	 *              2. Removed the second $escape parameter.
+	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -198,7 +200,7 @@ class Description {
 		);
 
 		return memo(
-			\strlen( $desc ) ? \tsf()->sanitize_text( $desc ) : '',
+			\strlen( $desc ) ? Data\Filter\Sanitize::metadata_content( $desc ) : '',
 			$args,
 			$type,
 		);
@@ -230,7 +232,7 @@ class Description {
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
-			return \tsf()->sanitize_text( $desc );
+			return Data\Filter\Sanitize::metadata_content( $desc );
 
 		return '';
 	}
@@ -266,7 +268,7 @@ class Description {
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
-			return \tsf()->sanitize_text( $desc );
+			return Data\Filter\Sanitize::metadata_content( $desc );
 
 		return '';
 	}

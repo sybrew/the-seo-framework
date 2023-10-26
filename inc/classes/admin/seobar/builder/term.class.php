@@ -310,7 +310,7 @@ final class Term extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				\tsf()->escape_text( \tsf()->sanitize_text( $title ) ),
+				\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -505,7 +505,7 @@ final class Term extends Main {
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				\tsf()->escape_text( \tsf()->sanitize_text( $desc ) ),
+				\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -639,7 +639,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['noindex'] ) ) {
+		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
@@ -782,7 +782,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['nofollow'] ) ) {
+		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
@@ -899,7 +899,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['noarchive'] ) ) {
+		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.

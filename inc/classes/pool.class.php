@@ -432,7 +432,7 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return anonymous An anonymous data class containing subpools.
+	 * @return \Closure An anononymous class with subpools.
 	 */
 	public static function data() {
 		return static::$pool['data'] ??= new class {
@@ -665,7 +665,7 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\RobotsTXT\Main
+	 * @return \The_SEO_Framework\Helper\Guidelines
 	 */
 	public static function guidelines() {
 		return static::$pool['guidelines'] ??= new class extends Helper\Guidelines {
@@ -678,15 +678,53 @@ class Pool extends Legacy_API {
 	}
 
 	/**
+	 * Returns the Escape API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Data\Filter\Escape
+	 */
+	public static function escape() {
+		return static::$pool['escape'] ??= new class extends Data\Filter\Escape {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->filter()->escape()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Sanitize API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Data\Filter\Sanitize
+	 */
+	public static function sanitize() {
+		return static::$pool['sanitize'] ??= new class extends Data\Filter\Sanitize {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->filter()->sanitize()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
 	 * Returns a pool of Sitemap classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \Closure An anononymous class with subclasses.
+	 * @return \Closure An anononymous class with subpools.
 	 */
-	public function sitemap() {
+	public static function sitemap() {
 		return static::$pool['sitemap'] ??= new class {
 			use Static_Deprecator;
 
@@ -771,9 +809,9 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \Closure An anononymous class with subclasses.
+	 * @return \Closure An anononymous class with subpools.
 	 */
-	public function format() {
+	public static function format() {
 		return static::$pool['format'] ??= new class {
 			use Static_Deprecator;
 
@@ -850,6 +888,20 @@ class Pool extends Legacy_API {
 					private $deprecated_properties = [];
 				};
 			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\HTML
+			 */
+			public static function html() {
+				return static::$subpool['html'] ??= new class extends Helper\Format\HTML {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->format()->html()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
 		};
 	}
 
@@ -860,9 +912,9 @@ class Pool extends Legacy_API {
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \Closure An anononymous class with subclasses.
+	 * @return \Closure An anononymous class with subpools.
 	 */
-	public function admin() {
+	public static function admin() {
 		return static::$pool['layout'] ??= new class {
 			use Static_Deprecator;
 
@@ -924,7 +976,7 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \Closure An anononymous class with subclasses.
+			 * @return \Closure An anononymous class with subpools.
 			 */
 			public static function layout() {
 				return static::$subpool['layout'] ??= new class {

@@ -8,12 +8,7 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
-	memo,
-	umemo,
-	normalize_generation_args,
-	Utils\scrub_array,
-};
+use function \The_SEO_Framework\normalize_generation_args;
 
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
@@ -66,7 +61,7 @@ class Schema {
 		$graph = static::get_generated_graph( $args );
 
 		return $graph
-			? (string) \tsf()->escape_json_encode(
+			? (string) Data\Filter\Escape::json_encode_html(
 				$graph,
 				( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 )
 			)

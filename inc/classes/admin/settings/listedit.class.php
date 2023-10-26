@@ -256,7 +256,7 @@ final class ListEdit extends Admin\Lists\Table {
 
 		if ( Query::is_static_front_page( $generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
-			$_has_home_title     = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_title     = (bool) Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
 								 ? Meta\Title::get_custom_title( $generator_args )
 								 : Meta\Title::get_bare_generated_title( $generator_args );
@@ -265,7 +265,7 @@ final class ListEdit extends Admin\Lists\Table {
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
-			$_has_home_desc      = (bool) \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_description' ) );
+			$_has_home_desc      = (bool) Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
 								 ? Meta\Description::get_custom_description( $generator_args )
 								 : Meta\Description::get_generated_description( $generator_args );
@@ -285,9 +285,9 @@ final class ListEdit extends Admin\Lists\Table {
 		];
 		$title_data = [
 			'refTitleLocked'    => $is_title_ref_locked,
-			'defaultTitle'      => \tsf()->escape_title( $default_title ),
+			'defaultTitle'      => \esc_html( $default_title ), // var_dump() remove these?
 			'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
-			'additionValue'     => \tsf()->escape_title( $addition ),
+			'additionValue'     => \esc_html( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
 		$desc_data  = [
@@ -427,9 +427,9 @@ final class ListEdit extends Admin\Lists\Table {
 
 		$title_data = [
 			'refTitleLocked'    => false,
-			'defaultTitle'      => \tsf()->escape_title( Meta\Title::get_bare_generated_title( $generator_args ) ),
+			'defaultTitle'      => \esc_html( Meta\Title::get_bare_generated_title( $generator_args ) ),
 			'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
-			'additionValue'     => \tsf()->escape_title( Meta\Title::get_addition() ),
+			'additionValue'     => \esc_html( Meta\Title::get_addition() ),
 			'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];

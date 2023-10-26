@@ -71,15 +71,19 @@ final class Feed {
 		 * $feed_type is only set on 'the_content_feed' filter.
 		 */
 		if ( isset( $feed_type ) && Data\Plugin::get_option( 'excerpt_the_feed' ) ) {
+			/**
+			 * @since 2.5.2
+			 * @param int $clamp_length The maximum feed (multibyte) string length.
+			 */
+			$clamp_length = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
+
 			// Strip all code and lines, and AI-trim it.
-			$excerpt = Strings::clamp_sentence(
-				\tsf()->s_excerpt_raw( $content, false ),
-				1,
-				/**
-				 * @since 2.5.2
-				 * @param int $max_len The maximum feed (multibyte) string length.
-				 */
-				\apply_filters( 'the_seo_framework_max_content_feed_length', 400 )
+			$excerpt = Format\HTML::extract_content(
+				$content,
+				[
+					'allow_shortcodes' => false,
+					'clamp'            => $clamp_length,
+				]
 			);
 
 			$content = "<p>$excerpt</p>";

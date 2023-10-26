@@ -8,9 +8,10 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\{
-	Format\Arrays,
-	Query,
+use \The_SEO_Framework\{
+	Data,
+	Helper\Format\Arrays,
+	Helper\Query,
 };
 
 /**
@@ -98,8 +99,6 @@ class Form {
 			$args['default']
 		);
 
-		$tsf = \tsf();
-
 		return vsprintf(
 			sprintf( '<div class="%s">%s</div>',
 				\esc_attr( $args['class'] ),
@@ -108,7 +107,7 @@ class Form {
 			[
 				$args['label'] ? sprintf(
 					'<label for="%s">%s</label> ', // superfluous space!
-					$tsf->s_field_id( $args['id'] ),
+					Data\Filter\Escape::option_name_attribute( $args['id'] ),
 					sprintf(
 						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
 						\esc_html( $args['label'] )
@@ -122,7 +121,7 @@ class Form {
 				vsprintf(
 					'<select id="%s" name="%s"%s %s>%s</select>',
 					[
-						$tsf->s_field_id( $args['id'] ),
+						Data\Filter\Escape::option_name_attribute( $args['id'] ),
 						\esc_attr( $args['name'] ),
 						$args['required'] ? ' required' : '',
 						HTML::make_data_attributes( $args['data'] ),

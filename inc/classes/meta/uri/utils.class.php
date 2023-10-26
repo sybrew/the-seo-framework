@@ -13,8 +13,10 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -70,7 +72,8 @@ class Utils {
 	 * @since 2.7.0
 	 * @since 2.9.2 1. Now considers port too.
 	 *              2. Now uses get_home_url(), rather than get_option('home').
-	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Data\Blog
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `get_home_host`.
 	 *              2. Removed memoization.
 	 *
 	 * @return string The home URL host.
@@ -214,6 +217,25 @@ class Utils {
 	}
 
 	/**
+	 * Makes URLs absolute if not already, or tries to match the preferred domain
+	 * scheme otherwise.
+	 * Does nothing if the URL is absolute and doesn't match the current domain.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $url An URL or path to rectify.
+	 * @return string An absolute URL with the input domain's scheme.
+	 */
+	public static function make_absolute_current_scheme_url( $url ) {
+
+		if ( static::url_matches_blog_domain( $url ) )
+			return static::set_preferred_url_scheme( $url );
+
+		// This also sets preferred URL scheme if path.
+		return static::convert_path_to_url( $url );
+	}
+
+	/**
 	 * Makes a fully qualified URL by adding the scheme prefix.
 	 * Always adds http prefix, not https.
 	 *
@@ -226,7 +248,7 @@ class Utils {
 	 * @see `static::set_url_scheme()` to set the correct scheme.
 	 * @see `static::convert_path_to_url()` to create URLs from paths.
 	 *
-	 * @param string $url Required the current maybe not fully qualified URL.
+	 * @param string $url The current maybe not fully qualified URL. Required.
 	 * @return string $url
 	 */
 	public static function make_fully_qualified_url( $url ) {
@@ -274,6 +296,23 @@ class Utils {
 
 		// If they start with the same, we can assume it's the same domain.
 		return 0 === stripos( $url, $home_domain );
+	}
+
+	/**
+	 * Converts absolute URLs to relative URLs, if they weren't already.
+	 * Returns the path, query, and fragment.
+	 *
+	 * @since 2.6.5
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.0.0 No longer strips the prepended / path.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `s_relative_url()`
+	 *
+	 * @param string $url An absolute or relative URL.
+	 * @return string $url The URL's path.
+	 */
+	public static function get_relative_part_from_url( $url ) {
+		return preg_replace( '/^(?:https?:)?\/\/[^\/]+(\/.*)/i', '$1', $url );
 	}
 
 	/**
@@ -326,7 +365,7 @@ class Utils {
 
 			// Remove queries, add them back later.
 			if ( $_query )
-				$url = \tsf()->s_url( $url ); // FIXME do this more elegantly.
+				$url = strtok( $url, '?' );
 
 			if ( $use_base ) {
 				$url = \user_trailingslashit(
@@ -395,7 +434,7 @@ class Utils {
 				$_query = parse_url( $url, \PHP_URL_QUERY );
 				// Remove queries, add them back later.
 				if ( $_query )
-					$url = \tsf()->s_url( $url );
+					$url = strtok( $url, '?' );
 
 				$pos = strrpos( $url, $find );
 				// Defensive programming, only remove if $find matches the stack length, without query arguments.

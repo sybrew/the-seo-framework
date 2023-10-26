@@ -70,7 +70,7 @@ printf(
 		]
 	),
 	\esc_xml(
-		\tsf()->sanitize_text(
+		Data\Filter\Sanitize::metadata_content(
 			Data\Blog::get_public_blog_name() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' )
 		)
 	)

@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -54,7 +56,7 @@ final class Organization extends Reference {
 		$entity = [
 			'@type' => static::$type,
 			'@id'   => static::get_id(),
-			'name'  => \tsf()->sanitize_text( Data\Plugin::get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name() ),
+			'name'  => Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name() ),
 			'url'   => Meta\URI::get_bare_front_page_url(),
 		];
 

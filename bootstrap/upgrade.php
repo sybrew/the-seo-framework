@@ -99,7 +99,7 @@ function _previous_db_version() {
  */
 function _do_upgrade() {
 
-	if ( ! \tsf()->loaded || \wp_doing_ajax() ) return;
+	if ( ! \tsf()->loaded || \wp_doing_ajax() ) return; // var_dump()
 
 	if ( Query::is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
@@ -854,7 +854,7 @@ function _do_upgrade_4110() {
  */
 function _do_upgrade_4120() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4120' )
-		\tsf()->update_option( 'ping_use_cron_prerender', 0 );
+		Data\Plugin::update_option( 'ping_use_cron_prerender', 0 );
 }
 
 /**
@@ -874,7 +874,7 @@ function _do_upgrade_4200() {
  */
 function _do_upgrade_4270() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' )
-		\tsf()->update_option( 'auto_description_html_method', 'fast' );
+		Data\Plugin::update_option( 'auto_description_html_method', 'fast' );
 }
 
 /**

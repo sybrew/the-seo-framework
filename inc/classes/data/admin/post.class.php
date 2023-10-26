@@ -198,7 +198,7 @@ class Post {
 
 		$new_data = [];
 
-		foreach ( (array) \wp_unslash( $_POST['autodescription-quick'] ) as $key => $value ) {
+		foreach ( (array) \wp_unslash( $_POST['autodescription-quick'] ) as $key => $value ) { // var_dump() should we still unslash?
 			switch ( $key ) {
 				case 'doctitle':
 					$new_data['_genesis_title'] = $value;

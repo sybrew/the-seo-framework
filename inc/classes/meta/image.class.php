@@ -8,11 +8,13 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query,
-	\The_SEO_Framework\Meta;
-
 use function \The_SEO_Framework\normalize_generation_args;
+
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -399,7 +401,7 @@ class Image {
 		}
 
 		if ( ! empty( $details['url'] ) ) {
-			$details = \tsf()->s_image_details( static::merge_extra_image_details( $details, 'full' ) );
+			$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
 
 			if ( $details['url'] )
 				yield $details;
@@ -465,7 +467,7 @@ class Image {
 		}
 
 		if ( ! empty( $details['url'] ) ) {
-			$details = \tsf()->s_image_details( static::merge_extra_image_details( $details, 'full' ) );
+			$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
 
 			if ( $details['url'] )
 				yield $details;
@@ -600,7 +602,7 @@ class Image {
 		if ( isset( $args ) ) {
 			foreach ( $cbs as $cb ) {
 				foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
-					$details = \tsf()->s_image_details( static::merge_extra_image_details( $details, $size ) );
+					$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details( $details, $size ) );
 
 					if ( $details['url'] ) {
 						yield $details;
@@ -639,7 +641,7 @@ class Image {
 
 				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- gotta check and end early.
 				while ( $fiber->valid() || ( $fiber = false ) ) {
-					$details = \tsf()->s_image_details( static::merge_extra_image_details(
+					$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details(
 						$fiber->current(),
 						$size,
 					) );

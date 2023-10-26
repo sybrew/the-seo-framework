@@ -50,13 +50,13 @@ switch ( $instance ) :
 		$latest_post_id = Data\Post::get_latest_post_id();
 		$latest_cat_id  = Data\Term::get_latest_term_id( 'category' );
 
-		$post_title = \tsf()->escape_text( Strings::hellip_if_over(
+		$post_title = \esc_html( Strings::hellip_if_over(
 			Meta\Title::get_post_title( $latest_post_id ) ?: \__( 'Example Post', 'autodescription' ),
 			60
 		) );
 
-		$cat_prefix = \tsf()->escape_text( \_x( 'Category:', 'category archive title prefix', 'default' ) );
-		$cat_title  = \tsf()->escape_text( Strings::hellip_if_over(
+		$cat_prefix = \esc_html( \_x( 'Category:', 'category archive title prefix', 'default' ) );
+		$cat_title  = \esc_html( Strings::hellip_if_over(
 			Meta\Title::get_term_title( \get_term( $latest_cat_id ) ) ?: \__( 'Example Category', 'autodescription' ),
 			60 - \strlen( $cat_prefix )
 		) );
@@ -261,7 +261,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin::get_option( 'site_title' ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'site_title' ) ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( \__( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );

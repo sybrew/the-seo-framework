@@ -8,12 +8,11 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use function \The_SEO_Framework\normalize_generation_args;
 
-use function \The_SEO_Framework\{
-	memo,
-	normalize_generation_args,
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
 };
 
 /**
@@ -198,7 +197,7 @@ class Twitter {
 
 		if ( ! isset( $title ) ) return '';
 		if ( \strlen( $title ) )
-			return \tsf()->sanitize_text( $title );
+			return Data\Filter\Sanitize::metadata_content( $title );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return static::fallback_to_open_graph()
@@ -236,7 +235,7 @@ class Twitter {
 
 		if ( ! isset( $title ) ) return '';
 		if ( \strlen( $title ) )
-			return \tsf()->sanitize_text( $title );
+			return Data\Filter\Sanitize::metadata_content( $title );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return static::fallback_to_open_graph()
@@ -316,7 +315,7 @@ class Twitter {
 
 		if ( ! isset( $desc ) ) return '';
 		if ( \strlen( $desc ) )
-			return \tsf()->sanitize_text( $desc );
+			return Data\Filter\Sanitize::metadata_content( $desc );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return static::fallback_to_open_graph()
@@ -354,7 +353,7 @@ class Twitter {
 
 		if ( ! isset( $desc ) ) return '';
 		if ( \strlen( $desc ) )
-			return \tsf()->sanitize_text( $desc );
+			return Data\Filter\Sanitize::metadata_content( $desc );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return static::fallback_to_open_graph()

@@ -232,8 +232,8 @@ class Utils {
 						if ( ! static::using_pretty_permalinks() ) break;
 
 						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
-						// WordPress mitigates this via a 404 query when a numeric value is found.
-						if ( ! preg_match( '/^[1-9][0-9]*$/', $query[ $qv ] ) )
+						// WordPress mitigates this via a 404 query when a numeric value is found without a leading 0.
+						if ( ! preg_match( '/^[1-9]\d*$/', $query[ $qv ] ) )
 							return memo( true );
 						break;
 

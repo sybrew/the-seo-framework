@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Helper\Query;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Helper\Query; // Yes, it is legal to share class and namespaces.
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query, // Yes, it is legal to share class and namespaces.
+};
 
 /**
  * The SEO Framework plugin

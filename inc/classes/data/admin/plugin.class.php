@@ -57,8 +57,7 @@ class Plugin {
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[
-				'type'              => 'array',
-				'sanitize_callback' => [ Data\Plugin\Sanitize::class, 'filter_settings_update' ],
+				'type' => 'array',
 			],
 		);
 

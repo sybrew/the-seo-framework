@@ -28,8 +28,8 @@ namespace The_SEO_Framework;
  */
 
 $title    = \__( 'XML Sitemap', 'autodescription' );
-$sep      = \The_SEO_Framework\Meta\Title::get_separator(); // Lacking import OK.
-$addition = \The_SEO_Framework\Data\Blog::get_public_blog_name(); // Lacking import OK.
+$sep      = Meta\Title::get_separator();
+$addition = Data\Blog::get_public_blog_name();
 
 ?>
-<title><?= \esc_xml( \tsf()->sanitize_text( "$title $sep $addition" ) ) ?></title>
+<title><?= \esc_xml( Data\Filter\Sanitize::metadata_content( "$title $sep $addition" ) ) ?></title>

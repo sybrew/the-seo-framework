@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -64,8 +66,8 @@ final class WebSite extends Reference {
 			'@type'       => &static::$type,
 			'@id'         => static::get_id(),
 			'url'         => Meta\URI::get_bare_front_page_url(),
-			'name'        => \tsf()->sanitize_text( Data\Blog::get_public_blog_name() ),
-			'description' => \tsf()->sanitize_text( Data\Blog::get_filtered_blog_description() ),
+			'name'        => Data\Filter\Sanitize::metadata_content( Data\Blog::get_public_blog_name() ),
+			'description' => Data\Filter\Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ),
 			'inLanguage'  => Data\Blog::get_language(),
 		];
 

@@ -44,14 +44,14 @@ class Plugin {
 	 * @var array Holds 'all' TSF's options/settings. Updates in real time.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 */
-	private static $options;
+	private static $options_memo;
 
 	/**
 	 * @since 4.3.0
 	 * @var array Holds 'all' TSF's site cache. Updates in real time.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_CACHE
 	 */
-	private static $site_cache;
+	private static $site_cache_memo;
 
 	/**
 	 * Returns selected option. Null on failure.
@@ -71,7 +71,7 @@ class Plugin {
 	 */
 	public static function get_option( ...$key ) {
 
-		$option = static::$options ?? static::get_options();
+		$option = static::$options_memo ?? static::get_options();
 
 		foreach ( $key as $k )
 			$option = $option[ $k ] ?? null;
@@ -88,8 +88,8 @@ class Plugin {
 	 */
 	public static function get_options() {
 
-		if ( isset( static::$options ) )
-			return static::$options;
+		if ( isset( static::$options_memo ) )
+			return static::$options_memo;
 
 		$is_headless = is_headless( 'settings' );
 
@@ -104,7 +104,7 @@ class Plugin {
 		 * @param string $setting  The settings name.
 		 * @param bool   $headless Whether the options are headless.
 		 */
-		return static::$options = \apply_filters_ref_array(
+		return static::$options_memo = \apply_filters_ref_array(
 			'the_seo_framework_get_options',
 			[
 				$is_headless
@@ -137,7 +137,7 @@ class Plugin {
 		// The current request is still headless -- so do not update the state.
 		// The next request may have filtered this value, or the update was blocked.
 		if ( ! is_headless( 'settings' ) )
-			static::$options = $options;
+			static::$options_memo = null;
 
 		Plugin\PTA::flush_cache();
 
@@ -154,7 +154,7 @@ class Plugin {
 	 */
 	public static function get_site_cache( $key ) {
 		return (
-			static::$site_cache ?? static::get_site_caches()
+			static::$site_cache_memo ?? static::get_site_caches()
 		)[ $key ] ?? null;
 	}
 
@@ -167,12 +167,12 @@ class Plugin {
 	 */
 	public static function get_site_caches() {
 
-		if ( isset( static::$site_cache ) )
-			return static::$site_cache;
+		if ( isset( static::$site_cache_memo ) )
+			return static::$site_cache_memo;
 
 		static::register_automated_refresh( 'site_cache' );
 
-		return static::$site_cache = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] ) ?: [];
+		return static::$site_cache_memo = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] ) ?: [];
 	}
 
 	/**
@@ -193,7 +193,7 @@ class Plugin {
 			\is_array( $cache ) ? $cache : [ $cache => $value ]
 		);
 
-		static::$site_cache = $site_cache;
+		static::$site_cache_memo = $site_cache;
 
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
 	}
@@ -213,7 +213,7 @@ class Plugin {
 		foreach ( (array) $cache as $key )
 			unset( $site_cache[ $key ] );
 
-		static::$site_cache = $site_cache;
+		static::$site_cache_memo = $site_cache;
 
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
 	}

@@ -162,7 +162,7 @@ final class Tags {
 				case 'href':
 				case 'xlink:href':
 				case 'src':
-					$_secure_attr_value = \sanitize_url( $value );
+					$_secure_attr_value = \sanitize_url( $value ); // var_dump() break me.
 					break;
 				default:
 					if (
@@ -195,7 +195,7 @@ final class Tags {
 				 *
 				 * @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#attributes-0>
 				 */
-				preg_replace( '/[^a-zA-Z0-9:_-]+/', '', $name ),
+				preg_replace( '/[^a-z\d:_-]+/i', '', $name ),
 				$_secure_attr_value
 			);
 		}
@@ -206,7 +206,7 @@ final class Tags {
 				'<%1$s%2$s>%3$s</%1$s>',
 				[
 					/** @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#syntax-tag-name> */
-					preg_replace( '/[^0-9a-zA-Z]+/', '', $tag ), // phpcs:ignore, WordPress.Security.EscapeOutput -- this escapes.
+					preg_replace( '/[^a-z\d]+/i', '', $tag ), // phpcs:ignore, WordPress.Security.EscapeOutput -- this escapes.
 					$attr,
 					\is_array( $content )
 						? ( $content['escape'] ?? true )

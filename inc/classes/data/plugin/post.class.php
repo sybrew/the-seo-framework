@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Data\Plugin;
 
 use function \The_SEO_Framework\is_headless;
 
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
@@ -245,20 +246,24 @@ class Post {
 		 *       So, set an empty value if you wish to delete them.
 		 * @see https://github.com/sybrew/the-seo-framework/issues/185
 		 * @since 4.0.0
-		 * @since 4.3.0 The second parameter is now an integer, instead of Post object.
+		 * @since 4.3.0 1. The second parameter is now an integer, instead of Post object.
+		 *              2. No longer sends pre-sanitized data to the filter.
 		 * @param array $data The data that's going to be saved.
 		 * @param int   $post The post object.
 		 */
 		$data = (array) \apply_filters(
 			'the_seo_framework_save_post_meta',
-			\tsf()->s_post_meta( array_merge(
+			array_merge(
 				static::get_default_meta( $post_id ),
-				$data
-			) ),
+				$data,
+			),
 			$post_id,
 		);
 
-		static::$meta_memo[ $post_id ] = $data;
+		unset( static::$meta_memo[ $post_id ] );
+
+		// See <https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-1780697955>
+		$data = Data\Filter\Post::filter_meta_update( $data );
 
 		// Cycle through $data, insert value or delete field
 		foreach ( (array) $data as $field => $value ) {
@@ -381,6 +386,8 @@ class Post {
 
 		// Unset and don't refill -- we store a simple number; we don't want to get the entire term here.
 		unset( static::$pt_memo[ $post_id ?? \get_the_id() ] );
+
+		$value = \absint( $value );
 
 		if ( empty( $value ) )
 			return \delete_post_meta( $post_id, "_primary_term_{$taxonomy}" );

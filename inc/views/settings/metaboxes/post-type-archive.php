@@ -204,7 +204,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\PTA::get_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off />
 			<?php
 			$pto = \get_post_type_object( $args['post_type'] );
 
@@ -216,12 +216,12 @@ switch ( $instance ) :
 				Input::get_field_id( $args['options']['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => \tsf()->escape_text( $_default_title ),
+						'defaultTitle'      => \esc_html( $_default_title ), // var_dump() is this necessary?
 						'addAdditions'      => Meta\Title\Conditions::use_branding( $args['generator_args'] ),
 						'useSocialTagline'  => Meta\Title\Conditions::use_branding( $args['generator_args'], true ),
-						'additionValue'     => \tsf()->escape_text( Meta\Title::get_addition() ),
+						'additionValue'     => \esc_html( Meta\Title::get_addition() ),
 						'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
-						'prefixValue'       => \tsf()->escape_text( $_prefix_value ),
+						'prefixValue'       => \esc_html( $_prefix_value ),
 						'showPrefix'        => Meta\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
 				]
@@ -275,7 +275,7 @@ switch ( $instance ) :
 				Input::get_field_id( $args['options']['description'] ),
 				[
 					'state' => [
-						'defaultDescription' => \tsf()->escape_text(
+						'defaultDescription' => \esc_html(
 							Meta\Description::get_generated_description( $args['generator_args'] )
 						),
 					],
@@ -292,16 +292,16 @@ switch ( $instance ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => \tsf()->escape_text( Meta\Open_Graph::get_generated_title( $args['generator_args'] ) ),
+						'defaultTitle' => \esc_html( Meta\Open_Graph::get_generated_title( $args['generator_args'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $args['generator_args'], 'og' ),
-						'defaultDesc'  => \tsf()->escape_text( Meta\Open_Graph::get_generated_description( $args['generator_args'] ) ),
+						'defaultDesc'  => \esc_html( Meta\Open_Graph::get_generated_description( $args['generator_args'] ) ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => \tsf()->escape_text( Meta\Twitter::get_generated_title( $args['generator_args'] ) ),
+						'defaultTitle' => \esc_html( Meta\Twitter::get_generated_title( $args['generator_args'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $args['generator_args'], 'twitter' ),
-						'defaultDesc'  => \tsf()->escape_text( Meta\Twitter::get_generated_description( $args['generator_args'] ) ),
+						'defaultDesc'  => \esc_html( Meta\Twitter::get_generated_description( $args['generator_args'] ) ),
 					],
 				],
 			]
@@ -318,7 +318,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle />
 		</p>
 
 		<p>
@@ -346,7 +346,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle />
 		</p>
 
 		<p>
@@ -403,7 +403,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= Meta\URI::get_generated_url( $args['generator_args'] ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= \esc_url( Meta\URI::get_generated_url( $args['generator_args'] ) ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off />
 		</p>
 
 		<hr>

@@ -13,11 +13,11 @@ use function \The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomies,
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+	Helper\Taxonomies,
+	Meta,
 };
 
 /**

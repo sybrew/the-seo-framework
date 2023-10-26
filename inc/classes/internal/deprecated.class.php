@@ -12,13 +12,16 @@ namespace The_SEO_Framework\Internal;
 use function \The_SEO_Framework\{
 	memo,
 	umemo,
+	normalize_generation_args,
 };
 
-use function \The_SEO_Framework\normalize_generation_args;
-
 // Precautionary.
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Data,
+	Helper,
+	Helper\Query,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -88,28 +91,6 @@ final class Deprecated {
 	public function get_transient( $transient ) {
 		\tsf()->_deprecated_function( 'tsf()->get_transient()', '4.3.0', 'get_transient()' );
 		return \get_transient( $transient );
-	}
-
-	/**
-	 * Returns left or right, for the home separator location.
-	 *
-	 * This method fetches the default option because it's conditional (LTR/RTL).
-	 *
-	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
-	 * @since 4.3.0 1. No longer falls back to option or default option, but a language-based default instead.
-	 *              2. Deprecated.
-	 * @deprecated
-	 *
-	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
-	 * @return string left or right
-	 */
-	public function s_left_right_home( $position ) {
-
-		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_left_right_home()', '4.3.0', 'tsf()->s_left_right()' );
-
-		return $tsf->s_left_right( $position );
 	}
 
 	/**
@@ -1170,9 +1151,7 @@ final class Deprecated {
 	 * @return string The advanced query protection (aqp) identifier.
 	 */
 	public function advanced_query_protection() {
-
 		\tsf()->_deprecated_function( 'tsf()->advanced_query_protection()', '4.3.0' );
-
 		return \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
 			'name'  => 'tsf:aqp',
 			'value' => '1',
@@ -3337,6 +3316,7 @@ final class Deprecated {
 
 		$excerpt = $excerpt ?: $tsf->description()->get_excerpt_from_args( [ 'id' => $id ] );
 
+		// NOTE: the new s_excerpt does NOT escape nor sanitize.
 		return $escape ? $tsf->s_excerpt( $excerpt ) : $tsf->s_excerpt_raw( $excerpt );
 	}
 
@@ -6421,9 +6401,7 @@ final class Deprecated {
 	 * @return bool True on clear. False otherwise.
 	 */
 	public function clean_response_header() {
-
 		\tsf()->_deprecated_function( 'tsf()->clean_response_header()', '4.3.0' );
-
 		return \The_SEO_Framework\Helper\Headers::clean_response_header();
 	}
 
@@ -6460,9 +6438,7 @@ final class Deprecated {
 	 * @return string The generated SEO bar, in HTML.
 	 */
 	public function get_generated_seo_bar( $query ) {
-
 		\tsf()->_deprecated_function( 'tsf()->get_generated_seo_bar()', '4.3.0' );
-
 		return \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar( $query );
 	}
 
@@ -6476,9 +6452,7 @@ final class Deprecated {
 	 * @param string $url The redirection URL.
 	 */
 	public function do_redirect( $url = '' ) {
-
 		\tsf()->_deprecated_function( 'tsf()->do_redirect()', '4.3.0', 'wp_safe_redirect()' );
-
 		return \The_SEO_Framework\Front\Redirect::do_redirect( $url );
 	}
 
@@ -6493,9 +6467,7 @@ final class Deprecated {
 	 * @return bool Whether external redirect is allowed.
 	 */
 	public function allow_external_redirect() {
-
 		\tsf()->_deprecated_function( 'tsf()->allow_external_redirect()', '4.3.0' );
-
 		return \The_SEO_Framework\Helper\Redirect::allow_external_redirect();
 	}
 
@@ -6514,9 +6486,7 @@ final class Deprecated {
 	 * @return string The document title
 	 */
 	public function get_document_title( $title = '' ) {
-
 		\tsf()->_deprecated_function( 'tsf()->get_document_title()', '4.3.0' );
-
 		return \The_SEO_Framework\Front\Title::set_document_title( $title );
 	}
 
@@ -6536,9 +6506,7 @@ final class Deprecated {
 	 * @return string $title
 	 */
 	public function get_wp_title( $title = '' ) {
-
 		\tsf()->_deprecated_function( 'tsf()->get_wp_title()', '4.3.0' );
-
 		return \The_SEO_Framework\Front\Title::set_document_title( $title );
 	}
 
@@ -6552,9 +6520,7 @@ final class Deprecated {
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function get_seo_settings_page_url() {
-
 		\tsf()->_deprecated_function( 'tsf()->get_seo_settings_page_url()', '4.3.0' );
-
 		return \the_seo_framework\is_headless( 'settings' )
 			? ''
 			: \esc_url(
@@ -6607,9 +6573,7 @@ final class Deprecated {
 	 * @return string The converted time. Empty string if no $time is given.
 	 */
 	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
-
 		\tsf()->_deprecated_function( 'tsf()->gmt2date()', '4.3.0', 'gmdate()' );
-
 		return gmdate( $format, strtotime( "$time GMT" ) );
 	}
 
@@ -7096,7 +7060,7 @@ final class Deprecated {
 	 */
 	public function init_sanitizer_filters() {
 		\tsf()->_deprecated_function( 'tsf()->add_option_filter()', '4.3.0' );
-		\The_SEO_Framework\Data\Plugin\Sanitize::register_filters_jit();
+		\The_SEO_Framework\Data\Filter\Plugin::register_filters_jit();
 	}
 
 	/**
@@ -7244,5 +7208,1245 @@ final class Deprecated {
 	public function detect_sitemap_plugin() {
 		\tsf()->_deprecated_function( 'tsf()->detect_sitemap_plugin()', '4.3.0' );
 		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['sitemaps'];
+	}
+
+	/**
+	 * Makes Email Addresses safe, via sanitize_email()
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $email A possibly unsafe email.
+	 * @return string String a safe email address
+	 */
+	public function s_email_address( $email ) {
+		\tsf()->_deprecated_function( 'tsf()->s_email_address()', '4.3.0', 'sanitize_email()' );
+		return \sanitize_email( $email );
+	}
+
+	/**
+	 * Removes unsafe HTML tags, via wp_kses_post().
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with potentially unsafe HTML in it.
+	 * @return string String with only safe HTML in it
+	 */
+	public function s_safe_html( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->s_safe_html()', '4.3.0', 'wp_kses_post()' );
+		return \wp_kses_post( $text );
+	}
+	/**
+	 * Removes HTML tags from string.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String, possibly with HTML in it.
+	 * @return string String without HTML in it.
+	 */
+	public function s_no_html( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->s_no_html()', '4.3.0', 'strip_tags()' );
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+		return strip_tags( $text );
+	}
+
+	/**
+	 * Removes HTML tags and line breaks from string.
+	 * Also removes all spaces.
+	 *
+	 * @since 2.5.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String, possibly with HTML and spaces in it.
+	 * @return string String without HTML and breaks in it.
+	 */
+	public function s_no_html_space( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->s_no_html_space()', '4.3.0' );
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+		return str_replace( ' ', '', strip_tags( $text ) );
+	}
+
+	/**
+	 * Makes URLs safe, maintaining queries.
+	 *
+	 * @since 2.2.8
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url A possibly unsafe URL.
+	 * @return string String a safe URL with Query Arguments.
+	 */
+	public function s_url_query( $url ) {
+		\tsf()->_deprecated_function( 'tsf()->s_url_query()', '4.3.0', 'sanitize_url()' );
+		return \sanitize_url( $url );
+	}
+
+	/**
+	 * Makes URLs safe and removes query args.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url A possibly unsafe URL.
+	 * @return string String a safe URL without Query Arguments.
+	 */
+	public function s_url( $url ) {
+		\tsf()->_deprecated_function( 'tsf()->s_url()', '4.3.0' );
+		return \sanitize_url(
+			/**
+			 * If queries have been tokenized, take the value before the query args.
+			 * Otherwise it's empty, so take the current value.
+			 */
+			strtok( $url, '?' ) ?: $url
+		);
+	}
+
+	/**
+	 * Cleans canonical URL.
+	 * Looks at permalink settings to determine roughness of escaping.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url A fully qualified URL.
+	 * @return string A fully qualified clean URL.
+	 */
+	public function clean_canonical_url( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->clean_canonical_url()', '4.3.0', 'esc_url()' );
+
+		if ( $tsf->query()->utils()->using_pretty_permalinks() )
+			return \esc_url( $url, [ 'https', 'http' ] );
+
+		// Keep the &'s more readable when using query-parameters.
+		return \sanitize_url( $url, [ 'https', 'http' ] );
+	}
+
+	/**
+	 * Sanitizeses ID. Mainly removing spaces and coding characters.
+	 *
+	 * Unlike sanitize_key(), it doesn't alter the case nor applies filters.
+	 * It also maintains the '@' character and square brackets.
+	 *
+	 * @see WordPress Core sanitize_key()
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $id The unsanitized ID.
+	 * @return string The sanitized ID.
+	 */
+	public function s_field_id( $id ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_field_id()', '4.3.0', 'tsf()->escape()->option_name_attribute()' );
+
+		return $tsf->escape()->option_name_attribute( $id );
+	}
+
+	/**
+	 * Returns an one-line sanitized description and escapes it.
+	 *
+	 * @since 2.5.0
+	 * @since 2.6.6 Removes duplicated spaces.
+	 * @since 2.8.0 Method is now public.
+	 * @since 2.8.2 Added extra sanitation.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $description The Description.
+	 * @return string One line sanitized description.
+	 */
+	public function s_description( $description ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_description()', '4.3.0' );
+
+		return \esc_html(
+			$tsf->sanitize()->metadata_content( $description )
+		);
+	}
+
+	/**
+	 * Escapes and beautifies description.
+	 *
+	 * @since 2.5.2
+	 * @since 4.3.0 1. The first parameter is now required.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $description The description to escape and beautify.
+	 * @return string Escaped and beautified description.
+	 */
+	public function escape_description( $description ) {
+
+		\tsf()->_deprecated_function( 'tsf()->escape_description()', '4.3.0', 'esc_html()' );
+
+		return trim(
+			\esc_html(
+				\convert_chars(
+					\wptexturize(
+						\capital_P_dangit( $description )
+					)
+				)
+			)
+		);
+	}
+
+	/**
+	 * Returns a sanitized and trimmed title.
+	 *
+	 * @since 2.5.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $title The input Title.
+	 * @return string Sanitized and trimmed title.
+	 */
+	public function s_title( $title ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_title()', '4.3.0' );
+
+		return \esc_html(
+			$tsf->sanitize()->metadata_content( $title )
+		);
+	}
+
+	/**
+	 * Escapes and beautifies title.
+	 *
+	 * @since 2.5.2
+	 * @since 4.3.0 1. The first parameter is now required.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $title The title to escape and beautify.
+	 * @param bool   $trim  Whether to trim the title from whitespaces.
+	 * @return string Escaped and beautified title.
+	 */
+	public function escape_title( $title, $trim = true ) {
+
+		\tsf()->_deprecated_function( 'tsf()->escape_title()', '4.3.0', 'esc_html()' );
+
+		$title = \esc_html(
+			\convert_chars(
+				\wptexturize(
+					\capital_P_dangit( $title )
+				)
+			)
+		);
+
+		return $trim ? trim( $title ) : $title;
+	}
+
+	/**
+	 * Escapes attributes after converting `&` to `&amp;` to prevent double-escaping
+	 * of entities in HTML input value attributes.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with possibly ampersands.
+	 * @return string
+	 */
+	public function esc_attr_preserve_amp( $text ) {
+
+		\tsf()->_deprecated_function( 'tsf()->esc_attr_preserve_amp()', '4.3.0', 'esc_attr()' );
+
+		return \esc_attr( str_replace( '&', '&amp;', $text ) );
+	}
+
+	/**
+	 * Strips all URLs that are placed on new lines. These are prone to be embeds.
+	 *
+	 * This might leave stray line feeds. Use `tsf()->s_singleline()` to fix that.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @see \WP_Embed::autoembed()
+	 *
+	 * @param string $content The content to look for embed.
+	 * @return string $content Content without single-lined URLs.
+	 */
+	public function strip_newline_urls( $content ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->strip_newline_urls()', '4.3.0', 'tsf()->format()->html()->strip_newline_urls()' );
+
+		return $tsf->format()->html()->strip_newline_urls( $content );
+	}
+
+	/**
+	 * Strips all URLs that are placed in paragraphs on their own. These are prone to be embeds.
+	 *
+	 * This might leave stray line feeds. Use `tsf()->s_singleline()` to fix that.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @see \WP_Embed::autoembed()
+	 *
+	 * @param string $content The content to look for embed.
+	 * @return string $content Content without the paragraphs containing solely URLs.
+	 */
+	public function strip_paragraph_urls( $content ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->strip_paragraph_urls()', '4.3.0', 'tsf()->format()->html()->strip_paragraph_urls()' );
+
+		return $tsf->format()->html()->strip_paragraph_urls( $content );
+	}
+
+	/**
+	 * Strips tags with HTML Context-Sensitivity and outputs its breakdown.
+	 *
+	 * It essentially strips all tags, and replaces block-type tags' endings with spaces.
+	 * When done, it performs a sanity-cleanup via `strip_tags()`.
+	 *
+	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated/repeated spaces afterward.
+	 *
+	 * @since 3.2.4
+	 * @since 4.0.0 Now allows emptying the indexes `space` and `clear`.
+	 * @since 4.0.5 1. Added the `strip` argument index to the second parameter for clearing leftover tags.
+	 *              2. Now also clears `iframe` tags by default.
+	 *              3. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
+	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
+	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
+	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
+	 * @since 4.2.7 1. Revamped the HTML lookup: it now (more) accurately processes HTML, and is less likely to be fooled by HTML tags
+	 *                 in attributes.
+	 *              2. The 'space' index no longer has default `fieldset`, `figcaption`, `form`, `main`, `nav`, `pre`, `table`, and `tfoot`.
+	 *              3. The space index now has added to default `details`, `hgroup`, and `hr`.
+	 *              4. The 'clear' index no longer has default `bdo`, `hr`, `link`, `meta`, `option`, `samp`, `style`, and `var`.
+	 *              5. The 'clear' index now has added to default `area`, `audio`, `datalist`, `del`, `dialog`, `fieldset`, `form`, `map`,
+	 *                 `menu`, `meter`, `nav`, `object`, `output`, `pre`, `progress`, `s`, `table`, and `template`.
+	 *              6. Added the 'passes' index to `$args`. This tells the maximum passes 'space' may process.
+	 *                 Read TSF option `auto_description_html_method` to use the user-defined method.
+	 *              7. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit
+	 *                 those from '$args' so it falls through to `strip_tags()`.
+	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
+	 * @since 4.2.8 Elements with that start with exactly the same text as others won't be preemptively closed.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $input The input text that needs its tags stripped.
+	 * @param array  $args  The input arguments. Tags not included are ignored. {
+	 *                         'space'   : @param ?string[] HTML elements that should be processed for spacing. If the space
+	 *                                                      element is of void element type, it'll be treated as 'clear'.
+	 *                                                      If not set or null, skip check.
+	 *                                                      If empty array, skips stripping; otherwise, use input.
+	 *                         'clear'   : @param ?string[] HTML elements that should be emptied and replaced with a space.
+	 *                                                      If not set or null, skip check.
+	 *                                                      If empty array, skips stripping; otherwise, use input.
+	 *                         'strip'   : @param bool      If set, strip_tags() is performed before returning the output.
+	 *                                                      Recommended always true, since Regex doesn't understand XML.
+	 *                         'passes'  : @param int       The maximum number of passes 'space' may conduct. More is slower,
+	 *                                                      but more accurate.
+	 *                      }
+	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization/quoting.
+	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`. (togglable via `$args['strip']`)
+	 *                            Also note that their contents are maintained as-is, without added spaces.
+	 *                            It is why you should always list `style` and `script` in the `clear` array, never in 'space'.
+	 * @return string The output string without tags. May have many stray and repeated spaces.
+	 *                NOT SECURE for display! Don't trust this method. Always use esc_* functionality.
+	 */
+	public function strip_tags_cs( $input, $args = [] ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->strip_tags_cs()', '4.3.0', 'tsf()->format()->html()->strip_tags_cs()' );
+
+		return $tsf->format()->html()->strip_tags_cs( $input, $args );
+	}
+
+	/**
+	 * Sanitizes input excerpt.
+	 *
+	 * @since 2.8.0
+	 * @since 2.8.2 1. Added $allow_shortcodes parameter.
+	 *              2. Added $escape parameter.
+	 * @since 3.2.4 Now selectively clears tags.
+	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
+	 * @since 4.2.7 1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
+	 *              2. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`,
+	 *                 `object`, `output`, `progress`, `s`, `template`, and `ul`.
+	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
+	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
+	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
+	 * @since 4.3.0 1. The first parameter is now required.
+	 *              2. Now returns an empty string when something falsesque is returned.
+	 *              3. Deprecated.
+	 * @deprecated
+	 * @see `$this->strip_tags_cs()`
+	 *
+	 * @param string $excerpt          The excerpt.
+	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
+	 * @param bool   $escape           Whether to escape the excerpt.
+	 * @return string The escaped Excerpt.
+	 */
+	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_excerpt()', '4.3.0', 'tsf()->format()->html()->extract_content()' );
+
+		$excerpt = $tsf->format()->html()->extract_content(
+			$excerpt,
+			[ 'allow_shortcodes' => $allow_shortcodes ],
+		);
+
+		if ( $escape ) {
+			\esc_html(
+				\convert_chars(
+					\wptexturize(
+						$excerpt
+					)
+				)
+			);
+		}
+
+		return $excerpt;
+	}
+
+	/**
+	 * Cleans input excerpt. Does NOT escape excerpt for output.
+	 *
+	 * @since 2.8.2
+	 * @since 4.3.0 1. The first parameter is now required.
+	 *              2. Deprecated.
+	 * @deprecated
+	 * @see $this->s_excerpt - This is basically a copy without sanitation.
+	 *
+	 * @param string $excerpt          The excerpt.
+	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
+	 * @return string The unescaped Excerpt.
+	 */
+	public function s_excerpt_raw( $excerpt, $allow_shortcodes = true ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_excerpt_raw()', '4.3.0', 'tsf()->format()->html()->extract_content()' );
+
+		return $tsf->format()->html()->extract_content(
+			$excerpt,
+			[ 'allow_shortcodes' => $allow_shortcodes ],
+		);
+	}
+
+	/**
+	 * Returns an single-line, trimmed description without dupliacated spaces, nbsp, or tabs.
+	 * Does NOT escape.
+	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
+	 *
+	 * @since 2.8.2
+	 * @since 4.0.5 Now normalized `-` entities.
+	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated.
+	 *
+	 * @param string $description The Description.
+	 * @return string One line sanitized description.
+	 */
+	public function s_description_raw( $description ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_description_raw()', '4.3.0', 'tsf()->sanitize()->metadata_content()' );
+
+		return $tsf->sanitize()->metadata_content( $description );
+	}
+
+	/**
+	 * Converts multilines to single lines.
+	 *
+	 * @since 2.8.2
+	 * @since 3.1.0 Simplified method.
+	 * @since 4.1.0 1. Made this method about 25~92% faster (more replacements = more faster). 73% slower on empty strings (negligible).
+	 *              2. Now also strips form-feed and vertical whitespace characters--might they appear in the wild.
+	 *              3. Now also strips horizontal tabs (reverted in 4.1.1).
+	 * @since 4.1.1 1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+	 *              2. No longer transforms horizontal tabs. Use `s_tabs()` instead.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
+	 *
+	 * @param string $text The input value with possible multiline.
+	 * @return string The input string without multiple lines.
+	 */
+	public function s_singleline( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_singleline()', '4.3.0', 'tsf()->sanitize()->newline_to_space()' );
+
+		return $tsf->sanitize()->newline_to_space( $text );
+	}
+
+	/**
+	 * Removes duplicated spaces from the input value.
+	 *
+	 * @since 2.8.2
+	 * @since 2.9.4 Now no longer fails when first two characters are spaces.
+	 * @since 3.1.0 1. Now also catches non-breaking spaces.
+	 *              2. Now uses a regex pattern.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text The input value with possible multispaces.
+	 * @return string The input string without duplicated spaces.
+	 */
+	public function s_dupe_space( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_dupe_space()', '4.3.0', 'tsf()->sanitize()->remove_repeated_spacing()' );
+
+		return $tsf->sanitize()->remove_repeated_spacing( $text );
+	}
+
+	/**
+	 * Removes tabs and replaces it with spaces.
+	 *
+	 * @since 2.8.2
+	 * @since 4.1.1 Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 * @see $this->s_dupe_space() For removing duplicates spaces.
+	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
+	 *
+	 * @param string $text The input value with possible tabs.
+	 * @return string The input string without tabs.
+	 */
+	public function s_tabs( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_tabs()', '4.3.0', 'tsf()->sanitize()->tab_to_space()' );
+
+		return $tsf->sanitize()->tab_to_space( $text );
+	}
+
+	/**
+	 * Returns a -1, 0, or 1, based on nearest value.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $value Should ideally be -1, 0, or 1.
+	 * @return int -1, 0, or 1.
+	 */
+	public function s_qubit( $value ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_qubit()', '4.3.0', 'tsf()->sanitize()->qubit()' );
+
+		return $tsf->sanitize()->qubit( $value );
+	}
+
+	/**
+	 * Returns a 1 or 0, for all truthy / falsy values.
+	 *
+	 * Uses double casting. First, we cast to bool, then to integer.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $value Should ideally be a 1 or 0 integer passed in.
+	 * @return int 1 or 0.
+	 */
+	public function s_one_zero( $value ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_one_zero()', '4.3.0', 'tsf()->sanitize()->boolean_integer()' );
+
+		return $tsf->sanitize()->boolean_integer( $value );
+	}
+
+	/**
+	 * Returns a numeric string, like '0', '1', '2'.
+	 *
+	 * Uses double casting. First, we cast to integer, then to string.
+	 * Rounds floats down. Converts non-numeric inputs to '0'.
+	 *
+	 * @since 3.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $value Should ideally be an integer.
+	 * @return string An integer as string.
+	 */
+	public function s_numeric_string( $value ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_numeric_string()', '4.3.0', 'tsf()->sanitize()->numeric_string()' );
+
+		return $tsf->sanitize()->numeric_string( $value );
+	}
+
+	/**
+	 * Returns a positive integer value.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $value Should ideally be a positive integer.
+	 * @return integer Positive integer.
+	 */
+	public function s_absint( $value ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_absint()', '4.3.0', 'absint()' );
+
+		return \absint( $value );
+	}
+
+	/**
+	 * Sanitizes color hexadecimals.
+	 *
+	 * @since 2.8.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $color String with potentially unwanted hex values.
+	 * @return string The sanitized color hex.
+	 */
+	public function s_color_hex( $color ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_absint()', '4.3.0', 'tsf()->sanitize()->rgb_hex()' );
+
+		return $tsf->sanitize()->rgb_hex( $color );
+	}
+
+	/**
+	 * Replaces non-transformative hyphens with entity hyphens.
+	 * Duplicated simple hyphens are preserved.
+	 *
+	 * Regex challenge, make the columns without an x light up:
+	 * xxx - xx - xxx- - - xxxxxx xxxxxx- xxxxx - -
+	 * --- - -- - ---- - - ------ ------- ----- - -
+	 *
+	 * The answer? `/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/`
+	 * Sybre-kamisama.
+	 *
+	 * @since 4.0.5
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with potential hyphens.
+	 * @return string A string with safe HTML encoded hyphens.
+	 */
+	public function s_hyphen( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_hyphen()', '4.3.0', 'tsf()->sanitize()->lone_hyphen_to_entity()' );
+
+		return $tsf->sanitize()->lone_hyphen_to_entity( $text );
+	}
+
+	/**
+	 * Replaces non-break spaces with regular spaces.
+	 *
+	 * @since 2.8.2
+	 * @since 3.1.0 Now catches all non-breaking characters.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with potentially unwanted nbsp values.
+	 * @return string A spacey string.
+	 */
+	public function s_nbsp( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_nbsp()', '4.3.0', 'tsf()->sanitize()->nbsp_to_space()' );
+
+		return $tsf->sanitize()->nbsp_to_space( $text );
+	}
+
+	/**
+	 * Replaces backslash with entity backslash.
+	 *
+	 * @since 2.8.2
+	 * @since 4.3.0 1. No longer removes backslashes since we no longer add them.
+	 *                 Even though that changes data handling, this shouldn't be used for data outside of our APIs.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with potentially unwanted \ values.
+	 * @return string A string with safe HTML encoded backslashes.
+	 */
+	public function s_bsol( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_bsol()', '4.3.0', 'tsf()->sanitize()->backward_solidus_to_entity()' );
+
+		return $tsf->sanitize()->backward_solidus_to_entity( $text );
+	}
+
+	/**
+	 * Replaces backslash with entity backslash.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with potentially wanted \ values.
+	 * @return string A string with safe HTML encoded backslashes.
+	 */
+	public function s_bsol_raw( $text ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_bsol_raw()', '4.3.0', 'tsf()->sanitize()->backward_solidus_to_entity()' );
+
+		return $tsf->sanitize()->backward_solidus_to_entity( $text );
+	}
+
+	/**
+	 * Returns an single-line, trimmed title without dupliacated spaces, nbsp, or tabs.
+	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
+	 *
+	 * @since 2.8.2
+	 * @since 4.0.0 Now normalizes `&` entities.
+	 * @since 4.0.5 Now normalized `-` entities.
+	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $title The input Title.
+	 * @return string Sanitized, beautified and trimmed title.
+	 */
+	public function s_title_raw( $title ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_title_raw()', '4.3.0', 'tsf()->sanitize()->metadata_content()' );
+
+		return $tsf->sanitize()->metadata_content( $title );
+	}
+
+	/**
+	 * Cleans known parameters from image details.
+	 *
+	 * @since 4.0.0
+	 * @since 4.0.2 Now finds smaller images when they're over 4K.
+	 * @since 4.0.5 Now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
+	 * @since 4.1.4 Fixed theoretical issue where a different image could be set when width
+	 *              and height are supplied and either over 4K, but no ID is given.
+	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
+	 * @since 4.3.0 1. Now sanitizes the caption.
+	 *              2. Deprecated.
+	 * @deprecated
+	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
+	 *
+	 * @param array $details The image details, either associative (see $defaults) or sequential.
+	 * @return array|array[] The image details array : {
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
+	 * }
+	 */
+	public function s_image_details( $details ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_image_details()', '4.3.0', 'tsf()->sanitize()->image_details()' );
+
+		return $tsf->sanitize()->image_details( $details );
+	}
+
+	/**
+	 * Parses Twitter name and site. Adds @ if it wasn't supplied.
+	 * Parses URL to path and adds @ if URL is given.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 3.0.0 1. Now removes '@' from the URL path.
+	 *              2. Now removes spaces and tabs.
+	 * @since 4.0.0 1. Now returns empty on lone `@` entries.
+	 *              2. Now returns empty when using only spaces and tabs.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $username String with potentially wrong Twitter username.
+	 * @return string String with 'correct' Twitter username
+	 */
+	public function s_twitter_name( $username ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_twitter_name()', '4.3.0', 'tsf()->sanitize()->twitter_profile_handle()' );
+
+		return $tsf->sanitize()->twitter_profile_handle( $username );
+	}
+
+	/**
+	 * Parses Facebook profile URLs. Exchanges URLs for Facebook's.
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
+	 * @since 4.0.0 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
+	 *              2. Now returns empty when using only spaces and tabs.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $profile String with potentially wrong Facebook profile URL.
+	 * @return string String with 'correct' Facebook profile URL.
+	 */
+	public function s_facebook_profile( $profile ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_facebook_profile()', '4.3.0', 'tsf()->sanitize()->facebook_profile_link()' );
+
+		return $tsf->sanitize()->facebook_profile_link( $profile );
+	}
+
+	/**
+	 * Iterates over and cleans known parameters from image details. Also strips out duplicates.
+	 *
+	 * @since 4.0.0
+	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $details_array The image details, preferably sequential.
+	 * @return array[] The image details array, sequential: int => {
+	 *    string url:      The image URL,
+	 *    int    id:       The image ID,
+	 *    int    width:    The image width in pixels,
+	 *    int    height:   The image height in pixels,
+	 *    string alt:      The image alt tag,
+	 *    string caption:  The image caption,
+	 *    int    filesize: The image filesize in bytes,
+	 * }
+	 */
+	public function s_image_details_deep( $details_array ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_image_details_deep()', '4.3.0', 'tsf()->sanitize()->image_details()' );
+
+		$cleaned_details = $tsf->sanitize()->image_details( $details_array );
+
+		return array_values(
+			array_intersect_key(
+				$cleaned_details,
+				array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
+			)
+		);
+	}
+
+	/**
+	 * Sanitizes the Redirect URL.
+	 *
+	 * @since 2.2.4
+	 * @since 2.8.0 Method is now public.
+	 * @since 3.0.6 Noqueries is now disabled by default.
+	 * @since 4.0.0 1. Removed rudimentary relative URL testing.
+	 *              2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
+	 *              3. Now allows all protocols. Enjoy!
+	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://example.com/https://example.com/path/to/file/`)
+	 *                 when filter `the_seo_framework_allow_external_redirect` is set to false.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url String with potentially unwanted redirect URL.
+	 * @return string The Sanitized Redirect URL
+	 */
+	public function s_redirect_url( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_redirect_url()', '4.3.0', 'tsf()->sanitize()->redirect_url()' );
+
+		return $tsf->sanitize()->redirect_url( $url );
+	}
+
+	/**
+	 * Makes non-relative URLs absolute, corrects the scheme to most preferred when the
+	 * domain matches the current site, and makes it safer regardless afterward.
+	 *
+	 * Could not think of a good name. Enjoy.
+	 *
+	 * @since 4.0.2
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url A possibly unsafe URL.
+	 * @return string String a safe URL with Query Arguments.
+	 */
+	public function s_url_relative_to_current_scheme( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_url_relative_to_current_scheme()', '4.3.0', 'tsf()->uri()->utils()->make_absolute_current_scheme_url()' );
+
+		return $tsf->uri()->utils()->make_absolute_current_scheme_url( $url );
+	}
+
+	/**
+	 * Converts absolute URLs to relative URLs, if they weren't already.
+	 * The method should more aptly be named: "maybe_make_url_relative()".
+	 *
+	 * @since 2.6.5
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.0.0 No longer strips the prepended / path.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $url Full Path URL or relative URL.
+	 * @return string Absolute path.
+	 */
+	public function s_relative_url( $url ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->s_url_relative_to_current_scheme()', '4.3.0', 'tsf()->uri()->utils()->get_relative_part_from_url()' );
+
+		return $tsf->uri()->utils()->get_relative_part_from_url( $url );
+	}
+
+	/**
+	 * Sanitizes term meta.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $data The term meta to sanitize.
+	 * @return array The sanitized term meta.
+	 */
+	public function s_term_meta( $data ) {
+		\tsf()->_deprecated_function( 'tsf()->s_term_meta()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Term::filter_meta_update( $data );
+	}
+
+	/**
+	 * Sanitizes post meta.
+	 *
+	 * @since 4.0.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $data The post meta to sanitize.
+	 * @return array The sanitized post meta.
+	 */
+	public function s_post_meta( $data ) {
+		\tsf()->_deprecated_function( 'tsf()->s_post_meta()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Post::filter_meta_update( $data );
+	}
+
+	/**
+	 * Sanitizes user meta.
+	 *
+	 * @since 4.1.4
+	 * @since 4.2.0 Now accepts and sanitizes the 'counter_type' index.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $data The user meta to sanitize.
+	 * @return array The sanitized user meta.
+	 */
+	public function s_user_meta( $data ) {
+		\tsf()->_deprecated_function( 'tsf()->s_user_meta()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\User::filter_meta_update( $data );
+	}
+
+	/**
+	 * Sanitizes post type archive meta.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $data The post type archive meta to sanitize : {
+	 *    string $post_type => array $data
+	 * }
+	 * @return array The sanitized post type archive meta.
+	 */
+	public function s_all_post_type_archive_meta( $data ) {
+		\tsf()->_deprecated_function( 'tsf()->s_all_post_type_archive_meta()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::pta_meta( $data, [], 'pta' );
+	}
+
+	/**
+	 * Sanitizes post type archive meta.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $data The post type archive meta to sanitize.
+	 * @return array The sanitized post type archive meta.
+	 */
+	public function s_post_type_archive_meta( $data ) {
+		\tsf()->_deprecated_function( 'tsf()->s_post_type_archive_meta()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::pta_meta( $data, [], 'pta' );
+	}
+
+	/**
+	 * Sanitizes canonical scheme settings.
+	 *
+	 * @since 2.9.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text String with potentially unwanted values.
+	 * @return string A correct canonical scheme setting value.
+	 */
+	public function s_canonical_scheme( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->s_canonical_scheme()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::canonical_scheme( $text, '', 'canonical_scheme' );
+	}
+
+	/**
+	 * Sanitizes sitemap's min/max post value.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 1. Now also sanitizes the default fallback value.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $limit Integer with potentially unwanted values.
+	 * @return int A limited integer 1<=R<=50000.
+	 */
+	public function s_min_max_sitemap( $limit ) {
+		\tsf()->_deprecated_function( 'tsf()->s_min_max_sitemap()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::sitemap_query_limit( $limit, 0, 'sitemap_query_limit' );
+	}
+
+	/**
+	 * Parses Twitter Card radio input. Fills in default if incorrect value is supplied.
+	 * Falls back to previous value if empty. If previous value is empty if will go to default.
+	 *
+	 * @since 2.5.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 1. Now falls back to 'summary_large_image' instead of the default option. // var_dump() auto!
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $card String with potentially wrong option value.
+	 * @return string Sanitized twitter card type.
+	 */
+	public function s_twitter_card( $card ) {
+		\tsf()->_deprecated_function( 'tsf()->s_twitter_card()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::twitter_card( $card, 'summary', 'twitter_card' );
+	}
+
+	/**
+	 * Sanitizes image preview directive value.
+	 *
+	 * @since 4.0.2
+	 * @since 4.3.0 1. Now falls back to 'large' instead of 'standard'.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $size The image preview size with possibly unwanted values.
+	 * @return string The robots image snippet preview directive value.
+	 */
+	public function s_image_preview( $size ) {
+		\tsf()->_deprecated_function( 'tsf()->s_image_preview()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::copyright_image_size( $size, 'large', 'max_image_preview' );
+	}
+
+	/**
+	 * Sanitizes video and snippet preview length directive values.
+	 *
+	 * @since 4.0.2
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param int $length The snippet length that's possibly out of range.
+	 * @return int A limited integer -1<=R<=600.
+	 */
+	public function s_snippet_length( $length ) {
+		\tsf()->_deprecated_function( 'tsf()->s_snippet_length()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::copyright_content_length( $length, 0, 'max_snippet_length' );
+	}
+
+	/**
+	 * Returns the title separator value string.
+	 *
+	 * @since 2.2.2
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $sep A valid separator.
+	 * @return string Title separator option
+	 */
+	public function s_title_separator( $sep ) {
+		\tsf()->_deprecated_function( 'tsf()->s_snippet_length()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::title_separator( $sep, 'pipe', 'title_separator' );
+	}
+
+	/**
+	 * Returns the knowledge type value string.
+	 *
+	 * @since 2.2.8
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.1.0 Can no longer fall back to its previous value--instead, it will fall back to a generic value.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $type Should ideally be a string 'person' or 'organization' passed in.
+	 * @return string title Knowledge type option
+	 */
+	public function s_knowledge_type( $type ) {
+		\tsf()->_deprecated_function( 'tsf()->s_knowledge_type()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::knowledge_type( $type, 'person', 'knowledge_type' );
+	}
+
+	/**
+	 * Sanitizes disabled post type entries.
+	 * Filters out default post types.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array[string,int] $post_types An array with post type name indexes and 0/1 values.
+	 * @return array
+	 */
+	public function s_disabled_post_types( $post_types ) {
+		\tsf()->_deprecated_function( 'tsf()->s_disabled_post_types()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array(
+			\The_SEO_Framework\Data\Filter\Plugin::disabled_post_types( $post_types, [], 'disabled_post_types' ),
+			[],
+			'disabled_post_types'
+		);
+	}
+
+	/**
+	 * Sanitizes generic post type entries.
+	 * Ideally, we want to check if the post type exists; however, some might be registered too late.
+	 *
+	 * @since 3.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array[string,int] $post_types An array with post type name indexes and 0/1 values.
+	 * @return array
+	 */
+	public function s_post_types( $post_types ) {
+		\tsf()->_deprecated_function( 'tsf()->s_post_types()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array( $post_types );
+	}
+
+	/**
+	 * Sanitizes disabled taxonomy entries.
+	 * Filters out default taxonomies.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array[string,int] $taxonomies An array with taxonomy name indexes and 0/1 values.
+	 * @return array
+	 */
+	public function s_disabled_taxonomies( $taxonomies ) {
+		\tsf()->_deprecated_function( 'tsf()->s_disabled_taxonomies()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array(
+			\The_SEO_Framework\Data\Filter\Plugin::disabled_taxonomies( $taxonomies, [], 'disabled_taxonomies' ),
+			[],
+			'disabled_taxonomies'
+		);
+	}
+
+	/**
+	 * Sanitizes generic taxonomy entries.
+	 * Ideally, we want to check if the taxonomy exists; however, some might be registered too late.
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array[string,int] $taxonomies An array with taxonomy name indexes and 0/1 values.
+	 * @return array
+	 */
+	public function s_taxonomies( $taxonomies ) {
+		\tsf()->_deprecated_function( 'tsf()->s_taxonomies()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array( $taxonomies );
+	}
+
+	/**
+	 * Returns left or right, for the separator location.
+	 *
+	 * This method fetches the default option because it's conditional (LTR/RTL).
+	 *
+	 * @since 2.2.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 1. No longer falls back to option or default optionm, but a language-based default instead.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
+	 * @return string left or right
+	 */
+	public function s_left_right( $position ) {
+		\tsf()->_deprecated_function( 'tsf()->s_left_right()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::title_location( $position, 'left', 'title_location' );
+	}
+
+	/**
+	 * Returns left or right, for the home separator location.
+	 *
+	 * This method fetches the default option because it's conditional (LTR/RTL).
+	 *
+	 * @since 2.5.2
+	 * @since 2.8.0 Method is now public.
+	 * @since 4.3.0 1. No longer falls back to option or default option, but a language-based default instead.
+	 *              2. Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $position Should ideally be a string 'left' or 'right' passed in.
+	 * @return string left or right
+	 */
+	public function s_left_right_home( $position ) {
+		\tsf()->_deprecated_function( 'tsf()->s_left_right_home()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::title_location( $position, 'left', 'home_title_location' );
+	}
+
+	/**
+	 * Sanitizes alter query type.
+	 *
+	 * @since 2.9.4
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $type Should ideally be a string 'in_query' or 'post_query' passed in.
+	 * @return string 'in_query' or 'post_query'
+	 */
+	public function s_alter_query_type( $type ) {
+		\tsf()->_deprecated_function( 'tsf()->s_alter_query_type()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::alter_query_type( $type, 'in_query', 'alter_archive_query_type' );
+	}
+
+	/**
+	 * Sanitizes the html method value.
+	 *
+	 * @since 4.2.7
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param mixed $method Should ideally be a string 'fast', 'accurate', or 'thorough' passed in.
+	 * @return string 'fast', 'accurate', or 'thorough'.
+	 */
+	public function s_description_html_method( $method ) {
+		\tsf()->_deprecated_function( 'tsf()->s_description_html_method()', '4.3.0' );
+		return \The_SEO_Framework\Data\Filter\Plugin::auto_description_method( $method, 'fast', 'auto_description_method' );
 	}
 }

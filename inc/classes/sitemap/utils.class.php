@@ -12,8 +12,10 @@ use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -190,8 +192,8 @@ class Utils {
 		if ( $get_defaults )
 			return $defaults;
 
-		$main   = \tsf()->s_color_hex( Data\Plugin::get_option( 'sitemap_color_main' ) );
-		$accent = \tsf()->s_color_hex( Data\Plugin::get_option( 'sitemap_color_accent' ) );
+		$main   = Data\Filter\Sanitize::rgb_hex( Data\Plugin::get_option( 'sitemap_color_main' ) );
+		$accent = Data\Filter\Sanitize::rgb_hex( Data\Plugin::get_option( 'sitemap_color_accent' ) );
 
 		return array_merge(
 			$defaults,

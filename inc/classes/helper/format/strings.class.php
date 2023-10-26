@@ -8,8 +8,6 @@ namespace The_SEO_Framework\Helper\Format;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -102,7 +100,7 @@ class Strings {
 		];
 
 		// Don't use polyfills; we're going for speed over accuracy. Hosts must do their job correctly.
-		$use_mb = memo( null, 'use_mb' ) ?? memo( \extension_loaded( 'mbstring' ), 'use_mb' );
+		$use_mb = \extension_loaded( 'mbstring' );
 
 		$word_list = preg_split(
 			'/[^\p{Cc}\p{L}\p{N}\p{Pc}\p{Pd}\p{Pf}\'"]+/mu',
@@ -178,11 +176,13 @@ class Strings {
 	 *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
 	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
 	 * @since 4.2.7 Now considers floating numerics as one word.
-	 * @since 4.3.0 1. Renamed from `trim_excerpt()`.
-	 *              2. Moved from \The_SEO_Framework\Load.
+	 * @since 4.3.0 1. Moved from \The_SEO_Framework\Load.
+	 *              2. Renamed from `trim_excerpt()`.
+	 *              3. Anchored the first regex to the start prevent catastrophic backtracking when no spacing is found.
+	 *              4. Forced a useful match in the first regex to prevent catastrophic backtracking in the second regex.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
-	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
+	 * We use `[^\P{Po}\'\":]` because WordPress texturizes ' and " to fall under `\P{Po}`.
 	 * This is perfect. Please have the courtesy to credit us when taking it. :)
 	 *
 	 * @param string $sentence        The untrimmed sentence. Expected not to contain any HTML operators.
@@ -207,13 +207,14 @@ class Strings {
 		$sentence = html_entity_decode( $sentence, \ENT_QUOTES, 'UTF-8' );
 
 		// Find all words until $max_char_length, and trim when the last word boundary or punctuation is found.
+		// Tries to match "\x20" when the sentence contains no spaces, subsequently failing because trim() already removed that.
 		preg_match(
 			sprintf(
-				'/.{0,%d}([^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\Z){1}/su',
+				'/^.{0,%d}(?:[^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\x20)/su',
 				$max_char_length
 			),
 			trim( $sentence ),
-			$matches
+			$matches,
 		);
 
 		$sentence = trim( $matches[0] ?? '' );
@@ -226,10 +227,10 @@ class Strings {
 			\wptexturize( htmlentities(
 				$sentence,
 				\ENT_QUOTES,
-				'UTF-8'
+				'UTF-8',
 			) ),
 			\ENT_QUOTES,
-			'UTF-8'
+			'UTF-8',
 		);
 
 		/**
@@ -239,8 +240,11 @@ class Strings {
 		 * https://regex101.com/r/dAqhWC/1 (current)
 		 *
 		 * TODO Group 4's match is repeated. However, referring to it as (4) will cause it to congeal into 3.
+		 * TODO `([\p{Z}\w])` will try to match any word boundary even if there aren't any. This must be detected above.
+		 *      e.g., a sentence consisting ONLY of `''''` will cause catastrophic backtracking.
 		 * Note: Group 4 misses `?\p{Z}*` between `.+` and `[\p{Pc}`, but I couldn't find a use-case for it.
 		 *
+		 * Note to self: Do not anchor to start of sentence.
 		 * Critically optimized (worst case: 217 logic steps), so the $matches don't make much sense. Bear with me:
 		 *
 		 * @param array $matches : {
@@ -268,8 +272,10 @@ class Strings {
 			$sentence = "$matches[1]$matches[2]";
 		} elseif ( isset( $matches[1] ) ) {
 			$sentence = $matches[1];
+		} else {
+			// The sentence consists of control characters -- ditch it.
+			return '';
 		}
-		// Else: We'll get the original sentence. This shouldn't happen, but at least it's already trimmed to $max_char_length.
 
 		if ( \strlen( $sentence ) < $min_char_length )
 			return '';

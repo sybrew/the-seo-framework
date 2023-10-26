@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -60,7 +62,7 @@ final class BreadcrumbList extends Reference {
 				'@type'    => 'ListItem',
 				'position' => $i + 1, // Let's not create 0
 				'item'     => \esc_url( $item['url'] ),
-				'name'     => \tsf()->escape_text( $item['name'] ),
+				'name'     => Data\Filter\Sanitize::metadata_content( $item['name'] ),
 			];
 		}
 

@@ -56,7 +56,7 @@ function _wpforo_fix_page() {
  * @access private
  */
 function _wpforo_disable_tsf_html_output() {
-	\remove_action( 'wp_head', [ \tsf(), 'html_output' ], 1 );
+	\remove_action( 'wp_head', [ \tsf(), 'html_output' ], 1 ); // var_dump()
 }
 
 /**

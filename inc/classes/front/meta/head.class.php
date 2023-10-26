@@ -13,8 +13,10 @@ use function \The_SEO_Framework\{
 	_bootstrap_timer,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+};
 
 /**
  * The SEO Framework plugin
@@ -127,13 +129,11 @@ final class Head {
 		 * @since 3.1.4
 		 * @since 4.3.0 Deprecated
 		 * @deprecated
-		 * @param bool
+		 * @param bool $use_og_tags
 		 */
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_og_tags',
-			[
-				(bool) Data\Plugin::get_option( 'og_tags' ),
-			],
+			[ (bool) Data\Plugin::get_option( 'og_tags' ) ],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {
@@ -144,13 +144,11 @@ final class Head {
 		 * @since 3.1.4
 		 * @since 4.3.0 Deprecated
 		 * @deprecated
-		 * @param bool
+		 * @param bool $use_facebook_tags
 		 */
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
-			[
-				(bool) Data\Plugin::get_option( 'facebook_tags' ),
-			],
+			[ (bool) Data\Plugin::get_option( 'facebook_tags' ) ],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {
@@ -160,13 +158,11 @@ final class Head {
 		 * @since 3.1.4
 		 * @since 4.3.0 Deprecated
 		 * @deprecated
-		 * @param bool
+		 * @param bool $use_twitter_tags
 		 */
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_twitter_tags',
-			[
-				(bool) Data\Plugin::get_option( 'twitter_tags' ),
-			],
+			[ (bool) Data\Plugin::get_option( 'twitter_tags' ) ],
 			'4.3.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {

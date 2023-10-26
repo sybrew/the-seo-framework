@@ -415,7 +415,7 @@ switch ( $instance ) :
 			);
 
 			// Legacy.
-			$id = \tsf()->s_field_id( "{$type}_{$ro_value}" );
+			$id = Data\Filter\Escape::option_name_attribute( "{$type}_{$ro_value}" );
 
 			// Add warning if it's 'site'.
 			if ( 'site' === $type ) {

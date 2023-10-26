@@ -13,12 +13,12 @@ use function \The_SEO_Framework\{
 	normalize_generation_args,
 };
 
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Post_Types,
 	Query,
 	Taxonomies,
 };
-use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -82,8 +82,8 @@ class Title {
 	 * @since 4.0.0 Moved the filter to a separated method.
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Title.
-	 *              2. Removed the second $escape parameter.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -119,9 +119,8 @@ class Title {
 	 * @since 4.0.0 Moved the filter to a separated method.
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Moved `sanitize_text()` to before the title merging, to be more in line with custom title merging.
-	 *              2. Moved to \The_SEO_Framework\Meta\Title.
-	 *              3. Removed the second $escape parameter.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Removed the second `$escape` parameter.
 	 *              4. Moved the third parameter to the second.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -153,7 +152,7 @@ class Title {
 	 * @since 4.2.0 1. The first parameter can now be voided.
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -178,7 +177,7 @@ class Title {
 		 * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is auto-determined.
 		 */
-		return \tsf()->sanitize_text( (string) \apply_filters(
+		return Data\Filter\Sanitize::metadata_content( (string) \apply_filters(
 			'the_seo_framework_title_from_custom_field',
 			$title,
 			$args,
@@ -192,7 +191,7 @@ class Title {
 	 * @since 4.2.0 1. The first parameter can now be voided.
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -231,7 +230,7 @@ class Title {
 		);
 
 		return memo(
-			\strlen( $title ) ? \tsf()->sanitize_text( $title ) : '',
+			\strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '',
 			$args
 		);
 	}
@@ -241,7 +240,7 @@ class Title {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -259,7 +258,7 @@ class Title {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Can now return custom post type archive titles.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string The custom title.
 	 */
@@ -281,7 +280,7 @@ class Title {
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
-			return \tsf()->sanitize_text( $title );
+			return Data\Filter\Sanitize::metadata_content( $title );
 
 		return '';
 	}
@@ -314,7 +313,7 @@ class Title {
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
-			return \tsf()->sanitize_text( $title );
+			return Data\Filter\Sanitize::metadata_content( $title );
 
 		return '';
 	}
@@ -513,7 +512,7 @@ class Title {
 				$prefix = sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-					\tsf()->sanitize_text( Taxonomies::get_taxonomy_label( $term->taxonomy ?? '' ) )
+					Data\Filter\Sanitize::metadata_content( Taxonomies::get_taxonomy_label( $term->taxonomy ?? '' ) )
 				);
 			}
 		}
@@ -591,7 +590,7 @@ class Title {
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
-			return \tsf()->sanitize_text( $title );
+			return Data\Filter\Sanitize::metadata_content( $title );
 
 		return '';
 	}
@@ -649,7 +648,7 @@ class Title {
 				$title = \apply_filters( 'single_term_title', $term->name );
 		}
 
-		return \strlen( $title ) ? \tsf()->sanitize_text( $title ) : '';
+		return \strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '';
 	}
 
 	/**
@@ -664,7 +663,7 @@ class Title {
 
 		$title = \get_userdata( $user_id ?: Query::get_the_real_id() )->display_name ?? '';
 
-		return \strlen( $title ) ? \tsf()->sanitize_text( $title ) : '';
+		return \strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '';
 	}
 
 	/**
@@ -702,7 +701,7 @@ class Title {
 			$post_type,
 		);
 
-		return \strlen( $title ) ? \tsf()->sanitize_text( $title ) : '';
+		return \strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '';
 	}
 
 	/**
@@ -726,7 +725,7 @@ class Title {
 	 * @return string The generated search title.
 	 */
 	public static function get_search_query_title() {
-		return \tsf()->sanitize_text(
+		return Data\Filter\Sanitize::metadata_content(
 			/* translators: %s: search phrase */
 			sprintf( \__( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) )
 		);
@@ -740,7 +739,7 @@ class Title {
 	 * @return string The generated 404 title.
 	 */
 	public static function get_404_title() {
-		return \tsf()->sanitize_text(
+		return Data\Filter\Sanitize::metadata_content(
 			/**
 			 * @since 2.5.2
 			 * @since 4.3.0 Now defaults to Core translatable "Page not found."
@@ -905,7 +904,7 @@ class Title {
 	 * @return string The generated front page title.
 	 */
 	public static function get_front_page_title() {
-		return \tsf()->sanitize_text( Data\Blog::get_public_blog_name() );
+		return Data\Filter\Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
 	}
 
 	/**
@@ -919,7 +918,7 @@ class Title {
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition() {
-		return \tsf()->sanitize_text( Data\Blog::get_public_blog_name() );
+		return Data\Filter\Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
 	}
 
 	/**
@@ -927,13 +926,13 @@ class Title {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition_for_front_page() {
 		return memo() ?? memo(
-			\tsf()->sanitize_text(
+			Data\Filter\Sanitize::metadata_content(
 				Data\Plugin::get_option( 'homepage_title_tagline' ) ?: Data\Blog::get_filtered_blog_description()
 			)
 		);
@@ -943,7 +942,7 @@ class Title {
 	 * Returns title separator location.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string The separator location.
 	 */
@@ -955,7 +954,7 @@ class Title {
 	 * Returns title separator location for the front page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string The Seplocation for the front page.
 	 */
@@ -968,7 +967,7 @@ class Title {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string The Separator.
 	 */

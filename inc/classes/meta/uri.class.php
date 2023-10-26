@@ -13,8 +13,10 @@ use function \The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Query,
+};
 
 /**
  * The SEO Framework plugin

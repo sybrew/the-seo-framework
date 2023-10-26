@@ -240,7 +240,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
 	if (
 		   $options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
-		|| 0 === \tsf()->s_qubit( Data\Plugin\Post::get_meta_item( '_genesis_noindex', $page_id ) )
+		|| 0 === Data\Filter\Sanitize::qubit( Data\Plugin\Post::get_meta_item( '_genesis_noindex', $page_id ) )
 	) {
 		$meta['noindex'] = 'noindex';
 	}
@@ -276,7 +276,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
 	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status']               =
-		0 !== \tsf()->s_qubit(
+		0 !== Data\Filter\Sanitize::qubit(
 			$builder->get_query_cache()['meta']['_genesis_noindex']
 		)
 			? $interpreter::STATE_OKAY

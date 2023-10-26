@@ -320,7 +320,7 @@ final class Page extends Main {
 
 		$title_len = mb_strlen(
 			html_entity_decode(
-				\tsf()->escape_text( \tsf()->sanitize_text( $title ) ),
+				\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -537,7 +537,7 @@ final class Page extends Main {
 
 		$desc_len = mb_strlen(
 			html_entity_decode(
-				\tsf()->escape_text( \tsf()->sanitize_text( $desc ) ),
+				\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
 				\ENT_NOQUOTES,
 				'UTF-8'
 			)
@@ -706,7 +706,7 @@ final class Page extends Main {
 			}
 		}
 
-		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
+		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
@@ -830,7 +830,7 @@ final class Page extends Main {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
+		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
@@ -961,7 +961,7 @@ final class Page extends Main {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== \tsf()->s_qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
+		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.

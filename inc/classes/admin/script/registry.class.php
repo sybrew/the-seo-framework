@@ -493,8 +493,6 @@ class Registry {
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
-			$tsf = \tsf();
-
 			if (
 				   ! \is_array( $_colors[ $_scheme ]->colors ?? null )
 				|| \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.

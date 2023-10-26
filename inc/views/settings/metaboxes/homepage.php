@@ -121,22 +121,22 @@ switch ( $instance ) :
 		Form::output_pixel_counter_wrap( Input::get_field_id( 'homepage_title' ), 'title', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
 			<?php
-			$_post_meta_title = $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
+			$_post_meta_title = $home_id ? Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
 			Input::output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
 				[
 					'state' => [
 						'refTitleLocked'      => false, // This field is the mother of all references.
-						'defaultTitle'        => \tsf()->escape_text(
+						'defaultTitle'        => \esc_html(
 							$_post_meta_title ?: Meta\Title::get_bare_generated_title( $generator_args )
 						),
 						'_defaultTitleLocked' => (bool) $_post_meta_title, // Underscore because it's non-standard API.
 						'addAdditions'        => Meta\Title\Conditions::use_branding( $generator_args ),
 						'useSocialTagline'    => Meta\Title\Conditions::use_branding( $generator_args, true ),
-						'additionValue'       => \tsf()->escape_text( Meta\Title::get_addition_for_front_page() ),
+						'additionValue'       => \esc_html( Meta\Title::get_addition_for_front_page() ),
 						'additionPlacement'   => 'left' === Meta\Title::get_addition_location_for_front_page() ? 'before' : 'after',
 					],
 				]
@@ -176,8 +176,8 @@ switch ( $instance ) :
 				Input::get_field_id( 'homepage_description' ),
 				[
 					'state' => [
-						'defaultDescription' => \tsf()->escape_text(
-							( $home_id ? \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : '' )
+						'defaultDescription' => \esc_html(
+							( $home_id ? Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : '' )
 							?: Meta\Description::get_generated_description( $generator_args )
 						),
 					],
@@ -196,13 +196,13 @@ switch ( $instance ) :
 
 	case 'additions':
 		// Fetches escaped title parts.
-		$_example_title = \tsf()->escape_text(
+		$_example_title = \esc_html(
 			Meta\Title::get_bare_custom_title( $generator_args )
 			?: Meta\Title::get_bare_generated_title( $generator_args )
 		);
 		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
 		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
-		$_example_blogname  = \tsf()->escape_text(
+		$_example_blogname  = \esc_html(
 			Meta\Title::get_addition_for_front_page()
 			?: Meta\Title::get_untitled_title()
 		);
@@ -219,7 +219,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Blog::get_filtered_blog_description() ) ) ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_title_tagline' ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ) ) ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title_tagline' ) ) ) ?>" autocomplete=off />
 		</p>
 
 		<div class=tsf-title-tagline-toggle>
@@ -274,10 +274,10 @@ switch ( $instance ) :
 
 		// Gets custom fields from page.
 		if ( $home_id ) {
-			$custom_og_title = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_open_graph_title', $home_id ) );
-			$custom_og_desc  = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
-			$custom_tw_title = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
-			$custom_tw_desc  = \tsf()->sanitize_text( Data\Plugin\Post::get_meta_item( '_twitter_description', $home_id ) );
+			$custom_og_title = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title', $home_id ) );
+			$custom_og_desc  = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
+			$custom_tw_title = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
+			$custom_tw_desc  = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description', $home_id ) );
 			$custom_image    = \sanitize_url( Data\Plugin\Post::get_meta_item( '_social_image_url', $home_id ) );
 		}
 
@@ -288,11 +288,11 @@ switch ( $instance ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => \tsf()->escape_text(
+						'defaultTitle' => \esc_html(
 							$custom_og_title ?: Meta\Open_Graph::get_generated_title( $generator_args )
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
-						'defaultDesc'  => \tsf()->escape_text(
+						'defaultDesc'  => \esc_html(
 							$custom_og_desc ?: Meta\Open_Graph::get_generated_description( $generator_args )
 						),
 						'titlePhLock'  => (bool) $custom_og_title,
@@ -301,11 +301,11 @@ switch ( $instance ) :
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => \tsf()->escape_text(
+						'defaultTitle' => \esc_html(
 							$custom_tw_title ?: Meta\Twitter::get_generated_title( $generator_args )
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
-						'defaultDesc'  => \tsf()->escape_text(
+						'defaultDesc'  => \esc_html(
 							$custom_tw_desc ?: Meta\Twitter::get_generated_description( $generator_args )
 						),
 						'titlePhLock'  => (bool) $custom_tw_title,
@@ -326,7 +326,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_title' ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
 		if ( Query\Utils::has_page_on_front() && $custom_og_title ) {
@@ -367,7 +367,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_twitter_title' ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \tsf()->escape_text( \tsf()->sanitize_text( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
 		if ( Query\Utils::has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {

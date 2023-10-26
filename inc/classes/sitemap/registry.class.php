@@ -16,10 +16,10 @@ use function \The_SEO_Framework\{
 use \The_SEO_Framework\{
 	Admin,
 	Data,
+	Helper,
+	Helper\Query,
 	Meta,
 };
-use \The_SEO_Framework\Helper,
-	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin

@@ -63,14 +63,18 @@ $headless = is_headless();
 if ( ! $headless['meta'] ) {
 	// Initialize term meta filters and actions.
 	\add_action( 'edit_term', [ Data\Admin\Term::class, 'update_meta' ], 10, 3 );
+	\add_action(
+		'sanitize_term_meta_' . \THE_SEO_FRAMEWORK_TERM_OPTIONS,
+		[ Data\Filter\Term::class, 'filter_meta_update' ]
+	);
 
-	// Initialize term meta filters and actions.
+	// Initialize post meta filters and actions. Saving handles the sanitization.
 	\add_action( 'save_post', [ Data\Admin\Post::class, 'update_meta' ], 1 );
 	\add_action( 'edit_attachment', [ Data\Admin\Post::class, 'update_meta' ], 1 );
 	\add_action( 'save_post', [ Data\Admin\Post::class, 'update_primary_term' ], 1 );
 
 	// Enqueue Post meta boxes.
-	\add_action( 'add_meta_boxes', [ Admin\Settings\Post::class, 'prepare_meta_box' ], 10 );
+	\add_action( 'add_meta_boxes', [ Admin\Settings\Post::class, 'prepare_meta_box' ] );
 
 	// Enqueue Term meta output. Terms don't have proper catch-all hooks, so this loads on every page:
 	\add_action( 'current_screen', [ Admin\Settings\Term::class, 'prepare_setting_fields' ] );
@@ -88,8 +92,16 @@ if ( ! $headless['meta'] ) {
 }
 
 if ( ! $headless['settings'] ) {
-	// Register settings and manage saving thereof.
+	// Register settings and manage saving and sanitization thereof.
 	\add_action( 'admin_init', [ Data\Admin\Plugin::class, 'register_settings' ], 0 );
+	\add_action( 'admin_init', [ Data\Admin\Plugin::class, 'register_settings' ], 0 );
+	// register_setting() only passes 1 argument, instead of 3.
+	\add_filter(
+		'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+		[ Data\Filter\Plugin::class, 'filter_settings_update' ],
+		10,
+		3
+	);
 
 	\add_action( 'admin_action_update', [ Data\Admin\Plugin::class, 'prepare_settings_update' ] );
 
@@ -114,6 +126,12 @@ if ( \in_array( false, $headless, true ) ) {
 
 	// Enqueues admin scripts.
 	\add_action( 'admin_enqueue_scripts', [ Admin\Script\Registry::class, '_init' ], 0, 1 );
+
+	// Setup user sanitization. If at least something isn't headless, user metadata can be used.
+	\add_action(
+		'sanitize_usermeta_' . \THE_SEO_FRAMEWORK_USER_OPTIONS,
+		[ Data\Filter\User::class, 'filter_meta_update' ]
+	);
 }
 
 // Add plugin links to the plugin activation page.

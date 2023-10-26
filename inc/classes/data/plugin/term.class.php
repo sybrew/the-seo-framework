@@ -228,20 +228,21 @@ class Term {
 		 * @NOTE Do not remove indexes. We store all data, even if empty,
 		 *       to ensure defaults don't override them.
 		 * @since 3.1.0
-		 * @since 4.3.0 Removed 3rd and 4th parameters ($tt_id and $taxonomy)
+		 * @since 4.3.0 1. Removed 3rd and 4th parameters (`$tt_id` and `$taxonomy`).
+		 *              2. No longer sends pre-sanitized data to the filter.
 		 * @param array  $data     The data that's going to be saved.
 		 * @param int    $term_id  The term ID.
 		 */
 		$data = (array) \apply_filters(
 			'the_seo_framework_save_term_data',
-			\tsf()->s_term_meta( array_merge(
+			array_merge(
 				static::get_default_meta( $term_id ),
 				$data,
-			) ),
+			),
 			$term_id,
 		);
 
-		static::$meta_memo[ $term_id ] = $data;
+		unset( static::$meta_memo[ $term_id ] );
 
 		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
 		\update_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );

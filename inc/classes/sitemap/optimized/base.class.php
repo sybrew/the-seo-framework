@@ -527,7 +527,7 @@ class Base extends Main {
 		if ( empty( $args['loc'] ) ) return '';
 
 		$xml = [
-			'loc' => \tsf()->esc_xml_uri( $args['loc'] ),
+			'loc' => Data\Filter\Escape::xml_uri( $args['loc'] ),
 		];
 
 		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {
