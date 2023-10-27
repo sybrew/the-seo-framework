@@ -21,7 +21,7 @@ namespace The_SEO_Framework;
  */
 function _um_reinstate_title_support() {
 
-	if ( ! \tsf()->can_i_use( [
+	if ( ! Helper\Compatibility::can_i_use( [
 		'functions' => [
 			'um_is_core_page',
 			'um_get_requested_user',
@@ -51,7 +51,7 @@ function _um_determine_support( $supported = true ) {
 	// No need to modify support if it's already not supported.
 	if ( ! $supported ) return $supported;
 
-	if ( ! \tsf()->can_i_use( [
+	if ( ! Helper\Compatibility::can_i_use( [
 		'functions' => [
 			'um_queried_user',
 			'um_is_core_page',

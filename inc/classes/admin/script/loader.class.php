@@ -83,7 +83,7 @@ class Loader {
 			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
 
-			if ( \tsf()->is_gutenberg_page() )
+			if ( Query::is_block_editor() )
 				$scripts[] = static::get_gutenberg_compat_scripts();
 		} elseif ( Query::is_term_edit() ) {
 			static::prepare_media_scripts();
@@ -430,7 +430,7 @@ class Loader {
 						'states' => [
 							'isPrivate'       => Data\Post::is_private( $id ),
 							'isProtected'     => Data\Post::is_password_protected( $id ),
-							'isGutenbergPage' => \tsf()->is_gutenberg_page(),
+							'isGutenbergPage' => Query::is_block_editor(),
 							'id'              => (int) $id,
 						],
 						'params' => [
@@ -683,7 +683,7 @@ class Loader {
 		$_taxonomies = $post_type ? Taxonomies::get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
 		$taxonomies  = [];
 
-		$gutenberg = \tsf()->is_gutenberg_page();
+		$gutenberg = Query::is_block_editor();
 
 		foreach ( $_taxonomies as $_t ) {
 			if ( ! Taxonomies::is_taxonomy_supported( $_t->name ) ) continue;

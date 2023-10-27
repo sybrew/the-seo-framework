@@ -10,9 +10,10 @@ namespace The_SEO_Framework\Data;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Helper\{
-	Format\Time,
-	Query,
+use \The_SEO_Framework\{
+	Helper,
+	Helper\Format\Time,
+	Helper\Query,
 };
 
 /**
@@ -87,7 +88,7 @@ class Post {
 	 *
 	 * @since 4.1.0
 	 * @since 4.3.0 1. First parameter may now be empty to automatically fetch the post ID.
-	 *              2. Moved to \The_SEO_Framework\Data\Post.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int $post_id The post ID to check.
 	 * @return bool
@@ -109,7 +110,7 @@ class Post {
 			return $detected;
 
 		// If there's no meta, or no builder active, it doesn't use a builder.
-		if ( empty( $meta ) || ! \tsf()->detect_non_html_page_builder() )
+		if ( empty( $meta ) || ! Helper\Compatibility::is_non_html_builder_active() )
 			return false;
 
 		// Divi Builder by Elegant Themes
@@ -127,7 +128,7 @@ class Post {
 	 *              2. Input parameter now default to null.
 	 *                 This currently doesn't affect how it works.
 	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Post.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected or private, false otherwise.
@@ -144,7 +145,7 @@ class Post {
 	 * Determines if the current post has a password.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Post.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected, false otherwise.
@@ -158,7 +159,7 @@ class Post {
 	 * Determines if the current post is private.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Post.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if private, false otherwise.
@@ -172,7 +173,7 @@ class Post {
 	 * Determines if the current post is a draft.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Post.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if draft, false otherwise.
@@ -197,7 +198,7 @@ class Post {
 	 * @since 2.4.3
 	 * @since 2.9.3 1. Removed object caching.
 	 *              2. It now uses WP_Query, instead of wpdb.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Data\Post.
+	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @slow The queried result is not stored in WP Post's cache, which would allow
 	 *       direct access to all values of the post (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
@@ -222,6 +223,40 @@ class Post {
 		] );
 
 		return memo( reset( $query->posts ) );
+	}
+
+	/**
+	 * Tests if the post type archive of said post type contains public posts.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `has_posts_in_post_type_archive`.
+	 * @slow The queried result is not stored in WP Post's cache, which would allow
+	 *       direct access to all values of the post (if requested). This is because
+	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
+	 *
+	 * @param string $post_type The post type to test.
+	 * @return bool True if a post is found in the archive, false otherwise.
+	 */
+	public static function has_posts_in_pta( $post_type ) {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
+
+		$query = new \WP_Query( [
+			'posts_per_page' => 1,
+			'post_type'      => [ $post_type ],
+			'orderby'        => 'date',
+			'order'          => 'ASC',
+			'post_status'    => 'publish',
+			'has_password'   => false,
+			'fields'         => 'ids',
+			'cache_results'  => false,
+			'no_found_rows'  => true,
+		] );
+
+		return memo( ! empty( $query->posts ), $post_type );
 	}
 
 	/**

@@ -139,7 +139,6 @@ class Query {
 
 	/**
 	 * Fetches post or term ID within the admin.
-	 * Alters while in the loop. Therefore, this can't be cached and must be called within the loop.
 	 *
 	 * @since 2.7.0
 	 * @since 2.8.0 Removed WP 3.9 compat
@@ -154,12 +153,10 @@ class Query {
 		 */
 		return (int) \apply_filters(
 			'the_seo_framework_current_admin_id',
-			\get_the_ID() ?: (
-				// Get current term ID (outside loop).
-				static::is_archive_admin()
-					? static::get_admin_term_id()
-					: 0
-			)
+			// Get in the loop first, fall back to globals or get parameters.
+			   \get_the_ID()
+			?: static::get_admin_post_id()
+			?: static::get_admin_term_id()
 		);
 	}
 
@@ -180,6 +177,20 @@ class Query {
 	}
 
 	/**
+	 * Fetches the Post ID on admin pages.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return int Post ID.
+	 */
+	public static function get_admin_post_id() {
+		return static::is_post_edit()
+			// phpcs:ignore, WordPress.Security.NonceVerification -- current_screen validated the 'post' object.
+			? \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 )
+			: 0;
+	}
+
+	/**
 	 * Fetches the Term ID on admin pages.
 	 *
 	 * @since 2.6.0
@@ -189,18 +200,12 @@ class Query {
 	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
 	 * @global int $tag_ID
 	 *
-	 * TODO consider making the function name id -> ID.
-	 *
 	 * @return int Term ID.
 	 */
 	public static function get_admin_term_id() {
-
-		if ( false === static::is_archive_admin() )
-			return 0;
-
-		return \absint(
-			! empty( $GLOBALS['tag_ID'] ) ? $GLOBALS['tag_ID'] : 0
-		);
+		return static::is_archive_admin()
+			? \absint( $GLOBALS['tag_ID'] ?? 0 )
+			: 0;
 	}
 
 	/**
@@ -1219,5 +1224,21 @@ class Query {
 		$user = \wp_get_current_user();
 
 		return Query\Cache::memo( $user->exists() ? (int) $user->ID : 0 );
+	}
+
+	/**
+	 * Detects if we're on a Gutenberg page.
+	 *
+	 * @since 3.1.0
+	 * @since 3.2.0 1. Now detects the WP 5.0 block editor.
+	 *              2. Method is now public.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `is_gutenberg_page`.
+	 *              3. Now reads the current screen value.
+	 *
+	 * @return bool True if we're viewing the block editor (aka Gutenberg).
+	 */
+	public static function is_block_editor() {
+		return $GLOBALS['current_screen']->is_block_editor ?? false;
 	}
 }

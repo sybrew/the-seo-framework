@@ -75,7 +75,7 @@ class Plugin {
 	 * @hook admin_action_update 10
 	 * @since 4.3.0
 	 */
-	public static function prepare_settings_update() {
+	public static function process_settings_update() {
 
 		if (
 			   empty( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )

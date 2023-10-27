@@ -73,12 +73,6 @@ function _load_tsf() {
 
 		require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-compat.php';
 
-		// Register the required settings capability early.
-		\add_filter(
-			'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			fn() => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
-		);
-
 		\add_action( 'init', 'The_SEO_Framework\_init_tsf' );
 
 		if ( \is_admin() ) {

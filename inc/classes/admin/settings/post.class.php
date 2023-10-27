@@ -154,7 +154,7 @@ final class Post {
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_box' );
 
-		\tsf()->is_gutenberg_page()
+		Query::is_block_editor()
 			and Admin\Template::output_view( 'post/gutenberg-data' );
 
 		Admin\Template::output_view( 'post/settings', 'main' );
@@ -177,7 +177,7 @@ final class Post {
 	 */
 	public static function add_postbox_class( $classes = [] ) {
 
-		if ( \tsf()->is_gutenberg_page() )
+		if ( Query::is_block_editor() )
 			$classes[] = 'tsf-is-block-editor';
 
 		return $classes;

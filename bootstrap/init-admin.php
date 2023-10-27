@@ -91,20 +91,30 @@ if ( ! $headless['meta'] ) {
 	}
 }
 
+/**
+ * Register the required settings capability regardless of headlessness.
+ * For it may be higher than manage_options, and shielded via headlessness.
+ */
+\add_filter(
+	'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+	fn() => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
+);
+/**
+ * Register the required settings sanitization regardless of headlessness.
+ * Other plugins may still update our options.
+ * Also, register_settings only passes 1 parameter, while we need all 3.
+ */
+\add_filter(
+	'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+	[ Data\Filter\Plugin::class, 'filter_settings_update' ],
+	10,
+	3
+);
+
 if ( ! $headless['settings'] ) {
-	// Register settings and manage saving and sanitization thereof.
+	// Register settings, saving, and the menu.
 	\add_action( 'admin_init', [ Data\Admin\Plugin::class, 'register_settings' ], 0 );
-	\add_action( 'admin_init', [ Data\Admin\Plugin::class, 'register_settings' ], 0 );
-	// register_setting() only passes 1 argument, instead of 3.
-	\add_filter(
-		'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-		[ Data\Filter\Plugin::class, 'filter_settings_update' ],
-		10,
-		3
-	);
-
-	\add_action( 'admin_action_update', [ Data\Admin\Plugin::class, 'prepare_settings_update' ] );
-
+	\add_action( 'admin_action_update', [ Data\Admin\Plugin::class, 'process_settings_update' ] );
 	\add_action( 'admin_menu', [ Admin\Menu::class, 'register_top_menu_page' ] );
 }
 

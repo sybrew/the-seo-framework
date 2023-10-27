@@ -14,10 +14,13 @@ use \The_SEO_Framework\{
 	Data,
 	Meta,
 	RobotsTXT,
-	Helper\Guidelines,
-	Helper\Format\Strings,
-	Helper\Query,
 	Admin\SEOBar\Builder,
+};
+use \The_SEO_Framework\Helper\{
+	Guidelines,
+	Format\Strings,
+	Migrate,
+	Query,
 };
 
 /**
@@ -229,7 +232,7 @@ final class Page extends Main {
 				}
 			}
 
-			if ( \tsf()->has_unprocessed_syntax( $title_part ) ) {
+			if ( Migrate::text_has_unprocessed_syntax( $title_part ) ) {
 				$item['status']           = Builder::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];
@@ -450,7 +453,7 @@ final class Page extends Main {
 				}
 			}
 
-			if ( \tsf()->has_unprocessed_syntax( $desc ) ) {
+			if ( Migrate::text_has_unprocessed_syntax( $desc ) ) {
 				$item['status']           = Builder::STATE_BAD;
 				$item['reason']           = $cache['reason']['syntax'];
 				$item['assess']['syntax'] = $cache['assess']['syntax'];

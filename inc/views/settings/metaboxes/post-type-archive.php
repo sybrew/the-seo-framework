@@ -51,7 +51,7 @@ switch ( $instance ) :
 			$post_types_data[ $post_type ] = [
 				'label'    => Post_Types::get_post_type_label( $post_type ),
 				'url'      => Meta\URI::get_bare_post_type_archive_url( $post_type ), // permalink!
-				'hasPosts' => \tsf()->has_posts_in_post_type_archive( $post_type ),
+				'hasPosts' => Data\Post::has_posts_in_pta( $post_type ),
 			];
 		}
 

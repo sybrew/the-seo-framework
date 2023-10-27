@@ -8,8 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\Helper\Query;
 
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
@@ -86,7 +85,7 @@ function _polylang_set_sitemap_language() {
  */
 function _polylang_sitemap_append_non_translatables( $args ) {
 
-	if ( ! \tsf()->can_i_use( [
+	if ( ! Helper\Compatibility::can_i_use( [
 		'functions' => [
 			'PLL',
 			'pll_languages_list',

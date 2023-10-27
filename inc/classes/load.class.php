@@ -52,7 +52,7 @@ use \The_SEO_Framework\Data;
  *              10. Deprecated $the_seo_framework_use_transients
  * @api
  */
-final class Load extends Detect {
+final class Load extends Pool {
 
 	/**
 	 * @since 4.3.0

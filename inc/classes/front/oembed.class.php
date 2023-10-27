@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Front;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta,
-	\The_SEO_Framework\Helper;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin

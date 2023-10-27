@@ -197,4 +197,98 @@ class Compatibility {
 
 		return memo( $conflicting_types );
 	}
+
+	/**
+	 * Detect if you can use all the given constants, functions and classes.
+	 *
+	 * @since 2.5.2
+	 * @since 4.1.4 Fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
+	 * @since 4.2.0 Rewrote sorting algorithm; now, it's actually good.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `can_i_use`.
+	 *              3. Removed the second parameter `$use_cache`.
+	 *              4. Removed caching. This responsibility now lies by the caller.
+	 *
+	 * @param array[] $plugins   Array of array for globals, constants, classes
+	 *                           and/or functions to check for plugin existence.
+	 * @return bool True if everything is accessible.
+	 */
+	public static function can_i_use( $plugins = [] ) {
+
+		// Check for globals
+		foreach ( $plugins['globals'] ?? [] as $name )
+			if ( ! isset( $GLOBALS[ $name ] ) )
+				return false;
+
+		// Check for constants
+		foreach ( $plugins['constants'] ?? [] as $name )
+			if ( ! \defined( $name ) )
+				return false;
+
+		// Check for functions
+		foreach ( $plugins['functions'] ?? [] as $name )
+			if ( ! \function_exists( $name ) )
+				return false;
+
+		// Check for classes
+		foreach ( $plugins['classes'] ?? [] as $name )
+			if ( ! class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+				return false;
+
+		// All classes, functions and constant have been found to exist
+		return true;
+	}
+
+	/**
+	 * Checks if the (parent) theme name is loaded.
+	 *
+	 * @since 2.1.0
+	 * @since 4.2.0 No longer "loads" the theme; instead, simply compares input to active theme options.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `is_theme`.
+	 *
+	 * @param string|string[] $themes The theme names to test.
+	 * @return bool Any of the themes are active.
+	 */
+	public static function is_theme_active( $themes = '' ) {
+
+		$active_theme = [
+			strtolower( \get_option( 'stylesheet' ) ), // Parent
+			strtolower( \get_option( 'template' ) ),   // Child
+		];
+
+		foreach ( (array) $themes as $theme )
+			if ( \in_array( strtolower( $theme ), $active_theme, true ) )
+				return true;
+
+		return false;
+	}
+
+	/**
+	 * Detects presence of a page builder that renders content dynamically.
+	 *
+	 * Detects the following builders:
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `detect_non_html_page_builder`.
+	 *
+	 * @return bool
+	 */
+	public static function is_non_html_builder_active() {
+		return memo() ?? memo(
+			/**
+			 * @since 4.1.0
+			 * @param bool $detected Whether an active page builder that renders content dynamically is detected.
+			 * @NOTE not to be confused with `the_seo_framework_detect_non_html_page_builder`, which tests
+			 *       the page builder status for each post individually.
+			 */
+			(bool) \apply_filters(
+				'the_seo_framework_shortcode_based_page_builder_active',
+				\defined( 'ET_BUILDER_VERSION' ) || \defined( 'WPB_VC_VERSION' )
+			)
+		);
+	}
 }

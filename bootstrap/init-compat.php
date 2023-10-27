@@ -28,7 +28,7 @@ namespace The_SEO_Framework;
 // Disable Headway theme SEO.
 \add_filter( 'headway_seo_disabled', '__return_true' );
 
-if ( \tsf()->is_theme( 'genesis' ) )
+if ( Helper\Compatibility::is_theme_active( 'genesis' ) )
 	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-genesis.php';
 
 foreach (

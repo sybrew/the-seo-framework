@@ -8449,4 +8449,223 @@ final class Deprecated {
 		\tsf()->_deprecated_function( 'tsf()->s_description_html_method()', '4.3.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::auto_description_method( $method, 'fast', 'auto_description_method' );
 	}
+
+	/**
+	 * Tests if the post type archive of said post type contains public posts.
+	 * Memoizes the return value.
+	 *
+	 * @since 4.2.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $post_type The post type to test.
+	 * @return bool True if a post is found in the archive, false otherwise.
+	 */
+	public function has_posts_in_post_type_archive( $post_type ) {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->has_posts_in_post_type_archive()', '4.3.0', 'tsf()->data()->post()->has_posts_in_pta()' );
+
+		return $tsf->data()->post()->has_posts_in_pta( $post_type );
+	}
+
+	/**
+	 * Determines whether the text has recognizable transformative syntax.
+	 *
+	 * @since 4.2.7
+	 * @since 4.2.8 Added SEOPress support.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text The text to evaluate
+	 * @return bool
+	 */
+	public function has_unprocessed_syntax( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->has_unprocessed_syntax()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Migrate::text_has_unprocessed_syntax( $text );
+	}
+
+	/**
+	 * Determines if the input text has transformative Yoast SEO syntax.
+	 *
+	 * @since 4.0.5
+	 * @since 4.2.7 1. Added wildcard `ct_`, and `cf_` detection.
+	 *              2. Added detection for various other types
+	 *              2. Removed wildcard `cs_` detection.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text The text to evaluate.
+	 * @return bool
+	 */
+	public function has_yoast_syntax( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->has_yoast_syntax()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Migrate::text_has_yoast_seo_syntax( $text );
+	}
+
+	/**
+	 * Determines if the input text has transformative Rank Math syntax.
+	 *
+	 * @since 4.2.7
+	 * @since 4.2.8 Actualized the variable list.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text The text to evaluate.
+	 * @return bool
+	 */
+	public function has_rankmath_syntax( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->has_rankmath_syntax()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Migrate::text_has_rank_math_syntax( $text );
+	}
+
+	/**
+	 * Determines if the input text has transformative SEOPress syntax.
+	 *
+	 * @since 4.2.8
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string $text The text to evaluate.
+	 * @return bool
+	 */
+	public function has_seopress_syntax( $text ) {
+		\tsf()->_deprecated_function( 'tsf()->has_seopress_syntax()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Migrate::text_has_seopress_syntax( $text );
+	}
+
+	/**
+	 * Detect active plugin by constant, class or function existence.
+	 *
+	 * Note: Class check is 3 times as slow as defined check. Function check is 2 times as slow.
+	 *
+	 * @since 1.3.0
+	 * @since 2.8.0 1. Can now check for globals.
+	 *              2. Switched detection order from FAST to SLOW.
+	 * @since 4.0.6 Can no longer autoload classes.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
+	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
+	 */
+	public function detect_plugin( $plugins ) {
+
+		\tsf()->_deprecated_function( 'tsf()->detect_plugin()', '4.3.0' );
+
+		foreach ( $plugins['globals'] ?? [] as $name )
+			if ( isset( $GLOBALS[ $name ] ) )
+				return true;
+
+		// Check for constants
+		foreach ( $plugins['constants'] ?? [] as $name )
+			if ( \defined( $name ) )
+				return true;
+
+		// Check for functions
+		foreach ( $plugins['functions'] ?? [] as $name )
+			if ( \function_exists( $name ) )
+				return true;
+
+		// Check for classes
+		foreach ( $plugins['classes'] ?? [] as $name )
+			if ( class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+				return true;
+
+		// No globals, constant, function, or class found to exist
+		return false;
+	}
+
+	/**
+	 * Detect if you can use the given constants, functions and classes.
+	 * All inputs must be available for this method to return true.
+	 * Memoizes the return value for the input argument--sorts the array deeply to ensure a match.
+	 *
+	 * @since 2.5.2
+	 * @since 4.1.4 Fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
+	 * @since 4.2.0 Rewrote sorting algorithm; now, it's actually good.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array[] $plugins Array of array for globals, constants, classes
+	 *                         and/or functions to check for plugin existence.
+	 */
+	public function can_i_use( $plugins = [] ) {
+		\tsf()->_deprecated_function( 'tsf()->can_i_use()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::can_i_use( $plugins );
+	}
+
+	/**
+	 * Detect active plugin by constant, class or function existence.
+	 * All parameters must match and return true.
+	 *
+	 * @since 2.5.2
+	 * @since 4.0.6 1. Can now check for globals.
+	 *              2. Switched detection order from FAST to SLOW.
+	 *              3. Can no longer autoload classes.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param array[] $plugins Array of array for constants, classes
+	 *                         and / or functions to check for plugin existence.
+	 * @return bool True if ALL functions classes and constants exists
+	 *              or false if plugin constant, class or function not detected.
+	 */
+	public function detect_plugin_multi( $plugins ) {
+		\tsf()->_deprecated_function( 'tsf()->detect_plugin_multi()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::can_i_use( $plugins );
+	}
+
+	/**
+	 * Checks if the (parent) theme name is loaded.
+	 *
+	 * @since 2.1.0
+	 * @since 4.2.0 No longer "loads" the theme; instead, simply compares input to active theme options.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @param string|array $themes The theme names to test.
+	 * @return bool is theme active.
+	 */
+	public function is_theme( $themes = '' ) {
+		\tsf()->_deprecated_function( 'tsf()->is_theme()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::is_theme_active( $themes );
+	}
+
+	/**
+	 * Detects presence of a page builder that renders content dynamically.
+	 *
+	 * Detects the following builders:
+	 * - Divi Builder by Elegant Themes
+	 * - Visual Composer by WPBakery
+	 *
+	 * @since 4.1.0
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function detect_non_html_page_builder() {
+		\tsf()->_deprecated_function( 'tsf()->detect_non_html_page_builder()', '4.3.0' );
+		return \The_SEO_Framework\Helper\Compatibility::is_non_html_builder_active();
+	}
+
+	/**
+	 * Detects if we're on a Gutenberg page.
+	 *
+	 * @since 3.1.0
+	 * @since 3.2.0 1. Now detects the WP 5.0 block editor.
+	 *              2. Method is now public.
+	 * @since 4.3.0 Deprecated.
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
+	public function is_gutenberg_page() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->is_gutenberg_page()', '4.3.0', 'tsf()->query()->is_block_editor()' );
+
+		return $tsf->query()->is_block_editor();
+	}
 }

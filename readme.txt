@@ -1424,6 +1424,17 @@ TODO we allow saving of "0" now, but we'll discard it when we read it.
 				* `s_left_right_home()`, with no alternative available.
 				* `s_alter_query_type()`, with no alternative available.
 				* `s_description_html_method()`, with no alternative available.
+				* `has_posts_in_post_type_archive()`, use `tsf()->data()->post()->has_posts_in_pta()` instead.
+				* `has_unprocessed_syntax()`, with no alternative available.
+				* `has_yoast_syntax()`, with no alternative available.
+				* `has_rankmath_syntax()`, with no alternative available.
+				* `has_seopress_syntax()`, with no alternative available.
+				* `detect_plugin()`, with no alternative available.
+				* `can_i_use()`, with no alternative available.
+				* `detect_plugin_multi()`, with no alternative available.
+				* `is_theme()`, with no alternative available.
+				* `detect_non_html_page_builder()`, with no alternative available.
+				* `is_gutenberg_page()`, use `tsf()->query()->is_block_editor()` instead.
 			* **Methods removed:**
 				* `is_auto_description_enabled()`, without deprecation (it was marked private).
 				* `_adjust_post_link_category()`, without deprecation (it was marked private).

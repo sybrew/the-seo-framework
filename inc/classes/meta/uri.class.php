@@ -16,6 +16,7 @@ use function \The_SEO_Framework\{
 use \The_SEO_Framework\{
 	Data,
 	Helper\Query,
+	Meta,
 };
 
 /**

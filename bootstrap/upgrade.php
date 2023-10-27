@@ -96,10 +96,11 @@ function _previous_db_version() {
  *                 While this lock is active, the SEO Settings can't be accessed, either.
  * @since 4.1.0 Now checks whether the lock is successfully set before proceeding. Preventing race conditions.
  * @since 4.2.1 No longer lowers the PHP execution time limit -- only increases it.
+ * @since 4.3.0 No longer checks if TSF can load.
  */
 function _do_upgrade() {
 
-	if ( ! \tsf()->loaded || \wp_doing_ajax() ) return; // var_dump()
+	if ( \wp_doing_ajax() ) return;
 
 	if ( Query::is_seo_settings_page( false ) ) {
 		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
