@@ -168,8 +168,8 @@ class Base extends Main {
 		 */
 		\do_action( 'the_seo_framework_build_sitemap_base', $this );
 
-		$content = '';
-		$count   = 0;
+		$content         = '';
+		$this->url_count = 0;
 
 		$show_modified = (bool) Data\Plugin::get_option( 'sitemaps_modified' );
 
@@ -193,8 +193,7 @@ class Base extends Main {
 			) . "\n";
 
 		foreach ( $this->generate_front_and_blog_url_items(
-			compact( 'show_modified' ),
-			$count
+			[ 'show_modified' => $show_modified ],
 		) as $_values ) {
 			$content .= $this->build_url_item( $_values );
 		}
@@ -228,7 +227,7 @@ class Base extends Main {
 				(int) \get_option( 'page_for_posts' ),
 			] );
 
-			$_hierarchical_posts_limit = Sitemap\Utils::get_sitemap_post_limit( true );
+			$_hierarchical_posts_limit = Sitemap\Utils::get_sitemap_post_limit( 'hierarchical' );
 
 			/**
 			 * @since 4.0.0
@@ -271,7 +270,8 @@ class Base extends Main {
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_nhpt_query_args',
 				[
-					'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( false ),
+					// phpcs:ignore, WordPress.WP.PostsPerPage -- This is a sitemap, it will be slow.
+					'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( 'nonhierarchical' ),
 					'post_type'      => $non_hierarchical_post_types,
 					'orderby'        => 'lastmod',
 					'order'          => 'DESC',
@@ -317,8 +317,10 @@ class Base extends Main {
 
 		foreach ( $this->generate_url_item_values(
 			$_items,
-			compact( 'show_modified', 'total_items' ),
-			$count
+			[
+				'show_modified' => $show_modified,
+				'total_items'   => $total_items,
+			],
 		) as $_values ) {
 			$content .= static::build_url_item( $_values );
 		}
@@ -329,8 +331,10 @@ class Base extends Main {
 		 */
 		if ( \has_filter( 'the_seo_framework_sitemap_additional_urls' ) ) {
 			foreach ( $this->generate_additional_base_urls(
-				compact( 'show_modified', 'count' ),
-				$count
+				[
+					'show_modified' => $show_modified,
+					'count'         => $this->url_count,
+				]
 			) as $_values ) {
 				$content .= static::build_url_item( $_values );
 			}
@@ -348,12 +352,13 @@ class Base extends Main {
 		 *   int  $count         : The total sitemap items before adding additional URLs.
 		 * }
 		 */
-		$extend = (string) \apply_filters_ref_array(
+		$extend = (string) \apply_filters(
 			'the_seo_framework_sitemap_extend',
+			'',
 			[
-				'',
-				compact( 'show_modified', 'count' ),
-			]
+				'show_modified' => $show_modified,
+				'count'         => $this->url_count,
+			],
 		);
 
 		if ( $extend )
@@ -366,17 +371,17 @@ class Base extends Main {
 	 * Generates front-and blog page sitemap items.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Removed second parameter `&$count`.
 	 * @generator
 	 *
-	 * @param array $args  The generator arguments.
-	 * @param int   $count The iteration count. Passed by reference.
+	 * @param array $args The generator arguments.
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
 	 *   string priority
 	 * }
 	 */
-	protected function generate_front_and_blog_url_items( $args, &$count = 0 ) {
+	protected function generate_front_and_blog_url_items( $args ) {
 
 		if ( Query\Utils::has_page_on_front() ) {
 			$front_page_id = (int) \get_option( 'page_on_front' );
@@ -386,7 +391,6 @@ class Base extends Main {
 				yield from $this->generate_url_item_values(
 					[ $front_page_id ],
 					$args,
-					$count
 				);
 			}
 
@@ -394,7 +398,6 @@ class Base extends Main {
 				foreach ( $this->generate_url_item_values(
 					[ $posts_page_id ],
 					$args,
-					$count
 				) as $_values ) {
 					if ( $_values['loc'] && $args['show_modified'] ) {
 						$latests_posts = \wp_get_recent_posts(
@@ -462,7 +465,7 @@ class Base extends Main {
 					);
 				}
 
-				++$count;
+				++$this->url_count;
 				yield $_values;
 			}
 		}
@@ -473,19 +476,19 @@ class Base extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.1 Now clears WordPress's post cache every time an item is generated.
+	 * @since 4.3.0 Removed second parameter `&$count`.
 	 * @generator
 	 * @iterator
 	 *
 	 * @param int[] $post_ids The post IDs to go over.
-	 * @param array $args    The generator arguments.
-	 * @param int   $count   The iteration count. Passed by reference.
+	 * @param array $args     The generator arguments.
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
 	 *   string priority
 	 * }
 	 */
-	protected function generate_url_item_values( $post_ids, $args, &$count = 0 ) {
+	protected function generate_url_item_values( $post_ids, $args ) {
 
 		foreach ( $post_ids as $post_id ) {
 			// Setup post cache, which is also used in is_post_included_in_sitemap() and get_bare_singular_url().
@@ -499,7 +502,7 @@ class Base extends Main {
 				if ( $args['show_modified'] )
 					$_values['lastmod'] = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
-				++$count;
+				++$this->url_count;
 				yield $_values;
 			}
 
@@ -544,6 +547,7 @@ class Base extends Main {
 	 * @since 4.0.0
 	 * @since 4.0.1 1. Converted to generator and iterator. Therefore, renamed function.
 	 *              2. Now actually does something.
+	 * @since 4.3.0 Removed second parameter `&$count`.
 	 * @generator
 	 * @iterator
 	 *
@@ -551,14 +555,13 @@ class Base extends Main {
 	 *   bool $show_modified : Whether to display modified date.
 	 *   int  $count         : The total sitemap items before adding additional URLs.
 	 * }
-	 * @param int   $count The iteration count. Passed by reference.
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
 	 *   string priority
 	 * }
 	 */
-	protected function generate_additional_base_urls( $args, &$count = 0 ) {
+	protected function generate_additional_base_urls( $args ) {
 		/**
 		 * @since 2.5.2
 		 * @since 3.2.2 Invalid URLs are now skipped.
@@ -594,7 +597,7 @@ class Base extends Main {
 			if ( $args['show_modified'] )
 				$_values['lastmod'] = ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00';
 
-			++$count;
+			++$this->url_count;
 			yield $_values;
 		}
 	}

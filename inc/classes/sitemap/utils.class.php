@@ -48,10 +48,10 @@ class Utils {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param bool $hierarchical Whether the query is for hierarchical post types or not.
+	 * @param string $type Whether the query is for hierarchical post types or not.
 	 * @return int The post limit
 	 */
-	public static function get_sitemap_post_limit( $hierarchical = false ) {
+	public static function get_sitemap_post_limit( $type = 'nonhierarchical' ) {
 		/**
 		 * @since 2.2.9
 		 * @since 2.8.0 Increased to 1200 from 700.
@@ -64,7 +64,7 @@ class Utils {
 		return (int) \apply_filters(
 			'the_seo_framework_sitemap_post_limit',
 			Data\Plugin::get_option( 'sitemap_query_limit' ),
-			$hierarchical
+			'hierarchical' === $type,
 		);
 	}
 

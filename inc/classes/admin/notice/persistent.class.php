@@ -115,23 +115,26 @@ class Persistent {
 	 * When the threshold is reached, the notice is deleted.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. The second paremeter is no longer passed by reference.
 	 *
 	 * @param string $key   The notice key.
-	 * @param int    $count The number of counts the notice has left. Passed by reference.
+	 * @param int    $count The number of counts the notice has left.
 	 *                      When -1 (permanent notice), nothing happens.
 	 */
-	public static function count_down_notice( $key, &$count ) {
+	public static function count_down_notice( $key, $count ) {
 
-		$_count_before = $count;
+		// Permanent notice.
+		if ( $count < 0 ) return;
 
-		if ( $count > 0 )
-			--$count;
+		--$count;
 
 		if ( ! $count ) {
 			static::clear_notice( $key );
-		} elseif ( $_count_before !== $count ) {
+		} else {
+
 			$notices = Data\Plugin::get_site_cache( 'persistent_notices' );
+
 			if ( isset( $notices[ $key ]['conditions']['count'] ) ) {
 				$notices[ $key ]['conditions']['count'] = $count;
 				Data\Plugin::update_site_cache( 'persistent_notices', $notices );

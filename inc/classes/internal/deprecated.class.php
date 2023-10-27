@@ -6910,6 +6910,10 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->count_down_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->count_down_notice()' );
 
 		$tsf->admin()->notice()->persistent()->count_down_notice( $key, $count );
+
+		// No longer passes $count by reference. Simulate what had happened:
+		if ( $count > 0 )
+			--$count;
 	}
 
 	/**

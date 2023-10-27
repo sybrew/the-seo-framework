@@ -98,12 +98,11 @@ final class Page extends Main {
 	 * Primes the current query cache.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Removed first parameter.
 	 * @abstract
-	 *
-	 * @param array $query_cache The current query cache. Passed by reference.
 	 */
-	protected function prime_query_cache( array &$query_cache = [] ) {
-		$query_cache = [
+	protected function prime_query_cache() {
+		$this->query_cache = [
 			'post'   => \get_post( static::$query['id'] ),
 			'meta'   => Data\Plugin\Post::get_meta( static::$query['id'] ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [

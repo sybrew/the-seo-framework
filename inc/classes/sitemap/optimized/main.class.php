@@ -41,6 +41,12 @@ use \The_SEO_Framework\Data,
 abstract class Main {
 
 	/**
+	 * @since 4.3.0
+	 * @var int The total number of URLs registered in the current sitemap.
+	 */
+	public $url_count = 0;
+
+	/**
 	 * Prepares sitemap generation by raising the memory limit and fixing the timezone.
 	 *
 	 * @since 4.0.0

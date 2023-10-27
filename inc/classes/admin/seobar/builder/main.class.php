@@ -175,7 +175,7 @@ abstract class Main {
 
 		static::$query = $query;
 
-		$this->prime_query_cache( $this->query_cache );
+		$this->prime_query_cache();
 
 		if ( \in_array( 'redirect', $tests, true ) && $this->has_blocking_redirect() )
 			$tests = [ 'redirect' ];
@@ -216,10 +216,9 @@ abstract class Main {
 	 * It's best to overwrite the cache whenever you generate a new SEO Bar.
 	 *
 	 * @since 4.0.0
-	 *
-	 * @param array $query_cache The current query cache. Passed by reference.
+	 * @since 4.3.0 Removed first parameter.
 	 */
-	abstract protected function prime_query_cache( array &$query_cache = [] );
+	abstract protected function prime_query_cache();
 
 	/**
 	 * Tests for blocking redirection.
