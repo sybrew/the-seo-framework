@@ -52,319 +52,107 @@ class Pool extends Legacy_API {
 	// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 
 	/**
-	 * Returns the Query class as instantiated object with deprecation capabilities.
+	 * Returns a pool of Layout classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Helper\Query
+	 * @return \Closure An anononymous class with subpools.
 	 */
-	public static function query() {
-		return static::$pool['query'] ??= new class extends Helper\Query {
+	public static function admin() {
+		return static::$pool['layout'] ??= new class {
 			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->query()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Helper\Query\Utils
+			 * @return \Closure An anononymous class with subpools.
+			 */
+			public static function layout() {
+				return static::$subpool['layout'] ??= new class {
+					use Static_Deprecator;
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+					 */
+					public static function form() {
+						return static::$subpool['form'] ??= new class extends Admin\Settings\Layout\Form {
+							use Static_Deprecator;
+
+							private $colloquial_handle     = 'tsf()->admin()->layout()->form()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+						};
+					}
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+					 */
+					public static function html() {
+						return static::$subpool['html'] ??= new class extends Admin\Settings\Layout\HTML {
+							use Static_Deprecator;
+
+							private $colloquial_handle     = 'tsf()->admin()->layout()->html()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+						};
+					}
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Admin\Menu
+			 */
+			public static function menu() {
+				return static::$subpool['menu'] ??= new class extends Admin\Menu {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->admin()->menu()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Admin\Notice
+			 */
+			public static function notice() {
+				return static::$subpool['notice'] ??= new class extends Admin\Notice {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->admin()->notice()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+
+					/**
+					 * @since 4.3.0
+					 * @return \The_SEO_Framework\Admin\Notice\Persistent
+					 */
+					public static function persistent() {
+						return static::$subpool['exclusion'] ??= new class extends Admin\Notice\Persistent {
+							use Static_Deprecator;
+
+							private $colloquial_handle     = 'tsf()->admin()->notice()->persistent()';
+							private $deprecated_methods    = [];
+							private $deprecated_properties = [];
+						};
+					}
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
 			 */
 			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Helper\Query\Utils {
+				return static::$subpool['utils'] ??= new class extends Admin\Utils {
 					use Static_Deprecator;
 
-					private $colloquial_handle     = 'tsf()->query()->utils()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Helper\Query\Cache
-			 */
-			public static function cache() {
-				return static::$subpool['cache'] ??= new class extends Helper\Query\Cache {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->query()->cache()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Helper\Query\Exclusion
-			 */
-			public static function exclusion() {
-				return static::$subpool['exclusion'] ??= new class extends Helper\Query\Exclusion {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->query()->exclusion()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-		};
-	}
-
-	/**
-	 * Returns the Post_Types class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Helper\Post_Types
-	 */
-	public static function post_types() {
-		return static::$pool['post_types'] ??= new class extends Helper\Post_Types {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->post_types()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the Taxonomies class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Helper\Taxonomies
-	 */
-	public static function taxonomies() {
-		return static::$pool['taxonomies'] ??= new class extends Helper\Taxonomies {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->taxonomies()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the Robots API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Robots
-	 */
-	public static function robots() {
-		return static::$pool['robots'] ??= new class extends Meta\Robots {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->robots()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the URI API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\URI
-	 */
-	public static function uri() {
-		return static::$pool['uri'] ??= new class extends Meta\URI {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->uri()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\URI\Utils
-			 */
-			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\URI\Utils {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->uri()->utils()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-		};
-	}
-
-	/**
-	 * Returns the Title API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Title
-	 */
-	public static function title() {
-		return static::$pool['title'] ??= new class extends Meta\Title {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->title()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Title\Utils
-			 */
-			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Title\Utils {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->title()->utils()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Title\Conditions
-			 */
-			public static function conditions() {
-				return static::$subpool['conditions'] ??= new class extends Meta\Title\Conditions {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->title()->conditions()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-		};
-	}
-
-	/**
-	 * Returns the Description API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Description
-	 */
-	public static function description() {
-		return static::$pool['description'] ??= new class extends Meta\Description {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->description()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Description\Excerpt
-			 */
-			public static function excerpt() {
-				return static::$subpool['excerpt'] ??= new class extends Meta\Description\Excerpt {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->description()->excerpt()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-		};
-	}
-
-	/**
-	 * Returns the Open_Graph API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Open_Graph
-	 */
-	public static function open_graph() {
-		return static::$pool['open_graph'] ??= new class extends Meta\Open_Graph {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->open_graph()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the Facebook API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Facebook
-	 */
-	public static function facebook() {
-		return static::$pool['facebook'] ??= new class extends Meta\Facebook {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->facebook()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the Twitter API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Twitter
-	 */
-	public static function twitter() {
-		return static::$pool['twitter'] ??= new class extends Meta\Twitter {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->twitter()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the Image API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Image
-	 */
-	public static function image() {
-		return static::$pool['image'] ??= new class extends Meta\Image {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->image()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Meta\Image\Utils
-			 */
-			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Meta\Image\Utils {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->image()->utils()';
+					private $colloquial_handle     = 'tsf()->admin()->utils()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 				};
@@ -388,40 +176,6 @@ class Pool extends Legacy_API {
 			private $colloquial_handle     = 'tsf()->breadcrumbs()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns the Structured_Data API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Meta\Schema
-	 */
-	public static function schema() {
-		return static::$pool['schema'] ??= new class extends Meta\Schema {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->schema()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @readonly
-			 * @var array[string,string] A list of accessible entity class names.
-			 */
-			public $entities = [
-				'Author'         => Meta\Schema\Author::class,
-				'BreadcrumbList' => Meta\Schema\BreadcrumbList::class,
-				'Organization'   => Meta\Schema\Organization::class,
-				'Person'         => Meta\Schema\Person::class,
-				'WebPage'        => Meta\Schema\WebPage::class,
-				'WebSite'        => Meta\Schema\WebSite::class,
-				'Reference'      => Meta\Schema\Reference::class,
-			];
 		};
 	}
 
@@ -626,54 +380,35 @@ class Pool extends Legacy_API {
 	}
 
 	/**
-	 * Returns the Robots TXT API class as instantiated object with deprecation capabilities.
+	 * Returns the Description API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\RobotsTXT\Main
+	 * @return \The_SEO_Framework\Meta\Description
 	 */
-	public static function robotstxt() {
-		return static::$pool['robotstxt'] ??= new class extends RobotsTXT\Main {
+	public static function description() {
+		return static::$pool['description'] ??= new class extends Meta\Description {
 			use Static_Deprecator;
 
-			private $colloquial_handle     = 'tsf()->robotstxt()';
+			private $colloquial_handle     = 'tsf()->description()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\RobotsTXT\Utils
+			 * @return \The_SEO_Framework\Meta\Description\Excerpt
 			 */
-			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends RobotsTXT\Utils {
+			public static function excerpt() {
+				return static::$subpool['excerpt'] ??= new class extends Meta\Description\Excerpt {
 					use Static_Deprecator;
 
-					private $colloquial_handle     = 'tsf()->robotstxt()->utils()';
+					private $colloquial_handle     = 'tsf()->description()->excerpt()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 				};
 			}
-		};
-	}
-
-	/**
-	 * Returns the Guidelines API class as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \The_SEO_Framework\Helper\Guidelines
-	 */
-	public static function guidelines() {
-		return static::$pool['guidelines'] ??= new class extends Helper\Guidelines {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->guidelines()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
 		};
 	}
 
@@ -697,108 +432,21 @@ class Pool extends Legacy_API {
 	}
 
 	/**
-	 * Returns the Sanitize API class as instantiated object with deprecation capabilities.
+	 * Returns the Facebook API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Data\Filter\Sanitize
+	 * @return \The_SEO_Framework\Meta\Facebook
 	 */
-	public static function sanitize() {
-		return static::$pool['sanitize'] ??= new class extends Data\Filter\Sanitize {
+	public static function facebook() {
+		return static::$pool['facebook'] ??= new class extends Meta\Facebook {
 			use Static_Deprecator;
 
-			private $colloquial_handle     = 'tsf()->filter()->sanitize()';
+			private $colloquial_handle     = 'tsf()->facebook()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-		};
-	}
-
-	/**
-	 * Returns a pool of Sitemap classes as instantiated object with deprecation capabilities.
-	 * This allows for easy API access, and it allows us to silence fatal errors.
-	 *
-	 * @since 4.3.0
-	 * @api Not used internally.
-	 *
-	 * @return \Closure An anononymous class with subpools.
-	 */
-	public static function sitemap() {
-		return static::$pool['sitemap'] ??= new class {
-			use Static_Deprecator;
-
-			private $colloquial_handle     = 'tsf()->sitemap()';
-			private $deprecated_methods    = [];
-			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Sitemap\Cache
-			 */
-			public static function cache() {
-				return static::$subpool['cache'] ??= new class extends Sitemap\Cache {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->sitemap()->cache()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Sitemap\Ping
-			 */
-			public static function ping() {
-				return static::$subpool['ping'] ??= new class extends Sitemap\Ping {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->sitemap()->ping()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Sitemap\Lock
-			 */
-			public static function lock() {
-				return static::$subpool['lock'] ??= new class extends Sitemap\Lock {
-					use Static_Deprecator;
-					private $colloquial_handle     = 'tsf()->sitemap()->lock()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Sitemap\Registry
-			 */
-			public static function registry() {
-				return static::$subpool['registry'] ??= new class extends Sitemap\Registry {
-					use Static_Deprecator;
-					private $colloquial_handle     = 'tsf()->sitemap()->registry()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Sitemap\Utils
-			 */
-			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Sitemap\Utils {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->sitemap()->utils()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
 		};
 	}
 
@@ -818,48 +466,6 @@ class Pool extends Legacy_API {
 			private $colloquial_handle     = 'tsf()->format()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Helper\Format\Markdown
-			 */
-			public static function markdown() {
-				return static::$subpool['markdown'] ??= new class extends Helper\Format\Markdown {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->format()->markdown()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Helper\Format\Time
-			 */
-			public static function time() {
-				return static::$subpool['time'] ??= new class extends Helper\Format\Time {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->format()->time()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Helper\Format\Strings
-			 */
-			public static function strings() {
-				return static::$subpool['strings'] ??= new class extends Helper\Format\Strings {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->format()->strings()';
-					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
 
 			/**
 			 * @since 4.3.0
@@ -902,11 +508,309 @@ class Pool extends Legacy_API {
 					private $deprecated_properties = [];
 				};
 			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Markdown
+			 */
+			public static function markdown() {
+				return static::$subpool['markdown'] ??= new class extends Helper\Format\Markdown {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->format()->markdown()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Strings
+			 */
+			public static function strings() {
+				return static::$subpool['strings'] ??= new class extends Helper\Format\Strings {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->format()->strings()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Format\Time
+			 */
+			public static function time() {
+				return static::$subpool['time'] ??= new class extends Helper\Format\Time {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->format()->time()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
 		};
 	}
 
 	/**
-	 * Returns a pool of Layout classes as instantiated object with deprecation capabilities.
+	 * Returns the Guidelines API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Helper\Guidelines
+	 */
+	public static function guidelines() {
+		return static::$pool['guidelines'] ??= new class extends Helper\Guidelines {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->guidelines()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Image API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Image
+	 */
+	public static function image() {
+		return static::$pool['image'] ??= new class extends Meta\Image {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->image()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\Image\Utils
+			 */
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends Meta\Image\Utils {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->image()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns the Open_Graph API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Open_Graph
+	 */
+	public static function open_graph() {
+		return static::$pool['open_graph'] ??= new class extends Meta\Open_Graph {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->open_graph()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Post_Types class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Helper\Post_Types
+	 */
+	public static function post_types() {
+		return static::$pool['post_types'] ??= new class extends Helper\Post_Types {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->post_types()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Query class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Helper\Query
+	 */
+	public static function query() {
+		return static::$pool['query'] ??= new class extends Helper\Query {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->query()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Query\Cache
+			 */
+			public static function cache() {
+				return static::$subpool['cache'] ??= new class extends Helper\Query\Cache {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->query()->cache()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Query\Exclusion
+			 */
+			public static function exclusion() {
+				return static::$subpool['exclusion'] ??= new class extends Helper\Query\Exclusion {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->query()->exclusion()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Helper\Query\Utils
+			 */
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends Helper\Query\Utils {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->query()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns the Robots API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Robots
+	 */
+	public static function robots() {
+		return static::$pool['robots'] ??= new class extends Meta\Robots {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->robots()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Robots TXT API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\RobotsTXT\Main
+	 */
+	public static function robotstxt() {
+		return static::$pool['robotstxt'] ??= new class extends RobotsTXT\Main {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->robotstxt()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\RobotsTXT\Utils
+			 */
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends RobotsTXT\Utils {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->robotstxt()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns the Sanitize API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Data\Filter\Sanitize
+	 */
+	public static function sanitize() {
+		return static::$pool['sanitize'] ??= new class extends Data\Filter\Sanitize {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->filter()->sanitize()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Structured_Data API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Schema
+	 */
+	public static function schema() {
+		return static::$pool['schema'] ??= new class extends Meta\Schema {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->schema()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
+			/**
+			 * @since 4.3.0
+			 * @readonly
+			 * @var array[string,string] A list of accessible entity class names.
+			 */
+			public $entities = [
+				'Author'         => Meta\Schema\Author::class,
+				'BreadcrumbList' => Meta\Schema\BreadcrumbList::class,
+				'Organization'   => Meta\Schema\Organization::class,
+				'Person'         => Meta\Schema\Person::class,
+				'Reference'      => Meta\Schema\Reference::class,
+				'WebPage'        => Meta\Schema\WebPage::class,
+				'WebSite'        => Meta\Schema\WebSite::class,
+			];
+		};
+	}
+
+	/**
+	 * Returns a pool of Sitemap classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
@@ -914,19 +818,23 @@ class Pool extends Legacy_API {
 	 *
 	 * @return \Closure An anononymous class with subpools.
 	 */
-	public static function admin() {
-		return static::$pool['layout'] ??= new class {
+	public static function sitemap() {
+		return static::$pool['sitemap'] ??= new class {
 			use Static_Deprecator;
 
+			private $colloquial_handle     = 'tsf()->sitemap()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Admin\Menu
+			 * @return \The_SEO_Framework\Sitemap\Cache
 			 */
-			public static function menu() {
-				return static::$subpool['menu'] ??= new class extends Admin\Menu {
+			public static function cache() {
+				return static::$subpool['cache'] ??= new class extends Sitemap\Cache {
 					use Static_Deprecator;
 
-					private $colloquial_handle     = 'tsf()->admin()->menu()';
+					private $colloquial_handle     = 'tsf()->sitemap()->cache()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 				};
@@ -934,41 +842,105 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Admin\Notice
+			 * @return \The_SEO_Framework\Sitemap\Lock
 			 */
-			public static function notice() {
-				return static::$subpool['notice'] ??= new class extends Admin\Notice {
+			public static function lock() {
+				return static::$subpool['lock'] ??= new class extends Sitemap\Lock {
 					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->admin()->notice()';
+					private $colloquial_handle     = 'tsf()->sitemap()->lock()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-
-					/**
-					 * @since 4.3.0
-					 * @return \The_SEO_Framework\Admin\Notice\Persistent
-					 */
-					public static function persistent() {
-						return static::$subpool['exclusion'] ??= new class extends Admin\Notice\Persistent {
-							use Static_Deprecator;
-
-							private $colloquial_handle     = 'tsf()->admin()->notice()->persistent()';
-							private $deprecated_methods    = [];
-							private $deprecated_properties = [];
-						};
-					}
 				};
 			}
 
 			/**
 			 * @since 4.3.0
-			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+			 * @return \The_SEO_Framework\Sitemap\Ping
+			 */
+			public static function ping() {
+				return static::$subpool['ping'] ??= new class extends Sitemap\Ping {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->sitemap()->ping()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Registry
+			 */
+			public static function registry() {
+				return static::$subpool['registry'] ??= new class extends Sitemap\Registry {
+					use Static_Deprecator;
+					private $colloquial_handle     = 'tsf()->sitemap()->registry()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Sitemap\Utils
 			 */
 			public static function utils() {
-				return static::$subpool['utils'] ??= new class extends Admin\Utils {
+				return static::$subpool['utils'] ??= new class extends Sitemap\Utils {
 					use Static_Deprecator;
 
-					private $colloquial_handle     = 'tsf()->admin()->utils()';
+					private $colloquial_handle     = 'tsf()->sitemap()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns the Taxonomies class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Helper\Taxonomies
+	 */
+	public static function taxonomies() {
+		return static::$pool['taxonomies'] ??= new class extends Helper\Taxonomies {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->taxonomies()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
+	 * Returns the Title API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Title
+	 */
+	public static function title() {
+		return static::$pool['title'] ??= new class extends Meta\Title {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->title()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\Title\Conditions
+			 */
+			public static function conditions() {
+				return static::$subpool['conditions'] ??= new class extends Meta\Title\Conditions {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->title()->conditions()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 				};
@@ -976,39 +948,67 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 4.3.0
-			 * @return \Closure An anononymous class with subpools.
+			 * @return \The_SEO_Framework\Meta\Title\Utils
 			 */
-			public static function layout() {
-				return static::$subpool['layout'] ??= new class {
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends Meta\Title\Utils {
 					use Static_Deprecator;
 
-					/**
-					 * @since 4.3.0
-					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
-					 */
-					public static function html() {
-						return static::$subpool['html'] ??= new class extends Admin\Settings\Layout\HTML {
-							use Static_Deprecator;
+					private $colloquial_handle     = 'tsf()->title()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+		};
+	}
 
-							private $colloquial_handle     = 'tsf()->admin()->layout()->html()';
-							private $deprecated_methods    = [];
-							private $deprecated_properties = [];
-						};
-					}
+	/**
+	 * Returns the Twitter API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Twitter
+	 */
+	public static function twitter() {
+		return static::$pool['twitter'] ??= new class extends Meta\Twitter {
+			use Static_Deprecator;
 
-					/**
-					 * @since 4.3.0
-					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
-					 */
-					public static function form() {
-						return static::$subpool['form'] ??= new class extends Admin\Settings\Layout\Form {
-							use Static_Deprecator;
+			private $colloquial_handle     = 'tsf()->twitter()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
 
-							private $colloquial_handle     = 'tsf()->admin()->layout()->form()';
-							private $deprecated_methods    = [];
-							private $deprecated_properties = [];
-						};
-					}
+	/**
+	 * Returns the URI API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\URI
+	 */
+	public static function uri() {
+		return static::$pool['uri'] ??= new class extends Meta\URI {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->uri()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+
+			/**
+			 * @since 4.3.0
+			 * @return \The_SEO_Framework\Meta\URI\Utils
+			 */
+			public static function utils() {
+				return static::$subpool['utils'] ??= new class extends Meta\URI\Utils {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->uri()->utils()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
 				};
 			}
 		};
