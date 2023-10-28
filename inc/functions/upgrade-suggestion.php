@@ -103,10 +103,10 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 			Markdown::convert(
 				sprintf(
 					'<p>The SEO Framework: [Cyber Sale &ndash; 50%% off](%s). This notification will self-destruct when the sale ends, or when you dismiss it.</p>',
-					'https://theseoframework.com/?p=3527'
+					'https://theseoframework.com/?p=3527',
 				),
 				[ 'a' ],
-				[ 'a_internal' => false ]
+				[ 'a_internal' => false ],
 			),
 			'suggest-sale',
 			[
@@ -121,7 +121,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 				'user'         => 0,
 				'count'        => 4,
 				'timeout'      => strtotime( 'December 4th, 2022, 23:00GMT+1' ) - time(),
-			]
+			],
 		);
 	}
 }

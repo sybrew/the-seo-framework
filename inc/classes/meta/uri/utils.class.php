@@ -370,7 +370,7 @@ class Utils {
 			if ( $use_base ) {
 				$url = \user_trailingslashit(
 					\trailingslashit( $url ) . "{$GLOBALS['wp_rewrite']->pagination_base}/$page",
-					'paged'
+					'paged',
 				);
 			} else {
 				$url = \user_trailingslashit( \trailingslashit( $url ) . $page, 'single_paged' );

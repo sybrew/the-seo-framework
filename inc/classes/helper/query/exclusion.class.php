@@ -102,10 +102,10 @@ class Exclusion {
 		// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
 		$cache = [
 			'archive' => $wpdb->get_results(
-				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where"
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where",
 			),
 			'search'  => $wpdb->get_results(
-				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where"
+				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where",
 			),
 		];
 		// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared

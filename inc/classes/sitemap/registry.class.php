@@ -175,7 +175,7 @@ class Registry {
 		return \sanitize_url(
 			$path_info['use_query_var']
 				? "$host{$path_info['path']}$id"
-				: "$host{$path_info['path']}{$list[ $id ]['endpoint']}"
+				: "$host{$path_info['path']}{$list[ $id ]['endpoint']}",
 		);
 	}
 
@@ -240,8 +240,8 @@ class Registry {
 						'callback' => [ static::class, 'output_stylesheet' ],
 						'robots'   => false,
 					],
-				]
-			)
+				],
+			),
 		);
 	}
 
@@ -475,8 +475,8 @@ class Registry {
 			'the_seo_framework_sitemap_base_path',
 			rtrim(
 				Meta\URI\Utils::get_parsed_front_page_url()['path'] ?? '',
-				'/'
-			)
+				'/',
+			),
 		);
 	}
 

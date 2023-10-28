@@ -58,14 +58,14 @@ switch ( $instance ) :
 		$cat_prefix = \esc_html( \_x( 'Category:', 'category archive title prefix', 'default' ) );
 		$cat_title  = \esc_html( Strings::hellip_if_over(
 			Meta\Title::get_term_title( \get_term( $latest_cat_id ) ) ?: \__( 'Example Category', 'autodescription' ),
-			60 - \strlen( $cat_prefix )
+			60 - \strlen( $cat_prefix ),
 		) );
 
 		$cat_title_full = sprintf(
 			/* translators: 1: Title prefix. 2: Title. */
 			\esc_html_x( '%1$s %2$s', 'archive title', 'default' ),
 			$cat_prefix,
-			$cat_title
+			$cat_title,
 		);
 
 		$example_post_left      = "<em>{$additions_left}{$post_title}</em>";
@@ -148,11 +148,11 @@ switch ( $instance ) :
 						/* translators: 1: Extension name, 2: Extension link. Markdown!  */
 						\esc_html__( "The current theme doesn't support a feature that allows predictable output of titles. Consider installing [%1\$s](%2\$s) when you notice the title output in the browser-tab isn't as you have configured.", 'autodescription' ),
 						'Title Fix',
-						'https://theseoframework.com/?p=2298'
+						'https://theseoframework.com/?p=2298',
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ]
-				)
+					[ 'a_internal' => false ],
+				),
 			);
 			?>
 			<hr>
@@ -216,7 +216,7 @@ switch ( $instance ) :
 						HTML::make_data_attributes( [ 'entity' => \esc_html( $html ) ] ), // This will double escape, but we found no issues.
 						\checked( $default_title_separator, $name, false ),
 						\esc_html( $html ),
-					]
+					],
 				);
 			}
 			?>
@@ -236,7 +236,7 @@ switch ( $instance ) :
 				'<code>&amp;lt;strong&amp;gt;</code>' // Double escaped HTML (&amp;) for attribute display.
 			),
 			'',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -244,7 +244,7 @@ switch ( $instance ) :
 				'label'  => \esc_html__( 'Strip HTML tags from generated titles?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 
 		HTML::description( \__( 'Tip: It is a bad practice to style page titles with HTML as inconsistent behavior might occur.', 'autodescription' ) );
@@ -303,7 +303,7 @@ switch ( $instance ) :
 			$info = HTML::make_info(
 				\__( 'Always brand your titles. Search engines may ignore your titles with this feature enabled.', 'autodescription' ),
 				'https://developers.google.com/search/docs/advanced/appearance/title-link',
-				false
+				false,
 			);
 
 			HTML::wrap_fields(
@@ -312,7 +312,7 @@ switch ( $instance ) :
 					'label'  => \esc_html__( 'Remove site title from the title?', 'autodescription' ) . " $info",
 					'escape' => false,
 				] ),
-				true
+				true,
 			);
 			?>
 		</div>
@@ -335,7 +335,7 @@ switch ( $instance ) :
 			$info = HTML::make_info(
 				\__( "The prefix helps visitors and search engines determine what kind of page they're visiting.", 'autodescription' ),
 				'https://kb.theseoframework.com/?p=34',
-				false
+				false,
 			);
 			HTML::wrap_fields(
 				Input::make_checkbox( [
@@ -343,7 +343,7 @@ switch ( $instance ) :
 					'label'  => \esc_html__( 'Remove term type prefixes from generated archive titles?', 'autodescription' ) . " $info",
 					'escape' => false,
 				] ),
-				true
+				true,
 			);
 			?>
 		</div>

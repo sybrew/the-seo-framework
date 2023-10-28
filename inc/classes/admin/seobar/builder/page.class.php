@@ -89,7 +89,7 @@ final class Page extends Main {
 						'nofollow'  => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'nofollow' ) ),
 						'noarchive' => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noarchive' ) ),
 					],
-				]
+				],
 			);
 		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 	}
@@ -119,8 +119,8 @@ final class Page extends Main {
 					Meta\Robots::get_generated_meta(
 						[ 'id' => static::$query['id'] ],
 						[ 'noindex', 'nofollow', 'noarchive' ],
-						ROBOTS_ASSERT
-					)
+						ROBOTS_ASSERT,
+					),
 				),
 				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
 				// The asserter should be leading, but the SEO Bar should be readable.
@@ -173,7 +173,7 @@ final class Page extends Main {
 					'untitled'   => sprintf(
 						/* translators: %s = "Untitled" */
 						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
-						Meta\Title::get_untitled_title()
+						Meta\Title::get_untitled_title(),
 					),
 					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
 					'branding'   => [
@@ -210,7 +210,7 @@ final class Page extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$generator_args = [ 'id' => static::$query['id'] ];
@@ -302,7 +302,7 @@ final class Page extends Main {
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
 				$title,
-				$matches
+				$matches,
 			)
 			: 0;
 
@@ -320,13 +320,11 @@ final class Page extends Main {
 			return $item;
 		}
 
-		$title_len = mb_strlen(
-			html_entity_decode(
-				\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
-				\ENT_NOQUOTES,
-				'UTF-8'
-			)
-		);
+		$title_len = mb_strlen( html_entity_decode(
+			\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
+			\ENT_NOQUOTES,
+			'UTF-8',
+		) );
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
 			$this->query_cache['states']['locale']
@@ -357,7 +355,7 @@ final class Page extends Main {
 		$item['assess']['length'] = sprintf(
 			$cache['params']['disclaim'],
 			$length_i18n,
-			$cache['params']['estimated']
+			$cache['params']['estimated'],
 		);
 
 		return $item;
@@ -431,7 +429,7 @@ final class Page extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$generator_args = [ 'id' => static::$query['id'] ];
@@ -511,7 +509,7 @@ final class Page extends Main {
 					/* translators: 1: Word found, 2: Occurrences */
 					\esc_attr__( '&#8220;%1$s&#8221; is used %2$d times.', 'autodescription' ),
 					\esc_attr( key( $_repeated_word ) ),
-					reset( $_repeated_word ) // escaped in sprintf %d
+					reset( $_repeated_word ), // escaped in sprintf %d.
 				);
 			}
 
@@ -537,13 +535,11 @@ final class Page extends Main {
 		)['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
-		$desc_len = mb_strlen(
-			html_entity_decode(
-				\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
-				\ENT_NOQUOTES,
-				'UTF-8'
-			)
-		);
+		$desc_len = mb_strlen( html_entity_decode(
+			\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
+			\ENT_NOQUOTES,
+			'UTF-8',
+		) );
 
 		if ( $desc_len < $guidelines['lower'] ) {
 			$item['status'] = Builder::STATE_BAD;
@@ -569,7 +565,7 @@ final class Page extends Main {
 		$item['assess']['length'] = sprintf(
 			$cache['params']['disclaim'],
 			$length_i18n,
-			$cache['params']['estimated']
+			$cache['params']['estimated'],
 		);
 
 		return $item;
@@ -633,7 +629,7 @@ final class Page extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		if ( $this->query_cache['states']['isdraft'] ) {
@@ -715,7 +711,7 @@ final class Page extends Main {
 			unset(
 				$item['assess']['posttype'],
 				$item['assess']['homepage'],
-				$item['assess']['site']
+				$item['assess']['site'],
 			);
 
 			$item['assess']['override'] = $cache['assess']['override'];
@@ -784,7 +780,7 @@ final class Page extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		if ( $this->query_cache['states']['isdraft'] ) {
@@ -839,7 +835,7 @@ final class Page extends Main {
 			unset(
 				$item['assess']['posttype'],
 				$item['assess']['homepage'],
-				$item['assess']['site']
+				$item['assess']['site'],
 			);
 
 			$item['assess']['override'] = $cache['assess']['override'];
@@ -915,7 +911,7 @@ final class Page extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		if ( $this->query_cache['states']['isdraft'] ) {
@@ -970,7 +966,7 @@ final class Page extends Main {
 			unset(
 				$item['assess']['posttype'],
 				$item['assess']['homepage'],
-				$item['assess']['site']
+				$item['assess']['site'],
 			);
 
 			$item['assess']['override'] = $cache['assess']['override'];
@@ -1015,7 +1011,7 @@ final class Page extends Main {
 					'meta'   => [
 						'blocking' => false,
 					],
-				]
+				],
 			);
 
 			if ( $this->query_cache['states']['isdraft'] )
@@ -1036,7 +1032,7 @@ final class Page extends Main {
 					'meta'   => [
 						'blocking' => true,
 					],
-				]
+				],
 			);
 		}
 	}

@@ -33,13 +33,13 @@ if ( \function_exists( 'tsf_extension_manager' )
 	&& \in_array(
 		\tsf_extension_manager()->seo_extensions_page_slug ?? null,
 		array_column( $GLOBALS['submenu'][ \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG ] ?? [], 2 ),
-		true
+		true,
 	)
 ) {
 	$_extensions_button = sprintf(
 		'<a href="%s" class=button>%s</a>',
 		\menu_page_url( \tsf_extension_manager()->seo_extensions_page_slug, false ),
-		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ),
 	);
 } else {
 	$_extensions_button = Admin\Utils::display_extension_suggestions() ? sprintf(
@@ -66,7 +66,7 @@ $_reset_button = \get_submit_button(
 	[
 		'id'      => '', // we output this twice, don't set ID.
 		'onclick' => "return confirm(`{$_ays_reset}`)", // this passes through \esc_attr() unscathed.
-	]
+	],
 );
 
 $hook_name = Admin\Menu::get_page_hook_name();

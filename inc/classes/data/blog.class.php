@@ -166,15 +166,13 @@ class Blog {
 	 */
 	public static function is_subdirectory_installation() {
 		return memo() ?? memo(
-			(bool) \strlen(
-				ltrim(
-					parse_url(
-						\get_option( 'home' ),
-						\PHP_URL_PATH
-					) ?? '',
-					' \\/'
-				)
-			)
+			(bool) \strlen( ltrim(
+				parse_url(
+					\get_option( 'home' ),
+					\PHP_URL_PATH
+				) ?? '',
+				' \\/',
+			) )
 		);
 	}
 

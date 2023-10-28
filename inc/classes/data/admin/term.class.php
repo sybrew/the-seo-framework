@@ -98,7 +98,7 @@ class Term {
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
 			Data\Plugin\Term::get_meta( $term->term_id, false ),
-			(array) \wp_unslash( $_POST['autodescription-quick'] )
+			(array) \wp_unslash( $_POST['autodescription-quick'] ),
 		);
 
 		// Trim, sanitize, and save the metadata.

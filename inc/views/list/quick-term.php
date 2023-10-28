@@ -69,13 +69,7 @@ $robots_settings = [
 	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
 	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
-	\do_action_ref_array(
-		'the_seo_framework_before_quick_edit',
-		[
-			$post_type,
-			$taxonomy,
-		]
-	);
+	\do_action( 'the_seo_framework_before_quick_edit', $post_type, $taxonomy );
 	?>
 	<fieldset class=inline-edit-col-full>
 		<legend class=inline-edit-legend><?php \esc_html_e( 'General SEO Settings', 'autodescription' ); ?></legend>
@@ -165,12 +159,6 @@ $robots_settings = [
 	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
 	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
-	\do_action_ref_array(
-		'the_seo_framework_after_quick_edit',
-		[
-			$post_type,
-			$taxonomy,
-		]
-	);
+	\do_action( 'the_seo_framework_after_quick_edit', $post_type, $taxonomy );
 	?>
 </div>

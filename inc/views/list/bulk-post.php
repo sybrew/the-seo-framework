@@ -66,13 +66,7 @@ $robots_settings = [
 	 * @param string $post_type The current post type.
 	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
-	\do_action_ref_array(
-		'the_seo_framework_before_bulk_edit',
-		[
-			$post_type,
-			$taxonomy,
-		]
-	);
+	\do_action( 'the_seo_framework_before_bulk_edit', $post_type, $taxonomy );
 	?>
 	<fieldset class=inline-edit-col-left>
 		<legend class=inline-edit-legend><?php \esc_html_e( 'Visibility SEO Settings', 'autodescription' ); ?></legend>
@@ -111,12 +105,6 @@ $robots_settings = [
 	 * @param string $post_type The current post type.
 	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
-	\do_action_ref_array(
-		'the_seo_framework_after_bulk_edit',
-		[
-			$post_type,
-			$taxonomy,
-		]
-	);
+	\do_action( 'the_seo_framework_after_bulk_edit', $post_type, $taxonomy );
 	?>
 </div>

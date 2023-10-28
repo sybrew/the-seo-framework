@@ -124,15 +124,15 @@ switch ( $instance ) :
 								sprintf(
 									/* translators: 1 = Post Type Archive name */
 									\esc_html__( 'Editing archive of %s', 'autodescription' ),
-									\esc_html( $post_types_data[ $post_type ]['label'] )
+									\esc_html( $post_types_data[ $post_type ]['label'] ),
 								),
 								\esc_html( $post_type ),
 								sprintf(
 									'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
 									\esc_url( $post_types_data[ $post_type ]['url'] ),
-									\esc_html__( 'View archive', 'autodescription' )
+									\esc_html__( 'View archive', 'autodescription' ),
 								),
-							]
+							],
 						)
 					);
 					?>
@@ -159,12 +159,10 @@ switch ( $instance ) :
 						 * @param array   $tabs      The default tabs.
 						 * @param strring $post_type The post type archive's name.
 						 */
-						(array) \apply_filters_ref_array(
+						(array) \apply_filters(
 							'the_seo_framework_post_type_archive_settings_tabs',
-							[
-								$tabs,
-								$post_type,
-							]
+							$tabs,
+							$post_type,
 						)
 					);
 					?>
@@ -186,7 +184,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/appearance/title-link'
+						'https://developers.google.com/search/docs/advanced/appearance/title-link',
 					);
 				?>
 			</label>
@@ -195,7 +193,7 @@ switch ( $instance ) :
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
 		Form::output_character_counter_wrap(
 			Input::get_field_id( $args['options']['doctitle'] ),
-			(bool) Data\Plugin::get_option( 'display_character_counter' )
+			(bool) Data\Plugin::get_option( 'display_character_counter' ),
 		);
 		Form::output_pixel_counter_wrap(
 			Input::get_field_id( $args['options']['doctitle'] ),
@@ -224,7 +222,7 @@ switch ( $instance ) :
 						'prefixValue'       => \esc_html( $_prefix_value ),
 						'showPrefix'        => Meta\Title\Conditions::use_generated_archive_prefix( $pto ),
 					],
-				]
+				],
 			);
 			?>
 		</p>
@@ -234,7 +232,7 @@ switch ( $instance ) :
 			$info = HTML::make_info(
 				\__( 'Use this when you want to rearrange the title parts manually.', 'autodescription' ),
 				'',
-				false
+				false,
 			);
 
 			HTML::wrap_fields(
@@ -244,7 +242,7 @@ switch ( $instance ) :
 					'value'  => Data\Plugin\PTA::get_meta_item( 'title_no_blog_name', $args['post_type'] ),
 					'escape' => false,
 				] ),
-				true
+				true,
 			);
 		?>
 		</div>
@@ -258,7 +256,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/appearance/snippet'
+						'https://developers.google.com/search/docs/advanced/appearance/snippet',
 					);
 				?>
 			</label>
@@ -279,7 +277,7 @@ switch ( $instance ) :
 							Meta\Description::get_generated_description( $args['generator_args'] )
 						),
 					],
-				]
+				],
 			);
 			?>
 		</p>
@@ -304,7 +302,7 @@ switch ( $instance ) :
 						'defaultDesc'  => \esc_html( Meta\Twitter::get_generated_description( $args['generator_args'] ) ),
 					],
 				],
-			]
+			],
 		);
 
 		?>
@@ -370,7 +368,7 @@ switch ( $instance ) :
 				<?php
 				HTML::make_info(
 					\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
-					'https://developers.facebook.com/docs/sharing/best-practices#images'
+					'https://developers.facebook.com/docs/sharing/best-practices#images',
 				);
 				?>
 			</label>
@@ -397,7 +395,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
+						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls',
 					);
 				?>
 			</label>
@@ -462,11 +460,11 @@ switch ( $instance ) :
 						HTML::make_info(
 							$_rs['_info'][0],
 							$_rs['_info'][1] ?? '',
-							false
+							false,
 						),
-					]
+					],
 				),
-				true
+				true,
 			);
 			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 			echo Form::make_single_select_form( [
@@ -497,7 +495,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'This will force visitors to go to another URL.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
+						'https://developers.google.com/search/docs/advanced/crawling/301-redirects',
 					);
 				?>
 			</label>

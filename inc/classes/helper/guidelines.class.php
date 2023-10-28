@@ -186,7 +186,7 @@ class Guidelines {
 				[ $c_adjust, $p_adjust ],
 				$locale,
 			),
-			$locale
+			$locale,
 		);
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}

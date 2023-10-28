@@ -165,11 +165,11 @@ final class Ping {
 
 		$url = static::get_ping_url();
 
-		if ( ! $url ) return;
+		if ( empty( $url ) ) return;
 
 		\wp_safe_remote_get(
 			'https://www.google.com/ping?sitemap=' . rawurlencode( $url ),
-			[ 'timeout' => 3 ]
+			[ 'timeout' => 3 ],
 		);
 	}
 
@@ -187,11 +187,11 @@ final class Ping {
 
 		$url = static::get_ping_url();
 
-		if ( ! $url ) return;
+		if ( empty( $url ) ) return;
 
 		\wp_safe_remote_get(
 			'https://www.bing.com/ping?sitemap=' . rawurlencode( $url ),
-			[ 'timeout' => 3 ]
+			[ 'timeout' => 3 ],
 		);
 	}
 

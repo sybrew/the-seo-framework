@@ -206,7 +206,7 @@ class HTML {
 					],
 				],
 				$args['space'],
-				$args['clear']
+				$args['clear'],
 			);
 		}
 

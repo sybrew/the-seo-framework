@@ -104,15 +104,13 @@ class Plugin {
 		 * @param string $setting  The settings name.
 		 * @param bool   $headless Whether the options are headless.
 		 */
-		return static::$options_memo = \apply_filters_ref_array(
+		return static::$options_memo = \apply_filters(
 			'the_seo_framework_get_options',
-			[
-				$is_headless
-					? Plugin\Setup::get_default_options()
-					: \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ),
-				\THE_SEO_FRAMEWORK_SITE_OPTIONS,
-				$is_headless,
-			]
+			$is_headless
+				? Plugin\Setup::get_default_options()
+				: \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ),
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			$is_headless,
 		);
 	}
 
@@ -131,7 +129,7 @@ class Plugin {
 		// Get the latest known revision from the database.
 		$options = array_merge(
 			\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ),
-			\is_array( $option ) ? $option : [ $option => $value ]
+			\is_array( $option ) ? $option : [ $option => $value ],
 		);
 
 		// The current request is still headless -- so do not update the state.
@@ -190,7 +188,7 @@ class Plugin {
 		// Get the latest known revision from the database.
 		$site_cache = array_merge(
 			\get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ),
-			\is_array( $cache ) ? $cache : [ $cache => $value ]
+			\is_array( $cache ) ? $cache : [ $cache => $value ],
 		);
 
 		static::$site_cache_memo = $site_cache;

@@ -81,7 +81,7 @@ class Posts extends \WP_Sitemaps_Posts {
 			'wp_sitemaps_posts_pre_url_list',
 			null,
 			$post_type,
-			$page_num
+			$page_num,
 		);
 
 		if ( null !== $url_list )
@@ -127,18 +127,16 @@ class Posts extends \WP_Sitemaps_Posts {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						\OBJECT
+						\OBJECT,
 					);
 
 					/**
 					 * @since 4.1.1
 					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
 					 */
-					$lastmod = (string) \apply_filters_ref_array(
+					$lastmod = (string) \apply_filters(
 						'the_seo_framework_sitemap_blog_lastmod',
-						[
-							$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
-						]
+						$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
 					);
 
 					if ( isset( $lastmod ) && '0000-00-00 00:00:00' !== $lastmod ) {

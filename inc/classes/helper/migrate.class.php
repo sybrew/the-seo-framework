@@ -137,10 +137,10 @@ class Migrate {
 							'title',
 							'user_description',
 							'userid',
-						]
+						],
 					),
 					'wildcard_end' => implode( '|', [ 'ct_', 'cf_' ] ),
-				]
+				],
 			);
 		}
 
@@ -228,7 +228,7 @@ class Migrate {
 							'title',
 							'user_description',
 							'userid',
-						]
+						],
 					),
 					// Check out for ref RankMath\Replace_Variables\Replacer::set_up_replacements();
 					'wildcard_end' => implode(
@@ -243,9 +243,9 @@ class Migrate {
 							'date',
 							'modified',
 							'tags',
-						]
+						],
 					),
-				]
+				],
 			);
 		}
 
@@ -327,7 +327,7 @@ class Migrate {
 							'wc_single_cat',
 							'wc_single_short_desc',
 							'wc_single_tag',
-						]
+						],
 					),
 					// Check out for ref somewhere in SEOPress, seopress_get_dyn_variables() is one I guess.
 					'wildcard_end' => implode(
@@ -336,9 +336,9 @@ class Migrate {
 							'_cf_',
 							'_ct_',
 							'_ucf_',
-						]
+						],
 					),
-				]
+				],
 			);
 		}
 

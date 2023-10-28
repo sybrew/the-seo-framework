@@ -63,7 +63,7 @@ class Compatibility {
 				 * only for the admin to find out a few months later.
 				 */
 				'timeout'    => -1,
-			]
+			],
 		);
 	}
 
@@ -126,7 +126,7 @@ class Compatibility {
 		 */
 		$conflicting_plugins = (array) \apply_filters(
 			'the_seo_framework_conflicting_plugins',
-			$conflicting_plugins
+			$conflicting_plugins,
 		);
 
 		if ( \has_filter( 'the_seo_framework_conflicting_plugins_type' ) ) {
@@ -191,7 +191,7 @@ class Compatibility {
 					'open_graph'   => true,
 					'twitter_card' => true,
 					'schema'       => true,
-				]
+				],
 			);
 		}
 
@@ -253,8 +253,8 @@ class Compatibility {
 	public static function is_theme_active( $themes = '' ) {
 
 		$active_theme = [
-			strtolower( \get_option( 'stylesheet' ) ), // Parent
-			strtolower( \get_option( 'template' ) ),   // Child
+			strtolower( \get_option( 'stylesheet' ) ), // Parent.
+			strtolower( \get_option( 'template' ) ),   // Child.
 		];
 
 		foreach ( (array) $themes as $theme )

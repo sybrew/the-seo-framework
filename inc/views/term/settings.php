@@ -70,7 +70,7 @@ $canonical_placeholder = Meta\URI::get_generated_url( $generator_args );
 $robots_defaults       = Meta\Robots::get_generated_meta(
 	$generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],
-	ROBOTS_IGNORE_SETTINGS
+	ROBOTS_IGNORE_SETTINGS,
 );
 
 // TODO reintroduce the info blocks, and place the labels at the left, instead??
@@ -145,7 +145,7 @@ $robots_settings = [
 					echo ' ';
 					HTML::make_info(
 						\__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/appearance/title-link'
+						'https://developers.google.com/search/docs/advanced/appearance/title-link',
 					);
 					?>
 				</label>
@@ -171,7 +171,7 @@ $robots_settings = [
 								'additionValue'     => \esc_html( Meta\Title::get_addition() ),
 								'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 							],
-						]
+						],
 					);
 					?>
 				</div>
@@ -194,7 +194,7 @@ $robots_settings = [
 					echo ' ';
 					HTML::make_info(
 						\__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/appearance/snippet'
+						'https://developers.google.com/search/docs/advanced/appearance/snippet',
 					);
 					?>
 				</label>
@@ -216,7 +216,7 @@ $robots_settings = [
 								Meta\Description::get_generated_description( $generator_args )
 							),
 						],
-					]
+					],
 				);
 				?>
 			</td>
@@ -244,7 +244,7 @@ Input::output_js_social_data(
 				'defaultDesc'  => \esc_html( Meta\Twitter::get_generated_description( $generator_args ) ),
 			],
 		],
-	]
+	],
 );
 ?>
 
@@ -322,7 +322,7 @@ Input::output_js_social_data(
 					echo ' ';
 					HTML::make_info(
 						\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
-						'https://developers.facebook.com/docs/sharing/best-practices#images'
+						'https://developers.facebook.com/docs/sharing/best-practices#images',
 					);
 					?>
 				</label>
@@ -353,7 +353,7 @@ Input::output_js_social_data(
 					echo ' ';
 					HTML::make_info(
 						\__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
+						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls',
 					);
 					?>
 				</label>
@@ -370,7 +370,7 @@ Input::output_js_social_data(
 				echo ' ';
 				HTML::make_info(
 					\__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this term.', 'autodescription' ),
-					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives'
+					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 				);
 				?>
 				</th>
@@ -412,7 +412,7 @@ Input::output_js_social_data(
 					echo ' ';
 					HTML::make_info(
 						\__( 'This will force visitors to go to another URL.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
+						'https://developers.google.com/search/docs/advanced/crawling/301-redirects',
 					);
 					?>
 				</label>

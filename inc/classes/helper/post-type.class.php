@@ -63,12 +63,10 @@ class Post_Type {
 		 * @param bool   $disabled
 		 * @param string $post_type
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_post_type_disabled',
-			[
-				Data\Plugin::get_option( 'disabled_post_types', $post_type ),
-				$post_type,
-			]
+			Data\Plugin::get_option( 'disabled_post_types', $post_type ),
+			$post_type,
 		);
 	}
 
@@ -94,14 +92,12 @@ class Post_Type {
 		 * @param bool   $supported           Whether the post type is supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		return (bool) \apply_filters_ref_array(
+		return (bool) \apply_filters(
 			'the_seo_framework_supported_post_type',
-			[
-				$post_type
-					&& ! static::is_disabled( $post_type )
-					&& \in_array( $post_type, static::get_all_public(), true ),
-				$post_type,
-			]
+			$post_type
+				&& ! static::is_disabled( $post_type )
+				&& \in_array( $post_type, static::get_all_public(), true ),
+			$post_type,
 		);
 	}
 
@@ -124,14 +120,12 @@ class Post_Type {
 		 * @param bool   $supported           Whether the post type archive is supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		return (bool) \apply_filters_ref_array(
+		return (bool) \apply_filters(
 			'the_seo_framework_supported_post_type_archive',
-			[
-				$post_type
-					&& static::is_supported( $post_type )
-					&& \in_array( $post_type, static::get_public_pta(), true ),
-				$post_type,
-			]
+			$post_type
+				&& static::is_supported( $post_type )
+				&& \in_array( $post_type, static::get_public_pta(), true ),
+			$post_type,
 		);
 	}
 
@@ -173,12 +167,10 @@ class Post_Type {
 	 */
 	public static function get_all_supported_pta() {
 		return memo() ?? memo(
-			array_values(
-				array_filter(
-					static::get_public_pta(),
-					[ static::class, 'is_pta_supported' ]
-				)
-			)
+			array_values( array_filter(
+				static::get_public_pta(),
+				[ static::class, 'is_pta_supported' ],
+			) )
 		);
 	}
 
@@ -226,12 +218,10 @@ class Post_Type {
 	 */
 	public static function get_all_supported() {
 		return memo() ?? memo(
-			array_values(
-				array_filter(
-					static::get_all_public(),
-					[ static::class, 'is_supported' ]
-				)
-			)
+			array_values( array_filter(
+				static::get_all_public(),
+				[ static::class, 'is_supported' ],
+			) )
 		);
 	}
 
@@ -259,18 +249,14 @@ class Post_Type {
 				 */
 				\apply_filters(
 					'the_seo_framework_public_post_types',
-					array_values(
-						array_filter(
-							array_unique(
-								array_merge(
-									static::get_all_forced_supported(),
-									// array_keys() because get_post_types() gives a sequential array.
-									array_keys( (array) \get_post_types( [ 'public' => true ] ) )
-								)
-							),
-							'is_post_type_viewable'
-						)
-					)
+					array_values( array_filter(
+						array_unique( array_merge(
+							static::get_all_forced_supported(),
+							// array_keys() because get_post_types() gives a sequential array.
+							array_keys( (array) \get_post_types( [ 'public' => true ] ) )
+						) ),
+						'is_post_type_viewable',
+					) )
 				)
 			);
 	}
@@ -291,14 +277,12 @@ class Post_Type {
 		* @since 3.1.0
 		* @param string[] $forced Forced supported post types
 		*/
-		return (array) \apply_filters_ref_array(
+		return (array) \apply_filters(
 			'the_seo_framework_forced_supported_post_types',
-			[
-				array_values( \get_post_types( [
-					'public'   => true,
-					'_builtin' => true,
-				] ) ),
-			]
+			array_values( \get_post_types( [
+				'public'   => true,
+				'_builtin' => true,
+			] ) ),
 		);
 	}
 
@@ -319,7 +303,7 @@ class Post_Type {
 					'hierarchical' => true,
 					'public'       => true,
 				],
-				'names'
+				'names',
 			)
 		);
 	}
@@ -341,7 +325,7 @@ class Post_Type {
 					'hierarchical' => false,
 					'public'       => true,
 				],
-				'names'
+				'names',
 			)
 		);
 	}

@@ -32,7 +32,7 @@ use \The_SEO_Framework\Helper\Format;
 // Styles generic.
 printf(
 	'<xsl:variable name="tableMinWidth" select="\'%s\'"/>',
-	Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550'
+	Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550',
 );
 
 $colors = Sitemap\Utils::get_sitemap_colors();

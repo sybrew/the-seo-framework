@@ -92,11 +92,11 @@ switch ( $instance ) :
 				sprintf(
 					/* translators: %s = Learn more URL. Markdown! */
 					\esc_html__( 'The sitemap does not contribute to ranking; [it can only help with indexing](%s). Search engines process smaller, less complicated sitemaps quicker, which shortens the time required for indexing pages.', 'autodescription' ),
-					'https://kb.theseoframework.com/?p=119'
+					'https://kb.theseoframework.com/?p=119',
 				),
 				[ 'a' ],
-				[ 'a_internal' => false ]
-			)
+				[ 'a_internal' => false ],
+			),
 		);
 
 		if ( $has_sitemap_plugin ) {
@@ -118,34 +118,30 @@ switch ( $instance ) :
 					. ' ' . HTML::make_info(
 						\__( 'This sitemap is processed quicker by search engines.', 'autodescription' ),
 						'',
-						false
+						false,
 					),
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 
 		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
 			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
-				HTML::description_noesc(
-					sprintf(
-						'<a href="%s" target=_blank rel=noopener>%s</a>',
-						\esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
-						\esc_html__( 'View the base sitemap.', 'autodescription' )
-					)
-				);
+				HTML::description_noesc( sprintf(
+					'<a href="%s" target=_blank rel=noopener>%s</a>',
+					\esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
+					\esc_html__( 'View the base sitemap.', 'autodescription' ),
+				) );
 				// TODO In settings generator (TSF 5.0): Overwrite this section for Polylang/WPML and output each sitemap language link respectively.
 				// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
 			} elseif ( Sitemap\Utils::use_core_sitemaps() ) {
 				$_index_url = \get_sitemap_url( 'index' );
 				if ( $_index_url )
-					HTML::description_noesc(
-						sprintf(
-							'<a href="%s" target=_blank rel=noopener>%s</a>',
-							\esc_url( $_index_url, [ 'https', 'http' ] ),
-							\esc_html__( 'View the sitemap index.', 'autodescription' )
-						)
-					);
+					HTML::description_noesc( sprintf(
+						'<a href="%s" target=_blank rel=noopener>%s</a>',
+						\esc_url( $_index_url, [ 'https', 'http' ] ),
+						\esc_html__( 'View the sitemap index.', 'autodescription' ),
+					) );
 			}
 
 			if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
@@ -155,11 +151,11 @@ switch ( $instance ) :
 						sprintf(
 							/* translators: %s = Documentation URL in markdown */
 							\esc_html__( 'A multilingual plugin has been detected, so your site may have multiple sitemaps. [Learn more](%s).', 'autodescription' ),
-							'https://kb.theseoframework.com/?p=104#same-site-sitemaps'
+							'https://kb.theseoframework.com/?p=104#same-site-sitemaps',
 						),
 						[ 'a' ],
 						[ 'a_internal' => false ] // opens in new tab.
-					)
+					),
 				);
 			}
 		}
@@ -193,7 +189,7 @@ switch ( $instance ) :
 					. ' ' . HTML::make_info( \__( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		break;
 
@@ -224,10 +220,10 @@ switch ( $instance ) :
 							/* translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is! */
 							\esc_html__( 'Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`.', 'autodescription' ),
 							\esc_url( \admin_url( 'options-permalink.php' ), [ 'https', 'http' ] ),
-							'/%category%/%postname%/'
+							'/%category%/%postname%/',
 						),
 						[ 'code', 'a' ],
-						[ 'a_internal' => false ] // open in new window.
+						[ 'a_internal' => false ], // open in new window.
 					)
 				);
 				echo '<hr>';
@@ -246,18 +242,16 @@ switch ( $instance ) :
 					'id'    => 'sitemaps_robots',
 					'label' => \__( 'Add sitemap location to robots.txt?', 'autodescription' ),
 				] ),
-				true
+				true,
 			);
 		}
 
 		if ( $robots_url ) {
-			HTML::description_noesc(
-				sprintf(
-					'<a href="%s" target=_blank rel=noopener>%s</a>',
-					\esc_url( $robots_url, [ 'https', 'http' ] ),
-					\esc_html__( 'View the robots.txt output.', 'autodescription' )
-				)
-			);
+			HTML::description_noesc( sprintf(
+				'<a href="%s" target=_blank rel=noopener>%s</a>',
+				\esc_url( $robots_url, [ 'https', 'http' ] ),
+				\esc_html__( 'View the robots.txt output.', 'autodescription' ),
+			) );
 		}
 		break;
 
@@ -271,11 +265,11 @@ switch ( $instance ) :
 				'label'  => Markdown::convert(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					\esc_html__( 'Add `<lastmod>` to the sitemap?', 'autodescription' ),
-					[ 'code' ]
+					[ 'code' ],
 				),
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		break;
 
@@ -292,7 +286,7 @@ switch ( $instance ) :
 						. ' ' . HTML::make_info(
 							\__( 'This speeds up post and term saving processes, by offsetting pinging to a later time.', 'autodescription' ),
 							'',
-							false
+							false,
 						),
 					'escape' => false,
 				] ),
@@ -302,13 +296,13 @@ switch ( $instance ) :
 						. ' ' . HTML::make_info(
 							\__( 'This mitigates timeouts some search engines may experience when waiting for the sitemap to render. Transient caching for the sitemap must be enabled for this to work.', 'autodescription' ),
 							'',
-							false
+							false,
 						),
 					'description' => \esc_html__( 'Only enable prerendering when generating the sitemap takes over 60 seconds.', 'autodescription' ),
 					'escape'      => false,
 				] ),
 			],
-			true
+			true,
 		);
 
 		?>
@@ -350,7 +344,7 @@ switch ( $instance ) :
 				'label'  => \esc_html__( 'Style sitemap?', 'autodescription' ) . ' ' . HTML::make_info( \__( 'This makes the sitemap more readable for humans.', 'autodescription' ), '', false ),
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 
 		?>
@@ -388,7 +382,7 @@ switch ( $instance ) :
 				'id'    => 'sitemap_logo',
 				'label' => \__( 'Show logo next to sitemap header title?', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 
 		$ph_id  = \get_theme_mod( 'custom_logo' ) ?: \get_option( 'site_icon' ) ?: 0;

@@ -140,7 +140,7 @@ class Markdown {
 			$text = str_replace(
 				$matches[0][ $i ],
 				sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
-				$text
+				$text,
 			);
 		}
 
@@ -165,7 +165,7 @@ class Markdown {
 			$text = str_replace(
 				$matches[0][ $i ],
 				sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
-				$text
+				$text,
 			);
 		}
 
@@ -190,7 +190,7 @@ class Markdown {
 			$text = str_replace(
 				$matches[0][ $i ],
 				sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
-				$text
+				$text,
 			);
 		}
 
@@ -215,7 +215,7 @@ class Markdown {
 			$text = str_replace(
 				$matches[0][ $i ],
 				sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
-				$text
+				$text,
 			);
 		}
 		return $text;
@@ -245,7 +245,7 @@ class Markdown {
 			$text = str_replace(
 				$matches[0][ $i ],
 				sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
-				$text
+				$text,
 			);
 		}
 
@@ -276,7 +276,7 @@ class Markdown {
 			$text = str_replace(
 				$matches[0][ $i ],
 				sprintf( $_string, \esc_url( $matches[2][ $i ], [ 'https', 'http' ] ), \esc_html( $matches[1][ $i ] ) ),
-				$text
+				$text,
 			);
 		}
 

@@ -84,7 +84,7 @@ foreach ( $tabs as $tab => $params ) {
 				'id'     => $id,
 				'tab'    => $tab,
 				'params' => $params,
-			]
+			],
 		);
 	?>
 	</div>

@@ -177,7 +177,7 @@ final class Head {
 		 */
 		$generator_pools = \apply_filters(
 			'the_seo_framework_meta_generator_pools',
-			isset( $remove_pools ) ? array_diff( $generator_pools, $remove_pools ) : $generator_pools
+			isset( $remove_pools ) ? array_diff( $generator_pools, $remove_pools ) : $generator_pools,
 		);
 
 		$tag_generators   = &Tags::tag_generators();
@@ -282,7 +282,7 @@ final class Head {
 					$timers = sprintf(
 						' | %s meta | %s boot',
 						number_format( $meta_timer * 1e3, 2, null, '' ) . 'ms',
-						number_format( $bootstrap_timer * 1e3, 2, null, '' ) . 'ms'
+						number_format( $bootstrap_timer * 1e3, 2, null, '' ) . 'ms',
 					);
 				} else {
 					$timers = '';

@@ -362,9 +362,9 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 					/* translators: %1$s = New, lower version number, surrounded in markdown-backticks. %2$s = Old, higher version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Your website has been downgraded successfully to use The SEO Framework at database version `%1$s` from `%2$s`.', 'autodescription' ),
 					\esc_html( $current_version ),
-					\esc_html( $previous_version )
+					\esc_html( $previous_version ),
 				),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			"notify-downgraded-$current_version",
 			[
@@ -379,7 +379,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 				'user'         => 0,
 				'count'        => 1,
 				'timeout'      => \DAY_IN_SECONDS,
-			]
+			],
 		);
 	}
 }
@@ -412,9 +412,9 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Thank you for updating The SEO Framework! Your website has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
-					\esc_html( $current_version )
+					\esc_html( $current_version ),
 				),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			"thank-you-updated-$current_version",
 			[
@@ -429,7 +429,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'user'         => 0,
 				'count'        => 1,
 				'timeout'      => \DAY_IN_SECONDS,
-			]
+			],
 		);
 	} elseif ( ! $previous_version && $current_version ) { // User successfully installed.
 		$network_mode = (bool) ( \get_site_option( 'active_sitewide_plugins' )[ \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ] ?? false );
@@ -447,8 +447,8 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 							'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
 						),
 						[ 'a' ],
-						[ 'a_internal' => false ]
-					)
+						[ 'a_internal' => false ],
+					),
 				),
 				'thank-you-installed',
 				[
@@ -463,7 +463,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 					'user'         => 0,
 					'count'        => 3,
 					'timeout'      => 2 * \MINUTE_IN_SECONDS,
-				]
+				],
 			);
 		}
 
@@ -520,11 +520,11 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 						\esc_html(
 							count( $found_titles ) > 1 ? wp_sprintf_l( '%l', $found_titles ) : current( $found_titles )
 						),
-						'https://theseoframework.com/docs/seo-data-migration/'
+						'https://theseoframework.com/docs/seo-data-migration/',
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ]
-				)
+					[ 'a_internal' => false ],
+				),
 			),
 			'installed-migration-notice',
 			[
@@ -539,7 +539,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 				'user'         => 0,
 				'count'        => 69,
 				'timeout'      => \WEEK_IN_SECONDS,
-			]
+			],
 		);
 	}
 }
@@ -587,7 +587,7 @@ function _add_upgrade_notice( $notice = '' ) {
 		[
 			'excl_screens' => [ 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes' ],
 			'capability'   => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
-		]
+		],
 	);
 }
 
@@ -697,7 +697,7 @@ function _do_upgrade_3103() {
 		// Transport title separator (option name typo).
 		Data\Plugin::update_option(
 			'title_separator',
-			Data\Plugin::get_option( 'title_seperator' ) ?: 'hyphen' // Typo intended.
+			Data\Plugin::get_option( 'title_seperator' ) ?: 'hyphen', // Typo intended.
 		);
 
 		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
@@ -741,7 +741,7 @@ function _do_upgrade_3300() {
 		// Remove old rewrite rules.
 		unset(
 			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xml$'],
-			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$']
+			$GLOBALS['wp_rewrite']->extra_rules_top['sitemap\.xsl$'],
 		); // redundant?
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 
@@ -891,38 +891,30 @@ function _do_upgrade_4301() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4301' ) {
 		Data\Plugin::update_option(
 			'auto_description_html_method',
-			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast' // Typo intended
+			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast', // Typo intended.
 		);
 
 		global $wpdb;
 
 		// Cleanup leftover from TSF 3.0.0 ~ 3.1.0. Sans trailing _, since it doesn't support multilingual.
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( "_transient_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%'
-			)
-		);
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( "_transient_timeout_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%'
-			)
-		);
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%',
+		) );
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_timeout_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%',
+		) );
 
 		// Cleanup from 3.1.0 ~ 4.2.8. This data will be rebuilt automatically.
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( "_transient_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%'
-			)
-		);
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-				$wpdb->esc_like( "_transient_timeout_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%'
-			)
-		);
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%',
+		) );
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_timeout_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%',
+		) );
 
 		$site_cache = get_option( 'autodescription-updates-cache' ) ?: [];
 		if ( $site_cache ) {

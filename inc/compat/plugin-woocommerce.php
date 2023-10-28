@@ -274,13 +274,11 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 	// Don't do anything if there's a blocking redirect.
 	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
-	$index_item                         = &$interpreter::edit_seo_bar_item( 'indexing' );
-	$index_item['status']               =
-		0 !== Data\Filter\Sanitize::qubit(
-			$builder->get_query_cache()['meta']['_genesis_noindex']
-		)
-			? $interpreter::STATE_OKAY
-			: $interpreter::STATE_UNKNOWN;
+	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
+	$index_item['status'] = 0 !== Data\Filter\Sanitize::qubit( $builder->get_query_cache()['meta']['_genesis_noindex'] )
+		? $interpreter::STATE_OKAY
+		: $interpreter::STATE_UNKNOWN;
+
 	$index_item['assess']['recommends'] = \__( 'WooCommerce recommends not indexing this dynamic page.', 'autodescription' );
 }
 

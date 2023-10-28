@@ -51,7 +51,7 @@ if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 			'<img src="%s" width="%s" height="%s" />',
 			\esc_url( $_src[0] ),
 			\esc_attr( $_src[1] ?? '' ),
-			\esc_attr( $_src[2] ?? '' )
+			\esc_attr( $_src[2] ?? '' ),
 		);
 	}
 }
@@ -67,7 +67,7 @@ printf(
 				'width'  => true,
 				'height' => true,
 			],
-		]
+		],
 	),
 	\esc_xml(
 		Data\Filter\Sanitize::metadata_content(
@@ -84,7 +84,7 @@ printf(
 		/* translators: URLs are in Markdown. Don't forget to localize the URLs. */
 		\esc_xml( \__( 'This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ) ),
 		[ 'a' ],
-		[ 'a_internal' => false ]
+		[ 'a_internal' => false ],
 	);
 	?>
 </p>
@@ -95,7 +95,7 @@ printf(
 		/* translators: URLs are in Markdown. Don't localize this URL. */
 		\esc_xml( \__( 'You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/).', 'autodescription' ) ),
 		[ 'a' ],
-		[ 'a_internal' => false ]
+		[ 'a_internal' => false ],
 	);
 	?>
 </p>

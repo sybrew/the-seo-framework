@@ -115,7 +115,7 @@ class Query {
 			 */
 			$id = \apply_filters(
 				'the_seo_framework_real_id',
-				\is_feed() ? \get_the_ID() : 0
+				\is_feed() ? \get_the_ID() : 0,
 			);
 		}
 
@@ -124,13 +124,10 @@ class Query {
 		 * @param int  $id        Can be either the Post ID, or the Term ID.
 		 * @param bool $use_cache Whether this value is stored in runtime caching.
 		 */
-		$id = (int) \apply_filters_ref_array(
+		$id = (int) \apply_filters(
 			'the_seo_framework_current_object_id',
-			[
-				// This catches most IDs. Even Post IDs.
-				( $id ?? 0 ) ?: \get_queried_object_id(),
-				$use_cache,
-			]
+			( $id ?? 0 ) ?: \get_queried_object_id(), // This catches most IDs. Even Post IDs.
+			$use_cache,
 		);
 
 		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
@@ -172,7 +169,7 @@ class Query {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				Query\Utils::has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0
+				Query\Utils::has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0,
 			);
 	}
 
@@ -224,7 +221,7 @@ class Query {
 		return Query\Cache::memo()
 			?? Query\Cache::memo(
 				( \is_admin() ? $GLOBALS['current_screen'] : \get_queried_object() )
-					->taxonomy ?? ''
+					->taxonomy ?? '',
 			);
 	}
 
@@ -316,14 +313,12 @@ class Query {
 				 * @param bool     $is_singular_archive Whether the post ID is a singular archive.
 				 * @param int|null $id                  The supplied post ID. Null when in the loop.
 				 */
-				\apply_filters_ref_array(
+				\apply_filters(
 					'the_seo_framework_is_singular_archive',
-					[
-						static::is_blog_as_page( $id ),
-						$id,
-					]
+					static::is_blog_as_page( $id ),
+					$id,
 				),
-				$id
+				$id,
 			);
 	}
 
@@ -634,7 +629,7 @@ class Query {
 				\is_int( $page ) || $page instanceof \WP_Post
 					? \in_array( \get_post_type( $page ), Post_Type::get_all_hierarchical(), true )
 					: \is_page( $page ),
-				$page
+				$page,
 			);
 	}
 
@@ -719,7 +714,7 @@ class Query {
 				\is_int( $post ) || $post instanceof \WP_Post
 					? \in_array( \get_post_type( $post ), Post_Type::get_all_nonhierarchical(), true )
 					: \is_single( $post ),
-				$post
+				$post,
 			);
 	}
 
@@ -802,7 +797,9 @@ class Query {
 		$front_id = umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				'page' === \get_option( 'show_on_front' ) ? (int) \get_option( 'page_on_front' ) : false
+				'page' === \get_option( 'show_on_front' )
+					? (int) \get_option( 'page_on_front' )
+					: false,
 			);
 
 		return false !== $front_id && ( $id ?: static::get_the_real_id() ) === $front_id;
@@ -877,8 +874,8 @@ class Query {
 				 * @param bool $is_shop Whether the post ID is a shop.
 				 * @param int  $id      The current or supplied post ID.
 				 */
-				\apply_filters_ref_array( 'the_seo_framework_is_shop', [ false, $post ] ),
-				$post
+				\apply_filters( 'the_seo_framework_is_shop', false, $post ),
+				$post,
 			);
 	}
 
@@ -905,8 +902,8 @@ class Query {
 				 * @param bool $is_product
 				 * @param int|WP_Post|null $post (Optional) Post ID or post object.
 				 */
-				(bool) \apply_filters_ref_array( 'the_seo_framework_is_product', [ false, $post ] ),
-				$post
+				(bool) \apply_filters( 'the_seo_framework_is_product', false, $post ),
+				$post,
 			);
 	}
 

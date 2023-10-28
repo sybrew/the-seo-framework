@@ -64,7 +64,7 @@ class Menu {
 			$menu['menu_slug'],
 			$menu['callback'],
 			$menu['icon'],
-			$menu['position']
+			$menu['position'],
 		);
 
 		/**
@@ -77,7 +77,7 @@ class Menu {
 			$menu['page_title'],
 			$menu['capability'],
 			$menu['menu_slug'],
-			$menu['callback']
+			$menu['callback'],
 		);
 	}
 
@@ -108,7 +108,7 @@ class Menu {
 				'callback'   => [ Settings\Plugin::class, 'prepare_settings_wrap' ],
 				'icon'       => 'dashicons-search',
 				'position'   => '90.9001',
-			]
+			],
 		) );
 	}
 
@@ -177,7 +177,7 @@ class Menu {
 			sprintf(
 				/* translators: %s: number of issues waiting */
 				\_n( '%s issue waiting', '%s issues waiting', $issue_count, 'autodescription' ),
-				$notice_i18n
+				$notice_i18n,
 			)
 		);
 	}

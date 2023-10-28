@@ -51,15 +51,15 @@ if ( \count( $tabs ) > 1 ) {
 					[
 						\esc_attr( "tsf-$id-tab-$tab" ),
 						\esc_attr( "tsf-$id-tabs" ),
-						( 1 === $tab_index ? 'checked' : '' ),
+						1 === $tab_index ? 'checked' : '', // phpcs:ignore, WordPress.Security.EscapeOutput -- plaintext.
 						sprintf(
 							'%s%s',
 							// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- bug in EscapeOutputSniff
-							( $dashicon ? '<span class="dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : '' ),
+							$dashicon ? '<span class="dashicons dashicons-' . \esc_attr( $dashicon ) . ' tsf-dashicons-tabs"></span>' : '',
 							// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- bug in EscapeOutputSniff
-							( $name ? '<span class=tsf-nav-desktop>' . \esc_attr( $name ) . '</span>' : '' )
+							$name ? '<span class=tsf-nav-desktop>' . \esc_attr( $name ) . '</span>' : '',
 						),
-					]
+					],
 				)
 			);
 			++$tab_index;

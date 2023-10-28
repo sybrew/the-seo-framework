@@ -231,7 +231,7 @@ class Title {
 
 		return memo(
 			\strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '',
-			$args
+			$args,
 		);
 	}
 
@@ -415,7 +415,7 @@ class Title {
 					/* translators: 1: Title prefix. 2: Title. */
 					\_x( '%1$s %2$s', 'archive title', 'default' ),
 					$prefix,
-					$title
+					$title,
 				);
 			}
 		}
@@ -512,7 +512,7 @@ class Title {
 				$prefix = sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-					Data\Filter\Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) )
+					Data\Filter\Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) ),
 				);
 			}
 		}
@@ -547,7 +547,7 @@ class Title {
 					$prefix = sprintf(
 						/* translators: %s: Taxonomy singular name. */
 						\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-						Taxonomy::get_label( $object->taxonomy )
+						Taxonomy::get_label( $object->taxonomy ),
 					);
 			}
 		} elseif ( $object instanceof \WP_Post_Type && isset( $object->name ) ) {
@@ -863,9 +863,9 @@ class Title {
 					'protected_title_format',
 					/* translators: %s: Protected post title. */
 					\__( 'Protected: %s', 'default' ),
-					$post
+					$post,
 				),
-				$title
+				$title,
 			);
 		} elseif ( 'private' === ( $post->post_status ?? null ) ) {
 			return sprintf(
@@ -884,9 +884,9 @@ class Title {
 					'private_title_format',
 					/* translators: %s: Private post title. */
 					\__( 'Private: %s', 'default' ),
-					$post
+					$post,
 				),
-				$title
+				$title,
 			);
 		}
 
@@ -979,7 +979,7 @@ class Title {
 		return memo() ?? memo(
 			(string) \apply_filters(
 				'the_seo_framework_title_separator',
-				Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ] ?? '&#x2d;'
+				Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ] ?? '&#x2d;',
 			)
 		);
 	}

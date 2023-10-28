@@ -136,7 +136,7 @@ class Image {
 				true,
 			],
 			'4.3.0 of The SEO Framework',
-			'the_seo_framework_custom_image_details or the_seo_framework_generated_image_details'
+			'the_seo_framework_custom_image_details or the_seo_framework_generated_image_details',
 		);
 	}
 
@@ -178,15 +178,13 @@ class Image {
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_custom_image_details',
-			[
-				$single
-					? array_filter( [ static::generate_custom_image_details( $args, $context )->current() ] )
-					: [ ...static::generate_custom_image_details( $args, $context ) ],
-				$args,
-				$single,
-			]
+			$single
+				? array_filter( [ static::generate_custom_image_details( $args, $context )->current() ] )
+				: [ ...static::generate_custom_image_details( $args, $context ) ],
+			$args,
+			$single,
 		);
 	}
 
@@ -228,16 +226,14 @@ class Image {
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_generated_image_details',
-			[
-				$single
-					? array_filter( [ static::generate_generated_image_details( $args, $context )->current() ] )
-					: [ ...static::generate_generated_image_details( $args, $context ) ],
-				$args,
-				$single,
-				$context,
-			]
+			$single
+				? array_filter( [ static::generate_generated_image_details( $args, $context )->current() ] )
+				: [ ...static::generate_generated_image_details( $args, $context ) ],
+			$args,
+			$single,
+			$context,
 		);
 	}
 
@@ -560,18 +556,16 @@ class Image {
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_image_generation_params',
 			[
-				[
-					'size'     => 'full',
-					'multi'    => true,
-					'cbs'      => $cbs ?? [],
-					'fallback' => $fallback ?? [],
-				],
-				$args,
-				$context,
-			]
+				'size'     => 'full',
+				'multi'    => true,
+				'cbs'      => $cbs ?? [],
+				'fallback' => $fallback ?? [],
+			],
+			$args,
+			$context,
 		);
 	}
 

@@ -72,7 +72,7 @@ class Escape {
 			| \JSON_HEX_AMP
 			| \JSON_UNESCAPED_UNICODE
 			| \JSON_INVALID_UTF8_IGNORE
-			| $options
+			| $options,
 		);
 	}
 
@@ -106,7 +106,7 @@ class Escape {
 				| \JSON_HEX_AMP
 				| \JSON_UNESCAPED_UNICODE
 				| \JSON_INVALID_UTF8_IGNORE
-				| $options
+				| $options,
 			),
 			\ENT_QUOTES,
 			$charset,

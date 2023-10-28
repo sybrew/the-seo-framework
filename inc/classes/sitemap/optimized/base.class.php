@@ -181,16 +181,16 @@ class Base extends Main {
 
 		if ( $timestamp )
 			$content .= sprintf(
-				'<!-- %s -->',
+				"<!-- %s -->\n",
 				sprintf(
 					$this->base_is_prerendering
 						/* translators: %s = timestamp */
 						? \esc_html__( 'Sitemap is prerendered on %s', 'autodescription' )
 						/* translators: %s = timestamp */
 						: \esc_html__( 'Sitemap is generated on %s', 'autodescription' ),
-					\current_time( 'Y-m-d H:i:s \G\M\T' )
-				)
-			) . "\n";
+					\current_time( 'Y-m-d H:i:s \G\M\T' ),
+				),
+			);
 
 		foreach ( $this->generate_front_and_blog_url_items(
 			[ 'show_modified' => $show_modified ],
@@ -246,7 +246,7 @@ class Base extends Main {
 					'fields'         => 'ids',
 					'cache_results'  => false,
 					'no_found_rows'  => true,
-				]
+				],
 			);
 
 			if ( $_args['post_type'] ) {
@@ -280,7 +280,7 @@ class Base extends Main {
 					'fields'         => 'ids',
 					'cache_results'  => false,
 					'no_found_rows'  => true,
-				]
+				],
 			);
 
 			if ( $_args['post_type'] ) {
@@ -300,13 +300,11 @@ class Base extends Main {
 		 * @param int[] $hierarchical_post_ids     The post IDs from hierarchical post types.
 		 * @param int[] $non_hierarchical_post_ids The post IDs from non-hierarchical post types.
 		 */
-		$_items      = (array) \apply_filters_ref_array(
+		$_items      = (array) \apply_filters(
 			'the_seo_framework_sitemap_items',
-			[
-				array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids ),
-				$hierarchical_post_ids,
-				$non_hierarchical_post_ids,
-			]
+			array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids ),
+			$hierarchical_post_ids,
+			$non_hierarchical_post_ids,
 		);
 		$total_items = \count( $_items );
 
@@ -410,7 +408,7 @@ class Base extends Main {
 								'order'        => 'DESC',
 								'offset'       => 0,
 							],
-							\OBJECT
+							\OBJECT,
 						);
 						$_publish_post = $latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00';
 						$_lastmod_blog = $_values['lastmod']; // Inferred from generator generate_url_item_values()
@@ -419,13 +417,11 @@ class Base extends Main {
 						 * @since 4.1.1
 						 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
 						 */
-						$_values['lastmod'] = (string) \apply_filters_ref_array(
+						$_values['lastmod'] = (string) \apply_filters(
 							'the_seo_framework_sitemap_blog_lastmod',
-							[
-								strtotime( $_publish_post ) > strtotime( $_lastmod_blog )
-									? $_publish_post
-									: $_lastmod_blog,
-							]
+							strtotime( $_publish_post ) > strtotime( $_lastmod_blog )
+								? $_publish_post
+								: $_lastmod_blog,
 						);
 					}
 
@@ -450,18 +446,16 @@ class Base extends Main {
 							'order'        => 'DESC',
 							'offset'       => 0,
 						],
-						\OBJECT
+						\OBJECT,
 					);
 
 					/**
 					 * @since 4.1.1
 					 * @param string $lastmod The lastmod time in SQL notation (`Y-m-d H:i:s`). Expected to explicitly follow that format!
 					 */
-					$_values['lastmod'] = (string) \apply_filters_ref_array(
+					$_values['lastmod'] = (string) \apply_filters(
 						'the_seo_framework_sitemap_blog_lastmod',
-						[
-							$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
-						]
+						$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
 					);
 				}
 

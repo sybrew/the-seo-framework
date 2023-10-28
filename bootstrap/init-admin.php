@@ -52,7 +52,7 @@ $clear_excluded_callback = [ Query\Exclusion::class, 'clear_excluded_post_ids_ca
 \add_action(
 	'load-options-permalink.php',
 	[ Sitemap\Registry::class, '_refresh_sitemap_transient_permalink_updated' ],
-	20
+	20,
 );
 
 \add_action( 'activated_plugin', [ Compatibility::class, 'try_plugin_conflict_notification' ] );
@@ -65,7 +65,7 @@ if ( ! $headless['meta'] ) {
 	\add_action( 'edit_term', [ Data\Admin\Term::class, 'update_meta' ], 10, 3 );
 	\add_action(
 		'sanitize_term_meta_' . \THE_SEO_FRAMEWORK_TERM_OPTIONS,
-		[ Data\Filter\Term::class, 'filter_meta_update' ]
+		[ Data\Filter\Term::class, 'filter_meta_update' ],
 	);
 
 	// Initialize post meta filters and actions. Saving handles the sanitization.
@@ -108,7 +108,7 @@ if ( ! $headless['meta'] ) {
 	'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
 	[ Data\Filter\Plugin::class, 'filter_settings_update' ],
 	10,
-	3
+	3,
 );
 
 if ( ! $headless['settings'] ) {
@@ -140,7 +140,7 @@ if ( \in_array( false, $headless, true ) ) {
 	// Setup user sanitization. If at least something isn't headless, user metadata can be used.
 	\add_action(
 		'sanitize_usermeta_' . \THE_SEO_FRAMEWORK_USER_OPTIONS,
-		[ Data\Filter\User::class, 'filter_meta_update' ]
+		[ Data\Filter\User::class, 'filter_meta_update' ],
 	);
 }
 
@@ -149,11 +149,11 @@ if ( \in_array( false, $headless, true ) ) {
 	'plugin_action_links_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
 	[ Admin\PluginTable::class, 'add_plugin_action_links' ],
 	10,
-	2
+	2,
 );
 \add_filter(
 	'plugin_row_meta',
 	[ Admin\PluginTable::class, 'add_plugin_row_meta' ],
 	10,
-	2
+	2,
 );

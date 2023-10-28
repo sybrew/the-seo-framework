@@ -205,7 +205,7 @@ function _bbpress_filter_title( $title, $args ) {
 			'text'   => $title,
 			'format' => '%s',
 		],
-		'title'
+		'title',
 	);
 
 	// Get the formatted raw title
@@ -448,12 +448,9 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 	if ( empty( $forum_id ) || \bbp_is_forum_public( $forum_id ) ) return;
 
 	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
-	$index_item['status'] =
-		0 !== Data\Filter\Sanitize::qubit(
-			$builder->get_query_cache()['meta']['_genesis_noindex']
-		)
-			? $interpreter::STATE_OKAY
-			: $interpreter::STATE_UNKNOWN;
+	$index_item['status'] = 0 !== Data\Filter\Sanitize::qubit( $builder->get_query_cache()['meta']['_genesis_noindex'] )
+		? $interpreter::STATE_OKAY
+		: $interpreter::STATE_UNKNOWN;
 
 	if ( 'forum' === $interpreter::$query['post_type'] ) {
 		$index_item['assess']['notpublic'] = \__( 'This is not a public forum.', 'autodescription' );

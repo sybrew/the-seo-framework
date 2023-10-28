@@ -153,13 +153,11 @@ final class Conditions {
 		 *                           Is null when the query is auto-determined.
 		 * @param bool       $social Whether the title is meant for social display.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_use_title_branding',
-			[
-				$use,
-				$args,
-				(bool) $social,
-			]
+			$use,
+			$args,
+			(bool) $social,
 		);
 	}
 
@@ -233,12 +231,10 @@ final class Conditions {
 		 * @param string                          $use  Whether to use branding.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type $term The current term.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_use_archive_prefix',
-			[
-				! Data\Plugin::get_option( 'title_rem_prefixes' ),
-				$term ?? \get_queried_object(),
-			]
+			! Data\Plugin::get_option( 'title_rem_prefixes' ),
+			$term ?? \get_queried_object(),
 		);
 	}
 }

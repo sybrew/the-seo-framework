@@ -83,7 +83,7 @@ final class Feed {
 				[
 					'allow_shortcodes' => false,
 					'clamp'            => $clamp_length,
-				]
+				],
 			);
 
 			$content = "<p>$excerpt</p>";

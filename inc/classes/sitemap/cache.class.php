@@ -86,7 +86,7 @@ class Cache {
 				[ true ],
 			],
 			'4.3.0 of The SEO Framework',
-			'the_seo_framework_cleared_sitemap_transients'
+			'the_seo_framework_cleared_sitemap_transients',
 		);
 	}
 

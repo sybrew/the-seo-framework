@@ -154,12 +154,10 @@ final class Excerpt {
 		 * @param \WP_Term|\WP_Post_Type $object  The Term object or post type object.
 		 * @todo deprecate and move to main fetcher.
 		 */
-		$excerpt = (string) \apply_filters_ref_array(
+		$excerpt = (string) \apply_filters(
 			'the_seo_framework_generated_archive_excerpt',
-			[
-				'',
-				$object,
-			]
+			'',
+			$object,
 		);
 
 		if ( $excerpt ) return $excerpt;
@@ -170,9 +168,10 @@ final class Excerpt {
 				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
 				$excerpt = $object->description ?? '';
 			} elseif ( Query::is_author() ) {
-				$excerpt = Format\HTML::extract_content(
-					\get_the_author_meta( 'description', (int) \get_query_var( 'author' ) )
-				);
+				$excerpt = Format\HTML::extract_content( \get_the_author_meta(
+					'description',
+					(int) \get_query_var( 'author' ),
+				) );
 			} elseif ( \is_post_type_archive() ) {
 				/**
 				 * @since 4.0.6
@@ -181,12 +180,10 @@ final class Excerpt {
 				 * @param \WP_Term|\WP_Post_Type $object The post type object.
 				 * @todo deprecate and move to main fetcher.
 				 */
-				$excerpt = (string) \apply_filters_ref_array(
+				$excerpt = (string) \apply_filters(
 					'the_seo_framework_pta_description_excerpt',
-					[
-						$object->description ?? '',
-						$object,
-					]
+					$object->description ?? '',
+					$object,
 				);
 			} else {
 				/**
@@ -196,12 +193,10 @@ final class Excerpt {
 				 * @param \WP_Term $object    The Term object.
 				 * @todo deprecate and move to main fetcher.
 				 */
-				$excerpt = (string) \apply_filters_ref_array(
+				$excerpt = (string) \apply_filters(
 					'the_seo_framework_fallback_archive_description_excerpt',
-					[
-						'',
-						$object,
-					]
+					'',
+					$object,
 				);
 			}
 		} else {

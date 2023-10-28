@@ -151,7 +151,7 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 		$item['assess']['base'] = sprintf(
 			// translators: %s = Plugin name.
 			\__( 'This is managed by plugin "%s."', 'autodescription' ),
-			'wpForo Forum'
+			'wpForo Forum',
 		);
 	}
 }

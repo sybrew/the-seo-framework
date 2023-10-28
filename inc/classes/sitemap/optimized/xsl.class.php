@@ -169,7 +169,7 @@ final class XSL {
 						'scheme'     => [],
 					],
 				],
-				[]
+				[],
 			);
 		}
 

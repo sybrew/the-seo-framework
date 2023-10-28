@@ -152,21 +152,17 @@ function pll__( $string ) {
 function _polylang_flush_sitemap() {
 	global $wpdb;
 
-	$wpdb->query(
-		$wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
-		)
-	);
+	$wpdb->query( $wpdb->prepare(
+		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+		$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%',
+	) );
 
 	// We didn't use a wildcard after "_transient_" to reduce scans.
 	// A second query is faster on saturated sites.
-	$wpdb->query(
-		$wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
-		)
-	);
+	$wpdb->query( $wpdb->prepare(
+		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+		$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%',
+	) );
 }
 
 /**

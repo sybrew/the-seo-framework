@@ -538,11 +538,6 @@ TODO add robots.txt editor
 	-> Also move the callback to a new class.
 	-> Add this as an extension instead?
 
-TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
-	-> Only do this if there's already a comma present in the multi-line code.
-
-TODO Remove all _ref_array?
-
 TODO get_post/term/user_meta -> add to legacy api?
 
 TODO instead of removing Elementor library from public posts types, force noindex on them?

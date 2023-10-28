@@ -288,9 +288,9 @@ final class AJAX {
 				array_intersect_key(
 					array_merge(
 						$_get_defaults,
-						(array) ( $_POST['get'] ?? [] )
+						(array) ( $_POST['get'] ?? [] ),
 					),
-					$_get_defaults
+					$_get_defaults,
 				)
 			)
 		);

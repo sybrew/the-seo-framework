@@ -64,7 +64,7 @@ class User {
 		// This is because we only update a portion of the meta.
 		$data = array_merge(
 			Data\Plugin\User::get_meta( $user_id ),
-			(array) ( $_POST['tsf-user-meta'] ?? [] )
+			(array) ( $_POST['tsf-user-meta'] ?? [] ),
 		);
 
 		Data\Plugin\User::save_meta( $user_id, $data );

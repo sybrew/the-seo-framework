@@ -97,10 +97,7 @@ class Twitter {
 		 * @param string $card The generated Twitter card type.
 		 * @param int    $id   The current page or term ID.
 		 */
-		return (string) \apply_filters(
-			'the_seo_framework_twitter_card',
-			$card
-		);
+		return (string) \apply_filters( 'the_seo_framework_twitter_card', $card );
 	}
 
 	/**

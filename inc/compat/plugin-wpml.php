@@ -61,21 +61,17 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
 function _wpml_flush_sitemap() {
 	global $wpdb;
 
-	$wpdb->query(
-		$wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%'
-		)
-	); // No cache OK. DB call ok.
+	$wpdb->query( $wpdb->prepare(
+		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+		$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%',
+	) );
 
 	// We didn't use a wildcard after "_transient_" to reduce scans.
 	// A second query is faster on saturated sites.
-	$wpdb->query(
-		$wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%'
-		)
-	); // No cache OK. DB call ok.
+	$wpdb->query( $wpdb->prepare(
+		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+		$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%',
+	) );
 }
 
 /**

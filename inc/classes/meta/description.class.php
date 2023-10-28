@@ -295,12 +295,10 @@ class Description {
 		 * @param array|null $args            The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                                    Is null when the query is auto-determined.
 		 */
-		return (bool) \apply_filters_ref_array(
+		return (bool) \apply_filters(
 			'the_seo_framework_enable_auto_description',
-			[
-				Data\Plugin::get_option( 'auto_description' ),
-				$args,
-			]
+			Data\Plugin::get_option( 'auto_description' ),
+			$args,
 		);
 	}
 }

@@ -49,7 +49,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		$info = HTML::make_info(
 			\__( 'Learn how this feature works.', 'autodescription' ),
 			'https://kb.theseoframework.com/?p=65',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -57,7 +57,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'label'  => \esc_html__( 'Automatically generate descriptions?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		HTML::description(
 			\__( "Open Graph and Twitter require descriptions. So, it's best to leave description generation enabled.", 'autodescription' )
@@ -82,7 +82,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'fast'     => \__( 'Fast (max. 2 passes)', 'autodescription' ),
 				'accurate' => \__( 'Accurate (max. 6 passes)', 'autodescription' ),
 				'thorough' => \__( 'Thorough (max. 12 passes)', 'autodescription' ),
-			]
+			],
 		);
 
 		$html_passes_select_options = '';
@@ -94,7 +94,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 					\esc_attr( $value ),
 					\selected( $_current, \esc_attr( $value ), false ),
 					\esc_html( $name ),
-				]
+				],
 			);
 		}
 
@@ -107,9 +107,9 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 					\esc_html__( 'HTML parsing method:', 'autodescription' ),
 					Input::get_field_name( 'auto_description_html_method' ),
 					$html_passes_select_options,
-				]
+				],
 			),
-			true
+			true,
 		);
 
 		HTML::description_noesc(

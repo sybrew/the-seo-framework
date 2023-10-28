@@ -92,11 +92,11 @@ class Term {
 							'pad_counts' => false, // If true, this gives us the value we seek, but we can get it faster via column.
 							'get'        => '',
 						] ),
-						'count'
-					)
+						'count',
+					),
 				),
 				$term_id,
-				$taxonomy
+				$taxonomy,
 			);
 	}
 }

@@ -1435,7 +1435,9 @@ final class Deprecated {
 			[
 				$tsf->data()->plugin()->get_option( 'google_verification' ),
 				$tsf->query()->get_the_real_id(),
-			]
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_render_data',
 		);
 
 		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
@@ -1470,7 +1472,9 @@ final class Deprecated {
 			[
 				$tsf->data()->plugin()->get_option( 'bing_verification' ),
 				$tsf->query()->get_the_real_id(),
-			]
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_render_data',
 		);
 
 		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
@@ -1505,7 +1509,9 @@ final class Deprecated {
 			[
 				$tsf->data()->plugin()->get_option( 'yandex_verification' ),
 				$tsf->query()->get_the_real_id(),
-			]
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_render_data',
 		);
 
 		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
@@ -1540,7 +1546,9 @@ final class Deprecated {
 			[
 				$tsf->data()->plugin()->get_option( 'baidu_verification' ),
 				$tsf->query()->get_the_real_id(),
-			]
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_render_data',
 		);
 
 		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
@@ -1575,7 +1583,9 @@ final class Deprecated {
 			[
 				$tsf->data()->plugin()->get_option( 'pint_verification' ),
 				$tsf->query()->get_the_real_id(),
-			]
+			],
+			'4.3.0 of The SEO Framework',
+			'the_seo_framework_meta_render_data',
 		);
 
 		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
@@ -2513,7 +2523,7 @@ final class Deprecated {
 		$tsf->_deprecated_function(
 			'tsf()->array_merge_recursive_distinct()',
 			'4.3.0',
-			'tsf()->format()->array()->array_merge_recursive_distinct()'
+			'tsf()->format()->array()->array_merge_recursive_distinct()',
 		);
 
 		return $tsf->format()->array()->array_merge_recursive_distinct( ...$arrays );
@@ -3345,7 +3355,7 @@ final class Deprecated {
 		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->excerpt()->get_post_excerpt()' );
 
 		return $tsf->description()->excerpt()->get_post_excerpt(
-			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null
+			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null,
 		);
 	}
 
@@ -5243,13 +5253,11 @@ final class Deprecated {
 		 * @param string $setting  The settings field.
 		 * @param bool   $headless Whether the options are headless.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_get_options',
-			[
-				\get_option( $setting ),
-				$setting,
-				false,
-			]
+			\get_option( $setting ),
+			$setting,
+			false,
 		);
 	}
 
@@ -6520,14 +6528,16 @@ final class Deprecated {
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function get_seo_settings_page_url() {
+
 		\tsf()->_deprecated_function( 'tsf()->get_seo_settings_page_url()', '4.3.0' );
-		return \the_seo_framework\is_headless( 'settings' )
+
+		return \The_SEO_Framework\is_headless( 'settings' )
 			? ''
 			: \esc_url(
 				html_entity_decode(
 					\menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false )
 				),
-				[ 'https', 'http' ]
+				[ 'https', 'http' ],
 			);
 	}
 
@@ -6692,7 +6702,7 @@ final class Deprecated {
 				'filter_under'       => $dupe_count,
 				'filter_short_under' => $dupe_short,
 				'short_word_length'  => $short_length,
-			]
+			],
 		);
 	}
 
@@ -7309,13 +7319,11 @@ final class Deprecated {
 	 */
 	public function s_url( $url ) {
 		\tsf()->_deprecated_function( 'tsf()->s_url()', '4.3.0' );
-		return \sanitize_url(
-			/**
-			 * If queries have been tokenized, take the value before the query args.
-			 * Otherwise it's empty, so take the current value.
-			 */
-			strtok( $url, '?' ) ?: $url
-		);
+		/**
+		 * If queries have been tokenized, take the value before the query args.
+		 * Otherwise it's empty, so take the current value.
+		 */
+		return \sanitize_url( strtok( $url, '?' ) ?: $url );
 	}
 
 	/**
@@ -7616,15 +7624,8 @@ final class Deprecated {
 			[ 'allow_shortcodes' => $allow_shortcodes ],
 		);
 
-		if ( $escape ) {
-			\esc_html(
-				\convert_chars(
-					\wptexturize(
-						$excerpt
-					)
-				)
-			);
-		}
+		if ( $escape )
+			\esc_html( \convert_chars( \wptexturize( $excerpt ) ) );
 
 		return $excerpt;
 	}
@@ -8330,7 +8331,7 @@ final class Deprecated {
 		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array(
 			\The_SEO_Framework\Data\Filter\Plugin::disabled_post_types( $post_types, [], 'disabled_post_types' ),
 			[],
-			'disabled_post_types'
+			'disabled_post_types',
 		);
 	}
 
@@ -8366,7 +8367,7 @@ final class Deprecated {
 		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array(
 			\The_SEO_Framework\Data\Filter\Plugin::disabled_taxonomies( $taxonomies, [], 'disabled_taxonomies' ),
 			[],
-			'disabled_taxonomies'
+			'disabled_taxonomies',
 		);
 	}
 

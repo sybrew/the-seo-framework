@@ -109,12 +109,10 @@ class Schema {
 		 * @param array|null $args            The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                                    Is null when being autodetermined.
 		 */
-		$entity_builders = \apply_filters_ref_array(
+		$entity_builders = \apply_filters(
 			'the_seo_framework_schema_entity_builders',
-			[
-				array_merge( ...$builders_queue ),
-				$args,
-			]
+			array_merge( ...$builders_queue ),
+			$args,
 		);
 
 		$graph = [];
@@ -136,12 +134,10 @@ class Schema {
 		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is autodetermined.
 		 */
-		$graph = \apply_filters_ref_array(
+		$graph = \apply_filters(
 			'the_seo_framework_schema_graph_data',
-			[
-				$graph,
-				$args,
-			]
+			$graph,
+			$args,
 		);
 
 		if ( empty( $graph ) ) return [];

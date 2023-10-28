@@ -114,17 +114,19 @@ class Notice {
 			'<div class="notice %s tsf-notice %s %s">%s%s</div>',
 			[
 				\esc_attr( $args['type'] ),
-				( $args['icon'] ? 'tsf-show-icon' : '' ),
-				( $args['inline'] ? 'inline' : '' ),
+				$args['icon'] ? 'tsf-show-icon' : '',
+				$args['inline'] ? 'inline' : '',
 				sprintf(
-					( ! $args['escape'] && 0 === stripos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
-					( $args['escape'] ? \esc_html( $message ) : $message )
+					! $args['escape'] && 0 === stripos( $message, '<p' )
+						? '%s'
+						: '<p>%s</p>',
+					$args['escape'] ? \esc_html( $message ) : $message,
 				),
 				sprintf(
 					'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s"></a>',
 					\esc_attr__( 'Dismiss this notice', 'default' )
 				),
-			]
+			],
 		);
 	}
 }

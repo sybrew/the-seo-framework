@@ -457,14 +457,17 @@ class Loader {
 
 		$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
 
-		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( Query::get_the_real_id(), $taxonomy ) )
-			/* translators: %s: Taxonomy singular name. */
-			? sprintf(
+		if ( Meta\Title\Conditions::use_generated_archive_prefix(
+			\get_term( Query::get_the_real_id(), $taxonomy )
+		) ) {
+			$term_prefix = sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				Taxonomy::get_label( $taxonomy )
-			)
-			: '';
+				Taxonomy::get_label( $taxonomy ),
+			);
+		} else {
+			$term_prefix = '';
+		}
 
 		return [
 			[
@@ -692,22 +695,21 @@ class Loader {
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,
 				'primary' => $primary_term_id, // if 0, it'll use hints from the interface.
-			] + (
-				$gutenberg ? [
-					'i18n' => [
-						/* translators: %s = term name */
-						'selectPrimary' => sprintf( \esc_html__( 'Select Primary %s', 'autodescription' ), $singular_name ),
-					],
-				] : [
-					'i18n' => [
-						/* translators: %s = term name */
-						'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), strtolower( $singular_name ) ),
-						/* translators: %s = term name */
-						'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), strtolower( $singular_name ) ),
-						'name'        => strtolower( $singular_name ),
-					],
-				]
-			);
+			];
+			if ( $gutenberg ) {
+				$taxonomies[ $_t->name ]['i18n'] = [
+					/* translators: %s = term name */
+					'selectPrimary' => sprintf( \esc_html__( 'Select Primary %s', 'autodescription' ), $singular_name ),
+				];
+			} else {
+				$taxonomies[ $_t->name ]['i18n'] = [
+					/* translators: %s = term name */
+					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), strtolower( $singular_name ) ),
+					/* translators: %s = term name */
+					'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), strtolower( $singular_name ) ),
+					'name'        => strtolower( $singular_name ),
+				];
+			}
 		}
 
 		if ( $gutenberg ) {

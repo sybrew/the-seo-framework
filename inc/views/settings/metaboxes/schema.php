@@ -84,7 +84,7 @@ switch ( $instance ) :
 		$info = HTML::make_info(
 			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/structured-data/breadcrumb',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -92,7 +92,7 @@ switch ( $instance ) :
 				'label'  => \esc_html__( 'Enable Breadcrumbs?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 
 		?>
@@ -104,7 +104,7 @@ switch ( $instance ) :
 		$info = HTML::make_info(
 			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/structured-data/sitelinks-searchbox',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -112,7 +112,7 @@ switch ( $instance ) :
 				'label'  => \esc_html_x( 'Enable Sitelinks Searchbox?', 'Sitelinks Searchbox is a Product name', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		break;
 
@@ -123,7 +123,7 @@ switch ( $instance ) :
 		$info = HTML::make_info(
 			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/beginner/establish-business-details',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -131,7 +131,7 @@ switch ( $instance ) :
 				'label'  => \esc_html__( 'Output Authorized Presence?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		?>
 		<hr>
@@ -146,17 +146,15 @@ switch ( $instance ) :
 					[
 						'organization' => \__( 'An Organization', 'autodescription' ),
 						'person'       => \__( 'A Person', 'autodescription' ),
-					]
+					],
 				);
 				$_current       = Data\Plugin::get_option( 'knowledge_type' );
 				foreach ( $knowledge_type as $value => $name )
-					vprintf(
+					printf(
 						'<option value="%s" %s>%s</option>',
-						[
-							\esc_attr( $value ),
-							\selected( $_current, \esc_attr( $value ), false ),
-							\esc_html( $name ),
-						]
+						\esc_attr( $value ),
+						\selected( $_current, \esc_attr( $value ), false ),
+						\esc_html( $name ),
 					);
 				?>
 			</select>
@@ -177,7 +175,7 @@ switch ( $instance ) :
 		$info = HTML::make_info(
 			\__( 'Learn how this data is used.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/structured-data/logo',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -305,7 +303,7 @@ switch ( $instance ) :
 					if ( $sc['examplelink'] ) {
 						HTML::make_info(
 							\__( 'View your profile.', 'autodescription' ),
-							$sc['examplelink']
+							$sc['examplelink'],
 						);
 					}
 					?>

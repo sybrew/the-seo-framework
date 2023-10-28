@@ -115,7 +115,7 @@ class HTML {
 		printf(
 			( $block ? '<p>%s</p>' : '%s' ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
-			"<span class=description>$content</span>"
+			"<span class=description>$content</span>",
 		);
 	}
 
@@ -144,7 +144,7 @@ class HTML {
 		printf(
 			( $block ? '<p>%s</p>' : '%s' ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
-			"<span class=attention>$content</span>"
+			"<span class=attention>$content</span>",
 		);
 	}
 
@@ -173,7 +173,7 @@ class HTML {
 		printf(
 			( $block ? '<p>%s</p>' : '%s' ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
-			"<span class=\"description attention\">$content</span>"
+			"<span class=\"description attention\">$content</span>",
 		);
 	}
 
@@ -221,7 +221,7 @@ class HTML {
 			$output = sprintf(
 				'<a href="%1$s" class="tsf-tooltip-item tsf-help" target=_blank rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
 				\esc_url( $link, [ 'https', 'http' ] ),
-				\esc_attr( $description )
+				\esc_attr( $description ),
 			);
 		} else {
 			$output = sprintf(

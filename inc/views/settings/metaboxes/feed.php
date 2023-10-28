@@ -73,7 +73,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 					'escape' => false,
 				] ),
 			],
-			true
+			true,
 		);
 
 		if ( \get_option( 'rss_use_excerpt' ) ) {
@@ -82,7 +82,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 					sprintf(
 						/* translators: %s = Reading Settings URL. Links are in Markdown! */
 						\esc_html__( 'Note: The feed is already converted into an excerpt through the [Reading Settings](%s).', 'autodescription' ),
-						\esc_url( \admin_url( 'options-reading.php' ) )
+						\esc_url( \admin_url( 'options-reading.php' ) ),
 					),
 					[ 'a' ],
 					[ 'a_internal' => false ] // open in new window, although it's internal.
@@ -90,11 +90,9 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 			);
 		}
 
-		HTML::description_noesc(
-			sprintf(
-				'<a href="%s" target=_blank rel=noopener>%s</a>',
-				\esc_url( \get_feed_link(), [ 'https', 'http' ] ),
-				\esc_html__( 'View the main feed.', 'autodescription' )
-			)
-		);
+		HTML::description_noesc( sprintf(
+			'<a href="%s" target=_blank rel=noopener>%s</a>',
+			\esc_url( \get_feed_link(), [ 'https', 'http' ] ),
+			\esc_html__( 'View the main feed.', 'autodescription' ),
+		) );
 endswitch;

@@ -106,7 +106,7 @@ class Strings {
 			'/[^\p{Cc}\p{L}\p{N}\p{Pc}\p{Pd}\p{Pf}\'"]+/mu',
 			$use_mb ? mb_strtolower( $string ) : strtolower( $string ),
 			-1,
-			\PREG_SPLIT_OFFSET_CAPTURE | \PREG_SPLIT_NO_EMPTY
+			\PREG_SPLIT_OFFSET_CAPTURE | \PREG_SPLIT_NO_EMPTY,
 		);
 
 		if ( empty( $word_list ) )
@@ -211,7 +211,7 @@ class Strings {
 		preg_match(
 			sprintf(
 				'/^.{0,%d}(?:[^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\x20)/su',
-				$max_char_length
+				$max_char_length,
 			),
 			trim( $sentence ),
 			$matches,
@@ -259,7 +259,7 @@ class Strings {
 		preg_match(
 			'/(?:\A[\p{P}\p{Z}]*?)?([\P{Po}\p{M}\xBF\xA1:\'\p{Z}]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:[^\p{Pe}\p{Pf}]*+.*[\p{Pe}\p{Pf}]+\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$sentence,
-			$matches
+			$matches,
 		);
 
 		// Unmatched isn't set. Since we count from last to first match, we don't need to test strlen().
@@ -290,7 +290,7 @@ class Strings {
 		preg_match(
 			'/(.+[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:;,\p{Z}\p{Po}])+?(\p{Z}*?[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:;,\p{Z}]+)?([\p{Pc}\p{Pd}\p{M}\xBF\xA1:;,\p{Z}]+)?/su',
 			$sentence,
-			$matches
+			$matches,
 		);
 
 		if ( isset( $matches[2] ) && \strlen( $matches[2] ) ) {

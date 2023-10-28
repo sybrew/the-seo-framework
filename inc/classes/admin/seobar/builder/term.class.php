@@ -95,7 +95,7 @@ final class Term extends Main {
 						'nofollow'  => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'nofollow' ) ),
 						'noarchive' => Data\Plugin::get_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noarchive' ) ),
 					],
-				]
+				],
 			);
 		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
 	}
@@ -127,8 +127,8 @@ final class Term extends Main {
 							'tax' => static::$query['tax'],
 						],
 						[ 'noindex', 'nofollow', 'noarchive' ],
-						ROBOTS_ASSERT
-					)
+						ROBOTS_ASSERT,
+					),
 				),
 				// We don't use this... yet. I couldn't find a way to properly implement the assertions in the right order.
 				// The asserter should be leading, but the SEO Bar should be readable.
@@ -183,7 +183,7 @@ final class Term extends Main {
 					'untitled'   => sprintf(
 						/* translators: %s = "Untitled" */
 						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
-						Meta\Title::get_untitled_title()
+						Meta\Title::get_untitled_title(),
 					),
 					'prefixed'   => \__( 'A term label prefix is automatically added which increases the length.', 'autodescription' ),
 					'branding'   => [
@@ -220,7 +220,7 @@ final class Term extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$generator_args = [
@@ -290,7 +290,7 @@ final class Term extends Main {
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
 				$title,
-				$matches
+				$matches,
 			)
 			: 0;
 
@@ -308,13 +308,11 @@ final class Term extends Main {
 			return $item;
 		}
 
-		$title_len = mb_strlen(
-			html_entity_decode(
-				\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
-				\ENT_NOQUOTES,
-				'UTF-8'
-			)
-		);
+		$title_len = mb_strlen( html_entity_decode(
+			\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
+			\ENT_NOQUOTES,
+			'UTF-8',
+		) );
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
 			$this->query_cache['states']['locale']
@@ -345,7 +343,7 @@ final class Term extends Main {
 		$item['assess']['length'] = sprintf(
 			$cache['params']['disclaim'],
 			$length_i18n,
-			$cache['params']['estimated']
+			$cache['params']['estimated'],
 		);
 
 		return $item;
@@ -416,7 +414,7 @@ final class Term extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$generator_args = [
@@ -477,7 +475,7 @@ final class Term extends Main {
 					/* translators: 1: Word found, 2: Occurrences */
 					\esc_attr__( '&#8220;%1$s&#8221; is used %2$d times.', 'autodescription' ),
 					\esc_attr( key( $_repeated_word ) ),
-					reset( $_repeated_word ) // escaped in sprintf %d
+					reset( $_repeated_word ), // escaped in sprintf %d.
 				);
 			}
 
@@ -503,13 +501,11 @@ final class Term extends Main {
 		)['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
-		$desc_len = mb_strlen(
-			html_entity_decode(
-				\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
-				\ENT_NOQUOTES,
-				'UTF-8'
-			)
-		);
+		$desc_len = mb_strlen( html_entity_decode(
+			\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
+			\ENT_NOQUOTES,
+			'UTF-8',
+		) );
 
 		if ( $desc_len < $guidelines['lower'] ) {
 			$item['status'] = Builder::STATE_BAD;
@@ -535,7 +531,7 @@ final class Term extends Main {
 		$item['assess']['length'] = sprintf(
 			$cache['params']['disclaim'],
 			$length_i18n,
-			$cache['params']['estimated']
+			$cache['params']['estimated'],
 		);
 
 		return $item;
@@ -593,7 +589,7 @@ final class Term extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
@@ -736,7 +732,7 @@ final class Term extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
@@ -853,7 +849,7 @@ final class Term extends Main {
 						],
 					],
 				],
-			]
+			],
 		);
 
 		$robots_global = static::get_cache( 'general/detect/robotsglobal' );
@@ -946,7 +942,7 @@ final class Term extends Main {
 					'meta'   => [
 						'blocking' => false,
 					],
-				]
+				],
 			);
 		} else {
 			return static::get_cache( 'term/redirect/default/1' ) ?: static::set_cache(
@@ -962,7 +958,7 @@ final class Term extends Main {
 					'meta'   => [
 						'blocking' => true,
 					],
-				]
+				],
 			);
 		}
 	}

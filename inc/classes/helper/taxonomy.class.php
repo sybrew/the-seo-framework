@@ -80,12 +80,10 @@ class Taxonomy {
 		 * @param bool    $disabled Whether the taxonomy is disabled.
 		 * @param ?string $taxonomy The taxonomy name. Left null to automatically determine.
 		 */
-		return \apply_filters_ref_array(
+		return \apply_filters(
 			'the_seo_framework_taxonomy_disabled',
-			[
-				$disabled,
-				$taxonomy,
-			]
+			$disabled,
+			$taxonomy,
 		);
 	}
 
@@ -112,14 +110,12 @@ class Taxonomy {
 		 * @param bool   $post_type Whether the post type is supported
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
-		return (bool) \apply_filters_ref_array(
+		return (bool) \apply_filters(
 			'the_seo_framework_supported_taxonomy',
-			[
-				$taxonomy
-					&& ! static::is_disabled( $taxonomy )
-					&& \in_array( $taxonomy, static::get_all_public(), true ),
-				$taxonomy,
-			]
+			$taxonomy
+				&& ! static::is_disabled( $taxonomy )
+				&& \in_array( $taxonomy, static::get_all_public(), true ),
+			$taxonomy,
 		);
 	}
 
@@ -134,12 +130,10 @@ class Taxonomy {
 	 */
 	public static function get_all_supported() {
 		return memo() ?? memo(
-			array_values(
-				array_filter(
-					static::get_all_public(),
-					[ static::class, 'is_supported' ]
-				)
-			)
+			array_values( array_filter(
+				static::get_all_public(),
+				[ static::class, 'is_supported' ],
+			) )
 		);
 	}
 
@@ -167,17 +161,15 @@ class Taxonomy {
 				\apply_filters(
 					'the_seo_framework_public_taxonomies',
 					array_filter(
-						array_unique(
-							array_merge(
-								static::get_all_forced_supported(),
-								// array_values() because get_taxonomies() gives a sequential array.
-								array_values( \get_taxonomies( [
-									'public'   => true,
-									'_builtin' => false,
-								] ) )
-							)
-						),
-						'is_taxonomy_viewable'
+						array_unique( array_merge(
+							static::get_all_forced_supported(),
+							// array_values() because get_taxonomies() gives a sequential array.
+							array_values( \get_taxonomies( [
+								'public'   => true,
+								'_builtin' => false,
+							] ) )
+						) ),
+						'is_taxonomy_viewable',
 					)
 				)
 			);
@@ -199,14 +191,12 @@ class Taxonomy {
 		 * @since 4.1.0
 		 * @param string[] $forced Forced supported post types
 		 */
-		return (array) \apply_filters_ref_array(
+		return (array) \apply_filters(
 			'the_seo_framework_forced_supported_taxonomies',
-			[
-				array_values( \get_taxonomies( [
-					'public'   => true,
-					'_builtin' => true,
-				] ) ),
-			]
+			array_values( \get_taxonomies( [
+				'public'   => true,
+				'_builtin' => true,
+			] ) ),
 		);
 	}
 
@@ -250,7 +240,7 @@ class Taxonomy {
 
 		$taxonomies = array_filter(
 			\get_object_taxonomies( $post_type, 'objects' ),
-			static fn( $t ) => ! empty( $t->hierarchical )
+			static fn( $t ) => ! empty( $t->hierarchical ),
 		);
 
 		// If names isn't $get, assume objects.

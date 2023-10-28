@@ -46,7 +46,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'info'        => HTML::make_info(
 					\__( 'Get the Google verification code.', 'autodescription' ),
 					'https://www.google.com/webmasters/verification/verification?siteUrl=' . rawurlencode( $site_url ) . '&tid=alternate&vtype=vmeta',
-					false
+					false,
 				),
 				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
 			],
@@ -56,7 +56,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'info'        => HTML::make_info(
 					\__( 'Get the Bing verification code.', 'autodescription' ),
 					'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url ),
-					false
+					false,
 				),
 				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
 			],
@@ -66,7 +66,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'info'        => HTML::make_info(
 					\__( 'Get the Yandex verification code.', 'autodescription' ),
 					'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url ),
-					false
+					false,
 				),
 				'placeholder' => '12345abc678901d2',
 			],
@@ -77,7 +77,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'info'        => HTML::make_info(
 					\__( 'Get the Baidu verification code.', 'autodescription' ),
 					'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
-					false
+					false,
 				),
 				'placeholder' => 'a12bcDEFGa',
 			],
@@ -87,7 +87,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'info'        => HTML::make_info(
 					\__( 'Get the Pinterest verification code.', 'autodescription' ),
 					'https://analytics.pinterest.com/',
-					false
+					false,
 				),
 				'placeholder' => '123456a7b8901de2fa34bcdef5a67b90',
 			],
@@ -101,23 +101,18 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		<hr>
 		<?php
 		foreach ( $settings as $setting ) {
-			vprintf(
+			printf(
 				'<p><label for=%s><strong>%s</strong> %s</label></p>',
-				[
-					\esc_attr( Input::get_field_id( $setting['setting'] ) ),
-					\esc_html( $setting['label'] ),
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
-					$setting['info'],
-				]
+				\esc_attr( Input::get_field_id( $setting['setting'] ) ),
+				\esc_html( $setting['label'] ),
+				$setting['info'], // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
 			);
-			vprintf(
+			printf(
 				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s" /></p>',
-				[
-					\esc_attr( Input::get_field_name( $setting['setting'] ) ),
-					\esc_attr( Input::get_field_id( $setting['setting'] ) ),
-					\esc_attr( $setting['placeholder'] ),
-					\esc_attr( Data\Plugin::get_option( $setting['setting'] ) ),
-				]
+				\esc_attr( Input::get_field_name( $setting['setting'] ) ),
+				\esc_attr( Input::get_field_id( $setting['setting'] ) ),
+				\esc_attr( $setting['placeholder'] ),
+				\esc_attr( Data\Plugin::get_option( $setting['setting'] ) ),
 			);
 		}
 endswitch;

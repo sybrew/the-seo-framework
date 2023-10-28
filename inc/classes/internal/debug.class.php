@@ -111,7 +111,7 @@ final class Debug {
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
 				static::combobulate_error_message( static::get_error(), $message, \E_USER_DEPRECATED ),
-				\E_USER_DEPRECATED
+				\E_USER_DEPRECATED,
 			);
 		}
 	}
@@ -165,7 +165,7 @@ final class Debug {
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
 				static::combobulate_error_message( static::get_error(), $message, \E_USER_NOTICE ),
-				\E_USER_NOTICE
+				\E_USER_NOTICE,
 			);
 		}
 	}
@@ -211,13 +211,13 @@ final class Debug {
 				'<code>' . \esc_html( $p_or_m ) . '</code>',
 				'<strong>' . \esc_html__( 'inaccessible', 'autodescription' ) . '</strong>',
 				sprintf( '<code>%s</code>', \esc_html( $handle ) ),
-				\esc_html( $message )
+				\esc_html( $message ),
 			);
 
 			trigger_error(
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
 				static::combobulate_error_message( static::get_error(), $message, \E_USER_WARNING ),
-				\E_USER_WARNING
+				\E_USER_WARNING,
 			);
 		}
 	}
@@ -458,7 +458,7 @@ final class Debug {
 		$is_search                      = Query::is_search();
 		$is_single                      = Query::is_single();
 		$is_singular                    = Query::is_singular();
-		$is_static_front_page            = Query::is_static_front_page();
+		$is_static_front_page           = Query::is_static_front_page();
 		$is_tag                         = Query::is_tag();
 		$is_tax                         = Query::is_tax();
 		$is_shop                        = Query::is_shop();
@@ -541,7 +541,7 @@ final class Debug {
 			'<div style="display:block;width:100%%;background:#fafafa;color:#333;border-bottom:1px solid #666">%s%s%s</div>',
 			sprintf(
 				'<div style="display:inline-block;width:100%%;padding:20px;margin:0 auto;border-bottom:1px solid #666;"><h2 style="color:#222;font-size:22px;padding:0;margin:0">%s</h2></div>',
-				$title
+				$title,
 			),
 			sprintf(
 				'<div style="display:inline-block;width:100%%;padding:20px;border-bottom:1px solid #666;">Generated in: %s seconds</div>',
@@ -549,8 +549,8 @@ final class Debug {
 			),
 			sprintf(
 				'<div style="display:inline-block;width:100%%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">%s</div>',
-				$output
-			)
+				$output,
+			),
 		);
 
 		return $output;

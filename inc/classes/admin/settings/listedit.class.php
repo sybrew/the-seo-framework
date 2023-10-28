@@ -189,7 +189,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$r_defaults = Meta\Robots::get_generated_meta(
 			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
-			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
+			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS,
 		);
 
 		$meta = Data\Plugin\Post::get_meta( $post_id );
@@ -244,7 +244,7 @@ final class ListEdit extends Admin\Lists\Table {
 		 * }
 		 * @param array $generator_args The query data. Contains 'id' or 'taxonomy'.
 		 */
-		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $generator_args ] );
+		$data = \apply_filters( 'the_seo_framework_list_table_data', $data, $generator_args );
 
 		printf(
 			// '<span class=hidden id=%s data-le="%s"></span>',
@@ -351,7 +351,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$r_defaults = Meta\Robots::get_generated_meta(
 			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
-			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
+			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS,
 		);
 
 		$meta = Data\Plugin\Term::get_meta( $term_id );
@@ -406,7 +406,7 @@ final class ListEdit extends Admin\Lists\Table {
 		 * }
 		 * @param array $generator_args The query data. Contains 'id' and 'tax'.
 		 */
-		$data = \apply_filters_ref_array( 'the_seo_framework_list_table_data', [ $data, $generator_args ] );
+		$data = \apply_filters( 'the_seo_framework_list_table_data', $data, $generator_args );
 
 		$container = '';
 
@@ -421,7 +421,7 @@ final class ListEdit extends Admin\Lists\Table {
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				Taxonomy::get_label( $generator_args['tax'] )
+				Taxonomy::get_label( $generator_args['tax'] ),
 			)
 			: '';
 

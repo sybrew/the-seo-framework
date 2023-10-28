@@ -325,7 +325,7 @@ final class Builder {
 						'',
 						array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] )
 					),
-				)
+				),
 			);
 
 			$count       = \count( $item['assess'] );
@@ -358,7 +358,7 @@ final class Builder {
 					\esc_attr( $aria ),
 					\esc_attr( $html ),
 					\esc_html( $symbol ),
-				]
+				],
 			);
 		}
 	}

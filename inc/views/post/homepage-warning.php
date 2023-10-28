@@ -45,7 +45,7 @@ namespace The_SEO_Framework;
 								),
 								[ 'https', 'http' ]
 							) . '#autodescription-homepage-settings' ),
-							\esc_html__( 'Edit Homepage Settings instead.', 'autodescription' )
+							\esc_html__( 'Edit Homepage Settings instead.', 'autodescription' ),
 						);
 					}
 					?>

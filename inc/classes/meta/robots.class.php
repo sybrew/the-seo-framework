@@ -71,7 +71,7 @@ class Robots {
 			__METHOD__,
 			Data\Blog::is_public()
 				? implode( ',', static::get_generated_meta() )
-				: ''
+				: '',
 		);
 	}
 
@@ -150,16 +150,12 @@ class Robots {
 		 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
 		 * }
 		 */
-		return array_filter(
-			(array) \apply_filters_ref_array(
-				'the_seo_framework_robots_meta_array',
-				[
-					$meta,
-					$args,
-					$options,
-				]
-			)
-		);
+		return array_filter( (array) \apply_filters(
+			'the_seo_framework_robots_meta_array',
+			$meta,
+			$args,
+			$options,
+		) );
 	}
 
 	/**

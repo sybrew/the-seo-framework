@@ -127,7 +127,7 @@ final class Author extends Reference {
 			$entity['description'] = Strings::clamp_sentence(
 				\wp_strip_all_tags( $user_data->description ),
 				1,
-				250
+				250,
 			);
 
 		return $entity;

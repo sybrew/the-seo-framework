@@ -84,11 +84,11 @@ trait Static_Deprecator {
 						'%s;%s',
 						$since ? "Since $since of The SEO Framework" : '',
 						$alternative ? " Use $alternative instead" : '',
-						$this->colloquial_handle
+						$this->colloquial_handle,
 					),
-					'; '
+					'; ',
 				),
-				$this->colloquial_handle
+				$this->colloquial_handle,
 			);
 		} else {
 			/**
@@ -127,11 +127,11 @@ trait Static_Deprecator {
 						'%s;%s',
 						$since ? "Since $since of The SEO Framework" : '',
 						$alternative ? " Use $alternative instead" : '',
-						$this->colloquial_handle
+						$this->colloquial_handle,
 					),
-					'; '
+					'; ',
 				),
-				$this->colloquial_handle
+				$this->colloquial_handle,
 			);
 
 			if ( $deprecated['fallback'] )

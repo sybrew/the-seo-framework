@@ -150,7 +150,7 @@ final class Tags {
 	public static function render(
 		$attributes = self::DATA_DEFAULTS['attributes'],
 		$tag = self::DATA_DEFAULTS['tag'],
-		$content = self::DATA_DEFAULTS['content']
+		$content = self::DATA_DEFAULTS['content'] // php 8.0+, add trailing comma
 	) {
 
 		$attr = '';
@@ -196,7 +196,7 @@ final class Tags {
 				 * @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#attributes-0>
 				 */
 				preg_replace( '/[^a-z\d:_-]+/i', '', $name ),
-				$_secure_attr_value
+				$_secure_attr_value,
 			);
 		}
 
@@ -213,14 +213,14 @@ final class Tags {
 							? \esc_html( $content['content'] )
 							: $content['content']
 						: \esc_html( $content ),
-				]
+				],
 			);
 		} else {
 			printf(
 				'<%s%s />',
 				/** @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#syntax-tag-name> */
 				preg_replace( '/[^0-9a-zA-Z]+/', '', $tag ),
-				$attr
+				$attr,
 			);
 		}
 		// phpcs:enable, WordPress.Security.EscapeOutput

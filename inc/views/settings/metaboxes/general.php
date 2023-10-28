@@ -108,12 +108,12 @@ switch ( $instance ) :
 					'label'  => \esc_html__( 'Use symbols for warnings?', 'autodescription' ) . ' ' . HTML::make_info(
 						\__( 'If you have difficulty discerning colors, this may help you spot issues more easily.', 'autodescription' ),
 						'',
-						false
+						false,
 					),
 					'escape' => false,
 				] ),
 			],
-			true
+			true,
 		);
 
 		?>
@@ -124,13 +124,13 @@ switch ( $instance ) :
 		$pixel_info = HTML::make_info(
 			\__( 'The pixel counter computes whether the input will fit on search engine result pages.', 'autodescription' ),
 			'https://kb.theseoframework.com/?p=48',
-			false
+			false,
 		);
 
 		$character_info = HTML::make_info(
 			\__( 'The character counter is based on guidelines.', 'autodescription' ),
 			'',
-			false
+			false,
 		);
 
 		HTML::wrap_fields(
@@ -146,7 +146,7 @@ switch ( $instance ) :
 					'escape' => false,
 				] ),
 			],
-			true
+			true,
 		);
 		break;
 
@@ -175,57 +175,51 @@ switch ( $instance ) :
 			[
 				'in_query'   => \_x( 'In the database', 'Perform query alteration: In the database', 'autodescription' ),
 				'post_query' => \_x( 'On the site', 'Perform query alteration: On the site', 'autodescription' ),
-			]
+			],
 		);
 
 		$search_query_select_options = '';
 		$_current                    = Data\Plugin::get_option( 'alter_search_query_type' );
 		foreach ( $query_types as $value => $name ) {
-			$search_query_select_options .= vsprintf(
+			$search_query_select_options .= sprintf(
 				'<option value="%s" %s>%s</option>',
-				[
-					\esc_attr( $value ),
-					\selected( $_current, \esc_attr( $value ), false ),
-					\esc_html( $name ),
-				]
+				\esc_attr( $value ),
+				\selected( $_current, \esc_attr( $value ), false ),
+				\esc_html( $name ),
 			);
 		}
 
 		$archive_query_select_options = '';
 		$_current                     = Data\Plugin::get_option( 'alter_archive_query_type' );
 		foreach ( $query_types as $value => $name ) {
-			$archive_query_select_options .= vsprintf(
+			$archive_query_select_options .= sprintf(
 				'<option value="%s" %s>%s</option>',
-				[
-					\esc_attr( $value ),
-					\selected( $_current, \esc_attr( $value ), false ),
-					\esc_html( $name ),
-				]
+				\esc_attr( $value ),
+				\selected( $_current, \esc_attr( $value ), false ),
+				\esc_html( $name ),
 			);
 		}
 
 		$perform_alteration_i18n = \esc_html__( 'Perform alteration:', 'autodescription' );
 
 		$search_query_select_field = vsprintf(
-			'<label for="%1$s">%2$s</label>
-			<select name="%3$s" id="%1$s">%4$s</select>',
+			'<label for="%1$s">%2$s</label><select name="%3$s" id="%1$s">%4$s</select>',
 			[
 				Input::get_field_id( 'alter_search_query_type' ),
 				$perform_alteration_i18n,
 				Input::get_field_name( 'alter_search_query_type' ),
 				$search_query_select_options,
-			]
+			],
 		);
 
 		$archive_query_select_field = vsprintf(
-			'<label for="%1$s">%2$s</label>
-			<select name="%3$s" id="%1$s">%4$s</select>',
+			'<label for="%1$s">%2$s</label><select name="%3$s" id="%1$s">%4$s</select>',
 			[
 				Input::get_field_id( 'alter_archive_query_type' ),
 				$perform_alteration_i18n,
 				Input::get_field_name( 'alter_archive_query_type' ),
 				$archive_query_select_options,
-			]
+			],
 		);
 
 		HTML::wrap_fields(
@@ -238,7 +232,7 @@ switch ( $instance ) :
 				] ),
 				$search_query_select_field,
 			],
-			true
+			true,
 		);
 
 		HTML::wrap_fields(
@@ -251,7 +245,7 @@ switch ( $instance ) :
 				] ),
 				$archive_query_select_field,
 			],
-			true
+			true,
 		);
 		break;
 
@@ -274,21 +268,19 @@ switch ( $instance ) :
 					'automatic' => sprintf(
 						/* translators: %s = HTTP or HTTPS */
 						\__( 'Detect automatically (%s)', 'autodescription' ),
-						strtoupper( Meta\URI\Utils::detect_site_url_scheme() )
+						strtoupper( Meta\URI\Utils::detect_site_url_scheme() ),
 					),
 					'http'      => 'HTTP',
 					'https'     => 'HTTPS',
-				]
+				],
 			);
 			$_current     = Data\Plugin::get_option( 'canonical_scheme' );
 			foreach ( $scheme_types as $value => $name )
-				vprintf(
+				printf(
 					'<option value="%s" %s>%s</option>',
-					[
-						\esc_attr( $value ),
-						\selected( $_current, \esc_attr( $value ), false ),
-						\esc_html( $name ),
-					]
+					\esc_attr( $value ),
+					\selected( $_current, \esc_attr( $value ), false ),
+					\esc_html( $name ),
 				);
 			?>
 		</select>
@@ -304,7 +296,7 @@ switch ( $instance ) :
 			'label'  => Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Add `rel` link tags to posts and pages?', 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			'escape' => false,
 		] );
@@ -314,7 +306,7 @@ switch ( $instance ) :
 			'label'  => Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Add `rel` link tags to archives?', 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			'escape' => false,
 		] );
@@ -324,7 +316,7 @@ switch ( $instance ) :
 			'label'  => Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Add `rel` link tags to the homepage?', 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			'escape' => false,
 		] );
@@ -383,7 +375,7 @@ switch ( $instance ) :
 			Markdown::convert(
 				/* translators: backticks are code wraps. Markdown! */
 				\esc_html__( "These options should not need changing when post types and taxonomies are registered correctly. When they aren't, consider applying `noindex` to purge them from search engines, instead.", 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			)
 		);
 		HTML::description( \__( 'Default post types and taxonomies can not be excluded.', 'autodescription' ) );
@@ -405,7 +397,7 @@ switch ( $instance ) :
 			$_label = sprintf(
 				'%s &ndash; <code>%s</code>',
 				\esc_html( $_label ),
-				\esc_html( $post_type )
+				\esc_html( $post_type ),
 			);
 
 			$boxes[] = Input::make_checkbox( [
@@ -436,7 +428,7 @@ switch ( $instance ) :
 			$_label = sprintf(
 				'%s &ndash; <code>%s</code>',
 				\esc_html( $_label ),
-				\esc_html( $taxonomy )
+				\esc_html( $taxonomy ),
 			);
 
 			$boxes[] = Input::make_checkbox( [

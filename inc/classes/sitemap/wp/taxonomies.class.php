@@ -78,7 +78,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			'wp_sitemaps_taxonomies_pre_url_list',
 			null,
 			$taxonomy,
-			$page_num
+			$page_num,
 		);
 
 		if ( null !== $url_list )

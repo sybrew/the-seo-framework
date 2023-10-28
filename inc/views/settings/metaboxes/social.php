@@ -96,7 +96,7 @@ switch ( $instance ) :
 				'label'       => \__( 'Output Open Graph meta tags?', 'autodescription' ),
 				'description' => \__( 'Facebook, Twitter, Pinterest and many other social sites make use of these meta tags.', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		if ( $active_conflicting_plugins_types['open_graph'] )
 			HTML::attention_description( \__( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
@@ -108,7 +108,7 @@ switch ( $instance ) :
 				'label'       => \__( 'Output Facebook meta tags?', 'autodescription' ),
 				'description' => \__( 'Output various meta tags targeted at Facebook.', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 
 		// Echo Twitter Tags checkboxes.
@@ -118,7 +118,7 @@ switch ( $instance ) :
 				'label'       => \__( 'Output Twitter meta tags?', 'autodescription' ),
 				'description' => \__( 'Output various meta tags targeted at Twitter.', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		if ( $active_conflicting_plugins_types['twitter_card'] )
 			HTML::attention_description( \__( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
@@ -130,7 +130,7 @@ switch ( $instance ) :
 				'label'       => \__( 'Output oEmbed scripts?', 'autodescription' ),
 				'description' => \__( 'WordPress, Discord, Drupal, Squarespace, and many other clients can make use of these scripts.', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		?>
 		<hr>
@@ -141,7 +141,7 @@ switch ( $instance ) :
 		$info = HTML::make_info(
 			\__( 'When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically.', 'autodescription' ),
 			'',
-			false
+			false,
 		);
 
 		HTML::wrap_fields(
@@ -150,7 +150,7 @@ switch ( $instance ) :
 				'label'  => \esc_html__( 'Remove site title from generated social titles?', 'autodescription' ) . " $info",
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		?>
 		<hr>
@@ -164,7 +164,7 @@ switch ( $instance ) :
 				'label'       => \__( 'Output multiple Open Graph image tags?', 'autodescription' ),
 				'description' => \__( 'This enables users to select any image attached to the page shared on social networks, like Facebook.', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		?>
 		<p>
@@ -206,7 +206,7 @@ switch ( $instance ) :
 				'id'    => 'shortlink_tag',
 				'label' => \__( 'Output shortlink tag?', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		break;
 
@@ -233,7 +233,7 @@ switch ( $instance ) :
 				echo ' ';
 				HTML::make_info(
 					\__( 'Get Facebook App ID.', 'autodescription' ),
-					'https://developers.facebook.com/apps'
+					'https://developers.facebook.com/apps',
 				);
 				?>
 			</label>
@@ -249,7 +249,7 @@ switch ( $instance ) :
 				echo ' ';
 				HTML::make_info(
 					\__( 'Only Facebook Business Pages are accepted.', 'autodescription' ),
-					'https://www.facebook.com/business/pages/set-up'
+					'https://www.facebook.com/business/pages/set-up',
 				);
 				?>
 			</label>
@@ -265,7 +265,7 @@ switch ( $instance ) :
 				echo ' ';
 				HTML::make_info(
 					\__( 'Your Facebook profile.', 'autodescription' ),
-					'https://facebook.com/me'
+					'https://facebook.com/me',
 				);
 				?>
 			</label>
@@ -343,7 +343,7 @@ switch ( $instance ) :
 				echo ' ';
 				HTML::make_info(
 					\__( 'Find your @username.', 'autodescription' ),
-					'https://twitter.com/home'
+					'https://twitter.com/home',
 				);
 				?>
 			</label>
@@ -359,7 +359,7 @@ switch ( $instance ) :
 				echo ' ';
 				HTML::make_info(
 					\__( 'Find your @username.', 'autodescription' ),
-					'https://twitter.com/home'
+					'https://twitter.com/home',
 				);
 				?>
 			</label>
@@ -385,12 +385,12 @@ switch ( $instance ) :
 				'label'       => \__( 'Use Open Graph title?', 'autodescription' ),
 				'description' => \__( 'Check this option if you want to replace page titles with Open Graph titles in embeds.', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		$_info = HTML::make_info(
 			\__( 'Only custom social images that are selected via the Media Library are considered.', 'autodescription' ),
 			'',
-			false
+			false,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -399,7 +399,7 @@ switch ( $instance ) :
 				'description' => \esc_html__( "LinkedIn displays the post's featured image in embeds. Check this option if you want to replace it with the social image.", 'autodescription' ),
 				'escape'      => false,
 			] ),
-			true
+			true,
 		);
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -407,7 +407,7 @@ switch ( $instance ) :
 				'label'       => \__( 'Remove author name?', 'autodescription' ),
 				'description' => \__( "Discord shows the page author's name above the sharing embed. Check this option if you find this undesirable.", 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 
 		break;
@@ -425,7 +425,7 @@ switch ( $instance ) :
 					'label'  => Markdown::convert(
 						/* translators: the backticks are Markdown! Preserve them as-is! */
 						\esc_html__( 'Add `article:published_time` to posts?', 'autodescription' ),
-						[ 'code' ]
+						[ 'code' ],
 					),
 					'escape' => false,
 				] ),
@@ -434,11 +434,11 @@ switch ( $instance ) :
 					'label'  => Markdown::convert(
 						/* translators: the backticks are Markdown! Preserve them as-is! */
 						\esc_html__( 'Add `article:modified_time` to posts?', 'autodescription' ),
-						[ 'code' ]
+						[ 'code' ],
 					),
 					'escape' => false,
 				] ),
 			],
-			true
+			true,
 		);
 endswitch;

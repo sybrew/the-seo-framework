@@ -144,15 +144,15 @@ class Sanitize {
 								static::tab_to_space(
 									static::newline_to_space(
 										static::nbsp_to_space(
-											(string) $text
-										)
-									)
-								)
-							)
-						)
-					)
-				)
-			)
+											(string) $text,
+										),
+									),
+								),
+							),
+						),
+					),
+				),
+			),
 		);
 	}
 

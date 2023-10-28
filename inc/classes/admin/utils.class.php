@@ -89,11 +89,11 @@ class Utils {
 					sprintf(
 						/* translators: %s = Redirect URL markdown */
 						\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
-						\esc_url( $target )
+						\esc_url( $target ),
 					),
 					[ 'a' ],
-					[ 'a_internal' => true ]
-				)
+					[ 'a_internal' => true ],
+				),
 			);
 		}
 

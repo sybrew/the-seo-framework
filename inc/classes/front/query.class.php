@@ -216,7 +216,7 @@ final class Query {
 			 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
 			 * @param \WP_Query $wp_query The current query.
 			 */
-			if ( ! \apply_filters_ref_array( 'the_seo_framework_do_adjust_archive_query', [ true, $wp_query ] ) )
+			if ( ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query ) )
 				return true;
 		}
 

@@ -73,7 +73,7 @@ $button_js = sprintf(
 		'key'   => $sanitized_key,
 		// Is this the best nonce key key? Capability validation already happened. See `output_dismissible_persistent_notices()`.
 		'nonce' => \wp_create_nonce( $nonce_action ),
-	] )
+	] ),
 );
 // TODO should we display this if the notice is shown one last time?
 $button_nojs = vsprintf(
@@ -92,15 +92,12 @@ $button_nojs = vsprintf(
 						$sanitized_key,
 						$sanitized_key,
 						\esc_attr( $dismiss_title_i18n ),
-						sprintf(
-							'<span class=screen-reader-text>%s</span>',
-							\esc_html( $dismiss_title_i18n )
-						),
-					]
+						sprintf( '<span class=screen-reader-text>%s</span>', \esc_html( $dismiss_title_i18n ) ),
+					],
 				),
-			]
+			],
 		),
-	]
+	],
 );
 
 vprintf(
@@ -116,5 +113,5 @@ vprintf(
 		),
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- they are.
 		$button_js . $button_nojs,
-	]
+	],
 );

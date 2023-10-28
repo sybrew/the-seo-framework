@@ -96,13 +96,14 @@ class Form {
 					\esc_html( $name )
 				);
 			},
-			$args['default']
+			$args['default'],
 		);
 
 		return vsprintf(
-			sprintf( '<div class="%s">%s</div>',
+			sprintf(
+				'<div class="%s">%s</div>',
 				\esc_attr( $args['class'] ),
-				( \is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s' )
+				\is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s',
 			),
 			[
 				$args['label'] ? sprintf(
@@ -126,9 +127,9 @@ class Form {
 						$args['required'] ? ' required' : '',
 						HTML::make_data_attributes( $args['data'] ),
 						implode( $html_options ),
-					]
+					],
 				),
-			]
+			],
 		);
 	}
 
@@ -150,12 +151,11 @@ class Form {
 					/* translators: %s = number */
 					\esc_html__( 'Characters: %s', 'autodescription' ),
 					sprintf(
-						'<span id="%s">%s</span>',
+						'<span id="%s">0</span>',
 						\esc_attr( "{$for}_chars" ),
-						0
-					)
+					),
 				),
-			]
+			],
 		);
 	}
 
@@ -176,13 +176,13 @@ class Form {
 				sprintf(
 					'<div id="%s" class=tsf-tooltip-wrap>%s</div>',
 					\esc_attr( "{$for}_pixels" ),
-					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label data-desc tabindex=0><span class=tsf-pixel-counter-fluid></span></span>'
+					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label data-desc tabindex=0><span class=tsf-pixel-counter-fluid></span></span>',
 				),
 				sprintf(
 					'<div class=tsf-pixel-shadow-wrap><span class="tsf-pixel-counter-shadow %s"></span></div>',
 					\esc_attr( "tsf-{$type}-pixel-counter-shadow" )
 				),
-			]
+			],
 		);
 	}
 
@@ -251,7 +251,7 @@ class Form {
 					],
 				],
 			],
-			$args
+			$args,
 		);
 
 		$content = vsprintf(
@@ -264,10 +264,10 @@ class Form {
 				HTML::make_data_attributes(
 					[ 'inputId' => $args['id'] ]
 					+ $args['data']
-					+ [ 'buttonClass' => $args['button_class'] ]
+					+ [ 'buttonClass' => $args['button_class'] ],
 				),
 				\esc_html( $args['i18n']['button_text'] ),
-			]
+			],
 		);
 
 		$content .= sprintf(

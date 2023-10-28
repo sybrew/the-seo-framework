@@ -156,17 +156,17 @@ class Plugin {
 		\add_action(
 			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[ static::class, 'update_db_version' ],
-			12
+			12,
 		);
 
 		\add_action(
 			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[ Sitemap\Registry::class, 'refresh_sitemaps' ]
+			[ Sitemap\Registry::class, 'refresh_sitemaps' ],
 		);
 		// Mitigate race condition. If options change affecting the "excluded post", repopulate it.
 		\add_action(
 			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[ Query\Exclusion::class, 'clear_excluded_post_ids_cache' ]
+			[ Query\Exclusion::class, 'clear_excluded_post_ids_cache' ],
 		);
 	}
 

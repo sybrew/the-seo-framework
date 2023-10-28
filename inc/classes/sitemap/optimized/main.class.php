@@ -153,7 +153,7 @@ abstract class Main {
 		\tsf()->_deprecated_function(
 			__METHOD__,
 			'4.3.0',
-			'tsf()->sitemap()->utils()->is_post_included_in_sitemap()'
+			'tsf()->sitemap()->utils()->is_post_included_in_sitemap()',
 		);
 
 		return Sitemap\Utils::is_post_included_in_sitemap( $post_id );
@@ -177,7 +177,7 @@ abstract class Main {
 		\tsf()->_deprecated_function(
 			__METHOD__,
 			'4.3.0',
-			'tsf()->sitemap()->utils()->is_term_included_in_sitemap()'
+			'tsf()->sitemap()->utils()->is_term_included_in_sitemap()',
 		);
 
 		return Sitemap\Utils::is_term_included_in_sitemap( $term_id, $taxonomy );
@@ -199,7 +199,7 @@ abstract class Main {
 		\tsf()->_deprecated_function(
 			__METHOD__,
 			'4.3.0',
-			'tsf()->sitemap()->utils()->get_sitemap_post_limit()'
+			'tsf()->sitemap()->utils()->get_sitemap_post_limit()',
 		);
 
 		return Sitemap\Utils::get_sitemap_post_limit( $hierarchical );

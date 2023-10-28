@@ -144,15 +144,16 @@ final class Generator {
 					'clear' =>
 						[ 'address', 'aside', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'dialog', 'dl', 'fieldset', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'var', 'video' ],
 					'strip' => false,
-				]
+				],
 			);
 
-			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES? -> We could, via preg_match() and strip content, but the opcodes won't help.
+			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES?
+			// -> We could, via preg_match() and strip content, but the function overhead won't help.
 			preg_match_all(
 				'/<img\b[^>]+?\bsrc=(["\'])?([^"\'>\s]+)\1?[^>]*?>/mi',
 				$content,
 				$matches,
-				\PREG_SET_ORDER
+				\PREG_SET_ORDER,
 			);
 		}
 

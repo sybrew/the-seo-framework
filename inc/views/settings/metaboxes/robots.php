@@ -143,7 +143,7 @@ switch ( $instance ) :
 				'id'    => 'advanced_query_protection',
 				'label' => \__( 'Enable advanced query protection?', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 		?>
 		<hr>
@@ -157,11 +157,11 @@ switch ( $instance ) :
 				'label'  => Markdown::convert(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					\esc_html__( 'Apply `noindex` to every second or later archive page?', 'autodescription' ),
-					[ 'code' ]
+					[ 'code' ],
 				),
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 		?>
 		<hr>
@@ -174,7 +174,7 @@ switch ( $instance ) :
 				'id'    => 'set_copyright_directives',
 				'label' => \__( 'Specify aggregator copyright compliance directives?', 'autodescription' ),
 			] ),
-			true
+			true,
 		);
 
 		$_text_snippet_types = [
@@ -196,13 +196,11 @@ switch ( $instance ) :
 
 			$_options = '';
 			foreach ( $_values as $_value => $_name ) {
-				$_options .= vsprintf(
+				$_options .= sprintf(
 					'<option value="%s" %s>%s</option>',
-					[
-						\esc_attr( $_value ),
-						\selected( $_current, \esc_attr( $_value ), false ),
-						\esc_html( $_name ),
-					]
+					\esc_attr( $_value ),
+					\selected( $_current, \esc_attr( $_value ), false ),
+					\esc_html( $_name ),
 				);
 			}
 
@@ -221,12 +219,12 @@ switch ( $instance ) :
 					HTML::make_info(
 						\__( 'This may limit the text snippet length for all pages on this site.', 'autodescription' ),
 						'',
-						false
+						false,
 					),
 					\esc_html__( "This directive also imposes a limit on meta descriptions and structured data, which unintentionally restricts the amount of information you can share. Therefore, it's best to use at least a 320 character limit.", 'autodescription' ),
-				]
+				],
 			),
-			true
+			true,
 		);
 
 		$image_preview_options = '';
@@ -237,13 +235,11 @@ switch ( $instance ) :
 			'large'    => \__( 'Large or full size', 'autodescription' ),
 		];
 		foreach ( $_image_preview_types as $_value => $_name ) {
-			$image_preview_options .= vsprintf(
+			$image_preview_options .= sprintf(
 				'<option value="%s" %s>%s</option>',
-				[
-					\esc_attr( $_value ),
-					\selected( $_current, \esc_attr( $_value ), false ),
-					\esc_html( $_name ),
-				]
+				\esc_attr( $_value ),
+				\selected( $_current, \esc_attr( $_value ), false ),
+				\esc_html( $_name ),
 			);
 		}
 		HTML::wrap_fields(
@@ -258,11 +254,11 @@ switch ( $instance ) :
 					HTML::make_info(
 						\__( 'This may limit the image preview size for all images from this site.', 'autodescription' ),
 						'',
-						false
+						false,
 					),
-				]
+				],
 			),
-			true
+			true,
 		);
 
 		$_video_snippet_types = [
@@ -284,13 +280,11 @@ switch ( $instance ) :
 
 			$_options = '';
 			foreach ( $_values as $_value => $_name ) {
-				$_options .= vsprintf(
+				$_options .= sprintf(
 					'<option value="%s" %s>%s</option>',
-					[
-						\esc_attr( $_value ),
-						\selected( $_current, \esc_attr( $_value ), false ),
-						\esc_html( $_name ),
-					]
+					\esc_attr( $_value ),
+					\selected( $_current, \esc_attr( $_value ), false ),
+					\esc_html( $_name ),
 				);
 			}
 
@@ -308,11 +302,11 @@ switch ( $instance ) :
 					HTML::make_info(
 						\__( 'This may limit the video preview length for all videos on this site.', 'autodescription' ),
 						'',
-						false
+						false,
 					),
-				]
+				],
 			),
-			true
+			true,
 		);
 		break;
 
@@ -356,8 +350,12 @@ switch ( $instance ) :
 				'label'  => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
-					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, \esc_html( Post_Type::get_label( $post_type, false ) ) ),
-					\esc_html( $post_type )
+					sprintf(
+						$apply_x_to_y_i18n_plural,
+						$ro_name_wrapped,
+						\esc_html( Post_Type::get_label( $post_type, false ) ),
+					),
+					\esc_html( $post_type ),
 				),
 				'escape' => false,
 				'data'   => [
@@ -385,8 +383,12 @@ switch ( $instance ) :
 				'label'  => sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
-					sprintf( $apply_x_to_y_i18n_plural, $ro_name_wrapped, \esc_html( Taxonomy::get_label( $taxonomy, false ) ) ),
-					\esc_html( $taxonomy )
+					sprintf(
+						$apply_x_to_y_i18n_plural,
+						$ro_name_wrapped,
+						\esc_html( Taxonomy::get_label( $taxonomy, false ) ),
+					),
+					\esc_html( $taxonomy ),
 				),
 				'escape' => false,
 				'data'   => [

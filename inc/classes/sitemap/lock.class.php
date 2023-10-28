@@ -78,7 +78,7 @@ class Lock {
 			printf(
 				/* translators: %d = number of seconds */
 				\esc_html__( 'Sitemap is locked for %d seconds. Try again later.', 'autodescription' ),
-				(int) ( $timeout - time() )
+				(int) ( $timeout - time() ),
 			);
 		} else {
 			\esc_html_e( 'Sitemap is locked temporarily. Try again later.', 'autodescription' );

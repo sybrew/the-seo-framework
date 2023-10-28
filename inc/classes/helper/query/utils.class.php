@@ -211,7 +211,7 @@ class Utils {
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
 				// We only need one to pass this test. We could use array_key_first()... but that may be nulled (out of our control).
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
-			]
+			],
 		);
 
 		$query = $wp_query->query;

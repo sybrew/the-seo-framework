@@ -523,7 +523,7 @@ class Registry {
 				[
 					'search'  => array_keys( $_conversion_table ),
 					'replace' => array_values( $_conversion_table ),
-				]
+				],
 			);
 		}
 

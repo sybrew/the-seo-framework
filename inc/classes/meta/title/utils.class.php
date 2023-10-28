@@ -72,7 +72,7 @@ class Utils {
 				'ge'     => '&ge;',
 				'lt'     => '&lt;',
 				'gt'     => '&gt;',
-			]
+			],
 		);
 	}
 

@@ -132,7 +132,7 @@ class PTA {
 			'the_seo_framework_post_type_archive_meta',
 			array_merge(
 				static::get_default_meta( $post_type ),
-				$meta
+				$meta,
 			),
 			$post_type,
 			$is_headless,

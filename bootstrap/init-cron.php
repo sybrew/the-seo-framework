@@ -33,7 +33,7 @@ if ( Data\Plugin::get_option( 'ping_use_cron' ) ) {
 	) {
 		\add_action(
 			'tsf_sitemap_cron_hook_before',
-			[ Sitemap\Optimized\Base::class, 'prerender_sitemap' ]
+			[ Sitemap\Optimized\Base::class, 'prerender_sitemap' ],
 		);
 	}
 

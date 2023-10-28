@@ -56,7 +56,7 @@ switch ( $instance ) :
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						\esc_html__( 'Edit the fields on the [homepage](%s).', 'autodescription' ),
-						\esc_url( \admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) )
+						\esc_url( \admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) ),
 					),
 					[ 'a' ],
 					[ 'a_internal' => false ] // opens in new tab.
@@ -110,7 +110,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/appearance/title-link'
+						'https://developers.google.com/search/docs/advanced/appearance/title-link',
 					);
 				?>
 			</label>
@@ -139,7 +139,7 @@ switch ( $instance ) :
 						'additionValue'       => \esc_html( Meta\Title::get_addition_for_front_page() ),
 						'additionPlacement'   => 'left' === Meta\Title::get_addition_location_for_front_page() ? 'before' : 'after',
 					],
-				]
+				],
 			);
 			?>
 		</p>
@@ -159,7 +159,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/appearance/snippet'
+						'https://developers.google.com/search/docs/advanced/appearance/snippet',
 					);
 				?>
 			</label>
@@ -181,7 +181,7 @@ switch ( $instance ) :
 							?: Meta\Description::get_generated_description( $generator_args )
 						),
 					],
-				]
+				],
 			);
 			?>
 		</p>
@@ -229,7 +229,7 @@ switch ( $instance ) :
 					'id'    => 'homepage_tagline',
 					'label' => \__( 'Add Meta Title Additions to the homepage title?', 'autodescription' ),
 				] ),
-				true
+				true,
 			);
 		?>
 		</div>
@@ -312,7 +312,7 @@ switch ( $instance ) :
 						'descPhLock'   => (bool) $custom_tw_desc,
 					],
 				],
-			]
+			],
 		);
 
 		?>
@@ -407,7 +407,7 @@ switch ( $instance ) :
 				<?php
 				HTML::make_info(
 					\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
-					'https://developers.facebook.com/docs/sharing/best-practices#images'
+					'https://developers.facebook.com/docs/sharing/best-practices#images',
 				);
 				?>
 			</label>
@@ -443,13 +443,11 @@ switch ( $instance ) :
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
 			$checked_home = sprintf(
 				'- %s',
-				vsprintf(
+				sprintf(
 					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
-					[
-						\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),
-						\esc_attr_x( 'Edit homepage page settings', 'Bear with me: the homepage can be edited globally, or via its page. Thus "homepage page".', 'autodescription' ),
-						\esc_html__( 'Overwritten by page settings', 'autodescription' ),
-					]
+					\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),
+					\esc_attr_x( 'Edit homepage page settings', 'Bear with me: the homepage can be edited globally, or via its page. Thus "homepage page".', 'autodescription' ),
+					\esc_html__( 'Overwritten by page settings', 'autodescription' ),
 				)
 			);
 		}
@@ -462,14 +460,14 @@ switch ( $instance ) :
 			Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Apply `noindex` to the homepage?', 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			HTML::make_info(
 				\__( 'This tells search engines not to show this page in their search results.', 'autodescription' ),
 				'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
-				false
+				false,
 			),
-			$noindex_post ? $checked_home : ''
+			$noindex_post ? $checked_home : '',
 		);
 
 		$f_label = sprintf(
@@ -478,14 +476,14 @@ switch ( $instance ) :
 			Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Apply `nofollow` to the homepage?', 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			HTML::make_info(
 				\__( 'This tells search engines not to follow links on this page.', 'autodescription' ),
 				'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
-				false
+				false,
 			),
-			$nofollow_post ? $checked_home : ''
+			$nofollow_post ? $checked_home : '',
 		);
 
 		$a_label = sprintf(
@@ -494,14 +492,14 @@ switch ( $instance ) :
 			Markdown::convert(
 				/* translators: the backticks are Markdown! Preserve them as-is! */
 				\esc_html__( 'Apply `noarchive` to the homepage?', 'autodescription' ),
-				[ 'code' ]
+				[ 'code' ],
 			),
 			HTML::make_info(
 				\__( 'This tells search engines not to save a cached copy of this page.', 'autodescription' ),
 				'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
-				false
+				false,
 			),
-			$noarchive_post ? $checked_home : ''
+			$noarchive_post ? $checked_home : '',
 		);
 
 		HTML::attention_description( \__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ) );
@@ -524,7 +522,7 @@ switch ( $instance ) :
 					'escape' => false,
 				] ),
 			],
-			true
+			true,
 		);
 
 		if ( Query\Utils::has_page_on_front() ) {
@@ -533,11 +531,11 @@ switch ( $instance ) :
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
 						\esc_html__( 'Note: These options may be overwritten by the [page settings](%s).', 'autodescription' ),
-						\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) )
+						\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ]
-				)
+					[ 'a_internal' => false ],
+				),
 			);
 		}
 		?>
@@ -553,10 +551,10 @@ switch ( $instance ) :
 				'label'  => Markdown::convert(
 					/* translators: the backticks are Markdown! Preserve them as-is! */
 					\esc_html__( 'Apply `noindex` to every second or later page on the homepage?', 'autodescription' ),
-					[ 'code' ]
+					[ 'code' ],
 				),
 				'escape' => false,
 			] ),
-			true
+			true,
 		);
 endswitch;

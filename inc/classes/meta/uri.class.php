@@ -273,7 +273,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -288,11 +288,11 @@ class URI {
 		return umemo( __METHOD__ ) ?? umemo(
 			__METHOD__,
 			\sanitize_url(
-				URI\Utils::slash_front_page_url(
-					URI\Utils::set_preferred_url_scheme( Data\Blog::get_front_page_url() )
-				),
-				[ 'https', 'http' ]
-			)
+				URI\Utils::slash_front_page_url( URI\Utils::set_preferred_url_scheme(
+					Data\Blog::get_front_page_url(),
+				) ),
+				[ 'https', 'http' ],
+			),
 		);
 	}
 
@@ -328,7 +328,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -348,7 +348,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -373,10 +373,12 @@ class URI {
 			return '';
 
 		return \sanitize_url(
-			URI\Utils::set_preferred_url_scheme(
-				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
-			),
-			[ 'https', 'http' ]
+			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
+				$url,
+				Query::paged(),
+				true,
+			) ),
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -403,7 +405,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -426,10 +428,12 @@ class URI {
 		if ( empty( $url ) ) return '';
 
 		return \sanitize_url(
-			URI\Utils::set_preferred_url_scheme(
-				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
-			),
-			[ 'https', 'http' ]
+			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
+				$url,
+				Query::paged(),
+				true,
+			) ),
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -450,7 +454,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -472,10 +476,12 @@ class URI {
 		if ( empty( $url ) ) return '';
 
 		return \sanitize_url(
-			URI\Utils::set_preferred_url_scheme(
-				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
-			),
-			[ 'https', 'http' ]
+			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
+				$url,
+				Query::paged(),
+				true,
+			) ),
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -495,7 +501,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -530,10 +536,12 @@ class URI {
 		if ( empty( $url ) ) return '';
 
 		return \sanitize_url(
-			URI\Utils::set_preferred_url_scheme(
-				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
-			),
-			[ 'https', 'http' ]
+			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
+				$url,
+				Query::paged(),
+				true,
+			) ),
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -561,7 +569,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -585,10 +593,12 @@ class URI {
 		if ( empty( $url ) ) return '';
 
 		return \sanitize_url(
-			URI\Utils::set_preferred_url_scheme(
-				URI\Utils::add_pagination_to_url( $url, Query::paged(), true )
-			),
-			[ 'https', 'http' ]
+			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
+				$url,
+				Query::paged(),
+				true,
+			) ),
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -608,7 +618,7 @@ class URI {
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 
@@ -641,7 +651,7 @@ class URI {
 			if ( $url )
 				$next = \sanitize_url(
 					URI\Utils::add_pagination_to_url( $url, $page + 1 ),
-					[ 'https', 'http' ]
+					[ 'https', 'http' ],
 				);
 		}
 
@@ -652,7 +662,7 @@ class URI {
 			if ( $url )
 				$prev = \sanitize_url(
 					URI\Utils::add_pagination_to_url( $url, $page - 1 ),
-					[ 'https', 'http' ]
+					[ 'https', 'http' ],
 				);
 		}
 
@@ -787,9 +797,9 @@ class URI {
 		return \sanitize_url(
 			URI\Utils::append_query_to_url(
 				static::get_bare_front_page_url(),
-				$query
+				$query,
 			),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 }

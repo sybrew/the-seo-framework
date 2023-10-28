@@ -53,7 +53,7 @@ final class PluginTable {
 			$tsf_links['settings'] = sprintf(
 				'<a href="%s">%s</a>',
 				\esc_url( \admin_url( 'admin.php?page=' . \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG ) ),
-				\esc_html__( 'Settings', 'autodescription' )
+				\esc_html__( 'Settings', 'autodescription' ),
 			);
 		}
 
@@ -113,7 +113,7 @@ final class PluginTable {
 					'https://tsf.fyi/extension-manager',
 					'Extension Manager',
 				),
-			]
+			],
 		);
 	}
 }

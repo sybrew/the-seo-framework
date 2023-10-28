@@ -55,11 +55,11 @@ final class Plugin {
 
 		\add_action(
 			Admin\Menu::get_page_hook_name() . '_settings_page_boxes',
-			[ static::class, 'output_columns' ]
+			[ static::class, 'output_columns' ],
 		);
 		\add_action(
 			'the_seo_framework_setting_notices',
-			[ static::class, 'output_notices' ]
+			[ static::class, 'output_notices' ],
 		);
 
 		static::output_wrap();
@@ -102,7 +102,7 @@ final class Plugin {
 				\esc_html__( 'General Settings', 'autodescription' ),
 				[ static::class, '_general_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Title Meta Box
@@ -112,7 +112,7 @@ final class Plugin {
 				\esc_html__( 'Title Settings', 'autodescription' ),
 				[ static::class, '_title_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Description Meta Box
@@ -122,7 +122,7 @@ final class Plugin {
 				\esc_html__( 'Description Meta Settings', 'autodescription' ),
 				[ static::class, '_description_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Homepage Meta Box
@@ -132,7 +132,7 @@ final class Plugin {
 				\esc_html__( 'Homepage Settings', 'autodescription' ),
 				[ static::class, '_homepage_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		if ( $post_type_archive && Post_Type::get_public_pta() )
@@ -141,7 +141,7 @@ final class Plugin {
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),
 				[ static::class, '_post_type_archive_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Social Meta Box
@@ -151,7 +151,7 @@ final class Plugin {
 				\esc_html__( 'Social Meta Settings', 'autodescription' ),
 				[ static::class, '_social_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Schema Meta Box
@@ -161,7 +161,7 @@ final class Plugin {
 				\esc_html__( 'Schema.org Settings', 'autodescription' ),
 				[ static::class, '_schema_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Robots Meta Box
@@ -171,7 +171,7 @@ final class Plugin {
 				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
 				[ static::class, '_robots_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Webmaster Meta Box
@@ -181,7 +181,7 @@ final class Plugin {
 				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),
 				[ static::class, '_webmaster_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Sitemaps Meta Box
@@ -191,7 +191,7 @@ final class Plugin {
 				\esc_html__( 'Sitemap Settings', 'autodescription' ),
 				[ static::class, '_sitemaps_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 
 		// Feed Meta Box
@@ -201,7 +201,7 @@ final class Plugin {
 				\esc_html__( 'Feed Settings', 'autodescription' ),
 				[ static::class, '_feed_metabox' ],
 				$settings_page_hook,
-				'main'
+				'main',
 			);
 	}
 

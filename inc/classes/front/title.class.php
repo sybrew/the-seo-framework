@@ -65,12 +65,10 @@ final class Title {
 		 * @param string $title The generated title.
 		 * @param int    $id    The page or term ID.
 		 */
-		return \esc_html( \apply_filters_ref_array(
+		return \esc_html( \apply_filters(
 			'the_seo_framework_pre_get_document_title',
-			[
-				Meta\Title::get_title(),
-				Query::get_the_real_id(),
-			]
+			Meta\Title::get_title(),
+			Query::get_the_real_id(),
 		) );
 	}
 }

@@ -149,7 +149,7 @@ switch ( $instance ) :
 						<?php
 						HTML::make_info(
 							\__( 'The meta title can be used to determine the title used on search engine result pages.', 'autodescription' ),
-							'https://developers.google.com/search/docs/advanced/appearance/title-link'
+							'https://developers.google.com/search/docs/advanced/appearance/title-link',
 						);
 						?>
 						</div>
@@ -177,7 +177,7 @@ switch ( $instance ) :
 								'additionValue'     => \esc_html( $title_additions ),
 								'additionPlacement' => 'left' === $title_seplocation ? 'before' : 'after',
 							],
-						]
+						],
 					);
 					?>
 				</div>
@@ -218,7 +218,7 @@ switch ( $instance ) :
 						<?php
 						HTML::make_info(
 							\__( 'The meta description can be used to determine the text used under the title on search engine results pages.', 'autodescription' ),
-							'https://developers.google.com/search/docs/advanced/appearance/snippet'
+							'https://developers.google.com/search/docs/advanced/appearance/snippet',
 						);
 						?>
 						</div>
@@ -241,7 +241,7 @@ switch ( $instance ) :
 							'defaultDescription'   => \esc_html( Data\Filter\Sanitize::metadata_content( $default_description ) ),
 							'refDescriptionLocked' => $description_ref_locked,
 						],
-					]
+					],
 				);
 				?>
 			</div>
@@ -256,7 +256,7 @@ switch ( $instance ) :
 		$r_defaults = Meta\Robots::get_generated_meta(
 			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
-			ROBOTS_IGNORE_SETTINGS | ROBOTS_IGNORE_PROTECTION
+			ROBOTS_IGNORE_SETTINGS | ROBOTS_IGNORE_PROTECTION,
 		);
 		$r_settings = [
 			'noindex'   => [
@@ -295,7 +295,7 @@ switch ( $instance ) :
 						<?php
 							HTML::make_info(
 								\__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
-								'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls'
+								'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls',
 							);
 						?>
 						</div>
@@ -316,7 +316,7 @@ switch ( $instance ) :
 						<?php
 							HTML::make_info(
 								\__( 'These directives may urge robots not to display, follow links on, or create a cached copy of this page.', 'autodescription' ),
-								'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives'
+								'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 							);
 						?>
 						</div>
@@ -427,7 +427,7 @@ switch ( $instance ) :
 							<?php
 							HTML::make_info(
 								\__( 'This will force visitors to go to another URL.', 'autodescription' ),
-								'https://developers.google.com/search/docs/advanced/crawling/301-redirects'
+								'https://developers.google.com/search/docs/advanced/crawling/301-redirects',
 							);
 							?>
 						</div>
@@ -497,7 +497,7 @@ switch ( $instance ) :
 						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
 					],
 				],
-			]
+			],
 		);
 
 		?>
@@ -596,7 +596,7 @@ switch ( $instance ) :
 						<?php
 						HTML::make_info(
 							\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
-							'https://developers.facebook.com/docs/sharing/best-practices#images'
+							'https://developers.facebook.com/docs/sharing/best-practices#images',
 						);
 						?>
 						</div>

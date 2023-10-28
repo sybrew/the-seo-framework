@@ -269,7 +269,7 @@ class Post {
 	 */
 	public static function get_published_time( $id = null ) {
 		return Time::convert_to_preferred_format(
-			\get_post( $id ?? Query::get_the_real_id() )->post_date_gmt ?? ''
+			\get_post( $id ?? Query::get_the_real_id() )->post_date_gmt ?? '',
 		);
 	}
 
@@ -283,7 +283,7 @@ class Post {
 	 */
 	public static function get_modified_time( $id = null ) {
 		return Time::convert_to_preferred_format(
-			\get_post( $id ?? Query::get_the_real_id() )->post_modified_gmt ?? ''
+			\get_post( $id ?? Query::get_the_real_id() )->post_modified_gmt ?? '',
 		);
 	}
 }

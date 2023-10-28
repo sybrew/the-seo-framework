@@ -64,7 +64,7 @@ final class Term {
 			 *                      Defaults to a high priority, this box is seen soon below the default edit inputs.
 			 */
 			(int) \apply_filters( 'the_seo_framework_term_metabox_priority', 0 ),
-			2
+			2,
 		);
 	}
 

@@ -96,7 +96,7 @@ class Plugin {
 							$val,
 							$original_value[ $option ], // If this fails, the option isn't registered properly.
 							$option,
-						]
+						],
 					);
 				}
 			} else {
@@ -486,7 +486,7 @@ class Plugin {
 
 		return \sanitize_url(
 			Meta\URI\Utils::make_absolute_current_scheme_url( $value ),
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		);
 	}
 

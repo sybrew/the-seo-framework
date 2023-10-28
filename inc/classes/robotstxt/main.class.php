@@ -115,10 +115,12 @@ class Main {
 			$error  = sprintf(
 				"%s\n%s\n\n",
 				'# This is an invalid robots.txt location.',
-				'# Please visit: ' . \esc_url(
-					\trailingslashit(
-						Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() )
-					) . 'robots.txt'
+				'# Please visit: '
+				. \esc_url(
+					\trailingslashit( Meta\URI\Utils::set_preferred_url_scheme(
+						Meta\URI\Utils::get_site_host()
+					) )
+					. 'robots.txt',
 				)
 			);
 			$output = "$error$output";

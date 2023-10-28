@@ -48,7 +48,7 @@ function _init_locale() {
 	\load_plugin_textdomain(
 		'autodescription',
 		false,
-		\dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language'
+		\dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language',
 	);
 }
 
@@ -195,7 +195,7 @@ function _autoload_classes( $class ) {
 		[
 			'\\' => \DIRECTORY_SEPARATOR,
 			'_'  => '-',
-		]
+		],
 	);
 
 	if ( str_starts_with( $class, 'traits' ) ) {
