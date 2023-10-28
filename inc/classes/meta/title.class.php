@@ -56,8 +56,11 @@ class Title {
 	 * @return string The real title output.
 	 */
 	public static function get_title( $args = null ) {
-		return static::get_custom_title( $args )
-			?: static::get_generated_title( $args );
+
+		$title = static::get_custom_title( $args );
+
+		// Allow 0 to be the title.
+		return \strlen( $title ) ? $title : static::get_generated_title( $args );
 	}
 
 	/**
@@ -71,8 +74,11 @@ class Title {
 	 * @return string The unmodified title output.
 	 */
 	public static function get_bare_title( $args = null ) {
-		return static::get_bare_custom_title( $args )
-			?: static::get_bare_generated_title( $args );
+
+		$title = static::get_bare_custom_title( $args );
+
+		// Allow 0 to be the title.
+		return \strlen( $title ) ? $title : static::get_bare_generated_title( $args );
 	}
 
 	/**
@@ -266,8 +272,10 @@ class Title {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$title = Data\Plugin::get_option( 'homepage_title' )
-					  ?: Data\Plugin\Post::get_meta_item( '_genesis_title' );
+				$title = Data\Plugin::get_option( 'homepage_title' );
+				// Allow 0 to be the title.
+				if ( ! \strlen( $title ) )
+					$title = Data\Plugin\Post::get_meta_item( '_genesis_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
@@ -303,8 +311,10 @@ class Title {
 			$title = Data\Plugin\PTA::get_meta_item( 'doctitle', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$title = Data\Plugin::get_option( 'homepage_title' )
-					  ?: Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
+				$title = Data\Plugin::get_option( 'homepage_title' );
+				// Allow 0 to be the title.
+				if ( ! \strlen( $title ) )
+					$title = Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
@@ -660,10 +670,9 @@ class Title {
 	 * @return string The generated post type archive title.
 	 */
 	public static function get_user_title( $user_id = 0 ) {
-
-		$title = \get_userdata( $user_id ?: Query::get_the_real_id() )->display_name ?? '';
-
-		return \strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '';
+		return Data\Filter\Sanitize::metadata_content(
+			\get_userdata( $user_id ?: Query::get_the_real_id() )->display_name ?? ''
+		);
 	}
 
 	/**
@@ -781,7 +790,7 @@ class Title {
 		$title    = trim( $title );
 		$addition = trim( $addition ?? static::get_addition() );
 
-		if ( $addition && $title ) {
+		if ( \strlen( $addition ) && \strlen( $title ) ) {
 			$sep = static::get_separator();
 
 			if ( 'left' === ( $seplocation ?? static::get_addition_location() ) )
@@ -931,11 +940,16 @@ class Title {
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition_for_front_page() {
-		return memo() ?? memo(
-			Data\Filter\Sanitize::metadata_content(
-				Data\Plugin::get_option( 'homepage_title_tagline' ) ?: Data\Blog::get_filtered_blog_description()
-			)
-		);
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = memo() ) return $memo;
+
+		$tagline = Data\Plugin::get_option( 'homepage_title_tagline' );
+
+		// Allow 0 to be the title.
+		return memo( Data\Filter\Sanitize::metadata_content(
+			\strlen( $tagline ) ? $tagline : Data\Blog::get_filtered_blog_description()
+		) );
 	}
 
 	/**

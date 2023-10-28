@@ -171,7 +171,7 @@ final class Open_Graph {
 			);
 		}
 
-		if ( $title )
+		if ( \strlen( $title ) )
 			yield [
 				'attributes' => [
 					'property' => 'og:title',
@@ -208,7 +208,7 @@ final class Open_Graph {
 			);
 		}
 
-		if ( $description )
+		if ( \strlen( $description ) )
 			yield [
 				'attributes' => [
 					'property' => 'og:description',

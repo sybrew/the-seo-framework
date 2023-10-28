@@ -504,8 +504,6 @@ TODO instead of .min.js and .min.js, do /min/x.js?
 TODO can we bust the cache via a JS script if we detect an older version is being requested?
 	-> E.g., we flag "expected version" to each script. If it's a mismatch, bust it?
 
-TODO deprecate the_seo_framework_fetched_description_excerpt.
-
 TODO add support for get_shortlink_url( $args )
 	-> Also add input field per post, so users can overwrite it on a per-post basis.
 		-> We could use this well for tsf.fyi.
@@ -514,8 +512,6 @@ TODO test product structured data.
 	-> Also on product categories and product search.
 
 TODO test attachment pages' breadcrumb (and image data etc.).
-
-TODO Remove s_url_query(), exchange for sanitize_url()?
 
 TODO schema.org wbesite logo example doesn't reflect actual output...
 	-> Also, we can remove the ID requirement. See https://github.com/sybrew/the-seo-framework/issues/646
@@ -627,8 +623,6 @@ TODO move URI\Utils to Format\URI?
 TODO make issue: We should upgrade the twitter profile inputs to become fully qualified URLs.
 	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.
 
-TODO we allow saving of "0" now, but we'll discard it when we read it.
-
 **Detailed log**
 
 **For everyone:**
@@ -682,6 +676,12 @@ TODO we allow saving of "0" now, but we'll discard it when we read it.
 	* When a dropdown option fails sanitization, it will revert back to the last known option, instead of an arbitrary default.
 	* We no longer allow unregistered settings to be stored in TSF's option meta. During the upgrade, all unregistered settings will be deleted automatically as a side-effect of registering new defaults.
 * **Improved:**
+	* **Administration:**
+		* You can now store lone `0`'s as titles and descriptions, and those will be outputted as-is on the front-end.
+			* If the title is unbranded, WordPress will replace the title.
+			* No one should make use of this feature. It serves as a flex that our data handling is super robust.
+		* You can now store ampersands (`&`), slashes (`/`), and backward solidus (`\`) in titles and descriptions without the risk of them being lost, changed, or duplicated on (a repeated) save.
+			* Much work has been done in previous updates to prevent this issue, but we're now certain of its robustness.
 	* **Localization:**
 		* Repeated spacing in metadata are now replaced using the same space character inputted, instead of a default space character.
 	* **Performance:**

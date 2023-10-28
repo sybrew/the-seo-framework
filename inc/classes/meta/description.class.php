@@ -59,8 +59,11 @@ class Description {
 	 * @return string The real description output.
 	 */
 	public static function get_description( $args = null ) {
-		return static::get_custom_description( $args )
-			?: static::get_generated_description( $args );
+
+		$desc = static::get_custom_description( $args );
+
+		// Allow 0 to be the description.
+		return \strlen( $desc ) ? $desc : static::get_generated_description( $args );
 	}
 
 	/**
@@ -218,8 +221,10 @@ class Description {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$desc = Data\Plugin::get_option( 'homepage_description' )
-					 ?: Data\Plugin\Post::get_meta_item( '_genesis_description' );
+				$desc = Data\Plugin::get_option( 'homepage_description' );
+				// Allow 0 to be the description.
+				if ( ! \strlen( $desc ) )
+					$desc = Data\Plugin\Post::get_meta_item( '_genesis_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
@@ -258,8 +263,10 @@ class Description {
 			$desc = Data\Plugin\PTA::get_meta_item( 'description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$desc = Data\Plugin::get_option( 'homepage_description' )
-					 ?: Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
+				$desc = Data\Plugin::get_option( 'homepage_description' );
+				// Allow 0 to be the description.
+				if ( ! \strlen( $desc ) )
+					$desc = Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}

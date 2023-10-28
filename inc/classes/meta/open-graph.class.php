@@ -105,8 +105,11 @@ class Open_Graph {
 	 * @return string Open Graph Title.
 	 */
 	public static function get_title( $args = null ) {
-		return static::get_custom_title( $args, true )
-			?: static::get_generated_title( $args, true );
+
+		$title = static::get_custom_title( $args );
+
+		// Allow 0 to be the title.
+		return \strlen( $title ) ? $title : static::get_generated_title( $args );
 	}
 
 	/**
@@ -136,8 +139,10 @@ class Open_Graph {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$title = Data\Plugin::get_option( 'homepage_og_title' )
-					  ?: Data\Plugin\Post::get_meta_item( '_open_graph_title' );
+				$title = Data\Plugin::get_option( 'homepage_og_title' );
+				// Allow 0 to be the title.
+				if ( ! \strlen( $title ) )
+					$title = Data\Plugin\Post::get_meta_item( '_open_graph_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
@@ -150,6 +155,7 @@ class Open_Graph {
 		}
 
 		if ( ! isset( $title ) ) return '';
+
 		if ( \strlen( $title ) )
 			return Data\Filter\Sanitize::metadata_content( $title );
 
@@ -176,8 +182,10 @@ class Open_Graph {
 			$title = Data\Plugin\PTA::get_meta_item( 'og_title', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$title = Data\Plugin::get_option( 'homepage_og_title' )
-					  ?: Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
+				$title = Data\Plugin::get_option( 'homepage_og_title' );
+				// Allow 0 to be the title.
+				if ( ! \strlen( $title ) )
+					$title = Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
@@ -186,6 +194,7 @@ class Open_Graph {
 		}
 
 		if ( ! isset( $title ) ) return '';
+
 		if ( \strlen( $title ) )
 			return Data\Filter\Sanitize::metadata_content( $title );
 
@@ -217,8 +226,11 @@ class Open_Graph {
 	 * @return string The real Open Graph description output.
 	 */
 	public static function get_description( $args = null ) {
-		return static::get_custom_description( $args )
-			?: static::get_generated_description( $args );
+
+		$desc = static::get_custom_description( $args );
+
+		// Allow 0 to be the description.
+		return \strlen( $desc ) ? $desc : static::get_generated_description( $args );
 	}
 
 	/**
@@ -249,8 +261,10 @@ class Open_Graph {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$desc = Data\Plugin::get_option( 'homepage_og_description' )
-					 ?: Data\Plugin\Post::get_meta_item( '_open_graph_description' );
+				$desc = Data\Plugin::get_option( 'homepage_og_description' );
+				// Allow 0 to be the description.
+				if ( ! \strlen( $desc ) )
+					$desc = Data\Plugin\Post::get_meta_item( '_open_graph_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_og_description' );
 			}
@@ -263,6 +277,7 @@ class Open_Graph {
 		}
 
 		if ( ! isset( $desc ) ) return '';
+
 		if ( \strlen( $desc ) )
 			return Data\Filter\Sanitize::metadata_content( $desc );
 
@@ -289,8 +304,10 @@ class Open_Graph {
 			$desc = Data\Plugin\PTA::get_meta_item( 'og_description', $args['pta'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$desc = Data\Plugin::get_option( 'homepage_og_description' )
-					 ?: Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
+				$desc = Data\Plugin::get_option( 'homepage_og_description' );
+				// Allow 0 to be the description.
+				if ( ! \strlen( $desc ) )
+					$desc = Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_og_description' );
 			}
@@ -299,6 +316,7 @@ class Open_Graph {
 		}
 
 		if ( ! isset( $desc ) ) return '';
+
 		if ( \strlen( $desc ) )
 			return Data\Filter\Sanitize::metadata_content( $desc );
 

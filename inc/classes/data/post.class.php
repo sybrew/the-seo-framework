@@ -55,6 +55,7 @@ class Post {
 		$post = \get_post( $post ?: Query::get_the_real_id() );
 
 		// '0' is not deemed content. Return empty string for it's a slippery slope.
+		// We only allow that for TSF's custom fields.
 		return ! empty( $post->post_excerpt ) && \post_type_supports( $post->post_type, 'excerpt' )
 			? $post->post_excerpt
 			: '';
@@ -73,6 +74,7 @@ class Post {
 		$post = \get_post( $post ?: Query::get_the_real_id() );
 
 		// '0' is not deemed content. Return empty string for it's a slippery slope.
+		// We only allow that for TSF's custom fields.
 		return ! empty( $post->post_content ) && \post_type_supports( $post->post_type, 'editor' )
 			? $post->post_content
 			: '';

@@ -71,7 +71,7 @@ final class Description {
 			);
 		}
 
-		if ( $description )
+		if ( \strlen( $description ) )
 			yield [
 				'attributes' => [
 					'name'    => 'description',

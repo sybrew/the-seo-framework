@@ -167,7 +167,7 @@ final class Twitter {
 			);
 		}
 
-		if ( $title )
+		if ( \strlen( $title ) )
 			yield [
 				'attributes' => [
 					'name'    => 'twitter:title',
@@ -204,7 +204,7 @@ final class Twitter {
 			);
 		}
 
-		if ( $description )
+		if ( \strlen( $description ) )
 			yield [
 				'attributes' => [
 					'name'    => 'twitter:description',

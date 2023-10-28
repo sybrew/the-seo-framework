@@ -126,9 +126,7 @@ if ( \apply_filters( 'the_seo_framework_overwrite_titles', true ) ) {
 	 */
 	if ( \apply_filters_deprecated(
 		'the_seo_framework_manipulate_title',
-		[
-			true,
-		],
+		[ true ],
 		'4.3.0 of The SEO Framework',
 		'the_seo_framework_overwrite_titles',
 	) ) {
