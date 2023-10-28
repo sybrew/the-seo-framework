@@ -19,7 +19,7 @@ use \The_SEO_Framework\Helper\{
 	Guidelines,
 	Format\Arrays,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -129,14 +129,12 @@ class Loader {
 		 * @param string $registry The \The_SEO_Framework\Admin\Script\Registry registry class name.
 		 * @param string $loader   The \The_SEO_Framework\Admin\Script\Loader loader class name.
 		 */
-		$scripts = \apply_filters_ref_array(
+		$scripts = \apply_filters(
 			'the_seo_framework_scripts',
-			[
-				// Flattening is 3% of this method's total time, we can improve by simplifying the getters above like do_meta_output().
-				Arrays::flatten_list( $scripts ),
-				Registry::class,
-				Loader::class,
-			]
+			// Flattening is 3% of this method's total time, we can improve by simplifying the getters above like do_meta_output().
+			Arrays::flatten_list( $scripts ),
+			Registry::class,
+			Loader::class,
 		);
 
 		Registry::register( $scripts );
@@ -464,7 +462,7 @@ class Loader {
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				Taxonomies::get_taxonomy_label( $taxonomy )
+				Taxonomy::get_label( $taxonomy )
 			)
 			: '';
 
@@ -680,15 +678,15 @@ class Loader {
 		$id = Query::get_the_real_admin_id();
 
 		$post_type   = \get_post_type( $id );
-		$_taxonomies = $post_type ? Taxonomies::get_hierarchical_taxonomies_as( 'objects', $post_type ) : [];
+		$_taxonomies = $post_type ? Taxonomy::get_hierarchical( 'objects', $post_type ) : [];
 		$taxonomies  = [];
 
 		$gutenberg = Query::is_block_editor();
 
 		foreach ( $_taxonomies as $_t ) {
-			if ( ! Taxonomies::is_taxonomy_supported( $_t->name ) ) continue;
+			if ( ! Taxonomy::is_supported( $_t->name ) ) continue;
 
-			$singular_name   = Taxonomies::get_taxonomy_label( $_t->name );
+			$singular_name   = Taxonomy::get_label( $_t->name );
 			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $id, $_t->name );
 
 			$taxonomies[ $_t->name ] = [

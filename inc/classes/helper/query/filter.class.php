@@ -39,8 +39,12 @@ use \The_SEO_Framework\{
 final class Filter {
 
 	/**
-	 * Adjusts category post link.
+	 * Adjusts category post link and replace it with the primary term.
 	 *
+	 * @hook post_link_category 10
+	 * @hook wc_product_post_type_link_product_cat 10
+	 * @hook woocommerce_breadcrumb_main_term 10
+	 * @hook woocommerce_product_categories_widget_main_term 10
 	 * @since 4.3.0
 	 * @access private
 	 *

@@ -15,9 +15,9 @@ use function \The_SEO_Framework\{
 
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -512,7 +512,7 @@ class Title {
 				$prefix = sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-					Data\Filter\Sanitize::metadata_content( Taxonomies::get_taxonomy_label( $term->taxonomy ?? '' ) )
+					Data\Filter\Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) )
 				);
 			}
 		}
@@ -547,7 +547,7 @@ class Title {
 					$prefix = sprintf(
 						/* translators: %s: Taxonomy singular name. */
 						\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-						Taxonomies::get_taxonomy_label( $object->taxonomy )
+						Taxonomy::get_label( $object->taxonomy )
 					);
 			}
 		} elseif ( $object instanceof \WP_Post_Type && isset( $object->name ) ) {
@@ -684,7 +684,7 @@ class Title {
 		if ( \is_array( $post_type ) )
 			$post_type = reset( $post_type );
 
-		if ( ! \in_array( $post_type, Post_Types::get_public_post_type_archives(), true ) )
+		if ( ! \in_array( $post_type, Post_Type::get_public_pta(), true ) )
 			return '';
 
 		/**
@@ -697,7 +697,7 @@ class Title {
 		 */
 		$title = \apply_filters(
 			'post_type_archive_title',
-			Post_Types::get_post_type_label( $post_type, false ),
+			Post_Type::get_label( $post_type, false ),
 			$post_type,
 		);
 

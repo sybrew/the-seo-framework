@@ -17,7 +17,7 @@ use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
 use \The_SEO_Framework\Helper\{
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -123,7 +123,7 @@ final class Front extends Factory {
 					yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, Query::get_current_taxonomy() );
 
 					// Store values from each post type bound to the taxonomy.
-					foreach ( Taxonomies::get_post_types_from_taxonomy() as $post_type )
+					foreach ( Taxonomy::get_post_types() as $post_type )
 						$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
 					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).

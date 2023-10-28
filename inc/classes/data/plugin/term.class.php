@@ -12,7 +12,7 @@ use function \The_SEO_Framework\is_headless;
 
 use \The_SEO_Framework\Helper\{
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -99,7 +99,7 @@ class Term {
 			return static::$meta_memo[ $term_id ];
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
-		if ( empty( $term_id ) || ! Taxonomies::is_taxonomy_supported( \get_term( $term_id )->taxonomy ?? '' ) )
+		if ( empty( $term_id ) || ! Taxonomy::is_supported( \get_term( $term_id )->taxonomy ?? '' ) )
 			return static::$meta_memo[ $term_id ] = [];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.

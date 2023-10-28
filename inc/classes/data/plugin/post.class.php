@@ -12,7 +12,7 @@ use function \The_SEO_Framework\is_headless;
 
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
 };
 
@@ -107,7 +107,7 @@ class Post {
 			return static::$meta_memo[ $post_id ];
 
 		// We test post type support for "post_query"-queries might get past this point.
-		if ( empty( $post_id ) || ! Post_Types::is_post_type_supported( \get_post( $post_id )->post_type ) )
+		if ( empty( $post_id ) || ! Post_Type::is_supported( \get_post( $post_id )->post_type ) )
 			return static::$meta_memo[ $post_id ] = [];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.

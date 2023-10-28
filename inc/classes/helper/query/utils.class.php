@@ -12,9 +12,9 @@ use function \The_SEO_Framework\memo;
 
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query, // Yes, it is legal to share class and namespaces.
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -85,16 +85,16 @@ class Utils {
 				break;
 			case Query::is_singular():
 				// This is the most likely scenario, but may collide with is_feed() et al.
-				$supported = Post_Types::is_post_type_supported() && Query::get_the_real_id();
+				$supported = Post_Type::is_supported() && Query::get_the_real_id();
 				break;
 			case \is_post_type_archive():
-				$supported = Post_Types::is_post_type_archive_supported();
+				$supported = Post_Type::is_pta_supported();
 				break;
 			case Query::is_category() || Query::is_tag() || Query::is_tax():
 				// When a term has no posts attached, it'll not return a post type, and it returns a 404 late in the loop.
 				// This is because get_post_type() tries to assert the first post in the loop here.
 				// Thus, we test for is_taxonomy_supported() instead.
-				$supported = Taxonomies::is_taxonomy_supported() && Query::get_the_real_id();
+				$supported = Taxonomy::is_supported() && Query::get_the_real_id();
 				break;
 			default:
 				// Everything else: homepage, 404, search, edge-cases.

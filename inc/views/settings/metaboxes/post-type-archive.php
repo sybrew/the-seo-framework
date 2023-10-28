@@ -15,7 +15,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 };
 use \The_SEO_Framework\Helper\{
 	Compatibility,
-	Post_Types,
+	Post_Type,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -44,12 +44,12 @@ use \The_SEO_Framework\Helper\{
 switch ( $instance ) :
 	case 'main':
 		$_settings_class = Admin\Settings\Plugin::class;
-		$post_types      = Post_Types::get_public_post_type_archives();
+		$post_types      = Post_Type::get_public_pta();
 
 		$post_types_data = [];
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
-				'label'    => Post_Types::get_post_type_label( $post_type ),
+				'label'    => Post_Type::get_label( $post_type ),
 				'url'      => Meta\URI::get_bare_post_type_archive_url( $post_type ), // permalink!
 				'hasPosts' => Data\Post::has_posts_in_pta( $post_type ),
 			];

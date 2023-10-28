@@ -16,7 +16,7 @@ use \The_SEO_Framework\{
 };
 
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
 };
 
@@ -73,7 +73,7 @@ final class Post {
 		 */
 		if (
 			   ! Query::is_post_edit()
-			|| ! Post_Types::is_post_type_supported( $post_type )
+			|| ! Post_Type::is_supported( $post_type )
 			|| ! \apply_filters( 'the_seo_framework_seobox_output', true )
 		) return;
 

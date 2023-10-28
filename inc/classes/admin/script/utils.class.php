@@ -19,7 +19,7 @@ use \The_SEO_Framework\Helper\{
 	Guidelines,
 	Format\Arrays,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**

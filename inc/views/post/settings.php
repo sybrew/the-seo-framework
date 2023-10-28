@@ -19,7 +19,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	Input,
 };
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
 };
 
@@ -380,7 +380,7 @@ switch ( $instance ) :
 		</div>
 
 		<?php
-		$can_do_archive_query = Post_Types::post_type_supports_taxonomies() && Data\Plugin::get_option( 'alter_archive_query' );
+		$can_do_archive_query = Post_Type::supports_taxonomies() && Data\Plugin::get_option( 'alter_archive_query' );
 		$can_do_search_query  = (bool) Data\Plugin::get_option( 'alter_search_query' );
 		?>
 

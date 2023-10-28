@@ -15,9 +15,9 @@ use \The_SEO_Framework\{
 	Front,
 };
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 // phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
@@ -342,7 +342,7 @@ final class Debug {
 			return;
 
 		if ( Query::is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', static fn () => Query::get_the_front_page_id() );
+			\add_filter( 'the_seo_framework_current_object_id', static fn() => Query::get_the_front_page_id() );
 
 		// Start timer.
 		$t = hrtime( true );
@@ -468,16 +468,16 @@ final class Debug {
 		$is_multipage                   = Query::is_multipage();
 		$is_singular_archive            = Query::is_singular_archive();
 		$is_term_meta_capable           = Query::is_editable_term();
-		$is_post_type_supported         = Post_Types::is_post_type_supported();
-		$is_post_type_archive_supported = Post_Types::is_post_type_archive_supported();
+		$is_post_type_supported         = Post_Type::is_supported();
+		$is_post_type_archive_supported = Post_Type::is_pta_supported();
 		$has_page_on_front              = Query\Utils::has_page_on_front();
-		$is_taxonomy_supported          = Taxonomies::is_taxonomy_supported();
+		$is_taxonomy_supported          = Taxonomy::is_supported();
 		$get_post_type                  = \get_post_type();
 		$get_post_type_real_id          = Query::get_post_type_real_id();
 		$admin_post_type                = Query::get_admin_post_type();
 		$current_taxonomy               = Query::get_current_taxonomy();
 		$current_post_type              = Query::get_current_post_type();
-		$is_taxonomy_disabled           = Taxonomies::is_taxonomy_disabled();
+		$is_taxonomy_disabled           = Taxonomy::is_disabled();
 		$is_post_type_archive           = \is_post_type_archive();
 		$is_protected                   = Data\Post::is_protected( $page_id );
 		$wp_doing_ajax                  = \wp_doing_ajax();

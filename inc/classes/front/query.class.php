@@ -249,7 +249,7 @@ final class Query {
 
 			foreach ( $wp_query->tax_query->queries as $_query ) {
 				if ( isset( $_query['taxonomy'] ) ) {
-					$supported = Helper\Taxonomies::is_taxonomy_supported( $_query['taxonomy'] );
+					$supported = Helper\Taxonomy::is_supported( $_query['taxonomy'] );
 					// If just one tax is supported for this query, greenlight it: all must be blocking.
 					if ( $supported ) break;
 				}

@@ -21,7 +21,7 @@ use \The_SEO_Framework\Helper\{
 	Format\Strings,
 	Query,
 	Migrate,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -114,7 +114,7 @@ final class Term extends Main {
 			'states' => [
 				'locale'       => \get_locale(),
 				'isempty'      => ! Data\Term::is_term_populated( static::$query['id'], static::$query['tax'] ),
-				'posttypes'    => Taxonomies::get_post_types_from_taxonomy( static::$query['tax'] ),
+				'posttypes'    => Taxonomy::get_post_types( static::$query['tax'] ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,

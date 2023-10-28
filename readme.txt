@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
 Requires at least: 5.9
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 7.4.0
 Stable tag: 4.2.8
 License: GPLv3
@@ -23,7 +23,7 @@ It's easy to get started. Activate this plugin, and your site's instantly protec
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 25&#160;000 hours into this plugin. Here are the results: =
+= We poured over 27&#160;000 hours into this plugin. Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -525,19 +525,6 @@ TODO in transport, we have a mechanism to capture and cache the last term/post f
 	-> Can we do this for the Data/Post and Data/Term objects?
 		-> We could use umemo( __CLASS__ . "+$post_id" )
 
-TODO we added `uid`. We may want to rename `taxonomy` to `tax`--making it easier to read.
-	-> normalize_generator_args() can swap the name.
-
-TODO Helper/query
-	-> Query?
-		-> cache
-		-> utils
-TODO Helper/Taxonomies
-	-> Helper/Taxonomy
-TODO Helper/Post_Types
-	-> Helper/PostType
-What about "Helper/Filter/Taxonomies"?
-
 TODO we MUST add a new option for Schema.org
 	-> Shall we add subsequent toggles, for each type?
 		-> Shall we add more input fields for the user to tweak?
@@ -552,7 +539,9 @@ TODO add robots.txt editor
 	-> Add this as an extension instead?
 
 TODO add trailing commas on all multi-line code (about 100 instances, so it's fine)
-	-> Also remove all _ref_array?
+	-> Only do this if there's already a comma present in the multi-line code.
+
+TODO Remove all _ref_array?
 
 TODO get_post/term/user_meta -> add to legacy api?
 
@@ -809,12 +798,12 @@ TODO we allow saving of "0" now, but we'll discard it when we read it.
 			* Internally known as `The_SEO_Framework\Meta\Title\Exclusion`.
 		* This pool has a sub-pool, accessible via `tsf()->query()->utils()`.
 			* Internally known as `The_SEO_Framework\Meta\Title\Utils`.
-	* Pool `tsf()->post_types()` is now available.
-		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_types()->is_post_type_supported()`.
+	* Pool `tsf()->post_type()` is now available.
+		* All public post type methods have been moved to that pool. E.g., `tsf()->is_post_type_supported()` is now `tsf()->post_type()->is_supported()`.
 		* Internally known as `The_SEO_Framework\Helper\Post_Types`.
-	* Pool `tsf()->taxonomies()` is now available.
-		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->is_taxonomy_supported()` is now `tsf()->taxonomies()->is_taxonomy_supported()`.
-		* Internally known as `The_SEO_Framework\Helper\Taxonomies`.
+	* Pool `tsf()->taxonomy()` is now available.
+		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->is_taxonomy_supported()` is now `tsf()->taxonomy()->is_supported()`.
+		* Internally known as `The_SEO_Framework\Helper\Taxonomy`.
 	* Pool `tsf()->robots()` is now available.
 		* All public taxonomy methods have been moved to that pool. E.g., `tsf()->get_robots_meta()` is now `tsf()->robots()->get_meta()`.
 		* Internally known as `The_SEO_Framework\Meta\Robots`.
@@ -940,6 +929,9 @@ TODO we allow saving of "0" now, but we'll discard it when we read it.
 	* Twitter cards are no longer validated whether a card type is provided.
 		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
 	* When scripts are enqueued, it is now automatically determined whether late-enqueuing in the footer is necessary.
+	* **Generation arguments:**
+		* Generation arguments for getting titles, descriptions, canonical URLs, etc., now support `'tax'` instead of `'taxonomy'`.
+		* We also added support for `'uid'`, which stands for "User ID," provisioned to become fully embraced in a future update. This is used sparingly and shouldn't be relied on just yet.
 	* Script templates no longer forward arguments by name, but put them sequentially in variable `$view_args` instead.
 	* Almost all of the plugin's data is now sanitized when using the WordPress option or meta APIs, instead of only when using TSF's APIs. The exception is post metadata, which we'll address next major update ([learn more](https://github.com/sybrew/the-seo-framework/issues/185)).
 		* Migration plugins might be affected if they use the default WordPress option/meta API calls that invoke any of these hooks:
@@ -1058,7 +1050,7 @@ TODO we allow saving of "0" now, but we'll discard it when we read it.
 				* `is_robots()`, use WordPress's builtin namesake instead.
 				* `get_post_type_real_id()`, use `tsf()->query()->get_post_type_real_id()` instead
 				* `get_admin_post_type()`, use `tsf()->query()->get_admin_post_type()` instead
-				* `get_post_types_from_taxonomy()`, use `tsf()->taxonomies()->get_post_types_from_taxonomy()` instead
+				* `get_post_types_from_taxonomy()`, use `tsf()->taxonomy()->get_post_types()` instead
 				* `get_the_real_id()`, use `tsf()->query()->get_the_real_id()` instead
 				* `get_the_real_admin_id()`, use `tsf()->query()->get_the_real_admin_id()` instead
 				* `get_the_front_page_id()`, use `tsf()->query()->get_the_front_page_id()` instead
@@ -1151,22 +1143,22 @@ TODO we allow saving of "0" now, but we'll discard it when we read it.
 				* `query_supports_seo()`, use `tsf()->query()->utils()->query_supports_seo()` instead.
 				* `is_query_exploited()`, use `tsf()->query()->utils()->is_query_exploited()` instead.
 				* `has_page_on_front()`, use `tsf()->query()->utils()->has_page_on_front()` instead.
-				* `is_post_type_supported()`, use `tsf()->post_types()->is_post_type_supported()` instead.
-				* `is_post_type_archive_supported()`, use `tsf()->post_types()->is_post_type_archive_supported()` instead.
-				* `post_type_supports_taxonomies()`, use `tsf()->post_types()->post_type_supports_taxonomies()` instead.
-				* `get_supported_post_type_archives()`, use `tsf()->post_types()->get_supported_post_type_archives()` instead.
-				* `get_public_post_type_archives()`, use `tsf()->post_types()->get_public_post_type_archives()` instead.
-				* `get_supported_post_types()`, use `tsf()->post_types()->get_supported_post_types()` instead.
-				* `is_post_type_disabled()`, use `tsf()->post_types()->is_post_type_disabled()` instead.
-				* `is_taxonomy_supported()`, use `tsf()->taxonomies()->is_taxonomy_supported()` instead.
-				* `get_supported_taxonomies()`, use `tsf()->taxonomies()->get_supported_taxonomies()` instead.
-				* `is_taxonomy_disabled()`, use `tsf()->taxonomies()->is_taxonomy_disabled()` instead.
+				* `is_post_type_supported()`, use `tsf()->post_type()->is_supported()` instead.
+				* `is_post_type_archive_supported()`, use `tsf()->post_type()->is_pta_supported()` instead.
+				* `post_type_supports_taxonomies()`, use `tsf()->post_type()->supports_taxonomies()` instead.
+				* `get_supported_post_type_archives()`, use `tsf()->post_type()->get_all_supported_pta()` instead.
+				* `get_public_post_type_archives()`, use `tsf()->post_type()->get_public_pta()` instead.
+				* `get_supported_post_types()`, use `tsf()->post_type()->get_all_supported()` instead.
+				* `is_post_type_disabled()`, use `tsf()->post_type()->is_disabled()` instead.
+				* `is_taxonomy_supported()`, use `tsf()->taxonomy()->is_supported()` instead.
+				* `get_supported_taxonomies()`, use `tsf()->taxonomy()->get_all_supported()` instead.
+				* `is_taxonomy_disabled()`, use `tsf()->taxonomy()->is_disabled()` instead.
 				* `is_term_meta_capable()`, use `tsf()->query()->is_editable_term()` instead.
-				* `get_hierarchical_post_types()`, use `tsf()->post_types()->get_hierarchical_post_types()` instead.
-				* `get_nonhierarchical_post_types()`, use `tsf()->post_types()->get_nonhierarchical_post_types()` instead.
-				* `get_hierarchical_taxonomies_as()`, use `tsf()->taxonomies()->get_hierarchical_taxonomies_as()` instead.
-				* `get_post_type_label()`, use `tsf()->post_types()->get_post_type_label()` instead.
-				* `get_tax_type_label()`, use `tsf()->post_types()->get_taxonomy_label()` instead.
+				* `get_hierarchical_post_types()`, use `tsf()->post_type()->get_all_hierarchical()` instead.
+				* `get_nonhierarchical_post_types()`, use `tsf()->post_type()->get_all_nonhierarchical()` instead.
+				* `get_hierarchical_taxonomies_as()`, use `tsf()->taxonomy()->get_hierarchical()` instead.
+				* `get_post_type_label()`, use `tsf()->post_type()->get_label()` instead.
+				* `get_tax_type_label()`, use `tsf()->taxonomy()->get_label()` instead.
 				* `generate_og_type()`, use `tsf()->open_graph()->get_type()` instead.
 				* `get_og_type()`, use `tsf()->open_graph()->get_type()` instead.
 				* `get_redirect_url()`, use `tsf()->uri()->get_redirect_url()` instead.

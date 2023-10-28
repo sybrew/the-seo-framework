@@ -11,7 +11,7 @@ namespace The_SEO_Framework\Admin\Settings;
 use \The_SEO_Framework\Admin;
 use \The_SEO_Framework\Helper\{
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -53,7 +53,7 @@ final class Term {
 
 		$taxonomy = Query::get_current_taxonomy();
 
-		if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) ) return;
+		if ( ! Taxonomy::is_supported( $taxonomy ) ) return;
 
 		\add_action(
 			"{$taxonomy}_edit_form",

@@ -16,7 +16,7 @@ use \The_SEO_Framework\{
 };
 use \The_SEO_Framework\Helper\{
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -421,7 +421,7 @@ final class ListEdit extends Admin\Lists\Table {
 			? sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-				Taxonomies::get_taxonomy_label( $generator_args['tax'] )
+				Taxonomy::get_label( $generator_args['tax'] )
 			)
 			: '';
 

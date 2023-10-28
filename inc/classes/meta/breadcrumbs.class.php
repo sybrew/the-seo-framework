@@ -16,7 +16,7 @@ use function \The_SEO_Framework\{
 use \The_SEO_Framework\{
 	Data,
 	Helper\Query,
-	Helper\Taxonomies,
+	Helper\Taxonomy,
 	Meta,
 };
 
@@ -185,7 +185,7 @@ class Breadcrumbs {
 				];
 			}
 		} else { // single.
-			$taxonomies = Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type );
+			$taxonomies = Taxonomy::get_hierarchical( 'names', $post_type );
 			$taxonomy   = reset( $taxonomies ); // TODO make this an option; also which output they want to use.
 
 			if ( $taxonomy ) {

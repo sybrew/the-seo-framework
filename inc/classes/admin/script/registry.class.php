@@ -20,9 +20,9 @@ use \The_SEO_Framework\{
 };
 use \The_SEO_Framework\Helper\{
 	Format,
-	Post_Types,
+	Post_Type,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -107,8 +107,8 @@ class Registry {
 			|| Data\Plugin::get_site_cache( 'persistent_notices' )
 			|| (
 				! is_headless( 'meta' ) && (
-					   ( Query::is_archive_admin() && Taxonomies::is_taxonomy_supported() )
-					|| ( Query::is_singular_admin() && Post_Types::is_post_type_supported() )
+					   ( Query::is_archive_admin() && Taxonomy::is_supported() )
+					|| ( Query::is_singular_admin() && Post_Type::is_supported() )
 				)
 			)
 		);

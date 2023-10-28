@@ -142,9 +142,9 @@ final class Deprecated {
 	public function get_post_types_from_taxonomy( $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->taxonomies()->get_post_types_from_taxonomy()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->taxonomy()->get_post_types()' );
 
-		return $tsf->taxonomies()->get_post_types_from_taxonomy( $taxonomy );
+		return $tsf->taxonomy()->get_post_types( $taxonomy );
 	}
 
 	/**
@@ -2708,9 +2708,9 @@ final class Deprecated {
 	public function is_post_type_supported( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_supported()', '4.3.0', 'tsf()->post_types()->is_post_type_supported()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_supported()', '4.3.0', 'tsf()->post_type()->is_supported()' );
 
-		return $tsf->post_types()->is_post_type_supported( $post_type );
+		return $tsf->post_type()->is_supported( $post_type );
 	}
 
 	/**
@@ -2726,9 +2726,9 @@ final class Deprecated {
 	public function is_post_type_archive_supported( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_archive_supported()', '4.3.0', 'tsf()->post_types()->is_post_type_archive_supported()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_archive_supported()', '4.3.0', 'tsf()->post_type()->is_pta_supported()' );
 
-		return $tsf->post_types()->is_post_type_archive_supported( $post_type );
+		return $tsf->post_type()->is_pta_supported( $post_type );
 	}
 
 	/**
@@ -2747,9 +2747,9 @@ final class Deprecated {
 	public function post_type_supports_taxonomies( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->post_type_supports_taxonomies()', '4.3.0', 'tsf()->post_types()->post_type_supports_taxonomies()' );
+		$tsf->_deprecated_function( 'tsf()->post_type_supports_taxonomies()', '4.3.0', 'tsf()->post_type()->supports_taxonomies()' );
 
-		return $tsf->post_types()->post_type_supports_taxonomies( $post_type );
+		return $tsf->post_type()->supports_taxonomies( $post_type );
 	}
 
 	/**
@@ -2765,9 +2765,9 @@ final class Deprecated {
 	public function get_supported_post_type_archives() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_supported_post_type_archives()', '4.3.0', 'tsf()->post_types()->get_supported_post_type_archives()' );
+		$tsf->_deprecated_function( 'tsf()->get_supported_post_type_archives()', '4.3.0', 'tsf()->post_type()->get_all_supported_pta()' );
 
-		return $tsf->post_types()->get_supported_post_type_archives();
+		return $tsf->post_type()->get_all_supported_pta();
 	}
 
 	/**
@@ -2783,9 +2783,9 @@ final class Deprecated {
 	public function get_public_post_type_archives() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_public_post_type_archives()', '4.3.0', 'tsf()->post_types()->get_public_post_type_archives()' );
+		$tsf->_deprecated_function( 'tsf()->get_public_post_type_archives()', '4.3.0', 'tsf()->post_type()->get_public_pta()' );
 
-		return $tsf->post_types()->get_public_post_type_archives();
+		return $tsf->post_type()->get_public_pta();
 	}
 
 	/**
@@ -2800,9 +2800,9 @@ final class Deprecated {
 	public function get_supported_post_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_supported_post_types()', '4.3.0', 'tsf()->post_types()->get_supported_post_types()' );
+		$tsf->_deprecated_function( 'tsf()->get_supported_post_types()', '4.3.0', 'tsf()->post_type()->get_all_supported()' );
 
-		return $tsf->post_types()->get_supported_post_types();
+		return $tsf->post_type()->get_all_supported();
 	}
 
 	/**
@@ -2821,9 +2821,9 @@ final class Deprecated {
 	public function is_post_type_disabled( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_disabled()', '4.3.0', 'tsf()->post_types()->is_post_type_disabled()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_disabled()', '4.3.0', 'tsf()->post_type()->is_disabled()' );
 
-		return $tsf->post_types()->is_post_type_disabled( $post_type );
+		return $tsf->post_type()->is_disabled( $post_type );
 	}
 
 	/**
@@ -2842,9 +2842,9 @@ final class Deprecated {
 	public function is_taxonomy_supported( $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_taxonomy_supported()', '4.3.0', 'tsf()->taxonomies()->is_taxonomy_supported()' );
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_supported()', '4.3.0', 'tsf()->taxonomy()->is_supported()' );
 
-		return $tsf->taxonomies()->is_taxonomy_supported( $taxonomy );
+		return $tsf->taxonomy()->is_supported( $taxonomy );
 	}
 
 	/**
@@ -2859,9 +2859,9 @@ final class Deprecated {
 	public function get_supported_taxonomies() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_supported_taxonomies()', '4.3.0', 'tsf()->taxonomies()->get_supported_taxonomies()' );
+		$tsf->_deprecated_function( 'tsf()->get_supported_taxonomies()', '4.3.0', 'tsf()->taxonomy()->get_all_supported()' );
 
-		return $tsf->taxonomies()->get_supported_taxonomies();
+		return $tsf->taxonomy()->get_all_supported();
 	}
 
 	/**
@@ -2882,9 +2882,9 @@ final class Deprecated {
 	public function is_taxonomy_disabled( $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_taxonomy_disabled()', '4.3.0', 'tsf()->taxonomies()->is_taxonomy_disabled()' );
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_disabled()', '4.3.0', 'tsf()->taxonomy()->is_disabled()' );
 
-		return $tsf->taxonomies()->is_taxonomy_disabled( $taxonomy );
+		return $tsf->taxonomy()->is_disabled( $taxonomy );
 	}
 
 	/**
@@ -2918,9 +2918,9 @@ final class Deprecated {
 	public function get_hierarchical_post_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_hierarchical_post_types()', '4.3.0', 'tsf()->post_types()->get_hierarchical_post_types()' );
+		$tsf->_deprecated_function( 'tsf()->get_hierarchical_post_types()', '4.3.0', 'tsf()->post_type()->get_all_hierarchical()' );
 
-		return $tsf->post_types()->get_hierarchical_post_types();
+		return $tsf->post_type()->get_all_hierarchical();
 	}
 
 	/**
@@ -2936,9 +2936,9 @@ final class Deprecated {
 	public function get_nonhierarchical_post_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_nonhierarchical_post_types()', '4.3.0', 'tsf()->post_types()->get_nonhierarchical_post_types()' );
+		$tsf->_deprecated_function( 'tsf()->get_nonhierarchical_post_types()', '4.3.0', 'tsf()->post_type()->get_all_nonhierarchical()' );
 
-		return $tsf->post_types()->get_nonhierarchical_post_types();
+		return $tsf->post_type()->get_all_nonhierarchical();
 	}
 
 	/**
@@ -2957,9 +2957,9 @@ final class Deprecated {
 	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_hierarchical_taxonomies_as()', '4.3.0', 'tsf()->taxonomies()->get_hierarchical_taxonomies_as()' );
+		$tsf->_deprecated_function( 'tsf()->get_hierarchical_taxonomies_as()', '4.3.0', 'tsf()->taxonomy()->get_hierarchical()' );
 
-		return $tsf->taxonomies()->get_hierarchical_taxonomies_as( $get, $post_type );
+		return $tsf->taxonomy()->get_hierarchical( $get, $post_type );
 	}
 
 	/**
@@ -2976,9 +2976,9 @@ final class Deprecated {
 	public function get_post_type_label( $post_type, $singular = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_label()', '4.3.0', 'tsf()->post_types()->get_post_type_label()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_label()', '4.3.0', 'tsf()->post_type()->get_label()' );
 
-		return $tsf->post_types()->get_post_type_label( $post_type, $singular );
+		return $tsf->post_type()->get_label( $post_type, $singular );
 	}
 
 	/**
@@ -2995,9 +2995,9 @@ final class Deprecated {
 	public function get_tax_type_label( $tax_type, $singular = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_tax_type_label()', '4.3.0', 'tsf()->post_types()->get_taxonomy_label()' );
+		$tsf->_deprecated_function( 'tsf()->get_tax_type_label()', '4.3.0', 'tsf()->taxonomy()->get_label()' );
 
-		return $tsf->taxonomies()->get_taxonomy_label( $tax_type, $singular );
+		return $tsf->taxonomy()->get_label( $tax_type, $singular );
 	}
 
 	/**

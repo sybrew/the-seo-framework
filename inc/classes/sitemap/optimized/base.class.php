@@ -15,7 +15,7 @@ use \The_SEO_Framework\{
 };
 use \The_SEO_Framework\Helper\{
 	Format\Time,
-	Post_Types,
+	Post_Type,
 	Query,
 };
 
@@ -198,7 +198,7 @@ class Base extends Main {
 			$content .= $this->build_url_item( $_values );
 		}
 
-		$post_types = array_diff( Post_Types::get_supported_post_types(), [ 'attachment' ] );
+		$post_types = array_diff( Post_Type::get_all_supported(), [ 'attachment' ] );
 
 		/**
 		 * @since 4.0.0

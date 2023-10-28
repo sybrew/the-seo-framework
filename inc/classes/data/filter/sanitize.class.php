@@ -174,7 +174,7 @@ class Sanitize {
 		return preg_replace_callback(
 			'/(\p{Zs}){2,}/u',
 			// Unicode support sans mb_*: Calculate the bytes of the match and then remove that length.
-			static fn ( $matches ) => substr( $matches[1], 0, \strlen( $matches[1] ) ),
+			static fn( $matches ) => substr( $matches[1], 0, \strlen( $matches[1] ) ),
 			$text,
 		);
 	}

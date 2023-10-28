@@ -12,8 +12,8 @@ use function \The_SEO_Framework\has_run;
 
 use The_SEO_Framework\{
 	Data,
-	Helper\Taxonomies,
-	Helper\Post_Types,
+	Helper\Taxonomy,
+	Helper\Post_Type,
 	Meta,
 };
 
@@ -388,7 +388,7 @@ class Plugin {
 
 		if ( empty( $value ) || ! \is_array( $value ) ) return [];
 
-		foreach ( Post_Types::get_forced_supported_post_types() as $forced )
+		foreach ( Post_Type::get_all_forced_supported() as $forced )
 			unset( $value[ $forced ] );
 
 		return $value;
@@ -404,7 +404,7 @@ class Plugin {
 
 		if ( empty( $value ) || ! \is_array( $value ) ) return [];
 
-		foreach ( Taxonomies::get_forced_supported_taxonomies() as $forced )
+		foreach ( Taxonomy::get_all_forced_supported() as $forced )
 			unset( $value[ $forced ] );
 
 		return $value;

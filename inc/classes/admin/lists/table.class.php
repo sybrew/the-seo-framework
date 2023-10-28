@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Admin\Lists;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 /**
@@ -173,10 +173,10 @@ abstract class Table {
 		$taxonomy  = $screen->taxonomy ?? '';
 
 		if ( $taxonomy ) {
-			if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) )
+			if ( ! Taxonomy::is_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! Post_Types::is_post_type_supported( $post_type ) )
+			if ( ! Post_Type::is_supported( $post_type ) )
 				return;
 		}
 
@@ -215,10 +215,10 @@ abstract class Table {
 				?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 
 		if ( $taxonomy ) {
-			if ( ! Taxonomies::is_taxonomy_supported( $taxonomy ) )
+			if ( ! Taxonomy::is_supported( $taxonomy ) )
 				return;
 		} else {
-			if ( ! Post_Types::is_post_type_supported( $post_type ) )
+			if ( ! Post_Type::is_supported( $post_type ) )
 				return;
 		}
 

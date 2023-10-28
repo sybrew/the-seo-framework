@@ -625,19 +625,19 @@ class Pool extends Legacy_API {
 	}
 
 	/**
-	 * Returns the Post_Types class as instantiated object with deprecation capabilities.
+	 * Returns the Post_Type class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Helper\Post_Types
+	 * @return \The_SEO_Framework\Helper\Post_Type
 	 */
-	public static function post_types() {
-		return static::$pool['post_types'] ??= new class extends Helper\Post_Types {
+	public static function post_type() {
+		return static::$pool['post_type'] ??= new class extends Helper\Post_Type {
 			use Static_Deprecator;
 
-			private $colloquial_handle     = 'tsf()->post_types()';
+			private $colloquial_handle     = 'tsf()->post_type()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 		};
@@ -897,19 +897,19 @@ class Pool extends Legacy_API {
 	}
 
 	/**
-	 * Returns the Taxonomies class as instantiated object with deprecation capabilities.
+	 * Returns the Taxonomy class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
 	 * @since 4.3.0
 	 * @api Not used internally.
 	 *
-	 * @return \The_SEO_Framework\Helper\Taxonomies
+	 * @return \The_SEO_Framework\Helper\Taxonomy
 	 */
-	public static function taxonomies() {
-		return static::$pool['taxonomies'] ??= new class extends Helper\Taxonomies {
+	public static function taxonomy() {
+		return static::$pool['taxonomy'] ??= new class extends Helper\Taxonomy {
 			use Static_Deprecator;
 
-			private $colloquial_handle     = 'tsf()->taxonomies()';
+			private $colloquial_handle     = 'tsf()->taxonomy()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 		};

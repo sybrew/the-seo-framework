@@ -13,7 +13,7 @@ use function \The_SEO_Framework\is_headless;
 use \The_SEO_Framework\Data;
 
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
 };
 
@@ -105,7 +105,7 @@ class PTA {
 			return static::$meta_memo[ $post_type ];
 
 		// We test post type support for "post_query"-queries might get past this point.
-		if ( empty( $post_type ) || ! Post_Types::is_post_type_supported( $post_type ) )
+		if ( empty( $post_type ) || ! Post_Type::is_supported( $post_type ) )
 			return static::$meta_memo[ $post_type ] = [];
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
@@ -153,7 +153,7 @@ class PTA {
 
 		$defaults = [];
 
-		foreach ( Post_Types::get_public_post_type_archives() as $pta )
+		foreach ( Post_Type::get_public_pta() as $pta )
 			$defaults[ $pta ] = static::get_default_meta( $pta );
 
 		return $defaults;

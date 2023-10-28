@@ -12,8 +12,8 @@ use function \The_SEO_Framework\is_headless;
 
 use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
-	Post_Types,
-	Taxonomies,
+	Post_Type,
+	Taxonomy,
 };
 
 /**
@@ -84,8 +84,8 @@ class Exclusion {
 
 		global $wpdb;
 
-		$supported_post_types = Post_Types::get_supported_post_types();
-		$public_post_types    = Post_Types::get_public_post_types();
+		$supported_post_types = Post_Type::get_all_supported();
+		$public_post_types    = Post_Type::get_all_public();
 
 		$join  = '';
 		$where = '';

@@ -11,7 +11,7 @@ namespace The_SEO_Framework\Admin\Settings;
 use \The_SEO_Framework\{
 	Admin,
 	Data,
-	Helper\Post_Types,
+	Helper\Post_Type,
 };
 
 /**
@@ -135,7 +135,7 @@ final class Plugin {
 				'main'
 			);
 
-		if ( $post_type_archive && Post_Types::get_public_post_type_archives() )
+		if ( $post_type_archive && Post_Type::get_public_pta() )
 			\add_meta_box(
 				'autodescription-post-type-archive-settings',
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),

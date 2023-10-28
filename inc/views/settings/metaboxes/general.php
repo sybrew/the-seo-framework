@@ -14,9 +14,9 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 };
 use \The_SEO_Framework\Helper\{
 	Format\Markdown,
-	Post_Types,
+	Post_Type,
 	Query,
-	Taxonomies,
+	Taxonomy,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -395,11 +395,11 @@ switch ( $instance ) :
 		HTML::description( \__( 'Select post types which should be excluded.', 'autodescription' ) );
 		HTML::description( \__( 'These settings apply to the post type pages and their terms. When terms are shared between post types, all their post types should be checked for this to have an effect.', 'autodescription' ) );
 
-		$forced_pt = Post_Types::get_forced_supported_post_types();
+		$forced_pt = Post_Type::get_all_forced_supported();
 		$boxes     = [];
 
-		foreach ( Post_Types::get_public_post_types() as $post_type ) {
-			$_label = Post_Types::get_post_type_label( $post_type, false );
+		foreach ( Post_Type::get_all_public() as $post_type ) {
+			$_label = Post_Type::get_label( $post_type, false );
 			if ( ! \strlen( $_label ) ) continue;
 
 			$_label = sprintf(
@@ -426,11 +426,11 @@ switch ( $instance ) :
 		HTML::description( \__( 'Select taxonomies which should be excluded.', 'autodescription' ) );
 		HTML::description( \__( 'When taxonomies have all their bound post types excluded, they will inherit their exclusion status.', 'autodescription' ) );
 
-		$forced_tax = Taxonomies::get_forced_supported_taxonomies();
+		$forced_tax = Taxonomy::get_all_forced_supported();
 		$boxes      = [];
 
-		foreach ( Taxonomies::get_public_taxonomies() as $taxonomy ) {
-			$_label = Taxonomies::get_taxonomy_label( $taxonomy, false );
+		foreach ( Taxonomy::get_all_public() as $taxonomy ) {
+			$_label = Taxonomy::get_label( $taxonomy, false );
 			if ( ! \strlen( $_label ) ) continue;
 
 			$_label = sprintf(
@@ -446,7 +446,7 @@ switch ( $instance ) :
 				'escape'   => false,
 				'disabled' => \in_array( $taxonomy, $forced_tax, true ),
 				'data'     => [
-					'postTypes' => Taxonomies::get_post_types_from_taxonomy( $taxonomy ),
+					'postTypes' => Taxonomy::get_post_types( $taxonomy ),
 				],
 			] );
 		}

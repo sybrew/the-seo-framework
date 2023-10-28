@@ -11,9 +11,9 @@ namespace The_SEO_Framework;
 use \The_SEO_Framework\Internal\Debug;
 
 use \The_SEO_Framework\Helper\{
-	Post_Types,
+	Post_Type,
 	Query,
-	Taxonomies
+	Taxonomy,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -44,9 +44,9 @@ $post_type = Query::get_current_post_type();
 if ( Query::is_real_front_page() ) {
 	$type = 'Front Page';
 } elseif ( $taxonomy ) {
-	$type = Taxonomies::get_taxonomy_label( $taxonomy );
+	$type = Taxonomy::get_label( $taxonomy );
 } elseif ( $post_type ) {
-	$type = Post_Types::get_post_type_label( $post_type );
+	$type = Post_Type::get_label( $post_type );
 } else {
 	$type = 'Unknown';
 }

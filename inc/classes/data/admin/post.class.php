@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Data\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Helper\Taxonomies;
+use \The_SEO_Framework\{
+	Data,
+	Helper\Taxonomy,
+};
 
 /**
  * The SEO Framework plugin
@@ -118,7 +120,7 @@ class Post {
 		// Can this even fail?
 		if ( empty( $post_type ) ) return;
 
-		foreach ( Taxonomies::get_hierarchical_taxonomies_as( 'names', $post_type ) as $taxonomy ) {
+		foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
 			// Redundant. Fortified.
 			if ( ! \wp_verify_nonce(
 				$_POST[ static::$nonce_name . "_pt_{$taxonomy}" ] ?? '', // If empty, wp_verify_nonce will return false.

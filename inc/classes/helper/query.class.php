@@ -59,7 +59,7 @@ class Query {
 
 		if ( static::is_archive() ) {
 			if ( static::is_category() || static::is_tag() || static::is_tax() ) {
-				$post_type = Taxonomies::get_post_types_from_taxonomy();
+				$post_type = Taxonomy::get_post_types();
 				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 			} elseif ( \is_post_type_archive() ) {
 				$post_type = \get_query_var( 'post_type' );
@@ -632,7 +632,7 @@ class Query {
 		return Query\Cache::memo( null, $page )
 			?? Query\Cache::memo(
 				\is_int( $page ) || $page instanceof \WP_Post
-					? \in_array( \get_post_type( $page ), Post_Types::get_hierarchical_post_types(), true )
+					? \in_array( \get_post_type( $page ), Post_Type::get_all_hierarchical(), true )
 					: \is_page( $page ),
 				$page
 			);
@@ -650,7 +650,7 @@ class Query {
 	 */
 	public static function is_page_admin() {
 		return static::is_singular_admin()
-			&& \in_array( static::is_singular_admin(), Post_Types::get_hierarchical_post_types(), true );
+			&& \in_array( static::is_singular_admin(), Post_Type::get_all_hierarchical(), true );
 	}
 
 	/**
@@ -717,7 +717,7 @@ class Query {
 		return Query\Cache::memo( null, $post )
 			?? Query\Cache::memo(
 				\is_int( $post ) || $post instanceof \WP_Post
-					? \in_array( \get_post_type( $post ), Post_Types::get_nonhierarchical_post_types(), true )
+					? \in_array( \get_post_type( $post ), Post_Type::get_all_nonhierarchical(), true )
 					: \is_single( $post ),
 				$post
 			);
@@ -736,7 +736,7 @@ class Query {
 	public static function is_single_admin() {
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
 		return static::is_singular_admin()
-			&& \in_array( static::is_singular_admin(), Post_Types::get_nonhierarchical_post_types(), true );
+			&& \in_array( static::is_singular_admin(), Post_Type::get_all_nonhierarchical(), true );
 	}
 
 	/**
