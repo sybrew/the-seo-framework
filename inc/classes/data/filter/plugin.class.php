@@ -633,7 +633,7 @@ class Plugin {
 		// Do NOT test for post type's existence -- it might be registered too late (incorrectly).
 		// If the metadata yields empty -- do not unset key! It'll override "defaults" that way.
 		foreach ( $value as &$meta ) {
-			foreach ( $meta as $key => &$value ) {
+			foreach ( $meta as $key => &$val ) {
 				switch ( $key ) {
 					case 'doctitle':
 					case 'og_title':
@@ -641,32 +641,32 @@ class Plugin {
 					case 'description':
 					case 'og_description':
 					case 'tw_description':
-						$value = Sanitize::metadata_content( $value );
+						$val = Sanitize::metadata_content( $val );
 						continue 2;
 
 					case 'canonical':
 					case 'social_image_url':
-						$value = \sanitize_url( $value, [ 'https', 'http' ] );
+						$val = \sanitize_url( $val, [ 'https', 'http' ] );
 						continue 2;
 
 					case 'social_image_id':
 						// Bound to social_image_url.
-						$value = $meta['social_image_url'] ? \absint( $value ) : 0;
+						$val = $meta['social_image_url'] ? \absint( $val ) : 0;
 						continue 2;
 
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
-						$value = Sanitize::qubit( $value );
+						$val = Sanitize::qubit( $val );
 						continue 2;
 
 					case 'redirect':
 						// Allow all protocols also allowed by WP:
-						$value = \sanitize_url( $value );
+						$val = \sanitize_url( $val );
 						continue 2;
 
 					case 'title_no_blog_name':
-						$value = Sanitize::boolean_integer( $value );
+						$val = Sanitize::boolean_integer( $val );
 						continue 2;
 
 					default:
