@@ -512,6 +512,8 @@ TODO test product structured data.
 	-> Also on product categories and product search.
 
 TODO test attachment pages' breadcrumb (and image data etc.).
+	-> Everything's OK, but:
+	-> FIXME: The placeholder description doesn't reflect the "alternative text" we're using.
 
 TODO schema.org wbesite logo example doesn't reflect actual output...
 	-> Also, we can remove the ID requirement. See https://github.com/sybrew/the-seo-framework/issues/646
@@ -825,6 +827,10 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 	* Pool `tsf()->facebook()` is now available.
 		* Facebook never had a public API, but it now has new methods, e.g., `tsf()->facebook()->get_author()`.
 		* Internally known as `The_SEO_Framework\Meta\Facebook`.
+	* Pool `tsf()->guidelines()` is now available.
+		* Internally known as `The_SEO_Framework\Helper\Guidelines`.
+	* Pool `tsf()->headers()` is now available.
+		* Internally known as `The_SEO_Framework\Helper\Headers`.
 	* Pool `tsf()->twitter()` is now available.
 		* All public Twitter-related methods have been moved to that pool. E.g., `tsf()->get_twitter_title()` is now `tsf()->twitter()->get_description()`.
 		* Internally known as `The_SEO_Framework\Meta\Twitter`.
@@ -1048,7 +1054,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `get_post_types_from_taxonomy()`, use `tsf()->taxonomy()->get_post_types()` instead
 				* `get_the_real_id()`, use `tsf()->query()->get_the_real_id()` instead
 				* `get_the_real_admin_id()`, use `tsf()->query()->get_the_real_admin_id()` instead
-				* `get_the_front_page_id()`, use `tsf()->query()->get_the_front_page_id()` instead
+				* `get_the_front_page_id()`, use `tsf()->query()->get_front_page_id()` instead
 				* `get_admin_term_id()`, use `tsf()->query()->get_admin_term_id()` instead
 				* `get_current_taxonomy()`, use `tsf()->query()->get_current_taxonomy()` instead
 				* `get_current_post_type()`, use `tsf()->query()->get_current_post_type()` instead
@@ -1170,7 +1176,6 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `get_excerpt_by_id()`, use `tsf()->description()->get_singular_excerpt()` instead.
 				* `fetch_excerpt()`, use `tsf()->description()->get_singular_excerpt()` instead.
 				* `get_modified_time()`, with no alternative available.
-				* `get_description()`, use `tsf()->description()->get_description()` instead.
 				* `get_description_from_custom_field()`, use `tsf()->description()->get_custom_description()` instead.
 				* `get_generated_description()`, use `tsf()->description()->get_generated()` instead.
 				* `get_generated_twitter_description()`, use `tsf()->twitter()->get_generated_description()` instead.
@@ -1231,7 +1236,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `remove_pagination_from_url()`, use `tsf()->uri()->utils()->remove_pagination_from_url()` instead.
 				* `get_paged_url()`, use `tsf()->uri()->get_paged_url()` instead.
 				* `get_paged_urls()`, use `tsf()->uri()->get_paged_url()` instead.
-				* `get_home_host()`, use `tsf()->data()->blog()->get_site_host()` instead.
+				* `get_home_host()`, use `tsf()->uri()->utils()->get_site_host()` instead.
 				* `append_url_query()`, use `tsf()->uri()->utils()->append_url_query()` instead.
 				* `matches_this_domain()`, use `tsf()->uri()->utils()->url_matches_blog_domain()` instead.
 				* `convert_to_url_if_path()`, use `tsf()->uri()->utils()->convert_path_to_url()` instead.
@@ -1342,7 +1347,9 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `generate_dismissible_notice()`, use `tsf()->admin()->notice()->generate_notice()` instead.
 				* `do_dismissible_notice()`, use `tsf()->admin()->notice()->output_notice()` instead.
 				* `register_settings()`, with no alternative available.
-				* `add_option_filter()`, with no alternative available.
+				* `update_db_version()`, with no alternative available.
+				* `init_sanitizer_filters()`, with no alternative available.
+				* `add_option_filter()`, use filter `the_seo_framework_settings_update_sanitizers` instead.
 				* `get_relative_fontcolor()`, use `tsf()->format()->color()->get_relative_fontcolor()` instead.
 				* `active_plugins()`, use `tsf()->data()->blog()->get_active_plugins()` instead.
 				* `conflicting_plugins()`, with no alternative available.
@@ -1378,7 +1385,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `s_one_zero()`, use `tsf()->sanitize()->boolean_integer()` instead.
 				* `s_numeric_string()`, use `tsf()->sanitize()->numeric_string()` instead.
 				* `s_absint()`, use `absint()` instead.
-				* `s_absint()`, use `tsf()->sanitize()->rgb_hex()` instead.
+				* `s_color_hex()`, use `tsf()->sanitize()->rgb_hex()` instead.
 				* `s_hyphen()`, use `tsf()->sanitize()->lone_hyphen_to_entity()` instead.
 				* `s_nbsp()`, use `tsf()->sanitize()->nbsp_to_space()` instead.
 				* `s_bsol()`, use `tsf()->sanitize()->backward_solidus_to_entity()` instead.
@@ -1390,7 +1397,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `s_image_details_deep()`, use `tsf()->sanitize()->image_details()` instead.
 				* `s_redirect_url()`, use `tsf()->sanitize()->redirect_url()` instead.
 				* `s_url_relative_to_current_scheme()`, use `tsf()->uri()->utils()->make_absolute_current_scheme_url()` instead.
-				* `s_url_relative_to_current_scheme()`, use `tsf()->uri()->utils()->get_relative_part_from_url()` instead.
+				* `s_relative_url()`, use `tsf()->uri()->utils()->get_relative_part_from_url()` instead.
 				* `s_term_meta()`, with no alternative available.
 				* `s_post_meta()`, with no alternative available.
 				* `s_user_meta()`, with no alternative available.
@@ -1401,7 +1408,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `s_twitter_card()`, with no alternative available.
 				* `s_image_preview()`, with no alternative available.
 				* `s_snippet_length()`, with no alternative available.
-				* `s_snippet_length()`, with no alternative available.
+				* `s_title_separator()`, with no alternative available.
 				* `s_knowledge_type()`, with no alternative available.
 				* `s_disabled_post_types()`, with no alternative available.
 				* `s_post_types()`, with no alternative available.

@@ -54,7 +54,6 @@ class Main {
 	 *
 	 * @since 4.3.0
 	 * @uses robots_txt filter located at WP core
-	 * @access private
 	 * @TODO rework into a workable standard...
 	 *
 	 * @return string Robots.txt output.

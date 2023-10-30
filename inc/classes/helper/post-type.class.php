@@ -166,12 +166,10 @@ class Post_Type {
 	 * @return string[] Supported post types with post type archive support.
 	 */
 	public static function get_all_supported_pta() {
-		return memo() ?? memo(
-			array_values( array_filter(
-				static::get_public_pta(),
-				[ static::class, 'is_pta_supported' ],
-			) )
-		);
+		return memo() ?? memo( array_values( array_filter(
+			static::get_public_pta(),
+			[ static::class, 'is_pta_supported' ],
+		) ) );
 	}
 
 	/**
@@ -217,12 +215,10 @@ class Post_Type {
 	 * @return string[] All supported post types.
 	 */
 	public static function get_all_supported() {
-		return memo() ?? memo(
-			array_values( array_filter(
-				static::get_all_public(),
-				[ static::class, 'is_supported' ],
-			) )
-		);
+		return memo() ?? memo( array_values( array_filter(
+			static::get_all_public(),
+			[ static::class, 'is_supported' ],
+		) ) );
 	}
 
 	/**

@@ -117,24 +117,22 @@ switch ( $instance ) :
 				<div class=tsf-post-type-header>
 					<?php
 					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
-					echo HTML::get_header_title(
-						vsprintf(
-							'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
-							[
-								sprintf(
-									/* translators: 1 = Post Type Archive name */
-									\esc_html__( 'Editing archive of %s', 'autodescription' ),
-									\esc_html( $post_types_data[ $post_type ]['label'] ),
-								),
-								\esc_html( $post_type ),
-								sprintf(
-									'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
-									\esc_url( $post_types_data[ $post_type ]['url'] ),
-									\esc_html__( 'View archive', 'autodescription' ),
-								),
-							],
-						)
-					);
+					echo HTML::get_header_title( vsprintf(
+						'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
+						[
+							sprintf(
+								/* translators: 1 = Post Type Archive name */
+								\esc_html__( 'Editing archive of %s', 'autodescription' ),
+								\esc_html( $post_types_data[ $post_type ]['label'] ),
+							),
+							\esc_html( $post_type ),
+							sprintf(
+								'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
+								\esc_url( $post_types_data[ $post_type ]['url'] ),
+								\esc_html__( 'View archive', 'autodescription' ),
+							),
+						],
+					) );
 					?>
 				</div>
 				<div class="tsf-post-type-archive-if-excluded hidden">

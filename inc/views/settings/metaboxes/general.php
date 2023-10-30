@@ -371,13 +371,11 @@ switch ( $instance ) :
 	case 'exclusions':
 		HTML::header_title( \__( 'Exclusion Settings', 'autodescription' ) );
 		HTML::description( \__( 'When checked, these options will remove meta optimizations, SEO suggestions, and sitemap inclusions for the selected post types and taxonomies. This will allow search engines to crawl the post type and taxonomies without advanced restrictions or directions.', 'autodescription' ) );
-		HTML::attention_description_noesc(
-			Markdown::convert(
-				/* translators: backticks are code wraps. Markdown! */
-				\esc_html__( "These options should not need changing when post types and taxonomies are registered correctly. When they aren't, consider applying `noindex` to purge them from search engines, instead.", 'autodescription' ),
-				[ 'code' ],
-			)
-		);
+		HTML::attention_description_noesc( Markdown::convert(
+			/* translators: backticks are code wraps. Markdown! */
+			\esc_html__( "These options should not need changing when post types and taxonomies are registered correctly. When they aren't, consider applying `noindex` to purge them from search engines, instead.", 'autodescription' ),
+			[ 'code' ],
+		) );
 		HTML::description( \__( 'Default post types and taxonomies can not be excluded.', 'autodescription' ) );
 		?>
 

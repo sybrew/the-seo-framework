@@ -347,7 +347,7 @@ final class Builder {
 				sprintf(
 					$gettext['list'],
 					$count < 2 ? $gettext['assessment'] : $gettext['assessments'],
-					implode( ' ', $assessments )
+					implode( ' ', $assessments ),
 				),
 			);
 

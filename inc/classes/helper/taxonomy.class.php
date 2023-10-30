@@ -129,12 +129,10 @@ class Taxonomy {
 	 * @return string[] All supported taxonomies.
 	 */
 	public static function get_all_supported() {
-		return memo() ?? memo(
-			array_values( array_filter(
-				static::get_all_public(),
-				[ static::class, 'is_supported' ],
-			) )
-		);
+		return memo() ?? memo( array_values( array_filter(
+			static::get_all_public(),
+			[ static::class, 'is_supported' ],
+		) ) );
 	}
 
 	/**

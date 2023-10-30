@@ -57,6 +57,8 @@ class Headers {
 	/**
 	 * Sets the X-Robots tag headers to 'noindex'.
 	 *
+	 * @hook do_robots 10
+	 * @hook the_seo_framework_sitemap_header 10
 	 * @since 4.3.0
 	 * @access private
 	 */

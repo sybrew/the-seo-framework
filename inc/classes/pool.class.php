@@ -573,6 +573,25 @@ class Pool extends Legacy_API {
 	}
 
 	/**
+	 * Returns the HTTP Headers API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 4.3.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Helper\Headers
+	 */
+	public static function headers() {
+		return static::$pool['headers'] ??= new class extends Helper\Headers {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->headers()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
 	 * Returns the Image API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *

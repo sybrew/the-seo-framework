@@ -217,7 +217,7 @@ class Legacy_API {
 	 * @since 4.0.0
 	 * @since 4.0.5 The output is now filterable.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Removed the last $clean parameter. It always returns a cleaned image now.
+	 * @since 4.3.0 1. Removed the last `$clean` parameter. It always returns a cleaned image now.
 	 *              2. Ennobled to be part of the legacy API.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.

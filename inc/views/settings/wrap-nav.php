@@ -60,7 +60,7 @@ if ( \count( $tabs ) > 1 ) {
 							$name ? '<span class=tsf-nav-desktop>' . \esc_attr( $name ) . '</span>' : '',
 						),
 					],
-				)
+				),
 			);
 			++$tab_index;
 		}
