@@ -39,12 +39,13 @@ namespace The_SEO_Framework;
 						echo ' &mdash; ';
 						printf(
 							'<a href="%s" target=_blank>%s</a>',
-							\esc_url( \esc_url(
+							\esc_url(
 								html_entity_decode(
 									\menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false )
 								),
 								[ 'https', 'http' ]
-							) . '#autodescription-homepage-settings' ),
+								. '#autodescription-homepage-settings'
+							),
 							\esc_html__( 'Edit Homepage Settings instead.', 'autodescription' ),
 						);
 					}

@@ -240,6 +240,7 @@ class Legacy_API {
 
 	/**
 	 * Loads all admin scripts.
+	 * However, consider filtering `the_seo_framework_register_scripts` instead.
 	 *
 	 * May load more depending on the page requested.
 	 * `tsf` and `tsf-tt` will always be available.

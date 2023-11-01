@@ -94,7 +94,7 @@ class Plugin {
 						$callback,
 						[
 							$val,
-							$original_value[ $option ], // If this fails, the option isn't registered properly.
+							$original_value[ $key ], // If this fails, the option isn't registered properly. Error is good.
 							$option,
 						],
 					);

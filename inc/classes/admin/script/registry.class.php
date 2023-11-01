@@ -132,12 +132,14 @@ class Registry {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		Loader::init();
+		if ( \did_action( 'admin_enqueue_scripts' ) )
+			Loader::init();
 
 		if ( \did_action( 'in_admin_header' ) )
 			static::footer_enqueue();
 
 		// These fail when called in the body.
+		\add_action( 'admin_enqueue_scripts', [ Loader::class, 'init' ], 0 );
 		\add_filter( 'admin_body_class', [ static::class, '_add_body_class' ] );
 		\add_action( 'in_admin_header', [ static::class, '_print_tsfjs_script' ] );
 

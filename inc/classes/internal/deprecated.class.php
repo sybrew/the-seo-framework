@@ -6709,12 +6709,9 @@ final class Deprecated {
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param string       $filter Sanitization filter type
-	 * @param string       $option The option key.
-	 * @param array|string $suboption Optional. Suboption key(s).
 	 * @return boolean Returns true when complete
 	 */
-	public function add_option_filter( $filter, $option, $suboption = null ) {
+	public function add_option_filter() {
 		\tsf()->_deprecated_function( 'tsf()->add_option_filter()', '4.3.0', 'filter the_seo_framework_settings_update_sanitizers' );
 		return false;
 	}

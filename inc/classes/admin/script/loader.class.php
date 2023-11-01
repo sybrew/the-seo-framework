@@ -8,8 +8,6 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\has_run;
-
 use \The_SEO_Framework\{
 	Admin,
 	Data,
@@ -60,8 +58,6 @@ class Loader {
 	 * @access private
 	 */
 	public static function init() {
-
-		if ( has_run( __METHOD__ ) ) return;
 
 		$scripts = [
 			static::get_tsf_scripts(),
@@ -144,6 +140,7 @@ class Loader {
 	 * Prepares WordPress Media scripts.
 	 *
 	 * @since 4.0.0
+	 * @since 4.3.0 Resolved PHP notices by not setting the 'post' indexed on new posts.
 	 */
 	public static function prepare_media_scripts() {
 
@@ -678,9 +675,9 @@ class Loader {
 	 */
 	public static function get_primaryterm_scripts() {
 
-		$id = Query::get_the_real_admin_id();
+		$post_id = Query::get_the_real_admin_id();
 
-		$post_type   = \get_post_type( $id );
+		$post_type   = Query::get_admin_post_type();
 		$_taxonomies = $post_type ? Taxonomy::get_hierarchical( 'objects', $post_type ) : [];
 		$taxonomies  = [];
 
@@ -690,7 +687,7 @@ class Loader {
 			if ( ! Taxonomy::is_supported( $_t->name ) ) continue;
 
 			$singular_name   = Taxonomy::get_label( $_t->name );
-			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $id, $_t->name );
+			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post_id, $_t->name );
 
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,

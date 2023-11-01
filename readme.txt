@@ -979,6 +979,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 				* `get_canonical_url()`
 				* `get_image_details()`
 				* `load_admin_scripts()` (new!)
+					* However, consider filtering `the_seo_framework_register_scripts` instead.
 				* `print_seo_meta_tags()` (new!)
 			* **Methods changed:**
 				* TODO redo this list; just go by all functions within the object, ought to be easier retroactively...
