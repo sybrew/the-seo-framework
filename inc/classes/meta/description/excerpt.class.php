@@ -149,7 +149,7 @@ final class Excerpt {
 
 		/**
 		 * @since 3.1.0
-		 * @see `\tsf()->s_excerpt_raw()` to strip HTML tags neatly.
+		 * @see `\tsf()->format()->html()->extract_content()` to strip HTML tags neatly.
 		 * @param string                 $excerpt The short circuit excerpt.
 		 * @param \WP_Term|\WP_Post_Type $object  The Term object or post type object.
 		 * @todo deprecate and move to main fetcher.

@@ -368,18 +368,11 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 		-> Or, otherwise, allow all authors to be indexed on the site.
 			"Allow indexing of author pages that have no posts." with a warning.
 
-TODO filters *_plugin_detected only turn ONE conflicting plugin, instead of the lot.
-	-> Deprecate and rewrite?
-
-TODO deprecate the_seo_framework_conflicting_plugins_type, it adds complexity and negates filter the_seo_framework_conflicting_plugins.
 TODO test all compat files.
 
 TODO what about get_image_dimensions()
 	-> Are we going to move this to a new generator class?
 		-> If so, we can remove the deprecation altogether.
-
-TODO mark update_settings as private?
-TODO cache_json_data makes no sense.
 
 TODO remove leftover var_dump()
 
@@ -405,16 +398,6 @@ TODO eradicate all static::$tsf()-> calls by the end of this dev cycle.
 TODO eradicate get_defined_vars() or array unpacking where we can use func_get_args()
 	-> https://3v4l.org/TjjDK
 	-> https://3v4l.org/HYBT8
-
-// Lacking imports:
-^<\?php([\w\W](?!use (\\The_SEO_Framework\\(Helper|Data|Meta)\\\{).*;))*?(^(.(?!\*|\/\/))*?\\The_SEO_Framework\\.*?::)(.(?!\/\/ Lacking import OK.))*$
-// Lacking import OK.
-^ not robust enough
-
-TODO Remove "// Lacking import OK." before release -- this is only necessary to filter in bulk for now.
-
-// Lacking Data import:
-^<\?php([\w\W](?!(use\s|\t)(\\The_SEO_Framework\\Data)))*?(^(.(?!\*|\/\/))*?Data\\[A-Za-z_\\]*::)
 
 // Lacking header:
 ^<\?php([\w\W](?!defined))*?(The SEO Framework plugin)
@@ -454,12 +437,9 @@ function (.*?)\(([\w\W](?!\1\())*?\}
 // Do not import and rename, that'll cause headaches down the line. Find the renaming imports via:
 ^use .*?\\\{[\w\W]* as [^\}]*\};
 
-TODO find mismatch memo ?? umemo (notice extra u)
 TODO remove 3+ @since in Deprecated.class to reduce filesize.
 
-TODO remove unusued \The_SEO_Framework\normalize_generation_args imports (and other imports..)
 TODO find new public function and filters via @since 4.3.0.*?...
-TODO find repeated tsf() calls in functions.
 TODO mark subroutine methods in Meta private?
 
 TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."
@@ -550,21 +530,12 @@ TODO make canonical URL placeholder work in output_column_contents_for_post()
 	-> Also make the Indexing react to the Password/Private states.
 		-> This already works for the title.
 
-TODO dump get_instance from Feed and SEOBar\Builder
-	-> Nothing in the Builder is related to the instance...
-
-TODO dump prepare() methods, it's dumb.
-
 TODO run all deprecation methods one last time
 	We should be able to loop over them quite easily.
-
-TODO make the Hook class functional, and add it to bootstrap?
 
 TODO for get_largest_image_src, should we try to maintain the ratio?
 
 TODO add "try it in playground" button/link at the top of the readme.
-
-TODO test `^ [^\*]` (rogue spaces).
 
 TODO can we affect Gutenberg's URL by switching the primary category?
 
@@ -591,9 +562,6 @@ TODO also do "renamed to", should be "renamed from".
 TODO Test all deprecation of same kind accidentally updated via ctrl+shift+h
 	e.g. tsf()->the_same_thing() use tsf()->the_same_thing() instead.
 
-TODO fix wrong multi-line if-statement indents, find them via:
-	if \(\n\t*[a-z].*?\)\n\t[\|&]
-
 TODO add settings check  wp_attachment_pages_enabled (the attachments are still "public")
 	See https://make.wordpress.org/core/2023/10/16/changes-to-attachment-pages/
 
@@ -609,10 +577,6 @@ TODO since we now sanitize images when we obtain then, we may accidentally fetch
 
 TODO in deprecated, use public API as much as possible? e.g. `tsf()->query()` instead of `\The_SEO_Framework\Helper\Query`
 	-> This helps prevent crashing thanks to the fallback in Static_Deprecator.
-
-TODO move URI\Utils to Format\URI?
-	-> Also Image\Utils to Format\Image
-
 
 // TODO in canonical_scheme, set an error if an incorrect option is selected:
 	"The canonical scheme setting did not appear to be correct. Please select..."
@@ -1700,8 +1664,9 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 		* `the_seo_framework_delete_cache_sitemap`, use `the_seo_framework_cleared_sitemap_transients` instead.
 * **Hook notes:**
 	* Excluded IDs cache is now cleared on `wp_insert_post` and `attachment_updated`, from `save_post` and `edit_attachment` respectively.
-	* `[ \tsf(), 'html_output' ]` no longer runs on `wp_head`. Instead, `[ 'The_SEO_Framework\Front\Meta\Head', 'print_wrap_and_tags' ]` is now outputted -- remaining at priority `1`.
-	* `_init_tsf` no longer runs on `plugins_loaded`, but on `init`. Use filter `the_seo_framework_load` instead.
+	* These are among the most prominent changes of over 35 others:
+		* `[ \tsf(), 'html_output' ]` no longer runs on `wp_head`. Instead, `[ 'The_SEO_Framework\Front\Meta\Head', 'print_wrap_and_tags' ]` is now outputted -- remaining at priority `1`.
+		* `_init_tsf` no longer runs on `plugins_loaded`, but on `init`. Use filter `the_seo_framework_load` instead.
 * **JavaScript notes:**
 	* HTML element with ID `tsf-description-reference` is no longer available. Use `tsf-description-reference_{$type}` instead.
 		* `$type` can be: `autodescription_description`, `autodescription-meta[description]`, `autodescription-quick[description]`, `autodescription-site-settings[homepage_description]`, or `tsf-description-reference_autodescription-site-settings[pta][%s][description]` (where `%s` is the post type).

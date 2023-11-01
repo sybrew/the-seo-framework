@@ -90,7 +90,7 @@ final class Open_Graph {
 				'the_seo_framework_oglocale_output',
 				[
 					$locale,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -127,7 +127,7 @@ final class Open_Graph {
 				'the_seo_framework_ogsitename_output',
 				[
 					$sitename,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -164,7 +164,7 @@ final class Open_Graph {
 				'the_seo_framework_ogtitle_output',
 				[
 					$title,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -201,7 +201,7 @@ final class Open_Graph {
 				'the_seo_framework_ogdescription_output',
 				[
 					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -237,7 +237,7 @@ final class Open_Graph {
 				'the_seo_framework_ogurl_output',
 				[
 					$url,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -318,7 +318,7 @@ final class Open_Graph {
 				'the_seo_framework_publishedtime_output',
 				[
 					$time,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -355,7 +355,7 @@ final class Open_Graph {
 				'the_seo_framework_modifiedtime_output',
 				[
 					$time,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

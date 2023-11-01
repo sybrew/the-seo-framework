@@ -10,9 +10,11 @@ namespace The_SEO_Framework\Internal;
 
 // Precautionary.
 use function \The_SEO_Framework\{
+	is_headless,
+	normalize_generation_args,
+	get_query_type_from_args,
 	memo,
 	umemo,
-	normalize_generation_args,
 };
 
 // Precautionary.
@@ -97,7 +99,6 @@ final class Deprecated {
 	 * Returns the post type name from query input or real ID.
 	 *
 	 * @since 4.0.5
-	 * @since 4.2.0 Now supports common archives without relying on the first post.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -151,7 +152,6 @@ final class Deprecated {
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
 	 *
 	 * @since 2.5.0
-	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -171,7 +171,6 @@ final class Deprecated {
 	 * Alters while in the loop. Therefore, this can't be cached and must be called within the loop.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 Removed WP 3.9 compat
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -206,9 +205,6 @@ final class Deprecated {
 	 * Fetches the Term ID on admin pages.
 	 *
 	 * @since 2.6.0
-	 * @since 2.6.6 Moved from class The_SEO_Framework_Term_Data.
-	 * @since 3.1.0 1. Removed WP 4.5 compat. Now uses global $tag_ID.
-	 *              2. Removed caching
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -292,7 +288,6 @@ final class Deprecated {
 	 * Detects attachment page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.0.0 Now reliably works on admin screens.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -329,10 +324,6 @@ final class Deprecated {
 	 * Simply put, it detects a blog page and WooCommerce shop page.
 	 *
 	 * @since 3.1.0
-	 * @since 4.0.5 1. The output is now filterable.
-	 *              2. Added caching.
-	 *              3. Now has a first parameter `$post`.
-	 * @since 4.0.6 Added a short-circuit on current-requests for `is_singular()`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -472,7 +463,6 @@ final class Deprecated {
 	 * Detects the blog page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.2.0 Added the first parameter to allow custom query testing.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -529,8 +519,6 @@ final class Deprecated {
 	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer guesses category by name. It now only matches WordPress's built-in category.
-	 * @since 4.0.0 Removed caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -662,7 +650,6 @@ final class Deprecated {
 	 * When $page is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
-	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -681,7 +668,6 @@ final class Deprecated {
 	 * Detects pages within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @since 4.0.0 Now tests for post type, although redundant.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -721,7 +707,6 @@ final class Deprecated {
 	 * Detects search.
 	 *
 	 * @since 2.6.0
-	 * @since 2.9.4 Now always returns false in admin.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -740,7 +725,6 @@ final class Deprecated {
 	 * When $post is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
-	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -759,7 +743,6 @@ final class Deprecated {
 	 * Detects posts within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @since 4.0.0 Now no longer returns true on categories and tags.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -778,9 +761,6 @@ final class Deprecated {
 	 * Replaces and expands default WordPress `is_singular()`.
 	 *
 	 * @since 2.5.2
-	 * @since 3.1.0 Now passes $post_types parameter in admin screens, only when it's an integer.
-	 * @since 4.0.0 No longer processes integers as input.
-	 * @since 4.2.4 No longer tests type of $post_types.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -799,8 +779,6 @@ final class Deprecated {
 	 * Determines if the page is singular within the admin screen.
 	 *
 	 * @since 2.5.2
-	 * @since 3.1.0 Added $post_id parameter. When used, it'll only check for it.
-	 * @since 4.0.0 Removed first parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -818,7 +796,6 @@ final class Deprecated {
 	 * Detects the static front page.
 	 *
 	 * @since 2.3.8
-	 * @since 4.1.4 Added memoization.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -855,8 +832,6 @@ final class Deprecated {
 	 * Determines if the page is a tag within the admin screen.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer guesses tag by name. It now only matches WordPress's built-in tag.
-	 * @since 4.0.0 Removed caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -893,7 +868,6 @@ final class Deprecated {
 	 * Determines if the $post is a shop page.
 	 *
 	 * @since 4.0.5
-	 * @since 4.1.4 Added memoization.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -912,7 +886,6 @@ final class Deprecated {
 	 * Determines if the page is a product page.
 	 *
 	 * @since 4.0.5
-	 * @since 4.1.4 Added memoization.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -931,7 +904,6 @@ final class Deprecated {
 	 * Determines if the admin page is for a product page.
 	 *
 	 * @since 4.0.5
-	 * @since 4.1.4 Added memoization.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -984,8 +956,6 @@ final class Deprecated {
 	 * WARNING: Do not ever use this as a safety check.
 	 *
 	 * @since 2.6.0
-	 * @since 2.7.0 Added secure parameter.
-	 * @since 2.9.0 If $secure is false, the cache is no longer used.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1004,7 +974,6 @@ final class Deprecated {
 	 * Checks the screen base file through global $page_hook or $_GET.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0 Added pageslug parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 * @global string $page_hook the current page hook.
@@ -1072,7 +1041,6 @@ final class Deprecated {
 	 * we need is set up in the loop, not in the header; where TSF is active.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.4 Now only returns "1" in the admin.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1111,7 +1079,6 @@ final class Deprecated {
 	 * Memoizes the return value once set.
 	 *
 	 * @since 2.9.2
-	 * @since 4.0.0 Now memoizes instead of populating class properties.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1152,7 +1119,7 @@ final class Deprecated {
 	 */
 	public function advanced_query_protection() {
 		\tsf()->_deprecated_function( 'tsf()->advanced_query_protection()', '4.3.0' );
-		return \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'  => 'tsf:aqp',
 			'value' => '1',
 		] );
@@ -1162,8 +1129,6 @@ final class Deprecated {
 	 * Renders the description meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 3.0.6 No longer uses \tsf()->description_from_cache()
-	 * @since 3.1.0 No longer checks for SEO plugin presence.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1176,7 +1141,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated description.
@@ -1192,7 +1156,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'description',
 			'content' => $description,
 		] ) : '';
@@ -1203,7 +1167,6 @@ final class Deprecated {
 	 * Returns early if blog isn't public. WordPress Core will then output the meta tags.
 	 *
 	 * @since 2.0.0
-	 * @since 4.0.2 Thanks to special tags, output escaping has been added precautionarily.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1219,7 +1182,7 @@ final class Deprecated {
 
 		$meta = $tsf->robots()->get_meta();
 
-		return $meta ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $meta ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'robots',
 			'content' => $meta,
 		] ) : '';
@@ -1229,8 +1192,6 @@ final class Deprecated {
 	 * Renders Canonical URL meta tag.
 	 *
 	 * @since 2.0.6
-	 * @since 3.0.0 Deleted filter `the_seo_framework_output_canonical`.
-	 * @since 3.2.4 Now no longer returns a value when the post is not indexed with a non-custom URL.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1269,7 +1230,7 @@ final class Deprecated {
 			}
 		}
 
-		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
+		return $url ? \The_SEO_Framework\Front\Meta\Tags::render(
 			[
 				'rel'  => 'canonical',
 				'href' => $url,
@@ -1282,7 +1243,6 @@ final class Deprecated {
 	 * Renders Shortlink meta tag
 	 *
 	 * @since 2.2.2
-	 * @since 2.9.3 Now work when homepage is a blog.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1310,7 +1270,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
+		return $url ? \The_SEO_Framework\Front\Meta\Tags::render(
 			[
 				'rel'  => 'shortlink',
 				'href' => $url,
@@ -1369,14 +1329,14 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		$output  = $prev ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
+		$output  = $prev ? \The_SEO_Framework\Front\Meta\Tags::render(
 			[
 				'rel'  => 'prev',
 				'href' => $prev,
 			],
 			'link'
 		) : '';
-		$output .= $next ? \The_SEO_Framework\Front\Meta\Tags::render( // Lacking import OK.
+		$output .= $next ? \The_SEO_Framework\Front\Meta\Tags::render(
 			[
 				'rel'  => 'next',
 				'href' => $next,
@@ -1403,7 +1363,7 @@ final class Deprecated {
 
 		$theme_color = $tsf->data()->plugin()->get_option( 'theme_color' );
 
-		return $theme_color ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $theme_color ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'theme-color',
 			'content' => $theme_color,
 		] ) : '';
@@ -1440,7 +1400,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'google-site-verification',
 			'content' => $code,
 		] ) : '';
@@ -1477,7 +1437,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'msvalidate.01',
 			'content' => $code,
 		] ) : '';
@@ -1514,7 +1474,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'yandex-verification',
 			'content' => $code,
 		] ) : '';
@@ -1551,7 +1511,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'baidu-site-verification',
 			'content' => $code,
 		] ) : '';
@@ -1588,7 +1548,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $code ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'p:domain_verify',
 			'content' => $code,
 		] ) : '';
@@ -1598,9 +1558,6 @@ final class Deprecated {
 	 * Determines whether we can use Open Graph tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Removed cache.
-	 * @since 3.1.4 1. Added filter.
-	 *              2. Reintroduced cache because of filter.
 	 * @since 4.3.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 * @deprecated
@@ -1632,7 +1589,6 @@ final class Deprecated {
 	 * Renders the Open Graph title meta tag.
 	 *
 	 * @since 2.0.3
-	 * @since 3.0.4 No longer uses \tsf()->title_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1648,7 +1604,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $title The generated Open Graph title.
@@ -1664,7 +1619,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $title ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $title ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:title',
 			'content'  => $title,
 		] ) : '';
@@ -1674,7 +1629,6 @@ final class Deprecated {
 	 * Renders og:description meta tag
 	 *
 	 * @since 1.3.0
-	 * @since 3.0.4 No longer uses \tsf()->description_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1690,7 +1644,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated Open Graph description.
@@ -1706,7 +1659,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:description',
 			'content'  => $description,
 		] ) : '';
@@ -1731,7 +1684,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $locale The generated locale field.
@@ -1747,7 +1699,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $locale ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $locale ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:locale',
 			'content'  => $locale,
 		] ) : '';
@@ -1772,7 +1724,7 @@ final class Deprecated {
 
 		$type = $tsf->open_graph()->get_type();
 
-		return $type ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $type ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:type',
 			'content'  => $type,
 		] ) : '';
@@ -1782,10 +1734,6 @@ final class Deprecated {
 	 * Renders Open Graph image meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 2.6.0 Added WooCommerce gallery images.
-	 * @since 2.7.0 Added image dimensions if found.
-	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator to
-	 *              reduce processing power.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1803,24 +1751,24 @@ final class Deprecated {
 		$multi = (bool) $tsf->data()->plugin()->get_option( 'multi_og_image' );
 
 		foreach ( $tsf->get_image_details( null, ! $multi ) as $image ) {
-			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 				'property' => 'og:image',
 				'content'  => $image['url'],
 			] );
 
 			if ( $image['height'] && $image['width'] ) {
-				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 					'property' => 'og:image:width',
 					'content'  => $image['width'],
 				] );
-				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 					'property' => 'og:image:height',
 					'content'  => $image['height'],
 				] );
 			}
 
 			if ( $image['alt'] ) {
-				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 					'property' => 'og:image:alt',
 					'content'  => $image['alt'],
 				] );
@@ -1837,7 +1785,6 @@ final class Deprecated {
 	 * Renders Open Graph sitename meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 3.1.0 Now uses \tsf()->get_blogname(), which trims the output.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1852,7 +1799,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $sitename The generated Open Graph site name.
@@ -1868,7 +1814,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $sitename ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $sitename ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:site_name',
 			'content'  => $sitename,
 		] ) : '';
@@ -1878,8 +1824,6 @@ final class Deprecated {
 	 * Renders Open Graph URL meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 2.9.3 Added filter
-	 * @since 4.1.4 Now uses `render_element()`, which applies `esc_attr()` on the URL.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1909,7 +1853,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $url ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:url',
 			'content'  => $url,
 		] ) : '';
@@ -1934,7 +1878,7 @@ final class Deprecated {
 
 		$time = $tsf->get_modified_time();
 
-		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'og:updated_time',
 			'content'  => $time,
 		] ) : '';
@@ -1944,8 +1888,6 @@ final class Deprecated {
 	 * Renders Facebook Author meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Returns empty on og:type 'website' or 'product'
-	 * @since 3.0.0 Fetches Author meta data.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -1961,7 +1903,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $facebook_page The generated Facebook author page URL.
@@ -1978,7 +1919,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $facebook_page ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $facebook_page ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'article:author',
 			'content'  => $facebook_page,
 		] ) : '';
@@ -1988,7 +1929,6 @@ final class Deprecated {
 	 * Renders Facebook Publisher meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 3.0.0 No longer outputs tag when "og:type" isn't 'article'.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2004,7 +1944,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $publisher The Facebook publisher page URL.
@@ -2020,7 +1959,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $publisher ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $publisher ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'article:publisher',
 			'content'  => $publisher,
 		] ) : '';
@@ -2044,7 +1983,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $app_id The Facebook app ID.
@@ -2060,7 +1998,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data', // var_dump() delete me?
 		);
 
-		return $app_id ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $app_id ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'fb:app_id',
 			'content'  => $app_id,
 		] ) : '';
@@ -2070,9 +2008,6 @@ final class Deprecated {
 	 * Determines whether we can use Facebook tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Removed cache.
-	 * @since 3.1.4 1. Added filter.
-	 *              2. Reintroduced cache because of filter.
 	 * @since 4.3.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 * @deprecated
@@ -2104,10 +2039,6 @@ final class Deprecated {
 	 * Renders Article Publishing Time meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0 1. Now checks for 0000 timestamps.
-	 *              2. Now uses timestamp formats.
-	 *              3. Now uses GMT time.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2122,7 +2053,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $time The article published time.
@@ -2138,7 +2068,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'article:published_time',
 			'content'  => $time,
 		] ) : '';
@@ -2148,11 +2078,6 @@ final class Deprecated {
 	 * Renders Article Modified Time meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0 Listens to $tsf->query()->get_the_real_id() instead of WordPress Core ID determination.
-	 * @since 2.8.0 Returns empty on product pages.
-	 * @since 3.0.0 1. Now checks for 0000 timestamps.
-	 *              2. Now uses timestamp formats.
-	 * @since 4.1.4 No longer renders the Open Graph Updated Time meta tag.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2167,7 +2092,7 @@ final class Deprecated {
 
 		$time = $tsf->get_modified_time();
 
-		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $time ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'article:modified_time',
 			'content'  => $time,
 		] ) : '';
@@ -2177,7 +2102,6 @@ final class Deprecated {
 	 * Determines if modified time should be used in the current query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Removed caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2198,7 +2122,6 @@ final class Deprecated {
 	 * Determines if published time should be used in the current query.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Removed caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2219,7 +2142,6 @@ final class Deprecated {
 	 * Returns the current Twitter card type.
 	 *
 	 * @since 2.8.2
-	 * @since 3.1.0 Filter has been moved to generate_twitter_card_type()
 	 * @since 4.3.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 * @deprecated
@@ -2252,7 +2174,7 @@ final class Deprecated {
 
 		$card = $tsf->get_current_twitter_card_type();
 
-		return $card ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $card ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'twitter:card',
 			'content' => $card,
 		] ) : '';
@@ -2276,7 +2198,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $site The Twitter site owner tag.
@@ -2292,7 +2213,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $site ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $site ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'twitter:site',
 			'content' => $site,
 		] ) : '';
@@ -2319,7 +2240,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $creator The Twitter page creator.
@@ -2336,7 +2256,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $creator ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $creator ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'twitter:creator',
 			'content' => $creator,
 		] ) : '';
@@ -2346,7 +2266,6 @@ final class Deprecated {
 	 * Renders Twitter Title meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 3.0.4 No longer uses \tsf()->title_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2361,7 +2280,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $title The generated Twitter title.
@@ -2377,7 +2295,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $title ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $title ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'twitter:title',
 			'content' => $title,
 		] ) : '';
@@ -2387,7 +2305,6 @@ final class Deprecated {
 	 * Renders Twitter Description meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 3.0.4 No longer uses \tsf()->description_from_cache()
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2402,7 +2319,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated Twitter description.
@@ -2418,7 +2334,7 @@ final class Deprecated {
 			'the_seo_framework_meta_render_data',
 		);
 
-		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+		return $description ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'twitter:description',
 			'content' => $description,
 		] ) : '';
@@ -2447,13 +2363,13 @@ final class Deprecated {
 		$output = '';
 
 		foreach ( $tsf->get_image_details( null, ! $tsf->data()->plugin()->get_option( 'multi_og_image' ) ) as $image ) {
-			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
 			] );
 
 			if ( $image['alt'] ) {
-				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [ // Lacking import OK.
+				$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 					'name'    => 'twitter:image:alt',
 					'content' => $image['alt'],
 				] );
@@ -2470,8 +2386,6 @@ final class Deprecated {
 	 * Determines whether we can use Twitter tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 2.8.2 Now also considers Twitter card type output.
-	 * @since 3.1.4 Added filter.
 	 * @since 4.3.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 *              3. Removed test for card type.
@@ -2623,7 +2537,6 @@ final class Deprecated {
 	 * Determines if the taxonomy has a robots value set.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2643,9 +2556,6 @@ final class Deprecated {
 	 * Determines whether the main query supports custom SEO.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 Now tests for an existing post/term ID when on singular/term pages.
-	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
-	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries (they're not supported as SEO-able queries).
 	 * @since 4.3.0 1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -2689,7 +2599,6 @@ final class Deprecated {
 	 * Determines whether a page or blog is on front.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Removed caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2766,7 +2675,6 @@ final class Deprecated {
 	 * Returns a list of all supported post types with archives.
 	 *
 	 * @since 4.2.0
-	 * @since 4.2.8 Now filters via `tsf()->is_post_type_archive_supported()`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2784,7 +2692,6 @@ final class Deprecated {
 	 * Gets all post types that have PTA and could possibly support SEO.
 	 *
 	 * @since 4.2.0
-	 * @since 4.2.8 Added filter `the_seo_framework_public_post_type_archives`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2819,9 +2726,6 @@ final class Deprecated {
 	 * Determines if the post type is disabled from SEO all optimization.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 Now is fiterable.
-	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
-	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2901,7 +2805,6 @@ final class Deprecated {
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.0 No longer lists post type archives as term-meta capable. It's not a taxonomy.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2919,7 +2822,6 @@ final class Deprecated {
 	 * Returns an array of hierarchical post types.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2937,7 +2839,6 @@ final class Deprecated {
 	 * Returns an array of nonhierarchical post types.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -2955,8 +2856,6 @@ final class Deprecated {
 	 * Returns hierarchical taxonomies for post type.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`.
-	 * @since 4.1.0 Now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3111,7 +3010,6 @@ final class Deprecated {
 	 * Fetch blog description.
 	 *
 	 * @since 2.5.2
-	 * @since 3.0.0 No longer returns untitled when empty, instead, it just returns an empty string.
 	 * @since 4.3.0 1. No longer memoizes the return value.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -3130,10 +3028,6 @@ final class Deprecated {
 	 * Generates the Twitter Card type.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.2 Now considers description output.
-	 * @since 2.9.0 Now listens to $this->get_available_twitter_cards().
-	 * @since 3.1.0 Now inherits filter `the_seo_framework_twittercard_output`.
-	 * @since 4.1.4 Removed needless preprocessing of the option.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3231,9 +3125,6 @@ final class Deprecated {
 	 * List of title separators.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Is now filterable.
-	 * @since 4.0.0 Removed the dash key.
-	 * @since 4.0.5 Added back the hyphen.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3253,35 +3144,6 @@ final class Deprecated {
 	 * Warning: Returns with entities encoded. The output is not safe for printing.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 1. Now uses smarter trimming.
-	 *              2. Deprecated 2nd parameter.
-	 *              3. Now has unicode support for sentence closing.
-	 *              4. Now strips last three words when preceded by a sentence closing separator.
-	 *              5. Now always leads with (inviting) dots, even if the excerpt is shorter than $max_char_length.
-	 * @since 4.0.0 1. Now stops parsing earlier on failure.
-	 *              2. Now performs faster queries.
-	 *              3. Now maintains last sentence with closing punctuations.
-	 * @since 4.0.5 1. Now decodes the excerpt input, improving accuracy, and so that HTML entities at
-	 *                 the end won't be transformed into gibberish.
-	 * @since 4.1.0 1. Now texturizes the excerpt input, improving accuracy with included closing & final punctuation support.
-	 *              2. Now performs even faster queries, in most situations. (0.2ms/0.02ms total (worst/best) @ PHP 7.3/PCRE 11).
-	 *                 Mind you, this method probably boots PCRE and wptexturize; so, it'll be slower than what we noted--it's
-	 *                 overhead that otherwise WP, the theme, or other plugin would cause anyway. So, deduct that.
-	 *              3. Now recognizes connector and final punctuations for preliminary sentence bounding.
-	 *              4. Leading punctuation now excludes symbols, special annotations, opening brackets and quotes,
-	 *                 and marks used in some latin languages like ¡¿.
-	 *              5. Is now able to always strip leading punctuation.
-	 *              6. It will now strip leading colon characters.
-	 *              7. It will now stop counting trailing words towards new sentences when a connector, dash, mark, or ¡¿ is found.
-	 *              8. Now returns encoded entities once more. So that the return value can be treated the same as anything else
-	 *                 revolving around descriptions--preventing double transcoding like `&amp;amp; > &amp; > &` instead of `&amp;`.
-	 * @since 4.1.5 1. The second parameter now accepts values again. From "current description length" to minimum accepted char length.
-	 *              2. Can now return an empty string when the input string doesn't satisfy the minimum character length.
-	 *              3. The third parameter now defaults to 4096, so no longer unexpected results are created.
-	 *              4. Resolved some backtracking issues.
-	 *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
-	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
-	 * @since 4.2.7 Now considers floating numerics as one word.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3306,10 +3168,6 @@ final class Deprecated {
 	 * Fetches or parses the excerpt of the post.
 	 *
 	 * @since 1.0.0
-	 * @since 2.8.2 Added 4th parameter for escaping.
-	 * @since 3.1.0 1. No longer returns anything for terms.
-	 *              2. Now strips plausible embeds URLs.
-	 * @since 4.0.1 The second parameter `$id` now defaults to int 0, instead of an empty string.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3336,13 +3194,6 @@ final class Deprecated {
 	 * Does not sanitize output.
 	 *
 	 * @since 2.5.2
-	 * @since 2.6.6 Detects Page builders.
-	 * @since 3.1.0 1. No longer returns anything for terms.
-	 *              2. Now strips plausible embeds URLs.
-	 * @since 4.0.1 Now fetches the real ID when no post is supplied.
-	 *              Internally, this was never an issue.
-	 * @since 4.2.8 1. Now tests for post type support of 'excerpt' before parsing the excerpt.
-	 *              2. Now tests for post type support of 'editor' before parsing the content.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3375,7 +3226,6 @@ final class Deprecated {
 
 		/**
 		 * @since 2.3.0
-		 * @since 2.7.0 Added output within filter.
 		 * @since 4.3.0 Deprecated.
 		 * @deprecated
 		 * @param string $time The article modified time.
@@ -3396,8 +3246,6 @@ final class Deprecated {
 	 * Returns the custom user-inputted description.
 	 *
 	 * @since 3.0.6
-	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3417,14 +3265,6 @@ final class Deprecated {
 	 * Returns the autogenerated meta description.
 	 *
 	 * @since 3.0.6
-	 * @since 3.1.0 1. The first argument now accepts an array, with "id" and "taxonomy" fields.
-	 *              2. No longer caches.
-	 *              3. Now listens to option.
-	 *              4. Added type argument.
-	 * @since 3.1.2 1. Now omits additions when the description will be deemed too short.
-	 *              2. Now no longer converts additions into excerpt when no excerpt is found.
-	 * @since 3.2.2 Now converts HTML characters prior trimming.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3446,7 +3286,6 @@ final class Deprecated {
 	 * Returns the autogenerated Twitter meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3466,7 +3305,6 @@ final class Deprecated {
 	 * Returns the autogenerated Open Graph meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3504,9 +3342,6 @@ final class Deprecated {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 The first parameter now expects an array.
-	 * @since 4.1.0 Now appends the "social" argument when getting the title.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3529,9 +3364,6 @@ final class Deprecated {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.0.4
-	 * @since 3.1.0 The first parameter now expects an array.
-	 * @since 4.1.0 Now appends the "social" argument when getting the title.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3553,7 +3385,6 @@ final class Deprecated {
 	 * Determines whether to add or remove title protection prefixes.
 	 *
 	 * @since 3.2.4
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3592,11 +3423,6 @@ final class Deprecated {
 	 * Determines whether to add or remove title branding additions.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 1. Added filter.
-	 *              2. Added strict taxonomical check.
-	 * @since 3.2.2 Now differentiates from query and parameter input.
-	 * @since 4.1.0 Added the second $social parameter.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3638,7 +3464,6 @@ final class Deprecated {
 	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
-	 * @since 3.0.4 Now checks for `$this->get_home_title_additions()`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3741,8 +3566,6 @@ final class Deprecated {
 	 * Gets Title Seplocation for the homepage.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Removed first parameter.
-	 * @since 4.0.0 Left is now right, and right is now left.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3777,9 +3600,6 @@ final class Deprecated {
 	 * Returns the custom user-inputted title.
 	 *
 	 * @since 3.1.0
-	 * @since 4.0.0 Moved the filter to a separated method.
-	 * @since 4.1.0 Added the third $social parameter.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3801,11 +3621,6 @@ final class Deprecated {
 	 * Returns the autogenerated meta title.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.4 1. Added check for title protection.
-	 *              2. Moved check for title pagination.
-	 * @since 4.0.0 Moved the filter to a separated method.
-	 * @since 4.1.0 Added the third $social parameter.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3874,7 +3689,6 @@ final class Deprecated {
 	 * finally admits through their code that terms can be queried using only IDs.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3939,11 +3753,6 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work for metadata and in admin.
 	 *
 	 * @since 3.1.0
-	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
-	 * @since 4.0.5 1: Now no longer uses `get_the_author()` to fetch the author's display name,
-	 *                 but uses the provided term object instead.
-	 *              2: The first parameter now accepts `\WP_User` objects.
-	 * @since 4.1.2 Now supports WP 5.5 archive titles.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -3986,7 +3795,6 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.8 Now tests for post type support of 'title' before parsing the title.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4009,9 +3817,6 @@ final class Deprecated {
 	 * Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 4.0.0 No longer redundantly tests the query, now only uses the term input or queried object.
-	 * @since 4.0.2 Now asserts the correct tag taxonomy condition.
-	 * @since 4.2.7 Now invokes proper filters when 'category' or 'tag' taxonomies are used.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4032,7 +3837,6 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.0 Now actually works in the admin area, provided you forward $post_type.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4085,7 +3889,6 @@ final class Deprecated {
 	 * Returns 404 title.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer accepts parameters, nor has conditions.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4103,9 +3906,6 @@ final class Deprecated {
 	 * Merges title branding, when allowed.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 Added strict taxonomical check.
-	 * @since 3.1.3 Fixed conditional logic.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4125,7 +3925,6 @@ final class Deprecated {
 	 * Merges pagination with the title, if paginated.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 Now uses the registered default translation.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4143,10 +3942,6 @@ final class Deprecated {
 	 * Merges title protection prefixes.
 	 *
 	 * @since 3.1.0
-	 * @since 3.1.2 Added strict taxonomical checks for title protection.
-	 * @since 3.1.3 Fixed conditional logic.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.4 Resolved regression where $run-test was reversed (renamed to $merge).
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4212,7 +4007,6 @@ final class Deprecated {
 	 * Which can automatically be detected when not set, based on the site URL setting.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.0 Now gets the "automatic" scheme from the WordPress home URL.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4275,9 +4069,6 @@ final class Deprecated {
 	 * WordPress core function, without filter.
 	 *
 	 * @since 2.4.2
-	 * @since 3.0.0 $use_filter now defaults to false.
-	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
-	 * @since 4.0.0 Removed the deprecated parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4340,7 +4131,6 @@ final class Deprecated {
 	 * Does not work for unregistered pages, like search, 404, date, author, and CPTA.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Now properly generates taxonomical URLs.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4376,9 +4166,6 @@ final class Deprecated {
 	 * The URL will never be paginated.
 	 *
 	 * @since 3.0.0
-	 * @since 4.0.0 Now preemptively fixes the generation arguments, for easier implementation.
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.2.3 Marked for deprecation.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4426,7 +4213,6 @@ final class Deprecated {
 	 * Returns home canonical URL without query considerations.
 	 *
 	 * @since 4.2.0
-	 * @since 4.2.2 Now adds a trailing slash if the URL is a root URL.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4444,12 +4230,6 @@ final class Deprecated {
 	 * Returns singular canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Added WC Shop and WP Blog (as page) pagination integration via Query::paged().
-	 * @since 3.2.4 Removed pagination support for singular posts, as the SEO attack is now mitigated via WordPress.
-	 * @since 4.0.5 Now passes the `$id` to `is_singular_archive()`
-	 * @since 4.2.0 1. Added memoization.
-	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
-	 * @since 4.2.3 Rectified pagination removal issue. No longer adds pagination when $post_id is null.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4603,9 +4383,6 @@ final class Deprecated {
 	 * Adds pagination to input URL.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.4 1. Now considers query arguments when using pretty permalinks.
-	 *              2. The second and third parameters are now optional.
-	 * @since 4.2.0 Now properly adds pagination to search links.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4630,13 +4407,6 @@ final class Deprecated {
 	 * The URL must match this query if no second parameter is provided.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.4 1. Now correctly removes the pagination base on singular post types.
-	 *              2. The second parameter now accepts null or a value.
-	 *              3. The third parameter is now changed to $use_base, from the archive pagination number.
-	 *              4. Now supports pretty permalinks with query parameters.
-	 *              5. Is now public.
-	 * @since 4.1.2 Now correctly reappends query when pagination isn't removed.
-	 * @since 4.2.0 Now properly removes pagination from search links.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4716,8 +4486,6 @@ final class Deprecated {
 	 * If this fails, you're going to have a bad time.
 	 *
 	 * @since 2.7.0
-	 * @since 2.9.2 1. Now considers port too.
-	 *              2. Now uses get_home_url(), rather than get_option('home').
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4754,7 +4522,6 @@ final class Deprecated {
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 2.9.4
-	 * @since 4.1.0 Improved performance by testing an early match.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4792,7 +4559,6 @@ final class Deprecated {
 	 * Returns singular custom field's canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.2.0 The first parameter is now optional.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4811,7 +4577,6 @@ final class Deprecated {
 	 * Returns taxonomical custom field's canonical URL.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.0 The first parameter is now optional.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4848,9 +4613,6 @@ final class Deprecated {
 	 * Generates shortlink URL.
 	 *
 	 * @since 2.2.2
-	 * @since 3.1.0 1. No longer accepts $post_id input. Output's based on query only.
-	 *              2. Shortened date archive URL length.
-	 *              3. Removed query parameter collisions.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4869,11 +4631,6 @@ final class Deprecated {
 	 * To be used on the front-end only.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0 $get_id parameter has been added.
-	 * @since 4.0.0 Now uses the new image generator.
-	 * @since 4.1.2 Now forwards the `multi_og_image` option to the generator. Although
-	 *              it'll always use just one image, we read this option so we'll only
-	 *              use a single cache instance internally with the generator.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4923,7 +4680,6 @@ final class Deprecated {
 	 * Returns single custom field image details.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -4950,7 +4706,6 @@ final class Deprecated {
 	 * Returns single or multiple generates image details.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5073,7 +4828,6 @@ final class Deprecated {
 	 * Skips the original image, which may also be acceptable.
 	 *
 	 * @since 4.0.2
-	 * @since 4.2.4 Added parameter `$max_filesize` that filters images larger than it.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5094,7 +4848,6 @@ final class Deprecated {
 	 * Returns the minimum role required to adjust settings.
 	 *
 	 * @since 3.0.0
-	 * @since 4.1.0 Now uses the constant `THE_SEO_FRAMEWORK_SETTINGS_CAP` as a default return value.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5124,15 +4877,6 @@ final class Deprecated {
 	 * Echos the header meta and scripts.
 	 *
 	 * @since 1.0.0
-	 * @since 2.8.0 Cache is busted on each new release.
-	 * @since 3.0.0 Now converts timezone if needed.
-	 * @since 3.1.0 1. Now no longer outputs anything on preview.
-	 *              2. Now no longer outputs anything on blocked post types.
-	 * @since 4.0.0 Now no longer outputs anything on Customizer.
-	 * @since 4.0.4 1. Now sets timezone to UTC to fix WP 5.3 bug <https://core.trac.wordpress.org/ticket/48623>
-	 *              2. Now always sets timezone regardless of settings, because, again, bug.
-	 * @since 4.2.0 No longer sets timezone.
-	 * @since 4.2.7 No longer marked as private.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 */
@@ -5155,17 +4899,13 @@ final class Deprecated {
 	 */
 	public function do_meta_output() {
 		\tsf()->_deprecated_function( 'tsf()->do_meta_output()', '4.3.0', 'tsf()->print_seo_meta_tags()' );
-		\The_SEO_Framework\Front\Meta\Head::print_tags(); // Lacking import OK.
+		\The_SEO_Framework\Front\Meta\Head::print_tags();
 	}
 
 	/**
 	 * Holds default site options.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Now applies filters 'the_seo_framework_default_site_options'
-	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
-	 * @since 4.2.4 `max_image_preview` now defaults to `large`, from `standard`, matching WordPress's default.
-	 * @since 4.2.7 Added `auto_description_html_method`, defaults to `fast`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5183,11 +4923,6 @@ final class Deprecated {
 	 * Holds warned site options array.
 	 *
 	 * @since 2.6.0
-	 * @since 2.9.0 Removed all non-warned settings.
-	 * @since 3.1.0 Now applies the "the_seo_framework_warned_site_options" filter.
-	 * @since 4.1.0 Added robots' post type setting warnings.
-	 * @since 4.1.2 Added `ping_use_cron_prerender`.
-	 * @since 4.2.0 Now memoizes its return value.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5208,7 +4943,6 @@ final class Deprecated {
 	 * This method does NOT merge the default post options.
 	 *
 	 * @since 2.6.0
-	 * @since 2.9.2 Added $use_current parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5283,7 +5017,6 @@ final class Deprecated {
 	 * Returns the option key for Post Type robots settings.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.0 No longer sanitizes the input parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5302,7 +5035,6 @@ final class Deprecated {
 	 * Returns the option key for Taxonomy robots settings.
 	 *
 	 * @since 4.1.0
-	 * @since 4.2.0 No longer sanitizes the input parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5391,7 +5123,6 @@ final class Deprecated {
 	 * Returns the term meta item by key.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.0 No longer accidentally returns an empty array on failure.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5414,14 +5145,6 @@ final class Deprecated {
 	 * Returns Genesis 2.3.0+ data if no term meta data is set via compat module.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 Added filter.
-	 * @since 3.0.0 Added filter.
-	 * @since 3.1.0 Deprecated filter.
-	 * @since 4.0.0 1. Removed deprecated filter.
-	 *              2. Now fills in defaults.
-	 * @since 4.1.4 1. Removed deprecated filter.
-	 *              2. Now considers headlessness.
-	 * @since 4.2.0 Now returns an empty array when the term's taxonomy isn't supported.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5440,11 +5163,6 @@ final class Deprecated {
 	 * Returns an array of default term options.
 	 *
 	 * @since 2.7.0
-	 * @since 3.1.0 This is now always used.
-	 * @since 4.0.0 1. Added $term_id parameter.
-	 *              2. Added 'redirect' value.
-	 *              3. Added 'title_no_blog_name' value.
-	 *              4. Removed 'saved_flag' value.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5581,12 +5299,6 @@ final class Deprecated {
 	 * Returns the primary term for post.
 	 *
 	 * @since 3.0.0
-	 * @since 4.1.5   1. Added memoization.
-	 *                2. The first and second parameters are now required.
-	 * @since 4.1.5.1 1. No longer causes a PHP warning in the unlikely event a post's taxonomy gets deleted.
-	 *                2. This method now converts the post meta to an integer, making the comparison work again.
-	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
-	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
 	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
 	 *              2. Now returns `null` instead of `false` on failure.
 	 *              3. Deprecated.
@@ -5668,7 +5380,6 @@ final class Deprecated {
 	 * Returns the author meta item by key.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.8 Now returns null when no post author can be established.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5688,8 +5399,6 @@ final class Deprecated {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.7 Removed redundant memoization.
-	 * @since 4.2.8 Now returns null when no post author can be established.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5708,10 +5417,6 @@ final class Deprecated {
 	 * Memoizes the return value, can be bypassed.
 	 *
 	 * @since 2.7.0
-	 * @since 2.8.0 Always returns array, even if no value is assigned.
-	 * @since 4.1.4 1. Now returns default values when custom values are missing.
-	 *              2. Now listens to headlessness.
-	 *              3. Deprecated the third argument, and moved it to the second.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5767,7 +5472,6 @@ final class Deprecated {
 	 * Updates users meta from input.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.0 No longer returns the update success state.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5845,8 +5549,6 @@ final class Deprecated {
 	 * Fetches Post content.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 No longer applies WordPress's default filters.
-	 * @since 4.2.8 Now tests for post type support of 'editor' before parsing the content.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5969,7 +5671,6 @@ final class Deprecated {
 	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.1 Now obtains the real ID when none is supplied.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5989,9 +5690,6 @@ final class Deprecated {
 	 * Returns all registered custom SEO fields for a post.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 Now tests for valid post ID in the post object.
-	 * @since 4.1.4 1. Now returns an empty array when the post type isn't supported.
-	 *              2. Now considers headlessness.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6054,7 +5752,6 @@ final class Deprecated {
 	 * Save post meta / custom field data for a singular post type.
 	 *
 	 * @since 4.0.0
-	 * @since 4.1.4 Removed deprecated filter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6150,7 +5847,6 @@ final class Deprecated {
 	 * Returns sitemap color scheme.
 	 *
 	 * @since 2.8.0
-	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6169,7 +5865,6 @@ final class Deprecated {
 	 * Checks if blog is public through WordPress core settings.
 	 *
 	 * @since 2.6.0
-	 * @since 4.0.5 Can now test for non-sanitized 'blog_public' option states.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6188,8 +5883,6 @@ final class Deprecated {
 	 * Multisite Only.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 Now uses get_site()
-	 * @since 3.1.1 Now checks for `is_multisite()`, to prevent a crash with Divi's compatibility injection.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6241,8 +5934,6 @@ final class Deprecated {
 	 * Determines whether we can output sitemap or not based on options and blog status.
 	 *
 	 * @since 2.6.0
-	 * @since 2.9.2 No longer checks for plain and ugly permalinks.
-	 * @since 4.0.0 Removed caching.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6260,7 +5951,6 @@ final class Deprecated {
 	 * Detects presence of robots.txt in root folder.
 	 *
 	 * @since 2.5.2
-	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6279,7 +5969,6 @@ final class Deprecated {
 	 * Only allows root domains.
 	 *
 	 * @since 2.9.2
-	 * @since 4.0.2 Now uses the preferred URL scheme.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6297,7 +5986,6 @@ final class Deprecated {
 	 * Detects presence of sitemap.xml in root folder.
 	 *
 	 * @since 2.5.2
-	 * @since 4.0.0 Now tries to load `wp-admin/includes/file.php` to prevent a fatal error.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6316,14 +6004,6 @@ final class Deprecated {
 	 * Requires the site not to have a robots.txt file in the root directory.
 	 *
 	 * @since 2.2.9
-	 * @since 2.9.3 Casts $public to string for check.
-	 * @since 4.0.5 1. The output is now filterable.
-	 *              2. Improved invalid location test.
-	 *              3. No longer shortcircuits on non-public sites.
-	 *              4. Now marked as private.
-	 * @since 4.1.0 Now adds the WordPress Core sitemap URL.
-	 * @since 4.1.2 Now only adds the WP Core sitemap URL when the provider tells us it's enabled.
-	 * @since 4.1.4 Removed object caching support.
 	 * @since 4.3.0 Deprecated. Even though access was marked private, we still found some used this (including us).
 	 * @deprecated
 	 *
@@ -6360,9 +6040,6 @@ final class Deprecated {
 	 * Memoizes the database request.
 	 *
 	 * @since 3.0.0
-	 * @since 3.1.0 Now no longer crashes on database errors.
-	 * @since 4.1.4 1. Now tests against post type exclusions.
-	 *              2. Now considers headlessness. This method runs only on the front-end.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6380,8 +6057,6 @@ final class Deprecated {
 	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
 	 *
 	 * @since 2.8.0
-	 * @since 2.9.0 Now flushes all levels rather than just the latest one.
-	 * @since 4.0.0 Is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6396,8 +6071,6 @@ final class Deprecated {
 	 * Registers admin scripts and styles.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 First parameter is now deprecated.
-	 * @since 4.0.0 First parameter is now removed.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 */
@@ -6484,7 +6157,6 @@ final class Deprecated {
 	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
-	 * @since 4.0.0 Removed extraneous, unused parameters.
 	 * @since 4.3.0 1. Now escapes the filter output.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -6525,12 +6197,6 @@ final class Deprecated {
 	 * Does not support list or block elements. Only inline statements.
 	 *
 	 * @since 2.8.0
-	 * @since 2.9.0 1. Removed word boundary requirement for strong.
-	 *              2. Now lets regex count their numeric values in string.
-	 *              3. Fixed header 1~6 calculation.
-	 * @since 2.9.3 Added $args parameter.
-	 * @since 4.0.3 Added a workaround for connected em/strong elements.
-	 * @since 4.1.4 Offloaded to `The_SEO_Framework\Interpreters\Markdown::convert()`
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 * @link https://wordpress.org/plugins/about/readme.txt
@@ -6553,7 +6219,6 @@ final class Deprecated {
 	 * Converts time from GMT input to given format.
 	 *
 	 * @since 2.7.0
-	 * @since 4.0.4 Now uses `gmdate()` instead of `date()`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6587,7 +6252,6 @@ final class Deprecated {
 		if ( isset( $override_get_time ) && '1' !== $override_get_time ) {
 			$get_time = $override_get_time;
 			/**
-			 * @see For valid formats https://www.w3.org/TR/NOTE-datetime.
 			 * @since 4.1.4
 			 * @param string The full timestamp format. Must be XML safe and in ISO 8601 datetime notation.
 			 * @param bool   True if time is requested, false if only date.
@@ -6623,7 +6287,6 @@ final class Deprecated {
 	 * Shortens string and adds ellipses when over a threshold in length.
 	 *
 	 * @since 3.1.0
-	 * @since 4.2.0 No longer prepends a space before the hellip.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6724,7 +6387,6 @@ final class Deprecated {
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6755,7 +6417,6 @@ final class Deprecated {
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6771,7 +6432,6 @@ final class Deprecated {
 	 * Adds menu links under "settings" in the wp-admin dashboard
 	 *
 	 * @since 2.2.2
-	 * @since 2.9.2 Added static cache so the method can only run once.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 */
@@ -6824,10 +6484,6 @@ final class Deprecated {
 	 * for alerts, etc.
 	 *
 	 * @since 2.2.2
-	 * @since 2.9.2 Added user-friendly exception handling.
-	 * @since 2.9.3 1. Query arguments work again (regression 2.9.2).
-	 *              2. Now only accepts http and https protocols.
-	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6847,7 +6503,6 @@ final class Deprecated {
 	 * Registers dismissible persistent notice, that'll respawn during page load until dismissed or otherwise expired.
 	 *
 	 * @since 4.1.0
-	 * @since 4.1.3 Now handles timeout values below -1 gracefully, by purging the whole notification gracelessly.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6945,15 +6600,6 @@ final class Deprecated {
 	 * Also loads scripts and styles if out of The SEO Framework's context.
 	 *
 	 * @since 2.6.0
-	 * @since 3.0.6 The messages are no longer auto-styled to "strong".
-	 * @since 4.0.0 Added a tabindex, so keyboard navigation is possible on the "empty" dashicon.
-	 * @since 4.0.3 1. Keyboard navigation is now supported on the dismiss icon.
-	 *              2. The info notice type is now supported.
-	 * @since 4.1.0 Now semantically wraps the content with HTML.
-	 * @since 4.1.2 1. No longer invokes the script loader during AJAX-requests.
-	 *              2. Now accepts empty messages, so that AJAX-invoked generators can grab a notice wrapper.
-	 *              3. Added the inline parameter.
-	 *              4. Now enqueues scripts in the footer, so templates won't spam the header.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6986,7 +6632,6 @@ final class Deprecated {
 	 * Echos generated dismissible notice.
 	 *
 	 * @since 2.7.0
-	 * @since 4.1.2 Added the $inline parameter.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7016,9 +6661,6 @@ final class Deprecated {
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
-	 * @since 2.9.0 Removed reset options check, see check_options_reset().
-	 * @since 3.1.0 Removed settings field existence check.
-	 * @since 4.0.0 Now checks if the option exists before adding it. Shaves 20μs...
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7048,7 +6690,6 @@ final class Deprecated {
 	 * Registers each of the settings with a sanitization filter type.
 	 *
 	 * @since 2.8.0
-	 * @since 3.1.0 Added caching, preventing duplicate registrations.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 */
@@ -7065,9 +6706,6 @@ final class Deprecated {
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.2.2
-	 * @since 2.7.0 Uses external caching function.
-	 * @since 2.8.0 Renamed.
-	 * @since 4.0.0 Now caches its $option registration.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7085,11 +6723,6 @@ final class Deprecated {
 	 * Calculates the relative font color according to the background, grayscale.
 	 *
 	 * @since 2.8.0
-	 * @since 2.9.0 Now adds a little more relative softness based on rel_lum.
-	 * @since 2.9.2 (Typo): Renamed from 'get_relatitve_fontcolor' to 'get_relative_fontcolor'.
-	 * @since 3.0.4 Now uses WCAG's relative luminance formula.
-	 * @since 4.2.0 Optimized code, but it now has some rounding changes at the end. This could
-	 *              offset the returned values by 1/255th.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7161,7 +6794,6 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 1.3.0
-	 * @since 2.6.0 Uses new style detection.
 	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
 	 *
 	 * @return bool SEO plugin detected.
@@ -7176,7 +6808,6 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 1.3.0
-	 * @since 2.8.0 No longer checks for old style filter.
 	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
 	 *
 	 * @return bool True if OG or SEO plugin detected.
@@ -7232,7 +6863,6 @@ final class Deprecated {
 	 * Makes Email Addresses safe, via sanitize_email()
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7248,7 +6878,6 @@ final class Deprecated {
 	 * Removes unsafe HTML tags, via wp_kses_post().
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7263,7 +6892,6 @@ final class Deprecated {
 	 * Removes HTML tags from string.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7281,7 +6909,6 @@ final class Deprecated {
 	 * Also removes all spaces.
 	 *
 	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7298,7 +6925,6 @@ final class Deprecated {
 	 * Makes URLs safe, maintaining queries.
 	 *
 	 * @since 2.2.8
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7314,7 +6940,6 @@ final class Deprecated {
 	 * Makes URLs safe and removes query args.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7359,7 +6984,6 @@ final class Deprecated {
 	 * Unlike sanitize_key(), it doesn't alter the case nor applies filters.
 	 * It also maintains the '@' character and square brackets.
 	 *
-	 * @see WordPress Core sanitize_key()
 	 * @since 4.0.0
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
@@ -7379,9 +7003,6 @@ final class Deprecated {
 	 * Returns an one-line sanitized description and escapes it.
 	 *
 	 * @since 2.5.0
-	 * @since 2.6.6 Removes duplicated spaces.
-	 * @since 2.8.0 Method is now public.
-	 * @since 2.8.2 Added extra sanitation.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7428,7 +7049,6 @@ final class Deprecated {
 	 * Returns a sanitized and trimmed title.
 	 *
 	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7498,7 +7118,6 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @see \WP_Embed::autoembed()
 	 *
 	 * @param string $content The content to look for embed.
 	 * @return string $content Content without single-lined URLs.
@@ -7519,7 +7138,6 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @see \WP_Embed::autoembed()
 	 *
 	 * @param string $content The content to look for embed.
 	 * @return string $content Content without the paragraphs containing solely URLs.
@@ -7538,29 +7156,7 @@ final class Deprecated {
 	 * It essentially strips all tags, and replaces block-type tags' endings with spaces.
 	 * When done, it performs a sanity-cleanup via `strip_tags()`.
 	 *
-	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated/repeated spaces afterward.
-	 *
 	 * @since 3.2.4
-	 * @since 4.0.0 Now allows emptying the indexes `space` and `clear`.
-	 * @since 4.0.5 1. Added the `strip` argument index to the second parameter for clearing leftover tags.
-	 *              2. Now also clears `iframe` tags by default.
-	 *              3. Now no longer (for example) accidentally takes `link` tags when only `li` tags are set for stripping.
-	 *              4. Now performs a separate query for void elements; to prevent regex recursion.
-	 * @since 4.1.0 Now detects nested elements and preserves that content correctly--as if we'd pass through scrupulously beyond infinity.
-	 * @since 4.1.1 Can now replace void elements with spaces when so inclined via the arguments (space vs clear).
-	 * @since 4.2.7 1. Revamped the HTML lookup: it now (more) accurately processes HTML, and is less likely to be fooled by HTML tags
-	 *                 in attributes.
-	 *              2. The 'space' index no longer has default `fieldset`, `figcaption`, `form`, `main`, `nav`, `pre`, `table`, and `tfoot`.
-	 *              3. The space index now has added to default `details`, `hgroup`, and `hr`.
-	 *              4. The 'clear' index no longer has default `bdo`, `hr`, `link`, `meta`, `option`, `samp`, `style`, and `var`.
-	 *              5. The 'clear' index now has added to default `area`, `audio`, `datalist`, `del`, `dialog`, `fieldset`, `form`, `map`,
-	 *                 `menu`, `meter`, `nav`, `object`, `output`, `pre`, `progress`, `s`, `table`, and `template`.
-	 *              6. Added the 'passes' index to `$args`. This tells the maximum passes 'space' may process.
-	 *                 Read TSF option `auto_description_html_method` to use the user-defined method.
-	 *              7. Now replaces all elements passed with spaces. For void elements, or phrasing elements, you'd want to omit
-	 *                 those from '$args' so it falls through to `strip_tags()`.
-	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
-	 * @since 4.2.8 Elements with that start with exactly the same text as others won't be preemptively closed.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7597,21 +7193,10 @@ final class Deprecated {
 	 * Sanitizes input excerpt.
 	 *
 	 * @since 2.8.0
-	 * @since 2.8.2 1. Added $allow_shortcodes parameter.
-	 *              2. Added $escape parameter.
-	 * @since 3.2.4 Now selectively clears tags.
-	 * @since 4.1.0 Moved `figcaption`, `figure`, `footer`, and `tfoot`, from `space` to `clear`.
-	 * @since 4.2.7 1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
-	 *              2. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`,
-	 *                 `object`, `output`, `progress`, `s`, `template`, and `ul`.
-	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
-	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
-	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
 	 * @since 4.3.0 1. The first parameter is now required.
 	 *              2. Now returns an empty string when something falsesque is returned.
 	 *              3. Deprecated.
 	 * @deprecated
-	 * @see `$this->strip_tags_cs()`
 	 *
 	 * @param string $excerpt          The excerpt.
 	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
@@ -7641,7 +7226,6 @@ final class Deprecated {
 	 * @since 4.3.0 1. The first parameter is now required.
 	 *              2. Deprecated.
 	 * @deprecated
-	 * @see $this->s_excerpt - This is basically a copy without sanitation.
 	 *
 	 * @param string $excerpt          The excerpt.
 	 * @param bool   $allow_shortcodes Whether to maintain shortcodes from excerpt.
@@ -7664,8 +7248,6 @@ final class Deprecated {
 	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
-	 * @since 4.0.5 Now normalized `-` entities.
-	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated.
 	 *
@@ -7684,12 +7266,6 @@ final class Deprecated {
 	 * Converts multilines to single lines.
 	 *
 	 * @since 2.8.2
-	 * @since 3.1.0 Simplified method.
-	 * @since 4.1.0 1. Made this method about 25~92% faster (more replacements = more faster). 73% slower on empty strings (negligible).
-	 *              2. Now also strips form-feed and vertical whitespace characters--might they appear in the wild.
-	 *              3. Now also strips horizontal tabs (reverted in 4.1.1).
-	 * @since 4.1.1 1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-	 *              2. No longer transforms horizontal tabs. Use `s_tabs()` instead.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
@@ -7709,9 +7285,6 @@ final class Deprecated {
 	 * Removes duplicated spaces from the input value.
 	 *
 	 * @since 2.8.2
-	 * @since 2.9.4 Now no longer fails when first two characters are spaces.
-	 * @since 3.1.0 1. Now also catches non-breaking spaces.
-	 *              2. Now uses a regex pattern.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7730,11 +7303,8 @@ final class Deprecated {
 	 * Removes tabs and replaces it with spaces.
 	 *
 	 * @since 2.8.2
-	 * @since 4.1.1 Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
-	 * @see $this->s_dupe_space() For removing duplicates spaces.
-	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
 	 * @param string $text The input value with possible tabs.
 	 * @return string The input string without tabs.
@@ -7771,7 +7341,6 @@ final class Deprecated {
 	 * Uses double casting. First, we cast to bool, then to integer.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7811,7 +7380,6 @@ final class Deprecated {
 	 * Returns a positive integer value.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7874,7 +7442,6 @@ final class Deprecated {
 	 * Replaces non-break spaces with regular spaces.
 	 *
 	 * @since 2.8.2
-	 * @since 3.1.0 Now catches all non-breaking characters.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7932,9 +7499,6 @@ final class Deprecated {
 	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
-	 * @since 4.0.0 Now normalizes `&` entities.
-	 * @since 4.0.5 Now normalized `-` entities.
-	 * @since 4.2.7 Now converts nbsp before singleline, because singleline must also trim old nbsp.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -7953,11 +7517,6 @@ final class Deprecated {
 	 * Cleans known parameters from image details.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 Now finds smaller images when they're over 4K.
-	 * @since 4.0.5 Now faults images with filename extensions APNG, BMP, ICO, TIFF, or SVG.
-	 * @since 4.1.4 Fixed theoretical issue where a different image could be set when width
-	 *              and height are supplied and either over 4K, but no ID is given.
-	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
 	 * @since 4.3.0 1. Now sanitizes the caption.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -7987,11 +7546,6 @@ final class Deprecated {
 	 * Parses URL to path and adds @ if URL is given.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
-	 * @since 3.0.0 1. Now removes '@' from the URL path.
-	 *              2. Now removes spaces and tabs.
-	 * @since 4.0.0 1. Now returns empty on lone `@` entries.
-	 *              2. Now returns empty when using only spaces and tabs.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8010,10 +7564,6 @@ final class Deprecated {
 	 * Parses Facebook profile URLs. Exchanges URLs for Facebook's.
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
-	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
-	 * @since 4.0.0 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
-	 *              2. Now returns empty when using only spaces and tabs.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8032,7 +7582,6 @@ final class Deprecated {
 	 * Iterates over and cleans known parameters from image details. Also strips out duplicates.
 	 *
 	 * @since 4.0.0
-	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8066,13 +7615,6 @@ final class Deprecated {
 	 * Sanitizes the Redirect URL.
 	 *
 	 * @since 2.2.4
-	 * @since 2.8.0 Method is now public.
-	 * @since 3.0.6 Noqueries is now disabled by default.
-	 * @since 4.0.0 1. Removed rudimentary relative URL testing.
-	 *              2. Removed input transformation filters, and with that, removed redundant multisite spam protection.
-	 *              3. Now allows all protocols. Enjoy!
-	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://example.com/https://example.com/path/to/file/`)
-	 *                 when filter `the_seo_framework_allow_external_redirect` is set to false.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8113,8 +7655,6 @@ final class Deprecated {
 	 * The method should more aptly be named: "maybe_make_url_relative()".
 	 *
 	 * @since 2.6.5
-	 * @since 2.8.0 Method is now public.
-	 * @since 4.0.0 No longer strips the prepended / path.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8163,7 +7703,6 @@ final class Deprecated {
 	 * Sanitizes user meta.
 	 *
 	 * @since 4.1.4
-	 * @since 4.2.0 Now accepts and sanitizes the 'counter_type' index.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8243,7 +7782,6 @@ final class Deprecated {
 	 * Falls back to previous value if empty. If previous value is empty if will go to default.
 	 *
 	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 1. Now falls back to 'summary_large_image' instead of the default option. // var_dump() auto!
 	 *              2. Deprecated.
 	 * @deprecated
@@ -8306,8 +7844,6 @@ final class Deprecated {
 	 * Returns the knowledge type value string.
 	 *
 	 * @since 2.2.8
-	 * @since 2.8.0 Method is now public.
-	 * @since 4.1.0 Can no longer fall back to its previous value--instead, it will fall back to a generic value.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8397,7 +7933,6 @@ final class Deprecated {
 	 * This method fetches the default option because it's conditional (LTR/RTL).
 	 *
 	 * @since 2.2.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 1. No longer falls back to option or default optionm, but a language-based default instead.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -8416,7 +7951,6 @@ final class Deprecated {
 	 * This method fetches the default option because it's conditional (LTR/RTL).
 	 *
 	 * @since 2.5.2
-	 * @since 2.8.0 Method is now public.
 	 * @since 4.3.0 1. No longer falls back to option or default option, but a language-based default instead.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -8482,7 +8016,6 @@ final class Deprecated {
 	 * Determines whether the text has recognizable transformative syntax.
 	 *
 	 * @since 4.2.7
-	 * @since 4.2.8 Added SEOPress support.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8498,9 +8031,6 @@ final class Deprecated {
 	 * Determines if the input text has transformative Yoast SEO syntax.
 	 *
 	 * @since 4.0.5
-	 * @since 4.2.7 1. Added wildcard `ct_`, and `cf_` detection.
-	 *              2. Added detection for various other types
-	 *              2. Removed wildcard `cs_` detection.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8516,7 +8046,6 @@ final class Deprecated {
 	 * Determines if the input text has transformative Rank Math syntax.
 	 *
 	 * @since 4.2.7
-	 * @since 4.2.8 Actualized the variable list.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8591,8 +8120,6 @@ final class Deprecated {
 	 * Memoizes the return value for the input argument--sorts the array deeply to ensure a match.
 	 *
 	 * @since 2.5.2
-	 * @since 4.1.4 Fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
-	 * @since 4.2.0 Rewrote sorting algorithm; now, it's actually good.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8629,7 +8156,6 @@ final class Deprecated {
 	 * Checks if the (parent) theme name is loaded.
 	 *
 	 * @since 2.1.0
-	 * @since 4.2.0 No longer "loads" the theme; instead, simply compares input to active theme options.
 	 * @since 4.3.0 Deprecated.
 	 * @deprecated
 	 *

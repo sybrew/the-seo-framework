@@ -86,7 +86,7 @@ final class Twitter {
 				'the_seo_framework_twittersite_output',
 				[
 					$site,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -123,7 +123,7 @@ final class Twitter {
 				'the_seo_framework_twittercreator_output',
 				[
 					$creator,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -160,7 +160,7 @@ final class Twitter {
 				'the_seo_framework_twittertitle_output',
 				[
 					$title,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
@@ -197,7 +197,7 @@ final class Twitter {
 				'the_seo_framework_twitterdescription_output',
 				[
 					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

@@ -71,7 +71,7 @@ class URI {
 				'the_seo_framework_rel_canonical_output',
 				[
 					'',
-					\The_SEO_Framework\Helper\Query::get_the_real_id(), // Lacking import OK.
+					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
 				'4.3.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',

@@ -271,7 +271,8 @@ final class Page extends Main {
 		// Don't use cache, as this can be filtered.
 		if ( Meta\Title\Conditions::use_protection_status( $generator_args ) ) {
 			$_title_before = $title;
-			\tsf()->merge_title_protection( $title, $generator_args );
+			$title         = Meta\Title::add_protection_status( $title, $generator_args );
+
 			if ( $title !== $_title_before )
 				$item['assess']['protected'] = $cache['assess']['protected'];
 		}

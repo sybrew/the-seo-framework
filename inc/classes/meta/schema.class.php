@@ -101,7 +101,7 @@ class Schema {
 		$builders_queue = [];
 		// Queue array_merge for improved performance.
 		foreach ( $primaries as $class )
-			$builders_queue[] = ( "\The_SEO_Framework\Meta\Schema\Entities\\$class" )::BUILDERS; // Lacking import OK.
+			$builders_queue[] = ( "\The_SEO_Framework\Meta\Schema\Entities\\$class" )::BUILDERS;
 
 		/**
 		 * @since 4.3.0
