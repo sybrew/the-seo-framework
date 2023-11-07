@@ -309,7 +309,7 @@ class Title {
 			$title = Data\Plugin\Term::get_meta_item( 'doctitle', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$title = Data\Plugin\PTA::get_meta_item( 'doctitle', $args['pta'] );
-		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$title = Data\Plugin::get_option( 'homepage_title' );
 				// Allow 0 to be the title.
@@ -368,15 +368,15 @@ class Title {
 			$title = static::get_archive_title( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
 			$title = static::get_archive_title( \get_post_type_object( $args['pta'] ) );
-		} else {
-			if ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-				$title = static::get_front_page_title();
-			} else {
-				$title = static::get_post_title( $args['id'] );
-			}
+		} elseif ( $args['uid'] ) {
+			$title = static::get_archive_title( \get_userdata( $args['uid'] ) );
+		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+			$title = static::get_front_page_title();
+		} elseif ( $args['id'] ) {
+			$title = static::get_post_title( $args['id'] );
 		}
 
-		return $title;
+		return $title ?? '';
 	}
 
 	/**

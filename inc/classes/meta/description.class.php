@@ -261,7 +261,7 @@ class Description {
 			$desc = Data\Plugin\Term::get_meta_item( 'description', $args['id'] );
 		} elseif ( $args['pta'] ) {
 			$desc = Data\Plugin\PTA::get_meta_item( 'description', $args['pta'] );
-		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 				// Allow 0 to be the description.

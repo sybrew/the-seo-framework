@@ -90,7 +90,7 @@ final class Excerpt {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @param array $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string
 	 */
 	public static function get_excerpt_from_args( $args ) {
@@ -101,12 +101,12 @@ final class Excerpt {
 			$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
 			$excerpt = static::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
-		} else {
-			if ( Query::is_blog_as_page( $args['id'] ) ) {
-				$excerpt = static::get_blog_page_excerpt();
-			} else {
-				$excerpt = static::get_singular_excerpt( $args['id'] );
-			}
+		} elseif ( $args['uid'] ) {
+			$excerpt = static::get_archive_excerpt( \get_userdata( $args['uid'] ) );
+		} elseif ( Query::is_blog_as_page( $args['id'] ) ) {
+			$excerpt = static::get_blog_page_excerpt();
+		} elseif ( $args['id'] ) {
+			$excerpt = static::get_singular_excerpt( $args['id'] );
 		}
 
 		return $excerpt ?? '';

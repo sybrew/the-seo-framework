@@ -243,6 +243,8 @@ class URI {
 			$url = static::get_bare_term_url( $args['id'], $args['tax'] );
 		} elseif ( $args['pta'] ) {
 			$url = static::get_bare_post_type_archive_url( $args['pta'] );
+		} elseif ( $args['uid'] ) {
+			$url = static::get_bare_author_url( $args['uid'] );
 		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
 			$url = static::get_bare_front_page_url();
 		} elseif ( $args['id'] ) {

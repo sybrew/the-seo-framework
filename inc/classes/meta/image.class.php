@@ -442,7 +442,7 @@ class Image {
 					'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
 					'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
 				];
-			} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+			} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 				$details = [
 					'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
 					'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),

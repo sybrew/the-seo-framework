@@ -114,7 +114,7 @@ final class Args extends Factory {
 				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
 			} elseif ( $args['pta'] ) {
 				yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
-			} else {
+			} elseif ( empty( $args['uid'] ) ) {
 				// $args['id'] can be empty, pointing to a plausible homepage query.
 				if ( Query::is_real_front_page_by_id( $args['id'] ) )
 					yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );

@@ -125,7 +125,7 @@ final class Conditions {
 					$use = static::use_term_branding( $args['id'] );
 				} elseif ( $args['pta'] ) {
 					$use = static::use_pta_branding( $args['pta'] );
-				} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
+				} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 					$use = static::use_front_page_tagline();
 				} else {
 					$use = static::use_post_branding( $args['id'] );

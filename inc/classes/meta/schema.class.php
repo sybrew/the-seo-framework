@@ -85,6 +85,7 @@ class Schema {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
+			// If is protected post, then only set WebSite to prevent spilling data.
 			if (
 				   empty( $args['tax'] )
 				&& empty( $args['pta'] )
@@ -95,7 +96,7 @@ class Schema {
 				$primaries = [ 'WebSite' ];
 			}
 		} else {
-			if ( Data\Post::is_protected() ) {
+			if ( Query::is_singular() && Data\Post::is_protected() ) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}

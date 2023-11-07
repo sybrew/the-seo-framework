@@ -132,6 +132,8 @@ class Breadcrumbs {
 			return static::get_archive_breadcrumb_list( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
 			return static::get_archive_breadcrumb_list( \get_post_type_object( $args['pta'] ) );
+		} elseif ( $args['uid'] ) {
+			return static::get_archive_breadcrumb_list( \get_userdata( $args['uid'] ) );
 		}
 
 		if ( Query::is_real_front_page_by_id( $args['id'] ) )
@@ -326,7 +328,6 @@ class Breadcrumbs {
 				] ),
 			];
 		} elseif ( $object instanceof \WP_User ) {
-			// TODO add, next to 'id', 'tax', and 'pta' support, also 'uid'
 			$crumbs[] = [
 				'url'  => Meta\URI::get_author_url( $object->id ),
 				'name' => Meta\Title::get_archive_title_from_object( $object ),
