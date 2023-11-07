@@ -208,7 +208,7 @@ function _upgrade( $previous_version ) {
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
 	// When a user upgrades beyond this range, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270', '4301' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4120', '4200', '4270', '5001' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -690,7 +690,7 @@ function _do_upgrade_3001() {
  *
  * @since 3.1.0
  * @since 4.1.1 No longer tests for default options.
- * @since 4.3.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 4301)
+ * @since 4.3.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 5001)
  */
 function _do_upgrade_3103() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
@@ -887,8 +887,8 @@ function _do_upgrade_4270() {
  * @since 4.3.0
  * @global \wpdb $wpdb
  */
-function _do_upgrade_4301() {
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4301' ) {
+function _do_upgrade_5001() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5001' ) {
 		Data\Plugin::update_option(
 			'auto_description_html_method',
 			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast', // Typo intended.
@@ -923,6 +923,16 @@ function _do_upgrade_4301() {
 			// The option holds only generated data that can be regenerated easily.
 			// On downgrade, this will be repopulated.
 			delete_option( 'autodescription-updates-cache' );
+		}
+
+		if (
+			   Data\Plugin::get_option( 'ld_json_searchbox' )
+			|| Data\Plugin::get_option( 'ld_json_breadcrumbs' )
+			|| Data\Plugin::get_option( 'knowledge_output' )
+		) {
+			Data\Plugin::update_option( 'ld_json_enabled', 1 );
+		} else {
+			Data\Plugin::update_option( 'ld_json_enabled', 0 );
 		}
 	}
 }

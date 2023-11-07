@@ -62,6 +62,7 @@ final class XSL {
 	/**
 	 * Prints global XSL variables.
 	 *
+	 * @hook the_seo_framework_xsl_head 0
 	 * @since 3.1.0
 	 * @since 4.2.0 1. $tableMinWidth no longer adds 'px'.
 	 *              2. Moved to class.
@@ -74,6 +75,7 @@ final class XSL {
 	/**
 	 * Prints XSL title.
 	 *
+	 * @hook the_seo_framework_xsl_head 10
 	 * @since 3.1.0
 	 * @since 4.0.0 Now uses a consistent titling scheme.
 	 * @since 4.2.0 Moved to class
@@ -86,6 +88,7 @@ final class XSL {
 	/**
 	 * Prints XSL styles.
 	 *
+	 * @hook the_seo_framework_xsl_head 10
 	 * @since 3.1.0
 	 * @since 4.2.0 1. Centered sitemap.
 	 *              2. Moved to class.
@@ -98,8 +101,9 @@ final class XSL {
 	/**
 	 * Prints XSL description.
 	 *
+	 * @hook the_seo_framework_xsl_description 10
 	 * @since 3.1.0
-	 * @since 4.2.0 Moved to class;
+	 * @since 4.2.0 Moved to class.
 	 * @access private
 	 */
 	public static function _print_xsl_description() {
@@ -109,6 +113,7 @@ final class XSL {
 	/**
 	 * Prints XSL content.
 	 *
+	 * @hook the_seo_framework_xsl_content 10
 	 * @since 3.1.0
 	 * @since 4.2.0 Moved to class.
 	 * @access private
@@ -120,8 +125,9 @@ final class XSL {
 	/**
 	 * Prints XSL footer.
 	 *
+	 * @hook the_seo_framework_xsl_footer 10
 	 * @since 3.1.0
-	 * @since 4.2.0 Moved to class
+	 * @since 4.2.0 Moved to class.
 	 * @access private
 	 */
 	public static function _print_xsl_footer() {
@@ -137,6 +143,7 @@ final class XSL {
 	 * Converts meta tags that aren't XHTML to XHTML, loosely.
 	 * Doesn't fix attribute minimization. TODO?..
 	 *
+	 * @hook site_icon_meta_tags PHP_INT_MAX
 	 * @since 3.1.4
 	 * @since 4.2.0 Moved to class.
 	 * @access private

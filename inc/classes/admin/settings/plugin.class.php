@@ -746,13 +746,13 @@ final class Plugin {
 	}
 
 	/**
-	 * Schema Meta Box Structure Tab output.
+	 * Schema Meta Box General Tab output.
 	 *
-	 * @since 4.0.0
+	 * @since 4.3.0
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
-	public static function _schema_metabox_structure_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/schema', 'structure' );
+	public static function _schema_metabox_general_tab() {
+		Admin\Template::output_view( 'settings/metaboxes/schema', 'general' );
 	}
 
 	/**

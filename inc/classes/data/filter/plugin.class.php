@@ -205,6 +205,7 @@ class Plugin {
 			'knowledge_type'               => 'knowledge_type',
 			'knowledge_youtube'            => 'fully_qualified_url',
 			'ld_json_breadcrumbs'          => 'checkbox',
+			'ld_json_enabled'              => 'checkbox',
 			'ld_json_searchbox'            => 'checkbox',
 			'max_image_preview'            => 'copyright_image_size',
 			'max_snippet_length'           => 'copyright_content_length',

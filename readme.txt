@@ -273,20 +273,6 @@ TODO add bespoke support for Events Calendar?
 	-> We need to recognize that their "archives" isn't an archive, so we should remove the prefix.
 		-> Simple.
 
-TODO implement "@hook wp_action" in every function with a callback.
-	-> If something is a callback of a hook AND something else, we may want to depict that differently?
-		E.g.: @hook ~ wp_action
-	-> Then, we can remove unused variables (often tagged with "Unused.").
-
-TODO the detect.*?plugins() functions use a foreach loop and then in_array() -- this can be slow, consider array_intersect instead?
-	-> Test performance.
-
-TODO DONE (still check assigments below): make 4.3.0 instead of 4.2.9?
-	-> This way we can push through large API changes, clean up soon-to-be-deprecations, sanitizations, etc.
-	-> We can also add Twitter Card type to every post
-	-> We can also justify major change for Title/Description output.
-	-> And we can justify jumping to PHP 7.3, so we can start using hrtime instead of microtime.
-
 TODO since the sitemap loads so early now, can we get rid of clean_up_globals()?
 	-> Test with 50 plugins and some "premium theme" active, and see if they slip through.
 
@@ -606,15 +592,21 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 	* **Structured data:**
 		* The Schema.org structured data generator has been upgraded to output graphs instead of simple, separated scripts.
 			* The way we've implemented it is faster and robust than ever before, and it finally allows for rapid implementation for new types. This also means that we had to abandon all filters (see the developer notes far below).
+				* TODO: It may not be as fast as before in net, because we output much more data.
+					-> Resolve this by memoizing descriptions and titles and URLs?
+						-> 5.0.1?
+		* Because the data is much more expansive, we've added a new toggle to enable all structured data.
+			* This toggle is enabled by default for all new users of TSF.
+			* This toggle is enabled for existing users if Sitelinks Search Box, Authorized Presence, or Breadcrumbs were enabled.
 		* We reintroduced the connected social networks interface for Schema.org.
 			* We still do not believe this is helpful for ranking. However, there's little harm done in having it.
-		* Schema.org/WebSite is now added to every page.
-			* Schema.org/organization is added to this if the site represents an organization.
-			* Schema.org/person is added to this if the site represents a person.
-		* Schema.org/WebPage is now added to every page but 404. TODO confirm
-			* Schema.org/BreadcrumbList is added to this.
+		* `Schema.org/WebSite` is now added to every page.
+			* `Schema.org/Organization` is added to this if the site represents an organization.
+			* `Schema.org/Person` is added to this if the site represents a person.
+		* `Schema.org/WebPage` is now added to every page but 404. TODO confirm
+			* `Schema.org/BreadcrumbList` is added to this.
 			* Schema.org/Author is added to this if there's an author registered to the post. TODO confirm
-		* Scheam.org/BreadcrumbList has been rewritten and is now supported on all pages, not just singular posts.
+		* `Schema.org/BreadcrumbList` has been rewritten and is now supported on all pages, not just singular posts.
 	* **Breadcrumbs:**
 		* Breadcrumb output is now supported. Since it appears they aren't coming anytime soon to the Block editor.
 			* You can use the shortcode, `[tsf_breadcrumbs separator=">"]`, which will output a breadcrumb of any kind using the separator ">".
@@ -693,6 +685,8 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* When disabling Open Graph meta tags, the Post Dates tab will now disappear.
 		* When disabling Facebook, Twitter, or oEmbed meta tags, their namesake tab will now disappear.
 		* When disabling Open Graph, Facebook, Twitter, and oEmbed meta tags, the Social Title and Social Image settings will now disappear.
+		* When disabling the Website logo, the input form is now hidden.
+		* When disabling Authorized presence, all its related settings are now hidden.
 	* **Redirects:**
 		* When an invalid URL is supplied by the admin in the redirect field, the plugin now displays a generic HTTP error code 400 (Bad Request), instead of showing the page.
 	* **Other:**
@@ -928,7 +922,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 	* For option index `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`):
 		* **Added:**
 			* Index `auto_description_html_method`, this used to be `auto_descripton_html_method` (typo).
-			* Suboption filter `s_color_hex` is available.
+			* Index `ld_json_enabled`, this is used to toggle all Schema.org option generation.
 		* **Changed:**
 			* The options no longer have their slashes stripped via `stripslashes_deep`. This was done precautionary because WordPress adds slashes to everything to account for a long-discouraged PHP quirk. Resaving the options would then cause slashes to become repeated: `'` becomes `\'`, `\'` becomes `\\\'`, etc. This is now addressed.
 				* WordPress addressed this issue in their [options API](https://github.com/WordPress/wordpress-develop/blob/6.3.1/src/wp-admin/options.php#L320), about which I was unaware.

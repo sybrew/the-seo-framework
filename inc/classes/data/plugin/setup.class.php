@@ -297,8 +297,13 @@ class Setup {
 				'baidu_verification'  => '', // Baidu Verification Code.
 				'pint_verification'   => '', // Pinterest Verification Code.
 
+				// Schema.org.
+				'ld_json_enabled'        => 1, // LD+Json toggle for Schema.
+				'ld_json_searchbox'      => 1, // LD+Json Sitelinks Searchbox.
+				'ld_json_breadcrumbs'    => 1, // LD+Json Breadcrumbs.
+				'knowledge_output'       => 1, // Default for outputting the Knowledge SEO.
+
 				// Knowledge general <https://developers.google.com/structured-data/customize/contact-points> - This is extremely extended and valuable. Expect a premium version.
-				'knowledge_output' => 1,              // Default for outputting the Knowledge SEO.
 				'knowledge_type'   => 'organization', // Organization or Person, dropdown.
 
 				// Knowledge business <https://developers.google.com/structured-data/customize/logos>.
@@ -343,10 +348,6 @@ class Setup {
 				'excerpt_the_feed' => 1, // Generate feed Excerpts.
 				'source_the_feed'  => 1, // Add backlink at the end of the feed.
 				'index_the_feed'   => 0, // Add backlink at the end of the feed.
-
-				// Schema.
-				'ld_json_searchbox'   => 1, // LD+Json Sitelinks Searchbox.
-				'ld_json_breadcrumbs' => 1, // LD+Json Breadcrumbs.
 			],
 		);
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment

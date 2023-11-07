@@ -82,6 +82,9 @@ class Schema {
 	 */
 	public static function get_generated_graph( $args = null ) {
 
+		if ( ! Data\Plugin::get_option( 'ld_json_enabled' ) )
+			return [];
+
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 

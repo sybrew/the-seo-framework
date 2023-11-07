@@ -125,9 +125,8 @@ final class WebPage extends Reference {
 				}
 			}
 
-			if ( Query::is_real_front_page() && Data\Plugin::get_option( 'knowledge_output' ) ) {
+			if ( Data\Plugin::get_option( 'knowledge_output' ) && Query::is_real_front_page() )
 				$entity['about'] = &Organization::get_dynamic_ref();
-			}
 
 			if ( Query::is_archive() || Query::is_singular_archive() ) {
 				static::$type = 'CollectionPage';

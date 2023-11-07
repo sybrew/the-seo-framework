@@ -133,7 +133,7 @@ switch ( $instance ) :
 			true,
 		);
 		?>
-		<div id=tsf-togglable-social-settings-wrapper>
+		<div id=tsf-social-settings-wrapper>
 			<hr>
 			<?php
 			HTML::header_title( \__( 'Social Title Settings', 'autodescription' ) );

@@ -63,6 +63,7 @@ trait Property_Refresher {
 	/**
 	 * Refreshes all static properties.
 	 *
+	 * @hook switch_blog 10
 	 * @since 4.3.0
 	 *
 	 * @param int $new_site_id New site ID.
