@@ -124,7 +124,7 @@ final class Generator {
 	public static function generate_content_image_details( $args = null ) {
 
 		if ( isset( $args ) ) {
-			if ( ! $args['tax'] && ! $args['pta'] ) {
+			if ( empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] ) ) {
 				$content = Data\Post::get_content( $args['id'] );
 			}
 		} elseif ( Query::is_singular() ) {

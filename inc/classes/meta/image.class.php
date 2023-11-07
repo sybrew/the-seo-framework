@@ -504,7 +504,7 @@ class Image {
 			];
 		} else {
 			if ( isset( $args ) ) {
-				if ( ! $args['tax'] && ! $args['pta'] ) {
+				if ( empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] ) ) {
 					if ( $args['id'] && \wp_attachment_is_image( $args['id'] ) ) {
 						$cbs = [
 							'attachment' => [ $generator, 'generate_attachment_image_details' ],

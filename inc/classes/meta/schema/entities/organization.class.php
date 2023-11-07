@@ -80,8 +80,8 @@ final class Organization extends Reference {
 		}
 
 		$logo = Data\Plugin::get_option( 'knowledge_logo' )
-				? current( Meta\Image::get_image_details( [ 'id' => 0 ], true, 'organization' ) )
-				: [];
+			? current( Meta\Image::get_image_details( [ 'id' => 0 ], true, 'organization' ) )
+			: [];
 
 		if ( $logo ) {
 			// If there isn't width/height, we can safely assume all other data is missing too.

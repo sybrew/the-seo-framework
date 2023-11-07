@@ -85,7 +85,12 @@ class Schema {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( ! $args['tax'] && ! $args['pta'] && Data\Post::is_protected( $args['id'] ) ) {
+			if (
+				   empty( $args['tax'] )
+				&& empty( $args['pta'] )
+				&& empty( $args['uid'] )
+				&& Data\Post::is_protected( $args['id'] )
+			) {
 				// Don't spill WebPage data if protected.
 				$primaries = [ 'WebSite' ];
 			}

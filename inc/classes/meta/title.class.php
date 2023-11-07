@@ -776,7 +776,12 @@ class Title {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( ! $args['tax'] && ! $args['pta'] && Query::is_real_front_page_by_id( $args['id'] ) ) {
+			if (
+				   empty( $args['tax'] )
+				&& empty( $args['pta'] )
+				&& empty( $args['uid'] )
+				&& Query::is_real_front_page_by_id( $args['id'] )
+			) {
 				$addition    = static::get_addition_for_front_page();
 				$seplocation = static::get_addition_location_for_front_page();
 			}
@@ -845,7 +850,7 @@ class Title {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 			$id  = $args['id'];
-			$add = ! $args['tax'] && ! $args['pta'];
+			$add = empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] );
 		} else {
 			$id  = Query::get_the_real_id();
 			$add = Query::is_singular();

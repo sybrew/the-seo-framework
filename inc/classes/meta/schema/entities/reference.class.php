@@ -56,7 +56,7 @@ abstract class Reference {
 	 *                         Leave null to autodetermine query.
 	 * @return string The entity ID for $args.
 	 */
-	public static function get_id( $args = null ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- trait ref.
+	public static function get_id( $args = null ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- abstract ref.
 		return Meta\URI::get_bare_front_page_url() . '#/schema/' . current( (array) static::$type );
 	}
 

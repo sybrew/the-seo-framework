@@ -309,7 +309,7 @@ class Setup {
 				'knowledge_logo_url'   => '',
 				'knowledge_logo_id'    => 0,
 
-				// Knowledge sameas locations.
+				// Knowledge sameas locations. TODO: Make this dynamic.
 				'knowledge_facebook'   => '', // Facebook Account.
 				'knowledge_twitter'    => '', // Twitter Account.
 				'knowledge_instagram'  => '', // Instagram Account.

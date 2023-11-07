@@ -94,7 +94,7 @@ final class WebPage extends Reference {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( empty( $args['tax'] ) && empty( $args['pta'] ) ) {
+			if ( empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] ) ) {
 				$entity['potentialAction'] = [
 					'@type'  => 'ReadAction',
 					'target' => Meta\URI::get_canonical_url( $args ),

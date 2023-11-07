@@ -124,7 +124,7 @@ final class Args extends Factory {
 			}
 
 		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
-			if ( ! $args['tax'] )
+			if ( empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] ) )
 				yield from static::assert_noindex_query_pass( 'protected' );
 		}
 

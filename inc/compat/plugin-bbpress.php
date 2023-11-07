@@ -390,7 +390,7 @@ function _bbpress_filter_robots( $meta, $args ) {
 		normalize_generation_args( $args );
 
 		// Custom query, back-end or sitemap.
-		if ( empty( $args['pta'] ) && empty( $args['tax'] ) ) {
+		if ( empty( $args['pta'] ) && empty( $args['tax'] ) && empty( $args['uid'] ) ) {
 			switch ( \get_post_type( $args['id'] ) ) {
 				case \bbp_get_forum_post_type():
 					$forum_id = $args['id'];

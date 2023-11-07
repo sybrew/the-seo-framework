@@ -251,6 +251,9 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 TODO mark that db version 4270 -> 4300+
 
+TODO Data\Filter\Sanitize -> Sanitize::
+TODO Data\Filter\Escape -> Escape::
+
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
@@ -589,6 +592,12 @@ TODO in deprecated, use public API as much as possible? e.g. `tsf()->query()` in
 TODO make issue: We should upgrade the twitter profile inputs to become fully qualified URLs.
 	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.
 
+TODO for all the instances of "Allow 0 to be the", should we introduce coalesce_strlen?
+
+TODO The logo isn't registered from the Schema.org information in Google Search Console. Yoast provided a workaround by implementing this aside from all their other data -- they are somehow aware? We should also output this second script under Meta/Schema/Entities/Logo?
+
+TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
+
 **Detailed log**
 
 **For everyone:**
@@ -896,7 +905,7 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 	* When scripts are enqueued, it is now automatically determined whether late-enqueuing in the footer is necessary.
 	* **Generation arguments:**
 		* Generation arguments for getting titles, descriptions, canonical URLs, etc., now support `'tax'` instead of `'taxonomy'`.
-		* We also added support for `'uid'`, which stands for "User ID," provisioned to become fully embraced in a future update. This is used sparingly and shouldn't be relied on just yet.
+		* We also added support for `'uid'`, which stands for "User ID," provisioned to become fully embraced in a future update. This is used sparingly and shouldn't be relied on just yet. We have implemented checks against this parameter for forward compatibility.
 	* Script templates no longer forward arguments by name, but put them sequentially in variable `$view_args` instead.
 	* Almost all of the plugin's data is now sanitized when using the WordPress option or meta APIs, instead of only when using TSF's APIs. The exception is post metadata, which we'll address next major update ([learn more](https://github.com/sybrew/the-seo-framework/issues/185)).
 		* Migration plugins might be affected if they use the default WordPress option/meta API calls that invoke any of these hooks:

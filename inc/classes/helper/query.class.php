@@ -961,7 +961,7 @@ class Query {
 			return false;
 
 		if ( ! $secure )
-			return static::is_menu_page( Admin\Menu::get_page_hook_name(), \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
+			return static::is_menu_page( '', \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
 
 		return Query\Cache::memo()
 			?? Query\Cache::memo( static::is_menu_page( Admin\Menu::get_page_hook_name() ) );
