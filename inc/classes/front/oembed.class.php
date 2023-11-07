@@ -56,8 +56,13 @@ final class OEmbed {
 	 */
 	public static function alter_response_data( $data, $post ) {
 
-		if ( Data\Plugin::get_option( 'oembed_use_og_title' ) )
-			$data['title'] = Meta\Open_Graph::get_title( [ 'id' => $post->ID ] ) ?: $data['title'];
+		if ( Data\Plugin::get_option( 'oembed_use_og_title' ) ) {
+			$data['title'] = (
+				Data\Plugin::get_option( 'og_tags' )
+					? Meta\Open_Graph::get_title( [ 'id' => $post->ID ] )
+					: Meta\Title::get_title( [ 'id' => $post->ID ] )
+			) ?: $data['title'];
+		}
 
 		if ( Data\Plugin::get_option( 'oembed_use_social_image' ) ) {
 			$image_details = current( Meta\Image::get_image_details(

@@ -116,7 +116,7 @@ switch ( $instance ) :
 			Input::make_checkbox( [
 				'id'          => 'twitter_tags',
 				'label'       => \__( 'Output Twitter meta tags?', 'autodescription' ),
-				'description' => \__( 'Output various meta tags targeted at Twitter.', 'autodescription' ),
+				'description' => \__( 'X (formerly Twitter), Discord, LinkedIn, and some other networks make use of these meta tags.', 'autodescription' ),
 			] ),
 			true,
 		);
@@ -133,56 +133,58 @@ switch ( $instance ) :
 			true,
 		);
 		?>
-		<hr>
-		<?php
-		HTML::header_title( \__( 'Social Title Settings', 'autodescription' ) );
-		HTML::description( \__( 'Most social sites and third-party services automatically include the website URL inside their embeds. When the site title is described well in the site URL, including it in the social title will be redundant.', 'autodescription' ) );
-
-		$info = HTML::make_info(
-			\__( 'When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically.', 'autodescription' ),
-			'',
-			false,
-		);
-
-		HTML::wrap_fields(
-			Input::make_checkbox( [
-				'id'     => 'social_title_rem_additions',
-				'label'  => \esc_html__( 'Remove site title from generated social titles?', 'autodescription' ) . " $info",
-				'escape' => false,
-			] ),
-			true,
-		);
-		?>
-		<hr>
-		<?php
-		HTML::header_title( \__( 'Social Image Settings', 'autodescription' ) );
-		HTML::description( \__( 'A social image can be displayed when your website is shared. It is a great way to grab attention.', 'autodescription' ) );
-
-		HTML::wrap_fields(
-			Input::make_checkbox( [
-				'id'          => 'multi_og_image',
-				'label'       => \__( 'Output multiple Open Graph image tags?', 'autodescription' ),
-				'description' => \__( 'This enables users to select any image attached to the page shared on social networks, like Facebook.', 'autodescription' ),
-			] ),
-			true,
-		);
-		?>
-		<p>
-			<label for=tsf_fb_socialimage-url>
-				<strong><?php \esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
-				<?php HTML::make_info( \__( 'When no image is available from the page or term, this fallback image will be used instead.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
-			</label>
-		</p>
-		<p>
-			<input class=large-text type=url name="<?php Input::field_name( 'social_image_fb_url' ); ?>" id=tsf_fb_socialimage-url value="<?= \esc_url( Data\Plugin::get_option( 'social_image_fb_url' ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( 'social_image_fb_id' ); ?>" id=tsf_fb_socialimage-id value="<?= \absint( Data\Plugin::get_option( 'social_image_fb_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
-		</p>
-		<p class=hide-if-no-tsf-js>
+		<div id=tsf-togglable-social-settings-wrapper>
+			<hr>
 			<?php
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-			echo Form::get_image_uploader_form( [ 'id' => 'tsf_fb_socialimage' ] );
+			HTML::header_title( \__( 'Social Title Settings', 'autodescription' ) );
+			HTML::description( \__( 'Most social sites and third-party services automatically include the website URL inside their embeds. When the site title is described well in the site URL, including it in the social title will be redundant.', 'autodescription' ) );
+
+			$info = HTML::make_info(
+				\__( 'When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically.', 'autodescription' ),
+				'',
+				false,
+			);
+
+			HTML::wrap_fields(
+				Input::make_checkbox( [
+					'id'     => 'social_title_rem_additions',
+					'label'  => \esc_html__( 'Remove site title from generated social titles?', 'autodescription' ) . " $info",
+					'escape' => false,
+				] ),
+				true,
+			);
 			?>
-		</p>
+			<hr>
+			<?php
+			HTML::header_title( \__( 'Social Image Settings', 'autodescription' ) );
+			HTML::description( \__( 'A social image can be displayed when your website is shared. It is a great way to grab attention.', 'autodescription' ) );
+
+			HTML::wrap_fields(
+				Input::make_checkbox( [
+					'id'          => 'multi_og_image',
+					'label'       => \__( 'Output multiple Open Graph image tags?', 'autodescription' ),
+					'description' => \__( 'This enables users to select any image attached to the page shared on social networks, like Facebook.', 'autodescription' ),
+				] ),
+				true,
+			);
+			?>
+			<p>
+				<label for=tsf_fb_socialimage-url>
+					<strong><?php \esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
+					<?php HTML::make_info( \__( 'When no image is available from the page or term, this fallback image will be used instead.', 'autodescription' ), 'https://developers.facebook.com/docs/sharing/best-practices#images' ); ?>
+				</label>
+			</p>
+			<p>
+				<input class=large-text type=url name="<?php Input::field_name( 'social_image_fb_url' ); ?>" id=tsf_fb_socialimage-url value="<?= \esc_url( Data\Plugin::get_option( 'social_image_fb_url' ) ) ?>" />
+				<input type=hidden name="<?php Input::field_name( 'social_image_fb_id' ); ?>" id=tsf_fb_socialimage-id value="<?= \absint( Data\Plugin::get_option( 'social_image_fb_id' ) ) ?>" disabled class=tsf-enable-media-if-js />
+			</p>
+			<p class=hide-if-no-tsf-js>
+				<?php
+				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+				echo Form::get_image_uploader_form( [ 'id' => 'tsf_fb_socialimage' ] );
+				?>
+			</p>
+		</div>
 		<hr>
 		<?php
 		HTML::header_title( \__( 'Theme Color Settings', 'autodescription' ) );
@@ -378,12 +380,19 @@ switch ( $instance ) :
 		<hr>
 		<?php
 
+		$_info = HTML::make_info(
+			/* translators: Unavailable means that either a custom Open Graph title is missing or Open Graph is disabled. */
+			\__( 'This will fall back to the meta title if the Open Graph title is unavailable.', 'autodescription' ),
+			'',
+			false,
+		);
 		// Split the wraps--the informational messages make for bad legibility otherwise.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'oembed_use_og_title',
-				'label'       => \__( 'Use Open Graph title?', 'autodescription' ),
-				'description' => \__( 'Check this option if you want to replace page titles with Open Graph titles in embeds.', 'autodescription' ),
+				'label'       => \esc_html__( 'Use Open Graph title?', 'autodescription' ) . " $_info",
+				'description' => \esc_html__( 'Check this option if you want to replace page titles with Open Graph titles in embeds.', 'autodescription' ),
+				'escape'      => false,
 			] ),
 			true,
 		);

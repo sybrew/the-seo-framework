@@ -690,6 +690,9 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 	* **Accessibility:**
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
 		* When resetting the SEO Settings, a clearer change-notice is sent.
+		* When disabling Open Graph meta tags, the Post Dates tab will now disappear.
+		* When disabling Facebook, Twitter, or oEmbed meta tags, their namesake tab will now disappear.
+		* When disabling Open Graph, Facebook, Twitter, and oEmbed meta tags, the Social Title and Social Image settings will now disappear.
 	* **Redirects:**
 		* When an invalid URL is supplied by the admin in the redirect field, the plugin now displays a generic HTTP error code 400 (Bad Request), instead of showing the page.
 	* **Other:**
@@ -738,6 +741,9 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* The shortlink can now generate a proper tag URL. WordPress created a different endpoint for this, unlike any other taxonomy.
 	* **Headless mode:**
 		* Primary terms are now ignored when `meta` is headless.
+	* **oEmbed:**
+		* Resolved an issue where, when Open Graph meta tags were disabled, the oEmbeds would still take Open Graph titles.
+			* We added a tooltip to the option to explain it will fall back to the meta title if the Open Graph title is unavailable.
 * **Removed:**
 	* The following plugins are no longer recognized as conflicting plugins:
 		* SEO: Yoast SEO Premium (Yoast SEO needs to be active for Yoast SEO Premium to work).
