@@ -32,7 +32,7 @@ use function \The_SEO_Framework\memo;
  *
  * Holds various functions that relay to the new APIs.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * You can access these methods via `tsf()` and `the_seo_framework()`.
  */
 class Legacy_API {
@@ -49,7 +49,7 @@ class Legacy_API {
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
 	 * @since 4.2.0 Now supports an option index as a $key.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed $use_cache; the cache is now dynamically updated.
 	 *              3. Now returns null if the option doesn't exist.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
@@ -67,7 +67,7 @@ class Legacy_API {
 	 * Updates options. Also updates the option cache if the settings aren't headless.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Ennobled to be part of the legacy API.
+	 * @since 5.0.0 Ennobled to be part of the legacy API.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -84,7 +84,7 @@ class Legacy_API {
 	 * @since 3.2.2 No longer double-escapes the custom field title.
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *              3. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
 	 *
@@ -104,7 +104,7 @@ class Legacy_API {
 	 * @since 3.1.0 1. The first parameter now expects an array.
 	 *              2. Now tries to get the homepage social title.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -123,7 +123,7 @@ class Legacy_API {
 	 * @since 3.1.0 1. The first parameter now expects an array.
 	 *              2. Now tries to get the homepage social titles.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -140,7 +140,7 @@ class Legacy_API {
 	 * @since 3.0.6
 	 * @since 3.1.0 The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -158,7 +158,7 @@ class Legacy_API {
 	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.
 	 *              2. The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -177,7 +177,7 @@ class Legacy_API {
 	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.
 	 *              2. The first argument now accepts an array, with "id" and "taxonomy" fields.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -195,7 +195,7 @@ class Legacy_API {
 	 * @since 3.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.3 Now accepts arguments publicly.
-	 * @since 4.3.0 1. No longer calls the query in the sitemap to remove pagination.
+	 * @since 5.0.0 1. No longer calls the query in the sitemap to remove pagination.
 	 *              2. Ennobled to be part of the legacy API.
 	 *              3. Removed support for `get_custom_field` without deprecation notice.
 	 *                 You should've used create_canonical_url() instead.
@@ -217,7 +217,7 @@ class Legacy_API {
 	 * @since 4.0.0
 	 * @since 4.0.5 The output is now filterable.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Removed the last `$clean` parameter. It always returns a cleaned image now.
+	 * @since 5.0.0 1. Removed the last `$clean` parameter. It always returns a cleaned image now.
 	 *              2. Ennobled to be part of the legacy API.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -245,7 +245,7 @@ class Legacy_API {
 	 * May load more depending on the page requested.
 	 * `tsf` and `tsf-tt` will always be available.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function load_admin_scripts() {
 		Admin\Script\Registry::register_scripts_and_hooks();
@@ -254,7 +254,7 @@ class Legacy_API {
 	/**
 	 * Prints all tags.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function print_seo_meta_tags() {
 		Front\Meta\Head::print_wrap_and_tags();

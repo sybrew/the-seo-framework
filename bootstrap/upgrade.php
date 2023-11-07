@@ -96,7 +96,7 @@ function _previous_db_version() {
  *                 While this lock is active, the SEO Settings can't be accessed, either.
  * @since 4.1.0 Now checks whether the lock is successfully set before proceeding. Preventing race conditions.
  * @since 4.2.1 No longer lowers the PHP execution time limit -- only increases it.
- * @since 4.3.0 No longer checks if TSF can load.
+ * @since 5.0.0 No longer checks if TSF can load.
  */
 function _do_upgrade() {
 
@@ -690,7 +690,7 @@ function _do_upgrade_3001() {
  *
  * @since 3.1.0
  * @since 4.1.1 No longer tests for default options.
- * @since 4.3.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 5001)
+ * @since 5.0.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 5001)
  */
 function _do_upgrade_3103() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
@@ -884,7 +884,7 @@ function _do_upgrade_4270() {
  * Changes option `autodescription-updates-cache` to constant value THE_SEO_FRAMEWORK_SITE_CACHE.
  * TODO registers default for static placeholder editing.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @global \wpdb $wpdb
  */
 function _do_upgrade_5001() {

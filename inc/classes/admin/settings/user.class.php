@@ -34,7 +34,7 @@ use \The_SEO_Framework\{
  * Prepares the User Settings view interface.
  *
  * @since 4.1.4
- * @since 4.3.0 1. Renamed from `UserSettings` to `User`.
+ * @since 5.0.0 1. Renamed from `UserSettings` to `User`.
  *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
  * @access private
  */
@@ -46,7 +46,7 @@ final class User {
 	 * @hook show_user_profile 0
 	 * @hook edit_user_profile 0
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Now asserts if user has capability on any multisite network's blog.
+	 * @since 5.0.0 1. Now asserts if user has capability on any multisite network's blog.
 	 *              2. Renamed from `_prepare_setting_fields`.
 	 *
 	 * @param \WP_User $user WP_User object.
@@ -62,7 +62,7 @@ final class User {
 	/**
 	 * Outputs user profile fields.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param \WP_User $user WP_User object.
 	 */

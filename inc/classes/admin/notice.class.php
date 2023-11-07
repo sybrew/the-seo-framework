@@ -30,7 +30,7 @@ use \The_SEO_Framework\Admin; // Yes, it ios legal to share class and namespace.
 /**
  * Holds simple persistent notices functionality.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->admin()->notice() instead.
  */
@@ -41,7 +41,7 @@ class Notice {
 	 *
 	 * @since 2.7.0
 	 * @since 4.1.2 Added the $inline parameter.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Shifted all second and later parameter into `$args`.
 	 *              3. Renamed from `do_dismissible_notice`.
 	 *
@@ -74,7 +74,7 @@ class Notice {
 	 *              2. Now accepts empty messages, so that AJAX-invoked generators can grab a notice wrapper.
 	 *              3. Added the inline parameter.
 	 *              4. Now enqueues scripts in the footer, so templates won't spam the header.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Shifted all second and later parameter into `$args`.
 	 *              3. Renamed from `generate_dismissible_notice`.
 	 *

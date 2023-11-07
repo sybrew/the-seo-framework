@@ -33,7 +33,7 @@ namespace {
 	 * unforeseen issues.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Now always returns TSF's object.
+	 * @since 5.0.0 Now always returns TSF's object.
 	 * @see `the_seo_framework()` alias.
 	 * @see inc\classes\pool.class.php for factory API functions;
 	 *      e.g., `tsf()->query()->is_sitemap()`
@@ -53,7 +53,7 @@ namespace {
 	 * unforeseen issues.
 	 *
 	 * @since 2.2.5
-	 * @since 4.3.0 Now always returns TSF's object.
+	 * @since 5.0.0 Now always returns TSF's object.
 	 * @see `tsf()` alias.
 	 * @api
 	 *
@@ -101,7 +101,7 @@ namespace The_SEO_Framework {
 	/**
 	 * Tells the headless state of the plugin.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api
 	 *
 	 * @param ?string $type The type of headless mode to request.
@@ -148,7 +148,7 @@ namespace The_SEO_Framework {
 	 *
 	 * 'uid' is reserved. It is already used in Author::build(), however.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see https://github.com/sybrew/the-seo-framework/issues/640#issuecomment-1703260744.
 	 *      We made an exception about passing by reference for this function.
 	 *
@@ -174,7 +174,7 @@ namespace The_SEO_Framework {
 	/**
 	 * Determines the type of request from the arguments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @param array $args The query arguments. Expects indexes 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The query type: 'user', 'pta', 'homeblog', 'term', or 'single'.
 	 */

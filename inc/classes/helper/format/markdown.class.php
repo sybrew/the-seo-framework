@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Helper\Format;
  * Holds methods for Markdown conversion.
  *
  * @since 4.1.4
- * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
  *
  * @NOTE to self: This is also used in XHTML configurations. Keep it strict!
  *
@@ -46,7 +46,7 @@ class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text    The text that might contain markdown. Expected to be escaped.
@@ -126,7 +126,7 @@ class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -152,7 +152,7 @@ class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -177,7 +177,7 @@ class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -202,7 +202,7 @@ class Markdown {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 No longer blocks text with either { or } from being parsed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @return string
@@ -225,7 +225,7 @@ class Markdown {
 	 * Makes header h1~6 elements.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text The input text.
 	 * @param string $type The header type. Accepts `/h[1-6]{1}/`.
@@ -258,7 +258,7 @@ class Markdown {
 	 * @since 4.1.4
 	 * @since 4.2.8 1. No longer blocks text with either { or } from being parsed.
 	 *              2. No longer blocks URLs with either ( or ) from being parsed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
 	 *
 	 * @param string $text     The input text.
 	 * @param bool   $internal Whether the link is internal (_self) or external (_blank).

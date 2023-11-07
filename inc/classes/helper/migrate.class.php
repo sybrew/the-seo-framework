@@ -30,7 +30,7 @@ use function \The_SEO_Framework\umemo;
 /**
  * Holds a collection of helper methods for plugin migration.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Migrate {
@@ -44,7 +44,7 @@ class Migrate {
 	 * @todo test all [ 'extension', 'yoast', 'aioseo', 'rankmath', 'seopress' ]
 	 * @since 4.2.7
 	 * @since 4.2.8 Added SEOPress support.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `has_unprocessed_syntax`.
 	 *
 	 * @param string $text The text to evaluate
@@ -67,7 +67,7 @@ class Migrate {
 	 * @since 4.2.7 1. Added wildcard `ct_`, and `cf_` detection.
 	 *              2. Added detection for various other types
 	 *              2. Removed wildcard `cs_` detection.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `has_yoast_syntax`.
 	 *
 	 * @param string $text The text to evaluate.
@@ -155,7 +155,7 @@ class Migrate {
 	 *       Wank Math has no documentation on this list, but we sampled their code.
 	 * @since 4.2.7
 	 * @since 4.2.8 Actualized the variable list.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `has_rankmath_syntax`.
 	 *
 	 * @param string $text The text to evaluate.
@@ -259,7 +259,7 @@ class Migrate {
 	 * @link <https://theseoframework.com/extensions/transport/#faq/what-data-is-transformed>
 	 *       SEOPress has no documentation on this list, but we sampled their code.
 	 * @since 4.2.8
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `has_seopress_syntax`.
 	 *
 	 * @param string $text The text to evaluate.

@@ -65,7 +65,7 @@ switch ( $instance ) :
 			'schema',
 			/**
 			 * @since 2.8.0
-			 * @since 4.3.0 Removed the 'structure' index and added the 'general' index.
+			 * @since 5.0.0 Removed the 'structure' index and added the 'general' index.
 			 * @param array $defaults The default tabs.
 			 */
 			(array) \apply_filters( 'the_seo_framework_schema_settings_tabs', $tabs )

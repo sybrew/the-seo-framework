@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
 /**
  * Prepares redirects.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Redirect {
@@ -50,7 +50,7 @@ final class Redirect {
 	 * @since 4.0.0 1. No longer tries to redirect on "search".
 	 *              2. Added term redirect support.
 	 *              3. No longer redirects on Customizer.
-	 * @since 4.3.0 1. Moved to `The_SEO_Framework\Front\Redirect`.
+	 * @since 5.0.0 1. Moved to `The_SEO_Framework\Front\Redirect`.
 	 *              2. Renamed from `_init_custom_field_redirect`.
 	 *
 	 * @return void early on non-singular pages.
@@ -76,7 +76,7 @@ final class Redirect {
 	 * Redirects vistor to input $url.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 1. Moved to `The_SEO_Framework\Front\Redirect`.
+	 * @since 5.0.0 1. Moved to `The_SEO_Framework\Front\Redirect`.
 	 *              2. First parameter is now required.
 	 *              3. Removed various sanity tests, since this method is no longer public.
 	 *              4. Now exists with a 400 error code when the URL failed.

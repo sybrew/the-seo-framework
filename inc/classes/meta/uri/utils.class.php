@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
 /**
  * Holds utility for the URI factory.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->uri()->utils() instead.
  */
@@ -55,7 +55,7 @@ class Utils {
 	 * However, should we output a notification? Or let them suffer until they use Monitor to find the issue for them?
 	 * Yea, Monitor's great for that. Gibe moni plos.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The detected URl scheme, lowercase.
 	 */
@@ -72,7 +72,7 @@ class Utils {
 	 * @since 2.7.0
 	 * @since 2.9.2 1. Now considers port too.
 	 *              2. Now uses get_home_url(), rather than get_option('home').
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_home_host`.
 	 *              2. Removed memoization.
 	 *
@@ -94,7 +94,7 @@ class Utils {
 	 * Fetches the parsed home URL.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The home URL host.
 	 */
@@ -106,7 +106,7 @@ class Utils {
 	/**
 	 * Slashes the root (home) URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $url The root URL.
 	 * @return string The root URL plausibly with added slashes.
@@ -133,7 +133,7 @@ class Utils {
 	 * Which can automatically be detected when not set, based on the site URL setting.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The preferred URl scheme.
 	 */
@@ -167,7 +167,7 @@ class Utils {
 	 * Does not sanitize output.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $url The URL to set scheme for.
 	 * @return string The URL with the preferred scheme.
@@ -184,7 +184,7 @@ class Utils {
 	 * @since 3.0.0 $use_filter now defaults to false.
 	 * @since 3.1.0 The third parameter ($use_filter) is now $deprecated.
 	 * @since 4.0.0 Removed the deprecated parameter.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Removed support for $scheme type 'admin', 'login', 'login_post', and 'rpc'.
 	 *
 	 * @param string $url    Absolute url that includes a scheme.
@@ -221,7 +221,7 @@ class Utils {
 	 * scheme otherwise.
 	 * Does nothing if the URL is absolute and doesn't match the current domain.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $url An URL or path to rectify.
 	 * @return string An absolute URL with the input domain's scheme.
@@ -244,7 +244,7 @@ class Utils {
 	 *       '/path/to/folder/` will become `http:///path/to/folder/`
 	 *
 	 * @since 2.6.5
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @see `static::set_url_scheme()` to set the correct scheme.
 	 * @see `static::convert_path_to_url()` to create URLs from paths.
 	 *
@@ -265,7 +265,7 @@ class Utils {
 	/**
 	 * Tests if input URL matches current domain.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $url The URL to test. Required.
 	 * @return bool true on match, false otherwise.
@@ -305,7 +305,7 @@ class Utils {
 	 * @since 2.6.5
 	 * @since 2.8.0 Method is now public.
 	 * @since 4.0.0 No longer strips the prepended / path.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_relative_url()`
 	 *
 	 * @param string $url An absolute or relative URL.
@@ -318,7 +318,7 @@ class Utils {
 	/**
 	 * Makes a fully qualified URL from any input.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $path Either the URL or path. Will always be transformed to the current domain.
 	 * @param string $url  The URL to add the path to. Defaults to the current home URL.
@@ -337,7 +337,7 @@ class Utils {
 	 * Adds pagination to input URL.
 	 *
 	 * @since 4.2.3
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $url      The fully qualified URL.
 	 * @param int    $page     The page number. Should be bigger than 1 to paginate.
@@ -401,7 +401,7 @@ class Utils {
 	 *              5. Is now public.
 	 * @since 4.1.2 Now correctly reappends query when pagination isn't removed.
 	 * @since 4.2.0 Now properly removes pagination from search links.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string    $url  The fully qualified URL to remove pagination from.
 	 * @param int|null  $page The page number to remove. If null, it will get number from query.
@@ -460,7 +460,7 @@ class Utils {
 	 * This is a "dumb" replacement of WordPress's add_query_arg(), but much faster
 	 * and with more straightforward query and fragment handlers.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $url   A fully qualified URL.
 	 * @param string $query A fully qualified query taken from parse_url( $url, \PHP_URL_QUERY );

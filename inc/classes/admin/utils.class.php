@@ -29,7 +29,7 @@ use \The_SEO_Framework\Helper\Format\Markdown;
 /**
  * Holds various Utility methods for TSF admin.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->admin()->utils() instead.
  */
@@ -44,7 +44,7 @@ class Utils {
 	 * @since 2.9.3 1. Query arguments work again (regression 2.9.2).
 	 *              2. Now only accepts http and https protocols.
 	 * @since 4.2.0 Now allows query arguments with value 0|'0'.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `admin_redirect`.
 	 *              3. Now bails with an explanatory error when the page doesn't exist.
 	 * @TODO WP 5.2/5.4+ will cause this method to never run on wp_die().
@@ -104,7 +104,7 @@ class Utils {
 	 * Whether to display Extension Manager suggestions to the user based on several conditions.
 	 *
 	 * @since 4.2.4
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_display_extension_suggestions`.
 	 * @uses TSF_DISABLE_SUGGESTIONS Set that to true if you don't like us.
 	 *

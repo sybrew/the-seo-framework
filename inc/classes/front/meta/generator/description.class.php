@@ -30,13 +30,13 @@ use \The_SEO_Framework\Meta;
 /**
  * Holds description generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Description {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -44,7 +44,7 @@ final class Description {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_description() {
@@ -55,7 +55,7 @@ final class Description {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $description The generated description.
 			 * @param int    $id          The page or term ID.
@@ -66,7 +66,7 @@ final class Description {
 					$description,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}

@@ -36,20 +36,20 @@ use \The_SEO_Framework\Helper\{
 /**
  * Holds a collection of Post data interface methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin->post() instead.
  */
 class Post {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] Stored post meta data.
 	 */
 	private static $meta_memo = [];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] Stored primary term IDs cache.
 	 */
 	private static $pt_memo = [];
@@ -63,7 +63,7 @@ class Post {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.1 Now obtains the real ID when none is supplied.
-	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_post_meta_item`.
 	 *
@@ -92,7 +92,7 @@ class Post {
 	 * @since 4.0.2 Now tests for valid post ID in the post object.
 	 * @since 4.1.4 1. Now returns an empty array when the post type isn't supported.
 	 *              2. Now considers headlessness.
-	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_post_meta`.
 	 *
@@ -158,7 +158,7 @@ class Post {
 	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_post_meta_defaults`.
 	 *
 	 * @param int $post_id The post ID.
@@ -204,7 +204,7 @@ class Post {
 	 * as it reprocesses all post meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_single_post_meta_item`.
 	 *
 	 * @param string  $item    The item to update.
@@ -228,7 +228,7 @@ class Post {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Removed deprecated filter.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `save_post_meta`.
 	 *
 	 * @param integer $post_id The post ID. Also accepts Post objects.
@@ -246,7 +246,7 @@ class Post {
 		 *       So, set an empty value if you wish to delete them.
 		 * @see https://github.com/sybrew/the-seo-framework/issues/185
 		 * @since 4.0.0
-		 * @since 4.3.0 1. The second parameter is now an integer, instead of Post object.
+		 * @since 5.0.0 1. The second parameter is now an integer, instead of Post object.
 		 *              2. No longer sends pre-sanitized data to the filter.
 		 * @param array $data The data that's going to be saved.
 		 * @param int   $post The post object.
@@ -289,7 +289,7 @@ class Post {
 	 *                2. This method now converts the post meta to an integer, making the comparison work again.
 	 * @since 4.2.7 Now correctly memoizes when no terms for a post can be found.
 	 * @since 4.2.8 Now correctly returns when no terms for a post can be found.
-	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
+	 * @since 5.0.0 1. Now always tries to return a term if none is set manually.
 	 *              2. Now returns `null` instead of `false` on failure.
 	 *              3. Now considers headlessness.
 	 *              4. Moved to `The_SEO_Framework\Data\Plugin\Post`.
@@ -340,7 +340,7 @@ class Post {
 		}
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param ?\WP_Term $primary_term The primary term. Null if cannot be generated.
 		 * @param int       $post_id     The post ID.
 		 * @param string    $taxonomy    The taxonomy name.
@@ -361,7 +361,7 @@ class Post {
 	 * @since 3.0.0
 	 * @since 4.1.5 1. Now validates if the stored term ID's term exists (for the post or at all).
 	 *              2. The first and second parameters are now required.
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Data\Plugin\Post`
+	 * @since 5.0.0 Moved to `The_SEO_Framework\Data\Plugin\Post`
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -375,7 +375,7 @@ class Post {
 	 * Updates the primary term ID for post.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Moved to `The_SEO_Framework\Data\Plugin\Post`
+	 * @since 5.0.0 Moved to `The_SEO_Framework\Data\Plugin\Post`
 	 *
 	 * @param int|null $post_id  The post ID.
 	 * @param string   $taxonomy The taxonomy name.

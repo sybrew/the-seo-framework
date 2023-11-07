@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
 /**
  * Holds getters for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->robots() instead.
  */
@@ -50,7 +50,7 @@ class Robots {
 	 * This only works when generate_robots_meta()'s $options value was given:
 	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array
 	 */
@@ -62,7 +62,7 @@ class Robots {
 	 * Returns the robots front-end meta value.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string
 	 */
@@ -79,7 +79,7 @@ class Robots {
 	 * Returns the `noindex`, `nofollow`, `noarchive` robots meta code array.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 1. Renamed from `get_robots_meta()`
+	 * @since 5.0.0 1. Renamed from `get_robots_meta()`
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -165,7 +165,7 @@ class Robots {
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $post_type The post type, optional. Leave empty to autodetermine type.
@@ -183,7 +183,7 @@ class Robots {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
 	 * @param string $taxonomy The taxonomy, optional. Leave empty to autodetermine type.

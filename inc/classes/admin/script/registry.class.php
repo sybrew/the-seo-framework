@@ -50,7 +50,7 @@ use \The_SEO_Framework\Helper\{
  * This handles admin-ONLY scripts for now.
  *
  * @since 3.1.0
- * @since 4.3.0 1. Moved from `\The_SEO_Framework\Builders`.
+ * @since 5.0.0 1. Moved from `\The_SEO_Framework\Builders`.
  *              2. Renamed from `Scripts`.
  * @see \WP_Styles
  * @see \WP_Scripts
@@ -95,7 +95,7 @@ class Registry {
 	 * Registers the script hooks when TSF is deemed to be loaded.
 	 *
 	 * @hook admin_enqueue_scripts 0
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @access private
 	 */
@@ -114,7 +114,7 @@ class Registry {
 		);
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param bool $register Whether to register scripts and hooks.
 		 */
 		if ( \apply_filters( 'the_seo_framework_register_scripts', $register ) )
@@ -124,7 +124,7 @@ class Registry {
 	/**
 	 * Registers all scripts and necessary hooks.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @access public
 	 */
@@ -175,7 +175,7 @@ class Registry {
 	 * Adds admin-body classes.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param string $classes Space-separated list of CSS classes.
 	 * @return string
@@ -190,7 +190,7 @@ class Registry {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 Put the const assignment on front, so it's prone to fail earlier.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 */
 	public static function _print_tsfjs_script() {
 		echo "<script>(()=>{const a=0;document.body.classList.replace('tsf-no-js','tsf-js')})()</script>";
@@ -200,7 +200,7 @@ class Registry {
 	 * Prepares scripts for output on post edit screens.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 */
 	public static function _prepare_admin_scripts() {
 		static::forward_known_scripts();
@@ -306,7 +306,7 @@ class Registry {
 	 * Forwards known scripts to WordPress's script handler. Also prepares l10n and templates.
 	 *
 	 * @since 3.2.2
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 * @uses static::$scripts
 	 * @uses static::egister_script()
 	 */
@@ -322,7 +322,7 @@ class Registry {
 	 * Enqueues known scripts, and invokes the l10n and templates.
 	 *
 	 * @since 3.2.2
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 * @uses static::$scripts
 	 * @uses static::load_script()
 	 */
@@ -407,7 +407,7 @@ class Registry {
 	 * Memoizes use of RTL and minification.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param array $script The script arguments.
 	 * @param array $type Either 'js' or 'css'.
@@ -437,7 +437,7 @@ class Registry {
 	 * - {{$color_accent}}
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param iterable $styles The styles to add.
 	 * @return string
@@ -461,7 +461,7 @@ class Registry {
 	 * Concatenates inline JS.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param iterable $scripts The scripts to add.
 	 * @return string
@@ -480,7 +480,7 @@ class Registry {
 	 * Converts color CSS.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 * @TODO WordPress will one day normalize this correctly.
 	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>
 	 *
@@ -538,7 +538,7 @@ class Registry {
 	 * Set a multidimensional array to register multiple views.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param string $id        The related script handle/ID.
 	 * @param array  $templates Associative-&-singul-, or sequential-&-multi-dimensional : {
@@ -568,7 +568,7 @@ class Registry {
 	 * @since 3.1.0
 	 * @since 3.2.2 Now clears outputted templates, so to prevent duplications.
 	 * @since 4.1.2 Now clears templates right before outputting them, so to prevent a plausible infinite loop.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 */
 	public static function _output_templates() {
 		foreach ( static::$templates as $id => $templates ) {

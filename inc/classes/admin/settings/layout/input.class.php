@@ -32,7 +32,7 @@ use \The_SEO_Framework\Data;
  * Meant for the SEO Settings page, only.
  *
  * @since 4.2.0
- * @since 4.3.0 1. Moved from `\The_SEO_Framework\Interpreters`.
+ * @since 5.0.0 1. Moved from `\The_SEO_Framework\Interpreters`.
  *              2. Renamed from `Settings_Input`.
  *
  * @access private
@@ -204,7 +204,7 @@ class Input {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $id The input ID.
 	 * @param array  $data The input data.
@@ -234,7 +234,7 @@ class Input {
 	 * Outputs reference social HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string       $group    The social input group ID.
 	 * @param array[og,tw] $settings The input settings data.
@@ -255,7 +255,7 @@ class Input {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.2 Now prevents wp-emoji.js parsing the references and data.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $id   The description input ID.
 	 * @param array  $data The input data.

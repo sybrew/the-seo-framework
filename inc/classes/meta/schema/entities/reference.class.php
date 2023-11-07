@@ -30,7 +30,7 @@ use \The_SEO_Framework\Meta;
 /**
  * Abstract class of Schema.org referential structured data entity builder.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  *
  * @property string|string[] $type The Schema @type.
@@ -39,7 +39,7 @@ use \The_SEO_Framework\Meta;
 abstract class Reference {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var string|string[] $type The Schema @type.
 	 */
 	public static $type;
@@ -50,7 +50,7 @@ abstract class Reference {
 	public static $references = [];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -61,7 +61,7 @@ abstract class Reference {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -72,7 +72,7 @@ abstract class Reference {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -101,7 +101,7 @@ abstract class Reference {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -112,7 +112,7 @@ abstract class Reference {
 	/**
 	 * Writes all references, or to itself if there's only one reference.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function write() {

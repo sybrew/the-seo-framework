@@ -34,7 +34,7 @@ use \The_SEO_Framework\{
  * Augments the WordPress Core sitemap.
  *
  * @since 4.1.2
- * @since 4.3.0 1. Renamed from `The_SEO_Framework\Builders\CoreSitemaps\Main`.
+ * @since 5.0.0 1. Renamed from `The_SEO_Framework\Builders\CoreSitemaps\Main`.
  *              2. Moved to `\The_SEO_Framework\Sitemap\WP`.
  *              3. No longer extends `\The_SEO_Framework\Sitemap\Optimized\Main`.
  * @access private
@@ -47,7 +47,7 @@ class Filter {
 	 *
 	 * @link <https://core.trac.wordpress.org/ticket/56954>
 	 * @since 4.2.7
-	 * @since 4.3.0 Renamed from `_trick_filter_doing_sitemap`.
+	 * @since 5.0.0 Renamed from `_trick_filter_doing_sitemap`.
 	 * @access private
 	 * @global \WP_Query $wp_query We test against the main query here.
 	 *
@@ -72,7 +72,7 @@ class Filter {
 	 * Filters Core sitemap provider.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Renamed from `_filter_add_provider`.
+	 * @since 5.0.0 Renamed from `_filter_add_provider`.
 	 * @access private
 	 *
 	 * @param \WP_Sitemaps_Provider $provider Instance of a \WP_Sitemaps_Provider.
@@ -105,7 +105,7 @@ class Filter {
 	 * Filters Core sitemap query limit.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Renamed from `_filter_max_urls`.
+	 * @since 5.0.0 Renamed from `_filter_max_urls`.
 	 * @access private
 	 *
 	 * @return string The sitemap query limit.

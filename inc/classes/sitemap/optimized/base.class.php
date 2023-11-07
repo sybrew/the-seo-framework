@@ -41,7 +41,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `\The_SEO_Framework\Builders\Sitemap_Base`.
- * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\Sitemap`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\Sitemap`.
  *
  * @access private
  */
@@ -68,7 +68,7 @@ class Base extends Main {
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now no longer lowers the PHP execution time limit from unlimited to 3 minutes.
-	 * @since 4.3.0 1. Can now prerender sitemap on a $sitemap_id basis.
+	 * @since 5.0.0 1. Can now prerender sitemap on a $sitemap_id basis.
 	 *              2. Is now static.
 	 *
 	 * @param string $sitemap_id The sitemap ID to prerender.
@@ -105,7 +105,7 @@ class Base extends Main {
 	 * Returns the generated sitemap. Also stores it in the database when caching is enabled.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Can now generate cache on a $sitemap_id basis.
+	 * @since 5.0.0 Can now generate cache on a $sitemap_id basis.
 	 * @abstract
 	 *
 	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwritten via the API.
@@ -369,7 +369,7 @@ class Base extends Main {
 	 * Generates front-and blog page sitemap items.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Removed second parameter `&$count`.
+	 * @since 5.0.0 Removed second parameter `&$count`.
 	 * @generator
 	 *
 	 * @param array $args The generator arguments.
@@ -470,7 +470,7 @@ class Base extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.1 Now clears WordPress's post cache every time an item is generated.
-	 * @since 4.3.0 Removed second parameter `&$count`.
+	 * @since 5.0.0 Removed second parameter `&$count`.
 	 * @generator
 	 * @iterator
 	 *
@@ -510,7 +510,7 @@ class Base extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.1 Now uses `create_xml_entry()` to parse the XML.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param array $args : {
 	 *   string               $loc      : The item's URI.
@@ -541,7 +541,7 @@ class Base extends Main {
 	 * @since 4.0.0
 	 * @since 4.0.1 1. Converted to generator and iterator. Therefore, renamed function.
 	 *              2. Now actually does something.
-	 * @since 4.3.0 Removed second parameter `&$count`.
+	 * @since 5.0.0 Removed second parameter `&$count`.
 	 * @generator
 	 * @iterator
 	 *

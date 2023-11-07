@@ -33,19 +33,19 @@ use \The_SEO_Framework\{
 /**
  * Holds BreadcrumbList generator for Schema.org structured data.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 final class BreadcrumbList extends Reference {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var string|string[] $type The Schema @type.
 	 */
 	public static $type = 'BreadcrumbList';
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.

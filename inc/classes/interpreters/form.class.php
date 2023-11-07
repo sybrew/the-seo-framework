@@ -25,12 +25,12 @@ namespace The_SEO_Framework\Interpreters;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Interpreters\Form', '4.3.0', 'The_SEO_Framework\Admin\Settings\Layout\Form' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Interpreters\Form', '5.0.0', 'The_SEO_Framework\Admin\Settings\Layout\Form' );
 /**
  * Interprets anything you send here into Form HTML. Or so it should.
  *
  * @since 4.1.4
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\Settings\Layout
+ * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\Settings\Layout
  *              2. Deprecated.
  *
  * @access private

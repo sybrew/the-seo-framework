@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
 /**
  * Holds a collection of data helper methods for the blog.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->blog() instead.
  */
@@ -51,7 +51,7 @@ class Blog {
 	 *
 	 * Do not consider this function safe for printing!
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string $blogname The sanitized blogname.
 	 */
@@ -67,7 +67,7 @@ class Blog {
 	 * Fetches blogname (site title).
 	 * We use get_bloginfo( ..., 'display' ) because it applies filters.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string $blogname The sanitized blogname.
 	 */
@@ -86,7 +86,7 @@ class Blog {
 	 * Fetch blog description.
 	 * We use get_bloginfo( ..., 'display' ) because it applies filters.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string $blogname The sanitized blog description.
 	 */
@@ -100,7 +100,7 @@ class Blog {
 	 * plugins filter `home_url`.
 	 * Memoized.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The home URL.
 	 */
@@ -113,7 +113,7 @@ class Blog {
 	 * WordPress's get_bloginfo( 'language' ) is slow; so, we memoize it here.
 	 * We do NOT use get_bloginfo( ..., 'display' ) since nothing in Core does.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see https://www.w3.org/International/articles/language-tags/
 	 *
 	 * @return string $blogname The sanitized blogname.
@@ -126,7 +126,7 @@ class Blog {
 	 * Checks if blog is public through WordPress core settings.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool True is blog is public.
 	 */
@@ -138,7 +138,7 @@ class Blog {
 	 * Whether the current blog is spam or deleted.
 	 * Multisite Only.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool Current blog is spam.
 	 */
@@ -160,7 +160,7 @@ class Blog {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool
 	 */
@@ -180,7 +180,7 @@ class Blog {
 	 * Returns list of active plugins.
 	 *
 	 * @since 2.6.1
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `active_plugins`.
 	 *              3. Optimized code and removed memoization.
 	 * @credits Jetpack for some code.

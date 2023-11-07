@@ -25,12 +25,12 @@ namespace The_SEO_Framework\Interpreters;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Interpreters\SEOBar', '4.3.0', 'The_SEO_Framework\Admin\SEOBar\Builder' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Interpreters\SEOBar', '5.0.0', 'The_SEO_Framework\Admin\SEOBar\Builder' );
 /**
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\SEOBar\Builder
+ * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\SEOBar\Builder
  *              2. Deprecated.
  * @access protected
  * @deprecated

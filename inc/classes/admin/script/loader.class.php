@@ -45,7 +45,7 @@ use \The_SEO_Framework\Helper\{
  * - states may and are expected to be changed, like a page title.
  * - params shouldn't change, like the page ID.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @see \The_SEO_Framework\Admin\Script\Registry
  * @access private
  */
@@ -54,7 +54,7 @@ class Loader {
 	/**
 	 * Initializes scripts based on admin query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 */
 	public static function init() {
@@ -140,7 +140,7 @@ class Loader {
 	 * Prepares WordPress Media scripts.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Resolved PHP notices by not setting the 'post' indexed on new posts.
+	 * @since 5.0.0 Resolved PHP notices by not setting the 'post' indexed on new posts.
 	 */
 	public static function prepare_media_scripts() {
 

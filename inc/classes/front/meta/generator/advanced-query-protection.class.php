@@ -28,13 +28,13 @@ namespace The_SEO_Framework\Front\Meta\Generator;
 /**
  * Holds advanced query protection generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Advanced_Query_Protection {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -42,7 +42,7 @@ final class Advanced_Query_Protection {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_advanced_query_protection() {

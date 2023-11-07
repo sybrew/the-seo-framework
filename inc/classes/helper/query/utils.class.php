@@ -37,7 +37,7 @@ use \The_SEO_Framework\Helper\{
 /**
  * Holds a collection of helper methods for queries.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->query()->utils() instead.
  */
@@ -46,7 +46,7 @@ class Utils {
 	/**
 	 * Determines whether pretty permalinks are enabled.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @todo consider wp_force_plain_post_permalink()
 	 *
 	 * @return bool
@@ -63,7 +63,7 @@ class Utils {
 	 * @since 4.0.3 Can now assert empty categories again by checking for taxonomy support.
 	 * @since 4.2.4 Added detection for AJAX, Cron, JSON, and REST queries
 	 *              (they're not supported as SEO-able queries).
-	 * @since 4.3.0 1. Removed detection for JSON(P) and XML type requests,
+	 * @since 5.0.0 1. Removed detection for JSON(P) and XML type requests,
 	 *                 because these cannot be assumed as legitimate.
 	 *              2. Added `\is_customize_preview()` as unsupported.
 	 *              3. Moved to `\The_SEO_Framework\Helper\Query`.
@@ -149,7 +149,7 @@ class Utils {
 	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
 	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -259,7 +259,7 @@ class Utils {
 	 *
 	 * @since 2.6.0
 	 * @since 3.1.0 Removed caching.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool
 	 */

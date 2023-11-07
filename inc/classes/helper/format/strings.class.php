@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Helper\Format;
  * Holds methods for String interpretation and conversion.
  * String is a reserved keyword, so we use Strings.
  *
- * @since 4.3.0
+ * @since 5.0.0
  *
  * @access protected
  *         Use tsf()->format()->strings() instead.
@@ -41,7 +41,7 @@ class Strings {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 No longer prepends a space before the hellip.
-	 * @since 4.3.0 1. Now uses mb_* to determine the string length.
+	 * @since 5.0.0 1. Now uses mb_* to determine the string length.
 	 *              2. Moved from \The_SEO_Framework\Load.
 	 *
 	 * @param string $string The string to test and maybe trim
@@ -74,7 +74,7 @@ class Strings {
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
 	 *              and recognizes those as whole words.
-	 * @since 4.3.0 1. Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
+	 * @since 5.0.0 1. Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
 	 *              2. Moved from \The_SEO_Framework\Load.
 	 *
 	 * @param string $string Required. The string to count words in.
@@ -176,7 +176,7 @@ class Strings {
 	 *              5. Resolved an issue where a character followed by punctuation would cause the match to fail.
 	 * @since 4.2.0 Now enforces at least a character length of 1. This prevents needless processing.
 	 * @since 4.2.7 Now considers floating numerics as one word.
-	 * @since 4.3.0 1. Moved from \The_SEO_Framework\Load.
+	 * @since 5.0.0 1. Moved from \The_SEO_Framework\Load.
 	 *              2. Renamed from `trim_excerpt()`.
 	 *              3. Anchored the first regex to the start prevent catastrophic backtracking when no spacing is found.
 	 *              4. Forced a useful match in the first regex to prevent catastrophic backtracking in the second regex.

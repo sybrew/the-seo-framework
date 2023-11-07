@@ -28,13 +28,13 @@ namespace The_SEO_Framework\Front\Meta;
 /**
  * Interprets the meta tags from human readable PHP to machine readable HTML.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Tags {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] The meta tags' render data defaults : {
 	 *    @param ?array        attributes A list of attributes by [ name => value ].
 	 *    @param ?string       tag        The tag name. Defaults to 'meta' if left empty.
@@ -48,13 +48,13 @@ final class Tags {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] Meta tag generator callbacks.
 	 */
 	private static $tag_generators = [];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] The meta tags' render data : {
 	 *    @param ?array        attributes A list of attributes by [ name => value ].
 	 *    @param ?string       tag        The tag name. Defaults to 'meta' if left empty.
@@ -67,7 +67,7 @@ final class Tags {
 	/**
 	 * Returns the registered callbacks by reference.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see filter the_seo_framework_meta_generators.
 	 *
 	 * @return callable[] Callbacks, passed by reference.
@@ -79,7 +79,7 @@ final class Tags {
 	/**
 	 * Returns the registered tag render data by reference.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see filter the_seo_framework_meta_render_data.
 	 *
 	 * @return array[] The meta tags, passed by reference.
@@ -91,7 +91,7 @@ final class Tags {
 	/**
 	 * Walks over all tag generators and writes to $tags_render_data.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function fill_render_data_from_registered_generators() {
 
@@ -105,7 +105,7 @@ final class Tags {
 	/**
 	 * Outputs all registered callbacks.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function render_tags() {
 
@@ -137,7 +137,7 @@ final class Tags {
 	 * Even though most (if not all) WordPress sites use HTML5, we expect some still use XHTML.
 	 * We expect HTML5 fully on the back-end.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array         $attributes Associative array of tag names and tag values : {
 	 *                          string $name => string $value

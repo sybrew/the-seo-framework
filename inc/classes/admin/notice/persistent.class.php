@@ -34,7 +34,7 @@ use \The_SEO_Framework\{
 /**
  * Holds persistent notices functionality.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->admin()->notice()->persistent() instead.
  */
@@ -45,7 +45,7 @@ class Persistent {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.3 Now handles timeout values below -1 gracefully, by purging the whole notification gracelessly.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `register_dismissible_persistent_notice`.
 	 *
 	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
@@ -115,7 +115,7 @@ class Persistent {
 	 * When the threshold is reached, the notice is deleted.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. The second paremeter is no longer passed by reference.
 	 *
 	 * @param string $key   The notice key.
@@ -149,7 +149,7 @@ class Persistent {
 	 * Clears a persistent notice by key.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $key The notice key.
 	 * @return bool True on success, false on failure.
@@ -167,7 +167,7 @@ class Persistent {
 	 * Clears all registered persistent notices. Useful after upgrade.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -181,7 +181,7 @@ class Persistent {
 	 * @since 4.1.0
 	 * @since 4.1.4 1. Now 'public', marked private.
 	 *              2. Now uses underscores instead of dashes.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_get_dismiss_notice_nonce_action`.
 	 * @access private
 	 *
@@ -197,7 +197,7 @@ class Persistent {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.2 Now only ignores timeout values of -1 to test against.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `output_dismissible_persistent_notices`.
 	 * @access private
 	 */
@@ -232,7 +232,7 @@ class Persistent {
 	 * Clears persistent notice on user request (clicked Dismiss icon) via the no-JS form.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private
 	 * var_dump() equalize with AJAX::dismiss_notice() and combine
 	 */

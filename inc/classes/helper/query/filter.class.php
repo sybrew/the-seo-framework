@@ -33,7 +33,7 @@ use \The_SEO_Framework\{
 /**
  * Filters the query.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Filter {
@@ -45,7 +45,7 @@ final class Filter {
 	 * @hook wc_product_post_type_link_product_cat 10
 	 * @hook woocommerce_breadcrumb_main_term 10
 	 * @hook woocommerce_product_categories_widget_main_term 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param \WP_Term $term  The category to use in the permalink.

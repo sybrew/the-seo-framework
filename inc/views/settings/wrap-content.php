@@ -72,7 +72,7 @@ foreach ( $tabs as $tab => $args ) {
 
 		/**
 		 * @since 4.2.0
-		 * @since 4.3.0 Renamed 'params' to 'args'.
+		 * @since 5.0.0 Renamed 'params' to 'args'.
 		 * @param array $args The tab arguments: {
 		 *    @param string id
 		 *    @param string tab

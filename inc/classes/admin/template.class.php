@@ -29,13 +29,13 @@ use function \The_SEO_Framework\memo;
 /**
  * Holds API interfaces for screen views/templates.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Template {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var ?string $secret The include secret.
 	 */
 	private static $secret;
@@ -46,7 +46,7 @@ final class Template {
 	 * Adds a `$secret` to the file to prevent including without this class.
 	 * This make file inclusions difficult when the plugin is dormant (deactivated).
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param string $file         The relative view file name.
@@ -68,7 +68,7 @@ final class Template {
 	 * Adds a `$secret` to the file to prevent including without this class.
 	 * This make file inclusions difficult when the plugin is dormant (deactivated).
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param string $file         The absolute view file name.
@@ -86,7 +86,7 @@ final class Template {
 	 * Gets view location. Forces a path on our Views folder.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private
 	 *
 	 * @param string $file The file name.
@@ -108,7 +108,7 @@ final class Template {
 	/**
 	 * Verifies view secret.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param string $value The value to match against secret.

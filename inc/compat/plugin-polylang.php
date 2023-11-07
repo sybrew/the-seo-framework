@@ -145,7 +145,7 @@ function pll__( $string ) {
  *
  * @hook the_seo_framework_cleared_sitemap_transients 10
  * @since 4.0.5
- * @since 4.3.0 Removed clearing once-per-request restriction.
+ * @since 5.0.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
  */
@@ -172,7 +172,7 @@ function _polylang_flush_sitemap() {
  *
  * @hook admin_enqueue_scripts 11
  * @see https://github.com/polylang/polylang/issues/928
- * @since 4.3.0
+ * @since 5.0.0
  */
 function _defunct_badly_coded_polylang_script() {
 

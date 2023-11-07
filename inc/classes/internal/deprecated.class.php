@@ -53,7 +53,7 @@ use \The_SEO_Framework\{
  * @since 4.1.4 Removed all methods deprecated in 4.0.0.
  * @since 4.2.0 1. Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
  *              2. Removed all methods deprecated in 4.1.0.
- * @since 4.3.0 Removed all methods deprecated in 4.2.0
+ * @since 5.0.0 Removed all methods deprecated in 4.2.0
  * @ignore
  */
 final class Deprecated {
@@ -64,7 +64,7 @@ final class Deprecated {
 	 * Prevents setting of transients when they're disabled.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $transient  Transient name. Expected to not be SQL-escaped.
@@ -72,7 +72,7 @@ final class Deprecated {
 	 * @param int    $expiration Transient expiration date, optional. Expected to not be SQL-escaped.
 	 */
 	public function set_transient( $transient, $value, $expiration = 0 ) {
-		\tsf()->_deprecated_function( 'tsf()->set_transient()', '4.3.0', 'set_transient()' );
+		\tsf()->_deprecated_function( 'tsf()->set_transient()', '5.0.0', 'set_transient()' );
 		return \set_transient( $transient, $value, $expiration );
 	}
 
@@ -84,14 +84,14 @@ final class Deprecated {
 	 * will be false.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $transient Transient name. Expected to not be SQL-escaped.
 	 * @return mixed|bool Value of the transient. False on failure or non existing transient.
 	 */
 	public function get_transient( $transient ) {
-		\tsf()->_deprecated_function( 'tsf()->get_transient()', '4.3.0', 'get_transient()' );
+		\tsf()->_deprecated_function( 'tsf()->get_transient()', '5.0.0', 'get_transient()' );
 		return \get_transient( $transient );
 	}
 
@@ -99,7 +99,7 @@ final class Deprecated {
 	 * Returns the post type name from query input or real ID.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
@@ -108,7 +108,7 @@ final class Deprecated {
 	public function get_post_type_real_id( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_real_id()', '4.3.0', 'tsf()->query()->get_post_type_real_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_real_id()', '5.0.0', 'tsf()->query()->get_post_type_real_id()' );
 
 		return $tsf->query()->get_post_type_real_id( $post );
 	}
@@ -117,7 +117,7 @@ final class Deprecated {
 	 * Returns the post type name from current screen.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string
@@ -125,7 +125,7 @@ final class Deprecated {
 	public function get_admin_post_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_admin_post_type()', '4.3.0', 'tsf()->query()->get_admin_post_type()' );
+		$tsf->_deprecated_function( 'tsf()->get_admin_post_type()', '5.0.0', 'tsf()->query()->get_admin_post_type()' );
 
 		return $tsf->query()->get_admin_post_type();
 	}
@@ -134,7 +134,7 @@ final class Deprecated {
 	 * Returns a list of post types shared with the taxonomy.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxonomy.
@@ -143,7 +143,7 @@ final class Deprecated {
 	public function get_post_types_from_taxonomy( $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '4.3.0', 'tsf()->taxonomy()->get_post_types()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_types_from_taxonomy()', '5.0.0', 'tsf()->taxonomy()->get_post_types()' );
 
 		return $tsf->taxonomy()->get_post_types( $taxonomy );
 	}
@@ -152,7 +152,7 @@ final class Deprecated {
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
 	 *
 	 * @since 2.5.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $use_cache Whether to use the cache or not.
@@ -161,7 +161,7 @@ final class Deprecated {
 	public function get_the_real_id( $use_cache = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_the_real_id()', '4.3.0', 'tsf()->query()->get_the_real_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_the_real_id()', '5.0.0', 'tsf()->query()->get_the_real_id()' );
 
 		return $tsf->query()->get_the_real_id( $use_cache );
 	}
@@ -171,7 +171,7 @@ final class Deprecated {
 	 * Alters while in the loop. Therefore, this can't be cached and must be called within the loop.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int The admin ID.
@@ -179,7 +179,7 @@ final class Deprecated {
 	public function get_the_real_admin_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_the_real_admin_id()', '4.3.0', 'tsf()->query()->get_the_real_admin_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_the_real_admin_id()', '5.0.0', 'tsf()->query()->get_the_real_admin_id()' );
 
 		return $tsf->query()->get_the_real_admin_id();
 	}
@@ -188,7 +188,7 @@ final class Deprecated {
 	 * Returns the front page ID, if home is a page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int the ID.
@@ -196,7 +196,7 @@ final class Deprecated {
 	public function get_the_front_page_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_the_front_page_id()', '4.3.0', 'tsf()->query()->get_the_front_page_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_the_front_page_id()', '5.0.0', 'tsf()->query()->get_the_front_page_id()' );
 
 		return $tsf->query()->get_the_front_page_id();
 	}
@@ -205,7 +205,7 @@ final class Deprecated {
 	 * Fetches the Term ID on admin pages.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int Term ID.
@@ -213,7 +213,7 @@ final class Deprecated {
 	public function get_admin_term_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_admin_term_id()', '4.3.0', 'tsf()->query()->get_admin_term_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_admin_term_id()', '5.0.0', 'tsf()->query()->get_admin_term_id()' );
 
 		return $tsf->query()->get_admin_term_id();
 	}
@@ -224,7 +224,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 3.1.0 1. Now works in the admin.
 	 *              2. Added caching.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The queried taxonomy type.
@@ -232,7 +232,7 @@ final class Deprecated {
 	public function get_current_taxonomy() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_taxonomy()', '4.3.0', 'tsf()->query()->get_current_taxonomy()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_taxonomy()', '5.0.0', 'tsf()->query()->get_current_taxonomy()' );
 
 		return $tsf->query()->get_current_taxonomy();
 	}
@@ -241,7 +241,7 @@ final class Deprecated {
 	 * Returns the current post type, if any.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Deprecated.
+	 * @since 5.0.0 1. Deprecated.
 	 *              2. Now falls back to the current post type instead erroneously to a boolean.
 	 *              3. Now memoizes the return value.
 	 * @deprecated
@@ -251,7 +251,7 @@ final class Deprecated {
 	public function get_current_post_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_post_type()', '4.3.0', 'tsf()->query()->get_current_post_type()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_post_type()', '5.0.0', 'tsf()->query()->get_current_post_type()' );
 
 		return $tsf->query()->get_current_post_type();
 	}
@@ -260,13 +260,13 @@ final class Deprecated {
 	 * Detects 404.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_404() {
-		\tsf()->_deprecated_function( 'tsf()->is_404()', '4.3.0', 'is_404()' );
+		\tsf()->_deprecated_function( 'tsf()->is_404()', '5.0.0', 'is_404()' );
 		return \is_404();
 	}
 
@@ -274,13 +274,13 @@ final class Deprecated {
 	 * Detects admin screen.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_admin() {
-		\tsf()->_deprecated_function( 'tsf()->is_admin()', '4.3.0', 'is_admin()' );
+		\tsf()->_deprecated_function( 'tsf()->is_admin()', '5.0.0', 'is_admin()' );
 		return \is_admin();
 	}
 
@@ -288,7 +288,7 @@ final class Deprecated {
 	 * Detects attachment page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $attachment Attachment ID, title, slug, or array of such.
@@ -297,7 +297,7 @@ final class Deprecated {
 	public function is_attachment( $attachment = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_attachment()', '4.3.0', 'tsf()->query()->is_attachment()' );
+		$tsf->_deprecated_function( 'tsf()->is_attachment()', '5.0.0', 'tsf()->query()->is_attachment()' );
 
 		return $tsf->query()->is_attachment( $attachment );
 	}
@@ -306,7 +306,7 @@ final class Deprecated {
 	 * Detects attachments within the admin area.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -314,7 +314,7 @@ final class Deprecated {
 	public function is_attachment_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_attachment_admin()', '4.3.0', 'tsf()->query()->is_attachment_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_attachment_admin()', '5.0.0', 'tsf()->query()->is_attachment_admin()' );
 
 		return $tsf->query()->is_attachment_admin();
 	}
@@ -324,7 +324,7 @@ final class Deprecated {
 	 * Simply put, it detects a blog page and WooCommerce shop page.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
@@ -333,7 +333,7 @@ final class Deprecated {
 	public function is_singular_archive( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_singular_archive()', '4.3.0', 'tsf()->query()->is_singular_archive()' );
+		$tsf->_deprecated_function( 'tsf()->is_singular_archive()', '5.0.0', 'tsf()->query()->is_singular_archive()' );
 
 		return $tsf->query()->is_singular_archive( $post );
 	}
@@ -342,7 +342,7 @@ final class Deprecated {
 	 * Detects archive pages. Also in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -350,7 +350,7 @@ final class Deprecated {
 	public function is_archive() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_archive()', '4.3.0', 'tsf()->query()->is_archive()' );
+		$tsf->_deprecated_function( 'tsf()->is_archive()', '5.0.0', 'tsf()->query()->is_archive()' );
 
 		return $tsf->query()->is_archive();
 	}
@@ -359,7 +359,7 @@ final class Deprecated {
 	 * Extends default WordPress is_archive() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Post Type is archive
@@ -367,7 +367,7 @@ final class Deprecated {
 	public function is_archive_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_archive_admin()', '4.3.0', 'tsf()->query()->is_archive_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_archive_admin()', '5.0.0', 'tsf()->query()->is_archive_admin()' );
 
 		return $tsf->query()->is_archive_admin();
 	}
@@ -376,7 +376,7 @@ final class Deprecated {
 	 * Detects Term edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True if on Term Edit screen. False otherwise.
@@ -384,7 +384,7 @@ final class Deprecated {
 	public function is_term_edit() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_term_edit()', '4.3.0', 'tsf()->query()->is_term_edit()' );
+		$tsf->_deprecated_function( 'tsf()->is_term_edit()', '5.0.0', 'tsf()->query()->is_term_edit()' );
 
 		return $tsf->query()->is_term_edit();
 	}
@@ -393,7 +393,7 @@ final class Deprecated {
 	 * Detects Post edit screen in WP Admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool We're on Post Edit screen.
@@ -401,7 +401,7 @@ final class Deprecated {
 	public function is_post_edit() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_edit()', '4.3.0', 'tsf()->query()->is_post_edit()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_edit()', '5.0.0', 'tsf()->query()->is_post_edit()' );
 
 		return $tsf->query()->is_post_edit();
 	}
@@ -410,7 +410,7 @@ final class Deprecated {
 	 * Detects Post or Archive Lists in Admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool We're on the edit screen.
@@ -418,7 +418,7 @@ final class Deprecated {
 	public function is_wp_lists_edit() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_wp_lists_edit()', '4.3.0', 'tsf()->query()->is_wp_lists_edit()' );
+		$tsf->_deprecated_function( 'tsf()->is_wp_lists_edit()', '5.0.0', 'tsf()->query()->is_wp_lists_edit()' );
 
 		return $tsf->query()->is_wp_lists_edit();
 	}
@@ -427,7 +427,7 @@ final class Deprecated {
 	 * Detects Profile edit screen in WP Admin.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Now also tests network profile edit screens.
+	 * @since 5.0.0 1. Now also tests network profile edit screens.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -436,7 +436,7 @@ final class Deprecated {
 	public function is_profile_edit() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_profile_edit()', '4.3.0', 'tsf()->query()->is_profile_edit()' );
+		$tsf->_deprecated_function( 'tsf()->is_profile_edit()', '5.0.0', 'tsf()->query()->is_profile_edit()' );
 
 		return $tsf->query()->is_profile_edit();
 	}
@@ -445,7 +445,7 @@ final class Deprecated {
 	 * Detects author archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
@@ -454,7 +454,7 @@ final class Deprecated {
 	public function is_author( $author = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_author()', '4.3.0', 'tsf()->query()->is_author()' );
+		$tsf->_deprecated_function( 'tsf()->is_author()', '5.0.0', 'tsf()->query()->is_author()' );
 
 		return $tsf->query()->is_author( $author );
 	}
@@ -463,7 +463,7 @@ final class Deprecated {
 	 * Detects the blog page.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
@@ -473,7 +473,7 @@ final class Deprecated {
 	public function is_home( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_home()', '4.3.0', 'tsf()->query()->is_blog()' );
+		$tsf->_deprecated_function( 'tsf()->is_home()', '5.0.0', 'tsf()->query()->is_blog()' );
 
 		return $tsf->query()->is_blog( $post );
 	}
@@ -482,7 +482,7 @@ final class Deprecated {
 	 * Detects the non-front blog page.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
@@ -492,7 +492,7 @@ final class Deprecated {
 	public function is_home_as_page( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_home_as_page()', '4.3.0', 'tsf()->query()->is_blog_as_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_home_as_page()', '5.0.0', 'tsf()->query()->is_blog_as_page()' );
 
 		return $tsf->query()->is_blog_as_page( $post );
 	}
@@ -501,7 +501,7 @@ final class Deprecated {
 	 * Detects category archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $category Optional. Category ID, name, slug, or array of Category IDs, names, and slugs.
@@ -510,7 +510,7 @@ final class Deprecated {
 	public function is_category( $category = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_category()', '4.3.0', 'tsf()->query()->is_category()' );
+		$tsf->_deprecated_function( 'tsf()->is_category()', '5.0.0', 'tsf()->query()->is_category()' );
 
 		return $tsf->query()->is_category( $category );
 	}
@@ -519,7 +519,7 @@ final class Deprecated {
 	 * Extends default WordPress is_category() and determines screen in admin.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Post Type is category
@@ -527,7 +527,7 @@ final class Deprecated {
 	public function is_category_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_category_admin()', '4.3.0', 'tsf()->query()->is_category_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_category_admin()', '5.0.0', 'tsf()->query()->is_category_admin()' );
 
 		return $tsf->query()->is_category_admin();
 	}
@@ -539,13 +539,13 @@ final class Deprecated {
 	 * in `\WP_Customize_Manager::setup_theme()`.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_customize_preview() {
-		\tsf()->_deprecated_function( 'tsf()->is_customize_preview()', '4.3.0', 'is_customize_preview()' );
+		\tsf()->_deprecated_function( 'tsf()->is_customize_preview()', '5.0.0', 'is_customize_preview()' );
 		return \is_customize_preview();
 	}
 
@@ -553,13 +553,13 @@ final class Deprecated {
 	 * Detects date archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_date() {
-		\tsf()->_deprecated_function( 'tsf()->is_date()', '4.3.0', 'is_date()' );
+		\tsf()->_deprecated_function( 'tsf()->is_date()', '5.0.0', 'is_date()' );
 		return \is_date();
 	}
 
@@ -567,13 +567,13 @@ final class Deprecated {
 	 * Detects day archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_day() {
-		\tsf()->_deprecated_function( 'tsf()->is_day()', '4.3.0', 'is_day()' );
+		\tsf()->_deprecated_function( 'tsf()->is_day()', '5.0.0', 'is_day()' );
 		return \is_day();
 	}
 
@@ -581,14 +581,14 @@ final class Deprecated {
 	 * Detects feed.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|array $feeds Optional feed types to check.
 	 * @return bool
 	 */
 	public function is_feed( $feeds = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_feed()', '4.3.0', 'is_feed()' );
+		\tsf()->_deprecated_function( 'tsf()->is_feed()', '5.0.0', 'is_feed()' );
 		return \is_feed( $feeds );
 	}
 
@@ -596,7 +596,7 @@ final class Deprecated {
 	 * Detects front page.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -604,7 +604,7 @@ final class Deprecated {
 	public function is_real_front_page() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_real_front_page()', '4.3.0', 'tsf()->query()->is_real_front_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_real_front_page()', '5.0.0', 'tsf()->query()->is_real_front_page()' );
 
 		return $tsf->query()->is_real_front_page();
 	}
@@ -617,7 +617,7 @@ final class Deprecated {
 	 * WARNING: This will lead to **FALSE POSITIVES** for Date, CPTA, Search, and other archives.
 	 *
 	 * @since 3.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The tested ID.
@@ -626,7 +626,7 @@ final class Deprecated {
 	public function is_real_front_page_by_id( $id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_real_front_page_by_id()', '4.3.0', 'tsf()->query()->is_real_front_page_by_id()' );
+		$tsf->_deprecated_function( 'tsf()->is_real_front_page_by_id()', '5.0.0', 'tsf()->query()->is_real_front_page_by_id()' );
 
 		return $tsf->query()->is_real_front_page_by_id( $id );
 	}
@@ -635,13 +635,13 @@ final class Deprecated {
 	 * Detects month archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_month() {
-		\tsf()->_deprecated_function( 'tsf()->is_month()', '4.3.0', 'is_month()' );
+		\tsf()->_deprecated_function( 'tsf()->is_month()', '5.0.0', 'is_month()' );
 		return \is_month();
 	}
 
@@ -650,7 +650,7 @@ final class Deprecated {
 	 * When $page is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
@@ -659,7 +659,7 @@ final class Deprecated {
 	public function is_page( $page = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_page()', '4.3.0', 'tsf()->query()->is_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_page()', '5.0.0', 'tsf()->query()->is_page()' );
 
 		return $tsf->query()->is_page( $page );
 	}
@@ -668,7 +668,7 @@ final class Deprecated {
 	 * Detects pages within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -676,7 +676,7 @@ final class Deprecated {
 	public function is_page_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_page_admin()', '4.3.0', 'tsf()->query()->is_page_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_page_admin()', '5.0.0', 'tsf()->query()->is_page_admin()' );
 
 		return $tsf->query()->is_page_admin();
 	}
@@ -690,7 +690,7 @@ final class Deprecated {
 	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
 	 *              3. Added current_user_can() check.
 	 *              4. Added wp_verify_nonce() check.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -698,7 +698,7 @@ final class Deprecated {
 	public function is_preview() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_preview()', '4.3.0', 'tsf()->query()->is_preview()' );
+		$tsf->_deprecated_function( 'tsf()->is_preview()', '5.0.0', 'tsf()->query()->is_preview()' );
 
 		return $tsf->query()->is_preview();
 	}
@@ -707,7 +707,7 @@ final class Deprecated {
 	 * Detects search.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -715,7 +715,7 @@ final class Deprecated {
 	public function is_search() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_search()', '4.3.0', 'tsf()->query()->is_search()' );
+		$tsf->_deprecated_function( 'tsf()->is_search()', '5.0.0', 'tsf()->query()->is_search()' );
 
 		return $tsf->query()->is_search();
 	}
@@ -725,7 +725,7 @@ final class Deprecated {
 	 * When $post is supplied, it will check against the current object. So it will not work in the admin screens.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
@@ -734,7 +734,7 @@ final class Deprecated {
 	public function is_single( $post = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_single()', '4.3.0', 'tsf()->query()->is_single()' );
+		$tsf->_deprecated_function( 'tsf()->is_single()', '5.0.0', 'tsf()->query()->is_single()' );
 
 		return $tsf->query()->is_single( $post );
 	}
@@ -743,7 +743,7 @@ final class Deprecated {
 	 * Detects posts within the admin area.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -751,7 +751,7 @@ final class Deprecated {
 	public function is_single_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_single_admin()', '4.3.0', 'tsf()->query()->is_single_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_single_admin()', '5.0.0', 'tsf()->query()->is_single_admin()' );
 
 		return $tsf->query()->is_single_admin();
 	}
@@ -761,7 +761,7 @@ final class Deprecated {
 	 * Replaces and expands default WordPress `is_singular()`.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|string[] $post_types Optional. Post type or array of post types. Default empty string.
@@ -770,7 +770,7 @@ final class Deprecated {
 	public function is_singular( $post_types = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_singular()', '4.3.0', 'tsf()->query()->is_singular()' );
+		$tsf->_deprecated_function( 'tsf()->is_singular()', '5.0.0', 'tsf()->query()->is_singular()' );
 
 		return $tsf->query()->is_singular( $post_types );
 	}
@@ -779,7 +779,7 @@ final class Deprecated {
 	 * Determines if the page is singular within the admin screen.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Post Type is singular
@@ -787,7 +787,7 @@ final class Deprecated {
 	public function is_singular_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_singular_admin()', '4.3.0', 'tsf()->query()->is_singular_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_singular_admin()', '5.0.0', 'tsf()->query()->is_singular_admin()' );
 
 		return $tsf->query()->is_singular_admin();
 	}
@@ -796,7 +796,7 @@ final class Deprecated {
 	 * Detects the static front page.
 	 *
 	 * @since 2.3.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
@@ -805,7 +805,7 @@ final class Deprecated {
 	public function is_static_frontpage( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_static_frontpage()', '4.3.0', 'tsf()->query()->is_static_front_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_static_frontpage()', '5.0.0', 'tsf()->query()->is_static_front_page()' );
 
 		return $tsf->query()->is_static_front_page( $id );
 	}
@@ -814,7 +814,7 @@ final class Deprecated {
 	 * Detects tag archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $tag Optional. Tag ID, name, slug, or array of Tag IDs, names, and slugs.
@@ -823,7 +823,7 @@ final class Deprecated {
 	public function is_tag( $tag = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_tag()', '4.3.0', 'tsf()->query()->is_tag()' );
+		$tsf->_deprecated_function( 'tsf()->is_tag()', '5.0.0', 'tsf()->query()->is_tag()' );
 
 		return $tsf->query()->is_tag( $tag );
 	}
@@ -832,7 +832,7 @@ final class Deprecated {
 	 * Determines if the page is a tag within the admin screen.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Post Type is tag.
@@ -840,7 +840,7 @@ final class Deprecated {
 	public function is_tag_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_tag_admin()', '4.3.0', 'tsf()->query()->is_tag_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_tag_admin()', '5.0.0', 'tsf()->query()->is_tag_admin()' );
 
 		return $tsf->query()->is_tag_admin();
 	}
@@ -849,7 +849,7 @@ final class Deprecated {
 	 * Detects taxonomy archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|array     $taxonomy Optional. Taxonomy slug or slugs.
@@ -859,7 +859,7 @@ final class Deprecated {
 	public function is_tax( $taxonomy = '', $term = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_tax()', '4.3.0', 'tsf()->query()->is_tax()' );
+		$tsf->_deprecated_function( 'tsf()->is_tax()', '5.0.0', 'tsf()->query()->is_tax()' );
 
 		return $tsf->query()->is_tax( $taxonomy, $term );
 	}
@@ -868,7 +868,7 @@ final class Deprecated {
 	 * Determines if the $post is a shop page.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
@@ -877,7 +877,7 @@ final class Deprecated {
 	public function is_shop( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_shop()', '4.3.0', 'tsf()->query()->is_shop()' );
+		$tsf->_deprecated_function( 'tsf()->is_shop()', '5.0.0', 'tsf()->query()->is_shop()' );
 
 		return $tsf->query()->is_shop( $post );
 	}
@@ -886,7 +886,7 @@ final class Deprecated {
 	 * Determines if the page is a product page.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|WP_Post|null $post (Optional) Post ID or post object.
@@ -895,7 +895,7 @@ final class Deprecated {
 	public function is_product( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_product()', '4.3.0', 'tsf()->query()->is_product()' );
+		$tsf->_deprecated_function( 'tsf()->is_product()', '5.0.0', 'tsf()->query()->is_product()' );
 
 		return $tsf->query()->is_product( $post );
 	}
@@ -904,7 +904,7 @@ final class Deprecated {
 	 * Determines if the admin page is for a product page.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -912,7 +912,7 @@ final class Deprecated {
 	public function is_product_admin() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_product_admin()', '4.3.0', 'tsf()->query()->is_product_admin()' );
+		$tsf->_deprecated_function( 'tsf()->is_product_admin()', '5.0.0', 'tsf()->query()->is_product_admin()' );
 
 		return $tsf->query()->is_product_admin();
 	}
@@ -921,7 +921,7 @@ final class Deprecated {
 	 * Detects year archives.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -929,7 +929,7 @@ final class Deprecated {
 	public function is_year() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_year()', '4.3.0', 'tsf()->query()->is_year()' );
+		$tsf->_deprecated_function( 'tsf()->is_year()', '5.0.0', 'tsf()->query()->is_year()' );
 
 		return $tsf->query()->is_year();
 	}
@@ -938,7 +938,7 @@ final class Deprecated {
 	 * Determines if SSL is used.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True if SSL, false otherwise.
@@ -946,7 +946,7 @@ final class Deprecated {
 	public function is_ssl() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_ssl()', '4.3.0', 'tsf()->query()->is_ssl()' );
+		$tsf->_deprecated_function( 'tsf()->is_ssl()', '5.0.0', 'tsf()->query()->is_ssl()' );
 
 		return $tsf->query()->is_ssl();
 	}
@@ -956,7 +956,7 @@ final class Deprecated {
 	 * WARNING: Do not ever use this as a safety check.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
@@ -965,7 +965,7 @@ final class Deprecated {
 	public function is_seo_settings_page( $secure = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_seo_settings_page()', '4.3.0', 'tsf()->query()->is_seo_settings_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_seo_settings_page()', '5.0.0', 'tsf()->query()->is_seo_settings_page()' );
 
 		return $tsf->query()->is_seo_settings_page( $secure );
 	}
@@ -974,7 +974,7 @@ final class Deprecated {
 	 * Checks the screen base file through global $page_hook or $_GET.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 * @global string $page_hook the current page hook.
 	 *
@@ -987,7 +987,7 @@ final class Deprecated {
 	public function is_menu_page( $pagehook = '', $pageslug = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_menu_page()', '4.3.0', 'tsf()->query()->is_menu_page()' );
+		$tsf->_deprecated_function( 'tsf()->is_menu_page()', '5.0.0', 'tsf()->query()->is_menu_page()' );
 
 		return $tsf->query()->is_menu_page( $pagehook, $pageslug );
 	}
@@ -1001,7 +1001,7 @@ final class Deprecated {
 	 *              2. Now always returns 1 on the admin screens.
 	 * @since 4.2.8 Now returns the last page on pagination overflow,
 	 *              but only when we're on a paginated static frontpage.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int (R>0) $page Always a positive number.
@@ -1009,7 +1009,7 @@ final class Deprecated {
 	public function page() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->page()', '4.3.0', 'tsf()->query()->page()' );
+		$tsf->_deprecated_function( 'tsf()->page()', '5.0.0', 'tsf()->query()->page()' );
 
 		return $tsf->query()->page();
 	}
@@ -1021,7 +1021,7 @@ final class Deprecated {
 	 * @since 2.6.0
 	 * @since 3.2.4 1. Added overflow protection.
 	 *              2. Now always returns 1 on the admin screens.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int (R>0) $paged Always a positive number.
@@ -1029,7 +1029,7 @@ final class Deprecated {
 	public function paged() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->paged()', '4.3.0', 'tsf()->query()->paged()' );
+		$tsf->_deprecated_function( 'tsf()->paged()', '5.0.0', 'tsf()->query()->paged()' );
 
 		return $tsf->query()->paged();
 	}
@@ -1041,7 +1041,7 @@ final class Deprecated {
 	 * we need is set up in the loop, not in the header; where TSF is active.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int
@@ -1049,7 +1049,7 @@ final class Deprecated {
 	public function numpages() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->numpages()', '4.3.0', 'tsf()->query()->numpages()' );
+		$tsf->_deprecated_function( 'tsf()->numpages()', '5.0.0', 'tsf()->query()->numpages()' );
 
 		return $tsf->query()->numpages();
 	}
@@ -1061,7 +1061,7 @@ final class Deprecated {
 	 * @since 3.1.0 1. Now also works on archives.
 	 *              2. Now is public.
 	 * @since 3.2.4 Now always returns false on the admin pages.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True if multipage.
@@ -1069,7 +1069,7 @@ final class Deprecated {
 	public function is_multipage() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_multipage()', '4.3.0', 'tsf()->query()->is_multipage()' );
+		$tsf->_deprecated_function( 'tsf()->is_multipage()', '5.0.0', 'tsf()->query()->is_multipage()' );
 
 		return $tsf->query()->is_multipage();
 	}
@@ -1079,7 +1079,7 @@ final class Deprecated {
 	 * Memoizes the return value once set.
 	 *
 	 * @since 2.9.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $set Whether to set "doing sitemap".
@@ -1088,7 +1088,7 @@ final class Deprecated {
 	public function is_sitemap( $set = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_sitemap()', '4.3.0', 'tsf()->query()->is_sitemap()' );
+		$tsf->_deprecated_function( 'tsf()->is_sitemap()', '5.0.0', 'tsf()->query()->is_sitemap()' );
 
 		return $tsf->query()->is_sitemap( $set );
 	}
@@ -1097,13 +1097,13 @@ final class Deprecated {
 	 * Determines whether we're on the robots.txt file output.
 	 *
 	 * @since 2.9.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function is_robots() {
-		\tsf()->_deprecated_function( 'tsf()->is_robots()', '4.3.0', 'is_robots()' );
+		\tsf()->_deprecated_function( 'tsf()->is_robots()', '5.0.0', 'is_robots()' );
 		return \is_robots();
 	}
 
@@ -1112,13 +1112,13 @@ final class Deprecated {
 	 * is triggered.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The advanced query protection (aqp) identifier.
 	 */
 	public function advanced_query_protection() {
-		\tsf()->_deprecated_function( 'tsf()->advanced_query_protection()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->advanced_query_protection()', '5.0.0' );
 		return \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'  => 'tsf:aqp',
 			'value' => '1',
@@ -1129,7 +1129,7 @@ final class Deprecated {
 	 * Renders the description meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The description meta tag.
@@ -1137,11 +1137,11 @@ final class Deprecated {
 	public function the_description() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->the_description()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->the_description()', '5.0.0' );
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated description.
 		 * @param int    $id          The page or term ID.
@@ -1152,7 +1152,7 @@ final class Deprecated {
 				$tsf->get_description(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1167,7 +1167,7 @@ final class Deprecated {
 	 * Returns early if blog isn't public. WordPress Core will then output the meta tags.
 	 *
 	 * @since 2.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Robots meta tags.
@@ -1175,7 +1175,7 @@ final class Deprecated {
 	public function robots() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->robots()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->robots()', '5.0.0' );
 
 		// Don't do anything if the blog isn't set to public.
 		if ( false === $tsf->data()->blog()->is_public() ) return '';
@@ -1192,7 +1192,7 @@ final class Deprecated {
 	 * Renders Canonical URL meta tag.
 	 *
 	 * @since 2.0.6
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Canonical URL meta tag.
@@ -1200,13 +1200,13 @@ final class Deprecated {
 	public function canonical() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->canonical()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->canonical()', '5.0.0' );
 
 		$_url = $tsf->get_current_canonical_url();
 
 		/**
 		 * @since 2.6.5
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $url The canonical URL. Must be escaped.
 		 * @param int    $id  The current page or term ID.
@@ -1217,7 +1217,7 @@ final class Deprecated {
 				$_url,
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1243,7 +1243,7 @@ final class Deprecated {
 	 * Renders Shortlink meta tag
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Shortlink meta tag.
@@ -1251,11 +1251,11 @@ final class Deprecated {
 	public function shortlink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->advanced_query_protection()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->advanced_query_protection()', '5.0.0' );
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $url The generated shortlink URL.
 		 * @param int    $id  The current post or term ID.
@@ -1266,7 +1266,7 @@ final class Deprecated {
 				$tsf->get_shortlink(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1283,7 +1283,7 @@ final class Deprecated {
 	 * Renders Prev/Next Paged URL meta tags.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Prev/Next Paged URL meta tags.
@@ -1291,14 +1291,14 @@ final class Deprecated {
 	public function paged_urls() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->paged_urls()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->paged_urls()', '5.0.0' );
 
 		[ $next, $prev ] = $tsf->uri()->get_paged_urls();
 		$id              = $tsf->query()->get_the_real_id();
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $next The next-page URL.
 		 * @param int    $id   The current post or term ID.
@@ -1309,12 +1309,12 @@ final class Deprecated {
 				$next,
 				$id,
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $next The previous-page URL.
 		 * @param int    $id   The current post or term ID.
@@ -1325,7 +1325,7 @@ final class Deprecated {
 				$prev,
 				$id,
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1351,7 +1351,7 @@ final class Deprecated {
 	 * Renders Theme Color meta tag.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Theme Color meta tag.
@@ -1359,7 +1359,7 @@ final class Deprecated {
 	public function theme_color() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->theme_color()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->theme_color()', '5.0.0' );
 
 		$theme_color = $tsf->data()->plugin()->get_option( 'theme_color' );
 
@@ -1373,7 +1373,7 @@ final class Deprecated {
 	 * Renders Google Site Verification Code meta tag.
 	 *
 	 * @since 2.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Google Site Verification code meta tag.
@@ -1381,11 +1381,11 @@ final class Deprecated {
 	public function google_site_output() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->google_site_output()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->google_site_output()', '5.0.0' );
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Google verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1396,7 +1396,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'google_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1410,7 +1410,7 @@ final class Deprecated {
 	 * Renders Bing Site Verification Code meta tag.
 	 *
 	 * @since 2.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Bing Site Verification Code meta tag.
@@ -1418,11 +1418,11 @@ final class Deprecated {
 	public function bing_site_output() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->bing_site_output()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->bing_site_output()', '5.0.0' );
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Bing verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1433,7 +1433,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'bing_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1447,7 +1447,7 @@ final class Deprecated {
 	 * Renders Yandex Site Verification code meta tag.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Yandex Site Verification code meta tag.
@@ -1455,11 +1455,11 @@ final class Deprecated {
 	public function yandex_site_output() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->yandex_site_output()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->yandex_site_output()', '5.0.0' );
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Yandex verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1470,7 +1470,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'yandex_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1484,7 +1484,7 @@ final class Deprecated {
 	 * Renders Baidu Site Verification code meta tag.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Baidu Site Verification code meta tag.
@@ -1492,11 +1492,11 @@ final class Deprecated {
 	public function baidu_site_output() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->baidu_site_output()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->baidu_site_output()', '5.0.0' );
 
 		/**
 		 * @since 4.0.5
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Baidu verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1507,7 +1507,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'baidu_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1521,7 +1521,7 @@ final class Deprecated {
 	 * Renders Pinterest Site Verification code meta tag.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Pinterest Site Verification code meta tag.
@@ -1529,11 +1529,11 @@ final class Deprecated {
 	public function pint_site_output() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->pint_site_output()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->pint_site_output()', '5.0.0' );
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $code The Pinterest verification code.
 		 * @param int    $id   The current post or term ID.
@@ -1544,7 +1544,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'pint_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1558,7 +1558,7 @@ final class Deprecated {
 	 * Determines whether we can use Open Graph tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 1. Deprecated.
+	 * @since 5.0.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 * @deprecated
 	 *
@@ -1567,11 +1567,11 @@ final class Deprecated {
 	public function use_og_tags() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_og_tags()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->use_og_tags()', '5.0.0' );
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param bool $use_open_graph
 		 */
@@ -1580,7 +1580,7 @@ final class Deprecated {
 			[
 				(bool) $tsf->data()->plugin()->get_option( 'og_tags' ),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
 		);
 	}
@@ -1589,7 +1589,7 @@ final class Deprecated {
 	 * Renders the Open Graph title meta tag.
 	 *
 	 * @since 2.0.3
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph title meta tag.
@@ -1597,14 +1597,14 @@ final class Deprecated {
 	public function og_title() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_title()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_title()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() )
 			return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $title The generated Open Graph title.
 		 * @param int    $id    The page or term ID.
@@ -1615,7 +1615,7 @@ final class Deprecated {
 				$tsf->get_open_graph_title(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1629,7 +1629,7 @@ final class Deprecated {
 	 * Renders og:description meta tag
 	 *
 	 * @since 1.3.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph description meta tag.
@@ -1637,14 +1637,14 @@ final class Deprecated {
 	public function og_description() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_description()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_description()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() )
 			return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated Open Graph description.
 		 * @param int    $id          The page or term ID.
@@ -1655,7 +1655,7 @@ final class Deprecated {
 				$tsf->get_open_graph_description(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1669,7 +1669,7 @@ final class Deprecated {
 	 * Renders the OG locale meta tag.
 	 *
 	 * @since 1.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph locale meta tag.
@@ -1677,14 +1677,14 @@ final class Deprecated {
 	public function og_locale() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_locale()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_locale()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() )
 			return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $locale The generated locale field.
 		 * @param int    $id     The page or term ID.
@@ -1695,7 +1695,7 @@ final class Deprecated {
 				$tsf->open_graph()->get_supported_locales(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1709,7 +1709,7 @@ final class Deprecated {
 	 * Renders the Open Graph type meta tag.
 	 *
 	 * @since 1.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph type meta tag.
@@ -1717,7 +1717,7 @@ final class Deprecated {
 	public function og_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_type()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_type()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() )
 			return '';
@@ -1734,7 +1734,7 @@ final class Deprecated {
 	 * Renders Open Graph image meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph image meta tag.
@@ -1742,7 +1742,7 @@ final class Deprecated {
 	public function og_image() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_image()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_image()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() ) return '';
 
@@ -1785,7 +1785,7 @@ final class Deprecated {
 	 * Renders Open Graph sitename meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph sitename meta tag.
@@ -1793,13 +1793,13 @@ final class Deprecated {
 	public function og_sitename() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_sitename()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_sitename()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $sitename The generated Open Graph site name.
 		 * @param int    $id       The page or term ID.
@@ -1810,7 +1810,7 @@ final class Deprecated {
 				$tsf->data()->blog()->get_public_blogname(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1824,7 +1824,7 @@ final class Deprecated {
 	 * Renders Open Graph URL meta tag.
 	 *
 	 * @since 1.3.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph URL meta tag.
@@ -1832,13 +1832,13 @@ final class Deprecated {
 	public function og_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_url()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_url()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() ) return '';
 
 		/**
 		 * @since 2.9.3
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $url The canonical/Open Graph URL. Must be escaped.
 		 * @param int    $id  The current page or term ID.
@@ -1849,7 +1849,7 @@ final class Deprecated {
 				$tsf->get_current_canonical_url(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1863,7 +1863,7 @@ final class Deprecated {
 	 * Renders the Open Graph Updated Time meta tag.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Article Modified Time meta tag, and optionally the Open Graph Updated Time.
@@ -1871,7 +1871,7 @@ final class Deprecated {
 	public function og_updated_time() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->og_updated_time()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->og_updated_time()', '5.0.0' );
 
 		if ( ! $tsf->use_og_tags() ) return '';
 		if ( ! $tsf->output_published_time() ) return '';
@@ -1888,7 +1888,7 @@ final class Deprecated {
 	 * Renders Facebook Author meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Facebook Author meta tag.
@@ -1896,14 +1896,14 @@ final class Deprecated {
 	public function facebook_author() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->facebook_author()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->facebook_author()', '5.0.0' );
 
 		if ( ! $tsf->use_facebook_tags() ) return '';
 		if ( 'article' !== $tsf->open_graph()->get_type() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $facebook_page The generated Facebook author page URL.
 		 * @param int    $id            The current page or term ID.
@@ -1915,7 +1915,7 @@ final class Deprecated {
 					?: $tsf->data()->plugin()->get_option( 'facebook_author' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1929,7 +1929,7 @@ final class Deprecated {
 	 * Renders Facebook Publisher meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Facebook Publisher meta tag.
@@ -1937,14 +1937,14 @@ final class Deprecated {
 	public function facebook_publisher() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->facebook_publisher()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->facebook_publisher()', '5.0.0' );
 
 		if ( ! $tsf->use_facebook_tags() ) return '';
 		if ( 'article' !== $tsf->open_graph()->get_type() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $publisher The Facebook publisher page URL.
 		 * @param int    $id        The current page or term ID.
@@ -1955,7 +1955,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'facebook_publisher' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -1969,7 +1969,7 @@ final class Deprecated {
 	 * Renders Facebook App ID meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Facebook App ID meta tag.
@@ -1977,13 +1977,13 @@ final class Deprecated {
 	public function facebook_app_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->facebook_app_id()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->facebook_app_id()', '5.0.0' );
 
 		if ( ! $tsf->use_facebook_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $app_id The Facebook app ID.
 		 * @param int    $id     The current page or term ID.
@@ -1994,7 +1994,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'facebook_appid' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data', // var_dump() delete me?
 		);
 
@@ -2008,7 +2008,7 @@ final class Deprecated {
 	 * Determines whether we can use Facebook tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 1. Deprecated.
+	 * @since 5.0.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 * @deprecated
 	 *
@@ -2017,11 +2017,11 @@ final class Deprecated {
 	public function use_facebook_tags() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_facebook_tags()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->use_facebook_tags()', '5.0.0' );
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param bool $use_facebook
 		 */
@@ -2030,7 +2030,7 @@ final class Deprecated {
 			[
 				(bool) $tsf->data()->plugin()->get_option( 'facebook_tags' ),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
 		);
 	}
@@ -2039,7 +2039,7 @@ final class Deprecated {
 	 * Renders Article Publishing Time meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Article Publishing Time meta tag.
@@ -2047,13 +2047,13 @@ final class Deprecated {
 	public function article_published_time() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->article_published_time()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->article_published_time()', '5.0.0' );
 
 		if ( ! $tsf->output_published_time() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $time The article published time.
 		 * @param int    $id   The current page or term ID.
@@ -2064,7 +2064,7 @@ final class Deprecated {
 				$tsf->data()->post()->get_published_time(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -2078,7 +2078,7 @@ final class Deprecated {
 	 * Renders Article Modified Time meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Article Modified Time meta tag
@@ -2086,7 +2086,7 @@ final class Deprecated {
 	public function article_modified_time() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->article_modified_time()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->article_modified_time()', '5.0.0' );
 
 		if ( ! $tsf->output_modified_time() ) return '';
 
@@ -2102,7 +2102,7 @@ final class Deprecated {
 	 * Determines if modified time should be used in the current query.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -2110,7 +2110,7 @@ final class Deprecated {
 	public function output_modified_time() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->output_modified_time()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->output_modified_time()', '5.0.0' );
 
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
@@ -2122,7 +2122,7 @@ final class Deprecated {
 	 * Determines if published time should be used in the current query.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -2130,7 +2130,7 @@ final class Deprecated {
 	public function output_published_time() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->output_published_time()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->output_published_time()', '5.0.0' );
 
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
@@ -2142,7 +2142,7 @@ final class Deprecated {
 	 * Returns the current Twitter card type.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 1. Deprecated.
+	 * @since 5.0.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 * @deprecated
 	 *
@@ -2151,7 +2151,7 @@ final class Deprecated {
 	public function get_current_twitter_card_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_twitter_card_type()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->get_current_twitter_card_type()', '5.0.0' );
 
 		return $tsf->twitter()->get_card_type();
 	}
@@ -2160,7 +2160,7 @@ final class Deprecated {
 	 * Renders the Twitter Card type meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Card meta tag.
@@ -2168,7 +2168,7 @@ final class Deprecated {
 	public function twitter_card() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->twitter_card()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->twitter_card()', '5.0.0' );
 
 		if ( ! $tsf->use_twitter_tags() ) return '';
 
@@ -2184,7 +2184,7 @@ final class Deprecated {
 	 * Renders the Twitter Site meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Site meta tag.
@@ -2192,13 +2192,13 @@ final class Deprecated {
 	public function twitter_site() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->twitter_site()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->twitter_site()', '5.0.0' );
 
 		if ( ! $tsf->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $site The Twitter site owner tag.
 		 * @param int    $id   The current page or term ID.
@@ -2209,7 +2209,7 @@ final class Deprecated {
 				$tsf->data()->plugin()->get_option( 'twitter_site' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -2226,7 +2226,7 @@ final class Deprecated {
 	 * @since 2.9.3 No longer has a fallback to twitter:site:id
 	 *              @link https://dev.twitter.com/cards/getting-started
 	 * @since 3.0.0 Now uses author meta data.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Creator or Twitter Site ID meta tag.
@@ -2234,13 +2234,13 @@ final class Deprecated {
 	public function twitter_creator() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->twitter_creator()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->twitter_creator()', '5.0.0' );
 
 		if ( ! $tsf->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $creator The Twitter page creator.
 		 * @param int    $id      The current page or term ID.
@@ -2252,7 +2252,7 @@ final class Deprecated {
 					?: $tsf->data()->plugin()->get_option( 'twitter_creator' ),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -2266,7 +2266,7 @@ final class Deprecated {
 	 * Renders Twitter Title meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Title meta tag.
@@ -2274,13 +2274,13 @@ final class Deprecated {
 	public function twitter_title() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->twitter_title()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->twitter_title()', '5.0.0' );
 
 		if ( ! $tsf->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $title The generated Twitter title.
 		 * @param int    $id    The current page or term ID.
@@ -2291,7 +2291,7 @@ final class Deprecated {
 				$tsf->get_twitter_title(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -2305,7 +2305,7 @@ final class Deprecated {
 	 * Renders Twitter Description meta tag.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Description meta tag.
@@ -2313,13 +2313,13 @@ final class Deprecated {
 	public function twitter_description() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->twitter_adescription()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->twitter_adescription()', '5.0.0' );
 
 		if ( ! $tsf->use_twitter_tags() ) return '';
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $description The generated Twitter description.
 		 * @param int    $id          The current page or term ID.
@@ -2330,7 +2330,7 @@ final class Deprecated {
 				$tsf->get_twitter_description(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 
@@ -2348,7 +2348,7 @@ final class Deprecated {
 	 *              it'll always use just one image, we read this option so we'll only
 	 *              use a single cache instance internally with the generator.
 	 * @since 4.2.8 Removed support for the long deprecated `twitter:image:height` and `twitter:image:width`.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Image meta tag.
@@ -2356,7 +2356,7 @@ final class Deprecated {
 	public function twitter_image() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->twitter_image()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->twitter_image()', '5.0.0' );
 
 		if ( ! $tsf->use_twitter_tags() ) return '';
 
@@ -2386,7 +2386,7 @@ final class Deprecated {
 	 * Determines whether we can use Twitter tags on the front-end.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 1. Deprecated.
+	 * @since 5.0.0 1. Deprecated.
 	 *              2. Removed memoization.
 	 *              3. Removed test for card type.
 	 * @deprecated
@@ -2396,11 +2396,11 @@ final class Deprecated {
 	public function use_twitter_tags() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_twitter_tags()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->use_twitter_tags()', '5.0.0' );
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param bool $use_twitter_card
 		 */
@@ -2409,7 +2409,7 @@ final class Deprecated {
 			[
 				(bool) $tsf->data()->plugin()->get_option( 'twitter_tags' ),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
 		);
 	}
@@ -2425,7 +2425,7 @@ final class Deprecated {
 	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
 	 *              3. Now no longer throws warnings with qubed+ arrays.
 	 *              4. Now no longer prevents scalar values overwriting arrays.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
@@ -2436,7 +2436,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function(
 			'tsf()->array_merge_recursive_distinct()',
-			'4.3.0',
+			'5.0.0',
 			'tsf()->format()->array()->array_merge_recursive_distinct()',
 		);
 
@@ -2450,7 +2450,7 @@ final class Deprecated {
 	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array
@@ -2458,7 +2458,7 @@ final class Deprecated {
 	public function retrieve_robots_meta_assertions() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->retrieve_robots_meta_assertions()', '4.3.0', 'tsf()->robots()->get_collected_meta_assertions()' );
+		$tsf->_deprecated_function( 'tsf()->retrieve_robots_meta_assertions()', '5.0.0', 'tsf()->robots()->get_collected_meta_assertions()' );
 
 		return $tsf->query()->get_collected_meta_assertions();
 	}
@@ -2467,7 +2467,7 @@ final class Deprecated {
 	 * Returns the robots meta array.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array
@@ -2475,7 +2475,7 @@ final class Deprecated {
 	public function get_robots_meta() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_robots_meta()', '4.3.0', 'tsf()->robots()->get_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_robots_meta()', '5.0.0', 'tsf()->robots()->get_meta()' );
 
 		return explode( ',', $tsf->robots()->get_meta() );
 	}
@@ -2486,7 +2486,7 @@ final class Deprecated {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now offloads metadata generation to an actual generator.
 	 *              2. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -2506,7 +2506,7 @@ final class Deprecated {
 	public function generate_robots_meta( $args = null, $get = null, $options = 0b00 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->generate_robots_meta()', '4.3.0', 'tsf()->robots()->generate_meta()' );
+		$tsf->_deprecated_function( 'tsf()->generate_robots_meta()', '5.0.0', 'tsf()->robots()->generate_meta()' );
 
 		return $tsf->robots()->generate_meta( $args, $get, $options );
 	}
@@ -2518,7 +2518,7 @@ final class Deprecated {
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
 	 * @since 4.1.1 Now tests for not empty, instead of isset. We no longer support PHP 5.4 since v4.0.0.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $type      Accepts 'noindex', 'nofollow', 'noarchive'.
@@ -2528,7 +2528,7 @@ final class Deprecated {
 	public function is_post_type_robots_set( $type, $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_robots_set()', '4.3.0', 'tsf()->robots()->is_post_type_robots_set()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_robots_set()', '5.0.0', 'tsf()->robots()->is_post_type_robots_set()' );
 
 		return $tsf->robots()->is_post_type_robots_set( $type, $post_type );
 	}
@@ -2537,7 +2537,7 @@ final class Deprecated {
 	 * Determines if the taxonomy has a robots value set.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $type     Accepts 'noindex', 'nofollow', 'noarchive'.
@@ -2547,7 +2547,7 @@ final class Deprecated {
 	public function is_taxonomy_robots_set( $type, $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_taxonomy_robots_set()', '4.3.0', 'tsf()->robots()->is_taxonomy_robots_set()' );
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_robots_set()', '5.0.0', 'tsf()->robots()->is_taxonomy_robots_set()' );
 
 		return $tsf->robots()->is_taxonomy_robots_set( $type, $taxonomy ?: null );
 	}
@@ -2556,7 +2556,7 @@ final class Deprecated {
 	 * Determines whether the main query supports custom SEO.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
+	 * @since 5.0.0 1. Removed detection for JSON(P) and XML type requests, because these cannot be assumed as legitimate.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -2565,7 +2565,7 @@ final class Deprecated {
 	public function query_supports_seo() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->query_supports_seo()', '4.3.0', 'tsf()->query()->utils()->query_supports_seo()' );
+		$tsf->_deprecated_function( 'tsf()->query_supports_seo()', '5.0.0', 'tsf()->query()->utils()->query_supports_seo()' );
 
 		return $tsf->query()->utils()->query_supports_seo();
 	}
@@ -2577,7 +2577,7 @@ final class Deprecated {
 	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
 	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 * @global \WP_Query $wp_query
 	 *
@@ -2590,7 +2590,7 @@ final class Deprecated {
 	public function is_query_exploited() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_query_exploited()', '4.3.0', 'tsf()->query()->utils()->is_query_exploited()' );
+		$tsf->_deprecated_function( 'tsf()->is_query_exploited()', '5.0.0', 'tsf()->query()->utils()->is_query_exploited()' );
 
 		return $tsf->query()->utils()->is_query_exploited();
 	}
@@ -2599,7 +2599,7 @@ final class Deprecated {
 	 * Determines whether a page or blog is on front.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -2607,7 +2607,7 @@ final class Deprecated {
 	public function has_page_on_front() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->has_page_on_front()', '4.3.0', 'tsf()->query()->utils()->has_page_on_front()' );
+		$tsf->_deprecated_function( 'tsf()->has_page_on_front()', '5.0.0', 'tsf()->query()->utils()->has_page_on_front()' );
 
 		return $tsf->query()->utils()->has_page_on_front();
 	}
@@ -2618,7 +2618,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type Optional. The post type to check.
@@ -2627,7 +2627,7 @@ final class Deprecated {
 	public function is_post_type_supported( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_supported()', '4.3.0', 'tsf()->post_type()->is_supported()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_supported()', '5.0.0', 'tsf()->post_type()->is_supported()' );
 
 		return $tsf->post_type()->is_supported( $post_type );
 	}
@@ -2636,7 +2636,7 @@ final class Deprecated {
 	 * Detects if the current or inputted post type's archive is supported and not disabled.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type Optional. The post type's archive to check.
@@ -2645,7 +2645,7 @@ final class Deprecated {
 	public function is_post_type_archive_supported( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_archive_supported()', '4.3.0', 'tsf()->post_type()->is_pta_supported()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_archive_supported()', '5.0.0', 'tsf()->post_type()->is_pta_supported()' );
 
 		return $tsf->post_type()->is_pta_supported( $post_type );
 	}
@@ -2657,7 +2657,7 @@ final class Deprecated {
 	 * @since 2.9.3
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type Optional. The post type to check.
@@ -2666,7 +2666,7 @@ final class Deprecated {
 	public function post_type_supports_taxonomies( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->post_type_supports_taxonomies()', '4.3.0', 'tsf()->post_type()->supports_taxonomies()' );
+		$tsf->_deprecated_function( 'tsf()->post_type_supports_taxonomies()', '5.0.0', 'tsf()->post_type()->supports_taxonomies()' );
 
 		return $tsf->post_type()->supports_taxonomies( $post_type );
 	}
@@ -2675,7 +2675,7 @@ final class Deprecated {
 	 * Returns a list of all supported post types with archives.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string[] Supported post types with post type archive support.
@@ -2683,7 +2683,7 @@ final class Deprecated {
 	public function get_supported_post_type_archives() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_supported_post_type_archives()', '4.3.0', 'tsf()->post_type()->get_all_supported_pta()' );
+		$tsf->_deprecated_function( 'tsf()->get_supported_post_type_archives()', '5.0.0', 'tsf()->post_type()->get_all_supported_pta()' );
 
 		return $tsf->post_type()->get_all_supported_pta();
 	}
@@ -2692,7 +2692,7 @@ final class Deprecated {
 	 * Gets all post types that have PTA and could possibly support SEO.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string[] Public post types with post type archive support.
@@ -2700,7 +2700,7 @@ final class Deprecated {
 	public function get_public_post_type_archives() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_public_post_type_archives()', '4.3.0', 'tsf()->post_type()->get_public_pta()' );
+		$tsf->_deprecated_function( 'tsf()->get_public_post_type_archives()', '5.0.0', 'tsf()->post_type()->get_public_pta()' );
 
 		return $tsf->post_type()->get_public_pta();
 	}
@@ -2709,7 +2709,7 @@ final class Deprecated {
 	 * Returns a list of all supported post types.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string[] All supported post types.
@@ -2717,7 +2717,7 @@ final class Deprecated {
 	public function get_supported_post_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_supported_post_types()', '4.3.0', 'tsf()->post_type()->get_all_supported()' );
+		$tsf->_deprecated_function( 'tsf()->get_supported_post_types()', '5.0.0', 'tsf()->post_type()->get_all_supported()' );
 
 		return $tsf->post_type()->get_all_supported();
 	}
@@ -2726,7 +2726,7 @@ final class Deprecated {
 	 * Determines if the post type is disabled from SEO all optimization.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type Optional. The post type to check.
@@ -2735,7 +2735,7 @@ final class Deprecated {
 	public function is_post_type_disabled( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_post_type_disabled()', '4.3.0', 'tsf()->post_type()->is_disabled()' );
+		$tsf->_deprecated_function( 'tsf()->is_post_type_disabled()', '5.0.0', 'tsf()->post_type()->is_disabled()' );
 
 		return $tsf->post_type()->is_disabled( $post_type );
 	}
@@ -2747,7 +2747,7 @@ final class Deprecated {
 	 * and whether the taxonomy is public and rewritable.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $taxonomy Optional. The taxonomy name.
@@ -2756,7 +2756,7 @@ final class Deprecated {
 	public function is_taxonomy_supported( $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_taxonomy_supported()', '4.3.0', 'tsf()->taxonomy()->is_supported()' );
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_supported()', '5.0.0', 'tsf()->taxonomy()->is_supported()' );
 
 		return $tsf->taxonomy()->is_supported( $taxonomy );
 	}
@@ -2765,7 +2765,7 @@ final class Deprecated {
 	 * Returns a list of all supported taxonomies.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string[] All supported taxonomies.
@@ -2773,7 +2773,7 @@ final class Deprecated {
 	public function get_supported_taxonomies() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_supported_taxonomies()', '4.3.0', 'tsf()->taxonomy()->get_all_supported()' );
+		$tsf->_deprecated_function( 'tsf()->get_supported_taxonomies()', '5.0.0', 'tsf()->taxonomy()->get_all_supported()' );
 
 		return $tsf->taxonomy()->get_all_supported();
 	}
@@ -2787,7 +2787,7 @@ final class Deprecated {
 	 *              2. Now uses `is_post_type_supported()` instead of `is_post_type_disabled()`.
 	 * @since 4.1.0 1. Now also checks for the option `disabled_taxonomies`.
 	 *              2. Now applies filters `the_seo_framework_taxonomy_disabled`.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $taxonomy The taxonomy name.
@@ -2796,7 +2796,7 @@ final class Deprecated {
 	public function is_taxonomy_disabled( $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_taxonomy_disabled()', '4.3.0', 'tsf()->taxonomy()->is_disabled()' );
+		$tsf->_deprecated_function( 'tsf()->is_taxonomy_disabled()', '5.0.0', 'tsf()->taxonomy()->is_disabled()' );
 
 		return $tsf->taxonomy()->is_disabled( $taxonomy );
 	}
@@ -2805,7 +2805,7 @@ final class Deprecated {
 	 * Determines if current query handles term meta.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -2813,7 +2813,7 @@ final class Deprecated {
 	public function is_term_meta_capable() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_term_meta_capable()', '4.3.0', 'tsf()->query()->is_editable_term()' );
+		$tsf->_deprecated_function( 'tsf()->is_term_meta_capable()', '5.0.0', 'tsf()->query()->is_editable_term()' );
 
 		return $tsf->query()->is_editable_term();
 	}
@@ -2822,7 +2822,7 @@ final class Deprecated {
 	 * Returns an array of hierarchical post types.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array The public hierarchical post types.
@@ -2830,7 +2830,7 @@ final class Deprecated {
 	public function get_hierarchical_post_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_hierarchical_post_types()', '4.3.0', 'tsf()->post_type()->get_all_hierarchical()' );
+		$tsf->_deprecated_function( 'tsf()->get_hierarchical_post_types()', '5.0.0', 'tsf()->post_type()->get_all_hierarchical()' );
 
 		return $tsf->post_type()->get_all_hierarchical();
 	}
@@ -2839,7 +2839,7 @@ final class Deprecated {
 	 * Returns an array of nonhierarchical post types.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array The public nonhierarchical post types.
@@ -2847,7 +2847,7 @@ final class Deprecated {
 	public function get_nonhierarchical_post_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_nonhierarchical_post_types()', '4.3.0', 'tsf()->post_type()->get_all_nonhierarchical()' );
+		$tsf->_deprecated_function( 'tsf()->get_nonhierarchical_post_types()', '5.0.0', 'tsf()->post_type()->get_all_nonhierarchical()' );
 
 		return $tsf->post_type()->get_all_nonhierarchical();
 	}
@@ -2856,7 +2856,7 @@ final class Deprecated {
 	 * Returns hierarchical taxonomies for post type.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $get       Whether to get the names or objects.
@@ -2866,7 +2866,7 @@ final class Deprecated {
 	public function get_hierarchical_taxonomies_as( $get = 'objects', $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_hierarchical_taxonomies_as()', '4.3.0', 'tsf()->taxonomy()->get_hierarchical()' );
+		$tsf->_deprecated_function( 'tsf()->get_hierarchical_taxonomies_as()', '5.0.0', 'tsf()->taxonomy()->get_hierarchical()' );
 
 		return $tsf->taxonomy()->get_hierarchical( $get, $post_type );
 	}
@@ -2875,7 +2875,7 @@ final class Deprecated {
 	 * Returns the post type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type The post type. Required.
@@ -2885,7 +2885,7 @@ final class Deprecated {
 	public function get_post_type_label( $post_type, $singular = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_label()', '4.3.0', 'tsf()->post_type()->get_label()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_label()', '5.0.0', 'tsf()->post_type()->get_label()' );
 
 		return $tsf->post_type()->get_label( $post_type, $singular );
 	}
@@ -2894,7 +2894,7 @@ final class Deprecated {
 	 * Returns the taxonomy type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $tax_type The taxonomy type. Required.
@@ -2904,7 +2904,7 @@ final class Deprecated {
 	public function get_tax_type_label( $tax_type, $singular = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_tax_type_label()', '4.3.0', 'tsf()->taxonomy()->get_label()' );
+		$tsf->_deprecated_function( 'tsf()->get_tax_type_label()', '5.0.0', 'tsf()->taxonomy()->get_label()' );
 
 		return $tsf->taxonomy()->get_label( $tax_type, $singular );
 	}
@@ -2913,7 +2913,7 @@ final class Deprecated {
 	 * Generates the Open Graph type based on query status.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 1. An image is no longer required to generate the 'article' type.
+	 * @since 5.0.0 1. An image is no longer required to generate the 'article' type.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -2922,7 +2922,7 @@ final class Deprecated {
 	public function generate_og_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->generate_og_type()', '4.3.0', 'tsf()->open_graph()->get_type()' );
+		$tsf->_deprecated_function( 'tsf()->generate_og_type()', '5.0.0', 'tsf()->open_graph()->get_type()' );
 
 		return $tsf->open_graph()->get_type();
 	}
@@ -2931,7 +2931,7 @@ final class Deprecated {
 	 * Returns Open Graph type value.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string
@@ -2939,7 +2939,7 @@ final class Deprecated {
 	public function get_og_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_og_type()', '4.3.0', 'tsf()->open_graph()->get_type()' );
+		$tsf->_deprecated_function( 'tsf()->get_og_type()', '5.0.0', 'tsf()->open_graph()->get_type()' );
 
 		return $tsf->open_graph()->get_type();
 	}
@@ -2950,7 +2950,7 @@ final class Deprecated {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
 	 *              2. Now redirects post type archives.
-	 * @since 4.3.0 1. Now expects an ID before getting a post meta item.
+	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -2963,7 +2963,7 @@ final class Deprecated {
 	public function get_redirect_url( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_redirect_url()', '4.3.0', 'tsf()->uri()->get_redirect_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_redirect_url()', '5.0.0', 'tsf()->uri()->get_redirect_url()' );
 
 		return $tsf->uri()->get_redirect_url( $args );
 	}
@@ -2976,7 +2976,7 @@ final class Deprecated {
 	 * @since 2.5.2
 	 * @since 4.2.0 1. Now listens to the new `site_title` option.
 	 *              2. Now applies filters.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string $blogname The sanitized blogname.
@@ -2984,7 +2984,7 @@ final class Deprecated {
 	public function get_blogname() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_blogname()', '4.3.0', 'tsf()->data()->blog()->get_public_blog_name()' );
+		$tsf->_deprecated_function( 'tsf()->get_blogname()', '5.0.0', 'tsf()->data()->blog()->get_public_blog_name()' );
 
 		return $tsf->data()->blog()->get_public_blog_name();
 	}
@@ -2993,7 +2993,7 @@ final class Deprecated {
 	 * Fetches blogname (site title).
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string $blogname The sanitized blogname.
@@ -3001,7 +3001,7 @@ final class Deprecated {
 	public function get_filtered_raw_blogname() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_blogname()', '4.3.0', 'tsf()->data()->blog()->get_filtered_blog_name()' );
+		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_blogname()', '5.0.0', 'tsf()->data()->blog()->get_filtered_blog_name()' );
 
 		return $tsf->data()->blog()->get_filtered_blog_name();
 	}
@@ -3010,7 +3010,7 @@ final class Deprecated {
 	 * Fetch blog description.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 1. No longer memoizes the return value.
+	 * @since 5.0.0 1. No longer memoizes the return value.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -3019,7 +3019,7 @@ final class Deprecated {
 	public function get_blogdescription() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_blogdescription()', '4.3.0', 'tsf()->data()->blog()->get_filtered_blog_description()' );
+		$tsf->_deprecated_function( 'tsf()->get_blogdescription()', '5.0.0', 'tsf()->data()->blog()->get_filtered_blog_description()' );
 
 		return $tsf->data()->blog()->get_filtered_blog_description();
 	}
@@ -3028,7 +3028,7 @@ final class Deprecated {
 	 * Generates the Twitter Card type.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
@@ -3036,7 +3036,7 @@ final class Deprecated {
 	public function generate_twitter_card_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->generate_twitter_card_type()', '4.3.0', 'tsf()->twitter()->get_card_type()' );
+		$tsf->_deprecated_function( 'tsf()->generate_twitter_card_type()', '5.0.0', 'tsf()->twitter()->get_card_type()' );
 
 		return $tsf->twitter()->get_card_type();
 	}
@@ -3045,7 +3045,7 @@ final class Deprecated {
 	 * Returns array of Twitter Card Types
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array Twitter Card types.
@@ -3053,7 +3053,7 @@ final class Deprecated {
 	public function get_twitter_card_types() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_twitter_card_types()', '4.3.0', 'tsf()->twitter()->get_supported_cards()' );
+		$tsf->_deprecated_function( 'tsf()->get_twitter_card_types()', '5.0.0', 'tsf()->twitter()->get_supported_cards()' );
 
 		return $tsf->twitter()->get_supported_cards();
 	}
@@ -3066,7 +3066,7 @@ final class Deprecated {
 	 *              2. Now always returns an array, instead of a boolean (false) on failure.
 	 * @since 4.2.0 1. No longer memoizes the return value.
 	 *              2. No longer tests for the Twitter title.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array False when it shouldn't be used. Array of available cards otherwise.
@@ -3074,7 +3074,7 @@ final class Deprecated {
 	public function get_available_twitter_cards() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_available_twitter_cards()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->get_available_twitter_cards()', '5.0.0' );
 
 		return [
 			'summary'             => 'summary',
@@ -3091,7 +3091,7 @@ final class Deprecated {
 	 * @since 4.0.0 No longer converts the `dash` separator option.
 	 * @since 4.0.5 1. Now utilizes the predefined separator list, instead of guessing the output.
 	 *              2. The default fallback value is now a hyphen.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The separator.
@@ -3099,7 +3099,7 @@ final class Deprecated {
 	public function get_separator() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_separator()', '4.3.0', 'tsf()->title()->get_separator()' );
+		$tsf->_deprecated_function( 'tsf()->get_separator()', '5.0.0', 'tsf()->title()->get_separator()' );
 
 		return $tsf->title()->get_separator();
 	}
@@ -3108,7 +3108,7 @@ final class Deprecated {
 	 * Gets Title Separator.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Separator, unescaped.
@@ -3116,7 +3116,7 @@ final class Deprecated {
 	public function get_title_separator() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_title_separator()', '4.3.0', 'tsf()->title()->get_separator()' );
+		$tsf->_deprecated_function( 'tsf()->get_title_separator()', '5.0.0', 'tsf()->title()->get_separator()' );
 
 		return $tsf->title()->get_separator();
 	}
@@ -3125,7 +3125,7 @@ final class Deprecated {
 	 * List of title separators.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array Title separators.
@@ -3133,7 +3133,7 @@ final class Deprecated {
 	public function get_separator_list() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_separator_list()', '4.3.0', 'tsf()->title()->utils()->get_separator_list()' );
+		$tsf->_deprecated_function( 'tsf()->get_separator_list()', '5.0.0', 'tsf()->title()->utils()->get_separator_list()' );
 
 		return $tsf->title()->utils()->get_separator_list();
 	}
@@ -3144,7 +3144,7 @@ final class Deprecated {
 	 * Warning: Returns with entities encoded. The output is not safe for printing.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * We use `[^\P{Po}\'\"]` because WordPress texturizes ' and " to fall under `\P{Po}`.
@@ -3159,7 +3159,7 @@ final class Deprecated {
 	public function trim_excerpt( $excerpt, $min_char_length = 1, $max_char_length = 4096 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->trim_excerpt()', '4.3.0', 'tsf()->format()->strings()->clamp_sentence()' );
+		$tsf->_deprecated_function( 'tsf()->trim_excerpt()', '5.0.0', 'tsf()->format()->strings()->clamp_sentence()' );
 
 		return $tsf->format()->strings()->clamp_sentence( $excerpt, $min_char_length, $max_char_length );
 	}
@@ -3168,7 +3168,7 @@ final class Deprecated {
 	 * Fetches or parses the excerpt of the post.
 	 *
 	 * @since 1.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $excerpt    The Excerpt.
@@ -3180,7 +3180,7 @@ final class Deprecated {
 	public function get_excerpt_by_id( $excerpt = '', $id = 0, $deprecated = null, $escape = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_excerpt_by_id()', '4.3.0', 'tsf()->description()->excerpt()->get_excerpt_from_args()' );
+		$tsf->_deprecated_function( 'tsf()->get_excerpt_by_id()', '5.0.0', 'tsf()->description()->excerpt()->get_excerpt_from_args()' );
 
 		$excerpt = $excerpt ?: $tsf->description()->get_excerpt_from_args( [ 'id' => $id ] );
 
@@ -3194,7 +3194,7 @@ final class Deprecated {
 	 * Does not sanitize output.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
@@ -3203,7 +3203,7 @@ final class Deprecated {
 	public function fetch_excerpt( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '4.3.0', 'tsf()->description()->excerpt()->get_post_excerpt()' );
+		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '5.0.0', 'tsf()->description()->excerpt()->get_post_excerpt()' );
 
 		return $tsf->description()->excerpt()->get_post_excerpt(
 			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null,
@@ -3214,7 +3214,7 @@ final class Deprecated {
 	 * Returns the post's modified time.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The current post's modified time
@@ -3222,11 +3222,11 @@ final class Deprecated {
 	public function get_modified_time() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_modified_time()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->get_modified_time()', '5.0.0' );
 
 		/**
 		 * @since 2.3.0
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param string $time The article modified time.
 		 * @param int    $id   The current page or term ID.
@@ -3237,7 +3237,7 @@ final class Deprecated {
 				$tsf->data()->post()->get_modified_time(),
 				$tsf->query()->get_the_real_id(),
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_render_data',
 		);
 	}
@@ -3246,7 +3246,7 @@ final class Deprecated {
 	 * Returns the custom user-inputted description.
 	 *
 	 * @since 3.0.6
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3256,7 +3256,7 @@ final class Deprecated {
 	public function get_description_from_custom_field( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_description_from_custom_field()', '4.3.0', 'tsf()->description()->get_custom_description()' );
+		$tsf->_deprecated_function( 'tsf()->get_description_from_custom_field()', '5.0.0', 'tsf()->description()->get_custom_description()' );
 
 		return $tsf->description()->get_custom_description( $args );
 	}
@@ -3265,7 +3265,7 @@ final class Deprecated {
 	 * Returns the autogenerated meta description.
 	 *
 	 * @since 3.0.6
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3277,7 +3277,7 @@ final class Deprecated {
 	public function get_generated_description( $args = null, $escape = true, $type = 'search' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_description()', '4.3.0', 'tsf()->description()->get_generated()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_description()', '5.0.0', 'tsf()->description()->get_generated()' );
 
 		return $tsf->description()->get_generated( $args, $escape, $type );
 	}
@@ -3286,7 +3286,7 @@ final class Deprecated {
 	 * Returns the autogenerated Twitter meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3296,7 +3296,7 @@ final class Deprecated {
 	public function get_generated_twitter_description( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_description()', '4.3.0', 'tsf()->twitter()->get_generated_description()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_description()', '5.0.0', 'tsf()->twitter()->get_generated_description()' );
 
 		return $tsf->twitter()->get_generated_description( $args );
 	}
@@ -3305,7 +3305,7 @@ final class Deprecated {
 	 * Returns the autogenerated Open Graph meta description. Falls back to meta description.
 	 *
 	 * @since 3.0.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3315,7 +3315,7 @@ final class Deprecated {
 	public function get_generated_open_graph_description( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_description()', '4.3.0', 'tsf()->open_graph()->get_generated_description()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_description()', '5.0.0', 'tsf()->open_graph()->get_generated_description()' );
 
 		return $tsf->open_graph()->get_generated_description( $args );
 	}
@@ -3324,7 +3324,7 @@ final class Deprecated {
 	 * Returns supported social site locales.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array Valid social locales
@@ -3332,7 +3332,7 @@ final class Deprecated {
 	public function supported_social_locales() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->supported_social_locales()', '4.3.0', 'tsf()->open_graph()->get_supported_locales()' );
+		$tsf->_deprecated_function( 'tsf()->supported_social_locales()', '5.0.0', 'tsf()->open_graph()->get_supported_locales()' );
 
 		return $tsf->open_graph()->get_supported_locales();
 	}
@@ -3342,7 +3342,7 @@ final class Deprecated {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.0.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3352,7 +3352,7 @@ final class Deprecated {
 	public function get_generated_open_graph_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_title()', '4.3.0', 'tsf()->open_graph()->get_generated_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_open_graph_title()', '5.0.0', 'tsf()->open_graph()->get_generated_title()' );
 
 		// Discrepancy: The interface always hid this bug of using the wrong callback.
 		// Let's keep this bug where it fetches the custom field title first.
@@ -3364,7 +3364,7 @@ final class Deprecated {
 	 * Falls back to meta title.
 	 *
 	 * @since 3.0.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3374,7 +3374,7 @@ final class Deprecated {
 	public function get_generated_twitter_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_title()', '4.3.0', 'tsf()->twitter()->get_generated_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_twitter_title()', '5.0.0', 'tsf()->twitter()->get_generated_title()' );
 
 		// Discrepancy: The interface always hid this bug of using the wrong callback.
 		// Let's keep this bug where it fetches the custom field title first.
@@ -3385,7 +3385,7 @@ final class Deprecated {
 	 * Determines whether to add or remove title protection prefixes.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3395,7 +3395,7 @@ final class Deprecated {
 	public function use_title_protection( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_title_protection()', '4.3.0', 'tsf()->title()->conditions()->use_protection_status()' );
+		$tsf->_deprecated_function( 'tsf()->use_title_protection()', '5.0.0', 'tsf()->title()->conditions()->use_protection_status()' );
 
 		return $tsf->title()->conditions()->use_protection_status( $args );
 	}
@@ -3404,7 +3404,7 @@ final class Deprecated {
 	 * Determines whether to add or remove title pagination additions.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3414,7 +3414,7 @@ final class Deprecated {
 	public function use_title_pagination( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_title_pagination()', '4.3.0', 'tsf()->title()->conditions()->use_pagination()' );
+		$tsf->_deprecated_function( 'tsf()->use_title_pagination()', '5.0.0', 'tsf()->title()->conditions()->use_pagination()' );
 
 		return $tsf->title()->conditions()->use_pagination( $args );
 	}
@@ -3423,7 +3423,7 @@ final class Deprecated {
 	 * Determines whether to add or remove title branding additions.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3435,7 +3435,7 @@ final class Deprecated {
 	public function use_title_branding( $args = null, $social = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_title_branding()', '5.0.0', 'tsf()->title()->conditions()->use_branding()' );
 
 		return $tsf->title()->conditions()->use_branding( $args, $social );
 	}
@@ -3446,7 +3446,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.0.5 1: Added first parameter `$term`.
 	 *              2: Added filter.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $term The Term object. Leave null to autodermine query.
@@ -3455,7 +3455,7 @@ final class Deprecated {
 	public function use_generated_archive_prefix( $term = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_generated_archive_prefix()', '4.3.0', 'tsf()->title()->conditions()->use_generated_archive_prefix()' );
+		$tsf->_deprecated_function( 'tsf()->use_generated_archive_prefix()', '5.0.0', 'tsf()->title()->conditions()->use_generated_archive_prefix()' );
 
 		return $tsf->title()->conditions()->use_generated_archive_prefix( $term );
 	}
@@ -3464,7 +3464,7 @@ final class Deprecated {
 	 * Determines whether to add homepage tagline.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -3472,7 +3472,7 @@ final class Deprecated {
 	public function use_home_page_title_tagline() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_home_page_title_tagline()', '5.0.0', 'tsf()->title()->conditions()->use_branding()' );
 
 		return $tsf->title()->conditions()->use_branding( [ 'id' => $tsf->query()->get_the_front_page_id() ] );
 	}
@@ -3481,7 +3481,7 @@ final class Deprecated {
 	 * Determines whether to add the title tagline for the post.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The post ID. Optional.
@@ -3490,7 +3490,7 @@ final class Deprecated {
 	public function use_singular_title_branding( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_singular_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_singular_title_branding()', '5.0.0', 'tsf()->title()->conditions()->use_branding()' );
 
 		return $tsf->title()->conditions()->use_branding( [ 'id' => $id ] );
 	}
@@ -3499,7 +3499,7 @@ final class Deprecated {
 	 * Determines whether to add the title tagline for the term.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id The term ID. Optional.
@@ -3508,7 +3508,7 @@ final class Deprecated {
 	public function use_taxonomical_title_branding( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_taxonomical_title_branding()', '5.0.0', 'tsf()->title()->conditions()->use_branding()' );
 
 		return $tsf->title()->conditions()->use_branding( [
 			'id'  => $id ?: $tsf->query()->get_the_real_id(),
@@ -3520,7 +3520,7 @@ final class Deprecated {
 	 * Determines whether to add the title tagline for the pta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $pta The post type archive. Optional.
@@ -3529,7 +3529,7 @@ final class Deprecated {
 	public function use_post_type_archive_title_branding( $pta = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '4.3.0', 'tsf()->title()->conditions()->use_branding()' );
+		$tsf->_deprecated_function( 'tsf()->use_post_type_archive_title_branding()', '5.0.0', 'tsf()->title()->conditions()->use_branding()' );
 
 		return $tsf->title()->conditions()->use_branding( [
 			'pta' => $pta ?: $tsf->query()->get_current_post_type(),
@@ -3545,7 +3545,7 @@ final class Deprecated {
 	 *              3. Removed caching.
 	 *              4. Removed filters.
 	 * @since 4.0.0 The homepage option's return value is now reversed from expected.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $home The home separator location.
@@ -3554,7 +3554,7 @@ final class Deprecated {
 	public function get_title_seplocation( $home = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_title_seplocation()', '4.3.0', 'tsf()->title()->get_addition_location()' );
+		$tsf->_deprecated_function( 'tsf()->get_title_seplocation()', '5.0.0', 'tsf()->title()->get_addition_location()' );
 
 		if ( $home )
 			return $tsf->get_home_title_seplocation();
@@ -3566,7 +3566,7 @@ final class Deprecated {
 	 * Gets Title Seplocation for the homepage.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The Seplocation for the homepage.
@@ -3574,7 +3574,7 @@ final class Deprecated {
 	public function get_home_title_seplocation() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_title_seplocation()', '4.3.0', 'tsf()->title()->get_addition_location_for_front_page()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_title_seplocation()', '5.0.0', 'tsf()->title()->get_addition_location_for_front_page()' );
 
 		return $tsf->title()->get_addition_location_for_front_page();
 	}
@@ -3583,7 +3583,7 @@ final class Deprecated {
 	 * Returns the homepage additions (tagline) from option or bloginfo, when set.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The trimmed tagline.
@@ -3591,7 +3591,7 @@ final class Deprecated {
 	public function get_home_title_additions() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_title_additions()', '4.3.0', 'tsf()->title()->get_addition_for_front_page()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_title_additions()', '5.0.0', 'tsf()->title()->get_addition_for_front_page()' );
 
 		return $tsf->title()->get_addition_for_front_page();
 	}
@@ -3600,7 +3600,7 @@ final class Deprecated {
 	 * Returns the custom user-inputted title.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3612,7 +3612,7 @@ final class Deprecated {
 	public function get_custom_field_title( $args = null, $escape = true, $social = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_custom_field_title()', '4.3.0', 'tsf()->title()->get_custom_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_custom_field_title()', '5.0.0', 'tsf()->title()->get_custom_title()' );
 
 		return $tsf->title()->get_custom_title( $args, $social );
 	}
@@ -3621,7 +3621,7 @@ final class Deprecated {
 	 * Returns the autogenerated meta title.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3633,7 +3633,7 @@ final class Deprecated {
 	public function get_generated_title( $args = null, $escape = true, $social = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_title()', '4.3.0', 'tsf()->title()->get_generated_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_title()', '5.0.0', 'tsf()->title()->get_generated_title()' );
 
 		return $tsf->title()->get_generated_title( $args, $social );
 	}
@@ -3645,7 +3645,7 @@ final class Deprecated {
 	 * @since 4.2.0 1. The first parameter can now be voided.
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3655,7 +3655,7 @@ final class Deprecated {
 	public function get_filtered_raw_custom_field_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_custom_field_title()', '4.3.0', 'tsf()->title()->get_bare_custom_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_custom_field_title()', '5.0.0', 'tsf()->title()->get_bare_custom_title()' );
 
 		return $tsf->title()->get_bare_custom_title( $args );
 	}
@@ -3667,7 +3667,7 @@ final class Deprecated {
 	 * @since 4.2.0 1. The first parameter can now be voided.
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3677,7 +3677,7 @@ final class Deprecated {
 	public function get_filtered_raw_generated_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_generated_title()', '4.3.0', 'tsf()->title()->get_bare_generated_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_filtered_raw_generated_title()', '5.0.0', 'tsf()->title()->get_bare_generated_title()' );
 
 		return $tsf->title()->get_bare_generated_title( $args );
 	}
@@ -3689,7 +3689,7 @@ final class Deprecated {
 	 * finally admits through their code that terms can be queried using only IDs.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3699,7 +3699,7 @@ final class Deprecated {
 	public function get_raw_custom_field_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_custom_field_title()', '4.3.0', 'tsf()->title()->get_bare_unfiltered_custom_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_custom_field_title()', '5.0.0', 'tsf()->title()->get_bare_unfiltered_custom_title()' );
 
 		return $tsf->title()->get_bare_unfiltered_custom_title( $args );
 	}
@@ -3710,7 +3710,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.2.0 1. Added memoization.
 	 *              2. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -3720,7 +3720,7 @@ final class Deprecated {
 	public function get_raw_generated_title( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_generated_title()', '4.3.0', 'tsf()->title()->get_bare_generated_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_generated_title()', '5.0.0', 'tsf()->title()->get_bare_generated_title()' );
 
 		return $tsf->title()->get_bare_generated_title( $args );
 	}
@@ -3734,7 +3734,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 4.2.0 1. Now listens to the new `site_title` option.
 	 *              2. Now applies filters.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The generated front page title.
@@ -3742,7 +3742,7 @@ final class Deprecated {
 	public function get_static_front_page_title() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_static_front_page_title()', '4.3.0', 'tsf()->title()->get_front_page_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_static_front_page_title()', '5.0.0', 'tsf()->title()->get_front_page_title()' );
 
 		return $tsf->title()->get_front_page_title();
 	}
@@ -3753,7 +3753,7 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work for metadata and in admin.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
@@ -3763,7 +3763,7 @@ final class Deprecated {
 	public function get_generated_archive_title( $object = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_archive_title()', '4.3.0', 'tsf()->title()->get_archive_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_archive_title()', '5.0.0', 'tsf()->title()->get_archive_title()' );
 
 		return $tsf->title()->get_archive_title( $object );
 	}
@@ -3774,7 +3774,7 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work for metadata.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The Term object.
@@ -3784,7 +3784,7 @@ final class Deprecated {
 	public function get_raw_generated_archive_title_items( $object = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_generated_archive_title_items()', '4.3.0', 'tsf()->title()->get_archive_title_list()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_generated_archive_title_items()', '5.0.0', 'tsf()->title()->get_archive_title_list()' );
 
 		return $tsf->title()->get_archive_title_list( $object );
 	}
@@ -3795,7 +3795,7 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|\WP_Post $id The Post ID or post object.
@@ -3804,7 +3804,7 @@ final class Deprecated {
 	public function get_generated_single_post_title( $id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_single_post_title()', '4.3.0', 'tsf()->title()->get_post_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_single_post_title()', '5.0.0', 'tsf()->title()->get_post_title()' );
 
 		return $tsf->title()->get_post_title( $id );
 	}
@@ -3817,7 +3817,7 @@ final class Deprecated {
 	 * Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param null|\WP_Term $term The term name, required in the admin area.
@@ -3826,7 +3826,7 @@ final class Deprecated {
 	public function get_generated_single_term_title( $term = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_single_term_title()', '4.3.0', 'tsf()->title()->get_term_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_single_term_title()', '5.0.0', 'tsf()->title()->get_term_title()' );
 
 		return $tsf->title()->get_term_title( $term );
 	}
@@ -3837,7 +3837,7 @@ final class Deprecated {
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type The post type.
@@ -3846,7 +3846,7 @@ final class Deprecated {
 	public function get_generated_post_type_archive_title( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_post_type_archive_title()', '4.3.0', 'tsf()->title()->get_post_type_archive_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_post_type_archive_title()', '5.0.0', 'tsf()->title()->get_post_type_archive_title()' );
 
 		return $tsf->title()->get_post_type_archive_title( $post_type );
 	}
@@ -3855,7 +3855,7 @@ final class Deprecated {
 	 * Returns untitled title.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The untitled title.
@@ -3863,7 +3863,7 @@ final class Deprecated {
 	public function get_static_untitled_title() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_static_untitled_title()', '4.3.0', 'tsf()->title()->get_untitled_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_static_untitled_title()', '5.0.0', 'tsf()->title()->get_untitled_title()' );
 
 		return $tsf->title()->get_untitled_title();
 	}
@@ -3872,7 +3872,7 @@ final class Deprecated {
 	 * Returns search title.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The generated search title, partially escaped.
@@ -3880,7 +3880,7 @@ final class Deprecated {
 	public function get_generated_search_query_title() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_search_query_title()', '4.3.0', 'tsf()->title()->get_search_query_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_search_query_title()', '5.0.0', 'tsf()->title()->get_search_query_title()' );
 
 		return $tsf->title()->get_search_query_title();
 	}
@@ -3889,7 +3889,7 @@ final class Deprecated {
 	 * Returns 404 title.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The generated 404 title.
@@ -3897,7 +3897,7 @@ final class Deprecated {
 	public function get_static_404_title() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_static_404_title()', '4.3.0', 'tsf()->title()->get_404_title()' );
+		$tsf->_deprecated_function( 'tsf()->get_static_404_title()', '5.0.0', 'tsf()->title()->get_404_title()' );
 
 		return $tsf->title()->get_404_title();
 	}
@@ -3906,7 +3906,7 @@ final class Deprecated {
 	 * Merges title branding, when allowed.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string     $title The title. Passed by reference.
@@ -3916,7 +3916,7 @@ final class Deprecated {
 	public function merge_title_branding( &$title, $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->merge_title_branding()', '4.3.0', 'tsf()->title()->add_branding()' );
+		$tsf->_deprecated_function( 'tsf()->merge_title_branding()', '5.0.0', 'tsf()->title()->add_branding()' );
 
 		$title = $tsf->title()->add_branding( $title, $args );
 	}
@@ -3925,7 +3925,7 @@ final class Deprecated {
 	 * Merges pagination with the title, if paginated.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $title The title. Passed by reference.
@@ -3933,7 +3933,7 @@ final class Deprecated {
 	public function merge_title_pagination( &$title ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->merge_title_pagination()', '4.3.0', 'tsf()->title()->add_pagination()' );
+		$tsf->_deprecated_function( 'tsf()->merge_title_pagination()', '5.0.0', 'tsf()->title()->add_pagination()' );
 
 		$title = $tsf->title()->add_pagination( $title );
 	}
@@ -3942,7 +3942,7 @@ final class Deprecated {
 	 * Merges title protection prefixes.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string     $title The title. Passed by reference.
@@ -3953,7 +3953,7 @@ final class Deprecated {
 	public function merge_title_protection( &$title, $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->merge_title_protection()', '4.3.0', 'tsf()->title()->add_protection_status()' );
+		$tsf->_deprecated_function( 'tsf()->merge_title_protection()', '5.0.0', 'tsf()->title()->add_protection_status()' );
 
 		$title = $tsf->title()->add_protection_status( $title, $args );
 	}
@@ -3965,7 +3965,7 @@ final class Deprecated {
 	 * @since 4.2.0 1. Now also detects canonical URLs for taxonomies.
 	 *              2. Now also detects canonical URLs for PTAs.
 	 *              3. Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
@@ -3977,7 +3977,7 @@ final class Deprecated {
 	public function has_custom_canonical_url( $args = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->has_custom_canonical_url()', '4.3.0', 'tsf()->uri()->get_custom_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->has_custom_canonical_url()', '5.0.0', 'tsf()->uri()->get_custom_canonical_url()' );
 
 		return (bool) $tsf->uri()->get_custom_canonical_url( $args );
 	}
@@ -3989,7 +3989,7 @@ final class Deprecated {
 	 * Memoized.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The home URL.
@@ -3997,7 +3997,7 @@ final class Deprecated {
 	public function get_home_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_url()', '4.3.0', 'tsf->data()->blog()->get_front_page_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_url()', '5.0.0', 'tsf->data()->blog()->get_front_page_url()' );
 
 		return $tsf->data()->blog()->get_front_page_url();
 	}
@@ -4007,7 +4007,7 @@ final class Deprecated {
 	 * Which can automatically be detected when not set, based on the site URL setting.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The preferred URl scheme.
@@ -4015,7 +4015,7 @@ final class Deprecated {
 	public function get_preferred_scheme() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_preferred_scheme()', '4.3.0', 'tsf->uri()->utils()->get_preferred_url_scheme()' );
+		$tsf->_deprecated_function( 'tsf()->get_preferred_scheme()', '5.0.0', 'tsf->uri()->utils()->get_preferred_url_scheme()' );
 
 		return $tsf->uri()->utils()->get_preferred_url_scheme();
 	}
@@ -4025,7 +4025,7 @@ final class Deprecated {
 	 * Does not sanitize output.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url The URL to set scheme for.
@@ -4034,7 +4034,7 @@ final class Deprecated {
 	public function set_preferred_url_scheme( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->set_preferred_url_scheme()', '4.3.0', 'tsf->uri()->utils()->set_preferred_url_scheme()' );
+		$tsf->_deprecated_function( 'tsf()->set_preferred_url_scheme()', '5.0.0', 'tsf->uri()->utils()->set_preferred_url_scheme()' );
 
 		return $tsf->uri()->utils()->set_preferred_url_scheme( $url );
 	}
@@ -4051,7 +4051,7 @@ final class Deprecated {
 	 * Yea, Monitor's great for that. Gibe moni plos.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The detected URl scheme, lowercase.
@@ -4059,7 +4059,7 @@ final class Deprecated {
 	public function detect_site_url_scheme() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->detect_site_url_scheme()', '4.3.0', 'uri()->utils()->detect_site_url_scheme()' );
+		$tsf->_deprecated_function( 'tsf()->detect_site_url_scheme()', '5.0.0', 'uri()->utils()->detect_site_url_scheme()' );
 
 		return $tsf->uri()->utils()->detect_site_url_scheme();
 	}
@@ -4069,7 +4069,7 @@ final class Deprecated {
 	 * WordPress core function, without filter.
 	 *
 	 * @since 2.4.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url    Absolute url that includes a scheme.
@@ -4079,7 +4079,7 @@ final class Deprecated {
 	public function set_url_scheme( $url, $scheme = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->set_url_scheme()', '4.3.0', 'uri()->utils()->set_url_scheme()' );
+		$tsf->_deprecated_function( 'tsf()->set_url_scheme()', '5.0.0', 'uri()->utils()->set_url_scheme()' );
 
 		return $tsf->uri()->utils()->set_url_scheme( $url, $scheme );
 	}
@@ -4093,7 +4093,7 @@ final class Deprecated {
 	 *       '/path/to/folder/` will become `http:///path/to/folder/`
 	 *
 	 * @since 2.6.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url Required the current maybe not fully qualified URL.
@@ -4102,7 +4102,7 @@ final class Deprecated {
 	public function make_fully_qualified_url( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->make_fully_qualified_url()', '4.3.0', 'uri()->utils()->make_fully_qualified_url()' );
+		$tsf->_deprecated_function( 'tsf()->make_fully_qualified_url()', '5.0.0', 'uri()->utils()->make_fully_qualified_url()' );
 
 		return $tsf->uri()->utils()->make_fully_qualified_url( $url );
 	}
@@ -4111,7 +4111,7 @@ final class Deprecated {
 	 * Caches and returns the current URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The current URL.
@@ -4119,7 +4119,7 @@ final class Deprecated {
 	public function get_current_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_canonical_url()', '4.3.0', 'tsf()->uri()->get_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_canonical_url()', '5.0.0', 'tsf()->uri()->get_canonical_url()' );
 
 		return $tsf->uri()->get_canonical_url();
 	}
@@ -4131,7 +4131,7 @@ final class Deprecated {
 	 * Does not work for unregistered pages, like search, 404, date, author, and CPTA.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The current permalink.
@@ -4139,7 +4139,7 @@ final class Deprecated {
 	public function get_current_permalink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_permalink()', '4.3.0', 'tsf()->uri()->get_generated_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_permalink()', '5.0.0', 'tsf()->uri()->get_generated_url()' );
 
 		return $tsf->uri()->get_generated_url();
 	}
@@ -4148,7 +4148,7 @@ final class Deprecated {
 	 * Caches and returns the homepage URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The home URL.
@@ -4156,7 +4156,7 @@ final class Deprecated {
 	public function get_homepage_permalink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '4.3.0', 'tsf()->uri()->get_bare_front_page_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_homepage_permalink()', '5.0.0', 'tsf()->uri()->get_bare_front_page_url()' );
 
 		return $tsf->uri()->get_bare_front_page_url();
 	}
@@ -4166,7 +4166,7 @@ final class Deprecated {
 	 * The URL will never be paginated.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $args The canonical URL arguments : {
@@ -4180,7 +4180,7 @@ final class Deprecated {
 	public function create_canonical_url( $args = [] ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->create_canonical_url()', '4.3.0', 'tsf->uri()->get_canonical_url() or tsf->uri()->get_custom_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->create_canonical_url()', '5.0.0', 'tsf->uri()->get_canonical_url() or tsf->uri()->get_custom_canonical_url()' );
 
 		if ( empty( $args['get_custom_field'] ) )
 			return $tsf->uri()->get_canonical_url( $args ?: null );
@@ -4196,7 +4196,7 @@ final class Deprecated {
 	 * @since 3.2.4 1. Now adds a slash to the home URL when it's a root URL.
 	 *              2. Now skips slashing when queries have been appended to the URL.
 	 *              3. Home-as-page pagination is now supported.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The home canonical URL.
@@ -4204,7 +4204,7 @@ final class Deprecated {
 	public function get_home_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '4.3.0', 'tsf->uri()->get_front_page_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_canonical_url()', '5.0.0', 'tsf->uri()->get_front_page_url()' );
 
 		return $tsf->uri()->get_front_page_url();
 	}
@@ -4213,7 +4213,7 @@ final class Deprecated {
 	 * Returns home canonical URL without query considerations.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The home canonical URL without query considerations.
@@ -4221,7 +4221,7 @@ final class Deprecated {
 	public function get_raw_home_canonical_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '4.3.0', 'tsf->uri()->get_bare_front_page_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_raw_home_canonical_url()', '5.0.0', 'tsf->uri()->get_bare_front_page_url()' );
 
 		return $tsf->uri()->get_bare_front_page_url();
 	}
@@ -4230,7 +4230,7 @@ final class Deprecated {
 	 * Returns singular canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null $post_id The page ID. Leave null to autodetermine.
@@ -4239,7 +4239,7 @@ final class Deprecated {
 	public function get_singular_canonical_url( $post_id = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_singular_canonical_url()', '4.3.0', 'tsf()->uri()->get_singular_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_singular_canonical_url()', '5.0.0', 'tsf()->uri()->get_singular_url()' );
 
 		return $tsf->uri()->get_singular_url( $post_id );
 	}
@@ -4253,7 +4253,7 @@ final class Deprecated {
 	 *              2. Now works on the admin-screens.
 	 * @since 4.2.0 1. Added memoization.
 	 *              2. The parameters are now optional.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
@@ -4263,7 +4263,7 @@ final class Deprecated {
 	public function get_taxonomical_canonical_url( $term_id = null, $taxonomy = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_taxonomical_canonical_url()', '4.3.0', 'tsf()->uri()->get_term_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_taxonomical_canonical_url()', '5.0.0', 'tsf()->uri()->get_term_url()' );
 
 		return $tsf->uri()->get_term_url( $term_id, $taxonomy );
 	}
@@ -4276,7 +4276,7 @@ final class Deprecated {
 	 *              2. Now forwards post type object calling to WordPress's function.
 	 * @since 4.2.0 1. Now correctly adds pagination to the URL.
 	 *              2. Removed argument type deprecation doing it wrong warning.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param null|string $post_type The post type archive's post type.
@@ -4286,7 +4286,7 @@ final class Deprecated {
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '4.3.0', 'tsf()->uri()->get_post_type_archive_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '5.0.0', 'tsf()->uri()->get_post_type_archive_url()' );
 
 		return $tsf->uri()->get_post_type_archive_url( $post_type );
 	}
@@ -4298,7 +4298,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.2.0 1. The first parameter is now optional.
 	 *              2. When the $id isn't set, the URL won't get tested for pagination issues.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null $id The author ID. Leave null to autodetermine.
@@ -4307,7 +4307,7 @@ final class Deprecated {
 	public function get_author_canonical_url( $id = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_author_canonical_url()', '4.3.0', 'tsf()->uri()->get_author_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_author_canonical_url()', '5.0.0', 'tsf()->uri()->get_author_url()' );
 
 		return $tsf->uri()->get_author_url( $id );
 	}
@@ -4317,7 +4317,7 @@ final class Deprecated {
 	 * Automatically adds pagination if the date input matches the query.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $year  The year.
@@ -4328,7 +4328,7 @@ final class Deprecated {
 	public function get_date_canonical_url( $year, $month = null, $day = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_date_canonical_url()', '4.3.0', 'tsf()->uri()->get_date_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_date_canonical_url()', '5.0.0', 'tsf()->uri()->get_date_url()' );
 
 		return $tsf->uri()->get_date_url( $year, $month, $day );
 	}
@@ -4341,7 +4341,7 @@ final class Deprecated {
 	 * @since 3.1.0 1. The first parameter now defaults to null.
 	 *              2. The search term is now matched with the input query if not set,
 	 *                 instead of it being empty.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $search_query The search query. Mustn't be escaped.
@@ -4351,7 +4351,7 @@ final class Deprecated {
 	public function get_search_canonical_url( $search_query = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_search_canonical_url()', '4.3.0', 'tsf()->uri()->get_search_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_search_canonical_url()', '5.0.0', 'tsf()->uri()->get_search_url()' );
 
 		return $tsf->uri()->get_search_url( $search_query );
 	}
@@ -4360,7 +4360,7 @@ final class Deprecated {
 	 * Adds pagination to input URL.
 	 *
 	 * @since 4.2.3
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url      The fully qualified URL.
@@ -4374,7 +4374,7 @@ final class Deprecated {
 	public function add_pagination_to_url( $url, $page = null, $use_base = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->add_pagination_to_url()', '4.3.0', 'tsf()->uri()->utils()->add_pagination_to_url()' );
+		$tsf->_deprecated_function( 'tsf()->add_pagination_to_url()', '5.0.0', 'tsf()->uri()->utils()->add_pagination_to_url()' );
 
 		return $tsf->uri()->utils()->add_pagination_to_url( $url, $page, $use_base );
 	}
@@ -4383,7 +4383,7 @@ final class Deprecated {
 	 * Adds pagination to input URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url      The fully qualified URL.
@@ -4397,7 +4397,7 @@ final class Deprecated {
 	public function add_url_pagination( $url, $page = null, $use_base = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->add_url_pagination()', '4.3.0', 'tsf()->uri()->utils()->add_pagination_to_url()' );
+		$tsf->_deprecated_function( 'tsf()->add_url_pagination()', '5.0.0', 'tsf()->uri()->utils()->add_pagination_to_url()' );
 
 		return $tsf->uri()->utils()->add_pagination_to_url( $url, $page, $use_base );
 	}
@@ -4407,7 +4407,7 @@ final class Deprecated {
 	 * The URL must match this query if no second parameter is provided.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string    $url  The fully qualified URL to remove pagination from.
@@ -4421,7 +4421,7 @@ final class Deprecated {
 	public function remove_pagination_from_url( $url, $page = null, $use_base = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->remove_pagination_from_url()', '4.3.0', 'tsf->uri()->utils()->remove_pagination_from_url()' );
+		$tsf->_deprecated_function( 'tsf()->remove_pagination_from_url()', '5.0.0', 'tsf->uri()->utils()->remove_pagination_from_url()' );
 
 		return $tsf->uri()->utils()->remove_pagination_from_url( $url, $page, $use_base );
 	}
@@ -4434,7 +4434,7 @@ final class Deprecated {
 	 *              2. Now sanitizes canonical URL according to permalink settings.
 	 *              3. Removed second parameter. It was only a source of bugs.
 	 *              4. Removed WordPress Core `get_pagenum_link` filter.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $next_prev Whether to get the previous or next page link.
@@ -4444,7 +4444,7 @@ final class Deprecated {
 	public function get_paged_url( $next_prev ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_paged_url()', '4.3.0', 'tsf->uri()->get_paged_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_paged_url()', '5.0.0', 'tsf->uri()->get_paged_url()' );
 
 		[ $next, $prev ] = $tsf->uri()->get_paged_urls();
 
@@ -4463,7 +4463,7 @@ final class Deprecated {
 	 * @since 4.1.0 Removed memoization.
 	 * @since 4.1.2 1. Added back memoization.
 	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array Escaped site Pagination URLs: {
@@ -4474,7 +4474,7 @@ final class Deprecated {
 	public function get_paged_urls() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_paged_urls()', '4.3.0', 'tsf->uri()->get_paged_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_paged_urls()', '5.0.0', 'tsf->uri()->get_paged_url()' );
 
 		[ $next, $prev ] = $tsf->uri()->get_paged_urls();
 
@@ -4486,7 +4486,7 @@ final class Deprecated {
 	 * If this fails, you're going to have a bad time.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The home URL host.
@@ -4494,7 +4494,7 @@ final class Deprecated {
 	public function get_home_host() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_home_host()', '4.3.0', 'tsf->uri()->utils()->get_site_host()' );
+		$tsf->_deprecated_function( 'tsf()->get_home_host()', '5.0.0', 'tsf->uri()->utils()->get_site_host()' );
 
 		return $tsf->uri()->utils()->get_site_host();
 	}
@@ -4503,7 +4503,7 @@ final class Deprecated {
 	 * Appends given query to given URL.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url   A fully qualified URL.
@@ -4513,7 +4513,7 @@ final class Deprecated {
 	public function append_url_query( $url, $query = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->append_url_query()', '4.3.0', 'tsf->uri()->utils()->append_url_query()' );
+		$tsf->_deprecated_function( 'tsf()->append_url_query()', '5.0.0', 'tsf->uri()->utils()->append_url_query()' );
 
 		return $tsf->uri()->utils()->append_query_to_url( $url, $query );
 	}
@@ -4522,7 +4522,7 @@ final class Deprecated {
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 2.9.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url The URL to test. Required.
@@ -4531,7 +4531,7 @@ final class Deprecated {
 	public function matches_this_domain( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->matches_this_domain()', '4.3.0', 'tsf->uri()->utils()->url_matches_blog_domain()' );
+		$tsf->_deprecated_function( 'tsf()->matches_this_domain()', '5.0.0', 'tsf->uri()->utils()->url_matches_blog_domain()' );
 
 		return $tsf->uri()->utils()->url_matches_blog_domain( $url );
 	}
@@ -4540,7 +4540,7 @@ final class Deprecated {
 	 * Makes a fully qualified URL from any input.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $path Either the URL or path. Will always be transformed to the current domain.
@@ -4550,7 +4550,7 @@ final class Deprecated {
 	public function convert_to_url_if_path( $path, $url = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->convert_to_url_if_path()', '4.3.0', 'tsf->uri()->utils()->convert_path_to_url()' );
+		$tsf->_deprecated_function( 'tsf()->convert_to_url_if_path()', '5.0.0', 'tsf->uri()->utils()->convert_path_to_url()' );
 
 		return $tsf->uri()->utils()->convert_path_to_url( $path, $url );
 	}
@@ -4559,7 +4559,7 @@ final class Deprecated {
 	 * Returns singular custom field's canonical URL.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null $id The page ID.
@@ -4568,7 +4568,7 @@ final class Deprecated {
 	public function get_singular_custom_canonical_url( $id = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_singular_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_singular_custom_canonical_url()', '5.0.0', 'tsf->uri()->get_custom_canonical_url()' );
 
 		return $tsf->data()->plugin()->post()->get_meta_item( '_genesis_canonical_uri', $id ) ?: '';
 	}
@@ -4577,7 +4577,7 @@ final class Deprecated {
 	 * Returns taxonomical custom field's canonical URL.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $term_id The term ID.
@@ -4586,7 +4586,7 @@ final class Deprecated {
 	public function get_taxonomical_custom_canonical_url( $term_id = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_taxonomical_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_taxonomical_custom_canonical_url()', '5.0.0', 'tsf->uri()->get_custom_canonical_url()' );
 
 		return $tsf->data()->plugin()->term()->get_meta_item( 'canonical', $term_id ) ?: '';
 	}
@@ -4595,7 +4595,7 @@ final class Deprecated {
 	 * Returns post type archive custom field's canonical URL.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $pta The post type.
@@ -4604,7 +4604,7 @@ final class Deprecated {
 	public function get_post_type_archive_custom_canonical_url( $pta = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_custom_canonical_url()', '4.3.0', 'tsf->uri()->get_custom_canonical_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_custom_canonical_url()', '5.0.0', 'tsf->uri()->get_custom_canonical_url()' );
 
 		return $tsf->data()->plugin()->pta()->get_meta_item( 'canonical', $pta ) ?: '';
 	}
@@ -4613,7 +4613,7 @@ final class Deprecated {
 	 * Generates shortlink URL.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string|null Escaped site Shortlink URL.
@@ -4621,7 +4621,7 @@ final class Deprecated {
 	public function get_shortlink() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_shortlink()', '4.3.0', 'tsf->uri()->get_shortlink()' );
+		$tsf->_deprecated_function( 'tsf()->get_shortlink()', '5.0.0', 'tsf->uri()->get_shortlink()' );
 
 		return $tsf->uri()->get_shortlink_url();
 	}
@@ -4631,7 +4631,7 @@ final class Deprecated {
 	 * To be used on the front-end only.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The image URL.
@@ -4639,7 +4639,7 @@ final class Deprecated {
 	public function get_image_from_cache() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_image_from_cache()', '4.3.0', 'tsf()->get_first_valid_image()' );
+		$tsf->_deprecated_function( 'tsf()->get_image_from_cache()', '5.0.0', 'tsf()->get_first_valid_image()' );
 
 		foreach ( $tsf->image()->get_image_details( null, true ) as $image ) {
 			$url = $image['url'];
@@ -4656,7 +4656,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.1.2 Added a $single parameter, which helps reduce processing power required.
 	 *              This parameter might get deprecated when we start supporting PHP 7.1+ only.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $single Whether to return at most a single array item.
@@ -4671,7 +4671,7 @@ final class Deprecated {
 	public function get_image_details_from_cache( $single = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_image_details_from_cache()', '4.3.0', 'tsf()->get_image_details()' );
+		$tsf->_deprecated_function( 'tsf()->get_image_details_from_cache()', '5.0.0', 'tsf()->get_image_details()' );
 
 		return $tsf->get_image_details( null, $single );
 	}
@@ -4680,7 +4680,7 @@ final class Deprecated {
 	 * Returns single custom field image details.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -4697,7 +4697,7 @@ final class Deprecated {
 	public function get_custom_field_image_details( $args = null, $single = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_custom_field_image_details()', '4.3.0', 'tsf()->image()->get_custom_image_details()' );
+		$tsf->_deprecated_function( 'tsf()->get_custom_field_image_details()', '5.0.0', 'tsf()->image()->get_custom_image_details()' );
 
 		return $tsf->image()->get_custom_image_details( $args, $single );
 	}
@@ -4706,7 +4706,7 @@ final class Deprecated {
 	 * Returns single or multiple generates image details.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -4724,7 +4724,7 @@ final class Deprecated {
 	public function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_generated_image_details()', '4.3.0', 'tsf()->image()->get_generated_image_details()' );
+		$tsf->_deprecated_function( 'tsf()->get_generated_image_details()', '5.0.0', 'tsf()->image()->get_generated_image_details()' );
 
 		return $tsf->image()->get_generated_image_details( $args, $single, $context );
 	}
@@ -4735,7 +4735,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.2.4 1. Now returns filesizes under index `filesize`.
 	 *              2. No longer processes details when no `id` is given in `$details`.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array  $details The image details array, associative: {
@@ -4755,7 +4755,7 @@ final class Deprecated {
 	public function merge_extra_image_details( $details, $size = 'full' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->merge_extra_image_details()', '4.3.0', 'tsf()->image()->merge_extra_image_details()' );
+		$tsf->_deprecated_function( 'tsf()->merge_extra_image_details()', '5.0.0', 'tsf()->image()->merge_extra_image_details()' );
 
 		return $tsf->image()->merge_extra_image_details( $details, $size );
 	}
@@ -4767,7 +4767,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.2.4 1. No longer relies on `$url` to fetch the correct dimensions, improving performance significantly.
 	 *              2. Renamed `$url` to `$depr`, without a deprecation notice added.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $src_id The source ID of the image.
@@ -4781,7 +4781,7 @@ final class Deprecated {
 	public function get_image_dimensions( $src_id, $depr, $size ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_image_dimensions()', '4.3.0', 'tsf()->image()->utils()->get_image_dimensions()' );
+		$tsf->_deprecated_function( 'tsf()->get_image_dimensions()', '5.0.0', 'tsf()->image()->utils()->get_image_dimensions()' );
 
 		return $tsf->image()->utils()->get_image_dimensions( $src_id, $size );
 	}
@@ -4790,7 +4790,7 @@ final class Deprecated {
 	 * Fetches image dimensions.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $src_id The source ID of the image.
@@ -4799,7 +4799,7 @@ final class Deprecated {
 	public function get_image_alt_tag( $src_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_image_alt_tag()', '4.3.0', 'tsf()->image()->utils()->get_image_alt_tag()' );
+		$tsf->_deprecated_function( 'tsf()->get_image_alt_tag()', '5.0.0', 'tsf()->image()->utils()->get_image_alt_tag()' );
 
 		return $tsf->image()->utils()->get_image_alt_tag( $src_id );
 	}
@@ -4808,7 +4808,7 @@ final class Deprecated {
 	 * Fetches image filesize in bytes. Requires an image (re)generated in WP 6.0 or later.
 	 *
 	 * @since 4.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $src_id The source ID of the image.
@@ -4818,7 +4818,7 @@ final class Deprecated {
 	public function get_image_filesize( $src_id, $size ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_image_filesize()', '4.3.0', 'tsf()->image()->utils()->get_image_filesize()' );
+		$tsf->_deprecated_function( 'tsf()->get_image_filesize()', '5.0.0', 'tsf()->image()->utils()->get_image_filesize()' );
 
 		return $tsf->image()->utils()->get_image_filesize( $src_id, $size );
 	}
@@ -4828,7 +4828,7 @@ final class Deprecated {
 	 * Skips the original image, which may also be acceptable.
 	 *
 	 * @since 4.0.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $id           The image ID.
@@ -4839,7 +4839,7 @@ final class Deprecated {
 	public function get_largest_acceptable_image_src( $id, $max_size = 4096, $max_filesize = 5242880 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_largest_acceptable_image_src()', '4.3.0', 'tsf()->image()->utils()->get_largest_image_src()' );
+		$tsf->_deprecated_function( 'tsf()->get_largest_acceptable_image_src()', '5.0.0', 'tsf()->image()->utils()->get_largest_image_src()' );
 
 		return $tsf->image()->utils()->get_largest_image_src( $id, $max_size, $max_filesize );
 	}
@@ -4848,13 +4848,13 @@ final class Deprecated {
 	 * Returns the minimum role required to adjust settings.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The minimum required capability for SEO Settings.
 	 */
 	public function get_settings_capability() {
-		\tsf()->_deprecated_function( 'tsf()->get_settings_capability()', '4.3.0', 'constant THE_SEO_FRAMEWORK_SETTINGS_CAP' );
+		\tsf()->_deprecated_function( 'tsf()->get_settings_capability()', '5.0.0', 'constant THE_SEO_FRAMEWORK_SETTINGS_CAP' );
 		return \THE_SEO_FRAMEWORK_SETTINGS_CAP;
 	}
 
@@ -4863,13 +4863,13 @@ final class Deprecated {
 	 * Not cached as it's imposing security functionality.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function can_access_settings() {
-		\tsf()->_deprecated_function( 'tsf()->can_access_settings()', '4.3.0', 'current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )' );
+		\tsf()->_deprecated_function( 'tsf()->can_access_settings()', '5.0.0', 'current_user_can( THE_SEO_FRAMEWORK_SETTINGS_CAP )' );
 		return \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP );
 	}
 
@@ -4877,14 +4877,14 @@ final class Deprecated {
 	 * Echos the header meta and scripts.
 	 *
 	 * @since 1.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function html_output() {
 
 		$tsf = \tsf();
 
-		$tsf->_deprecated_function( 'tsf()->html_output()', '4.3.0', 'tsf()->print_seo_meta_tags()' );
+		$tsf->_deprecated_function( 'tsf()->html_output()', '5.0.0', 'tsf()->print_seo_meta_tags()' );
 		$tsf->print_seo_meta_tags();
 	}
 
@@ -4894,11 +4894,11 @@ final class Deprecated {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now invokes two actions before and after output.
 	 *              2. No longer rectifies timezones.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function do_meta_output() {
-		\tsf()->_deprecated_function( 'tsf()->do_meta_output()', '4.3.0', 'tsf()->print_seo_meta_tags()' );
+		\tsf()->_deprecated_function( 'tsf()->do_meta_output()', '5.0.0', 'tsf()->print_seo_meta_tags()' );
 		\The_SEO_Framework\Front\Meta\Head::print_tags();
 	}
 
@@ -4906,7 +4906,7 @@ final class Deprecated {
 	 * Holds default site options.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array Default site options.
@@ -4914,7 +4914,7 @@ final class Deprecated {
 	public function get_default_site_options() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_default_site_options()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_default_options()' );
+		$tsf->_deprecated_function( 'tsf()->get_default_site_options()', '5.0.0', 'tsf()->data()->plugin()->setup()->get_default_options()' );
 
 		return $tsf->data()->plugin()->setup()->get_default_options();
 	}
@@ -4923,7 +4923,7 @@ final class Deprecated {
 	 * Holds warned site options array.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array $options.
@@ -4931,7 +4931,7 @@ final class Deprecated {
 	public function get_warned_site_options() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_warned_site_options()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_warned_options()' );
+		$tsf->_deprecated_function( 'tsf()->get_warned_site_options()', '5.0.0', 'tsf()->data()->plugin()->setup()->get_warned_options()' );
 
 		return $tsf->data()->plugin()->setup()->get_warned_options();
 	}
@@ -4943,7 +4943,7 @@ final class Deprecated {
 	 * This method does NOT merge the default post options.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $setting The setting key.
@@ -4952,7 +4952,7 @@ final class Deprecated {
 	public function get_all_options( $setting = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_all_options()', '4.3.0', 'tsf()->get_options()' );
+		$tsf->_deprecated_function( 'tsf()->get_all_options()', '5.0.0', 'tsf()->get_options()' );
 
 		if ( ! $setting )
 			return $tsf->get_options();
@@ -4981,7 +4981,7 @@ final class Deprecated {
 	 * @since 4.2.0 1. Now supports an option index as `$key`.
 	 *              2. Removed second parameter (`$use_cache`).
 	 *              3. Now always memoizes.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|string[] $key Required. The option name, or a map of indexes.
@@ -4990,7 +4990,7 @@ final class Deprecated {
 	public function get_default_option( $key ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_default_option()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_default_option()' );
+		$tsf->_deprecated_function( 'tsf()->get_default_option()', '5.0.0', 'tsf()->data()->plugin()->setup()->get_default_option()' );
 
 		return $tsf->data()->plugin()->setup()->get_default_option( ...(array) $key );
 	}
@@ -4999,7 +4999,7 @@ final class Deprecated {
 	 * Return Warned SEO options from the SEO options array.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|string[] $key Required. The option name, or a map of indexes.
@@ -5008,7 +5008,7 @@ final class Deprecated {
 	public function get_warned_option( $key ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_warned_option()', '4.3.0', 'tsf()->data()->plugin()->setup()->get_warned_option()' );
+		$tsf->_deprecated_function( 'tsf()->get_warned_option()', '5.0.0', 'tsf()->data()->plugin()->setup()->get_warned_option()' );
 
 		return $tsf->data()->plugin()->setup()->get_warned_option( ...(array) $key );
 	}
@@ -5017,7 +5017,7 @@ final class Deprecated {
 	 * Returns the option key for Post Type robots settings.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
@@ -5026,7 +5026,7 @@ final class Deprecated {
 	public function get_robots_post_type_option_id( $type ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_robots_post_type_option_id()', '4.3.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
+		$tsf->_deprecated_function( 'tsf()->get_robots_post_type_option_id()', '5.0.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
 
 		return $tsf->data()->plugin()->helper()->get_robots_option_index( 'post_type', $type );
 	}
@@ -5035,7 +5035,7 @@ final class Deprecated {
 	 * Returns the option key for Taxonomy robots settings.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $type Accepts 'noindex', 'nofollow', 'noarchive'.
@@ -5044,7 +5044,7 @@ final class Deprecated {
 	public function get_robots_taxonomy_option_id( $type ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_robots_taxonomy_option_id()', '4.3.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
+		$tsf->_deprecated_function( 'tsf()->get_robots_taxonomy_option_id()', '5.0.0', 'tsf()->data()->plugin()->helper()->get_robots_option_index()' );
 
 		return $tsf->data()->plugin()->helper()->get_robots_option_index( 'taxonomy', $type );
 	}
@@ -5053,7 +5053,7 @@ final class Deprecated {
 	 * Allows bulk-updating of the SEO settings.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|array $new_option : {
@@ -5068,7 +5068,7 @@ final class Deprecated {
 	public function update_settings( $new_option = '', $settings_field = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_settings()', '4.3.0', 'tsf()->data()->plugin()->update_option()' );
+		$tsf->_deprecated_function( 'tsf()->update_settings()', '5.0.0', 'tsf()->data()->plugin()->update_option()' );
 
 		if ( ! $settings_field )
 			return $tsf->data()->plugin()->update_option( \is_array( $new_option ) ? $new_option : [ $new_option => '' ] );
@@ -5083,7 +5083,7 @@ final class Deprecated {
 	 * Retrieves a single caching option.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $key     The option key. Required.
@@ -5093,7 +5093,7 @@ final class Deprecated {
 	public function get_static_cache( $key, $default = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_static_cache()', '4.3.0', 'tsf()->data()->plugin()->get_site_cache()' );
+		$tsf->_deprecated_function( 'tsf()->get_static_cache()', '5.0.0', 'tsf()->data()->plugin()->get_site_cache()' );
 
 		return $tsf->data()->plugin()->get_site_cache( $key ) ?? $default;
 	}
@@ -5104,7 +5104,7 @@ final class Deprecated {
 	 * Can return false if option is unchanged.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $key   The cache key. Required.
@@ -5114,7 +5114,7 @@ final class Deprecated {
 	public function update_static_cache( $key, $value = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_static_cache()', '4.3.0', 'tsf()->data()->plugin()->update_site_cache()' );
+		$tsf->_deprecated_function( 'tsf()->update_static_cache()', '5.0.0', 'tsf()->data()->plugin()->update_site_cache()' );
 
 		return $tsf->data()->plugin()->update_site_cache( $key, $value );
 	}
@@ -5123,7 +5123,7 @@ final class Deprecated {
 	 * Returns the term meta item by key.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $item      The item to get.
@@ -5133,7 +5133,7 @@ final class Deprecated {
 	public function get_term_meta_item( $item, $term_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->get_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_term_meta_item()', '5.0.0', 'tsf()->data()->plugin()->term()->get_meta_item()' );
 
 		return $tsf->data()->plugin()->term()->get_meta_item( $item, $term_id );
 	}
@@ -5145,7 +5145,7 @@ final class Deprecated {
 	 * Returns Genesis 2.3.0+ data if no term meta data is set via compat module.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $term_id The Term ID.
@@ -5154,7 +5154,7 @@ final class Deprecated {
 	public function get_term_meta( $term_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->get_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_term_meta()', '5.0.0', 'tsf()->data()->plugin()->term()->get_meta()' );
 
 		return $tsf->data()->plugin()->term()->get_meta( $term_id );
 	}
@@ -5163,7 +5163,7 @@ final class Deprecated {
 	 * Returns an array of default term options.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $term_id The term ID.
@@ -5172,7 +5172,7 @@ final class Deprecated {
 	public function get_term_meta_defaults( $term_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_term_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->term()->get_default_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_term_meta_defaults()', '5.0.0', 'tsf()->data()->plugin()->term()->get_default_meta()' );
 
 		return $tsf->data()->plugin()->term()->get_default_meta( $term_id );
 	}
@@ -5186,7 +5186,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $item    The item to update.
@@ -5196,7 +5196,7 @@ final class Deprecated {
 	public function update_single_term_meta_item( $item, $value, $term_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '4.3.0', 'tsf()->data()->plugin()->term()->update_single_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->update_single_term_meta_item()', '5.0.0', 'tsf()->data()->plugin()->term()->update_single_meta_item()' );
 
 		return $tsf->data()->plugin()->term()->update_single_meta_item( $item, $value, $term_id );
 	}
@@ -5207,7 +5207,7 @@ final class Deprecated {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $term_id  Term ID.
@@ -5218,7 +5218,7 @@ final class Deprecated {
 	public function save_term_meta( $term_id, $tt_id, $taxonomy, $data ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->save_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->save_meta()' );
+		$tsf->_deprecated_function( 'tsf()->save_term_meta()', '5.0.0', 'tsf()->data()->plugin()->term()->save_meta()' );
 
 		return $tsf->data()->plugin()->term()->save_meta( $term_id, $data );
 	}
@@ -5235,7 +5235,7 @@ final class Deprecated {
 	public function delete_term_meta( $term_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->delete_term_meta()', '4.3.0', 'tsf()->data()->plugin()->term()->delete_meta()' );
+		$tsf->_deprecated_function( 'tsf()->delete_term_meta()', '5.0.0', 'tsf()->data()->plugin()->term()->delete_meta()' );
 
 		return $tsf->data()->plugin()->term()->delete_meta( $term_id );
 	}
@@ -5244,7 +5244,7 @@ final class Deprecated {
 	 * Fetch latest public category ID.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int Latest Category ID.
@@ -5252,7 +5252,7 @@ final class Deprecated {
 	public function get_latest_category_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '4.3.0', 'tsf()->data()->term()->get_latest_category_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '5.0.0', 'tsf()->data()->term()->get_latest_category_id()' );
 
 		return $tsf->data()->term()->get_latest_term_id( 'category' );
 	}
@@ -5261,7 +5261,7 @@ final class Deprecated {
 	 * Tests whether term is populated. Also tests the child terms.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $term_id The term ID.
@@ -5271,7 +5271,7 @@ final class Deprecated {
 	public function is_term_populated( $term_id, $taxonomy ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '4.3.0', 'tsf()->data()->term()->is_term_populated()' );
+		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '5.0.0', 'tsf()->data()->term()->is_term_populated()' );
 
 		return $tsf->data()->term()->is_term_populated( $term_id, $taxonomy );
 	}
@@ -5282,7 +5282,7 @@ final class Deprecated {
 	 * @since 2.4.3
 	 * @since 2.9.3 1. Removed object caching.
 	 *              2. It now uses WP_Query, instead of wpdb.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int Latest Post ID.
@@ -5290,7 +5290,7 @@ final class Deprecated {
 	public function get_latest_post_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_latest_post_id()', '4.3.0', 'tsf()->data()->post()->get_latest_post_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_latest_post_id()', '5.0.0', 'tsf()->data()->post()->get_latest_post_id()' );
 
 		return $tsf->data()->post()->get_latest_post_id();
 	}
@@ -5299,7 +5299,7 @@ final class Deprecated {
 	 * Returns the primary term for post.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 1. Now always tries to return a term if none is set manually.
+	 * @since 5.0.0 1. Now always tries to return a term if none is set manually.
 	 *              2. Now returns `null` instead of `false` on failure.
 	 *              3. Deprecated.
 	 * @deprecated
@@ -5311,7 +5311,7 @@ final class Deprecated {
 	public function get_primary_term( $post_id, $taxonomy ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_primary_term()', '4.3.0', 'tsf()->data()->plugin()->post()->get_primary_term()' );
+		$tsf->_deprecated_function( 'tsf()->get_primary_term()', '5.0.0', 'tsf()->data()->plugin()->post()->get_primary_term()' );
 
 		return $tsf->data()->plugin()->post()->get_primary_term( $post_id, $taxonomy );
 	}
@@ -5322,7 +5322,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.1.5 1. Now validates if the stored term ID's term exists (for the post or at all).
 	 *              2. The first and second parameters are now required.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $post_id  The post ID.
@@ -5332,7 +5332,7 @@ final class Deprecated {
 	public function get_primary_term_id( $post_id, $taxonomy ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_primary_term_id()', '4.3.0', 'tsf()->data()->plugin()->post()->get_primary_term_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_primary_term_id()', '5.0.0', 'tsf()->data()->plugin()->post()->get_primary_term_id()' );
 
 		return $tsf->data()->plugin()->post()->get_primary_term_id( $post_id, $taxonomy );
 	}
@@ -5341,7 +5341,7 @@ final class Deprecated {
 	 * Updates the primary term ID for post.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null $post_id  The post ID.
@@ -5352,7 +5352,7 @@ final class Deprecated {
 	public function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_primary_term_id()', '4.3.0', 'tsf()->data()->plugin()->post()->update_primary_term_id()' );
+		$tsf->_deprecated_function( 'tsf()->update_primary_term_id()', '5.0.0', 'tsf()->data()->plugin()->post()->update_primary_term_id()' );
 
 		return $tsf->data()->plugin()->post()->update_primary_term_id( $post_id, $taxonomy, $value );
 	}
@@ -5361,7 +5361,7 @@ final class Deprecated {
 	 * Returns the user meta item by key.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $item      The item to get. Required.
@@ -5371,7 +5371,7 @@ final class Deprecated {
 	public function get_user_meta_item( $item, $user_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->get_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_meta_item()', '5.0.0', 'tsf()->data()->plugin()->user()->get_meta_item()' );
 
 		return $tsf->data()->plugin()->user()->get_meta_item( $item, $user_id );
 	}
@@ -5380,7 +5380,7 @@ final class Deprecated {
 	 * Returns the author meta item by key.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $item      The item to get. Required.
@@ -5389,7 +5389,7 @@ final class Deprecated {
 	public function get_current_post_author_meta_item( $item ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_post_author_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->get_current_post_author_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_meta_item()', '5.0.0', 'tsf()->data()->plugin()->user()->get_current_post_author_meta_item()' );
 
 		return $tsf->data()->plugin()->user()->get_current_post_author_meta_item( $item );
 	}
@@ -5399,7 +5399,7 @@ final class Deprecated {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return ?array The current author meta, null when no author is set.
@@ -5407,7 +5407,7 @@ final class Deprecated {
 	public function get_current_post_author_meta() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_post_author_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->get_current_post_author_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_meta()', '5.0.0', 'tsf()->data()->plugin()->user()->get_current_post_author_meta()' );
 
 		return $tsf->data()->plugin()->user()->get_current_post_author_meta();
 	}
@@ -5417,7 +5417,7 @@ final class Deprecated {
 	 * Memoizes the return value, can be bypassed.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $user_id The user ID.
@@ -5426,7 +5426,7 @@ final class Deprecated {
 	public function get_user_meta( $user_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->get_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_meta()', '5.0.0', 'tsf()->data()->plugin()->user()->get_meta()' );
 
 		return $tsf->data()->plugin()->user()->get_meta( $user_id );
 	}
@@ -5435,7 +5435,7 @@ final class Deprecated {
 	 * Returns an array of default user meta.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
@@ -5444,7 +5444,7 @@ final class Deprecated {
 	public function get_user_meta_defaults( $user_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->user()->get_default_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_meta_defaults()', '5.0.0', 'tsf()->data()->plugin()->user()->get_default_meta()' );
 
 		return $tsf->data()->plugin()->user()->get_default_meta( $user_id );
 	}
@@ -5453,7 +5453,7 @@ final class Deprecated {
 	 * Updates user TSF-meta option.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $user_id The user ID.
@@ -5463,7 +5463,7 @@ final class Deprecated {
 	public function update_single_user_meta_item( $user_id, $option, $value ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_single_user_meta_item()', '4.3.0', 'tsf()->data()->plugin()->user()->update_single_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->update_single_user_meta_item()', '5.0.0', 'tsf()->data()->plugin()->user()->update_single_meta_item()' );
 
 		return $tsf->data()->plugin()->user()->update_single_meta_item( $user_id, $option, $value );
 	}
@@ -5472,7 +5472,7 @@ final class Deprecated {
 	 * Updates users meta from input.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int   $user_id The user ID.
@@ -5481,7 +5481,7 @@ final class Deprecated {
 	public function save_user_meta( $user_id, $data ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->save_user_meta()', '4.3.0', 'tsf()->data()->plugin()->user()->save_meta()' );
+		$tsf->_deprecated_function( 'tsf()->save_user_meta()', '5.0.0', 'tsf()->data()->plugin()->user()->save_meta()' );
 
 		return $tsf->data()->plugin()->user()->save_meta( $user_id, $data );
 	}
@@ -5493,7 +5493,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
 	 *              2. Now always returns an integer.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $post_id The post ID to fetch the author from. Leave 0 to autodetermine.
@@ -5502,7 +5502,7 @@ final class Deprecated {
 	public function get_post_author_id( $post_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_author_id()', '4.3.0', 'tsf()->query()->get_post_author_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_author_id()', '5.0.0', 'tsf()->query()->get_post_author_id()' );
 
 		return $tsf->query()->get_post_author_id( $post_id );
 	}
@@ -5514,7 +5514,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
 	 *              2. Now always returns an integer.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int Post author ID on success, 0 on failure.
@@ -5522,7 +5522,7 @@ final class Deprecated {
 	public function get_current_post_author_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_post_author_id()', '4.3.0', 'tsf()->query()->get_post_author_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_current_post_author_id()', '5.0.0', 'tsf()->query()->get_post_author_id()' );
 
 		return $tsf->query()->get_post_author_id();
 	}
@@ -5532,7 +5532,7 @@ final class Deprecated {
 	 * To be used in AJAX, back-end and front-end.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int The user ID. 0 if user is not found.
@@ -5540,7 +5540,7 @@ final class Deprecated {
 	public function get_user_id() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_user_id()', '4.3.0', 'tsf()->query()->get_current_user_id()' );
+		$tsf->_deprecated_function( 'tsf()->get_user_id()', '5.0.0', 'tsf()->query()->get_current_user_id()' );
 
 		return $tsf->query()->get_current_user_id();
 	}
@@ -5549,7 +5549,7 @@ final class Deprecated {
 	 * Fetches Post content.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param \WP_Post|int|null $post The Post or Post ID. Leave null to get current post.
@@ -5558,7 +5558,7 @@ final class Deprecated {
 	public function get_post_content( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_content()', '4.3.0', 'tsf()->data()->post()->get_content()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_content()', '5.0.0', 'tsf()->data()->post()->get_content()' );
 
 		return $tsf->data()->post()->get_content( $post );
 	}
@@ -5572,7 +5572,7 @@ final class Deprecated {
 	 * - Visual Composer by WPBakery
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $post_id The post ID to check.
@@ -5581,7 +5581,7 @@ final class Deprecated {
 	public function uses_non_html_page_builder( $post_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->uses_non_html_page_builder()', '4.3.0', 'tsf()->data()->post()->uses_non_html_page_builder()' );
+		$tsf->_deprecated_function( 'tsf()->uses_non_html_page_builder()', '5.0.0', 'tsf()->data()->post()->uses_non_html_page_builder()' );
 
 		return $tsf->data()->post()->uses_non_html_page_builder( $post_id );
 	}
@@ -5595,7 +5595,7 @@ final class Deprecated {
 	 *              2. Input parameter now default to null.
 	 *                 This currently doesn't affect how it works.
 	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
@@ -5604,7 +5604,7 @@ final class Deprecated {
 	public function is_protected( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_protected()', '4.3.0', 'tsf()->data()->post()->is_protected()' );
+		$tsf->_deprecated_function( 'tsf()->is_protected()', '5.0.0', 'tsf()->data()->post()->is_protected()' );
 
 		return $tsf->data()->post()->is_protected( $post );
 	}
@@ -5613,7 +5613,7 @@ final class Deprecated {
 	 * Determines if the current post has a password.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
@@ -5622,7 +5622,7 @@ final class Deprecated {
 	public function is_password_protected( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_password_protected()', '4.3.0', 'tsf()->data()->post()->is_password_protected()' );
+		$tsf->_deprecated_function( 'tsf()->is_password_protected()', '5.0.0', 'tsf()->data()->post()->is_password_protected()' );
 
 		return $tsf->data()->post()->is_password_protected( $post );
 	}
@@ -5631,7 +5631,7 @@ final class Deprecated {
 	 * Determines if the current post is private.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
@@ -5640,7 +5640,7 @@ final class Deprecated {
 	public function is_private( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_private()', '4.3.0', 'tsf()->data()->post()->is_private()' );
+		$tsf->_deprecated_function( 'tsf()->is_private()', '5.0.0', 'tsf()->data()->post()->is_private()' );
 
 		return $tsf->data()->post()->is_private( $post );
 	}
@@ -5649,7 +5649,7 @@ final class Deprecated {
 	 * Determines if the current post is a draft.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
@@ -5658,7 +5658,7 @@ final class Deprecated {
 	public function is_draft( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_draft()', '4.3.0', 'tsf()->data()->post()->is_draft()' );
+		$tsf->_deprecated_function( 'tsf()->is_draft()', '5.0.0', 'tsf()->data()->post()->is_draft()' );
 
 		return $tsf->data()->post()->is_draft( $post );
 	}
@@ -5671,7 +5671,7 @@ final class Deprecated {
 	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $item    The item to get.
@@ -5681,7 +5681,7 @@ final class Deprecated {
 	public function get_post_meta_item( $item, $post_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->get_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_meta_item()', '5.0.0', 'tsf()->data()->plugin()->post()->get_meta_item()' );
 
 		return $tsf->data()->plugin()->post()->get_meta_item( $item, $post_id );
 	}
@@ -5690,7 +5690,7 @@ final class Deprecated {
 	 * Returns all registered custom SEO fields for a post.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $post_id The post ID.
@@ -5699,7 +5699,7 @@ final class Deprecated {
 	public function get_post_meta( $post_id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->get_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_meta()', '5.0.0', 'tsf()->data()->plugin()->post()->get_meta()' );
 
 		return $tsf->data()->plugin()->post()->get_meta( $post_id );
 	}
@@ -5712,7 +5712,7 @@ final class Deprecated {
 	 * WordPress's cache, where they cast many filters and redundantly sanitize the object.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $post_id The post ID.
@@ -5721,7 +5721,7 @@ final class Deprecated {
 	public function get_post_meta_defaults( $post_id = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->post()->get_default_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_meta_defaults()', '5.0.0', 'tsf()->data()->plugin()->post()->get_default_meta()' );
 
 		return $tsf->data()->plugin()->post()->get_default_meta( $post_id );
 	}
@@ -5733,7 +5733,7 @@ final class Deprecated {
 	 * as it reprocesses all post meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string           $item  The item to update.
@@ -5743,7 +5743,7 @@ final class Deprecated {
 	public function update_single_post_meta_item( $item, $value, $post ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->update_single_post_meta_item()', '4.3.0', 'tsf()->data()->plugin()->post()->update_single_post_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->update_single_post_meta_item()', '5.0.0', 'tsf()->data()->plugin()->post()->update_single_post_meta_item()' );
 
 		return $tsf->data()->plugin()->post()->update_single_post_meta_item( $item, $value, $post );
 	}
@@ -5752,7 +5752,7 @@ final class Deprecated {
 	 * Save post meta / custom field data for a singular post type.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param \WP_Post|integer $post The post object or post ID.
@@ -5761,7 +5761,7 @@ final class Deprecated {
 	public function save_post_meta( $post, $data ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->save_post_meta()', '4.3.0', 'tsf()->data()->plugin()->post()->save_meta()' );
+		$tsf->_deprecated_function( 'tsf()->save_post_meta()', '5.0.0', 'tsf()->data()->plugin()->post()->save_meta()' );
 
 		return $tsf->data()->plugin()->post()->save_meta( $post, $data );
 	}
@@ -5774,7 +5774,7 @@ final class Deprecated {
 	 * disabled, anyway, for we never query post types externally, aside from the SEO settings page.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type The post type.
@@ -5783,7 +5783,7 @@ final class Deprecated {
 	public function get_post_type_archive_meta( $post_type ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta()', '5.0.0', 'tsf()->data()->plugin()->pta()->get_meta()' );
 
 		return $tsf->data()->plugin()->pta()->get_meta( $post_type );
 	}
@@ -5792,7 +5792,7 @@ final class Deprecated {
 	 * Returns a single post type archive item's value.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $item      The item to get.
@@ -5802,7 +5802,7 @@ final class Deprecated {
 	public function get_post_type_archive_meta_item( $item, $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_item()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_meta_item()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_item()', '5.0.0', 'tsf()->data()->plugin()->pta()->get_meta_item()' );
 
 		return $tsf->data()->plugin()->pta()->get_meta_item( $item, $post_type );
 	}
@@ -5811,7 +5811,7 @@ final class Deprecated {
 	 * Returns an array of all public post type archive option defaults.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array[] The Post Type Archive Metadata default options
@@ -5820,7 +5820,7 @@ final class Deprecated {
 	public function get_all_post_type_archive_meta_defaults() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_all_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_all_default_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_all_post_type_archive_meta_defaults()', '5.0.0', 'tsf()->data()->plugin()->pta()->get_all_default_meta()' );
 
 		return $tsf->data()->plugin()->pta()->get_all_default_meta();
 	}
@@ -5829,7 +5829,7 @@ final class Deprecated {
 	 * Returns an array of default post type archive meta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $post_type The post type.
@@ -5838,7 +5838,7 @@ final class Deprecated {
 	public function get_post_type_archive_meta_defaults( $post_type = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_defaults()', '4.3.0', 'tsf()->data()->plugin()->pta()->get_default_meta()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_meta_defaults()', '5.0.0', 'tsf()->data()->plugin()->pta()->get_default_meta()' );
 
 		return $tsf->data()->plugin()->pta()->get_default_meta( $post_type );
 	}
@@ -5847,7 +5847,7 @@ final class Deprecated {
 	 * Returns sitemap color scheme.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $get_defaults Whether to get the default colors.
@@ -5856,7 +5856,7 @@ final class Deprecated {
 	public function get_sitemap_colors( $get_defaults = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_sitemap_colors()', '4.3.0', 'tsf()->sitemap()->utils()->get_sitemap_colors()' );
+		$tsf->_deprecated_function( 'tsf()->get_sitemap_colors()', '5.0.0', 'tsf()->sitemap()->utils()->get_sitemap_colors()' );
 
 		return $tsf->sitemap()->utils()->get_sitemap_colors( $get_defaults );
 	}
@@ -5865,7 +5865,7 @@ final class Deprecated {
 	 * Checks if blog is public through WordPress core settings.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True is blog is public.
@@ -5873,7 +5873,7 @@ final class Deprecated {
 	public function is_blog_public() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_blog_public()', '4.3.0', 'tsf()->data()->blog()->is_public()' );
+		$tsf->_deprecated_function( 'tsf()->is_blog_public()', '5.0.0', 'tsf()->data()->blog()->is_public()' );
 
 		return $tsf->data()->blog()->is_public();
 	}
@@ -5883,7 +5883,7 @@ final class Deprecated {
 	 * Multisite Only.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Current blog is spam.
@@ -5891,7 +5891,7 @@ final class Deprecated {
 	public function current_blog_is_spam_or_deleted() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->current_blog_is_spam_or_deleted()', '4.3.0', 'tsf()->data()->blog()->is_spam_or_deleted()' );
+		$tsf->_deprecated_function( 'tsf()->current_blog_is_spam_or_deleted()', '5.0.0', 'tsf()->data()->blog()->is_spam_or_deleted()' );
 
 		return $tsf->data()->blog()->is_spam_or_deleted();
 	}
@@ -5900,7 +5900,7 @@ final class Deprecated {
 	 * Determines if the current installation is on a subdirectory.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -5908,7 +5908,7 @@ final class Deprecated {
 	public function is_subdirectory_installation() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_subdirectory_installation()', '4.3.0', 'tsf()->data()->blog()->is_subdirectory_installation()' );
+		$tsf->_deprecated_function( 'tsf()->is_subdirectory_installation()', '5.0.0', 'tsf()->data()->blog()->is_subdirectory_installation()' );
 
 		return $tsf->data()->blog()->is_subdirectory_installation();
 	}
@@ -5917,7 +5917,7 @@ final class Deprecated {
 	 * Tells whether WP 5.5 Core Sitemaps are used.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -5925,7 +5925,7 @@ final class Deprecated {
 	public function use_core_sitemaps() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->use_core_sitemaps()', '4.3.0', 'tsf()->sitemap()->utils()->use_core_sitemaps()' );
+		$tsf->_deprecated_function( 'tsf()->use_core_sitemaps()', '5.0.0', 'tsf()->sitemap()->utils()->use_core_sitemaps()' );
 
 		return $tsf->sitemap()->utils()->use_core_sitemaps();
 	}
@@ -5934,7 +5934,7 @@ final class Deprecated {
 	 * Determines whether we can output sitemap or not based on options and blog status.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -5942,7 +5942,7 @@ final class Deprecated {
 	public function can_run_sitemap() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->can_run_sitemap()', '4.3.0', 'tsf()->sitemap()->utils()->may_output_optimized_sitemap()' );
+		$tsf->_deprecated_function( 'tsf()->can_run_sitemap()', '5.0.0', 'tsf()->sitemap()->utils()->may_output_optimized_sitemap()' );
 
 		return $tsf->sitemap()->utils()->may_output_optimized_sitemap();
 	}
@@ -5951,7 +5951,7 @@ final class Deprecated {
 	 * Detects presence of robots.txt in root folder.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Whether the robots.txt file exists.
@@ -5959,7 +5959,7 @@ final class Deprecated {
 	public function has_robots_txt() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->has_robots_txt()', '4.3.0', 'tsf()->robotstxt()->utils()->has_root_robots_txt()' );
+		$tsf->_deprecated_function( 'tsf()->has_robots_txt()', '5.0.0', 'tsf()->robotstxt()->utils()->has_root_robots_txt()' );
 
 		return $tsf->robotstxt()->utils()->has_root_robots_txt();
 	}
@@ -5969,7 +5969,7 @@ final class Deprecated {
 	 * Only allows root domains.
 	 *
 	 * @since 2.9.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string URL location of robots.txt. Unescaped.
@@ -5977,7 +5977,7 @@ final class Deprecated {
 	public function get_robots_txt_url() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_robots_txt_url()', '4.3.0', 'tsf()->robotstxt()->utils()->get_robots_txt_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_robots_txt_url()', '5.0.0', 'tsf()->robotstxt()->utils()->get_robots_txt_url()' );
 
 		return $tsf->robotstxt()->utils()->get_robots_txt_url();
 	}
@@ -5986,7 +5986,7 @@ final class Deprecated {
 	 * Detects presence of sitemap.xml in root folder.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Whether the sitemap.xml file exists.
@@ -5994,7 +5994,7 @@ final class Deprecated {
 	public function has_sitemap_xml() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->has_sitemap_xml()', '4.3.0', 'tsf()->sitemap()->utils()->has_root_sitemap_xml()' );
+		$tsf->_deprecated_function( 'tsf()->has_sitemap_xml()', '5.0.0', 'tsf()->sitemap()->utils()->has_root_sitemap_xml()' );
 
 		return $tsf->sitemap()->utils()->has_root_sitemap_xml();
 	}
@@ -6004,7 +6004,7 @@ final class Deprecated {
 	 * Requires the site not to have a robots.txt file in the root directory.
 	 *
 	 * @since 2.2.9
-	 * @since 4.3.0 Deprecated. Even though access was marked private, we still found some used this (including us).
+	 * @since 5.0.0 Deprecated. Even though access was marked private, we still found some used this (including us).
 	 * @deprecated
 	 *
 	 * @return string Robots.txt output.
@@ -6012,7 +6012,7 @@ final class Deprecated {
 	public function robots_txt() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->robots_txt()', '4.3.0', 'tsf()->robotstxt()->get_robots_txt' );
+		$tsf->_deprecated_function( 'tsf()->robots_txt()', '5.0.0', 'tsf()->robotstxt()->get_robots_txt' );
 
 		return $tsf->robotstxt()->get_robots_txt();
 	}
@@ -6021,7 +6021,7 @@ final class Deprecated {
 	 * Deletes excluded post IDs cache.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True on success, false on failure.
@@ -6029,7 +6029,7 @@ final class Deprecated {
 	public function delete_excluded_ids_cache() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->delete_excluded_ids_cache()', '4.3.0', 'tsf()->query()->exclusion()->clear_excluded_post_ids_cache()' );
+		$tsf->_deprecated_function( 'tsf()->delete_excluded_ids_cache()', '5.0.0', 'tsf()->query()->exclusion()->clear_excluded_post_ids_cache()' );
 
 		return $tsf->query()->exclusion()->clear_excluded_post_ids_cache();
 	}
@@ -6040,7 +6040,7 @@ final class Deprecated {
 	 * Memoizes the database request.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array : { 'archive', 'search' }
@@ -6048,7 +6048,7 @@ final class Deprecated {
 	public function get_excluded_ids_from_cache() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_excluded_ids_from_cache()', '4.3.0', 'tsf()->query()->exclusion()->get_excluded_ids_from_cache()' );
+		$tsf->_deprecated_function( 'tsf()->get_excluded_ids_from_cache()', '5.0.0', 'tsf()->query()->exclusion()->get_excluded_ids_from_cache()' );
 
 		return $tsf->query()->exclusion()->get_excluded_ids_from_cache();
 	}
@@ -6057,13 +6057,13 @@ final class Deprecated {
 	 * Destroys output buffer, if any. To be used with AJAX and XML to clear any PHP errors or dumps.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
 	public function clean_response_header() {
-		\tsf()->_deprecated_function( 'tsf()->clean_response_header()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->clean_response_header()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Headers::clean_response_header();
 	}
 
@@ -6071,13 +6071,13 @@ final class Deprecated {
 	 * Registers admin scripts and styles.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function init_admin_scripts() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->init_admin_scripts()', '4.3.0', 'tsf()->load_admin_scripts()' );
+		$tsf->_deprecated_function( 'tsf()->init_admin_scripts()', '5.0.0', 'tsf()->load_admin_scripts()' );
 
 		return $tsf->load_admin_scripts();
 	}
@@ -6086,7 +6086,7 @@ final class Deprecated {
 	 * Returns the SEO Bar.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $query : {
@@ -6098,7 +6098,7 @@ final class Deprecated {
 	 * @return string The generated SEO bar, in HTML.
 	 */
 	public function get_generated_seo_bar( $query ) {
-		\tsf()->_deprecated_function( 'tsf()->get_generated_seo_bar()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_generated_seo_bar()', '5.0.0' );
 		return \The_SEO_Framework\Admin\SEOBar\Builder::generate_bar( $query );
 	}
 
@@ -6106,13 +6106,13 @@ final class Deprecated {
 	 * Redirects vistor to input $url.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url The redirection URL.
 	 */
 	public function do_redirect( $url = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->do_redirect()', '4.3.0', 'wp_safe_redirect()' );
+		\tsf()->_deprecated_function( 'tsf()->do_redirect()', '5.0.0', 'wp_safe_redirect()' );
 		return \The_SEO_Framework\Front\Redirect::do_redirect( $url );
 	}
 
@@ -6121,13 +6121,13 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool Whether external redirect is allowed.
 	 */
 	public function allow_external_redirect() {
-		\tsf()->_deprecated_function( 'tsf()->allow_external_redirect()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->allow_external_redirect()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Redirect::allow_external_redirect();
 	}
 
@@ -6138,7 +6138,7 @@ final class Deprecated {
 	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Now escapes the filter output.
+	 * @since 5.0.0 1. Now escapes the filter output.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -6146,7 +6146,7 @@ final class Deprecated {
 	 * @return string The document title
 	 */
 	public function get_document_title( $title = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->get_document_title()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_document_title()', '5.0.0' );
 		return \The_SEO_Framework\Front\Title::set_document_title( $title );
 	}
 
@@ -6157,7 +6157,7 @@ final class Deprecated {
 	 * Use tsf()->get_title() instead.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Now escapes the filter output.
+	 * @since 5.0.0 1. Now escapes the filter output.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -6165,7 +6165,7 @@ final class Deprecated {
 	 * @return string $title
 	 */
 	public function get_wp_title( $title = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->get_wp_title()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_wp_title()', '5.0.0' );
 		return \The_SEO_Framework\Front\Title::set_document_title( $title );
 	}
 
@@ -6173,14 +6173,14 @@ final class Deprecated {
 	 * Returns the SEO Settings page URL.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return string The escaped SEO Settings page URL.
 	 */
 	public function get_seo_settings_page_url() {
 
-		\tsf()->_deprecated_function( 'tsf()->get_seo_settings_page_url()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->get_seo_settings_page_url()', '5.0.0' );
 
 		return \The_SEO_Framework\is_headless( 'settings' )
 			? ''
@@ -6197,7 +6197,7 @@ final class Deprecated {
 	 * Does not support list or block elements. Only inline statements.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
@@ -6210,7 +6210,7 @@ final class Deprecated {
 	public function convert_markdown( $text, $convert = [], $args = [] ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->convert_markdown()', '4.3.0', 'tsf()->format()->markdown()->convert()' );
+		$tsf->_deprecated_function( 'tsf()->convert_markdown()', '5.0.0', 'tsf()->format()->markdown()->convert()' );
 
 		return $tsf->format()->markdown()->convert( $text, $convert, $args );
 	}
@@ -6219,7 +6219,7 @@ final class Deprecated {
 	 * Converts time from GMT input to given format.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $format The datetime format.
@@ -6227,7 +6227,7 @@ final class Deprecated {
 	 * @return string The converted time. Empty string if no $time is given.
 	 */
 	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->gmt2date()', '4.3.0', 'gmdate()' );
+		\tsf()->_deprecated_function( 'tsf()->gmt2date()', '5.0.0', 'gmdate()' );
 		return gmdate( $format, strtotime( "$time GMT" ) );
 	}
 
@@ -6238,7 +6238,7 @@ final class Deprecated {
 	 * @since 3.0.0
 	 * @since 4.1.4 1. Added options-override parameter.
 	 *              2. Added return value filter.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param null|bool $override_get_time Whether to override the $get_time from option value.
@@ -6247,7 +6247,7 @@ final class Deprecated {
 	public function get_timestamp_format( $override_get_time = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_timestamp_format()', '4.3.0', 'tsf()->format()->time()->get_preferred_format()' );
+		$tsf->_deprecated_function( 'tsf()->get_timestamp_format()', '5.0.0', 'tsf()->format()->time()->get_preferred_format()' );
 
 		if ( isset( $override_get_time ) && '1' !== $override_get_time ) {
 			$get_time = $override_get_time;
@@ -6270,7 +6270,7 @@ final class Deprecated {
 	 * Determines if time is used in the timestamp format.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True if time is used. False otherwise.
@@ -6278,7 +6278,7 @@ final class Deprecated {
 	public function uses_time_in_timestamp_format() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->uses_time_in_timestamp_format()', '4.3.0', "tsf()->data()->plugin()->get_option( 'timestamp_format' )" );
+		$tsf->_deprecated_function( 'tsf()->uses_time_in_timestamp_format()', '5.0.0', "tsf()->data()->plugin()->get_option( 'timestamp_format' )" );
 
 		return '1' === $tsf->data()->plugin()->get_option( 'timestamp_format' );
 	}
@@ -6287,7 +6287,7 @@ final class Deprecated {
 	 * Shortens string and adds ellipses when over a threshold in length.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $string The string to test and maybe trim
@@ -6299,7 +6299,7 @@ final class Deprecated {
 	public function hellip_if_over( $string, $over = 0 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->hellip_if_over()', '4.3.0', 'tsf()->format()->strings()->hellip_if_over()' );
+		$tsf->_deprecated_function( 'tsf()->hellip_if_over()', '5.0.0', 'tsf()->format()->strings()->hellip_if_over()' );
 
 		return $tsf->format()->strings()->hellip_if_over( $string, $over );
 	}
@@ -6320,7 +6320,7 @@ final class Deprecated {
 	 *              3. Short length now works as intended, instead of comparing as less, it compares as less or equal to.
 	 * @since 4.2.0 Now supports detection of connector-dashes, connector-punctuation, and closing quotes,
 	 *              and recognizes those as whole words.
-	 * @since 4.3.0 1. Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
+	 * @since 5.0.0 1. Now converts input string as UTF-8. This mainly solves issues with attached quotes (d'anglais).
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -6336,7 +6336,7 @@ final class Deprecated {
 	public function get_word_count( $string, $dupe_count = 3, $dupe_short = 5, $short_length = 3 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_word_count()', '4.3.0', 'tsf()->format()->strings()->get_word_count()' );
+		$tsf->_deprecated_function( 'tsf()->get_word_count()', '5.0.0', 'tsf()->format()->strings()->get_word_count()' );
 
 		return $tsf->format()->strings()->get_word_count(
 			$string,
@@ -6362,7 +6362,7 @@ final class Deprecated {
 	public function get_input_guidelines( $locale = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_input_guidelines()', '4.3.0', 'tsf()->guidelines()->get_text_size_guidelines()' );
+		$tsf->_deprecated_function( 'tsf()->get_input_guidelines()', '5.0.0', 'tsf()->guidelines()->get_text_size_guidelines()' );
 
 		return $tsf->guidelines()->get_text_size_guidelines( $locale );
 	}
@@ -6378,7 +6378,7 @@ final class Deprecated {
 	public function get_input_guidelines_i18n() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_input_guidelines_i18n()', '4.3.0', 'tsf()->guidelines()->get_text_size_guidelines_i18n()' );
+		$tsf->_deprecated_function( 'tsf()->get_input_guidelines_i18n()', '5.0.0', 'tsf()->guidelines()->get_text_size_guidelines_i18n()' );
 
 		return $tsf->guidelines()->get_input_guidelines_i18n();
 	}
@@ -6387,14 +6387,14 @@ final class Deprecated {
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $id The input ID.
 	 * @param array  $data The input data.
 	 */
 	public function output_js_title_data( $id, $data ) {
-		\tsf()->_deprecated_function( 'tsf()->output_js_title_data()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->output_js_title_data()', '5.0.0' );
 		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_title_data( $id, $data );
 	}
 
@@ -6402,14 +6402,14 @@ final class Deprecated {
 	 * Outputs reference social HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string       $group    The social input group ID.
 	 * @param array[og,tw] $settings The input settings data.
 	 */
 	public function output_js_social_data( $group, $settings ) {
-		\tsf()->_deprecated_function( 'tsf()->output_js_social_data()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->output_js_social_data()', '5.0.0' );
 		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_social_data( $group, $settings );
 	}
 
@@ -6417,14 +6417,14 @@ final class Deprecated {
 	 * Outputs reference description HTML elements for JavaScript for a specific ID.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $id   The description input ID.
 	 * @param array  $data The input data.
 	 */
 	public function output_js_description_data( $id, $data ) {
-		\tsf()->_deprecated_function( 'tsf()->output_js_description_data()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->output_js_description_data()', '5.0.0' );
 		\The_SEO_Framework\Admin\Settings\Layout\Input::output_js_social_data( $id, $data );
 	}
 
@@ -6432,13 +6432,13 @@ final class Deprecated {
 	 * Adds menu links under "settings" in the wp-admin dashboard
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function add_menu_link() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->add_menu_link()', '4.3.0', 'tsf()->admin()->menu()->register_top_menu_page()' );
+		$tsf->_deprecated_function( 'tsf()->add_menu_link()', '5.0.0', 'tsf()->admin()->menu()->register_top_menu_page()' );
 
 		$tsf->admin()->menu()->register_top_menu_page();
 	}
@@ -6448,7 +6448,7 @@ final class Deprecated {
 	 * Always returns 0 when the settings are headless.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return int The registered issue count.
@@ -6456,7 +6456,7 @@ final class Deprecated {
 	public function get_admin_issue_count() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_admin_issue_count()', '4.3.0', 'tsf()->admin()->menu()->get_top_menu_issue_count()' );
+		$tsf->_deprecated_function( 'tsf()->get_admin_issue_count()', '5.0.0', 'tsf()->admin()->menu()->get_top_menu_issue_count()' );
 
 		return $tsf->admin()->menu()->get_top_menu_issue_count();
 	}
@@ -6465,7 +6465,7 @@ final class Deprecated {
 	 * Returns formatted text for the notice count to be displayed in the admin menu as a number.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $issue_count The issue count.
@@ -6474,7 +6474,7 @@ final class Deprecated {
 	public function get_admin_menu_issue_badge( $issue_count ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_admin_menu_issue_badge()', '4.3.0', 'tsf()->admin()->menu()->get_issue_badge()' );
+		$tsf->_deprecated_function( 'tsf()->get_admin_menu_issue_badge()', '5.0.0', 'tsf()->admin()->menu()->get_issue_badge()' );
 
 		return $tsf->admin()->menu()->get_issue_badge( $issue_count );
 	}
@@ -6484,7 +6484,7 @@ final class Deprecated {
 	 * for alerts, etc.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $page Menu slug. This slug must exist, or the redirect will loop back to the current page.
@@ -6494,7 +6494,7 @@ final class Deprecated {
 	public function admin_redirect( $page, $query_args = [] ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->admin_redirect()', '4.3.0', 'tsf()->admin()->utils()->redirect()' );
+		$tsf->_deprecated_function( 'tsf()->admin_redirect()', '5.0.0', 'tsf()->admin()->utils()->redirect()' );
 
 		$tsf->admin()->utils()->redirect( $page, $query_args );
 	}
@@ -6503,7 +6503,7 @@ final class Deprecated {
 	 * Registers dismissible persistent notice, that'll respawn during page load until dismissed or otherwise expired.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $message    The notice message. Expected to be escaped if $escape is false.
@@ -6531,7 +6531,7 @@ final class Deprecated {
 	public function register_dismissible_persistent_notice( $message, $key, $args = [], $conditions = [] ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->register_dismissible_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->register_notice()' );
+		$tsf->_deprecated_function( 'tsf()->register_dismissible_persistent_notice()', '5.0.0', 'tsf()->admin()->notice()->persistent()->register_notice()' );
 
 		$tsf->admin()->notice()->persistent()->register_notice( $message, $key, $args, $conditions );
 	}
@@ -6541,7 +6541,7 @@ final class Deprecated {
 	 * When the threshold is reached, the notice is deleted.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $key   The notice key.
@@ -6551,7 +6551,7 @@ final class Deprecated {
 	public function count_down_persistent_notice( $key, &$count ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->count_down_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->count_down_notice()' );
+		$tsf->_deprecated_function( 'tsf()->count_down_persistent_notice()', '5.0.0', 'tsf()->admin()->notice()->persistent()->count_down_notice()' );
 
 		$tsf->admin()->notice()->persistent()->count_down_notice( $key, $count );
 
@@ -6564,7 +6564,7 @@ final class Deprecated {
 	 * Clears a persistent notice by key.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $key The notice key.
@@ -6573,7 +6573,7 @@ final class Deprecated {
 	public function clear_persistent_notice( $key ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->clear_persistent_notice()', '4.3.0', 'tsf()->admin()->notice()->persistent()->clear_notice()' );
+		$tsf->_deprecated_function( 'tsf()->clear_persistent_notice()', '5.0.0', 'tsf()->admin()->notice()->persistent()->clear_notice()' );
 
 		return $tsf->admin()->notice()->persistent()->clear_notice( $key );
 	}
@@ -6582,7 +6582,7 @@ final class Deprecated {
 	 * Clears all registered persistent notices. Useful after upgrade.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool True on success, false on failure.
@@ -6590,7 +6590,7 @@ final class Deprecated {
 	public function clear_all_persistent_notices() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->clear_all_persistent_notices()', '4.3.0', 'tsf()->admin()->notice()->persistent()->clear_all_notices()' );
+		$tsf->_deprecated_function( 'tsf()->clear_all_persistent_notices()', '5.0.0', 'tsf()->admin()->notice()->persistent()->clear_all_notices()' );
 
 		return $tsf->admin()->notice()->persistent()->clear_all_notices();
 	}
@@ -6600,7 +6600,7 @@ final class Deprecated {
 	 * Also loads scripts and styles if out of The SEO Framework's context.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
@@ -6615,7 +6615,7 @@ final class Deprecated {
 	public function generate_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true, $inline = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->generate_dismissible_notice()', '4.3.0', 'tsf()->admin()->notice()->generate_notice()' );
+		$tsf->_deprecated_function( 'tsf()->generate_dismissible_notice()', '5.0.0', 'tsf()->admin()->notice()->generate_notice()' );
 
 		return $tsf->admin()->notice()->generate_notice(
 			$message,
@@ -6632,7 +6632,7 @@ final class Deprecated {
 	 * Echos generated dismissible notice.
 	 *
 	 * @since 2.7.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
@@ -6644,7 +6644,7 @@ final class Deprecated {
 	public function do_dismissible_notice( $message = '', $type = 'updated', $icon = true, $escape = true, $inline = false ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->do_dismissible_notice()', '4.3.0', 'tsf()->admin()->notice()->output_notice()' );
+		$tsf->_deprecated_function( 'tsf()->do_dismissible_notice()', '5.0.0', 'tsf()->admin()->notice()->output_notice()' );
 
 		return $tsf->admin()->notice()->output_notice(
 			$message,
@@ -6661,13 +6661,13 @@ final class Deprecated {
 	 * Register the database settings for storage.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return void Early if settings can't be registered.
 	 */
 	public function register_settings() {
-		\tsf()->_deprecated_function( 'tsf()->register_settings()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->register_settings()', '5.0.0' );
 		\The_SEO_Framework\Data\Admin\Plugin::register_settings();
 	}
 
@@ -6678,11 +6678,11 @@ final class Deprecated {
 	 * might be different from a future (or past, since v4.1.0) one.
 	 *
 	 * @since 3.0.6
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function update_db_version() {
-		\tsf()->_deprecated_function( 'tsf()->update_db_version()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->update_db_version()', '5.0.0' );
 		\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
 	}
 
@@ -6690,11 +6690,11 @@ final class Deprecated {
 	 * Registers each of the settings with a sanitization filter type.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
 	public function init_sanitizer_filters() {
-		\tsf()->_deprecated_function( 'tsf()->init_sanitizer_filters()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->init_sanitizer_filters()', '5.0.0' );
 		\The_SEO_Framework\Data\Filter\Plugin::register_filters_jit();
 	}
 
@@ -6706,13 +6706,13 @@ final class Deprecated {
 	 * sanitizer at the right time.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return boolean Returns true when complete
 	 */
 	public function add_option_filter() {
-		\tsf()->_deprecated_function( 'tsf()->add_option_filter()', '4.3.0', 'filter the_seo_framework_settings_update_sanitizers' );
+		\tsf()->_deprecated_function( 'tsf()->add_option_filter()', '5.0.0', 'filter the_seo_framework_settings_update_sanitizers' );
 		return false;
 	}
 
@@ -6720,7 +6720,7 @@ final class Deprecated {
 	 * Calculates the relative font color according to the background, grayscale.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $hex The 3 to 6+ character RGB hex. The '#' prefix may be added.
@@ -6730,7 +6730,7 @@ final class Deprecated {
 	public function get_relative_fontcolor( $hex = '' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_relative_fontcolor()', '4.3.0', 'tsf()->format()->color()->get_relative_fontcolor()' );
+		$tsf->_deprecated_function( 'tsf()->get_relative_fontcolor()', '5.0.0', 'tsf()->format()->color()->get_relative_fontcolor()' );
 
 		return $tsf->format()->color()->get_relative_fontcolor( $hex );
 	}
@@ -6740,7 +6740,7 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.1
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return array List of active plugins.
@@ -6748,7 +6748,7 @@ final class Deprecated {
 	public function active_plugins() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->active_plugins()', '4.3.0', 'tsf()->data()->blog()->get_active_plugins()' );
+		$tsf->_deprecated_function( 'tsf()->active_plugins()', '5.0.0', 'tsf()->data()->blog()->get_active_plugins()' );
 
 		return $tsf->data()->blog()->get_active_plugins();
 	}
@@ -6764,7 +6764,7 @@ final class Deprecated {
 	public function conflicting_plugins() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->conflicting_plugins()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->conflicting_plugins()', '5.0.0' );
 
 		return \The_SEO_Framework\Helper\get_conflicting_plugins();
 	}
@@ -6781,7 +6781,7 @@ final class Deprecated {
 	public function get_conflicting_plugins( $type = 'seo_tools' ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_conflicting_plugins()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->get_conflicting_plugins()', '5.0.0' );
 
 		return \The_SEO_Framework\Helper\get_conflicting_plugins()[ $type ] ?? [];
 	}
@@ -6796,7 +6796,7 @@ final class Deprecated {
 	 * @return bool SEO plugin detected.
 	 */
 	public function detect_seo_plugins() {
-		\tsf()->_deprecated_function( 'tsf()->detect_seo_plugins()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_seo_plugins()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['seo_tools'];
 	}
 
@@ -6810,7 +6810,7 @@ final class Deprecated {
 	 * @return bool True if OG or SEO plugin detected.
 	 */
 	public function detect_og_plugin() {
-		\tsf()->_deprecated_function( 'tsf()->detect_og_plugin()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_og_plugin()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['open_graph'];
 	}
 
@@ -6824,7 +6824,7 @@ final class Deprecated {
 	 * @return bool Twitter Card plugin detected.
 	 */
 	public function detect_twitter_card_plugin() {
-		\tsf()->_deprecated_function( 'tsf()->detect_twitter_card_plugin()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_twitter_card_plugin()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['twitter_card'];
 	}
 
@@ -6838,7 +6838,7 @@ final class Deprecated {
 	 * @return bool Whether another Schema.org plugin is active.
 	 */
 	public function has_json_ld_plugin() {
-		\tsf()->_deprecated_function( 'tsf()->has_json_ld_plugin()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->has_json_ld_plugin()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['schema'];
 	}
 
@@ -6852,7 +6852,7 @@ final class Deprecated {
 	 * @return bool
 	 */
 	public function detect_sitemap_plugin() {
-		\tsf()->_deprecated_function( 'tsf()->detect_sitemap_plugin()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_sitemap_plugin()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::get_active_conflicting_plugin_types()['sitemaps'];
 	}
 
@@ -6860,14 +6860,14 @@ final class Deprecated {
 	 * Makes Email Addresses safe, via sanitize_email()
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $email A possibly unsafe email.
 	 * @return string String a safe email address
 	 */
 	public function s_email_address( $email ) {
-		\tsf()->_deprecated_function( 'tsf()->s_email_address()', '4.3.0', 'sanitize_email()' );
+		\tsf()->_deprecated_function( 'tsf()->s_email_address()', '5.0.0', 'sanitize_email()' );
 		return \sanitize_email( $email );
 	}
 
@@ -6875,28 +6875,28 @@ final class Deprecated {
 	 * Removes unsafe HTML tags, via wp_kses_post().
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String with potentially unsafe HTML in it.
 	 * @return string String with only safe HTML in it
 	 */
 	public function s_safe_html( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->s_safe_html()', '4.3.0', 'wp_kses_post()' );
+		\tsf()->_deprecated_function( 'tsf()->s_safe_html()', '5.0.0', 'wp_kses_post()' );
 		return \wp_kses_post( $text );
 	}
 	/**
 	 * Removes HTML tags from string.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String, possibly with HTML in it.
 	 * @return string String without HTML in it.
 	 */
 	public function s_no_html( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->s_no_html()', '4.3.0', 'strip_tags()' );
+		\tsf()->_deprecated_function( 'tsf()->s_no_html()', '5.0.0', 'strip_tags()' );
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		return strip_tags( $text );
 	}
@@ -6906,14 +6906,14 @@ final class Deprecated {
 	 * Also removes all spaces.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String, possibly with HTML and spaces in it.
 	 * @return string String without HTML and breaks in it.
 	 */
 	public function s_no_html_space( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->s_no_html_space()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_no_html_space()', '5.0.0' );
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		return str_replace( ' ', '', strip_tags( $text ) );
 	}
@@ -6922,14 +6922,14 @@ final class Deprecated {
 	 * Makes URLs safe, maintaining queries.
 	 *
 	 * @since 2.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url A possibly unsafe URL.
 	 * @return string String a safe URL with Query Arguments.
 	 */
 	public function s_url_query( $url ) {
-		\tsf()->_deprecated_function( 'tsf()->s_url_query()', '4.3.0', 'sanitize_url()' );
+		\tsf()->_deprecated_function( 'tsf()->s_url_query()', '5.0.0', 'sanitize_url()' );
 		return \sanitize_url( $url );
 	}
 
@@ -6937,14 +6937,14 @@ final class Deprecated {
 	 * Makes URLs safe and removes query args.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url A possibly unsafe URL.
 	 * @return string String a safe URL without Query Arguments.
 	 */
 	public function s_url( $url ) {
-		\tsf()->_deprecated_function( 'tsf()->s_url()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_url()', '5.0.0' );
 		/**
 		 * If queries have been tokenized, take the value before the query args.
 		 * Otherwise it's empty, so take the current value.
@@ -6957,7 +6957,7 @@ final class Deprecated {
 	 * Looks at permalink settings to determine roughness of escaping.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url A fully qualified URL.
@@ -6966,7 +6966,7 @@ final class Deprecated {
 	public function clean_canonical_url( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->clean_canonical_url()', '4.3.0', 'esc_url()' );
+		$tsf->_deprecated_function( 'tsf()->clean_canonical_url()', '5.0.0', 'esc_url()' );
 
 		if ( $tsf->query()->utils()->using_pretty_permalinks() )
 			return \esc_url( $url, [ 'https', 'http' ] );
@@ -6982,7 +6982,7 @@ final class Deprecated {
 	 * It also maintains the '@' character and square brackets.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $id The unsanitized ID.
@@ -6991,7 +6991,7 @@ final class Deprecated {
 	public function s_field_id( $id ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_field_id()', '4.3.0', 'tsf()->escape()->option_name_attribute()' );
+		$tsf->_deprecated_function( 'tsf()->s_field_id()', '5.0.0', 'tsf()->escape()->option_name_attribute()' );
 
 		return $tsf->escape()->option_name_attribute( $id );
 	}
@@ -7000,7 +7000,7 @@ final class Deprecated {
 	 * Returns an one-line sanitized description and escapes it.
 	 *
 	 * @since 2.5.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $description The Description.
@@ -7009,7 +7009,7 @@ final class Deprecated {
 	public function s_description( $description ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_description()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->s_description()', '5.0.0' );
 
 		return \esc_html(
 			$tsf->sanitize()->metadata_content( $description )
@@ -7020,7 +7020,7 @@ final class Deprecated {
 	 * Escapes and beautifies description.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 1. The first parameter is now required.
+	 * @since 5.0.0 1. The first parameter is now required.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7029,7 +7029,7 @@ final class Deprecated {
 	 */
 	public function escape_description( $description ) {
 
-		\tsf()->_deprecated_function( 'tsf()->escape_description()', '4.3.0', 'esc_html()' );
+		\tsf()->_deprecated_function( 'tsf()->escape_description()', '5.0.0', 'esc_html()' );
 
 		return trim(
 			\esc_html(
@@ -7046,7 +7046,7 @@ final class Deprecated {
 	 * Returns a sanitized and trimmed title.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $title The input Title.
@@ -7055,7 +7055,7 @@ final class Deprecated {
 	public function s_title( $title ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_title()', '4.3.0' );
+		$tsf->_deprecated_function( 'tsf()->s_title()', '5.0.0' );
 
 		return \esc_html(
 			$tsf->sanitize()->metadata_content( $title )
@@ -7066,7 +7066,7 @@ final class Deprecated {
 	 * Escapes and beautifies title.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 1. The first parameter is now required.
+	 * @since 5.0.0 1. The first parameter is now required.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7076,7 +7076,7 @@ final class Deprecated {
 	 */
 	public function escape_title( $title, $trim = true ) {
 
-		\tsf()->_deprecated_function( 'tsf()->escape_title()', '4.3.0', 'esc_html()' );
+		\tsf()->_deprecated_function( 'tsf()->escape_title()', '5.0.0', 'esc_html()' );
 
 		$title = \esc_html(
 			\convert_chars(
@@ -7094,7 +7094,7 @@ final class Deprecated {
 	 * of entities in HTML input value attributes.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String with possibly ampersands.
@@ -7102,7 +7102,7 @@ final class Deprecated {
 	 */
 	public function esc_attr_preserve_amp( $text ) {
 
-		\tsf()->_deprecated_function( 'tsf()->esc_attr_preserve_amp()', '4.3.0', 'esc_attr()' );
+		\tsf()->_deprecated_function( 'tsf()->esc_attr_preserve_amp()', '5.0.0', 'esc_attr()' );
 
 		return \esc_attr( str_replace( '&', '&amp;', $text ) );
 	}
@@ -7113,7 +7113,7 @@ final class Deprecated {
 	 * This might leave stray line feeds. Use `tsf()->s_singleline()` to fix that.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $content The content to look for embed.
@@ -7122,7 +7122,7 @@ final class Deprecated {
 	public function strip_newline_urls( $content ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->strip_newline_urls()', '4.3.0', 'tsf()->format()->html()->strip_newline_urls()' );
+		$tsf->_deprecated_function( 'tsf()->strip_newline_urls()', '5.0.0', 'tsf()->format()->html()->strip_newline_urls()' );
 
 		return $tsf->format()->html()->strip_newline_urls( $content );
 	}
@@ -7133,7 +7133,7 @@ final class Deprecated {
 	 * This might leave stray line feeds. Use `tsf()->s_singleline()` to fix that.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $content The content to look for embed.
@@ -7142,7 +7142,7 @@ final class Deprecated {
 	public function strip_paragraph_urls( $content ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->strip_paragraph_urls()', '4.3.0', 'tsf()->format()->html()->strip_paragraph_urls()' );
+		$tsf->_deprecated_function( 'tsf()->strip_paragraph_urls()', '5.0.0', 'tsf()->format()->html()->strip_paragraph_urls()' );
 
 		return $tsf->format()->html()->strip_paragraph_urls( $content );
 	}
@@ -7154,7 +7154,7 @@ final class Deprecated {
 	 * When done, it performs a sanity-cleanup via `strip_tags()`.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $input The input text that needs its tags stripped.
@@ -7181,7 +7181,7 @@ final class Deprecated {
 	public function strip_tags_cs( $input, $args = [] ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->strip_tags_cs()', '4.3.0', 'tsf()->format()->html()->strip_tags_cs()' );
+		$tsf->_deprecated_function( 'tsf()->strip_tags_cs()', '5.0.0', 'tsf()->format()->html()->strip_tags_cs()' );
 
 		return $tsf->format()->html()->strip_tags_cs( $input, $args );
 	}
@@ -7190,7 +7190,7 @@ final class Deprecated {
 	 * Sanitizes input excerpt.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 1. The first parameter is now required.
+	 * @since 5.0.0 1. The first parameter is now required.
 	 *              2. Now returns an empty string when something falsesque is returned.
 	 *              3. Deprecated.
 	 * @deprecated
@@ -7203,7 +7203,7 @@ final class Deprecated {
 	public function s_excerpt( $excerpt, $allow_shortcodes = true, $escape = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_excerpt()', '4.3.0', 'tsf()->format()->html()->extract_content()' );
+		$tsf->_deprecated_function( 'tsf()->s_excerpt()', '5.0.0', 'tsf()->format()->html()->extract_content()' );
 
 		$excerpt = $tsf->format()->html()->extract_content(
 			$excerpt,
@@ -7220,7 +7220,7 @@ final class Deprecated {
 	 * Cleans input excerpt. Does NOT escape excerpt for output.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 1. The first parameter is now required.
+	 * @since 5.0.0 1. The first parameter is now required.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7231,7 +7231,7 @@ final class Deprecated {
 	public function s_excerpt_raw( $excerpt, $allow_shortcodes = true ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_excerpt_raw()', '4.3.0', 'tsf()->format()->html()->extract_content()' );
+		$tsf->_deprecated_function( 'tsf()->s_excerpt_raw()', '5.0.0', 'tsf()->format()->html()->extract_content()' );
 
 		return $tsf->format()->html()->extract_content(
 			$excerpt,
@@ -7245,7 +7245,7 @@ final class Deprecated {
 	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated.
 	 *
 	 * @param string $description The Description.
@@ -7254,7 +7254,7 @@ final class Deprecated {
 	public function s_description_raw( $description ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_description_raw()', '4.3.0', 'tsf()->sanitize()->metadata_content()' );
+		$tsf->_deprecated_function( 'tsf()->s_description_raw()', '5.0.0', 'tsf()->sanitize()->metadata_content()' );
 
 		return $tsf->sanitize()->metadata_content( $description );
 	}
@@ -7263,7 +7263,7 @@ final class Deprecated {
 	 * Converts multilines to single lines.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
@@ -7273,7 +7273,7 @@ final class Deprecated {
 	public function s_singleline( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_singleline()', '4.3.0', 'tsf()->sanitize()->newline_to_space()' );
+		$tsf->_deprecated_function( 'tsf()->s_singleline()', '5.0.0', 'tsf()->sanitize()->newline_to_space()' );
 
 		return $tsf->sanitize()->newline_to_space( $text );
 	}
@@ -7282,7 +7282,7 @@ final class Deprecated {
 	 * Removes duplicated spaces from the input value.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text The input value with possible multispaces.
@@ -7291,7 +7291,7 @@ final class Deprecated {
 	public function s_dupe_space( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_dupe_space()', '4.3.0', 'tsf()->sanitize()->remove_repeated_spacing()' );
+		$tsf->_deprecated_function( 'tsf()->s_dupe_space()', '5.0.0', 'tsf()->sanitize()->remove_repeated_spacing()' );
 
 		return $tsf->sanitize()->remove_repeated_spacing( $text );
 	}
@@ -7300,7 +7300,7 @@ final class Deprecated {
 	 * Removes tabs and replaces it with spaces.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text The input value with possible tabs.
@@ -7309,7 +7309,7 @@ final class Deprecated {
 	public function s_tabs( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_tabs()', '4.3.0', 'tsf()->sanitize()->tab_to_space()' );
+		$tsf->_deprecated_function( 'tsf()->s_tabs()', '5.0.0', 'tsf()->sanitize()->tab_to_space()' );
 
 		return $tsf->sanitize()->tab_to_space( $text );
 	}
@@ -7318,7 +7318,7 @@ final class Deprecated {
 	 * Returns a -1, 0, or 1, based on nearest value.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $value Should ideally be -1, 0, or 1.
@@ -7327,7 +7327,7 @@ final class Deprecated {
 	public function s_qubit( $value ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_qubit()', '4.3.0', 'tsf()->sanitize()->qubit()' );
+		$tsf->_deprecated_function( 'tsf()->s_qubit()', '5.0.0', 'tsf()->sanitize()->qubit()' );
 
 		return $tsf->sanitize()->qubit( $value );
 	}
@@ -7338,7 +7338,7 @@ final class Deprecated {
 	 * Uses double casting. First, we cast to bool, then to integer.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $value Should ideally be a 1 or 0 integer passed in.
@@ -7347,7 +7347,7 @@ final class Deprecated {
 	public function s_one_zero( $value ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_one_zero()', '4.3.0', 'tsf()->sanitize()->boolean_integer()' );
+		$tsf->_deprecated_function( 'tsf()->s_one_zero()', '5.0.0', 'tsf()->sanitize()->boolean_integer()' );
 
 		return $tsf->sanitize()->boolean_integer( $value );
 	}
@@ -7359,7 +7359,7 @@ final class Deprecated {
 	 * Rounds floats down. Converts non-numeric inputs to '0'.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $value Should ideally be an integer.
@@ -7368,7 +7368,7 @@ final class Deprecated {
 	public function s_numeric_string( $value ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_numeric_string()', '4.3.0', 'tsf()->sanitize()->numeric_string()' );
+		$tsf->_deprecated_function( 'tsf()->s_numeric_string()', '5.0.0', 'tsf()->sanitize()->numeric_string()' );
 
 		return $tsf->sanitize()->numeric_string( $value );
 	}
@@ -7377,7 +7377,7 @@ final class Deprecated {
 	 * Returns a positive integer value.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $value Should ideally be a positive integer.
@@ -7386,7 +7386,7 @@ final class Deprecated {
 	public function s_absint( $value ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_absint()', '4.3.0', 'absint()' );
+		$tsf->_deprecated_function( 'tsf()->s_absint()', '5.0.0', 'absint()' );
 
 		return \absint( $value );
 	}
@@ -7395,7 +7395,7 @@ final class Deprecated {
 	 * Sanitizes color hexadecimals.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $color String with potentially unwanted hex values.
@@ -7404,7 +7404,7 @@ final class Deprecated {
 	public function s_color_hex( $color ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_color_hex()', '4.3.0', 'tsf()->sanitize()->rgb_hex()' );
+		$tsf->_deprecated_function( 'tsf()->s_color_hex()', '5.0.0', 'tsf()->sanitize()->rgb_hex()' );
 
 		return $tsf->sanitize()->rgb_hex( $color );
 	}
@@ -7421,7 +7421,7 @@ final class Deprecated {
 	 * Sybre-kamisama.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String with potential hyphens.
@@ -7430,7 +7430,7 @@ final class Deprecated {
 	public function s_hyphen( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_hyphen()', '4.3.0', 'tsf()->sanitize()->lone_hyphen_to_entity()' );
+		$tsf->_deprecated_function( 'tsf()->s_hyphen()', '5.0.0', 'tsf()->sanitize()->lone_hyphen_to_entity()' );
 
 		return $tsf->sanitize()->lone_hyphen_to_entity( $text );
 	}
@@ -7439,7 +7439,7 @@ final class Deprecated {
 	 * Replaces non-break spaces with regular spaces.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String with potentially unwanted nbsp values.
@@ -7448,7 +7448,7 @@ final class Deprecated {
 	public function s_nbsp( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_nbsp()', '4.3.0', 'tsf()->sanitize()->nbsp_to_space()' );
+		$tsf->_deprecated_function( 'tsf()->s_nbsp()', '5.0.0', 'tsf()->sanitize()->nbsp_to_space()' );
 
 		return $tsf->sanitize()->nbsp_to_space( $text );
 	}
@@ -7457,7 +7457,7 @@ final class Deprecated {
 	 * Replaces backslash with entity backslash.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 1. No longer removes backslashes since we no longer add them.
+	 * @since 5.0.0 1. No longer removes backslashes since we no longer add them.
 	 *                 Even though that changes data handling, this shouldn't be used for data outside of our APIs.
 	 *              2. Deprecated.
 	 * @deprecated
@@ -7468,7 +7468,7 @@ final class Deprecated {
 	public function s_bsol( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_bsol()', '4.3.0', 'tsf()->sanitize()->backward_solidus_to_entity()' );
+		$tsf->_deprecated_function( 'tsf()->s_bsol()', '5.0.0', 'tsf()->sanitize()->backward_solidus_to_entity()' );
 
 		return $tsf->sanitize()->backward_solidus_to_entity( $text );
 	}
@@ -7477,7 +7477,7 @@ final class Deprecated {
 	 * Replaces backslash with entity backslash.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String with potentially wanted \ values.
@@ -7486,7 +7486,7 @@ final class Deprecated {
 	public function s_bsol_raw( $text ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_bsol_raw()', '4.3.0', 'tsf()->sanitize()->backward_solidus_to_entity()' );
+		$tsf->_deprecated_function( 'tsf()->s_bsol_raw()', '5.0.0', 'tsf()->sanitize()->backward_solidus_to_entity()' );
 
 		return $tsf->sanitize()->backward_solidus_to_entity( $text );
 	}
@@ -7496,7 +7496,7 @@ final class Deprecated {
 	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $title The input Title.
@@ -7505,7 +7505,7 @@ final class Deprecated {
 	public function s_title_raw( $title ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_title_raw()', '4.3.0', 'tsf()->sanitize()->metadata_content()' );
+		$tsf->_deprecated_function( 'tsf()->s_title_raw()', '5.0.0', 'tsf()->sanitize()->metadata_content()' );
 
 		return $tsf->sanitize()->metadata_content( $title );
 	}
@@ -7514,7 +7514,7 @@ final class Deprecated {
 	 * Cleans known parameters from image details.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Now sanitizes the caption.
+	 * @since 5.0.0 1. Now sanitizes the caption.
 	 *              2. Deprecated.
 	 * @deprecated
 	 * @NOTE If the input details are in an associative array, they'll be converted to sequential.
@@ -7533,7 +7533,7 @@ final class Deprecated {
 	public function s_image_details( $details ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_image_details()', '4.3.0', 'tsf()->sanitize()->image_details()' );
+		$tsf->_deprecated_function( 'tsf()->s_image_details()', '5.0.0', 'tsf()->sanitize()->image_details()' );
 
 		return $tsf->sanitize()->image_details( $details );
 	}
@@ -7543,7 +7543,7 @@ final class Deprecated {
 	 * Parses URL to path and adds @ if URL is given.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $username String with potentially wrong Twitter username.
@@ -7552,7 +7552,7 @@ final class Deprecated {
 	public function s_twitter_name( $username ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_twitter_name()', '4.3.0', 'tsf()->sanitize()->twitter_profile_handle()' );
+		$tsf->_deprecated_function( 'tsf()->s_twitter_name()', '5.0.0', 'tsf()->sanitize()->twitter_profile_handle()' );
 
 		return $tsf->sanitize()->twitter_profile_handle( $username );
 	}
@@ -7561,7 +7561,7 @@ final class Deprecated {
 	 * Parses Facebook profile URLs. Exchanges URLs for Facebook's.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $profile String with potentially wrong Facebook profile URL.
@@ -7570,7 +7570,7 @@ final class Deprecated {
 	public function s_facebook_profile( $profile ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_facebook_profile()', '4.3.0', 'tsf()->sanitize()->facebook_profile_link()' );
+		$tsf->_deprecated_function( 'tsf()->s_facebook_profile()', '5.0.0', 'tsf()->sanitize()->facebook_profile_link()' );
 
 		return $tsf->sanitize()->facebook_profile_link( $profile );
 	}
@@ -7579,7 +7579,7 @@ final class Deprecated {
 	 * Iterates over and cleans known parameters from image details. Also strips out duplicates.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $details_array The image details, preferably sequential.
@@ -7596,7 +7596,7 @@ final class Deprecated {
 	public function s_image_details_deep( $details_array ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_image_details_deep()', '4.3.0', 'tsf()->sanitize()->image_details()' );
+		$tsf->_deprecated_function( 'tsf()->s_image_details_deep()', '5.0.0', 'tsf()->sanitize()->image_details()' );
 
 		$cleaned_details = $tsf->sanitize()->image_details( $details_array );
 
@@ -7612,7 +7612,7 @@ final class Deprecated {
 	 * Sanitizes the Redirect URL.
 	 *
 	 * @since 2.2.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url String with potentially unwanted redirect URL.
@@ -7621,7 +7621,7 @@ final class Deprecated {
 	public function s_redirect_url( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_redirect_url()', '4.3.0', 'tsf()->sanitize()->redirect_url()' );
+		$tsf->_deprecated_function( 'tsf()->s_redirect_url()', '5.0.0', 'tsf()->sanitize()->redirect_url()' );
 
 		return $tsf->sanitize()->redirect_url( $url );
 	}
@@ -7633,7 +7633,7 @@ final class Deprecated {
 	 * Could not think of a good name. Enjoy.
 	 *
 	 * @since 4.0.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url A possibly unsafe URL.
@@ -7642,7 +7642,7 @@ final class Deprecated {
 	public function s_url_relative_to_current_scheme( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_url_relative_to_current_scheme()', '4.3.0', 'tsf()->uri()->utils()->make_absolute_current_scheme_url()' );
+		$tsf->_deprecated_function( 'tsf()->s_url_relative_to_current_scheme()', '5.0.0', 'tsf()->uri()->utils()->make_absolute_current_scheme_url()' );
 
 		return $tsf->uri()->utils()->make_absolute_current_scheme_url( $url );
 	}
@@ -7652,7 +7652,7 @@ final class Deprecated {
 	 * The method should more aptly be named: "maybe_make_url_relative()".
 	 *
 	 * @since 2.6.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $url Full Path URL or relative URL.
@@ -7661,7 +7661,7 @@ final class Deprecated {
 	public function s_relative_url( $url ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->s_relative_url()', '4.3.0', 'tsf()->uri()->utils()->get_relative_part_from_url()' );
+		$tsf->_deprecated_function( 'tsf()->s_relative_url()', '5.0.0', 'tsf()->uri()->utils()->get_relative_part_from_url()' );
 
 		return $tsf->uri()->utils()->get_relative_part_from_url( $url );
 	}
@@ -7670,14 +7670,14 @@ final class Deprecated {
 	 * Sanitizes term meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $data The term meta to sanitize.
 	 * @return array The sanitized term meta.
 	 */
 	public function s_term_meta( $data ) {
-		\tsf()->_deprecated_function( 'tsf()->s_term_meta()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_term_meta()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Term::filter_meta_update( $data );
 	}
 
@@ -7685,14 +7685,14 @@ final class Deprecated {
 	 * Sanitizes post meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $data The post meta to sanitize.
 	 * @return array The sanitized post meta.
 	 */
 	public function s_post_meta( $data ) {
-		\tsf()->_deprecated_function( 'tsf()->s_post_meta()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_post_meta()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Post::filter_meta_update( $data );
 	}
 
@@ -7700,14 +7700,14 @@ final class Deprecated {
 	 * Sanitizes user meta.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $data The user meta to sanitize.
 	 * @return array The sanitized user meta.
 	 */
 	public function s_user_meta( $data ) {
-		\tsf()->_deprecated_function( 'tsf()->s_user_meta()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_user_meta()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\User::filter_meta_update( $data );
 	}
 
@@ -7715,7 +7715,7 @@ final class Deprecated {
 	 * Sanitizes post type archive meta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $data The post type archive meta to sanitize : {
@@ -7724,7 +7724,7 @@ final class Deprecated {
 	 * @return array The sanitized post type archive meta.
 	 */
 	public function s_all_post_type_archive_meta( $data ) {
-		\tsf()->_deprecated_function( 'tsf()->s_all_post_type_archive_meta()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_all_post_type_archive_meta()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::pta_meta( $data, [], 'pta' );
 	}
 
@@ -7732,14 +7732,14 @@ final class Deprecated {
 	 * Sanitizes post type archive meta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $data The post type archive meta to sanitize.
 	 * @return array The sanitized post type archive meta.
 	 */
 	public function s_post_type_archive_meta( $data ) {
-		\tsf()->_deprecated_function( 'tsf()->s_post_type_archive_meta()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_post_type_archive_meta()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::pta_meta( $data, [], 'pta' );
 	}
 
@@ -7747,14 +7747,14 @@ final class Deprecated {
 	 * Sanitizes canonical scheme settings.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text String with potentially unwanted values.
 	 * @return string A correct canonical scheme setting value.
 	 */
 	public function s_canonical_scheme( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->s_canonical_scheme()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_canonical_scheme()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::canonical_scheme( $text, '', 'canonical_scheme' );
 	}
 
@@ -7762,7 +7762,7 @@ final class Deprecated {
 	 * Sanitizes sitemap's min/max post value.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Now also sanitizes the default fallback value.
+	 * @since 5.0.0 1. Now also sanitizes the default fallback value.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7770,7 +7770,7 @@ final class Deprecated {
 	 * @return int A limited integer 1<=R<=50000.
 	 */
 	public function s_min_max_sitemap( $limit ) {
-		\tsf()->_deprecated_function( 'tsf()->s_min_max_sitemap()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_min_max_sitemap()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::sitemap_query_limit( $limit, 0, 'sitemap_query_limit' );
 	}
 
@@ -7779,7 +7779,7 @@ final class Deprecated {
 	 * Falls back to previous value if empty. If previous value is empty if will go to default.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 1. Now falls back to 'summary_large_image' instead of the default option. // var_dump() auto!
+	 * @since 5.0.0 1. Now falls back to 'summary_large_image' instead of the default option. // var_dump() auto!
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7787,7 +7787,7 @@ final class Deprecated {
 	 * @return string Sanitized twitter card type.
 	 */
 	public function s_twitter_card( $card ) {
-		\tsf()->_deprecated_function( 'tsf()->s_twitter_card()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_twitter_card()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::twitter_card( $card, 'summary', 'twitter_card' );
 	}
 
@@ -7795,7 +7795,7 @@ final class Deprecated {
 	 * Sanitizes image preview directive value.
 	 *
 	 * @since 4.0.2
-	 * @since 4.3.0 1. Now falls back to 'large' instead of 'standard'.
+	 * @since 5.0.0 1. Now falls back to 'large' instead of 'standard'.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7803,7 +7803,7 @@ final class Deprecated {
 	 * @return string The robots image snippet preview directive value.
 	 */
 	public function s_image_preview( $size ) {
-		\tsf()->_deprecated_function( 'tsf()->s_image_preview()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_image_preview()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::copyright_image_size( $size, 'large', 'max_image_preview' );
 	}
 
@@ -7811,14 +7811,14 @@ final class Deprecated {
 	 * Sanitizes video and snippet preview length directive values.
 	 *
 	 * @since 4.0.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $length The snippet length that's possibly out of range.
 	 * @return int A limited integer -1<=R<=600.
 	 */
 	public function s_snippet_length( $length ) {
-		\tsf()->_deprecated_function( 'tsf()->s_snippet_length()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_snippet_length()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::copyright_content_length( $length, 0, 'max_snippet_length' );
 	}
 
@@ -7826,14 +7826,14 @@ final class Deprecated {
 	 * Returns the title separator value string.
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $sep A valid separator.
 	 * @return string Title separator option
 	 */
 	public function s_title_separator( $sep ) {
-		\tsf()->_deprecated_function( 'tsf()->s_title_separator()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_title_separator()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::title_separator( $sep, 'pipe', 'title_separator' );
 	}
 
@@ -7841,14 +7841,14 @@ final class Deprecated {
 	 * Returns the knowledge type value string.
 	 *
 	 * @since 2.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $type Should ideally be a string 'person' or 'organization' passed in.
 	 * @return string title Knowledge type option
 	 */
 	public function s_knowledge_type( $type ) {
-		\tsf()->_deprecated_function( 'tsf()->s_knowledge_type()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_knowledge_type()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::knowledge_type( $type, 'person', 'knowledge_type' );
 	}
 
@@ -7857,14 +7857,14 @@ final class Deprecated {
 	 * Filters out default post types.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array[string,int] $post_types An array with post type name indexes and 0/1 values.
 	 * @return array
 	 */
 	public function s_disabled_post_types( $post_types ) {
-		\tsf()->_deprecated_function( 'tsf()->s_disabled_post_types()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_disabled_post_types()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array(
 			\The_SEO_Framework\Data\Filter\Plugin::disabled_post_types( $post_types, [], 'disabled_post_types' ),
 			[],
@@ -7877,14 +7877,14 @@ final class Deprecated {
 	 * Ideally, we want to check if the post type exists; however, some might be registered too late.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array[string,int] $post_types An array with post type name indexes and 0/1 values.
 	 * @return array
 	 */
 	public function s_post_types( $post_types ) {
-		\tsf()->_deprecated_function( 'tsf()->s_post_types()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_post_types()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array( $post_types );
 	}
 
@@ -7893,14 +7893,14 @@ final class Deprecated {
 	 * Filters out default taxonomies.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array[string,int] $taxonomies An array with taxonomy name indexes and 0/1 values.
 	 * @return array
 	 */
 	public function s_disabled_taxonomies( $taxonomies ) {
-		\tsf()->_deprecated_function( 'tsf()->s_disabled_taxonomies()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_disabled_taxonomies()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array(
 			\The_SEO_Framework\Data\Filter\Plugin::disabled_taxonomies( $taxonomies, [], 'disabled_taxonomies' ),
 			[],
@@ -7913,14 +7913,14 @@ final class Deprecated {
 	 * Ideally, we want to check if the taxonomy exists; however, some might be registered too late.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array[string,int] $taxonomies An array with taxonomy name indexes and 0/1 values.
 	 * @return array
 	 */
 	public function s_taxonomies( $taxonomies ) {
-		\tsf()->_deprecated_function( 'tsf()->s_taxonomies()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_taxonomies()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::checkbox_array( $taxonomies );
 	}
 
@@ -7930,7 +7930,7 @@ final class Deprecated {
 	 * This method fetches the default option because it's conditional (LTR/RTL).
 	 *
 	 * @since 2.2.2
-	 * @since 4.3.0 1. No longer falls back to option or default optionm, but a language-based default instead.
+	 * @since 5.0.0 1. No longer falls back to option or default optionm, but a language-based default instead.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7938,7 +7938,7 @@ final class Deprecated {
 	 * @return string left or right
 	 */
 	public function s_left_right( $position ) {
-		\tsf()->_deprecated_function( 'tsf()->s_left_right()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_left_right()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::title_location( $position, 'left', 'title_location' );
 	}
 
@@ -7948,7 +7948,7 @@ final class Deprecated {
 	 * This method fetches the default option because it's conditional (LTR/RTL).
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 1. No longer falls back to option or default option, but a language-based default instead.
+	 * @since 5.0.0 1. No longer falls back to option or default option, but a language-based default instead.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *
@@ -7956,7 +7956,7 @@ final class Deprecated {
 	 * @return string left or right
 	 */
 	public function s_left_right_home( $position ) {
-		\tsf()->_deprecated_function( 'tsf()->s_left_right_home()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_left_right_home()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::title_location( $position, 'left', 'home_title_location' );
 	}
 
@@ -7964,14 +7964,14 @@ final class Deprecated {
 	 * Sanitizes alter query type.
 	 *
 	 * @since 2.9.4
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $type Should ideally be a string 'in_query' or 'post_query' passed in.
 	 * @return string 'in_query' or 'post_query'
 	 */
 	public function s_alter_query_type( $type ) {
-		\tsf()->_deprecated_function( 'tsf()->s_alter_query_type()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_alter_query_type()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::alter_query_type( $type, 'in_query', 'alter_archive_query_type' );
 	}
 
@@ -7979,14 +7979,14 @@ final class Deprecated {
 	 * Sanitizes the html method value.
 	 *
 	 * @since 4.2.7
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param mixed $method Should ideally be a string 'fast', 'accurate', or 'thorough' passed in.
 	 * @return string 'fast', 'accurate', or 'thorough'.
 	 */
 	public function s_description_html_method( $method ) {
-		\tsf()->_deprecated_function( 'tsf()->s_description_html_method()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->s_description_html_method()', '5.0.0' );
 		return \The_SEO_Framework\Data\Filter\Plugin::auto_description_method( $method, 'fast', 'auto_description_method' );
 	}
 
@@ -7995,7 +7995,7 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $post_type The post type to test.
@@ -8004,7 +8004,7 @@ final class Deprecated {
 	public function has_posts_in_post_type_archive( $post_type ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->has_posts_in_post_type_archive()', '4.3.0', 'tsf()->data()->post()->has_posts_in_pta()' );
+		$tsf->_deprecated_function( 'tsf()->has_posts_in_post_type_archive()', '5.0.0', 'tsf()->data()->post()->has_posts_in_pta()' );
 
 		return $tsf->data()->post()->has_posts_in_pta( $post_type );
 	}
@@ -8013,14 +8013,14 @@ final class Deprecated {
 	 * Determines whether the text has recognizable transformative syntax.
 	 *
 	 * @since 4.2.7
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text The text to evaluate
 	 * @return bool
 	 */
 	public function has_unprocessed_syntax( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->has_unprocessed_syntax()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->has_unprocessed_syntax()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Migrate::text_has_unprocessed_syntax( $text );
 	}
 
@@ -8028,14 +8028,14 @@ final class Deprecated {
 	 * Determines if the input text has transformative Yoast SEO syntax.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text The text to evaluate.
 	 * @return bool
 	 */
 	public function has_yoast_syntax( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->has_yoast_syntax()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->has_yoast_syntax()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Migrate::text_has_yoast_seo_syntax( $text );
 	}
 
@@ -8043,14 +8043,14 @@ final class Deprecated {
 	 * Determines if the input text has transformative Rank Math syntax.
 	 *
 	 * @since 4.2.7
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text The text to evaluate.
 	 * @return bool
 	 */
 	public function has_rankmath_syntax( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->has_rankmath_syntax()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->has_rankmath_syntax()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Migrate::text_has_rank_math_syntax( $text );
 	}
 
@@ -8058,14 +8058,14 @@ final class Deprecated {
 	 * Determines if the input text has transformative SEOPress syntax.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string $text The text to evaluate.
 	 * @return bool
 	 */
 	public function has_seopress_syntax( $text ) {
-		\tsf()->_deprecated_function( 'tsf()->has_seopress_syntax()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->has_seopress_syntax()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Migrate::text_has_seopress_syntax( $text );
 	}
 
@@ -8078,7 +8078,7 @@ final class Deprecated {
 	 * @since 2.8.0 1. Can now check for globals.
 	 *              2. Switched detection order from FAST to SLOW.
 	 * @since 4.0.6 Can no longer autoload classes.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
@@ -8086,7 +8086,7 @@ final class Deprecated {
 	 */
 	public function detect_plugin( $plugins ) {
 
-		\tsf()->_deprecated_function( 'tsf()->detect_plugin()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_plugin()', '5.0.0' );
 
 		foreach ( $plugins['globals'] ?? [] as $name )
 			if ( isset( $GLOBALS[ $name ] ) )
@@ -8117,14 +8117,14 @@ final class Deprecated {
 	 * Memoizes the return value for the input argument--sorts the array deeply to ensure a match.
 	 *
 	 * @since 2.5.2
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array[] $plugins Array of array for globals, constants, classes
 	 *                         and/or functions to check for plugin existence.
 	 */
 	public function can_i_use( $plugins = [] ) {
-		\tsf()->_deprecated_function( 'tsf()->can_i_use()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->can_i_use()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::can_i_use( $plugins );
 	}
 
@@ -8136,7 +8136,7 @@ final class Deprecated {
 	 * @since 4.0.6 1. Can now check for globals.
 	 *              2. Switched detection order from FAST to SLOW.
 	 *              3. Can no longer autoload classes.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param array[] $plugins Array of array for constants, classes
@@ -8145,7 +8145,7 @@ final class Deprecated {
 	 *              or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin_multi( $plugins ) {
-		\tsf()->_deprecated_function( 'tsf()->detect_plugin_multi()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_plugin_multi()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::can_i_use( $plugins );
 	}
 
@@ -8153,14 +8153,14 @@ final class Deprecated {
 	 * Checks if the (parent) theme name is loaded.
 	 *
 	 * @since 2.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param string|array $themes The theme names to test.
 	 * @return bool is theme active.
 	 */
 	public function is_theme( $themes = '' ) {
-		\tsf()->_deprecated_function( 'tsf()->is_theme()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->is_theme()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::is_theme_active( $themes );
 	}
 
@@ -8172,13 +8172,13 @@ final class Deprecated {
 	 * - Visual Composer by WPBakery
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
 	 */
 	public function detect_non_html_page_builder() {
-		\tsf()->_deprecated_function( 'tsf()->detect_non_html_page_builder()', '4.3.0' );
+		\tsf()->_deprecated_function( 'tsf()->detect_non_html_page_builder()', '5.0.0' );
 		return \The_SEO_Framework\Helper\Compatibility::is_non_html_builder_active();
 	}
 
@@ -8188,7 +8188,7 @@ final class Deprecated {
 	 * @since 3.1.0
 	 * @since 3.2.0 1. Now detects the WP 5.0 block editor.
 	 *              2. Method is now public.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @return bool
@@ -8196,7 +8196,7 @@ final class Deprecated {
 	public function is_gutenberg_page() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->is_gutenberg_page()', '4.3.0', 'tsf()->query()->is_block_editor()' );
+		$tsf->_deprecated_function( 'tsf()->is_gutenberg_page()', '5.0.0', 'tsf()->query()->is_block_editor()' );
 
 		return $tsf->query()->is_block_editor();
 	}

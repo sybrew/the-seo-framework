@@ -28,7 +28,7 @@ namespace The_SEO_Framework\Helper\Format;
 /**
  * Holds methods for HTML Color interpretation and conversion.
  *
- * @since 4.3.0
+ * @since 5.0.0
  *
  * @access protected
  *         Use tsf()->format()->color() instead.
@@ -44,7 +44,7 @@ class Color {
 	 * @since 3.0.4 Now uses WCAG's relative luminance formula.
 	 * @since 4.2.0 Optimized code, but it now has some rounding changes at the end. This could
 	 *              offset the returned values by 1/255th.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @link https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
 	 * @link https://www.w3.org/WAI/GL/wiki/Relative_luminance
 	 *

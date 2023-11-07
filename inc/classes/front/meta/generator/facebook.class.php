@@ -30,13 +30,13 @@ use \The_SEO_Framework\Meta;
 /**
  * Holds Facebook generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Facebook {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -46,7 +46,7 @@ final class Facebook {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_article_author() {
@@ -57,7 +57,7 @@ final class Facebook {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $facebook_author The generated Facebook author page URL.
 			 * @param int    $id              The current page or term ID.
@@ -68,7 +68,7 @@ final class Facebook {
 					$author,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -83,7 +83,7 @@ final class Facebook {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_article_publisher() {
@@ -94,7 +94,7 @@ final class Facebook {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $publisher The Facebook publisher page URL.
 			 * @param int    $id        The current page or term ID.
@@ -105,7 +105,7 @@ final class Facebook {
 					$publisher,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -120,7 +120,7 @@ final class Facebook {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_facebook_app_id() {
@@ -131,7 +131,7 @@ final class Facebook {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $app_id The Facebook app ID.
 			 * @param int    $id     The current page or term ID.
@@ -142,7 +142,7 @@ final class Facebook {
 					$app_id,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}

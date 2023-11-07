@@ -28,7 +28,7 @@ namespace The_SEO_Framework\Data;
 /**
  * Holds a collection of data helper methods for a user.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->user() instead.
  */
@@ -37,7 +37,7 @@ class User {
 	/**
 	 * Saves user profile fields.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @todo add memoization?
 	 *
 	 * @param int|\WP_User $user A user ID or valid \WP_User object.

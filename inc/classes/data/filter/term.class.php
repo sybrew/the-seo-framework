@@ -28,14 +28,14 @@ namespace The_SEO_Framework\Data\Filter;
 /**
  * Holds a collection of term meta sanitization methods.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Term {
 
 	/**
 	 * @hook "sanitize_term_meta_ . THE_SEO_FRAMEWORK_TERM_OPTIONS" 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $meta_value An unsanitized value.
 	 * @return array The sanitized term meta. An empty array on failure.

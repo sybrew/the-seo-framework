@@ -30,13 +30,13 @@ use \The_SEO_Framework\Data;
 /**
  * Holds theme color generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Theme_Color {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -44,7 +44,7 @@ final class Theme_Color {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_theme_color() {

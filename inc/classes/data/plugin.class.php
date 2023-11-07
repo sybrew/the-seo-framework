@@ -32,7 +32,7 @@ use \The_SEO_Framework\Traits\Property_Refresher;
 /**
  * Holds a collection of data interface methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin() instead.
  */
@@ -40,14 +40,14 @@ class Plugin {
 	use Property_Refresher;
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array Holds 'all' TSF's options/settings. Updates in real time.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 */
 	private static $options_memo;
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array Holds 'all' TSF's site cache. Updates in real time.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_CACHE
 	 */
@@ -60,7 +60,7 @@ class Plugin {
 	 * @since 2.8.2 No longer decodes entities on request.
 	 * @since 3.1.0 Now uses the filterable call when caching is disabled.
 	 * @since 4.2.0 Now supports an option index as a $key.
-	 * @since 4.3.0 1. Removed $use_cache; the cache is now dynamically updated.
+	 * @since 5.0.0 1. Removed $use_cache; the cache is now dynamically updated.
 	 *              2. $key is now variadic. Additional variables allow you to dig deeper in the cache.
 	 *              3. Moved to `The_SEO_Framework\Data`.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
@@ -82,7 +82,7 @@ class Plugin {
 	/**
 	 * Returns option array. Does not merge with defaults.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array Options.
 	 */
@@ -118,7 +118,7 @@ class Plugin {
 	 * Updates options. Also updates the option cache if the settings aren't headless.
 	 *
 	 * @since 2.9.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -145,7 +145,7 @@ class Plugin {
 	/**
 	 * Retrieves caching options.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $key The cache key.
 	 * @return mixed Cache value on success, $default if non-existent.
@@ -159,7 +159,7 @@ class Plugin {
 	/**
 	 * Returns option array. Does not merge with defaults.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array Options.
 	 */
@@ -177,7 +177,7 @@ class Plugin {
 	 * Updates static caching option.
 	 * Can return false if cache is unchanged.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string|array $cache The cache key, or an array (of arrays) of key and value pairs.
 	 * @param mixed        $value The cache value. Ignored when $cache is an array.
@@ -199,7 +199,7 @@ class Plugin {
 	/**
 	 * Deletes static caching option indexes.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string|string[] $cache The cache key, or an array of keys to delete.
 	 * @return bool True on success, false on failure.

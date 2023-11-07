@@ -30,13 +30,13 @@ use \The_SEO_Framework\Meta;
 /**
  * Holds Twitter generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Twitter {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -49,7 +49,7 @@ final class Twitter {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_twitter_card() {
@@ -66,7 +66,7 @@ final class Twitter {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_twitter_site() {
@@ -77,7 +77,7 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $site The Twitter site owner tag.
 			 * @param int    $id   The current page or term ID.
@@ -88,7 +88,7 @@ final class Twitter {
 					$site,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -103,7 +103,7 @@ final class Twitter {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_twitter_creator() {
@@ -114,7 +114,7 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $creator The Twitter page creator.
 			 * @param int    $id      The current page or term ID.
@@ -125,7 +125,7 @@ final class Twitter {
 					$creator,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -140,7 +140,7 @@ final class Twitter {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_twitter_title() {
@@ -151,7 +151,7 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $title The generated Twitter title.
 			 * @param int    $id    The current page or term ID.
@@ -162,7 +162,7 @@ final class Twitter {
 					$title,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -177,7 +177,7 @@ final class Twitter {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_twitter_description() {
@@ -188,7 +188,7 @@ final class Twitter {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $description The generated Twitter description.
 			 * @param int    $id          The current page or term ID.
@@ -199,7 +199,7 @@ final class Twitter {
 					$description,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -214,7 +214,7 @@ final class Twitter {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_twitter_image() {

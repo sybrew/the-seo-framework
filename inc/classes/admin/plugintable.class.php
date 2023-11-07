@@ -30,7 +30,7 @@ use function \The_SEO_Framework\is_headless;
  * Prepares the Plugin Table view interface.
  *
  * @since 4.1.4
- * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges`
  * @access private
  */
 final class PluginTable {
@@ -76,7 +76,7 @@ final class PluginTable {
 	 *
 	 * @since 3.2.4
 	 * @since 4.1.4 Moved to PluginTable.
-	 * @since 4.3.0 Exchanged API docs for GitHub link. Simplified translations.
+	 * @since 5.0.0 Exchanged API docs for GitHub link. Simplified translations.
 	 * @access private
 	 *
 	 * @param string[] $plugin_meta An array of the plugin's metadata,

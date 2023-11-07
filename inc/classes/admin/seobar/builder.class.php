@@ -32,7 +32,7 @@ use \The_SEO_Framework\Data,
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved from `\The_SEO_Framework\Interpreters`
+ * @since 5.0.0 1. Moved from `\The_SEO_Framework\Interpreters`
  *              2. Renamed from `SEOBar`.
  *              3. The entire class is now static.
  * @access private
@@ -139,7 +139,7 @@ final class Builder {
 		 *
 		 * @link Example: https://gist.github.com/sybrew/59130560fcbeb98f7580dc11c54ba174
 		 * @since 4.0.0
-		 * @since 4.3.0 Added the builder's instance as the third parameter.
+		 * @since 5.0.0 Added the builder's instance as the third parameter.
 		 * @param string $interpreter The interpreter class name.
 		 * @param object $builder     The builder's class instance.
 		 */

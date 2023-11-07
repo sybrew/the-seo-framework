@@ -42,7 +42,7 @@ use \The_SEO_Framework\Helper\{
 /**
  * Holds various utility functionality for scripts.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Utils {
@@ -51,7 +51,7 @@ class Utils {
 	 * Decodes entities of a string, making it workable for different encoding in both JS and HTML.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Scripts`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Scripts`.
 	 *
 	 * @param mixed $value If string, it'll be decoded.
 	 * @return mixed
@@ -66,7 +66,7 @@ class Utils {
 	 * Decodes all entities of the input.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Scripts`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Scripts`.
 	 * @uses static::decode_entities();
 	 *
 	 * @param mixed $values The entries to decode.
@@ -86,7 +86,7 @@ class Utils {
 	/**
 	 * Checks ajax referred set by set_js_nonces based on capability.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 * @uses WP Core check_ajax_referer()
 	 * @see @link https://developer.wordpress.org/reference/functions/check_ajax_referer/
@@ -107,7 +107,7 @@ class Utils {
 	 * Performs wp_die( -1, 403 ) on failure.
 	 *
 	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_check_tsf_ajax_referer`.
 	 * @access private
 	 * @uses WP Core check_ajax_referer()

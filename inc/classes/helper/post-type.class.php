@@ -35,7 +35,7 @@ use \The_SEO_Framework\Data;
 /**
  * Holds a collection of helper methods for Post Types.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->post_type() instead.
  */
@@ -48,7 +48,7 @@ class Post_Type {
 	 * @since 3.1.2 Now is fiterable.
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_post_type_disabled`.
 	 *
 	 * @param string $post_type Optional. The post type to check.
@@ -76,7 +76,7 @@ class Post_Type {
 	 * @since 3.1.0
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_post_type_supported`.
 	 *
 	 * @param string $post_type Optional. The post type to check.
@@ -105,7 +105,7 @@ class Post_Type {
 	 * Detects if the current or inputted post type's archive is supported and not disabled.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_post_type_archive_supported`.
 	 *
 	 * @param string $post_type Optional. The post type's archive to check.
@@ -136,7 +136,7 @@ class Post_Type {
 	 * @since 2.9.3
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`;
 	 *              mitigating issues with singular-archives pages (blog, shop, etc.).
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `post_type_supports_taxonomies`.
 	 * @global \WP_Screen $current_screen
 	 *
@@ -160,7 +160,7 @@ class Post_Type {
 	 *
 	 * @since 4.2.0
 	 * @since 4.2.8 Now filters via `static::is_post_type_archive_supported()`.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_supported_post_type_archives`.
 	 *
 	 * @return string[] Supported post types with post type archive support.
@@ -178,7 +178,7 @@ class Post_Type {
 	 *
 	 * @since 4.2.0
 	 * @since 4.2.8 Added filter `the_seo_framework_public_post_type_archives`.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_public_post_type_archives`.
 	 *
 	 * @return string[] Public post types with post type archive support.
@@ -209,7 +209,7 @@ class Post_Type {
 	 * Returns a list of all supported post types.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_supported_post_types`.
 	 *
 	 * @return string[] All supported post types.
@@ -227,7 +227,7 @@ class Post_Type {
 	 *
 	 * @since 4.1.0
 	 * @since 4.1.4 Now resets the index keys of the return value.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_public_post_types`.
 	 *              3. Is now public.
 	 *
@@ -262,7 +262,7 @@ class Post_Type {
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Removed memoization.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_forced_supported_post_types`.
 	 *              3. Is now public.
 	 *
@@ -287,7 +287,7 @@ class Post_Type {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_hierarchical_post_types`.
 	 *
 	 * @return string[] All public hierarchical post types.
@@ -309,7 +309,7 @@ class Post_Type {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_nonhierarchical_post_types`.
 	 *
 	 * @return array The public nonhierarchical post types.
@@ -330,7 +330,7 @@ class Post_Type {
 	 * Returns the post type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_post_type_label`.
 	 *
 	 * @param string $post_type The post type. Required.

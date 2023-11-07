@@ -36,7 +36,7 @@ use \The_SEO_Framework\Helper\{
 /**
  * Holds getters for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->schema() instead.
  */
@@ -50,7 +50,7 @@ class Schema {
 	/**
 	 * Returns the JSON encoded Schema.org graph.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -73,7 +73,7 @@ class Schema {
 	/**
 	 * Returns the Schema.org graph.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/search-gallery
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -113,7 +113,7 @@ class Schema {
 			$builders_queue[] = ( "\The_SEO_Framework\Meta\Schema\Entities\\$class" )::BUILDERS;
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param callable[] $entity_builders A list of Schema.org entity builders.
 		 * @param array|null $args            The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                                    Is null when being autodetermined.
@@ -138,7 +138,7 @@ class Schema {
 		static::$writer_queue = [];
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array[]    $graph A sequential list of graph entities.
 		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is autodetermined.
@@ -160,7 +160,7 @@ class Schema {
 	/**
 	 * Returns the Schema.org graph.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string   $id       The identifier to write.
 	 * @param callable $callback The callback to call to write graph.

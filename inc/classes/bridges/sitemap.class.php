@@ -25,12 +25,12 @@ namespace The_SEO_Framework\Bridges;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Bridges\Sitemap', '4.3.0', 'The_SEO_Framework\Sitemap\Registry' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Bridges\Sitemap', '5.0.0', 'The_SEO_Framework\Sitemap\Registry' );
 /**
  * Prepares sitemap output.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Sitemap\Registry
+ * @since 5.0.0 1. Moved to \The_SEO_Framework\Sitemap\Registry
  *              2. Deprecated.
  * @deprecated
  * @ignore
@@ -70,7 +70,7 @@ class Sitemap extends \The_SEO_Framework\Sitemap\Registry {
 	/**
 	 * Deprecation handler for Extension Manager.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param string $name      The method name.

@@ -35,7 +35,7 @@ use \The_SEO_Framework\Helper\{
  * Prepares the Term Settings view interface.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Renamed from `TermSettings` to `Term`.
+ * @since 5.0.0 1. Renamed from `TermSettings` to `Term`.
  *              2. Moved to `\The_SEO_Framework\Admin\Settings`.
  * @access private
  */
@@ -44,7 +44,7 @@ final class Term {
 	/**
 	 * Prepares the setting fields.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @hook current_screen 10
 	 */
 	public static function prepare_setting_fields() {

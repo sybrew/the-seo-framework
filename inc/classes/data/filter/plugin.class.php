@@ -37,13 +37,13 @@ use The_SEO_Framework\{
 /**
  * Holds a collection of plugin option sanitization methods.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Plugin {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] The option filter sanitization callbacks.
 	 */
 	private static $sanitizers = [];
@@ -54,7 +54,7 @@ class Plugin {
 	 *
 	 * @hook "sanitize_option . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
 	 * @since 2.2.2
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `sanitize`.
 	 *
 	 * @param mixed  $value          The sanitized [sic] option value.
@@ -77,7 +77,7 @@ class Plugin {
 		);
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array $filters A map of filters and their callbacks : {
 		 *    string option_name => callable[] A list of callbacks,
 		 * }
@@ -113,7 +113,7 @@ class Plugin {
 	 * developers to add their custom filters before we do --- use filter
 	 * `'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS`.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array $filters A map of filters and their callbacks : {
 	 *    string option_name => callable|callable[] callback,
@@ -138,7 +138,7 @@ class Plugin {
 	 *
 	 * @since 2.8.0
 	 * @since 3.1.0 Added caching, preventing duplicate registrations.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `init_sanitizer_filters`.
 	 */
 	public static function register_sanitizers_jit() {
@@ -291,7 +291,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return int A boolean as a string (1 or 0) option value.
@@ -301,7 +301,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -319,7 +319,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -338,7 +338,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A sanitized verification code value.
@@ -361,7 +361,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -380,7 +380,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @return array A valid disabled post type setting.
@@ -396,7 +396,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return array A valid disabled post type setting.
@@ -412,7 +412,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return int[] An array of boolean as a string (1 or 0).
@@ -428,7 +428,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string The sanitized Facebook profile URL.
@@ -438,7 +438,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -456,7 +456,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A sanitized single line of metadata text.
@@ -466,7 +466,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string Either left or right.
@@ -476,7 +476,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A fully qualified sanitized URL that matches the current scheme if current domain.
@@ -492,7 +492,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -510,7 +510,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -529,7 +529,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return int A valid copyright content length option value.
@@ -540,7 +540,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A valid copyright content length option value.
@@ -550,7 +550,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -567,7 +567,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string An integer as string.
@@ -577,7 +577,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -592,7 +592,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
@@ -610,7 +610,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @link <https://help.twitter.com/en/managing-your-account/change-x-handle>
 	 *
 	 * @param mixed $value An unsanitized value.
@@ -621,7 +621,7 @@ class Plugin {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return array[] The sanitized post type archive meta.

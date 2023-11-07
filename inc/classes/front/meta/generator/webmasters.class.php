@@ -30,13 +30,13 @@ use \The_SEO_Framework\Data;
 /**
  * Holds webmaster verification generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Webmasters {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -48,7 +48,7 @@ final class Webmasters {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_google_verification() {
@@ -58,7 +58,7 @@ final class Webmasters {
 		if ( \has_filter( 'the_seo_framework_googlesite_output' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $code The Google verification code.
 			 * @param int    $id   The current post or term ID.
@@ -69,7 +69,7 @@ final class Webmasters {
 					$code,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -84,7 +84,7 @@ final class Webmasters {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_bing_verification() {
@@ -94,7 +94,7 @@ final class Webmasters {
 		if ( \has_filter( 'the_seo_framework_bingsite_output' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $code The Bing verification code.
 			 * @param int    $id   The current post or term ID.
@@ -105,7 +105,7 @@ final class Webmasters {
 					$code,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -120,7 +120,7 @@ final class Webmasters {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_yandex_verification() {
@@ -130,7 +130,7 @@ final class Webmasters {
 		if ( \has_filter( 'the_seo_framework_yandexsite_output' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $code The Yandex verification code.
 			 * @param int    $id   The current post or term ID.
@@ -141,7 +141,7 @@ final class Webmasters {
 					$code,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -156,7 +156,7 @@ final class Webmasters {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_baidu_verification() {
@@ -166,7 +166,7 @@ final class Webmasters {
 		if ( \has_filter( 'the_seo_framework_yandexsite_output' ) ) {
 			/**
 			 * @since 4.0.5
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $code The Baidu verification code.
 			 * @param int    $id   The current post or term ID.
@@ -177,7 +177,7 @@ final class Webmasters {
 					$code,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -192,7 +192,7 @@ final class Webmasters {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_pinterest_verification() {
@@ -202,7 +202,7 @@ final class Webmasters {
 		if ( \has_filter( 'the_seo_framework_pintsite_output' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $code The Pinterest verification code.
 			 * @param int    $id   The current post or term ID.
@@ -213,7 +213,7 @@ final class Webmasters {
 					$code,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}

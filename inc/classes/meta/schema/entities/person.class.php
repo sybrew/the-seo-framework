@@ -34,19 +34,19 @@ use \The_SEO_Framework\{
  * Holds Person generator for Schema.org structured data.
  * Not to be confused with "Author". This one represents the entire website.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 final class Person extends Reference {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var string|string[] $type The Schema @type.
 	 */
 	public static $type = 'Person';
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.

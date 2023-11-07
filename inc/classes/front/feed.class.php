@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
  * Prepares feed mofifications.
  *
  * @since 4.1.0
- * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
 final class Feed {
@@ -43,7 +43,7 @@ final class Feed {
 	/**
 	 * Sets the X-Robots-Tag headers for feeds.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function output_robots_noindex_headers_on_feed() {
 		\is_feed() and Helper\Headers::output_robots_noindex_headers();
@@ -55,7 +55,7 @@ final class Feed {
 	 * This method converts the input $content to an excerpt and is able to add
 	 * a nofollow backlink at the end of the feed.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string      $content   The feed's content.
 	 * @param null|string $feed_type The feed type (not used in excerpted content)

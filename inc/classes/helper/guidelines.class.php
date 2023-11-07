@@ -30,7 +30,7 @@ use function \The_SEO_Framework\memo;
 /**
  * Holds a collection of helper methods for title and description guidelines.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Guidelines {
@@ -50,7 +50,7 @@ class Guidelines {
 	 * @since 3.1.0
 	 * @since 4.0.0 1. Now gives different values for various WordPress locales.
 	 *              2. Added $locale input parameter.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_input_guidelines()`.
 	 *
 	 * @TODO Consider splitting up search into Google, Bing, etc., as we might
@@ -198,7 +198,7 @@ class Guidelines {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Now added a short leading-dot version for ARIA labels.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Added memoization.
 	 *
 	 * @return array

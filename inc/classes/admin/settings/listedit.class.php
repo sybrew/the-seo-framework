@@ -40,7 +40,7 @@ use \The_SEO_Framework\Helper\{
  * Prepares the List Edit view interface.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
 final class ListEdit extends Admin\Lists\Table {
@@ -55,7 +55,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 * Setups class and prepares quick edit.
 	 *
 	 * @hook admin_init 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function init_quick_and_bulk_edit() {
 
@@ -70,7 +70,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 *
 	 * @hook current_screen 10
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `prepare_edit_box`.
+	 * @since 5.0.0 Renamed from `prepare_edit_box`.
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 */
@@ -91,7 +91,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 *
 	 * @hook hidden_columns 10
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_hide_quick_edit_column`.
+	 * @since 5.0.0 Renamed from `_hide_quick_edit_column`.
 	 *
 	 * @param array $hidden The existing hidden columns.
 	 * @return array $columns the column data
@@ -108,7 +108,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 * @hook manage_{$screen_id}_columns 10
 	 * @hook manage_edit-{$taxonomy}_columns 1
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_add_column`.
+	 * @since 5.0.0 Renamed from `_add_column`.
 	 * @abstract
 	 *
 	 * @param array $columns The existing columns
@@ -125,7 +125,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 *
 	 * @hook bulk_edit_custom_box 10
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_display_bulk_edit_fields`.
+	 * @since 5.0.0 Renamed from `_display_bulk_edit_fields`.
 	 *
 	 * @param string $column_name Name of the column to edit.
 	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
@@ -148,7 +148,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 *
 	 * @hook quick_edit_custom_box 10
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_display_quick_edit_fields`.
+	 * @since 5.0.0 Renamed from `_display_quick_edit_fields`.
 	 *
 	 * @param string $column_name Name of the column to edit.
 	 * @param string $post_type   The post type slug, or current screen name if this is a taxonomy list table.
@@ -171,7 +171,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 * @hook manage_posts_custom_column 1
 	 * @hook manage_pages_custom_column 1
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_output_column_contents_for_post`.
+	 * @since 5.0.0 Renamed from `_output_column_contents_for_post`.
 	 * @abstract
 	 *
 	 * @param string $column_name The name of the column to display.
@@ -327,7 +327,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 * @hook manage_{$taxonomy}_custom_column 1
 	 * @since 4.0.0
 	 * @since 4.2.0 Now properly populates use_generated_archive_prefix() with a \WP_Term object.
-	 * @since 4.3.0 Renamed from `_output_column_contents_for_term`.
+	 * @since 5.0.0 Renamed from `_output_column_contents_for_term`.
 	 * @abstract
 	 * @NOTE Unlike `_output_column_post_data()`, this is a filter callback.
 	 *       Because of this, the first parameter is a useless string, which must be extended.

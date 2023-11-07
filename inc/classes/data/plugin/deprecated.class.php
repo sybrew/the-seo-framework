@@ -30,13 +30,13 @@ use \The_SEO_Framework\Data;
 /**
  * Holds a collection of data deprecator methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Deprecated {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array Holds 'all' deprecated TSF's options/settings. Updates in real time.
 	 */
 	private static $deprecation_map;
@@ -44,7 +44,7 @@ final class Deprecated {
 	/**
 	 * Returns the deprecated option value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
 	 *                       When empty, the function will return an unexpected value, but likely null.
@@ -73,7 +73,7 @@ final class Deprecated {
 	/**
 	 * Returns the deprecation map.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array A list of deprecated options and their replacement indexes.
 	 */

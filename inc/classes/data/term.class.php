@@ -32,7 +32,7 @@ use \The_SEO_Framework\Helper\Query;
 /**
  * Holds a collection of data helper methods for a term.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->term() instead.
  */
@@ -42,7 +42,7 @@ class Term {
 	 * Fetch latest public term ID for any taxonomy.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @slow The queried result is not stored in WP Term's cache, which would allow
 	 *       direct access to all values of the term (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
@@ -72,7 +72,7 @@ class Term {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int    $term_id The term ID.
 	 * @param string $taxonomy The term taxonomy.

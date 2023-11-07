@@ -32,14 +32,14 @@ use \The_SEO_Framework\Helper\Query;
 /**
  * Holds a collection of User data interface methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin->user() instead.
  */
 class User {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] Stored user meta data.
 	 */
 	private static $meta_memo = [];
@@ -50,7 +50,7 @@ class User {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 Now returns null when no post author can be established.
-	 * @since 4.3.0 1. Removed the second `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the second `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $item The user meta item to get. Required.
@@ -72,7 +72,7 @@ class User {
 	 * @since 4.1.4
 	 * @since 4.2.7 Removed redundant memoization.
 	 * @since 4.2.8 Now returns null when no post author can be established.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @ignore Unused internally. Public API.
 	 *
 	 * @return ?array The current author meta, null when no author is set.
@@ -91,7 +91,7 @@ class User {
 	 * Will fall back to the CURRENT LOGGED IN user's metadata.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_user_meta_item`.
 	 *
@@ -117,7 +117,7 @@ class User {
 	 * @since 4.1.4 1. Now returns default values when custom values are missing.
 	 *              2. Now listens to headlessness.
 	 *              3. Deprecated the third argument, and moved it to the second.
-	 * @since 4.3.0 1. Removed the second `$depr` and third `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the second `$depr` and third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_user_meta`.
 	 *
@@ -192,7 +192,7 @@ class User {
 	 * Returns an array of default user meta.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_user_meta_defaults`.
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
@@ -219,7 +219,7 @@ class User {
 	 * Updates user TSF-meta option.
 	 *
 	 * @since 4.1.4
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_single_user_meta_item`.
 	 *
 	 * @param int    $user_id The user ID.
@@ -245,7 +245,7 @@ class User {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.0 No longer returns the update success state.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `save_user_meta`.
 	 *
 	 * @param int   $user_id The user ID.
@@ -260,7 +260,7 @@ class User {
 
 		/**
 		 * @since 4.1.4
-		 * @since 4.3.0 No longer sends pre-sanitized data to the filter.
+		 * @since 5.0.0 No longer sends pre-sanitized data to the filter.
 		 * @param array  $data     The data that's going to be saved.
 		 * @param int    $user_id  The user ID.
 		 */
@@ -283,7 +283,7 @@ class User {
 	 * Deletes only the default data keys as set by `get_default_meta()`
 	 * or everything when no custom keys are set.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @ignore Unused internally. Public API.
 	 *
 	 * @param int $user_id The user ID.

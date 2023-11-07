@@ -36,7 +36,7 @@ use \The_SEO_Framework\{
 /**
  * Holds a collection of data helper methods for a post.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->post() instead.
  */
@@ -45,7 +45,7 @@ class Post {
 	/**
 	 * Fetches Post content.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param \WP_Post|int $post The Post or Post ID.
 	 * @return string The post content.
@@ -64,7 +64,7 @@ class Post {
 	/**
 	 * Fetches Post content.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param \WP_Post|int $post The Post or Post ID.
 	 * @return string The post content.
@@ -89,7 +89,7 @@ class Post {
 	 * - Visual Composer by WPBakery
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 1. First parameter may now be empty to automatically fetch the post ID.
+	 * @since 5.0.0 1. First parameter may now be empty to automatically fetch the post ID.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int $post_id The post ID to check.
@@ -130,7 +130,7 @@ class Post {
 	 *              2. Input parameter now default to null.
 	 *                 This currently doesn't affect how it works.
 	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected or private, false otherwise.
@@ -147,7 +147,7 @@ class Post {
 	 * Determines if the current post has a password.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected, false otherwise.
@@ -161,7 +161,7 @@ class Post {
 	 * Determines if the current post is private.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if private, false otherwise.
@@ -175,7 +175,7 @@ class Post {
 	 * Determines if the current post is a draft.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if draft, false otherwise.
@@ -200,7 +200,7 @@ class Post {
 	 * @since 2.4.3
 	 * @since 2.9.3 1. Removed object caching.
 	 *              2. It now uses WP_Query, instead of wpdb.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @slow The queried result is not stored in WP Post's cache, which would allow
 	 *       direct access to all values of the post (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
@@ -232,7 +232,7 @@ class Post {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `has_posts_in_post_type_archive`.
 	 * @slow The queried result is not stored in WP Post's cache, which would allow
 	 *       direct access to all values of the post (if requested). This is because
@@ -264,7 +264,7 @@ class Post {
 	/**
 	 * Returns the post modified time (GMT), formatted according to site settings.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param ?int $id The post ID. Leave null to autodetermine.
 	 * @return string The post published time according to settings.
@@ -278,7 +278,7 @@ class Post {
 	/**
 	 * Returns the post modified time (GMT), formatted according to site settings.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param ?int $id The post ID. Leave null to autodetermine.
 	 * @return string The post modified time according to settings.

@@ -37,7 +37,7 @@ use \The_SEO_Framework\{
 /**
  * Holds various utility functionality for sitemaps.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->sitemap()->utils() instead.
  */
@@ -46,7 +46,7 @@ class Utils {
 	/**
 	 * Returns the sitemap post query limit.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $type Whether the query is for hierarchical post types or not.
 	 * @return int The post limit
@@ -71,7 +71,7 @@ class Utils {
 	/**
 	 * Determines if post is possibly included in the sitemap.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int $post_id The Post ID to check.
 	 * @return bool True if included, false otherwise.
@@ -121,7 +121,7 @@ class Utils {
 	/**
 	 * Determines if term is possibly included in the sitemap.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int    $term_id  The Term ID to check.
 	 * @param string $taxonomy The taxonomy.
@@ -177,7 +177,7 @@ class Utils {
 	 *
 	 * @since 2.8.0
 	 * @since 4.0.5 Changed default colors to be more in line with WordPress.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param bool $get_defaults Whether to get the default colors.
 	 * @return array The sitemap colors.
@@ -209,7 +209,7 @@ class Utils {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return bool
 	 */
@@ -232,7 +232,7 @@ class Utils {
 	/**
 	 * Determines whether we can output sitemap or not based on options and blog status.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool
 	 */
@@ -245,7 +245,7 @@ class Utils {
 	 * Detects presence of sitemap.xml in root folder.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool Whether the sitemap.xml file exists.
 	 */

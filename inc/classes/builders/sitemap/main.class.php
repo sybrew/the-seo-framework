@@ -25,13 +25,13 @@ namespace The_SEO_Framework\Builders\Sitemap;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Sitemap\Main', '4.3.0', 'The_SEO_Framework\Sitemap\Optimized\Main' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Sitemap\Main', '5.0.0', 'The_SEO_Framework\Sitemap\Optimized\Main' );
 /**
  * Generates the sitemap.
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\Sitemap`
- * @since 4.3.0 Deprecated.
+ * @since 5.0.0 Deprecated.
  * @deprecated
  * @access protected
  */

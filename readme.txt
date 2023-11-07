@@ -332,8 +332,6 @@ TODO 'show-if-tsf-js'
 
 TODO update doc "actions" (also update doc "constants" for TSFEM)
 
-If we go through with 4.3.0, consider removing deprecated filters (filters_deprecated)
-
 TODO add vertical expand title input?
 	-> This helps with Gutenberg's atrocious sidebar.
 
@@ -428,7 +426,7 @@ function (.*?)\(([\w\W](?!\1\())*?\}
 
 TODO remove 3+ @since in Deprecated.class to reduce filesize.
 
-TODO find new public function and filters via @since 4.3.0.*?...
+TODO find new public function and filters via @since 5.0.0.*?...
 TODO mark subroutine methods in Meta private?
 
 TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."

@@ -30,14 +30,14 @@ use \The_SEO_Framework\Data;
 /**
  * Holds getters for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->facebook() instead.
  */
 class Facebook {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string Facebook author's value if API type is 'article'.
 	 */
@@ -50,7 +50,7 @@ class Facebook {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string Facebook publisher value if API type is 'article'.
 	 */
@@ -62,7 +62,7 @@ class Facebook {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string Facebook app ID.
 	 */

@@ -40,7 +40,7 @@ use \The_SEO_Framework\Data;
  * @since 4.0.0 No longer implements an interface. It's implied.
  * @since 4.1.0 Now extends `Cache` instead of `Feed`.
  * @since 4.1.4 Removed protected property $use_object_cache.
- * @since 4.3.0 1. Deprecated $inpost_nonce_field
+ * @since 5.0.0 1. Deprecated $inpost_nonce_field
  *              2. Deprecated $inpost_nonce_name
  *              3. Deprecated $is_headless
  *              4. Deprecated $loaded
@@ -55,7 +55,7 @@ use \The_SEO_Framework\Data;
 final class Load extends Pool {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var \The_SEO_Framework\Load This instance.
 	 */
 	private static $instance;
@@ -63,7 +63,7 @@ final class Load extends Pool {
 	/**
 	 * Instance getter.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return null If called twice or more.
 	 */
@@ -77,7 +77,7 @@ final class Load extends Pool {
 	 * @since 2.8.0
 	 * @since 4.0.0 Now informs developer of invalid class instancing.
 	 * @since 4.1.4.Now constructs headlessness.
-	 * @since 4.3.0 Is now protected. Use `tsf()` or `the_seo_framework()` instead.
+	 * @since 5.0.0 Is now protected. Use `tsf()` or `the_seo_framework()` instead.
 	 */
 	protected function __construct() { }
 
@@ -89,7 +89,7 @@ final class Load extends Pool {
 	 *
 	 * @since 2.8.0
 	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
-	 * @since 4.3.0 Now protects against fatal errors on PHP 8.2 or later.
+	 * @since 5.0.0 Now protects against fatal errors on PHP 8.2 or later.
 	 *
 	 * @param string $name  The property name.
 	 * @param mixed  $value The property value.
@@ -98,13 +98,13 @@ final class Load extends Pool {
 
 		switch ( $name ) {
 			case 'the_seo_framework_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant THE_SEO_FRAMEWORK_DEBUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; set constant THE_SEO_FRAMEWORK_DEBUG' );
 				return false;
 			case 'script_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant SCRIPT_DEBUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; set constant SCRIPT_DEBUG' );
 				return false;
 			case 'seo_settings_page_slug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; set constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; set constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
 				return false;
 		}
 
@@ -123,7 +123,7 @@ final class Load extends Pool {
 	 * @since 2.7.0
 	 * @since 3.1.0 Removed known deprecations.
 	 * @since 3.2.2 This method no longer invokes PHP errors, nor returns protected values.
-	 * @since 4.3.0 Removed 'load_option' deprecation.
+	 * @since 5.0.0 Removed 'load_option' deprecation.
 	 *
 	 * @param string $name The property name.
 	 * @return mixed
@@ -132,34 +132,34 @@ final class Load extends Pool {
 
 		switch ( $name ) {
 			case 'inpost_nonce_field':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; you should make your own.' );
 				return Data\Admin\Post::$nonce_action;
 			case 'inpost_nonce_name':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you should make your own.' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; you should make your own.' );
 				return Data\Admin\Post::$nonce_name;
 			case 'is_headless':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use function \The_SEO_Framework\is_headless()' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use function \The_SEO_Framework\is_headless()' );
 				return is_headless();
 			case 'loaded':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; you may drop the loaded check.' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; you may drop the loaded check.' );
 				return true;
 			case 'pretty_permalinks':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
 				return $this->query()->utils()->using_pretty_permalinks();
 			case 'script_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant SCRIPT_DEBUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use constant SCRIPT_DEBUG' );
 				return \SCRIPT_DEBUG;
 			case 'seo_settings_page_slug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG or The_SEO_Framework\Admin::get_top_menu_args()' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG or The_SEO_Framework\Admin::get_top_menu_args()' );
 				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
 			case 'seo_settings_page_hook':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use `tsf()->admin()->menu()->get_page_hook_name()` instead.' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use `tsf()->admin()->menu()->get_page_hook_name()` instead.' );
 				return Admin\Menu::get_page_hook_name();
 			case 'the_seo_framework_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
 				return \THE_SEO_FRAMEWORK_DEBUG;
 			case 'the_seo_framework_use_transients':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 4.3.0; with no alternative available' );
+				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; with no alternative available' );
 				return true;
 		}
 

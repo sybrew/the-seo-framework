@@ -46,7 +46,7 @@ use \The_SEO_Framework\Helper\{
  * @since 2.8.0
  * @since 4.0.0 No longer implements an interface. It's implied.
  * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
- * @since 4.3.0 Is now private. This was never meant to be public.
+ * @since 5.0.0 Is now private. This was never meant to be public.
  * @access private
  */
 final class Debug {
@@ -178,7 +178,7 @@ final class Debug {
 	 * @since 2.8.0 1. Now escapes all parameters.
 	 *              2. Removed check for gettext.
 	 * @since 4.1.1 No longer registers a custom error handler.
-	 * @since 4.3.0 Added third parameter $handle.
+	 * @since 5.0.0 Added third parameter $handle.
 	 * @access private
 	 *
 	 * @param string $p_or_m  The Property or Method.
@@ -231,7 +231,7 @@ final class Debug {
 	 *
 	 * @since 3.2.2
 	 * @since 4.1.1 Reworked to work with any error handler.
-	 * @since 4.3.0 Now actualyl used my brain and added an automated object searcher instead of guessing.
+	 * @since 5.0.0 Now actualyl used my brain and added an automated object searcher instead of guessing.
 	 * @see PHP debug_backtrace()
 	 *
 	 * @return array The erroneous caller data
@@ -309,7 +309,7 @@ final class Debug {
 	 * Echos debug output.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 is now static.
+	 * @since 5.0.0 is now static.
 	 * @access private
 	 */
 	public static function _do_debug_output() {

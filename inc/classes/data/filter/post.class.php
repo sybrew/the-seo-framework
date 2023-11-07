@@ -28,13 +28,13 @@ namespace The_SEO_Framework\Data\Filter;
 /**
  * Holds a collection of post meta sanitization methods.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Post {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $meta_value Metadata value to sanitize.
 	 * @return array[] The sanitized post meta.

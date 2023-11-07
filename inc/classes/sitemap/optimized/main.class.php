@@ -34,14 +34,14 @@ use \The_SEO_Framework\Data,
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\Sitemap`
- * @since 4.3.0 1. No longer holds the `$tsf` property.
+ * @since 5.0.0 1. No longer holds the `$tsf` property.
  *              2. Moved to `\The_SEO_Framework\Sitemap\Optimized`.
  * @access public
  */
 abstract class Main {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var int The total number of URLs registered in the current sitemap.
 	 */
 	public $url_count = 0;
@@ -102,7 +102,7 @@ abstract class Main {
 	 * Note: Not final, other classes may overwrite this.
 	 *
 	 * @since 4.1.1
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param iterable $data  The data to create an XML item from. Expected to be escaped and XML-safe!
 	 * @param int      $level The iteration level. Default 1 (one level in from urlset).
@@ -142,7 +142,7 @@ abstract class Main {
 	 *              5. Moved to \The_SEO_Framework\Builders\Sitemap
 	 * @since 4.1.4 TRUE: Now tests for redirect settings.
 	 * @since 4.2.0 Now only asserts noindex robots-values, instead of all robots-values, improving performance.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int $post_id The Post ID to check.
@@ -152,7 +152,7 @@ abstract class Main {
 
 		\tsf()->_deprecated_function(
 			__METHOD__,
-			'4.3.0',
+			'5.0.0',
 			'tsf()->sitemap()->utils()->is_post_included_in_sitemap()',
 		);
 
@@ -165,7 +165,7 @@ abstract class Main {
 	 * @since 4.0.0
 	 * @since 4.1.4 Now tests for redirect settings.
 	 * @since 4.2.0 Now only asserts noindex robots-values, instead of all robots-values, improving performance.
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param int    $term_id  The Term ID to check.
@@ -176,7 +176,7 @@ abstract class Main {
 
 		\tsf()->_deprecated_function(
 			__METHOD__,
-			'4.3.0',
+			'5.0.0',
 			'tsf()->sitemap()->utils()->is_term_included_in_sitemap()',
 		);
 
@@ -188,7 +188,7 @@ abstract class Main {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Moved to \The_SEO_Framework\Builders\Sitemap
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
 	 * @param bool $hierarchical Whether the query is for hierarchical post types or not.
@@ -198,7 +198,7 @@ abstract class Main {
 
 		\tsf()->_deprecated_function(
 			__METHOD__,
-			'4.3.0',
+			'5.0.0',
 			'tsf()->sitemap()->utils()->get_sitemap_post_limit()',
 		);
 

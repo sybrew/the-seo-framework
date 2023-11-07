@@ -44,7 +44,7 @@ final class Silencer {
 	 * Tells if this plugin is loaded.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated (silently here, shh).
+	 * @since 5.0.0 Deprecated (silently here, shh).
 	 * @access protected
 	 *         Don't alter this variable.
 	 * @var boolean $loaded

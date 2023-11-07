@@ -28,14 +28,14 @@ namespace The_SEO_Framework\Data\Plugin;
 /**
  * Holds a collection of data helper methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin->helper() instead.
  */
 class Helper {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $field Accepts 'post_type' and 'taxonomy'
 	 * @param string $type  Accepts 'noindex', 'nofollow', 'noarchive'.

@@ -30,20 +30,20 @@ use \The_SEO_Framework\Helper\Query; // Yes, it is legal to share class and name
 /**
  * Memoizes queries for Query.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->query()->cache() instead.
  */
 class Cache {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var ?true $can_cache_query
 	 */
 	private static $can_cache_query;
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] $memo The memo cache by value
 	 */
 	private static $memo;
@@ -55,7 +55,7 @@ class Cache {
 	 * The first parameter might not get retrieved in a later call, for this method
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty queries.
@@ -94,7 +94,7 @@ class Cache {
 	 *              2. Now asks for and passes $method.
 	 *              3. Now returns false on WP CLI.
 	 * @since 3.2.2 No longer spits out errors on production websites.
-	 * @since 4.3.0 1. No longer accepts the $method parameter.
+	 * @since 5.0.0 1. No longer accepts the $method parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 * @global \WP_Query $wp_query
 	 * @global \WP_Screen|null $current_screen
@@ -124,7 +124,7 @@ class Cache {
 	 * Outputs a doing it wrong notice if an error occurs in the current query.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 1. No longer accepts the method parameter.
+	 * @since 5.0.0 1. No longer accepts the method parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string $method The original caller method.

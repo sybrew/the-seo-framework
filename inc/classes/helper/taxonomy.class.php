@@ -35,7 +35,7 @@ use \The_SEO_Framework\Data;
 /**
  * Holds a collection of helper methods for Taxonomy.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->taxonomy() instead.
  */
@@ -50,7 +50,7 @@ class Taxonomy {
 	 *              2. Now uses `is_post_type_supported()` instead of `is_post_type_disabled()`.
 	 * @since 4.1.0 1. Now also checks for the option `disabled_taxonomies`.
 	 *              2. Now applies filters `the_seo_framework_taxonomy_disabled`.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_taxonomy_disabled`.
 	 *
 	 * @param ?string $taxonomy The taxonomy name. Leave null to automatically determine.
@@ -94,7 +94,7 @@ class Taxonomy {
 	 * and whether the taxonomy is public and rewritable.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_taxonomy_supported`.
 	 *
 	 * @param string $taxonomy Optional. The taxonomy name.
@@ -123,7 +123,7 @@ class Taxonomy {
 	 * Returns a list of all supported taxonomies.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_supported_taxonomies`.
 	 *
 	 * @return string[] All supported taxonomies.
@@ -140,7 +140,7 @@ class Taxonomy {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_public_taxonomies`.
 	 *              3. Is now public.
 	 *
@@ -178,7 +178,7 @@ class Taxonomy {
 	 *
 	 * @since 4.1.0
 	 * @since 4.2.0 Removed memoization.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_forced_supported_taxonomies`.
 	 *              3. Is now public.
 	 *
@@ -202,7 +202,7 @@ class Taxonomy {
 	 * Returns a list of post types shared with the taxonomy.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_post_types_from_taxonomy`.
 	 *
 	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxonomy.
@@ -222,7 +222,7 @@ class Taxonomy {
 	 * @since 3.0.0
 	 * @since 4.0.5 The `$post_type` fallback now uses a real query ID, instead of `$GLOBALS['post']`.
 	 * @since 4.1.0 Now filters taxonomies more graciously--expecting broken taxonomies returned in the filter.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_hierarchical_taxonomies_as`.
 	 *
 	 * @param string $get       What to get. Accepts 'names' or 'objects'.
@@ -249,7 +249,7 @@ class Taxonomy {
 	 * Returns the taxonomy type object label. Either plural or singular.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_taxonomy_label`.
 	 *              3. The first parameter is now optional.
 	 *

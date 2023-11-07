@@ -28,7 +28,7 @@ namespace The_SEO_Framework\Helper;
 /**
  * Holds a collection of helper methods for HTTP Headers.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Headers {
@@ -59,7 +59,7 @@ class Headers {
 	 *
 	 * @hook do_robots 10
 	 * @hook the_seo_framework_sitemap_header 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 */
 	public static function output_robots_noindex_headers() {

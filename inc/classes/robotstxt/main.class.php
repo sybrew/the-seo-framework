@@ -36,7 +36,7 @@ use \The_SEO_Framework\{
 /**
  * Holds various methods for the robots txt output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->robotstxt() instead.
  */
@@ -52,7 +52,7 @@ class Main {
 	 * The Robots Exclusion Protocol encourages you not to use robots.txt for
 	 * non-administrative endpoints. Use the robots meta tags (and headers) instead.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @uses robots_txt filter located at WP core
 	 * @TODO rework into a workable standard...
 	 *

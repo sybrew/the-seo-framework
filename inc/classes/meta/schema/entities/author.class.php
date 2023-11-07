@@ -38,19 +38,19 @@ use \The_SEO_Framework\{
  * Holds Author generator for Schema.org structured data.
  * Not to be confused with "Person". This one represents a post.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 final class Author extends Reference {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var string|string[] $type The Schema @type.
 	 */
 	public static $type = 'Person';
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -75,7 +75,7 @@ final class Author extends Reference {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -94,7 +94,7 @@ final class Author extends Reference {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.

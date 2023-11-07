@@ -29,7 +29,7 @@ use \The_SEO_Framework\Data;
 /**
  * Prepares the SEO Settings page interface.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class PostStates {
@@ -39,7 +39,7 @@ final class PostStates {
 	 *
 	 * @hook display_post_states 10
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_add_post_state`.
 	 *
 	 * @param string[] $post_states An array of post display states.

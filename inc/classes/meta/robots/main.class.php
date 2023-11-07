@@ -33,7 +33,7 @@ use function \The_SEO_Framework\umemo;
  * Generates robots meta.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\Robots`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\Robots`.
  * @access private
  */
 final class Main {
@@ -60,7 +60,7 @@ final class Main {
 	private static $instance;
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] The collected assertions
 	 */
 	private $assertions = [];

@@ -39,7 +39,7 @@ use \The_SEO_Framework\{
 /**
  * Holds conditions for the Title factory.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->title()->conditions() instead.
  */
@@ -48,7 +48,7 @@ final class Conditions {
 	/**
 	 * Determines whether to add or remove title protection prefixes.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -79,7 +79,7 @@ final class Conditions {
 	 * Determines whether to add or remove title pagination additions.
 	 *
 	 * @since 3.2.4
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -103,7 +103,7 @@ final class Conditions {
 	 * @since 3.2.2 Now differentiates from query and parameter input.
 	 * @since 4.1.0 Added the second $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
 	 *
 	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                           Leave null to autodetermine query.
@@ -164,7 +164,7 @@ final class Conditions {
 	/**
 	 * Determines whether to add homepage tagline.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool
 	 */
@@ -177,7 +177,7 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the post.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
 	 *
 	 * @param int $id The post ID. Optional.
 	 * @return bool
@@ -191,7 +191,7 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the term.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
 	 *
 	 * @param int $id The term ID. Optional.
 	 * @return bool
@@ -204,7 +204,7 @@ final class Conditions {
 	/**
 	 * Determines whether to add the title tagline for the post type archive.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $pta The post type archive. Optional.
 	 * @return bool
@@ -220,7 +220,7 @@ final class Conditions {
 	 * @since 3.1.0
 	 * @since 4.0.5 1: Added first parameter `$term`.
 	 *              2: Added filter.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $term The Term object. Leave null to autodermine query.
 	 * @return bool

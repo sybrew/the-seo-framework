@@ -54,7 +54,7 @@ function _wpml_remove_all_languages( $languages_links = [] ) {
  *
  * @hook the_seo_framework_cleared_sitemap_transients 10
  * @since 3.1.0
- * @since 4.3.0 Removed clearing once-per-request restriction.
+ * @since 5.0.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
  * @access private
  */

@@ -36,7 +36,7 @@ use \The_SEO_Framework\{
 /**
  * Holds various utility methods for the robots txt.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->robotstxt()->utils() instead.
  */
@@ -46,7 +46,7 @@ class Utils {
 	 * Detects presence of robots.txt in root folder.
 	 * Memoizes the return value.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool Whether the robots.txt file exists.
 	 */
@@ -70,7 +70,7 @@ class Utils {
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.2 Now uses the preferred URL scheme.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return string URL location of robots.txt. Unescaped.
 	 */

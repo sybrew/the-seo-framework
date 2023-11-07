@@ -33,7 +33,7 @@ use \The_SEO_Framework\{
 /**
  * Holds a collection of data sanitization methods.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 class Sanitize {
@@ -45,7 +45,7 @@ class Sanitize {
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_one_zero`.
 	 *
 	 * @param mixed $value The value to cast to a boolean integer.
@@ -62,7 +62,7 @@ class Sanitize {
 	 * Rounds floats down. Converts non-numeric inputs to '0'.
 	 *
 	 * @since 3.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_numeric_string`.
 	 *
 	 * @param mixed $value The value to cast to a numeric string.
@@ -78,7 +78,7 @@ class Sanitize {
 	 * Makes the input lowercase.
 	 *
 	 * @since 2.8.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_color_hex`.
 	 *              3. Now accepts longer strings, and shortens them to the correct length.
 	 *
@@ -101,7 +101,7 @@ class Sanitize {
 	 * Removes leading hashtags.
 	 * Makes the input lowercase.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $color String with potentially unwanted hex values.
 	 * @return string The sanitized color hex.
@@ -126,7 +126,7 @@ class Sanitize {
 	 * Also adds a capital P, dangit.
 	 * Finally, it texturizes the content.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $text The text.
 	 * @return string One line sanitized text.
@@ -163,7 +163,7 @@ class Sanitize {
 	 * @since 2.9.4 Now no longer fails when first two characters are spaces.
 	 * @since 3.1.0 1. Now also catches non-breaking spaces.
 	 *              2. Now uses a regex pattern.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_dupe_space`.
 	 *              3. Now replaces the spaces with the original spacing type, instead of only \u20.
 	 *
@@ -191,7 +191,7 @@ class Sanitize {
 	 * Sybre-kamisama desu.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_hyphen`.
 	 *
 	 * @param string $text String with potential hyphens.
@@ -216,7 +216,7 @@ class Sanitize {
 	 *
 	 * @since 2.8.2
 	 * @since 3.1.0 Now catches all non-breaking characters.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_nbsp`.
 	 *
 	 * @param string $text String with potentially unwanted nbsp values.
@@ -230,7 +230,7 @@ class Sanitize {
 	 * Replaces backslash with entity backslash.
 	 *
 	 * @since 2.8.2
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_bsol`.
 	 *              3. No longer removes backslashes.
 	 *
@@ -251,7 +251,7 @@ class Sanitize {
 	 *              3. Now also strips horizontal tabs (reverted in 4.1.1).
 	 * @since 4.1.1 1. Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
 	 *              2. No longer transforms horizontal tabs. Use `s_tabs()` instead.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_singleline`.
 	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
@@ -270,7 +270,7 @@ class Sanitize {
 	 *
 	 * @since 2.8.2
 	 * @since 4.1.1 Now uses real bytes, instead of sequences (causing uneven transformations, plausibly emptying content).
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_tabs`.
 	 * @link https://www.php.net/manual/en/regexp.reference.escape.php
 	 *
@@ -291,7 +291,7 @@ class Sanitize {
 	 * If more positive, set.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_qubit`.
 	 *              3. Now considers .3334 the turnover point, instead of 0.33000...0001.
 	 *
@@ -313,7 +313,7 @@ class Sanitize {
 	 *              3. Now allows all protocols. Enjoy!
 	 *              4. Now no longer lets through double-absolute URLs (e.g. `https://example.com/https://example.com/path/to/file/`)
 	 *                 when filter `the_seo_framework_allow_external_redirect` is set to false.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_redirect_url`.
 	 *              3. No longer provides stripping URL queries via a filter.
 	 * @deprecated
@@ -344,7 +344,7 @@ class Sanitize {
 	 * @since 4.1.4 Fixed theoretical issue where a different image could be set when width
 	 *              and height are supplied and either over 4K, but no ID is given.
 	 * @since 4.2.4 Now accepts, processes, and returns filesizes under index `filesize`.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_image_details`.
 	 *              3. Now sanitizes the caption.
 	 *
@@ -447,7 +447,7 @@ class Sanitize {
 	 * @since 3.0.6 Now allows a sole query argument when profile.php is used.
 	 * @since 4.0.0 1. No longer returns a plain Facebook URL when the entry path is sanitized to become empty.
 	 *              2. Now returns empty when using only spaces and tabs.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_facebook_profile`.
 	 *
 	 * @param string $link The unsanitized Facebook profile URL.
@@ -483,7 +483,7 @@ class Sanitize {
 	 *              2. Now removes spaces and tabs.
 	 * @since 4.0.0 1. Now returns empty on lone `@` entries.
 	 *              2. Now returns empty when using only spaces and tabs.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_twitter_name`.
 	 * @deprecated
 	 *

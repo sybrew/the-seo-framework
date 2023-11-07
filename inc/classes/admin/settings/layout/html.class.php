@@ -31,7 +31,7 @@ use \The_SEO_Framework\Data;
  * Interprets anything you send here into HTML. Or so it should.
  *
  * @since 4.1.4
- * @since 4.3.0 1. Moved from `\The_SEO_Framework\Interpreters`.
+ * @since 5.0.0 1. Moved from `\The_SEO_Framework\Interpreters`.
  *              2. The methods herein are now considered public.
  * @NOTE This and the methods herein will likely be deprecated in the future.
  *

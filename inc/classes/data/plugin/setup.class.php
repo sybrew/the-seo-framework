@@ -33,7 +33,7 @@ use \The_SEO_Framework\{
 /**
  * Holds a collection of default data interface methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin()->setup() instead.
  */
@@ -41,13 +41,13 @@ class Setup {
 	use Property_Refresher;
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array Holds all default options.
 	 */
 	private static $default_options;
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array Holds all warned options.
 	 */
 	private static $warned_options;
@@ -55,7 +55,7 @@ class Setup {
 	/**
 	 * Resets the options and flushes all pertaining caches for the current request.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -76,7 +76,7 @@ class Setup {
 	 * @since 4.2.0 1. Now supports an option index as `$key`.
 	 *              2. Removed second parameter (`$use_cache`).
 	 *              3. Now always memoizes.
-	 * @since 4.3.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
+	 * @since 5.0.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
 	 *              2. Moved to `The_SEO_Framework\Data\Setup`.
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
@@ -97,7 +97,7 @@ class Setup {
 	 * Return Warned SEO options from the SEO options array.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
+	 * @since 5.0.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
 	 *              2. Moved to `The_SEO_Framework\Data\Setup`.
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.

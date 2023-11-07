@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
 /**
  * Holds methods for HTML Color interpretation and conversion.
  *
- * @since 4.3.0
+ * @since 5.0.0
  *
  * @access protected
  *         Use tsf()->format()->html() instead.
@@ -48,7 +48,7 @@ class HTML {
 	 * This might leave stray line feeds. Use `tsf()->sanitize()->newline_to_space()` to fix that.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @see \WP_Embed::autoembed()
 	 *
 	 * @param string $content The content to look for embed.
@@ -64,7 +64,7 @@ class HTML {
 	 * This might leave stray line feeds. Use `tsf()->sanitize()->newline_to_space()` to fix that.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Improved regex to reflect absurd HTML.
 	 * @see \WP_Embed::autoembed()
 	 * @link <https://regex101.com/r/hjHjgp/2>
@@ -105,7 +105,7 @@ class HTML {
 	 *                 those from '$args' so it falls through to `strip_tags()`.
 	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
 	 * @since 4.2.8 Elements with that start with exactly the same text as others won't be preemptively closed.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
@@ -283,7 +283,7 @@ class HTML {
 	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
 	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
 	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
-	 * @since 4.3.0 1. The first parameter is now required.
+	 * @since 5.0.0 1. The first parameter is now required.
 	 *              2. Now returns an empty string when something falsesque is returned.
 	 *              3. Removed the third `$escape` parameter.
 	 *              4. The second parameter is changed from `$allow_shortcodes`
@@ -334,7 +334,7 @@ class HTML {
 		 * Always strip shortcodes if not allowed by the arguments, ignoring the filter.
 		 *
 		 * @since 2.6.6.1
-		 * @since 4.3.0 Added the third `$args` parameter.
+		 * @since 5.0.0 Added the third `$args` parameter.
 		 * @param bool $allow_shortcodes Whether to allow shortcodes.
 		 * @param array $args The arguments for the extraction.
 		 */

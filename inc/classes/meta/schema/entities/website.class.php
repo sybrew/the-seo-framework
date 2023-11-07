@@ -33,13 +33,13 @@ use \The_SEO_Framework\{
 /**
  * Holds WebSite generator for Schema.org structured data.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 final class WebSite extends Reference {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] BUILDERS A list of autoloaded builder callbacks.
 	 */
 	const BUILDERS = [
@@ -47,13 +47,13 @@ final class WebSite extends Reference {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var string|string[] $type The Schema @type.
 	 */
 	public static $type = 'WebSite';
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.

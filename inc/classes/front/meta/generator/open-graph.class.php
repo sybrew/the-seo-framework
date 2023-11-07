@@ -31,13 +31,13 @@ use \The_SEO_Framework\Data,
 /**
  * Holds Open Graph generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Open_Graph {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -53,7 +53,7 @@ final class Open_Graph {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_type() {
@@ -70,7 +70,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_locale() {
@@ -81,7 +81,7 @@ final class Open_Graph {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $locale The generated locale field.
 			 * @param int    $id     The page or term ID.
@@ -92,7 +92,7 @@ final class Open_Graph {
 					$locale,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -107,7 +107,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_site_name() {
@@ -118,7 +118,7 @@ final class Open_Graph {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $locale The generated Open Graph site name.
 			 * @param int    $id     The page or term ID.
@@ -129,7 +129,7 @@ final class Open_Graph {
 					$sitename,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -144,7 +144,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_title() {
@@ -155,7 +155,7 @@ final class Open_Graph {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $title The generated Open Graph title.
 			 * @param int    $id    The page or term ID.
@@ -166,7 +166,7 @@ final class Open_Graph {
 					$title,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -181,7 +181,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_description() {
@@ -192,7 +192,7 @@ final class Open_Graph {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $description The generated Open Graph description.
 			 * @param int    $id          The page or term ID.
@@ -203,7 +203,7 @@ final class Open_Graph {
 					$description,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -218,7 +218,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_url() {
@@ -228,7 +228,7 @@ final class Open_Graph {
 		if ( \has_filter( 'the_seo_framework_ogurl_output' ) ) {
 			/**
 			 * @since 2.9.3
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $url The canonical/Open Graph URL. Must be escaped.
 			 * @param int    $id  The page or term ID.
@@ -239,7 +239,7 @@ final class Open_Graph {
 					$url,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -254,7 +254,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_open_graph_image() {
@@ -297,7 +297,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_article_published_time() {
@@ -309,7 +309,7 @@ final class Open_Graph {
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
 			 * @since 2.9.3
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $time The article published time.
 			 * @param int    $id   The current page or term ID.
@@ -320,7 +320,7 @@ final class Open_Graph {
 					$time,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -335,7 +335,7 @@ final class Open_Graph {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_article_modified_time() {
@@ -346,7 +346,7 @@ final class Open_Graph {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $time The article modified time.
 			 * @param int    $id   The current page or term ID.
@@ -357,7 +357,7 @@ final class Open_Graph {
 					$time,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}

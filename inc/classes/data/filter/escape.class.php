@@ -30,7 +30,7 @@ use function \The_SEO_Framework\memo;
 /**
  * Holds a collection of data escaping methods.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 class Escape {
@@ -43,7 +43,7 @@ class Escape {
 	 *
 	 * @see WordPress Core sanitize_key()
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_field_id`.
 	 *
 	 * @param string $id The unsanitized ID.
@@ -56,7 +56,7 @@ class Escape {
 	/**
 	 * Escapes value via JSON encoding.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value   The value to encode.
 	 * @param int   $options Extra JSON encoding options
@@ -79,7 +79,7 @@ class Escape {
 	/**
 	 * Escapes value via JSON encoding.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $value   The value to encode.
 	 * @param int   $options Extra JSON encoding options
@@ -116,7 +116,7 @@ class Escape {
 	/**
 	 * Escapes URIs for XML.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param mixed $uri The URI to escape.
 	 * @return string A value that's safe for XML use.

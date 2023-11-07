@@ -31,7 +31,7 @@ use \The_SEO_Framework\Data,
 /**
  * Handles the data and caching interface for sitemaps.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->sitemap()->cache() instead.
  */
@@ -40,7 +40,7 @@ class Cache {
 	/**
 	 * Returns a unique cache key suffix per blog and language.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $key The cache key.
 	 * @return string The cache key with blog ID and locale appended.
@@ -52,7 +52,7 @@ class Cache {
 	/**
 	 * Clears sitemap transients.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function clear_sitemap_caches() {
 
@@ -64,13 +64,13 @@ class Cache {
 		}
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 */
 		\do_action( 'the_seo_framework_cleared_sitemap_transients' );
 
 		/**
 		 * @since 3.1.0
-		 * @since 4.3.0 Deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
+		 * @since 5.0.0 Deprecated. Use action 'the_seo_framework_cleared_sitemap_transients' instead.
 		 *
 		 * @param string $type    The flush type. Comes in handy when you use a catch-all function.
 		 * @param int    $id      The post, page or TT ID. Defaults to Query::get_the_real_id().
@@ -85,7 +85,7 @@ class Cache {
 				[ 'type' => 'sitemap' ],
 				[ true ],
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_cleared_sitemap_transients',
 		);
 	}
@@ -93,7 +93,7 @@ class Cache {
 	/**
 	 * Tells whether sitemap caching is enabled by user.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool
 	 */
@@ -104,7 +104,7 @@ class Cache {
 	/**
 	 * Returns the sitemap's storage transient name.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return string|false The sitemap transient store key.
@@ -123,7 +123,7 @@ class Cache {
 	/**
 	 * Stores the sitemap in transient cache.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $content    The sitemap content
 	 * @param string $sitemap_id The sitemap ID.
@@ -142,7 +142,7 @@ class Cache {
 	/**
 	 * Returns the sitemap from transient cache.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return string|false The sitemap from cache. False is not set.

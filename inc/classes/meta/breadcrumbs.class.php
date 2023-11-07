@@ -40,7 +40,7 @@ use \The_SEO_Framework\{
 /**
  * Holds getters for breadcrumbs output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->breadcrumbs() instead.
  */
@@ -49,7 +49,7 @@ class Breadcrumbs {
 	/**
 	 * Returns a list of breadcrumbs by URL and name.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @todo consider wp_force_plain_post_permalink()
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -69,7 +69,7 @@ class Breadcrumbs {
 		}
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array[] The breadcrumb list, sequential: int position => {
 		 *    string url:  The breadcrumb URL.
 		 *    string name: The breadcrumb page title.
@@ -87,7 +87,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs, based on expected or current query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
@@ -116,7 +116,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs, based on input arguments query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -145,7 +145,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs for the front page.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
@@ -159,7 +159,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs for a singular object.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|\WP_Post $id The post ID or post object.
 	 * @return array[] The breadcrumb list : {
@@ -237,7 +237,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs for a singular object.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The Term object. Leave null to autodermine query.
 	 * @return array[] The breadcrumb list : {
@@ -343,7 +343,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs for a search query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
@@ -363,7 +363,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a list of breadcrumbs for 404 page.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL. In this case, it's empty.
@@ -383,7 +383,7 @@ class Breadcrumbs {
 	/**
 	 * Gets a single breadcrumb for the front page.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array The frontpage breadcrumb : {
 	 *    string url:  The breadcrumb URL.

@@ -34,7 +34,7 @@ use \The_SEO_Framework\Admin;
  * PHP should deprecate list() and array().
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+ * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
  *              2. Renamed from `SEOBar`.
  * @access private
  */
@@ -50,7 +50,7 @@ final class ListTable extends Admin\Lists\Table {
 	 * Setups class and prepares quick edit.
 	 *
 	 * @hook admin_init 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function init_seo_bar() {
 		new self;
@@ -65,7 +65,7 @@ final class ListTable extends Admin\Lists\Table {
 	 * @hook manage_{$screen_id}_columns 10
 	 * @hook manage_edit-{$taxonomy}_columns 1
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_add_column`.
+	 * @since 5.0.0 Renamed from `_add_column`.
 	 * @abstract
 	 *
 	 * @param array $columns The existing columns.
@@ -125,7 +125,7 @@ final class ListTable extends Admin\Lists\Table {
 	 * @hook manage_posts_custom_column 1
 	 * @hook manage_pages_custom_column 1
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_output_column_contents_for_post`.
+	 * @since 5.0.0 Renamed from `_output_column_contents_for_post`.
 	 * @abstract
 	 *
 	 * @param string $column_name The name of the column to display.
@@ -150,7 +150,7 @@ final class ListTable extends Admin\Lists\Table {
 	 *
 	 * @hook manage_{$taxonomy}_custom_column 1
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_output_column_contents_for_term`.
+	 * @since 5.0.0 Renamed from `_output_column_contents_for_term`.
 	 * @abstract
 	 * @NOTE Unlike output_column_contents_for_post(), this is a filter callback.
 	 *       Because of this, the first parameter is a useless string, which must be extended.

@@ -34,7 +34,7 @@ use \The_SEO_Framework\{
 /**
  * Generates images.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Generator {
@@ -49,7 +49,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the attachment page entry.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -76,7 +76,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the featured image input.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -176,7 +176,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the fallback image options.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @yield array : {
@@ -201,7 +201,7 @@ final class Generator {
 	 * N.B. This output may be randomized.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -237,7 +237,7 @@ final class Generator {
 	 * Generates image URLs and IDs from the logo modification.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -265,7 +265,7 @@ final class Generator {
 	 * Generates image URLs and IDs from site icon options.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.

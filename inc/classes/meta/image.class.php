@@ -36,14 +36,14 @@ use \The_SEO_Framework\{
 /**
  * Holds getters for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->image() instead.
  */
 class Image {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -56,7 +56,7 @@ class Image {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -68,7 +68,7 @@ class Image {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -85,7 +85,7 @@ class Image {
 	 * @since 4.0.0
 	 * @since 4.0.5 The output is now filterable.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Now always obtains cleaned images.
+	 * @since 5.0.0 1. Now always obtains cleaned images.
 	 *              2. Moved to \The_SEO_Framework\Meta\Image.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -106,7 +106,7 @@ class Image {
 		/**
 		 * @since 4.0.5
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @since 4.3.0 Deprecated.
+		 * @since 5.0.0 Deprecated.
 		 * @deprecated
 		 * @param array      $details The image details array, sequential: int => {
 		 *    string url:      The image URL,
@@ -135,7 +135,7 @@ class Image {
 				$context,
 				true,
 			],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_custom_image_details or the_seo_framework_generated_image_details',
 		);
 	}
@@ -145,7 +145,7 @@ class Image {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Moved to \The_SEO_Framework\Meta\Image.
+	 * @since 5.0.0 1. Moved to \The_SEO_Framework\Meta\Image.
 	 *              2. Now supports $context.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -164,7 +164,7 @@ class Image {
 	 */
 	public static function get_custom_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array      $details The image details array, sequential: int => {
 		 *    string url:      The image URL,
 		 *    int    id:       The image ID,
@@ -193,7 +193,7 @@ class Image {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -211,7 +211,7 @@ class Image {
 	 */
 	public static function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array      $details The image details array, sequential: int => {
 		 *    string url:      The image URL,
 		 *    int    id:       The image ID,
@@ -240,7 +240,7 @@ class Image {
 	/**
 	 * Yields generated image details.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -271,7 +271,7 @@ class Image {
 	 * Yields generated image details.
 	 * Yes, brilliant name.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -300,7 +300,7 @@ class Image {
 	 * Yields generated image details.
 	 * Yes, brilliant name.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -338,7 +338,7 @@ class Image {
 	 * Yields custom image details from query.
 	 * Yes, brilliant name.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 *
 	 * @param string $context The filter context. Default 'social'.
@@ -408,7 +408,7 @@ class Image {
 	 * Yields custom image details from args.
 	 * Yes, brilliant name.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 * @param string     $context The filter context. Default 'social'.
@@ -476,7 +476,7 @@ class Image {
 	 * @since 4.0.0
 	 * @since 4.1.1 Now only the 'social' context will fetch images from the content.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 4.3.0 1. Now expects an ID before testing whether an attachment is an image.
+	 * @since 5.0.0 1. Now expects an ID before testing whether an attachment is an image.
 	 *              2. Now supports 'organization' context.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -573,7 +573,7 @@ class Image {
 	 * Generates image details from callbacks.
 	 * Memoizes the callbacks when $args is null.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
@@ -654,7 +654,7 @@ class Image {
 	/**
 	 * Adds image dimension and alt parameters to the input details, if any.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array  $details The image details array, associative: {
 	 *    string url:    The image URL,

@@ -37,14 +37,14 @@ use \The_SEO_Framework\Traits\Internal\Static_Deprecator;
  * @todo: If the subobjects require complex fallbacks, put them in a new \Internal
  *        subobject. Create private class constant to hold that class location.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @link https://en.wikipedia.org/wiki/Object_pool_pattern
  * You can access these methods via `tsf()` and `the_seo_framework()`.
  */
 class Pool extends Legacy_API {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var class[] The class store. Used in favor of memo() for a chain would become expensive.
 	 */
 	private static $pool = [];
@@ -55,7 +55,7 @@ class Pool extends Legacy_API {
 	 * Returns a pool of Layout classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \Closure An anononymous class with subpools.
@@ -65,7 +65,7 @@ class Pool extends Legacy_API {
 			use Static_Deprecator;
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \Closure An anononymous class with subpools.
 			 */
 			public static function layout() {
@@ -73,7 +73,7 @@ class Pool extends Legacy_API {
 					use Static_Deprecator;
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
 					 */
 					public static function form() {
@@ -87,7 +87,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
 					 */
 					public static function html() {
@@ -103,7 +103,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Admin\Menu
 			 */
 			public static function menu() {
@@ -117,7 +117,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Admin\Notice
 			 */
 			public static function notice() {
@@ -129,7 +129,7 @@ class Pool extends Legacy_API {
 					private $deprecated_properties = [];
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Admin\Notice\Persistent
 					 */
 					public static function persistent() {
@@ -145,7 +145,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
 			 */
 			public static function utils() {
@@ -164,7 +164,7 @@ class Pool extends Legacy_API {
 	 * Returns the Breadcrumbs API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Breadcrumbs
@@ -183,7 +183,7 @@ class Pool extends Legacy_API {
 	 * Returns a pool of Data classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \Closure An anononymous class with subpools.
@@ -197,7 +197,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Data\Blog
 			 */
 			public static function blog() {
@@ -211,7 +211,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Data\Plugin
 			 */
 			public static function plugin() {
@@ -223,7 +223,7 @@ class Pool extends Legacy_API {
 					private $deprecated_properties = [];
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Filter
 					 */
 					public static function filter() {
@@ -236,7 +236,7 @@ class Pool extends Legacy_API {
 						};
 					}
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Helper
 					 */
 					public static function helper() {
@@ -250,7 +250,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Home
 					 */
 					public static function home() {
@@ -264,7 +264,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Post
 					 */
 					public static function post() {
@@ -278,7 +278,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\PTA
 					 */
 					public static function pta() {
@@ -292,7 +292,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Setup
 					 */
 					public static function setup() {
@@ -306,7 +306,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Term
 					 */
 					public static function term() {
@@ -320,7 +320,7 @@ class Pool extends Legacy_API {
 					}
 
 					/**
-					 * @since 4.3.0
+					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\User
 					 */
 					public static function user() {
@@ -336,7 +336,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Data\Post
 			 */
 			public static function post() {
@@ -350,7 +350,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Data\Term
 			 */
 			public static function term() {
@@ -364,7 +364,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Data\User
 			 */
 			public static function user() {
@@ -383,7 +383,7 @@ class Pool extends Legacy_API {
 	 * Returns the Description API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Description
@@ -397,7 +397,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Meta\Description\Excerpt
 			 */
 			public static function excerpt() {
@@ -416,7 +416,7 @@ class Pool extends Legacy_API {
 	 * Returns the Escape API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Data\Filter\Escape
@@ -435,7 +435,7 @@ class Pool extends Legacy_API {
 	 * Returns the Facebook API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Facebook
@@ -454,7 +454,7 @@ class Pool extends Legacy_API {
 	 * Returns a pool of Format classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \Closure An anononymous class with subpools.
@@ -468,7 +468,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\Arrays
 			 */
 			public static function arrays() {
@@ -482,7 +482,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\Color
 			 */
 			public static function color() {
@@ -496,7 +496,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\HTML
 			 */
 			public static function html() {
@@ -510,7 +510,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\Markdown
 			 */
 			public static function markdown() {
@@ -524,7 +524,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\Strings
 			 */
 			public static function strings() {
@@ -538,7 +538,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\Time
 			 */
 			public static function time() {
@@ -557,7 +557,7 @@ class Pool extends Legacy_API {
 	 * Returns the Guidelines API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Helper\Guidelines
@@ -576,7 +576,7 @@ class Pool extends Legacy_API {
 	 * Returns the HTTP Headers API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Helper\Headers
@@ -595,7 +595,7 @@ class Pool extends Legacy_API {
 	 * Returns the Image API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Image
@@ -609,7 +609,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Meta\Image\Utils
 			 */
 			public static function utils() {
@@ -628,7 +628,7 @@ class Pool extends Legacy_API {
 	 * Returns the Open_Graph API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Open_Graph
@@ -647,7 +647,7 @@ class Pool extends Legacy_API {
 	 * Returns the Post_Type class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Helper\Post_Type
@@ -666,7 +666,7 @@ class Pool extends Legacy_API {
 	 * Returns the Query class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Helper\Query
@@ -680,7 +680,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Query\Cache
 			 */
 			public static function cache() {
@@ -694,7 +694,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Query\Exclusion
 			 */
 			public static function exclusion() {
@@ -708,7 +708,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Query\Utils
 			 */
 			public static function utils() {
@@ -727,7 +727,7 @@ class Pool extends Legacy_API {
 	 * Returns the Robots API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Robots
@@ -746,7 +746,7 @@ class Pool extends Legacy_API {
 	 * Returns the Robots TXT API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\RobotsTXT\Main
@@ -760,7 +760,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\RobotsTXT\Utils
 			 */
 			public static function utils() {
@@ -779,7 +779,7 @@ class Pool extends Legacy_API {
 	 * Returns the Sanitize API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Data\Filter\Sanitize
@@ -798,7 +798,7 @@ class Pool extends Legacy_API {
 	 * Returns the Structured_Data API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Schema
@@ -812,7 +812,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @readonly
 			 * @var array[string,string] A list of accessible entity class names.
 			 */
@@ -832,7 +832,7 @@ class Pool extends Legacy_API {
 	 * Returns a pool of Sitemap classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \Closure An anononymous class with subpools.
@@ -846,7 +846,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Sitemap\Cache
 			 */
 			public static function cache() {
@@ -860,7 +860,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Sitemap\Lock
 			 */
 			public static function lock() {
@@ -873,7 +873,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Sitemap\Ping
 			 */
 			public static function ping() {
@@ -887,7 +887,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Sitemap\Registry
 			 */
 			public static function registry() {
@@ -900,7 +900,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Sitemap\Utils
 			 */
 			public static function utils() {
@@ -919,7 +919,7 @@ class Pool extends Legacy_API {
 	 * Returns the Taxonomy class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Helper\Taxonomy
@@ -938,7 +938,7 @@ class Pool extends Legacy_API {
 	 * Returns the Title API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Title
@@ -952,7 +952,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Meta\Title\Conditions
 			 */
 			public static function conditions() {
@@ -966,7 +966,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Meta\Title\Utils
 			 */
 			public static function utils() {
@@ -985,7 +985,7 @@ class Pool extends Legacy_API {
 	 * Returns the Twitter API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Twitter
@@ -1004,7 +1004,7 @@ class Pool extends Legacy_API {
 	 * Returns the URI API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\URI
@@ -1018,7 +1018,7 @@ class Pool extends Legacy_API {
 			private $deprecated_properties = [];
 
 			/**
-			 * @since 4.3.0
+			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Meta\URI\Utils
 			 */
 			public static function utils() {

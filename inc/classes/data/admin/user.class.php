@@ -30,7 +30,7 @@ use \The_SEO_Framework\Data;
 /**
  * Holds a collection of data saving methods for users.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class User {
@@ -42,7 +42,7 @@ class User {
 	 * @hook edit_user_profile_update 10
 	 * @since 4.1.4
 	 * @since 4.2.0 Now repopulates not-posted user metadata.
-	 * @since 4.3.0 1. Now tests if our POST data is set at all before acting.
+	 * @since 5.0.0 1. Now tests if our POST data is set at all before acting.
 	 *              2. Moved to `\The_SEO_Framework\Data\Admin\User`.
 	 *              3. Renamed from `_update_user_meta`.
 	 * @access private

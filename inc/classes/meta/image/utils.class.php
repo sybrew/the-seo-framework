@@ -28,7 +28,7 @@ namespace The_SEO_Framework\Meta\Image;
 /**
  * Holds utility for the Image factory.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->image()->utils() instead.
  */
@@ -37,7 +37,7 @@ class Utils {
 	/**
 	 * Fetches image dimensions.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int    $src_id The source ID of the image.
 	 * @param string $size   The size of the image used.
@@ -66,7 +66,7 @@ class Utils {
 	/**
 	 * Fetches image alt tag.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int $src_id The source ID of the image.
 	 * @return string The image alt tag.
@@ -78,7 +78,7 @@ class Utils {
 	/**
 	 * Fetches image caption.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int $src_id The source ID of the image.
 	 * @return string The image caption.
@@ -90,7 +90,7 @@ class Utils {
 	/**
 	 * Fetches image filesize in bytes. Requires an image (re)generated in WP 6.0 or later.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int    $src_id The source ID of the image.
 	 * @param string $size   The size of the image used.
@@ -107,7 +107,7 @@ class Utils {
 	 * Returns the largest acceptable image size's details.
 	 * Skips the original image, which may also be acceptable.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int $id           The image ID.
 	 * @param int $max_size     The largest acceptable dimension in pixels. Accounts for both width and height.

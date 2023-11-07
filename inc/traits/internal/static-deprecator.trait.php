@@ -29,7 +29,7 @@ namespace The_SEO_Framework\Traits\Internal;
  * Trait The_SEO_Framework\Traits\Internal\Static_Deprecator
  * Holds deprecation handler for static classes.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  * @see \The_SEO_Framework\Pool
  *
@@ -53,7 +53,7 @@ namespace The_SEO_Framework\Traits\Internal;
 trait Static_Deprecator {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var class[] The class subpool store. Used in favor of memo() for a chain would become expensive.
 	 */
 	private static $subpool = [];
@@ -64,7 +64,7 @@ trait Static_Deprecator {
 	 * Makes sure deprecated properties are still overwritten.
 	 * If the property never existed, default PHP behavior is invoked.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $name  The property name.
 	 * @param mixed  $value The property value.
@@ -107,7 +107,7 @@ trait Static_Deprecator {
 	 *
 	 * Makes sure deprecated properties are still accessible.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $name The property name.
 	 * @return mixed
@@ -144,7 +144,7 @@ trait Static_Deprecator {
 	/**
 	 * Handles unapproachable invoked methods.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $name      The method name.
 	 * @param array  $arguments The method arguments.

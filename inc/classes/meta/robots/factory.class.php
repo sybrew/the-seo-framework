@@ -31,7 +31,7 @@ use \The_SEO_Framework\Data;
  * Factory engine for robots generator.
  *
  * @since 4.2.0
- * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\Robots`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\Robots`.
  * @access private
  */
 class Factory {

@@ -36,7 +36,7 @@ use \The_SEO_Framework\Helper\{
 /**
  * Excludes stuff from the query.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->query()->exclusion() instead.
  */
@@ -48,7 +48,7 @@ class Exclusion {
 	 * @hook wp_insert_post 10
 	 * @hook attachment_updated 10
 	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -65,7 +65,7 @@ class Exclusion {
 	 * @since 3.1.0 Now no longer crashes on database errors.
 	 * @since 4.1.4 1. Now tests against post type exclusions.
 	 *              2. Now considers headlessness. This method runs only on the front-end.
-	 * @since 4.3.0 1. Now uses the static cache methods instead of non-expiring-transients.
+	 * @since 5.0.0 1. Now uses the static cache methods instead of non-expiring-transients.
 	 *              2. Moved to `The_SEO_Framework\Helper\Query\Exclusion`
 	 *
 	 * @return array : { 'archive', 'search' }

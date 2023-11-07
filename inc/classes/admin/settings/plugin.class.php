@@ -37,7 +37,7 @@ use \The_SEO_Framework\{
  * Note the use of "metabox" instead of "meta_box" throughout.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Renamed from `SeoSettings` to `Plugin`.
+ * @since 5.0.0 1. Renamed from `SeoSettings` to `Plugin`.
  *              2. Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
@@ -47,7 +47,7 @@ final class Plugin {
 	 * Outputs the SEO Settings page wrap.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 */
 	public static function prepare_settings_wrap() {
 
@@ -69,7 +69,7 @@ final class Plugin {
 	 * Registers meta boxes on the Site SEO Settings page.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_register_seo_settings_meta_boxes`.
+	 * @since 5.0.0 Renamed from `_register_seo_settings_meta_boxes`.
 	 */
 	public static function register_seo_settings_meta_boxes() {
 
@@ -209,7 +209,7 @@ final class Plugin {
 	 * Outputs SEO Settings page wrap.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_output_wrap`.
+	 * @since 5.0.0 Renamed from `_output_wrap`.
 	 */
 	public static function output_wrap() {
 		/**
@@ -227,7 +227,7 @@ final class Plugin {
 	 * Outputs SEO Settings columns.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Renamed from `_output_columns`.
+	 * @since 5.0.0 Renamed from `_output_columns`.
 	 */
 	public static function output_columns() {
 		Admin\Template::output_view( 'settings/columns' );
@@ -238,7 +238,7 @@ final class Plugin {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 This is no longer a static function.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_do_settings_page_notices`.
 	 * @access private
 	 */
@@ -251,7 +251,7 @@ final class Plugin {
 	 * Outputs Tabs and settings content.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Removed third parameter: $use_tabs.
+	 * @since 5.0.0 1. Removed third parameter: $use_tabs.
 	 *              2. Renamed from `_nav_tab_wrapper`.
 	 *
 	 * @param string $id   The nav-tab ID.
@@ -748,7 +748,7 @@ final class Plugin {
 	/**
 	 * Schema Meta Box General Tab output.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_general_tab() {

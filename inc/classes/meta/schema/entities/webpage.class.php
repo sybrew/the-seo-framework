@@ -34,13 +34,13 @@ use \The_SEO_Framework\Data,
 /**
  * Holds WebPage generator for Schema.org structured data.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 final class WebPage extends Reference {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] BUILDERS A list of autoloaded builder callbacks.
 	 */
 	const BUILDERS = [
@@ -48,7 +48,7 @@ final class WebPage extends Reference {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var string|string[] $type The Schema @type.
 	 */
 	public static $type = 'WebPage';
@@ -59,7 +59,7 @@ final class WebPage extends Reference {
 	 * In this case, we use a plain URL -- as that is, most locally, the absolute
 	 * canonical identifier of a WebPage.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -70,7 +70,7 @@ final class WebPage extends Reference {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.

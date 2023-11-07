@@ -30,7 +30,7 @@ use \The_SEO_Framework\Data;
 /**
  * Holds a collection of data saving methods for terms.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Term {
@@ -49,7 +49,7 @@ class Term {
 	 *              7. Now uses the current term meta to set new values.
 	 *              8. No longer deletes meta from abstracting plugins on save when they're deactivated.
 	 *              9. Now allows updating during `WP_AJAX`.
-	 * @since 4.3.0 1. Moved to `\The_SEO_Framework\Data\Admin\Term`.
+	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 *              2. Renamed from `_update_term_meta`.
 	 * @access private
 	 *         Use Data\Plugin\Term::save_meta() instead.
@@ -74,7 +74,7 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 1. Removed second parameter $tt_id.
+	 * @since 5.0.0 1. Removed second parameter $tt_id.
 	 *              2. Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 *              3. Renamed from `update_quick_edit_term_meta`.
 	 *
@@ -111,7 +111,7 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 1. Removed second parameter $tt_id.
+	 * @since 5.0.0 1. Removed second parameter $tt_id.
 	 *              2. Moved to `\The_SEO_Framework\Data\Admin\Term`.
 	 *              3. Renamed from `update_term_edit_term_meta`.
 	 *

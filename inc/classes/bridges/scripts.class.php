@@ -25,12 +25,12 @@ namespace The_SEO_Framework\Bridges;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Bridges\Scripts', '4.3.0', 'The_SEO_Framework\Admin\Script\Loader' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Bridges\Scripts', '5.0.0', 'The_SEO_Framework\Admin\Script\Loader' );
 /**
  * Prepares admin GUI scripts. Auto-invokes everything the moment this file is required.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\Script
+ * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\Script
  *              2. Deprecated.
  * @deprecated
  * @ignore
@@ -44,7 +44,7 @@ class Scripts extends \The_SEO_Framework\Admin\Script\Loader {
 	 * this class is needed yet.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @ignore
 	 * @deprecated
 	 */

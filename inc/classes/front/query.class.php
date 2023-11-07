@@ -34,7 +34,7 @@ use \The_SEO_Framework\{
 /**
  * Prepares query modifications.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Query {
@@ -43,7 +43,7 @@ final class Query {
 	 * Alters search results after database query.
 	 *
 	 * @since 2.9.4
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `alter_search_query_post`.
 	 * @access private
 	 *
@@ -73,7 +73,7 @@ final class Query {
 	 *
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_archive_query_in`.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
@@ -108,7 +108,7 @@ final class Query {
 	 * Alters archive results after database query.
 	 *
 	 * @since 2.9.4
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_archive_query_post`.
 	 * @access private
 	 *
@@ -138,7 +138,7 @@ final class Query {
 	 *
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_search_query_in`.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
@@ -196,7 +196,7 @@ final class Query {
 	 * @since 4.2.0 Improved supported taxonomy loop.
 	 * @since 4.2.6 Added check for `did_action( 'wp_loaded' )` early, before queries are tested and cached.
 	 * @since 4.2.7 No longer affects the sitemap query.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param \WP_Query $wp_query WP_Query object.
 	 * @return bool

@@ -42,7 +42,7 @@ use \The_SEO_Framework\{
  * Prepares sitemap output.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Renamed from `Sitemap`.
+ * @since 5.0.0 1. Renamed from `Sitemap`.
  *              2. Moved to `\The_SEO_Framework\Sitemap`.
  * @access protected
  *         Use tsf()->sitemap()->registry() instead.
@@ -54,7 +54,7 @@ class Registry {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.2 Can now parse non-ASCII URLs. No longer only lowercases raw URIs.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 * @access private
 	 */
 	public static function _init() {
@@ -137,7 +137,7 @@ class Registry {
 	 * @hook pre_get_posts 10
 	 * @link https://core.trac.wordpress.org/ticket/51542
 	 * @link https://core.trac.wordpress.org/ticket/51117
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param \WP_Query $wp_query The WordPress WC_Query instance.
@@ -157,7 +157,7 @@ class Registry {
 	 * @since 4.1.4 Now assimilates the output using the base path, so that filter
 	 *              `the_seo_framework_sitemap_base_path` also works. Glues the
 	 *              pieces together using the `get_site_host()` value.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @param string $id The base ID. Default 'base'.
@@ -183,7 +183,7 @@ class Registry {
 	 * Returns a list of known sitemap endpoints.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @return array[] The sitemap endpoints with their callbacks.
 	 */
@@ -250,7 +250,7 @@ class Registry {
 	 * Can only run once per request.
 	 *
 	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -295,7 +295,7 @@ class Registry {
 	 * @hook deleted_page 10
 	 * @hook post_updated 10
 	 * @hook page_updated 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param int $post_id The Post ID that has been updated.
@@ -313,7 +313,7 @@ class Registry {
 	 * Checks whether the permalink structure is updated.
 	 *
 	 * @hook load-options-permalink.php 20
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @return bool Whether if sitemap transient is deleted.
@@ -397,7 +397,7 @@ class Registry {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.3 Added a trailing newline to the stylesheet-tag for readability.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 */
 	public static function output_sitemap_header() {
 
@@ -416,7 +416,7 @@ class Registry {
 	 * Returns the opening tag for the sitemap urlset.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 */
 	public static function output_sitemap_urlset_open_tag() {
 
@@ -451,7 +451,7 @@ class Registry {
 	 * Outputs the closing tag for the sitemap urlset.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 */
 	public static function output_sitemap_urlset_close_tag() {
 		echo '</urlset>';
@@ -462,7 +462,7 @@ class Registry {
 	 * Useful when the path is non-standard, like notoriously in Polylang.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @return string The path.
 	 */
@@ -485,7 +485,7 @@ class Registry {
 	 * Useful when the prefix path is non-standard, like notoriously in Polylang.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @return string The path prefix.
 	 */
@@ -505,7 +505,7 @@ class Registry {
 	 * Returns the base path information for the sitemap.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
 	 * @return array : {
@@ -542,7 +542,7 @@ class Registry {
 	 * This method is to be used after outputting the sitemap.
 	 *
 	 * @since 4.1.1
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @return int bytes freed.
 	 */
@@ -560,7 +560,7 @@ class Registry {
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from clean_up_globals_for_sitemap()
 	 * @since 4.2.0 Now always returns the freed memory.
-	 * @since 4.3.0 Is now static.
+	 * @since 5.0.0 Is now static.
 	 *
 	 * @param bool $get_freed_memory Whether to return the freed memory in bytes.
 	 * @return int $freed_memory in bytes

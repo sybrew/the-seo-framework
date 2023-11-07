@@ -63,7 +63,7 @@ namespace The_SEO_Framework;
  * Enables the site-wide SEO debugging interface.
  *
  * @since 2.3.4
- * @since 4.3.0 Is now registered during plugin load.
+ * @since 5.0.0 Is now registered during plugin load.
  * @param bool
  */
 \defined( 'THE_SEO_FRAMEWORK_DEBUG' )
@@ -72,7 +72,7 @@ namespace The_SEO_Framework;
 /**
  * The plugin's main settings page slug.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @param bool
  */
 \defined( 'THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' )
@@ -84,7 +84,7 @@ namespace The_SEO_Framework;
  * Used for storing the SEO options array.
  *
  * @since 2.2.2
- * @since 4.3.0 Removed its filter.
+ * @since 5.0.0 Removed its filter.
  */
 \define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', 'autodescription-site-settings' );
 
@@ -92,7 +92,7 @@ namespace The_SEO_Framework;
  * Plugin term options key.
  *
  * @since 2.7.0
- * @since 4.3.0 Removed its filter.
+ * @since 5.0.0 Removed its filter.
  */
 \define( 'THE_SEO_FRAMEWORK_TERM_OPTIONS', 'autodescription-term-settings' );
 
@@ -100,7 +100,7 @@ namespace The_SEO_Framework;
  * Plugin user term options key.
  *
  * @since 2.7.0
- * @since 4.3.0 Removed its filter.
+ * @since 5.0.0 Removed its filter.
  */
 \define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', 'autodescription-user-settings' );
 
@@ -108,7 +108,7 @@ namespace The_SEO_Framework;
  * Plugin updates cache key.
  *
  * @since 3.1.0
- * @since 4.3.0 Removed its filter.
+ * @since 5.0.0 Removed its filter.
  */
 \define( 'THE_SEO_FRAMEWORK_SITE_CACHE', 'autodescription-site-cache' );
 

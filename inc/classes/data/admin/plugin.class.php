@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
 /**
  * Holds a collection of data saving methods for posts.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Plugin {
@@ -48,7 +48,7 @@ class Plugin {
 	 * @since 2.9.0 Removed reset options check, see check_options_reset().
 	 * @since 3.1.0 Removed settings field existence check.
 	 * @since 4.0.0 Now checks if the option exists before adding it. Shaves 20μs...
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Is now marked private.
 	 */
 	public static function register_settings() {
@@ -73,7 +73,7 @@ class Plugin {
 	 * Prepares updating of TSF settings.
 	 *
 	 * @hook admin_action_update 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function process_settings_update() {
 
@@ -99,7 +99,7 @@ class Plugin {
 	/**
 	 * Resets options on request.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return void Early if not on SEO settings page.
 	 */
@@ -175,7 +175,7 @@ class Plugin {
 	 *
 	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_set_option_updated_notice`.
 	 */
 	public static function set_option_updated_notice() {
@@ -190,7 +190,7 @@ class Plugin {
 	 *
 	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 12
 	 * @since 3.0.6
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 */
 	public static function update_db_version() {
 		\update_option( 'the_seo_framework_upgraded_db_version', \THE_SEO_FRAMEWORK_DB_VERSION );
@@ -205,7 +205,7 @@ class Plugin {
 	 * @since 4.1.0 1. Added taxonomical robots options backward compat.
 	 *              2. Added the first two parameters.
 	 * @since 4.2.5 Emptied and is no longer enqueued.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_set_backward_compatibility`.
 	 *
 	 * @param mixed $options The new, unserialized option values.

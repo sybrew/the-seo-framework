@@ -30,7 +30,7 @@ use \The_SEO_Framework\Helper;
 /**
  * Handles the locking mechanics for sitemaps.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->sitemap()->lock() instead.
  */
@@ -40,7 +40,7 @@ class Lock {
 	 * Returns the sitemap's lock cache ID.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return string|false The sitemap lock key. False when key is invalid.
@@ -60,7 +60,7 @@ class Lock {
 	 * Outputs a '503: Service Unavailable' header and no-cache headers.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 */
@@ -94,7 +94,7 @@ class Lock {
 	 *
 	 * @since 4.1.2
 	 * @since 4.2.1 Now considers "unlimited" execution time (0) that'd've prevented locks altogether.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on success, false on failure.
@@ -121,7 +121,7 @@ class Lock {
 	 * Unlocks a sitemap for the current blog & locale and $sitemap_id.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool True on success, false on failure.
@@ -137,7 +137,7 @@ class Lock {
 	 * Tells whether a sitemap is locked for the current blog & locale and $sitemap_id.
 	 *
 	 * @since 4.1.2
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges\Sitemap`.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return bool|int False if not locked, the lock UNIX release time otherwise.

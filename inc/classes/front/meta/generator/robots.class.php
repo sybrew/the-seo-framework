@@ -30,13 +30,13 @@ use \The_SEO_Framework\Meta;
 /**
  * Holds robots generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Robots {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -44,7 +44,7 @@ final class Robots {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_robots() {
@@ -54,7 +54,7 @@ final class Robots {
 		if ( \has_filter( 'the_seo_framework_robots_meta' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 1. Deprecated.
+			 * @since 5.0.0 1. Deprecated.
 			 *              2. No longer used internally.
 			 * @deprecated
 			 * @param array $meta The robots meta.
@@ -68,7 +68,7 @@ final class Robots {
 						explode( ',', $meta ),
 						\The_SEO_Framework\Helper\Query::get_the_real_id(),
 					],
-					'4.3.0 of The SEO Framework',
+					'5.0.0 of The SEO Framework',
 					'the_seo_framework_robots_meta_array',
 				)
 			);

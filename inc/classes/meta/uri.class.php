@@ -39,7 +39,7 @@ use \The_SEO_Framework\{
 /**
  * Holds getters for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->uri() instead.
  */
@@ -48,7 +48,7 @@ class URI {
 	/**
 	 * Gets the canonical URL for indexation.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string $url If indexable, a canonical URL will appear.
 	 */
@@ -62,7 +62,7 @@ class URI {
 		if ( \has_filter( 'the_seo_framework_rel_canonical_output' ) ) {
 			/**
 			 * @since 2.6.5
-			 * @since 4.3.0 Deprecated.
+			 * @since 5.0.0 Deprecated.
 			 * @deprecated
 			 * @param string $url The canonical URL. Must be escaped.
 			 * @param int    $id  The current page or term ID.
@@ -73,7 +73,7 @@ class URI {
 					'',
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 
@@ -93,7 +93,7 @@ class URI {
 	 * @since 3.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.3 Now accepts arguments publicly.
-	 * @since 4.3.0 1. No longer calls the query in the sitemap to remove pagination.
+	 * @since 5.0.0 1. No longer calls the query in the sitemap to remove pagination.
 	 *              2. Moved to \The_SEO_Framework\Meta\URI.
 	 *              3. Now always returns a sanitized URL.
 	 *
@@ -112,7 +112,7 @@ class URI {
 	/**
 	 * Returns the custom canonical URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -128,7 +128,7 @@ class URI {
 	 * Returns the generated canonical URL.
 	 * Memoizes if $args is null.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine and memoize query.
@@ -143,7 +143,7 @@ class URI {
 	/**
 	 * Returns the custom canonical URL, based on query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The custom canonical URL, if any.
 	 */
@@ -168,7 +168,7 @@ class URI {
 	/**
 	 * Returns the custom canonical URL, based on arguments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -199,7 +199,7 @@ class URI {
 	/**
 	 * Gets generated permalink, based on query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The generated canonical URL.
 	 */
@@ -229,7 +229,7 @@ class URI {
 	/**
 	 * Gets generated permalink, based on args.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -258,7 +258,7 @@ class URI {
 	 * Returns home URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The home URL.
 	 */
@@ -282,7 +282,7 @@ class URI {
 	/**
 	 * Returns home URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string The home URL.
 	 */
@@ -301,7 +301,7 @@ class URI {
 	/**
 	 * Returns singular URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|null $post_id The page ID. Leave null to autodetermine.
 	 * @return string The singular URL.
@@ -337,7 +337,7 @@ class URI {
 	/**
 	 * Returns singular canonical URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int $post_id The post ID to get the URL from.
 	 * @return string The singular canonical URL without complex optimizations.
@@ -358,7 +358,7 @@ class URI {
 	 * Returns taxonomical canonical URL.
 	 * Automatically adds pagination if the ID matches the query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
 	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
@@ -387,7 +387,7 @@ class URI {
 	/**
 	 * Returns taxonomical canonical URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|null $term_id  The term ID.
 	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
@@ -414,7 +414,7 @@ class URI {
 	/**
 	 * Returns post type archive canonical URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                               Leave null to autodetermine query and allow pagination.
@@ -442,7 +442,7 @@ class URI {
 	/**
 	 * Returns post type archive canonical URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param null|string $post_type The post type archive's post type.
 	 *                          Leave null to autodetermine query and allow pagination.
@@ -463,7 +463,7 @@ class URI {
 	/**
 	 * Returns author canonical URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|null $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
@@ -490,7 +490,7 @@ class URI {
 	/**
 	 * Returns author canonical URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|null $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
@@ -550,7 +550,7 @@ class URI {
 	/**
 	 * Returns date canonical URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int  $year  The year.
 	 * @param ?int $month The month.
@@ -579,7 +579,7 @@ class URI {
 	 * Returns search canonical URL.
 	 * Automatically adds pagination if the input matches the query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $search_query The search query. Mustn't be escaped.
 	 *                             When left empty, the current query will be used.
@@ -607,7 +607,7 @@ class URI {
 	/**
 	 * Returns search canonical URL without query adjustments.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $search_query The search query. Mustn't be escaped.
 	 * @return string The date canonical URL, if any.
@@ -633,7 +633,7 @@ class URI {
 	 * @since 4.1.0 Removed memoization.
 	 * @since 4.1.2 1. Added back memoization.
 	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
-	 * @since 4.3.0 1. Removed memoization thanks to optimization.
+	 * @since 5.0.0 1. Removed memoization thanks to optimization.
 	 *              2. Moved to \The_SEO_Framework\Meta\URI.
 	 *
 	 * @return array Escaped site Pagination URLs: {
@@ -680,7 +680,7 @@ class URI {
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
 	 *              2. Now redirects post type archives.
-	 * @since 4.3.0 1. Now expects an ID before getting a post meta item.
+	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved to \The_SEO_Framework\Meta\URI.
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
@@ -719,7 +719,7 @@ class URI {
 	/**
 	 * Generates shortlink URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string|null Escaped site Shortlink URL.
 	 */
@@ -736,7 +736,7 @@ class URI {
 	/**
 	 * Generates shortlink URL.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @todo Append queries of other plugins for other pages as well?
 	 *
 	 * @return string|null Escaped site Shortlink URL.

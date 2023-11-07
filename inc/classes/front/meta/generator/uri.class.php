@@ -30,13 +30,13 @@ use \The_SEO_Framework\Meta;
 /**
  * Holds URI generators for meta tag output.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class URI {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -46,7 +46,7 @@ final class URI {
 	];
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_canonical_url() {
@@ -64,7 +64,7 @@ final class URI {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_pagination_urls() {
@@ -74,7 +74,7 @@ final class URI {
 		if ( \has_filter( 'the_seo_framework_paged_url_output_prev' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $next The previous-page URL.
 			 * @param int    $id   The current post or term ID.
@@ -85,14 +85,14 @@ final class URI {
 					$prev,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
 		if ( \has_filter( 'the_seo_framework_paged_url_output_next' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $next The next-page URL.
 			 * @param int    $id   The current post or term ID.
@@ -103,7 +103,7 @@ final class URI {
 					$next,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}
@@ -128,7 +128,7 @@ final class URI {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_shortlink() {
@@ -138,7 +138,7 @@ final class URI {
 		if ( \has_filter( 'the_seo_framework_shortlink_output' ) ) {
 			/**
 			 * @since 2.6.0
-			 * @since 4.3.0 Deprecated
+			 * @since 5.0.0 Deprecated
 			 * @deprecated
 			 * @param string $url The generated shortlink URL.
 			 * @param int    $id  The current post or term ID.
@@ -149,7 +149,7 @@ final class URI {
 					$url,
 					\The_SEO_Framework\Helper\Query::get_the_real_id(),
 				],
-				'4.3.0 of The SEO Framework',
+				'5.0.0 of The SEO Framework',
 				'the_seo_framework_meta_render_data',
 			);
 		}

@@ -39,7 +39,7 @@ use \The_SEO_Framework\{
 /**
  * Holds Excerpt generation for the Description factory.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->description()->excerpt() instead.
  */
@@ -48,7 +48,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -63,7 +63,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for the current query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string
 	 */
@@ -88,7 +88,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for the current query.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string
@@ -115,7 +115,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for the blog page.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return string
 	 */
@@ -130,7 +130,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for archives.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param null|\WP_Term|\WP_Post_Type $object The term or post type object.
 	 * @return string
@@ -209,7 +209,7 @@ final class Excerpt {
 	/**
 	 * Returns a description excerpt for singular post types.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * NOTE: Don't add memo; large memory heaps can occur.
 	 *       It only runs twice on the post edit screen (post.php).
 	 *       Front-end caller get_excerpt_from_query() uses memo.

@@ -31,7 +31,7 @@ use \The_SEO_Framework\Admin;
  * Interprets the Sitemap Stylesheet of the optimized Sitemap.
  *
  * @since 4.2.0
- * @since 4.3.0 1. Moved to `\The_SEO_Framework\Interpreters`.
+ * @since 5.0.0 1. Moved to `\The_SEO_Framework\Interpreters`.
  *              2. Renamed from `Sitemap_XSL`.
  * @access private
  */
@@ -40,7 +40,7 @@ final class XSL {
 	/**
 	 * Loads all hooks for the stylesheet.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function register_hooks() {
 

@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
 /**
  * Holds a collection of helper methods for plugin compatibility.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 class Compatibility {
@@ -44,7 +44,7 @@ class Compatibility {
 	 * Registers plugin cache checks on plugin activation.
 	 *
 	 * @hook activated_plugin 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function try_plugin_conflict_notification() {
 
@@ -71,7 +71,7 @@ class Compatibility {
 	 * Clears plugin cache checks on plugin deactivation.
 	 *
 	 * @hook deactivated_plugin 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function clear_plugin_conflict_notification() {
 		Admin\Notice\Persistent::clear_notice( 'seo-plugin-conflict' );
@@ -81,7 +81,7 @@ class Compatibility {
 	 * Returns a filterable list of conflicting plugins.
 	 *
 	 * @since 2.6.0
-	 * @since 4.3.0 1. Moved from `The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `The_SEO_Framework\Load`.
 	 *              2. Renamed from `conflicting_plugins`.
 	 *
 	 * @return array List of conflicting plugins.
@@ -121,7 +121,7 @@ class Compatibility {
 
 		/**
 		 * @since 2.6.0
-		 * @since 4.3.0 Added indexes 'multilingual' and 'schema'.
+		 * @since 5.0.0 Added indexes 'multilingual' and 'schema'.
 		 * @param array $conflicting_plugins The conflicting plugin list.
 		 */
 		$conflicting_plugins = (array) \apply_filters(
@@ -133,7 +133,7 @@ class Compatibility {
 			foreach ( $conflicting_plugins as $type => &$plugins ) {
 				/**
 				 * @since 2.6.1
-				 * @since 4.3.0 Deprecated. Use `the_seo_framework_conflicting_plugins` instead.
+				 * @since 5.0.0 Deprecated. Use `the_seo_framework_conflicting_plugins` instead.
 				 * @deprecated
 				 * @param array  $conflicting_plugins Conflicting plugins
 				 * @param string $type                The type of plugins to get.
@@ -144,7 +144,7 @@ class Compatibility {
 						$plugins,
 						$type,
 					],
-					'4.3.0 of The SEO Framework',
+					'5.0.0 of The SEO Framework',
 					'the_seo_framework_conflicting_plugins',
 				);
 			}
@@ -156,7 +156,7 @@ class Compatibility {
 	/**
 	 * Determines if other conflicting plugins are active.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param bool $refresh Whether to refresh the cache.
 	 * @return array[] A list of types that are potentially conflicting : {
@@ -204,7 +204,7 @@ class Compatibility {
 	 * @since 2.5.2
 	 * @since 4.1.4 Fixed sorting algorithm from fribbling-me to resolving-me. Nothing changed but legibility.
 	 * @since 4.2.0 Rewrote sorting algorithm; now, it's actually good.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `can_i_use`.
 	 *              3. Removed the second parameter `$use_cache`.
 	 *              4. Removed caching. This responsibility now lies by the caller.
@@ -244,7 +244,7 @@ class Compatibility {
 	 *
 	 * @since 2.1.0
 	 * @since 4.2.0 No longer "loads" the theme; instead, simply compares input to active theme options.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_theme`.
 	 *
 	 * @param string|string[] $themes The theme names to test.
@@ -272,7 +272,7 @@ class Compatibility {
 	 * - Visual Composer by WPBakery
 	 *
 	 * @since 4.1.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `detect_non_html_page_builder`.
 	 *
 	 * @return bool

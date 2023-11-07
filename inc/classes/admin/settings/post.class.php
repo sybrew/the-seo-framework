@@ -43,7 +43,7 @@ use \The_SEO_Framework\Helper\{
  * TODO carry over what we implemented in TSFEM, and make that the standard.
  *
  * @since 4.0.0
- * @since 4.3.0 1. Renamed from `PostSettings` to `Post`.
+ * @since 5.0.0 1. Renamed from `PostSettings` to `Post`.
  *              2. Moved from `\The_SEO_Framework\Bridges`.
  * @access private
  */
@@ -56,7 +56,7 @@ final class Post {
 	 * @since 4.0.0
 	 * @since 4.0.5 Now registers custom postbox classes.
 	 * @since 4.2.8 No longer uses the post type label for the meta box title.
-	 * @since 4.3.0 1. No longer uses the $post_type for the screen-parameter in add_meta_box.
+	 * @since 5.0.0 1. No longer uses the $post_type for the screen-parameter in add_meta_box.
 	 *              2. No longer generates a dynamic title for the Homepage with settings-helper.
 	 *                 This because Gutenberg is inconsistent with metabox display and escapes HTML incorrectly.
 	 *              3. Now registers homepage warnings in the primary tabs.
@@ -116,7 +116,7 @@ final class Post {
 	 * Outputs Tabs and settings content.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Removed third parameter: $use_tabs.
+	 * @since 5.0.0 1. Removed third parameter: $use_tabs.
 	 *              2. Moved from `\The_SEO_Framework\Bridges`.
 	 *              3. Renamed from `_flex_nav_tab_wrapper`.
 	 *
@@ -142,7 +142,7 @@ final class Post {
 	 * Outputs the meta box.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_meta_box`.
 	 */
 	public static function meta_box() {
@@ -169,7 +169,7 @@ final class Post {
 	 * Adds a Gutenberg/Block-editor box class.
 	 *
 	 * @since 4.0.5
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_add_postbox_class`.
 	 *
 	 * @param array $classes The registered postbox classes.
@@ -186,7 +186,7 @@ final class Post {
 	/**
 	 * Outputs the Homepage SEO settings warning.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function output_homepage_warning() {
 		Admin\Template::output_view( 'post/homepage-warning' );
@@ -196,7 +196,7 @@ final class Post {
 	 * Outputs the Post SEO box general tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_general_tab`.
 	 */
 	public static function general_tab() {
@@ -215,7 +215,7 @@ final class Post {
 	 * Outputs the Post SEO box visibility tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_visibility_tab`.
 	 */
 	public static function visibility_tab() {
@@ -234,7 +234,7 @@ final class Post {
 	 * Outputs the Post SEO box social tab.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Bridges`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
 	 *              2. Renamed from `_social_tab`.
 	 */
 	public static function social_tab() {

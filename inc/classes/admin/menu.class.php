@@ -35,7 +35,7 @@ use \The_SEO_Framework\Helper\Format\Markdown;
 /**
  * Prepares the TSF menu interfaces.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->admin()->menu() instead.
  */
@@ -46,7 +46,7 @@ class Menu {
 	 *
 	 * @since 2.2.2
 	 * @since 2.9.2 Added static cache so the method can only run once.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `add_menu_link`.
 	 *
 	 * @return void Early if method is already called.
@@ -82,7 +82,7 @@ class Menu {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @return array The top menu page arguments.
 	 */
@@ -113,7 +113,7 @@ class Menu {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param string $submenu The submenu to get. If it's empty, it'll get TSF's main page hook.
 	 * @return string TSF's menu page hook name or its submenu hook name.
@@ -140,7 +140,7 @@ class Menu {
 	 * Always returns 0 when the settings are headless.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_admin_issue_count`.
 	 *
 	 * @return int The registered issue count.
@@ -160,7 +160,7 @@ class Menu {
 	 * Returns formatted text for the notice count to be displayed in the admin menu as a number.
 	 *
 	 * @since 4.2.8
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_issue_badge`.
 	 *
 	 * @param int $issue_count The issue count.

@@ -59,7 +59,7 @@ function _init_locale() {
  * action later than plugins_loaded and you can access the class and functions.
  *
  * @hook plugins_loaded 5
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 function _load_tsf() {
@@ -96,7 +96,7 @@ function _load_tsf() {
  *
  * @hook init 10
  * @since 3.1.0
- * @since 4.3.0 1. Is no longer responsible for the loading.
+ * @since 5.0.0 1. Is no longer responsible for the loading.
  *              2. Moved from plugins_loaded to init.
  * @see namespace\_load_tsf().
  * @access private
@@ -168,7 +168,7 @@ function _init_tsf() {
  *              2. Added timing functionality
  *              3. No longer loads interfaces automatically.
  * @since 4.2.0 Now supports mixed class case.
- * @since 4.3.0 Now supports trait loading.
+ * @since 5.0.0 Now supports trait loading.
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
  * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private

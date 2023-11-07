@@ -37,14 +37,14 @@ use \The_SEO_Framework\Helper\{
 /**
  * Holds a collection of Post Type Archive data interface methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin->pta() instead.
  */
 class PTA {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] Stored pta meta data.
 	 */
 	private static $meta_memo = [];
@@ -52,7 +52,7 @@ class PTA {
 	/**
 	 * Flushes all PTA runtime cache.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 * @see \The_SEO_Framework\Data\Option::update_option()
 	 */
@@ -64,7 +64,7 @@ class PTA {
 	 * Returns a single post type archive item's value.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_post_type_archive_meta_item`.
 	 *
@@ -89,7 +89,7 @@ class PTA {
 	 * disabled, anyway, for we never query post types externally, aside from the SEO settings page.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. The first parameter may now be empty to autodetermine post type.
+	 * @since 5.0.0 1. The first parameter may now be empty to autodetermine post type.
 	 *              2. Removed the second `$use_cache` parameter.
 	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 *              4. Renamed from `get_post_type_archive_meta`.
@@ -143,7 +143,7 @@ class PTA {
 	 * Returns an array of all public post type archive option defaults.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_all_post_type_archive_meta_defaults`.
 	 *
 	 * @return array[] The Post Type Archive Metadata default options
@@ -163,7 +163,7 @@ class PTA {
 	 * Returns an array of default post type archive meta.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_post_type_archive_meta_defaults`.
 	 *
 	 * @param int $post_type The post type.

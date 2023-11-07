@@ -73,7 +73,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		);
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array $html_passes_method The HTML pass option by [ 'option_value' => 'Name' ]
 		 */
 		$html_passes_methods = (array) \apply_filters(

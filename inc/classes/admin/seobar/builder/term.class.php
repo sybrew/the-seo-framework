@@ -46,7 +46,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `SeoBar_Term`.
- * @since 4.3.0 Moved from `\The_SEO_Framework\Builders\SEOBar`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\SEOBar`.
  *
  * @access private
  * @see \The_SEO_Framework\Admin\SEOBar\Builder
@@ -104,7 +104,7 @@ final class Term extends Main {
 	 * Primes the current query cache.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Removed first parameter.
+	 * @since 5.0.0 Removed first parameter.
 	 * @abstract
 	 */
 	protected function prime_query_cache() {

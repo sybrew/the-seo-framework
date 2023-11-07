@@ -33,7 +33,7 @@ use \The_SEO_Framework\{
 /**
  * Prepares redirects.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class Title {
@@ -47,7 +47,7 @@ final class Title {
 	 * @hook pre_get_document_title 10
 	 * @hook wp_title 9
 	 * @since 3.1.0
-	 * @since 4.3.0 1. Now escapes the filter output.
+	 * @since 5.0.0 1. Now escapes the filter output.
 	 *              2. Moved to `The_SEO_Framework\Front\Title`.
 	 *              3. Renamed from `get_document_title`.
 	 * @see $this->get_title()

@@ -35,14 +35,14 @@ use \The_SEO_Framework\Helper\{
 /**
  * Holds a collection of Term data interface methods for TSF.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin->term() instead.
  */
 class Term {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array[] Stored term meta data.
 	 */
 	private static $meta_memo = [];
@@ -52,7 +52,7 @@ class Term {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 No longer accidentally returns an empty array on failure.
-	 * @since 4.3.0 1. Removed the third `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_term_meta_item`.
 	 *
@@ -84,7 +84,7 @@ class Term {
 	 * @since 4.1.4 1. Removed deprecated filter.
 	 *              2. Now considers headlessness.
 	 * @since 4.2.0 Now returns an empty array when the term's taxonomy isn't supported.
-	 * @since 4.3.0 1. Removed the second `$use_cache` parameter.
+	 * @since 5.0.0 1. Removed the second `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_term_meta`.
 	 *
@@ -143,7 +143,7 @@ class Term {
 	 *              2. Added 'redirect' value.
 	 *              3. Added 'title_no_blog_name' value.
 	 *              4. Removed 'saved_flag' value.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_term_meta_defaults`.
 	 *
 	 * @param int $term_id The term ID.
@@ -186,7 +186,7 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_single_term_meta_item`.
 	 *
 	 * @param string $item     The item to update.
@@ -211,7 +211,7 @@ class Term {
 	 * @since 4.0.0
 	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
 	 *              2. Now continues using the filtered term object.
-	 * @since 4.3.0 1. Removed 3rd and 4th parameters ($tt_id and $taxonomy).
+	 * @since 5.0.0 1. Removed 3rd and 4th parameters ($tt_id and $taxonomy).
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `save_term_meta`.
 	 *
@@ -228,7 +228,7 @@ class Term {
 		 * @NOTE Do not remove indexes. We store all data, even if empty,
 		 *       to ensure defaults don't override them.
 		 * @since 3.1.0
-		 * @since 4.3.0 1. Removed 3rd and 4th parameters (`$tt_id` and `$taxonomy`).
+		 * @since 5.0.0 1. Removed 3rd and 4th parameters (`$tt_id` and `$taxonomy`).
 		 *              2. No longer sends pre-sanitized data to the filter.
 		 * @param array  $data     The data that's going to be saved.
 		 * @param int    $term_id  The term ID.
@@ -255,7 +255,7 @@ class Term {
 	 *
 	 * @since 2.7.0
 	 * @since 4.0.0 Removed 2nd, unused, parameter.
-	 * @since 4.3.0 1. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `delete_term_meta`.
 	 * @ignore Unused internally. Public API.
 	 *

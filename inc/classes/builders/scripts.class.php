@@ -25,7 +25,7 @@ namespace The_SEO_Framework\Builders;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Scripts', '4.3.0', 'The_SEO_Framework\Admin\Script\Registry' );
+\tsf()->_deprecated_function( 'The_SEO_Framework\Builders\Scripts', '5.0.0', 'The_SEO_Framework\Admin\Script\Registry' );
 /**
  * Registers and outputs admin GUI scripts. Auto-invokes everything the moment
  * this file is required.
@@ -34,7 +34,7 @@ namespace The_SEO_Framework\Builders;
  * This handles admin-ONLY scripts for now.
  *
  * @since 3.1.0
- * @since 4.3.0 1. Moved to \The_SEO_Framework\Admin\Script\Registry
+ * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\Script\Registry
  *              2. Deprecated.
  * @deprecated
  * @ignore
@@ -47,7 +47,7 @@ class Scripts extends \The_SEO_Framework\Admin\Script\Registry {
 	 * this class is needed yet.
 	 *
 	 * @since 4.0.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @ignore
 	 * @deprecated
 	 */
@@ -59,7 +59,7 @@ class Scripts extends \The_SEO_Framework\Admin\Script\Registry {
 	 * Verifies template view inclusion secret.
 	 *
 	 * @since 3.1.0
-	 * @since 4.3.0 Deprecated.
+	 * @since 5.0.0 Deprecated.
 	 * @ignore
 	 * @deprecated
 	 *

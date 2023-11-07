@@ -41,7 +41,7 @@ use \The_SEO_Framework\Helper,
  * they're with their relatives.
  *
  * @since 4.1.4
- * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges`
  * @access private
  */
 final class AJAX {
@@ -51,7 +51,7 @@ final class AJAX {
 	 *
 	 * @since 4.1.0
 	 * @since 4.2.0 Now cleans response header.
-	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
+	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
 	public static function dismiss_notice() {
@@ -87,7 +87,7 @@ final class AJAX {
 	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
 	 * @since 4.2.0 1. Now uses wp.ajax instead of $.ajax.
 	 *              2. No longer tests if settings-saving was successful.
-	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
+	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
 	public static function update_counter_type() {
@@ -142,7 +142,7 @@ final class AJAX {
 	 * @since 4.2.0 Now cleans response header.
 	 * @since 4.2.5 1. Backported cropping support for WebP (WP 5.9).
 	 *              2. Backported title, description, alt tag, and excerpt preservation (WP 6.0).
-	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
+	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
 	public static function crop_image() {
@@ -174,7 +174,7 @@ final class AJAX {
 				 *
 				 * Allows to add filters to modify the way a cropped image is saved.
 				 *
-				 * @since 4.3.0 WordPress Core
+				 * @since 5.0.0 WordPress Core
 				 *
 				 * @param string $context       The Customizer control requesting the cropped image.
 				 * @param int    $attachment_id The attachment ID of the original image.
@@ -230,7 +230,7 @@ final class AJAX {
 				$metadata      = \wp_generate_attachment_metadata( $attachment_id, $cropped );
 
 				/**
-				 * @since 4.3.0 WordPress Core
+				 * @since 5.0.0 WordPress Core
 				 * @see wp_generate_attachment_metadata()
 				 * @param array $metadata Attachment metadata.
 				 */
@@ -238,7 +238,7 @@ final class AJAX {
 				\wp_update_attachment_metadata( $attachment_id, $metadata );
 
 				/**
-				 * @since 4.3.0 WordPress Core
+				 * @since 5.0.0 WordPress Core
 				 * @param int    $attachment_id The attachment ID of the cropped image.
 				 * @param string $context       The Customizer control requesting the cropped image.
 				 */
@@ -259,7 +259,7 @@ final class AJAX {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
-	 * @since 4.3.0 Removed _wp_ajax_ from the plugin name.
+	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @access private
 	 */
 	public static function get_post_data() {

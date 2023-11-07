@@ -33,7 +33,7 @@ use \The_SEO_Framework\Data;
  * Holds search engine sitemap pinging functionality.
  *
  * @since 4.0.0
- * @since 4.3.0 Moved from `\The_SEO_Framework\Bridges`.
+ * @since 5.0.0 Moved from `\The_SEO_Framework\Bridges`.
  * @access protected
  *         Use tsf()->sitemap()->ping() instead.
  */
@@ -200,7 +200,7 @@ final class Ping {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.2.0
-	 * @since 4.3.0 Added first `$sitemap_id` parameter.
+	 * @since 5.0.0 Added first `$sitemap_id` parameter.
 	 *
 	 * @param string $sitemap_id The sitemap ID. Only works when the Optimized Sitemaps are enabled.
 	 * @return string The ping URL. Empty string on failure.

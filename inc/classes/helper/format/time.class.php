@@ -32,7 +32,7 @@ use \The_SEO_Framework\Data;
 /**
  * Holds methods for Time interpretation and conversion.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @NOTE to self: This is also used in XHTML configurations. Keep it strict!
  *
  * @access protected
@@ -43,7 +43,7 @@ class Time {
 	/**
 	 * Converts the input
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int|string $time The timestamp. Expected to be GMT/UTC.
 	 * @return string The time in correct format. An empty string on failure.
@@ -66,7 +66,7 @@ class Time {
 	 * Returns timestamp format based on timestamp settings.
 	 * Note that this must be XML safe.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @link https://www.w3.org/TR/NOTE-datetime
 	 *
 	 * @return string The timestamp format used in PHP date.

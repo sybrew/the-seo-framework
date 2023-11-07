@@ -31,7 +31,7 @@ use function \The_SEO_Framework\memo;
  * Holds methods for Array interpretation and conversion.
  * Array is a reserved keyword, so we use Arrays.
  *
- * @since 4.3.0
+ * @since 5.0.0
  *
  * @access protected
  *         Use tsf()->format()->arrays() instead.
@@ -47,7 +47,7 @@ class Arrays {
 	 *
 	 * @link <https://3v4l.org/XBSFa>, test it here.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array $array The array to flatten. If input is not an array, it'll be casted.
 	 * @return array The flattened array.
@@ -84,7 +84,7 @@ class Arrays {
 	 *
 	 * @link <https://3v4l.org/SDdal>, test it here.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param array $array The array to flatten. If input is not an array, it'll be casted.
 	 * @return array The flattened array.
@@ -120,7 +120,7 @@ class Arrays {
 	 *              2. Reduced number of opcodes by roughly 27% by reworking it.
 	 *              3. Now no longer throws warnings with qubed+ arrays.
 	 *              4. Now no longer prevents scalar values overwriting arrays.
-	 * @since 4.3.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array ...$arrays The arrays to merge. The rightmost array's values are dominant.
 	 * @return array The merged arrays.

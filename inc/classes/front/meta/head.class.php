@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
 /**
  * Outputs the front-end metadata output in WP Head.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access protected
  */
 final class Head {
@@ -47,7 +47,7 @@ final class Head {
 	 * Prints the indicator wrap and meta tags.
 	 * Adds various action hooks for outside the wrap.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function print_wrap_and_tags() {
 
@@ -90,7 +90,7 @@ final class Head {
 	 * Registers, generates, and prints the meta tags.
 	 * Adds various action hooks for around the tags.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function print_tags() {
 
@@ -127,14 +127,14 @@ final class Head {
 
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
+		 * @since 5.0.0 Deprecated
 		 * @deprecated
 		 * @param bool $use_og_tags
 		 */
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_og_tags',
 			[ (bool) Data\Plugin::get_option( 'og_tags' ) ],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {
 			// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- coalescable.
@@ -142,35 +142,35 @@ final class Head {
 		}
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
+		 * @since 5.0.0 Deprecated
 		 * @deprecated
 		 * @param bool $use_facebook_tags
 		 */
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
 			[ (bool) Data\Plugin::get_option( 'facebook_tags' ) ],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {
 			$remove_pools[] = 'Facebook';
 		}
 		/**
 		 * @since 3.1.4
-		 * @since 4.3.0 Deprecated
+		 * @since 5.0.0 Deprecated
 		 * @deprecated
 		 * @param bool $use_twitter_tags
 		 */
 		if ( ! \apply_filters_deprecated(
 			'the_seo_framework_use_twitter_tags',
 			[ (bool) Data\Plugin::get_option( 'twitter_tags' ) ],
-			'4.3.0 of The SEO Framework',
+			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {
 			$remove_pools[] = 'Twitter';
 		}
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param string[] $generator_pools A list of tag pools requested for the current query.
 		 *                                  The tag pool names correspond directly to the classes'.
 		 *                                  Do not register new pools, it'll cause a fatal error.
@@ -188,7 +188,7 @@ final class Head {
 			$generators_queue[] = ( "\The_SEO_Framework\Front\Meta\Generator\\$pool" )::GENERATORS;
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param callable[] $tag_generators  A list of meta tag generator callbacks.
 		 *                                    The generators may offload work to other generators.
 		 * @param string[]   $generator_pools A list of tag pools requested for the current query.
@@ -203,7 +203,7 @@ final class Head {
 		Tags::fill_render_data_from_registered_generators();
 
 		/**
-		 * @since 4.3.0
+		 * @since 5.0.0
 		 * @param array[] $tags_render_data  The meta tags' render data : {
 		 *    ?array  attributes A list of attributes by [ name => value ].
 		 *    ?string tag        The tag name. Defaults to 'meta' if left empty.
@@ -232,7 +232,7 @@ final class Head {
 	 * Returns the plugin hidden HTML indicators.
 	 * Memoizes the filter outputs.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @access private
 	 *
 	 * @param string $where                 Determines the position of the indicator.

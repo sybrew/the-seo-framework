@@ -36,7 +36,7 @@ use \The_SEO_Framework\{
  * They called it OEmbed first:
  * https://blog.leahculver.com/2008/05/announcing-oembed-an-open-standard-for-embedded-content.html
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access private
  */
 final class OEmbed {
@@ -47,7 +47,7 @@ final class OEmbed {
 	 * @hook oembed_response_data 10
 	 * @since 4.0.5
 	 * @since 4.1.1 Now also alters titles and images.
-	 * @since 4.3.0 1. Moved to `The_SEO_Framework\Front\OEmbed`.
+	 * @since 5.0.0 1. Moved to `The_SEO_Framework\Front\OEmbed`.
 	 *              2. Renamed from `_alter_oembed_response_data`.
 	 *
 	 * @param array    $data   The response data.

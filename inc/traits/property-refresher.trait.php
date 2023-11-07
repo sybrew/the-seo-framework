@@ -34,13 +34,13 @@ use function \The_SEO_Framework\has_run;
  * Handy when dealing with multisite, where class properties need to be flushed
  * when blogs are switched.
  *
- * @since 4.3.0
+ * @since 5.0.0
  * @access public
  */
 trait Property_Refresher {
 
 	/**
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @var array A list of properties marked for refresh.
 	 */
 	protected static $marked_for_refresh = [];
@@ -48,7 +48,7 @@ trait Property_Refresher {
 	/**
 	 * Registers automated refreshes.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 * @param string $property The property that's marked for refresh.
 	 */
 	protected static function register_automated_refresh( $property ) {
@@ -64,7 +64,7 @@ trait Property_Refresher {
 	 * Refreshes all static properties.
 	 *
 	 * @hook switch_blog 10
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 *
 	 * @param int $new_site_id New site ID.
 	 * @param int $old_site_id Old site ID.
@@ -79,7 +79,7 @@ trait Property_Refresher {
 	/**
 	 * Refreshes all static properties.
 	 *
-	 * @since 4.3.0
+	 * @since 5.0.0
 	 */
 	public static function refresh_static_properties() {
 		foreach ( get_class_vars( __CLASS__ ) as $key => $initial )
