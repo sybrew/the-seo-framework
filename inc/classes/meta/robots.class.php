@@ -82,7 +82,7 @@ class Robots {
 	 * @since 5.0.0 1. Renamed from `get_robots_meta()`
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param array|null $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'

@@ -50,7 +50,7 @@ final class Conditions {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when prefixes are allowed.
 	 */
@@ -81,7 +81,7 @@ final class Conditions {
 	 * @since 3.2.4
 	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
@@ -105,7 +105,7 @@ final class Conditions {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
 	 *
-	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool|string $social Whether the title is meant for social display.
 	 *                            Also accepts string 'og' and 'twitter' for future proofing.

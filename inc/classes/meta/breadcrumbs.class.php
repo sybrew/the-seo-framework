@@ -52,7 +52,7 @@ class Breadcrumbs {
 	 * @since 5.0.0
 	 * @todo consider wp_force_plain_post_permalink()
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
@@ -118,7 +118,7 @@ class Breadcrumbs {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.

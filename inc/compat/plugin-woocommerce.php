@@ -340,7 +340,7 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  * @access private
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+ * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
  * @yield array : {
@@ -387,7 +387,7 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  * @access private
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+ * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
  * @yield array : {

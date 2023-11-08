@@ -249,7 +249,15 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
-TODO mark that db version 4270 -> 4300+
+TODO highlight in large changes:
+	* Color scheme works again for tooltips.
+	* Issue with caching plugins and WordPress Core vulnerability yet unresolved?
+		* https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
+		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
+		* Also notify Nik via email?
+	* Multisite support for author SEO fields.
+
+TODO mark that db version 4270 -> 5000+
 
 TODO Data\Filter\Sanitize -> Sanitize::
 TODO Data\Filter\Escape -> Escape::
@@ -282,14 +290,6 @@ TODO add summary_large_image/summary toggle on a per-page basis
 		- Only when set to "auto"
 	- See https://github.com/sybrew/the-seo-framework/issues/525
 
-TODO highlight in large changes:
-	* Color scheme works again for tooltips.
-	* Issue with caching plugins and WordPress Core vulnerability yet unresolved?
-		* https://wordpress.org/support/topic/meta-block-sometimes-not-inserted/.
-		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
-		* Also notify Nik via email?
-	* Multisite support for author SEO fields.
-
 TODO add "disable JIT compiler" option to Description generator?
 	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
 		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
@@ -307,8 +307,6 @@ TODO 'show-if-tsf-js'
 			-> If current_user_can install plugins, add "You may have received an automated notification email about this. Otherwise, check the PHP error logs for details."
 
 TODO update doc "actions" (also update doc "constants" for TSFEM)
-
-TODO Accepts 'id', 'tax', and 'pta'. -> also uid
 
 TODO add vertical expand title input?
 	-> This helps with Gutenberg's atrocious sidebar.

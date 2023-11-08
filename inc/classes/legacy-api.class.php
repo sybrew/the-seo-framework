@@ -90,7 +90,7 @@ class Legacy_API {
 	 *              3. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The meta title output.
 	 */
@@ -110,7 +110,7 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The Open Graph title output.
 	 */
@@ -130,7 +130,7 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The Twitter title output.
 	 */
@@ -148,7 +148,7 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The meta description output.
 	 */
@@ -167,7 +167,7 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The Open Graph description output.
 	 */
@@ -187,7 +187,7 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The Twitter description output.
 	 */
@@ -229,7 +229,7 @@ class Legacy_API {
 	 *              2. Ennobled to be part of the legacy API.
 	 * @api
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.

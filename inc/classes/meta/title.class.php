@@ -51,7 +51,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The real title output.
 	 */
@@ -69,7 +69,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The unmodified title output.
 	 */
@@ -92,7 +92,7 @@ class Title {
 	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $social Whether the title is meant for social display.
 	 * @return string The custom field title.
@@ -129,7 +129,7 @@ class Title {
 	 *              3. Removed the second `$escape` parameter.
 	 *              4. Moved the third parameter to the second.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $social Whether the title is meant for social display.
 	 * @return string The generated title output.
@@ -160,7 +160,7 @@ class Title {
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -199,7 +199,7 @@ class Title {
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -248,7 +248,7 @@ class Title {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom field title, if it exists.
 	 */
@@ -298,7 +298,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
@@ -357,7 +357,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array $args The query arguments. Required. Accepts 'id', 'tax', and 'pta'.
+	 * @param array $args The query arguments. Required. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The generated title. Empty if query can't be replicated.
 	 */
 	public static function generate_title_from_args( $args ) {
@@ -767,7 +767,7 @@ class Title {
 	 * @since 5.0.0
 	 *
 	 * @param string     $title The title.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                          Leave null to autodetermine query.
 	 * @return string The title with branding.
 	 */
@@ -841,7 +841,7 @@ class Title {
 	 * @since 5.0.0
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                          Leave null to autodetermine query.
 	 * @return string The title with possible protection status.
 	 */

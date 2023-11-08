@@ -45,7 +45,7 @@ class Image {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return string The first valid image URL found, if any.
@@ -58,7 +58,7 @@ class Image {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return string The first valid image URL found, if any.
@@ -70,7 +70,7 @@ class Image {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @return string The first valid image URL found, if any.
@@ -88,7 +88,7 @@ class Image {
 	 * @since 5.0.0 1. Now always obtains cleaned images.
 	 *              2. Moved to \The_SEO_Framework\Meta\Image.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -117,7 +117,7 @@ class Image {
 		 *    string caption:  The image caption,
 		 *    int    filesize: The image filesize in bytes,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
@@ -148,7 +148,7 @@ class Image {
 	 * @since 5.0.0 1. Moved to \The_SEO_Framework\Meta\Image.
 	 *              2. Now supports $context.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -174,7 +174,7 @@ class Image {
 		 *    string caption:  The image caption,
 		 *    int    filesize: The image filesize in bytes,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 */
@@ -195,7 +195,7 @@ class Image {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.
@@ -221,7 +221,7 @@ class Image {
 		 *    string caption:  The image caption,
 		 *    int    filesize: The image filesize in bytes,
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
 		 * @param bool       $single  Whether to fetch one image, or multiple.
 		 * @param string     $context The filter context. Default 'social'.
@@ -243,7 +243,7 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
@@ -274,7 +274,7 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
@@ -303,7 +303,7 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
@@ -410,7 +410,7 @@ class Image {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @param string     $context The filter context. Default 'social'.
 	 * @yield array The image details array {
 	 *    string url:      The image URL,
@@ -479,7 +479,7 @@ class Image {
 	 * @since 5.0.0 1. Now expects an ID before testing whether an attachment is an image.
 	 *              2. Now supports 'organization' context.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Use null to autodetermine query.
 	 * @param string     $context The filter context. Default 'social'.
 	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
@@ -576,7 +576,7 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param callable[] $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param string     $size   The image size to use.

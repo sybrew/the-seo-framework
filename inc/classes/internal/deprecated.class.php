@@ -2489,7 +2489,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @param null|array $get     The robots types to retrieve. Leave null to get all. Set array to pick: {
 	 *    'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'
 	 * }
@@ -3249,7 +3249,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom field description.
 	 */
@@ -3268,7 +3268,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the description.
 	 * @param string     $type   Type of description. Accepts 'search', 'opengraph', 'twitter'.
@@ -3289,7 +3289,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated Twitter description output.
 	 */
@@ -3308,7 +3308,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated Open Graph description output.
 	 */
@@ -3345,7 +3345,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated Open Graph Title.
 	 */
@@ -3367,7 +3367,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated Twitter Title.
 	 */
@@ -3388,7 +3388,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when prefixes are allowed.
 	 */
@@ -3407,7 +3407,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
@@ -3426,7 +3426,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool|string $social Whether the title is meant for social display.
 	 *                            Also accepts string 'og' and 'twitter' for future proofing.
@@ -3603,7 +3603,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @param bool       $social Whether the title is meant for social display.
@@ -3624,7 +3624,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $escape Whether to escape the title.
 	 * @param bool       $social Whether the title is meant for social display.
@@ -3648,7 +3648,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -3670,7 +3670,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
@@ -3692,7 +3692,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom field title, if it exists.
 	 */
@@ -3713,7 +3713,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The generated title.
 	 */
@@ -3910,7 +3910,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                          Leave null to autodetermine query.
 	 */
 	public function merge_title_branding( &$title, $args = null ) {
@@ -3946,7 +3946,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param string     $title The title. Passed by reference.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                          Leave null to autodetermine query.
 	 * @return void
 	 */
@@ -4683,7 +4683,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single Whether to fetch one image, or multiple. Unused, reserved.
 	 * @return array The image details array, sequential: int => {
@@ -4709,7 +4709,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context The filter context. Default 'social'.

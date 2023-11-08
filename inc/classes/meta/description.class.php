@@ -54,7 +54,7 @@ class Description {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The real description output.
 	 */
@@ -71,7 +71,7 @@ class Description {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom field description.
 	 */
@@ -115,7 +115,7 @@ class Description {
 	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
 	 * @return string The generated description output.
@@ -251,7 +251,7 @@ class Description {
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved to \The_SEO_Framework\Meta\Description.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return string The custom description.
 	 */
@@ -285,7 +285,7 @@ class Description {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @return bool
 	 */
