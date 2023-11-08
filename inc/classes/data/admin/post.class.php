@@ -270,7 +270,8 @@ class Post {
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
-						if ( 'nochange' === $value ) continue 2;
+						if ( 'nochange' === $value )
+							break;
 						$new_data[ "_genesis_$key" ] = $value;
 				}
 			}

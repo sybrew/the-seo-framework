@@ -54,6 +54,19 @@ class Plugin {
 	private static $site_cache_memo;
 
 	/**
+	 * Flushes all option runtime cache.
+	 *
+	 * @hook "update_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" 0
+	 * @since 5.0.0
+	 * @access private
+	 */
+	public static function flush_cache() {
+		static::$options_memo    = null;
+		static::$site_cache_memo = null;
+		Plugin\PTA::flush_cache();
+	}
+
+	/**
 	 * Returns selected option. Null on failure.
 	 *
 	 * @since 2.2.2
@@ -132,7 +145,7 @@ class Plugin {
 			\is_array( $option ) ? $option : [ $option => $value ],
 		);
 
-		// The current request is still headless -- so do not update the state.
+		// If the current request is headless, do not update the state.
 		// The next request may have filtered this value, or the update was blocked.
 		if ( ! is_headless( 'settings' ) )
 			static::$options_memo = null;

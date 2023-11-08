@@ -145,6 +145,13 @@ class Plugin {
 		);
 		*/
 
+		// This submission uses WordPress built-in option stores, bypassing Data\Plugin. Hence, we flush:
+		\add_action(
+			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			[ Data\Plugin::class, 'flush_cache' ],
+			0
+		);
+
 		// Sets that the options are unchanged, preemptively.
 		Data\Plugin::update_site_cache( 'settings_notice', 'unchanged' );
 		// But, if this action fires, we can assure that the settings have been changed (according to WP).

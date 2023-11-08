@@ -53,34 +53,34 @@ class Post {
 				case '_open_graph_description':
 				case '_twitter_description':
 					$value = Sanitize::metadata_content( $value );
-					continue 2;
+					break;
 
 				case '_genesis_canonical_uri':
 				case '_social_image_url':
 					$value = \sanitize_url( $value, [ 'https', 'http' ] );
-					continue 2;
+					break;
 
 				case '_social_image_id':
 					// Bound to _social_image_url.
 					$value = empty( $meta_value['_social_image_url'] ) ? 0 : \absint( $value );
-					continue 2;
+					break;
 
 				case '_genesis_noindex':
 				case '_genesis_nofollow':
 				case '_genesis_noarchive':
 					$value = Sanitize::qubit( $value );
-					continue 2;
+					break;
 
 				case 'redirect':
 					// Allow all protocols also allowed by WP:
 					$value = \sanitize_url( $value );
-					continue 2;
+					break;
 
 				case '_tsf_title_no_blogname':
 				case 'exclude_local_search':
 				case 'exclude_from_archive':
 					$value = Sanitize::boolean_integer( $value );
-					continue 2;
+					break;
 
 				default:
 					unset( $meta_value[ $key ] );

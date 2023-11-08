@@ -87,24 +87,22 @@ class Plugin {
 			static::$sanitizers,
 		);
 
-		foreach ( $value as $key => &$val ) {
-			if ( isset( $sanitizers[ $key ] ) ) {
-				foreach ( $sanitizers[ $key ] as $callback ) {
-					$val = \call_user_func_array(
-						$callback,
-						[
-							$val,
-							$original_value[ $key ], // If this fails, the option isn't registered properly. Error is good.
-							$option,
-						],
-					);
-				}
-			} else {
-				unset( $value[ $key ] );
+		$store = [];
+
+		foreach ( $sanitizers as $suboption => $callbacks ) {
+			foreach ( $callbacks as $callback ) {
+				$store[ $suboption ] = \call_user_func_array(
+					$callback,
+					[
+						$value[ $suboption ] ?? '', // If no value is sent, the form field was empty.
+						$original_value[ $suboption ], // If this fails, the option isn't registered properly. Error is good.
+						$suboption,
+					],
+				);
 			}
 		}
 
-		return $value;
+		return $store;
 	}
 
 	/**
@@ -644,32 +642,32 @@ class Plugin {
 					case 'og_description':
 					case 'tw_description':
 						$val = Sanitize::metadata_content( $val );
-						continue 2;
+						break;
 
 					case 'canonical':
 					case 'social_image_url':
 						$val = \sanitize_url( $val, [ 'https', 'http' ] );
-						continue 2;
+						break;
 
 					case 'social_image_id':
 						// Bound to social_image_url.
 						$val = $meta['social_image_url'] ? \absint( $val ) : 0;
-						continue 2;
+						break;
 
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
 						$val = Sanitize::qubit( $val );
-						continue 2;
+						break;
 
 					case 'redirect':
 						// Allow all protocols also allowed by WP:
 						$val = \sanitize_url( $val );
-						continue 2;
+						break;
 
 					case 'title_no_blog_name':
 						$val = Sanitize::boolean_integer( $val );
-						continue 2;
+						break;
 
 					default:
 						unset( $meta[ $key ] );

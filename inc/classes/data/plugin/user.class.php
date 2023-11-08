@@ -155,6 +155,7 @@ class User {
 					],
 				];
 
+				// Grab non-headless meta if any meta type isn't headless.
 				foreach ( $non_headless_meta as $meta_key => $meta_types ) {
 					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
 
@@ -162,6 +163,7 @@ class User {
 						if ( $is_headless[ $meta_type ] ) continue;
 
 						$meta[ $meta_key ] = $_meta[ $meta_key ];
+						// We made this key bypass headless mode. Skip subsequently redundant checks.
 						continue 2;
 					}
 				}

@@ -56,32 +56,32 @@ class Term {
 				case 'og_description':
 				case 'tw_description':
 					$value = Sanitize::metadata_content( $value );
-					continue 2;
+					break;
 
 				case 'canonical':
 				case 'social_image_url':
 					$value = \sanitize_url( $value, [ 'https', 'http' ] );
-					continue 2;
+					break;
 
 				case 'social_image_id':
 					// Bound to social_image_url.
 					$value = empty( $meta_value['social_image_url'] ) ? 0 : \absint( $value );
-					continue 2;
+					break;
 
 				case 'noindex':
 				case 'nofollow':
 				case 'noarchive':
 					$value = Sanitize::qubit( $value );
-					continue 2;
+					break;
 
 				case 'redirect':
 					// Allow all protocols also allowed by WP:
 					$value = \sanitize_url( $value );
-					continue 2;
+					break;
 
 				case 'title_no_blog_name':
 					$value = Sanitize::boolean_integer( $value );
-					continue 2;
+					break;
 
 				default:
 					unset( $value[ $key ] );

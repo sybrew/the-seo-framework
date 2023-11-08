@@ -928,7 +928,6 @@ function _do_upgrade_5001() {
 
 		Data\Plugin::update_option( 'seo_bar_low_contrast', 0 );
 
-		// var_dump() WHY DID YOU FAIL?
 		if (
 			   Data\Plugin::get_option( 'ld_json_searchbox' )
 			|| Data\Plugin::get_option( 'ld_json_breadcrumbs' )
