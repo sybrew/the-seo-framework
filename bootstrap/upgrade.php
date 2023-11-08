@@ -882,6 +882,7 @@ function _do_upgrade_4270() {
  * Deletes the static cache for exclusions.
  * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
  * Changes option `autodescription-updates-cache` to constant value THE_SEO_FRAMEWORK_SITE_CACHE.
+ * Enables `ld_json_enabled` only if any structured data function used to be active.
  * TODO registers default for static placeholder editing.
  *
  * @since 5.0.0
@@ -925,6 +926,9 @@ function _do_upgrade_5001() {
 			delete_option( 'autodescription-updates-cache' );
 		}
 
+		Data\Plugin::update_option( 'seo_bar_low_contrast', 0 );
+
+		// var_dump() WHY DID YOU FAIL?
 		if (
 			   Data\Plugin::get_option( 'ld_json_searchbox' )
 			|| Data\Plugin::get_option( 'ld_json_breadcrumbs' )

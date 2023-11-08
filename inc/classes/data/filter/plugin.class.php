@@ -231,6 +231,7 @@ class Plugin {
 			'search_noarchive'             => 'checkbox',
 			'search_nofollow'              => 'checkbox',
 			'search_noindex'               => 'checkbox',
+			'seo_bar_low_contrast'         => 'checkbox',
 			'seo_bar_symbols'              => 'checkbox',
 			'set_copyright_directives'     => 'checkbox',
 			'shortlink_tag'                => 'checkbox',

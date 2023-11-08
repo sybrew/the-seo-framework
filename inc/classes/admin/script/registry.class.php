@@ -175,14 +175,18 @@ class Registry {
 	 * Adds admin-body classes.
 	 *
 	 * @since 4.0.0
-	 * @since 5.0.0 Is now static.
+	 * @since 5.0.0 1. Is now static.
+	 *              2. Now adds a low contrast SEO Bar class.
 	 *
 	 * @param string $classes Space-separated list of CSS classes.
 	 * @return string
 	 */
 	public static function _add_body_class( $classes ) {
+
+		$lcseobar = Data\Plugin::get_option( 'seo_bar_low_contrast' ) ? 'tsf-seo-bar-low-contrast' : '';
+
 		// Add spaces on both sides, because who knows what others do.
-		return " tsf-no-js $classes";
+		return " tsf-no-js $lcseobar $classes";
 	}
 
 	/**

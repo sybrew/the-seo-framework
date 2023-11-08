@@ -52,7 +52,7 @@ class Legacy_API {
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed $use_cache; the cache is now dynamically updated.
 	 *              3. Now returns null if the option doesn't exist.
-	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
+	 * @api
 	 *
 	 * @param string|string[] $key Option name, or a map of indexes therefor.
 	 *                             If you send an empty array, you'll get all options.
@@ -68,6 +68,7 @@ class Legacy_API {
 	 *
 	 * @since 2.9.0
 	 * @since 5.0.0 Ennobled to be part of the legacy API.
+	 * @api
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -87,6 +88,7 @@ class Legacy_API {
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 *              3. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
+	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -106,6 +108,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
+	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -125,6 +128,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
+	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -142,6 +146,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
+	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -160,6 +165,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
+	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -179,6 +185,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
+	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                         Leave null to autodetermine query.
@@ -199,6 +206,7 @@ class Legacy_API {
 	 *              2. Ennobled to be part of the legacy API.
 	 *              3. Removed support for `get_custom_field` without deprecation notice.
 	 *                 You should've used create_canonical_url() instead.
+	 * @api
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -219,6 +227,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Removed the last `$clean` parameter. It always returns a cleaned image now.
 	 *              2. Ennobled to be part of the legacy API.
+	 * @api
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', and 'pta'.
 	 *                            Leave null to autodetermine query.
@@ -246,15 +255,17 @@ class Legacy_API {
 	 * `tsf` and `tsf-tt` will always be available.
 	 *
 	 * @since 5.0.0
+	 * @api
 	 */
 	public static function load_admin_scripts() {
 		Admin\Script\Registry::register_scripts_and_hooks();
 	}
 
 	/**
-	 * Prints all tags.
+	 * Prints all meta tags.
 	 *
 	 * @since 5.0.0
+	 * @api
 	 */
 	public static function print_seo_meta_tags() {
 		Front\Meta\Head::print_wrap_and_tags();

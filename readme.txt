@@ -297,30 +297,6 @@ TODO add "disable JIT compiler" option to Description generator?
 TODO around the SEO Bar, make it a grid (expensive?) or add a container that eagerly collapses every 2 or 3 items, instead of one-by-one.
 	* Make the subitems collapsible, too -- but less eager.
 
-TODO distraction-free SEO Bar pallet (CSS media prefers-contrast:less?):
-	.tsf-seo-bar-bad {
-		background-color: #d14343;
-	}
-	.tsf-seo-bar-okay {
-		background-color: #e2c08d;
-	}
-	.tsf-seo-bar-good {
-		background-color: #36b37e;
-	}
-	.tsf-seo-bar-unknown {
-		background-color: #6886c5;
-	}
-	.tsf-seo-bar-undefined {
-		background-color: #9e9e9e;
-	}
-TODO ALT:
-	.tsf-seo-bar-bad {
-		background-color: #d15943;
-	}
-	.tsf-seo-bar-okay {
-		background-color: #e2c162;
-	}
-
 TODO deprecate and rename get_excerpt_by_id / fetch_excerpt
 
 TODO clear old deprecations?
@@ -331,6 +307,8 @@ TODO 'show-if-tsf-js'
 			-> If current_user_can install plugins, add "You may have received an automated notification email about this. Otherwise, check the PHP error logs for details."
 
 TODO update doc "actions" (also update doc "constants" for TSFEM)
+
+TODO Accepts 'id', 'tax', and 'pta'. -> also uid
 
 TODO add vertical expand title input?
 	-> This helps with Gutenberg's atrocious sidebar.
@@ -618,6 +596,9 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* SEOPress's metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
 	* **Third party support:**
 		* This plugin can now be updated via [GitHub PLugin Updater](https://git-updater.com/knowledge-base/general-usage/).
+	* **Accessibility:**
+		* You can now opt to use a low contrast color pallete for the SEO Bar.
+			* We are aware this should be [configurable via the device settings](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast), but this standard is inconsistent. Besides, giving an option allows any site owner to set a preference.
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* **Compatibility:**

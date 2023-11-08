@@ -98,7 +98,7 @@ switch ( $instance ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'          => 'knowledge_output',
-					'label'       => \esc_html__( 'Add Authorized Presence?', 'autodescription' ) . " $info",
+					'label'       => \esc_html__( 'Add authorized presence?', 'autodescription' ) . " $info",
 					'description' => \esc_html__( 'This tells search engines about who owns this website, its logo, and its social pages.', 'autodescription' ),
 					'escape'      => false,
 				] ),
@@ -113,7 +113,7 @@ switch ( $instance ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'          => 'ld_json_breadcrumbs',
-					'label'       => \esc_html__( 'Add Breadcrumbs?', 'autodescription' ) . " $info",
+					'label'       => \esc_html__( 'Add breadcrumbs?', 'autodescription' ) . " $info",
 					'description' => \esc_html__( "Breadcrumbs help search engines understand the site's hierarchy.", 'autodescription' ),
 					'escape'      => false,
 				] ),
@@ -128,7 +128,7 @@ switch ( $instance ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'          => 'ld_json_searchbox',
-					'label'       => \esc_html_x( 'Add Sitelinks Search Box?', 'Sitelinks Search Box is a Product name', 'autodescription' ) . " $info",
+					'label'       => \esc_html_x( 'Add Sitelinks Search Box?', 'Sitelinks Search Box is a product name', 'autodescription' ) . " $info",
 					'description' => \esc_html__( "This teaches search engines how to use your site's built-in search engine.", 'autodescription' ),
 					'escape'      => false,
 				] ),

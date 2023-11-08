@@ -208,21 +208,33 @@ body.no-js .tsf-seo-bar-item {
 .tsf-seo-bar-bad {
 	background-color: #dd3811;
 }
-
 .tsf-seo-bar-okay {
 	background-color: #ffa700;
 }
-
 .tsf-seo-bar-good {
 	background-color: #0cc34b;
 }
-
 .tsf-seo-bar-unknown {
 	background-color: #007bd2;
 }
-
 .tsf-seo-bar-undefined {
 	background-color: #767676;
+}
+
+body.tsf-seo-bar-low-contrast .tsf-seo-bar-bad {
+	background-color: #d14343;
+}
+body.tsf-seo-bar-low-contrast .tsf-seo-bar-okay {
+	background-color: #e2c162;
+}
+body.tsf-seo-bar-low-contrast .tsf-seo-bar-good {
+	background-color: #36b37e;
+}
+body.tsf-seo-bar-low-contrast .tsf-seo-bar-unknown {
+	background-color: #6886c5;
+}
+body.tsf-seo-bar-low-contrast .tsf-seo-bar-undefined {
+	background-color: #9e9e9e;
 }
 
 /* Taxonomies overflow fix */

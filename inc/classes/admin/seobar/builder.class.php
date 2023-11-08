@@ -351,14 +351,12 @@ final class Builder {
 				),
 			);
 
-			yield vsprintf(
+			yield sprintf(
 				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
-				[
-					$status,
-					\esc_attr( $aria ),
-					\esc_attr( $html ),
-					\esc_html( $symbol ),
-				],
+				$status,
+				\esc_attr( $aria ),
+				\esc_attr( $html ),
+				\esc_html( $symbol ),
 			);
 		}
 	}

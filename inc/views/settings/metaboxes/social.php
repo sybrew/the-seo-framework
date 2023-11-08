@@ -157,7 +157,7 @@ switch ( $instance ) :
 			<hr>
 			<?php
 			HTML::header_title( \__( 'Social Image Settings', 'autodescription' ) );
-			HTML::description( \__( 'A social image can be displayed when your website is shared. It is a great way to grab attention.', 'autodescription' ) );
+			HTML::description( \__( 'A social image can be displayed when a link to your website is shared. It is a great way to grab attention.', 'autodescription' ) );
 
 			HTML::wrap_fields(
 				Input::make_checkbox( [
