@@ -721,16 +721,16 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @return string|null Escaped site Shortlink URL.
+	 * @return string The shortlink URL.
 	 */
 	public static function get_shortlink_url() {
 
 		if (
 			   ! Data\Plugin::get_option( 'shortlink_tag' )
-			|| Query::is_real_front_page() // var_dump() if we have an input, we need to remove test for "get_custom".
+			|| Query::is_real_front_page()
 		) return '';
 
-		return static::generate_shortlink_url();
+		return static::get_generated_shortlink_url();
 	}
 
 	/**
@@ -741,7 +741,7 @@ class URI {
 	 *
 	 * @return string|null Escaped site Shortlink URL.
 	 */
-	public static function generate_shortlink_url() {
+	public static function get_generated_shortlink_url() {
 
 		if ( Query::is_singular() ) {
 			$query = [ 'p' => Query::get_the_real_id() ];

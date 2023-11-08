@@ -427,7 +427,7 @@ TODO These are better names for filters. Use these throughout and deprecate the 
 		1. the_seo_framework_title_from_custom_field -> the_seo_framework_custom_title
 		1. the_seo_framework_title_from_generation -> the_seo_framework_generated_title
 
-TODO test generate_shortlink_url() and URL pagination with multilingual plugins and other odd queries (wpforo et al.) and URL fragments (are there plugins that add these?).
+TODO test get_generated_shortlink_url() and URL pagination with multilingual plugins and other odd queries (wpforo et al.) and URL fragments (are there plugins that add these?).
 	-> find via wpdirectory.
 
 TODO use post_password_required()

@@ -20,7 +20,7 @@ use \The_SEO_Framework\{
  *
  * @since 2.3.5
  */
-\add_filter( 'bbp_title', [ \tsf(), 'get_document_title' ], 99, 3 ); // var_dump()
+\add_filter( 'bbp_title', [ Front\Title::class, 'set_document_title' ], 99 );
 
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_title', 10, 2 );
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );

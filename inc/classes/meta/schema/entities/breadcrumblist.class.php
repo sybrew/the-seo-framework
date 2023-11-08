@@ -9,7 +9,6 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Data, // var_dump() unused.
 	Data\Filter\Sanitize,
 	Meta,
 };

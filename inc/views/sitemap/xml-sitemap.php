@@ -41,7 +41,7 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 
 Sitemap\Registry::output_sitemap_urlset_open_tag();
 
-$sitemap_base = new Sitemap\Optimized\Base; // var_dump() make static -- why would we need more than 1 sitemap instance anyway
+$sitemap_base = new Sitemap\Optimized\Base; // TODO make static? Why would this need to be instantiated anyway?
 // phpcs:ignore, WordPress.Security.EscapeOutput
 echo $sitemap_base->generate_sitemap( $sitemap_id );
 

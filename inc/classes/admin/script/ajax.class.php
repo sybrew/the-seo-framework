@@ -65,6 +65,7 @@ final class AJAX {
 			\wp_send_json_error( null, 400 );
 
 		$notices = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
+
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) {
 			// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
 			\wp_send_json_error( null, 409 );

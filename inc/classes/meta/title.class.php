@@ -224,7 +224,7 @@ class Title {
 		/**
 		 * Filters the title from query.
 		 *
-		 * @NOTE: This filter doesn't consistently run on the SEO Settings page. var_dump() validate this
+		 * @NOTE: This filter doesn't consistently run on the SEO Settings page.
 		 *        You may want to avoid this filter for the homepage and pta, by returning the default value.
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.

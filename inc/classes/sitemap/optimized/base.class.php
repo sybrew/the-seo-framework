@@ -89,7 +89,7 @@ class Base extends Main {
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
 		if ( ! Sitemap\Lock::lock_sitemap( $sitemap_id ) ) return;
 
-		$sitemap_base = new self(); // var_dump() make static -- why would we need more than 1 sitemap instance anyway
+		$sitemap_base = new self(); // TODO make static? We needn't more than one instance, right?
 
 		$sitemap_base->prepare_generation();
 		$sitemap_base->base_is_prerendering = true;

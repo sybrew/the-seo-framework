@@ -234,7 +234,6 @@ class Persistent {
 	 * @since 4.1.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private
-	 * var_dump() equalize with AJAX::dismiss_notice() and combine
 	 */
 	public static function _dismiss_notice() {
 
@@ -243,7 +242,7 @@ class Persistent {
 
 		if ( ! $key ) return;
 
-		$notices = Data\Plugin::get_site_cache( 'persistent_notices' );
+		$notices = Data\Plugin::get_site_cache( 'persistent_notices' ) ?? [];
 
 		// Notice was deleted already elsewhere, or key was faulty. Either way, ignore--should be self-resolving.
 		if ( empty( $notices[ $key ]['conditions']['capability'] ) ) return;

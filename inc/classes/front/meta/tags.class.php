@@ -162,7 +162,17 @@ final class Tags {
 				case 'href':
 				case 'xlink:href':
 				case 'src':
-					$_secure_attr_value = \sanitize_url( $value ); // var_dump() break me.
+					// Perform discrete URL-encoding on resources that could bypass attributes, without mangling the URL.
+					// Ampersand is missing because that doesn't affect HTML attributes; plus, it's a struct for query parameters.
+					$_secure_attr_value = strtr(
+						\sanitize_url( $value ),
+						[
+							'"' => '%22',
+							"'" => '%27',
+							'<' => '%3C',
+							'>' => '%3E',
+						],
+					);
 					break;
 				default:
 					if (
@@ -209,9 +219,11 @@ final class Tags {
 					preg_replace( '/[^a-z\d]+/i', '', $tag ), // phpcs:ignore, WordPress.Security.EscapeOutput -- this escapes.
 					$attr,
 					\is_array( $content )
-						? ( $content['escape'] ?? true )
-							? \esc_html( $content['content'] )
-							: $content['content']
+						? (
+							( $content['escape'] ?? true )
+								? \esc_html( $content['content'] )
+								: $content['content']
+						)
 						: \esc_html( $content ),
 				],
 			);

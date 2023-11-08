@@ -30,7 +30,7 @@ use \The_SEO_Framework\Helper\{
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Remove canonical header tag from WP
+// Remove canonical header tag from WP.
 \remove_action( 'wp_head', 'rel_canonical' );
 
 // Remove shortlink.

@@ -213,7 +213,7 @@ switch ( $instance ) :
 				Input::get_field_id( $args['options']['doctitle'] ),
 				[
 					'state' => [
-						'defaultTitle'      => \esc_html( $_default_title ), // var_dump() is this necessary?
+						'defaultTitle'      => \esc_html( $_default_title ),
 						'addAdditions'      => Meta\Title\Conditions::use_branding( $args['generator_args'] ),
 						'useSocialTagline'  => Meta\Title\Conditions::use_branding( $args['generator_args'], true ),
 						'additionValue'     => \esc_html( Meta\Title::get_addition() ),

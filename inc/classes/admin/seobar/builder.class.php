@@ -87,8 +87,6 @@ final class Builder {
 	 *   string $pta       : Not implemented. Do not populate.
 	 *   string $post_type : Optional. If not set, this will be automatically filled.
 	 *                                 This parameter is ignored for taxonomies.
-	 *                                 This parameter will become obsolete once WP fixes its post cache.
-	 *                                 <https://core.trac.wordpress.org/ticket/50567> // var_dump() can we?
 	 * }
 	 * @return string The SEO Bar.
 	 */

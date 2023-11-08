@@ -172,7 +172,7 @@ switch ( $instance ) :
 						[
 							'state' => [
 								'refTitleLocked'    => $title_ref_locked,
-								'defaultTitle'      => \esc_html( $default_title ), // var_dump() remove these?
+								'defaultTitle'      => \esc_html( $default_title ),
 								'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
 								'useSocialTagline'  => Meta\Title\Conditions::use_branding( $generator_args, true ),
 								'additionValue'     => \esc_html( $title_additions ),

@@ -11,7 +11,6 @@ namespace The_SEO_Framework;
 use function \The_SEO_Framework\get_query_type_from_args;
 
 use \The_SEO_Framework\{
-	Builders, // var_dump() unused.
 	Data,
 	Data\Filter\Sanitize,
 	Helper\Query,
