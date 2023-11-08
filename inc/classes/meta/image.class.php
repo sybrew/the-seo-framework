@@ -12,6 +12,7 @@ use function \The_SEO_Framework\normalize_generation_args;
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Sanitize,
 	Helper\Query,
 	Meta,
 };
@@ -397,7 +398,7 @@ class Image {
 		}
 
 		if ( ! empty( $details['url'] ) ) {
-			$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
+			$details = Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
 
 			if ( $details['url'] )
 				yield $details;
@@ -463,7 +464,7 @@ class Image {
 		}
 
 		if ( ! empty( $details['url'] ) ) {
-			$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
+			$details = Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
 
 			if ( $details['url'] )
 				yield $details;
@@ -596,7 +597,7 @@ class Image {
 		if ( isset( $args ) ) {
 			foreach ( $cbs as $cb ) {
 				foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
-					$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details( $details, $size ) );
+					$details = Sanitize::image_details( static::merge_extra_image_details( $details, $size ) );
 
 					if ( $details['url'] ) {
 						yield $details;
@@ -635,7 +636,7 @@ class Image {
 
 				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- gotta check and end early.
 				while ( $fiber->valid() || ( $fiber = false ) ) {
-					$details = Data\Filter\Sanitize::image_details( static::merge_extra_image_details(
+					$details = Sanitize::image_details( static::merge_extra_image_details(
 						$fiber->current(),
 						$size,
 					) );

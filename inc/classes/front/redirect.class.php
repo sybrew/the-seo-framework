@@ -9,7 +9,6 @@ namespace The_SEO_Framework\Front;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Data,
 	Helper,
 	Helper\Query,
 	Meta,

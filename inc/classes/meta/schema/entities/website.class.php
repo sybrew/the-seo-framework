@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Sanitize,
 	Meta,
 };
 
@@ -66,8 +67,8 @@ final class WebSite extends Reference {
 			'@type'       => &static::$type,
 			'@id'         => static::get_id(),
 			'url'         => Meta\URI::get_bare_front_page_url(),
-			'name'        => Data\Filter\Sanitize::metadata_content( Data\Blog::get_public_blog_name() ),
-			'description' => Data\Filter\Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ),
+			'name'        => Sanitize::metadata_content( Data\Blog::get_public_blog_name() ),
+			'description' => Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ),
 			'inLanguage'  => Data\Blog::get_language(),
 		];
 

@@ -9,7 +9,8 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Data,
+	Data, // var_dump() unused.
+	Data\Filter\Sanitize,
 	Meta,
 };
 
@@ -62,7 +63,7 @@ final class BreadcrumbList extends Reference {
 				'@type'    => 'ListItem',
 				'position' => $i + 1, // Let's not create 0
 				'item'     => \esc_url( $item['url'] ),
-				'name'     => Data\Filter\Sanitize::metadata_content( $item['name'] ),
+				'name'     => Sanitize::metadata_content( $item['name'] ),
 			];
 		}
 

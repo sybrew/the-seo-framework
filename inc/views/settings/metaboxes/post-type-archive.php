@@ -13,9 +13,10 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Helper\{
-	Compatibility,
-	Post_Type,
+use \The_SEO_Framework\{
+	Data\Filter\Sanitize,
+	Helper\Compatibility,
+	Helper\Post_Type,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -200,7 +201,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off />
 			<?php
 			$pto = \get_post_type_object( $args['post_type'] );
 
@@ -314,7 +315,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle />
 		</p>
 
 		<p>
@@ -342,7 +343,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle />
 		</p>
 
 		<p>

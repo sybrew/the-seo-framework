@@ -10,10 +10,11 @@ namespace The_SEO_Framework;
 
 use function \The_SEO_Framework\get_query_type_from_args;
 
-use \The_SEO_Framework\Helper\Query;
 use \The_SEO_Framework\{
-	Builders,
+	Builders, // var_dump() unused.
 	Data,
+	Data\Filter\Sanitize,
+	Helper\Query,
 };
 
 \add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
@@ -240,7 +241,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
 	if (
 		   $options & \The_SEO_Framework\ROBOTS_IGNORE_SETTINGS
-		|| 0 === Data\Filter\Sanitize::qubit( Data\Plugin\Post::get_meta_item( '_genesis_noindex', $page_id ) )
+		|| 0 === Sanitize::qubit( Data\Plugin\Post::get_meta_item( '_genesis_noindex', $page_id ) )
 	) {
 		$meta['noindex'] = 'noindex';
 	}
@@ -275,7 +276,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
 	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
-	$index_item['status'] = 0 !== Data\Filter\Sanitize::qubit( $builder->get_query_cache()['meta']['_genesis_noindex'] )
+	$index_item['status'] = 0 !== Sanitize::qubit( $builder->get_query_cache()['meta']['_genesis_noindex'] )
 		? $interpreter::STATE_OKAY
 		: $interpreter::STATE_UNKNOWN;
 

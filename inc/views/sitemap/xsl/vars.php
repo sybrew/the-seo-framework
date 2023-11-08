@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Helper\Format;
+use \The_SEO_Framework\{
+	Data\Filter\Sanitize,
+	Helper\Format,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -40,7 +43,7 @@ $colors = Sitemap\Utils::get_sitemap_colors();
 // phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
 printf(
 	'<xsl:variable name="colorMain" select="\'%s\'"/>',
-	'#' . Data\Filter\Sanitize::rgb_hex(
+	'#' . Sanitize::rgb_hex(
 		/**
 		 * @since 2.8.0
 		 * @since 3.1.0 It now filters the mail color, instead of accent.
@@ -51,7 +54,7 @@ printf(
 );
 printf(
 	'<xsl:variable name="colorAccent" select="\'%s\'"/>',
-	'#' . Data\Filter\Sanitize::rgb_hex(
+	'#' . Sanitize::rgb_hex(
 		/**
 		 * @since 2.8.0
 		 * @since 3.1.0 It now filters the accent color, instead of main.
@@ -62,7 +65,7 @@ printf(
 );
 printf(
 	'<xsl:variable name="relativeFontColor" select="\'%s\'"/>',
-	'#' . Data\Filter\Sanitize::rgb_hex(
+	'#' . Sanitize::rgb_hex(
 		/**
 		 * @since 2.8.0
 		 * @param string $relativeFontColor A hexadecimal color.

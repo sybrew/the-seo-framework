@@ -8,6 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
+use \The_SEO_Framework\Data\Filter\Sanitize;
+
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
@@ -32,4 +34,4 @@ $sep      = Meta\Title::get_separator();
 $addition = Data\Blog::get_public_blog_name();
 
 ?>
-<title><?= \esc_xml( Data\Filter\Sanitize::metadata_content( "$title $sep $addition" ) ) ?></title>
+<title><?= \esc_xml( Sanitize::metadata_content( "$title $sep $addition" ) ) ?></title>

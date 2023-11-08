@@ -12,11 +12,10 @@ use \The_SEO_Framework\{
 	Admin,
 	Admin\Settings\Layout\HTML,
 	Data,
+	Data\Filter\Sanitize,
+	Helper\Query,
+	Helper\Taxonomy,
 	Meta,
-};
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomy,
 };
 
 /**
@@ -256,19 +255,19 @@ final class ListEdit extends Admin\Lists\Table {
 
 		if ( Query::is_static_front_page( $generator_args['id'] ) ) {
 			// When the homepage title is set, we can safely get the custom field.
-			$_has_home_title     = (bool) Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_title     = (bool) Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
-								 ? Meta\Title::get_custom_title( $generator_args )
-								 : Meta\Title::get_bare_generated_title( $generator_args );
+				? Meta\Title::get_custom_title( $generator_args )
+				: Meta\Title::get_bare_generated_title( $generator_args );
 			$addition            = Meta\Title::get_addition_for_front_page();
 			$seplocation         = Meta\Title::get_addition_location_for_front_page();
 			$is_title_ref_locked = $_has_home_title;
 
 			// When the homepage description is set, we can safely get the custom field.
-			$_has_home_desc      = (bool) Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) );
+			$_has_home_desc      = (bool) Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) );
 			$default_description = $_has_home_desc
-								 ? Meta\Description::get_custom_description( $generator_args )
-								 : Meta\Description::get_generated_description( $generator_args );
+				? Meta\Description::get_custom_description( $generator_args )
+				: Meta\Description::get_generated_description( $generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
 		} else {
 			$default_title       = Meta\Title::get_bare_generated_title( $generator_args );

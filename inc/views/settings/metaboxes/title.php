@@ -12,6 +12,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
+use \The_SEO_Framework\Data\Filter\Sanitize;
 use \The_SEO_Framework\Helper\Format\{
 	Markdown,
 	Strings,
@@ -261,7 +262,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'site_title' ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'site_title' ); ?>" class=large-text id="<?php Input::field_id( 'site_title' ); ?>" placeholder="<?= \esc_html( Sanitize::metadata_content( Data\Blog::get_filtered_blog_name() ) ) ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'site_title' ) ) ) ?>" autocomplete=off />
 		</p>
 		<?php
 		HTML::description( \__( 'This option does not affect titles displayed directly on your website.', 'autodescription' ) );

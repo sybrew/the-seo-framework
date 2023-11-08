@@ -13,14 +13,15 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
+use \The_SEO_Framework\{
+	Data\Filter\Sanitize,
+	Helper\Post_Type,
+	Helper\Query,
+};
 use \The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
-};
-use \The_SEO_Framework\Helper\{
-	Post_Type,
-	Query,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -164,7 +165,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
+					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title' ) ) ) ?>" autocomplete=off data-form-type=other />
 					<?php
 					Input::output_js_title_data(
 						'autodescription_title',
@@ -232,13 +233,13 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description' ) ) ) ?></textarea>
+				<textarea class=large-text name="autodescription[_genesis_description]" id=autodescription_description rows=4 cols=4 autocomplete=off><?= \esc_html( Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description' ) ) ) ?></textarea>
 				<?php
 				Input::output_js_description_data(
 					'autodescription_description',
 					[
 						'state' => [
-							'defaultDescription'   => \esc_html( Data\Filter\Sanitize::metadata_content( $default_description ) ),
+							'defaultDescription'   => \esc_html( Sanitize::metadata_content( $default_description ) ),
 							'refDescriptionLocked' => $description_ref_locked,
 						],
 					],
@@ -481,18 +482,18 @@ switch ( $instance ) :
 			[
 				'og' => [
 					'state' => [
-						'defaultTitle' => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_title['og'] ) ),
+						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['og'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
-						'defaultDesc'  => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_description['og'] ) ),
+						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['og'] ) ),
 						'titleLock'    => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_title' ),
 						'descLock'     => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_description' ),
 					],
 				],
 				'tw' => [
 					'state' => [
-						'defaultTitle' => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_title['tw'] ) ),
+						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['tw'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
-						'defaultDesc'  => \esc_html( Data\Filter\Sanitize::metadata_content( $_social_description['tw'] ) ),
+						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['tw'] ) ),
 						'titleLock'    => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
 						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
 					],
@@ -515,7 +516,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
 				</div>
 			</div>
 		</div>
@@ -533,7 +534,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description' ) ) ) ?></textarea>
+				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description' ) ) ) ?></textarea>
 			</div>
 		</div>
 
@@ -551,7 +552,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title' ) ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
 				</div>
 			</div>
 		</div>
@@ -571,7 +572,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
-					echo \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description' ) ) );
+					echo \esc_html( Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description' ) ) );
 				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
 				?></textarea>
 			</div>

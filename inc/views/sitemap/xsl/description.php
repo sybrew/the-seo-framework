@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Admin\Template::verify_secret( $secret ) or die;
 
-use \The_SEO_Framework\Helper\Format\Markdown;
+use \The_SEO_Framework\{
+	Data\Filter\Sanitize,
+	Helper\Format\Markdown,
+};
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -70,7 +73,7 @@ printf(
 		],
 	),
 	\esc_xml(
-		Data\Filter\Sanitize::metadata_content(
+		Sanitize::metadata_content(
 			Data\Blog::get_public_blog_name() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' )
 		)
 	)

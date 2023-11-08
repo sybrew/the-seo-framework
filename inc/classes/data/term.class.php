@@ -10,8 +10,6 @@ namespace The_SEO_Framework\Data;
 
 use function \The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Helper\Query;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)

@@ -12,6 +12,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
+use \The_SEO_Framework\Data\Filter\Escape;
 use \The_SEO_Framework\Helper\{
 	Format\Markdown,
 	Post_Type,
@@ -417,7 +418,7 @@ switch ( $instance ) :
 			);
 
 			// Legacy.
-			$id = Data\Filter\Escape::option_name_attribute( "{$type}_{$ro_value}" );
+			$id = Escape::option_name_attribute( "{$type}_{$ro_value}" );
 
 			// Add warning if it's 'site'.
 			if ( 'site' === $type ) {

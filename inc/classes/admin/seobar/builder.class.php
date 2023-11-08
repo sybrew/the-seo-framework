@@ -8,8 +8,7 @@ namespace The_SEO_Framework\Admin\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Builders;
+use \The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin

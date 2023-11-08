@@ -8,7 +8,9 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Data\Filter\Escape,
+};
 
 /**
  * The SEO Framework plugin
@@ -265,7 +267,7 @@ class HTML {
 				) ), // dash case.
 				\is_scalar( $v )
 					? \esc_attr( $v )
-					: Data\Filter\Escape::json_encode_attribute( $v )
+					: Escape::json_encode_attribute( $v )
 			);
 		}
 

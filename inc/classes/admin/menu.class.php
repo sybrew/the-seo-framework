@@ -13,8 +13,6 @@ use function \The_SEO_Framework\{
 	is_headless,
 };
 
-use \The_SEO_Framework\Helper\Format\Markdown;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)

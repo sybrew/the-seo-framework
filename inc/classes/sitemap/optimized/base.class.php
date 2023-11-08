@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Sitemap\Optimized;
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Escape,
 	Meta,
 	Sitemap,
 };
@@ -524,7 +525,7 @@ class Base extends Main {
 		if ( empty( $args['loc'] ) ) return '';
 
 		$xml = [
-			'loc' => Data\Filter\Escape::xml_uri( $args['loc'] ),
+			'loc' => Escape::xml_uri( $args['loc'] ),
 		];
 
 		if ( isset( $args['lastmod'] ) && '0000-00-00 00:00:00' !== $args['lastmod'] ) {

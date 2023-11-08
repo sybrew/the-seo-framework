@@ -12,9 +12,10 @@ use const \The_SEO_Framework\ROBOTS_ASSERT;
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Sanitize,
 	Meta,
 	RobotsTXT,
-	Admin\SEOBar\Builder,
+	Admin\SEOBar\Builder, // Yes, it is legal to import the same namespace.
 };
 use \The_SEO_Framework\Helper\{
 	Guidelines,
@@ -322,7 +323,7 @@ final class Page extends Main {
 		}
 
 		$title_len = mb_strlen( html_entity_decode(
-			\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
+			\esc_html( Sanitize::metadata_content( $title ) ),
 			\ENT_NOQUOTES,
 			'UTF-8',
 		) );
@@ -537,7 +538,7 @@ final class Page extends Main {
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
 		$desc_len = mb_strlen( html_entity_decode(
-			\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
+			\esc_html( Sanitize::metadata_content( $desc ) ),
 			\ENT_NOQUOTES,
 			'UTF-8',
 		) );
@@ -705,7 +706,7 @@ final class Page extends Main {
 			}
 		}
 
-		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
+		if ( 0 !== Sanitize::qubit( $this->query_cache['meta']['_genesis_noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
@@ -829,7 +830,7 @@ final class Page extends Main {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
+		if ( 0 !== Sanitize::qubit( $this->query_cache['meta']['_genesis_nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.
@@ -960,7 +961,7 @@ final class Page extends Main {
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
 
-		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
+		if ( 0 !== Sanitize::qubit( $this->query_cache['meta']['_genesis_noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype, homepage, nor site as "blocking" if there's an override.

@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin;
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomy,
+use \The_SEO_Framework\{
+	Admin,
+	Helper\Query,
+	Helper\Taxonomy,
 };
 
 /**

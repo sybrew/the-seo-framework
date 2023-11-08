@@ -15,6 +15,7 @@ use function \The_SEO_Framework\{
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Sanitize,
 	Meta,
 };
 use \The_SEO_Framework\Helper\{
@@ -92,7 +93,7 @@ class Description {
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
-		return Data\Filter\Sanitize::metadata_content( (string) \apply_filters(
+		return Sanitize::metadata_content( (string) \apply_filters(
 			'the_seo_framework_custom_field_description',
 			$desc,
 			$args,
@@ -203,7 +204,7 @@ class Description {
 		);
 
 		return memo(
-			\strlen( $desc ) ? Data\Filter\Sanitize::metadata_content( $desc ) : '',
+			\strlen( $desc ) ? Sanitize::metadata_content( $desc ) : '',
 			$args,
 			$type,
 		);
@@ -237,7 +238,7 @@ class Description {
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
-			return Data\Filter\Sanitize::metadata_content( $desc );
+			return Sanitize::metadata_content( $desc );
 
 		return '';
 	}
@@ -275,7 +276,7 @@ class Description {
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
-			return Data\Filter\Sanitize::metadata_content( $desc );
+			return Sanitize::metadata_content( $desc );
 
 		return '';
 	}

@@ -9,7 +9,7 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Data,
+	Data\Filter\Escape,
 	Helper\Format\Arrays,
 	Helper\Query,
 };
@@ -108,7 +108,7 @@ class Form {
 			[
 				$args['label'] ? sprintf(
 					'<label for="%s">%s</label> ', // superfluous space!
-					Data\Filter\Escape::option_name_attribute( $args['id'] ),
+					Escape::option_name_attribute( $args['id'] ),
 					sprintf(
 						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
 						\esc_html( $args['label'] )
@@ -122,7 +122,7 @@ class Form {
 				vsprintf(
 					'<select id="%s" name="%s"%s %s>%s</select>',
 					[
-						Data\Filter\Escape::option_name_attribute( $args['id'] ),
+						Escape::option_name_attribute( $args['id'] ),
 						\esc_attr( $args['name'] ),
 						$args['required'] ? ' required' : '',
 						HTML::make_data_attributes( $args['data'] ),

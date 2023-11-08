@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Data,
+	Data\Filter\Escape,
+};
 
 /**
  * The SEO Framework plugin
@@ -162,14 +165,14 @@ class Input {
 			vsprintf(
 				'<label for="%s"%s>%s</label>',
 				[
-					Data\Filter\Escape::option_name_attribute( $field_id ),
+					Escape::option_name_attribute( $field_id ),
 					( $args['disabled'] ? ' class=tsf-disabled' : '' ),
 					vsprintf(
 						'<input type=checkbox class="%s" name="%s" id="%s" value=1 %s%s %s /> %s',
 						[
 							\esc_attr( implode( ' ', array_filter( $cb_classes ) ) ),
-							Data\Filter\Escape::option_name_attribute( $field_name ),
-							Data\Filter\Escape::option_name_attribute( $field_id ),
+							Escape::option_name_attribute( $field_name ),
+							Escape::option_name_attribute( $field_id ),
 							\checked( $value, true, false ),
 							( $args['disabled'] ? ' disabled' : '' ),
 							HTML::make_data_attributes( $args['data'] ),

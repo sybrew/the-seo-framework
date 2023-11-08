@@ -15,6 +15,7 @@ use function \The_SEO_Framework\{
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Sanitize,
 	Helper\Query,
 };
 
@@ -157,7 +158,7 @@ class Open_Graph {
 		if ( ! isset( $title ) ) return '';
 
 		if ( \strlen( $title ) )
-			return Data\Filter\Sanitize::metadata_content( $title );
+			return Sanitize::metadata_content( $title );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return Title::get_custom_title( null, true );
@@ -196,7 +197,7 @@ class Open_Graph {
 		if ( ! isset( $title ) ) return '';
 
 		if ( \strlen( $title ) )
-			return Data\Filter\Sanitize::metadata_content( $title );
+			return Sanitize::metadata_content( $title );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return Title::get_custom_title( $args, true );
@@ -279,7 +280,7 @@ class Open_Graph {
 		if ( ! isset( $desc ) ) return '';
 
 		if ( \strlen( $desc ) )
-			return Data\Filter\Sanitize::metadata_content( $desc );
+			return Sanitize::metadata_content( $desc );
 
 		// At least there was an attempt made to fetch a description when we reach this. Try harder.
 		return Description::get_custom_description();
@@ -318,7 +319,7 @@ class Open_Graph {
 		if ( ! isset( $desc ) ) return '';
 
 		if ( \strlen( $desc ) )
-			return Data\Filter\Sanitize::metadata_content( $desc );
+			return Sanitize::metadata_content( $desc );
 
 		// At least there was an attempt made to fetch a description when we reach this. Try harder.
 		return Description::get_custom_description( $args );

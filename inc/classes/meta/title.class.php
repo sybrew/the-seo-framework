@@ -13,7 +13,10 @@ use function \The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\Data;
+use \The_SEO_Framework\{
+	Data,
+	Data\Filter\Sanitize,
+};
 use \The_SEO_Framework\Helper\{
 	Post_Type,
 	Query,
@@ -183,7 +186,7 @@ class Title {
 		 * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                          Is null when the query is auto-determined.
 		 */
-		return Data\Filter\Sanitize::metadata_content( (string) \apply_filters(
+		return Sanitize::metadata_content( (string) \apply_filters(
 			'the_seo_framework_title_from_custom_field',
 			$title,
 			$args,
@@ -236,7 +239,7 @@ class Title {
 		);
 
 		return memo(
-			\strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '',
+			\strlen( $title ) ? Sanitize::metadata_content( $title ) : '',
 			$args,
 		);
 	}
@@ -288,7 +291,7 @@ class Title {
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
-			return Data\Filter\Sanitize::metadata_content( $title );
+			return Sanitize::metadata_content( $title );
 
 		return '';
 	}
@@ -323,7 +326,7 @@ class Title {
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
-			return Data\Filter\Sanitize::metadata_content( $title );
+			return Sanitize::metadata_content( $title );
 
 		return '';
 	}
@@ -522,7 +525,7 @@ class Title {
 				$prefix = sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-					Data\Filter\Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) ),
+					Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) ),
 				);
 			}
 		}
@@ -600,7 +603,7 @@ class Title {
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
-			return Data\Filter\Sanitize::metadata_content( $title );
+			return Sanitize::metadata_content( $title );
 
 		return '';
 	}
@@ -658,7 +661,7 @@ class Title {
 				$title = \apply_filters( 'single_term_title', $term->name );
 		}
 
-		return \strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '';
+		return \strlen( $title ) ? Sanitize::metadata_content( $title ) : '';
 	}
 
 	/**
@@ -670,7 +673,7 @@ class Title {
 	 * @return string The generated post type archive title.
 	 */
 	public static function get_user_title( $user_id = 0 ) {
-		return Data\Filter\Sanitize::metadata_content(
+		return Sanitize::metadata_content(
 			\get_userdata( $user_id ?: Query::get_the_real_id() )->display_name ?? ''
 		);
 	}
@@ -710,7 +713,7 @@ class Title {
 			$post_type,
 		);
 
-		return \strlen( $title ) ? Data\Filter\Sanitize::metadata_content( $title ) : '';
+		return \strlen( $title ) ? Sanitize::metadata_content( $title ) : '';
 	}
 
 	/**
@@ -734,7 +737,7 @@ class Title {
 	 * @return string The generated search title.
 	 */
 	public static function get_search_query_title() {
-		return Data\Filter\Sanitize::metadata_content(
+		return Sanitize::metadata_content(
 			/* translators: %s: search phrase */
 			sprintf( \__( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) )
 		);
@@ -748,7 +751,7 @@ class Title {
 	 * @return string The generated 404 title.
 	 */
 	public static function get_404_title() {
-		return Data\Filter\Sanitize::metadata_content(
+		return Sanitize::metadata_content(
 			/**
 			 * @since 2.5.2
 			 * @since 5.0.0 Now defaults to Core translatable "Page not found."
@@ -918,7 +921,7 @@ class Title {
 	 * @return string The generated front page title.
 	 */
 	public static function get_front_page_title() {
-		return Data\Filter\Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
+		return Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
 	}
 
 	/**
@@ -932,7 +935,7 @@ class Title {
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition() {
-		return Data\Filter\Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
+		return Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
 	}
 
 	/**
@@ -952,7 +955,7 @@ class Title {
 		$tagline = Data\Plugin::get_option( 'homepage_title_tagline' );
 
 		// Allow 0 to be the title.
-		return memo( Data\Filter\Sanitize::metadata_content(
+		return memo( Sanitize::metadata_content(
 			\strlen( $tagline ) ? $tagline : Data\Blog::get_filtered_blog_description()
 		) );
 	}

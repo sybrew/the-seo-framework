@@ -13,11 +13,8 @@ use function \The_SEO_Framework\is_headless;
 use \The_SEO_Framework\{
 	Admin,
 	Data,
-};
-
-use \The_SEO_Framework\Helper\{
-	Post_Type,
-	Query,
+	Helper\Post_Type,
+	Helper\Query,
 };
 
 /**

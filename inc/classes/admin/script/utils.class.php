@@ -8,20 +8,6 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\has_run;
-
-use \The_SEO_Framework\{
-	Admin,
-	Data,
-	Meta,
-};
-use \The_SEO_Framework\Helper\{
-	Guidelines,
-	Format\Arrays,
-	Query,
-	Taxonomy,
-};
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2019 - 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)

@@ -14,7 +14,7 @@ use function \The_SEO_Framework\{
 };
 
 use \The_SEO_Framework\{
-	Data,
+	Data, // Yes, it is legal to import the same namespace.
 	Traits\Property_Refresher,
 };
 

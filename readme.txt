@@ -259,9 +259,6 @@ TODO highlight in large changes:
 
 TODO mark that db version 4270 -> 5000+
 
-TODO Data\Filter\Sanitize -> Sanitize::
-TODO Data\Filter\Escape -> Escape::
-
 TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
 	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
 	-> Does this affect the title as well? Test this.
@@ -399,6 +396,10 @@ function (.*?)\(([\w\W](?!\1\())*?\}
 
 // Do not import and rename, that'll cause headaches down the line. Find the renaming imports via:
 ^use .*?\\\{[\w\W]* as [^\}]*\};
+
+// Find unused imports:
+use \\.*?\n\t(.*?\\)+?(.*?),(?![\w\W]*\2(?:::|\\))
+(?:use (?:\\[\w\W]*?\n\t(?:.*?\\)+?(.*?),)|(?:[^\\\t]+(.*?);))(?![\w\W]*(?:\1|\2)(?:::|\\))
 
 TODO remove 3+ @since in Deprecated.class to reduce filesize.
 

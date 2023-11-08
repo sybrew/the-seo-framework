@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin; // Yes, it ios legal to share class and namespace.
+use \The_SEO_Framework\Admin; // Yes, it is legal to share class and namespace.
 
 /**
  * The SEO Framework plugin

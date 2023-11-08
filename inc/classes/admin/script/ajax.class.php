@@ -11,11 +11,11 @@ namespace The_SEO_Framework\Admin\Script;
 use \The_SEO_Framework\{
 	Admin,
 	Data,
+	Data\Filter\Sanitize,
+	Helper,
+	Helper\Query,
 	Meta,
 };
-
-use \The_SEO_Framework\Helper,
-	\The_SEO_Framework\Helper\Query;
 
 /**
  * The SEO Framework plugin
@@ -310,7 +310,7 @@ final class AJAX {
 				switch ( $g ) {
 					case 'metadescription':
 						if ( Query::is_static_front_page( $post_id ) ) {
-							$data[ $g ] = Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) )
+							$data[ $g ] = Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) )
 									   ?: Meta\Description::get_generated_description( $generator_args );
 						} else {
 							$data[ $g ] = Meta\Description::get_generated_description( $generator_args );
@@ -318,7 +318,7 @@ final class AJAX {
 						break;
 					case 'ogdescription':
 						if ( Query::is_static_front_page( $post_id ) ) {
-							$data[ $g ] = Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) )
+							$data[ $g ] = Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) )
 									   ?: Meta\Open_Graph::get_generated_description( $generator_args );
 						} else {
 							$data[ $g ] = Meta\Open_Graph::get_generated_description( $generator_args );
@@ -326,7 +326,7 @@ final class AJAX {
 						break;
 					case 'twdescription':
 						if ( Query::is_static_front_page( $post_id ) ) {
-							$data[ $g ] = Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) )
+							$data[ $g ] = Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) )
 									   ?: Meta\Twitter::get_generated_description( $generator_args );
 						} else {
 							$data[ $g ] = Meta\Twitter::get_generated_description( $generator_args );

@@ -10,10 +10,11 @@ namespace The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\normalize_generation_args;
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Helper\{
-	Format\Arrays,
-	Query,
+use \The_SEO_Framework\{
+	Data,
+	Data\Filter\Escape,
+	Helper\Format\Arrays,
+	Helper\Query,
 };
 
 /**
@@ -61,7 +62,7 @@ class Schema {
 		$graph = static::get_generated_graph( $args );
 
 		return $graph
-			? (string) Data\Filter\Escape::json_encode_html(
+			? (string) Escape::json_encode_html(
 				$graph,
 				( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 )
 			)

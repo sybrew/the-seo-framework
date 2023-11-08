@@ -13,7 +13,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-
+use \The_SEO_Framework\Data\Filter\Sanitize;
 use \The_SEO_Framework\Helper\{
 	Compatibility,
 	Format\Markdown,
@@ -121,9 +121,9 @@ switch ( $instance ) :
 		Form::output_pixel_counter_wrap( Input::get_field_id( 'homepage_title' ), 'title', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
 			<?php
-			$_post_meta_title = $home_id ? Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
+			$_post_meta_title = $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
 			Input::output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
@@ -177,7 +177,7 @@ switch ( $instance ) :
 				[
 					'state' => [
 						'defaultDescription' => \esc_html(
-							( $home_id ? Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : '' )
+							( $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : '' )
 							?: Meta\Description::get_generated_description( $generator_args )
 						),
 					],
@@ -219,7 +219,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ) ) ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title_tagline' ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= \esc_html( Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ) ) ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title_tagline' ) ) ) ?>" autocomplete=off />
 		</p>
 
 		<div class=tsf-title-tagline-toggle>
@@ -274,10 +274,10 @@ switch ( $instance ) :
 
 		// Gets custom fields from page.
 		if ( $home_id ) {
-			$custom_og_title = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title', $home_id ) );
-			$custom_og_desc  = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
-			$custom_tw_title = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
-			$custom_tw_desc  = Data\Filter\Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description', $home_id ) );
+			$custom_og_title = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title', $home_id ) );
+			$custom_og_desc  = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
+			$custom_tw_title = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
+			$custom_tw_desc  = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description', $home_id ) );
 			$custom_image    = \sanitize_url( Data\Plugin\Post::get_meta_item( '_social_image_url', $home_id ) );
 		}
 
@@ -326,7 +326,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_og_title' ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
 		if ( Query\Utils::has_page_on_front() && $custom_og_title ) {
@@ -367,7 +367,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( 'homepage_twitter_title' ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Data\Filter\Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
 		if ( Query\Utils::has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {

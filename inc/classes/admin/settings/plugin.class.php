@@ -10,7 +10,6 @@ namespace The_SEO_Framework\Admin\Settings;
 
 use \The_SEO_Framework\{
 	Admin,
-	Data,
 	Helper\Post_Type,
 };
 

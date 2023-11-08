@@ -12,6 +12,7 @@ use const \The_SEO_Framework\ROBOTS_ASSERT;
 
 use \The_SEO_Framework\{
 	Data,
+	Data\Filter\Sanitize,
 	Meta,
 	RobotsTXT,
 	Admin\SEOBar\Builder,
@@ -309,7 +310,7 @@ final class Term extends Main {
 		}
 
 		$title_len = mb_strlen( html_entity_decode(
-			\esc_html( Data\Filter\Sanitize::metadata_content( $title ) ),
+			\esc_html( Sanitize::metadata_content( $title ) ),
 			\ENT_NOQUOTES,
 			'UTF-8',
 		) );
@@ -502,7 +503,7 @@ final class Term extends Main {
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
 		$desc_len = mb_strlen( html_entity_decode(
-			\esc_html( Data\Filter\Sanitize::metadata_content( $desc ) ),
+			\esc_html( Sanitize::metadata_content( $desc ) ),
 			\ENT_NOQUOTES,
 			'UTF-8',
 		) );
@@ -635,7 +636,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['noindex'] ) ) {
+		if ( 0 !== Sanitize::qubit( $this->query_cache['meta']['noindex'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
@@ -778,7 +779,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['nofollow'] ) ) {
+		if ( 0 !== Sanitize::qubit( $this->query_cache['meta']['nofollow'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
@@ -895,7 +896,7 @@ final class Term extends Main {
 			$item['assess']['taxonomy'] = $cache['assess']['taxonomy'];
 		}
 
-		if ( 0 !== Data\Filter\Sanitize::qubit( $this->query_cache['meta']['noarchive'] ) ) {
+		if ( 0 !== Sanitize::qubit( $this->query_cache['meta']['noarchive'] ) ) {
 			// Status is already set.
 
 			// Don't assert posttype nor site as "blocking" if there's an override.
