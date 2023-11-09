@@ -274,6 +274,9 @@ switch ( $instance ) :
 
 		// Gets custom fields from page.
 		if ( $home_id ) {
+			$custom_title = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) );
+			$custom_desc  = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) );
+
 			$custom_og_title = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_title', $home_id ) );
 			$custom_og_desc  = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
 			$custom_tw_title = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
@@ -289,11 +292,15 @@ switch ( $instance ) :
 				'og' => [
 					'state' => [
 						'defaultTitle' => \esc_html(
-							$custom_og_title ?: Meta\Open_Graph::get_generated_title( $generator_args )
+							$custom_og_title
+							?: $custom_title
+							?: Meta\Open_Graph::get_generated_title( $generator_args )
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 						'defaultDesc'  => \esc_html(
-							$custom_og_desc ?: Meta\Open_Graph::get_generated_description( $generator_args )
+							$custom_og_desc
+							?: $custom_desc
+							?: Meta\Open_Graph::get_generated_description( $generator_args )
 						),
 						'titlePhLock'  => (bool) $custom_og_title,
 						'descPhLock'   => (bool) $custom_og_desc,
@@ -302,11 +309,17 @@ switch ( $instance ) :
 				'tw' => [
 					'state' => [
 						'defaultTitle' => \esc_html(
-							$custom_tw_title ?: Meta\Twitter::get_generated_title( $generator_args )
+							$custom_tw_title
+							?: $custom_og_title
+							?: $custom_title
+							?: Meta\Twitter::get_generated_title( $generator_args )
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 						'defaultDesc'  => \esc_html(
-							$custom_tw_desc ?: Meta\Twitter::get_generated_description( $generator_args )
+							$custom_tw_desc
+							?: $custom_og_desc
+							?: $custom_desc
+							?: Meta\Twitter::get_generated_description( $generator_args )
 						),
 						'titlePhLock'  => (bool) $custom_tw_title,
 						'descPhLock'   => (bool) $custom_tw_desc,

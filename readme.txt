@@ -259,10 +259,6 @@ TODO highlight in large changes:
 
 TODO mark that db version 4270 -> 5000+
 
-TODO When filling in the Meta Description for the homepage as page, the generated Social titles aren't locked to that on the SEO Settings page.
-	-> Consider that overriding the homepage description, the generated social inputs should be unlocked, unless one is filled in via the homepage page-settings.
-	-> Does this affect the title as well? Test this.
-
 TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
 	-> This requires probably a whole lot more work than I'd have hoped.
 	-> This can go wrong if the default language changes, or disappears.
@@ -408,35 +404,17 @@ TODO "Note: The input value of this field may be used to describe the name of th
 TODO regenerate deprecations in readme below. We may have changed some things.
 	-> Also name all subpools.
 
-TODO tell the user to "expect bugs" but "we're working resolving any report asap".
-
-TODO figure out if "@id" => "" is a bad thing for breadcrumbs on noindexed pages.
-
 TODO update "https://kb.theseoframework.com/kb/data-stored-in-your-database/".
-
-TODO These are better names for filters. Use these throughout and deprecate the rest?
-	-> It'll finally save me a naming headache.
-	1. the_seo_framework_custom_image_details
-	1. the_seo_framework_generated_image_details
-	-> Candidates:
-		1. the_seo_framework_custom_field_description -> the_seo_framework_custom_description
-		1. the_seo_framework_title_from_custom_field -> the_seo_framework_custom_title
-		1. the_seo_framework_title_from_generation -> the_seo_framework_generated_title
 
 TODO test get_generated_shortlink_url() and URL pagination with multilingual plugins and other odd queries (wpforo et al.) and URL fragments (are there plugins that add these?).
 	-> find via wpdirectory.
-
-TODO use post_password_required()
-	-> However, this initially relies on $post->post_password -- with this set, we must assume the post isn't publicly available, thus create zero content.
-
-TODO make this 5.0?
-	-> Then shift the design refresh to 6.0, might as well.
 
 TODO if we add a new "enable Schema.org output" support button (because it's now always outputting something), we should enable it only if the user has any of the 3 toggles enabled.
 	* Or, for new users, always enabled it.
 
 TODO test fresh site.
 TODO test site without images (or where images are gone).
+	-> Why?
 
 TODO instead of .min.js and .min.js, do /min/x.js?
 	-> This only helps me; whom, well... is spending most time on the project.
@@ -447,9 +425,6 @@ TODO can we bust the cache via a JS script if we detect an older version is bein
 TODO add support for get_shortlink_url( $args )
 	-> Also add input field per post, so users can overwrite it on a per-post basis.
 		-> We could use this well for tsf.fyi.
-
-TODO test product structured data.
-	-> Also on product categories and product search.
 
 TODO test attachment pages' breadcrumb (and image data etc.).
 	-> Everything's OK, but:
@@ -472,19 +447,12 @@ TODO we MUST add a new option for Schema.org
 TODO when loading Gutenberg, the title is prefilled with "Untitled" -- is this intentional?
 	-> It looks jarring on a slow connection.
 
-TODO add robots.txt editor
-	-> Also move the callback to a new class.
-	-> Add this as an extension instead?
-
 TODO get_post/term/user_meta -> add to legacy api?
 
 TODO instead of removing Elementor library from public posts types, force noindex on them?
 	-> Because we already excluded them, they're unlikely to be found by crawlers, though.
 	-> Having them still included will add a bunch of metadata fields to the admin; perhaps we should allow them on the front-end, and noindex them on the back-end?
 		-> Or we could use wp_robots filters? It's their mess, though.
-
-TODO make multiline deprecation notices over .{120,}
-	_deprecated_function.{100,}
 
 TODO make canonical URL placeholder work in output_column_contents_for_post()
 	-> Also make the Indexing react to the Password/Private states.
@@ -493,14 +461,7 @@ TODO make canonical URL placeholder work in output_column_contents_for_post()
 TODO run all deprecation methods one last time
 	We should be able to loop over them quite easily.
 
-TODO for get_largest_image_src, should we try to maintain the ratio?
-
 TODO add "try it in playground" button/link at the top of the readme.
-
-TODO can we affect Gutenberg's URL by switching the primary category?
-
-TODO detect query exploitation early, and send "no cache" headers?
-	-> see rest_send_nocache_headers.
 
 TODO list all new public classes and their methods in the changelog.
 	-> i.e. those without @access private

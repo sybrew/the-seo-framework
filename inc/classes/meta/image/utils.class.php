@@ -107,6 +107,8 @@ class Utils {
 	 * Returns the largest acceptable image size's details.
 	 * Skips the original image, which may also be acceptable.
 	 *
+	 * TODO: Can we maintain an aspect ratio? This must be registered first with WP, so it's unlikely.
+	 *
 	 * @since 5.0.0
 	 *
 	 * @param int $id           The image ID.

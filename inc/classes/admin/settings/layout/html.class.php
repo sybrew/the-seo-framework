@@ -8,9 +8,7 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
-	Data\Filter\Escape,
-};
+use \The_SEO_Framework\Data\Filter\Escape;
 
 /**
  * The SEO Framework plugin
