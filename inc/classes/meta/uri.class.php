@@ -39,7 +39,10 @@ use \The_SEO_Framework\{
 /**
  * Holds getters for meta tag output.
  *
- * NOTE: Unlike other Meta functionality, we do not use "generated" vs. "custom".
+ * Unlike other Meta functionality, we do not use "generated" vs. "custom" for every single function.
+ * This is because URIs are ambiguously used throughout WordPress.
+ * Often, we just need a URL, not a "generated" URL.
+ *
  * Glossary:
  *   indexable:         The final canonical URL that may be emptied if "noindex" is set.
  *   canonical:         The final canonical URl.

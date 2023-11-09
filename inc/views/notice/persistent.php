@@ -64,7 +64,7 @@ switch ( $args['type'] ) {
 
 $dismiss_title_i18n = \__( 'Dismiss this notice', 'default' );
 
-$nonce_action = Admin\Notice\Persistent::_get_dismiss_nonce_action( $sanitized_key ); // var_dump() also create nonce_name>?
+$nonce_action = Admin\Notice\Persistent::_get_dismiss_nonce_action( $sanitized_key );
 
 $button_js = sprintf(
 	'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s" %s></a>',
@@ -75,7 +75,7 @@ $button_js = sprintf(
 		'nonce' => \wp_create_nonce( $nonce_action ),
 	] ),
 );
-// TODO should we display this if the notice is shown one last time?
+// We'll display this button even if this notice no longer repeats. This aligns with the user's expectation and offers control.
 $button_nojs = vsprintf(
 	'<form action="%s" method=post id="tsf-dismiss-notice[%s]" class=hide-if-tsf-js>%s</form>',
 	[

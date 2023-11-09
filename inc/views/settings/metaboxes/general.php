@@ -106,7 +106,7 @@ switch ( $instance ) :
 				Input::make_checkbox( [
 					'id'     => 'seo_bar_low_contrast',
 					'label'  => \esc_html__( 'Use a reduced contrast color palette?', 'autodescription' ) . ' ' . HTML::make_info(
-						\__( "A reduced contrast color palette won't grab your attention and may be easier to work with.", 'autodescription' ),
+						\__( 'If you find the SEO Bar distracting, this may help you focus better.', 'autodescription' ),
 						'',
 						false,
 					),

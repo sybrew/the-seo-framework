@@ -13,10 +13,10 @@ use \The_SEO_Framework\Helper\Query;
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
-\add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' ); // var_dump()
-\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' ); // var_dump()
-\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' ); // var_dump()
-\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' ); // var_dump()
+\add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' );
+\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' );
+\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' );
+\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10 );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
 

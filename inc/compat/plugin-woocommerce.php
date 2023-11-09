@@ -51,20 +51,6 @@ function _init_wc_compat() {
 	\add_filter( 'woocommerce_product_categories_widget_main_term', [ Query\Filter::class, 'filter_post_link_category' ], 10, 2 );
 
 	\remove_filter( 'wp_robots', 'wc_page_no_robots' );
-
-	// Anonymous function. Filter 'the_seo_framework_json_breadcrumb_output' instead.
-	\add_action(
-		'the_seo_framework_do_before_output',
-		function () {
-			/**
-			 * Removes TSF breadcrumbs. WooCommerce outputs theirs.
-			 */
-			if ( Query::is_product() ) {
-				\add_filter( 'the_seo_framework_json_breadcrumb_output', '__return_false' );
-				// var_dump() filter the new filter here.
-			}
-		}
-	);
 }
 
 /**

@@ -225,7 +225,7 @@ body.tsf-seo-bar-low-contrast .tsf-seo-bar-bad {
 	background-color: #d14343;
 }
 body.tsf-seo-bar-low-contrast .tsf-seo-bar-okay {
-	background-color: #e2c162;
+	background-color: #e6ca75;
 }
 body.tsf-seo-bar-low-contrast .tsf-seo-bar-good {
 	background-color: #36b37e;
@@ -238,7 +238,8 @@ body.tsf-seo-bar-low-contrast .tsf-seo-bar-undefined {
 }
 
 /* Taxonomies overflow fix */
-#col-container, #col-right {
+#col-container,
+#col-right {
 	overflow: initial;
 }
 

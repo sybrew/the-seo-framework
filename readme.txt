@@ -598,6 +598,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 	* **Accessibility:**
 		* You can now opt to use a low contrast color pallete for the SEO Bar.
 			* We are aware this should be [configurable via the device settings](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast), but this standard is inconsistent. Besides, giving an option allows any site owner to set a preference.
+			* The color red will still jump out, this is because we use red to convey something must be fixed. All other colors will look faded and less distracting.
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* **Compatibility:**
@@ -616,7 +617,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* The shortlink URL is now also outputted on the paginated homepage.
 	* **Administration:**
 		* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
-	* The plugin compatibility loader now tests common filenames instead of function, constant, or class's presence.
+	* The plugin compatibility loader now tests common filenames instead of function, constant, or class' presence.
 	* When activating or deactivating the plugin, only on WordPress 6.4 or later the options will now toggle from autoloading on and off.
 		* It will still toggle on for older versions of WordPress.
 	* When a dropdown option fails sanitization, it will revert back to the last known option, instead of an arbitrary default.
@@ -658,6 +659,8 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* When another SEO plugin is active, and you activate a plugin, now a persistent notice is outputted to warn that you shouldn't mix SEO plugins.
 			* This notice is shown at most 3 times, to admins that can activate plugins, on the edit, edit-tags, plugins, dashboard, or The SEO Framework settings screens.
 			* This notice will clear when you deactivate a plugin, or when it has been shown 3 times.
+		* Breadcrumbs of TSF are no longer disabled on WooCommerce product pages. This is because our new script ID can no longer conflict at Google.
+			* WooCommerce apparently also made changes to prevent the likelihood for conflicts.
 	* **Accessibility:**
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
 		* When resetting the SEO Settings, a clearer change-notice is sent.

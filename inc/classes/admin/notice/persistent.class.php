@@ -189,7 +189,7 @@ class Persistent {
 	 * @return string The sanitized nonce action.
 	 */
 	public static function _get_dismiss_nonce_action( $key ) {
-		return \sanitize_key( "tsf_notice_nonce_$key" );
+		return \sanitize_key( "tsf-notice-nonce-$key" );
 	}
 
 	/**
@@ -250,7 +250,7 @@ class Persistent {
 		if (
 			   empty( $_POST['tsf_notice_nonce'] )
 			|| ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'], static::get_dismiss_notice_nonce_action( $key ) )
+			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'], static::_get_dismiss_nonce_action( $key ) )
 		) {
 			\wp_die( -1, 403 );
 		}

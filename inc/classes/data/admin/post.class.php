@@ -42,7 +42,7 @@ class Post {
 	 * @since 5.0.0
 	 * @var string The nonce name.
 	 */
-	public static $nonce_name = 'tsf_singular_nonce_field';
+	public static $nonce_name = 'tsf_singular_nonce_name';
 
 	/**
 	 * @since 5.0.0
