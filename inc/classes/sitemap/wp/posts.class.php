@@ -8,8 +8,10 @@ namespace The_SEO_Framework\Sitemap\WP;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Sitemap;
+use \The_SEO_Framework\{
+	Data,
+	Sitemap,
+};
 
 /**
  * The SEO Framework plugin

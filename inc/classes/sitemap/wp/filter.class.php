@@ -34,8 +34,8 @@ use \The_SEO_Framework\{
  * Augments the WordPress Core sitemap.
  *
  * @since 4.1.2
- * @since 5.0.0 1. Renamed from `The_SEO_Framework\Builders\CoreSitemaps\Main`.
- *              2. Moved to `\The_SEO_Framework\Sitemap\WP`.
+ * @since 5.0.0 1. Renamed from `Main`.
+ *              2. Moved from ``The_SEO_Framework\Builders\CoreSitemaps\Main`.
  *              3. No longer extends `\The_SEO_Framework\Sitemap\Optimized\Main`.
  * @access private
  */

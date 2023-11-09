@@ -76,33 +76,37 @@ abstract class Table {
 	public function __construct() {
 
 		// Initialize columns.
-		\add_action( 'current_screen', [ $this, '_prepare_columns' ] );
+		\add_action( 'current_screen', [ $this, 'prepare_columns' ] );
 
 		// Ajax handlers for columns.
-		\add_action( 'wp_ajax_add-tag', [ $this, '_prepare_columns_wp_ajax_add_tag' ], -1 );
-		\add_action( 'wp_ajax_inline-save', [ $this, '_prepare_columns_wp_ajax_inline_save' ], -1 );
-		\add_action( 'wp_ajax_inline-save-tax', [ $this, '_prepare_columns_wp_ajax_inline_save_tax' ], -1 );
+		\add_action( 'wp_ajax_add-tag', [ $this, 'prepare_columns_wp_ajax_add_tag' ], -1 );
+		\add_action( 'wp_ajax_inline-save', [ $this, 'prepare_columns_wp_ajax_inline_save' ], -1 );
+		\add_action( 'wp_ajax_inline-save-tax', [ $this, 'prepare_columns_wp_ajax_inline_save_tax' ], -1 );
 	}
 
 	/**
 	 * Initializes columns for current screen.
 	 *
+	 * @hook current_screen 10
 	 * @since 4.0.0
+	 * @since 5.0.0 Renamed from `_prepare_columns`.
 	 * @access private
 	 *
 	 * @param \WP_Screen|string $screen \WP_Screen
 	 */
-	public function _prepare_columns( $screen ) {
+	public function prepare_columns( $screen ) {
 		$this->init_columns( $screen );
 	}
 
 	/**
 	 * Initializes columns for adding a tag or category.
 	 *
+	 * @hook wp_ajax_add-tag -1
 	 * @since 4.0.0
+	 * @since 5.0.0 Renamed from `_prepare_columns_wp_ajax_add_tag`.
 	 * @access private
 	 */
-	public function _prepare_columns_wp_ajax_add_tag() {
+	public function prepare_columns_wp_ajax_add_tag() {
 
 		if (
 			   ! \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false )
@@ -119,10 +123,12 @@ abstract class Table {
 	/**
 	 * Initializes columns for adding a tag or category.
 	 *
+	 * @hook wp_ajax_inline-save -1
 	 * @since 4.0.0
+	 * @since 5.0.0 Renamed from `_prepare_columns_wp_ajax_inline_save`.
 	 * @access private
 	 */
-	public function _prepare_columns_wp_ajax_inline_save() {
+	public function prepare_columns_wp_ajax_inline_save() {
 
 		if (
 			   ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
@@ -141,10 +147,12 @@ abstract class Table {
 	/**
 	 * Initializes columns for adding a tag or category.
 	 *
+	 * @hook wp_ajax_inline-save-tax -1
 	 * @since 4.0.0
+	 * @since 5.0.0 Renamed from `_prepare_columns_wp_ajax_inline_save_tax`.
 	 * @access private
 	 */
-	public function _prepare_columns_wp_ajax_inline_save_tax() {
+	public function prepare_columns_wp_ajax_inline_save_tax() {
 
 		if (
 			   ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )

@@ -87,7 +87,7 @@ class Image {
 	 * @since 4.0.5 The output is now filterable.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Now always obtains cleaned images.
-	 *              2. Moved to \The_SEO_Framework\Meta\Image.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
@@ -146,8 +146,9 @@ class Image {
 	 *
 	 * @since 4.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 5.0.0 1. Moved to \The_SEO_Framework\Meta\Image.
-	 *              2. Now supports $context.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `get_custom_field_image_details`.
+	 *              3. Now accepts `$context`.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.

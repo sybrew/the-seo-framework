@@ -292,7 +292,7 @@ class Post {
 	 * @since 5.0.0 1. Now always tries to return a term if none is set manually.
 	 *              2. Now returns `null` instead of `false` on failure.
 	 *              3. Now considers headlessness.
-	 *              4. Moved to `The_SEO_Framework\Data\Plugin\Post`.
+	 *              4. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -361,7 +361,7 @@ class Post {
 	 * @since 3.0.0
 	 * @since 4.1.5 1. Now validates if the stored term ID's term exists (for the post or at all).
 	 *              2. The first and second parameters are now required.
-	 * @since 5.0.0 Moved to `The_SEO_Framework\Data\Plugin\Post`
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -375,7 +375,7 @@ class Post {
 	 * Updates the primary term ID for post.
 	 *
 	 * @since 3.0.0
-	 * @since 5.0.0 Moved to `The_SEO_Framework\Data\Plugin\Post`
+	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|null $post_id  The post ID.
 	 * @param string   $taxonomy The taxonomy name.

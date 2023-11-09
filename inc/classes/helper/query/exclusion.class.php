@@ -66,7 +66,7 @@ class Exclusion {
 	 * @since 4.1.4 1. Now tests against post type exclusions.
 	 *              2. Now considers headlessness. This method runs only on the front-end.
 	 * @since 5.0.0 1. Now uses the static cache methods instead of non-expiring-transients.
-	 *              2. Moved to `The_SEO_Framework\Helper\Query\Exclusion`
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return array : { 'archive', 'search' }
 	 */

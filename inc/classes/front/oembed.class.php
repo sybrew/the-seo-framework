@@ -47,7 +47,7 @@ final class OEmbed {
 	 * @hook oembed_response_data 10
 	 * @since 4.0.5
 	 * @since 4.1.1 Now also alters titles and images.
-	 * @since 5.0.0 1. Moved to `The_SEO_Framework\Front\OEmbed`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_oembed_response_data`.
 	 *
 	 * @param array    $data   The response data.

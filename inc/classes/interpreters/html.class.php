@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Interpreters;
  * Interprets anything you send here into HTML. Or so it should.
  *
  * @since 4.1.4
- * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\Settings\Layout
+ * @since 5.0.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Layout\HTML`.
  *              2. Deprecated.
  * @access private
  * @deprecated

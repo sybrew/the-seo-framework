@@ -77,7 +77,7 @@ class Setup {
 	 *              2. Removed second parameter (`$use_cache`).
 	 *              3. Now always memoizes.
 	 * @since 5.0.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
-	 *              2. Moved to `The_SEO_Framework\Data\Setup`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
 	 *                       When empty, it'll return all options. You should use get_default_options() instead.
@@ -98,7 +98,7 @@ class Setup {
 	 *
 	 * @since 4.2.0
 	 * @since 5.0.0 1. $key is now variadic. Additional variables allow you to dig deeper in the cache.
-	 *              2. Moved to `The_SEO_Framework\Data\Setup`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.
 	 *                       When empty, it'll return all options. You should use get_warned_options() instead.

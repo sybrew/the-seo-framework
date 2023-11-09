@@ -60,7 +60,7 @@ class Post {
 	 * @since 4.0.0 1. Renamed from `inpost_seo_save`
 	 *              2. Now allows updating during `WP_CRON`.
 	 *              3. Now allows updating during `WP_AJAX`.
-	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_update_post_meta`.
 	 * @access private
 	 *
@@ -88,7 +88,7 @@ class Post {
 	 * @since 3.0.0
 	 * @since 4.0.0 1. Now allows updating during `WP_CRON`.
 	 *              2. Now allows updating during `WP_AJAX`.
-	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_save_inpost_primary_term`.
 	 *
 	 * @param int $post_id The post ID.
@@ -139,7 +139,7 @@ class Post {
 	 * Overwrites all of the post meta on post-edit.
 	 *
 	 * @since 4.0.0
-	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_post_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
@@ -179,7 +179,7 @@ class Post {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Allowed title and description parsing.
-	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_quick_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
@@ -236,7 +236,7 @@ class Post {
 	 * Overwrites a park of the post meta on bulk-edit.
 	 *
 	 * @since 4.0.0
-	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Data\Admin\Post`.
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_bulk_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.

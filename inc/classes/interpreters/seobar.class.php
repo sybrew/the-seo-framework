@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Interpreters;
  * Interprets the SEO Bar into an HTML item.
  *
  * @since 4.0.0
- * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\SEOBar\Builder
+ * @since 5.0.0 1. Moved to `\The_SEO_Framework\Admin\SEOBar\Builder`.
  *              2. Deprecated.
  * @access protected
  * @deprecated

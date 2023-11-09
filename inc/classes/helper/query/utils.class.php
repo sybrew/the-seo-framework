@@ -66,7 +66,7 @@ class Utils {
 	 * @since 5.0.0 1. Removed detection for JSON(P) and XML type requests,
 	 *                 because these cannot be assumed as legitimate.
 	 *              2. Added `\is_customize_preview()` as unsupported.
-	 *              3. Moved to `\The_SEO_Framework\Helper\Query`.
+	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 *              4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`,
 	 *                 this is now being handled by `_init_tsf()`.
 	 *

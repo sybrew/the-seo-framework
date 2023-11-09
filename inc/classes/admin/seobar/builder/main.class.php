@@ -33,7 +33,7 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
  *
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
- * Implements test_{$*}, see property $tests and method `_run_test()` for what $* may be.
+ * Implements test_{$*}, see property $tests and method `run_test()` for what $* may be.
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `SeoBar`.
@@ -133,6 +133,7 @@ abstract class Main {
 	 * Runs all SEO bar tests.
 	 *
 	 * @since 4.2.0
+	 * @since 5.0.0 Renamed from `_run_all_tests`.
 	 * @access private
 	 * @generator
 	 *
@@ -146,8 +147,8 @@ abstract class Main {
 	 *    string $test => array The testing results.
 	 * }
 	 */
-	public function _run_all_tests( $query ) {
-		yield from $this->_run_test( static::$tests, $query );
+	public function run_all_tests( $query ) {
+		yield from $this->run_test( static::$tests, $query );
 	}
 
 	/**
@@ -155,6 +156,7 @@ abstract class Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 No longer clears the query cache.
+	 * @since 5.0.0 Renamed from `_run_test`.
 	 * @access private
 	 * @generator
 	 *
@@ -169,7 +171,7 @@ abstract class Main {
 	 *    string $test => array $item The SEO Bar compatible results.
 	 * }
 	 */
-	final public function _run_test( $tests, $query ) {
+	final public function run_test( $tests, $query ) {
 
 		$tests = array_intersect( static::$tests, (array) $tests );
 

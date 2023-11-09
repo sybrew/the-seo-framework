@@ -43,7 +43,7 @@ class User {
 	 * @since 4.1.4
 	 * @since 4.2.0 Now repopulates not-posted user metadata.
 	 * @since 5.0.0 1. Now tests if our POST data is set at all before acting.
-	 *              2. Moved to `\The_SEO_Framework\Data\Admin\User`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `_update_user_meta`.
 	 * @access private
 	 *

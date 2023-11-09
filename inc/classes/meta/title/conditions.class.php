@@ -79,7 +79,8 @@ final class Conditions {
 	 * Determines whether to add or remove title pagination additions.
 	 *
 	 * @since 3.2.4
-	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `use_title_pagination`.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -103,7 +104,8 @@ final class Conditions {
 	 * @since 3.2.2 Now differentiates from query and parameter input.
 	 * @since 4.1.0 Added the second $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `use_title_branding`.
 	 *
 	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
@@ -177,7 +179,8 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the post.
 	 *
 	 * @since 3.1.0
-	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `use_singular_title_branding`.
 	 *
 	 * @param int $id The post ID. Optional.
 	 * @return bool
@@ -191,7 +194,8 @@ final class Conditions {
 	 * Determines whether to add the title tagline for the term.
 	 *
 	 * @since 4.0.0
-	 * @since 5.0.0 Moved to \The_SEO_Framework\Meta\Title\Conditions
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
+	 *              2. Renamed from `use_taxonomical_title_branding`.
 	 *
 	 * @param int $id The term ID. Optional.
 	 * @return bool

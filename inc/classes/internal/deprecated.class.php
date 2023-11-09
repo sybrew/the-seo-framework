@@ -5145,8 +5145,6 @@ final class Deprecated {
 	 * as it reprocesses all term meta.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
-	 *              2. Now continues using the filtered term object.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5166,8 +5164,6 @@ final class Deprecated {
 	 * Updates term meta from input.
 	 *
 	 * @since 4.0.0
-	 * @since 4.0.2 1. Now tests for valid term ID in the term object.
-	 *              2. Now continues using the filtered term object.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5189,7 +5185,8 @@ final class Deprecated {
 	 * Deletes only the default data keys; or everything when only that is present.
 	 *
 	 * @since 2.7.0
-	 * @since 4.0.0 Removed 2nd, unused, parameter.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param int $term_id Term ID.
 	 */
@@ -5241,8 +5238,6 @@ final class Deprecated {
 	 * Fetch latest public post/page ID.
 	 *
 	 * @since 2.4.3
-	 * @since 2.9.3 1. Removed object caching.
-	 *              2. It now uses WP_Query, instead of wpdb.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5281,8 +5276,6 @@ final class Deprecated {
 	 * Returns the primary term ID for post.
 	 *
 	 * @since 3.0.0
-	 * @since 4.1.5 1. Now validates if the stored term ID's term exists (for the post or at all).
-	 *              2. The first and second parameters are now required.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5452,8 +5445,6 @@ final class Deprecated {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
-	 *              2. Now always returns an integer.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5473,8 +5464,6 @@ final class Deprecated {
 	 * Memoizes the return value for the current request.
 	 *
 	 * @since 3.0.0
-	 * @since 3.2.2 1. Now no longer returns the latest post author ID on home-as-blog pages.
-	 *              2. Now always returns an integer.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -5552,10 +5541,6 @@ final class Deprecated {
 	 * Only works on singular pages.
 	 *
 	 * @since 2.8.0
-	 * @since 3.0.0 1. No longer checks for current query.
-	 *              2. Input parameter now default to null.
-	 *                 This currently doesn't affect how it works.
-	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -6314,8 +6299,8 @@ final class Deprecated {
 	 * (Google) search, Open Graph, and Twitter.
 	 *
 	 * @since 3.1.0
-	 * @since 4.0.0 1. Now gives different values for various WordPress locales.
-	 *              2. Added $locale input parameter.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param ?string $locale The locale to test. If empty, it will be auto-determined.
 	 * @return array
@@ -6333,6 +6318,8 @@ final class Deprecated {
 	 *
 	 * @since 3.1.0
 	 * @since 4.0.0 Now added a short leading-dot version for ARIA labels.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return array
 	 */
@@ -6718,7 +6705,8 @@ final class Deprecated {
 	 * Filterable list of conflicting plugins.
 	 *
 	 * @since 2.6.0
-	 * @credits Jetpack for most code.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return array List of conflicting plugins.
 	 */
@@ -6727,14 +6715,15 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->conflicting_plugins()', '5.0.0' );
 
-		return \The_SEO_Framework\Helper\get_conflicting_plugins();
+		return \The_SEO_Framework\Helper\Compatibility::get_conflicting_plugins();
 	}
 
 	/**
 	 * Fetches type of conflicting plugins.
 	 *
 	 * @since 2.6.0
-	 * @since 4.2.0 Now always runs the filter, even when $type is not registered.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @param string $type The Key from $this->conflicting_plugins()
 	 * @return array
@@ -6744,7 +6733,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_conflicting_plugins()', '5.0.0' );
 
-		return \The_SEO_Framework\Helper\get_conflicting_plugins()[ $type ] ?? [];
+		return \The_SEO_Framework\Helper\Compatbility::get_conflicting_plugins()[ $type ] ?? [];
 	}
 
 	/**
@@ -6752,7 +6741,8 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 1.3.0
-	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool SEO plugin detected.
 	 */
@@ -6766,7 +6756,8 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 1.3.0
-	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool True if OG or SEO plugin detected.
 	 */
@@ -6780,7 +6771,8 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.6.0
-	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool Twitter Card plugin detected.
 	 */
@@ -6793,8 +6785,8 @@ final class Deprecated {
 	 * Determines if other Schema.org LD+Json plugins are active.
 	 *
 	 * @since 1.3.0
-	 * @since 2.6.1 Always return false. Let other plugin authors decide its value.
-	 * @TODO Make a list of plugins, so the users are well-informed.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool Whether another Schema.org plugin is active.
 	 */
@@ -6808,7 +6800,8 @@ final class Deprecated {
 	 * Memoizes the return value.
 	 *
 	 * @since 2.1.0
-	 * @since 3.1.0 The filter no longer short-circuits the function when it's false.
+	 * @since 5.0.0 Deprecated.
+	 * @deprecated
 	 *
 	 * @return bool
 	 */
@@ -8036,9 +8029,6 @@ final class Deprecated {
 	 * Note: Class check is 3 times as slow as defined check. Function check is 2 times as slow.
 	 *
 	 * @since 1.3.0
-	 * @since 2.8.0 1. Can now check for globals.
-	 *              2. Switched detection order from FAST to SLOW.
-	 * @since 4.0.6 Can no longer autoload classes.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8094,9 +8084,6 @@ final class Deprecated {
 	 * All parameters must match and return true.
 	 *
 	 * @since 2.5.2
-	 * @since 4.0.6 1. Can now check for globals.
-	 *              2. Switched detection order from FAST to SLOW.
-	 *              3. Can no longer autoload classes.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
@@ -8147,8 +8134,6 @@ final class Deprecated {
 	 * Detects if we're on a Gutenberg page.
 	 *
 	 * @since 3.1.0
-	 * @since 3.2.0 1. Now detects the WP 5.0 block editor.
-	 *              2. Method is now public.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *

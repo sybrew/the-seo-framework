@@ -75,7 +75,7 @@ class Plugin {
 	 * @since 4.2.0 Now supports an option index as a $key.
 	 * @since 5.0.0 1. Removed $use_cache; the cache is now dynamically updated.
 	 *              2. $key is now variadic. Additional variables allow you to dig deeper in the cache.
-	 *              3. Moved to `The_SEO_Framework\Data`.
+	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 *
 	 * @param string ...$key Option name. Additional parameters will try get subvalues of the array.

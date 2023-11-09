@@ -48,7 +48,7 @@ final class Title {
 	 * @hook wp_title 9
 	 * @since 3.1.0
 	 * @since 5.0.0 1. Now escapes the filter output.
-	 *              2. Moved to `The_SEO_Framework\Front\Title`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_document_title`.
 	 * @see $this->get_title()
 	 *

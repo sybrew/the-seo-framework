@@ -128,7 +128,7 @@ final class Builder {
 
 		$items = &static::collect_seo_bar_items();
 
-		foreach ( $builder->_run_all_tests( $query ) as $key => $data )
+		foreach ( $builder->run_all_tests( $query ) as $key => $data )
 			$items[ $key ] = $data;
 
 		/**

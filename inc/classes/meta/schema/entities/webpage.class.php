@@ -10,9 +10,11 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 use function \The_SEO_Framework\normalize_generation_args;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta,
-	\The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Data,
+	Meta,
+	Helper\Query,
+};
 
 /**
  * The SEO Framework plugin

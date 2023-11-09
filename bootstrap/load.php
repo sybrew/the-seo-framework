@@ -40,6 +40,7 @@ spl_autoload_register( 'The_SEO_Framework\_autoload_classes', true, true );
  * @hook plugins_loaded 4
  * @since 2.8.0
  * @since 4.0.2 Now points to the correct plugin folder for fallback MO-file loading (which was never used).
+ * @access private
  */
 function _init_locale() {
 	/**

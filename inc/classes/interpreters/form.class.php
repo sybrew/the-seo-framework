@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Interpreters;
  * Interprets anything you send here into Form HTML. Or so it should.
  *
  * @since 4.1.4
- * @since 5.0.0 1. Moved to \The_SEO_Framework\Admin\Settings\Layout
+ * @since 5.0.0 1. Moved to `\The_SEO_Framework\Admin\Settings\Layout\Form`.
  *              2. Deprecated.
  *
  * @access private

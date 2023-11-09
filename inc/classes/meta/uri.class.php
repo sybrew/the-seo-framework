@@ -105,7 +105,7 @@ class URI {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.3 Now accepts arguments publicly.
 	 * @since 5.0.0 1. No longer calls the query in the sitemap to remove pagination.
-	 *              2. Moved to \The_SEO_Framework\Meta\URI.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Now always returns a sanitized URL.
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
@@ -645,7 +645,7 @@ class URI {
 	 * @since 4.1.2 1. Added back memoization.
 	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
 	 * @since 5.0.0 1. Removed memoization thanks to optimization.
-	 *              2. Moved to \The_SEO_Framework\Meta\URI.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @return array Escaped site Pagination URLs: {
 	 *    string 'prev'
@@ -692,7 +692,7 @@ class URI {
 	 * @since 4.2.0 1. Now supports the `$args['pta']` index.
 	 *              2. Now redirects post type archives.
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
-	 *              2. Moved to \The_SEO_Framework\Meta\URI.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
 	 *    int    $id       The Post, Page or Term ID to generate the URL for.
@@ -731,6 +731,7 @@ class URI {
 	 * Generates shortlink URL.
 	 *
 	 * @since 5.0.0
+	 * @todo make this a getter via $args.
 	 *
 	 * @return string The shortlink URL.
 	 */

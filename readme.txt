@@ -274,9 +274,6 @@ TODO add bespoke support for Events Calendar?
 	-> We need to recognize that their "archives" isn't an archive, so we should remove the prefix.
 		-> Simple.
 
-TODO since the sitemap loads so early now, can we get rid of clean_up_globals()?
-	-> Test with 50 plugins and some "premium theme" active, and see if they slip through.
-
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
 	- Also make twitter card default to summary when a square image is posted.
@@ -286,11 +283,6 @@ TODO add summary_large_image/summary toggle on a per-page basis
 TODO add "disable JIT compiler" option to Description generator?
 	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
 		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
-
-TODO around the SEO Bar, make it a grid (expensive?) or add a container that eagerly collapses every 2 or 3 items, instead of one-by-one.
-	* Make the subitems collapsible, too -- but less eager.
-
-TODO deprecate and rename get_excerpt_by_id / fetch_excerpt
 
 TODO clear old deprecations?
 
@@ -313,8 +305,6 @@ TODO at "Schema.org Settings", we say "Enable...", "Enable..." and then "Output.
 	-> Use "Output" for anythign that outputs code, and "Enable" for a feature that adjusts already outputted code?
 TODO Searchbox -> Search box
 
-TODO test if TSF JSON breadcrumbs are still gone from WC products
-
 TODO when setting primary term in bulk edit, make sure that the post has at least 2 terms attached.
 	(why isn't this listed as a feature neither on our pricing page nor this page at all??)
 		-> Now I understand why people think the plugin doesn't support it :/
@@ -326,10 +316,6 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 
 TODO test all compat files.
 
-TODO what about get_image_dimensions()
-	-> Are we going to move this to a new generator class?
-		-> If so, we can remove the deprecation altogether.
-
 TODO remove leftover var_dump()
 
 TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
@@ -337,63 +323,6 @@ TODO announce that integers are no longer supported for `$args` in all methods t
 
 TODO see todo's in has_custom_canonical_url and get_canonical_url
 TODO list all methods available in every pool? Zzz.
-
-TODO _init_locale only on admin?
-	-> There's no translatable text on the front-end left, no?
-		-> There is... the HTML header.
-		-> There should be an issue for this.
-
-TODO we deprecated Builders\Images, but have yet to write docs.
-
-TODO eradicate all static::$tsf()-> calls by the end of this dev cycle.
-
-TODO eradicate get_defined_vars() or array unpacking where we can use func_get_args()
-	-> https://3v4l.org/TjjDK
-	-> https://3v4l.org/HYBT8
-
-// Lacking header:
-^<\?php([\w\W](?!defined))*?(The SEO Framework plugin)
-
-// Lacking deprecation comment:
-\/\*\*([\w\W](?!deprecated))*?(public function)
-\/\*\*([\w\W](?!deprecated))*?(apply_filters_deprecated)
-
-// Lacking deprecation notice:
-function.*?\{([\w\W](?!tsf\(\)))*?\}
-
-// Mismatch deprecation notices:
-function (.*?)\(([\w\W](?!\1))*?\}
-function (.*?)\(([\w\W](?!\1\())*?\}
-
-
-// Replace tsf()->_deprecated.*\ntsf()-> with $tsf()->
-1. (^.*?)\\tsf\(\)->(_deprecated.*$\n)(.*?return )\\tsf\(\)->
-2. \n$1$$tsf = \\tsf();\n$1$$tsf()->$2\n$3$tsf()->
-
-// Extract function names (by removing everything else)
-1. Strip: ^([\w\W](?!_deprecated_function))*?$
-2. Extract:
-	1. With alternatives
-		1. ^.*?\( '(.*?)',.*?, '(.*?)'.*\n+
-		2. * `$1`, use `$2` instead.\n
-	2. without alternatives:
-		1. ^.*?\( '(.*?)'.*\n+
-		2. * `$1`, with no alternative available.\n
-	- remove leftover tsf() from start:
-		1. \* `tsf\(\)->
-		2. * `
-
-// Find broken replacements
-^(?!use|namespace|\s*\t*\*)(.(?!@|Class|new|'))*?[_A-Za-z\\]*The_SEO_Framework\\(?!has_run|ROBOTS|_|Utils)([^:{](?! as ))*$
-
-// Do not import and rename, that'll cause headaches down the line. Find the renaming imports via:
-^use .*?\\\{[\w\W]* as [^\}]*\};
-
-// Find unused imports:
-use \\.*?\n\t(.*?\\)+?(.*?),(?![\w\W]*\2(?:::|\\))
-(?:use (?:\\[\w\W]*?\n\t(?:.*?\\)+?(.*?),)|(?:[^\\\t]+(.*?);))(?![\w\W]*(?:\1|\2)(?:::|\\))
-
-TODO remove 3+ @since in Deprecated.class to reduce filesize.
 
 TODO find new public function and filters via @since 5.0.0.*?...
 TODO mark subroutine methods in Meta private?
@@ -416,27 +345,13 @@ TODO test fresh site.
 TODO test site without images (or where images are gone).
 	-> Why?
 
-TODO instead of .min.js and .min.js, do /min/x.js?
-	-> This only helps me; whom, well... is spending most time on the project.
-
 TODO can we bust the cache via a JS script if we detect an older version is being requested?
 	-> E.g., we flag "expected version" to each script. If it's a mismatch, bust it?
-
-TODO add support for get_shortlink_url( $args )
-	-> Also add input field per post, so users can overwrite it on a per-post basis.
-		-> We could use this well for tsf.fyi.
 
 TODO test attachment pages' breadcrumb (and image data etc.).
 	-> Everything's OK, but:
 	-> FIXME: The placeholder description doesn't reflect the "alternative text" we're using.
-
-TODO schema.org wbesite logo example doesn't reflect actual output...
-	-> Also, we can remove the ID requirement. See https://github.com/sybrew/the-seo-framework/issues/646
-
-TODO in transport, we have a mechanism to capture and cache the last term/post fetched.
-	-> This prevents expensive cleaning via WP.
-	-> Can we do this for the Data/Post and Data/Term objects?
-		-> We could use umemo( __CLASS__ . "+$post_id" )
+		-> Make issue. This isn't important right now.
 
 TODO we MUST add a new option for Schema.org
 	-> Shall we add subsequent toggles, for each type?
@@ -470,24 +385,12 @@ TODO convert The_SEO_Framework\Meta\Robots\Main from singleton to static
 	-> It must be either instantiatable, or static.
 		-> ->set()->get() is fun though
 
-TODO remove all underscored functions in private classes.
-
 TODO tell the world that "The language is set from content" in "Polylang -> Settings -> URL Modifications" should not be used.
 	-> get_locale() doesn't respect language changes.
 	-> All others settings work fine.
 
-TODO all "Moved to" should be "Moved from"
-	-> Find origins! 164 times... ugh (most are from \The_SEO_Framework\Load, however).
-TODO also do "renamed to", should be "renamed from".
-
-TODO Test all deprecation of same kind accidentally updated via ctrl+shift+h
-	e.g. tsf()->the_same_thing() use tsf()->the_same_thing() instead.
-
 TODO add settings check  wp_attachment_pages_enabled (the attachments are still "public")
 	See https://make.wordpress.org/core/2023/10/16/changes-to-attachment-pages/
-
-TODO create a visual map of the plugin's class+method structure of before vs after?
-	-> This way, you can see how TSF's facade object has 300 methods.
 
 TODO since we now sanitize images when we obtain then, we may accidentally fetch duplicates.
 	-> When more than one image is obtained by the generator, filter it against the stack:
@@ -495,17 +398,6 @@ TODO since we now sanitize images when we obtain then, we may accidentally fetch
 			array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
 		2. Match duplicated IDs and strip if found; note that 0 === 0 and 0 == false, so don't use this:
 			array_unique( array_filter( array_column( $cleaned_details, 'id' ) ) )
-
-TODO in deprecated, use public API as much as possible? e.g. `tsf()->query()` instead of `\The_SEO_Framework\Helper\Query`
-	-> This helps prevent crashing thanks to the fallback in Static_Deprecator.
-
-// TODO in canonical_scheme, set an error if an incorrect option is selected:
-	"The canonical scheme setting did not appear to be correct. Please select..."
-	-> We'd need an option generator for that to capture errors automatically on a per-setting basis.
-		-> We can then name every option properly, and predefine error notices.
-		-> We now return the "old value" -- but that may not be sanitized according to our latest standards.
-			-> Still, if we allowed that to happen, then we didn't upgrade the options properly.
-		-> Make issue.
 
 TODO make issue: We should upgrade the twitter profile inputs to become fully qualified URLs.
 	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.

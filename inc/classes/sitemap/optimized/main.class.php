@@ -8,9 +8,10 @@ namespace The_SEO_Framework\Sitemap\Optimized;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data,
-	\The_SEO_Framework\Meta,
-	\The_SEO_Framework\Sitemap;
+use \The_SEO_Framework\{
+	Data,
+	Sitemap,
+};
 
 /**
  * The SEO Framework plugin
@@ -35,7 +36,7 @@ use \The_SEO_Framework\Data,
  * @since 4.0.0
  * @since 4.2.0 Renamed from `The_SEO_Framework\Builders\Sitemap`
  * @since 5.0.0 1. No longer holds the `$tsf` property.
- *              2. Moved to `\The_SEO_Framework\Sitemap\Optimized`.
+ *              2. Moved from `\The_SEO_Framework\Builders\Sitemap\Main`.
  * @access public
  */
 abstract class Main {

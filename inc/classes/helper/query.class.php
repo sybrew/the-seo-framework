@@ -230,7 +230,7 @@ class Query {
 	 * Memoizes the return value.
 	 *
 	 * @since 4.1.4
-	 * @since 5.0.0 1. Moved to `\The_SEO_Framework\Helper\Query`
+	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Now falls back to the current post type instead erroneously to a boolean.
 	 *              3. Now memoizes the return value.
 	 *
@@ -431,7 +431,7 @@ class Query {
 	 *
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Now also tests network profile edit screens.
-	 *              2. Moved to `\The_SEO_Framework\Helper\Query`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool True if on Profile Edit screen. False otherwise.
@@ -474,7 +474,7 @@ class Query {
 	 * @since 2.6.0
 	 * @since 4.2.0 Added the first parameter to allow custom query testing.
 	 * @since 5.0.0 1. Renamed from `is_home()`.
-	 *              2. Moved to `\The_SEO_Framework\Helper\Query`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
@@ -498,7 +498,7 @@ class Query {
 	 *
 	 * @since 4.2.0
 	 * @since 5.0.0 1. Renamed from `is_home_as_page()`.
-	 *              2. Moved to `\The_SEO_Framework\Helper\Query`.
+	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
