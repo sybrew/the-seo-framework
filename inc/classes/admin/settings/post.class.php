@@ -128,9 +128,6 @@ final class Post {
 	 * }
 	 */
 	public static function flex_nav_tab_wrapper( $id, $tabs = [] ) {
-
-		$vars = get_defined_vars();
-
 		Admin\Template::output_view( 'post/wrap-nav', $id, $tabs );
 		Admin\Template::output_view( 'post/wrap-content', $id, $tabs );
 	}

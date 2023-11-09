@@ -12,6 +12,7 @@ use function \The_SEO_Framework\memo;
 
 use \The_SEO_Framework\{
 	Admin,
+	Data,
 	Front,
 };
 use \The_SEO_Framework\Helper\{
@@ -19,6 +20,7 @@ use \The_SEO_Framework\Helper\{
 	Query,
 	Taxonomy,
 };
+
 // phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
 /**
@@ -336,7 +338,7 @@ final class Debug {
 	 *
 	 * @return string Wrapped SEO meta tags output.
 	 */
-	protected function get_debug_header_output() {
+	protected static function get_debug_header_output() {
 
 		if ( \is_admin() && ! Query::is_term_edit() && ! Query::is_post_edit() && ! Query::is_seo_settings_page( true ) )
 			return;

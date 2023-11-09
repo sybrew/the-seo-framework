@@ -204,14 +204,14 @@ final class Head {
 
 		/**
 		 * @since 5.0.0
-		 * @param array[] $tags_render_data  The meta tags' render data : {
+		 * @param array[]    $tags_render_data The meta tags' render data : string id => {
 		 *    ?array  attributes A list of attributes by [ name => value ].
 		 *    ?string tag        The tag name. Defaults to 'meta' if left empty.
 		 *    ?string content    The tag's content. Leave null to not render content.
 		 *    ?true   rendered   Do not write; tells whether the tag is rendered.
 		 * }
-		 * @param callable[] $tag_generators A list of meta tag generator callbacks.
-		 *                                   The generators may offload work to other generators.
+		 * @param callable[] $tag_generators   A list of meta tag generator callbacks.
+		 *                                     The generators may offload work to other generators.
 		 */
 		$tags_render_data = \apply_filters( // phpcs:ignore, Generic.Formatting -- bug in PHPCS.
 			'the_seo_framework_meta_render_data',

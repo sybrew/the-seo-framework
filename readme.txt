@@ -336,15 +336,11 @@ TODO what about get_image_dimensions()
 
 TODO remove leftover var_dump()
 
-TODO test the_seo_framework_meta_render_data
-
 TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
 	* Also list all methods affected.
 
 TODO see todo's in has_custom_canonical_url and get_canonical_url
 TODO list all methods available in every pool? Zzz.
-
-TODO move "Facebook" to "Open Graph", and purge fb:app_id?
 
 TODO _init_locale only on admin?
 	-> There's no translatable text on the front-end left, no?

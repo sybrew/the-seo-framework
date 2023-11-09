@@ -61,14 +61,14 @@ final class Schema {
 			);
 
 			if ( $content )
-				yield [
+				yield 'schema:graph' => [
 					'attributes' => [
 						'type' => 'application/ld+json',
 					],
 					'tag'        => 'script',
 					'content'    => [
-						'content' => $content,
-						'escape'  => false,
+						'content' => $content, // Yes, we're filling the content with content.
+						'escape'  => false, // Escape::json_encode_script escaped.
 					],
 				];
 		}

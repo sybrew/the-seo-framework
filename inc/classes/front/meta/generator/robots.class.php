@@ -75,7 +75,7 @@ final class Robots {
 		}
 
 		if ( $meta )
-			yield [
+			yield 'robots' => [
 				'attributes' => [
 					'name'    => 'robots',
 					'content' => $meta,

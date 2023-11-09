@@ -54,7 +54,7 @@ final class URI {
 		$url = Meta\URI::get_indexable_canonical_url();
 
 		if ( $url )
-			yield [
+			yield 'canonical' => [
 				'tag'        => 'link',
 				'attributes' => [
 					'rel'  => 'canonical',
@@ -109,7 +109,7 @@ final class URI {
 		}
 
 		if ( $prev )
-			yield [
+			yield 'prev' => [
 				'tag'        => 'link',
 				'attributes' => [
 					'rel'  => 'prev',
@@ -118,7 +118,7 @@ final class URI {
 			];
 
 		if ( $next )
-			yield [
+			yield 'next' => [
 				'tag'        => 'link',
 				'attributes' => [
 					'rel'  => 'next',
@@ -155,7 +155,7 @@ final class URI {
 		}
 
 		if ( $url )
-			yield [
+			yield 'shortlink' => [
 				'tag'        => 'link',
 				'attributes' => [
 					'rel'  => 'shortlink',

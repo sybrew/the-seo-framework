@@ -95,11 +95,12 @@ final class Tags {
 	 */
 	public static function fill_render_data_from_registered_generators() {
 
-		$tags_render_data = &static::tags_render_data();
+		$tags_render_data = &static::$tags_render_data;
+		$i                = 0;
 
 		foreach ( static::$tag_generators as $callback )
-			foreach ( \call_user_func( $callback ) as $data )
-				$tags_render_data[] = $data;
+			foreach ( \call_user_func( $callback ) as $id => $data )
+				$tags_render_data[ $id ?: ++$i ] = $data;
 	}
 
 	/**
@@ -109,8 +110,6 @@ final class Tags {
 	 */
 	public static function render_tags() {
 
-		$tags_render_data = &static::tags_render_data();
-
 		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::DATA_DEFAULTS hereinafter.
 		$data_defaults = static::DATA_DEFAULTS;
 		// Also remit FETCH_DIM_R by writing the index to variables: https://3v4l.org/SLKbq & https://3v4l.org/ipmh5.
@@ -118,7 +117,7 @@ final class Tags {
 		$default_tag        = $data_defaults['tag'];
 		$default_content    = $data_defaults['content'];
 
-		foreach ( $tags_render_data as &$tagdata ) {
+		foreach ( static::$tags_render_data as &$tagdata ) {
 			if ( $tagdata['rendered'] ?? false ) continue;
 
 			static::render(
@@ -221,7 +220,7 @@ final class Tags {
 					\is_array( $content )
 						? (
 							( $content['escape'] ?? true )
-								? \esc_html( $content['content'] )
+								? \esc_html( $content['content'] ) // Yes, we're filling the content with content.
 								: $content['content']
 						)
 						: \esc_html( $content ),

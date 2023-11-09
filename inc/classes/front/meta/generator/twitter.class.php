@@ -57,7 +57,7 @@ final class Twitter {
 		$card = Meta\Twitter::get_card_type();
 
 		if ( $card )
-			yield [
+			yield 'twitter:card' => [
 				'attributes' => [
 					'name'    => 'twitter:card',
 					'content' => $card,
@@ -94,7 +94,7 @@ final class Twitter {
 		}
 
 		if ( $site )
-			yield [
+			yield 'twitter:site' => [
 				'attributes' => [
 					'name'    => 'twitter:site',
 					'content' => $site,
@@ -131,7 +131,7 @@ final class Twitter {
 		}
 
 		if ( $creator )
-			yield [
+			yield 'twitter:creator' => [
 				'attributes' => [
 					'name'    => 'twitter:creator',
 					'content' => $creator,
@@ -168,7 +168,7 @@ final class Twitter {
 		}
 
 		if ( \strlen( $title ) )
-			yield [
+			yield 'twitter:title' => [
 				'attributes' => [
 					'name'    => 'twitter:title',
 					'content' => $title,
@@ -205,7 +205,7 @@ final class Twitter {
 		}
 
 		if ( \strlen( $description ) )
-			yield [
+			yield 'twitter:description' => [
 				'attributes' => [
 					'name'    => 'twitter:description',
 					'content' => $description,
@@ -223,7 +223,7 @@ final class Twitter {
 		$image = current( Meta\Image::get_image_details( null, true ) );
 
 		if ( $image ) {
-			yield [
+			yield 'twitter:image' => [
 				'attributes' => [
 					'name'    => 'twitter:image',
 					'content' => $image['url'],
@@ -231,7 +231,7 @@ final class Twitter {
 			];
 
 			if ( $image['alt'] ) {
-				yield [
+				yield 'twitter:image:alt' => [
 					'attributes' => [
 						'name'    => 'twitter:image:alt',
 						'content' => $image['alt'],

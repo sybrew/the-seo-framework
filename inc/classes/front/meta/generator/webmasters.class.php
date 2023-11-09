@@ -75,7 +75,7 @@ final class Webmasters {
 		}
 
 		if ( $code )
-			yield [
+			yield 'google-site-verification' => [
 				'attributes' => [
 					'name'    => 'google-site-verification',
 					'content' => $code,
@@ -111,7 +111,7 @@ final class Webmasters {
 		}
 
 		if ( $code )
-			yield [
+			yield 'msvalidate.01' => [
 				'attributes' => [
 					'name'    => 'msvalidate.01',
 					'content' => $code,
@@ -147,7 +147,7 @@ final class Webmasters {
 		}
 
 		if ( $code )
-			yield [
+			yield 'yandex-verification' => [
 				'attributes' => [
 					'name'    => 'yandex-verification',
 					'content' => $code,
@@ -183,7 +183,7 @@ final class Webmasters {
 		}
 
 		if ( $code )
-			yield [
+			yield 'baidu-site-verification' => [
 				'attributes' => [
 					'name'    => 'baidu-site-verification',
 					'content' => $code,
@@ -219,7 +219,7 @@ final class Webmasters {
 		}
 
 		if ( $code )
-			yield [
+			yield 'p:domain_verify' => [
 				'attributes' => [
 					'name'    => 'p:domain_verify',
 					'content' => $code,

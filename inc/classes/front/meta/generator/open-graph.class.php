@@ -61,7 +61,7 @@ final class Open_Graph {
 		$type = Meta\Open_Graph::get_type();
 
 		if ( $type )
-			yield [
+			yield 'og:type' => [
 				'attributes' => [
 					'property' => 'og:type',
 					'content'  => $type,
@@ -98,7 +98,7 @@ final class Open_Graph {
 		}
 
 		if ( $locale )
-			yield [
+			yield 'og:locale' => [
 				'attributes' => [
 					'property' => 'og:locale',
 					'content'  => $locale,
@@ -135,7 +135,7 @@ final class Open_Graph {
 		}
 
 		if ( $sitename )
-			yield [
+			yield 'og:site_name' => [
 				'attributes' => [
 					'property' => 'og:site_name',
 					'content'  => $sitename,
@@ -172,7 +172,7 @@ final class Open_Graph {
 		}
 
 		if ( \strlen( $title ) )
-			yield [
+			yield 'og:title' => [
 				'attributes' => [
 					'property' => 'og:title',
 					'content'  => $title,
@@ -209,7 +209,7 @@ final class Open_Graph {
 		}
 
 		if ( \strlen( $description ) )
-			yield [
+			yield 'og:description' => [
 				'attributes' => [
 					'property' => 'og:description',
 					'content'  => $description,
@@ -245,7 +245,7 @@ final class Open_Graph {
 		}
 
 		if ( $url )
-			yield [
+			yield 'og:url' => [
 				'attributes' => [
 					'property' => 'og:url',
 					'content'  => $url,
@@ -259,11 +259,12 @@ final class Open_Graph {
 	 */
 	public static function generate_open_graph_image() {
 
+		$i = 0;
 		foreach ( Meta\Image::get_image_details(
 			null,
 			! Data\Plugin::get_option( 'multi_og_image' )
 		) as $image ) {
-			yield [
+			yield "og:image:$i" => [
 				'attributes' => [
 					'property' => 'og:image',
 					'content'  => $image['url'],
@@ -271,13 +272,13 @@ final class Open_Graph {
 			];
 
 			if ( $image['height'] && $image['width'] ) {
-				yield [
+				yield "og:image:width:$i" => [
 					'attributes' => [
 						'property' => 'og:image:width',
 						'content'  => $image['width'],
 					],
 				];
-				yield [
+				yield "og:image:height:$i" => [
 					'attributes' => [
 						'property' => 'og:image:height',
 						'content'  => $image['height'],
@@ -286,13 +287,15 @@ final class Open_Graph {
 			}
 
 			if ( $image['alt'] ) {
-				yield [
+				yield "og:image:alt:$i" => [
 					'attributes' => [
 						'property' => 'og:image:alt',
 						'content'  => $image['alt'],
 					],
 				];
 			}
+
+			$i++;
 		}
 	}
 
@@ -326,7 +329,7 @@ final class Open_Graph {
 		}
 
 		if ( $time )
-			yield [
+			yield 'article:published_time' => [
 				'attributes' => [
 					'property' => 'article:published_time',
 					'content'  => $time,
@@ -363,7 +366,7 @@ final class Open_Graph {
 		}
 
 		if ( $time )
-			yield [
+			yield 'article:modified_time' => [
 				'attributes' => [
 					'property' => 'article:modified_time',
 					'content'  => $time,

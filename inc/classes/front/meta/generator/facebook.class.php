@@ -73,7 +73,7 @@ final class Facebook {
 		}
 
 		if ( $author )
-			yield [
+			yield 'article:author' => [
 				'attributes' => [
 					'property' => 'article:author',
 					'content'  => $author,
@@ -110,7 +110,7 @@ final class Facebook {
 		}
 
 		if ( $publisher )
-			yield [
+			yield 'article:publisher' => [
 				'attributes' => [
 					'property' => 'article:publisher',
 					'content'  => $publisher,

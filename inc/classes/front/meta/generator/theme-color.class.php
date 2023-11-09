@@ -52,7 +52,7 @@ final class Theme_Color {
 		$theme_color = Data\Plugin::get_option( 'theme_color' );
 
 		if ( $theme_color )
-			yield [
+			yield 'theme-color' => [
 				'attributes' => [
 					'name'    => 'theme-color',
 					'content' => $theme_color,
