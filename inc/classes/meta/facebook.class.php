@@ -60,13 +60,4 @@ class Facebook {
 
 		return Data\Plugin::get_option( 'facebook_publisher' );
 	}
-
-	/**
-	 * @since 5.0.0
-	 *
-	 * @return string Facebook app ID.
-	 */
-	public static function get_app_id() {
-		return Data\Plugin::get_option( 'facebook_appid' );
-	}
 }

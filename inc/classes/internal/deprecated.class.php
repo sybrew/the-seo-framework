@@ -1361,7 +1361,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->theme_color()', '5.0.0' );
 
-		$theme_color = $tsf->data()->plugin()->get_option( 'theme_color' );
+		$theme_color = $tsf->get_option( 'theme_color' );
 
 		return $theme_color ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'name'    => 'theme-color',
@@ -1393,7 +1393,7 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_googlesite_output',
 			[
-				$tsf->data()->plugin()->get_option( 'google_verification' ),
+				$tsf->get_option( 'google_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1430,7 +1430,7 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_bingsite_output',
 			[
-				$tsf->data()->plugin()->get_option( 'bing_verification' ),
+				$tsf->get_option( 'bing_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1467,7 +1467,7 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_yandexsite_output',
 			[
-				$tsf->data()->plugin()->get_option( 'yandex_verification' ),
+				$tsf->get_option( 'yandex_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1504,7 +1504,7 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_baidusite_output',
 			[
-				$tsf->data()->plugin()->get_option( 'baidu_verification' ),
+				$tsf->get_option( 'baidu_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1541,7 +1541,7 @@ final class Deprecated {
 		$code = (string) \apply_filters_deprecated(
 			'the_seo_framework_pintsite_output',
 			[
-				$tsf->data()->plugin()->get_option( 'pint_verification' ),
+				$tsf->get_option( 'pint_verification' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1578,7 +1578,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_og_tags',
 			[
-				(bool) $tsf->data()->plugin()->get_option( 'og_tags' ),
+				(bool) $tsf->get_option( 'og_tags' ),
 			],
 			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -1748,7 +1748,7 @@ final class Deprecated {
 
 		$output = '';
 
-		$multi = (bool) $tsf->data()->plugin()->get_option( 'multi_og_image' );
+		$multi = (bool) $tsf->get_option( 'multi_og_image' );
 
 		foreach ( $tsf->get_image_details( null, ! $multi ) as $image ) {
 			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
@@ -1912,7 +1912,7 @@ final class Deprecated {
 			'the_seo_framework_facebookauthor_output',
 			[
 				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'facebook_page' )
-					?: $tsf->data()->plugin()->get_option( 'facebook_author' ),
+					?: $tsf->get_option( 'facebook_author' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1952,7 +1952,7 @@ final class Deprecated {
 		$publisher = (string) \apply_filters_deprecated(
 			'the_seo_framework_facebookpublisher_output',
 			[
-				$tsf->data()->plugin()->get_option( 'facebook_publisher' ),
+				$tsf->get_option( 'facebook_publisher' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -1962,45 +1962,6 @@ final class Deprecated {
 		return $publisher ? \The_SEO_Framework\Front\Meta\Tags::render( [
 			'property' => 'article:publisher',
 			'content'  => $publisher,
-		] ) : '';
-	}
-
-	/**
-	 * Renders Facebook App ID meta tag.
-	 *
-	 * @since 2.2.2
-	 * @since 5.0.0 Deprecated.
-	 * @deprecated
-	 *
-	 * @return string The Facebook App ID meta tag.
-	 */
-	public function facebook_app_id() {
-
-		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->facebook_app_id()', '5.0.0' );
-
-		if ( ! $tsf->use_facebook_tags() ) return '';
-
-		/**
-		 * @since 2.3.0
-		 * @since 5.0.0 Deprecated.
-		 * @deprecated
-		 * @param string $app_id The Facebook app ID.
-		 * @param int    $id     The current page or term ID.
-		 */
-		$app_id = (string) \apply_filters_deprecated(
-			'the_seo_framework_facebookappid_output',
-			[
-				$tsf->data()->plugin()->get_option( 'facebook_appid' ),
-				$tsf->query()->get_the_real_id(),
-			],
-			'5.0.0 of The SEO Framework',
-			'the_seo_framework_meta_render_data', // var_dump() delete me?
-		);
-
-		return $app_id ? \The_SEO_Framework\Front\Meta\Tags::render( [
-			'property' => 'fb:app_id',
-			'content'  => $app_id,
 		] ) : '';
 	}
 
@@ -2028,7 +1989,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_facebook_tags',
 			[
-				(bool) $tsf->data()->plugin()->get_option( 'facebook_tags' ),
+				(bool) $tsf->get_option( 'facebook_tags' ),
 			],
 			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -2115,7 +2076,7 @@ final class Deprecated {
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
-		return (bool) $tsf->data()->plugin()->get_option( 'post_modify_time' );
+		return (bool) $tsf->get_option( 'post_modify_time' );
 	}
 
 	/**
@@ -2135,7 +2096,7 @@ final class Deprecated {
 		if ( 'article' !== $tsf->open_graph()->get_type() )
 			return false;
 
-		return (bool) $tsf->data()->plugin()->get_option( 'post_publish_time' );
+		return (bool) $tsf->get_option( 'post_publish_time' );
 	}
 
 	/**
@@ -2206,7 +2167,7 @@ final class Deprecated {
 		$site = (string) \apply_filters_deprecated(
 			'the_seo_framework_twittersite_output',
 			[
-				$tsf->data()->plugin()->get_option( 'twitter_site' ),
+				$tsf->get_option( 'twitter_site' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -2249,7 +2210,7 @@ final class Deprecated {
 			'the_seo_framework_twittercreator_output',
 			[
 				$tsf->data()->plugin()->user()->get_current_post_author_meta_item( 'twitter_page' )
-					?: $tsf->data()->plugin()->get_option( 'twitter_creator' ),
+					?: $tsf->get_option( 'twitter_creator' ),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -2362,7 +2323,7 @@ final class Deprecated {
 
 		$output = '';
 
-		foreach ( $tsf->get_image_details( null, ! $tsf->data()->plugin()->get_option( 'multi_og_image' ) ) as $image ) {
+		foreach ( $tsf->get_image_details( null, ! $tsf->get_option( 'multi_og_image' ) ) as $image ) {
 			$output .= \The_SEO_Framework\Front\Meta\Tags::render( [
 				'name'    => 'twitter:image',
 				'content' => $image['url'],
@@ -2407,7 +2368,7 @@ final class Deprecated {
 		return \apply_filters_deprecated(
 			'the_seo_framework_use_twitter_tags',
 			[
-				(bool) $tsf->data()->plugin()->get_option( 'twitter_tags' ),
+				(bool) $tsf->get_option( 'twitter_tags' ),
 			],
 			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generators',
@@ -6278,9 +6239,9 @@ final class Deprecated {
 	public function uses_time_in_timestamp_format() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->uses_time_in_timestamp_format()', '5.0.0', "tsf()->data()->plugin()->get_option( 'timestamp_format' )" );
+		$tsf->_deprecated_function( 'tsf()->uses_time_in_timestamp_format()', '5.0.0', "tsf()->get_option( 'timestamp_format' )" );
 
-		return '1' === $tsf->data()->plugin()->get_option( 'timestamp_format' );
+		return '1' === $tsf->get_option( 'timestamp_format' );
 	}
 
 	/**

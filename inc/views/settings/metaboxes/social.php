@@ -219,30 +219,11 @@ switch ( $instance ) :
 		$fb_publisher             = Data\Plugin::get_option( 'facebook_publisher' );
 		$fb_publisher_placeholder = \_x( 'https://www.facebook.com/YourBusinessProfile', 'Example Facebook Business URL', 'autodescription' );
 
-		$fb_appid             = Data\Plugin::get_option( 'facebook_appid' );
-		$fb_appid_placeholder = '123456789012345';
-
 		HTML::header_title( \__( 'Facebook Integration Settings', 'autodescription' ) );
 		HTML::description( \__( 'Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options.', 'autodescription' ) );
 		HTML::description( \__( 'When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared.', 'autodescription' ) );
 		?>
 		<hr>
-
-		<p>
-			<label for="<?php Input::field_id( 'facebook_appid' ); ?>">
-				<strong><?php \esc_html_e( 'Facebook App ID', 'autodescription' ); ?></strong>
-				<?php
-				echo ' ';
-				HTML::make_info(
-					\__( 'Get Facebook App ID.', 'autodescription' ),
-					'https://developers.facebook.com/apps',
-				);
-				?>
-			</label>
-		</p>
-		<p>
-			<input type=text name="<?php Input::field_name( 'facebook_appid' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'facebook_appid' ); ?>" placeholder="<?= \esc_attr( $fb_appid_placeholder ) ?>" value="<?= \esc_attr( $fb_appid ) ?>" />
-		</p>
 
 		<p>
 			<label for="<?php Input::field_id( 'facebook_publisher' ); ?>">

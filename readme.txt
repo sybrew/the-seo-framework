@@ -602,19 +602,20 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* **Compatibility:**
 		* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
-	* The Homepage SEO Settings box's title no longer carries a warning; instead, we added a bigger, more noticable warning to every settings section when editing the homepage.
-		* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
-		* This also works around an issue where Gutenberg still doesn't understand HTML.
-		* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
+	* **Accessibility:**
+		* The Homepage SEO Settings box's title no longer carries a warning; instead, we added a bigger, more noticable warning to every settings section when editing the homepage.
+			* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
+			* This also works around an issue where Gutenberg still doesn't understand HTML.
+			* This also works around an issue where Gutenberg leadership does not respect the community that allowed them to create the everlasting abomination and [fix all the points made here](https://github.com/WordPress/gutenberg/issues/7960), which would take about 5 hours of work -- postponed for 5 years already.
 	* **Meta tags:**
 		* The `theme_color` metatag now also outputs on requests where Advanced Query Protection engages.
 		* `article:modified_time` and `article:published_time` now listen to Open Graph settings, and will always try to output on single post types.
-	* No longer uses the blog tagline for the homepage, it's often too short anyway. FIXME/TODO what does? Description?
-	* Paginated URLs are now regardless of using a custom canonical URL or indexation status.
-		* This helps search engines find URLs to all paginated pages, improving link discovery.
-	* The shortlink URL is now also outputted on the paginated homepage.
-	* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
-	* All meta generation methods are now assumed to return (pre-)sanitized data. You must still escape the data when printing to screen.
+		* The description generator no longer uses the blog tagline for the homepage, it's often too short anyway.
+		* Paginated URLs are now outputted regardless of indexation status a custom canonical URL being present.
+			* This helps search engines find URLs to all paginated pages, improving link discovery.
+		* The shortlink URL is now also outputted on the paginated homepage.
+	* **Administration:**
+		* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
 	* The plugin compatibility loader now tests common filenames instead of function, constant, or class's presence.
 	* When activating or deactivating the plugin, only on WordPress 6.4 or later the options will now toggle from autoloading on and off.
 		* It will still toggle on for older versions of WordPress.
@@ -626,7 +627,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 			* If the title is unbranded, WordPress will replace the title.
 			* No one should make use of this feature. It serves as a flex that our data handling is super robust.
 		* You can now store ampersands (`&`), slashes (`/`), and backward solidus (`\`) in titles and descriptions without the risk of them being lost, changed, or duplicated on (a repeated) save.
-			* Much work has been done in previous updates to prevent this issue, but we're now certain of its robustness.
+			* Much work has been done in previous updates to prevent this issue, but we're now certain this is robust.
 	* **Localization:**
 		* Repeated spacing in metadata are now replaced using the same space character inputted, instead of a default space character.
 	* **Performance:**
@@ -722,8 +723,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 			* Yoast SEO is still checked for.
 		* Sitemaps: Simple Wp Sitemap ([abandoned](https://wordpress.org/plugins/simple-wp-sitemap/)).
 	* Open Graph tag `og:updated_time` is no longer outputted, it is inferred from `article:modified_time`.
-	* TODO remove `fb:app_id` -- even though users will get warnings and annoy us?
-		-> Yes, remove this. The sanitization also no longer makes sense.
+	* Facebook's App ID is no longer available. You may get warnings in Facebooks debugger about this, which you can safely ignore (Facebook doesn't use this tag any longer, and their debugger is outdated).
 
 **For translators:**
 
@@ -845,7 +845,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 			* Internally known as `The_SEO_Framework\Data\Blog`.
 		* This pool has a sub-pool, accessible via `tsf()->data()->plugin()`.
 			* All public TSF-related storage methods have been moved to that pool. E.g., `tsf()->get_all_options()` is now `tsf()->data()->plugin()->get_options()`.
-				* However, two of its methods have been ennobled to be part of the legacy API. So, you can use `tsf()->get_option()` and `tsf()->update_option()`.
+				* However, three of its methods have been ennobled to be part of the legacy API. So, you can use `tsf()->get_option()`, `tsf()->get_options()`, and `tsf()->update_option()`.
 			* Internally known as `The_SEO_Framework\Data\Plugin`.
 			* This pool has a sub-pool, accessible via `tsf()->data()->plugin->helper()`.
 				* All public TSF-related storage helper methods have been moved to that pool. E.g., `tsf()->get_robots_option_index()` is now `tsf()->data()->plugin()->helper()->get_robots_post_type_option_id()`.
@@ -909,8 +909,10 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 			* Index `auto_descripton_html_method`.
 				* It is now `auto_description_html_method` (typo in "description").
 				* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
-			* Index `knowledge_gplus`
+			* Index `knowledge_gplus`.
 				* It's no longer supported since 2018; we kept it around because users could fill whatever URL in this field. But, it's time to say goodbye to this cruft.
+			* Index `facebook_appid`.
+				* Facebook no longer uses this, nor should you.
 	* For option index `autodescription-updates-cache` (constant `THE_SEO_FRAMEWORK_SITE_CACHE`):
 		* It's now `autodescription-site-cache` and its contents will be migrated after updating.
 			* This option will now also be home to the Archive and Search Exclusion cache.
@@ -920,6 +922,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* Although the options were properly unslashed by WordPress, we did nothing of the like for terms. Now, term data is unslashed before saving, for both regular term and quick-edit saving. This means `\` will remain `\`, and won't become `\\` ad infinitum.
 	* For the post meta:
 		* Just like with term meta, you can now store backward solidi (`\`) without breakage.
+	* All meta generation methods are now assumed to return (pre-)sanitized data. You must still escape the data when printing to screen.
 * **Transient notes:**
 	* **Added:**
 		* Transient `tsf_sitemap_{$sitemap_id}_{$revision}_{$blog_id}_{$locale}` may now be stored for sitemaps.
@@ -1073,7 +1076,6 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 				* `og_updated_time()`, with no alternative available.
 				* `facebook_author()`, with no alternative available.
 				* `facebook_publisher()`, with no alternative available.
-				* `facebook_app_id()`, with no alternative available.
 				* `use_facebook_tags()`, with no alternative available.
 				* `article_published_time()`, with no alternative available.
 				* `article_modified_time()`, with no alternative available.
@@ -1389,6 +1391,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 				* `init_debug_vars()`, was never meant to be public.
 				* `get_image_generation_params()`, has nothing to offer for the public API.
 				* `set_plugin_check_caches()`, without deprecation (we now handle it without a cached check).
+				* `facebook_app_id()`, without deprecation (feature is gone).
 				* Since we rebuilt the class initialization, these methods are no longer available:
 					* `autodescription_run()`
 					* `init_the_seo_framework()`
@@ -1578,7 +1581,6 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* `the_seo_framework_ogurl_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_facebookauthor_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_facebookpublisher_output`, use `the_seo_framework_meta_render_data` instead.
-		* `the_seo_framework_facebookappid_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_publishedtime_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_twittersite_output`, use `the_seo_framework_meta_render_data` instead.
 		* `the_seo_framework_twittercreator_output`, use `the_seo_framework_meta_render_data` instead.
@@ -1627,6 +1629,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 			* It is now `the_seo_framework_auto_description_html_method_methods` (typo in "description").
 			* We found no indication this was used in public yet, so we didn't go through a deprecation process. Sorry in advance if this change affects your site.
 		* `the_seo_framework_delete_cache_args`, there's no functionality left that could use this.
+		* `the_seo_framework_facebookappid_output`, we removed `app:id` support.
 		* `the_seo_framework_delete_cache_{$type}`:
 			* This includes `the_seo_framework_delete_cache_excluded_post_ids`, which is gone.
 			* This also includes `the_seo_framework_delete_cache_sitemap`, which is now marked as deprecated.

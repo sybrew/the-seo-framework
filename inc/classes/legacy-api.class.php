@@ -54,11 +54,23 @@ class Legacy_API {
 	 *
 	 * @param string|string[] $key Option name, or a map of indexes therefor.
 	 *                             If you send an empty array, you'll get all options.
-	 *                             Don't do that; use get_options() instead.
+	 *                             Don't do that; use `tsf()->get_options()` instead.
 	 * @return ?mixed The TSF option value. Null when not found.
 	 */
 	public static function get_option( $key ) {
 		return static::data()->plugin()->get_option( ...(array) $key );
+	}
+
+	/**
+	 * Return all SEO options from the SEO options database.
+	 *
+	 * @since 5.0.0
+	 * @api
+	 *
+	 * @return array The TSF option values.
+	 */
+	public static function get_options() {
+		return static::data()->plugin()->get_options();
 	}
 
 	/**

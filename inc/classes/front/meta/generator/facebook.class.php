@@ -42,7 +42,6 @@ final class Facebook {
 	public const GENERATORS = [
 		[ __CLASS__, 'generate_article_author' ],
 		[ __CLASS__, 'generate_article_publisher' ],
-		[ __CLASS__, 'generate_facebook_app_id' ],
 	];
 
 	/**
@@ -90,7 +89,7 @@ final class Facebook {
 
 		$publisher = Meta\Facebook::get_publisher();
 
-		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
+		if ( \has_filter( 'the_seo_framework_facebookpublisher_output' ) ) {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.
@@ -115,43 +114,6 @@ final class Facebook {
 				'attributes' => [
 					'property' => 'article:publisher',
 					'content'  => $publisher,
-				],
-			];
-	}
-
-	/**
-	 * @since 5.0.0
-	 * @generator
-	 */
-	public static function generate_facebook_app_id() {
-
-		$app_id = Meta\Facebook::get_app_id();
-
-		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $app_id The Facebook app ID.
-			 * @param int    $id     The current page or term ID.
-			 */
-			$app_id = (string) \apply_filters_deprecated(
-				'the_seo_framework_facebookappid_output',
-				[
-					$app_id,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
-		if ( $app_id )
-			yield [
-				'attributes' => [
-					'property' => 'fb:app_id',
-					'content'  => $app_id,
 				],
 			];
 	}

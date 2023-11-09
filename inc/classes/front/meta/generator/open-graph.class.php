@@ -77,7 +77,7 @@ final class Open_Graph {
 
 		$locale = Meta\Open_Graph::get_locale();
 
-		if ( \has_filter( 'the_seo_framework_ogdescription_output' ) ) {
+		if ( \has_filter( 'the_seo_framework_oglocale_output' ) ) {
 			/**
 			 * @since 2.3.0
 			 * @since 2.7.0 Added output within filter.

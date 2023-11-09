@@ -208,17 +208,15 @@ final class Query {
 		if ( null === $has_filter )
 			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
 
-		if ( $has_filter ) {
-			/**
-			 * This filter affects both 'search-"archives"' and terms/taxonomies.
-			 *
-			 * @since 2.9.4
-			 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
-			 * @param \WP_Query $wp_query The current query.
-			 */
-			if ( ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query ) )
-				return true;
-		}
+		/**
+		 * This filter affects both 'search-"archives"' and terms/taxonomies.
+		 *
+		 * @since 2.9.4
+		 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
+		 * @param \WP_Query $wp_query The current query.
+		 */
+		if ( $has_filter && ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query ) )
+			return true;
 
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;

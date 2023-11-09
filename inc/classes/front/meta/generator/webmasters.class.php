@@ -163,7 +163,7 @@ final class Webmasters {
 
 		$code = Data\Plugin::get_option( 'baidu_verification' );
 
-		if ( \has_filter( 'the_seo_framework_yandexsite_output' ) ) {
+		if ( \has_filter( 'the_seo_framework_baidusite_output' ) ) {
 			/**
 			 * @since 4.0.5
 			 * @since 5.0.0 Deprecated

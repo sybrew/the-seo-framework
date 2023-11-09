@@ -256,7 +256,6 @@ class Setup {
 				// Facebook.
 				'facebook_publisher' => '', // Facebook Business URL.
 				'facebook_author'    => '', // Facebook User URL.
-				'facebook_appid'     => '', // Facebook App ID.
 
 				// Dates.
 				'post_publish_time' => 1, // Article Published Time.
