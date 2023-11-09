@@ -549,11 +549,30 @@ TODO in deprecated, use public API as much as possible? e.g. `tsf()->query()` in
 TODO make issue: We should upgrade the twitter profile inputs to become fully qualified URLs.
 	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.
 
-TODO for all the instances of "Allow 0 to be the", should we introduce coalesce_strlen?
-
-TODO The logo isn't registered from the Schema.org information in Google Search Console. Yoast provided a workaround by implementing this aside from all their other data -- they are somehow aware? We should also output this second script under Meta/Schema/Entities/Logo?
-
 TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
+
+For the filter, we should promote using:
+add_filter(
+	'the_seo_framework_meta_render_data',
+	function ( $tags_render_data ) {
+
+		$tags_render_data['robots']['attributes']['content'] = 'index';
+
+		$tags_render_data['twitter:description']['attributes']['content'] = 'hello world!';
+
+		$tags_render_data['my-custom-tag'] = [
+			'attributes' => [
+				'test' => 'some-exmaple-stuff',
+				'id'   => 'mytagid',
+			],
+			'tag'        => 'example', // The tag name.
+			'content'    => 'Some content', // The tag content. Leave this out to create a void tag.
+		];
+
+		return $tags_render_data;
+	},
+);
+
 
 **Detailed log**
 
@@ -872,9 +891,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 	* Usage of stopwatch `microtime()` has been exchanged for `hrtime()`, improving accuracy and performance.
 	* Deprecation and inaccessible property/method notices now ***absolutely accurately***&trade; find the originating caller.
 	* Query error notices also now ***absolutely accurately***&trade; find the originating caller, in reverse order.
-	* `0` should be allowed as a custom title now.
-		* TODO verify. If not, set "Allow 0 to be the title." back to an empty() check?
-			-> It works on admin, not on front...
+	* `0` should be allowed as a custom social/meta title and description now. Use `\The_SEO_Framework\coalesce_strlen()` to test.
 * **Changed:**
 	* When `tsf()` or `the_seo_framework()` are called too early (before `plugins_loaded`), they'll return a silencer class.
 	* Twitter cards are no longer validated whether a card type is provided.
@@ -934,6 +951,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* `The_SEO_Framework\is_headless()` is now available. Use this in favor of `\tsf()->is_headless`, which is now deprecated.
 		* `The_SEO_Framework\normalize_generation_args()` is now available.
 		* `The_SEO_Framework\get_query_type_from_args()` is now available. This is to quickly determine the type from all generation arguments.
+		* `The_SEO_Framework\coalesce_strlen()` is now available. This is to quickly determine if a string has length, or coalesce otherwise.
 	* **Changed:**
 		* `tsf()` and `the_seo_framework()` will now always return TSF's object -- even if the plugin isn't fully initialized. We can now do this because the hook loader has been moved from the class instance.
 * **Object notes:**

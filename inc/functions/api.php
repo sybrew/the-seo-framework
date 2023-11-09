@@ -175,6 +175,7 @@ namespace The_SEO_Framework {
 	 * Determines the type of request from the arguments.
 	 *
 	 * @since 5.0.0
+	 *
 	 * @param array $args The query arguments. Expects indexes 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The query type: 'user', 'pta', 'homeblog', 'term', or 'single'.
 	 */
@@ -193,6 +194,22 @@ namespace The_SEO_Framework {
 		}
 
 		return 'single';
+	}
+
+	/**
+	 * A helper function allows coalescing based on string length.
+	 * If the string is of length 0, it'll return null. Otherwise, it'll return the string.
+	 *
+	 * E.g., coalesce_strlen( '0' ) ?? '1'; will return '0'.
+	 * But, coalesce_strlen( '' ) ?? '1'; will return '1'.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $string The string to coalesce.
+	 * @return ?string The input string if it's at least 1 byte, null otherwise.
+	 */
+	function coalesce_strlen( $string ) {
+		return \strlen( $string ) ? $string : null;
 	}
 
 	/**

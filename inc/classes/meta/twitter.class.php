@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\normalize_generation_args;
+use function \The_SEO_Framework\{
+	coalesce_strlen,
+	normalize_generation_args,
+};
 
 use \The_SEO_Framework\{
 	Data,
@@ -149,11 +152,8 @@ class Twitter {
 	 * @return string Twitter Title.
 	 */
 	public static function get_title( $args = null ) {
-
-		$title = static::get_custom_title( $args );
-
-		// Allow 0 to be the title.
-		return \strlen( $title ) ? $title : static::get_generated_title( $args );
+		return coalesce_strlen( static::get_custom_title( $args ) )
+			?? static::get_generated_title( $args );
 	}
 
 	/**
@@ -183,10 +183,8 @@ class Twitter {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
-				// Allow 0 to be the title.
-				if ( ! \strlen( $title ) )
-					$title = Data\Plugin\Post::get_meta_item( '_twitter_title' );
+				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
+					  ?? Data\Plugin\Post::get_meta_item( '_twitter_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
@@ -228,10 +226,8 @@ class Twitter {
 			$title = Data\Plugin\PTA::get_meta_item( 'tw_title', $args['pta'] );
 		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
-				// Allow 0 to be the title.
-				if ( ! \strlen( $title ) )
-					$title = Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
+				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
+					  ?? Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
@@ -275,11 +271,8 @@ class Twitter {
 	 * @return string The real Twitter description output.
 	 */
 	public static function get_description( $args = null ) {
-
-		$desc = static::get_custom_description( $args );
-
-		// Allow 0 to be the description.
-		return \strlen( $desc ) ? $desc : static::get_generated_description( $args );
+		return coalesce_strlen( static::get_custom_description( $args ) )
+			?? static::get_generated_description( $args );
 	}
 
 	/**
@@ -310,10 +303,8 @@ class Twitter {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
-				// Allow 0 to be the description.
-				if ( ! \strlen( $desc ) )
-					$desc = Data\Plugin\Post::get_meta_item( '_twitter_description' );
+				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+					 ?? Data\Plugin\Post::get_meta_item( '_twitter_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
@@ -354,10 +345,8 @@ class Twitter {
 			$desc = Data\Plugin\PTA::get_meta_item( 'tw_description', $args['pta'] );
 		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
-				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
-				// Allow 0 to be the description.
-				if ( ! \strlen( $desc ) )
-					$desc = Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
+				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+					 ?? Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
