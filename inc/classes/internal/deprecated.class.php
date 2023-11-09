@@ -4247,9 +4247,9 @@ final class Deprecated {
 	public function get_post_type_archive_canonical_url( $post_type = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '5.0.0', 'tsf()->uri()->get_post_type_archive_url()' );
+		$tsf->_deprecated_function( 'tsf()->get_post_type_archive_canonical_url()', '5.0.0', 'tsf()->uri()->get_pta_url()' );
 
-		return $tsf->uri()->get_post_type_archive_url( $post_type );
+		return $tsf->uri()->get_pta_url( $post_type );
 	}
 
 	/**

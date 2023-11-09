@@ -581,9 +581,9 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 		* `Schema.org/WebPage` is now added to every page but 404. TODO confirm
 			* `Schema.org/BreadcrumbList` is added to this.
 			* Schema.org/Author is added to this if there's an author registered to the post. TODO confirm
-		* `Schema.org/BreadcrumbList` has been rewritten and is now supported on all pages, not just singular posts.
+		* `Schema.org/BreadcrumbList` has been rewritten and is now supported on all types of pages, not just singular posts.
 	* **Breadcrumbs:**
-		* Breadcrumb output is now supported. Since it appears they aren't coming anytime soon to the Block editor.
+		* TODO Breadcrumb output is now supported. Since it appears they aren't coming anytime soon to the Block editor.
 			* You can use the shortcode, `[tsf_breadcrumbs separator=">"]`, which will output a breadcrumb of any kind using the separator ">".
 				* We're planning to convert it to a block once the API is stable enough.
 					* TODO isn't it already? It's quite simple, but we want to add options for the separator.
@@ -1181,7 +1181,7 @@ TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 				* `get_raw_home_canonical_url()`, use `tsf()->uri()->get_bare_front_page_url()` instead.
 				* `get_singular_canonical_url()`, use `tsf()->uri()->get_singular_url()` instead.
 				* `get_taxonomical_canonical_url()`, use `tsf()->uri()->get_term_url()` instead.
-				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_post_type_archive_url()` instead.
+				* `get_post_type_archive_canonical_url()`, use `tsf()->uri()->get_pta_url()` instead.
 				* `get_author_canonical_url()`, use `tsf()->uri()->get_author_url()` instead.
 				* `get_date_canonical_url()`, use `tsf()->uri()->get_date_url()` instead.
 				* `get_search_canonical_url()`, use `tsf()->uri()->get_search_url()` instead.

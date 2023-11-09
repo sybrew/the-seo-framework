@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Front\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data\Filter\Escape,
+	Meta,
+};
 
 /**
  * The SEO Framework plugin
@@ -49,18 +52,25 @@ final class Schema {
 	 */
 	public static function generate_schema_graph() {
 
-		$content = Meta\Schema::get_generated_graph_in_json();
+		$graph = Meta\Schema::get_generated_graph();
 
-		if ( $content )
-			yield [
-				'attributes' => [
-					'type' => 'application/ld+json',
-				],
-				'tag'        => 'script',
-				'content'    => [
-					'content' => $content, // is escaped via json_encode.
-					'escape'  => false,
-				],
-			];
+		if ( $graph ) {
+			$content = Escape::json_encode_script(
+				$graph,
+				\SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0,
+			);
+
+			if ( $content )
+				yield [
+					'attributes' => [
+						'type' => 'application/ld+json',
+					],
+					'tag'        => 'script',
+					'content'    => [
+						'content' => $content,
+						'escape'  => false,
+					],
+				];
+		}
 	}
 }

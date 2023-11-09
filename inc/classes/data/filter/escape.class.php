@@ -52,7 +52,29 @@ class Escape {
 	}
 
 	/**
-	 * Escapes value via JSON encoding.
+	 * Escapes value via JSON encoding for script elements.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param mixed $value   The value to encode.
+	 * @param int   $options Extra JSON encoding options
+	 * @return string|false The HTML-escaped JSON-encoded text.
+	 */
+	public static function json_encode_script( $value, $options = 0 ) {
+		return json_encode(
+			$value,
+			\JSON_UNESCAPED_SLASHES
+			| \JSON_HEX_TAG
+			| \JSON_UNESCAPED_UNICODE
+			| \JSON_INVALID_UTF8_IGNORE
+			| $options,
+		);
+	}
+
+	/**
+	 * Escapes value via JSON encoding for HTML output.
+	 *
+	 * Unused internally.
 	 *
 	 * @since 5.0.0
 	 *
@@ -75,7 +97,7 @@ class Escape {
 	}
 
 	/**
-	 * Escapes value via JSON encoding.
+	 * Escapes value via JSON encoding for attributes.
 	 *
 	 * @since 5.0.0
 	 *
@@ -101,7 +123,6 @@ class Escape {
 				| \JSON_HEX_TAG
 				| \JSON_HEX_APOS
 				| \JSON_HEX_QUOT
-				| \JSON_HEX_AMP
 				| \JSON_UNESCAPED_UNICODE
 				| \JSON_INVALID_UTF8_IGNORE
 				| $options,

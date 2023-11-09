@@ -51,7 +51,7 @@ switch ( $instance ) :
 		foreach ( $post_types as $post_type ) {
 			$post_types_data[ $post_type ] = [
 				'label'    => Post_Type::get_label( $post_type ),
-				'url'      => Meta\URI::get_bare_post_type_archive_url( $post_type ), // permalink!
+				'url'      => Meta\URI::get_bare_pta_url( $post_type ), // permalink!
 				'hasPosts' => Data\Post::has_posts_in_pta( $post_type ),
 			];
 		}

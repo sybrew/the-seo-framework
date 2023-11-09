@@ -12,7 +12,6 @@ use function \The_SEO_Framework\normalize_generation_args;
 
 use \The_SEO_Framework\{
 	Data,
-	Data\Filter\Escape,
 	Helper\Format\Arrays,
 	Helper\Query,
 };
@@ -47,29 +46,6 @@ class Schema {
 	 * @var callable[] The writer queue.
 	 */
 	private static $writer_queue = [];
-
-	/**
-	 * Returns the JSON encoded Schema.org graph.
-	 *
-	 * @since 5.0.0
-	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @return string The JSON encoded Schema.org graph, if any. Empty string on failure.
-	 */
-	public static function get_generated_graph_in_json( $args = null ) {
-
-		$graph = static::get_generated_graph( $args );
-
-		return $graph
-			? (string) Escape::json_encode_html(
-				$graph,
-				( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 )
-			)
-			: '';
-	}
-
-	// NOTE: Specific stuff should be filtered deep in the generators -- such as the Breadcrumb generator's generator.
 
 	/**
 	 * Returns the Schema.org graph.
@@ -139,6 +115,8 @@ class Schema {
 		static::$writer_queue = [];
 
 		/**
+		 * For consistency, data should be filtered deep, such as (WordPress) title
+		 * filters for breadcrumb and page titles. Use this only if those aren't available.
 		 * @since 5.0.0
 		 * @param array[]    $graph A sequential list of graph entities.
 		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
