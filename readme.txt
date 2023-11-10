@@ -284,8 +284,6 @@ TODO add "disable JIT compiler" option to Description generator?
 	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
 		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
 
-TODO clear old deprecations?
-
 TODO 'show-if-tsf-js'
 	-> Use this to show a "Something went wrong, counters won't load" banner.
 		-> "Your site experienced a fatal error."
@@ -321,7 +319,6 @@ TODO remove leftover var_dump()
 TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
 	* Also list all methods affected.
 
-TODO see todo's in has_custom_canonical_url and get_canonical_url
 TODO list all methods available in every pool? Zzz.
 
 TODO find new public function and filters via @since 5.0.0.*?...
@@ -385,7 +382,7 @@ TODO convert The_SEO_Framework\Meta\Robots\Main from singleton to static
 	-> It must be either instantiatable, or static.
 		-> ->set()->get() is fun though
 
-TODO tell the world that "The language is set from content" in "Polylang -> Settings -> URL Modifications" should not be used.
+TODO tell in KB that "The language is set from content" in "Polylang -> Settings -> URL Modifications" should not be used.
 	-> get_locale() doesn't respect language changes.
 	-> All others settings work fine.
 
@@ -426,7 +423,6 @@ add_filter(
 	},
 );
 
-
 **Detailed log**
 
 **For everyone:**
@@ -462,7 +458,7 @@ add_filter(
 	* **Migration:**
 		* SEOPress's metadata is now detected when activating the plugin for the first time, so TSF can suggest to [migrate SEO metadata](https://theseoframework.com/extensions/transport/).
 	* **Third party support:**
-		* This plugin can now be updated via [GitHub PLugin Updater](https://git-updater.com/knowledge-base/general-usage/).
+		* This plugin can now be updated via [GitHub Plugin Updater](https://git-updater.com/knowledge-base/general-usage/).
 	* **Accessibility:**
 		* You can now opt to use a low contrast color pallete for the SEO Bar.
 			* We are aware this should be [configurable via the device settings](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast), but this standard is inconsistent. Besides, giving an option allows any site owner to set a preference.
@@ -1432,6 +1428,8 @@ add_filter(
 			1. Removed 3rd and 4th parameters (`$tt_id` and `$taxonomy`).
 			2. No longer sends pre-sanitized data to the filter.
 		* `the_seo_framework_save_user_data`, no longer sends pre-sanitized data to the filter.
+	* **Fixed:**
+		* Unsetting tabs via `the_seo_framework_inpost_settings_tabs` will no longer cause JavaScript errors.
 	* **Deprecated:**
 		* `the_seo_framework_googlesite_output`, with no alternative available.
 		* `the_seo_framework_bingsite_output`, with no alternative available.

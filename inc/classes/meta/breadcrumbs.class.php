@@ -185,6 +185,13 @@ class Breadcrumbs {
 		$post_type = \get_post_type( $post );
 
 		if ( \is_post_type_hierarchical( $post_type ) ) { // page.
+			if ( \get_post_type_object( $post_type )->has_archive ?? false ) {
+				$crumbs[] = [
+					'url'  => Meta\URI::get_bare_pta_url( $post_type ),
+					'name' => Meta\Title::get_bare_title( [ 'pta' => $post_type ] ),
+				];
+			}
+
 			// get_post_ancestors() has no filter. get_ancestors() isn't used for posts in WP.
 			foreach ( array_reverse( $post->ancestors ) as $ancestor_id ) {
 				$crumbs[] = [
