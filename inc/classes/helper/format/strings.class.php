@@ -269,6 +269,7 @@ class Strings {
 		} elseif ( isset( $matches[3] ) ) {
 			$sentence = "$matches[1]$matches[3]";
 		} elseif ( isset( $matches[2] ) ) {
+			// TODO Can we skip the next cleanup if we reach this?
 			$sentence = "$matches[1]$matches[2]";
 		} elseif ( isset( $matches[1] ) ) {
 			$sentence = $matches[1];

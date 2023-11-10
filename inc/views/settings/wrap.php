@@ -38,6 +38,7 @@ if ( \function_exists( 'tsf_extension_manager' )
 ) {
 	$_extensions_button = sprintf(
 		'<a href="%s" class=button>%s</a>',
+		// menu_page_url() escapes
 		\menu_page_url( \tsf_extension_manager()->seo_extensions_page_slug, false ),
 		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ),
 	);

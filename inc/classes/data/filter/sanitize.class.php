@@ -157,6 +157,24 @@ class Sanitize {
 	}
 
 	/**
+	 * Normalizes metadata content for string comparison.
+	 * The data returned is considered insecure.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $text The input text with possible repeated spacing.
+	 * @return string The input string without repeated spaces.
+	 */
+	public static function normalize_metadata_content_for_strcmp( $text ) {
+		// Why not blog_charset? Because blog_charset is there only to onboard non-UTF-8 to UTF-8.
+		return html_entity_decode(
+			static::metadata_content( $text ),
+			\ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5,
+			'UTF-8'
+		);
+	}
+
+	/**
 	 * Sanitizes text by removing repeated spaces.
 	 *
 	 * @since 2.8.2

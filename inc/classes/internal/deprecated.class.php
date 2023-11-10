@@ -6130,12 +6130,7 @@ final class Deprecated {
 
 		return \The_SEO_Framework\is_headless( 'settings' )
 			? ''
-			: \esc_url(
-				html_entity_decode(
-					\menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false )
-				),
-				[ 'https', 'http' ],
-			);
+			: \menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false ); // menu_page_url escapes.
 	}
 
 	/**

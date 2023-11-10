@@ -15,6 +15,8 @@ The fastest feature-complete SEO plugin for professional WordPress websites. Sec
 
 **The fastest and only feature-complete SEO plugin that follows the guidelines and rules imposed by WordPress and search engines.**
 
+**Preview The SEO Framework in your browser.](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)**
+
 Start using proven methods to optimize your website for SEO. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
 
 To top it off, this is the [fastest full-featured SEO plugin](https://twitter.com/TheSEOFramework/status/1493352649445580804/photo/1), and it blends right into your WordPress website, without leaving you in the dark.
@@ -366,14 +368,11 @@ TODO instead of removing Elementor library from public posts types, force noinde
 	-> Having them still included will add a bunch of metadata fields to the admin; perhaps we should allow them on the front-end, and noindex them on the back-end?
 		-> Or we could use wp_robots filters? It's their mess, though.
 
-TODO make canonical URL placeholder work in output_column_contents_for_post()
-	-> Also make the Indexing react to the Password/Private states.
-		-> This already works for the title.
-
 TODO run all deprecation methods one last time
 	We should be able to loop over them quite easily.
 
 TODO add "try it in playground" button/link at the top of the readme.
+	=> https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php
 
 TODO list all new public classes and their methods in the changelog.
 	-> i.e. those without @access private
@@ -557,11 +556,10 @@ add_filter(
 		* If a custom social image URL is inserted in the homepage post-edit meta box, it will now also be depicted in the Homepage Settings meta box on the SEO Settings page.
 		* Resolved an issue where the homepage's Post SEO Settings "Remove the site title?" automatically got checked after updating the page. Even though this hadn't an effect on the output, switching the homepage would cause unwonted and unanticipated behavior.
 		* Resolved an issue where an asynchronous update state (such as changing counter types) would seem to load infinitely, but it should've actually indicated updating has failed.
+		* Resolved an issue where special characters in the site title couldn't be recognized as a match for title branding. For example, a `'` didn't match up to a `&amp;#39;`, `&amp;apos;`, `&amp;#X27;`, or `&amp;#x00000000027;`, while they're all considered equal once rendered.
 	* **Title:**
 		* Resolved an issue where the Twitter title would fall back to a custom Open Graph title when Open Graph is disabled.
 		* Resolved an issue where the incorrect Open Graph fallback title was proposed as a placeholder in the admin interface.
-			* This probably can only be replicated after you already published the page and halt JS. We only resolved the bug in theory and verified there wasn't a new issue created. TODO actually verify.
-				-> This works on the front-end, not back-end.
 	* **Description:**
 		* Resolved an issue where the Twitter description would fall back to a custom Open Graph description when Open Graph is disabled.
 		* Words with attached plain connector punctuation (`l'apostrophe`) now get tested correctly for repeated words.
@@ -599,7 +597,7 @@ add_filter(
 
 **For developers:**
 
-* TODO: **Plugin database version is now at `4300`**
+* TODO: **Plugin database version is now at `5001`**
 * **Added:**
 	* Pooled objects: TODO order alphabetically (also in code)
 		* We do not use pools internally (we call the query-methods directly) -- however, we **urge you to use the pool**. This is because it has a neat little feature: **Dynamic deprecation**. Whenever we choose to remove a method or property you used, your site won't crash when you update the plugin -- instead, you get a deprecation notice and a temporary fallback value.
@@ -1396,10 +1394,6 @@ add_filter(
 		* **Almost all internal hook callbacks in this plugin have a new name.** If you removed a filter in TSF, it may now reappear. Please check your hooks.
 	* **Added:**
 		* `the_seo_framework_auto_description_html_method_methods`, this used to be `the_seo_framework_auto_descripton_html_method_methods` (typo).
-		* `the_seo_framework_multilingual_plugin_detected` TODO this will be rewritten -- confirm if this still exists.
-			* This is used only to turn off detection, not turn it on.
-			* Register conflicting plugins at `the_seo_framework_conflicting_plugins`.
-				* TODO will we not deprecate this?
 		* `the_seo_framework_sitemap_endpoint_list` now accepts `cache_id` for every entry.
 		* `the_seo_framework_conflicting_plugins` now supports index `'multilingual'`.
 		* `the_seo_framework_meta_generator_pools`, this is used to **remove meta generator callback pools** preemptively.
@@ -1501,9 +1495,9 @@ add_filter(
 		* `the_seo_framework_delete_cache_{$type}`:
 			* This includes `the_seo_framework_delete_cache_excluded_post_ids`, which is gone.
 			* This also includes `the_seo_framework_delete_cache_sitemap`, which is now marked as deprecated.
-		* `the_seo_framework_warn_homepage_global_title`, we now use multilingual plugin detection.
-		* `the_seo_framework_warn_homepage_global_description`, we now use multilingual plugin detection.
-		* `the_seo_framework_tell_multilingual_sitemap`, we now use multilingual plugin detection.
+		* `the_seo_framework_warn_homepage_global_title`, we now use multilingual plugin detection via `the_seo_framework_conflicting_plugins`.
+		* `the_seo_framework_warn_homepage_global_description`, we now use multilingual plugin detection via `the_seo_framework_conflicting_plugins`.
+		* `the_seo_framework_tell_multilingual_sitemap`, we now use multilingual plugin detection via `the_seo_framework_conflicting_plugins`.
 		* `the_seo_framework_site_options`, use WP options API instead to alter option name `'autodescription-site-settings'`.
 		* `the_seo_framework_term_options`, use WP options API instead to alter term metadata name `'autodescription-term-settings'`.
 		* `the_seo_framework_user_options`, use WP options API instead to alter user metadata name `'autodescription-user-settings'`.

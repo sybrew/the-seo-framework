@@ -59,8 +59,7 @@ class Utils {
 
 		if ( empty( $page_hook ) ) return;
 
-		// This can be empty... so $target will be empty. TODO test for $success and bail?
-		// Might cause security issues... we _must_ exit, always? Show warning?
+		// menu_page_url() always uses esc_url() for display, breaking ampersands. Undo that via html_entity_decode()
 		$url = html_entity_decode( \menu_page_url( $page_hook, false ) );
 
 		if ( ! $url ) exit( 'Redirect error: Page not found' );

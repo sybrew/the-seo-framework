@@ -174,7 +174,10 @@ final class Term extends Main {
 			[
 				'params'   => [
 					'untitled'        => Meta\Title::get_untitled_title(),
-					'blogname_quoted' => preg_quote( Data\Blog::get_public_blog_name(), '/' ),
+					'blogname_quoted' => preg_quote(
+						Sanitize::normalize_metadata_content_for_strcmp( Data\Blog::get_public_blog_name() ),
+						'/',
+					),
 					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
 					'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
 					'estimated'       => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
@@ -254,7 +257,7 @@ final class Term extends Main {
 			$title_part = Meta\Title::get_bare_generated_title( $generator_args );
 		}
 
-		if ( ! $title_part ) {
+		if ( ! \strlen( $title_part ) ) {
 			$item['status']          = Builder::STATE_BAD;
 			$item['reason']          = $cache['reason']['incomplete'];
 			$item['assess']['empty'] = $cache['assess']['empty'];
@@ -287,10 +290,12 @@ final class Term extends Main {
 			$item['assess']['branding'] = $cache['assess']['branding']['manual'];
 		}
 
+		$strcmp_title = Sanitize::normalize_metadata_content_for_strcmp( $title );
+
 		$brand_count = \strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
-				$title,
+				$strcmp_title,
 				$matches,
 			)
 			: 0;
@@ -309,11 +314,7 @@ final class Term extends Main {
 			return $item;
 		}
 
-		$title_len = mb_strlen( html_entity_decode(
-			\esc_html( Sanitize::metadata_content( $title ) ),
-			\ENT_NOQUOTES,
-			'UTF-8',
-		) );
+		$title_len = mb_strlen( $strcmp_title );
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
 			$this->query_cache['states']['locale']
@@ -502,11 +503,7 @@ final class Term extends Main {
 		)['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
-		$desc_len = mb_strlen( html_entity_decode(
-			\esc_html( Sanitize::metadata_content( $desc ) ),
-			\ENT_NOQUOTES,
-			'UTF-8',
-		) );
+		$desc_len = mb_strlen( Sanitize::normalize_metadata_content_for_strcmp( $desc ) );
 
 		if ( $desc_len < $guidelines['lower'] ) {
 			$item['status'] = Builder::STATE_BAD;
