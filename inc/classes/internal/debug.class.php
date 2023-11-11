@@ -11,7 +11,6 @@ namespace The_SEO_Framework\Internal;
 use function \The_SEO_Framework\memo;
 
 use \The_SEO_Framework\{
-	Admin,
 	Data,
 	Front,
 };
@@ -19,6 +18,7 @@ use \The_SEO_Framework\Helper\{
 	Post_Type,
 	Query,
 	Taxonomy,
+	Template,
 };
 
 // phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
@@ -315,7 +315,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _do_debug_output() {
-		Admin\Template::output_view( 'debug/output' );
+		Template::output_view( 'debug/output' );
 	}
 
 	/**

@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
-	Admin,
-	Helper\Query,
-	Helper\Taxonomy,
+use \The_SEO_Framework\Helper\{
+	Query,
+	Taxonomy,
+	Template,
 };
 
 /**
@@ -81,7 +81,7 @@ final class Term {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
-		Admin\Template::output_view( 'term/settings', $term, $taxonomy );
+		Template::output_view( 'term/settings', $term, $taxonomy );
 		/**
 		 * @since 2.9.0
 		 */

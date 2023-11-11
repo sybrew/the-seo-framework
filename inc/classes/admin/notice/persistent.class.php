@@ -9,9 +9,9 @@ namespace The_SEO_Framework\Admin\Notice;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Admin,
 	Data,
 	Helper\Query,
+	Helper\Template,
 };
 
 /**
@@ -222,7 +222,7 @@ class Persistent {
 				continue;
 			}
 
-			Admin\Template::output_view( 'notice/persistent', $notice['message'], $key, $notice['args'] );
+			Template::output_view( 'notice/persistent', $notice['message'], $key, $notice['args'] );
 
 			static::count_down_notice( $key, $cond['count'] );
 		}

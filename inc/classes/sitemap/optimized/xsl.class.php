@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Sitemap\Optimized;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin;
+use \The_SEO_Framework\Helper\Template;
 
 /**
  * The SEO Framework plugin
@@ -69,7 +69,7 @@ final class XSL {
 	 * @access private
 	 */
 	public static function _print_xsl_global_variables() {
-		Admin\Template::output_view( 'sitemap/xsl/vars' );
+		Template::output_view( 'sitemap/xsl/vars' );
 	}
 
 	/**
@@ -82,7 +82,7 @@ final class XSL {
 	 * @access private
 	 */
 	public static function _print_xsl_title() {
-		Admin\Template::output_view( 'sitemap/xsl/title' );
+		Template::output_view( 'sitemap/xsl/title' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class XSL {
 	 * @access private
 	 */
 	public static function _print_xsl_styles() {
-		Admin\Template::output_view( 'sitemap/xsl/styles' );
+		Template::output_view( 'sitemap/xsl/styles' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class XSL {
 	 * @access private
 	 */
 	public static function _print_xsl_description() {
-		Admin\Template::output_view( 'sitemap/xsl/description' );
+		Template::output_view( 'sitemap/xsl/description' );
 	}
 
 	/**
@@ -119,7 +119,7 @@ final class XSL {
 	 * @access private
 	 */
 	public static function _print_xsl_content() {
-		Admin\Template::output_view( 'sitemap/xsl/table' );
+		Template::output_view( 'sitemap/xsl/table' );
 	}
 
 	/**
@@ -136,7 +136,7 @@ final class XSL {
 		 * @param bool $indicator
 		 */
 		\apply_filters( 'the_seo_framework_indicator_sitemap', true )
-			and Admin\Template::output_view( 'sitemap/xsl/footer' );
+			and Template::output_view( 'sitemap/xsl/footer' );
 	}
 
 	/**

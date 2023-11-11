@@ -14,15 +14,13 @@ use function \The_SEO_Framework\{
 	is_headless,
 };
 
-use \The_SEO_Framework\{
-	Admin,
-	Data,
-};
+use \The_SEO_Framework\Data;
 use \The_SEO_Framework\Helper\{
 	Format,
 	Post_Type,
 	Query,
 	Taxonomy,
+	Template
 };
 
 /**
@@ -581,7 +579,7 @@ class Registry {
 				unset( static::$templates[ $id ] );
 
 				foreach ( $templates as $t )
-					Admin\Template::output_absolute_view( $t[0], $t[1] );
+					Template::output_absolute_view( $t[0], $t[1] );
 			}
 		}
 	}

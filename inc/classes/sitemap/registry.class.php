@@ -14,10 +14,10 @@ use function \The_SEO_Framework\{
 };
 
 use \The_SEO_Framework\{
-	Admin,
 	Data,
 	Helper,
 	Helper\Query,
+	Helper\Template,
 	Meta,
 };
 
@@ -358,7 +358,7 @@ class Registry {
 		}
 
 		// Fetch sitemap content and add trailing line. Already escaped internally.
-		Admin\Template::output_view( 'sitemap/xml-sitemap', $sitemap_id );
+		Template::output_view( 'sitemap/xml-sitemap', $sitemap_id );
 		echo "\n";
 
 		// We're done now.
@@ -388,7 +388,7 @@ class Registry {
 
 		Optimized\XSL::register_hooks();
 
-		Admin\Template::output_view( 'sitemap/xsl-stylesheet' );
+		Template::output_view( 'sitemap/xsl-stylesheet' );
 		exit;
 	}
 

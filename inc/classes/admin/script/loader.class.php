@@ -9,7 +9,6 @@ namespace The_SEO_Framework\Admin\Script;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Admin,
 	Data,
 	Meta,
 };
@@ -18,6 +17,7 @@ use \The_SEO_Framework\Helper\{
 	Format\Arrays,
 	Query,
 	Taxonomy,
+	Template,
 };
 
 /**
@@ -364,7 +364,7 @@ class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => Admin\Template::get_view_location( 'templates/settings/warnings' ),
+					'file' => Template::get_view_location( 'templates/settings/warnings' ),
 				],
 			],
 		];
@@ -749,7 +749,7 @@ class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => Admin\Template::get_view_location( 'templates/inpost/primary-term-selector' ),
+					'file' => Template::get_view_location( 'templates/inpost/primary-term-selector' ),
 				],
 			],
 		];

@@ -9,8 +9,8 @@ namespace The_SEO_Framework\Admin\Settings;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use \The_SEO_Framework\{
-	Admin,
 	Data,
+	Helper\Template,
 };
 
 /**
@@ -71,7 +71,7 @@ final class User {
 		 * @since 4.1.4
 		 */
 		\do_action( 'the_seo_framework_before_author_fields' );
-		Admin\Template::output_view( 'profile/settings', $user );
+		Template::output_view( 'profile/settings', $user );
 		/**
 		 * @since 4.1.4
 		 */

@@ -11,6 +11,7 @@ namespace The_SEO_Framework\Admin\Settings;
 use \The_SEO_Framework\{
 	Admin,
 	Helper\Post_Type,
+	Helper\Template,
 };
 
 /**
@@ -215,7 +216,7 @@ final class Plugin {
 		 * @since 3.0.0
 		 */
 		\do_action( 'the_seo_framework_pre_seo_settings' );
-		Admin\Template::output_view( 'settings/wrap' );
+		Template::output_view( 'settings/wrap' );
 		/**
 		 * @since 3.0.0
 		 */
@@ -229,7 +230,7 @@ final class Plugin {
 	 * @since 5.0.0 Renamed from `_output_columns`.
 	 */
 	public static function output_columns() {
-		Admin\Template::output_view( 'settings/columns' );
+		Template::output_view( 'settings/columns' );
 	}
 
 	/**
@@ -242,7 +243,7 @@ final class Plugin {
 	 * @access private
 	 */
 	public static function output_notices() {
-		Admin\Template::output_view( 'settings/notice' );
+		Template::output_view( 'settings/notice' );
 	}
 
 	/**
@@ -265,8 +266,8 @@ final class Plugin {
 	 * }
 	 */
 	public static function nav_tab_wrapper( $id, $tabs = [] ) {
-		Admin\Template::output_view( 'settings/wrap-nav', $id, $tabs );
-		Admin\Template::output_view( 'settings/wrap-content', $id, $tabs );
+		Template::output_view( 'settings/wrap-nav', $id, $tabs );
+		Template::output_view( 'settings/wrap-content', $id, $tabs );
 	}
 
 	/**
@@ -279,7 +280,7 @@ final class Plugin {
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_general_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/general', 'main' );
+		Template::output_view( 'settings/metaboxes/general', 'main' );
 		/**
 		 * @since 2.8.0
 		 */
@@ -293,7 +294,7 @@ final class Plugin {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/general', 'general' );
+		Template::output_view( 'settings/metaboxes/general', 'general' );
 	}
 
 	/**
@@ -303,7 +304,7 @@ final class Plugin {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_layout_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/general', 'layout' );
+		Template::output_view( 'settings/metaboxes/general', 'layout' );
 	}
 
 	/**
@@ -313,7 +314,7 @@ final class Plugin {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_performance_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/general', 'performance' );
+		Template::output_view( 'settings/metaboxes/general', 'performance' );
 	}
 
 	/**
@@ -323,7 +324,7 @@ final class Plugin {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_canonical_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/general', 'canonical' );
+		Template::output_view( 'settings/metaboxes/general', 'canonical' );
 	}
 
 	/**
@@ -333,7 +334,7 @@ final class Plugin {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_timestamps_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/general', 'timestamps' );
+		Template::output_view( 'settings/metaboxes/general', 'timestamps' );
 	}
 
 	/**
@@ -343,7 +344,7 @@ final class Plugin {
 	 * @see static::general_metabox() : Callback for General Settings box.
 	 */
 	public static function _general_metabox_exclusions_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/general', 'exclusions' );
+		Template::output_view( 'settings/metaboxes/general', 'exclusions' );
 	}
 
 	/**
@@ -356,7 +357,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_title_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/title', 'main' );
+		Template::output_view( 'settings/metaboxes/title', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -370,7 +371,7 @@ final class Plugin {
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 */
 	public static function _title_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/title', 'general' );
+		Template::output_view( 'settings/metaboxes/title', 'general' );
 	}
 
 	/**
@@ -382,7 +383,7 @@ final class Plugin {
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _title_metabox_additions_tab( $args ) {
-		Admin\Template::output_view( 'settings/metaboxes/title', 'additions', $args );
+		Template::output_view( 'settings/metaboxes/title', 'additions', $args );
 	}
 
 	/**
@@ -392,7 +393,7 @@ final class Plugin {
 	 * @see static::title_metabox() : Callback for Title Settings box.
 	 */
 	public static function _title_metabox_prefixes_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/title', 'prefixes' );
+		Template::output_view( 'settings/metaboxes/title', 'prefixes' );
 	}
 
 	/**
@@ -405,7 +406,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_description_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/description', 'main' );
+		Template::output_view( 'settings/metaboxes/description', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -422,7 +423,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_robots_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/robots', 'main' );
+		Template::output_view( 'settings/metaboxes/robots', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -436,7 +437,7 @@ final class Plugin {
 	 * @see static::robots_metabox() Callback for Robots Settings box.
 	 */
 	public static function _robots_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/robots', 'general' );
+		Template::output_view( 'settings/metaboxes/robots', 'general' );
 	}
 
 	/**
@@ -448,7 +449,7 @@ final class Plugin {
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _robots_metabox_no_tab( $args ) {
-		Admin\Template::output_view( 'settings/metaboxes/robots', 'no', $args );
+		Template::output_view( 'settings/metaboxes/robots', 'no', $args );
 	}
 
 	/**
@@ -461,7 +462,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_homepage_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/homepage', 'main' );
+		Template::output_view( 'settings/metaboxes/homepage', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -475,7 +476,7 @@ final class Plugin {
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/homepage', 'general' );
+		Template::output_view( 'settings/metaboxes/homepage', 'general' );
 	}
 
 	/**
@@ -485,7 +486,7 @@ final class Plugin {
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_additions_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/homepage', 'additions' );
+		Template::output_view( 'settings/metaboxes/homepage', 'additions' );
 	}
 
 	/**
@@ -495,7 +496,7 @@ final class Plugin {
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_robots_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/homepage', 'robots' );
+		Template::output_view( 'settings/metaboxes/homepage', 'robots' );
 	}
 
 	/**
@@ -505,7 +506,7 @@ final class Plugin {
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_social_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/homepage', 'social' );
+		Template::output_view( 'settings/metaboxes/homepage', 'social' );
 	}
 
 	/**
@@ -518,7 +519,7 @@ final class Plugin {
 		 * @since 4.2.0
 		 */
 		\do_action( 'the_seo_framework_post_type_archive_before' );
-		Admin\Template::output_view( 'settings/metaboxes/post-type-archive', 'main' );
+		Template::output_view( 'settings/metaboxes/post-type-archive', 'main' );
 		/**
 		 * @since 4.2.0
 		 */
@@ -533,7 +534,7 @@ final class Plugin {
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _post_type_archive_metabox_general_tab( $args ) {
-		Admin\Template::output_view( 'settings/metaboxes/post-type-archive', 'general', $args );
+		Template::output_view( 'settings/metaboxes/post-type-archive', 'general', $args );
 	}
 
 	/**
@@ -544,7 +545,7 @@ final class Plugin {
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _post_type_archive_metabox_social_tab( $args ) {
-		Admin\Template::output_view( 'settings/metaboxes/post-type-archive', 'social', $args );
+		Template::output_view( 'settings/metaboxes/post-type-archive', 'social', $args );
 	}
 
 	/**
@@ -555,7 +556,7 @@ final class Plugin {
 	 * @param array $args The variables to pass to the meta box tab.
 	 */
 	public static function _post_type_archive_metabox_visibility_tab( $args ) {
-		Admin\Template::output_view( 'settings/metaboxes/post-type-archive', 'visibility', $args );
+		Template::output_view( 'settings/metaboxes/post-type-archive', 'visibility', $args );
 	}
 
 	/**
@@ -568,7 +569,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_social_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/social', 'main' );
+		Template::output_view( 'settings/metaboxes/social', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -582,7 +583,7 @@ final class Plugin {
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/social', 'general' );
+		Template::output_view( 'settings/metaboxes/social', 'general' );
 	}
 
 	/**
@@ -592,7 +593,7 @@ final class Plugin {
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_facebook_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/social', 'facebook' );
+		Template::output_view( 'settings/metaboxes/social', 'facebook' );
 	}
 
 	/**
@@ -602,7 +603,7 @@ final class Plugin {
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_twitter_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/social', 'twitter' );
+		Template::output_view( 'settings/metaboxes/social', 'twitter' );
 	}
 
 	/**
@@ -612,7 +613,7 @@ final class Plugin {
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_oembed_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/social', 'oembed' );
+		Template::output_view( 'settings/metaboxes/social', 'oembed' );
 	}
 
 	/**
@@ -622,7 +623,7 @@ final class Plugin {
 	 * @see static::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_postdates_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/social', 'postdates' );
+		Template::output_view( 'settings/metaboxes/social', 'postdates' );
 	}
 
 	/**
@@ -635,7 +636,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_webmaster_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/webmaster', 'main' );
+		Template::output_view( 'settings/metaboxes/webmaster', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -653,7 +654,7 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_sitemaps_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/sitemaps', 'main' );
+		Template::output_view( 'settings/metaboxes/sitemaps', 'main' );
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -667,7 +668,7 @@ final class Plugin {
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/sitemaps', 'general' );
+		Template::output_view( 'settings/metaboxes/sitemaps', 'general' );
 	}
 
 	/**
@@ -677,7 +678,7 @@ final class Plugin {
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_robots_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/sitemaps', 'robots' );
+		Template::output_view( 'settings/metaboxes/sitemaps', 'robots' );
 	}
 
 	/**
@@ -687,7 +688,7 @@ final class Plugin {
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_metadata_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/sitemaps', 'metadata' );
+		Template::output_view( 'settings/metaboxes/sitemaps', 'metadata' );
 	}
 
 	/**
@@ -697,7 +698,7 @@ final class Plugin {
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_notify_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/sitemaps', 'notify' );
+		Template::output_view( 'settings/metaboxes/sitemaps', 'notify' );
 	}
 
 	/**
@@ -707,7 +708,7 @@ final class Plugin {
 	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox_style_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/sitemaps', 'style' );
+		Template::output_view( 'settings/metaboxes/sitemaps', 'style' );
 	}
 
 	/**
@@ -720,7 +721,7 @@ final class Plugin {
 		 * @since 2.5.2
 		 */
 		\do_action( 'the_seo_framework_feed_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/feed', 'main' );
+		Template::output_view( 'settings/metaboxes/feed', 'main' );
 		/**
 		 * @since 2.5.2
 		 */
@@ -737,7 +738,7 @@ final class Plugin {
 		 * @since 2.6.0
 		 */
 		\do_action( 'the_seo_framework_schema_metabox_before' );
-		Admin\Template::output_view( 'settings/metaboxes/schema', 'main' );
+		Template::output_view( 'settings/metaboxes/schema', 'main' );
 		/**
 		 * @since 2.6.0
 		 */
@@ -751,7 +752,7 @@ final class Plugin {
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_general_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/schema', 'general' );
+		Template::output_view( 'settings/metaboxes/schema', 'general' );
 	}
 
 	/**
@@ -761,6 +762,6 @@ final class Plugin {
 	 * @see static::schema_metabox() Callback for Schema.org Settings box.
 	 */
 	public static function _schema_metabox_presence_tab() {
-		Admin\Template::output_view( 'settings/metaboxes/schema', 'presence' );
+		Template::output_view( 'settings/metaboxes/schema', 'presence' );
 	}
 }

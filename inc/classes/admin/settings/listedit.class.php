@@ -15,6 +15,7 @@ use \The_SEO_Framework\{
 	Data\Filter\Sanitize,
 	Helper\Query,
 	Helper\Taxonomy,
+	Helper\Template,
 	Meta,
 };
 
@@ -138,7 +139,7 @@ final class ListEdit extends Admin\Lists\Table {
 		if ( $taxonomy ) {
 			// Not yet.
 		} else {
-			Admin\Template::output_view( 'list/bulk-post', $post_type, $taxonomy );
+			Template::output_view( 'list/bulk-post', $post_type, $taxonomy );
 		}
 	}
 
@@ -158,9 +159,9 @@ final class ListEdit extends Admin\Lists\Table {
 		if ( $this->column_name !== $column_name ) return;
 
 		if ( $taxonomy ) {
-			Admin\Template::output_view( 'list/quick-term', $post_type, $taxonomy );
+			Template::output_view( 'list/quick-term', $post_type, $taxonomy );
 		} else {
-			Admin\Template::output_view( 'list/quick-post', $post_type, $taxonomy );
+			Template::output_view( 'list/quick-post', $post_type, $taxonomy );
 		}
 	}
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\View
+ * @package The_SEO_Framework\Classes\Helper\View
  */
 
-namespace The_SEO_Framework\Admin;
+namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
