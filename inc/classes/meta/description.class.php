@@ -91,7 +91,7 @@ class Description {
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.
 		 */
-		return Sanitize::metadata_content( (string) \apply_filters(
+		return Sanitize::metadata_content( \apply_filters(
 			'the_seo_framework_custom_field_description',
 			$desc,
 			$args,
@@ -248,11 +248,12 @@ class Description {
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom description.
 	 */
 	public static function get_custom_description_from_args( $args ) {
+
+		normalize_generation_args( $args );
 
 		if ( $args['tax'] ) {
 			$desc = Data\Plugin\Term::get_meta_item( 'description', $args['id'] );

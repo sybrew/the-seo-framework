@@ -256,7 +256,7 @@ final class Debug {
 		// Search deeper if it exists. Skip the first 3.
 		foreach ( \array_slice( $backtrace, 3 ) as $trace ) {
 			if (
-					isset( $trace['object'] )
+				   isset( $trace['object'] )
 				&& is_a( $trace['object'], \the_seo_framework_class(), false )
 			) {
 				$error = $trace;

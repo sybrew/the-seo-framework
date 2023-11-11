@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Data\Filter;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use The_SEO_Framework\Meta;
+
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -72,7 +74,7 @@ class Post {
 					break;
 
 				case 'redirect':
-					// Allow all protocols also allowed by WP:
+					// Allow all protocols also allowed by WP.
 					$value = \sanitize_url( $value );
 					break;
 
@@ -80,6 +82,11 @@ class Post {
 				case 'exclude_local_search':
 				case 'exclude_from_archive':
 					$value = Sanitize::boolean_integer( $value );
+					break;
+
+				case '_tsf_twitter_card_type':
+					if ( ! \in_array( $value, Meta\Twitter::get_supported_cards(), true ) )
+						$value = ''; // default
 					break;
 
 				default:

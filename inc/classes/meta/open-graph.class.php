@@ -118,9 +118,10 @@ class Open_Graph {
 	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
 	 * @return string Open Graph Title.
 	 */
-	public static function get_custom_title( $args ) {
+	public static function get_custom_title( $args = null ) {
 		return isset( $args )
 			? static::get_custom_title_from_args( $args )
 			: static::get_custom_title_from_query();
@@ -139,7 +140,7 @@ class Open_Graph {
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
 				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_open_graph_title' );
+					  ?? Data\Plugin\Post::get_meta_item( '_open_graph_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
@@ -166,7 +167,7 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Open Graph Title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
@@ -180,7 +181,7 @@ class Open_Graph {
 		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
 			if ( $args['id'] ) {
 				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
-					?? Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
+					  ?? Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
@@ -281,7 +282,7 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Open Graph description.
 	 */
 	public static function get_custom_description_from_args( $args ) {

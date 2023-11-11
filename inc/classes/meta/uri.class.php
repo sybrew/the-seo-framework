@@ -108,11 +108,8 @@ class URI {
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Now always returns a sanitized URL.
 	 *
-	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
-	 *    int    $id       The Post, Page or Term ID to generate the URL for.
-	 *    string $taxonomy The Taxonomy.
-	 *    string $pta      The Post Type Archive.
-	 * }
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The canonical URL, if any.
 	 */
 	public static function get_canonical_url( $args = null ) {
@@ -181,10 +178,7 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param null|array $args The canonical URL arguments, leave null to autodetermine query : {
-	 *    int    $id       The Post, Page or Term ID to generate the URL for.
-	 *    string $taxonomy The taxonomy.
-	 * }
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public static function get_custom_canonical_url_from_args( $args ) {
@@ -242,8 +236,7 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The generated URL.
 	 */
 	public static function get_generated_url_from_args( $args ) {

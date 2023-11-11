@@ -238,6 +238,7 @@ class Setup {
 				// Homepage Social.
 				'homepage_og_title'            => '',
 				'homepage_og_description'      => '',
+				'homepage_twitter_card_type'   => '',
 				'homepage_twitter_title'       => '',
 				'homepage_twitter_description' => '',
 

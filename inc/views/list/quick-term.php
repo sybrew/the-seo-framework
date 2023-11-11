@@ -128,15 +128,15 @@ $robots_settings = [
 						printf( '<span class=title>%s</span>', \esc_html( $_setting['label'] ) );
 						// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 						echo Form::make_single_select_form( [
-							'id'      => $_setting['id'],
-							'name'    => $_setting['name'],
-							'options' => [
+							'id'       => $_setting['id'],
+							'name'     => $_setting['name'],
+							'options'  => [
 								/* translators: %s = default option value */
 								0  => $_default_i18n,
 								-1 => $_setting['force_on'],
 								1  => $_setting['force_off'],
 							],
-							'default' => 0,
+							'selected' => 0,
 						] );
 						// phpcs:enable, WordPress.Security.EscapeOutput
 					echo '</label>';

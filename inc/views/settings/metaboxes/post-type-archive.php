@@ -304,6 +304,10 @@ switch ( $instance ) :
 			],
 		);
 
+		/* translators: %s = default option value */
+		$_default_i18n     = \__( 'Default (%s)', 'autodescription' );
+		$tw_suported_cards = Meta\Twitter::get_supported_cards();
+
 		?>
 		<p>
 			<label for="<?php Input::field_id( $args['options']['og_title'] ); ?>" class=tsf-toblock>
@@ -359,6 +363,38 @@ switch ( $instance ) :
 			<textarea name="<?php Input::field_name( $args['options']['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twDesc><?= \esc_attr( Data\Plugin\PTA::get_meta_item( 'tw_description', $args['post_type'] ) ) ?></textarea>
 		</p>
 
+		<p>
+			<label for="<?php Input::field_id( $args['options']['tw_card_type'] ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></strong>
+				<?php
+				HTML::make_info(
+					\__( 'The Twitter Card type is used to determine whether an image appears on the side or as a large cover. This affects X, but also other social platforms like Discord.', 'autodescription' ),
+					'https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards',
+				);
+				?>
+			</label>
+		</p>
+		<p>
+			<?php
+			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+			echo Form::make_single_select_form( [
+				'id'       => Input::get_field_id( $args['options']['tw_card_type'] ),
+				'class'    => 'tsf-select-block',
+				'name'     => Input::get_field_name( $args['options']['tw_card_type'] ),
+				'label'    => '',
+				'options'  => array_merge(
+					[ '' => sprintf( $_default_i18n, Meta\Twitter::get_generated_card_type() ) ],
+					array_combine( $tw_suported_cards, $tw_suported_cards ),
+				),
+				'selected' => Data\Plugin\PTA::get_meta_item( 'tw_card_type', $args['post_type'] ),
+				'data'     => [
+					'defaultI18n' => $_default_i18n,
+				],
+			] );
+			// phpcs:enable, WordPress.Security.EscapeOutput
+			?>
+		</p>
+
 		<hr>
 
 		<p>
@@ -378,8 +414,9 @@ switch ( $instance ) :
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+			// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 			echo Form::get_image_uploader_form( [ 'id' => "tsf_pta_socialimage_{$args['post_type']}" ] );
+			// phpcs:enable, WordPress.Security.EscapeOutput
 			?>
 		</p>
 		<?php
@@ -467,17 +504,17 @@ switch ( $instance ) :
 			);
 			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 			echo Form::make_single_select_form( [
-				'id'      => Input::get_field_id( $args['options'][ $_r_type ] ),
-				'class'   => 'tsf-select-block',
-				'name'    => Input::get_field_name( $args['options'][ $_r_type ] ),
-				'label'   => '',
-				'options' => [
+				'id'       => Input::get_field_id( $args['options'][ $_r_type ] ),
+				'class'    => 'tsf-select-block',
+				'name'     => Input::get_field_name( $args['options'][ $_r_type ] ),
+				'label'    => '',
+				'options'  => [
 					0  => $_default_unknown_i18n,
 					-1 => $_rs['force_on'],
 					1  => $_rs['force_off'],
 				],
-				'default' => $_rs['_value'],
-				'data'    => [
+				'selected' => $_rs['_value'],
+				'data'     => [
 					'defaultI18n' => $_default_i18n,
 					'defaultOn'   => $_rs['_defaultOn'],
 					'defaultOff'  => $_rs['_defaultOff'],

@@ -883,6 +883,7 @@ function _do_upgrade_4270() {
  * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
  * Changes option `autodescription-updates-cache` to constant value THE_SEO_FRAMEWORK_SITE_CACHE.
  * Enables `ld_json_enabled` only if any structured data function used to be active.
+ * Sets `homepage_twitter_card_type` to an empty string (aka default).
  * TODO registers default for static placeholder editing.
  *
  * @since 5.0.0
@@ -937,5 +938,7 @@ function _do_upgrade_5001() {
 		} else {
 			Data\Plugin::update_option( 'ld_json_enabled', 0 );
 		}
+
+		Data\Plugin::update_option( 'homepage_twitter_card_type', '' );
 	}
 }

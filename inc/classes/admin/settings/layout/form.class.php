@@ -49,12 +49,13 @@ class Form {
 	 * Does not support "multiple" field selections.
 	 *
 	 * @since 4.1.4
+	 * @since 5.0.0 'default' is now synonymous to 'selected'. 'default' is no longer promoted.
 	 *
 	 * @param array $args : {
 	 *    string     $id       The select field ID.
 	 *    string     $class    The div wrapper class.
 	 *    string     $name     The option name.
-	 *    int|string $default  The current option value.
+	 *    int|string $selected The selected option value.
 	 *    array      $options  The select option values : { value => name }
 	 *    string     $label    The option label.
 	 *    string     $required Whether the field must be required.
@@ -69,7 +70,7 @@ class Form {
 			'id'          => '',
 			'class'       => '',
 			'name'        => '',
-			'default'     => '',
+			'selected'    => $args['default'] ?? '',
 			'options'     => [],
 			'label'       => '',
 			'labelstrong' => false,
@@ -84,19 +85,19 @@ class Form {
 		array_walk(
 			$html_options,
 			/**
-			 * @param string $name    The option name. Passed by reference, returned as the HTML option item.
-			 * @param mixed  $value
-			 * @param mixed  $default
+			 * @param string $name     The option name. Passed by reference, returned as the HTML option item.
+			 * @param mixed  $value    The option value.
+			 * @param mixed  $selected The current selected value.
 			 */
-			static function ( &$name, $value, $default ) {
+			static function ( &$name, $value, $selected ) {
 				$name = sprintf(
 					'<option value="%s"%s>%s</option>',
 					\esc_attr( $value ),
-					(string) $value === (string) $default ? ' selected' : '',
+					(string) $value === (string) $selected ? ' selected' : '',
 					\esc_html( $name )
 				);
 			},
-			$args['default'],
+			$args['selected'],
 		);
 
 		return vsprintf(

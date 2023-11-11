@@ -192,6 +192,7 @@ class Post {
 				'_open_graph_description' => '',
 				'_twitter_title'          => '',
 				'_twitter_description'    => '',
+				'_tsf_twitter_card_type'  => '',
 			],
 			$post_id ?: Query::get_the_real_id(),
 		);

@@ -50,11 +50,11 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
+	 * @return bool Whether to fall back to Open Graph tags.
 	 */
 	public static function fallback_to_open_graph() {
 		static $fallback;
-		return $fallback ??= Data\Plugin::get_option( 'og_tags' );
+		return $fallback ??= (bool) Data\Plugin::get_option( 'og_tags' );
 	}
 
 	/**
@@ -62,19 +62,14 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The Twitter Card type.
 	 */
-	public static function get_card_type() {
+	public static function get_card_type( $args = null ) {
 
-		$preferred_card = Data\Plugin::get_option( 'twitter_card' );
-
-		if ( 'auto' === $preferred_card ) {
-			$card = 'summary'; // TODO!
-		} else {
-			$card = \in_array( $preferred_card, static::get_supported_cards(), true )
-				? $preferred_card
-				: 'summary';
-		}
+		$card = static::get_custom_card_type( $args )
+			 ?: static::get_generated_card_type( $args );
 
 		if ( \has_filter( 'the_seo_framework_twittercard_output' ) ) {
 			/**
@@ -92,16 +87,83 @@ class Twitter {
 					Query::get_the_real_id(),
 				],
 				'5.0.0',
-				'the_seo_framework_twitter_card',
 			);
 		}
 
-		/**
-		 * @since 5.0.0
-		 * @param string $card The generated Twitter card type.
-		 * @param int    $id   The current page or term ID.
-		 */
-		return (string) \apply_filters( 'the_seo_framework_twitter_card', $card );
+		return $card;
+	}
+
+	/**
+	 * Gets the custom card type.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The custom card type. Empty string if not set.
+	 */
+	public static function get_custom_card_type( $args = null ) {
+
+		if ( isset( $args ) ) {
+			normalize_generation_args( $args );
+
+			if ( $args['tax'] ) {
+				$card = Data\Plugin\Term::get_meta_item( 'tw_card_type', $args['id'] );
+			} elseif ( $args['pta'] ) {
+				$card = Data\Plugin\PTA::get_meta_item( 'tw_card_type', $args['pta'] );
+			} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
+				if ( $args['id'] ) {
+					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
+						 ?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
+				} else {
+					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' );
+				}
+			} elseif ( $args['id'] ) {
+				$card = Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
+			}
+		} else {
+			if ( Query::is_real_front_page() ) {
+				if ( Query::is_static_front_page() ) {
+					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
+						 ?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type' );
+				} else {
+					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' );
+				}
+			} elseif ( Query::is_singular() ) {
+				$card = Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type' );
+			} elseif ( Query::is_editable_term() ) {
+				$card = Data\Plugin\Term::get_meta_item( 'tw_card_type' );
+			} elseif ( \is_post_type_archive() ) {
+				$card = Data\Plugin\PTA::get_meta_item( 'tw_card_type' );
+			}
+		}
+
+		if ( ! empty( $card ) && \in_array( $card, static::get_supported_cards(), true ) )
+			return $card;
+
+		return '';
+	}
+
+	/**
+	 * Generates the default card type.
+	 *
+	 * @NOTE Forward compatibility with $args: https://github.com/sybrew/the-seo-framework/issues/525
+	 * @since 5.0.0
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The default Twitter Card type for the current request.
+	 */
+	public static function get_generated_card_type( $args = null ) { // phpcs:ignore, VariableAnalysis -- see description note
+
+		$card = Data\Plugin::get_option( 'twitter_card' );
+
+		$supported_cards = static::get_supported_cards();
+		// Forward compatibility
+		if ( ! \in_array( $card, $supported_cards, true ) )
+			$card = reset( $supported_cards );
+
+		return $card;
 	}
 
 	/**
@@ -109,13 +171,21 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @return array Twitter Card types.
+	 * @return array Supported Twitter Card types.
 	 */
 	public static function get_supported_cards() {
-		return [
-			'summary',
-			'summary_large_image',
-		];
+		/**
+		 * @since 5.0.0
+		 * @param string[] The supported Twitter card types.
+		 *                 These are used for settings population, validation, and sanitization.
+		 */
+		return \apply_filters(
+			'the_seo_framework_supported_twitter_card_types',
+			[
+				'summary',
+				'summary_large_image',
+			],
+		);
 	}
 
 	/**
@@ -163,9 +233,10 @@ class Twitter {
 	 * @since 5.0.0
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
 	 * @return string Twitter Title.
 	 */
-	public static function get_custom_title( $args ) {
+	public static function get_custom_title( $args = null ) {
 		return isset( $args )
 			? static::get_custom_title_from_args( $args )
 			: static::get_custom_title_from_query();
@@ -213,7 +284,7 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Twitter Title.
 	 */
 	public static function get_custom_title_from_args( $args ) {
@@ -285,7 +356,7 @@ class Twitter {
 	 *                         Leave null to autodetermine query.
 	 * @return string Twitter description.
 	 */
-	public static function get_custom_description( $args ) {
+	public static function get_custom_description( $args = null ) {
 		return isset( $args )
 			? static::get_custom_description_from_args( $args )
 			: static::get_custom_description_from_query();
@@ -332,7 +403,7 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Twitter description.
 	 */
 	public static function get_custom_description_from_args( $args ) {

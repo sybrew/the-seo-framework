@@ -164,6 +164,7 @@ class PTA {
 	 * @since 4.2.0
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_post_type_archive_meta_defaults`.
+	 *              3. Added 'tw_card_type' value.
 	 *
 	 * @param int $post_type The post type.
 	 * @return array The Post Type Archive Metadata default options.
@@ -184,6 +185,7 @@ class PTA {
 				'og_description'     => '',
 				'tw_title'           => '',
 				'tw_description'     => '',
+				'tw_card_type'       => '',
 				'social_image_url'   => '',
 				'social_image_id'    => 0,
 				'canonical'          => '',

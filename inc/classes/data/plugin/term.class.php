@@ -145,6 +145,7 @@ class Term {
 	 *              4. Removed 'saved_flag' value.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_term_meta_defaults`.
+	 *              3. Added 'tw_card_type' value.
 	 *
 	 * @param int $term_id The term ID.
 	 * @return array The Term Metadata default options.
@@ -165,6 +166,7 @@ class Term {
 				'og_description'     => '',
 				'tw_title'           => '',
 				'tw_description'     => '',
+				'tw_card_type'       => '',
 				'social_image_url'   => '',
 				'social_image_id'    => 0,
 				'canonical'          => '',

@@ -40,7 +40,7 @@ printf(
 
 $colors = Sitemap\Utils::get_sitemap_colors();
 
-// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- s_color_hex() escapes.
+// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitize::rgb_hex() also escapes XML.
 printf(
 	'<xsl:variable name="colorMain" select="\'%s\'"/>',
 	'#' . Sanitize::rgb_hex(

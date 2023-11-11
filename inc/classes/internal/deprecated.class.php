@@ -2112,7 +2112,7 @@ final class Deprecated {
 	public function get_current_twitter_card_type() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_current_twitter_card_type()', '5.0.0' );
+		$tsf->_deprecated_function( 'tsf()->get_current_twitter_card_type()', '5.0.0', 'tsf()->twitter()->get_card_type()' );
 
 		return $tsf->twitter()->get_card_type();
 	}
@@ -2989,10 +2989,11 @@ final class Deprecated {
 	 * Generates the Twitter Card type.
 	 *
 	 * @since 2.7.0
-	 * @since 5.0.0 Deprecated.
+	 * @since 5.0.0 1. No longer falls back to an empty string on failure.
+	 *              2. Deprecated.
 	 * @deprecated
 	 *
-	 * @return string The Twitter Card type. When no social title is found, an empty string will be returned.
+	 * @return string The Twitter Card type
 	 */
 	public function generate_twitter_card_type() {
 
@@ -7728,7 +7729,7 @@ final class Deprecated {
 	 * Falls back to previous value if empty. If previous value is empty if will go to default.
 	 *
 	 * @since 2.5.2
-	 * @since 5.0.0 1. Now falls back to 'summary_large_image' instead of the default option. // var_dump() auto!
+	 * @since 5.0.0 1. Now falls back to 'summary_large_image' instead of the default option.
 	 *              2. Deprecated.
 	 * @deprecated
 	 *

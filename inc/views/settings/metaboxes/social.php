@@ -159,15 +159,19 @@ switch ( $instance ) :
 			HTML::header_title( \__( 'Social Image Settings', 'autodescription' ) );
 			HTML::description( \__( 'A social image can be displayed when a link to your website is shared. It is a great way to grab attention.', 'autodescription' ) );
 
-			HTML::wrap_fields(
-				Input::make_checkbox( [
-					'id'          => 'multi_og_image',
-					'label'       => \__( 'Output multiple Open Graph image tags?', 'autodescription' ),
-					'description' => \__( 'This enables users to select any image attached to the page shared on social networks, like Facebook.', 'autodescription' ),
-				] ),
-				true,
-			);
 			?>
+			<div id=multi_og_image_wrapper>
+				<?php
+				HTML::wrap_fields(
+					Input::make_checkbox( [
+						'id'          => 'multi_og_image',
+						'label'       => \__( 'Output multiple Open Graph image tags?', 'autodescription' ),
+						'description' => \__( 'This enables users to select any image attached to the page shared on social networks, like Facebook.', 'autodescription' ),
+					] ),
+					true,
+				);
+				?>
+			</div>
 			<p>
 				<label for=tsf_fb_socialimage-url>
 					<strong><?php \esc_html_e( 'Social Image Fallback URL', 'autodescription' ); ?></strong>
@@ -279,10 +283,10 @@ switch ( $instance ) :
 			<legend><?php HTML::header_title( \__( 'Twitter Card Type', 'autodescription' ) ); ?></legend>
 			<?php
 			HTML::description(
-				\__( 'The Twitter Card type may have the image highlighted, either small at the side or large above.', 'autodescription' )
+				\__( 'When you share a link on Twitter, an image can appear on the side or as a large cover.', 'autodescription' )
 			);
 			HTML::description(
-				\__( 'The Twitter Card type also affects Discord embeds, either small at the side or large below.', 'autodescription' )
+				\__( 'The Twitter Card type also affects images in Discord embeds; either displayed small at the side or large below.', 'autodescription' )
 			);
 			?>
 

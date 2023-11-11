@@ -316,10 +316,9 @@ TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_
 
 TODO test all compat files.
 
-TODO remove leftover var_dump()
-
 TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
 	* Also list all methods affected.
+		-> ouchie.
 
 TODO list all methods available in every pool? Zzz.
 
@@ -400,6 +399,8 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 
 TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
 
+TODO test if the deprecation notice emitter is still accurate?
+
 For the filter, we should promote using:
 add_filter(
 	'the_seo_framework_meta_render_data',
@@ -421,6 +422,14 @@ add_filter(
 		return $tags_render_data;
 	},
 );
+
+TODO highlight that `uid` is accepted as an argument. In rare circumstances, if the homepage is a blog, this may cause issues with forward compatibility.
+
+TODO switch around social and visibility order in post meta box output.
+
+TODO when og tags are hidden, the Twitter tags fields should not fall back to them.
+	-> They don't on the front-end, but do in the back-end.
+	-> This is even more tricky when considering Homepage and PTA settings...
 
 **Detailed log**
 
@@ -450,6 +459,8 @@ add_filter(
 			* You can use the shortcode, `[tsf_breadcrumbs separator=">"]`, which will output a breadcrumb of any kind using the separator ">".
 				* We're planning to convert it to a block once the API is stable enough.
 					* TODO isn't it already? It's quite simple, but we want to add options for the separator.
+	* **Twitter Card:**
+		* You can now override the default Twitter Card type for the homepage, and every post, term, and post type archive.
 	* **Multisite:**
 		* On multisite, you can now inspect and edit user SEO metadata ("Authorial Info") for any users that have author capabilities on any (other) blog.
 			* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
@@ -480,6 +491,7 @@ add_filter(
 		* The shortlink URL is now also outputted on the paginated homepage.
 	* **Administration:**
 		* When previewing a post, you may now be redirected when a custom redirect is entered in the meta.
+		* On various places where we mentioned Twitter, we now mention X. This is done sporadically, perhaps seemingly inconsistent, because we use "Twitter Card tags for X."
 	* The plugin compatibility loader now tests common filenames instead of function, constant, or class' presence.
 	* When activating or deactivating the plugin, only on WordPress 6.4 or later the options will now toggle from autoloading on and off.
 		* It will still toggle on for older versions of WordPress.
@@ -945,7 +957,7 @@ add_filter(
 				* `article_modified_time()`, with no alternative available.
 				* `output_modified_time()`, with no alternative available.
 				* `output_published_time()`, with no alternative available.
-				* `get_current_twitter_card_type()`, with no alternative available.
+				* `get_current_twitter_card_type()`, use `tsf()->twitter()->get_card_type()` instead.
 				* `twitter_card()`, with no alternative available.
 				* `twitter_site()`, with no alternative available.
 				* `twitter_creator()`, with no alternative available.
@@ -1409,6 +1421,7 @@ add_filter(
 		* `the_seo_framework_register_scripts`, this is used to engage the script loader on a custom TSF page.
 			* This must be filtered before `admin_enqueue_scripts` (e.g., at `load-{$plugin_page}`). If that's not possible, use `tsf()->load_admin_scripts()` instead to enforce loading.
 		* `the_seo_framework_settings_update_sanitizers`, this allows you to change sanitization callbacks on option-update.
+		* `the_seo_framework_supported_twitter_card_types` this allows you to remove or register new card types that are usable throughout the plugin.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
@@ -1458,6 +1471,7 @@ add_filter(
 		* `the_seo_framework_fetched_description_excerpt`, use `the_seo_framework_description_excerpt` instead.
 		* `the_seo_framework_manipulate_title`, use `the_seo_framework_overwrite_titles` instead.
 		* `the_seo_framework_conflicting_plugins_type`, use `the_seo_framework_conflicting_plugins` instead.
+		* `the_seo_framework_twittercard_output`, with no alternative available.
 	* **Removed:**
 		* Deprecated in TSF v4.2.0, two years later, we've now removed these filters:
 			* `the_seo_framework_pta_title`

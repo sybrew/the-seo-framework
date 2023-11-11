@@ -266,10 +266,15 @@ switch ( $instance ) :
 		break;
 
 	case 'social':
+		/* translators: %s = default option value */
+		$_default_i18n     = \__( 'Default (%s)', 'autodescription' );
+		$tw_suported_cards = Meta\Twitter::get_supported_cards();
+
 		$custom_og_title = '';
 		$custom_og_desc  = '';
 		$custom_tw_title = '';
 		$custom_tw_desc  = '';
+		$custom_tw_card  = '';
 		$custom_image    = '';
 
 		// Gets custom fields from page.
@@ -281,10 +286,18 @@ switch ( $instance ) :
 			$custom_og_desc  = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_open_graph_description', $home_id ) );
 			$custom_tw_title = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_title', $home_id ) );
 			$custom_tw_desc  = Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_twitter_description', $home_id ) );
-			$custom_image    = \sanitize_url( Data\Plugin\Post::get_meta_item( '_social_image_url', $home_id ) );
-		}
 
-		$image_placeholder = $custom_image ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+			$custom_tw_card  = Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $home_id );
+			$tw_card_default = \in_array( $custom_tw_card, $tw_suported_cards, true )
+				? $custom_tw_card
+				: Meta\Twitter::get_generated_card_type( $generator_args );
+
+			$custom_image      = \sanitize_url( Data\Plugin\Post::get_meta_item( '_social_image_url', $home_id ) );
+			$image_placeholder = $custom_image ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+		} else {
+			$tw_card_default   = Meta\Twitter::get_generated_card_type( $generator_args );
+			$image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+		}
 
 		Input::output_js_social_data(
 			'homepage_social_settings',
@@ -383,7 +396,7 @@ switch ( $instance ) :
 			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
-		if ( Query\Utils::has_page_on_front() && ( $custom_og_title || $custom_tw_title ) ) {
+		if ( ( $custom_og_title || $custom_tw_title ) && Query\Utils::has_page_on_front() ) {
 			HTML::description(
 				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -403,9 +416,50 @@ switch ( $instance ) :
 			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?= \esc_attr( Data\Plugin::get_option( 'homepage_twitter_description' ) ) ?></textarea>
 		</p>
 		<?php
-		if ( Query\Utils::has_page_on_front() && ( $custom_og_desc || $custom_tw_desc ) ) {
+		if ( ( $custom_og_desc || $custom_tw_desc ) && Query\Utils::has_page_on_front() ) {
 			HTML::description(
 				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+			);
+		}
+		?>
+
+		<p>
+			<label for="<?php Input::field_id( 'homepage_twitter_card_type' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></strong>
+				<?php
+				HTML::make_info(
+					\__( 'The Twitter Card type is used to determine whether an image appears on the side or as a large cover. This affects X, but also other social platforms like Discord.', 'autodescription' ),
+					'https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards',
+				);
+				?>
+			</label>
+		</p>
+		<p>
+			<?php
+			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+			echo Form::make_single_select_form( [
+				'id'       => Input::get_field_id( 'homepage_twitter_card_type' ),
+				'class'    => 'tsf-select-block',
+				'name'     => Input::get_field_name( 'homepage_twitter_card_type' ),
+				'label'    => '',
+				'options'  => array_merge(
+					[ '' => sprintf( $_default_i18n, $tw_card_default ) ],
+					array_combine( $tw_suported_cards, $tw_suported_cards ),
+				),
+				'selected' => Data\Plugin::get_option( 'homepage_twitter_card_type' ),
+				'data'     => [
+					'defaultI18n'   => $_default_i18n,
+					'defaultValue'  => $tw_card_default,
+					'defaultLocked' => (bool) $custom_tw_card,
+				],
+			] );
+			// phpcs:enable, WordPress.Security.EscapeOutput
+			?>
+		</p>
+		<?php
+		if ( $custom_tw_card && Query\Utils::has_page_on_front() ) {
+			HTML::description(
+				\__( 'Note: The default Twitter Card Type is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
 		}
 		?>
@@ -431,12 +485,13 @@ switch ( $instance ) :
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+			// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 			echo Form::get_image_uploader_form( [ 'id' => 'tsf_homepage_socialimage' ] );
+			// phpcs:enable, WordPress.Security.EscapeOutput
 			?>
 		</p>
 		<?php
-		if ( Query\Utils::has_page_on_front() && $custom_image ) {
+		if ( $custom_image && Query\Utils::has_page_on_front() ) {
 			HTML::description(
 				\__( 'Note: The image placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -444,9 +499,15 @@ switch ( $instance ) :
 		break;
 
 	case 'robots':
-		$noindex_post   = $home_id ? Data\Plugin\Post::get_meta_item( '_genesis_noindex', $home_id ) : '';
-		$nofollow_post  = $home_id ? Data\Plugin\Post::get_meta_item( '_genesis_nofollow', $home_id ) : '';
-		$noarchive_post = $home_id ? Data\Plugin\Post::get_meta_item( '_genesis_noarchive', $home_id ) : '';
+		if ( $home_id ) {
+			$noindex_post   = Data\Plugin\Post::get_meta_item( '_genesis_noindex', $home_id );
+			$nofollow_post  = Data\Plugin\Post::get_meta_item( '_genesis_nofollow', $home_id );
+			$noarchive_post = Data\Plugin\Post::get_meta_item( '_genesis_noarchive', $home_id );
+		} else {
+			$noindex_post   = '';
+			$nofollow_post  = '';
+			$noarchive_post = '';
+		}
 
 		$checked_home = '';
 		/**

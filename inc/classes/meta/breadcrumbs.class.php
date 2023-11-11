@@ -124,8 +124,7 @@ class Breadcrumbs {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
 	 *    string name: The breadcrumb page title.

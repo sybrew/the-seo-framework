@@ -185,6 +185,7 @@ class Plugin {
 			'homepage_tagline'             => 'checkbox',
 			'homepage_title_tagline'       => 'metadata_text',
 			'homepage_title'               => 'metadata_text',
+			'homepage_twitter_card_type'   => 'homepage_twitter_card',
 			'homepage_twitter_description' => 'metadata_text',
 			'homepage_twitter_title'       => 'metadata_text',
 			'index_the_feed'               => 'checkbox',
@@ -597,10 +598,25 @@ class Plugin {
 	 * @param mixed $old_value The last known value.
 	 * @return string A valid Twitter card type.
 	 */
-	public static function twitter_card( $value, $old_value ) {
+	public static function homepage_twitter_card( $value, $old_value ) {
 
-		if ( 'auto' === $value ) // var_Dump() is this implemented?
+		if ( \in_array( $value, Meta\Twitter::get_supported_cards(), true ) )
 			return $value;
+
+		if ( empty( $value ) )
+			return ''; // Default.
+
+		return $old_value;
+	}
+
+	/**
+	 * @since 5.0.0
+	 *
+	 * @param mixed $value     An unsanitized value.
+	 * @param mixed $old_value The last known value.
+	 * @return string A valid Twitter card type.
+	 */
+	public static function twitter_card( $value, $old_value ) {
 
 		if ( \in_array( $value, Meta\Twitter::get_supported_cards(), true ) )
 			return $value;
@@ -667,6 +683,11 @@ class Plugin {
 
 					case 'title_no_blog_name':
 						$val = Sanitize::boolean_integer( $val );
+						break;
+
+					case 'tw_card_type':
+						if ( ! \in_array( $val, Meta\Twitter::get_supported_cards(), true ) )
+							$val = ''; // default
 						break;
 
 					default:

@@ -41,22 +41,6 @@ use \The_SEO_Framework\Data\Filter\Sanitize;
 $term_id = $term->term_id;
 $meta    = Data\Plugin\Term::get_meta( $term_id );
 
-$title       = $meta['doctitle'];
-$description = $meta['description'];
-$canonical   = $meta['canonical'];
-$noindex     = $meta['noindex'];
-$nofollow    = $meta['nofollow'];
-$noarchive   = $meta['noarchive'];
-$redirect    = $meta['redirect'];
-
-$social_image_url = $meta['social_image_url'];
-$social_image_id  = $meta['social_image_id'];
-
-$og_title       = $meta['og_title'];
-$og_description = $meta['og_description'];
-$tw_title       = $meta['tw_title'];
-$tw_description = $meta['tw_description'];
-
 $generator_args = [
 	'id'  => $term_id,
 	'tax' => $taxonomy,
@@ -64,6 +48,8 @@ $generator_args = [
 
 $show_og = (bool) Data\Plugin::get_option( 'og_tags' );
 $show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
+
+$tw_suported_cards = Meta\Twitter::get_supported_cards();
 
 $image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 
@@ -83,7 +69,7 @@ $robots_settings = [
 		'force_off' => 'noindex',
 		'label'     => \__( 'Indexing', 'autodescription' ),
 		'_default'  => empty( $robots_defaults['noindex'] ) ? 'index' : 'noindex',
-		'_value'    => $noindex,
+		'_value'    => $meta['noindex'],
 		'_info'     => [
 			\__( 'This tells search engines not to show this term in their search results.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/crawling/block-indexing',
@@ -96,7 +82,7 @@ $robots_settings = [
 		'force_off' => 'nofollow',
 		'label'     => \__( 'Link following', 'autodescription' ),
 		'_default'  => empty( $robots_defaults['nofollow'] ) ? 'follow' : 'nofollow',
-		'_value'    => $nofollow,
+		'_value'    => $meta['nofollow'],
 		'_info'     => [
 			\__( 'This tells search engines not to follow links on this term.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/guidelines/qualify-outbound-links',
@@ -109,13 +95,16 @@ $robots_settings = [
 		'force_off' => 'noarchive',
 		'label'     => \__( 'Archiving', 'autodescription' ),
 		'_default'  => empty( $robots_defaults['noarchive'] ) ? 'archive' : 'noarchive',
-		'_value'    => $noarchive,
+		'_value'    => $meta['noarchive'],
 		'_info'     => [
 			\__( 'This tells search engines not to save a cached copy of this term.', 'autodescription' ),
 			'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 		],
 	],
 ];
+
+/* translators: %s = default option value */
+$_default_i18n = \__( 'Default (%s)', 'autodescription' );
 
 ?>
 <h2><?php \esc_html_e( 'General SEO Settings', 'autodescription' ); ?></h2>
@@ -159,7 +148,7 @@ $robots_settings = [
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= \esc_html( Sanitize::metadata_content( $title ) ) ?>" size=40 autocomplete=off data-form-type=other />
+					<input type=text name="autodescription-meta[doctitle]" id="autodescription-meta[doctitle]" value="<?= \esc_html( Sanitize::metadata_content( $meta['doctitle'] ) ) ?>" size=40 autocomplete=off data-form-type=other />
 					<?php
 					Input::output_js_title_data(
 						'autodescription-meta[doctitle]',
@@ -207,7 +196,7 @@ $robots_settings = [
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= \esc_html( Sanitize::metadata_content( $description ) ) ?></textarea>
+				<textarea name="autodescription-meta[description]" id="autodescription-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= \esc_html( Sanitize::metadata_content( $meta['description'] ) ) ?></textarea>
 				<?php
 				Input::output_js_description_data(
 					'autodescription-meta[description]',
@@ -263,7 +252,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-og-title-wrap>
-					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $og_title ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
+					<input name="autodescription-meta[og_title]" id="autodescription-meta[og_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['og_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogTitle />
 				</div>
 			</td>
 		</tr>
@@ -279,7 +268,7 @@ Input::output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( $og_description ) ) ?></textarea>
+				<textarea name="autodescription-meta[og_description]" id="autodescription-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( $meta['og_description'] ) ) ?></textarea>
 			</td>
 		</tr>
 
@@ -295,7 +284,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-tw-title-wrap>
-					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $tw_title ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
+					<input name="autodescription-meta[tw_title]" id="autodescription-meta[tw_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['tw_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twTitle />
 				</div>
 			</td>
 		</tr>
@@ -311,7 +300,38 @@ Input::output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?= \esc_html( Sanitize::metadata_content( $tw_description ) ) ?></textarea>
+				<textarea name="autodescription-meta[tw_description]" id="autodescription-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=autodescription_social_tt data-tsf-social-type=twDesc><?= \esc_html( Sanitize::metadata_content( $meta['tw_description'] ) ) ?></textarea>
+			</td>
+		</tr>
+
+		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
+			<th scope=row valign=top>
+				<label for="autodescription-meta[tw_card_type]">
+					<strong><?php \esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></strong>
+					<?php
+					echo ' ';
+					HTML::make_info(
+						\__( 'The Twitter Card type is used to determine whether an image appears on the side or as a large cover. This affects X, but also other social platforms like Discord.', 'autodescription' ),
+						'https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards',
+					);
+					?>
+				</label>
+			</th>
+			<td>
+				<?php
+				// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+				echo Form::make_single_select_form( [
+					'id'       => 'autodescription-meta[tw_card_type]',
+					'class'    => 'tsf-term-select-wrap',
+					'name'     => 'autodescription-meta[tw_card_type]',
+					'options'  => array_merge(
+						[ '' => sprintf( $_default_i18n, Meta\Twitter::get_generated_card_type( $generator_args ) ) ],
+						array_combine( $tw_suported_cards, $tw_suported_cards ),
+					),
+					'selected' => $meta['tw_card_type'],
+				] );
+				// phpcs:enable, WordPress.Security.EscapeOutput
+				?>
 			</td>
 		</tr>
 
@@ -329,12 +349,13 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[social_image_url]" id=autodescription_meta_socialimage-url placeholder="<?= \esc_attr( $image_placeholder ) ?>" value="<?= \esc_attr( $social_image_url ) ?>" size=40 autocomplete=off />
-				<input type=hidden name="autodescription-meta[social_image_id]" id=autodescription_meta_socialimage-id value="<?= \absint( $social_image_id ) ?>" disabled class=tsf-enable-media-if-js />
+				<input type=url name="autodescription-meta[social_image_url]" id=autodescription_meta_socialimage-url placeholder="<?= \esc_attr( $image_placeholder ) ?>" value="<?= \esc_attr( $meta['social_image_url'] ) ?>" size=40 autocomplete=off />
+				<input type=hidden name="autodescription-meta[social_image_id]" id=autodescription_meta_socialimage-id value="<?= \absint( $meta['social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js />
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
+					// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_meta_socialimage' ] );
+					// phpcs:enable, WordPress.Security.EscapeOutput
 					?>
 				</div>
 			</td>
@@ -360,7 +381,7 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_attr( $canonical_placeholder ) ?>" value="<?= \esc_attr( $canonical ) ?>" size=40 autocomplete=off />
+				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_attr( $canonical_placeholder ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off />
 			</td>
 		</tr>
 
@@ -377,24 +398,21 @@ Input::output_js_social_data(
 				</th>
 			<td>
 				<?php
-				/* translators: %s = default option value */
-				$_default_i18n = \__( 'Default (%s)', 'autodescription' );
-
 				foreach ( $robots_settings as $_s ) {
 					// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 					echo Form::make_single_select_form( [
-						'id'      => $_s['id'],
-						'class'   => 'tsf-term-select-wrap',
-						'name'    => $_s['name'],
-						'label'   => $_s['label'],
-						'options' => [
+						'id'       => $_s['id'],
+						'class'    => 'tsf-term-select-wrap',
+						'name'     => $_s['name'],
+						'label'    => $_s['label'],
+						'options'  => [
 							0  => sprintf( $_default_i18n, $_s['_default'] ),
 							-1 => $_s['force_on'],
 							1  => $_s['force_off'],
 						],
-						'default' => $_s['_value'],
-						'info'    => $_s['_info'],
-						'data'    => [
+						'selected' => $_s['_value'],
+						'info'     => $_s['_info'],
+						'data'     => [
 							'defaultUnprotected' => $_s['_default'],
 							'defaultI18n'        => $_default_i18n,
 						],
@@ -419,7 +437,7 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" value="<?= \esc_attr( $redirect ) ?>" size=40 autocomplete=off />
+				<input type=url name="autodescription-meta[redirect]" id="autodescription-meta[redirect]" value="<?= \esc_attr( $meta['redirect'] ) ?>" size=40 autocomplete=off />
 			</td>
 		</tr>
 	</tbody>
