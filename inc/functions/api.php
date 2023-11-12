@@ -116,6 +116,11 @@ namespace {
 			'tsf_breadcrumb',
 		);
 
+		preg_match( '/-?[a-z_]+[a-z\d_-]*/i', $atts['class'], $matches );
+
+		$class = $matches[0] ?? 'tsf-breadcrumb';
+		$sep   = esc_html( $atts['sep'] );
+
 		$crumbs = \The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list();
 		$count  = count( $crumbs );
 		$items  = [];
@@ -151,18 +156,13 @@ namespace {
 				HTML;
 		}
 
-		preg_match( '/[a-z_-]+[a-z\d_-]*/i', $atts['class'], $matches );
-
-		$class = \The_SEO_Framework\coalesce_strlen( $matches[0] ) ?? 'tsf-breadcrumb';
-		$sep   = esc_html( $atts['sep'] );
-
 		/**
 		 * @since 5.0.0
 		 * @param array  $css   The CSS selectors and their attributes.
 		 * @param string $class The class name of the breadcrumb wrapper.
 		 */
 		$css = (array) apply_filters(
-			'the_seo_framework_breadcrumbs_shortcode_css',
+			'the_seo_framework_breadcrumb_shortcode_css',
 			[
 				".$class ol"                            => [
 					'display:inline-flex',
@@ -204,7 +204,7 @@ namespace {
 		 * @param string $style  The CSS style element appended.
 		 */
 		return apply_filters(
-			'the_seo_framework_breadcrumbs_shortcode_output',
+			'the_seo_framework_breadcrumb_shortcode_output',
 			"$nav$style",
 			$crumbs,
 			$nav,

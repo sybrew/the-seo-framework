@@ -462,8 +462,8 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 				* `home` is the homepage's name. This is translatable by default.
 				* `class` is the CSS class for the breadcrumbs. This must be a valid class, or only the first few acceptable letters are chosen. When the entire classname is invalid, it'll fall back to `tsf-breadcrumb`.
 			* You can filter the attributes using filter `shortcode_atts_tsf_breadcrumb`.
-			* You can filter the CSS using filter `the_seo_framework_breadcrumbs_shortcode_css`.
-			* You can filter the output using filter `the_seo_framework_breadcrumbs_shortcode_output`.
+			* You can filter the CSS using filter `the_seo_framework_breadcrumb_shortcode_css`.
+			* You can filter the output using filter `the_seo_framework_breadcrumb_shortcode_output`.
 	* **Twitter Card:**
 		* You can now override the default Twitter Card type for the homepage, and every post, term, and post type archive.
 			* Yes, it's still called Twitter Card, which is used for X and Discord.
@@ -575,6 +575,7 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 		* Resolved an issue where the homepage's Post SEO Settings "Remove the site title?" automatically got checked after updating the page. Even though this hadn't an effect on the output, switching the homepage would cause unwonted and unanticipated behavior.
 		* Resolved an issue where an asynchronous update state (such as changing counter types) would seem to load infinitely, but it should've actually indicated updating has failed.
 		* Resolved an issue where special characters in the site title couldn't be recognized as a match for title branding. For example, a `'` didn't match up to a `&amp;#39;`, `&amp;apos;`, `&amp;#X27;`, or `&amp;#x00000000027;`, while they're all considered equal once rendered.
+		* Updated the Google Search Console verification ID link; their redirect to the new endpoint wasn't correct.
 	* **Title:**
 		* Resolved an issue where the Twitter title would fall back to a custom Open Graph title when Open Graph is disabled.
 		* Resolved an issue where the incorrect Open Graph fallback title was proposed as a placeholder in the admin interface.
@@ -1430,8 +1431,8 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 			* This must be filtered before `admin_enqueue_scripts` (e.g., at `load-{$plugin_page}`). If that's not possible, use `tsf()->load_admin_scripts()` instead to enforce loading.
 		* `the_seo_framework_settings_update_sanitizers`, this allows you to change sanitization callbacks on option-update.
 		* `the_seo_framework_supported_twitter_card_types` this allows you to remove or register new card types that are usable throughout the plugin.
-		* `the_seo_framework_breadcrumbs_shortcode_css`, this is used to filter the shortcode's CSS.
-		* `the_seo_framework_breadcrumbs_shortcode_output`, this is used to filter the shortcode's output.
+		* `the_seo_framework_breadcrumb_shortcode_css`, this is used to filter the shortcode's CSS.
+		* `the_seo_framework_breadcrumb_shortcode_output`, this is used to filter the shortcode's output.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).

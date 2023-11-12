@@ -45,7 +45,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'label'       => \__( 'Google Search Console Verification Code', 'autodescription' ),
 				'info'        => HTML::make_info(
 					\__( 'Get the Google verification code.', 'autodescription' ),
-					'https://www.google.com/webmasters/verification/verification?siteUrl=' . rawurlencode( $site_url ) . '&tid=alternate&vtype=vmeta',
+					'https://search.google.com/search-console/ownership?resource_id=' . rawurlencode( $site_url ),
 					false,
 				),
 				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
