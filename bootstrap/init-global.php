@@ -39,3 +39,6 @@ if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST )
 
 // Overwrite the robots.txt output.
 \add_filter( 'robots_txt', [ RobotsTXT\Main::class, 'get_robots_txt' ], 10, 2 );
+
+// Register the TSF breadcrumb shortcode.
+\add_shortcode( 'tsf_breadcrumb', 'tsf_breadcrumb' );

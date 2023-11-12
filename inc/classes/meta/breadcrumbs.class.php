@@ -54,7 +54,7 @@ class Breadcrumbs {
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
-	 * @return array[] The breadcrumb list : {
+	 * @return array[] The breadcrumb list, sequential : int position {
 	 *    string url:  The breadcrumb URL.
 	 *    string name: The breadcrumb page title.
 	 * }
@@ -70,7 +70,7 @@ class Breadcrumbs {
 
 		/**
 		 * @since 5.0.0
-		 * @param array[] The breadcrumb list, sequential: int position => {
+		 * @param array[] The breadcrumb list, sequential : int position => {
 		 *    string url:  The breadcrumb URL.
 		 *    string name: The breadcrumb page title.
 		 * }
@@ -199,12 +199,13 @@ class Breadcrumbs {
 				];
 			}
 		} else { // single.
-			$taxonomies = Taxonomy::get_hierarchical( 'names', $post_type );
-			$taxonomy   = reset( $taxonomies ); // TODO make this an option; also which output they want to use.
+			$taxonomies      = Taxonomy::get_hierarchical( 'names', $post_type );
+			$taxonomy        = reset( $taxonomies ); // TODO make this an option; also which output they want to use.
+			$primary_term_id = $taxonomy ? Data\Plugin\Post::get_primary_term_id( $post->ID, $taxonomy ) : 0;
 
-			if ( $taxonomy ) {
-				$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post->ID, $taxonomy );
-				$ancestors       = \get_ancestors(
+			// If there's no ID, then there's nothing assigned.
+			if ( $primary_term_id ) {
+				$ancestors = \get_ancestors(
 					$primary_term_id,
 					$taxonomy,
 					'taxonomy',

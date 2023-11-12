@@ -94,6 +94,123 @@ namespace {
 
 		return get_class( tsf() );
 	}
+
+	/**
+	 * Returns the breadcrumbs for front-end display.
+	 *
+	 * @since 5.0.0
+	 * @link <https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/examples/breadcrumb/>
+	 *
+	 * @param array $atts The shortcode attributes.
+	 * @return string The breadcrumbs.
+	 */
+	function tsf_breadcrumb( $atts = [] ) {
+
+		$atts = shortcode_atts(
+			[
+				'sep'   => '\203A',
+				'home'  => __( 'Home', 'default' ), /* defined in wp_page_menu() */
+				'class' => 'tsf-breadcrumb',
+			],
+			$atts,
+			'tsf_breadcrumb',
+		);
+
+		$crumbs = \The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list();
+		$count  = count( $crumbs );
+		$items  = [];
+
+		$home = \The_SEO_Framework\coalesce_strlen( $atts['home'] ) ?? $crumbs[0]['name'];
+
+		if ( 1 === $count ) {
+			$items[] = sprintf(
+				'<span aria-current="page">%s</span>',
+				esc_html( $home ),
+			);
+		} else {
+			foreach ( $crumbs as $i => $crumb ) {
+				if ( ( $count - 1 ) === $i ) {
+					$items[] = sprintf(
+						'<span aria-current="page">%s</span>',
+						esc_html( $crumb['name'] ),
+					);
+				} else {
+					$items[] = sprintf(
+						'<a href="%s">%s</a>',
+						esc_url( $crumb['url'] ),
+						esc_html( 0 === $i ? $home : $crumb['name'] ),
+					);
+				}
+			}
+		}
+
+		$html = '';
+		foreach ( $items as $item ) {
+			$html .= <<<HTML
+				<li class="breadcrumb-item">$item</li>
+				HTML;
+		}
+
+		preg_match( '/[a-z_-]+[a-z\d_-]*/i', $atts['class'], $matches );
+
+		$class = \The_SEO_Framework\coalesce_strlen( $matches[0] ) ?? 'tsf-breadcrumb';
+		$sep   = esc_html( $atts['sep'] );
+
+		/**
+		 * @since 5.0.0
+		 * @param array  $css   The CSS selectors and their attributes.
+		 * @param string $class The class name of the breadcrumb wrapper.
+		 */
+		$css = (array) apply_filters(
+			'the_seo_framework_breadcrumbs_shortcode_css',
+			[
+				".$class ol"                            => [
+					'display:inline-flex',
+					'list-style:none',
+				],
+				".$class ol li"                         => [
+					'display:inline',
+				],
+				".$class ol li:not(:last-child)::after" => [
+					"content:'$sep'",
+					'margin-inline-end:1ch',
+				],
+				".$class ol li :where(a,span)"          => [
+					'margin-inline-end:1ch',
+				],
+			],
+			$class,
+		);
+
+		$styles = '';
+
+		foreach ( $css as $selector => $declaration )
+			$styles .= sprintf(
+				'%s{%s}',
+				$selector,
+				implode( ';', $declaration ),
+			);
+
+		$style = "<style>$styles</style>";
+		$nav   = <<<HTML
+			<nav aria-label="Breadcrumb" class="$class"><ol>$html</ol></nav>
+			HTML;
+
+		/**
+		 * @since 5.0.0
+		 * @param string $nav    The entire breadcrumb navigation element output.
+		 * @param array  $crumbs The breadcrumbs found.
+		 * @param string $nav    The breadcrumb navigation element.
+		 * @param string $style  The CSS style element appended.
+		 */
+		return apply_filters(
+			'the_seo_framework_breadcrumbs_shortcode_output',
+			"$nav$style",
+			$crumbs,
+			$nav,
+			$style,
+		);
+	}
 }
 
 namespace The_SEO_Framework {

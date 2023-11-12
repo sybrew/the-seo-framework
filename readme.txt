@@ -455,12 +455,18 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 			* Schema.org/Author is added to this if there's an author registered to the post. TODO confirm
 		* `Schema.org/BreadcrumbList` has been rewritten and is now supported on all types of pages, not just singular posts.
 	* **Breadcrumbs:**
-		* TODO Breadcrumb output is now supported. Since it appears they aren't coming anytime soon to the Block editor.
-			* You can use the shortcode, `[tsf_breadcrumbs separator=">"]`, which will output a breadcrumb of any kind using the separator ">".
-				* We're planning to convert it to a block once the API is stable enough.
-					* TODO isn't it already? It's quite simple, but we want to add options for the separator.
+		* HTML breadcrumb output is now supported. Since it appears they aren't coming anytime soon to the Block editor.
+			* You can use the shortcode, `[tsf_breadcrumb]`, which will output a breadcrumb for the current request.
+			* Here are all default attributes; it's equivalent to the one above: `[tsf_breadcrumb sep="\203A" home="Home" class="tsf-breadcrumb"]`.
+				* `sep` is the separator. This is outputted via CSS content, so you mustn't use HTML.
+				* `home` is the homepage's name. This is translatable by default.
+				* `class` is the CSS class for the breadcrumbs. This must be a valid class, or only the first few acceptable letters are chosen. When the entire classname is invalid, it'll fall back to `tsf-breadcrumb`.
+			* You can filter the attributes using filter `shortcode_atts_tsf_breadcrumb`.
+			* You can filter the CSS using filter `the_seo_framework_breadcrumbs_shortcode_css`.
+			* You can filter the output using filter `the_seo_framework_breadcrumbs_shortcode_output`.
 	* **Twitter Card:**
 		* You can now override the default Twitter Card type for the homepage, and every post, term, and post type archive.
+			* Yes, it's still called Twitter Card, which is used for X and Discord.
 	* **Multisite:**
 		* On multisite, you can now inspect and edit user SEO metadata ("Authorial Info") for any users that have author capabilities on any (other) blog.
 			* This capability is by default `edit_posts`, predefineable via constant `THE_SEO_FRAMEWORK_AUTHOR_INFO_CAP`.
@@ -807,6 +813,8 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 		* Transient `tsf_exclude_0_%` was leftover from TSF 3.0 and will be deleted on upgrade.
 * **Function notes:**
 	* **Added:**
+		* `tsf_breadcrumb()` is now available. This outputs the breadcrumb for the current page. This is the callback function for shortcode `[tsf_breadcrumb]`.
+			* Its attributes (first argument) are filterable via `shortcode_atts_tsf_breadcrumb`.
 		* `The_SEO_Framework\is_headless()` is now available. Use this in favor of `\tsf()->is_headless`, which is now deprecated.
 		* `The_SEO_Framework\normalize_generation_args()` is now available.
 		* `The_SEO_Framework\get_query_type_from_args()` is now available. This is to quickly determine the type from all generation arguments.
@@ -1422,6 +1430,8 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 			* This must be filtered before `admin_enqueue_scripts` (e.g., at `load-{$plugin_page}`). If that's not possible, use `tsf()->load_admin_scripts()` instead to enforce loading.
 		* `the_seo_framework_settings_update_sanitizers`, this allows you to change sanitization callbacks on option-update.
 		* `the_seo_framework_supported_twitter_card_types` this allows you to remove or register new card types that are usable throughout the plugin.
+		* `the_seo_framework_breadcrumbs_shortcode_css`, this is used to filter the shortcode's CSS.
+		* `the_seo_framework_breadcrumbs_shortcode_output`, this is used to filter the shortcode's output.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
 		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
@@ -1549,6 +1559,7 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 	* Improved needless defense clauses. Props [Viktor Szépe](https://github.com/szepeviktor).
 	* We now try to avoid the word "home" in our code due to its ambiguity in relation to the front page and the blog page. So, we use "front" for front-page related queries, titles, etc., and "blog" otherwise.
 	* We no longer use `$escape` parameters in our code. You must escape as late as possible and not trust us blindly.
+	* Class `tsf-breadcrumb` is now used on the front-end.
 
 = 4.2.8 =
 
