@@ -597,7 +597,8 @@ function _add_upgrade_notice( $notice = '' ) {
  * @since 3.1.0
  */
 function _do_upgrade_1() {
-	Data\Admin\Plugin::register_settings();
+	// Here, `Plugin\Setup::get_default_options()` will get called 3 times in a row. Alas.
+	\add_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, Data\Plugin\Setup::get_default_options() );
 }
 
 /**
@@ -879,6 +880,7 @@ function _do_upgrade_4270() {
 }
 
 /**
+ * Registers option `THE_SEO_FRAMEWORK_SITE_CACHE`.
  * Deletes the static cache for exclusions.
  * Changes `auto_descripton_html_method` to `auto_description_html_method`. (typo)
  * Changes option `autodescription-updates-cache` to constant value THE_SEO_FRAMEWORK_SITE_CACHE.
@@ -890,33 +892,15 @@ function _do_upgrade_4270() {
  * @global \wpdb $wpdb
  */
 function _do_upgrade_5001() {
+
+	// Not a public "setting" -- only add the option to prevent additional db-queries when it's yet to be populated.
+	\add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] );
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5001' ) {
 		Data\Plugin::update_option(
 			'auto_description_html_method',
 			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast', // Typo intended.
 		);
-
-		global $wpdb;
-
-		// Cleanup leftover from TSF 3.0.0 ~ 3.1.0. Sans trailing _, since it doesn't support multilingual.
-		$wpdb->query( $wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( "_transient_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%',
-		) );
-		$wpdb->query( $wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( "_transient_timeout_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%',
-		) );
-
-		// Cleanup from 3.1.0 ~ 4.2.8. This data will be rebuilt automatically.
-		$wpdb->query( $wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( "_transient_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%',
-		) );
-		$wpdb->query( $wpdb->prepare(
-			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-			$wpdb->esc_like( "_transient_timeout_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%',
-		) );
 
 		$site_cache = get_option( 'autodescription-updates-cache' ) ?: [];
 		if ( $site_cache ) {
@@ -940,5 +924,27 @@ function _do_upgrade_5001() {
 		}
 
 		Data\Plugin::update_option( 'homepage_twitter_card_type', '' );
+
+		global $wpdb;
+
+		// Cleanup leftover from TSF 3.0.0 ~ 3.1.0. Sans trailing _, since it doesn't support multilingual.
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%',
+		) );
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_timeout_tsf_exclude_0_{$GLOBALS['blog_id']}" ) . '%',
+		) );
+
+		// Cleanup from 3.1.0 ~ 4.2.8. This data will be rebuilt automatically.
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%',
+		) );
+		$wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+			$wpdb->esc_like( "_transient_timeout_tsf_exclude_1_{$GLOBALS['blog_id']}_" ) . '%',
+		) );
 	}
 }

@@ -50,9 +50,9 @@ class Plugin {
 	 * @since 4.0.0 Now checks if the option exists before adding it. Shaves 20μs...
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Is now marked private.
+	 *              3. No longer adds options to the database, this is taken care off at `bootstrap\upgrade.php`.
 	 */
 	public static function register_settings() {
-
 		\register_setting(
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
@@ -60,13 +60,6 @@ class Plugin {
 				'type' => 'array',
 			],
 		);
-
-		\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS )
-			or \add_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, Data\Plugin\Setup::get_default_options() );
-
-		// Not a public "setting" -- only add the option to prevent additional db-queries when it's yet to be populated.
-		\get_option( \THE_SEO_FRAMEWORK_SITE_CACHE )
-			or \add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] );
 	}
 
 	/**

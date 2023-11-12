@@ -431,6 +431,14 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 	-> They don't on the front-end, but do in the back-end.
 	-> This is even more tricky when considering Homepage and PTA settings...
 
+TODO Note that this plugin now boots up twice as fast as before.
+TODO Note that this plugin generates data twice as fast as before
+	-> This assumes we have Structured Data disabled, which doubled the processing requirement (hence, we're back at ~the same performance).
+		-> Let's get the real data.
+	-> We must still implement new metadata generation memoizers.
+		-> Once that's implemented, it should be over twice as fast.
+			-> Practically, we could add memoization whenever `$args` is `null`.
+
 **Detailed log**
 
 **For everyone:**
@@ -479,6 +487,8 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 		* You can now opt to use a low contrast color pallete for the SEO Bar.
 			* We are aware this should be [configurable via the device settings](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast), but this standard is inconsistent. Besides, giving an option allows any site owner to set a preference.
 			* The color red will still jump out, this is because we use red to convey something must be fixed. All other colors will look faded and less distracting.
+	* **Performance:**
+		* All data fetchers use new memoization techniques that can hold data for up to 69 posts, terms, and users each (nice!). Whenever this number is exceeded in a single request, TSF maintains the first 7 entries and forgets the rest, assumning those first 7 are part of the initial request. This prevents excessive database lookups, data sanitization, etc., even beyond what we already did (only the last one requested was remembered).
 * **Changed:**
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* **Compatibility:**
@@ -758,6 +768,8 @@ TODO when og tags are hidden, the Twitter tags fields should not fall back to th
 	* Deprecation and inaccessible property/method notices now ***absolutely accurately***&trade; find the originating caller.
 	* Query error notices also now ***absolutely accurately***&trade; find the originating caller, in reverse order.
 	* `0` should be allowed as a custom social/meta title and description now. Use `\The_SEO_Framework\coalesce_strlen()` to test.
+	* Options are no longer fetched twice every admin request to see if they still need to be registered, but instead always use our memoization engine when possible.
+		* We offloaded this checking to the setup, so it only checks once (ever) per WordPress site.
 * **Changed:**
 	* When `tsf()` or `the_seo_framework()` are called too early (before `plugins_loaded`), they'll return a silencer class.
 	* Twitter cards are no longer validated whether a card type is provided.

@@ -121,7 +121,10 @@ class Plugin {
 			'the_seo_framework_get_options',
 			$is_headless
 				? Plugin\Setup::get_default_options()
-				: \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ),
+				: (
+					// May be empty during setup, let's return the defaults.
+					\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) ?: Plugin\Setup::get_default_options()
+				),
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			$is_headless,
 		);
