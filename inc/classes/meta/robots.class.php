@@ -141,7 +141,7 @@ class Robots {
 		 *     'max_image_preview' : 'max-image-preview:<string>'
 		 *     'max_video_preview' : 'max-video-preview:<string>'
 		 * }
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                         Is null when the query is auto-determined.
 		 * @param int <bit>  $options The ignore level. {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)

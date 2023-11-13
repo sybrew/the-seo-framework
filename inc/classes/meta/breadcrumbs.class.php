@@ -74,7 +74,7 @@ class Breadcrumbs {
 		 *    string url:  The breadcrumb URL.
 		 *    string name: The breadcrumb page title.
 		 * }
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                         Is null when the query is auto-determined.
 		 */
 		return (array) \apply_filters(
@@ -166,16 +166,16 @@ class Breadcrumbs {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|\WP_Post $id The post ID or post object.
+	 * @param ?int\WP_Post $id The post ID or post object. Leave null to autodetermine.
 	 * @return array[] The breadcrumb list : {
 	 *    string url:  The breadcrumb URL.
 	 *    string name: The breadcrumb page title.
 	 * }
 	 */
-	private static function get_singular_breadcrumb_list( $id = 0 ) {
+	private static function get_singular_breadcrumb_list( $id = null ) {
 
 		// Blog queries can be tricky. Use get_the_real_id to be certain.
-		$post = \get_post( $id ?: Query::get_the_real_id() );
+		$post = \get_post( $id ?? Query::get_the_real_id() );
 
 		if ( empty( $post ) )
 			return [];
@@ -229,6 +229,8 @@ class Breadcrumbs {
 					] ),
 				];
 			} elseif ( \get_post_type_object( $post_type )->has_archive ?? false ) {
+				// TODO: bbPress expects get_post_parent()/get_post_ancestors() here on a topic,
+				// but those aren't hierarchical. Are they wrong or are we?
 				$crumbs[] = [
 					'url'  => Meta\URI::get_bare_pta_url( $post_type ),
 					'name' => Meta\Title::get_bare_title( [ 'pta' => $post_type ] ),
@@ -236,10 +238,17 @@ class Breadcrumbs {
 			}
 		}
 
-		$crumbs[] = [
-			'url'  => Meta\URI::get_bare_singular_url( $post->ID ),
-			'name' => Meta\Title::get_bare_title( [ 'id' => $post->ID ] ),
-		];
+		if ( isset( $id ) ) {
+			$crumbs[] = [
+				'url'  => Meta\URI::get_bare_singular_url( $post->ID ),
+				'name' => Meta\Title::get_bare_title( [ 'id' => $post->ID ] ),
+			];
+		} else {
+			$crumbs[] = [
+				'url'  => Meta\URI::get_bare_singular_url(),
+				'name' => Meta\Title::get_bare_title(),
+			];
+		}
 
 		return [
 			static::get_front_breadcrumb(),

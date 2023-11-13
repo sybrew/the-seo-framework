@@ -553,7 +553,7 @@ class Image {
 		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
-		 * @param array|null $args    The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
 		 * @param string     $context The filter context. Default 'social'.
 		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.

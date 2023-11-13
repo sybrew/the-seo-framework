@@ -88,7 +88,7 @@ class Description {
 		 * @since 4.2.0 1. No longer gets supplied custom query arguments when in the loop.
 		 *              2. Now supports the `$args['pta']` index.
 		 * @param string     $desc The custom-field description.
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                         Is null when the query is auto-determined.
 		 */
 		return Sanitize::metadata_content( \apply_filters(
@@ -147,7 +147,7 @@ class Description {
 		 * @deprecated
 		 * @param string     $excerpt The excerpt to use.
 		 * @param int        $page_id Deprecated.
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                         Is null when the query is auto-determined.
 		 */
 		$excerpt = (string) \apply_filters_deprecated(
@@ -164,7 +164,7 @@ class Description {
 		/**
 		 * @since 5.0.0
 		 * @param string     $excerpt The excerpt to use.
-		 * @param array|null $args    The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
 		 * @param string     $type    Type of description. Accepts 'search', 'opengraph', 'twitter'.
 		 */
@@ -190,7 +190,7 @@ class Description {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @since 5.0.0 Added third parameter `$type`.
 		 * @param string     $desc The generated description.
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                         Is null when the query is auto-determined.
 		 * @param string     $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
 		 */
@@ -295,7 +295,7 @@ class Description {
 		 * @since 3.1.0 Now listens to option.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param bool       $autodescription Enable or disable the automated descriptions.
-		 * @param array|null $args            The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args            The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                                    Is null when the query is auto-determined.
 		 */
 		return (bool) \apply_filters(

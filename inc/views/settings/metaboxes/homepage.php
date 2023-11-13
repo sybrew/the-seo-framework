@@ -55,7 +55,7 @@ switch ( $instance ) :
 				$_multilingual_warning .= '<br>' . Markdown::convert(
 					sprintf(
 						/* translators: %s = Homepage URL markdown */
-						\esc_html__( 'Edit the fields on the [homepage](%s).', 'autodescription' ),
+						\esc_html__( 'Edit the fields on the [homepage](%s) instead.', 'autodescription' ),
 						\esc_url( \admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) ),
 					),
 					[ 'a' ],

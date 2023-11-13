@@ -10,44 +10,10 @@ namespace The_SEO_Framework;
 
 use \The_SEO_Framework\Helper\Query;
 
-\add_action( 'current_screen', __NAMESPACE__ . '\\_wpml_do_current_screen_action' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
 \add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
 \add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
-
-/**
- * Adds WPML filters based on current screen.
- *
- * @hook current_screen 10
- * @since 2.8.0
- * @access private
- */
-function _wpml_do_current_screen_action() {
-
-	if ( Query::is_seo_settings_page() ) {
-		\add_filter( 'wpml_admin_language_switcher_items', __NAMESPACE__ . '\\_wpml_remove_all_languages' );
-	}
-}
-
-/**
- * Removes "All languages" option from WPML admin switcher.
- *
- * FIXME: Why did we do this again? Does it even affect the settings? Does it fix the home query? Remove me?
- *
- * @hook wpml_admin_language_switcher_items 10
- * @since 2.8.0
- * @access private
- *
- * @param array $languages_links A list of selectable languages.
- * @return array
- */
-function _wpml_remove_all_languages( $languages_links = [] ) {
-
-	unset( $languages_links['all'] );
-
-	return $languages_links;
-}
 
 /**
  * Deletes all sitemap transients, instead of just one.

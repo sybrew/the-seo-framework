@@ -300,7 +300,7 @@ class Setup {
 
 				// Schema.org.
 				'ld_json_enabled'        => 1, // LD+Json toggle for Schema.
-				'ld_json_searchbox'      => 1, // LD+Json Sitelinks Searchbox.
+				'ld_json_searchbox'      => 1, // LD+Json Sitelinks Search Box.
 				'ld_json_breadcrumbs'    => 1, // LD+Json Breadcrumbs.
 				'knowledge_output'       => 1, // Default for outputting the Knowledge SEO.
 

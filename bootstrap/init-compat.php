@@ -35,7 +35,7 @@ foreach (
 	array_intersect_key(
 		[
 			'bbpress/bbpress.php'                      => 'bbpress',
-			'buddypress/buddypress.php'                => 'buddypress',
+			'buddypress/bp-loader.php'                 => 'buddypress',
 			'easy-digital-downloads/easy-digital-downloads.php' => 'edd',
 			'elementor/elementor.php'                  => 'elementor',
 			'jetpack/jetpack.php'                      => 'jetpack',

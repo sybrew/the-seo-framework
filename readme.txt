@@ -123,6 +123,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * WordPress Multisite setups, this plugin is in fact built upon one.
 * Detection and output of robots.txt and sitemap.xml files.
 * Full integration with WordPress Core sitemaps.
+* Primary term (category) selection to influence breadcrumbs and links.
 * Output of structured data via Schema.org JSON-LD scripts.
 * Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO tools to help you switch graciously.
@@ -259,8 +260,6 @@ TODO highlight in large changes:
 		* Also notify Nik via email?
 	* Multisite support for author SEO fields.
 
-TODO mark that db version 4270 -> 5000+
-
 TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
 	-> This requires probably a whole lot more work than I'd have hoped.
 	-> This can go wrong if the default language changes, or disappears.
@@ -269,12 +268,6 @@ TODO add toggle for homepage settings where each "language" installed can be alt
 	-> If we consider this, always have primary site language setting, and store sublanguages under another index.
 		-> This will cause issues if the main language changes?
 TODO check mail Dean about WPML config
-
-TODO add bespoke support for Events Calendar?
-	-> Basically, we need to overwrite the separator
-		-> We can do this via WordPress document title filters.
-	-> We need to recognize that their "archives" isn't an archive, so we should remove the prefix.
-		-> Simple.
 
 TODO add summary_large_image/summary toggle on a per-page basis
 	- Namely this affects how the image is displayed in both Twitter AND Discord.
@@ -296,25 +289,13 @@ TODO update doc "actions" (also update doc "constants" for TSFEM)
 TODO add vertical expand title input?
 	-> This helps with Gutenberg's atrocious sidebar.
 
-TODO add performance timer next to every Performance setting?
-	-> Perform a simple site query and see what the impact is?
-		-> Do not do this automatically! This may hamper someone's ability to even change this setting.
-		-> Add a fancy button instead, which tests both settings at once?
-
 TODO at "Schema.org Settings", we say "Enable...", "Enable..." and then "Output...".
 	-> Use "Output" for anythign that outputs code, and "Enable" for a feature that adjusts already outputted code?
-TODO Searchbox -> Search box
-
-TODO when setting primary term in bulk edit, make sure that the post has at least 2 terms attached.
-	(why isn't this listed as a feature neither on our pricing page nor this page at all??)
-		-> Now I understand why people think the plugin doesn't support it :/
 
 TODO highlight user-edit for multisite? It's quite a feat (user_has_author_info_cap_on_network et al.)
 	-> We may want to add "is indexable" on a per-site basis.
 		-> Or, otherwise, allow all authors to be indexed on the site.
 			"Allow indexing of author pages that have no posts." with a warning.
-
-TODO test all compat files.
 
 TODO announce that integers are no longer supported for `$args` in all methods that use `fix_generation_args`
 	* Also list all methods affected.
@@ -538,6 +519,7 @@ TODO Note that this plugin generates data twice as fast as before
 			* This notice will clear when you deactivate a plugin, or when it has been shown 3 times.
 		* Breadcrumbs of TSF are no longer disabled on WooCommerce product pages. This is because our new script ID can no longer conflict at Google.
 			* WooCommerce apparently also made changes to prevent the likelihood for conflicts.
+		* We no longer remove "All" languages from WPML when editing the SEO Settings -- in the past it caused querying issues.
 	* **Accessibility:**
 		* The Custom Post Type Archive selector now better conveys that it's not an option.
 		* When resetting the SEO Settings, a clearer change-notice is sent.

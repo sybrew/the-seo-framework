@@ -186,7 +186,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
  *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args    The query arguments. Contains 'id', 'tax', and 'pta'.
+ * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
  *                            Is null when the query is auto-determined.
  * @param int <bit>  $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
@@ -283,7 +283,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
  *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
  *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
- * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
+ * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
  *                         Is null when the query is auto-determined.
  * @return array $params
  */

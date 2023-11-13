@@ -343,10 +343,10 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int $post_id The post ID to get the URL from.
+	 * @param int|null $post_id The post ID to get the URL from. Leave null to autodetermine.
 	 * @return string The singular canonical URL without complex optimizations.
 	 */
-	public static function get_bare_singular_url( $post_id ) {
+	public static function get_bare_singular_url( $post_id = null ) {
 
 		$url = \get_permalink( $post_id );
 

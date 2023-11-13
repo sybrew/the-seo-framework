@@ -151,7 +151,7 @@ class Conditions {
 		 * @since 3.1.2
 		 * @since 4.1.0 Added the third $social parameter.
 		 * @param string     $use    Whether to use branding.
-		 * @param array|null $args   The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args   The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                           Is null when the query is auto-determined.
 		 * @param bool       $social Whether the title is meant for social display.
 		 */

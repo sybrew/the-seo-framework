@@ -178,7 +178,7 @@ class Title {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *
 		 * @param string     $title The title.
-		 * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                          Is null when the query is auto-determined.
 		 */
 		return Sanitize::metadata_content( (string) \apply_filters(
@@ -224,7 +224,7 @@ class Title {
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param string     $title The title.
-		 * @param array|null $args  The query arguments. Contains 'id', 'tax', and 'pta'.
+		 * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                          Is null when the query is auto-determined.
 		 */
 		$title = (string) \apply_filters(
