@@ -269,12 +269,6 @@ TODO add toggle for homepage settings where each "language" installed can be alt
 		-> This will cause issues if the main language changes?
 TODO check mail Dean about WPML config
 
-TODO add summary_large_image/summary toggle on a per-page basis
-	- Namely this affects how the image is displayed in both Twitter AND Discord.
-	- Also make twitter card default to summary when a square image is posted.
-		- Only when set to "auto"
-	- See https://github.com/sybrew/the-seo-framework/issues/525
-
 TODO add "disable JIT compiler" option to Description generator?
 	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
 		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
@@ -301,16 +295,11 @@ TODO announce that integers are no longer supported for `$args` in all methods t
 	* Also list all methods affected.
 		-> ouchie.
 
-TODO list all methods available in every pool? Zzz.
-
 TODO find new public function and filters via @since 5.0.0.*?...
 TODO mark subroutine methods in Meta private?
 
 TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."
 	-> Tell that it should be the brand name?
-
-TODO regenerate deprecations in readme below. We may have changed some things.
-	-> Also name all subpools.
 
 TODO update "https://kb.theseoframework.com/kb/data-stored-in-your-database/".
 
@@ -391,8 +380,6 @@ add_filter(
 );
 
 TODO highlight that `uid` is accepted as an argument. In rare circumstances, if the homepage is a blog, this may cause issues with forward compatibility.
-
-TODO switch around social and visibility order in post meta box output.
 
 TODO when og tags are hidden, the Twitter tags fields should not fall back to them.
 	-> They don't on the front-end, but do in the back-end.

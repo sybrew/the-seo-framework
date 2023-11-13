@@ -251,6 +251,227 @@ switch ( $instance ) :
 		<?php
 		break;
 
+	case 'social':
+		// Yes, this is hacky, but we don't want to lose the user's old input.
+		$show_og = (bool) Data\Plugin::get_option( 'og_tags' );
+		$show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
+
+		if ( $is_static_front_page ) {
+			$_social_title       = [
+				'og' => Data\Plugin::get_option( 'homepage_og_title' )
+						?: Data\Plugin::get_option( 'homepage_title' )
+						?: Meta\Open_Graph::get_generated_title( $generator_args ),
+				'tw' => Data\Plugin::get_option( 'homepage_twitter_title' )
+						?: Data\Plugin::get_option( 'homepage_og_title' )
+						?: Data\Plugin::get_option( 'homepage_title' )
+						?: Meta\Twitter::get_generated_title( $generator_args ),
+			];
+			$_social_description = [
+				'og' => Data\Plugin::get_option( 'homepage_og_description' )
+						?: Data\Plugin::get_option( 'homepage_description' )
+						?: Meta\Open_Graph::get_generated_description( $generator_args ),
+				'tw' => Data\Plugin::get_option( 'homepage_twitter_description' )
+						?: Data\Plugin::get_option( 'homepage_og_description' )
+						?: Data\Plugin::get_option( 'homepage_description' )
+						?: Meta\Twitter::get_generated_description( $generator_args ),
+			];
+
+			$_twitter_card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
+							?: Meta\Twitter::get_generated_card_type( $generator_args );
+		} else {
+			$_social_title       = [
+				'og' => Meta\Open_Graph::get_generated_title( $generator_args ),
+				'tw' => Meta\Twitter::get_generated_title( $generator_args ),
+			];
+			$_social_description = [
+				'og' => Meta\Open_Graph::get_generated_description( $generator_args ),
+				'tw' => Meta\Twitter::get_generated_description( $generator_args ),
+			];
+
+			$_twitter_card = Meta\Twitter::get_generated_card_type( $generator_args );
+		}
+
+		Input::output_js_social_data(
+			'autodescription_social_singular',
+			[
+				'og' => [
+					'state' => [
+						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['og'] ) ),
+						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
+						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['og'] ) ),
+						'titleLock'    => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_title' ),
+						'descLock'     => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_description' ),
+					],
+				],
+				'tw' => [
+					'state' => [
+						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['tw'] ) ),
+						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
+						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['tw'] ) ),
+						'titleLock'    => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
+						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
+					],
+				],
+			],
+		);
+
+		?>
+		<div class="tsf-flex-setting tsf-flex" <?= $show_og ? '' : 'style=display:none' ?>>
+			<div class="tsf-flex-setting-label tsf-flex">
+				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+					<label for=autodescription_og_title class="tsf-flex-setting-label-item tsf-flex">
+						<div><strong><?php \esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong></div>
+					</label>
+					<?php
+					Data\Plugin::get_option( 'display_character_counter' )
+						and Form::output_character_counter_wrap( 'autodescription_og_title' );
+					?>
+				</div>
+			</div>
+			<div class="tsf-flex-setting-input tsf-flex">
+				<div id=tsf-og-title-wrap>
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_open_graph_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+				</div>
+			</div>
+		</div>
+
+		<div class="tsf-flex-setting tsf-flex" <?= $show_og ? '' : 'style=display:none' ?>>
+			<div class="tsf-flex-setting-label tsf-flex">
+				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+					<label for=autodescription_og_description class="tsf-flex-setting-label-item tsf-flex">
+						<div><strong><?php \esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong></div>
+					</label>
+					<?php
+					Data\Plugin::get_option( 'display_character_counter' )
+						and Form::output_character_counter_wrap( 'autodescription_og_description' );
+					?>
+				</div>
+			</div>
+			<div class="tsf-flex-setting-input tsf-flex">
+				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( $meta['_open_graph_description'] ) ) ?></textarea>
+			</div>
+		</div>
+
+		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
+			<div class="tsf-flex-setting-label tsf-flex">
+				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+					<label for=autodescription_twitter_title class="tsf-flex-setting-label-item tsf-flex">
+						<div><strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong></div>
+					</label>
+					<?php
+					Data\Plugin::get_option( 'display_character_counter' )
+						and Form::output_character_counter_wrap( 'autodescription_twitter_title' );
+					?>
+				</div>
+			</div>
+			<div class="tsf-flex-setting-input tsf-flex">
+				<div id=tsf-twitter-title-wrap>
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_twitter_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+				</div>
+			</div>
+		</div>
+
+		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
+			<div class="tsf-flex-setting-label tsf-flex">
+				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+					<label for=autodescription_twitter_description class="tsf-flex-setting-label-item tsf-flex">
+						<div><strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong></div>
+					</label>
+					<?php
+					Data\Plugin::get_option( 'display_character_counter' )
+						and Form::output_character_counter_wrap( 'autodescription_twitter_description' );
+					?>
+				</div>
+			</div>
+			<div class="tsf-flex-setting-input tsf-flex">
+				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
+					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
+					echo \esc_html( Sanitize::metadata_content( $meta['_twitter_description'] ) );
+				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
+				?></textarea>
+			</div>
+		</div>
+
+		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
+			<div class="tsf-flex-setting-label tsf-flex">
+				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+					<label for=autodescription_twitter_card_type class="tsf-flex-setting-label-item tsf-flex">
+						<div><strong><?php \esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></strong></div>
+						<div>
+							<?php
+							HTML::make_info(
+								\__( 'The Twitter Card type is used to determine whether an image appears on the side or as a large cover. This affects X, but also other social platforms like Discord.', 'autodescription' ),
+								'https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards',
+							);
+							?>
+						</div>
+					</label>
+				</div>
+			</div>
+			<div class="tsf-flex-setting-input tsf-flex">
+				<?php
+				/* translators: %s = default option value */
+				$_default_i18n     = \__( 'Default (%s)', 'autodescription' );
+				$tw_suported_cards = Meta\Twitter::get_supported_cards();
+
+				// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+				echo Form::make_single_select_form( [
+					'id'       => 'autodescription_twitter_card_type',
+					'class'    => 'tsf-select-block',
+					'name'     => 'autodescription[_tsf_twitter_card_type]',
+					'label'    => '',
+					'options'  => array_merge(
+						[ '' => sprintf( $_default_i18n, $_twitter_card ) ],
+						array_combine( $tw_suported_cards, $tw_suported_cards ),
+					),
+					'selected' => $meta['_tsf_twitter_card_type'],
+				] );
+				// phpcs:enable, WordPress.Security.EscapeOutput
+				?>
+			</div>
+		</div>
+		<?php
+
+		// Fetch image placeholder.
+		if ( $is_static_front_page && Data\Plugin::get_option( 'homepage_social_image_url' ) ) {
+			$image_placeholder = Data\Plugin::get_option( 'homepage_social_image_url' )
+								?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+		} else {
+			$image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+		}
+
+		?>
+		<div class="tsf-flex-setting tsf-flex">
+			<div class="tsf-flex-setting-label tsf-flex">
+				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
+					<label for=autodescription_socialimage-url class="tsf-flex-setting-label-item tsf-flex">
+						<div><strong><?php \esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong></div>
+						<div>
+							<?php
+							HTML::make_info(
+								\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
+								'https://developers.facebook.com/docs/sharing/best-practices#images',
+							);
+							?>
+						</div>
+					</label>
+				</div>
+			</div>
+			<div class="tsf-flex-setting-input tsf-flex">
+				<input class=large-text type=url name="autodescription[_social_image_url]" id=autodescription_socialimage-url placeholder="<?= \esc_url( $image_placeholder ) ?>" value="<?= \esc_url( $meta['_social_image_url'] ) ?>" autocomplete=off />
+				<input type=hidden name="autodescription[_social_image_id]" id=autodescription_socialimage-id value="<?= \absint( $meta['_social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js />
+				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
+					<?php
+					// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
+					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_socialimage' ] );
+					// phpcs:enable, WordPress.Security.EscapeOutput
+					?>
+				</div>
+			</div>
+		</div>
+		<?php
+		break;
+
 	case 'visibility':
 		$canonical_placeholder = Meta\URI::get_generated_url( $generator_args );
 
@@ -438,227 +659,6 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<input class=large-text type=url name="autodescription[redirect]" id=autodescription_redirect value="<?= \esc_url( $meta['redirect'] ) ?>" autocomplete=off />
-			</div>
-		</div>
-		<?php
-		break;
-
-	case 'social':
-		// Yes, this is hacky, but we don't want to lose the user's old input.
-		$show_og = (bool) Data\Plugin::get_option( 'og_tags' );
-		$show_tw = (bool) Data\Plugin::get_option( 'twitter_tags' );
-
-		if ( $is_static_front_page ) {
-			$_social_title       = [
-				'og' => Data\Plugin::get_option( 'homepage_og_title' )
-					 ?: Data\Plugin::get_option( 'homepage_title' )
-					 ?: Meta\Open_Graph::get_generated_title( $generator_args ),
-				'tw' => Data\Plugin::get_option( 'homepage_twitter_title' )
-					 ?: Data\Plugin::get_option( 'homepage_og_title' )
-					 ?: Data\Plugin::get_option( 'homepage_title' )
-					 ?: Meta\Twitter::get_generated_title( $generator_args ),
-			];
-			$_social_description = [
-				'og' => Data\Plugin::get_option( 'homepage_og_description' )
-					 ?: Data\Plugin::get_option( 'homepage_description' )
-					 ?: Meta\Open_Graph::get_generated_description( $generator_args ),
-				'tw' => Data\Plugin::get_option( 'homepage_twitter_description' )
-					 ?: Data\Plugin::get_option( 'homepage_og_description' )
-					 ?: Data\Plugin::get_option( 'homepage_description' )
-					 ?: Meta\Twitter::get_generated_description( $generator_args ),
-			];
-
-			$_twitter_card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
-						  ?: Meta\Twitter::get_generated_card_type( $generator_args );
-		} else {
-			$_social_title       = [
-				'og' => Meta\Open_Graph::get_generated_title( $generator_args ),
-				'tw' => Meta\Twitter::get_generated_title( $generator_args ),
-			];
-			$_social_description = [
-				'og' => Meta\Open_Graph::get_generated_description( $generator_args ),
-				'tw' => Meta\Twitter::get_generated_description( $generator_args ),
-			];
-
-			$_twitter_card = Meta\Twitter::get_generated_card_type( $generator_args );
-		}
-
-		Input::output_js_social_data(
-			'autodescription_social_singular',
-			[
-				'og' => [
-					'state' => [
-						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['og'] ) ),
-						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
-						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['og'] ) ),
-						'titleLock'    => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_title' ),
-						'descLock'     => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_description' ),
-					],
-				],
-				'tw' => [
-					'state' => [
-						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['tw'] ) ),
-						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
-						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['tw'] ) ),
-						'titleLock'    => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
-						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
-					],
-				],
-			],
-		);
-
-		?>
-		<div class="tsf-flex-setting tsf-flex" <?= $show_og ? '' : 'style=display:none' ?>>
-			<div class="tsf-flex-setting-label tsf-flex">
-				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-					<label for=autodescription_og_title class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Open Graph Title', 'autodescription' ); ?></strong></div>
-					</label>
-					<?php
-					Data\Plugin::get_option( 'display_character_counter' )
-						and Form::output_character_counter_wrap( 'autodescription_og_title' );
-					?>
-				</div>
-			</div>
-			<div class="tsf-flex-setting-input tsf-flex">
-				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_open_graph_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
-				</div>
-			</div>
-		</div>
-
-		<div class="tsf-flex-setting tsf-flex" <?= $show_og ? '' : 'style=display:none' ?>>
-			<div class="tsf-flex-setting-label tsf-flex">
-				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-					<label for=autodescription_og_description class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Open Graph Description', 'autodescription' ); ?></strong></div>
-					</label>
-					<?php
-					Data\Plugin::get_option( 'display_character_counter' )
-						and Form::output_character_counter_wrap( 'autodescription_og_description' );
-					?>
-				</div>
-			</div>
-			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_open_graph_description]" id=autodescription_og_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( $meta['_open_graph_description'] ) ) ?></textarea>
-			</div>
-		</div>
-
-		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
-			<div class="tsf-flex-setting-label tsf-flex">
-				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-					<label for=autodescription_twitter_title class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong></div>
-					</label>
-					<?php
-					Data\Plugin::get_option( 'display_character_counter' )
-						and Form::output_character_counter_wrap( 'autodescription_twitter_title' );
-					?>
-				</div>
-			</div>
-			<div class="tsf-flex-setting-input tsf-flex">
-				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_twitter_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
-				</div>
-			</div>
-		</div>
-
-		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
-			<div class="tsf-flex-setting-label tsf-flex">
-				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-					<label for=autodescription_twitter_description class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong></div>
-					</label>
-					<?php
-					Data\Plugin::get_option( 'display_character_counter' )
-						and Form::output_character_counter_wrap( 'autodescription_twitter_description' );
-					?>
-				</div>
-			</div>
-			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
-					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
-					echo \esc_html( Sanitize::metadata_content( $meta['_twitter_description'] ) );
-				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
-				?></textarea>
-			</div>
-		</div>
-
-		<div class="tsf-flex-setting tsf-flex" <?= $show_tw ? '' : 'style=display:none' ?>>
-			<div class="tsf-flex-setting-label tsf-flex">
-				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-					<label for=autodescription_twitter_card_type class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Twitter Card Type', 'autodescription' ); ?></strong></div>
-						<div>
-							<?php
-							HTML::make_info(
-								\__( 'The Twitter Card type is used to determine whether an image appears on the side or as a large cover. This affects X, but also other social platforms like Discord.', 'autodescription' ),
-								'https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards',
-							);
-							?>
-						</div>
-					</label>
-				</div>
-			</div>
-			<div class="tsf-flex-setting-input tsf-flex">
-				<?php
-				/* translators: %s = default option value */
-				$_default_i18n     = \__( 'Default (%s)', 'autodescription' );
-				$tw_suported_cards = Meta\Twitter::get_supported_cards();
-
-				// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
-				echo Form::make_single_select_form( [
-					'id'       => 'autodescription_twitter_card_type',
-					'class'    => 'tsf-select-block',
-					'name'     => 'autodescription[_tsf_twitter_card_type]',
-					'label'    => '',
-					'options'  => array_merge(
-						[ '' => sprintf( $_default_i18n, $_twitter_card ) ],
-						array_combine( $tw_suported_cards, $tw_suported_cards ),
-					),
-					'selected' => $meta['_tsf_twitter_card_type'],
-				] );
-				// phpcs:enable, WordPress.Security.EscapeOutput
-				?>
-			</div>
-		</div>
-		<?php
-
-		// Fetch image placeholder.
-		if ( $is_static_front_page && Data\Plugin::get_option( 'homepage_social_image_url' ) ) {
-			$image_placeholder = Data\Plugin::get_option( 'homepage_social_image_url' )
-							  ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
-		} else {
-			$image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
-		}
-
-		?>
-		<div class="tsf-flex-setting tsf-flex">
-			<div class="tsf-flex-setting-label tsf-flex">
-				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
-					<label for=autodescription_socialimage-url class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Social Image URL', 'autodescription' ); ?></strong></div>
-						<div>
-							<?php
-							HTML::make_info(
-								\__( "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support.", 'autodescription' ),
-								'https://developers.facebook.com/docs/sharing/best-practices#images',
-							);
-							?>
-						</div>
-					</label>
-				</div>
-			</div>
-			<div class="tsf-flex-setting-input tsf-flex">
-				<input class=large-text type=url name="autodescription[_social_image_url]" id=autodescription_socialimage-url placeholder="<?= \esc_url( $image_placeholder ) ?>" value="<?= \esc_url( $meta['_social_image_url'] ) ?>" autocomplete=off />
-				<input type=hidden name="autodescription[_social_image_id]" id=autodescription_socialimage-id value="<?= \absint( $meta['_social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js />
-				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
-					<?php
-					// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
-					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_socialimage' ] );
-					// phpcs:enable, WordPress.Security.EscapeOutput
-					?>
-				</div>
 			</div>
 		</div>
 		<?php
