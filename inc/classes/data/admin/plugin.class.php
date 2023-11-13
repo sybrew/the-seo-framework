@@ -41,7 +41,7 @@ use \The_SEO_Framework\{
 class Plugin {
 
 	/**
-	 * Register the database settings for storage.
+	 * Register the database settings for saving and sanitizing via standard WordPress hooks.
 	 *
 	 * @hook admin_init 0
 	 * @since 2.2.2

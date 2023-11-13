@@ -1222,7 +1222,7 @@ final class Deprecated {
 		);
 
 		// If the page should not be indexed, consider removing the canonical URL.
-		if ( \in_array( 'noindex', $tsf->robots()->generate_meta(), true ) ) {
+		if ( \in_array( 'noindex', $tsf->robots()->get_generated_meta(), true ) ) {
 			// If the URL is filtered, don't empty it.
 			// If a custom canonical URL is set, don't empty it.
 			if ( $url === $_url && ! $tsf->has_custom_canonical_url() ) {
@@ -2398,10 +2398,10 @@ final class Deprecated {
 		$tsf->_deprecated_function(
 			'tsf()->array_merge_recursive_distinct()',
 			'5.0.0',
-			'tsf()->format()->array()->array_merge_recursive_distinct()',
+			'tsf()->format()->arrays()->array_merge_recursive_distinct()',
 		);
 
-		return $tsf->format()->array()->array_merge_recursive_distinct( ...$arrays );
+		return $tsf->format()->arrays()->array_merge_recursive_distinct( ...$arrays );
 	}
 
 	/**
@@ -2467,9 +2467,9 @@ final class Deprecated {
 	public function generate_robots_meta( $args = null, $get = null, $options = 0b00 ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->generate_robots_meta()', '5.0.0', 'tsf()->robots()->generate_meta()' );
+		$tsf->_deprecated_function( 'tsf()->generate_robots_meta()', '5.0.0', 'tsf()->robots()->get_generated_meta()' );
 
-		return $tsf->robots()->generate_meta( $args, $get, $options );
+		return $tsf->robots()->get_generated_meta( $args, $get, $options );
 	}
 
 	/**
@@ -6639,7 +6639,7 @@ final class Deprecated {
 	 */
 	public function init_sanitizer_filters() {
 		\tsf()->_deprecated_function( 'tsf()->init_sanitizer_filters()', '5.0.0' );
-		\The_SEO_Framework\Data\Filter\Plugin::register_filters_jit();
+		\The_SEO_Framework\Data\Filter\Plugin::register_sanitizers_jit();
 	}
 
 	/**
@@ -6729,7 +6729,7 @@ final class Deprecated {
 		$tsf = \tsf();
 		$tsf->_deprecated_function( 'tsf()->get_conflicting_plugins()', '5.0.0' );
 
-		return \The_SEO_Framework\Helper\Compatbility::get_conflicting_plugins()[ $type ] ?? [];
+		return \The_SEO_Framework\Helper\Compatibility::get_conflicting_plugins()[ $type ] ?? [];
 	}
 
 	/**

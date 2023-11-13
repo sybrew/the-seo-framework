@@ -129,7 +129,7 @@ switch ( $instance ) :
 				Input::make_checkbox( [
 					'id'          => 'ld_json_searchbox',
 					'label'       => \esc_html_x( 'Add Sitelinks Search Box?', 'Sitelinks Search Box is a product name', 'autodescription' ) . " $info",
-					'description' => \esc_html__( "This teaches search engines how to use your site's built-in search engine.", 'autodescription' ),
+					'description' => \esc_html__( "This tells search engines how to use the site's built-in search engine.", 'autodescription' ),
 					'escape'      => false,
 				] ),
 				true,

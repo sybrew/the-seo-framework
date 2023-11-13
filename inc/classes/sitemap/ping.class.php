@@ -37,7 +37,7 @@ use \The_SEO_Framework\Data;
  * @access protected
  *         Use tsf()->sitemap()->ping() instead.
  */
-final class Ping {
+class Ping {
 
 	/**
 	 * Prepares a cronjob-based ping within 30 seconds of calling this.

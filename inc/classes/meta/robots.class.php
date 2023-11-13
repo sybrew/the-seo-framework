@@ -134,12 +134,12 @@ class Robots {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *
 		 * @param array      $meta The current robots meta. {
-		 *     'noindex'           : 'noindex'|''
-		 *     'nofollow'          : 'nofollow'|''
-		 *     'noarchive'         : 'noarchive'|''
-		 *     'max_snippet'       : 'max-snippet:<int>'|''
-		 *     'max_image_preview' : 'max-image-preview:<string>'|''
-		 *     'max_video_preview' : 'max-video-preview:<string>'|''
+		 *     'noindex'           : 'noindex'
+		 *     'nofollow'          : 'nofollow'
+		 *     'noarchive'         : 'noarchive'
+		 *     'max_snippet'       : 'max-snippet:<int>'
+		 *     'max_image_preview' : 'max-image-preview:<string>'
+		 *     'max_video_preview' : 'max-video-preview:<string>'
 		 * }
 		 * @param array|null $args The query arguments. Contains 'id', 'tax', and 'pta'.
 		 *                         Is null when the query is auto-determined.

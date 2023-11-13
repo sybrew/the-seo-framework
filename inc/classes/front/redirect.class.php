@@ -88,7 +88,7 @@ final class Redirect {
 		$url = \sanitize_url( $url );
 
 		if ( empty( $url ) ) {
-			\http_status_code( 400 );
+			\status_header( 400 );
 			exit;
 		}
 

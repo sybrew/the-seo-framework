@@ -397,6 +397,8 @@ class Sanitize {
 			'filesize' => 0,
 		];
 
+		if ( empty( $details ) ) return $defaults;
+
 		[ $url, $id, $width, $height, $alt, $caption, $filesize ] = array_values( array_merge( $defaults, $details ) );
 
 		if ( empty( $url ) ) return $defaults;

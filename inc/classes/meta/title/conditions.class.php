@@ -43,7 +43,7 @@ use \The_SEO_Framework\{
  * @access protected
  *         Use tsf()->title()->conditions() instead.
  */
-final class Conditions {
+class Conditions {
 
 	/**
 	 * Determines whether to add or remove title protection prefixes.

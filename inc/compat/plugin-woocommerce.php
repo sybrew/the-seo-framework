@@ -28,7 +28,7 @@ use \The_SEO_Framework\{
 \add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
 
 /**
- * Initializes WooCommerce compatibility.
+ * Initializes (late) WooCommerce compatibility.
  *
  * @hook woocommerce_init 10
  * @since 3.1.0

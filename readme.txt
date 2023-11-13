@@ -15,7 +15,7 @@ The fastest feature-complete SEO plugin for professional WordPress websites. Sec
 
 **The fastest and only feature-complete SEO plugin that follows the guidelines and rules imposed by WordPress and search engines.**
 
-**Preview The SEO Framework in your browser.](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)**
+**Preview The SEO Framework in WordPress Playground.](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)**
 
 Start using proven methods to optimize your website for SEO. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
 
@@ -339,9 +339,7 @@ TODO test get_generated_shortlink_url() and URL pagination with multilingual plu
 TODO if we add a new "enable Schema.org output" support button (because it's now always outputting something), we should enable it only if the user has any of the 3 toggles enabled.
 	* Or, for new users, always enabled it.
 
-TODO test fresh site.
-TODO test site without images (or where images are gone).
-	-> Why?
+TODO test site without images and where images are all deleted after being set to TSF settings.
 
 TODO can we bust the cache via a JS script if we detect an older version is being requested?
 	-> E.g., we flag "expected version" to each script. If it's a mismatch, bust it?
@@ -367,18 +365,8 @@ TODO instead of removing Elementor library from public posts types, force noinde
 	-> Having them still included will add a bunch of metadata fields to the admin; perhaps we should allow them on the front-end, and noindex them on the back-end?
 		-> Or we could use wp_robots filters? It's their mess, though.
 
-TODO run all deprecation methods one last time
-	We should be able to loop over them quite easily.
-
-TODO add "try it in playground" button/link at the top of the readme.
-	=> https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php
-
 TODO list all new public classes and their methods in the changelog.
 	-> i.e. those without @access private
-
-TODO convert The_SEO_Framework\Meta\Robots\Main from singleton to static
-	-> It must be either instantiatable, or static.
-		-> ->set()->get() is fun though
 
 TODO tell in KB that "The language is set from content" in "Polylang -> Settings -> URL Modifications" should not be used.
 	-> get_locale() doesn't respect language changes.
@@ -398,8 +386,6 @@ TODO make issue: We should upgrade the twitter profile inputs to become fully qu
 	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.
 
 TODO use the word "robust" and "lightweight" and "unbranded" in our intro?
-
-TODO test if the deprecation notice emitter is still accurate?
 
 For the filter, we should promote using:
 add_filter(

@@ -46,7 +46,6 @@ final class Filter {
 	 * @hook woocommerce_breadcrumb_main_term 10
 	 * @hook woocommerce_product_categories_widget_main_term 10
 	 * @since 5.0.0
-	 * @access private
 	 *
 	 * @param \WP_Term $term  The category to use in the permalink.
 	 * @param array    $terms Array of all categories (WP_Term objects) associated with the post. Unused.

@@ -43,7 +43,7 @@ use \The_SEO_Framework\{
  * @access protected
  *         Use tsf()->description()->excerpt() instead.
  */
-final class Excerpt {
+class Excerpt {
 
 	/**
 	 * Returns a description excerpt.
