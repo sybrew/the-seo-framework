@@ -403,7 +403,7 @@ class Title {
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The Term object.
 	 *                                                     Leave null to autodetermine query.
-	 * @return String[$title,$prefix,$title_without_prefix] The generated archive title items.
+	 * @return String[title,prefix,title_without_prefix] The generated archive title items.
 	 */
 	public static function get_archive_title_list( $object = null ) {
 
@@ -431,6 +431,8 @@ class Title {
 		 *
 		 * @since 3.0.4
 		 * @since 4.2.0 Added the `$prefix` and `$origintitle_without_prefixal_title` parameters.
+		 * @since 5.0.0 Deprecated
+		 * @deprecated
 		 *
 		 * @param string                               $title                Archive title to be displayed.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object               The archive object.
@@ -438,19 +440,38 @@ class Title {
 		 * @param string                               $title_without_prefix Archive title without prefix.
 		 * @param string                               $prefix               Archive title prefix.
 		 */
-		$title = (string) \apply_filters(
+		$title = (string) \apply_filters_deprecated(
 			'the_seo_framework_generated_archive_title',
-			$title,
+			[
+				$title,
+				$object,
+				$title_without_prefix,
+				$prefix,
+			],
+			'5.0.0 of The SEO Framework',
+			'the_seo_framework_generated_archive_title_items'
+		);
+
+		/**
+		 * @since 5.0.0
+		 * @param String[title,prefix,title_without_prefix] $items                The generated archive title items.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type|null      $object               The archive object.
+		 *                                                                        Is null when query is autodetermined.
+		 * @param string                                    $title_without_prefix Archive title without prefix.
+		 * @param string                                    $prefix               Archive title prefix.
+		 */
+		return \apply_filters(
+			'the_seo_framework_generated_archive_title_items',
+			[
+				$title,
+				$prefix,
+				$title_without_prefix,
+			],
 			$object,
+			$title,
 			$title_without_prefix,
 			$prefix,
 		);
-
-		return [
-			$title,
-			$prefix,
-			$title_without_prefix,
-		];
 	}
 
 	/**
@@ -554,10 +575,10 @@ class Title {
 						Taxonomy::get_label( $object->taxonomy ),
 					);
 			}
-		} elseif ( $object instanceof \WP_Post_Type && isset( $object->name ) ) {
+		} elseif ( $object instanceof \WP_Post_Type ) {
 			$title  = static::get_post_type_archive_title( $object->name );
 			$prefix = \_x( 'Archives:', 'post type archive title prefix', 'default' );
-		} elseif ( $object instanceof \WP_User && isset( $object->ID ) ) {
+		} elseif ( $object instanceof \WP_User ) {
 			$title  = static::get_user_title( $object->ID );
 			$prefix = \_x( 'Author:', 'author archive title prefix', 'default' );
 		}

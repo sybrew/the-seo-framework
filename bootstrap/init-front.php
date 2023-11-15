@@ -62,6 +62,9 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 \add_action( 'do_robots', [ Headers::class, 'output_robots_noindex_headers' ] );
 \add_action( 'the_seo_framework_sitemap_header', [ Headers::class, 'output_robots_noindex_headers' ] );
 
+// Overwrite title tags.
+\add_action( 'template_redirect', [ Front\Title::class, 'overwrite_title_filters' ], 20 );
+
 // Output meta tags.
 \add_action( 'wp_head', [ Front\Meta\Head::class, 'print_wrap_and_tags' ], 1 );
 
@@ -103,37 +106,6 @@ if (
 	// Only add the feed link to the excerpt if we're only building excerpts.
 	if ( \get_option( 'rss_use_excerpt' ) )
 		\add_filter( 'the_excerpt_rss', [ Front\Feed::class, 'modify_the_content_feed' ], 10, 1 );
-}
-
-/**
- * @since 2.9.3
- * @param bool $overwrite_titles Whether to enable title overwriting.
- */
-if ( \apply_filters( 'the_seo_framework_overwrite_titles', true ) ) {
-	// Removes all pre_get_document_title filters.
-	\remove_all_filters( 'pre_get_document_title', false );
-
-	// New WordPress 4.4.0 filter. Hurray! It's also much faster :)
-	\add_filter( 'pre_get_document_title', [ Front\Title::class, 'set_document_title' ], 10 );
-
-	/**
-	 * @since 2.4.1
-	 * @since 5.0.0 Deprecated.
-	 * @deprecated
-	 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
-	 * TODO remove this code? -- it's been 8 years...
-	 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
-	 */
-	if ( \apply_filters_deprecated(
-		'the_seo_framework_manipulate_title',
-		[ true ],
-		'5.0.0 of The SEO Framework',
-		'the_seo_framework_overwrite_titles',
-	) ) {
-		\remove_all_filters( 'wp_title', false );
-		// Override WordPress Title
-		\add_filter( 'wp_title', [ Front\Title::class, 'set_document_title' ], 9 );
-	}
 }
 
 /**

@@ -44,7 +44,7 @@ function _um_reinstate_title_support() {
  * @access private
  *
  * @param bool $supported Whether the query supports SEO.
- * @return string The filtered title.
+ * @return bool Whether the query is supported.
  */
 function _um_determine_support( $supported = true ) {
 

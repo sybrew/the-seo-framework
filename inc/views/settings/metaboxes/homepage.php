@@ -270,11 +270,16 @@ switch ( $instance ) :
 		$_default_i18n     = \__( 'Default (%s)', 'autodescription' );
 		$tw_suported_cards = Meta\Twitter::get_supported_cards();
 
+		$custom_title    = '';
+		$custom_desc     = '';
+
 		$custom_og_title = '';
 		$custom_og_desc  = '';
 		$custom_tw_title = '';
 		$custom_tw_desc  = '';
+
 		$custom_tw_card  = '';
+
 		$custom_image    = '';
 
 		// Gets custom fields from page.

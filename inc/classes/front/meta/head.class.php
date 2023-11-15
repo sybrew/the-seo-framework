@@ -47,6 +47,7 @@ final class Head {
 	 * Prints the indicator wrap and meta tags.
 	 * Adds various action hooks for outside the wrap.
 	 *
+	 * @hook wp_head 1
 	 * @since 5.0.0
 	 */
 	public static function print_wrap_and_tags() {

@@ -150,7 +150,7 @@ class Conditions {
 		/**
 		 * @since 3.1.2
 		 * @since 4.1.0 Added the third $social parameter.
-		 * @param string     $use    Whether to use branding.
+		 * @param bool       $use    Whether to use branding.
 		 * @param array|null $args   The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                           Is null when the query is auto-determined.
 		 * @param bool       $social Whether the title is meant for social display.
@@ -232,8 +232,8 @@ class Conditions {
 	public static function use_generated_archive_prefix( $term = null ) {
 		/**
 		 * @since 4.0.5
-		 * @param string                          $use  Whether to use branding.
-		 * @param \WP_Term|\WP_User|\WP_Post_Type $term The current term.
+		 * @param bool                            $use  Whether to use the prefix.
+		 * @param \WP_Term|\WP_User|\WP_Post_Type $term The current term object.
 		 */
 		return \apply_filters(
 			'the_seo_framework_use_archive_prefix',

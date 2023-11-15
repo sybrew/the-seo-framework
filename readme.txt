@@ -447,6 +447,8 @@ TODO Note that this plugin generates data twice as fast as before
 	* TSF no longer pings search engines the base sitemap location when updating the options without changing the options.
 	* **Compatibility:**
 		* TSF now requires WordPress v5.9 or later, from WordPress v5.5 or later.
+		* When no proper Shop page is assigned in WooCommerce, TSF will now correctly treat the shop page as a Post Type Archive.
+			* In doing so, we removed the "Archives: " prefix. We find it an illogical addition for this post type specifically.
 	* **Accessibility:**
 		* The Homepage SEO Settings box's title no longer carries a warning; instead, we added a bigger, more noticable warning to every settings section when editing the homepage.
 			* We're getting too many support inquiries about this; sorry about the noise, but it ought to decrease confusion.
@@ -727,6 +729,8 @@ TODO Note that this plugin generates data twice as fast as before
 		* We offloaded this checking to the setup, so it only checks once (ever) per WordPress site.
 * **Changed:**
 	* When `tsf()` or `the_seo_framework()` are called too early (before `plugins_loaded`), they'll return a silencer class.
+	* Title overwriting is now engaged at `template_redirect`, instead of at `plugins_loaded`. This also tests for query support, so filtering `the_seo_framework_query_supports_seo` now affects titles.
+		* This means that some plugins will have their title filters discarded once again. However, reenabling support for this is now much easier.
 	* Twitter cards are no longer validated whether a card type is provided.
 		* Hence, returning an empty string to (TODO deprecated?) filter `'the_seo_framework_twittercard_output'` will no longer disable Twitter cards.
 	* When scripts are enqueued, it is now automatically determined whether late-enqueuing in the footer is necessary.
@@ -1400,9 +1404,9 @@ TODO Note that this plugin generates data twice as fast as before
 		* `the_seo_framework_supported_twitter_card_types` this allows you to remove or register new card types that are usable throughout the plugin.
 		* `the_seo_framework_breadcrumb_shortcode_css`, this is used to filter the shortcode's CSS.
 		* `the_seo_framework_breadcrumb_shortcode_output`, this is used to filter the shortcode's output.
+		* `the_seo_framework_generated_archive_title_items`, this is used to filer the archive title and its prefix simultaneously.
 	* **Changed:**
 		* `the_seo_framework_taxonomy_disabled`, the second parameter is now nullable (instead of an empty string).
-		* `the_seo_framework_generated_archive_title`, the second parameter is now nullable (instead of an object).
 		* `the_seo_framework_save_post_meta`
 			1. The second parameter is now an integer, instead of Post object.
 				* If you cannot save posts any longer after updating... well, there's your problem. We found no evidence of this being used in the wild.
@@ -1450,6 +1454,7 @@ TODO Note that this plugin generates data twice as fast as before
 		* `the_seo_framework_manipulate_title`, use `the_seo_framework_overwrite_titles` instead.
 		* `the_seo_framework_conflicting_plugins_type`, use `the_seo_framework_conflicting_plugins` instead.
 		* `the_seo_framework_twittercard_output`, with no alternative available.
+		* `the_seo_framework_generated_archive_title`, use `the_seo_framework_generated_archive_title_items` instead.
 	* **Removed:**
 		* Deprecated in TSF v4.2.0, two years later, we've now removed these filters:
 			* `the_seo_framework_pta_title`

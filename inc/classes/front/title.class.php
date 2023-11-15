@@ -39,6 +39,48 @@ use \The_SEO_Framework\{
 final class Title {
 
 	/**
+	 * Engages title writing in head.
+	 *
+	 * @hook template_redirect 20
+	 * @since 5.0.0
+	 */
+	public static function overwrite_title_filters() {
+
+		if (
+			   ! Query\Utils::query_supports_seo()
+			/**
+			 * @since 2.9.3
+			 * @param bool $overwrite_titles Whether to enable title overwriting.
+			 */
+			|| ! \apply_filters( 'the_seo_framework_overwrite_titles', true )
+		) return;
+
+		// Removes all pre_get_document_title filters.
+		\remove_all_filters( 'pre_get_document_title', false );
+
+		\add_filter( 'pre_get_document_title', [ static::class, 'set_document_title' ], 10 );
+
+		/**
+		 * @since 2.4.1
+		 * @since 5.0.0 Deprecated.
+		 * @deprecated
+		 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
+		 * TODO remove this code? -- it's been 8 years...
+		 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
+		 */
+		if ( \apply_filters_deprecated(
+			'the_seo_framework_manipulate_title',
+			[ true ],
+			'5.0.0 of The SEO Framework',
+			'the_seo_framework_overwrite_titles',
+		) ) {
+			\remove_all_filters( 'wp_title', false );
+
+			\add_filter( 'wp_title', [ static::class, 'set_document_title' ], 9 );
+		}
+	}
+
+	/**
 	 * Returns the document title.
 	 *
 	 * This method serves as a callback for filter `pre_get_document_title`.
@@ -50,16 +92,10 @@ final class Title {
 	 * @since 5.0.0 1. Now escapes the filter output.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_document_title`.
-	 * @see $this->get_title()
 	 *
-	 * @param string $title The filterable title.
 	 * @return string The document title
 	 */
-	public static function set_document_title( $title = '' ) {
-
-		if ( ! Query\Utils::query_supports_seo() )
-			return $title;
-
+	public static function set_document_title() {
 		/**
 		 * @since 3.1.0
 		 * @param string $title The generated title.
