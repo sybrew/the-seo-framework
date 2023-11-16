@@ -165,10 +165,10 @@ namespace {
 			'the_seo_framework_breadcrumb_shortcode_css',
 			[
 				".$class ol"                            => [
-					'display:inline-flex',
+					'display:inline',
 					'list-style:none',
 				],
-				".$class ol li"                         => [
+				".$class ol li"                         => [ // We could combine it the above; but this is easier for other devs.
 					'display:inline',
 				],
 				".$class ol li:not(:last-child)::after" => [

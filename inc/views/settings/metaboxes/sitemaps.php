@@ -16,6 +16,7 @@ use \The_SEO_Framework\Admin\Settings\Layout\{
 use \The_SEO_Framework\Helper\{
 	Compatibility,
 	Format\Markdown,
+	Query,
 };
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.

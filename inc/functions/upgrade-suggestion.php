@@ -98,11 +98,11 @@ function _prepare( $previous_version, $current_version ) {
  */
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
-	if ( $previous_version < '4270' && $current_version < '4280' ) {
+	if ( $previous_version < '4300' && $current_version < '5010' ) {
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
 				sprintf(
-					'<p>The SEO Framework: [Cyber Sale &ndash; 50%% off](%s). This notification will self-destruct when the sale ends, or when you dismiss it.</p>',
+					'<p>For The SEO Framework v5.0, we added over 1000 improvements in the past 7 months.</p><p>To celebrate this update (and Black Friday), we are offering a [50%% lifetime discount on our extensions](%s).</p><p>This notification will vanish December 2nd or when you dismiss it.</p>',
 					'https://theseoframework.com/?p=3527',
 				),
 				[ 'a' ],
@@ -119,8 +119,8 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 				'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
 				'capability'   => 'install_plugins',
 				'user'         => 0,
-				'count'        => 4,
-				'timeout'      => strtotime( 'December 4th, 2022, 23:00GMT+1' ) - time(),
+				'count'        => 42,
+				'timeout'      => strtotime( 'December 1st, 2023, 23:00GMT+1' ) - time(),
 			],
 		);
 	}
