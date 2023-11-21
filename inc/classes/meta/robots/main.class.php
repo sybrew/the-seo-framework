@@ -197,7 +197,7 @@ final class Main {
 	 * @return array The collected assertions. Returned by reference.
 	 */
 	public function &collect_assertions() {
-		return $this->collection;
+		return $this->assertions;
 	}
 
 	/**
@@ -222,7 +222,7 @@ final class Main {
 	 */
 	private function reset_assertions() {
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- No function by reference support?
-		$collection = &$this->collect_assertions();
-		$collection = [];
+		$assertions = &$this->collect_assertions();
+		$assertions = [];
 	}
 }

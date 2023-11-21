@@ -120,7 +120,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 				'capability'   => 'install_plugins',
 				'user'         => 0,
 				'count'        => 42,
-				'timeout'      => strtotime( 'December 1st, 2023, 23:00GMT+1' ) - time(),
+				'timeout'      => strtotime( 'December 2nd, 2023, 23:00GMT+1' ) - time(),
 			],
 		);
 	}

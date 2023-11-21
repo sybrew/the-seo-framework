@@ -25,7 +25,7 @@ It's easy to get started. Activate this plugin, and your site's instantly protec
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 27&#160;000 hours into this plugin. Here are the results: =
+= We poured over 27&#160;000 hours of love into this plugin. Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -252,6 +252,8 @@ If you wish to display breadcrumbs, then your theme should provide this. Alterna
 
 == Changelog ==
 
+> Quality is not an act, it is a habit. - Aristotle
+
 TODO highlight in large changes:
 	* Color scheme works again for tooltips.
 	* Issue with caching plugins and WordPress Core vulnerability yet unresolved?
@@ -259,6 +261,9 @@ TODO highlight in large changes:
 		* https://github.com/WordPress/WordPress-Coding-Standards/issues/2217.
 		* Also notify Nik via email?
 	* Multisite support for author SEO fields.
+	* Twitter Card selection.
+	* Breadcrumbs
+	* Renewed Schema.org output (now in Graph!).
 
 TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
 	-> This requires probably a whole lot more work than I'd have hoped.

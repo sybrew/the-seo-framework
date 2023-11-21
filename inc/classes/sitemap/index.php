@@ -1,2 +1,6 @@
 <?php
-// TODO
+/**
+ * The map is not the territory.
+ *
+ * - Alfred Korzybski
+ */

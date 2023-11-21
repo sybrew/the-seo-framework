@@ -175,7 +175,7 @@ namespace {
 					"content:'$sep'",
 					'margin-inline-end:1ch',
 				],
-				".$class ol li :where(a,span)"          => [
+				".$class ol li:not(:last-child) :where(a,span)" => [
 					'margin-inline-end:1ch',
 				],
 			],
