@@ -266,75 +266,6 @@ TODO highlight in large changes:
 	* Renewed Schema.org output (now in Graph!).
 	* `uid` is now accepted as a query parameter. If your custom filters for TSF act odd on profile pages, reach out to us in the forums and show us your code. We'll fix it for you.
 
-TODO add toggle for homepage settings where each "language" installed can be altered accordingly.
-	-> This requires probably a whole lot more work than I'd have hoped.
-	-> This can go wrong if the default language changes, or disappears.
-		-> But, this is effectively the same issue we have with Custom Post Type Archives.
-			-> Speaking of which, we should also have another of such a switcher for those... ugh.
-	-> If we consider this, always have primary site language setting, and store sublanguages under another index.
-		-> This will cause issues if the main language changes?
-TODO check mail Dean about WPML config
-
-TODO add "disable JIT compiler" option to Description generator?
-	- It'll remove some restrictions in PHP at the expense of performance (4x slower, effectively 0.75ms extra load time, so 5% slower overall?)
-		* https://wordpress.org/support/topic/no-meta-description-for-long-posts/
-
-TODO 'show-if-tsf-js'
-	-> Use this to show a "Something went wrong, counters won't load" banner.
-		-> "Your site experienced a fatal error."
-			-> If current_user_can install plugins, add "You may have received an automated notification email about this. Otherwise, check the PHP error logs for details."
-
-TODO update doc "actions" (also update doc "constants" for TSFEM)
-
-TODO add vertical expand title input?
-	-> This helps with Gutenberg's atrocious sidebar.
-
-TODO at "Schema.org Settings", we say "Enable...", "Enable..." and then "Output...".
-	-> Use "Output" for anythign that outputs code, and "Enable" for a feature that adjusts already outputted code?
-
-TODO For authors, we may want to add "is indexable" on a per-site basis.
-	-> Or, otherwise, allow all authors to be indexed on the site.
-		"Allow indexing of author pages that have no posts." with a warning.
-
-TODO "Note: The input value of this field may be used to describe the name of the site elsewhere."
-	-> Tell that it should be the brand name?
-
-TODO can we bust the cache via a JS script if we detect an older version is being requested?
-	-> E.g., we flag "expected version" to each script. If it's a mismatch, bust it?
-
-TODO Attachment page's placeholder description doesn't reflect the "alternative text" we're using.
-	-> Make issue. This isn't important right now.
-
-TODO For Schema.org, shall we make the URL input fields incremental, and collapse all stored URL fields that exist into them?
-
-TODO when loading Gutenberg, the title is prefilled with "Untitled" -- is this intentional?
-	-> It looks jarring on a slow connection.
-
-TODO instead of removing Elementor library from public posts types, force noindex on them?
-	-> Because we already excluded them, they're unlikely to be found by crawlers, though.
-	-> Having them still included will add a bunch of metadata fields to the admin; perhaps we should allow them on the front-end, and noindex them on the back-end?
-		-> Or we could use wp_robots filters? It's their mess, though.
-
-TODO add settings check  wp_attachment_pages_enabled (the attachments are still "public")
-	See https://make.wordpress.org/core/2023/10/16/changes-to-attachment-pages/
-
-TODO since we now sanitize images when we obtain then, we may accidentally fetch duplicates.
-	-> When more than one image is obtained by the generator, filter it against the stack:
-		1. Match duplicated URLs and strip if found.
-			array_unique( array_filter( array_column( $cleaned_details, 'url' ) ) )
-		2. Match duplicated IDs and strip if found; note that 0 === 0 and 0 == false, so don't use this:
-			array_unique( array_filter( array_column( $cleaned_details, 'id' ) ) )
-
-TODO make issue: We should upgrade the twitter profile inputs to become fully qualified URLs.
-	-> We can then use these inputs for the knowledge graph more easily, and extract the handle from the URI for Twitter Card.
-
-TODO Note that this plugin generates data twice as fast as before
-	-> This assumes we have Structured Data disabled, which doubled the processing requirement (hence, we're back at ~the same performance).
-		-> Let's get the real data.
-	-> We must still implement new metadata generation memoizers.
-		-> Once that's implemented, it should be over twice as fast.
-			-> Practically, we could add memoization whenever `$args` is `null`.
-
 **Detailed log**
 
 **For everyone:**
@@ -354,9 +285,6 @@ TODO Note that this plugin generates data twice as fast as before
 	* **Structured data:**
 		* The Schema.org structured data generator has been upgraded to output graphs instead of simple, separated scripts.
 			* The way we've implemented it is faster and robust than ever before, and it finally allows for rapid implementation for new types. This also means that we had to abandon all filters (see the developer notes far below).
-				* TODO: It may not be as fast as before in net, because we output much more data.
-					-> Resolve this by memoizing descriptions and titles and URLs?
-						-> 5.0.1?
 		* Because the data is much more expansive, we've added a new toggle to enable all structured data.
 			* This toggle is enabled by default for all new users of TSF.
 			* This toggle is enabled for existing users if Sitelinks Search Box, Authorized Presence, or Breadcrumbs were enabled.
@@ -755,9 +683,9 @@ TODO Note that this plugin generates data twice as fast as before
 	* **New objects:**
 		* There are over 69 new classes; however, they are ALL marked private. Use our new pool API instead.
 	* **Deprecated objects:**
-		* Class `The_SEO_Framework\Bridges\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Loader` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
-		* Class `The_SEO_Framework\Builders\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Registry` instead. TODO add a functional EP? e.g. `tsf()->scripts()`
-		* Class `The_SEO_Framework\Interpreters\SEOBar` is now deprecated. Use `The_SEO_Framework\Admin\SEOBar\Builder` instead. TODO add a functional EP? e.g. `tsf()->seobar()`
+		* Class `The_SEO_Framework\Bridges\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Loader` instead.
+		* Class `The_SEO_Framework\Builders\Scripts` is now deprecated. Use `The_SEO_Framework\Admin\Script\Registry` instead.
+		* Class `The_SEO_Framework\Interpreters\SEOBar` is now deprecated. Use `The_SEO_Framework\Admin\SEOBar\Builder` instead.
 		* Class `The_SEO_Framework\Builders\Sitemap\Main` is now deprecated. Use `The_SEO_Framework\Sitemap\Optimized\Main` instead.
 			* However, nothing useful is left to access directly in this class.
 	* **Removed objects:**
