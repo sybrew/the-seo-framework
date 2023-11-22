@@ -99,7 +99,7 @@ switch ( $instance ) :
 				Input::make_checkbox( [
 					'id'          => 'knowledge_output',
 					'label'       => \esc_html__( 'Add authorized presence?', 'autodescription' ) . " $info",
-					'description' => \esc_html__( 'This tells search engines about who owns this website, its logo, and its social pages.', 'autodescription' ),
+					'description' => \esc_html__( 'This tells search engines about the website ownership, its logo, and its social pages.', 'autodescription' ),
 					'escape'      => false,
 				] ),
 				true,

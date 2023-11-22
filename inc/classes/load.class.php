@@ -65,6 +65,7 @@ final class Load extends Pool {
 	 * Instance getter.
 	 *
 	 * @since 5.0.0
+	 * @access private
 	 *
 	 * @return null If called twice or more.
 	 */

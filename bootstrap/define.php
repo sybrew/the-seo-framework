@@ -108,7 +108,8 @@ namespace The_SEO_Framework;
  * Plugin updates cache key.
  *
  * @since 3.1.0
- * @since 5.0.0 Removed its filter.
+ * @since 5.0.0 1. Removed its filter.
+ *              2. Changed the default value from 'autodescription-updates-cache'.
  */
 \define( 'THE_SEO_FRAMEWORK_SITE_CACHE', 'autodescription-site-cache' );
 

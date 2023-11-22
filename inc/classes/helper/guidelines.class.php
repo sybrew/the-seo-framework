@@ -214,7 +214,7 @@ class Guidelines {
 				'good'        => \esc_attr__( 'Length is good.', 'autodescription' ),
 			],
 			'short'    => [
-				'empty'       => \esc_attr_x( 'Empty', 'The string is empty', 'autodescription' ),
+				'empty'       => \esc_attr_x( 'Empty', 'The text field is empty', 'autodescription' ),
 				'farTooShort' => \esc_attr__( 'Far too short', 'autodescription' ),
 				'tooShort'    => \esc_attr__( 'Too short', 'autodescription' ),
 				'tooLong'     => \esc_attr__( 'Too long', 'autodescription' ),
@@ -222,7 +222,7 @@ class Guidelines {
 				'good'        => \esc_attr__( 'Good', 'autodescription' ),
 			],
 			'shortdot' => [
-				'empty'       => \esc_attr_x( 'Empty.', 'The string is empty', 'autodescription' ),
+				'empty'       => \esc_attr_x( 'Empty.', 'The text field is empty', 'autodescription' ),
 				'farTooShort' => \esc_attr__( 'Far too short.', 'autodescription' ),
 				'tooShort'    => \esc_attr__( 'Too short.', 'autodescription' ),
 				'tooLong'     => \esc_attr__( 'Too long.', 'autodescription' ),

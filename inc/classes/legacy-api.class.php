@@ -97,7 +97,7 @@ class Legacy_API {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
 	 *              2. Removed the second parameter, the output is always sanitized now.
-	 *              3. Removed the third parameter; use get_open_graph_title() or get_twitter_title() instead.
+	 *              3. Removed the third parameter; use `get_open_graph_title()` or `get_twitter_title()` instead.
 	 * @api
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -212,10 +212,10 @@ class Legacy_API {
 	 * @since 3.0.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 4.2.3 Now accepts arguments publicly.
-	 * @since 5.0.0 1. No longer calls the query in the sitemap to remove pagination.
-	 *              2. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
+	 *              2. No longer calls the query in the sitemap to remove pagination.
 	 *              3. Removed support for `get_custom_field` without deprecation notice.
-	 *                 You should've used create_canonical_url() instead.
+	 *                 You should've used `create_canonical_url()` instead.
 	 * @api
 	 *
 	 * @param array|null $args The canonical URL arguments, leave null to autodetermine query : {
@@ -235,8 +235,8 @@ class Legacy_API {
 	 * @since 4.0.0
 	 * @since 4.0.5 The output is now filterable.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
-	 * @since 5.0.0 1. Removed the last `$clean` parameter. It always returns a cleaned image now.
-	 *              2. Ennobled to be part of the legacy API.
+	 * @since 5.0.0 1. Ennobled to be part of the legacy API.
+	 *              2. Removed the last `$clean` parameter. It always returns a cleaned image now.
 	 * @api
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
