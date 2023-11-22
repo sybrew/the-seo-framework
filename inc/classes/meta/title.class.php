@@ -124,8 +124,8 @@ class Title {
 	 * @since 4.1.0 Added the third $social parameter.
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
-	 *              3. Removed the second `$escape` parameter.
-	 *              4. Moved the third parameter to the second.
+	 *              2. Removed the second `$escape` parameter.
+	 *              3. Moved the third parameter to the second.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.

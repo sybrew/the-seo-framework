@@ -117,6 +117,7 @@ class Schema {
 		/**
 		 * For consistency, data should be filtered deep, such as (WordPress) title
 		 * filters for breadcrumb and page titles. Use this only if those aren't available.
+		 *
 		 * @since 5.0.0
 		 * @param array[]    $graph A sequential list of graph entities.
 		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
