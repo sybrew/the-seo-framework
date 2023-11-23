@@ -11,6 +11,7 @@ namespace The_SEO_Framework\Data\Filter;
 use \The_SEO_Framework\{
 	Helper,
 	Meta,
+	Format\Strings,
 };
 
 /**

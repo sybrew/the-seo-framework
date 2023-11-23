@@ -15,7 +15,7 @@ The fastest feature-complete SEO plugin for professional WordPress websites. Sec
 
 **The fastest and only feature-complete SEO plugin that follows the guidelines and rules imposed by WordPress and search engines.**
 
-**Preview The SEO Framework in WordPress Playground.](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)**
+**[Preview The SEO Framework in WordPress Playground.](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)**
 
 Start using proven methods to optimize your website for SEO. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
 
@@ -25,7 +25,7 @@ It's easy to get started. Activate this plugin, and your site's instantly protec
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 27&#160;000 hours of love into this plugin. Here are the results: =
+= We poured over 27&#160;000 hours of love into this plugin.<br>Here are the results: =
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -252,6 +252,16 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+= 5.0.1 =
+
+This update fixes issues our community found after the release of TSF v5.0.0.
+
+**For everyone:**
+
+* **Fixed:**
+	* TODO Resolved an issue where the RGB hex prefix `#` was missing on output. Both on the front-end and in the settings.
+	* Resolved a potential crash when an image with an alt tag was used for social meta sharing. Props [sageth](https://wordpress.org/support/users/sageth/) for reporting this.
+
 = 5.0.0 - Apex =
 
 *We become just by doing just acts, temperate by doing temperate acts, brave by doing brave acts. - [Aristotle](https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0054%3Abook%3D2%3Achapter%3Dpos%3D17%3Asection%3D4)*
@@ -263,7 +273,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * You can now select a preferred Twitter Card type for every post, term, and custom post type.
 * Do you fancy the SEO Bar but find it distracting? Toggle the new dull, low-contrast color scheme.
 * Special characters are now normalized for SEO Bar assertions, so it is now far more accurate.
-* Users with an author role anywhere in a multisite network now have their SEO meta tweaked from any site.
+* Users with an author role anywhere in a multisite network can now have their SEO meta tweaked from any site.
 * Tooltip backgrounds and various border accents now adhere to the admin color scheme (once more).
 
 **Apex**
@@ -278,7 +288,7 @@ You can now use shortcode `&#91;tsf_breadcrumb&#93;`. This shortcode is meant to
 
 **Important for developers**
 
-* We refactored the entire codebase in this update -- over 1.20 million characters were written, and over 0.87 million thousand were removed.
+* We refactored the entire codebase in this update -- over 1.20 million characters were written, and over 0.87 million were removed.
 * The code counts **1229 registered changes**; we added over 70 new classes, 220 new methods, 20 new filters, and a shortcode.
 * For the main object, `tsf()`, we deleted 19 classes, deprecated 388 methods and 1 property, and deleted 110 methods and 10 properties.
 * `uid` is now an accepted custom query parameter for almost all meta-generator methods. If your custom filters for TSF act odd on profile pages, [reach out to us in the forums](https://tsf.fyi/support/tsf/new-topic) and show us your code. **We'll fix it for you.**
