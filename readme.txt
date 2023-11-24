@@ -258,9 +258,12 @@ This update fixes issues our community found after the release of TSF v5.0.0.
 
 **For everyone:**
 
+* **Changed:**
+	* Trimming of image alt tags now happens at 417 characters; this is to account for Twitter's ambiguous 420 "maximum" value, where TSF may add three dots for ellipsis.
 * **Fixed:**
-	* TODO Resolved an issue where the RGB hex prefix `#` was missing on output. Both on the front-end and in the settings.
-	* Resolved a potential crash when an image with an alt tag was used for social meta sharing. Props [sageth](https://wordpress.org/support/users/sageth/) for reporting this.
+	* TODO Resolved a regression where the RGB hex prefix `#` was missing on output. Both on the front-end and in the settings.
+	* TODO Resolved a regression where an unassigned homepage would not be recognized as the homepage.
+	* Resolved a fatal error when an image with an alt tag over 420 characters was used for social meta sharing. Props [sageth](https://wordpress.org/support/users/sageth/) for reporting this.
 
 = 5.0.0 - Apex =
 

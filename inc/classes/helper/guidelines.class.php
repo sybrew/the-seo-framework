@@ -97,7 +97,7 @@ class Guidelines {
 			'ckb'   => 760 / 910, // Central Kurdish (كوردی)
 		];
 
-		// Default to 1 (760/760 = no adjustment).
+		// Default to 1 (910/910 = no adjustment).
 		$p_adjust = $pixel_adjustments[ $locale ] ?? 1;
 
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned

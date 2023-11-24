@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Helper\Format\Strings
+ * @package The_SEO_Framework\Classes\Helper\Format\Arrays
  * @subpackage The_SEO_Framework\Formatting
  */
 
