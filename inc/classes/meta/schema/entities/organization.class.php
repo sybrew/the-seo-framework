@@ -103,7 +103,7 @@ final class Organization extends Reference {
 					];
 				}
 				if ( $logo['filesize'] )
-					$entity['logo'] += [ 'contentSize' => $logo['filesize'] ];
+					$entity['logo'] += [ 'contentSize' => (string) $logo['filesize'] ];
 			} else {
 				$entity['logo'] = $logo['url'];
 			}

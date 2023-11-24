@@ -43,6 +43,7 @@ final class Feed {
 	/**
 	 * Sets the X-Robots-Tag headers for feeds.
 	 *
+	 * @hook template_redirect 10
 	 * @since 5.0.0
 	 */
 	public static function output_robots_noindex_headers_on_feed() {
@@ -55,6 +56,8 @@ final class Feed {
 	 * This method converts the input $content to an excerpt and is able to add
 	 * a nofollow backlink at the end of the feed.
 	 *
+	 * @hook the_content_feed 10
+	 * @hook the_excerpt_rss 10
 	 * @since 5.0.0
 	 *
 	 * @param string      $content   The feed's content.
