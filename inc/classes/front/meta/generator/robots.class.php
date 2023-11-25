@@ -1,7 +1,7 @@
 <?php
 /**
  * @package The_SEO_Framework\Classes\Front\Front\Meta\Generator
- * @subpackage The_SEO_Framework\Meta
+ * @subpackage The_SEO_Framework\Meta\Robots
  */
 
 namespace The_SEO_Framework\Front\Meta\Generator;
