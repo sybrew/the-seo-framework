@@ -560,7 +560,7 @@ class Query {
 	 * Detects front page.
 	 *
 	 * Adds support for custom "show_on_front" entries.
-	 * When the homepage isn't a 'page' (tested via `is_front_page()`) or 'posts',
+	 * When the homepage isn't a 'page' (tested via `is_front_page()`) or 'post',
 	 * it isn't considered a real front page -- it could be anything custom.
 	 *
 	 * @since 2.9.0
@@ -579,7 +579,7 @@ class Query {
 			\is_front_page()
 				?: static::is_blog()
 					&& 0 === static::get_the_real_id()
-					&& 'posts' === \get_option( 'show_on_front' )
+					&& 'post' !== \get_option( 'show_on_front' ) // 'page' is tested via `is_front_page()`
 		);
 	}
 
