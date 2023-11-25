@@ -935,6 +935,25 @@ class Pool extends Legacy_API {
 	}
 
 	/**
+	 * Returns the Theme Color API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 5.0.1
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Theme_Color
+	 */
+	public static function theme_color() {
+		return static::$pool['theme_color'] ??= new class extends Meta\Theme_Color {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->theme_color()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
 	 * Returns the Title API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *

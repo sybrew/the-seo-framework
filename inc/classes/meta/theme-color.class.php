@@ -1,14 +1,17 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Front\Meta\Generator
+ * @package The_SEO_Framework\Classes\Meta
  * @subpackage The_SEO_Framework\Meta\Theme_Color
  */
 
-namespace The_SEO_Framework\Front\Meta\Generator;
+namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta;
+use \The_SEO_Framework\{
+	Data,
+	Data\Filter\Sanitize,
+};
 
 /**
  * The SEO Framework plugin
@@ -28,35 +31,24 @@ use \The_SEO_Framework\Meta;
  */
 
 /**
- * Holds theme color generators for meta tag output.
+ * Holds getters for meta tag output.
  *
- * @since 5.0.0
- * @access private
+ * @since 5.0.1
+ * @access protected
+ *         Use tsf()->theme_color() instead.
  */
-final class Theme_Color {
+class Theme_Color {
 
 	/**
 	 * @since 5.0.0
-	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
+	 *
+	 * @return string The theme color including prefixed hashtag.
 	 */
-	public const GENERATORS = [
-		[ __CLASS__, 'generate_theme_color' ],
-	];
+	public static function get_theme_color() {
 
-	/**
-	 * @since 5.0.0
-	 * @generator
-	 */
-	public static function generate_theme_color() {
+		$color = Sanitize::rgb_hex( Data\Plugin::get_option( 'theme_color' ) );
 
-		$theme_color = Meta\Theme_Color::get_theme_color();
-
-		if ( $theme_color )
-			yield 'theme-color' => [
-				'attributes' => [
-					'name'    => 'theme-color',
-					'content' => $theme_color,
-				],
-			];
+		// '000' is true. '0b0' is also true.
+		return $color ? "#$color" : '';
 	}
 }

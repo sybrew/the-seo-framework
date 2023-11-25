@@ -85,6 +85,8 @@ switch ( $instance ) :
 		HTML::description( \__( 'Output various meta tags for social site integration, among other third-party services.', 'autodescription' ) );
 
 		$active_conflicting_plugins_types = Compatibility::get_active_conflicting_plugin_types();
+
+		$theme_color = Meta\Theme_Color::get_theme_color();
 		?>
 		<hr>
 		<?php
@@ -200,7 +202,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'theme_color' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'theme_color' ); ?>" value="<?= \esc_attr( Data\Plugin::get_option( 'theme_color' ) ) ?>" data-tsf-default-color="" />
+			<input type=text name="<?php Input::field_name( 'theme_color' ); ?>" class=tsf-color-picker id="<?php Input::field_id( 'theme_color' ); ?>" value="<?= \esc_attr( $theme_color ) ?>" data-tsf-default-color="" />
 		</p>
 		<hr>
 		<?php
