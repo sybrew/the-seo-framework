@@ -11,6 +11,7 @@ namespace The_SEO_Framework\Sitemap\WP;
 use \The_SEO_Framework\{
 	Data,
 	Sitemap,
+	Helper\Format\Time,
 };
 
 /**

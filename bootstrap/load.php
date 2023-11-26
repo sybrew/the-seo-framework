@@ -74,7 +74,7 @@ function _load_tsf() {
 
 		require \THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'init-compat.php';
 
-		\add_action( 'init', 'The_SEO_Framework\_init_tsf' );
+		\add_action( 'init', 'The_SEO_Framework\_init_tsf', 0 );
 
 		if ( \is_admin() ) {
 			/**
@@ -95,7 +95,7 @@ function _load_tsf() {
 /**
  * Initializes all of TSF.
  *
- * @hook init 10
+ * @hook init 0
  * @since 3.1.0
  * @since 5.0.0 1. Is no longer responsible for the loading.
  *              2. Moved from plugins_loaded to init.

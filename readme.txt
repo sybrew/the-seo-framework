@@ -265,10 +265,14 @@ This update fixes issues our community found after the release of TSF v5.0.0.
 	* Resolved a regression where an unassigned homepage would not be recognized as the homepage.
 	* Resolved an issue where the contentSize markup for Logo was of type integer, which should've been of type string (as an integer).
 	* Resolved a fatal error when an image with an alt tag over 420 characters was used for social meta sharing. Props [sageth](https://wordpress.org/support/users/sageth/) for reporting this.
+	* Resolved an issue where WordPress Core sitemaps were no longer augmented.
 
 * **For developers:**
 	* **Added**:
 		* Pool `tsf()->theme_color()` is now available. You can use `tsf()->theme_color()->get_theme_color()` to get the meta `theme-color` hexadecimal value.
+	* **Changed:**
+		* TSF initializes all its hooks at `init 0`, from `init 10`.
+			* To hook into WordPress's sitemap providers, which are registered far too early, we had to move TSF's initialization sequence. We used `0` for future-proofing, since WordPress's loading sequence is a combobulated mess now, which shows no signs of stopping.
 
 = 5.0.0 - Apex =
 

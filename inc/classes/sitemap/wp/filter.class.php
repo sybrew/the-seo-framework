@@ -45,6 +45,7 @@ class Filter {
 	 * Sets "doing sitemap" in TSF if preliminary conditions pass.
 	 * We do this via a filter, which is unconventional but a bypass.
 	 *
+	 * @hook wp_sitemaps_posts_query_args 11
 	 * @link <https://core.trac.wordpress.org/ticket/56954>
 	 * @since 4.2.7
 	 * @since 5.0.0 Renamed from `_trick_filter_doing_sitemap`.
@@ -71,6 +72,7 @@ class Filter {
 	/**
 	 * Filters Core sitemap provider.
 	 *
+	 * @hook wp_sitemaps_add_provider 9
 	 * @since 4.1.2
 	 * @since 5.0.0 Renamed from `_filter_add_provider`.
 	 * @access private
@@ -104,6 +106,7 @@ class Filter {
 	/**
 	 * Filters Core sitemap query limit.
 	 *
+	 * @hook wp_sitemaps_max_urls 9
 	 * @since 4.1.2
 	 * @since 5.0.0 Renamed from `_filter_max_urls`.
 	 * @access private

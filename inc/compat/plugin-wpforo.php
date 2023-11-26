@@ -11,8 +11,8 @@ namespace The_SEO_Framework;
 use \The_SEO_Framework\Meta;
 
 \add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
-
 \add_action( 'wpforo_before_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
+
 /**
  * Initializes wpForo page fixes.
  *
