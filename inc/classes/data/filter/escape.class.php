@@ -54,6 +54,8 @@ class Escape {
 	/**
 	 * Escapes value via JSON encoding for script elements.
 	 *
+	 * Unused internally.
+	 *
 	 * @since 5.0.0
 	 *
 	 * @param mixed $value   The value to encode.

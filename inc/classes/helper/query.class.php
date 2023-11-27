@@ -561,7 +561,8 @@ class Query {
 	 *
 	 * Adds support for custom "show_on_front" entries.
 	 * When the homepage isn't a 'page' (tested via `is_front_page()`) or 'post',
-	 * it isn't considered a real front page -- it could be anything custom.
+	 * it isn't considered a real front page -- it could be anything custom (Extra by Elegant Themes),
+	 * or the `show_on_front` setting is somehow corrupted.
 	 *
 	 * @since 2.9.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
@@ -569,18 +570,13 @@ class Query {
 	 * @return bool
 	 */
 	public static function is_real_front_page() {
-
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
-		if ( null !== $cache = Query\Cache::memo() )
-			return $cache;
-
-		// Elegant Themes's Extra Support: Assert home, but only when it's registered as such.
-		return Query\Cache::memo(
-			\is_front_page()
-				?: static::is_blog()
-					&& 0 === static::get_the_real_id()
-					&& 'post' !== \get_option( 'show_on_front' ) // 'page' is tested via `is_front_page()`
-		);
+		return Query\Cache::memo()
+			?? Query\Cache::memo(
+				\is_front_page()
+					?: static::is_blog()
+						&& 0 === static::get_the_real_id()
+						&& 'post' !== \get_option( 'show_on_front' ) // 'page' is tested via `is_front_page()`
+			);
 	}
 
 	/**

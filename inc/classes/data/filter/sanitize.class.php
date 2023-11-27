@@ -220,7 +220,7 @@ class Sanitize {
 		// str_replace is faster than putting these alternative sequences in the `-|-` regex below.
 		// That'd be this: "/((?'h'-|&\#45;|\xe2\x80\x90){2,3}(*SKIP)(?&h)|(?&h))(?(h)(*FAIL))/u"
 		return str_replace(
-			[ '&#45;', "\xe2\x80\x90" ],
+			[ '&#45;', "\xe2\x80\x90" ], // Should we consider &#000...00045;?
 			'&#x2d;',
 			preg_replace( '/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/', '&#x2d;', $text )
 		);

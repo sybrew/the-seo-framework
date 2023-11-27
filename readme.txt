@@ -254,27 +254,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 = 5.0.1 =
 
-This update fixes issues our community found after the release of TSF v5.0.0. We also improved performance.
-
-**For everyone:**
-
-* **Changed:**
-	* Trimming of image alt tags now happens at 417 characters; this is to account for Twitter's ambiguous 420 "maximum" value, where TSF may add three dots for ellipsis.
-	* Random theme headers are no longer considered for Open Graph images. This sporadic behavior, albeit fine for social sharing, took up 10% of TSF's processing time.
-* **Fixed:**
-	* Resolved a regression where the RGB hex prefix `#` was missing on output. Both on the front-end and in the settings.
-	* Resolved a regression where an unassigned homepage would not be recognized as the homepage.
-	* Resolved an issue where the contentSize markup for Logo was of type integer, which should've been of type string (as an integer).
-	* Resolved a fatal error when an image with an alt tag over 420 characters was used for social meta sharing. Props [sageth](https://wordpress.org/support/users/sageth/) for reporting this.
-	* Resolved an issue where WordPress Core sitemaps were no longer augmented.
-	* Resolved an issue where the screen settings were no longer visible on the SEO Settings page.
-
-* **For developers:**
-	* **Added**:
-		* Pool `tsf()->theme_color()` is now available. You can use `tsf()->theme_color()->get_theme_color()` to get the meta `theme-color` hexadecimal value.
-	* **Changed:**
-		* TSF initializes all its hooks at `init 0`, from `init 10`.
-			* To hook into WordPress's sitemap providers, which are registered far too early, we had to move TSF's initialization sequence. We used `0` for future-proofing, since WordPress's loading sequence is a combobulated mess now, which shows no signs of stopping.
+This minor update fixes issues our community found after the release of TSF v5.0.0. We also [improved the performance](https://theseoframework.com/?p=4158).
 
 = 5.0.0 - Apex =
 

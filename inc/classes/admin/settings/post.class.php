@@ -77,8 +77,8 @@ final class Post {
 
 		$box_id = 'tsf-inpost-box';
 
-		// TODO add the_seo_framework_post_metabox_args, and deprecate filters below?
-		// -> We'll concede to using Gutenberg, one day, dismissing this.
+		// TODO 5.1.0 add the_seo_framework_post_metabox_args, and deprecate filters below?
+		// -> Even if we'll concede to using Gutenberg, one day, dismissing this, this is still useful for Classic Editor.
 		\add_meta_box(
 			$box_id,
 			\esc_html__( 'SEO Settings', 'autodescription' ),

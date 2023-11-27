@@ -191,7 +191,7 @@ function _downgrade( $previous_version ) { // phpcs:ignore,VariableAnalysis.Code
 /**
  * Upgrades the plugin's database.
  *
- * NOTE do not skip versions. Sometimes, we add options. (e.g., _do_upgrade_1 & _do_upgrade_3103()).
+ * NOTE do not skip versions. Sometimes, we add options. (e.g., _do_upgrade_1 & _do_upgrade_5001()).
  *
  * @since 4.1.0
  * @TODO detect database transaction failures before continuing the upgrade? But, WordPress doesn't do that, either.
@@ -886,7 +886,6 @@ function _do_upgrade_4270() {
  * Changes option `autodescription-updates-cache` to constant value THE_SEO_FRAMEWORK_SITE_CACHE.
  * Enables `ld_json_enabled` only if any structured data function used to be active.
  * Sets `homepage_twitter_card_type` to an empty string (aka default).
- * TODO registers default for static placeholder editing.
  *
  * @since 5.0.0
  * @global \wpdb $wpdb
