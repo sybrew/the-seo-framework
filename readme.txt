@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4.0
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
