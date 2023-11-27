@@ -48,10 +48,9 @@ final class Plugin {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.1 Removed the registration of metaboxes.
 	 */
 	public static function prepare_settings_wrap() {
-
-		static::register_seo_settings_meta_boxes();
 
 		\add_action(
 			Admin\Menu::get_page_hook_name() . '_settings_page_boxes',

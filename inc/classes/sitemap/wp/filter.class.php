@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Sitemap\WP;
 
 use \The_SEO_Framework\{
 	Data,
+	Helper\Query,
 	Sitemap,
 };
 
@@ -63,7 +64,7 @@ class Filter {
 			// Didn't we request a simple API function for this? Anyway, null safe operators would also be nice here.
 			// For now, let's assume this API won't change. Test periodically.
 			if ( \wp_sitemaps_get_server()->registry->get_provider( $wp_query->query_vars['sitemap'] ) )
-				\tsf()->is_sitemap( true );
+				Query::is_sitemap( true );
 		}
 
 		return $args;

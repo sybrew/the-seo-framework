@@ -202,6 +202,7 @@ final class Generator {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
+	 * @since 5.0.1 No longer uses `get_custom_header()`, which tried to generate images.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -214,22 +215,31 @@ final class Generator {
 	 */
 	public static function generate_theme_header_image_details( $args = null, $size = 'full' ) {
 
-		$header = \get_custom_header();
+		$image = \get_theme_mod(
+			'header_image_data',
+			\get_theme_support( 'custom-header', 'default-image' )
+		);
 
-		if ( empty( $header->attachment_id ) ) { // This property isn't returned by default.
-			if ( $header->url )
+		if ( \is_string( $image ) && $image ) {
+			yield [
+				'url' => $image,
+				'id'  => 0,
+			];
+		} elseif ( \is_object( $image ) && ! empty( $image->url ) ) {
+			if ( empty( $image->attachment_id ) ) { // This property isn't stored by default.
 				yield [
-					'url' => $header->url,
+					'url' => $image->url,
 					'id'  => 0,
 				];
-		} else {
-			$url = \wp_get_attachment_image_url( $header->attachment_id, $size );
+			} else {
+				$url = \wp_get_attachment_image_url( $image->attachment_id, $size );
 
-			if ( $url )
-				yield [
-					'url' => $url,
-					'id'  => $header->attachment_id,
-				];
+				if ( $url )
+					yield [
+						'url' => $url,
+						'id'  => $image->attachment_id,
+					];
+			}
 		}
 	}
 
