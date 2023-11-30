@@ -164,19 +164,18 @@ namespace {
 		$css = (array) apply_filters(
 			'the_seo_framework_breadcrumb_shortcode_css',
 			[
-				".$class ol"                            => [
+				"nav.$class ol"                            => [
 					'display:inline',
 					'list-style:none',
+					'margin-inline-start:0',
 				],
-				".$class ol li"                         => [ // We could combine it the above; but this is easier for other devs.
+				"nav.$class ol li"                         => [ // We could combine it the above; but this is easier for other devs.
 					'display:inline',
 				],
-				".$class ol li:not(:last-child)::after" => [
+				"nav.$class ol li:not(:last-child)::after" => [
 					"content:'$sep'",
 					'margin-inline-end:1ch',
-				],
-				".$class ol li:not(:last-child) :where(a,span)" => [
-					'margin-inline-end:1ch',
+					'margin-inline-start:1ch',
 				],
 			],
 			$class,

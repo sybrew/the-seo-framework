@@ -256,11 +256,21 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 **For everyone:**
 
+* **Improved:**
+	* The breadcrumb shortcode now tries to remove inline margin in front of its text.
+		* And although we increased specificity, this may still be overwritten by the theme styles, which is intended behavior: enforcing styles makes theming difficult.
 * **Removed:**
 	* TODO We temporarily removed support for the GitHub Updater because of unforeseen quirks, such as it renaming the plugin folder.
 		* In a future update, we'll reintroduce this with the quirks resolved.
 * **Fixed:**
 	* Resolved an issue where term sitemaps wouldn't load when using the "not optimized" WordPress Core sitemaps.
+
+**For developers:**
+
+* **Changed:**
+	* We changed all indexes for `the_seo_framework_breadcrumb_shortcode_css` in order to resolve issues with displaying the breadcrumb.
+		* Now, all indexes are prefixed with `nav` to increase specificty.
+		* `.$class ol li:not(:last-child) :where(a,span)` is gone altogether.
 
 = 5.0.1 =
 
