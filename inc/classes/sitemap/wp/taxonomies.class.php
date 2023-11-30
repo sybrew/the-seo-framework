@@ -99,7 +99,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			/**
 			 * @augmented This if-statement prevents including the term in the sitemap when conditions apply.
 			 */
-			if ( ! Sitemap\Store::is_term_included_in_sitemap( $term->term_id, $taxonomy ) )
+			if ( ! Sitemap\Utils::is_term_included_in_sitemap( $term->term_id, $taxonomy ) )
 				continue;
 
 			$term_link = \get_term_link( $term, $taxonomy );

@@ -252,6 +252,16 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+= 5.0.2 =
+
+**For everyone:**
+
+* **Removed:**
+	* TODO We temporarily removed support for the GitHub Updater because of unforeseen quirks, such as it renaming the plugin folder.
+		* In a future update, we'll reintroduce this with the quirks resolved.
+* **Fixed:**
+	* Resolved an issue where term sitemaps wouldn't load when using the "not optimized" WordPress Core sitemaps.
+
 = 5.0.1 =
 
 This minor update fixes issues our community found after the release of TSF v5.0.0. We also [improved the performance](https://theseoframework.com/?p=4158).
