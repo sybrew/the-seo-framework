@@ -136,6 +136,7 @@ final class Open_Graph {
 			);
 		}
 
+		// A site called '0' does not make much sense.
 		if ( $sitename )
 			yield 'og:site_name' => [
 				'attributes' => [

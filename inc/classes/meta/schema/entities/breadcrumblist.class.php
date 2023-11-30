@@ -61,7 +61,7 @@ final class BreadcrumbList extends Reference {
 			$list_items[] = [
 				'@type'    => 'ListItem',
 				'position' => $i + 1, // Let's not create 0
-				'item'     => \esc_url( $item['url'] ),
+				'item'     => \sanitize_url( $item['url'] ),
 				'name'     => Sanitize::metadata_content( $item['name'] ),
 			];
 		}

@@ -69,7 +69,7 @@ body.rtl .tsf-nav-tab-content .tsf-pixel-counter-wrap {
 	height: 0;
 }
 
-/* 8 + 4 = 12. The 4px margins account for line height. */
+/* 8 + 4 = 12. The 4px margins account for line height. TODO use unit lh instead? */
 .tsf-pixel-counter-wrap {
 	border-bottom: 1px solid #ccc;
 	margin-top: 12px;

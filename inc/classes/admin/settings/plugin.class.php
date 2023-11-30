@@ -46,6 +46,7 @@ final class Plugin {
 	/**
 	 * Outputs the SEO Settings page wrap.
 	 *
+	 * @hook toplevel_page_theseoframework-settings 10
 	 * @since 4.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.1 Removed the registration of metaboxes.
@@ -67,6 +68,7 @@ final class Plugin {
 	/**
 	 * Registers meta boxes on the Site SEO Settings page.
 	 *
+	 * @hook load-toplevel_page_theseoframework-settings 10
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_register_seo_settings_meta_boxes`.
 	 */

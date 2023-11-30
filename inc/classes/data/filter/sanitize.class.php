@@ -10,8 +10,8 @@ namespace The_SEO_Framework\Data\Filter;
 
 use \The_SEO_Framework\{
 	Helper,
-	Meta,
 	Helper\Format\Strings,
+	Meta,
 };
 
 /**
@@ -36,6 +36,7 @@ use \The_SEO_Framework\{
  *
  * @since 5.0.0
  * @access protected
+ *         Use tsf()->filter()->sanitize() instead.
  */
 class Sanitize {
 

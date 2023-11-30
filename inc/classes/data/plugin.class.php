@@ -186,7 +186,7 @@ class Plugin {
 
 		static::register_automated_refresh( 'site_cache' );
 
-		return static::$site_cache_memo = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] ) ?: [];
+		return static::$site_cache_memo = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) ?: [];
 	}
 
 	/**
