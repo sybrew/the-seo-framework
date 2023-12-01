@@ -25,7 +25,7 @@ use \The_SEO_Framework\{
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_title', 10, 2 );
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_pre_title', 10, 2 );
-\add_filter( 'the_seo_framework_fetched_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 3 );
+\add_filter( 'the_seo_framework_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 2 );
 \add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description', 10, 2 );
 \add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
 \add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 2 );
@@ -284,21 +284,21 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  * This should be fixed with bbPress 3.0.
  * This function fixes the Excerpt part.
  *
- * @hook the_seo_framework_fetched_description_excerpt 10
+ * @hook the_seo_framework_description_excerpt 10
  * @since 2.9.0
  * @since 3.0.4 Default value for $max_char_length has been increased from 155 to 300.
  * @since 3.1.0 Now no longer fixes the description when `is_tax()` is true.
  *              @see `_bbpress_filter_pre_title()` for explanation.
  * @since 4.0.0 No longer overrules external queries.
+ * @since 5.0.2 Removed second parameter, and shifted the third into the second. This is because we changed the hook.
  * @access private
  *
  * @param string     $excerpt The excerpt to use.
- * @param int        $page_id Deprecated.
  * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
  *                         Is null when the query is auto-determined.
  * @return string The excerpt.
  */
-function _bbpress_filter_excerpt_generation( $excerpt = '', $page_id = 0, $args = null ) {
+function _bbpress_filter_excerpt_generation( $excerpt = '', $args = null ) {
 
 	if ( isset( $args ) || ! \is_bbpress() ) return $excerpt;
 

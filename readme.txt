@@ -267,6 +267,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* TODO Nested categories need to honor the primary but then the deepest one.
 		-> Is this a WC only issue?
 		-> https://wordpress.org/support/topic/deactivate-primary-categories-woocommerce/#post-17244455
+	* TODO Resolved an issue when bbPress is selectively unloaded, its compatibility file would cause a fatal error.
 
 **For developers:**
 
@@ -274,6 +275,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* We changed all indexes for `the_seo_framework_breadcrumb_shortcode_css` in order to resolve issues with displaying the breadcrumb.
 		* Now, all indexes are prefixed with `nav` to increase specificty.
 		* `.$class ol li:not(:last-child) :where(a,span)` is gone altogether.
+* **Fixed:**
+	* Resolved an issue where bbPress would spawn deprecation notices when altering the generated description.
 
 = 5.0.1 =
 
