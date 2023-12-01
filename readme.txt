@@ -260,10 +260,13 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* The breadcrumb shortcode now tries to remove inline margin in front of its text.
 		* And although we increased specificity, this may still be overwritten by the theme styles, which is intended behavior: enforcing styles makes theming difficult.
 * **Removed:**
-	* TODO We temporarily removed support for the GitHub Updater because of unforeseen quirks, such as it renaming the plugin folder.
+	* We temporarily removed support for the GitHub Updater because of unforeseen quirks, such as it renaming the plugin folder and updating from our development branch.
 		* In a future update, we'll reintroduce this with the quirks resolved.
 * **Fixed:**
 	* Resolved an issue where term sitemaps wouldn't load when using the "not optimized" WordPress Core sitemaps.
+	* TODO Nested categories need to honor the primary but then the deepest one.
+		-> Is this a WC only issue?
+		-> https://wordpress.org/support/topic/deactivate-primary-categories-woocommerce/#post-17244455
 
 **For developers:**
 
