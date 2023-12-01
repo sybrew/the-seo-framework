@@ -268,6 +268,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		-> Is this a WC only issue?
 		-> https://wordpress.org/support/topic/deactivate-primary-categories-woocommerce/#post-17244455
 	* TODO Resolved an issue when bbPress is selectively unloaded, its compatibility file would cause a fatal error.
+	* Resolved an issue where, when TSF options disappear or have failed to be registered, the plugin will no longer crash but fall back to defaults.
 
 **For developers:**
 

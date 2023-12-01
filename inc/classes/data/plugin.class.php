@@ -135,6 +135,7 @@ class Plugin {
 	 *
 	 * @since 2.9.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.2 Now falls back to default for merge: If the option disappears for some reason, we won't crash.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -144,7 +145,7 @@ class Plugin {
 
 		// Get the latest known revision from the database.
 		$options = array_merge(
-			\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ),
+			\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) ?: Plugin\Setup::get_default_options(),
 			\is_array( $option ) ? $option : [ $option => $value ],
 		);
 
@@ -186,7 +187,9 @@ class Plugin {
 
 		static::register_automated_refresh( 'site_cache' );
 
-		return static::$site_cache_memo = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) ?: [];
+		return static::$site_cache_memo =
+			   \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE )
+			?: Plugin\Setup::get_default_site_caches();
 	}
 
 	/**
@@ -194,6 +197,7 @@ class Plugin {
 	 * Can return false if cache is unchanged.
 	 *
 	 * @since 5.0.0
+	 * @since 5.0.2 Now falls back to default for merge: If the option disappears for some reason, we won't crash.
 	 *
 	 * @param string|array $cache The cache key, or an array (of arrays) of key and value pairs.
 	 * @param mixed        $value The cache value. Ignored when $cache is an array.
@@ -203,7 +207,7 @@ class Plugin {
 
 		// Get the latest known revision from the database.
 		$site_cache = array_merge(
-			\get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ),
+			\get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) ?: Plugin\Setup::get_default_site_caches(),
 			\is_array( $cache ) ? $cache : [ $cache => $value ],
 		);
 
@@ -216,13 +220,14 @@ class Plugin {
 	 * Deletes static caching option indexes.
 	 *
 	 * @since 5.0.0
+	 * @since 5.0.2 Now falls back to default for unset: If the option disappears for some reason, we won't crash.
 	 *
 	 * @param string|string[] $cache The cache key, or an array of keys to delete.
 	 * @return bool True on success, false on failure.
 	 */
 	public static function delete_site_cache( $cache ) {
 
-		$site_cache = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE );
+		$site_cache = \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) ?: Plugin\Setup::get_default_site_caches();
 
 		foreach ( (array) $cache as $key )
 			unset( $site_cache[ $key ] );

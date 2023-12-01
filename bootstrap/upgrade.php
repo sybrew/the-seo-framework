@@ -893,7 +893,7 @@ function _do_upgrade_4270() {
 function _do_upgrade_5001() {
 
 	// Not a public "setting" -- only add the option to prevent additional db-queries when it's yet to be populated.
-	\add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, [] );
+	\add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, Data\Plugin\Setup::get_default_site_caches() );
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5001' ) {
 		Data\Plugin::update_option(

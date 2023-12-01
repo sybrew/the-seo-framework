@@ -405,4 +405,17 @@ class Setup {
 			],
 		);
 	}
+
+	/**
+	 * Holds default site cache.
+	 *
+	 * This exists for consistency with how we handle options.
+	 *
+	 * @since 5.0.2
+	 *
+	 * @return array Default site cache.
+	 */
+	public static function get_default_site_caches() {
+		return [];
+	}
 }
