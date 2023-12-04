@@ -52,7 +52,11 @@ use \The_SEO_Framework\{
  */
 function _bbpress_filter_title( $title, $args ) {
 
-	if ( isset( $args ) || ! \is_bbpress() ) return $title;
+	if (
+		   isset( $args )
+		|| ! \function_exists( 'is_bbpress' )
+		|| ! \is_bbpress()
+	) return $title;
 
 	// phpcs:disable, Squiz.Commenting.BlockComment, Generic.WhiteSpace.ScopeIndent, WordPress.WP.I18n, Generic.Formatting.MultipleStatementAlignment -- Not my code.
 
@@ -267,9 +271,13 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  */
 function _bbpress_filter_pre_title( $title = '', $args = null ) {
 
-	if ( isset( $args ) || ! \is_bbpress() ) return $title;
+	if (
+		   isset( $args )
+		|| ! \function_exists( 'is_bbpress' )
+		|| ! \is_bbpress()
+	) return $title;
 
-	if ( \bbp_is_topic_tag() ) {
+	if ( \function_exists( 'bbp_is_topic_tag' ) && \bbp_is_topic_tag() ) {
 		$term  = \get_queried_object();
 		$title = $term->name ?? \tsf()->get_static_untitled_title();
 	}
@@ -300,9 +308,13 @@ function _bbpress_filter_pre_title( $title = '', $args = null ) {
  */
 function _bbpress_filter_excerpt_generation( $excerpt = '', $args = null ) {
 
-	if ( isset( $args ) || ! \is_bbpress() ) return $excerpt;
+	if (
+		   isset( $args )
+		|| ! \function_exists( 'is_bbpress' )
+		|| ! \is_bbpress()
+	) return $excerpt;
 
-	if ( \bbp_is_topic_tag() ) {
+	if ( \function_exists( 'bbp_is_topic_tag' ) && \bbp_is_topic_tag() ) {
 		// Always overwrite, even when none is found.
 		$excerpt = Sanitize::metadata_content( \get_queried_object()->description ?? '' );
 	}
@@ -329,9 +341,13 @@ function _bbpress_filter_excerpt_generation( $excerpt = '', $args = null ) {
  */
 function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
 
-	if ( isset( $args ) || ! \is_bbpress() ) return $desc;
+	if (
+		   isset( $args )
+		|| ! \function_exists( 'is_bbpress' )
+		|| ! \is_bbpress()
+	) return $desc;
 
-	if ( \bbp_is_topic_tag() ) {
+	if ( \function_exists( 'bbp_is_topic_tag' ) && \bbp_is_topic_tag() ) {
 		// Always overwrite, even when none is found.
 		$desc = Data\Plugin\Term::get_meta( \get_queried_object_id() )['description'] ?? '';
 	}
@@ -357,10 +373,13 @@ function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
  */
 function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
 
-	if ( \is_bbpress() && isset( $wp_query->query['post_type'] ) ) {
-		if ( \in_array( 'reply', (array) $wp_query->query['post_type'], true ) ) {
-			$do = false;
-		}
+	if (
+		   isset( $wp_query->query['post_type'] )
+		&& \in_array( 'reply', (array) $wp_query->query['post_type'], true )
+		&& \function_exists( 'is_bbpress' )
+		&& \is_bbpress()
+	) {
+		$do = false;
 	}
 
 	return $do;
@@ -390,6 +409,14 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
 function _bbpress_filter_robots( $meta, $args ) {
 
 	if ( isset( $args ) ) {
+		if ( ! Helper\Compatibility::can_i_use( [
+			'functions' => [
+				'bbp_get_forum_post_type',
+				'bbp_get_topic_post_type',
+				'bbp_get_reply_post_type',
+			],
+		] ) ) return $meta;
+
 		normalize_generation_args( $args );
 
 		// Custom query, back-end or sitemap.
@@ -404,6 +431,14 @@ function _bbpress_filter_robots( $meta, $args ) {
 			}
 		}
 	} else {
+		if ( ! Helper\Compatibility::can_i_use( [
+			'functions' => [
+				'bbp_is_single_forum',
+				'bbp_is_single_topic',
+				'bbp_is_single_reply',
+			],
+		] ) ) return $meta;
+
 		// Front-end
 		if ( \bbp_is_single_forum() ) {
 			$forum_id = Query::get_the_real_id();
@@ -433,6 +468,15 @@ function _bbpress_filter_robots( $meta, $args ) {
 function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
 	if ( $interpreter::$query['tax'] ) return;
+
+	if ( ! Helper\Compatibility::can_i_use( [
+		'functions' => [
+			'bbp_get_forum_post_type',
+			'bbp_get_topic_post_type',
+			'bbp_get_reply_post_type',
+			'bbp_is_forum_public',
+		],
+	] ) ) return;
 
 	$items = $interpreter::collect_seo_bar_items();
 

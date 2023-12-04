@@ -228,7 +228,7 @@ final class Tags {
 			);
 		} else {
 			printf(
-				'<%s%s />',
+				'<%s%s />', // XHTML compatible.
 				/** @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#syntax-tag-name> */
 				preg_replace( '/[^0-9a-zA-Z]+/', '', $tag ),
 				$attr,

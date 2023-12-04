@@ -267,8 +267,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* TODO Nested categories need to honor the primary but then the deepest one.
 		-> Is this a WC only issue?
 		-> https://wordpress.org/support/topic/deactivate-primary-categories-woocommerce/#post-17244455
-	* TODO Resolved an issue when bbPress is selectively unloaded, its compatibility file would cause a fatal error.
+	* Resolved an issue when bbPress is selectively unloaded its compatibility file would cause a fatal error.
 	* Resolved an issue where, when TSF options disappear or have failed to be registered, the plugin will no longer crash but fall back to defaults.
+* **Other:**
+	* Verified support with PHP 8.3.
 
 **For developers:**
 

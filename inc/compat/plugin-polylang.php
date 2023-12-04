@@ -46,7 +46,7 @@ function _polylang_set_sitemap_language() {
 			switch ( $_options['force_lang'] ) {
 				case 0:
 					// Polylang determines language sporadically from content: can't be trusted. Overwrite.
-					$lang = \pll_default_language();
+					$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
 					break;
 				default:
 					// Polylang can differentiate languages by (sub)domain/directory name early. No need to interfere. Cancel.

@@ -157,6 +157,8 @@ class Post {
 		 * @TODO find a way to maintain revisions:
 		 * @link https://github.com/sybrew/the-seo-framework/issues/48
 		 * @link https://johnblackbourn.com/post-meta-revisions-wordpress
+		 * @link https://core.trac.wordpress.org/ticket/20299#comment:64
+		 * @link https://make.wordpress.org/core/2023/10/24/framework-for-storing-revisions-of-post-meta-in-6-4/
 		 */
 		if ( \wp_is_post_autosave( $post_id ) || \wp_is_post_revision( $post_id ) ) return;
 
