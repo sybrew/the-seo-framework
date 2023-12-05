@@ -183,59 +183,55 @@ class Breadcrumbs {
 		$crumbs    = [];
 		$post_type = \get_post_type( $post );
 
-		if ( \is_post_type_hierarchical( $post_type ) ) { // page.
-			if ( \get_post_type_object( $post_type )->has_archive ?? false ) {
+		// Get Post Type Archive.
+		if (
+			   \is_post_type_hierarchical( $post_type )
+			&& \get_post_type_object( $post_type )->has_archive ?? false
+		) {
+			$crumbs[] = [
+				'url'  => Meta\URI::get_bare_pta_url( $post_type ),
+				'name' => Meta\Title::get_bare_title( [ 'pta' => $post_type ] ),
+			];
+		}
+
+		// Get Primary Term.
+		$taxonomies      = Taxonomy::get_hierarchical( 'names', $post_type );
+		$taxonomy        = reset( $taxonomies ); // TODO make this an option; also which output they want to use.
+		$primary_term_id = $taxonomy ? Data\Plugin\Post::get_primary_term_id( $post->ID, $taxonomy ) : 0;
+
+		// If there's no ID, then there's no term assigned.
+		if ( $primary_term_id ) {
+			$ancestors = \get_ancestors(
+				$primary_term_id,
+				$taxonomy,
+				'taxonomy',
+			);
+
+			foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_pta_url( $post_type ),
-					'name' => Meta\Title::get_bare_title( [ 'pta' => $post_type ] ),
-				];
-			}
-
-			// get_post_ancestors() has no filter. get_ancestors() isn't used for posts in WP.
-			foreach ( array_reverse( $post->ancestors ) as $ancestor_id ) {
-				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_singular_url( $ancestor_id ),
-					'name' => Meta\Title::get_bare_title( [ 'id' => $ancestor_id ] ),
-				];
-			}
-		} else { // single.
-			$taxonomies      = Taxonomy::get_hierarchical( 'names', $post_type );
-			$taxonomy        = reset( $taxonomies ); // TODO make this an option; also which output they want to use.
-			$primary_term_id = $taxonomy ? Data\Plugin\Post::get_primary_term_id( $post->ID, $taxonomy ) : 0;
-
-			// If there's no ID, then there's nothing assigned.
-			if ( $primary_term_id ) {
-				$ancestors = \get_ancestors(
-					$primary_term_id,
-					$taxonomy,
-					'taxonomy',
-				);
-
-				foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
-					$crumbs[] = [
-						'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
-						'name' => Meta\Title::get_bare_title( [
-							'id'  => $ancestor_id,
-							'tax' => $taxonomy,
-						] ),
-					];
-				}
-
-				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_term_url( $primary_term_id, $taxonomy ),
+					'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
 					'name' => Meta\Title::get_bare_title( [
-						'id'  => $primary_term_id,
+						'id'  => $ancestor_id,
 						'tax' => $taxonomy,
 					] ),
 				];
-			} elseif ( \get_post_type_object( $post_type )->has_archive ?? false ) {
-				// TODO: bbPress expects get_post_parent()/get_post_ancestors() here on a topic,
-				// but those aren't hierarchical. Are they wrong or are we?
-				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_pta_url( $post_type ),
-					'name' => Meta\Title::get_bare_title( [ 'pta' => $post_type ] ),
-				];
 			}
+
+			$crumbs[] = [
+				'url'  => Meta\URI::get_bare_term_url( $primary_term_id, $taxonomy ),
+				'name' => Meta\Title::get_bare_title( [
+					'id'  => $primary_term_id,
+					'tax' => $taxonomy,
+				] ),
+			];
+		}
+
+		// get_post_ancestors() has no filter. get_ancestors() isn't used for posts in WP.
+		foreach ( array_reverse( $post->ancestors ) as $ancestor_id ) {
+			$crumbs[] = [
+				'url'  => Meta\URI::get_bare_singular_url( $ancestor_id ),
+				'name' => Meta\Title::get_bare_title( [ 'id' => $ancestor_id ] ),
+			];
 		}
 
 		if ( isset( $id ) ) {
