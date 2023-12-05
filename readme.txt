@@ -256,6 +256,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 **For everyone:**
 
+* **Changed:**
+	* The fallback primary term now determines the last child of an hierarchical term if its parent has the lowest term ID.
+		* This is unlike how WordPress determines this for Categories, but like how WooCommerce does for Product Categories.
+		* Caveat: But only if its parents are also in the selected term chain. We could calculate this more accurately, but we'd have to bypass the term cache. We now perform inexpensive operations to determine the correct primary term.
 * **Improved:**
 	* The breadcrumb shortcode now tries to remove inline margin in front of its text.
 		* And although we increased specificity, this may still be overwritten by the theme styles, which is intended behavior: enforcing styles makes theming difficult.
@@ -268,11 +272,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Fixed:**
 	* Resolved an issue where breadcrumbs included considered non-public taxonomies for their trail.
 	* Resolved an issue where term sitemaps wouldn't load when using the "not optimized" WordPress Core sitemaps.
-	* TODO Nested categories need to honor the primary but then the deepest one.
-		-> Is this a WC only issue?
-		-> https://wordpress.org/support/topic/deactivate-primary-categories-woocommerce/#post-17244455
 	* Resolved an issue when bbPress is selectively unloaded its compatibility file would cause a fatal error.
 	* Resolved an issue where, when TSF options disappear or have failed to be registered, the plugin will no longer crash but fall back to defaults.
+	* Resolved an issue where the primary term cache was bypassed when no primary term could be determined (zero terms assigned to a post).
 * **Other:**
 	* Verified support with PHP 8.3.
 

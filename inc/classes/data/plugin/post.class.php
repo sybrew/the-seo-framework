@@ -294,6 +294,7 @@ class Post {
 	 *              2. Now returns `null` instead of `false` on failure.
 	 *              3. Now considers headlessness.
 	 *              4. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.2 Now selects the last child of a primary term if its parent has the lowest ID.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -302,7 +303,7 @@ class Post {
 	public static function get_primary_term( $post_id, $taxonomy ) {
 
 		if ( isset( static::$pt_memo[ $post_id ][ $taxonomy ] ) )
-			return static::$pt_memo[ $post_id ][ $taxonomy ];
+			return static::$pt_memo[ $post_id ][ $taxonomy ] ?: null;
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$pt_memo ) > 69 )
@@ -337,6 +338,26 @@ class Post {
 				$term_ids = array_column( $terms, 'term_id' );
 				asort( $term_ids );
 				$primary_term = $terms[ array_key_first( $term_ids ) ] ?? null;
+
+				if ( $primary_term && \count( $terms ) > 1 ) {
+					// parent_id => child_id; could be 0 => child_id if it has no parent.
+					$parent_child = array_column( $terms, 'term_id', 'parent' );
+					// term_id => $term index; related to $terms, flipped to speed up lookups.
+					$termid_termsindex = array_flip( $term_ids );
+
+					// Chain the isset because it expects an array.
+					while ( isset(
+						$parent_child[ $primary_term->term_id ],
+						$termid_termsindex[ $parent_child[ $primary_term->term_id ] ],
+						$terms[ $termid_termsindex[ $parent_child[ $primary_term->term_id ] ] ], // this is always an object.
+					) ) {
+						// If the primary term is of a parent, get the child ID from parent.
+						// If the child ID is in the termsindex, get the term.
+						// The $termid_termsindex may be 0 (first index) or deleted yet still registered as a child,
+						// so we need to test not isset but !empty($terms[...])
+						$primary_term = $terms[ $termid_termsindex[ $parent_child[ $primary_term->term_id ] ] ];
+					}
+				}
 			}
 		}
 
@@ -347,13 +368,15 @@ class Post {
 		 * @param string    $taxonomy    The taxonomy name.
 		 * @param bool      $is_headless Whether the meta are headless.
 		 */
-		return static::$pt_memo[ $post_id ][ $taxonomy ] = \apply_filters(
+		static::$pt_memo[ $post_id ][ $taxonomy ] = \apply_filters(
 			'the_seo_framework_primary_term',
 			$primary_term,
 			$post_id,
 			$taxonomy,
 			$is_headless,
-		);
+		) ?: false;
+
+		return static::$pt_memo[ $post_id ][ $taxonomy ] ?: null;
 	}
 
 	/**
