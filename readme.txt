@@ -259,10 +259,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Improved:**
 	* The breadcrumb shortcode now tries to remove inline margin in front of its text.
 		* And although we increased specificity, this may still be overwritten by the theme styles, which is intended behavior: enforcing styles makes theming difficult.
+	* In breadcrumbs, all post types now include their registered archive before any of their assigned terms.
+		* This will become togglable in a future update. Stay tuned!
+		* If you went out of your way implementing TSF's breadcrumbs, you may need to rethink and tweak that. Sorry about that! -- this is a brand new feature we're still learning about how to make it work better.
 * **Removed:**
 	* We temporarily removed support for the GitHub Updater because of unforeseen quirks, such as it renaming the plugin folder and updating from our development branch.
 		* In a future update, we'll reintroduce this with the quirks resolved.
 * **Fixed:**
+	* Resolved an issue where breadcrumbs included considered non-public taxonomies for their trail.
 	* Resolved an issue where term sitemaps wouldn't load when using the "not optimized" WordPress Core sitemaps.
 	* TODO Nested categories need to honor the primary but then the deepest one.
 		-> Is this a WC only issue?
