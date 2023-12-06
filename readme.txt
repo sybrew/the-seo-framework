@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4.0
-Stable tag: 5.0.1
+Stable tag: 5.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -112,9 +112,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 **The SEO Framework supports:**
 
-* PHP 7.4 and higher.
-* WordPress 5.9 and higher.
-* Internationalization through WordPress.org.
+* Internationalization through WordPress.org. You can [contribute here](https://translate.wordpress.org/projects/wp-plugins/autodescription/).
 * Unicode (UTF-8) character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
 * Right to Left (RTL) languages (Arabic, Hebrew, Farsi, et al.), through its interface and metatag generation.
 * Complete color-vision deficiency accessibility thanks to a carefully picked color scheme.
@@ -132,14 +130,6 @@ The SEO Framework works on many things without notifying you, because the best s
 * Forum plugins like bbPress and wpForo.
 * Editing posts and terms via WordPress's native bulk-and-quick-edit interfaces.
 * Headless mode via a single [constant definition](https://kb.theseoframework.com/?p=136).
-
-= Copyright legislation notice =
-
-In a few words: The SEO Framework allows search engines to do what they've been doing for the past 20 years via its preconfigured copyright settings.
-
-When you activate The SEO Framework on any site, you automatically grant rights to content aggregators, among Google, Bing, and Yandex, to obtain and use information from the site, including written work, images, audio, and video. You can control these rights via the robots-meta settings brought by this plugin. Your rights and the effectiveness of these settings are subject to your website's region and language, and the physical or virtual origin of the platform and their potential users through which your website's information is obtained and shared. It is up to the aggregator to honor your rights and the requests brought via The SEO Framework.
-
-If you wish to learn more, please refer to the [EU commission on copyright](https://ec.europa.eu/digital-single-market/en/modernisation-eu-copyright-rules). These rulings may propagate its effects through regions outside the EU.
 
 == Installation ==
 
@@ -254,38 +244,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 = 5.0.2 =
 
-**For everyone:**
-
-* **Changed:**
-	* The fallback primary term now determines the last child of an hierarchical term if its parent has the lowest term ID.
-		* This is unlike how WordPress determines this for Categories, but like how WooCommerce does for Product Categories.
-		* Caveat: But only if its parents are also in the selected term chain. We could calculate this more accurately, but we'd have to bypass the term cache. We now perform inexpensive operations to determine the correct primary term.
-* **Improved:**
-	* The breadcrumb shortcode now tries to remove inline margin in front of its text.
-		* And although we increased specificity, this may still be overwritten by the theme styles, which is intended behavior: enforcing styles makes theming difficult.
-	* In breadcrumbs, all post types now include their registered archive before any of their assigned terms.
-		* This will become togglable in a future update. Stay tuned!
-		* If you went out of your way implementing TSF's breadcrumbs, you may need to rethink and tweak that. Sorry about that! -- this is a brand new feature we're still learning about how to make it work better.
-* **Removed:**
-	* We temporarily removed support for the GitHub Updater because of unforeseen quirks, such as it renaming the plugin folder and updating from our development branch.
-		* In a future update, we'll reintroduce this with the quirks resolved.
-* **Fixed:**
-	* Resolved an issue where breadcrumbs included considered non-public taxonomies for their trail.
-	* Resolved an issue where term sitemaps wouldn't load when using the "not optimized" WordPress Core sitemaps.
-	* Resolved an issue when bbPress is selectively unloaded its compatibility file would cause a fatal error.
-	* Resolved an issue where, when TSF options disappear or have failed to be registered, the plugin will no longer crash but fall back to defaults.
-	* Resolved an issue where the primary term cache was bypassed when no primary term could be determined (zero terms assigned to a post).
-* **Other:**
-	* Verified support with PHP 8.3.
-
-**For developers:**
-
-* **Changed:**
-	* We changed all indexes for `the_seo_framework_breadcrumb_shortcode_css` in order to resolve issues with displaying the breadcrumb.
-		* Now, all indexes are prefixed with `nav` to increase specificty.
-		* `.$class ol li:not(:last-child) :where(a,span)` is gone altogether.
-* **Fixed:**
-	* Resolved an issue where bbPress would spawn deprecation notices when altering the generated description.
+This minor update fixes more issues our community found after the release of TSF v5.0.0. We also improved the calculation of primary terms with child terms and how breadcrumbs handle post type archives. And again, we [improved the performance](https://theseoframework.com/?p=4174).
 
 = 5.0.1 =
 

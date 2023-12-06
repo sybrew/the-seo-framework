@@ -341,21 +341,17 @@ class Post {
 
 				if ( $primary_term && \count( $terms ) > 1 ) {
 					// parent_id => child_id; could be 0 => child_id if it has no parent.
-					$parent_child = array_column( $terms, 'term_id', 'parent' );
+					$child_by_parent = array_column( $terms, 'term_id', 'parent' );
 					// term_id => $term index; related to $terms, flipped to speed up lookups.
-					$termid_termsindex = array_flip( $term_ids );
+					$term_by_term_id = array_flip( $term_ids );
 
 					// Chain the isset because it expects an array.
 					while ( isset(
-						$parent_child[ $primary_term->term_id ],
-						$termid_termsindex[ $parent_child[ $primary_term->term_id ] ],
-						$terms[ $termid_termsindex[ $parent_child[ $primary_term->term_id ] ] ], // this is always an object.
+						$child_by_parent[ $primary_term->term_id ],
+						$term_by_term_id[ $child_by_parent[ $primary_term->term_id ] ],
+						$terms[ $term_by_term_id[ $child_by_parent[ $primary_term->term_id ] ] ], // this is always an object.
 					) ) {
-						// If the primary term is of a parent, get the child ID from parent.
-						// If the child ID is in the termsindex, get the term.
-						// The $termid_termsindex may be 0 (first index) or deleted yet still registered as a child,
-						// so we need to test not isset but !empty($terms[...])
-						$primary_term = $terms[ $termid_termsindex[ $parent_child[ $primary_term->term_id ] ] ];
+						$primary_term = $terms[ $term_by_term_id[ $child_by_parent[ $primary_term->term_id ] ] ];
 					}
 				}
 			}
