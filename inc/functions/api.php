@@ -82,16 +82,12 @@ namespace {
 	 * @since 2.7.0
 	 * @since 2.8.0 Added `did_action()` check.
 	 * @since 4.2.0 Removed memoization.
+	 * @since 5.0.3 No longer requires action `plugins_loaded` to have occurred.
 	 * @api
 	 *
 	 * @return string|bool The SEO Framework class name. False if The SEO Framework isn't loaded (yet).
 	 */
 	function the_seo_framework_class() {
-
-		// did_action() returns true for current action match, too.
-		if ( ! did_action( 'plugins_loaded' ) )
-			return false;
-
 		return get_class( tsf() );
 	}
 

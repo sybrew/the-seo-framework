@@ -180,6 +180,7 @@ class Strings {
 	 *              2. Renamed from `trim_excerpt()`.
 	 *              3. Anchored the first regex to the start prevent catastrophic backtracking when no spacing is found.
 	 *              4. Forced a useful match in the first regex to prevent catastrophic backtracking in the second regex.
+	 * @since 5.0.3 In the first regex, the last word of a sentence shorter than maximum length without leading punctuation is now considered.
 	 * @see https://secure.php.net/manual/en/regexp.reference.unicode.php
 	 *
 	 * We use `[^\P{Po}\'\":]` because WordPress texturizes ' and " to fall under `\P{Po}`.
@@ -204,16 +205,17 @@ class Strings {
 			return '';
 
 		// Decode to get a more accurate character length in Unicode.
-		$sentence = html_entity_decode( $sentence, \ENT_QUOTES, 'UTF-8' );
+		$sentence = trim( html_entity_decode( $sentence, \ENT_QUOTES, 'UTF-8' ) );
 
 		// Find all words until $max_char_length, and trim when the last word boundary or punctuation is found.
 		// Tries to match "\x20" when the sentence contains no spaces, subsequently failing because trim() already removed that.
+		// Uses $ to consider cut-off endings under $max_char_length
 		preg_match(
 			sprintf(
-				'/^.{0,%d}(?:[^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\x20)/su',
+				'/^.{0,%d}(?:[^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\x20|$)/su',
 				$max_char_length,
 			),
-			trim( $sentence ),
+			$sentence,
 			$matches,
 		);
 

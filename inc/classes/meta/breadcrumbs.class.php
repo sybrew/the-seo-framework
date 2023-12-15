@@ -54,6 +54,9 @@ class Breadcrumbs {
 	 * @todo add extra parameter for $options; create (class?) constants for them.
 	 *       -> Is tsf()->breadcrumbs()::CONSTANT possible?
 	 *       -> Then, forward the options to a class variable, and build therefrom. Use as argument for memo().
+	 *       -> Requested features (for shortcode): Remove home, remove current page.
+	 *       -> Requested features (globally): Remove/show archive prefixes, hide PTA/terms, select home name, select SEO vs custom title (popular).
+	 *       -> Add generation args to every crumb; this way we can perform custom lookups for titles after the crumb is generated.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.

@@ -242,6 +242,19 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+= 5.0.3 =
+
+**For everyone:**
+
+TODO test Co Authors Plus (ugh) -- notify "Yuri".
+
+* **Fixed:**
+	* Resolved an issue where the last word of a sentence shorter than maximum length without leading punctuation wasn't considered for description generation.
+
+**For developers:**
+
+* Function `the_seo_framework_class()` no longer requires action `plugins_loaded` to have occurred.
+
 = 5.0.2 =
 
 This minor update fixes more issues our community found after the release of TSF v5.0.0. We also improved the calculation of primary terms with child terms and how breadcrumbs handle post type archives. And again, we [improved the performance](https://theseoframework.com/?p=4174).
