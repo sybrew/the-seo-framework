@@ -794,7 +794,7 @@ class Query {
 			?? umemo(
 				__METHOD__,
 				'page' === \get_option( 'show_on_front' )
-					? (int) \get_option( 'page_on_front' )
+					? ( (int) \get_option( 'page_on_front' ) ?: false )
 					: false,
 			);
 

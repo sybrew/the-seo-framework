@@ -114,7 +114,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 * Internationalization through WordPress.org. You can [contribute here](https://translate.wordpress.org/projects/wp-plugins/autodescription/).
 * Unicode (UTF-8) character recognition and rendering, including Emoji and CJKV (Chinese, Japanese, Korean, Vietnamese).
-* Right to Left (RTL) languages (Arabic, Hebrew, Farsi, et al.), through its interface and metatag generation.
+* Right to Left (RTL) languages (Arabic, Hebrew, Farsi, etc.), through its interface and metatag generation.
 * Complete color-vision deficiency accessibility thanks to a carefully picked color scheme.
 * Full keyboard navigation, so that you can inspect tooltips quickly without ever having to reach for your mouse.
 * Full screen-reader accessibility via field anchors, ARIA labels, and title attributes.
@@ -201,7 +201,7 @@ Learn more [about contributing](https://tsf.fyi/contributing).
 
 We use different colors to convey messages. Red is an error that you must resolve. Yellow is a non-critical warning that you may want to address. Green is good. Blue is informational and situational. Gray is undefined or unprocessable.
 
-= The sitemap doesn't contain categories, images, et al. =
+= The sitemap doesn't contain categories, images, etc. =
 
 Not having every single page listed is not an issue. Search engines love crawling WordPress because its structure is consistent and well known.
 
@@ -244,16 +244,36 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 = 5.0.3 =
 
+TODO test Co Authors Plus (ugh) -- notify "Yuri".
+TODO updated copyright year
+TODO updated POT file (new translation, Twitter no longer requires a feature).
+TODO find @deprecated functions in non-deprecated places. Like function redirect_url!
+	-> It is unused internally, in change for `sanitize_url()` -- was this intentional?
+	-> remove the var_dump().
+
+TODO 404 pages emit error during description generation.
+	-> We need to trim what can be generated here.
+TODO output og:locale, og:site_title, and og:title on 404 pages?
+
 **For everyone:**
 
-TODO test Co Authors Plus (ugh) -- notify "Yuri".
-
+* **Changed:**
+	* When the front page is setup as a static page, but the page is missing (not assigned or deleted), TSF will now still consider the home request supported for SEO.
+		* Both WordPress and TSF will treat the homepage as a blog. Though TSF won't consider the custom metadata from actual the blog page for this request.
 * **Fixed:**
 	* Resolved an issue where the last word of a sentence shorter than maximum length without leading punctuation wasn't considered for description generation.
+	* TODO Resolved an issue where Polylang compatibility wasn't loaded for Polylang Pro.
+
+**For translators:**
+
+Added: New translations are available.
+Updated: TODO The POT file contains new translations.
 
 **For developers:**
 
 * Function `the_seo_framework_class()` no longer requires action `plugins_loaded` to have occurred.
+* TODO Privately marked class `\The_SEO_Framework\Admin\SEOBar\Builder` is no longer erroneously marked as a replacement for the deprecated class `\The_SEO_Framework\Interpreters\SEOBar`.
+* Method `tsf()->query()->utils()->query_supports_seo()` now considers the query supported when the homepage is assigned a broken ID.
 
 = 5.0.2 =
 

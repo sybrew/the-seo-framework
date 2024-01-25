@@ -185,7 +185,7 @@ class Blog {
 	 *              3. Optimized code and removed memoization.
 	 * @credits Jetpack for some code.
 	 *
-	 * @return array List of active plugins.
+	 * @return string[] List of active plugins.
 	 */
 	public static function get_active_plugins() {
 

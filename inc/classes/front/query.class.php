@@ -221,6 +221,7 @@ final class Query {
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;
 
+		// TODO WP 6.5+ https://core.trac.wordpress.org/ticket/42061
 		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
 			$referer = \wp_get_referer();
 			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
