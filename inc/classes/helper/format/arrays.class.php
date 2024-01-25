@@ -92,7 +92,7 @@ class Arrays {
 	public static function scrub( $array ) {
 
 		foreach ( $array as $key => &$item ) {
-			// Catch null and false, but keep 0 and '0'.
+			// Keep 0 and '0', but grab empty string, null, false, and [].
 			if ( empty( $item ) && 0 !== $item && '0' !== $item ) {
 				unset( $array[ $key ] );
 			} elseif ( \is_array( $item ) ) {
