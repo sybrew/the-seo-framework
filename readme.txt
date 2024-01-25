@@ -259,7 +259,7 @@ TODO output og:locale, og:site_title, and og:title on 404 pages?
 		* Both WordPress and TSF will treat the homepage as a blog. Though TSF won't consider the custom metadata from actual the blog page for this request.
 * **Fixed:**
 	* Resolved an issue where the last word of a sentence shorter than maximum length without leading punctuation wasn't considered for description generation.
-	* TODO Resolved an issue where Polylang compatibility wasn't loaded for Polylang Pro.
+	* Resolved an issue where Polylang compatibility wasn't loaded for Polylang Pro.
 
 **For translators:**
 

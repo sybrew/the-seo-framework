@@ -60,7 +60,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 			true,
 		);
 		HTML::description(
-			\__( "Open Graph and Twitter require descriptions. So, it's best to leave description generation enabled.", 'autodescription' )
+			\__( "Open Graph requires descriptions. So, it's best to leave description generation enabled.", 'autodescription' )
 		);
 
 		?>

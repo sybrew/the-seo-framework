@@ -40,6 +40,7 @@ foreach (
 			'elementor/elementor.php'                  => 'elementor',
 			'jetpack/jetpack.php'                      => 'jetpack',
 			'polylang/polylang.php'                    => 'polylang',
+			'polylang-pro/polylang.php'                => 'polylang',
 			'sitepress-multilingual-cms/sitepress.php' => 'wpml',
 			'ultimate-member/ultimate-member.php'      => 'ultimatemember',
 			'wpforo/wpforo.php'                        => 'wpforo',
