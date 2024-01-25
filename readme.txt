@@ -245,7 +245,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 = 5.0.3 =
 
 TODO test Co Authors Plus (ugh) -- notify "Yuri".
-TODO updated copyright year
 TODO updated POT file (new translation, Twitter no longer requires a feature).
 
 TODO 404 pages emit error during description generation.
@@ -272,6 +271,7 @@ Updated: TODO The POT file contains new translations.
 * Privately marked class `\The_SEO_Framework\Admin\SEOBar\Builder` is no longer erroneously marked as a replacement for the deprecated class `\The_SEO_Framework\Interpreters\SEOBar`.
 * Method `tsf()->query()->utils()->query_supports_seo()` now considers the query supported when the homepage is assigned a broken ID.
 * Filter `the_seo_framework_allow_external_redirect` now fixes redirect URLs during the saving sequences again.
+* It's 2024! Updated all files' copyright year.
 
 = 5.0.2 =
 
