@@ -74,8 +74,7 @@ class Post {
 					break;
 
 				case 'redirect':
-					// Allow all protocols also allowed by WP.
-					$value = \sanitize_url( $value );
+					$value = Sanitize::redirect_url( $value );
 					break;
 
 				case '_tsf_title_no_blogname':

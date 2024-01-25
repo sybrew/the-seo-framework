@@ -77,8 +77,7 @@ class Term {
 					break;
 
 				case 'redirect':
-					// Allow all protocols also allowed by WP.
-					$value = \sanitize_url( $value );
+					$value = Sanitize::redirect_url( $value );
 					break;
 
 				case 'title_no_blog_name':

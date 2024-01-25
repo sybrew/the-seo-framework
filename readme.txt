@@ -271,7 +271,7 @@ Updated: TODO The POT file contains new translations.
 * Function `the_seo_framework_class()` no longer requires action `plugins_loaded` to have occurred.
 * Privately marked class `\The_SEO_Framework\Admin\SEOBar\Builder` is no longer erroneously marked as a replacement for the deprecated class `\The_SEO_Framework\Interpreters\SEOBar`.
 * Method `tsf()->query()->utils()->query_supports_seo()` now considers the query supported when the homepage is assigned a broken ID.
-* TODO Filter `the_seo_framework_allow_external_redirect` now fixes redirect URLs during the saving sequences again.
+* Filter `the_seo_framework_allow_external_redirect` now fixes redirect URLs during the saving sequences again.
 
 = 5.0.2 =
 

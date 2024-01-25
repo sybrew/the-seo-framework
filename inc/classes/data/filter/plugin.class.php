@@ -677,8 +677,7 @@ class Plugin {
 						break;
 
 					case 'redirect':
-						// Allow all protocols also allowed by WP:
-						$val = \sanitize_url( $val );
+						$val = Sanitize::redirect_url( $val );
 						break;
 
 					case 'title_no_blog_name':
