@@ -248,8 +248,6 @@ TODO test Co Authors Plus (ugh) -- notify "Yuri".
 TODO updated POT file (new translation, Twitter no longer requires a feature).
 
 TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
-TODO 404 pages emit error during description generation.
-	-> We need to trim what can be generated here.
 TODO output og:locale, og:site_title, and og:title on 404 pages?
 
 TODO Interface: Filter the_seo_framework_title_from_generation should be overwritten early via title triggers.
@@ -266,6 +264,7 @@ TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-
 	* Resolved an issue where the last word of a sentence shorter than maximum length without leading punctuation wasn't considered for description generation.
 	* Resolved an issue where Polylang compatibility wasn't loaded for Polylang Pro.
 	* Resolved an issue where Polylang Pro wasn't recognized as a translation plugin.
+	* Resolved an issue where TSF fetched post attributes from the Block Editor before it became available. This invoked multiple paints, slowing down the Block Editor load time.
 
 **For translators:**
 
@@ -278,6 +277,7 @@ Updated: TODO The POT file contains new translations.
 * Privately marked class `\The_SEO_Framework\Admin\SEOBar\Builder` is no longer erroneously marked as a replacement for the deprecated class `\The_SEO_Framework\Interpreters\SEOBar`.
 * Method `tsf()->query()->utils()->query_supports_seo()` now considers the query supported when the homepage is assigned a broken ID.
 * Filter `the_seo_framework_allow_external_redirect` now fixes redirect URLs during the saving sequences again.
+* Removed Lodash dependencies in the Block Editor because [Gutenberg is moving away from it](https://github.com/WordPress/gutenberg/issues/17025).
 * It's 2024! Updated all files' copyright year.
 
 = 5.0.2 =

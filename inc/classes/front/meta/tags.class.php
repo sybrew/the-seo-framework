@@ -157,7 +157,8 @@ final class Tags {
 		foreach ( $attributes as $name => $value ) {
 			$name = trim( $name );
 
-			switch ( $name ) {
+			// Test lowercase for sanitization, but don't confuse devs in outputting it lowercase.
+			switch ( strtolower( $name ) ) {
 				case 'href':
 				case 'xlink:href':
 				case 'src':
