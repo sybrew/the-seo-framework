@@ -502,7 +502,7 @@ class Base extends Main {
 			}
 
 			// Only clean post cache when NOT using a caching plugin.
-			WP_CACHE or \clean_post_cache( $post );
+			\WP_CACHE or \clean_post_cache( $post );
 		}
 	}
 

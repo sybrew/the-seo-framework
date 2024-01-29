@@ -113,6 +113,7 @@ class Compatibility {
 			'schema'       => [],
 			'multilingual' => [
 				'Polylang'       => 'polylang/polylang.php',
+				'Polylang Pro'   => 'polylang-pro/polylang.php',
 				'WPML'           => 'sitepress-multilingual-cms/sitepress.php',
 				'TranslatePress' => 'translatepress-multilingual/index.php',
 				'WPGlobus'       => 'wpglobus/wpglobus.php',

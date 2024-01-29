@@ -247,9 +247,15 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 TODO test Co Authors Plus (ugh) -- notify "Yuri".
 TODO updated POT file (new translation, Twitter no longer requires a feature).
 
+TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 TODO 404 pages emit error during description generation.
 	-> We need to trim what can be generated here.
 TODO output og:locale, og:site_title, and og:title on 404 pages?
+
+TODO Interface: Filter the_seo_framework_title_from_generation should be overwritten early via title triggers.
+	-> This will make the filter not appear to be working, but it will fix the Untitled lag in Gutenberg.
+
+TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
 
 **For everyone:**
 
@@ -259,6 +265,7 @@ TODO output og:locale, og:site_title, and og:title on 404 pages?
 * **Fixed:**
 	* Resolved an issue where the last word of a sentence shorter than maximum length without leading punctuation wasn't considered for description generation.
 	* Resolved an issue where Polylang compatibility wasn't loaded for Polylang Pro.
+	* Resolved an issue where Polylang Pro wasn't recognized as a translation plugin.
 
 **For translators:**
 

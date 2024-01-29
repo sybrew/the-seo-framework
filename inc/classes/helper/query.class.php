@@ -115,7 +115,7 @@ class Query {
 			 */
 			$id = \apply_filters(
 				'the_seo_framework_real_id',
-				\is_feed() ? \get_the_ID() : 0,
+				\is_feed() ? \get_the_id() : 0,
 			);
 		}
 
@@ -151,7 +151,7 @@ class Query {
 		return (int) \apply_filters(
 			'the_seo_framework_current_admin_id',
 			// Get in the loop first, fall back to globals or get parameters.
-			   \get_the_ID()
+			   \get_the_id()
 			?: static::get_admin_post_id()
 			?: static::get_admin_term_id()
 		);
@@ -650,7 +650,7 @@ class Query {
 	 * @since 2.6.0
 	 * @since 4.0.0 This is now deemed a secure method.
 	 *              1. Added is_user_logged_in() check.
-	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
+	 *              2. Added is_singular() check, so get_the_id() won't cross with blog pages.
 	 *              3. Added current_user_can() check.
 	 *              4. Added wp_verify_nonce() check.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
@@ -665,7 +665,7 @@ class Query {
 			   \is_preview()
 			&& \is_user_logged_in()
 			&& \is_singular()
-			&& \current_user_can( 'edit_post', \get_the_ID() )
+			&& \current_user_can( 'edit_post', \get_the_id() )
 			&& isset( $_GET['preview_id'], $_GET['preview_nonce'] )
 			&& \wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] )
 		) {

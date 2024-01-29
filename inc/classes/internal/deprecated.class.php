@@ -687,7 +687,7 @@ final class Deprecated {
 	 * @since 2.6.0
 	 * @since 4.0.0 This is now deemed a secure method.
 	 *              1. Added is_user_logged_in() check.
-	 *              2. Added is_singular() check, so get_the_ID() won't cross with blog pages.
+	 *              2. Added is_singular() check, so get_the_id() won't cross with blog pages.
 	 *              3. Added current_user_can() check.
 	 *              4. Added wp_verify_nonce() check.
 	 * @since 5.0.0 Deprecated.
