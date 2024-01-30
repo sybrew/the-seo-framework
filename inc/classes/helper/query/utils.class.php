@@ -69,7 +69,7 @@ class Utils {
 	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 *              4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`,
 	 *                 this is now being handled by `_init_tsf()`.
-	 * @since 5.0.2 Now considers the query supported when the homepage is assigned a broken ID.
+	 * @since 5.0.3 Now considers the query supported when the homepage is assigned a broken ID.
 	 *
 	 * @return bool
 	 */
@@ -266,5 +266,16 @@ class Utils {
 	 */
 	public static function has_page_on_front() {
 		return 'page' === \get_option( 'show_on_front' );
+	}
+
+	/**
+	 * Determines whether the blog page exists.
+	 *
+	 * @since 5.0.3
+	 *
+	 * @return bool
+	 */
+	public static function blog_page_exists() {
+		return ! static::has_page_on_front() && \get_option( 'page_for_posts' );
 	}
 }

@@ -298,6 +298,7 @@ class Query {
 	public static function is_singular_archive( $post = null ) {
 
 		if ( isset( $post ) ) {
+			// Keep this an integer, even if 0. Only "null" may tell it's in the loop.
 			$id = \is_int( $post )
 				? $post
 				: ( \get_post( $post )->ID ?? 0 );
@@ -475,6 +476,8 @@ class Query {
 	 * @since 4.2.0 Added the first parameter to allow custom query testing.
 	 * @since 5.0.0 1. Renamed from `is_home()`.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.3 1. Will no longer validate `0` as a plausible blog page.
+	 *              2. Will no longer validate `is_home()` when the blog page is not assigned.
 	 *
 	 * @param int|WP_Post|null $post Optional. Post ID or post object.
 	 *                               Do not supply from WP_Query's main loop-query.
@@ -484,13 +487,14 @@ class Query {
 
 		if ( isset( $post ) ) {
 			$id = \is_int( $post )
-				? $post
-				: ( \get_post( $post )->ID ?? 0 );
+				? ( $post ?: null )
+				: ( \get_post( $post )->ID ?? null );
 
-			return (int) \get_option( 'page_for_posts' ) === $id;
+			return ( (int) \get_option( 'page_for_posts' ) ) === $id;
 		}
 
-		return \is_home();
+		// If not blog page is assigned, it won't exist. Ignore whatever WP thinks.
+		return Query\Utils::blog_page_exists() && \is_home();
 	}
 
 	/**
