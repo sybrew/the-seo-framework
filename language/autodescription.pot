@@ -1,15 +1,15 @@
-# Copyright (C) 2023 The SEO Framework Team
+# Copyright (C) 2024 The SEO Framework Team
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 5.0.0\n"
+"Project-Id-Version: The SEO Framework 5.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/autodescription\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-22T04:12:42+00:00\n"
+"POT-Creation-Date: 2024-01-30T15:30:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: autodescription\n"
@@ -79,17 +79,17 @@ msgstr ""
 msgid "No Archive"
 msgstr ""
 
-#: inc/classes/admin/menu.class.php:101
+#: inc/classes/admin/menu.class.php:111
 #: inc/classes/admin/settings/post.class.php:84
 msgid "SEO Settings"
 msgstr ""
 
-#: inc/classes/admin/menu.class.php:102
+#: inc/classes/admin/menu.class.php:112
 msgid "SEO"
 msgstr ""
 
 #. translators: %s: number of issues waiting
-#: inc/classes/admin/menu.class.php:177
+#: inc/classes/admin/menu.class.php:187
 msgid "%s issue waiting"
 msgid_plural "%s issues waiting"
 msgstr[0] ""
@@ -523,7 +523,7 @@ msgstr ""
 #: inc/views/list/quick-post.php:46
 #: inc/views/list/quick-term.php:46
 #: inc/views/post/settings.php:490
-#: inc/views/settings/metaboxes/post-type-archive.php:449
+#: inc/views/settings/metaboxes/post-type-archive.php:457
 #: inc/views/settings/metaboxes/robots.php:94
 #: inc/views/term/settings.php:70
 msgid "Indexing"
@@ -656,7 +656,7 @@ msgstr ""
 #: inc/views/list/quick-post.php:60
 #: inc/views/list/quick-term.php:60
 #: inc/views/post/settings.php:506
-#: inc/views/settings/metaboxes/post-type-archive.php:473
+#: inc/views/settings/metaboxes/post-type-archive.php:481
 #: inc/views/settings/metaboxes/robots.php:116
 #: inc/views/term/settings.php:96
 msgid "Archiving"
@@ -861,50 +861,50 @@ msgstr ""
 msgid "Characters: %s"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:102
+#: inc/classes/admin/settings/plugin.class.php:103
 msgid "General Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:112
+#: inc/classes/admin/settings/plugin.class.php:113
 msgid "Title Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:122
+#: inc/classes/admin/settings/plugin.class.php:123
 msgid "Description Meta Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:132
+#: inc/classes/admin/settings/plugin.class.php:133
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:141
+#: inc/classes/admin/settings/plugin.class.php:142
 msgid "Post Type Archive Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:151
+#: inc/classes/admin/settings/plugin.class.php:152
 msgid "Social Meta Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:161
+#: inc/classes/admin/settings/plugin.class.php:162
 msgid "Schema.org Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:171
+#: inc/classes/admin/settings/plugin.class.php:172
 #: inc/views/post/settings.php:537
 #: inc/views/settings/metaboxes/homepage.php:534
 #: inc/views/term/settings.php:391
 msgid "Robots Meta Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:181
+#: inc/classes/admin/settings/plugin.class.php:182
 msgid "Webmaster Meta Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:191
+#: inc/classes/admin/settings/plugin.class.php:192
 msgid "Sitemap Settings"
 msgstr ""
 
-#: inc/classes/admin/settings/plugin.class.php:201
+#: inc/classes/admin/settings/plugin.class.php:202
 msgid "Feed Settings"
 msgstr ""
 
@@ -913,7 +913,7 @@ msgstr ""
 msgid "There has been an error redirecting. Refresh the page or follow [this link](%s)."
 msgstr ""
 
-#: inc/classes/front/feed.class.php:104
+#: inc/classes/front/feed.class.php:107
 msgctxt "The content source"
 msgid "Source"
 msgstr ""
@@ -1067,11 +1067,11 @@ msgstr ""
 msgid "Sitemap is generated on %s"
 msgstr ""
 
-#: inc/compat/plugin-bbpress.php:459
+#: inc/compat/plugin-bbpress.php:503
 msgid "This is not a public forum."
 msgstr ""
 
-#: inc/compat/plugin-bbpress.php:461
+#: inc/compat/plugin-bbpress.php:505
 msgid "This page is not part of a public forum."
 msgstr ""
 
@@ -1091,7 +1091,7 @@ msgstr ""
 #: inc/views/list/bulk-post.php:50
 #: inc/views/list/quick-post.php:53
 #: inc/views/post/settings.php:498
-#: inc/views/settings/metaboxes/post-type-archive.php:461
+#: inc/views/settings/metaboxes/post-type-archive.php:469
 #: inc/views/term/settings.php:83
 msgid "Link following"
 msgstr ""
@@ -1104,7 +1104,7 @@ msgid "Visibility SEO Settings"
 msgstr ""
 
 #: inc/views/list/bulk-post.php:77
-#: inc/views/settings/metaboxes/post-type-archive.php:486
+#: inc/views/settings/metaboxes/post-type-archive.php:494
 msgid "Default (unknown)"
 msgstr ""
 
@@ -1118,7 +1118,7 @@ msgstr ""
 #: inc/views/list/quick-term.php:78
 #: inc/views/post/settings.php:149
 #: inc/views/settings/metaboxes/homepage.php:108
-#: inc/views/settings/metaboxes/post-type-archive.php:181
+#: inc/views/settings/metaboxes/post-type-archive.php:189
 #: inc/views/term/settings.php:133
 msgid "Meta Title"
 msgstr ""
@@ -1127,7 +1127,7 @@ msgstr ""
 #: inc/views/list/quick-term.php:95
 #: inc/views/post/settings.php:218
 #: inc/views/settings/metaboxes/homepage.php:157
-#: inc/views/settings/metaboxes/post-type-archive.php:253
+#: inc/views/settings/metaboxes/post-type-archive.php:261
 #: inc/views/term/settings.php:182
 msgid "Meta Description"
 msgstr ""
@@ -1135,7 +1135,7 @@ msgstr ""
 #: inc/views/list/quick-post.php:115
 #: inc/views/list/quick-term.php:115
 #: inc/views/post/settings.php:516
-#: inc/views/settings/metaboxes/post-type-archive.php:429
+#: inc/views/settings/metaboxes/post-type-archive.php:437
 #: inc/views/term/settings.php:373
 msgid "Canonical URL"
 msgstr ""
@@ -1146,8 +1146,8 @@ msgstr ""
 #: inc/views/post/settings.php:414
 #: inc/views/post/settings.php:576
 #: inc/views/settings/metaboxes/homepage.php:270
-#: inc/views/settings/metaboxes/post-type-archive.php:308
-#: inc/views/settings/metaboxes/post-type-archive.php:485
+#: inc/views/settings/metaboxes/post-type-archive.php:316
+#: inc/views/settings/metaboxes/post-type-archive.php:493
 #: inc/views/term/settings.php:107
 msgid "Default (%s)"
 msgstr ""
@@ -1155,7 +1155,7 @@ msgstr ""
 #: inc/views/list/quick-post.php:147
 #: inc/views/list/quick-term.php:148
 #: inc/views/post/settings.php:647
-#: inc/views/settings/metaboxes/post-type-archive.php:529
+#: inc/views/settings/metaboxes/post-type-archive.php:537
 #: inc/views/term/settings.php:429
 msgid "301 Redirect URL"
 msgstr ""
@@ -1170,7 +1170,7 @@ msgstr ""
 
 #: inc/views/post/settings.php:63
 #: inc/views/settings/metaboxes/homepage.php:73
-#: inc/views/settings/metaboxes/post-type-archive.php:90
+#: inc/views/settings/metaboxes/post-type-archive.php:98
 #: inc/views/settings/metaboxes/robots.php:88
 #: inc/views/settings/metaboxes/schema.php:53
 #: inc/views/settings/metaboxes/sitemaps.php:48
@@ -1181,12 +1181,12 @@ msgstr ""
 
 #: inc/views/post/settings.php:68
 #: inc/views/settings/metaboxes/homepage.php:83
-#: inc/views/settings/metaboxes/post-type-archive.php:96
+#: inc/views/settings/metaboxes/post-type-archive.php:104
 msgid "Social"
 msgstr ""
 
 #: inc/views/post/settings.php:73
-#: inc/views/settings/metaboxes/post-type-archive.php:102
+#: inc/views/settings/metaboxes/post-type-archive.php:110
 msgid "Visibility"
 msgstr ""
 
@@ -1197,14 +1197,14 @@ msgstr ""
 
 #: inc/views/post/settings.php:153
 #: inc/views/settings/metaboxes/homepage.php:112
-#: inc/views/settings/metaboxes/post-type-archive.php:185
+#: inc/views/settings/metaboxes/post-type-archive.php:193
 #: inc/views/term/settings.php:137
 msgid "The meta title can be used to determine the title used on search engine result pages."
 msgstr ""
 
 #: inc/views/post/settings.php:197
 #: inc/views/post/settings.php:204
-#: inc/views/settings/metaboxes/post-type-archive.php:240
+#: inc/views/settings/metaboxes/post-type-archive.php:248
 #: inc/views/term/settings.php:171
 msgid "Remove the site title?"
 msgstr ""
@@ -1214,77 +1214,77 @@ msgid "For the homepage, this option must be managed on the SEO Settings page."
 msgstr ""
 
 #: inc/views/post/settings.php:206
-#: inc/views/settings/metaboxes/post-type-archive.php:232
+#: inc/views/settings/metaboxes/post-type-archive.php:240
 #: inc/views/term/settings.php:173
 msgid "Use this when you want to rearrange the title parts manually."
 msgstr ""
 
 #: inc/views/post/settings.php:222
 #: inc/views/settings/metaboxes/homepage.php:161
-#: inc/views/settings/metaboxes/post-type-archive.php:257
+#: inc/views/settings/metaboxes/post-type-archive.php:265
 #: inc/views/term/settings.php:186
 msgid "The meta description can be used to determine the text used under the title on search engine results pages."
 msgstr ""
 
 #: inc/views/post/settings.php:323
 #: inc/views/settings/metaboxes/homepage.php:352
-#: inc/views/settings/metaboxes/post-type-archive.php:314
+#: inc/views/settings/metaboxes/post-type-archive.php:322
 #: inc/views/term/settings.php:246
 msgid "Open Graph Title"
 msgstr ""
 
 #: inc/views/post/settings.php:342
 #: inc/views/settings/metaboxes/homepage.php:372
-#: inc/views/settings/metaboxes/post-type-archive.php:327
+#: inc/views/settings/metaboxes/post-type-archive.php:335
 #: inc/views/term/settings.php:263
 msgid "Open Graph Description"
 msgstr ""
 
 #: inc/views/post/settings.php:359
 #: inc/views/settings/metaboxes/homepage.php:393
-#: inc/views/settings/metaboxes/post-type-archive.php:342
+#: inc/views/settings/metaboxes/post-type-archive.php:350
 #: inc/views/term/settings.php:278
 msgid "Twitter Title"
 msgstr ""
 
 #: inc/views/post/settings.php:378
 #: inc/views/settings/metaboxes/homepage.php:413
-#: inc/views/settings/metaboxes/post-type-archive.php:355
+#: inc/views/settings/metaboxes/post-type-archive.php:363
 #: inc/views/term/settings.php:295
 msgid "Twitter Description"
 msgstr ""
 
 #: inc/views/post/settings.php:399
 #: inc/views/settings/metaboxes/homepage.php:433
-#: inc/views/settings/metaboxes/post-type-archive.php:368
-#: inc/views/settings/metaboxes/social.php:283
+#: inc/views/settings/metaboxes/post-type-archive.php:376
+#: inc/views/settings/metaboxes/social.php:285
 #: inc/views/term/settings.php:310
 msgid "Twitter Card Type"
 msgstr ""
 
 #: inc/views/post/settings.php:403
 #: inc/views/settings/metaboxes/homepage.php:436
-#: inc/views/settings/metaboxes/post-type-archive.php:371
+#: inc/views/settings/metaboxes/post-type-archive.php:379
 #: inc/views/term/settings.php:314
 msgid "The Twitter Card type is used to determine whether an image appears on the side or as a large cover. This affects X, but also other social platforms like Discord."
 msgstr ""
 
 #: inc/views/post/settings.php:448
 #: inc/views/settings/metaboxes/homepage.php:478
-#: inc/views/settings/metaboxes/post-type-archive.php:402
+#: inc/views/settings/metaboxes/post-type-archive.php:410
 #: inc/views/term/settings.php:341
 msgid "Social Image URL"
 msgstr ""
 
 #: inc/views/post/settings.php:452
 #: inc/views/settings/metaboxes/homepage.php:481
-#: inc/views/settings/metaboxes/post-type-archive.php:405
+#: inc/views/settings/metaboxes/post-type-archive.php:413
 #: inc/views/term/settings.php:345
 msgid "The social image URL can be used by search engines and social networks alike. It's best to use an image with a 1.91:1 aspect ratio that is at least 1200px wide for universal support."
 msgstr ""
 
 #: inc/views/post/settings.php:520
-#: inc/views/settings/metaboxes/post-type-archive.php:433
+#: inc/views/settings/metaboxes/post-type-archive.php:441
 #: inc/views/term/settings.php:377
 msgid "This urges search engines to go to the outputted URL."
 msgstr ""
@@ -1315,7 +1315,7 @@ msgid "Exclude this page from all archive queries on this site."
 msgstr ""
 
 #: inc/views/post/settings.php:652
-#: inc/views/settings/metaboxes/post-type-archive.php:533
+#: inc/views/settings/metaboxes/post-type-archive.php:541
 #: inc/views/term/settings.php:433
 msgid "This will force visitors to go to another URL."
 msgstr ""
@@ -1325,7 +1325,7 @@ msgid "Facebook profile page"
 msgstr ""
 
 #: inc/views/profile/settings.php:39
-#: inc/views/settings/metaboxes/social.php:221
+#: inc/views/settings/metaboxes/social.php:223
 msgctxt "Example Facebook Personal URL"
 msgid "https://www.facebook.com/YourPersonalProfile"
 msgstr ""
@@ -1364,7 +1364,7 @@ msgid "Automatically generate descriptions?"
 msgstr ""
 
 #: inc/views/settings/metaboxes/description.php:63
-msgid "Open Graph and Twitter require descriptions. So, it's best to leave description generation enabled."
+msgid "Open Graph requires descriptions. So, it's best to leave description generation enabled."
 msgstr ""
 
 #: inc/views/settings/metaboxes/description.php:69
@@ -1706,7 +1706,7 @@ msgid "These settings will take precedence over the settings set within the home
 msgstr ""
 
 #: inc/views/settings/metaboxes/homepage.php:53
-#: inc/views/settings/metaboxes/post-type-archive.php:150
+#: inc/views/settings/metaboxes/post-type-archive.php:158
 msgid "A multilingual plugin has been detected and text entered below may not be translated."
 msgstr ""
 
@@ -1767,7 +1767,7 @@ msgid "Note: The default Twitter Card Type is fetched from the Page SEO Settings
 msgstr ""
 
 #: inc/views/settings/metaboxes/homepage.php:473
-#: inc/views/settings/metaboxes/social.php:159
+#: inc/views/settings/metaboxes/social.php:161
 msgid "Social Image Settings"
 msgstr ""
 
@@ -1841,34 +1841,38 @@ msgstr ""
 msgid "Apply `noindex` to every second or later page on the homepage?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/post-type-archive.php:68
+#: inc/views/settings/metaboxes/post-type-archive.php:48
+msgid "Post type archives (PTA) are unique archives displaying all pages for a post type. Since PTAs lack an administrative interface, their SEO settings are displayed here."
+msgstr ""
+
+#: inc/views/settings/metaboxes/post-type-archive.php:76
 msgid "Select archive to edit:"
 msgstr ""
 
 #. translators: 1 = Post Type Archive name
-#: inc/views/settings/metaboxes/post-type-archive.php:126
+#: inc/views/settings/metaboxes/post-type-archive.php:134
 msgid "Editing archive of %s"
 msgstr ""
 
-#: inc/views/settings/metaboxes/post-type-archive.php:133
+#: inc/views/settings/metaboxes/post-type-archive.php:141
 msgid "View archive"
 msgstr ""
 
-#: inc/views/settings/metaboxes/post-type-archive.php:142
+#: inc/views/settings/metaboxes/post-type-archive.php:150
 msgid "This post type is excluded, so settings won't have any effect."
 msgstr ""
 
-#: inc/views/settings/metaboxes/post-type-archive.php:454
+#: inc/views/settings/metaboxes/post-type-archive.php:462
 #: inc/views/term/settings.php:74
 msgid "This tells search engines not to show this term in their search results."
 msgstr ""
 
-#: inc/views/settings/metaboxes/post-type-archive.php:466
+#: inc/views/settings/metaboxes/post-type-archive.php:474
 #: inc/views/term/settings.php:87
 msgid "This tells search engines not to follow links on this term."
 msgstr ""
 
-#: inc/views/settings/metaboxes/post-type-archive.php:478
+#: inc/views/settings/metaboxes/post-type-archive.php:486
 #: inc/views/term/settings.php:100
 msgid "This tells search engines not to save a cached copy of this term."
 msgstr ""
@@ -2467,255 +2471,255 @@ msgstr ""
 msgid "Output various meta tags for social site integration, among other third-party services."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:96
+#: inc/views/settings/metaboxes/social.php:98
 msgid "Output Open Graph meta tags?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:97
+#: inc/views/settings/metaboxes/social.php:99
 msgid "Facebook, Twitter, Pinterest and many other social sites make use of these meta tags."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:102
+#: inc/views/settings/metaboxes/social.php:104
 msgid "Note: Another Open Graph plugin has been detected. These meta tags might conflict."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:108
+#: inc/views/settings/metaboxes/social.php:110
 msgid "Output Facebook meta tags?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:109
+#: inc/views/settings/metaboxes/social.php:111
 msgid "Output various meta tags targeted at Facebook."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:118
+#: inc/views/settings/metaboxes/social.php:120
 msgid "Output Twitter meta tags?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:119
+#: inc/views/settings/metaboxes/social.php:121
 msgid "X (formerly Twitter), Discord, LinkedIn, and some other networks make use of these meta tags."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:124
+#: inc/views/settings/metaboxes/social.php:126
 msgid "Note: Another Twitter Card plugin has been detected. These meta tags might conflict."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:130
+#: inc/views/settings/metaboxes/social.php:132
 msgid "Output oEmbed scripts?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:131
+#: inc/views/settings/metaboxes/social.php:133
 msgid "WordPress, Discord, Drupal, Squarespace, and many other clients can make use of these scripts."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:139
+#: inc/views/settings/metaboxes/social.php:141
 msgid "Social Title Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:140
+#: inc/views/settings/metaboxes/social.php:142
 msgid "Most social sites and third-party services automatically include the website URL inside their embeds. When the site title is described well in the site URL, including it in the social title will be redundant."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:143
+#: inc/views/settings/metaboxes/social.php:145
 msgid "When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:151
+#: inc/views/settings/metaboxes/social.php:153
 msgid "Remove site title from generated social titles?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:160
+#: inc/views/settings/metaboxes/social.php:162
 msgid "A social image can be displayed when a link to your website is shared. It is a great way to grab attention."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:168
+#: inc/views/settings/metaboxes/social.php:170
 msgid "Output multiple Open Graph image tags?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:169
+#: inc/views/settings/metaboxes/social.php:171
 msgid "This enables users to select any image attached to the page shared on social networks, like Facebook."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:177
+#: inc/views/settings/metaboxes/social.php:179
 msgid "Social Image Fallback URL"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:178
+#: inc/views/settings/metaboxes/social.php:180
 msgid "When no image is available from the page or term, this fallback image will be used instead."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:194
+#: inc/views/settings/metaboxes/social.php:196
 msgid "Theme Color Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:195
+#: inc/views/settings/metaboxes/social.php:197
 msgid "Discord styles embeds with the theme color. The theme color can also affect the tab-color in some browsers."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:199
+#: inc/views/settings/metaboxes/social.php:201
 msgid "Theme Color"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:207
+#: inc/views/settings/metaboxes/social.php:209
 msgid "Site Shortlink Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:208
+#: inc/views/settings/metaboxes/social.php:210
 msgid "The shortlink tag can be manually used for microblogging services like Twitter, but it has no SEO value whatsoever."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:213
+#: inc/views/settings/metaboxes/social.php:215
 msgid "Output shortlink tag?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:224
+#: inc/views/settings/metaboxes/social.php:226
 msgctxt "Example Facebook Business URL"
 msgid "https://www.facebook.com/YourBusinessProfile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:226
+#: inc/views/settings/metaboxes/social.php:228
 msgid "Facebook Integration Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:227
+#: inc/views/settings/metaboxes/social.php:229
 msgid "Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:228
+#: inc/views/settings/metaboxes/social.php:230
 msgid "When these options are filled in, Facebook might link the Facebook profile to be followed and liked when your post or page is shared."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:234
+#: inc/views/settings/metaboxes/social.php:236
 msgid "Facebook Publisher page"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:238
+#: inc/views/settings/metaboxes/social.php:240
 msgid "Only Facebook Business Pages are accepted."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:250
+#: inc/views/settings/metaboxes/social.php:252
 msgid "Facebook Author Fallback Page"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:254
+#: inc/views/settings/metaboxes/social.php:256
 msgid "Your Facebook profile."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:260
-#: inc/views/settings/metaboxes/social.php:354
+#: inc/views/settings/metaboxes/social.php:262
+#: inc/views/settings/metaboxes/social.php:356
 msgid "Authors can override this option on their profile page."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:269
+#: inc/views/settings/metaboxes/social.php:271
 msgctxt "Twitter @username"
 msgid "@your-site-username"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:272
+#: inc/views/settings/metaboxes/social.php:274
 msgctxt "Twitter @username"
 msgid "@your-personal-username"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:276
+#: inc/views/settings/metaboxes/social.php:278
 msgid "Twitter Integration Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:277
+#: inc/views/settings/metaboxes/social.php:279
 msgid "Twitter post sharing works mostly through Twitter Cards, and may fall back to use Open Graph. However, you can also link your Business and Personal Twitter pages, among various other options."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:286
+#: inc/views/settings/metaboxes/social.php:288
 msgid "When you share a link on Twitter, an image can appear on the side or as a large cover."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:289
+#: inc/views/settings/metaboxes/social.php:291
 msgid "The Twitter Card type also affects images in Discord embeds; either displayed small at the side or large below."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:305
+#: inc/views/settings/metaboxes/social.php:307
 msgid "Learn more about this card."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:320
+#: inc/views/settings/metaboxes/social.php:322
 msgid "Card and Content Attribution"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:322
+#: inc/views/settings/metaboxes/social.php:324
 msgid "Twitter claims users will be able to follow and view the profiles of attributed accounts directly from the card when these fields are filled in."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:323
+#: inc/views/settings/metaboxes/social.php:325
 msgid "However, for now, these fields seem to have no discernible effect."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:328
+#: inc/views/settings/metaboxes/social.php:330
 msgid "Website Twitter Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:332
-#: inc/views/settings/metaboxes/social.php:348
+#: inc/views/settings/metaboxes/social.php:334
+#: inc/views/settings/metaboxes/social.php:350
 msgid "Find your @username."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:344
+#: inc/views/settings/metaboxes/social.php:346
 msgid "Twitter Author Fallback Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:362
+#: inc/views/settings/metaboxes/social.php:364
 msgid "oEmbed Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:363
+#: inc/views/settings/metaboxes/social.php:365
 msgid "Some social sharing services and clients, like WordPress, LinkedIn, and Discord, obtain the linked page information via oEmbed."
 msgstr ""
 
 #. translators: Unavailable means that either a custom Open Graph title is missing or Open Graph is disabled.
-#: inc/views/settings/metaboxes/social.php:370
+#: inc/views/settings/metaboxes/social.php:372
 msgid "This will fall back to the meta title if the Open Graph title is unavailable."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:378
+#: inc/views/settings/metaboxes/social.php:380
 msgid "Use Open Graph title?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:379
+#: inc/views/settings/metaboxes/social.php:381
 msgid "Check this option if you want to replace page titles with Open Graph titles in embeds."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:385
+#: inc/views/settings/metaboxes/social.php:387
 msgid "Only custom social images that are selected via the Media Library are considered."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:392
+#: inc/views/settings/metaboxes/social.php:394
 msgid "Use social image?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:393
+#: inc/views/settings/metaboxes/social.php:395
 msgid "LinkedIn displays the post's featured image in embeds. Check this option if you want to replace it with the social image."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:401
+#: inc/views/settings/metaboxes/social.php:403
 msgid "Remove author name?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:402
+#: inc/views/settings/metaboxes/social.php:404
 msgid "Discord shows the page author's name above the sharing embed. Check this option if you find this undesirable."
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:409
+#: inc/views/settings/metaboxes/social.php:411
 msgid "Post Date Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/social.php:410
+#: inc/views/settings/metaboxes/social.php:412
 msgid "Some social sites output the shared post's publishing and modified data in the sharing snippet."
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-#: inc/views/settings/metaboxes/social.php:421
+#: inc/views/settings/metaboxes/social.php:423
 msgid "Add `article:published_time` to posts?"
 msgstr ""
 
 #. translators: the backticks are Markdown! Preserve them as-is!
-#: inc/views/settings/metaboxes/social.php:430
+#: inc/views/settings/metaboxes/social.php:432
 msgid "Add `article:modified_time` to posts?"
 msgstr ""
 

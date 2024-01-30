@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4.0
-Stable tag: 5.0.2
+Stable tag: 5.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -244,36 +244,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 = 5.0.3 =
 
-TODO updated POT file (new translation, Twitter no longer requires a feature).
-
-**For everyone:**
-
-* **Changed:**
-	* When the front page is setup as a static page, but the page is missing (not assigned or deleted), TSF will now still consider the home request supported for SEO.
-		* Both WordPress and TSF will treat the homepage as a blog. Though TSF won't consider the custom metadata from actual the blog page for this request.
-* **Fixed:**
-	* Resolved an issue where the last word of a sentence shorter than maximum length without leading punctuation wasn't considered for description generation.
-	* Resolved an issue where Polylang compatibility wasn't loaded for Polylang Pro.
-	* Resolved an issue where Polylang Pro wasn't recognized as a translation plugin.
-	* Resolved an issue where TSF fetched post attributes from the Block Editor before it became available. This invoked multiple paints, slowing down the Block Editor load time.
-
-**For translators:**
-
-Added: New translations are available.
-Updated: TODO The POT file contains new translations.
-
-**For developers:**
-
-* Function `the_seo_framework_class()` no longer requires action `plugins_loaded` to have occurred.
-* Privately marked class `\The_SEO_Framework\Admin\SEOBar\Builder` is no longer erroneously marked as a replacement for the deprecated class `\The_SEO_Framework\Interpreters\SEOBar`.
-* Method `tsf()->query()->utils()->query_supports_seo()` now considers the query supported when the homepage is assigned a broken ID.
-* Method `tsf()->query()->utils()->blog_page_exists()` is new.
-* Method `tsf()->query()->is_blog()`:
-	1. Will no longer validate `0` as a plausible blog page.
-	2. Will no longer validate `is_home()` when the blog page is not assigned.
-* Filter `the_seo_framework_allow_external_redirect` now fixes redirect URLs during the saving sequences again.
-* Removed Lodash dependencies in the Block Editor because [Gutenberg is moving away from it](https://github.com/WordPress/gutenberg/issues/17025).
-* It's 2024! Updated all files' copyright year.
+This minor update fixes compatibility with Polylang Pro. We also perfected the detection of unassigned home and blog pages and improved the Block Editor's load time by [resolving a glitch](https://theseoframework.com/?p=4204).
 
 = 5.0.2 =
 
