@@ -270,12 +270,13 @@ class Utils {
 
 	/**
 	 * Determines whether the blog page exists.
+	 * This is not always a "blog as page" -- for that, just check the `'page_for_posts'` option.
 	 *
 	 * @since 5.0.3
 	 *
 	 * @return bool
 	 */
 	public static function blog_page_exists() {
-		return ! static::has_page_on_front() && \get_option( 'page_for_posts' );
+		return ! static::has_page_on_front() || \get_option( 'page_for_posts' );
 	}
 }
