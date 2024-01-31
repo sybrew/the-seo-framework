@@ -244,7 +244,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 = 5.0.4 =
 
-This update addresses an issue that affected detection of the assigned blog page.
+This tiny update [addresses an issue](https://theseoframework.com/?p=4215) that affected detection of the assigned blog page.
 
 = 5.0.3 =
 

@@ -494,7 +494,7 @@ class Query {
 		}
 
 		// If not blog page is assigned, it won't exist. Ignore whatever WP thinks.
-		return Query\Utils::blog_page_exists() && \is_home();
+		return Query\Utils::has_blog_page() && \is_home();
 	}
 
 	/**
