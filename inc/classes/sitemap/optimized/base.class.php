@@ -386,7 +386,7 @@ class Base extends Main {
 			$front_page_id = (int) \get_option( 'page_on_front' );
 			$posts_page_id = (int) \get_option( 'page_for_posts' );
 
-			if ( $front_page_id ) {
+			if ( $front_page_id ) { // Might not be assigned.
 				yield from $this->generate_url_item_values(
 					[ $front_page_id ],
 					$args,

@@ -269,6 +269,17 @@ class Utils {
 	}
 
 	/**
+	 * Determines whether a page on front is actually assigned.
+	 *
+	 * @since 5.0.5
+	 *
+	 * @return bool
+	 */
+	public static function has_assigned_page_on_front() {
+		return static::has_page_on_front() && \get_option( 'page_on_front' );
+	}
+
+	/**
 	 * Determines whether the blog page exists.
 	 * This is not always a "blog as page" -- for that, use `tsf()->query()->is_blog_as_page()`.
 	 *

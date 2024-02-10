@@ -13,6 +13,8 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
+use function \The_SEO_Framework\coalesce_strlen;
+
 use \The_SEO_Framework\{
 	Data\Filter\Sanitize,
 	Helper\Post_Type,
@@ -115,8 +117,8 @@ switch ( $instance ) :
 		}
 
 		if ( $is_static_front_page ) {
-			$_has_home_title = (bool) Data\Plugin::get_option( 'homepage_title' );
-			$_has_home_desc  = (bool) Data\Plugin::get_option( 'homepage_description' );
+			$_has_home_title = (bool) \strlen( Data\Plugin::get_option( 'homepage_title' ) );
+			$_has_home_desc  = (bool) \strlen( Data\Plugin::get_option( 'homepage_description' ) );
 
 			// When the homepage title is set, we can safely get the custom field.
 			$default_title     = $_has_home_title
@@ -258,26 +260,26 @@ switch ( $instance ) :
 
 		if ( $is_static_front_page ) {
 			$_social_title       = [
-				'og' => Data\Plugin::get_option( 'homepage_og_title' )
-						?: Data\Plugin::get_option( 'homepage_title' )
-						?: Meta\Open_Graph::get_generated_title( $generator_args ),
-				'tw' => Data\Plugin::get_option( 'homepage_twitter_title' )
-						?: Data\Plugin::get_option( 'homepage_og_title' )
-						?: Data\Plugin::get_option( 'homepage_title' )
-						?: Meta\Twitter::get_generated_title( $generator_args ),
+				'og' => coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
+						?? coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
+						?? Meta\Open_Graph::get_generated_title( $generator_args ),
+				'tw' => coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
+						?? coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
+						?? coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
+						?? Meta\Twitter::get_generated_title( $generator_args ),
 			];
 			$_social_description = [
-				'og' => Data\Plugin::get_option( 'homepage_og_description' )
-						?: Data\Plugin::get_option( 'homepage_description' )
-						?: Meta\Open_Graph::get_generated_description( $generator_args ),
-				'tw' => Data\Plugin::get_option( 'homepage_twitter_description' )
-						?: Data\Plugin::get_option( 'homepage_og_description' )
-						?: Data\Plugin::get_option( 'homepage_description' )
-						?: Meta\Twitter::get_generated_description( $generator_args ),
+				'og' => coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+						?? coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
+						?? Meta\Open_Graph::get_generated_description( $generator_args ),
+				'tw' => coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+						?? coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+						?? coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
+						?? Meta\Twitter::get_generated_description( $generator_args ),
 			];
 
 			$_twitter_card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
-							?: Meta\Twitter::get_generated_card_type( $generator_args );
+						  ?: Meta\Twitter::get_generated_card_type( $generator_args );
 		} else {
 			$_social_title       = [
 				'og' => Meta\Open_Graph::get_generated_title( $generator_args ),
@@ -299,8 +301,8 @@ switch ( $instance ) :
 						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['og'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['og'] ) ),
-						'titleLock'    => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_title' ),
-						'descLock'     => $is_static_front_page && Data\Plugin::get_option( 'homepage_og_description' ),
+						'titleLock'    => $is_static_front_page && \strlen( Data\Plugin::get_option( 'homepage_og_title' ) ),
+						'descLock'     => $is_static_front_page && \strlen( Data\Plugin::get_option( 'homepage_og_description' ) ),
 					],
 				],
 				'tw' => [
@@ -308,8 +310,8 @@ switch ( $instance ) :
 						'defaultTitle' => \esc_html( Sanitize::metadata_content( $_social_title['tw'] ) ),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 						'defaultDesc'  => \esc_html( Sanitize::metadata_content( $_social_description['tw'] ) ),
-						'titleLock'    => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_title' ),
-						'descLock'     => $is_static_front_page && (bool) Data\Plugin::get_option( 'homepage_twitter_description' ),
+						'titleLock'    => $is_static_front_page && \strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) ),
+						'descLock'     => $is_static_front_page && \strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) ),
 					],
 				],
 			],

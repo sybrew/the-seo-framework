@@ -95,8 +95,8 @@ class Blog {
 	}
 
 	/**
-	 * Returns the home URL. Created for the WordPress method is slow for it
-	 * performs "set_url_scheme" calls slowly. We rely on this method for some
+	 * Returns the home URL. Created because the WordPress method is slow for it
+	 * performs bad "set_url_scheme" calls. We rely on this method for some
 	 * plugins filter `home_url`.
 	 * Memoized.
 	 *

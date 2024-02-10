@@ -245,8 +245,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 = 5.0.5 =
 
 TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
-TODO Interface: Filter the_seo_framework_title_from_generation should be overwritten early via title triggers.
-	-> This will make the filter not appear to be working, but it will fix the Untitled lag in Gutenberg.
+	-> aka https://developers.google.com/search/docs/appearance/structured-data/profile-page
+	-> Move to 5.1.0? This is a new Schema type and we want more "sameas" URLs complement this feature.
+	-> The "alternateName" refering to the page URL should only be filled when there's no name?
+	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
 TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
 TODO has_page_on_front() should say false when no page is assigned?
 	-> is_static_frontpage() already tests for this somewhat correctly.
@@ -262,12 +264,20 @@ TODO in get_all_nonhierarchical we use ?: instead of ?? next to memo(). Why?
 TODO add to "Output optimized sitemap?" that only the latests pages are included, and no archives?
 	-> I'm circumspect of that users think TSF not including all this cruft is a bug.
 
+TODO add every language's sitemap to robots.txt?
+	-> Is this even possible?
+		-> If so, we can then also add a link in the admin "See English sitemap" instead of "See base sitemap".
+
 **For everyone**
 
 * **Improved:**
 	* Changed the wording of the link relationship settings to reflect better what they output.
 * **Fixed:**
 	* The link relationship settings now have an effect again.
+	* When a homepage isn't assigned with a page on front (that's something you should address), TSF will no longer incorrectly assume there is one and give a broken link to edit it at the homepage settings.
+	* The Homepage Settings now correctly reflect the page's SEO Settings when they're set to `0`.
+		* Note that a lone `0` for the title (without branding/additions) will bypass WordPress's filters, because WordPress doesn't support a lone `0` for the title. But you should brand your titles.
+	* The Page SEO settings now correctly reflect the Homepage's SEO Settings when those are set to `0`.
 
 **For translators**
 
@@ -278,6 +288,8 @@ TODO add to "Output optimized sitemap?" that only the latests pages are included
 
 * **Added:**
 	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
+	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
+	* JavaScript method `tsf.coalesceStrlen()` is now available.
 * **Fixed:**
 	* For method `tsf()->uri()->get_paged_urls()`, reinstated missing option checks.
 

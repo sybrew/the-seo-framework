@@ -131,9 +131,9 @@ switch ( $instance ) :
 					'state' => [
 						'refTitleLocked'      => false, // This field is the mother of all references.
 						'defaultTitle'        => \esc_html(
-							$_post_meta_title ?: Meta\Title::get_bare_generated_title( $generator_args )
+							coalesce_strlen( $_post_meta_title ) ?? Meta\Title::get_bare_generated_title( $generator_args )
 						),
-						'_defaultTitleLocked' => (bool) $_post_meta_title, // Underscore because it's non-standard API.
+						'_defaultTitleLocked' => (bool) \strlen( $_post_meta_title ), // Underscored index because it's non-standard API.
 						'addAdditions'        => Meta\Title\Conditions::use_branding( $generator_args ),
 						'useSocialTagline'    => Meta\Title\Conditions::use_branding( $generator_args, true ),
 						'additionValue'       => \esc_html( Meta\Title::get_addition_for_front_page() ),
@@ -146,7 +146,7 @@ switch ( $instance ) :
 		<?php
 		HTML::description( \__( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
 
-		if ( $home_id && Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) )
+		if ( $home_id && \strlen( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) )
 			HTML::description( \__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
 
 		?>
@@ -177,8 +177,10 @@ switch ( $instance ) :
 				[
 					'state' => [
 						'defaultDescription' => \esc_html(
-							( $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : '' )
-							?: Meta\Description::get_generated_description( $generator_args )
+							coalesce_strlen(
+								$home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) : ''
+							)
+							?? Meta\Description::get_generated_description( $generator_args )
 						),
 					],
 				],
@@ -187,7 +189,7 @@ switch ( $instance ) :
 		</p>
 		<?php
 
-		if ( $home_id && Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) {
+		if ( $home_id && \strlen( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) ) {
 			HTML::description(
 				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -272,14 +274,11 @@ switch ( $instance ) :
 
 		$custom_title    = '';
 		$custom_desc     = '';
-
 		$custom_og_title = '';
 		$custom_og_desc  = '';
 		$custom_tw_title = '';
 		$custom_tw_desc  = '';
-
 		$custom_tw_card  = '';
-
 		$custom_image    = '';
 
 		// Gets custom fields from page.
@@ -310,37 +309,37 @@ switch ( $instance ) :
 				'og' => [
 					'state' => [
 						'defaultTitle' => \esc_html(
-							$custom_og_title
-							?: $custom_title
-							?: Meta\Open_Graph::get_generated_title( $generator_args )
+							coalesce_strlen( $custom_og_title )
+							?? coalesce_strlen( $custom_title )
+							?? Meta\Open_Graph::get_generated_title( $generator_args )
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 						'defaultDesc'  => \esc_html(
-							$custom_og_desc
-							?: $custom_desc
-							?: Meta\Open_Graph::get_generated_description( $generator_args )
+							coalesce_strlen( $custom_og_desc )
+							?? coalesce_strlen( $custom_desc )
+							?? Meta\Open_Graph::get_generated_description( $generator_args )
 						),
-						'titlePhLock'  => (bool) $custom_og_title,
-						'descPhLock'   => (bool) $custom_og_desc,
+						'titlePhLock'  => (bool) \strlen( $custom_og_title ),
+						'descPhLock'   => (bool) \strlen( $custom_og_desc ),
 					],
 				],
 				'tw' => [
 					'state' => [
 						'defaultTitle' => \esc_html(
-							$custom_tw_title
-							?: $custom_og_title
-							?: $custom_title
-							?: Meta\Twitter::get_generated_title( $generator_args )
+							coalesce_strlen( $custom_tw_title )
+							?? coalesce_strlen( $custom_og_title )
+							?? coalesce_strlen( $custom_title )
+							?? Meta\Twitter::get_generated_title( $generator_args )
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 						'defaultDesc'  => \esc_html(
-							$custom_tw_desc
-							?: $custom_og_desc
-							?: $custom_desc
-							?: Meta\Twitter::get_generated_description( $generator_args )
+							coalesce_strlen( $custom_tw_desc )
+							?? coalesce_strlen( $custom_og_desc )
+							?? coalesce_strlen( $custom_desc )
+							?? Meta\Twitter::get_generated_description( $generator_args )
 						),
-						'titlePhLock'  => (bool) $custom_tw_title,
-						'descPhLock'   => (bool) $custom_tw_desc,
+						'titlePhLock'  => (bool) \strlen( $custom_tw_title ),
+						'descPhLock'   => (bool) \strlen( $custom_tw_desc ),
 					],
 				],
 			],
@@ -360,7 +359,7 @@ switch ( $instance ) :
 			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle />
 		</p>
 		<?php
-		if ( Query\Utils::has_page_on_front() && $custom_og_title ) {
+		if ( \strlen( $custom_og_title ) ) {
 			HTML::description(
 				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -380,7 +379,7 @@ switch ( $instance ) :
 			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?= \esc_attr( Data\Plugin::get_option( 'homepage_og_description' ) ) ?></textarea>
 		</p>
 		<?php
-		if ( Query\Utils::has_page_on_front() && $custom_og_desc ) {
+		if ( \strlen( $custom_og_desc ) ) {
 			HTML::description(
 				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -401,7 +400,7 @@ switch ( $instance ) :
 			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle />
 		</p>
 		<?php
-		if ( ( $custom_og_title || $custom_tw_title ) && Query\Utils::has_page_on_front() ) {
+		if ( \strlen( $custom_og_title ) || \strlen( $custom_tw_title ) ) {
 			HTML::description(
 				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -421,7 +420,7 @@ switch ( $instance ) :
 			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?= \esc_attr( Data\Plugin::get_option( 'homepage_twitter_description' ) ) ?></textarea>
 		</p>
 		<?php
-		if ( ( $custom_og_desc || $custom_tw_desc ) && Query\Utils::has_page_on_front() ) {
+		if ( \strlen( $custom_og_desc ) || \strlen( $custom_tw_desc ) ) {
 			HTML::description(
 				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -462,7 +461,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<?php
-		if ( $custom_tw_card && Query\Utils::has_page_on_front() ) {
+		if ( $custom_tw_card ) {
 			HTML::description(
 				\__( 'Note: The default Twitter Card Type is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -496,7 +495,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<?php
-		if ( $custom_image && Query\Utils::has_page_on_front() ) {
+		if ( $custom_image ) {
 			HTML::description(
 				\__( 'Note: The image placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
 			);
@@ -604,7 +603,7 @@ switch ( $instance ) :
 			true,
 		);
 
-		if ( Query\Utils::has_page_on_front() ) {
+		if ( $home_id ) {
 			HTML::description_noesc(
 				Markdown::convert(
 					sprintf(

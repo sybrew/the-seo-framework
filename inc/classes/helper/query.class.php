@@ -796,8 +796,8 @@ class Query {
 		$front_id = umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				'page' === \get_option( 'show_on_front' )
-					? ( (int) \get_option( 'page_on_front' ) ?: false )
+				Query\Utils::has_assigned_page_on_front()
+					? (int) \get_option( 'page_on_front' )
 					: false,
 			);
 

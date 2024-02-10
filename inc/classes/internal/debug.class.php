@@ -473,6 +473,7 @@ final class Debug {
 		$is_post_type_supported         = Post_Type::is_supported();
 		$is_post_type_archive_supported = Post_Type::is_pta_supported();
 		$has_page_on_front              = Query\Utils::has_page_on_front();
+		$has_assigned_page_on_front     = Query\Utils::has_assigned_page_on_front();
 		$has_blog_page                  = Query\Utils::has_blog_page();
 		$is_taxonomy_supported          = Taxonomy::is_supported();
 		$get_post_type                  = \get_post_type();
