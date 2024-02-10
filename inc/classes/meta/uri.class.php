@@ -629,7 +629,7 @@ class URI {
 	}
 
 	/**
-	 * Generates Previous and Next links.
+	 * Gets Previous and Next links.
 	 *
 	 * @since 3.1.0
 	 * @since 3.2.4 1. Now correctly removes the pagination base from singular URLs.
@@ -639,6 +639,9 @@ class URI {
 	 *              2. Reduced needless canonical URL generation when it wouldn't be processed anyway.
 	 * @since 5.0.0 1. Removed memoization thanks to optimization.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 *              3. Removed option checks (unintentionally)
+	 * @since 5.0.5 Reinstated missing option checks.
+	 * @todo make this a getter via $args.
 	 *
 	 * @return array Escaped site Pagination URLs: {
 	 *    string 'prev'
@@ -646,6 +649,31 @@ class URI {
 	 * }
 	 */
 	public static function get_paged_urls() {
+
+		if ( Query::is_real_front_page() ) {
+			$get = Data\Plugin::get_option( 'prev_next_frontpage' );
+		} elseif ( Query::is_singular() || Query::is_singular_archive() ) {
+			$get = Data\Plugin::get_option( 'prev_next_posts' );
+		} elseif ( Query::is_archive() ) {
+			$get = Data\Plugin::get_option( 'prev_next_archives' );
+		} else {
+			$get = false;
+		}
+
+		return $get ? static::get_generated_paged_urls() : [ '', '' ];
+	}
+
+	/**
+	 * Generates Previous and Next links.
+	 *
+	 * @since 5.0.5
+	 *
+	 * @return array Escaped site Pagination URLs: {
+	 *    string 'prev'
+	 *    string 'next'
+	 * }
+	 */
+	public static function get_generated_paged_urls() {
 
 		$page     = max( Query::paged(), Query::page() );
 		$numpages = Query::numpages();

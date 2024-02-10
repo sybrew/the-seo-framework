@@ -336,7 +336,7 @@ class HTML {
 		 * @since 2.6.6.1
 		 * @since 5.0.0 Added the third `$args` parameter.
 		 * @param bool $allow_shortcodes Whether to allow shortcodes.
-		 * @param array $args The arguments for the extraction.
+		 * @param array $args The extraction parameters.
 		 */
 		if ( ! $args['allow_shortcodes'] || ! \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false, $args ) )
 			$html = \strip_shortcodes( $html );

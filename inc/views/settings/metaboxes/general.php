@@ -296,9 +296,9 @@ switch ( $instance ) :
 
 		<hr>
 		<?php
-		HTML::header_title( \__( 'Link Relationship Settings', 'autodescription' ) );
+		HTML::header_title( \__( 'Paginated Link Relationship Settings', 'autodescription' ) );
 		HTML::description( \__( 'Some search engines look for relations between the content of your pages. If you have pagination on a post or page, or have archives indexed, these options will help search engines look for the right page to display in the search results.', 'autodescription' ) );
-		HTML::description( \__( "It's recommended to turn these options on for better SEO consistency and to prevent duplicated content issues.", 'autodescription' ) );
+		HTML::description( \__( 'Enable these options to mitigate duplicated content issues.', 'autodescription' ) );
 
 		$prev_next_posts_checkbox = Input::make_checkbox( [
 			'id'     => 'prev_next_posts',

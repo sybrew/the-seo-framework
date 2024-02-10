@@ -343,7 +343,6 @@ class Query {
 		if ( \is_archive() && false === static::is_singular() )
 			return Query\Cache::memo( true );
 
-		// The $can_cache check is used here because it asserted $wp_query is valid on the front-end.
 		if ( isset( $GLOBALS['wp_query']->query ) && false === static::is_singular() ) {
 			global $wp_query;
 

@@ -242,6 +242,45 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+= 5.0.5 =
+
+TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
+TODO Interface: Filter the_seo_framework_title_from_generation should be overwritten early via title triggers.
+	-> This will make the filter not appear to be working, but it will fix the Untitled lag in Gutenberg.
+TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
+TODO has_page_on_front() should say false when no page is assigned?
+	-> is_static_frontpage() already tests for this somewhat correctly.
+	-> however, the admin Meta Description doesn't reflect this for the homepage.
+TODO remove ping_bing.
+TODO add cursor:pointer to TSF's tabs (settings and post meta).
+	- This way of showing tabs is being phased out by WP. https://core.trac.wordpress.org/ticket/59733
+TODO make timestamp setting 1 also include SECONDS.
+	-> Then, via the API, also apply this to Articles.
+	-> https://wordpress.org/support/topic/suggestions-for-improving-the-plugin-2/#post-17397987
+TODO add filter at method extract_content() -- https://wordpress.org/support/topic/ul-lists-stripped-from-automated-description/.
+TODO in get_all_nonhierarchical we use ?: instead of ?? next to memo(). Why?
+TODO add to "Output optimized sitemap?" that only the latests pages are included, and no archives?
+	-> I'm circumspect of that users think TSF not including all this cruft is a bug.
+
+**For everyone**
+
+* **Improved:**
+	* Changed the wording of the link relationship settings to reflect better what they output.
+* **Fixed:**
+	* The link relationship settings now have an effect again.
+
+**For translators**
+
+* **Added:** New translations are available.
+* **Updated:** TODO The POT file contains new translations.
+
+**For developers:**
+
+* **Added:**
+	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
+* **Fixed:**
+	* For method `tsf()->uri()->get_paged_urls()`, reinstated missing option checks.
+
 = 5.0.4 =
 
 This tiny update [addresses an issue](https://theseoframework.com/?p=4215) that affected detection of the assigned blog page.
