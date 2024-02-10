@@ -250,9 +250,6 @@ TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> The "alternateName" refering to the page URL should only be filled when there's no name?
 	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
 TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
-TODO has_page_on_front() should say false when no page is assigned?
-	-> is_static_frontpage() already tests for this somewhat correctly.
-	-> however, the admin Meta Description doesn't reflect this for the homepage.
 TODO remove ping_bing.
 TODO add cursor:pointer to TSF's tabs (settings and post meta).
 	- This way of showing tabs is being phased out by WP. https://core.trac.wordpress.org/ticket/59733
@@ -278,6 +275,8 @@ TODO add every language's sitemap to robots.txt?
 	* The Homepage Settings now correctly reflect the page's SEO Settings when they're set to `0`.
 		* Note that a lone `0` for the title (without branding/additions) will bypass WordPress's filters, because WordPress doesn't support a lone `0` for the title. But you should brand your titles.
 	* The Page SEO settings now correctly reflect the Homepage's SEO Settings when those are set to `0`.
+* **Other:**
+	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
 
 **For translators**
 

@@ -158,6 +158,7 @@ input.tsf-flex-nav-tab-radio {
 	align-items: center;
 	align-content: space-around;
 	position: relative;
+	cursor: pointer;
 }
 
 .tsf-flex-nav-dashicon,

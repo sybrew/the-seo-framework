@@ -196,6 +196,7 @@
 	color: #555;
 	font-weight: 600;
 	border-radius: 3px 3px 0 0;
+	cursor: pointer;
 }
 body.rtl .tsf-nav-tab-label {
 	float: right;
