@@ -112,6 +112,12 @@ switch ( $instance ) :
 		<?php
 		HTML::header_title( \__( 'Sitemap Output', 'autodescription' ) );
 
+		HTML::description( \__( 'Search engines crawl links to discover all pages and archives without requiring a sitemap. The optimized sitemap only includes the latest pages, so search engines can find and process changes quickly.', 'autodescription' ) );
+
+		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
+			HTML::description( \__( 'Disable the optimized sitemap to use complex sitemaps that include all links at the cost of indexing speed.', 'autodescription' ) );
+		}
+
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'     => 'sitemaps_output',
@@ -127,6 +133,7 @@ switch ( $instance ) :
 		);
 
 		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
+			// Note to self: Do not toggle this condition in JS. The user would get a 404 message if the options have yet to be saved.
 			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
 				HTML::description_noesc( sprintf(
 					'<a href="%s" target=_blank rel=noopener>%s</a>',

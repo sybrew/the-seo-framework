@@ -13,11 +13,13 @@ use const \The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomy,
+use function \The_SEO_Framework\get_query_type_from_args;
+
+use \The_SEO_Framework\{
+	Data,
+	Meta\Robots, // Yes, it is legal to share class and namespaces.
+	Helper\Query,
+	Helper\Taxonomy,
 };
 
 /**
@@ -66,16 +68,21 @@ final class Args extends Factory {
 
 		$asserting_noindex = 'noindex' === $type;
 
+		$query_type = get_query_type_from_args( $args );
+
 		// We assert options here for a jump to meta_settings might be unaware.
 		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) {
 			$qubit = null;
 
-			if ( $args['tax'] ) {
-				$qubit = (int) Data\Plugin\Term::get_meta_item( $type, $args['id'] );
-			} elseif ( $args['id'] ) {
-				$qubit = (int) Data\Plugin\Post::get_meta_item( "_genesis_$type", $args['id'] );
-			} elseif ( $args['pta'] ) {
-				$qubit = (int) Data\Plugin\PTA::get_meta_item( $type, $args['pta'] );
+			switch ( $query_type ) {
+				case 'single':
+					$qubit = (int) Data\Plugin\Post::get_meta_item( "_genesis_$type", $args['id'] );
+					break;
+				case 'term':
+					$qubit = (int) Data\Plugin\Term::get_meta_item( $type, $args['id'] );
+					break;
+				case 'pta':
+					$qubit = (int) Data\Plugin\PTA::get_meta_item( $type, $args['pta'] );
 			}
 
 			switch ( isset( $qubit ) ) {
@@ -101,30 +108,34 @@ final class Args extends Factory {
 		globals:
 			yield 'globals_site' => (bool) Data\Plugin::get_option( "site_$type" );
 
-			if ( $args['tax'] ) {
-				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
+			switch ( $query_type ) {
+				case 'single':
+				case 'homeblog':
+					// $args['id'] can be empty, pointing to a plausible homepage query.
+					if ( Query::is_real_front_page_by_id( $args['id'] ) )
+						yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
 
-				yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, $args['tax'] );
+					if ( $args['id'] )
+						yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+					break;
+				case 'term':
+					$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
 
-				// Store values from each post type bound to the taxonomy.
-				foreach ( Taxonomy::get_post_types( $args['tax'] ) as $post_type )
-					$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
+					yield 'globals_taxonomy' => Robots::is_taxonomy_robots_set( $type, $args['tax'] );
 
-				// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
-				yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
-			} elseif ( $args['pta'] ) {
-				yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
-			} elseif ( empty( $args['uid'] ) ) {
-				// $args['id'] can be empty, pointing to a plausible homepage query.
-				if ( Query::is_real_front_page_by_id( $args['id'] ) )
-					yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
+					// Store values from each post type bound to the taxonomy.
+					foreach ( Taxonomy::get_post_types( $args['tax'] ) as $post_type )
+						$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
-				if ( $args['id'] )
-					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
+					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+					break;
+				case 'pta':
+					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
 			}
 
 		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
-			if ( empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] ) )
+			if ( 'single' === $query_type )
 				yield from static::assert_noindex_query_pass( 'protected' );
 		}
 
@@ -148,7 +159,7 @@ final class Args extends Factory {
 		$args = static::$args;
 
 		switch ( $pass ) {
-			case '404':
+			case '404': // Only tests terms via args.
 				yield '404' => ! Data\Term::is_term_populated( $args['id'], $args['tax'] );
 				break;
 

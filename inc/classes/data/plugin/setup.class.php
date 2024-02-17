@@ -327,7 +327,7 @@ class Setup {
 
 				// Sitemaps.
 				'sitemaps_output'     => 1,    // Output of sitemap.
-				'sitemap_query_limit' => 1000, // Sitemap post limit.
+				'sitemap_query_limit' => 250, // Sitemap post limit.
 
 				'sitemaps_modified' => 1, // Add sitemap modified time.
 

@@ -90,7 +90,7 @@ class Utils {
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_ids', [] );
 
-			// isset() is faster than in_array(). So, we flip it.
+			// isset() is faster than in_array(). And since we memoize, it's faster to flip.
 			$excluded = $excluded ? array_flip( $excluded ) : [];
 		}
 
@@ -105,7 +105,7 @@ class Utils {
 					Meta\Robots::get_generated_meta(
 						$generator_args,
 						[ 'noindex' ],
-						ROBOTS_IGNORE_PROTECTION
+						ROBOTS_IGNORE_PROTECTION,
 					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
@@ -139,7 +139,7 @@ class Utils {
 			 */
 			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_term_ids', [] );
 
-			// isset() is faster than in_array(). So, we flip it.
+			// isset() is faster than in_array(). And since we memoize, it's faster to flip.
 			$excluded = $excluded ? array_flip( $excluded ) : [];
 		}
 
@@ -159,7 +159,7 @@ class Utils {
 					Meta\Robots::get_generated_meta(
 						$generator_args,
 						[ 'noindex' ],
-						ROBOTS_IGNORE_PROTECTION
+						ROBOTS_IGNORE_PROTECTION,
 					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
 				);
 
@@ -201,7 +201,7 @@ class Utils {
 			array_filter( [
 				'main'   => $main ? "#$main" : '',
 				'accent' => $accent ? "#$accent" : '',
-			] )
+			] ),
 		);
 	}
 
@@ -225,8 +225,7 @@ class Utils {
 		$wp_sitemaps_server = \wp_sitemaps_get_server();
 
 		return memo(
-			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' )
-				&& $wp_sitemaps_server->sitemaps_enabled()
+			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' ) && $wp_sitemaps_server->sitemaps_enabled()
 		);
 	}
 

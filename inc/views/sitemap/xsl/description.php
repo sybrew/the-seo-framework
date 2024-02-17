@@ -85,7 +85,7 @@ printf(
 	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
 	echo Markdown::convert(
 		/* translators: URLs are in Markdown. Don't forget to localize the URLs. */
-		\esc_xml( \__( 'This is a generated XML Sitemap, meant to be consumed by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ) ),
+		\esc_xml( \__( 'This is an optimized XML sitemap meant to be processed quickly by search engines like [Google](https://www.google.com/) or [Bing](https://www.bing.com/).', 'autodescription' ) ),
 		[ 'a' ],
 		[ 'a_internal' => false ],
 	);

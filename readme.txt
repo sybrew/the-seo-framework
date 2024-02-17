@@ -159,7 +159,7 @@ Optionally, also install our free [Extension Manager](https://theseoframework.co
 
 == Screenshots ==
 
-1. The SEO Framework shows you how your site is performing, at a glance. These are what we call the SEO Bar.
+1. The SEO Framework shows you how your site is performing, at a glance. Thedse are what we call the SEO Bar.
 2. Hover over, tap on, or focus any SEO Bar item and it will tell you what's asserted from your environment.
 3. The SEO meta box is displayed on all pages. It's everything you need. Here you can see the pixel counters.
 4. These SEO settings are shown on the term edit screen. It seamlessly blends into your WordPress interface.
@@ -251,8 +251,6 @@ TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
 TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
 TODO remove ping_bing.
-TODO add cursor:pointer to TSF's tabs (settings and post meta).
-	- This way of showing tabs is being phased out by WP. https://core.trac.wordpress.org/ticket/59733
 TODO make timestamp setting 1 also include SECONDS.
 	-> Then, via the API, also apply this to Articles.
 	-> https://wordpress.org/support/topic/suggestions-for-improving-the-plugin-2/#post-17397987
@@ -265,16 +263,33 @@ TODO add every language's sitemap to robots.txt?
 	-> Is this even possible?
 		-> If so, we can then also add a link in the admin "See English sitemap" instead of "See base sitemap".
 
+TODO add "output_robots_noindex_headers" to Core Sitemap.
+	- https://wordpress.org/support/topic/missing-http-header-x-robots-tag-for-wp-sitemap-xml/
+		-> Note we must test wp_sitemaps_enabled.
+		-> See method render_sitemaps().
+		-> https://core.trac.wordpress.org/ticket/60552#ticket
+
 **For everyone**
 
+* **Changed:**
+	* TODO We now use `YYYY-MM-DDThh:mm:ssTZD` instead of `YYYY-MM-DDThh:mmTZD` for full dates.
+	* The optimized sitemap now orders hierarchical post types by last modified date instead of first publishing date, akin to how it already ordered nonhierarchical post types.
+	* Reduced the default sitemap query limit from 1000 to 250.
+		1. This reduces the likelihood of crashes when another plugin hooks into the Post or Post Meta APIs with heavy checks (that ought to be done elsewhere).
+		2. We now convey why the optimized sitemap does things differently.
+		3. If the user switches to the complex sitemap, then this will help with faster generation of its paginated sitemaps.
+		4. Faster generation times look better.
 * **Improved:**
 	* Changed the wording of the link relationship settings to reflect better what they output.
+	* Expounded on what the optimized sitemap does, and that disabling the optimized sitemap will give the complex sitemap.
 * **Fixed:**
 	* The link relationship settings now have an effect again.
 	* When a homepage isn't assigned with a page on front (that's something you should address), TSF will no longer incorrectly assume there is one and give a broken link to edit it at the homepage settings.
 	* The Homepage Settings now correctly reflect the page's SEO Settings when they're set to `0`.
 		* Note that a lone `0` for the title (without branding/additions) will bypass WordPress's filters, because WordPress doesn't support a lone `0` for the title. But you should brand your titles.
 	* The Page SEO settings now correctly reflect the Homepage's SEO Settings when those are set to `0`.
+	* The Homepage is now asserted for inclusion in the sitemap via various indexability tests (password, private, draft, noindex, and post exclusion filter tests).
+	* The Posts Page is now asserted for inclusion in the sitemap via more indexability tests than before (password, private, and draft tests).
 * **Other:**
 	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
 
@@ -289,6 +304,10 @@ TODO add every language's sitemap to robots.txt?
 	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
 	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
 	* JavaScript method `tsf.coalesceStrlen()` is now available.
+* **Changed:**
+	* Filter `the_seo_framework_sitemap_hpt_query_args`:
+		1. Now sets orderby to 'lastmod', from 'date'.
+		1. Now sets order to 'DESC', from 'ASC'.
 * **Fixed:**
 	* For method `tsf()->uri()->get_paged_urls()`, reinstated missing option checks.
 

@@ -232,6 +232,8 @@ class Base extends Main {
 
 			/**
 			 * @since 4.0.0
+			 * @since 5.0.5 1. Now sets orderby to 'lastmod', from 'date'.
+			 *              2. Now sets order to 'DESC', from 'ASC'.
 			 * @param array $args The query arguments.
 			 * @link <https://w.org/support/topic/sitemap-and-memory-exhaustion/#post-13331896>
 			 */
@@ -240,8 +242,8 @@ class Base extends Main {
 				[
 					'posts_per_page' => $_hierarchical_posts_limit + \count( $_exclude_ids ),
 					'post_type'      => $hierarchical_post_types,
-					'orderby'        => 'date',
-					'order'          => 'ASC',
+					'orderby'        => 'lastmod',
+					'order'          => 'DESC',
 					'post_status'    => 'publish',
 					'has_password'   => false,
 					'fields'         => 'ids',
@@ -371,6 +373,8 @@ class Base extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 Removed second parameter `&$count`.
+	 * @since 5.0.5 1. Now tests for is_protected, is_draft, and is_post_included_in_sitemap for the front page.
+	 *              2. Now tests for is_protected and is_draft for the posts page.
 	 * @generator
 	 *
 	 * @param array $args The generator arguments.
@@ -386,14 +390,25 @@ class Base extends Main {
 			$front_page_id = (int) \get_option( 'page_on_front' );
 			$posts_page_id = (int) \get_option( 'page_for_posts' );
 
-			if ( $front_page_id ) { // Might not be assigned.
+			// Assert 404 here; these are queried separately from all other entries that have these tests builtin.
+			if (
+				   $front_page_id // Might not be assigned.
+				&& ! Data\Post::is_protected( $front_page_id )
+				&& ! Data\Post::is_draft( $front_page_id )
+				&& Sitemap\Utils::is_post_included_in_sitemap( $front_page_id )
+			) {
 				yield from $this->generate_url_item_values(
 					[ $front_page_id ],
 					$args,
 				);
 			}
 
-			if ( $posts_page_id && Sitemap\Utils::is_post_included_in_sitemap( $posts_page_id ) ) {
+			if (
+				   $posts_page_id // Might not be assigned.
+				&& ! Data\Post::is_protected( $posts_page_id )
+				&& ! Data\Post::is_draft( $posts_page_id )
+				&& Sitemap\Utils::is_post_included_in_sitemap( $posts_page_id )
+			) {
 				foreach ( $this->generate_url_item_values(
 					[ $posts_page_id ],
 					$args,
