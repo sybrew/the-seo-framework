@@ -335,7 +335,6 @@ class Setup {
 
 				'ping_use_cron'           => 1, // Ping using cron.
 				'ping_google'             => 1, // Ping Google.
-				'ping_bing'               => 1, // Ping Bing.
 				'ping_use_cron_prerender' => 0, // Sitemap cron-ping prerender.
 
 				'sitemap_styles'       => 1,        // Whether to style the sitemap.

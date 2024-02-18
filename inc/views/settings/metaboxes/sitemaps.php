@@ -289,10 +289,14 @@ switch ( $instance ) :
 		HTML::wrap_fields(
 			[
 				Input::make_checkbox( [
+					'id'    => 'ping_google',
+					'label' => \__( 'Ping Google when the sitemap updates?', 'autodescription' ),
+				] ),
+				Input::make_checkbox( [
 					'id'     => 'ping_use_cron',
 					'label'  => \esc_html__( 'Use cron for pinging?', 'autodescription' )
 						. ' ' . HTML::make_info(
-							\__( 'This speeds up post and term saving processes, by offsetting pinging to a later time.', 'autodescription' ),
+							\__( 'This reduces the wait time for saving a post by deferring pinging.', 'autodescription' ),
 							'',
 							false,
 						),
@@ -302,7 +306,7 @@ switch ( $instance ) :
 					'id'          => 'ping_use_cron_prerender',
 					'label'       => \esc_html__( 'Prerender optimized sitemap before pinging via cron?', 'autodescription' )
 						. ' ' . HTML::make_info(
-							\__( 'This mitigates timeouts some search engines may experience when waiting for the sitemap to render. Transient caching for the sitemap must be enabled for this to work.', 'autodescription' ),
+							\__( 'This mitigates timeouts Google may experience when waiting for the sitemap to render. Transient caching for the sitemap must be enabled for this to work.', 'autodescription' ),
 							'',
 							false,
 						),
@@ -312,29 +316,6 @@ switch ( $instance ) :
 			],
 			true,
 		);
-
-		?>
-		<hr>
-		<?php
-		HTML::header_title( \__( 'Notify Search Engines', 'autodescription' ) );
-
-		$engines = [
-			'ping_google' => 'Google',
-			'ping_bing'   => 'Bing',
-		];
-
-		$ping_checkbox = '';
-
-		foreach ( $engines as $option => $engine ) {
-			/* translators: %s = Google */
-			$ping_label     = sprintf( \__( 'Notify %s about sitemap changes?', 'autodescription' ), $engine );
-			$ping_checkbox .= Input::make_checkbox( [
-				'id'    => $option,
-				'label' => $ping_label,
-			] );
-		}
-
-		HTML::wrap_fields( $ping_checkbox, true );
 		break;
 
 	case 'style':

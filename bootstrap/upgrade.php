@@ -753,7 +753,7 @@ function _do_upgrade_3300() {
 		// Add default cron pinging option.
 		Data\Plugin::update_option( 'ping_use_cron', 1 );
 
-		if ( Data\Plugin::get_option( 'ping_google' ) || Data\Plugin::get_option( 'ping_bing' ) ) {
+		if ( Data\Plugin::get_option( 'ping_google' ) ) {
 			_add_upgrade_notice(
 				\__( 'A cronjob is now used to ping search engines, and it alerts them to changes in your sitemap.', 'autodescription' )
 			);

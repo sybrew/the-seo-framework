@@ -866,6 +866,7 @@ class Pool extends Legacy_API {
 			public static function lock() {
 				return static::$subpool['lock'] ??= new class extends Sitemap\Lock {
 					use Static_Deprecator;
+
 					private $colloquial_handle     = 'tsf()->sitemap()->lock()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
@@ -881,7 +882,9 @@ class Pool extends Legacy_API {
 					use Static_Deprecator;
 
 					private $colloquial_handle     = 'tsf()->sitemap()->ping()';
-					private $deprecated_methods    = [];
+					private $deprecated_methods    = [
+						'ping_bing' => [ 'since' => '5.0.5' ],
+					];
 					private $deprecated_properties = [];
 				};
 			}
@@ -893,6 +896,7 @@ class Pool extends Legacy_API {
 			public static function registry() {
 				return static::$subpool['registry'] ??= new class extends Sitemap\Registry {
 					use Static_Deprecator;
+
 					private $colloquial_handle     = 'tsf()->sitemap()->registry()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];

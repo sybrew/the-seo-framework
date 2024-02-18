@@ -156,9 +156,9 @@ trait Static_Deprecator {
 
 		if ( $deprecated ) {
 			\tsf()->_deprecated_function(
-				\esc_html( "{$this->colloquial_handle}::$name" ),
-				\esc_html( $deprecated['since'] ?? '' ),
-				\esc_html( $deprecated['alternative'] ?? '' ),
+				\esc_html( "{$this->colloquial_handle}::$name()" ), // redundant escape
+				\esc_html( $deprecated['since'] ?? '' ),            // redundant escape
+				! empty( $deprecated['alternative'] ) ? \esc_html( $deprecated['alternative'] ) : null,
 			);
 
 			$fallback = $deprecated['fallback'] ?? null;

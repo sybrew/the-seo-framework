@@ -250,7 +250,6 @@ TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> The "alternateName" refering to the page URL should only be filled when there's no name?
 	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
 TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
-TODO remove ping_bing.
 TODO make timestamp setting 1 also include SECONDS.
 	-> Then, via the API, also apply this to Articles.
 	-> https://wordpress.org/support/topic/suggestions-for-improving-the-plugin-2/#post-17397987
@@ -269,8 +268,18 @@ TODO add "output_robots_noindex_headers" to Core Sitemap.
 		-> See method render_sitemaps().
 		-> https://core.trac.wordpress.org/ticket/60552#ticket
 
+TODO add Post/Term SEO-edit cap?
+	-> can this even be done?
+		-> Or, should we set a "default"?
+		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
+
 **For everyone**
 
+* **Removed:**
+	* We've removed the ability to ping the sitemap to Bing because it no longer works. The Bing network's sitemap pinging endpoint was [closed by Microsoft in 2022](https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission) to propel the IndexNow protocol. We were hopeful that they'd return the pinging functionality, but alas.
+		* Bing still uses the sitemap protocol as before, they only dropped pinging thereof.
+		* Bing reads `/robots.txt` and looks for the sitemap's location there. They and all significant search engines automatically read the sitemap periodically without relying on pinging.
+		* We have plans to support IndexNow, but for Now, you can Index via IndexNow using the official [IndexNow plugin](https://wordpress.org/plugins/indexnow/). As someone who can distinguish WordPress.com from WordPress.org, we'll bring you a properly programmed version later this year, though likely via a Premium extension.
 * **Changed:**
 	* TODO We now use `YYYY-MM-DDThh:mm:ssTZD` instead of `YYYY-MM-DDThh:mmTZD` for full dates.
 	* The optimized sitemap now orders hierarchical post types by last modified date instead of first publishing date, akin to how it already ordered nonhierarchical post types.
@@ -304,6 +313,10 @@ TODO add "output_robots_noindex_headers" to Core Sitemap.
 	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
 	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
 	* JavaScript method `tsf.coalesceStrlen()` is now available.
+	* TODO Javascript method `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
+* **Option notes:**
+	* Removed option index `ping_bing` of `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`).
+		* This option isn't deleted in this update, but remains dormant and clears automatically in a future upgrade or on options-save.
 * **Changed:**
 	* Filter `the_seo_framework_sitemap_hpt_query_args`:
 		1. Now sets orderby to 'lastmod', from 'date'.

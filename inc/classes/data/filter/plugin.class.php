@@ -216,7 +216,6 @@ class Plugin {
 			'oembed_use_social_image'      => 'checkbox',
 			'og_tags'                      => 'checkbox',
 			'paged_noindex'                => 'checkbox',
-			'ping_bing'                    => 'checkbox',
 			'ping_google'                  => 'checkbox',
 			'ping_use_cron_prerender'      => 'checkbox',
 			'ping_use_cron'                => 'checkbox',

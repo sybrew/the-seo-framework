@@ -131,9 +131,6 @@ class Ping {
 			if ( Data\Plugin::get_option( 'ping_google' ) )
 				static::ping_google();
 
-			if ( Data\Plugin::get_option( 'ping_bing' ) )
-				static::ping_bing();
-
 			/**
 			 * @since 4.0.2
 			 * @param string $class The current class name.
@@ -169,28 +166,6 @@ class Ping {
 
 		\wp_safe_remote_get(
 			'https://www.google.com/ping?sitemap=' . rawurlencode( $url ),
-			[ 'timeout' => 3 ],
-		);
-	}
-
-	/**
-	 * Pings the main sitemap location to Bing.
-	 *
-	 * @since 2.2.9
-	 * @since 3.2.3 Updated ping URL. Old one still worked, too.
-	 * @since 4.0.0 Moved to \The_SEO_Framework\Bridges\Ping
-	 * @since 4.0.3 Bing now redirects to HTTPS. Updated URL scheme to accommodate.
-	 * @since 4.1.2 Now fetches WP Sitemaps' index URL when it's enabled.
-	 * @link https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed
-	 */
-	public static function ping_bing() {
-
-		$url = static::get_ping_url();
-
-		if ( empty( $url ) ) return;
-
-		\wp_safe_remote_get(
-			'https://www.bing.com/ping?sitemap=' . rawurlencode( $url ),
 			[ 'timeout' => 3 ],
 		);
 	}
