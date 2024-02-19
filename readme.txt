@@ -291,6 +291,7 @@ TODO add Post/Term SEO-edit cap?
 * **Improved:**
 	* Changed the wording of the link relationship settings to reflect better what they output.
 	* Expounded on what the optimized sitemap does, and that disabling the optimized sitemap will give the complex sitemap.
+	* Sitemap settings now dynamically reflect possibilities when switching from the Optimized and Core sitemaps.
 * **Fixed:**
 	* The link relationship settings now have an effect again.
 	* When a homepage isn't assigned with a page on front (that's something you should address), TSF will no longer incorrectly assume there is one and give a broken link to edit it at the homepage settings.
@@ -313,7 +314,7 @@ TODO add Post/Term SEO-edit cap?
 	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
 	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
 	* JavaScript method `tsf.coalesceStrlen()` is now available.
-	* TODO Javascript method `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
+	* Javascript methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
 * **Option notes:**
 	* Removed option index `ping_bing` of `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`).
 		* This option isn't deleted in this update, but remains dormant and clears automatically in a future upgrade or on options-save.

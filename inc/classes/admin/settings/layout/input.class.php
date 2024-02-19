@@ -117,14 +117,14 @@ class Input {
 	 * @since 4.2.0
 	 *
 	 * @param array $args : {
-	 *    string|map $id          The option index or map of indexes therefor, used as field ID.
-	 *    string     $class       The checkbox class.
-	 *    string     $label       The checkbox label description, placed inline of the checkbox.
-	 *    null|mixed $value       The option value. If not set, it'll try to retrieve the value based on $id.
-	 *    string     $description The checkbox additional description, placed underneat.
-	 *    array      $data        The checkbox field data. Sub-items are expected to be escaped if they're not an array.
-	 *    bool       $escape      Whether to enable escaping of the $label and $description.
-	 *    bool       $disabled    Whether to disable the checkbox field.
+	 *    string|string[] $id          The option index or map of indexes therefor, used as field ID.
+	 *    string          $class       The checkbox class.
+	 *    string          $label       The checkbox label description, placed inline of the checkbox.
+	 *    null|mixed      $value       The option value. If not set, it'll try to retrieve the value based on $id.
+	 *    string          $description The checkbox additional description, placed underneat.
+	 *    array           $data        The checkbox field data. Sub-items are expected to be escaped if they're not an array.
+	 *    bool            $escape      Whether to enable escaping of the $label and $description.
+	 *    bool            $disabled    Whether to disable the checkbox field.
 	 * }
 	 * @return string HTML checkbox output.
 	 */

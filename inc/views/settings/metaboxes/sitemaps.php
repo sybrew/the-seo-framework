@@ -112,7 +112,7 @@ switch ( $instance ) :
 		<?php
 		HTML::header_title( \__( 'Sitemap Output', 'autodescription' ) );
 
-		HTML::description( \__( 'Search engines crawl links to discover all pages and archives without requiring a sitemap. The optimized sitemap only includes the latest pages, so search engines can find and process changes quickly.', 'autodescription' ) );
+		HTML::description( \__( 'Search engines crawl links to discover all pages and archives without requiring a sitemap. The optimized sitemap only includes the latest pages, so search engines can find and process vital changes quickly.', 'autodescription' ) );
 
 		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
 			HTML::description( \__( 'Disable the optimized sitemap to use complex sitemaps that include all links at the cost of indexing speed.', 'autodescription' ) );
@@ -185,20 +185,24 @@ switch ( $instance ) :
 		<?php
 		HTML::description( \__( 'Consider lowering this value when the sitemap shows a white screen or notifies you of memory exhaustion.', 'autodescription' ) );
 		?>
-		<hr>
-		<?php
-		HTML::header_title( \__( 'Transient Cache Settings', 'autodescription' ) );
-		HTML::description( \__( 'To improve performance, generated output can be stored in the database as transient cache.', 'autodescription' ) );
+		<div id=tsf-sitemap-transient-cache-settings>
+			<hr>
+			<?php
+			HTML::header_title( \__( 'Transient Cache Settings', 'autodescription' ) );
+			HTML::description( \__( 'To improve performance, generated output can be stored in the database as transient cache.', 'autodescription' ) );
 
-		HTML::wrap_fields(
-			Input::make_checkbox( [
-				'id'     => 'cache_sitemap',
-				'label'  => \esc_html__( 'Enable optimized sitemap generation cache?', 'autodescription' )
-					. ' ' . HTML::make_info( \__( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
-				'escape' => false,
-			] ),
-			true,
-		);
+			HTML::wrap_fields(
+				Input::make_checkbox( [
+					'id'     => 'cache_sitemap',
+					'label'  => \esc_html__( 'Enable optimized sitemap generation cache?', 'autodescription' )
+						. ' ' . HTML::make_info( \__( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
+					'escape' => false,
+				] ),
+				true,
+			);
+			?>
+		</div>
+		<?php
 		break;
 
 	case 'robots':
@@ -302,6 +306,18 @@ switch ( $instance ) :
 						),
 					'escape' => false,
 				] ),
+			],
+			true,
+		);
+
+		?>
+		<div id=tsf-sitemap-prerendering-settings>
+			<?php
+			HTML::header_title( \__( 'Prerendering Settings', 'autodescription' ) );
+
+			HTML::description( \__( 'In extreme cases, the sitemap may take too long to load for search engines. Prerendering stores a cached copy of the sitemap as transient cache before pinging to search engines.', 'autodescription' ) );
+
+			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'          => 'ping_use_cron_prerender',
 					'label'       => \esc_html__( 'Prerender optimized sitemap before pinging via cron?', 'autodescription' )
@@ -313,9 +329,11 @@ switch ( $instance ) :
 					'description' => \esc_html__( 'Only enable prerendering when generating the sitemap takes over 60 seconds.', 'autodescription' ),
 					'escape'      => false,
 				] ),
-			],
-			true,
-		);
+				true,
+			);
+			?>
+		</div>
+		<?php
 		break;
 
 	case 'style':
