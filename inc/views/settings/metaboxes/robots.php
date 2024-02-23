@@ -150,7 +150,7 @@ switch ( $instance ) :
 		<hr>
 		<?php
 		HTML::header_title( \__( 'Paginated Archive Settings', 'autodescription' ) );
-		HTML::description( \__( "Indexing the second or later page of any archive might cause duplication errors. Search engines look down upon them; therefore, it's recommended to disable indexing of those pages.", 'autodescription' ) );
+		HTML::description( \__( "Paginated archive pages make for lousy landing pages. However, search engines stop looking for links on pages that aren't indexed, and most search engines recognize paginated pages, so keeping them indexed is often useful.", 'autodescription' ) );
 
 		HTML::wrap_fields(
 			Input::make_checkbox( [

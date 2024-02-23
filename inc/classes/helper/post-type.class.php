@@ -63,7 +63,7 @@ class Post_Type {
 		 * @param bool   $disabled
 		 * @param string $post_type
 		 */
-		return \apply_filters(
+		return (bool) \apply_filters(
 			'the_seo_framework_post_type_disabled',
 			Data\Plugin::get_option( 'disabled_post_types', $post_type ),
 			$post_type,
@@ -193,7 +193,7 @@ class Post_Type {
 				 * @since 4.2.8
 				 * @param string[] $post_types The public post types.
 				 */
-				\apply_filters(
+				(array) \apply_filters(
 					'the_seo_framework_public_post_type_archives',
 					array_values(
 						array_filter(
@@ -243,7 +243,7 @@ class Post_Type {
 				 * @since 4.2.0
 				 * @param string[] $post_types The public post types.
 				 */
-				\apply_filters(
+				(array) \apply_filters(
 					'the_seo_framework_public_post_types',
 					array_values( array_filter(
 						array_unique( array_merge(

@@ -205,8 +205,7 @@ final class Query {
 
 		static $has_filter = null;
 
-		if ( null === $has_filter )
-			$has_filter = \has_filter( 'the_seo_framework_do_adjust_archive_query' );
+		$has_filter ??= \has_filter( 'the_seo_framework_do_adjust_archive_query' );
 
 		/**
 		 * This filter affects both 'search-"archives"' and terms/taxonomies.

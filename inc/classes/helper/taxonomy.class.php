@@ -156,7 +156,7 @@ class Taxonomy {
 				 * @since 4.2.0
 				 * @param string[] $post_types The public post types.
 				 */
-				\apply_filters(
+				(array) \apply_filters(
 					'the_seo_framework_public_taxonomies',
 					array_filter(
 						array_unique( array_merge(

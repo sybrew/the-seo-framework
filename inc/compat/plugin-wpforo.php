@@ -93,7 +93,7 @@ function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore
  */
 function _wpforo_filter_pre_title( $title = '', $args = null ) {
 
-	if ( null === $args ) {
+	if ( ! isset( $args ) ) {
 		$sep          = Meta\Title::get_separator();
 		$wpforo_title = implode(
 			" $sep ",

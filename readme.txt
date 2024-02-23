@@ -25,7 +25,7 @@ It's easy to get started. Activate this plugin, and your site's instantly protec
 
 [Migrate](https://theseoframework.com/?p=511) | [Setup](https://theseoframework.com/?p=2428) | [Improve](https://theseoframework.com/?p=2663) | [Extensions](https://theseoframework.com/extensions/) | [API](https://theseoframework.com/?p=82) | [Support](https://theseoframework.com/?p=3478) | [Privacy](https://theseoframework.com/?p=1701#pluginprivacyinformation)
 
-= We poured over 27&#160;000 hours of love into this plugin.<br>Here are the results: =
+### We poured over 27&#160;000 hours of love into this plugin. <br>Here are the results:
 
 * **It is brilliant.**
 The SEO Framework is an [expert system](https://en.wikipedia.org/wiki/Expert_system) for SEO. It is the only solution that can intelligently generate critical SEO meta tags in any language by reading your WordPress environment. This automation saves you a considerable amount of time that could be used to write more content or focus on other tasks. It also removes the need for advanced SEO knowledge.
@@ -69,13 +69,13 @@ We encourage other developers to enhance and add functionality to this plugin. W
 * **It respects your privacy.**
 The SEO Framework sends us no information and does not create cookies. Learn more from our strictly adhered-to [privacy policy](https://theseoframework.com/?p=1701#pluginprivacyinformation).
 
-= Getting started =
+### Getting started
 
 * Used another plugin? Easily [migrate your SEO data](https://theseoframework.com/?p=511).
 * Need a helping hand getting started? Read our [quick setup guide](https://theseoframework.com/?p=2428).
 * Want to improve your pages? Learn how to [optimize your metadata](https://theseoframework.com/?p=2663).
 
-= Do more with extensions =
+### Do more with extensions
 
 For additional functionality, check out our free companion plugin [Extension Manager](https://theseoframework.com/?p=2760). It provides numerous free and paid extensions, such as:
 
@@ -93,11 +93,11 @@ For additional functionality, check out our free companion plugin [Extension Man
 
 Visit our [extensions overview page](https://theseoframework.com/extensions/) for more information.
 
-= Unbranded, free and for the professionals =
+### Unbranded, free and for the professionals
 
 The SEO Framework is a uniquely white label plugin that blends seamlessly into your WordPress dashboard. This means that we don't even put the name "The SEO Framework" anywhere within your WordPress interface. No ads, no nags. Nobody has to know about the tools you've used to create your website. Note that we output standardized development-comments distinguishing the plugin output in source code. You can remove these with our free [Incognito extension](https://theseoframework.com/?p=2301).
 
-= Behind the screens =
+### Behind the screens
 
 The SEO Framework works on many things without notifying you, because the best software is fast, nimble, responsive, and should save you precious time. Here are a few things it does behind the screens.
 
@@ -108,7 +108,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them; only, they won't show them in their search results.
 * It directs search engines from the comment pages back to the post storing those comments.
 
-= Compatibility =
+### Compatibility
 
 **The SEO Framework supports:**
 
@@ -133,27 +133,27 @@ The SEO Framework works on many things without notifying you, because the best s
 
 == Installation ==
 
-= This plugin requires: =
+### This plugin requires:
 
 * PHP 7.4 or higher.
 * WordPress 5.9 or higher.
 * Any modern browser for administration.
 
-= Installation instructions: =
+### Installation instructions:
 
 1. Install **The SEO Framework** either via your WordPress dashboard using plugin search or by uploading the files to your server.
 1. Either network-activate this plugin or activate it on a single site.
 1. That's it! The plugin now optimizes your website for SEO. It also protects your website against SEO attacks.
 
-= This plugin auto-configures its global settings =
+### This plugin auto-configures its global settings
 
 However, it would be best if you read up on our [plugin setup guide](https://theseoframework.com/?p=2428) to get the most out of The SEO Framework.
 
-= This plugin auto-configures SEO meta settings =
+### This plugin auto-configures SEO meta settings
 
 However, you may want to read up on our [page improvement guide](https://theseoframework.com/?p=2663) to learn how you can optimize your pages.
 
-= Get more SEO power =
+### Get more SEO power
 
 Optionally, also install our free [Extension Manager](https://theseoframework.com/?p=2760) plugin for additional SEO solutions.
 
@@ -242,7 +242,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-= 5.0.5 =
+### 5.0.5
 
 TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> aka https://developers.google.com/search/docs/appearance/structured-data/profile-page
@@ -292,6 +292,7 @@ TODO add Post/Term SEO-edit cap?
 	* Changed the wording of the link relationship settings to reflect better what they output.
 	* Expounded on what the optimized sitemap does, and that disabling the optimized sitemap will give the complex sitemap.
 	* Sitemap settings now dynamically reflect possibilities when switching from the Optimized and Core sitemaps.
+	* After looking at meetup events about The SEO Framework, we found that experts misinterpreted some of our settings (especially in non-English speaking languages). For those settings, we made our language more plain and clear, and hope this helps translators to better convey our intent.
 * **Fixed:**
 	* The link relationship settings now have an effect again.
 	* When a homepage isn't assigned with a page on front (that's something you should address), TSF will no longer incorrectly assume there is one and give a broken link to edit it at the homepage settings.
@@ -325,23 +326,23 @@ TODO add Post/Term SEO-edit cap?
 * **Fixed:**
 	* For method `tsf()->uri()->get_paged_urls()`, reinstated missing option checks.
 
-= 5.0.4 =
+### 5.0.4
 
 This tiny update [addresses an issue](https://theseoframework.com/?p=4215) that affected detection of the assigned blog page.
 
-= 5.0.3 =
+### 5.0.3
 
 This minor update fixes compatibility with Polylang Pro. We also perfected the detection of unassigned home and blog pages and improved the Block Editor's load time by [resolving a glitch](https://theseoframework.com/?p=4204).
 
-= 5.0.2 =
+### 5.0.2
 
 This minor update fixes more issues our community found after the release of TSF v5.0.0. We also improved the calculation of primary terms with child terms and how breadcrumbs handle post type archives. And again, we [improved the performance](https://theseoframework.com/?p=4174).
 
-= 5.0.1 =
+### 5.0.1
 
 This minor update fixes issues our community found after the release of TSF v5.0.0. We also [improved the performance](https://theseoframework.com/?p=4158).
 
-= 5.0.0 - Apex =
+### 5.0.0 - Apex
 
 *We become just by doing just acts, temperate by doing temperate acts, brave by doing brave acts. - [Aristotle](https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0054%3Abook%3D2%3Achapter%3Dpos%3D17%3Asection%3D4)*
 
@@ -403,7 +404,7 @@ We hope you'll love this update as much as we do. Please consider supporting us 
 
 We become brave by training ourselves to despise and endure terrors, and we shall be best able to endure terrors [when we have become brave](https://theseoframework.com/?p=4135#detailed).
 
-= Full changelog =
+### Full changelog
 
 * **You can find the full changelog [here](https://theseoframework.com/?cat=2).**
 
@@ -412,8 +413,5 @@ We become brave by training ourselves to despise and endure terrors, and we shal
 = 5.0.0 =
 
 This is a major upgrade. Make a backup of your database before updating. WordPress v5.9 or higher and PHP v7.4 or higher are now required. If you use the Extension Manager, update it to v2.6.3 or higher before updating this plugin. Downgrading to v4.2.8 is possible, but the description's HTML parsing method will revert to its default setting.
-
-= 4.1.0 =
-The v4.1.0 update brings a major upgrade. Make a backup of your database before updating. WordPress v5.1 (or higher) is now required. Downgrading to v4.0.7 is possible without side effects.
 
 == Other Notes ==

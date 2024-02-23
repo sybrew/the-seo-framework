@@ -86,7 +86,7 @@ class Time {
 			 * @param string The full timestamp format. Must be XML safe and in ISO 8601 datetime notation.
 			 * @param bool   True if time is requested, false if only date.
 			 */
-			\apply_filters(
+			(string) \apply_filters(
 				'the_seo_framework_timestamp_format',
 				$get_time ? 'Y-m-d\TH:iP' : 'Y-m-d',
 				(bool) $get_time,

@@ -213,7 +213,7 @@ class Registry {
 			 *   }
 			 * }
 			 */
-			\apply_filters(
+			(array) \apply_filters(
 				'the_seo_framework_sitemap_endpoint_list',
 				[
 					'base'           => [

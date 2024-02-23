@@ -314,7 +314,7 @@ class Query {
 				 * @param bool     $is_singular_archive Whether the post ID is a singular archive.
 				 * @param int|null $id                  The supplied post ID. Null when in the loop.
 				 */
-				\apply_filters(
+				(bool) \apply_filters(
 					'the_seo_framework_is_singular_archive',
 					static::is_blog_as_page( $id ),
 					$id,
@@ -873,7 +873,7 @@ class Query {
 				 * @param bool $is_shop Whether the post ID is a shop.
 				 * @param int  $id      The current or supplied post ID.
 				 */
-				\apply_filters( 'the_seo_framework_is_shop', false, $post ),
+				(bool) \apply_filters( 'the_seo_framework_is_shop', false, $post ),
 				$post,
 			);
 	}
