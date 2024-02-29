@@ -17,7 +17,10 @@ use \The_SEO_Framework\Helper\Query;
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' );
-\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap', 10 );
+\add_filter( 'the_seo_framework_front_init', __NAMESPACE__ . '\\_hijack_polylang_home_url' );
+\add_filter( 'pll_home_url_white_list', __NAMESPACE__ . '\\_polylang_allow_tsf_home_url' );
+\add_filter( 'pll_home_url_allow_list', __NAMESPACE__ . '\\_polylang_allow_tsf_home_url' );
+\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap' );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
 
 /**
@@ -170,6 +173,8 @@ function _polylang_flush_sitemap() {
  * This hack seeks to remove their broken code, letting WordPress take over
  * correctly once more with full forward and backward compatibility, as we proposed.
  *
+ * Practically, this applies the proposed fix at <https://github.com/polylang/polylang/issues/928#issuecomment-1040062844>.
+ *
  * @hook admin_enqueue_scripts 11
  * @see https://github.com/polylang/polylang/issues/928
  * @since 5.0.0
@@ -192,4 +197,76 @@ function _defunct_badly_coded_polylang_script() {
 	// Remove PLL post handler on ajaxSuccess. It is redundant, achieves nothing,
 	// creates redundant secondary requests, and breaks all plugins but Yoast SEO.
 	\wp_add_inline_script( 'pll_post', $remove_ajax_success );
+}
+
+/**
+ * Polylang breaks the home URL by not always augmenting the home URL.
+ * This hack lets Polylang's home_url filter think it's ready to start augmenting URLs.
+ *
+ * Practically, this applies the proposed fix at <https://github.com/polylang/polylang/issues/1422#issuecomment-1970620222>.
+ *
+ * Polylang also tests for a debug backtrace. They skip the first two callbacks because they are redundant.
+ * We add another callback in this trace: but it is at position 0. So, the second trace is now tested
+ * in Polylang's method (it being `apply_filters()`). This is of no functional impact but on the performance,
+ * since that function is not in the allow/block lists.
+ *
+ * @hook the_seo_framework_front_init 10
+ * @see https://github.com/polylang/polylang/issues/1422
+ * @see https://github.com/sybrew/the-seo-framework/issues/665
+ * @since 5.0.5
+ */
+function _hijack_polylang_home_url() {
+
+	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
+
+	$default_cb = [ \PLL()->filters_links ?? null, 'home_url' ];
+	// If not false, this will imply method `home_url()` exists and is public.
+	$priority = $default_cb[0] ? \has_filter( 'home_url', $default_cb ) : false;
+
+	if ( false === $priority ) return;
+
+	\remove_filter( 'home_url', $default_cb, $priority );
+
+	\add_filter(
+		'home_url',
+		function ( ...$args ) use ( $default_cb ) {
+			global $wp_actions;
+
+			if ( isset( $wp_actions['template_redirect'] ) || ! isset( $wp_actions['pll_language_defined'] ) )
+				return \call_user_func_array( $default_cb, $args );
+
+			// Trick Polylang.
+			// phpcs:ignore, WordPress.WP.GlobalVariablesOverride.Prohibited -- it's called a hijack for a reason.
+			$wp_actions['template_redirect'] = 1;
+
+			$url = \call_user_func_array( $default_cb, $args );
+
+			// Undo trick.
+			unset( $wp_actions['template_redirect'] );
+
+			return $url;
+		},
+		$priority,
+		4, // forward all the args.
+	);
+}
+
+/**
+ * Polylang breaks the home URL by not always augmenting the home URL.
+ * This filter adds TSF as correctly interpreting the home URL, so it can be
+ * agnostic about the home URL request.
+ *
+ * @hook pll_home_url_white_list 10 - I didn't pick this name.
+ * @hook pll_home_url_allow_list 10 - some day this will probably be instated.
+ * @since 5.0.5
+ * @param string[][] $allow_list An array of arrays each of them having a 'file' key
+ *                               and/or a 'function' key to decide which functions in
+ *                               which files using home_url() calls must be filtered.
+ * @return string[]
+ */
+function _polylang_allow_tsf_home_url( $allow_list ) {
+
+	$allow_list[] = [ 'file' => \THE_SEO_FRAMEWORK_DIR_PATH ];
+
+	return $allow_list;
 }

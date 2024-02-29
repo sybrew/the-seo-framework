@@ -262,6 +262,8 @@ TODO add every language's sitemap to robots.txt?
 	-> Is this even possible?
 		-> If so, we can then also add a link in the admin "See English sitemap" instead of "See base sitemap".
 
+TODO make issue about adding option for freezing the changed time?
+
 TODO add "output_robots_noindex_headers" to Core Sitemap.
 	- https://wordpress.org/support/topic/missing-http-header-x-robots-tag-for-wp-sitemap-xml/
 		-> Note we must test wp_sitemaps_enabled.
@@ -272,6 +274,9 @@ TODO add Post/Term SEO-edit cap?
 	-> can this even be done?
 		-> Or, should we set a "default"?
 		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
+
+TODO fix the bbPress deprecation notice.
+TODO can we decrease _bbpress_filter_title()'s footprint? Have they finally implemented my suggestions after 8 years?
 
 **For everyone**
 
@@ -301,6 +306,10 @@ TODO add Post/Term SEO-edit cap?
 	* The Page SEO settings now correctly reflect the Homepage's SEO Settings when those are set to `0`.
 	* The Homepage is now asserted for inclusion in the sitemap via various indexability tests (password, private, draft, noindex, and post exclusion filter tests).
 	* The Posts Page is now asserted for inclusion in the sitemap via more indexability tests than before (password, private, and draft tests).
+	* Addressed an issue where the homepage canonical URL wasn't translated by Polylang.
+		* We achieved this by hijacking Polylang's code, fixing [a bug in that plugin](https://github.com/polylang/polylang/issues/1422).
+		* This also fixes the bug described below.
+	* Addressed an issue where the subdirectory-translation sitemap wasn't accessible via Polylang, such as `/fr/sitemap.xml`.
 * **Other:**
 	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
 
