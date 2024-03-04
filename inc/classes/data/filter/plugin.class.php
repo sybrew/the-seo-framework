@@ -252,7 +252,7 @@ class Plugin {
 			'social_title_rem_additions'   => 'checkbox',
 			'source_the_feed'              => 'checkbox',
 			'theme_color'                  => 'rgb_hex',
-			'timestamps_format'            => 'numeric_string',
+			'timestamps_format'            => 'checkbox',
 			'title_location'               => 'title_location',
 			'title_rem_additions'          => 'checkbox',
 			'title_rem_prefixes'           => 'checkbox',

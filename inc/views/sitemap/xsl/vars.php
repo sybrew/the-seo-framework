@@ -35,7 +35,7 @@ use \The_SEO_Framework\{
 // Styles generic.
 printf(
 	'<xsl:variable name="tableMinWidth" select="\'%s\'"/>',
-	Data\Plugin::get_option( 'sitemaps_modified' ) ? '700' : '550',
+	Data\Plugin::get_option( 'sitemaps_modified' ) ? '727' : '557', // magic numbers: sexy primes
 );
 
 $colors = Sitemap\Utils::get_sitemap_colors();

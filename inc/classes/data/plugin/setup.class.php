@@ -164,7 +164,7 @@ class Setup {
 				'canonical_scheme' => 'automatic', // Canonical URL scheme.
 
 				// General. Timestamps.
-				'timestamps_format' => '1', // Timestamp format, numeric string.
+				'timestamps_format' => 1, // Timestamp format, numeric string.
 
 				// General. Exclusions.
 				'disabled_post_types' => [], // Post Type support.

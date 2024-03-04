@@ -249,13 +249,8 @@ TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> Move to 5.1.0? This is a new Schema type and we want more "sameas" URLs complement this feature.
 	-> The "alternateName" refering to the page URL should only be filled when there's no name?
 	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
-TODO make timestamp setting 1 also include SECONDS.
-	-> Then, via the API, also apply this to Articles.
-	-> https://wordpress.org/support/topic/suggestions-for-improving-the-plugin-2/#post-17397987
 TODO add filter at method extract_content() -- https://wordpress.org/support/topic/ul-lists-stripped-from-automated-description/.
 TODO in get_all_nonhierarchical we use ?: instead of ?? next to memo(). Why?
-TODO add to "Output optimized sitemap?" that only the latests pages are included, and no archives?
-	-> I'm circumspect of that users think TSF not including all this cruft is a bug.
 
 TODO add every language's sitemap to robots.txt?
 	-> Is this even possible?
@@ -276,7 +271,7 @@ TODO add Post/Term SEO-edit cap?
 	* bbPress 2.5.14 and below are no longer supported for topic tag title and description generation. Please update to bbPress 2.6.9 or later for the best experience.
 		* bbPress 2.6 rectified the query detection, so TSF works automatically with that.
 * **Changed:**
-	* TODO We now use `YYYY-MM-DDThh:mm:ssTZD` instead of `YYYY-MM-DDThh:mmTZD` for full dates.
+	* We now use `YYYY-MM-DDThh:mm:ssTZD` instead of `YYYY-MM-DDThh:mmTZD` (we added the seconds) for full dates in the sitemap, structured data, and Open Graph.
 	* The optimized sitemap now orders hierarchical post types by last modified date instead of first publishing date, akin to how it already ordered nonhierarchical post types.
 	* Reduced the default sitemap query limit from 1000 to 250.
 		1. This reduces the likelihood of crashes when another plugin hooks into the Post or Post Meta APIs with heavy checks (that ought to be done elsewhere).
@@ -315,11 +310,15 @@ TODO add Post/Term SEO-edit cap?
 * **Added:**
 	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
 	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
+	* Method `tsf()->format()->time()->get_format()` is new.
 	* JavaScript method `tsf.coalesceStrlen()` is now available.
 	* Javascript methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
 * **Option notes:**
 	* Removed option index `ping_bing` of `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`).
 		* This option isn't deleted in this update, but remains dormant and clears automatically in a future upgrade or on options-save.
+	* `timestamps_format` of `autodescription-site-settings` is now considered a boolean, instead of an integer.
+		* New sites will store this as `1` or `0`, while old sites still use `'1'` or `'0'`, until the setting are (re)saved or updated in the future.
+		* We left this as a string to allow more options in the future, but that was never necessary.
 * **Changed:**
 	* Filter `the_seo_framework_sitemap_hpt_query_args`:
 		1. Now sets orderby to 'lastmod', from 'date'.

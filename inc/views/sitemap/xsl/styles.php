@@ -91,7 +91,7 @@ $styles = <<<'CSS'
 		padding: 1rem 1.5rem;
 		width: 100%;
 		max-width: <xsl:value-of select="concat( $tableMinWidth - 159, 'px' )" />;
-		min-width: 99px;
+		min-width: 115px;
 		overflow-wrap: anywhere;
 	}
 	th {

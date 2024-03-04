@@ -338,7 +338,7 @@ switch ( $instance ) :
 		 * @see The_SEO_Framework\Helper\Format\Time::get_preferred_format()
 		 */
 		$timestamp_date     = gmdate( 'Y-m-d' );
-		$timestamp_datetime = gmdate( 'Y-m-d\TH:iP' );
+		$timestamp_datetime = gmdate( 'Y-m-d\TH:i:sP' ); // Could use 'c', but that specification is ambiguous
 
 		HTML::header_title( \__( 'Timestamp Settings', 'autodescription' ) );
 		HTML::description( \__( 'Timestamps help indicate when a page has been published and modified.', 'autodescription' ) );
@@ -367,7 +367,7 @@ switch ( $instance ) :
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo HTML::code_wrap( $timestamp_datetime ), ' ', HTML::make_info(
-							\__( 'This outputs the complete date including hours, minutes, and timezone.', 'autodescription' )
+							\__( 'This outputs the complete date including hours, minutes, seconds, and timezone.', 'autodescription' )
 						);
 						?>
 					</label>

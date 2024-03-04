@@ -112,7 +112,7 @@ switch ( $instance ) :
 		<?php
 		HTML::header_title( \__( 'Sitemap Output', 'autodescription' ) );
 
-		HTML::description( \__( 'Search engines crawl links to discover all pages and archives without requiring a sitemap. The optimized sitemap only includes the latest pages, so search engines can find and process vital changes quickly.', 'autodescription' ) );
+		HTML::description( \__( 'Search engines crawl links to discover all pages and archives without requiring a sitemap. The optimized sitemap only includes the latest pages and no archives, so search engines can find and process vital changes quickly.', 'autodescription' ) );
 
 		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
 			HTML::description( \__( 'Disable the optimized sitemap to use complex sitemaps that include all links at the cost of indexing speed.', 'autodescription' ) );
