@@ -232,6 +232,7 @@ function _hijack_polylang_home_url() {
 		function ( ...$args ) use ( $default_cb ) {
 			global $wp_actions;
 
+			// Polylang runs as intended at template_redirect or later. Don't trick when pll_language_defined didn't run.
 			if ( isset( $wp_actions['template_redirect'] ) || ! isset( $wp_actions['pll_language_defined'] ) )
 				return \call_user_func_array( $default_cb, $args );
 

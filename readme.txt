@@ -249,7 +249,6 @@ TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> Move to 5.1.0? This is a new Schema type and we want more "sameas" URLs complement this feature.
 	-> The "alternateName" refering to the page URL should only be filled when there's no name?
 	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
-TODO make issue https://wordpress.org/support/topic/use-wordpress-title-instead-of-seo-title-for-breadcrumbs-option/#post-17266022.
 TODO make timestamp setting 1 also include SECONDS.
 	-> Then, via the API, also apply this to Articles.
 	-> https://wordpress.org/support/topic/suggestions-for-improving-the-plugin-2/#post-17397987
@@ -262,21 +261,10 @@ TODO add every language's sitemap to robots.txt?
 	-> Is this even possible?
 		-> If so, we can then also add a link in the admin "See English sitemap" instead of "See base sitemap".
 
-TODO make issue about adding option for freezing the changed time?
-
-TODO add "output_robots_noindex_headers" to Core Sitemap.
-	- https://wordpress.org/support/topic/missing-http-header-x-robots-tag-for-wp-sitemap-xml/
-		-> Note we must test wp_sitemaps_enabled.
-		-> See method render_sitemaps().
-		-> https://core.trac.wordpress.org/ticket/60552#ticket
-
 TODO add Post/Term SEO-edit cap?
 	-> can this even be done?
 		-> Or, should we set a "default"?
 		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
-
-TODO fix the bbPress deprecation notice.
-TODO can we decrease _bbpress_filter_title()'s footprint? Have they finally implemented my suggestions after 8 years?
 
 **For everyone**
 
@@ -285,6 +273,8 @@ TODO can we decrease _bbpress_filter_title()'s footprint? Have they finally impl
 		* Bing still uses the sitemap protocol as before, they only dropped pinging thereof.
 		* Bing reads `/robots.txt` and looks for the sitemap's location there. They and all significant search engines automatically read the sitemap periodically without relying on pinging.
 		* We have plans to support IndexNow, but for Now, you can Index via IndexNow using the official [IndexNow plugin](https://wordpress.org/plugins/indexnow/). As someone who can distinguish WordPress.com from WordPress.org, we'll bring you a properly programmed version later this year, though likely via a Premium extension.
+	* bbPress 2.5.14 and below are no longer supported for topic tag title and description generation. Please update to bbPress 2.6.9 or later for the best experience.
+		* bbPress 2.6 rectified the query detection, so TSF works automatically with that.
 * **Changed:**
 	* TODO We now use `YYYY-MM-DDThh:mm:ssTZD` instead of `YYYY-MM-DDThh:mmTZD` for full dates.
 	* The optimized sitemap now orders hierarchical post types by last modified date instead of first publishing date, akin to how it already ordered nonhierarchical post types.
@@ -299,17 +289,19 @@ TODO can we decrease _bbpress_filter_title()'s footprint? Have they finally impl
 	* Sitemap settings now dynamically reflect possibilities when switching from the Optimized and Core sitemaps.
 	* After looking at meetup events about The SEO Framework, we found that experts misinterpreted some of our settings (especially in non-English speaking languages). For those settings, we made our language more plain and clear, and hope this helps translators to better convey our intent.
 * **Fixed:**
-	* The link relationship settings now have an effect again.
-	* When a homepage isn't assigned with a page on front (that's something you should address), TSF will no longer incorrectly assume there is one and give a broken link to edit it at the homepage settings.
-	* The Homepage Settings now correctly reflect the page's SEO Settings when they're set to `0`.
+	* Addressed an issue where the link relationship settings didn't have an effect.
+	* Addressed an issue where a broken homepage-settings-edit-link was given when there isn't a static homepage assigned when the homepage should display a static page.
+		* Yes, you can assign a homepage without assigning a homepage, and that's a bug in WordPress where a user assigns a static homepage, and then unpublishes/deletes that page, or the user otherwise only set a posts page.
+	* Addressed an issue where the Homepage SEO settings didn't reflect the Page SEO settings when they're set to `0`.
 		* Note that a lone `0` for the title (without branding/additions) will bypass WordPress's filters, because WordPress doesn't support a lone `0` for the title. But you should brand your titles.
-	* The Page SEO settings now correctly reflect the Homepage's SEO Settings when those are set to `0`.
-	* The Homepage is now asserted for inclusion in the sitemap via various indexability tests (password, private, draft, noindex, and post exclusion filter tests).
-	* The Posts Page is now asserted for inclusion in the sitemap via more indexability tests than before (password, private, and draft tests).
+	* Addressed an issue where the Page SEO settings didn't reflect the Homepage SEO settings when they're set to `0`.
+	* Addressed an issue where the homepage wasn't asserted for inclusion in the sitemap via various indexability tests (password, private, draft, noindex, and post exclusion filter tests).
+	* Addressed an issue where the posts page wasn't asserted for inclusion in the sitemap via some indexability tests than before (password, private, and draft tests).
 	* Addressed an issue where the homepage canonical URL wasn't translated by Polylang.
 		* We achieved this by hijacking Polylang's code, fixing [a bug in that plugin](https://github.com/polylang/polylang/issues/1422).
 		* This also fixes the bug described below.
 	* Addressed an issue where the subdirectory-translation sitemap wasn't accessible via Polylang, such as `/fr/sitemap.xml`.
+	* Addressed an issue where TSF would output a deprecation notice when visiting a bbPress topic tag.
 * **Other:**
 	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
 

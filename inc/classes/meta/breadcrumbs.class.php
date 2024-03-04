@@ -430,7 +430,7 @@ class Breadcrumbs {
 			static::get_front_breadcrumb(),
 			[
 				'url'  => Meta\URI::get_search_url(),
-				'name' => Meta\Title::get_search_query_title(),
+				'name' => Meta\Title::get_search_query_title(), // discrepancy
 			],
 		];
 	}
@@ -450,7 +450,7 @@ class Breadcrumbs {
 			static::get_front_breadcrumb(),
 			[
 				'url'  => '',
-				'name' => Meta\Title::get_404_title(),
+				'name' => Meta\Title::get_404_title(), // discrepancy
 			],
 		];
 	}
@@ -468,7 +468,7 @@ class Breadcrumbs {
 	private static function get_front_breadcrumb() {
 		return [
 			'url'  => Meta\URI::get_bare_front_page_url(),
-			'name' => Meta\Title::get_front_page_title(),
+			'name' => Meta\Title::get_front_page_title(), // discrepancy
 		];
 	}
 }

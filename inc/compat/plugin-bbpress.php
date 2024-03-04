@@ -24,9 +24,6 @@ use \The_SEO_Framework\{
 
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_title', 10, 2 );
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );
-\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_pre_title', 10, 2 );
-\add_filter( 'the_seo_framework_description_excerpt', __NAMESPACE__ . '\\_bbpress_filter_excerpt_generation', 10, 2 );
-\add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\_bbpress_filter_custom_field_description', 10, 2 );
 \add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
 \add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 2 );
 \add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar', 10, 2 );
@@ -36,6 +33,8 @@ use \The_SEO_Framework\{
  *
  * Still waiting for an API to get the proper title from bbPress (e.g. get raw 'Forum edit: %s'), instead of them formulating
  * a complete title for us.
+ * We already notified them about this, but perhaps we should create a ticket on bbPress's Trac and
+ * request feature "bbp_get_title()" or something.
  *
  * We're going to trust Automattic/bbPress that they'll deprecate all functions called here, instead of removing them,
  * might they desire to add/improve new functionality.
@@ -253,114 +252,7 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
 }
 
 /**
- * Fixes bbPress tag titles.
- *
- * @hook the_seo_framework_title_from_generation 10
- * @since 2.9.0
- * @since 3.1.0 1. Updated to support new title generation.
- *              2. Now no longer fixes the title when `is_tax()` is true. Because,
- *                 this method is no longer necessary when bbPress fixes this issue.
- *                 This should be fixed as of bbPress 2.6. Which seemed to be released internally August 6th, 2018.
- * @since 4.0.0 No longer overrules external queries.
- * @access private
- *
- * @param string     $title The filter title.
- * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                          Is null when the query is auto-determined.
- * @return string $title The bbPress title.
- */
-function _bbpress_filter_pre_title( $title = '', $args = null ) {
-
-	if (
-		   isset( $args )
-		|| ! \function_exists( 'is_bbpress' )
-		|| ! \is_bbpress()
-	) return $title;
-
-	if ( \function_exists( 'bbp_is_topic_tag' ) && \bbp_is_topic_tag() ) {
-		$term  = \get_queried_object();
-		$title = $term->name ?? \tsf()->get_static_untitled_title();
-	}
-
-	return $title;
-}
-
-/**
- * Fixes bbPress excerpts.
- *
- * Now, bbPress has a hard time maintaining WordPress's query after the original query.
- * This should be fixed with bbPress 3.0.
- * This function fixes the Excerpt part.
- *
- * @hook the_seo_framework_description_excerpt 10
- * @since 2.9.0
- * @since 3.0.4 Default value for $max_char_length has been increased from 155 to 300.
- * @since 3.1.0 Now no longer fixes the description when `is_tax()` is true.
- *              @see `_bbpress_filter_pre_title()` for explanation.
- * @since 4.0.0 No longer overrules external queries.
- * @since 5.0.2 Removed second parameter, and shifted the third into the second. This is because we changed the hook.
- * @access private
- *
- * @param string     $excerpt The excerpt to use.
- * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                         Is null when the query is auto-determined.
- * @return string The excerpt.
- */
-function _bbpress_filter_excerpt_generation( $excerpt = '', $args = null ) {
-
-	if (
-		   isset( $args )
-		|| ! \function_exists( 'is_bbpress' )
-		|| ! \is_bbpress()
-	) return $excerpt;
-
-	if ( \function_exists( 'bbp_is_topic_tag' ) && \bbp_is_topic_tag() ) {
-		// Always overwrite, even when none is found.
-		$excerpt = Sanitize::metadata_content( \get_queried_object()->description ?? '' );
-	}
-
-	return $excerpt;
-}
-
-/**
- * Fixes bbPress custom Description for social meta.
- *
- * Now, bbPress has a hard time maintaining WordPress's query after the original query.
- * This should be fixed with bbPress 3.0.
- * This function fixes the Custom Description part.
- *
- * @hook the_seo_framework_custom_field_description 10
- * @since 2.9.0
- * @since 4.0.0 No longer overrules external queries.
- * @access private
- *
- * @param string     $desc The custom-field description.
- * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                         Is null when the query is auto-determined.
- * @return string The custom description.
- */
-function _bbpress_filter_custom_field_description( $desc = '', $args = null ) {
-
-	if (
-		   isset( $args )
-		|| ! \function_exists( 'is_bbpress' )
-		|| ! \is_bbpress()
-	) return $desc;
-
-	if ( \function_exists( 'bbp_is_topic_tag' ) && \bbp_is_topic_tag() ) {
-		// Always overwrite, even when none is found.
-		$desc = Data\Plugin\Term::get_meta( \get_queried_object_id() )['description'] ?? '';
-	}
-
-	return $desc;
-}
-
-/**
- * Fixes bbPress exclusion of first reply.
- *
- * Now, bbPress has a hard time maintaining WordPress's query after the original query.
- * This should be fixed with bbPress 3.0.
- * This function fixes the query alteration part.
+ * Fixes bbPress exclusion of first reply, when the topic is set to be excluded everywhere else.
  *
  * @hook the_seo_framework_do_adjust_archive_query 10
  * @since 3.0.3

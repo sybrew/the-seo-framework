@@ -193,7 +193,7 @@ namespace {
 
 		/**
 		 * @since 5.0.0
-		 * @param string $nav    The entire breadcrumb navigation element output.
+		 * @param string $output The entire breadcrumb navigation element output.
 		 * @param array  $crumbs The breadcrumbs found.
 		 * @param string $nav    The breadcrumb navigation element.
 		 * @param string $style  The CSS style element appended.
