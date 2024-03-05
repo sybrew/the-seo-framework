@@ -34,6 +34,12 @@ use \The_SEO_Framework\Traits\Internal\Static_Deprecator;
  * The objects are decorated with Static Deprecator, allowing us to deprecate
  * methods and properties quickly.
  *
+ * @NOTE: Calling STATIC pools and their STATIC functions MUST be done in a NON-STATIC manner.
+ *        Do NOT use   tsf()::admin()::layout()::make_single_select_form();
+ *        Instead, use tsf()->admin()->layout()->make_single_select_form();
+ *        Failing to do so might result in a crash when we need to deprecate a call, defeating
+ *        the purpose of the static deprecator.
+ *
  * @todo: If the subobjects require complex fallbacks, put them in a new \Internal
  *        subobject. Create private class constant to hold that class location.
  *
@@ -842,7 +848,12 @@ class Pool extends Legacy_API {
 			use Static_Deprecator;
 
 			private $colloquial_handle     = 'tsf()->sitemap()';
-			private $deprecated_methods    = [];
+			private $deprecated_methods    = [
+				'ping' => [
+					'since'    => '5.0.5',
+					'fallback' => '\The_SEO_Framework\Internal\Silencer::instance',
+				],
+			];
 			private $deprecated_properties = [];
 
 			/**
@@ -860,6 +871,20 @@ class Pool extends Legacy_API {
 			}
 
 			/**
+			 * @since 5.0.5
+			 * @return \The_SEO_Framework\Sitemap\Cron
+			 */
+			public static function cron() {
+				return static::$subpool['cron'] ??= new class extends Sitemap\Cron {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->sitemap()->cron()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
 			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Sitemap\Lock
 			 */
@@ -869,22 +894,6 @@ class Pool extends Legacy_API {
 
 					private $colloquial_handle     = 'tsf()->sitemap()->lock()';
 					private $deprecated_methods    = [];
-					private $deprecated_properties = [];
-				};
-			}
-
-			/**
-			 * @since 5.0.0
-			 * @return \The_SEO_Framework\Sitemap\Ping
-			 */
-			public static function ping() {
-				return static::$subpool['ping'] ??= new class extends Sitemap\Ping {
-					use Static_Deprecator;
-
-					private $colloquial_handle     = 'tsf()->sitemap()->ping()';
-					private $deprecated_methods    = [
-						'ping_bing' => [ 'since' => '5.0.5' ],
-					];
 					private $deprecated_properties = [];
 				};
 			}

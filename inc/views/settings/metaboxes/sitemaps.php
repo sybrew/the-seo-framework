@@ -59,11 +59,6 @@ switch ( $instance ) :
 				'callback' => [ Admin\Settings\Plugin::class, '_sitemaps_metabox_metadata_tab' ],
 				'dashicon' => 'index-card',
 			],
-			'notify'   => [
-				'name'     => \_x( 'Ping', 'Ping or notify search engine', 'autodescription' ),
-				'callback' => [ Admin\Settings\Plugin::class, '_sitemaps_metabox_notify_tab' ],
-				'dashicon' => 'megaphone',
-			],
 			'style'    => [
 				'name'     => \__( 'Style', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_sitemaps_metabox_style_tab' ],
@@ -194,13 +189,32 @@ switch ( $instance ) :
 			HTML::wrap_fields(
 				Input::make_checkbox( [
 					'id'     => 'cache_sitemap',
-					'label'  => \esc_html__( 'Enable optimized sitemap generation cache?', 'autodescription' )
+					'label'  => \esc_html__( 'Enable sitemap generation cache?', 'autodescription' )
 						. ' ' . HTML::make_info( \__( 'Generating the sitemap can use a lot of server resources.', 'autodescription' ), '', false ),
 					'escape' => false,
 				] ),
 				true,
 			);
+
 			?>
+			<div id=tsf-sitemap-prerendering-settings>
+				<?php
+				HTML::wrap_fields(
+					Input::make_checkbox( [
+						'id'          => 'sitemap_cron_prerender',
+						'label'       => \esc_html__( 'Prerender sitemap via cron?', 'autodescription' )
+							. ' ' . HTML::make_info(
+								\__( 'This mitigates timeouts search engines may experience when waiting for the sitemap to render.', 'autodescription' ),
+								'',
+								false,
+							),
+						'description' => \esc_html__( 'Only enable prerendering when the sitemap takes longer than 60 seconds to generate.', 'autodescription' ),
+						'escape'      => false,
+					] ),
+					true,
+				);
+				?>
+			</div>
 		</div>
 		<?php
 		break;
@@ -269,7 +283,10 @@ switch ( $instance ) :
 
 	case 'metadata':
 		HTML::header_title( \__( 'Timestamps Settings', 'autodescription' ) );
-		HTML::description( \__( 'The modified time suggests to search engines where to look for content changes first.', 'autodescription' ) );
+		HTML::description_noesc( Markdown::convert(
+			/* translators: the backticks are Markdown! Preserve them as-is! */
+			\esc_html__( 'The `<lastmod>` tag shows the last updated time of a page. It helps search engines to quickly find content changes via the sitemap.', 'autodescription' )
+		) );
 
 		HTML::wrap_fields(
 			Input::make_checkbox( [
@@ -285,60 +302,9 @@ switch ( $instance ) :
 		);
 		break;
 
-	case 'notify':
-		HTML::header_title( \__( 'Ping Settings', 'autodescription' ) );
-		HTML::description( \__( 'Notifying search engines of a sitemap change is helpful to get your content indexed as soon as possible.', 'autodescription' ) );
-		HTML::description( \__( 'By default this will happen at most once an hour.', 'autodescription' ) );
-
-		HTML::wrap_fields(
-			[
-				Input::make_checkbox( [
-					'id'    => 'ping_google',
-					'label' => \__( 'Ping Google when the sitemap updates?', 'autodescription' ),
-				] ),
-				Input::make_checkbox( [
-					'id'     => 'ping_use_cron',
-					'label'  => \esc_html__( 'Use cron for pinging?', 'autodescription' )
-						. ' ' . HTML::make_info(
-							\__( 'This reduces the wait time for saving a post by deferring pinging.', 'autodescription' ),
-							'',
-							false,
-						),
-					'escape' => false,
-				] ),
-			],
-			true,
-		);
-
-		?>
-		<div id=tsf-sitemap-prerendering-settings>
-			<?php
-			HTML::header_title( \__( 'Prerendering Settings', 'autodescription' ) );
-
-			HTML::description( \__( 'In extreme cases, the sitemap may take too long to load for search engines. Prerendering stores a cached copy of the sitemap as transient cache before pinging to search engines.', 'autodescription' ) );
-
-			HTML::wrap_fields(
-				Input::make_checkbox( [
-					'id'          => 'ping_use_cron_prerender',
-					'label'       => \esc_html__( 'Prerender optimized sitemap before pinging via cron?', 'autodescription' )
-						. ' ' . HTML::make_info(
-							\__( 'This mitigates timeouts Google may experience when waiting for the sitemap to render. Transient caching for the sitemap must be enabled for this to work.', 'autodescription' ),
-							'',
-							false,
-						),
-					'description' => \esc_html__( 'Only enable prerendering when generating the sitemap takes over 60 seconds.', 'autodescription' ),
-					'escape'      => false,
-				] ),
-				true,
-			);
-			?>
-		</div>
-		<?php
-		break;
-
 	case 'style':
-		HTML::header_title( \__( 'Optimized Sitemap Styling Settings', 'autodescription' ) );
-		HTML::description( \__( 'You can style the optimized sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
+		HTML::header_title( \__( 'Sitemap Styling Settings', 'autodescription' ) );
+		HTML::description( \__( 'You can style the sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
 		HTML::description( \__( 'Note: Changes may not appear to have an effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
 		?>
 		<hr>

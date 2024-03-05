@@ -49,7 +49,7 @@ We focus on the quality of features you need over the quantity on features you d
 We built The SEO Framework for small to large corporations and enterprises. The interface is entirely accessible and seamlessly integrates within your dashboard. Therefore, interacting with this plugin feels natural. It might feel dull, but your WordPress dashboard shouldn't be a billboard for our branding. We won't ever change this.
 
 * **It improves search presence.**
-The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search, and by automatically generating titles and descriptions according to Google's guidelines. It also notifies Google, Bing, and all connected search networks automatically of your website's changes with its built-in sitemap.
+The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search via structured data. It also automatically generates titles and descriptions according to Google's guidelines and quickly helps search engines find the website's latest changes via the built-in optimized sitemap.
 
 * **It makes social sharing easy.**
 The SEO Framework automatically supports and allows you to further tailor the Open Graph, Facebook, and Twitter Cards protocols. It helps your posts stand out when they're shared on various social networks, including Pinterest, Discord, and Whatsapp.
@@ -261,13 +261,19 @@ TODO add Post/Term SEO-edit cap?
 		-> Or, should we set a "default"?
 		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
 
+TODO remove all references to pinging in readme/docs.
+	- notify / ping / tell
+
 **For everyone**
 
+* **Upgrade:** Now uses TSF version `5050`.
+	* The sitemap prerendering option was renamed, since it's no longer bound to pinging.
 * **Removed:**
-	* We've removed the ability to ping the sitemap to Bing because it no longer works. The Bing network's sitemap pinging endpoint was [closed by Microsoft in 2022](https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission) to propel the IndexNow protocol. We were hopeful that they'd return the pinging functionality, but alas.
-		* Bing still uses the sitemap protocol as before, they only dropped pinging thereof.
-		* Bing reads `/robots.txt` and looks for the sitemap's location there. They and all significant search engines automatically read the sitemap periodically without relying on pinging.
+	* We've removed the ability to ping the sitemap to Bing and Google because it no longer works. The Bing network's sitemap pinging endpoint was [closed by Microsoft in 2022](https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission) to propel the IndexNow protocol. We were hopeful that they'd return the pinging functionality, but alas. [Google subsequently closed their endpoint in January 2024](https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping). They say they deprecated it, but it simply no longer works, neither for regular sitemaps nor for the Google News sitemaps.
+		* The search engines still use the sitemap protocol as before, they only dropped pinging thereof.
+		* The search engines read `/robots.txt` and looks for the sitemap's location there. They and all significant search engines automatically read the sitemap periodically without relying on pinging.
 		* We have plans to support IndexNow, but for Now, you can Index via IndexNow using the official [IndexNow plugin](https://wordpress.org/plugins/indexnow/). As someone who can distinguish WordPress.com from WordPress.org, we'll bring you a properly programmed version later this year, though likely via a Premium extension.
+		* Pinging of the Google News sitemap may still engage via Articles and provoke deprecation notices; we'll remove this in the next update of Extension Manager.
 	* bbPress 2.5.14 and below are no longer supported for topic tag title and description generation. Please update to bbPress 2.6.9 or later for the best experience.
 		* bbPress 2.6 rectified the query detection, so TSF works automatically with that.
 * **Changed:**
@@ -278,6 +284,8 @@ TODO add Post/Term SEO-edit cap?
 		2. We now convey why the optimized sitemap does things differently.
 		3. If the user switches to the complex sitemap, then this will help with faster generation of its paginated sitemaps.
 		4. Faster generation times look better.
+	* You can now opt to prerender the sitemap without opting for pinging via cron... because pinging is no longer possible.
+		* This is less effective but should still serve its purpose fine.
 * **Improved:**
 	* Changed the wording of the link relationship settings to reflect better what they output.
 	* Expounded on what the optimized sitemap does, and that disabling the optimized sitemap will give the complex sitemap.
@@ -308,21 +316,39 @@ TODO add Post/Term SEO-edit cap?
 **For developers:**
 
 * **Added:**
+	* Pool `tsf()->sitemap()->cron()` is now available.
+		* It contains method `schedule_single_event()`, which engages all sitemap crons in 29, 30, and 31 seconds.
+		* Internally known as `The_SEO_Framework\Sitemap\Cron`.
 	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
 	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
 	* Method `tsf()->format()->time()->get_format()` is new.
 	* JavaScript method `tsf.coalesceStrlen()` is now available.
 	* Javascript methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
 * **Option notes:**
-	* Removed option index `ping_bing` of `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`).
-		* This option isn't deleted in this update, but remains dormant and clears automatically in a future upgrade or on options-save.
-	* `timestamps_format` of `autodescription-site-settings` is now considered a boolean, instead of an integer.
-		* New sites will store this as `1` or `0`, while old sites still use `'1'` or `'0'`, until the setting are (re)saved or updated in the future.
-		* We left this as a string to allow more options in the future, but that was never necessary.
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `sitemap_cron_prerender`.
+		* Changed index `timestamps_format`: It is now considered a boolean, instead of an integer.
+			* We left this as a string to allow more options in the future, but that was never necessary.
+		* Removed index `ping_bing`.
+		* Removed index `ping_google`.
+		* Removed index `ping_use_cron`.
+* **Action notes:**
+	* `the_seo_framework_sitemap_transient_cleared` no longer provides information in its first parameter.
+	* `tsf_sitemap_cron_hook_retry` (cron event) is gone.
+	* `the_seo_framework_before_ping_search_engines` is gone.
+	* `the_seo_framework_ping_search_engines` is gone.
+* **Filter notes:**
+	* `the_seo_framework_sitemap_throttle_s` is gone.
 * **Changed:**
 	* Filter `the_seo_framework_sitemap_hpt_query_args`:
 		1. Now sets orderby to 'lastmod', from 'date'.
 		1. Now sets order to 'DESC', from 'ASC'.
+* **Deprecated:**
+	* Pool `tsf()->sitemap()->ping()` is now deprecated, and its methods are no longer accessible and return `null`.
+	* Protected class `\The_SEO_Framework\Sitemap\Ping` is now gone.
+* **Improved:**
+	* Incorrectly calling pool methods statically is now handled more gracefully.
+		* Do NOT call pools like `tsf()::admin()::layout()::make_single_select_form()`, but use `tsf()->admin()->layout()->make_single_select_form()` instead. Failing to do so might result in a crash once we need to deprecate a call, defeating the purpose of the static deprecator.
 * **Fixed:**
 	* For method `tsf()->uri()->get_paged_urls()`, reinstated missing option checks.
 

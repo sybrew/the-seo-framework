@@ -30,31 +30,35 @@ namespace The_SEO_Framework\Internal;
 /**
  * Class The_SEO_Framework\Internal\Silencer
  *
- * This is an empty class to silence invalid API calls when the plugin is soft-disabled.
+ * This is an empty class to silence invalid API calls when a class is soft-disabled.
  * This alleviates redundant checks throughout the plugin API.
  *
  * @since 3.1.0
  * @since 4.2.0 Changed namespace from \The_SEO_Framework to \The_SEO_Framework\Internal
- * @ignore
- * @property false $loaded
+ * @since 5.0.5 Repurposed for silencing the pool (\The_SEO_Framework\Pool).
+ * @access private
+ * @property static $instance
  */
 final class Silencer {
 
 	/**
-	 * Tells if this plugin is loaded.
-	 *
-	 * @since 3.1.0
-	 * @since 5.0.0 Deprecated (silently here, shh).
-	 * @access protected
-	 *         Don't alter this variable.
-	 * @var boolean $loaded
+	 * @since 5.0.5
+	 * @var static
 	 */
-	public $loaded = false;
+	private static $instance;
 
 	/**
 	 * @since 3.1.0
 	 */
 	public function __construct() {}
+
+	/**
+	 * @since 5.0.5
+	 * @return static
+	 */
+	public static function instance() {
+		return static::$instance ??= new static;
+	}
 
 	/**
 	 * @since 3.1.0
@@ -90,6 +94,15 @@ final class Silencer {
 	 * @param array  $arguments The method arguments.
 	 */
 	public function __call( $name, $arguments ) {
+		return null;
+	}
+
+	/**
+	 * @since 5.0.5
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
+	 */
+	public static function __callStatic( $name, $arguments ) {
 		return null;
 	}
 }

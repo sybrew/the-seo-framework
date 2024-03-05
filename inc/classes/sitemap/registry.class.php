@@ -260,28 +260,15 @@ class Registry {
 
 		Cache::clear_sitemap_caches();
 
-		$ping_use_cron           = Data\Plugin::get_option( 'ping_use_cron' );
-		$ping_use_cron_prerender = Data\Plugin::get_option( 'ping_use_cron_prerender' );
-
 		/**
 		 * @since 4.1.1
 		 * @since 4.1.2 Added index `ping_use_cron_prerender` to the first parameter.
-		 * @param array $params Any useful environment parameters.
+		 * @since 5.0.5 Removed indexes `ping_use_cron` and `ping_use_cron_prerender`.
+		 * @param array $deprecated Deprecated; do not use the first parameter.
 		 */
-		\do_action(
-			'the_seo_framework_sitemap_transient_cleared',
-			[
-				'ping_use_cron'           => $ping_use_cron,
-				'ping_use_cron_prerender' => $ping_use_cron_prerender, // TODO migrate this so it can run regardless of pinging?
-			]
-		);
+		\do_action( 'the_seo_framework_sitemap_transient_cleared', [] );
 
-		if ( $ping_use_cron ) {
-			// This name is wrong. It's not exclusively used for pinging.
-			Ping::engage_pinging_cron();
-		} else {
-			Ping::ping_search_engines();
-		}
+		Cron::schedule_single_event();
 
 		return true;
 	}

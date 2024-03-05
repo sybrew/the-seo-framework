@@ -693,16 +693,6 @@ final class Plugin {
 	}
 
 	/**
-	 * Sitemaps Meta Box Notify Tab output.
-	 *
-	 * @since 4.0.0
-	 * @see static::sitemaps_metabox() Callback for Sitemaps Settings box.
-	 */
-	public static function _sitemaps_metabox_notify_tab() {
-		Template::output_view( 'settings/metaboxes/sitemaps', 'notify' );
-	}
-
-	/**
 	 * Sitemaps Meta Box Style Tab output.
 	 *
 	 * @since 4.0.0
