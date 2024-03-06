@@ -249,8 +249,6 @@ TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
 	-> Move to 5.1.0? This is a new Schema type and we want more "sameas" URLs complement this feature.
 	-> The "alternateName" refering to the page URL should only be filled when there's no name?
 	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
-TODO add filter at method extract_content() -- https://wordpress.org/support/topic/ul-lists-stripped-from-automated-description/.
-TODO in get_all_nonhierarchical we use ?: instead of ?? next to memo(). Why?
 
 TODO add every language's sitemap to robots.txt?
 	-> Is this even possible?
@@ -260,9 +258,6 @@ TODO add Post/Term SEO-edit cap?
 	-> can this even be done?
 		-> Or, should we set a "default"?
 		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
-
-TODO remove all references to pinging in readme/docs.
-	- notify / ping / tell
 
 **For everyone**
 
@@ -305,6 +300,8 @@ TODO remove all references to pinging in readme/docs.
 		* This also fixes the bug described below.
 	* Addressed an issue where the subdirectory-translation sitemap wasn't accessible via Polylang, such as `/fr/sitemap.xml`.
 	* Addressed an issue where TSF would output a deprecation notice when visiting a bbPress topic tag.
+	* Addressed an issue where multiple database requests could be made if a certain post type trait (hierarchical, nonhierachical, has_archive) didn't exist. This shouldn't be possible unless posts or pages are unregistered, nor should it be possible because the caches aren't touched more than once per request, but I deemed it a bug nonetheless.
+		* Pro tip: Look for logical bugs by tracing your code, rather than solely relying on user feedback. You're lazy (and rich and settled) if you don't revisit your popular code.
 * **Other:**
 	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
 
@@ -326,7 +323,7 @@ TODO remove all references to pinging in readme/docs.
 	* Javascript methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
-		* Added index `sitemap_cron_prerender`.
+		* Renamed index `ping_use_cron_prerender` to `sitemap_cron_prerender`, which value is migrated during upgrade. Default `0`.
 		* Changed index `timestamps_format`: It is now considered a boolean, instead of an integer.
 			* We left this as a string to allow more options in the future, but that was never necessary.
 		* Removed index `ping_bing`.
@@ -334,10 +331,11 @@ TODO remove all references to pinging in readme/docs.
 		* Removed index `ping_use_cron`.
 * **Action notes:**
 	* `the_seo_framework_sitemap_transient_cleared` no longer provides information in its first parameter.
-	* `tsf_sitemap_cron_hook_retry` (cron event) is gone.
+	* `tsf_sitemap_cron_hook_retry` (cron event) is gone. This hook was used when the pinging cron job failed to complete due to the sitemap still prerendering. It was actually quite ingenius, what we had.
 	* `the_seo_framework_before_ping_search_engines` is gone.
 	* `the_seo_framework_ping_search_engines` is gone.
 * **Filter notes:**
+	* `the_seo_framework_extract_content_strip_args` is new. Use this to filter how post content is extracted via the context-sensitive tag stripper `\The_SEO_Framework\Helper\Format\HTML\strip_tags_cs()`.
 	* `the_seo_framework_sitemap_throttle_s` is gone.
 * **Changed:**
 	* Filter `the_seo_framework_sitemap_hpt_query_args`:

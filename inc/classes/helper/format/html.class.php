@@ -119,10 +119,10 @@ class HTML {
 	 *                         'clear'   : @param ?string[] HTML elements that should be emptied and replaced with a space.
 	 *                                                      If not set or null, skip check.
 	 *                                                      If empty array, skips stripping; otherwise, use input.
-	 *                         'strip'   : @param bool      If set, strip_tags() is performed before returning the output.
-	 *                                                      Recommended always true, since Regex doesn't understand XML.
-	 *                         'passes'  : @param int       The maximum number of passes 'space' may conduct. More is slower,
-	 *                                                      but more accurate. 'clear' is unaffected.
+	 *                         'strip'   : @param ?bool     If set, strip_tags() is performed before returning the output.
+	 *                                                      Recommended always true, since Regex doesn't understand XML. Default true.
+	 *                         'passes'  : @param ?int      If set, the maximum number of passes 'space' may conduct. More is slower,
+	 *                                                      but more accurate. 'clear' is unaffected. Default 1.
 	 *                      }
 	 *                      NOTE: WARNING The array values are forwarded to a regex without sanitization/quoting.
 	 *                      NOTE: Unlisted, script, and style tags will be stripped via PHP's `strip_tags()`. (togglable via `$args['strip']`)
@@ -270,7 +270,7 @@ class HTML {
 	}
 
 	/**
-	 * Extracts a usable excerpt from the content.
+	 * Extracts a usable excerpt from singular content.
 	 *
 	 * @since 2.8.0
 	 * @since 2.8.2 1. Added `$allow_shortcodes` parameter.
@@ -320,14 +320,23 @@ class HTML {
 				$passes = 2;
 		}
 
-		// Missing 'th', 'tr', 'tbody', 'thead', 'dd', 'dt', and 'li' -- these are obligatory subelements of what's already cleared.
-		$strip_args = [
-			'space'  =>
-				[ 'article', 'br', 'blockquote', 'details', 'div', 'hr', 'p', 'section' ],
-			'clear'  =>
-				[ 'address', 'area', 'aside', 'audio', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'del', 'dialog', 'dl', 'fieldset', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'meter', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'progress', 's', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'video' ],
-			'passes' => $passes,
-		];
+		/**
+		 * Missing 'th', 'tr', 'tbody', 'thead', 'dd', 'dt', and 'li' -- these are obligatory subelements of what's already cleared.
+		 *
+		 * @since 5.0.5
+		 * @param array $strip_args The content stripping arguments, associative.
+		 *                          Refer to the second parameter of `\The_SEO_Framework\Helper\Format\HTML::strip_tags_cs()`.
+		 */
+		$strip_args = (array) \apply_filters(
+			'the_seo_framework_extract_content_strip_args',
+			[
+				'space'  =>
+					[ 'article', 'br', 'blockquote', 'details', 'div', 'hr', 'p', 'section' ],
+				'clear'  =>
+					[ 'address', 'area', 'aside', 'audio', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'del', 'dialog', 'dl', 'fieldset', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'meter', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'progress', 's', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'video' ],
+				'passes' => $passes,
+			]
+		);
 
 		/**
 		 * Always strip shortcodes unless specifically allowed via the filter.

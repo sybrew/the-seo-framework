@@ -129,7 +129,7 @@ class Taxonomy {
 	 * @return string[] All supported taxonomies.
 	 */
 	public static function get_all_supported() {
-		return memo() ?? memo( array_values( array_filter(
+		return memo() ?: memo( array_values( array_filter(
 			static::get_all_public(),
 			[ static::class, 'is_supported' ],
 		) ) );
@@ -148,7 +148,7 @@ class Taxonomy {
 	 */
 	public static function get_all_public() {
 		return umemo( __METHOD__ )
-			?? umemo(
+			?: umemo(
 				__METHOD__,
 				/**
 				 * Do not consider using this filter. Properly register your taxonomy, noob.
@@ -258,9 +258,11 @@ class Taxonomy {
 	 * @return string The Taxonomy Type name/label, if found.
 	 */
 	public static function get_label( $taxonomy = '', $singular = true ) {
-		return \get_taxonomy(
-			$taxonomy ?: Query::get_current_taxonomy()
-		)->labels->{
+
+		$taxonomy = $taxonomy ?: Query::get_current_taxonomy();
+		$tax      = $taxonomy ? \get_taxonomy( $taxonomy ) : null;
+
+		return $tax->labels->{
 			$singular ? 'singular_name' : 'name'
 		} ?? '';
 	}
