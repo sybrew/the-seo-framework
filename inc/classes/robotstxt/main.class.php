@@ -129,7 +129,7 @@ class Main {
 		 * The robots.txt output.
 		 *
 		 * @since 4.0.5
-		 * @param string $output The (cached) robots.txt output.
+		 * @param string $output The robots.txt output.
 		 */
 		return (string) \apply_filters( 'the_seo_framework_robots_txt', $output );
 	}

@@ -244,23 +244,21 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.0.5
 
-TODO test https://wordpress.org/support/topic/schema-markup-on-the-authors-page/
-	-> aka https://developers.google.com/search/docs/appearance/structured-data/profile-page
-	-> Move to 5.1.0? This is a new Schema type and we want more "sameas" URLs complement this feature.
-	-> The "alternateName" refering to the page URL should only be filled when there's no name?
-	-> This all appears to be aimed at social media profiles, not as much WordPress profiles...
-
-TODO add every language's sitemap to robots.txt?
-	-> Is this even possible?
-		-> If so, we can then also add a link in the admin "See English sitemap" instead of "See base sitemap".
-
 TODO add Post/Term SEO-edit cap?
 	-> can this even be done?
 		-> Or, should we set a "default"?
 		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
 
+TODO deJqueryfy more, with Element, we can grab jQuery via:
+	// Backward compatibility for jQuery vs ES.
+	if ( element?.[0] )
+		element = element[0];
+
 **For everyone**
 
+* **Added:**
+	* For Polylang and WPML, the robots.txt output now contains the sitemap URL for every other language. This works when using the URL formats subdirectory, from content, or parameter translation.
+		* Subdomain or different domain URL formats already worked as intended, where every subdomain's robots.txt displayed the current language's sitemap URL.
 * **Upgrade:** Now uses TSF version `5050`.
 	* The sitemap prerendering option was renamed, since it's no longer bound to pinging.
 * **Removed:**

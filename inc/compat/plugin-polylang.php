@@ -8,9 +8,13 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Helper\Query,
+	Meta\URI,
+};
 
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_polylang_set_sitemap_language' );
+\add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\\_polylang_register_sitemap_languages', 20 );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' );
@@ -22,6 +26,76 @@ use \The_SEO_Framework\Helper\Query;
 \add_filter( 'pll_home_url_allow_list', __NAMESPACE__ . '\\_polylang_allow_tsf_home_url' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap' );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
+
+/**
+ * Registeres more sitemaps for the robots.txt to parse.
+ *
+ * This has no other intended effect. But default permalinks may react more tsf_sitemap query values,
+ * specifically ?tsf_sitemap=_base_polylang_es&lang=es" (assumed, untested).
+ *
+ * @hook the_seo_framework_sitemap_endpoint_list 20
+ * @since 5.0.5
+ * @param array[] $list The endpoints: {
+ *   'id' => array: {
+ *      'lock_id'  => string|false Optional. The cache key to use for locking. Defaults to index 'id'.
+ *                                           Set to false to disable locking.
+ *      'cache_id' => string|false Optional. The cache key to use for storing. Defaults to index 'id'.
+ *                                           Set to false to disable caching.
+ *      'endpoint' => string       The expected "pretty" endpoint, meant for administrative display.
+ *      'epregex'  => string       The endpoint regex, following the home path regex.
+ *      'callback' => callable     The callback for the sitemap output.
+ *      'robots'   => bool         Whether the endpoint should be mentioned in the robots.txt file.
+ *   }
+ * }
+ * @return array[]
+ */
+function _polylang_register_sitemap_languages( $list ) {
+
+	if ( empty( $list['base'] ) )
+		return $list;
+
+	if ( ! Helper\Compatibility::can_i_use( [
+		'functions' => [
+			'pll_languages_list',
+			'pll_default_language',
+		],
+	] ) ) return $list;
+
+	// Do most work outside of a loop. We have two loops because of this.
+	// We fall back to -1 because null/false match with '0'
+	switch ( \get_option( 'polylang' )['force_lang'] ?? -1 ) {
+		case 0:
+			foreach (
+				array_diff(
+					\pll_languages_list( [ 'hide_empty' => 1 ] ),
+					[ \pll_default_language() ],
+				)
+				as $language
+			) {
+				$list[ "_base_polylang_$language" ] = [
+					'endpoint' => URI\Utils::append_query_to_url(
+						$list['base']['endpoint'],
+						"lang=$language",
+					),
+				] + $list['base'];
+			}
+			break;
+		case 1:
+			foreach (
+				array_diff(
+					\pll_languages_list( [ 'hide_empty' => 1 ] ),
+					[ \pll_default_language() ],
+				)
+				as $language
+			) {
+				$list[ "_base_polylang_$language" ] = [
+					'endpoint' => "$language/{$list['base']['endpoint']}",
+				] + $list['base'];
+			}
+	}
+
+	return $list;
+}
 
 /**
  * Sets the correct Polylang query language for the sitemap based on the 'lang' GET parameter.
@@ -44,25 +118,25 @@ function _polylang_set_sitemap_language() {
 	// Language codes are user-definable: copy Polylang's filtering.
 	// The preg_match's source: \PLL_Admin_Model::validate_lang();
 	if ( ! \is_string( $lang ) || ! \strlen( $lang ) || ! preg_match( '#^[a-z_-]+$#', $lang ) ) {
-		$_options = \get_option( 'polylang' );
-		if ( isset( $_options['force_lang'] ) ) {
-			switch ( $_options['force_lang'] ) {
-				case 0:
-					// Polylang determines language sporadically from content: can't be trusted. Overwrite.
-					$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
-					break;
-				default:
-					// Polylang can differentiate languages by (sub)domain/directory name early. No need to interfere. Cancel.
-					return;
-			}
+
+		switch ( \get_option( 'polylang' )['force_lang'] ?? -1 ) {
+			case 0:
+				// Polylang determines language sporadically from content: can't be trusted. Overwrite.
+				$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
+				break;
+			default:
+				// Polylang can differentiate languages by (sub)domain/directory name early. No need to interfere. Cancel.
+				return;
 		}
 	}
 
 	// This will default to the default language when $lang is invalid or unregistered. This is fine.
 	$new_lang = \PLL()->model->get_language( $lang );
 
-	if ( $new_lang )
+	if ( $new_lang ) {
 		\PLL()->curlang = $new_lang;
+		\did_action( 'pll_language_defined' ) or \do_action( 'pll_language_defined' );
+	}
 }
 
 /**
@@ -146,6 +220,9 @@ function pll__( $string ) {
 /**
  * Deletes all sitemap transients, instead of just one.
  *
+ * We didn't implement this in our default APIs because we want to trigger WP hooks.
+ * Executing database queries directly bypass those. So, we do this afterward.
+ *
  * @hook the_seo_framework_cleared_sitemap_transients 10
  * @since 4.0.5
  * @since 5.0.0 Removed clearing once-per-request restriction.
@@ -155,16 +232,18 @@ function pll__( $string ) {
 function _polylang_flush_sitemap() {
 	global $wpdb;
 
+	$transient_prefix = Sitemap\Cache::TRANSIENT_PREFIX;
+
 	$wpdb->query( $wpdb->prepare(
 		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-		$wpdb->esc_like( '_transient_tsf_sitemap_' ) . '%',
+		$wpdb->esc_like( "_transient_$transient_prefix" ) . '%',
 	) );
 
 	// We didn't use a wildcard after "_transient_" to reduce scans.
 	// A second query is faster on saturated sites.
 	$wpdb->query( $wpdb->prepare(
 		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-		$wpdb->esc_like( '_transient_timeout_tsf_sitemap_' ) . '%',
+		$wpdb->esc_like( "_transient_timeout_$transient_prefix" ) . '%',
 	) );
 }
 

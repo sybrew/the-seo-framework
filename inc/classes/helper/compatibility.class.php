@@ -209,8 +209,9 @@ class Compatibility {
 	 *              2. Renamed from `can_i_use`.
 	 *              3. Removed the second parameter `$use_cache`.
 	 *              4. Removed caching. This responsibility now lies by the caller.
+	 * @since 5.0.5 Now accepts methods.
 	 *
-	 * @param array[] $plugins   Array of array for globals, constants, classes
+	 * @param array[] $plugins   Array of array for globals, constants, classes, methods,
 	 *                           and/or functions to check for plugin existence.
 	 * @return bool True if everything is accessible.
 	 */
@@ -234,6 +235,11 @@ class Compatibility {
 		// Check for classes
 		foreach ( $plugins['classes'] ?? [] as $name )
 			if ( ! class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+				return false;
+
+		// Check for classes
+		foreach ( $plugins['methods'] ?? [] as [ $object, $name ] )
+			if ( ! method_exists( $object, $name ) )
 				return false;
 
 		// All classes, functions and constant have been found to exist
