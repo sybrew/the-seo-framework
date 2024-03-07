@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Helper\Query,
+	Meta\URI,
+};
 
 \add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\\_wpml_register_sitemap_languages', 20 );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
@@ -20,7 +23,7 @@ use \The_SEO_Framework\Helper\Query;
  * Registeres more sitemaps for the robots.txt to parse.
  *
  * This has no other intended effect. But default permalinks may react more tsf_sitemap query values,
- * specifically ?tsf_sitemap=_base_polylang_es&lang=es" (assumed, untested).
+ * specifically ?tsf_sitemap=_base_wpml_es&lang=es" (assumed, untested).
  *
  * @hook the_seo_framework_sitemap_endpoint_list 20
  * @since 5.0.5
