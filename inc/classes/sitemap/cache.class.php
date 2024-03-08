@@ -37,15 +37,6 @@ use \The_SEO_Framework\Data;
 class Cache {
 
 	/**
-	 * @access protected
-	 *         We cannot deprecate this. Test this before if you must:
-	 *         `defined( get_class( tsf()->sitemap()->cache() ) . '::TRANSIENT_PREFIX' )`
-	 * @since 5.0.5
-	 * @var string TRANSIENT_PREFIX
-	 */
-	public const TRANSIENT_PREFIX = 'tsf_sitemap_';
-
-	/**
 	 * Returns a unique cache key suffix per blog and language.
 	 *
 	 * @since 5.0.0
@@ -110,6 +101,19 @@ class Cache {
 	}
 
 	/**
+	 * Returns the transient prefix.
+	 * We're using a function instead of a variable or constant, because variables can be overwritten (pre PHP 8.1),
+	 * and constants cannot be deprecated via the static deprecator (must use `defined( get_class( ... ), '::constant' )`).
+	 *
+	 * @since 5.0.5
+	 *
+	 * @return string The transient prefix of the sitemap.
+	 */
+	public static function get_transient_prefix() {
+		return 'tsf_sitemap_';
+	}
+
+	/**
 	 * Returns the sitemap's storage transient name.
 	 *
 	 * @since 5.0.0
@@ -125,7 +129,7 @@ class Cache {
 
 		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
 
-		return static::build_sitemap_cache_key( static::TRANSIENT_PREFIX . $cache_key );
+		return static::build_sitemap_cache_key( static::get_transient_prefix() . $cache_key );
 	}
 
 	/**

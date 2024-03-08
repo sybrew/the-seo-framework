@@ -148,13 +148,15 @@ class Post {
 	 *
 	 * @since 3.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.5 Now again assumes that `'0'` is an invalid password.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected, false otherwise.
 	 */
 	public static function is_password_protected( $post = null ) {
 		// Don't get the post directly if it can be evaded, it's still quite slow.
-		return '' !== ( $post->post_password ?? \get_post( $post )->post_password ?? '' );
+		// Assume '0' is an invalid password.
+		return ! empty( $post->post_password ?? \get_post( $post )->post_password ?? false );
 	}
 
 	/**

@@ -232,7 +232,7 @@ function pll__( $string ) {
 function _polylang_flush_sitemap() {
 	global $wpdb;
 
-	$transient_prefix = Sitemap\Cache::TRANSIENT_PREFIX;
+	$transient_prefix = Sitemap\Cache::get_transient_prefix();
 
 	$wpdb->query( $wpdb->prepare(
 		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",

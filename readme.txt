@@ -249,11 +249,6 @@ TODO add Post/Term SEO-edit cap?
 		-> Or, should we set a "default"?
 		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
 
-TODO deJqueryfy more, with Element, we can grab jQuery via:
-	// Backward compatibility for jQuery vs ES.
-	if ( element?.[0] )
-		element = element[0];
-
 **For everyone**
 
 * **Added:**
@@ -282,8 +277,9 @@ TODO deJqueryfy more, with Element, we can grab jQuery via:
 * **Improved:**
 	* Changed the wording of the link relationship settings to reflect better what they output.
 	* Expounded on what the optimized sitemap does, and that disabling the optimized sitemap will give the complex sitemap.
-	* Sitemap settings now dynamically reflect possibilities when switching from the Optimized and Core sitemaps.
+	* Sitemap settings now dynamically display the available features when switching from the Optimized and Core sitemaps.
 	* After looking at meetup events about The SEO Framework, we found that experts misinterpreted some of our settings (especially in non-English speaking languages). For those settings, we made our language more plain and clear, and hope this helps translators to better convey our intent.
+	* Removed more jQuery dependencies, improving performance slightly of the admin UI.
 * **Fixed:**
 	* Addressed an issue where the link relationship settings didn't have an effect.
 	* Addressed an issue where a broken homepage-settings-edit-link was given when there isn't a static homepage assigned when the homepage should display a static page.
@@ -300,6 +296,7 @@ TODO deJqueryfy more, with Element, we can grab jQuery via:
 	* Addressed an issue where TSF would output a deprecation notice when visiting a bbPress topic tag.
 	* Addressed an issue where multiple database requests could be made if a certain post type trait (hierarchical, nonhierachical, has_archive) didn't exist. This shouldn't be possible unless posts or pages are unregistered, nor should it be possible because the caches aren't touched more than once per request, but I deemed it a bug nonetheless.
 		* Pro tip: Look for logical bugs by tracing your code, rather than solely relying on user feedback. You're lazy (and rich and settled) if you don't revisit your popular code.
+	* Addressed a regression where '0' was incorrectly considered a valid post password in the Classic Editor.
 * **Other:**
 	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
 
@@ -310,15 +307,20 @@ TODO deJqueryfy more, with Element, we can grab jQuery via:
 
 **For developers:**
 
-* **Added:**
-	* Pool `tsf()->sitemap()->cron()` is now available.
-		* It contains method `schedule_single_event()`, which engages all sitemap crons in 29, 30, and 31 seconds.
-		* Internally known as `The_SEO_Framework\Sitemap\Cron`.
-	* Method `tsf()->uri()->get_generated_paged_urls()` is new.
-	* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
-	* Method `tsf()->format()->time()->get_format()` is new.
-	* JavaScript method `tsf.coalesceStrlen()` is now available.
-	* Javascript methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
+* **PHP method notes:**
+	* **Added:**
+		* Pool `tsf()->sitemap()->cron()` is now available.
+			* It contains method `schedule_single_event()`, which engages all sitemap crons in 29, 30, and 31 seconds.
+			* Internally known as `The_SEO_Framework\Sitemap\Cron`.
+		* Method `tsf()->uri()->get_generated_paged_urls()` is new.
+		* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
+		* Method `tsf()->format()->time()->get_format()` is new.
+		* Method `tsf()->sitemap()->cache()->get_transient_prefix()` is new.
+	* **Changed:**
+		* `tsf()->data()->post()->is_password_protected()` now again assumes that `'0'` is an invalid password.
+* **Javascript notes:**
+	* Method `tsf.coalesceStrlen()` is now available.
+	* Methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Renamed index `ping_use_cron_prerender` to `sitemap_cron_prerender`, which value is migrated during upgrade. Default `0`.

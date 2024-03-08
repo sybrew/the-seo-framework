@@ -53,7 +53,7 @@ class Lock {
 
 		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
 
-		return Cache::build_sitemap_cache_key( Cache::TRANSIENT_PREFIX . 'lock' ) . "_{$lock_id}";
+		return Cache::build_sitemap_cache_key( Cache::get_transient_prefix() . 'lock' ) . "_{$lock_id}";
 	}
 
 	/**
