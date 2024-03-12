@@ -252,6 +252,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* For Polylang and WPML, the robots.txt output now contains the sitemap URL for every other language. This works when using the URL formats subdirectory, from content, or parameter translation.
 		* Subdomain or different domain URL formats already worked as intended, where every subdomain's robots.txt displayed the current language's sitemap URL.
 	* Added the `WebSite` type's `alternateName` back to the Schema.org structured data output. This will take the value of the "Organisation or Personal Name" input if it differs from the "Site Title" set at WordPress's General Settings.
+	* When the WordPress sitemap is disabled, the endpoints still work and [subsequently performs broken queries](https://core.trac.wordpress.org/ticket/51117). For these requests, Advanced Query Protection now engages and blocks indexing for these broken queries.
 * **Removed:**
 	* We've removed the ability to ping the sitemap to Bing and Google because it no longer works. The Bing network's sitemap pinging endpoint was [closed by Microsoft in 2022](https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission) to propel the IndexNow protocol. We were hopeful that they'd return the pinging functionality, but alas. [Google subsequently closed their endpoint in January 2024](https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping). They say they deprecated it, but it simply no longer works, neither for regular sitemaps nor for the Google News sitemaps.
 		* The search engines still use the sitemap protocol as before, they only dropped pinging thereof.
@@ -276,6 +277,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Sitemap settings now dynamically display the available features when switching from the Optimized and Core sitemaps.
 	* After looking at meetup events about The SEO Framework, we found that experts misinterpreted some of our settings (especially in non-English speaking languages). For those settings, we made our language more plain and clear, and hope this helps translators to better convey our intent.
 	* Removed more jQuery dependencies, improving performance slightly of the admin UI.
+	* Improved performance of Advanced Query Protection by skipping some repeated tests when the homepage isn't a blog.
 * **Fixed:**
 	* Addressed an issue where the link relationship settings didn't have an effect.
 	* Addressed an issue where a broken homepage-settings-edit-link was given when there isn't a static homepage assigned when the homepage should display a static page.
@@ -314,6 +316,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `tsf()->sitemap()->cache()->get_transient_prefix()` is new.
 	* **Changed:**
 		* `tsf()->data()->post()->is_password_protected()` now again assumes that `'0'` is an invalid password.
+		* `tsf()->query()->utils()->is_query_exploited()` now detects `should_be_404`, specifically for query variable `sitemap` and `sitemap-subtype`.
 * **Javascript notes:**
 	* Method `tsf.coalesceStrlen()` is now available.
 	* Methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
@@ -333,6 +336,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Filter notes:**
 	* `the_seo_framework_extract_content_strip_args` is new. Use this to filter how post content is extracted via the context-sensitive tag stripper `\The_SEO_Framework\Helper\Format\HTML\strip_tags_cs()`.
 	* `the_seo_framework_sitemap_throttle_s` is gone.
+	* `the_seo_framework_exploitable_query_endpoints`, added index `not_front_page` with values `sitemap` and `sitemap-subtype`.
 * **Changed:**
 	* Filter `the_seo_framework_sitemap_hpt_query_args`:
 		1. Now sets orderby to 'lastmod', from 'date'.

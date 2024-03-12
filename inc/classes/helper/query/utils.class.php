@@ -151,6 +151,7 @@ class Utils {
 	 *              2. Improved detection for `cat` and `author`, where the value may only be numeric above 0.
 	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.0.5 Now detects `should_be_404`, specifically for query variable `sitemap` and `sitemap-subtype`.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -179,8 +180,9 @@ class Utils {
 
 		/**
 		 * @since 4.0.5
-		 * @param array $exploitables The exploitable endpoints by type.
 		 * @since 4.2.7 Added index `not_home_as_page` with value `search`.
+		 * @since 5.0.5 Added index `not_front_page` with values `sitemap` and `sitemap-subtype`.
+		 * @param array $exploitables The exploitable endpoints by type.
 		 */
 		$exploitables = \apply_filters(
 			'the_seo_framework_exploitable_query_endpoints',
@@ -212,6 +214,11 @@ class Utils {
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
 				// We only need one to pass this test. We could use array_key_first()... but that may be nulled (out of our control).
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
+				// Another WordPress bug type mitigation: https://core.trac.wordpress.org/ticket/51117.
+				'should_be_404'    => [
+					'sitemap',
+					'sitemap-subtype',
+				],
 			],
 		);
 
@@ -246,8 +253,22 @@ class Utils {
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
 						// !Query::get_the_real_id() is already executed. Just test if home is a page.
-						if ( Query::is_blog_as_page() )
+						if ( Query::is_blog_as_page() ) {
 							return memo( true );
+						} else {
+							// No need to test other 'not_home_as_page' types. Go to next type (if any).
+							continue 3; // 1 = switch, 2 = foreach $qvs, 3 = foreach $exploitables.
+						}
+						break;
+
+					case 'should_be_404':
+						// isset($query[$qv]) is already executed. Just test if we're also on a 404 page.
+						if ( \is_404() ) {
+							return memo( true );
+						} else {
+							// No need to test other 'not_front_page' types. Go to next type (if any).
+							continue 3; // 1 = switch, 2 = foreach $qvs, 3 = foreach $exploitables.
+						}
 				}
 			}
 		}

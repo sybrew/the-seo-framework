@@ -222,7 +222,7 @@ class Excerpt {
 		$post = \get_post( $id ?? Query::get_the_real_id() );
 
 		// If the post is protected, don't generate a description.
-		if ( Data\Post::is_protected( $post ) ) return '';
+		if ( ! $post || Data\Post::is_protected( $post ) ) return '';
 
 		$excerpt = Data\Post::get_excerpt( $post );
 
