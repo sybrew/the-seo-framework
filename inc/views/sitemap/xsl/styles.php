@@ -90,8 +90,9 @@ $styles = <<<'CSS'
 		border: 0px solid;
 		padding: 1rem 1.5rem;
 		width: 100%;
-		max-width: <xsl:value-of select="concat( $tableMinWidth - 159, 'px' )" />;
-		min-width: 115px;
+		/* Magic numbers: sexy primes. Either of these work on their own (+ a few extra pixels): */
+		max-width: <xsl:value-of select="concat( $tableMinWidth - 173, 'px' )" />;
+		min-width: 113px;
 		overflow-wrap: anywhere;
 	}
 	th {

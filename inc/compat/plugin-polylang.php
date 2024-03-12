@@ -252,7 +252,7 @@ function _polylang_flush_sitemap() {
  * This hack seeks to remove their broken code, letting WordPress take over
  * correctly once more with full forward and backward compatibility, as we proposed.
  *
- * Practically, this applies the proposed fix at <https://github.com/polylang/polylang/issues/928#issuecomment-1040062844>.
+ * Practically, this applies the proposed fix of <https://github.com/polylang/polylang/issues/928#issuecomment-1040062844>.
  *
  * @hook admin_enqueue_scripts 11
  * @see https://github.com/polylang/polylang/issues/928
@@ -280,9 +280,10 @@ function _defunct_badly_coded_polylang_script() {
 
 /**
  * Polylang breaks the home URL by not always augmenting the home URL.
- * This hack lets Polylang's home_url filter think it's ready to start augmenting URLs.
+ * This hack lets Polylang's home_url filter think it's ready to start augmenting URLs, as we proposed,
+ * instead of engaging far too late.
  *
- * Practically, this applies the proposed fix at <https://github.com/polylang/polylang/issues/1422#issuecomment-1970620222>.
+ * Practically, this applies the proposed fix of <https://github.com/polylang/polylang/issues/1422#issuecomment-1970620222>.
  *
  * Polylang also tests for a debug backtrace. They skip the first two callbacks because they are redundant.
  * We add another callback in this trace: but it is at position 0. So, the second trace is now tested

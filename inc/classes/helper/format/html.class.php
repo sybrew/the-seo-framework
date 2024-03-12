@@ -176,8 +176,9 @@ class HTML {
 		if ( ! $parse ) {
 			// Void elements never have content. 'param', 'source', 'track',
 			$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'wbr' ];
-			// Phrase elements should be replaced without spacing. There are more phrasing (54) than block elements (39)...
-			// Blocks: address, area, article, aside, audio, blockquote, br, button, canvas, dd, details, dialog, div, dl, dt, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, li, ol, pre, table, td, template, textarea, th, tr, ul, video
+			// Phrase elements should be replaced without spacing around them. There are more phrasing (54) than block elements (39)...
+			// Blocks: address, area, article, aside, audio, blockquote, br, button, canvas, dd, details, dialog, div, dl, dt, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, li, ol, pre, table, td, template, textarea, th, tr, ul, video.
+			// Some block elements can be interpreted as phrasing elements, like audio, canvas, button, and video; hence, they're also listed in $phrase.
 			// 'br' is a phrase element, but also a struct whitespace -- let's omit it so we can substitute it with a space as block.
 			$phrase = [ 'a', 'area', 'abbr', 'audio', 'b', 'bdo', 'bdi', 'button', 'canvas', 'cite', 'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img', 'input', 'ins', 'link', 'kbd', 'label', 'map', 'mark', 'meta', 'math', 'meter', 'noscript', 'object', 'output', 'picture', 'progress', 'q', 'ruby', 's', 'samp', 'script', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'svg', 'textarea', 'time', 'u', 'var', 'video', 'wbr' ];
 
