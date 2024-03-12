@@ -55,6 +55,7 @@ final class WebSite extends Reference {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.0.5 Added back alternateName.
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -63,13 +64,18 @@ final class WebSite extends Reference {
 	 */
 	public static function build( $args = null ) { // phpcs:ignore -- VariableAnalysis, abstract.
 
+		// Sanitize them both, even if empty, so we can normalize them to compare later.
+		$name    = Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
+		$altname = Sanitize::metadata_content( Data\Plugin::get_option( 'knowledge_name' ) );
+
 		$entity = [
-			'@type'       => &static::$type,
-			'@id'         => static::get_id(),
-			'url'         => Meta\URI::get_bare_front_page_url(),
-			'name'        => Sanitize::metadata_content( Data\Blog::get_public_blog_name() ),
-			'description' => Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ),
-			'inLanguage'  => Data\Blog::get_language(),
+			'@type'         => &static::$type,
+			'@id'           => static::get_id(),
+			'url'           => Meta\URI::get_bare_front_page_url(),
+			'name'          => $name,
+			'alternateName' => $name === $altname ? '' : $altname,
+			'description'   => Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ),
+			'inLanguage'    => Data\Blog::get_language(),
 		];
 
 		if ( Data\Plugin::get_option( 'ld_json_searchbox' ) ) {

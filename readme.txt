@@ -244,18 +244,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.0.5
 
-TODO add Post/Term SEO-edit cap?
-	-> can this even be done?
-		-> Or, should we set a "default"?
-		-> Will this cause problems when deleting a post? Does TSF even invoke anything then, or does WP handle everything?
-
 **For everyone**
 
+* **Upgrade:** Now uses TSF version `5050`.
+	* The sitemap prerendering option was renamed, since it's no longer bound to the obsolete sitemap pinging functionality.
 * **Added:**
 	* For Polylang and WPML, the robots.txt output now contains the sitemap URL for every other language. This works when using the URL formats subdirectory, from content, or parameter translation.
 		* Subdomain or different domain URL formats already worked as intended, where every subdomain's robots.txt displayed the current language's sitemap URL.
-* **Upgrade:** Now uses TSF version `5050`.
-	* The sitemap prerendering option was renamed, since it's no longer bound to pinging.
+	* Added the `WebSite` type's `alternateName` back to the Schema.org structured data output. This will take the value of the "Organisation or Personal Name" input if it differs from the "Site Title" set at WordPress's General Settings.
 * **Removed:**
 	* We've removed the ability to ping the sitemap to Bing and Google because it no longer works. The Bing network's sitemap pinging endpoint was [closed by Microsoft in 2022](https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission) to propel the IndexNow protocol. We were hopeful that they'd return the pinging functionality, but alas. [Google subsequently closed their endpoint in January 2024](https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping). They say they deprecated it, but it simply no longer works, neither for regular sitemaps nor for the Google News sitemaps.
 		* The search engines still use the sitemap protocol as before, they only dropped pinging thereof.

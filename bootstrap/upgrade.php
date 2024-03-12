@@ -934,7 +934,6 @@ function _do_upgrade_5001() {
  * Subsequently, it removes indexes `ping_google` and `ping_bing`. Downgrading will keep these disabled, which is fine.
  *
  * @since 5.0.5
- * @global \wpdb $wpdb
  */
 function _do_upgrade_5050() {
 

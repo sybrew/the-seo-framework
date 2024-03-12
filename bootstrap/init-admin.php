@@ -127,7 +127,7 @@ if ( ! $headless['user'] ) {
 	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );
 }
 
-if ( \in_array( false, $headless, true ) ) {
+if ( \in_array( false, $headless, true ) ) { // Still got head...
 	// Set up notices.
 	\add_action( 'admin_notices', [ Admin\Notice\Persistent::class, '_output_notices' ] );
 
