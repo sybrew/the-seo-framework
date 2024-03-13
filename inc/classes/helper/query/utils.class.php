@@ -257,9 +257,9 @@ class Utils {
 							return memo( true );
 						} else {
 							// No need to test other 'not_home_as_page' types. Go to next type (if any).
-							continue 3; // 1 = switch, 2 = foreach $qvs, 3 = foreach $exploitables.
+							continue 3; // 1: switch, 2: loop $qvs, 3: loop $exploitables.
 						}
-						break;
+						break; // unreachable?
 
 					case 'should_be_404':
 						// isset($query[$qv]) is already executed. Just test if we're also on a 404 page.
@@ -267,7 +267,7 @@ class Utils {
 							return memo( true );
 						} else {
 							// No need to test other 'not_front_page' types. Go to next type (if any).
-							continue 3; // 1 = switch, 2 = foreach $qvs, 3 = foreach $exploitables.
+							continue 3; // 1: switch, 2: loop $qvs, 3: loop $exploitables.
 						}
 				}
 			}

@@ -278,6 +278,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* After looking at meetup events about The SEO Framework, we found that experts misinterpreted some of our settings (especially in non-English speaking languages). For those settings, we made our language more plain and clear, and hope this helps translators to better convey our intent.
 	* Removed more jQuery dependencies, improving performance slightly of the admin UI.
 	* Improved performance of Advanced Query Protection by skipping some repeated tests when the homepage isn't a blog.
+	* Processing of Markdown text in the admin area is a tad faster now.
+	* The sitemap stylesheet (`/sitemap.xsl`) now has its CSS minified.
 * **Fixed:**
 	* Addressed an issue where the link relationship settings didn't have an effect.
 	* Addressed an issue where a broken homepage-settings-edit-link was given when there isn't a static homepage assigned when the homepage should display a static page.
@@ -310,6 +312,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Pool `tsf()->sitemap()->cron()` is now available.
 			* It contains method `schedule_single_event()`, which engages all sitemap crons in 29, 30, and 31 seconds.
 			* Internally known as `The_SEO_Framework\Sitemap\Cron`.
+		* Pool `tsf()->format()->minify()` is now available.
+			* It contains methods `javascript()` and `css()`, respectively minifying JS and CSS.
+			* Internally known as `The_SEO_Framework\Helper\Format\Minify`.
 		* Method `tsf()->uri()->get_generated_paged_urls()` is new.
 		* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
 		* Method `tsf()->format()->time()->get_format()` is new.

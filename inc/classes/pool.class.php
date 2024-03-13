@@ -502,6 +502,20 @@ class Pool extends Legacy_API {
 			}
 
 			/**
+			 * @since 5.0.5
+			 * @return \The_SEO_Framework\Helper\Format\Minify
+			 */
+			public static function minify() {
+				return static::$subpool['minify'] ??= new class extends Helper\Format\Minify {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->format()->minify()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
+
+			/**
 			 * @since 5.0.0
 			 * @return \The_SEO_Framework\Helper\Format\HTML
 			 */

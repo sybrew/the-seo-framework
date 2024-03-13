@@ -10,7 +10,7 @@ namespace The_SEO_Framework\Data\Filter;
 
 use function \The_SEO_Framework\has_run;
 
-use The_SEO_Framework\{
+use \The_SEO_Framework\{
 	Data,
 	Helper\Taxonomy,
 	Helper\Post_Type,

@@ -58,9 +58,7 @@ class Markdown {
 	public static function convert( $text, $convert = [], $args = [] ) {
 
 		// preprocess
-		$text = str_replace( [ "\r\n", "\r" ], "\n", $text );
-		$text = str_replace( "\t", ' ', $text );
-		$text = trim( $text );
+		$text = trim( str_replace( [ "\r\n", "\r", "\t" ], [ "\n", "\n", ' ' ], $text ) );
 
 		// You need at least 3 chars to make a markdown: *m*
 		if ( \strlen( $text ) < 3 )
@@ -270,7 +268,7 @@ class Markdown {
 		$count = preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, \PREG_PATTERN_ORDER );
 
 		// Keep this XHTML compatible!
-		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>'; // Keep XHTML valid!
+		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$text = str_replace(

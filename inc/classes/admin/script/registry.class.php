@@ -484,7 +484,6 @@ class Registry {
 	 * @since 3.1.0
 	 * @since 5.0.0 1. Is now static.
 	 *              2. Renamed from `convert_color_css`.
-	 * @TODO WordPress will one day normalize this correctly.
 	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>
 	 *
 	 * @param array $css The CSS to convert.
