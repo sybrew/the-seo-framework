@@ -211,8 +211,8 @@ class Compatibility {
 	 *              4. Removed caching. This responsibility now lies by the caller.
 	 * @since 5.0.5 Now accepts methods.
 	 *
-	 * @param array[] $plugins   Array of array for globals, constants, classes, methods,
-	 *                           and/or functions to check for plugin existence.
+	 * @param array[] $plugins Array of array for globals, constants, classes, methods,
+	 *                         and/or functions to check for plugin existence.
 	 * @return bool True if everything is accessible.
 	 */
 	public static function can_i_use( $plugins = [] ) {

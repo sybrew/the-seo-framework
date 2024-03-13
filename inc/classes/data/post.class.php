@@ -156,7 +156,7 @@ class Post {
 	public static function is_password_protected( $post = null ) {
 		// Don't get the post directly if it can be evaded, it's still quite slow.
 		// Assume '0' is an invalid password.
-		return ! empty( $post->post_password ?? \get_post( $post )->post_password ?? false );
+		return ! empty( $post->post_password ?? \get_post( $post )->post_password ?? '' );
 	}
 
 	/**
@@ -170,7 +170,8 @@ class Post {
 	 */
 	public static function is_private( $post = null ) {
 		// Don't get the post directly if it can be evaded, it's still quite slow.
-		return 'private' === ( $post->post_status ?? \get_post( $post )->post_status ?? '' );
+		// We cast type false for Zend tests strict type before identical-string-comparing.
+		return 'private' === ( $post->post_status ?? \get_post( $post )->post_status ?? false );
 	}
 
 	/**

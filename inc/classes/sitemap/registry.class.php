@@ -262,7 +262,6 @@ class Registry {
 
 		/**
 		 * @since 4.1.1
-		 * @since 4.1.2 Added index `ping_use_cron_prerender` to the first parameter.
 		 * @since 5.0.5 Removed indexes `ping_use_cron` and `ping_use_cron_prerender`.
 		 * @param array $deprecated Deprecated; do not use the first parameter.
 		 */

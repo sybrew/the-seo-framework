@@ -728,7 +728,6 @@ function _do_upgrade_3103() {
 /**
  * Flushes rewrite rules for one last time.
  * Converts title separator's dash option to ndash.
- * Enables pinging via cron.
  * Flips the home_title_location option from left to right, and vice versa.
  *
  * Annotated as 3300, because 4.0 was supposed to be the 3.3 update before we

@@ -244,6 +244,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.0.5
 
+Highlight: Pinging removal, polylang/wpml sitemap multilingual list in robots.txt for search engines to automatically discover, fixed a bug in Polylang to make every site work more reliably (and to solve the homepage query conflict with TSF). Improved performance (again), and made the sitemap settings easier to understand.
+
 **For everyone**
 
 * **Upgrade:** Now uses TSF version `5050`.
@@ -294,7 +296,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* This also fixes the bug described below.
 	* Addressed an issue where the subdirectory-translation sitemap wasn't accessible via Polylang, such as `/fr/sitemap.xml`.
 	* Addressed an issue where TSF would output a deprecation notice when visiting a bbPress topic tag.
-	* Addressed an issue where multiple database requests could be made if a certain post type trait (hierarchical, nonhierachical, has_archive) didn't exist. This shouldn't be possible unless posts or pages are unregistered, nor should it be possible because the caches aren't touched more than once per request, but I deemed it a bug nonetheless.
+	* Addressed an issue where slow requests could be made if a certain post type trait (`hierarchical`, `nonhierachical`) didn't exist. This shouldn't be possible unless posts or pages are unregistered, nor should it be possible because the caches aren't touched more than once per request, but I deemed it a bug nonetheless.
 		* Pro tip: Look for logical bugs by tracing your code, rather than solely relying on user feedback. You're lazy (and rich and settled) if you don't revisit your popular code.
 	* Addressed a regression where '0' was incorrectly considered a valid post password in the Classic Editor.
 * **Other:**

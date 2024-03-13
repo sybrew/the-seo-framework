@@ -382,11 +382,11 @@ class Setup {
 		return static::$warned_options = (array) \apply_filters(
 			'the_seo_framework_warned_site_options',
 			[
-				'title_rem_additions'    => 1, // Title remove additions.
-				'site_noindex'           => 1, // Site Page robots noindex.
-				'site_nofollow'          => 1, // Site Page robots nofollow.
-				'homepage_noindex'       => 1, // Homepage robots noindex.
-				'homepage_nofollow'      => 1, // Homepage robots noarchive.
+				'title_rem_additions' => 1, // Title remove additions.
+				'site_noindex'        => 1, // Site Page robots noindex.
+				'site_nofollow'       => 1, // Site Page robots nofollow.
+				'homepage_noindex'    => 1, // Homepage robots noindex.
+				'homepage_nofollow'   => 1, // Homepage robots noarchive.
 				Helper::get_robots_option_index( 'post_type', 'noindex' ) => [
 					'post' => 1,
 					'page' => 1,

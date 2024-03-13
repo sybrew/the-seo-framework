@@ -27,8 +27,8 @@ namespace The_SEO_Framework;
 
 // Prerender sitemap.
 if (
-	   Data\Plugin::get_option( 'sitemaps_output' )
-	&& Data\Plugin::get_option( 'sitemap_cron_prerender' )
+	   Data\Plugin::get_option( 'sitemap_cron_prerender' ) // Less likely to be true.
+	&& Data\Plugin::get_option( 'sitemaps_output' )
 ) {
 	\add_action(
 		'tsf_sitemap_cron_hook_before',

@@ -129,7 +129,7 @@ class Taxonomy {
 	 * @return string[] All supported taxonomies.
 	 */
 	public static function get_all_supported() {
-		return memo() ?: memo( array_values( array_filter(
+		return memo() ?? memo( array_values( array_filter(
 			static::get_all_public(),
 			[ static::class, 'is_supported' ],
 		) ) );
@@ -148,7 +148,7 @@ class Taxonomy {
 	 */
 	public static function get_all_public() {
 		return umemo( __METHOD__ )
-			?: umemo(
+			?? umemo(
 				__METHOD__,
 				/**
 				 * Do not consider using this filter. Properly register your taxonomy, noob.

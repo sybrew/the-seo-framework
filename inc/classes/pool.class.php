@@ -34,11 +34,11 @@ use \The_SEO_Framework\Traits\Internal\Static_Deprecator;
  * The objects are decorated with Static Deprecator, allowing us to deprecate
  * methods and properties quickly.
  *
- * @NOTE: Calling STATIC pools and their STATIC functions MUST be done in a NON-STATIC manner.
+ * @NOTE: STATIC pools and their STATIC functions MUST BE CALLED in a NON-STATIC manner.
  *        Do NOT use   tsf()::admin()::layout()::make_single_select_form();
  *        Instead, use tsf()->admin()->layout()->make_single_select_form();
- *        Failing to do so might result in a crash when we need to deprecate a call, defeating
- *        the purpose of the static deprecator.
+ *        Failing to do so might result in a crash when we need to deprecate a call,
+ *        defeating the purpose of the static deprecator.
  *
  * @todo: If the subobjects require complex fallbacks, put them in a new \Internal
  *        subobject. Create private class constant to hold that class location.

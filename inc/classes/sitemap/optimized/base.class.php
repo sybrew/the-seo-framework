@@ -403,6 +403,7 @@ class Base extends Main {
 				);
 			}
 
+			// Assert 404 here; these are queried separately from all other entries that have these tests builtin.
 			if (
 				   $posts_page_id // Might not be assigned.
 				&& ! Data\Post::is_protected( $posts_page_id )

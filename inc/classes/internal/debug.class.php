@@ -503,7 +503,7 @@ final class Debug {
 		if ( 'yup' === $cache_version ) {
 			$title = 'WordPress Query at Meta Generation';
 		} else {
-			$title = \is_admin() ? 'Expected Front-end WordPress Query' : 'Current WordPress Query';
+			$title = \is_admin() ? 'Current WordPress Admin Query' : 'Current WordPress Query';
 		}
 
 		$output = str_replace( [ "\r\n", "\r", "\n" ], "<br>\n", $output );

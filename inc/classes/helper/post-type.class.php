@@ -166,10 +166,12 @@ class Post_Type {
 	 * @return string[] Supported post types with post type archive support.
 	 */
 	public static function get_all_supported_pta() {
-		return memo() ?: memo( array_values( array_filter(
-			static::get_public_pta(),
-			[ static::class, 'is_pta_supported' ],
-		) ) );
+		return memo() ?? memo( array_values(
+			array_filter(
+				static::get_public_pta(),
+				[ static::class, 'is_pta_supported' ],
+			)
+		) );
 	}
 
 	/**
@@ -185,7 +187,7 @@ class Post_Type {
 	 */
 	public static function get_public_pta() {
 		return umemo( __METHOD__ )
-			?: umemo(
+			?? umemo(
 				__METHOD__,
 				/**
 				 * Do not consider using this filter. Properly register your post type, noob.
@@ -215,10 +217,12 @@ class Post_Type {
 	 * @return string[] All supported post types.
 	 */
 	public static function get_all_supported() {
-		return memo() ?: memo( array_values( array_filter(
-			static::get_all_public(),
-			[ static::class, 'is_supported' ],
-		) ) );
+		return memo() ?? memo( array_values(
+			array_filter(
+				static::get_all_public(),
+				[ static::class, 'is_supported' ],
+			)
+		) );
 	}
 
 	/**
@@ -235,7 +239,7 @@ class Post_Type {
 	 */
 	public static function get_all_public() {
 		return umemo( __METHOD__ )
-			?: umemo(
+			?? umemo(
 				__METHOD__,
 				/**
 				 * Do not consider using this filter. Properly register your post type, noob.
@@ -293,7 +297,7 @@ class Post_Type {
 	 * @return string[] All public hierarchical post types.
 	 */
 	public static function get_all_hierarchical() {
-		return memo() ?: memo(
+		return memo() ?? memo(
 			\get_post_types(
 				[
 					'hierarchical' => true,
@@ -315,7 +319,7 @@ class Post_Type {
 	 * @return array The public nonhierarchical post types.
 	 */
 	public static function get_all_nonhierarchical() {
-		return memo() ?: memo(
+		return memo() ?? memo(
 			\get_post_types(
 				[
 					'hierarchical' => false,

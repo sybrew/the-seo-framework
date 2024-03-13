@@ -51,8 +51,8 @@ class Minify {
 		static $pairs;
 
 		if ( empty( $pairs ) ) {
-			// Get omni-spaced first!
-			$s_and_r = [
+			$sr = [
+				"\r"   => '',
 				"\n"   => '',
 				"\t"   => '',
 				'    ' => ' ',
@@ -80,8 +80,8 @@ class Minify {
 			];
 
 			$pairs = [
-				'search'  => array_keys( $s_and_r ),
-				'replace' => array_values( $s_and_r ),
+				'search'  => array_keys( $sr ),
+				'replace' => array_values( $sr ),
 			];
 		}
 
@@ -102,7 +102,7 @@ class Minify {
 		static $pairs;
 
 		if ( empty( $pairs ) ) {
-			$s_and_r = [
+			$sr = [
 				"\r"   => '',
 				"\n"   => '',
 				"\t"   => '',
@@ -125,8 +125,8 @@ class Minify {
 			];
 
 			$pairs = [
-				'search'  => array_keys( $s_and_r ),
-				'replace' => array_values( $s_and_r ),
+				'search'  => array_keys( $sr ),
+				'replace' => array_values( $sr ),
 			];
 		}
 

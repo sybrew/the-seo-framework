@@ -159,12 +159,11 @@ final class Args extends Factory {
 		$args = static::$args;
 
 		switch ( $pass ) {
-			case '404': // Only tests terms via args.
+			case '404': // We only tests 404 terms via args.
 				yield '404' => ! Data\Term::is_term_populated( $args['id'], $args['tax'] );
 				break;
 
 			case 'protected':
-				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
 				yield 'protected' => Data\Post::is_protected( $args['id'] );
 		}
 	}
