@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, per
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4.0
-Stable tag: 5.0.4
+Stable tag: 5.0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -244,118 +244,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.0.5
 
-Highlight: Pinging removal, polylang/wpml sitemap multilingual list in robots.txt for search engines to automatically discover, fixed a bug in Polylang to make every site work more reliably (and to solve the homepage query conflict with TSF). Improved performance (again), and made the sitemap settings easier to understand.
-
-**For everyone**
-
-* **Upgrade:** Now uses TSF version `5050`.
-	* The sitemap prerendering option was renamed, since it's no longer bound to the obsolete sitemap pinging functionality.
-* **Added:**
-	* For Polylang and WPML, the robots.txt output now contains the sitemap URL for every other language. This works when using the URL formats subdirectory, from content, or parameter translation.
-		* Subdomain or different domain URL formats already worked as intended, where every subdomain's robots.txt displayed the current language's sitemap URL.
-	* Added the `WebSite` type's `alternateName` back to the Schema.org structured data output. This will take the value of the "Organisation or Personal Name" input if it differs from the "Site Title" set at WordPress's General Settings.
-	* When the WordPress sitemap is disabled, the endpoints still work and [subsequently performs broken queries](https://core.trac.wordpress.org/ticket/51117). For these requests, Advanced Query Protection now engages and blocks indexing for these broken queries.
-* **Removed:**
-	* We've removed the ability to ping the sitemap to Bing and Google because it no longer works. The Bing network's sitemap pinging endpoint was [closed by Microsoft in 2022](https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission) to propel the IndexNow protocol. We were hopeful that they'd return the pinging functionality, but alas. [Google subsequently closed their endpoint in January 2024](https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping). They say they deprecated it, but it simply no longer works, neither for regular sitemaps nor for the Google News sitemaps.
-		* The search engines still use the sitemap protocol as before, they only dropped pinging thereof.
-		* The search engines read `/robots.txt` and looks for the sitemap's location there. They and all significant search engines automatically read the sitemap periodically without relying on pinging.
-		* We have plans to support IndexNow, but for Now, you can Index via IndexNow using the official [IndexNow plugin](https://wordpress.org/plugins/indexnow/). As someone who can distinguish WordPress.com from WordPress.org, we'll bring you a properly programmed version later this year, though likely via a Premium extension.
-		* Pinging of the Google News sitemap may still engage via Articles and provoke deprecation notices; we'll remove this in the next update of Extension Manager.
-	* bbPress 2.5.14 and below are no longer supported for topic tag title and description generation. Please update to bbPress 2.6.9 or later for the best experience.
-		* bbPress 2.6 rectified the query detection, so TSF works automatically with that.
-* **Changed:**
-	* We now use `YYYY-MM-DDThh:mm:ssTZD` instead of `YYYY-MM-DDThh:mmTZD` (we added the seconds) for full dates in the sitemap, structured data, and Open Graph.
-	* The optimized sitemap now orders hierarchical post types by last modified date instead of first publishing date, akin to how it already ordered nonhierarchical post types.
-	* Reduced the default sitemap query limit from 1000 to 250.
-		1. This reduces the likelihood of crashes when another plugin hooks into the Post or Post Meta APIs with heavy checks (that ought to be done elsewhere).
-		2. We now convey why the optimized sitemap does things differently.
-		3. If the user switches to the complex sitemap, then this will help with faster generation of its paginated sitemaps.
-		4. Faster generation times look better.
-	* You can now opt to prerender the sitemap without opting for pinging via cron... because pinging is no longer possible.
-		* This is less effective but should still serve its purpose fine.
-* **Improved:**
-	* Changed the wording of the link relationship settings to reflect better what they output.
-	* Expounded on what the optimized sitemap does, and that disabling the optimized sitemap will give the complex sitemap.
-	* Sitemap settings now dynamically display the available features when switching from the Optimized and Core sitemaps.
-	* After looking at meetup events about The SEO Framework, we found that experts misinterpreted some of our settings (especially in non-English speaking languages). For those settings, we made our language more plain and clear, and hope this helps translators to better convey our intent.
-	* Removed more jQuery dependencies, improving performance slightly of the admin UI.
-	* Improved performance of Advanced Query Protection by skipping some repeated tests when the homepage isn't a blog.
-	* Processing of Markdown text in the admin area is a tad faster now.
-	* The sitemap stylesheet (`/sitemap.xsl`) now has its CSS minified.
-* **Fixed:**
-	* Addressed an issue where the link relationship settings didn't have an effect.
-	* Addressed an issue where a broken homepage-settings-edit-link was given when there isn't a static homepage assigned when the homepage should display a static page.
-		* Yes, you can assign a homepage without assigning a homepage, and that's a bug in WordPress where a user assigns a static homepage, and then unpublishes/deletes that page, or the user otherwise only set a posts page.
-	* Addressed an issue where the Homepage SEO settings didn't reflect the Page SEO settings when they're set to `0`.
-		* Note that a lone `0` for the title (without branding/additions) will bypass WordPress's filters, because WordPress doesn't support a lone `0` for the title. But you should brand your titles.
-	* Addressed an issue where the Page SEO settings didn't reflect the Homepage SEO settings when they're set to `0`.
-	* Addressed an issue where the homepage wasn't asserted for inclusion in the sitemap via various indexability tests (password, private, draft, noindex, and post exclusion filter tests).
-	* Addressed an issue where the posts page wasn't asserted for inclusion in the sitemap via some indexability tests than before (password, private, and draft tests).
-	* Addressed an issue where the homepage canonical URL wasn't translated by Polylang.
-		* We achieved this by hijacking Polylang's code, fixing [a bug in that plugin](https://github.com/polylang/polylang/issues/1422).
-		* This also fixes the bug described below.
-	* Addressed an issue where the subdirectory-translation sitemap wasn't accessible via Polylang, such as `/fr/sitemap.xml`.
-	* Addressed an issue where TSF would output a deprecation notice when visiting a bbPress topic tag.
-	* Addressed an issue where slow requests could be made if a certain post type trait (`hierarchical`, `nonhierachical`) didn't exist. This shouldn't be possible unless posts or pages are unregistered, nor should it be possible because the caches aren't touched more than once per request, but I deemed it a bug nonetheless.
-		* Pro tip: Look for logical bugs by tracing your code, rather than solely relying on user feedback. You're lazy (and rich and settled) if you don't revisit your popular code.
-	* Addressed a regression where '0' was incorrectly considered a valid post password in the Classic Editor.
-* **Other:**
-	* WordPress v6.5 will [no longer set pointer-cursors for labels](https://core.trac.wordpress.org/ticket/59733). Because we use labels for our settings-tabs' buttons and adopted WP's cursor property, we reinstated that property for our tabs.
-
-**For translators**
-
-* **Added:** New translations are available.
-* **Updated:** TODO The POT file contains new translations.
-
-**For developers:**
-
-* **PHP method notes:**
-	* **Added:**
-		* Pool `tsf()->sitemap()->cron()` is now available.
-			* It contains method `schedule_single_event()`, which engages all sitemap crons in 29, 30, and 31 seconds.
-			* Internally known as `The_SEO_Framework\Sitemap\Cron`.
-		* Pool `tsf()->format()->minify()` is now available.
-			* It contains methods `javascript()` and `css()`, respectively minifying JS and CSS.
-			* Internally known as `The_SEO_Framework\Helper\Format\Minify`.
-		* Method `tsf()->uri()->get_generated_paged_urls()` is new.
-		* Method `tsf()->query()->utils()->has_assigned_page_on_front()` is new.
-		* Method `tsf()->format()->time()->get_format()` is new.
-		* Method `tsf()->sitemap()->cache()->get_transient_prefix()` is new.
-	* **Changed:**
-		* `tsf()->data()->post()->is_password_protected()` now again assumes that `'0'` is an invalid password.
-		* `tsf()->query()->utils()->is_query_exploited()` now detects `should_be_404`, specifically for query variable `sitemap` and `sitemap-subtype`.
-* **Javascript notes:**
-	* Method `tsf.coalesceStrlen()` is now available.
-	* Methods `tsfTabs.hideTab()`, `tsfTabs.showTab()`, and `tsfTabs.toggleTab()` are now available.
-* **Option notes:**
-	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
-		* Renamed index `ping_use_cron_prerender` to `sitemap_cron_prerender`, which value is migrated during upgrade. Default `0`.
-		* Changed index `timestamps_format`: It is now considered a boolean, instead of an integer.
-			* We left this as a string to allow more options in the future, but that was never necessary.
-		* Removed index `ping_bing`.
-		* Removed index `ping_google`.
-		* Removed index `ping_use_cron`.
-* **Action notes:**
-	* `the_seo_framework_sitemap_transient_cleared` no longer provides information in its first parameter.
-	* `tsf_sitemap_cron_hook_retry` (cron event) is gone. This hook was used when the pinging cron job failed to complete due to the sitemap still prerendering. It was actually quite ingenius, what we had.
-	* `the_seo_framework_before_ping_search_engines` is gone.
-	* `the_seo_framework_ping_search_engines` is gone.
-* **Filter notes:**
-	* `the_seo_framework_extract_content_strip_args` is new. Use this to filter how post content is extracted via the context-sensitive tag stripper `\The_SEO_Framework\Helper\Format\HTML\strip_tags_cs()`.
-	* `the_seo_framework_sitemap_throttle_s` is gone.
-	* `the_seo_framework_exploitable_query_endpoints`, added index `not_front_page` with values `sitemap` and `sitemap-subtype`.
-* **Changed:**
-	* Filter `the_seo_framework_sitemap_hpt_query_args`:
-		1. Now sets orderby to 'lastmod', from 'date'.
-		1. Now sets order to 'DESC', from 'ASC'.
-* **Deprecated:**
-	* Pool `tsf()->sitemap()->ping()` is now deprecated, and its methods are no longer accessible and return `null`.
-	* Protected class `\The_SEO_Framework\Sitemap\Ping` is now gone.
-* **Improved:**
-	* Incorrectly calling pool methods statically is now handled more gracefully.
-		* Do NOT call pools like `tsf()::admin()::layout()::make_single_select_form()`, but use `tsf()->admin()->layout()->make_single_select_form()` instead. Failing to do so might result in a crash once we need to deprecate a call, defeating the purpose of the static deprecator.
-* **Fixed:**
-	* For method `tsf()->uri()->get_paged_urls()`, reinstated missing option checks.
+In this minor sitemap-centric update, we've integrated WPML and Polylang's language-specific sitemap URLs into robots.txt, clarified support for complex sitemaps, and removed deprecated pinging functionality. Additionally, we also added seconds to timestamps, resolved issues pertaining to the number 0, and remotely [fixed another compatibility issue in Polylang](https://theseoframework.com/?p=4234).
 
 ### 5.0.4
 
