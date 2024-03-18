@@ -1,8 +1,3 @@
-/**
- * See, for colors:
- * https://color.adobe.com/create/color-wheel/?base=2&rule=Custom&selected=1&name=Mijn%20Color-thema&mode=rgb&rgbvalues=0,0,0,1,0.6289566724811484,0.10577297701442445,0.04724043389094745,0.7647058823529411,0.2945255209368204,0,0.4806705005377058,0.8235294117647058,0.8666666666666667,0.2196078431372549,0.06666666666666667&swatchOrder=0,1,2,3,4
- */
-
 .tsf-js .hide-if-tsf-js,
 .tsf-no-js .hide-if-no-tsf-js {
 	display: none;
@@ -90,7 +85,7 @@ body.rtl .tsf-notice .tsf-dismiss {
 	outline: none;
 	box-shadow:
 		0 0 0 1px #5b9dd9,
-		0 0 2px 1px rgba(30, 140, 190, 0.8);
+		0 0 2px 1px rgba( 30, 140, 190, .8);
 }
 
 .tsf-dismiss:before {
@@ -192,8 +187,8 @@ body.rtl .tsf-title-placeholder-prefix {
 	display: block;
 	color: #fff;
 	text-align: center;
-	border: 1px solid rgba(0,0,0,.1);
-	text-shadow: 0 0 3px rgba(0,0,0,.5);
+	border: 1px solid rgba( 0, 0, 0, .1 );
+	text-shadow: 0 0 3px rgba( 0, 0, 0, .5 );
 }
 
 .tsf-seo-bar-item:focus {
@@ -402,7 +397,7 @@ body.rtl .tsf-remove-image-button.button {
 #tsf-inpost-box textarea::-webkit-input-placeholder,
 .tsf-metaboxes input[type=text]::-webkit-input-placeholder,
 .tsf-metaboxes textarea::-webkit-input-placeholder {
-	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
+	transition: color .33s ease-in, text-shadow .33s ease-in;
 }
 
 /* Doesn't fire appropriate events, also seems deprecated. Hide it. */
@@ -416,14 +411,14 @@ body.rtl .tsf-remove-image-button.button {
 #tsf-inpost-box textarea::-moz-placeholder,
 .tsf-metaboxes input[type=text]::-moz-placeholder,
 .tsf-metaboxes textarea::-moz-placeholder {
-	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
+	transition: color .33s ease-in, text-shadow .33s ease-in;
 }
 
 #tsf-inpost-box input[type=text]:-ms-input-placeholder,
 #tsf-inpost-box textarea:-ms-input-placeholder,
 .tsf-metaboxes input[type=text]:-ms-input-placeholder,
 .tsf-metaboxes textarea:-ms-input-placeholder {
-	transition: color 0.33s ease-in, text-shadow 0.33s ease-in;
+	transition: color .33s ease-in, text-shadow .33s ease-in;
 }
 
 #tsf-inpost-box input[type=text]:focus::-webkit-input-placeholder,
@@ -431,7 +426,7 @@ body.rtl .tsf-remove-image-button.button {
 .tsf-metaboxes input[type=text]:focus::-webkit-input-placeholder,
 .tsf-metaboxes textarea:focus::-webkit-input-placeholder {
 	color: transparent;
-	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);
+	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
 }
 
 #tsf-inpost-box input[type=text]:focus::-moz-placeholder,
@@ -439,7 +434,7 @@ body.rtl .tsf-remove-image-button.button {
 .tsf-metaboxes input[type=text]:focus::-moz-placeholder,
 .tsf-metaboxe textarea:focus::-moz-placeholder {
 	color: transparent;
-	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);
+	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
 }
 
 #tsf-inpost-box input[type=text]:focus:-ms-input-placeholder,
@@ -447,7 +442,7 @@ body.rtl .tsf-remove-image-button.button {
 .tsf-metaboxes input[type=text]:focus:-ms-input-placeholder,
 .tsf-metaboxes textarea:focus:-ms-input-placeholder {
 	color: transparent;
-	text-shadow: 0 0 1px rgba(114, 119, 124, 0.75);
+	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
 }
 
 @keyframes tsf-spin {
@@ -477,7 +472,7 @@ body.rtl .tsf-remove-image-button.button {
 	}
 }
 
-@media screen and (max-width: 782px) {
+@media screen and ( max-width: 782px ) {
 	.notice.tsf-notice,
 	.wp-core-ui .notice.tsf-notice {
 		padding-right: 46px;
@@ -499,12 +494,12 @@ body.rtl .tsf-remove-image-button.button {
 		min-width: 40px;
 	}
 
-	.wp-list-table .is-expanded td.tsf-seo-bar-wrap:not(.hidden) {
+	.wp-list-table .is-expanded td.tsf-seo-bar-wrap:not( .hidden ) {
 		overflow: initial !important;
 	}
 }
 
-@media screen and (max-width: 642px) {
+@media screen and ( max-width: 642px ) {
 	.tsf-nav-desktop {
 		display: none;
 	}

@@ -53,7 +53,7 @@ body.rtl .tsf-primary-term-selector-help-wrap {
 	right: initial;
 }
 
-@media screen and (max-width: 782px) {
+@media screen and ( max-width: 782px ) {
 	.tsf-primary-term-selector input {
 		height: 18px;
 		width: 18px;

@@ -54,7 +54,7 @@ body.rtl .tsf-inline-input {
 	width: 30%;
 }
 
-@media screen and (max-width: 782px) {
+@media screen and ( max-width: 782px ) {
 	.tsf-inline-input {
 		margin-left: 0;
 	}

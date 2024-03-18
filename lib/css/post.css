@@ -3,7 +3,7 @@
 	padding: 14px;
 }
 
-#tsf-inpost-box:not(.tsf-is-block-editor) .inside,
+#tsf-inpost-box:not( .tsf-is-block-editor ) .inside,
 .edit-post-sidebar #tsf-inpost-box .inside { /* .edit-post-sidebar is Gutenberg-only */
 	width: 100%;
 	padding: 0;
@@ -154,7 +154,7 @@ input.tsf-flex-nav-tab-radio {
 	text-align: center;
 	flex-direction: row;
 	box-shadow: 0 0 0 0 transparent inset;
-	transition: box-shadow 0.15s ease-out;
+	transition: box-shadow .15s ease-out;
 	align-items: center;
 	align-content: space-around;
 	position: relative;
@@ -170,10 +170,10 @@ input.tsf-flex-nav-tab-radio {
 
 .tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label {
 	box-shadow: 0 -2px 0 0 #007bd2 inset, 0 0 0 0 #007bd2 inset;
-	transition: box-shadow 0.25s ease-in;
+	transition: box-shadow .25s ease-in;
 }
 
-.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not(.tsf-no-focus-ring) {
+.tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not( .tsf-no-focus-ring ) {
 	box-shadow: 0 0 0 0 #007bd2 inset, 0 0 0 1px #007bd2 inset;
 }
 

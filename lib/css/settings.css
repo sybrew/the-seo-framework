@@ -36,7 +36,7 @@
 	justify-content: flex-end;
 }
 
-@media screen and (max-width: 782px) {
+@media screen and ( max-width: 782px ) {
 	.tsf-top-wrap,
 	.tsf-bottom-wrap,
 	.tsf-top-buttons.tsf-end,
@@ -106,7 +106,7 @@
 	background-color: #fff;
 }
 
-#tsf-title-separator input:focus + label:not(.tsf-no-focus-ring) {
+#tsf-title-separator input:focus + label:not( .tsf-no-focus-ring ) {
 	box-shadow: 0px 0px 1px 1px #333 inset;
 }
 
@@ -236,10 +236,10 @@ input.tsf-nav-tab-radio {
 }
 
 /* make all border colors #fff, so it doesn't look skewed */
-.tsf-nav-tab-radio:focus + label:not(.tsf-no-focus-ring) {
+.tsf-nav-tab-radio:focus + label:not( .tsf-no-focus-ring ) {
 	box-shadow:
 		0 0 0 1px #5b9dd9,
-		0 0 2px 1px rgba(30, 140, 190, .8);
+		0 0 2px 1px rgba( 30, 140, 190, .8 );
 	border-color: #fff;
 }
 

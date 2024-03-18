@@ -1,7 +1,7 @@
 === The SEO Framework – Fast, Automated, Effortless. ===
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
-Tags: seo, xml sitemap, google search, open graph, schema.org, twitter card, performance, headless
+Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4.0
@@ -52,7 +52,7 @@ We built The SEO Framework for small to large corporations and enterprises. The 
 The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search via structured data. It also automatically generates titles and descriptions according to Google's guidelines and quickly helps search engines find the website's latest changes via the built-in optimized sitemap.
 
 * **It makes social sharing easy.**
-The SEO Framework automatically supports and allows you to further tailor the Open Graph, Facebook, and Twitter Cards protocols. It helps your posts stand out when they're shared on various social networks, including Pinterest, Discord, and Whatsapp.
+The SEO Framework automatically supports and allows you to further tailor the Open Graph, Facebook, and Twitter Cards protocols. It helps your posts stand out when they're shared on various social networks, including Pinterest, Discord, and WhatsApp.
 
 * **It feels more than accessible.**
 We handpicked our color scheme so that people with any medically recognized color-vision deficiency can distinguish the guidelines set by search engines. We also implemented full keyboard-navigation and screen-reader support.
@@ -159,7 +159,7 @@ Optionally, also install our free [Extension Manager](https://theseoframework.co
 
 == Screenshots ==
 
-1. The SEO Framework shows you how your site is performing, at a glance. Thedse are what we call the SEO Bar.
+1. The SEO Framework shows you how your site is performing, at a glance. This is what we call the SEO Bar.
 2. Hover over, tap on, or focus any SEO Bar item and it will tell you what's asserted from your environment.
 3. The SEO meta box is displayed on all pages. It's everything you need. Here you can see the pixel counters.
 4. These SEO settings are shown on the term edit screen. It seamlessly blends into your WordPress interface.
@@ -242,9 +242,16 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+TODO "timezone" => "time zone" (also update POT)
+TODO "monitor" doesn't keep track... it just informs when requested.
+TODO Honeypot has 5 methods, no? It will get another method soon, regardless.
+TODO "enhances" -> "enriches"? -> note SEO.
+TODO toggleTab -> toggleDisplayTab?
+	-> Also, it has a bug where it auto-toggles based on its current "checked" state, not current "visibility" state!
+
 ### 5.0.5
 
-In this minor sitemap-centric update, we've integrated WPML and Polylang's language-specific sitemap URLs into robots.txt, clarified support for complex sitemaps, and removed deprecated pinging functionality. Additionally, we also added seconds to timestamps, resolved issues pertaining to the number 0, and remotely [fixed another compatibility issue in Polylang](https://theseoframework.com/?p=4234).
+In this minor sitemap-centric update, we've integrated WPML and Polylang's language-specific sitemap URLs into robots.txt, clarified support for complex sitemaps, and removed deprecated pinging functionality. We also added seconds to timestamps, resolved issues pertaining to the number 0, and remotely [fixed another compatibility issue in Polylang](https://theseoframework.com/?p=4234).
 
 ### 5.0.4
 
