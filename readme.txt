@@ -242,12 +242,22 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### 5.0.6
+
 TODO "timezone" => "time zone" (also update POT)
 TODO "monitor" doesn't keep track... it just informs when requested.
 TODO Honeypot has 5 methods, no? It will get another method soon, regardless.
 TODO "enhances" -> "enriches"? -> note SEO.
 TODO toggleTab -> toggleDisplayTab?
 	-> Also, it has a bug where it auto-toggles based on its current "checked" state, not current "visibility" state!
+
+**For everyone:**
+
+* **Fixed:**
+	* Addressed an issue where TSF deemed a query comment-paginated when it wasn't.
+		* This can happen when using FSE (Full Site Editing) or a theme that renders blocks early for another reason. With this, the `cpage` query variable always gets rewritten to a greater number than the page we're on; that number is never used by the comment block, but it told WordPress, TSF, and 200 other plugins to act like we're on a comment-paginated page.
+		* We couldn't find a reason for this, other than an oversight during local development. (TODO add bug report link).
+		* Props [dreamon11 and stranger03](https://wordpress.org/support/topic/the-seo-framework-adds-noindex-to-posts-with-multiple-comment-pages-%E2%9A%A0%ef%b8%8f/) for reporting and helping to debug this issue.
 
 ### 5.0.5
 

@@ -145,12 +145,7 @@ final class Front extends Factory {
 			if ( Query::is_singular() ) {
 				yield from static::assert_noindex_query_pass( 'protected' );
 
-				/**
-				 * N.B. WordPress protects this query variable with options 'page_comments'
-				 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
-				 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
-				 */
-				if ( (int) \get_query_var( 'cpage', 0 ) > 0 )
+				if ( Query::is_comment_paged() )
 					yield from static::assert_noindex_query_pass( 'cpage' );
 			}
 		}

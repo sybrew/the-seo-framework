@@ -273,7 +273,6 @@ class Query {
 	 * @since 4.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @see static::is_attachment()
-	 * @global \WP_Screen $current_screen;
 	 *
 	 * @return bool
 	 */
@@ -1156,6 +1155,67 @@ class Query {
 	 */
 	public static function is_multipage() {
 		return static::numpages() > 1;
+	}
+
+	/**
+	 * Detects paginated comment pages thoroughly.
+	 *
+	 * WordPress 6.0 introduced a last minute function called `build_comment_query_vars_from_block()`.
+	 * This function exists to workaround a bug in comment blocks as sub-query by adjusting the main query.
+	 *
+	 * @since 5.0.5
+	 *
+	 * @return bool
+	 */
+	public static function is_comment_paged() {
+
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		if ( null !== $memo = Query\Cache::memo() )
+			return $memo;
+
+		/**
+		 * N.B. WordPress protects this query variable with options 'page_comments'
+		 * and 'default_comments_page' via `redirect_canonical()`, so we don't have to.
+		 * For reference, it fires `remove_query_arg( 'cpage', $redirect['query'] )`;
+		 */
+		$is_cpaged = (int) \get_query_var( 'cpage', 0 ) > 0;
+
+		// WP 6.0 bugged this. Let's scrutinize if $cpage might be incorrectly set.
+		// If comments haven't yet been parsed, we can safely assume there's no bug active.
+		if ( $is_cpaged && \did_action( 'parse_comment_query' ) ) {
+			// Comments should only work on singular.
+			if ( ! static::is_singular() )
+				return Query\Cache::memo( false );
+
+			// Get post from main query.
+			$post = \get_post( static::get_the_real_id() );
+
+			if ( \has_blocks( $post ) ) {
+				// Any of these blocks can invoke `set_query_var( 'cpage' ).
+				// 'core/comments-pagination-previous' doesn't invoke this; yet to be determined why.
+				$breaking_blocks = [
+					'core/comment-template',
+					'core/comments-pagination-next',
+					'core/comments-pagination-numbers',
+				];
+
+				foreach ( $breaking_blocks as $block ) {
+					if ( \has_block( $block, $post ) ) { // Slow function is slow.
+						/**
+						 * Assume 0 if the unaltered query variable isn't found;
+						 * it might be purged, so we won't have pagination.
+						 * There is no other fast+reliable method to determine whether
+						 * comment pagination is engaged for the current query.
+						 * This is a bypass, after all.
+						 */
+						$is_cpaged = (int) ( $GLOBALS['wp_query']->query['cpage'] ?? 0 ) > 0;
+						break;
+					}
+				}
+			}
+		}
+
+		return Query\Cache::memo( $is_cpaged );
 	}
 
 	/**
