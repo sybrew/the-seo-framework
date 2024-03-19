@@ -1183,7 +1183,7 @@ class Query {
 		// WP 6.0 bugged this. Let's scrutinize if $cpage might be incorrectly set.
 		// If comments haven't yet been parsed, we can safely assume there's no bug active.
 		if ( $is_cpaged && \did_action( 'parse_comment_query' ) ) {
-			// Comments should only work on singular. core/comments
+			// core/comments only works on singular; this bug doesn't invoke otherwise anyway.
 			if ( ! static::is_singular() )
 				return Query\Cache::memo( false );
 

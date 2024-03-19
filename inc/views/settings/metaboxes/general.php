@@ -367,7 +367,7 @@ switch ( $instance ) :
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo HTML::code_wrap( $timestamp_datetime ), ' ', HTML::make_info(
-							\__( 'This outputs the complete date including hours, minutes, seconds, and timezone.', 'autodescription' )
+							\__( 'This outputs the complete date including hours, minutes, seconds, and time zone.', 'autodescription' )
 						);
 						?>
 					</label>

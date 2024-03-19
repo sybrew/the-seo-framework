@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 5.9
 Tested up to: 6.4
 Requires PHP: 7.4.0
-Stable tag: 5.0.5
+Stable tag: 5.0.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,7 +17,7 @@ The fastest feature-complete SEO plugin for professional WordPress websites. Sec
 
 **[Preview The SEO Framework in WordPress Playground.](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)**
 
-Start using proven methods to optimize your website for SEO. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
+Start using proven SEO tactics to improve your website's ranking. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
 
 To top it off, this is the [fastest full-featured SEO plugin](https://twitter.com/TheSEOFramework/status/1493352649445580804/photo/1), and it blends right into your WordPress website, without leaving you in the dark.
 
@@ -82,7 +82,7 @@ For additional functionality, check out our free companion plugin [Extension Man
 * [Focus](https://theseoframework.com/?p=2305) guides you through the process of writing targeted content that ranks with **focus keywords and synonyms**.
 * [Articles](https://theseoframework.com/?p=2303) **enhances your published posts** by automatically adding important Structured Data.
 * [Transport](https://theseoframework.com/?p=3962) **migrates and transforms metadata** from Rank Math, Yoast SEO, and SEOPress to this plugin.
-* [Honeypot](https://theseoframework.com/?p=2300) **catches comment spammers** through four lightweight yet powerful ways.
+* [Honeypot](https://theseoframework.com/?p=2300) **catches comment spammers** through five lightweight yet powerful ways.
 * [Cord](https://theseoframework.com/?p=3404) helps you connect your website to **Google Analytics and Meta Pixel**.
 * [Local](https://theseoframework.com/?p=2306) lets you set up **important local business information** for search engines to consume.
 * [AMP](https://theseoframework.com/?p=2304) **binds The SEO Framework to the AMP plugin** for AMP supported articles and pages.
@@ -143,7 +143,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 1. Install **The SEO Framework** either via your WordPress dashboard using plugin search or by uploading the files to your server.
 1. Either network-activate this plugin or activate it on a single site.
-1. That's it! The plugin now optimizes your website for SEO. It also protects your website against SEO attacks.
+1. That's it! The plugin now improves your website with SEO. It also protects your website against SEO attacks.
 
 ### This plugin auto-configures its global settings
 
@@ -244,20 +244,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.0.6
 
-TODO "timezone" => "time zone" (also update POT)
-TODO "monitor" doesn't keep track... it just informs when requested.
-TODO Honeypot has 5 methods, no? It will get another method soon, regardless.
-TODO "enhances" -> "enriches"? -> note SEO.
-TODO toggleTab -> toggleDisplayTab?
-	-> Also, it has a bug where it auto-toggles based on its current "checked" state, not current "visibility" state!
-
-**For everyone:**
-
-* **Fixed:**
-	* Addressed an issue where TSF deemed a query comment-paginated when it wasn't.
-		* This can happen when using FSE (Full Site Editing) or a theme that renders blocks early for another reason. With this, the `cpage` query variable always gets rewritten to a greater number than the page we're on; that number is never used by the comment block, but it told WordPress, TSF, and 200 other plugins to act like we're on a comment-paginated page.
-		* We couldn't find a reason for this, other than an oversight during local development. (TODO add bug report link).
-		* Props [dreamon11 and stranger03](https://wordpress.org/support/topic/the-seo-framework-adds-noindex-to-posts-with-multiple-comment-pages-%E2%9A%A0%ef%b8%8f/) for reporting and helping to debug this issue.
+This patch addresses an issue where [WordPress 6.0 and higher mistakenly tweaks unpaginated queries as comment-paginated](https://core.trac.wordpress.org/ticket/60806), causing indexing issues when using Full Site Editing or themes that [prerender Blocks before TSF](https://theseoframework.com/?p=4244).
 
 ### 5.0.5
 

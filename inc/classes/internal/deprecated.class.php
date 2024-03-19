@@ -4855,7 +4855,7 @@ final class Deprecated {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.0 1. Now invokes two actions before and after output.
-	 *              2. No longer rectifies timezones.
+	 *              2. No longer rectifies time zones.
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 */
@@ -6165,7 +6165,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param string $format The datetime format.
-	 * @param string $time The GMT time. Expects timezone to be omitted.
+	 * @param string $time The GMT time. Expects the time zone to be omitted.
 	 * @return string The converted time. Empty string if no $time is given.
 	 */
 	public function gmt2date( $format = 'Y-m-d', $time = '' ) {
