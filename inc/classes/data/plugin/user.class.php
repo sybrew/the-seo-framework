@@ -34,7 +34,7 @@ use \The_SEO_Framework\Helper\Query;
  *
  * @since 5.0.0
  * @access protected
- *         Use tsf()->data()->plugin->user() instead.
+ *         Use tsf()->data()->plugin()->user() instead.
  */
 class User {
 

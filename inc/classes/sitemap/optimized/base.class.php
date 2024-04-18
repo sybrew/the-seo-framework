@@ -530,9 +530,8 @@ class Base extends Main {
 	 * @since 5.0.0 Is now static.
 	 *
 	 * @param array $args : {
-	 *   string               $loc      : The item's URI.
-	 *   string|void|false    $lastmod  : string if set and not '0000-00-00 00:00:00', false otherwise. Expected to be GMT.
-	 *   int|float|void|false $priority : int if set, false otherwise.
+	 *   string  $loc     : The item's URI.
+	 *   ?string $lastmod : SQL timestamp string (Y-m-d H:i:s). Expected to be GMT. Null or '0000-00-00 00:00:00' to omit.
 	 * }
 	 * @return string The sitemap item.
 	 */
@@ -578,11 +577,10 @@ class Base extends Main {
 		 * @since 3.2.2 Invalid URLs are now skipped.
 		 * @since 4.0.0 Added $args parameter.
 		 * @since 4.2.0 No longer forwards the 'show_priority' index in the second ($args) parameter.
-		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '14-01-2018' ] ]
+		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '2024-04-10 14:52:06' ] ]
 		 * @param array $custom_urls : {
 		 *    string (key) $url The absolute url to the page. : array {
-		 *       string           $lastmod  : UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
-		 *       float|int|string $priority : URL Priority
+		 *       string $lastmod  : UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
 		 *    }
 		 * }
 		 * @param array $args : {

@@ -197,7 +197,7 @@ class Post {
 	}
 
 	/**
-	 * Fetch latest public post/page ID.
+	 * Fetch latest public, future, or pending post/page ID.
 	 * Memoizes the return value.
 	 *
 	 * @since 2.4.3
@@ -208,7 +208,7 @@ class Post {
 	 *       direct access to all values of the post (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
 	 *
-	 * @return int Latest Post ID.
+	 * @return int The latest Post ID.
 	 */
 	public static function get_latest_post_id() {
 

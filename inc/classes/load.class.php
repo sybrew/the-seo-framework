@@ -179,7 +179,7 @@ final class Load extends Pool {
 	 */
 	public function __call( $name, $arguments ) {
 
-		static $depr_class = null;
+		static $depr_class;
 
 		$depr_class ??= new Internal\Deprecated;
 

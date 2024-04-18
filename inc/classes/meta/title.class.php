@@ -358,6 +358,7 @@ class Title {
 
 		normalize_generation_args( $args );
 
+		// TODO switch get_query_type_from_args()?
 		if ( $args['tax'] ) {
 			$title = static::get_archive_title( \get_term( $args['id'], $args['tax'] ) );
 		} elseif ( $args['pta'] ) {
@@ -791,6 +792,7 @@ class Title {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
+			// TODO get_query_type_from_args() === 'single'?
 			if (
 				   empty( $args['tax'] )
 				&& empty( $args['pta'] )
@@ -865,6 +867,7 @@ class Title {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 			$id  = $args['id'];
+			// TODO get_query_type_from_args() === 'single'?
 			$add = empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] );
 		} else {
 			$id  = Query::get_the_real_id();

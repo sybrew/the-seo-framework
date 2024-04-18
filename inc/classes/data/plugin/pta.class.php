@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
  *
  * @since 5.0.0
  * @access protected
- *         Use tsf()->data()->plugin->pta() instead.
+ *         Use tsf()->data()->plugin()->pta() instead.
  */
 class PTA {
 

@@ -58,8 +58,8 @@ class Breadcrumbs {
 	 *       -> Requested features (globally): Remove/show archive prefixes, hide PTA/terms, select home name, select SEO vs custom title (popular).
 	 *       -> Add generation args to every crumb; this way we can perform custom lookups for titles after the crumb is generated.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
 	 * @return array[] The breadcrumb list, sequential : int position {
 	 *    string url:  The breadcrumb URL.
 	 *    string name: The breadcrumb page title.

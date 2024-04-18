@@ -242,6 +242,30 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+TODO In Polylang 3.5.x (and 3.6), unsetting " Hide URL language information for default language" will cause the robots.txt URLs to add extraneous language prefixes. The sitemap endpoints still work on their correct URL, however.
+	-> It's also incorrect if the homepage URL isn't of the DEFAULT language. Still, that causes the site to malfunction altogether.
+	-> https://wordpress.org/support/topic/issue-with-xml-sitemap-generation-in-non-english-languages-polylang/
+
+TODO In Polylang 3.5 or 3.6, they reversed the order of columns (another bug) when using quick-edit. _defunct_badly_coded_polylang_script() still addresses the disappearance of TSF's data, but they bork it in PHP this time.
+
+TODO add cornerstone as a non-html page builder.
+
+TODO hide AIOSEO's deceptive notice when TSF is active?
+
+TODO new translations are available.
+
+TODO the get_query_type_from_args() thingies (search for comments).
+
+TODO note the var_dump()
+
+
+### 5.0.7
+
+**For everyone:**
+
+* **Fixed:**
+	* TODO Comment queries happening after the main query are now ignored entirely, instead of for only the Full Site Editor.
+
 ### 5.0.6
 
 This patch addresses an issue where [WordPress 6.0 and higher mistakenly tweaks unpaginated queries as comment-paginated](https://core.trac.wordpress.org/ticket/60806), causing indexing issues when using Full Site Editing or themes that [prerender Blocks before TSF](https://theseoframework.com/?p=4244).

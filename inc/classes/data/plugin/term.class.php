@@ -37,7 +37,7 @@ use \The_SEO_Framework\Helper\{
  *
  * @since 5.0.0
  * @access protected
- *         Use tsf()->data()->plugin->term() instead.
+ *         Use tsf()->data()->plugin()->term() instead.
  */
 class Term {
 

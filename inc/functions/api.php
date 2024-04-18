@@ -112,6 +112,7 @@ namespace {
 			'tsf_breadcrumb',
 		);
 
+		// Extract a valid class; it'll be of an escaped kind.
 		preg_match( '/-?[a-z_]+[a-z\d_-]*/i', $atts['class'], $matches );
 
 		$class = $matches[0] ?? 'tsf-breadcrumb';

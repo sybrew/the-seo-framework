@@ -147,9 +147,7 @@ if ( \in_array( false, $headless, true ) ) { // Still got head...
 // Add plugin links to the plugin activation page.
 \add_filter(
 	'plugin_action_links_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME,
-	[ Admin\PluginTable::class, 'add_plugin_action_links' ],
-	10,
-	2,
+	[ Admin\PluginTable::class, 'add_plugin_action_links' ]
 );
 \add_filter(
 	'plugin_row_meta',

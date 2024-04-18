@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Data\Plugin;
  *
  * @since 5.0.0
  * @access protected
- *         Use tsf()->data()->plugin->helper() instead.
+ *         Use tsf()->data()->plugin()->helper() instead.
  */
 class Helper {
 
