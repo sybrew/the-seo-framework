@@ -264,7 +264,7 @@ TODO note the var_dump()
 **For everyone:**
 
 * **Fixed:**
-	* TODO Comment queries happening after the main query are now ignored entirely, instead of for only the Full Site Editor.
+	* Comment pagination queries happening after the main query are now ignored entirely, instead of for only the Full Site Editor.
 
 ### 5.0.6
 

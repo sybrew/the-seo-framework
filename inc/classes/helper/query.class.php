@@ -1163,7 +1163,8 @@ class Query {
 	 * WordPress 6.0 introduced a last minute function called `build_comment_query_vars_from_block()`.
 	 * This function exists to workaround a bug in comment blocks as sub-query by adjusting the main query.
 	 *
-	 * @since 5.0.5
+	 * @since 5.0.6
+	 * @link <https://core.trac.wordpress.org/ticket/60806>
 	 *
 	 * @return bool
 	 */
@@ -1180,34 +1181,36 @@ class Query {
 		 */
 		$is_cpaged = (int) \get_query_var( 'cpage', 0 ) > 0;
 
-		// WP 6.0 bugged this. Let's scrutinize if $cpage might be incorrectly set.
-		// If comments haven't yet been parsed, we can safely assume there's no bug active.
+		/**
+		 * Let's scrutinize if $cpage might be incorrectly set.
+		 *
+		 * WP 6.0 bugged this. Any of these blocks can invoke `set_query_var( 'cpage', 1+ )`.
+		 * 'core/comment-template',            // parent core/comments
+		 * 'core/comments-pagination-next',    // parent core/comments-pagination, parent core/comments
+		 * 'core/comments-pagination-numbers', // parent core/comments-pagination, parent core/comments
+		 * 'core/comments-pagination-previous' doesn't invoke this; yet to be determined why.
+		 *
+		 * These functions can too invoke `set_query_var`; but Core doesn't mess this up:
+		 * 'comments_template()'
+		 * 'wp_list_comments()'  // But only after comments_template()
+		 *
+		 * If comments haven't yet been parsed, we can safely assume there's no bug active.
+		 * Hence, we test for did_action(). We want the main query, not the tainted one.
+		 * So, even if this runs in the footer, we should still scrutinize it.
+		 */
 		if ( $is_cpaged && \did_action( 'parse_comment_query' ) ) {
 			// core/comments only works on singular; this bug doesn't invoke otherwise anyway.
 			if ( ! static::is_singular() )
 				return Query\Cache::memo( false );
 
 			/**
-			 * Any of these blocks can invoke `set_query_var( 'cpage', 1+ )`.
-			 * 'core/comment-template',            // parent core/comments
-			 * 'core/comments-pagination-next',    // parent core/comments-pagination, parent core/comments
-			 * 'core/comments-pagination-numbers', // parent core/comments-pagination, parent core/comments
-			 *
-			 * If we'd had to loop, it'd be best to call has_blocks( $content ) first.
-			 *
-			 * 'core/comments-pagination-previous' doesn't invoke this; yet to be determined why.
+			 * Assume 0 if the unaltered query variable isn't found;
+			 * it might be purged, so we won't have pagination.
+			 * There is no other fast+reliable method to determine whether
+			 * comment pagination is engaged for the current query.
+			 * This is a bypass, after all.
 			 */
-			// Get post content from main query.
-			if ( \has_block( 'core/comments', Data\Post::get_content() ) ) { // Slow function is slow.
-				/**
-				 * Assume 0 if the unaltered query variable isn't found;
-				 * it might be purged, so we won't have pagination.
-				 * There is no other fast+reliable method to determine whether
-				 * comment pagination is engaged for the current query.
-				 * This is a bypass, after all.
-				 */
-				$is_cpaged = (int) ( $GLOBALS['wp_query']->query['cpage'] ?? 0 ) > 0;
-			}
+			$is_cpaged = (int) ( $GLOBALS['wp_query']->query['cpage'] ?? 0 ) > 0;
 		}
 
 		return Query\Cache::memo( $is_cpaged );
