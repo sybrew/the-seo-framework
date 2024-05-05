@@ -258,13 +258,20 @@ TODO the get_query_type_from_args() thingies (search for comments).
 
 TODO note the var_dump()
 
+TODO https://wordpress.org/support/topic/about-homepage-meta-description-with-wpml/#post-17715796?
+	-> Also note the KB article mention which we need to address.
+
+TODO the post update sequence fires thrice now?
+	-> This makes TSF fetch data 3x on save... :/
+		-> The debouncer is not working, maybe?
 
 ### 5.0.7
 
 **For everyone:**
 
 * **Fixed:**
-	* Comment pagination queries happening after the main query are now ignored entirely, instead of for only the Full Site Editor.
+	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
+	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
 
 ### 5.0.6
 

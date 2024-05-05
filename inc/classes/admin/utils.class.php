@@ -64,8 +64,10 @@ class Utils {
 
 		if ( ! $url ) exit( 'Redirect error: Page not found' );
 
-		$target = \add_query_arg( array_filter( $query_args, 'strlen' ), $url );
-		$target = \sanitize_url( $target, [ 'https', 'http' ] );
+		$target = \sanitize_url(
+			\add_query_arg( array_filter( $query_args, 'strlen' ), $url ),
+			[ 'https', 'http' ],
+		);
 
 		// Predict white screen:
 		$headers_sent = headers_sent();
