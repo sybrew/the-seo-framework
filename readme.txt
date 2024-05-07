@@ -261,14 +261,35 @@ TODO note the var_dump()
 TODO https://wordpress.org/support/topic/about-homepage-meta-description-with-wpml/#post-17715796?
 	-> Also note the KB article mention which we need to address.
 
-TODO the post update sequence fires thrice now?
-	-> This makes TSF fetch data 3x on save... :/
-		-> The debouncer is not working, maybe?
+TODO: expand WPML string translation for TSF metadata
+	-> See https://wordpress.org/support/topic/about-homepage-meta-description-with-wpml/#post-17715796.
+	-> DONE: Also consider adding PTA settings, though these are dynamic
+		-> Figure how we can implement this.
+	-> TODO: Report this to the KB
+		-> Also consider explaining how to translate settings (checkboxes from 1 to 0, etc.)
+			<ol><li>Go to "WPML > String Translation."</li>
+				<li>Scroll down, select "Translate texts in admin screens."</li>
+				<li>Search for "autodescription," and select the Options you want to translate.</li>
+				<li>Hit "Add to String Translation."</li>
+				<li>Return to "WPML > String Translation."</li>
+				<li>Now, you should see the selected option under Name (note: might be on the second page).</li>
+				<li>Hit the big plus under the other languages to set a custom value.</li>
+				<li>Click anywhere on the page to save your translation.</li></ol>
+		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
+	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
+
+
 
 ### 5.0.7
 
 **For everyone:**
 
+* **Added:**
+	* For WPML Multilingual Plugin, the following fields are automatically registered with their String Translation tool under domain `admin_texts_autodescription-site-settings`. Please note that these are only shown when they have a value inputted via the SEO Settings page:
+		* **Homepage:** title, description, social image URL, Open Graph title and description, Twitter title and description.
+			* Identifyable by name `[autodescription-site-settings]homepage_*`.
+		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
+			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.

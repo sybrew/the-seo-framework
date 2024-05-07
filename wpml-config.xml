@@ -10,4 +10,28 @@
 		<custom-field action="translate">_open_graph_description</custom-field>
 		<custom-field action="translate">_twitter_description</custom-field>
 	</custom-fields>
+	<admin-texts>
+		<key name="autodescription-site-settings">
+			<key name="homepage_description" />
+			<key name="homepage_title" />
+			<key name="homepage_social_image_url" />
+			<key name="homepage_og_title" />
+			<key name="homepage_twitter_title" />
+			<key name="homepage_og_description" />
+			<key name="homepage_twitter_description" />
+			<key name="pta">
+				<key name="*">
+					<key name="doctitle" />
+					<key name="description" />
+					<key name="social_image_url" />
+					<key name="canonical" />
+					<key name="redirect" />
+					<key name="og_title" />
+					<key name="tw_title" />
+					<key name="og_description" />
+					<key name="tw_description" />
+				</key>
+			</key>
+		</key>
+	</admin-texts>
 </wpml-config>
