@@ -7,6 +7,8 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+// phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- Too many scoped funcs. Test me once in a while.
+
 use \The_SEO_Framework\{
 	Admin,
 	Data,
@@ -45,8 +47,6 @@ use \The_SEO_Framework\Helper\{
  * @TODO convert to class, see \TSF_Extension_Manager\Upgrader
  *       It's a generator/iterator, so we must wait to PHP>5.5 support.
  */
-
-// phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 
 \add_action( 'init', 'The_SEO_Framework\Bootstrap\_do_upgrade', 20 );
 \add_action( 'the_seo_framework_upgraded', 'The_SEO_Framework\Bootstrap\_prepare_upgrade_notice', 99, 2 );
@@ -518,7 +518,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 						/* translators: 1: SEO plugin name(s), 2: link to guide, in Markdown! */
 						\esc_html__( 'The SEO Framework detected metadata from %1$s. Whenever you are set, read our [migration guide](%2$s).', 'autodescription' ),
 						\esc_html(
-							count( $found_titles ) > 1 ? wp_sprintf_l( '%l', $found_titles ) : current( $found_titles )
+							\count( $found_titles ) > 1 ? \wp_sprintf_l( '%l', $found_titles ) : current( $found_titles )
 						),
 						'https://theseoframework.com/docs/seo-data-migration/',
 					),
@@ -881,13 +881,13 @@ function _do_upgrade_5001() {
 			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast', // Typo intended.
 		);
 
-		$site_cache = get_option( 'autodescription-updates-cache' ) ?: [];
+		$site_cache = \get_option( 'autodescription-updates-cache' ) ?: [];
 		if ( $site_cache ) {
 			// Try to use the options API as much as possible, instead of using $wpdb->update().
-			update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
+			\update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
 			// The option holds only generated data that can be regenerated easily.
 			// On downgrade, this will be repopulated.
-			delete_option( 'autodescription-updates-cache' );
+			\delete_option( 'autodescription-updates-cache' );
 		}
 
 		Data\Plugin::update_option( 'seo_bar_low_contrast', 0 );

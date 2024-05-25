@@ -81,7 +81,7 @@ class Utils {
 		switch ( true ) {
 			case \is_feed():
 			case \is_customize_preview():
-			case \defined( 'REST_REQUEST' ) && \REST_REQUEST: // TODO WP 6.5+ https://core.trac.wordpress.org/ticket/42061
+			case \defined( 'REST_REQUEST' ) && \REST_REQUEST: // TODO WP 6.5+ wp_is_serving_rest_request()
 				$supported = false;
 				break;
 			case Query::is_singular():

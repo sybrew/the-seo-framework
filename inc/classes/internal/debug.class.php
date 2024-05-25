@@ -455,7 +455,7 @@ final class Debug {
 		$is_protected                   = Data\Post::is_protected( $page_id );
 		$wp_doing_ajax                  = \wp_doing_ajax();
 		$wp_doing_cron                  = \wp_doing_cron();
-		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST;
+		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST; // TODO WP 6.5+ wp_is_serving_rest_request()
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 

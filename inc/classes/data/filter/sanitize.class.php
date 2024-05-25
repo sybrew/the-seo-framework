@@ -172,7 +172,7 @@ class Sanitize {
 		return html_entity_decode(
 			static::metadata_content( $text ),
 			\ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5,
-			'UTF-8'
+			'UTF-8',
 		);
 	}
 
@@ -223,7 +223,7 @@ class Sanitize {
 		return str_replace(
 			[ '&#45;', "\xe2\x80\x90" ], // Should we consider &#000...00045;?
 			'&#x2d;',
-			preg_replace( '/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/', '&#x2d;', $text )
+			preg_replace( '/((-{2,3})(*SKIP)-|-)(?(2)(*FAIL))/', '&#x2d;', $text ),
 		);
 	}
 
@@ -281,7 +281,7 @@ class Sanitize {
 	public static function newline_to_space( $text ) {
 		// Use x20 because it's a human-visible real space.
 		return trim(
-			strtr( $text, "\x0A\x0B\x0C\x0D", "\x20\x20\x20\x20" )
+			strtr( $text, "\x0A\x0B\x0C\x0D", "\x20\x20\x20\x20" ),
 		);
 	}
 
@@ -349,7 +349,7 @@ class Sanitize {
 		// This is also checked when performing a redirect.
 		if ( ! Helper\Redirect::allow_external_redirect() ) {
 			$url = Meta\URI\Utils::set_url_scheme( Meta\URI\Utils::convert_path_to_url(
-				Meta\URI\Utils::set_url_scheme( $url, 'relative' )
+				Meta\URI\Utils::set_url_scheme( $url, 'relative' ),
 			) );
 		}
 
@@ -426,7 +426,7 @@ class Sanitize {
 		if ( \in_array(
 			strtolower( strtok( pathinfo( $url, \PATHINFO_EXTENSION ), '?' ) ),
 			[ 'apng', 'bmp', 'ico', 'cur', 'svg', 'tif', 'tiff' ],
-			true
+			true,
 		) ) return $defaults;
 
 		$width  = \absint( $width );
@@ -440,7 +440,7 @@ class Sanitize {
 			$new_image = Meta\Image\Utils::get_largest_image_src( $id, 4096, 5 * \MB_IN_BYTES );
 			$url       = $new_image ? \sanitize_url(
 				Meta\URI\Utils::make_absolute_current_scheme_url( $new_image[0] ),
-				[ 'https', 'http' ]
+				[ 'https', 'http' ],
 			) : '';
 
 			if ( empty( $url ) ) return $defaults;

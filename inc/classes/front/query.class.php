@@ -220,13 +220,13 @@ final class Query {
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;
 
-		// TODO WP 6.5+ https://core.trac.wordpress.org/ticket/42061
+		// TODO WP 6.5+ https://core.trac.wordpress.org/ticket/42061: wp_is_serving_rest_request()
 		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
 			$referer = \wp_get_referer();
 			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
 				/**
 				 * WordPress should've authenthicated the user at
-				 * WP_REST_Server::check_authentication() -> rest_cookie_check_errors() -> wp_nonce et al.
+				 * WP_REST_Server::check_authentication() -> rest_cookie_check_errors() -> wp_nonce etc.
 				 * before executing the query. For REST_REQUEST can not be true otherwise. Ergo,
 				 * \current_user_can() should work. If it returns true, we can trust it's a safe request.
 				 * If it returns false, the user may still be logged in, but the request isn't sent via

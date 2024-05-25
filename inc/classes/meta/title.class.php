@@ -842,11 +842,7 @@ class Title {
 			/* translators: %s: Page number. */
 			$paging = sprintf( \__( 'Page %s', 'default' ), $page );
 
-			if ( \is_rtl() ) {
-				return "$paging $sep $title";
-			} else {
-				return "$title $sep $paging";
-			}
+			return \is_rtl() ? "$paging $sep $title" : "$title $sep $paging";
 		}
 
 		return $title;
@@ -866,7 +862,7 @@ class Title {
 
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
-			$id  = $args['id'];
+			$id = $args['id'];
 			// TODO get_query_type_from_args() === 'single'?
 			$add = empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] );
 		} else {
