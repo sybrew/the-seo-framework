@@ -250,6 +250,9 @@ TODO In Polylang 3.5 or 3.6, they reversed the order of columns (another bug) wh
 
 TODO add cornerstone as a non-html page builder.
 
+TODO when double-clicking the submit button, we process the settings submission twice.
+	-> The second time it'll state nothing has changed, and this is what the user then sees.
+
 TODO hide AIOSEO's deceptive notice when TSF is active?
 
 TODO new translations are available.
@@ -293,6 +296,14 @@ TODO: expand WPML string translation for TSF metadata
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
+
+**For developers:**
+
+* **Fixed:**
+	* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't output the `og:locale` properly and gave a warning instead.
+	* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
+		* Its first parameter has been removed and now always uses the current locale.
+		* Use `tsf()->open_graph()->get_locale()` instead.
 
 ### 5.0.6
 

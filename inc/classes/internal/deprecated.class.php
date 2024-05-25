@@ -1670,6 +1670,7 @@ final class Deprecated {
 	 *
 	 * @since 1.0.0
 	 * @since 5.0.0 Deprecated.
+	 * @since 5.0.7 Resolved an issue with a wrong callback; now returns the meta tag again.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph locale meta tag.
@@ -1692,7 +1693,7 @@ final class Deprecated {
 		$locale = (string) \apply_filters_deprecated(
 			'the_seo_framework_oglocale_output',
 			[
-				$tsf->open_graph()->get_supported_locales(),
+				$tsf->open_graph()->get_locale(),
 				$tsf->query()->get_the_real_id(),
 			],
 			'5.0.0 of The SEO Framework',
@@ -3170,6 +3171,26 @@ final class Deprecated {
 		return $tsf->description()->excerpt()->get_post_excerpt(
 			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null,
 		);
+	}
+
+	/**
+	 * Matches WordPress locales.
+	 * If not matched, it will calculate a locale.
+	 *
+	 * @since 2.5.2
+	 * @since 5.0.0 Deleted accidentally.
+	 * @since 5.0.7 1. Deprecated.
+	 *              2. Removed the first parameter. Now always uses the current locale.
+	 * @deprecated
+	 *
+	 * @return string Facebook acceptable OG locale.
+	 */
+	public function fetch_locale() {
+
+		$tsf = \tsf();
+		$tsf->_deprecated_function( 'tsf()->fetch_locale()', '5.0.0', 'tsf()->open_graph()->get_locale()' );
+
+		return $tsf->open_graph()->get_locale();
 	}
 
 	/**
