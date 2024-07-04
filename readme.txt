@@ -310,6 +310,8 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 			* Identifyable by name `[autodescription-site-settings]homepage_*`.
 		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
+* **Improved:**
+	* TODO References to X and Twitter Card are more distinctive now.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -319,8 +321,8 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 * **Added:**
 	* JS method `tsf.debounce()` is new. It's used to debounce operations.
 	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
-	* TODO Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
-	* TODO Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
+	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
+	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
 * **Fixed:**
