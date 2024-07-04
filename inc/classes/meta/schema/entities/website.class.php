@@ -69,7 +69,7 @@ final class WebSite extends Reference {
 		$altname = Sanitize::metadata_content( Data\Plugin::get_option( 'knowledge_name' ) );
 
 		$entity = [
-			'@type'         => &static::$type,
+			'@type'         => static::$type,
 			'@id'           => static::get_id(),
 			'url'           => Meta\URI::get_bare_front_page_url(),
 			'name'          => $name,

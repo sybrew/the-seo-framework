@@ -104,6 +104,24 @@ class Schema {
 		foreach ( $entity_builders as $builder )
 			$graph[] = \call_user_func( $builder, $args );
 
+		/**
+		 * For consistency, data should be filtered deep, such as (WordPress) title
+		 * filters for breadcrumb and page titles. Use this only if those aren't available.
+		 *
+		 * Use this only to adjust write dynamic references.
+		 * Use `the_seo_framework_schema_graph_data` for direct alteration instead.
+		 *
+		 * @since 5.0.0
+		 * @param array[]    $graph A sequential list of graph entities.
+		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 *                          Is null when the query is autodetermined.
+		 */
+		$graph = \apply_filters(
+			'the_seo_framework_schema_queued_graph_data',
+			$graph,
+			$args,
+		);
+
 		// Fill the graph's references dynamically. Append extra graphs when given.
 		foreach ( static::$writer_queue as $writer )
 			foreach ( \call_user_func( $writer ) as $extra_graph )
@@ -136,7 +154,7 @@ class Schema {
 	}
 
 	/**
-	 * Returns the Schema.org graph.
+	 * Registers an entity writer for the current graph.
 	 *
 	 * @since 5.0.0
 	 *

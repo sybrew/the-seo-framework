@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\normalize_generation_args;
+use function \The_SEO_Framework\{
+	get_query_type_from_args,
+	normalize_generation_args,
+};
 
 use \The_SEO_Framework\{
 	Data,
@@ -80,6 +83,9 @@ final class WebPage extends Reference {
 	 */
 	public static function build( $args = null ) {
 
+		// We write to this type, reset it.
+		static::$type = 'WebPage';
+
 		$entity = [
 			'@type'       => &static::$type,
 			'@id'         => static::get_id( $args ),
@@ -91,27 +97,34 @@ final class WebPage extends Reference {
 		];
 
 		if ( Data\Plugin::get_option( 'ld_json_breadcrumbs' ) )
-			$entity['breadcrumb'] = &BreadcrumbList::get_dynamic_ref();
+			$entity['breadcrumb'] = &BreadcrumbList::get_dynamic_ref( $args );
 
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] ) ) {
-				$entity['potentialAction'] = [
-					'@type'  => 'ReadAction',
-					'target' => Meta\URI::get_canonical_url( $args ),
-				];
+			switch ( get_query_type_from_args( $args ) ) {
+				case 'single':
+					$entity['potentialAction'] = [
+						'@type'  => 'ReadAction',
+						'target' => Meta\URI::get_canonical_url( $args ),
+					];
 
-				if ( Query::is_static_front_page( $args['id'] ) && Data\Plugin::get_option( 'knowledge_output' ) )
-					$entity['about'] = &Organization::get_dynamic_ref();
+					if ( Data\Plugin::get_option( 'knowledge_output' ) && Query::is_static_front_page( $args['id'] ) )
+						$entity['about'] = &Organization::get_dynamic_ref(); // Organization doesn't use args.
 
-				if ( Query::is_single( $args['id'] ) ) {
-					$entity['datePublished'] = Data\Post::get_published_time( $args['id'] );
-					$entity['dateModified']  = Data\Post::get_modified_time( $args['id'] );
-					$entity['author']        = &Author::get_dynamic_ref( [
-						'uid' => Query::get_post_author_id( $args['id'] ),
-					] );
-				}
+					if ( Query::is_single( $args['id'] ) ) {
+						$entity['datePublished'] = Data\Post::get_published_time( $args['id'] );
+						$entity['dateModified']  = Data\Post::get_modified_time( $args['id'] );
+						$entity['author']        = &Author::get_dynamic_ref( [
+							'uid' => Query::get_post_author_id( $args['id'] ),
+						] );
+					}
+
+					if ( Query::is_singular_archive( $args['id'] ) )
+						static::$type = 'CollectionPage';
+					break;
+				case 'term':
+					static::$type = 'CollectionPage';
 			}
 		} else {
 			if ( Query::is_singular() ) {

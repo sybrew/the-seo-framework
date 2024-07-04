@@ -318,7 +318,9 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 
 * **Added:**
 	* JS method `tsf.debounce()` is new. It's used to debounce operations.
-	* TODO Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
+	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
+	* TODO Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
+	* TODO Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
 * **Fixed:**
@@ -326,8 +328,9 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 	* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
 		* Its first parameter has been removed and now always uses the current locale.
 		* Use `tsf()->open_graph()->get_locale()` instead.
-	* TODO  `tsf()->schema()->entities` now report the correct class names.
+	*  `tsf()->schema()->entities` now report the correct class names.
 	* TODO  Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL.
+	* The `schema.org/WebPage` type reference is resetted now when regenerated.
 
 ### 5.0.6
 

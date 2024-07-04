@@ -102,6 +102,7 @@ final class Organization extends Reference {
 						'caption'    => $logo['caption'],
 					];
 				}
+				// Don't report filesize if 0; 0 doesn't get scrubbed.
 				if ( $logo['filesize'] )
 					$entity['logo'] += [ 'contentSize' => (string) $logo['filesize'] ];
 			} else {
