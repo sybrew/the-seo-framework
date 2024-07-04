@@ -317,7 +317,7 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 **For developers:**
 
 * **Added:**
-	* TODO JS method `tsf.debounce()`, used to debounce operations.
+	* JS method `tsf.debounce()` is new. It's used to debounce operations.
 	* TODO Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
