@@ -289,8 +289,6 @@ TODO add trailing commas to the object.assign properties.
 
 TODO symbols for warnings + reduced contrast = yellow illegible.
 
-TODO can we drop ms-input-placeholder and -ms-clear?
-
 TODO WP 6.5 added lastmod to the sitemap... eh?
 
 TODO theoretical bug: The markdown search/replace could replace links incorrectly, where both will get the link1:
@@ -315,6 +313,7 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
+	* Awesome Motive's All in One SEO Pack plugin outputs a notice urging to deactivate other SEO plugins, but without clarifying which SEO plugin emits this notice or telling which plugins get deactivated. So, we now hide this deceptive notice.
 
 **For developers:**
 
@@ -325,6 +324,8 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
+* **Other:**
+	* Removed support for `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 * **Fixed:**
 	* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
 	* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.

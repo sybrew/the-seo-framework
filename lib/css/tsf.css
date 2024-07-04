@@ -400,24 +400,10 @@ body.rtl .tsf-remove-image-button.button {
 	transition: color .33s ease-in, text-shadow .33s ease-in;
 }
 
-/* Doesn't fire appropriate events, also seems deprecated. Hide it. */
-#tsf-inpost-box input[type=text]::-ms-clear,
-.tsf-metaboxes input[type=text]::-ms-clear,
-.tsf-quick-edit-columns input[type=text]::-ms-clear {
-	display: none;
-}
-
 #tsf-inpost-box input[type=text]::-moz-placeholder,
 #tsf-inpost-box textarea::-moz-placeholder,
 .tsf-metaboxes input[type=text]::-moz-placeholder,
 .tsf-metaboxes textarea::-moz-placeholder {
-	transition: color .33s ease-in, text-shadow .33s ease-in;
-}
-
-#tsf-inpost-box input[type=text]:-ms-input-placeholder,
-#tsf-inpost-box textarea:-ms-input-placeholder,
-.tsf-metaboxes input[type=text]:-ms-input-placeholder,
-.tsf-metaboxes textarea:-ms-input-placeholder {
 	transition: color .33s ease-in, text-shadow .33s ease-in;
 }
 
@@ -433,14 +419,6 @@ body.rtl .tsf-remove-image-button.button {
 #tsf-inpost-box textarea:focus::-moz-placeholder,
 .tsf-metaboxes input[type=text]:focus::-moz-placeholder,
 .tsf-metaboxe textarea:focus::-moz-placeholder {
-	color: transparent;
-	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
-}
-
-#tsf-inpost-box input[type=text]:focus:-ms-input-placeholder,
-#tsf-inpost-box textarea:focus:-ms-input-placeholder,
-.tsf-metaboxes input[type=text]:focus:-ms-input-placeholder,
-.tsf-metaboxes textarea:focus:-ms-input-placeholder {
 	color: transparent;
 	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
 }
@@ -514,4 +492,9 @@ body.rtl .tsf-remove-image-button.button {
 	input.tsf-warning-selected {
 		box-shadow: 0 0 0 1px #dd3811;
 	}
+}
+
+/* Hide deceptive notice from Awesome Motive */
+#wpbody .aioseo-conflicting-plugins-notice {
+	display: none;
 }
