@@ -154,7 +154,7 @@ class Escape {
 		if ( $q ) {
 			parse_str( $q, $r );
 			// Don't replace. Tokenize. The query part might be part of the URL (in some alien environment).
-			$uri = strtok( $uri, '?' ) . '?' . http_build_query( $r, null, '&amp;', PHP_QUERY_RFC3986 );
+			$uri = strtok( $uri, '?' ) . '?' . http_build_query( $r, '', '&amp;', PHP_QUERY_RFC3986 );
 		}
 
 		return $uri;

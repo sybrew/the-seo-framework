@@ -301,12 +301,12 @@ namespace The_SEO_Framework {
 			if ( $args['pta'] )
 				return 'pta';
 
-			return 'homeblog'; // home as page is 'single'!
+			return 'homeblog'; // "homeblog" isn't single, the "Your homepage displays > A static page > Posts page" is single!
 		} elseif ( $args['tax'] ) {
 			return 'term';
 		}
 
-		return 'single';
+		return 'single'; // page, post, product, etc.
 	}
 
 	/**

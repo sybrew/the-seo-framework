@@ -82,7 +82,8 @@ class Notice {
 	 *                        When the message contains HTML, it must start with a <p> tag,
 	 *                        or it will be added for you--regardless of proper semantics.
 	 * @param array  $args    : {
-	 *    'type'   => string Optional. The notification type. Default 'updated'.
+	 *    'type'   => string Optional. The notification type. Accepts 'updated', 'warning', 'info', and 'error'.
+	 *                                 Default 'updated'.
 	 *    'icon'   => bool   Optional. Whether to enable icon. Default true.
 	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
 	 *    'inline' => bool   Optional. Whether to escape the whole output. Default false.

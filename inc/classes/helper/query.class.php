@@ -92,6 +92,8 @@ class Query {
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
 	 * Memoizes the return value.
 	 *
+	 * Uses `umemo()` instead of `Query\Cache::memo()`, for it is faster.
+	 *
 	 * @since 2.5.0
 	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
@@ -791,7 +793,7 @@ class Query {
 	 */
 	public static function is_static_front_page( $id = 0 ) {
 
-		// Memo this slow part separately; memo_query() would cache the whole method, which isn't necessary.
+		// Memo this slow part separately; Query\Cache::memo() isn't fast enough.
 		$front_id = umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,

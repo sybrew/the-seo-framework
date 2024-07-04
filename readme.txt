@@ -311,7 +311,7 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
 * **Improved:**
-	* TODO References to X and Twitter Card are more distinctive now.
+	* References to X and Twitter Card are more distinctive now.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.

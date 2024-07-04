@@ -62,7 +62,7 @@ class Utils {
 		// menu_page_url() always uses esc_url() for display, breaking ampersands. Undo that via html_entity_decode()
 		$url = html_entity_decode( \menu_page_url( $page_hook, false ) );
 
-		if ( ! $url ) exit( 'Redirect error: Page not found' );
+		$url or exit( 'Redirect error: Page not found' );
 
 		$target = \sanitize_url(
 			\add_query_arg( array_filter( $query_args, 'strlen' ), $url ),

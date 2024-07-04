@@ -29,7 +29,8 @@ use \The_SEO_Framework\Admin\Settings\Layout\Input;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if ( \function_exists( 'tsf_extension_manager' )
+if (
+	   \function_exists( 'tsf_extension_manager' )
 	&& \in_array(
 		\tsf_extension_manager()->seo_extensions_page_slug ?? null,
 		array_column( $GLOBALS['submenu'][ \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG ] ?? [], 2 ),
