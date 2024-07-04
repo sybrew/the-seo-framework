@@ -66,9 +66,6 @@ class Markdown {
 
 		$args += [ 'a_internal' => false ];
 
-		/**
-		 * The conversion list's keys are per reference only.
-		 */
 		$conversions = [
 			'**'     => 'strong',
 			'*'      => 'em',
@@ -132,12 +129,12 @@ class Markdown {
 	private static function strong_em( $text ) {
 
 		// Discrepancy with strong OR em: we exclude * here, we only want to capture full blocks.
-		$count = preg_match_all( '/\*{3}([^\*]+)\*{3}/', $text, $matches, \PREG_PATTERN_ORDER );
+		preg_match_all( '/\*{3}([^\*]+)\*{3}/', $text, $matches, \PREG_SET_ORDER );
 
-		for ( $i = 0; $i < $count; $i++ ) {
+		foreach ( $matches as $match ) {
 			$text = str_replace(
-				$matches[0][ $i ],
-				sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
+				$match[0],
+				sprintf( '<strong><em>%s</em></strong>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -157,12 +154,12 @@ class Markdown {
 	 */
 	private static function strong( $text ) {
 
-		$count = preg_match_all( '/\*{2}(.+?)\*{2}/', $text, $matches, \PREG_PATTERN_ORDER );
+		preg_match_all( '/\*{2}(.+?)\*{2}/', $text, $matches, \PREG_SET_ORDER );
 
-		for ( $i = 0; $i < $count; $i++ ) {
+		foreach ( $matches as $match ) {
 			$text = str_replace(
-				$matches[0][ $i ],
-				sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
+				$match[0],
+				sprintf( '<strong>%s</strong>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -182,12 +179,12 @@ class Markdown {
 	 */
 	private static function em( $text ) {
 
-		$count = preg_match_all( '/\*([^\*]+)\*/', $text, $matches, \PREG_PATTERN_ORDER );
+		preg_match_all( '/\*([^\*]+)\*/', $text, $matches, \PREG_SET_ORDER );
 
-		for ( $i = 0; $i < $count; $i++ ) {
+		foreach ( $matches as $match ) {
 			$text = str_replace(
-				$matches[0][ $i ],
-				sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
+				$match[0],
+				sprintf( '<em>%s</em>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -207,15 +204,16 @@ class Markdown {
 	 */
 	private static function code( $text ) {
 
-		$count = preg_match_all( '/`([^`]+)`/', $text, $matches, \PREG_PATTERN_ORDER );
+		preg_match_all( '/`([^`]+)`/', $text, $matches, \PREG_SET_ORDER );
 
-		for ( $i = 0; $i < $count; $i++ ) {
+		foreach ( $matches as $match ) {
 			$text = str_replace(
-				$matches[0][ $i ],
-				sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
+				$match[0],
+				sprintf( '<code>%s</code>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
+
 		return $text;
 	}
 
@@ -231,18 +229,23 @@ class Markdown {
 	 */
 	private static function h123456( $text, $type = 'h1' ) {
 
-		// Considers word non-boundary. @TODO consider removing that?
-		$expression = sprintf(
-			'/\={%1$d}\s(.+)\s\={%1$d}/',
-			filter_var( $type, \FILTER_SANITIZE_NUMBER_INT )
+		preg_match_all(
+			// Considers word non-boundary. @TODO consider removing that?
+			sprintf(
+				'/\={%1$d}\s(.+)\s\={%1$d}/',
+				filter_var( $type, \FILTER_SANITIZE_NUMBER_INT )
+			),
+			$text,
+			$matches,
+			\PREG_SET_ORDER,
 		);
 
-		$count = preg_match_all( $expression, $text, $matches, \PREG_PATTERN_ORDER );
+		$type = \esc_attr( $type );
 
-		for ( $i = 0; $i < $count; $i++ ) {
+		foreach ( $matches as $match ) {
 			$text = str_replace(
-				$matches[0][ $i ],
-				sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
+				$match[0],
+				sprintf( '<%1$s>%2$s</%1$s>', $type, \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -265,15 +268,15 @@ class Markdown {
 	 */
 	private static function a( $text, $internal = true ) {
 
-		$count = preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, \PREG_PATTERN_ORDER );
+		preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, \PREG_SET_ORDER );
 
 		// Keep this XHTML compatible!
-		$_string = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
+		$format = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';
 
-		for ( $i = 0; $i < $count; $i++ ) {
+		foreach ( $matches as $match ) {
 			$text = str_replace(
-				$matches[0][ $i ],
-				sprintf( $_string, \esc_url( $matches[2][ $i ], [ 'https', 'http' ] ), \esc_html( $matches[1][ $i ] ) ),
+				$match[0],
+				sprintf( $format, \esc_url( $match[2], [ 'https', 'http' ] ), \esc_html( $match[1] ) ),
 				$text,
 			);
 		}

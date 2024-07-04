@@ -242,9 +242,13 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+TODO add toggle to block GPTBot (and other bots) via robots.txt.
+
 TODO In Polylang 3.5.x (and 3.6), unsetting " Hide URL language information for default language" will cause the robots.txt URLs to add extraneous language prefixes. The sitemap endpoints still work on their correct URL, however.
 	-> It's also incorrect if the homepage URL isn't of the DEFAULT language. Still, that causes the site to malfunction altogether.
+		-> What homepage URL?
 	-> https://wordpress.org/support/topic/issue-with-xml-sitemap-generation-in-non-english-languages-polylang/
+	-> UNRELATED but similar: https://wordpress.org/support/topic/sitemap-issue-with-polylang/
 
 TODO In Polylang 3.5 or 3.6, they reversed the order of columns (another bug) when using quick-edit. _defunct_badly_coded_polylang_script() still addresses the disappearance of TSF's data, but they bork it in PHP this time.
 
@@ -281,7 +285,20 @@ TODO: expand WPML string translation for TSF metadata
 		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
 	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
 
+TODO add trailing commas to the object.assign properties.
 
+TODO symbols for warnings + reduced contrast = yellow illegible.
+
+TODO can we drop ms-input-placeholder and -ms-clear?
+
+TODO WP 6.5 added lastmod to the sitemap... eh?
+
+TODO theoretical bug: The markdown search/replace could replace links incorrectly, where both will get the link1:
+	[not-unique](link1)
+	[not-unique](link2)
+
+TODO when zooming in with Chromium, the floating title for terms is vertically misaligned.
+	-> Only 125% seems to be affected, 150~225 not.
 
 ### 5.0.7
 
@@ -299,11 +316,18 @@ TODO: expand WPML string translation for TSF metadata
 
 **For developers:**
 
+* **Added:**
+	* TODO JS method `tsf.debounce()`, used to debounce operations.
+	* TODO Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
+* **Improved:**
+	* Improved the Markdown parser's performance by using fewer memory operations.
 * **Fixed:**
-	* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't output the `og:locale` properly and gave a warning instead.
+	* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
 	* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
 		* Its first parameter has been removed and now always uses the current locale.
 		* Use `tsf()->open_graph()->get_locale()` instead.
+	* TODO  `tsf()->schema()->entities` now report the correct class names.
+	* TODO  Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL.
 
 ### 5.0.6
 
