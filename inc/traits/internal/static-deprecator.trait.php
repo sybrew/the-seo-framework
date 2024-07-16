@@ -166,7 +166,7 @@ trait Static_Deprecator {
 			if ( $fallback )
 				return \call_user_func_array( $fallback, $arguments );
 		} else {
-			\tsf()->_inaccessible_p_or_m( \esc_html( "{$this->colloquial_handle}->$name()" ) );
+			\tsf()->_inaccessible_p_or_m( "{$this->colloquial_handle}->$name()" );
 		}
 	}
 
@@ -179,7 +179,7 @@ trait Static_Deprecator {
 	 * @param array  $arguments The method arguments.
 	 * @return void
 	 */
-	final public static function __callStatic( $name, $arguments ) {
+	final public static function __callStatic( $name, $arguments ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis -- __callStatic must take 2 args.
 		\tsf()->_inaccessible_p_or_m(
 			\esc_html( "$name()" ),
 			'Method is of unknown pool. Do not call pool methods statically! A fatal error might follow.',

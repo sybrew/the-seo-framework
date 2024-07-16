@@ -119,7 +119,7 @@ $hook_name = Admin\Menu::get_page_hook_name();
 	</form>
 </div>
 <script>
-	window.addEventListener( 'load', () => {
+	addEventListener( 'load', () => {
 		postboxes.add_postbox_toggles( '<?= \esc_js( $hook_name ) ?>' );
 	} );
 </script>

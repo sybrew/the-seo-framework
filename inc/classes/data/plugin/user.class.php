@@ -120,6 +120,7 @@ class User {
 	 * @since 5.0.0 1. Removed the second `$depr` and third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_user_meta`.
+	 * @since 5.0.7 Now returns the default meta if the user ID is empty.
 	 *
 	 * @param int $user_id The user ID.
 	 * @return array The user SEO meta data.
@@ -131,8 +132,11 @@ class User {
 		if ( isset( static::$meta_memo[ $user_id ] ) )
 			return static::$meta_memo[ $user_id ];
 
+		// TODO test if user exists via get_userdata()?
+		// That is expensive; the user object is not created when fetching meta.
+		// But we might as well have a user already when we reach this point.
 		if ( empty( $user_id ) )
-			return static::$meta_memo[ $user_id ] = [];
+			return static::$meta_memo[ $user_id ] = static::get_default_meta( $user_id );
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$meta_memo ) > 69 )

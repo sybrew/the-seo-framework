@@ -92,6 +92,7 @@ class PTA {
 	 *              2. Removed the second `$use_cache` parameter.
 	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 *              4. Renamed from `get_post_type_archive_meta`.
+	 * @since 5.0.7 Now returns the default meta if the PTA isn't supported.
 	 *
 	 * @param string $post_type The post type.
 	 * @return array The post type archive's meta item's values.
@@ -105,7 +106,7 @@ class PTA {
 
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post_type ) || ! Post_Type::is_supported( $post_type ) )
-			return static::$meta_memo[ $post_type ] = [];
+			return static::$meta_memo[ $post_type ] = static::get_default_meta( $post_type );
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$meta_memo ) > 69 )

@@ -95,6 +95,7 @@ class Post {
 	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_post_meta`.
+	 * @since 5.0.7 Now returns the default meta if the post type isn't supported.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return array The post meta.
@@ -108,7 +109,7 @@ class Post {
 
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post_id ) || ! Post_Type::is_supported( \get_post( $post_id )->post_type ) )
-			return static::$meta_memo[ $post_id ] = [];
+			return static::$meta_memo[ $post_id ] = static::get_default_meta( $post_id );
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$meta_memo ) > 69 )

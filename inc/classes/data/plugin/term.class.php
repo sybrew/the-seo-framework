@@ -87,6 +87,7 @@ class Term {
 	 * @since 5.0.0 1. Removed the second `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_term_meta`.
+	 * @since 5.0.7 Now returns the default meta if the term's taxonomy isn't supported.
 	 *
 	 * @param int $term_id The Term ID.
 	 * @return array The term meta data.
@@ -100,7 +101,7 @@ class Term {
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
 		if ( empty( $term_id ) || ! Taxonomy::is_supported( \get_term( $term_id )->taxonomy ?? '' ) )
-			return static::$meta_memo[ $term_id ] = [];
+			return static::$meta_memo[ $term_id ] = static::get_default_meta( $term_id );
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$meta_memo ) > 69 )
