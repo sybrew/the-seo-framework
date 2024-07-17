@@ -327,6 +327,7 @@ TODO test image type support and warn users about Facebook not supporting webp (
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
 	* Awesome Motive's All in One SEO Pack plugin outputs a notice urging to deactivate other SEO plugins, but without clarifying which SEO plugin emits this notice or telling which plugins get deactivated. So, we now hide this deceptive notice.
+	* Resolved a regression from WordPress 6.6 where a CSS identifier disappeared. We used this identifier to apply styling for the sidebar. We now use a different, more specific identifier that's in all WordPress versions we support; from `.edit-post-sidebar`, now `#edit-post\:document`.
 
 **For developers:**
 

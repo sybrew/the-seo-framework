@@ -4,7 +4,7 @@
 }
 
 #tsf-inpost-box:not( .tsf-is-block-editor ) .inside,
-.edit-post-sidebar #tsf-inpost-box .inside { /* .edit-post-sidebar is Gutenberg-only */
+#edit-post\:document #tsf-inpost-box .inside { /* edit-post\:document is Gutenberg's sidebar */
 	width: 100%;
 	padding: 0;
 }
@@ -22,8 +22,8 @@
 	border: 1px solid #ddd;
 }
 
-/* .edit-post-sidebar is Gutenberg-only. .tsf-is-block-editor is used to override specificity  */
-.edit-post-sidebar .tsf-is-block-editor .tsf-flex-inside-wrap {
+/* edit-post\:document is Gutenberg's sidebar; .tsf-is-block-editor is used to override specificity  */
+#edit-post\:document .tsf-is-block-editor .tsf-flex-inside-wrap {
 	border: 0;
 }
 
