@@ -56,8 +56,8 @@ turn_on_autoloading: if ( ! is_headless( 'settings' ) ) {
 		if ( \is_array( $temp_options ) )
 			$temp_options['update_buster'] = time();
 
-		$_success = \update_option( $setting, $temp_options, 'yes' );
+		$_success = \update_option( $setting, $temp_options, true );
 		if ( $_success )
-			\update_option( $setting, $options, 'yes' );
+			\update_option( $setting, $options, true );
 	}
 }

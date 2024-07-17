@@ -89,7 +89,7 @@ final class Args extends Factory {
 				case false:
 					// Page doesn't support metadata.
 					break;
-				case $qubit < -.3334:
+				case $qubit < -.3333:
 					// 'Force' index.
 					yield 'meta_qubit_force' => false;
 					// Override with index protection.

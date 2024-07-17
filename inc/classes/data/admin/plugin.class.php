@@ -193,7 +193,7 @@ class Plugin {
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 */
 	public static function update_db_version() {
-		\update_option( 'the_seo_framework_upgraded_db_version', \THE_SEO_FRAMEWORK_DB_VERSION );
+		\update_option( 'the_seo_framework_upgraded_db_version', \THE_SEO_FRAMEWORK_DB_VERSION, true );
 	}
 
 	/**

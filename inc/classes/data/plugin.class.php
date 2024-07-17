@@ -156,7 +156,7 @@ class Plugin {
 
 		Plugin\PTA::flush_cache();
 
-		return \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $options );
+		return \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $options, true );
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Plugin {
 
 		static::$site_cache_memo = $site_cache;
 
-		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
+		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );
 	}
 
 	/**
@@ -234,6 +234,6 @@ class Plugin {
 
 		static::$site_cache_memo = $site_cache;
 
-		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache );
+		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );
 	}
 }

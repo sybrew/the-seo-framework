@@ -344,6 +344,7 @@ TODO test image type support and warn users about Facebook not supporting webp (
 	* Improved the Markdown parser's performance by using fewer memory operations.
 * **Other:**
 	* Removed support for `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
+	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
 * **Fixed:**
 	* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
 	* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.

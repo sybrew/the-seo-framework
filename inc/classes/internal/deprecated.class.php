@@ -5058,7 +5058,8 @@ final class Deprecated {
 
 		return \update_option(
 			$settings_field,
-			\wp_parse_args( $new_option, \get_option( $settings_field ) )
+			\wp_parse_args( $new_option, \get_option( $settings_field ) ),
+			true,
 		);
 	}
 
@@ -6648,7 +6649,7 @@ final class Deprecated {
 	 */
 	public function update_db_version() {
 		\tsf()->_deprecated_function( 'tsf()->update_db_version()', '5.0.0' );
-		\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION );
+		\update_option( 'the_seo_framework_upgraded_db_version', THE_SEO_FRAMEWORK_DB_VERSION, true );
 	}
 
 	/**

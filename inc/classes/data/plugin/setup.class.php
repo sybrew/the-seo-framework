@@ -61,7 +61,7 @@ class Setup {
 	 */
 	public static function reset_options() {
 
-		$success = \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, static::get_default_options() );
+		$success = \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, static::get_default_options(), true );
 
 		if ( $success )
 			Data\Plugin::refresh_static_properties();

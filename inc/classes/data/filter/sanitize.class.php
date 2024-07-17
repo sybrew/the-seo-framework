@@ -314,12 +314,13 @@ class Sanitize {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_qubit`.
 	 *              3. Now considers .3334 the turnover point, instead of 0.33000...0001.
+	 * @since 5.0.7 Now considers .3333 the turnover point for the negative side, instead of -0.3333999...999.
 	 *
 	 * @param float|int $value The qubit to test; ideally be -1, 0, or 1.
 	 * @return int -1, 0, or 1.
 	 */
 	public static function qubit( $value ) {
-		return $value >= .3334 <=> -.3334 >= $value;
+		return $value >= .3334 <=> -.3333 >= $value;
 	}
 
 	/**
