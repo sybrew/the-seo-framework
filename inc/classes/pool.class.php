@@ -265,20 +265,6 @@ class Pool extends Legacy_API {
 
 					/**
 					 * @since 5.0.0
-					 * @return \The_SEO_Framework\Data\Plugin\Home
-					 */
-					public static function home() {
-						return static::$subpool['home'] ??= new class extends Data\Plugin\Home {
-							use Static_Deprecator;
-
-							private $colloquial_handle     = 'tsf()->data()->plugin()->home()';
-							private $deprecated_methods    = [];
-							private $deprecated_properties = [];
-						};
-					}
-
-					/**
-					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Post
 					 */
 					public static function post() {

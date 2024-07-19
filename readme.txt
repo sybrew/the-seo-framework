@@ -301,12 +301,6 @@ TODO when zooming in with Chromium, the floating title for terms is vertically m
 TODO add robots.txt settings
 	-> Specifically, to block ChatGPT bot.
 
-TODO move tsf.debounce to tsfUtils.debounce?
-	-> Also add tsfUtils.delay?
-	function delay ( ms ) {
-		return new Promise( resolve => setTimeout( resolve, ms ) );
-	}
-
 TODO to the snippets zipper, wrap the plugin inside its namesake folder so that WordPress won't assume the location based on filename, which can be appended (1) to if downloaded for a second time.
 
 TODO test image type support and warn users about Facebook not supporting webp (etc.)?
@@ -336,13 +330,17 @@ TODO test image type support and warn users about Facebook not supporting webp (
 	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
 	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
+	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
 * **Changed:**
-	* `The_SEO_Framework\Data\Plugin\Post::get_meta()` now returns the default meta if the post type isn't supported.
-	* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` now returns the default meta if the PTA isn't supported.
-	* `The_SEO_Framework\Data\Plugin\Term::get_meta()` now returns the default meta if the term's taxonomy isn't supported.
-	* `The_SEO_Framework\Data\Plugin\User::get_meta()` now returns the default meta if the user ID is empty.
+	* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
+	* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
+	* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
+	* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
+	* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
+* **Removed:**
+	* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
 * **Other:**
 	* Removed support for `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.

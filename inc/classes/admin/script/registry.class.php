@@ -238,23 +238,25 @@ class Registry {
 	 *       If the script is sequential, it'll be iterated over, and then registered.
 	 *
 	 * @param array|array[] $script The script or sequential array of scripts : {
-	 *   'id'   => string The script ID,
-	 *   'type' => string 'css|js',
-	 *   'autoload' => boolean If true, the script will be loaded directly.
-	 *                         If false, it'll only be registered for dependencies.
-	 *   'name' => string The unique script name, which is also the file name,
-	 *   'deps' => array  Dependencies,
-	 *   'ver'  => string Script version,
-	 *   'l10n' => array If type is 'js' : {
-	 *      'name' => string The JavaScript variable,
-	 *      'data' => mixed  The l10n properties,
+	 *   'id'       : string The script unique ID,
+	 *   'type'     : string The script type, either 'css' or 'js',
+	 *   'hasrtl'   : boolean Optional. If true, the script will consider .rtl and .rtl.min versions.
+	 *                        Default false.
+	 *   'autoload' : boolean If true, the script will be loaded directly.
+	 *                        If false, it'll only be registered for dependencies.
+	 *   'name'     : string The script file name,
+	 *   'deps'     : array  Any script dependencies by name,
+	 *   'ver'      : string Script version,
+	 *   'l10n'     : array Optional. If type is 'js' : {
+	 *      'name' : string The JavaScript variable,
+	 *      'data' : mixed  The l10n properties,
 	 *   }
-	 *   'tmpl' => array If type is 'js', either multidimensional or single : {
-	 *      'file' => string $file. The full file location,
-	 *      'args' => array $args. Optional,
+	 *   'tmpl'     : array Optional. If type is 'js', either multidimensional or single : {
+	 *      'file' : string $file. The full file location,
+	 *      'args' : array $args. Optional. Any arguments added to the $view_args array,
 	 *    }
-	 *   'inline' => array If type is 'css' : {
-	 *      'selector' => array : { iterable => 'style' }
+	 *   'inline'   : array Optional. If type is 'css' : {
+	 *      'selector' : array : { iterable => 'style' }
 	 *    }
 	 * }
 	 */

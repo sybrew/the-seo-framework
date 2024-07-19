@@ -130,6 +130,7 @@ class Post {
 			);
 
 			// WP converts all entries to arrays, because we got ALL entries. Disarray!
+			// $meta = array_column( $meta, 0 ); // var_dump() do this instead, directly on the array_intersect to save writing vars?
 			foreach ( $meta as &$value )
 				$value = $value[0];
 		}

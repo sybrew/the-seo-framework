@@ -60,8 +60,7 @@ class Loader {
 	public static function init() {
 
 		$scripts = [
-			static::get_tsf_scripts(),
-			static::get_tt_scripts(),
+			static::get_common_scripts(),
 		];
 
 		if ( Query::is_post_edit() ) {
@@ -164,20 +163,29 @@ class Loader {
 	}
 
 	/**
-	 * Returns the default TSF scripts.
+	 * Returns the common TSF scripts.
 	 *
-	 * @since 4.0.0
+	 * @since 5.0.7
 	 *
 	 * @return array The script params.
 	 */
-	public static function get_tsf_scripts() {
+	public static function get_common_scripts() {
 		return [
+			// Load TSF-utils first. TODO split the TSF object so that they will no longer become reliant upon eachother.
+			[
+				'id'       => 'tsf-utils',
+				'type'     => 'js',
+				'deps'     => [],
+				'autoload' => true,
+				'name'     => 'utils',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
 			[
 				'id'       => 'tsf',
 				'type'     => 'css',
 				'deps'     => [],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'tsf',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -185,7 +193,7 @@ class Loader {
 			[
 				'id'       => 'tsf',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'wp-util' ],
+				'deps'     => [ 'jquery', 'wp-util', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'tsf',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -209,24 +217,11 @@ class Loader {
 					],
 				],
 			],
-		];
-	}
-
-	/**
-	 * Returns TT (tooltip) scripts params.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @return array The script params.
-	 */
-	public static function get_tt_scripts() {
-		return [
 			[
 				'id'       => 'tsf-tt',
 				'type'     => 'css',
 				'deps'     => [],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'tt',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -273,7 +268,7 @@ class Loader {
 			[
 				'id'       => 'tsf-ays',
 				'type'     => 'js',
-				'deps'     => [ 'tsf' ],
+				'deps'     => [ 'tsf', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'ays',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -306,7 +301,6 @@ class Loader {
 				'type'     => 'css',
 				'deps'     => [ 'tsf' ],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -314,7 +308,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf' ],
+				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -341,7 +335,6 @@ class Loader {
 				'type'     => 'css',
 				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker' ],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'settings',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -398,7 +391,6 @@ class Loader {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt', 'tsf' ],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -472,7 +464,6 @@ class Loader {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt', 'tsf' ],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'term',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -511,7 +502,7 @@ class Loader {
 			[
 				'id'       => 'tsf-gbc',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf', 'wp-editor', 'wp-data', 'react' ],
+				'deps'     => [ 'jquery', 'tsf', 'tsf-utils', 'wp-editor', 'wp-data', 'react' ],
 				'autoload' => true,
 				'name'     => 'gbc',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -552,7 +543,7 @@ class Loader {
 		return [
 			'id'       => 'tsf-media',
 			'type'     => 'js',
-			'deps'     => [ 'jquery', 'media', 'tsf-tt', 'tsf' ],
+			'deps'     => [ 'jquery', 'media', 'tsf', 'tsf-utils', 'tsf-tt' ],
 			'autoload' => true,
 			'name'     => 'media',
 			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -729,7 +720,6 @@ class Loader {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt' ],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'pt',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
@@ -769,7 +759,6 @@ class Loader {
 				'type'     => 'css',
 				'deps'     => [ 'tsf-tt' ],
 				'autoload' => true,
-				'hasrtl'   => false,
 				'name'     => 'tsfc',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
