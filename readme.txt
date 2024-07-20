@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 5.9
-Tested up to: 6.4
+Tested up to: 6.6
 Requires PHP: 7.4.0
 Stable tag: 5.0.6
 License: GPLv3
@@ -305,6 +305,10 @@ TODO to the snippets zipper, wrap the plugin inside its namesake folder so that 
 
 TODO test image type support and warn users about Facebook not supporting webp (etc.)?
 
+TODO remove jQuery dependencies in UI?
+
+TODO add dashicons as a dependency to ui, settings, and tsf?
+
 ### 5.0.7
 
 **For everyone:**
@@ -322,15 +326,16 @@ TODO test image type support and warn users about Facebook not supporting webp (
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
 	* Awesome Motive's All in One SEO Pack plugin outputs a notice urging to deactivate other SEO plugins, but without clarifying which SEO plugin emits this notice or telling which plugins get deactivated. So, we now hide this deceptive notice.
 	* Resolved a regression from WordPress 6.6 where a CSS identifier disappeared. We used this identifier to apply styling for the sidebar. We now use a different, more specific identifier that's in all WordPress versions we support; from `.edit-post-sidebar`, now `#edit-post\:document`.
+	* Resolved an issue where the counter AJAX spinner wasn't offset by 3 pixels from the character counter's loader text. It's now also changed to 0.5 character widths.
 
 **For developers:**
 
 * **Added:**
-	* JS method `tsf.debounce()` is new. It's used to debounce operations.
 	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
 	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
+	* JS file `ui.js` is now available and considered "common;" it handles notices and contains two public methods: `fadeIn` and `fadeOut`.
 * **Changed:**
 	* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
 	* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
@@ -339,8 +344,10 @@ TODO test image type support and warn users about Facebook not supporting webp (
 	* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
+	* Removed the jQuery dependency for scripts `tsf` and `tsf-media` by refactoring animations to vanilla JS and CSS.
 * **Removed:**
 	* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
+	* Element `tsf-notice-wrap` is gone. We've long been relying on `wp-header-end` instead.
 * **Other:**
 	* Removed support for `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.

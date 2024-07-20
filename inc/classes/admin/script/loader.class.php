@@ -193,7 +193,7 @@ class Loader {
 			[
 				'id'       => 'tsf',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'wp-util', 'tsf-utils' ],
+				'deps'     => [ 'wp-util', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'tsf',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -250,6 +250,24 @@ class Loader {
 				'deps'     => [ 'tsf' ],
 				'autoload' => true,
 				'name'     => 'tt',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-ui',
+				'type'     => 'css',
+				'deps'     => [ 'tsf' ],
+				'autoload' => true,
+				'name'     => 'ui',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-ui',
+				'type'     => 'js',
+				'deps'     => [ 'tsf', 'tsf-utils', 'jquery' ],
+				'autoload' => true,
+				'name'     => 'ui',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 			],
@@ -523,7 +541,7 @@ class Loader {
 		return [
 			'id'       => 'tsf-tabs',
 			'type'     => 'js',
-			'deps'     => [], // nada.
+			'deps'     => [ 'tsf-utils', 'tsf-ui' ],
 			'autoload' => true,
 			'name'     => 'tabs',
 			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -543,7 +561,7 @@ class Loader {
 		return [
 			'id'       => 'tsf-media',
 			'type'     => 'js',
-			'deps'     => [ 'jquery', 'media', 'tsf', 'tsf-utils', 'tsf-tt' ],
+			'deps'     => [ 'media', 'tsf', 'tsf-utils', 'tsf-tt' ],
 			'autoload' => true,
 			'name'     => 'media',
 			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -648,7 +666,7 @@ class Loader {
 		return [
 			'id'       => 'tsf-social',
 			'type'     => 'js',
-			'deps'     => [ 'tsf' ],
+			'deps'     => [ 'tsf', 'tsf-utils' ],
 			'autoload' => true,
 			'name'     => 'social',
 			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',

@@ -92,11 +92,9 @@ $hook_name = Admin\Menu::get_page_hook_name();
 
 		<hr class=wp-header-end>
 
-		<div class=tsf-notice-wrap>
-			<?php
-			\do_action( 'the_seo_framework_setting_notices' );
-			?>
-		</div>
+		<?php
+		\do_action( 'the_seo_framework_setting_notices' );
+		?>
 
 		<?php
 		\do_action( "{$hook_name}_settings_page_boxes", $hook_name );
