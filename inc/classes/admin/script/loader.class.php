@@ -184,7 +184,7 @@ class Loader {
 			[
 				'id'       => 'tsf',
 				'type'     => 'css',
-				'deps'     => [],
+				'deps'     => [ 'dashicons' ],
 				'autoload' => true,
 				'name'     => 'tsf',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
@@ -256,7 +256,7 @@ class Loader {
 			[
 				'id'       => 'tsf-ui',
 				'type'     => 'css',
-				'deps'     => [ 'tsf' ],
+				'deps'     => [ 'tsf', 'dashicons' ],
 				'autoload' => true,
 				'name'     => 'ui',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
@@ -351,7 +351,7 @@ class Loader {
 			[
 				'id'       => 'tsf-settings',
 				'type'     => 'css',
-				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker' ],
+				'deps'     => [ 'tsf', 'tsf-tt', 'wp-color-picker', 'dashicons' ],
 				'autoload' => true,
 				'name'     => 'settings',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',

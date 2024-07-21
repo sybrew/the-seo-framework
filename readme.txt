@@ -319,14 +319,27 @@ TODO add dashicons as a dependency to ui, settings, and tsf?
 			* Identifyable by name `[autodescription-site-settings]homepage_*`.
 		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
+	* TODO Added a canonical URL input field for the homepage.
+	* TODO Added a redirect URL input field for the homepage.
 * **Improved:**
 	* References to X and Twitter Card are more distinctive now.
+	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
+	* The input placeholder blurring animation is now twice as fast.
+		* Note that [Firefox still doesn't support animations for placeholders](https://bugzilla.mozilla.org/show_bug.cgi?id=1115623). Now, we could workaround this using animations instead of transitions, but that's another can of worms.
+	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
+	* TODO Renamed "Additions" to "Title Additions" for the Homepage Settings, so to better convey you can edit a part of the title there.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
 	* Awesome Motive's All in One SEO Pack plugin outputs a notice urging to deactivate other SEO plugins, but without clarifying which SEO plugin emits this notice or telling which plugins get deactivated. So, we now hide this deceptive notice.
 	* Resolved a regression from WordPress 6.6 where a CSS identifier disappeared. We used this identifier to apply styling for the sidebar. We now use a different, more specific identifier that's in all WordPress versions we support; from `.edit-post-sidebar`, now `#edit-post\:document`.
 	* Resolved an issue where the counter AJAX spinner wasn't offset by 3 pixels from the character counter's loader text. It's now also changed to 0.5 character widths.
+	* Resolved a typo where the description placeholders didn't blur on focus on Firefox on the SEO Settings page.
+	* TODO Resolved an issue where the canonical URL placeholder wasn't populated for Quick Edit (post and term).
+
+**For translators:**
+
+* TODO
 
 **For developers:**
 
@@ -345,6 +358,7 @@ TODO add dashicons as a dependency to ui, settings, and tsf?
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
 	* Removed the jQuery dependency for scripts `tsf` and `tsf-media` by refactoring animations to vanilla JS and CSS.
+	* Added the Dashicons depdency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
 * **Removed:**
 	* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
 	* Element `tsf-notice-wrap` is gone. We've long been relying on `wp-header-end` instead.

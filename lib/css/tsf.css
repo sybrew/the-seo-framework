@@ -290,32 +290,12 @@ body.rtl .tsf-remove-image-button.button {
 	vertical-align: text-bottom;
 }
 
-#tsf-inpost-box input[type=text]::-webkit-input-placeholder,
-#tsf-inpost-box textarea::-webkit-input-placeholder,
-.tsf-metaboxes input[type=text]::-webkit-input-placeholder,
-.tsf-metaboxes textarea::-webkit-input-placeholder {
-	transition: color .33s ease-in, text-shadow .33s ease-in;
+:is( .tsf-metaboxes, #tsf-inpost-box, .tsf-term-meta, .tsf-quick-edit-columns ) :is( input[type=text], input[type=url], textarea )::placeholder {
+	transition: color .165s ease-in, text-shadow .165s ease-in;
+	text-shadow: 0 0 0 rgba( 114, 119, 124, .75 );
 }
 
-#tsf-inpost-box input[type=text]::-moz-placeholder,
-#tsf-inpost-box textarea::-moz-placeholder,
-.tsf-metaboxes input[type=text]::-moz-placeholder,
-.tsf-metaboxes textarea::-moz-placeholder {
-	transition: color .33s ease-in, text-shadow .33s ease-in;
-}
-
-#tsf-inpost-box input[type=text]:focus::-webkit-input-placeholder,
-#tsf-inpost-box textarea:focus::-webkit-input-placeholder,
-.tsf-metaboxes input[type=text]:focus::-webkit-input-placeholder,
-.tsf-metaboxes textarea:focus::-webkit-input-placeholder {
-	color: transparent;
-	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
-}
-
-#tsf-inpost-box input[type=text]:focus::-moz-placeholder,
-#tsf-inpost-box textarea:focus::-moz-placeholder,
-.tsf-metaboxes input[type=text]:focus::-moz-placeholder,
-.tsf-metaboxe textarea:focus::-moz-placeholder {
+:is( .tsf-metaboxes, #tsf-inpost-box, .tsf-term-meta, .tsf-quick-edit-columns ) :is( input[type=text], input[type=url], textarea ):focus::placeholder {
 	color: transparent;
 	text-shadow: 0 0 1px rgba( 114, 119, 124, .75 );
 }
