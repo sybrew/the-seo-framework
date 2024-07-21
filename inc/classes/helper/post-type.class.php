@@ -200,7 +200,7 @@ class Post_Type {
 					array_values(
 						array_filter(
 							static::get_all_public(),
-							static fn( $post_type ) => \get_post_type_object( $post_type )->has_archive ?? false,
+							fn( $post_type ) => \get_post_type_object( $post_type )->has_archive ?? false,
 						)
 					)
 				)

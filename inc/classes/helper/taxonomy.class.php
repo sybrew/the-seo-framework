@@ -238,7 +238,7 @@ class Taxonomy {
 
 		$taxonomies = array_filter(
 			\get_object_taxonomies( $post_type, 'objects' ),
-			static fn( $t ) => ! empty( $t->hierarchical ),
+			fn( $t ) => ! empty( $t->hierarchical ),
 		);
 
 		// If names isn't $get, assume objects.

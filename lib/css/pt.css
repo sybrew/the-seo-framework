@@ -15,6 +15,7 @@
 	float: right;
 	line-height: inherit;
 	display: block;
+	cursor: pointer;
 }
 
 body.rtl .tsf-primary-term-selector {

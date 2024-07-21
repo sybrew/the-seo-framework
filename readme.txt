@@ -307,7 +307,12 @@ TODO test image type support and warn users about Facebook not supporting webp (
 
 TODO remove jQuery dependencies in UI?
 
-TODO add dashicons as a dependency to ui, settings, and tsf?
+TODO regression: TSF-ajax keeps animating when displayed ("Doing it Right")
+TODO regression(?) The image placeholder is no longer considered of the featured image in WP 6.6 Gutenberg.
+	-> It does update on Save.
+	-> Also affects Classic Editor, but perhaps we never implemented something like this.
+
+TODO validate the URL field before showing an image preview?
 
 ### 5.0.7
 
@@ -324,10 +329,16 @@ TODO add dashicons as a dependency to ui, settings, and tsf?
 * **Improved:**
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
+	* The image selection button and preview icon animations are now twice as fast.
 	* The input placeholder blurring animation is now twice as fast.
 		* Note that [Firefox still doesn't support animations for placeholders](https://bugzilla.mozilla.org/show_bug.cgi?id=1115623). Now, we could workaround this using animations instead of transitions, but that's another can of worms.
 	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
 	* TODO Renamed "Additions" to "Title Additions" for the Homepage Settings, so to better convey you can edit a part of the title there.
+	* The canonical URL placeholder is now populated for Quick Edit.
+		* TODO and it responds to changes like it would on a page.
+	* TODO The canonical URL placeholder is now updated when changing the slug on the Classic Editor.
+	* TODO The canonical URL placeholder is now updated when changing the slug on term edit.
+	* After saving a page in Gutenberg, the SEO Bar (if displayed) fades in much quicker now.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -336,6 +347,7 @@ TODO add dashicons as a dependency to ui, settings, and tsf?
 	* Resolved an issue where the counter AJAX spinner wasn't offset by 3 pixels from the character counter's loader text. It's now also changed to 0.5 character widths.
 	* Resolved a typo where the description placeholders didn't blur on focus on Firefox on the SEO Settings page.
 	* TODO Resolved an issue where the canonical URL placeholder wasn't populated for Quick Edit (post and term).
+	* Resolved an issue where the Classic Editor's Primary Term selection label's cursor wasn't a pointer in WP 6.5 and later.
 
 **For translators:**
 
@@ -347,6 +359,8 @@ TODO add dashicons as a dependency to ui, settings, and tsf?
 	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
 	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
+	* JS Event `tsf-updated-block-editor` is now available.
+	* JS Event `tsf-updated-block-editor-${type}` is now available.
 	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
 	* JS file `ui.js` is now available and considered "common;" it handles notices and contains two public methods: `fadeIn` and `fadeOut`.
 * **Changed:**
@@ -357,7 +371,7 @@ TODO add dashicons as a dependency to ui, settings, and tsf?
 	* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
-	* Removed the jQuery dependency for scripts `tsf` and `tsf-media` by refactoring animations to vanilla JS and CSS.
+	* Removed the jQuery dependency for scripts `tsf`, `tsf-post`, and `tsf-media` by refactoring animations to vanilla JS and CSS.
 	* Added the Dashicons depdency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
 * **Removed:**
 	* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.

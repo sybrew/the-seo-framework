@@ -424,7 +424,7 @@ class Registry {
 
 		array_walk(
 			$schemas,
-			static function ( &$schema, $key ) {
+			function ( &$schema, $key ) {
 				$schema = sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
 			}
 		);

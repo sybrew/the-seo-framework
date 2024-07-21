@@ -203,9 +203,9 @@ final class ListEdit extends Admin\Lists\Table {
 				'value' => $meta['_genesis_description'],
 			],
 			'canonical'   => [
-				'value' => $meta['_genesis_canonical_uri'],
-				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => Meta\URI::get_generated_url( $generator_args ),
+				'value'       => $meta['_genesis_canonical_uri'],
+				// var_dump() figure out how to make it work seamlessly with noindex.
+				'placeholder' => Meta\URI::get_generated_url( $generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['_genesis_noindex'],
@@ -365,9 +365,9 @@ final class ListEdit extends Admin\Lists\Table {
 				'value' => $meta['description'],
 			],
 			'canonical'   => [
-				'value' => $meta['canonical'],
-				// TODO figure out how to make it work seamlessly with noindex.
-				// 'placeholder' => Meta\URI::get_generated_url( $generator_args ),
+				'value'       => $meta['canonical'],
+				// var_dump() figure out how to make it work seamlessly with noindex.
+				'placeholder' => Meta\URI::get_generated_url( $generator_args ),
 			],
 			'noindex'     => [
 				'value'    => $meta['noindex'],

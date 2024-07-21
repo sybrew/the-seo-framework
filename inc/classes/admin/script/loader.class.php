@@ -326,7 +326,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf', 'tsf-utils' ],
+				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf', 'tsf-tt', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -407,7 +407,7 @@ class Loader {
 			[
 				'id'       => 'tsf-post',
 				'type'     => 'css',
-				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'tsf-tt', 'tsf', 'tsf-ui' ],
 				'autoload' => true,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
@@ -424,7 +424,7 @@ class Loader {
 			[
 				'id'       => 'tsf-post',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tabs', 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -561,7 +561,7 @@ class Loader {
 		return [
 			'id'       => 'tsf-media',
 			'type'     => 'js',
-			'deps'     => [ 'media', 'tsf', 'tsf-utils', 'tsf-tt' ],
+			'deps'     => [ 'media', 'tsf', 'tsf-utils', 'tsf-tt', 'tsf-ays' ],
 			'autoload' => true,
 			'name'     => 'media',
 			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -723,7 +723,7 @@ class Loader {
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',
 			];
-			$deps = [ 'tsf', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'react', 'wp-util' ];
+			$deps = [ 'tsf', 'tsf-ays', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'react', 'wp-util' ];
 		} else {
 			$vars = [
 				'id'   => 'tsf-pt',

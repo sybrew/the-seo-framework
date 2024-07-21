@@ -89,7 +89,7 @@ class Form {
 			 * @param mixed  $value    The option value.
 			 * @param mixed  $selected The current selected value.
 			 */
-			static function ( &$name, $value, $selected ) {
+			function ( &$name, $value, $selected ) {
 				$name = sprintf(
 					'<option value="%s"%s>%s</option>',
 					\esc_attr( $value ),
