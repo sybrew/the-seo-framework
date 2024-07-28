@@ -142,7 +142,7 @@ class Posts extends \WP_Sitemaps_Posts {
 						$latests_posts[0]->post_date_gmt ?? '0000-00-00 00:00:00',
 					);
 
-					if ( isset( $lastmod ) && '0000-00-00 00:00:00' !== $lastmod ) {
+					if ( '0000-00-00 00:00:00' !== $lastmod ) {
 						// XML safe.
 						$sitemap_entry['lastmod'] = Time::convert_to_preferred_format( $lastmod );
 					}
@@ -175,9 +175,9 @@ class Posts extends \WP_Sitemaps_Posts {
 			 * @augmented Adds lastmod to sitemap entry.
 			 */
 			if ( $show_modified ) {
-				$lastmod = $post->post_modified_gmt ?? null;
+				$lastmod = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
-				if ( isset( $lastmod ) && '0000-00-00 00:00:00' !== $lastmod ) {
+				if ( '0000-00-00 00:00:00' !== $lastmod ) {
 					// XML safe.
 					$sitemap_entry['lastmod'] = Time::convert_to_preferred_format( $lastmod );
 				}

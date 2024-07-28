@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
 	coalesce_strlen,
+	get_query_type_from_args,
 	memo,
 	normalize_generation_args,
 };
@@ -358,17 +359,25 @@ class Title {
 
 		normalize_generation_args( $args );
 
-		// TODO switch get_query_type_from_args()?
-		if ( $args['tax'] ) {
-			$title = static::get_archive_title( \get_term( $args['id'], $args['tax'] ) );
-		} elseif ( $args['pta'] ) {
-			$title = static::get_archive_title( \get_post_type_object( $args['pta'] ) );
-		} elseif ( $args['uid'] ) {
-			$title = static::get_archive_title( \get_userdata( $args['uid'] ) );
-		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-			$title = static::get_front_page_title();
-		} elseif ( $args['id'] ) {
-			$title = static::get_post_title( $args['id'] );
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$title = static::get_front_page_title();
+				} else {
+					$title = static::get_post_title( $args['id'] );
+				}
+				break;
+			case 'term':
+				$title = static::get_archive_title( \get_term( $args['id'], $args['tax'] ) );
+				break;
+			case 'homeblog':
+				$title = static::get_front_page_title();
+				break;
+			case 'pta':
+				$title = static::get_archive_title( \get_post_type_object( $args['pta'] ) );
+				break;
+			case 'user':
+				$title = static::get_archive_title( \get_userdata( $args['uid'] ) );
 		}
 
 		return $title ?? '';
@@ -792,30 +801,38 @@ class Title {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			// TODO get_query_type_from_args() === 'single'?
-			if (
-				   empty( $args['tax'] )
-				&& empty( $args['pta'] )
-				&& empty( $args['uid'] )
-				&& Query::is_real_front_page_by_id( $args['id'] )
-			) {
-				$addition    = static::get_addition_for_front_page();
-				$seplocation = static::get_addition_location_for_front_page();
+			switch ( get_query_type_from_args( $args ) ) {
+				case 'single':
+					if ( ! Query::is_static_front_page( $args['id'] ) )
+						break;
+					// Fall through, we're asserting the home-as-page now.
+				case 'homeblog':
+					$addition    = static::get_addition_for_front_page();
+					$seplocation = static::get_addition_location_for_front_page();
+					break;
+			}
+
+			if ( ! isset( $addition, $seplocation ) ) {
+				$addition    = static::get_addition();
+				$seplocation = static::get_addition_location();
 			}
 		} else {
 			if ( Query::is_real_front_page() ) {
 				$addition    = static::get_addition_for_front_page();
 				$seplocation = static::get_addition_location_for_front_page();
+			} else {
+				$addition    = static::get_addition();
+				$seplocation = static::get_addition_location();
 			}
 		}
 
 		$title    = trim( $title );
-		$addition = trim( $addition ?? static::get_addition() );
+		$addition = trim( $addition );
 
 		if ( \strlen( $addition ) && \strlen( $title ) ) {
 			$sep = static::get_separator();
 
-			if ( 'left' === ( $seplocation ?? static::get_addition_location() ) )
+			if ( 'left' === $seplocation )
 				return "$addition $sep $title";
 
 			return "$title $sep $addition";
@@ -862,17 +879,14 @@ class Title {
 
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
-			$id = $args['id'];
-			// TODO get_query_type_from_args() === 'single'?
-			$add = empty( $args['tax'] ) && empty( $args['pta'] ) && empty( $args['uid'] );
-		} else {
-			$id  = Query::get_the_real_id();
-			$add = Query::is_singular();
+
+			if ( 'single' !== get_query_type_from_args( $args ) )
+				return $title;
+		} elseif ( ! Query::is_singular() ) {
+			return $title;
 		}
 
-		if ( ! $add ) return $title;
-
-		$post = $id ? \get_post( $id ) : null;
+		$post = \get_post( $args['id'] ?? Query::get_the_real_id() );
 
 		if ( ! empty( $post->post_password ) ) {
 			return sprintf(

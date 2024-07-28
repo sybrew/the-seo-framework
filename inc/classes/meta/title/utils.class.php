@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Meta\Title;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\normalize_generation_args;
+use function \The_SEO_Framework\{
+	get_query_type_from_args,
+	normalize_generation_args,
+};
 
 use \The_SEO_Framework\Data;
 
@@ -106,12 +109,18 @@ class Utils {
 			if ( isset( $args ) ) {
 				normalize_generation_args( $args );
 
-				if ( 'category' === $args['tax'] ) {
-					$filters = [ 'single_cat_title' ];
-				} elseif ( 'post_tag' === $args['tax'] ) {
-					$filters = [ 'single_tag_title' ];
-				} else {
-					$filters = [ 'single_post_title' ];
+				switch ( get_query_type_from_args( $args ) ) {
+					case 'single':
+						$filters = [ 'single_post_title' ];
+						break;
+					case 'term':
+						switch ( $args['tax'] ) {
+							case 'category':
+								$filters = [ 'single_cat_title' ];
+								break;
+							case 'post_tag':
+								$filters = [ 'single_tag_title' ];
+						}
 				}
 			} else {
 				$filters = [ 'single_post_title', 'single_cat_title', 'single_tag_title' ];

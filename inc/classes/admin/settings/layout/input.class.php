@@ -217,9 +217,9 @@ class Input {
 			implode(
 				'',
 				[
-					'<span id="tsf-title-reference_%1$s" class="tsf-title-reference wp-exclude-emoji hidden" data-for="%1$s"></span>',
-					'<span id="tsf-title-noadditions-reference_%1$s" class="tsf-title-noadditions-reference wp-exclude-emoji hidden" data-for="%1$s"></span>',
-					'<span id="tsf-title-offset_%1$s" class="tsf-title-offset wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span>',
+					'<span id="tsf-title-reference_%1$s" class="tsf-title-reference hidden wp-exclude-emoji" data-for="%1$s"></span>',
+					'<span id="tsf-title-noadditions-reference_%1$s" class="tsf-title-noadditions-reference hidden wp-exclude-emoji" data-for="%1$s"></span>',
+					'<span class=tsf-title-offset-wrap><span id="tsf-title-offset_%1$s" class="tsf-title-offset wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span></span>',
 					'<span id="tsf-title-placeholder-additions_%1$s" class="tsf-title-placeholder-additions wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span>',
 					'<span id="tsf-title-placeholder-prefix_%1$s" class="tsf-title-placeholder-prefix wp-exclude-emoji hide-if-no-tsf-js" data-for="%1$s"></span>',
 					'<span id="tsf-title-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s></span>',

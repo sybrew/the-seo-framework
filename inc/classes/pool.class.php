@@ -82,7 +82,7 @@ class Pool extends Legacy_API {
 				return static::$subpool['layout'] ??= new class {
 					use Static_Deprecator;
 
-					private $colloquial_handle     = 'tsf()->layout()';
+					private $colloquial_handle     = 'tsf()->admin()->layout()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 

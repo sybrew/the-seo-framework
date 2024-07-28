@@ -257,11 +257,7 @@ TODO add cornerstone as a non-html page builder.
 TODO when double-clicking the submit button, we process the settings submission twice.
 	-> The second time it'll state nothing has changed, and this is what the user then sees.
 
-TODO hide AIOSEO's deceptive notice when TSF is active?
-
 TODO new translations are available.
-
-TODO the get_query_type_from_args() thingies (search for comments).
 
 TODO note the var_dump()
 
@@ -285,15 +281,7 @@ TODO: expand WPML string translation for TSF metadata
 		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
 	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
 
-TODO add trailing commas to the object.assign properties.
-
 TODO symbols for warnings + reduced contrast = yellow illegible.
-
-TODO WP 6.5 added lastmod to the sitemap... eh?
-
-TODO theoretical bug: The markdown search/replace could replace links incorrectly, where both will get the link1:
-	[not-unique](link1)
-	[not-unique](link2)
 
 TODO when zooming in with Chromium, the floating title for terms is vertically misaligned.
 	-> Only 125% seems to be affected, 150~225 not.
@@ -348,6 +336,7 @@ TODO validate the URL field before showing an image preview?
 	* Resolved a typo where the description placeholders didn't blur on focus on Firefox on the SEO Settings page.
 	* TODO Resolved an issue where the canonical URL placeholder wasn't populated for Quick Edit (post and term).
 	* Resolved an issue where the Classic Editor's Primary Term selection label's cursor wasn't a pointer in WP 6.5 and later.
+	* Resolved an issue where horizontal scrolling bars would appear when the inputted title is wider than the screen when measured from the container.
 
 **For translators:**
 
