@@ -295,12 +295,13 @@ TODO test image type support and warn users about Facebook not supporting webp (
 
 TODO remove jQuery dependencies in UI?
 
-TODO regression: TSF-ajax keeps animating when displayed ("Doing it Right")
 TODO regression(?) The image placeholder is no longer considered of the featured image in WP 6.6 Gutenberg.
 	-> It does update on Save.
 	-> Also affects Classic Editor, but perhaps we never implemented something like this.
 
 TODO validate the URL field before showing an image preview?
+
+TODO when the "site title" is removed, the "Protected:" or "Private:" prefixes are no longer trimmed on overflow.
 
 ### 5.0.7
 
@@ -351,7 +352,7 @@ TODO validate the URL field before showing an image preview?
 	* JS Event `tsf-updated-block-editor` is now available.
 	* JS Event `tsf-updated-block-editor-${type}` is now available.
 	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
-	* JS file `ui.js` is now available and considered "common;" it handles notices and contains two public methods: `fadeIn` and `fadeOut`.
+	* JS file `ui.js` is now available and considered "common;" it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
 * **Changed:**
 	* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
 	* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
