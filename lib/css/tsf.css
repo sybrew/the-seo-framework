@@ -109,23 +109,23 @@ body.no-js .tsf-seo-bar-item {
 }
 
 .tsf-seo-bar-bad {
-	background-color: #dd3811;
+	background-color: #d63638;
 }
 .tsf-seo-bar-okay {
-	background-color: #ffa700;
+	background-color: #f0c33c;
 }
 .tsf-seo-bar-good {
-	background-color: #0cc34b;
+	background-color: #00a32a;
 }
 .tsf-seo-bar-unknown {
-	background-color: #007bd2;
+	background-color: #3582c4;
 }
 .tsf-seo-bar-undefined {
-	background-color: #767676;
+	background-color: #8c8f94;
 }
 
 body.tsf-seo-bar-low-contrast .tsf-seo-bar-bad {
-	background-color: #d14343;
+	background-color: #d63638;
 }
 body.tsf-seo-bar-low-contrast .tsf-seo-bar-okay {
 	background-color: #e6ca75;
@@ -161,18 +161,31 @@ body.tsf-seo-bar-low-contrast .tsf-seo-bar-undefined {
 	justify-content: flex-start;
 }
 
-input.tsf-default-selected {
-	border-color: #1c9d38;
+input:is( .tsf-default-selected, .tsf-warning-selected ) {
+	position: relative;
+	will-change: opacity; /* animations glitch if GPU is not ready, mix-blend-mode bug */
+	color: #00a32a;
+	border-color: currentColor;
 }
-input.tsf-default-selected:checked:before {
-	color: #1c9d38;
+input.tsf-warning-selected {
+	color: #d63638;
 }
 
-input.tsf-warning-selected {
-	border-color: #dd3811;
+input:is( .tsf-default-selected, .tsf-warning-selected ):after {
+	content: "";
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	width: inherit;
+	height: inherit;
+	border-radius: inherit;
+	background-color: currentColor;
+	mix-blend-mode: hue;
 }
-input.tsf-warning-selected:checked:before {
-	color: #dd3811;
+
+input:is( .tsf-default-selected, .tsf-warning-selected ):focus {
+	border-color: currentColor;
+	box-shadow: 0 0 0 1px currentColor;
 }
 
 label.tsf-disabled {
@@ -262,18 +275,18 @@ body.rtl .tsf-counter-wrap .tsf-ajax {
 
 .tsf-ajax.tsf-loading:before {
 	content: "\f463";
-	color: #007bd2;
+	color: #2271b1;
 	animation: tsf-spin 1.5s linear infinite;
 }
 
 .tsf-ajax.tsf-error:before {
 	content: "\f158";
-	color: #dd3811;
+	color: #d63638;
 }
 
 .tsf-ajax.tsf-success:before {
 	content: "\f147";
-	color: #0cc34b;
+	color: #00a32a;
 }
 
 .tsf-ajax.tsf-unknown:after {
@@ -335,17 +348,6 @@ body.rtl .tsf-remove-image-button.button {
 @media screen and ( max-width: 642px ) {
 	.tsf-nav-desktop {
 		display: none;
-	}
-}
-
-/* Firefix */
-@-moz-document url-prefix() {
-	input.tsf-default-selected {
-		box-shadow: 0 0 0 1px #1c9d38;
-	}
-
-	input.tsf-warning-selected {
-		box-shadow: 0 0 0 1px #dd3811;
 	}
 }
 

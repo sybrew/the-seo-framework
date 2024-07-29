@@ -169,12 +169,12 @@ input.tsf-flex-nav-tab-radio {
 }
 
 .tsf-flex-nav-tab .tsf-flex-nav-tab-radio:checked + .tsf-flex-nav-tab-label {
-	box-shadow: 0 -2px 0 0 #007bd2 inset, 0 0 0 0 #007bd2 inset;
+	box-shadow: 0 -2px 0 0 #2271b1 inset, 0 0 0 0 #2271b1 inset;
 	transition: box-shadow .25s ease-in;
 }
 
 .tsf-flex-nav-tab .tsf-flex-nav-tab-radio:focus + .tsf-flex-nav-tab-label:not( .tsf-no-focus-ring ) {
-	box-shadow: 0 0 0 0 #007bd2 inset, 0 0 0 1px #007bd2 inset;
+	box-shadow: 0 0 0 0 #2271b1 inset, 0 0 0 1px #2271b1 inset;
 }
 
 .tsf-flex-tab-content {
@@ -207,7 +207,7 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 .tsf-flex-tab-no-js .tsf-flex-nav-tab {
 	padding: 12px;
 	min-width: 125px;
-	box-shadow: 0 -2px 0 0 #007bd2 inset;
+	box-shadow: 0 -2px 0 0 #2271b1 inset;
 	flex-direction: row;
 	flex: 0 1 auto;
 }

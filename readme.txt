@@ -316,6 +316,7 @@ TODO when the "site title" is removed, the "Protected:" or "Private:" prefixes a
 	* TODO Added a canonical URL input field for the homepage.
 	* TODO Added a redirect URL input field for the homepage.
 * **Improved:**
+	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
 	* The image selection button and preview icon animations are now twice as fast.
@@ -338,6 +339,8 @@ TODO when the "site title" is removed, the "Protected:" or "Private:" prefixes a
 	* TODO Resolved an issue where the canonical URL placeholder wasn't populated for Quick Edit (post and term).
 	* Resolved an issue where the Classic Editor's Primary Term selection label's cursor wasn't a pointer in WP 6.5 and later.
 	* Resolved an issue where horizontal scrolling bars would appear when the inputted title is wider than the screen when measured from the container.
+	* Resolved a long-standing regression where WordPress 5.3 changed the checkbox mark from a colorable item to an immutable image, so it was no longer green or red colored for The SEO Framework's default and warned settings, respectively. Thanks to this fix, Firefox is now also fully supported (it doesn't natively support checkbox colors), although it might be more demanding of your computer to render the checkboxes.
+		* It took so long because we needed esoteric CSS that glitches when its container animates, namely, `mix-blend-mode`. We found a workaround with some trial and error.
 
 **For translators:**
 

@@ -14,16 +14,16 @@
 }
 
 .tsf-count-bad {
-	color: #dd3811;
+	color: #d63638;
 }
 .tsf-count-okay {
-	color: #ffa700;
+	color: #dba617;
 }
 .tsf-count-good {
-	color: #0cc34b;
+	color: #00a32a;
 }
 .tsf-count-unknown {
-	color: #007bd2;
+	color: #2271b1;
 }
 
 .tsf-counter-one {
@@ -36,16 +36,16 @@
 	vertical-align: baseline;
 }
 .tsf-counter-one.tsf-count-bad {
-	background-color: #dd3811;
+	background-color: #d63638;
 }
 .tsf-counter-one.tsf-count-okay {
-	background-color: #ffa700;
+	background-color: #dba617;
 }
 .tsf-counter-one.tsf-count-good {
-	background-color: #0cc34b;
+	background-color: #00a32a;
 }
 .tsf-counter-one.tsf-count-unknown {
-	background-color: #007bd2;
+	background-color: #4f94d4;
 }
 
 /* END Character Counters */
@@ -87,21 +87,21 @@ body.rtl .tsf-nav-tab-content .tsf-pixel-counter-wrap {
 	height: 3px;
 	width: 0%;
 	max-width: 100%;
-	background: #007bd2;
+	background: #4f94d4;
 	box-shadow: 0px 1px 3px 0px #ccc;
 	transition: width .15s cubic-bezier( 0, 0, .75, 1 );
 }
 
 .tsf-pixel-counter-bad .tsf-pixel-counter-fluid {
-	background-color: #dd3811;
+	background-color: #d63638;
 }
 
 .tsf-pixel-counter-okay .tsf-pixel-counter-fluid {
-	background-color: #ffa700;
+	background-color: #dba617;
 }
 
 .tsf-pixel-counter-good .tsf-pixel-counter-fluid {
-	background-color: #0cc34b;
+	background-color: #00a32a;
 }
 
 .tsf-description-pixel-counter-shadow,
