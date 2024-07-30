@@ -163,7 +163,7 @@ body.tsf-seo-bar-low-contrast .tsf-seo-bar-undefined {
 
 input:is( .tsf-default-selected, .tsf-warning-selected ) {
 	position: relative;
-	will-change: opacity; /* animations glitch if GPU is not ready, mix-blend-mode bug */
+	will-change: opacity; /* animations glitch if GPU is not ready; mix-blend-mode bug */
 	color: #00a32a;
 	border-color: currentColor;
 }
@@ -174,13 +174,13 @@ input.tsf-warning-selected {
 input:is( .tsf-default-selected, .tsf-warning-selected ):after {
 	content: "";
 	position: absolute;
-	top: -1px;
-	left: -1px;
-	width: inherit;
-	height: inherit;
+	top: 1px;
+	left: 1px;
+	width: calc(100% - 2px);
+	height: calc(100% - 2px);
 	border-radius: inherit;
 	background-color: currentColor;
-	mix-blend-mode: hue;
+	mix-blend-mode: color;
 }
 
 input:is( .tsf-default-selected, .tsf-warning-selected ):focus {

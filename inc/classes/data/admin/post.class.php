@@ -261,7 +261,7 @@ class Post {
 			$verified_referer = true;
 		}
 
-		static $new_data = null;
+		static $new_data;
 
 		if ( ! isset( $new_data ) ) {
 			$new_data = [];

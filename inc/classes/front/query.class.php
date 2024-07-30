@@ -203,7 +203,7 @@ final class Query {
 	 */
 	private static function is_query_adjustment_blocked( $wp_query ) {
 
-		static $has_filter = null;
+		static $has_filter;
 
 		$has_filter ??= \has_filter( 'the_seo_framework_do_adjust_archive_query' );
 

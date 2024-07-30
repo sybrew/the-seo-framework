@@ -41,7 +41,7 @@ abstract class Main extends \The_SEO_Framework\Sitemap\Optimized\Main {
 	 * @deprecated
 	 * @var null|\The_SEO_Framework\Load
 	 */
-	protected static $tsf = null;
+	protected static $tsf;
 
 	/**
 	 * Constructor.
