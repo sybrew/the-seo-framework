@@ -17,7 +17,7 @@
 	color: #d63638;
 }
 .tsf-count-okay {
-	color: #dba617;
+	color: #ffae00;
 }
 .tsf-count-good {
 	color: #00a32a;
@@ -39,7 +39,7 @@
 	background-color: #d63638;
 }
 .tsf-counter-one.tsf-count-okay {
-	background-color: #dba617;
+	background-color: #ffae00;
 }
 .tsf-counter-one.tsf-count-good {
 	background-color: #00a32a;
@@ -97,7 +97,7 @@ body.rtl .tsf-nav-tab-content .tsf-pixel-counter-wrap {
 }
 
 .tsf-pixel-counter-okay .tsf-pixel-counter-fluid {
-	background-color: #dba617;
+	background-color: #ffae00;
 }
 
 .tsf-pixel-counter-good .tsf-pixel-counter-fluid {

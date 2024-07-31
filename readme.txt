@@ -320,6 +320,7 @@ TODO when zooming in on iOS, the touch registration no longer aligns with the to
 	* TODO Added a redirect URL input field for the homepage.
 * **Improved:**
 	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
+		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
 	* The image selection button and preview icon animations are now twice as fast.

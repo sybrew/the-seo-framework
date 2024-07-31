@@ -33,23 +33,23 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 }
 
 .error.tsf-notice.tsf-show-icon p:before {
-	color: #dc3232;
+	color: #d63638;
 	content: "\f534";
 }
 
 .notice-warning.tsf-notice.tsf-show-icon p:before {
-	color: #ffb900;
+	color: #dba617;
 	content: "\f227";
 }
 
 .notice-info.tsf-notice.tsf-show-icon p:before {
-	color: #00a0d2;
+	color: #67a8e4;
 	font-size: 16px;
 	content: "\f223";
 }
 
 .updated.tsf-notice.tsf-show-icon p:before {
-	color: #46b450;
+	color: #00a32a;
 	font-size: 16px;
 	content: "\f147";
 }
@@ -63,7 +63,7 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 	margin: 0;
 	padding: 10px;
 	background: 0 0;
-	color: #72777c;
+	color: #787c82;
 	cursor: pointer;
 	text-decoration: none;
 }
@@ -89,8 +89,8 @@ body.rtl .tsf-notice .tsf-dismiss {
 	color: currentColor;
 	content: "\f153";
 	display: block;
-	font: 400 16px/20px dashicons;
-	speak: none;
+	font: normal 16px/20px dashicons;
+	speak: never;
 	height: 20px;
 	text-align: center;
 	width: 20px;
