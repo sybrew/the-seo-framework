@@ -12,6 +12,7 @@ use \The_SEO_Framework\{
 	Admin, // Yes, it ios legal to share class and namespace.
 	Data,
 	Helper\Query,
+	Helper\Format\Arrays,
 	Sitemap,
 };
 
@@ -93,15 +94,20 @@ class Plugin {
 	 * Resets options on request.
 	 *
 	 * @since 5.0.0
+	 * @since 5.0.7 1. Now differentiates the options independently of the order.
+	 *              2. Now resets options regardless of whether settings are changed from defaults.
 	 *
 	 * @return void Early if not on SEO settings page.
 	 */
 	private static function process_settings_reset() {
 
-		if ( Data\Plugin::get_options() === Data\Plugin\Setup::get_default_options() ) {
-			$state = 'unchanged';
-		} else {
+		if ( Arrays::array_diff_assoc_recursive( Data\Plugin::get_options(), Data\Plugin\Setup::get_default_options() ) ) {
+			// Settings are different from default, try resetting.
 			$state = Data\Plugin\Setup::reset_options() ? 'reset' : 'error';
+		} else {
+			// Proceed user intent thoroughly. Reset anyway yet say nothing's changed.
+			Data\Plugin\Setup::reset_options();
+			$state = 'unchanged';
 		}
 
 		Sitemap\Registry::refresh_sitemaps();
@@ -148,6 +154,8 @@ class Plugin {
 		// Sets that the options are unchanged, preemptively.
 		Data\Plugin::update_site_cache( 'settings_notice', 'unchanged' );
 		// But, if this action fires, we can assure that the settings have been changed (according to WP).
+		// WordPress resorts the settings array; so, right after a save, we do claim that the settings are updated.
+		// This is benign.
 		\add_action(
 			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[ static::class, 'set_option_updated_notice' ],

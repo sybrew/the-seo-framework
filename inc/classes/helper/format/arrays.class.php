@@ -140,4 +140,52 @@ class Arrays {
 
 		return $arrays[0];
 	}
+
+	/**
+	 * Computes a difference between arrays, recursively. Much like `array_diff_associative()`, but then
+	 * for multidimensionals.
+	 *
+	 * This is the only correct function of kind that exists, made bespoke by Sybre for TSF.
+	 *
+	 * @link <https://3v4l.org/qr7KH#v8.3.10> Test it here.
+	 *
+	 * @since 5.0.7
+	 *
+	 * @param array ...$arrays The arrays to differentiate. The leftmost array's values are dominant.
+	 * @return array The differentiated array values.
+	 */
+	public static function array_diff_assoc_recursive( ...$arrays ) {
+
+		$i = \count( $arrays );
+
+		while ( --$i ) if ( \is_array( $arrays[ $i ] ) ) foreach ( $arrays[ $i ] as $key => &$value ) {
+
+			$p = $i - 1;
+
+			if ( \is_array( $arrays[ $p ] ) && ! \array_key_exists( $key, $arrays[ $p ] ) ) {
+				// If the value doesn't exist in previous array, pass it along.
+				$arrays[ $p ][ $key ] = $value;
+				continue;
+			}
+
+			// If there's no diff with the previous array, remove it from all the next arrays.
+			if ( $value === $arrays[ $p ][ $key ] ) {
+				foreach ( range( $p, $i ) as $_i )
+					if ( \is_array( $arrays[ $_i ] ) )
+						unset( $arrays[ $_i ][ $key ] );
+
+				continue;
+			}
+
+			if ( \is_array( $value ) ) {
+				// Rewrite value based on iteration outcome.
+				$value = static::array_diff_assoc_recursive(
+					...array_column( $arrays, $key ),
+				);
+			}
+		}
+
+		// Return first iterated array.
+		return $arrays[ $p ];
+	}
 }

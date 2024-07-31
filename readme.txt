@@ -345,6 +345,7 @@ TODO when zooming in on iOS, the touch registration no longer aligns with the to
 	* Resolved an issue where horizontal scrolling bars would appear when the inputted title is wider than the screen when measured from the container.
 	* Resolved a long-standing regression where WordPress 5.3 changed the checkbox mark from a colorable item to an immutable image, so it was no longer green or red colored for The SEO Framework's default and warned settings, respectively. Thanks to this fix, Firefox is now also fully supported (it doesn't natively support checkbox colors), although it might be more demanding of your device to render the checkboxes.
 		* It took so long because we needed esoteric CSS that glitches when its container animates, namely, `mix-blend-mode`. We found a workaround with some trial and error.
+	* Resolved an issue where resetting the settings twice in a row would result in an "unknown error." Now, you get a "No SEO settings were changed" message instead.
 
 **For translators:**
 
@@ -356,6 +357,7 @@ TODO when zooming in on iOS, the touch registration no longer aligns with the to
 	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
 	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
+	* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
 	* JS Event `tsf-updated-block-editor` is now available.
 	* JS Event `tsf-updated-block-editor-${type}` is now available.
 	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
