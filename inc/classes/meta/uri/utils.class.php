@@ -418,12 +418,13 @@ class Utils {
 			$page ??= max( Query::paged(), Query::page() );
 
 			if ( $page > 1 ) {
-				$user_slash = ( $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '' );
-				$use_base ??=
-					   Query::is_real_front_page()
-					|| Query::is_archive()
-					|| Query::is_singular_archive()
-					|| Query::is_search();
+				$user_slash = $GLOBALS['wp_rewrite']->use_trailing_slashes ? '/' : '';
+
+				$use_base
+					??= Query::is_real_front_page()
+					 || Query::is_archive()
+					 || Query::is_singular_archive()
+					 || Query::is_search();
 
 				if ( $use_base ) {
 					$find = "/{$GLOBALS['wp_rewrite']->pagination_base}/{$page}{$user_slash}";

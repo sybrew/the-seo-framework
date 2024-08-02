@@ -3,13 +3,6 @@
 	display: none;
 }
 
-.tsf-seo-bar-item {
-	text-decoration: none;
-	font-size: 13px;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
 .tsf-title-wrap {
 	position: relative;
 	display: block;
@@ -94,9 +87,13 @@ body.rtl .tsf-title-placeholder-prefix {
 .tsf-seo-bar-item {
 	display: block;
 	color: #fff;
+	font-size: 13px;
 	text-align: center;
+	text-decoration: none;
 	border: 1px solid rgba( 0, 0, 0, .1 );
-	text-shadow: 0 0 3px rgba( 0, 0, 0, .5 );
+	text-shadow: 0 0 3px rgba( 0, 0, 0, .7 );
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .tsf-seo-bar-item:focus {

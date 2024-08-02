@@ -281,11 +281,6 @@ TODO: expand WPML string translation for TSF metadata
 		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
 	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
 
-TODO symbols for warnings + reduced contrast = yellow illegible.
-
-TODO when zooming in with Chromium, the floating title for terms is vertically misaligned.
-	-> Only 125% seems to be affected, 150~225 not.
-
 TODO add robots.txt settings
 	-> Specifically, to block ChatGPT bot.
 
@@ -293,18 +288,16 @@ TODO to the snippets zipper, wrap the plugin inside its namesake folder so that 
 
 TODO test image type support and warn users about Facebook not supporting webp (etc.)?
 
-TODO remove jQuery dependencies in UI?
-
-TODO regression(?) The image placeholder is no longer considered of the featured image in WP 6.6 Gutenberg.
-	-> It does update on Save.
-	-> Also affects Classic Editor, but perhaps we never implemented something like this.
-
 TODO validate the URL field before showing an image preview?
-
-TODO when the "site title" is removed, the "Protected:" or "Private:" prefixes are no longer trimmed on overflow.
 
 TODO when zooming in on iOS, the touch registration no longer aligns with the tooltip arrow.
 	-> This will probably involve some annoying relative offset vs screen width maths.
+
+Punt:
+- remove jQuery dependencies in UI?
+- The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
+	-> It does update on Save.
+	-> Also affects Classic Editor, but perhaps we never implemented something like this.
 
 ### 5.0.7
 
@@ -327,12 +320,15 @@ TODO when zooming in on iOS, the touch registration no longer aligns with the to
 	* The input placeholder blurring animation is now twice as fast.
 		* Note that [Firefox still doesn't support animations for placeholders](https://bugzilla.mozilla.org/show_bug.cgi?id=1115623). Now, we could workaround this using animations instead of transitions, but that's another can of worms.
 	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
-	* TODO Renamed "Additions" to "Title Additions" for the Homepage Settings, so to better convey you can edit a part of the title there.
+	* The plugin now better conveys where to modify the homepage's title "additions."
 	* The canonical URL placeholder is now populated for Quick Edit.
 		* TODO and it responds to changes like it would on a page.
 	* TODO The canonical URL placeholder is now updated when changing the slug on the Classic Editor.
 	* TODO The canonical URL placeholder is now updated when changing the slug on term edit.
 	* After saving a page in Gutenberg, the SEO Bar (if displayed) fades in much quicker now.
+	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
+	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
+	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -346,6 +342,9 @@ TODO when zooming in on iOS, the touch registration no longer aligns with the to
 	* Resolved a long-standing regression where WordPress 5.3 changed the checkbox mark from a colorable item to an immutable image, so it was no longer green or red colored for The SEO Framework's default and warned settings, respectively. Thanks to this fix, Firefox is now also fully supported (it doesn't natively support checkbox colors), although it might be more demanding of your device to render the checkboxes.
 		* It took so long because we needed esoteric CSS that glitches when its container animates, namely, `mix-blend-mode`. We found a workaround with some trial and error.
 	* Resolved an issue where resetting the settings twice in a row would result in an "unknown error." Now, you get a "No SEO settings were changed" message instead.
+	* Resolved an issue where the floating title parts didn't align properly when dealing with subpixel alignment.
+	* Resolved an issue where the floating title parts repositioned or (un)trimmed only when passing the `782px` screen width boundary, while they ought to be recalculated with every screen size change.
+	* Resolved an issue where the floating title prefix (e.g., `Private: `) didn't trim when the site title was removed.
 
 **For translators:**
 

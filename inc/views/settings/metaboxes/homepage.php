@@ -144,7 +144,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<?php
-		HTML::description( \__( 'Note: The input value of this field may be used to describe the name of the site elsewhere.', 'autodescription' ) );
+		HTML::description( \__( "Note: The input value of this field may be used to describe the website's name elsewhere. Therefore, it is best to only write the brand name. Use additions to decorate the title instead.", 'autodescription' ) );
 
 		if ( $home_id && \strlen( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) )
 			HTML::description( \__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );
@@ -580,7 +580,7 @@ switch ( $instance ) :
 			$noarchive_post ? $checked_home : '',
 		);
 
-		HTML::attention_description( \__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ) );
+		HTML::attention_description( \__( 'Warning: No public website should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ) );
 
 		HTML::wrap_fields(
 			[
