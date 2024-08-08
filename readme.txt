@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
-Requires at least: 5.9
+Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.4.0
 Stable tag: 5.0.6
@@ -293,6 +293,10 @@ TODO validate the URL field before showing an image preview?
 TODO when zooming in on iOS, the touch registration no longer aligns with the tooltip arrow.
 	-> This will probably involve some annoying relative offset vs screen width maths.
 
+TODO jr dot nl/?calendar=$test doesn't invoke aqp?
+
+TODO introduce css --vars
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -322,13 +326,18 @@ Punt:
 	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
 	* The plugin now better conveys where to modify the homepage's title "additions."
 	* The canonical URL placeholder is now populated for Quick Edit.
-		* TODO and it responds to changes like it would on a page.
+		* TODO and it responds to changes like it would on a page edit screen.
 	* TODO The canonical URL placeholder is now updated when changing the slug on the Classic Editor.
 	* TODO The canonical URL placeholder is now updated when changing the slug on term edit.
 	* After saving a page in Gutenberg, the SEO Bar (if displayed) fades in much quicker now.
 	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
 	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
 	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
+	* TODO (change course) The Primary Term selector for the Classic Editor has been rewritten for performance and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
+		* Moreover, the selector and its tooltip now only show up when you can select a primary term, decluttering the interface for most sites.
+		* Additionally, the selector tooltip has been moved down when "Add new {term_label}" is shown.
+			* With some languages, the "Most Used" tab would overlap with the tooltip icon. This won't occur with ["Add New Category"'s widest translation](https://translate.wordpress.org/projects/wp/6.5.x/ka/default/?filters%5Boriginal_id%5D=18061902&filters%5Bstatus%5D=either&filters%5Btranslation_id%5D=118594442), 'ახალი კატეგორიის დამატება'.
+			* The current user must be able to edit the terms of the taxonomy for the "Add new {term_label}" to be displayed.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -336,7 +345,6 @@ Punt:
 	* Resolved a regression from WordPress 6.6 where a CSS identifier disappeared. We used this identifier to apply styling for the sidebar. We now use a different, more specific identifier that's in all WordPress versions we support; from `.edit-post-sidebar`, now `#edit-post\:document`.
 	* Resolved an issue where the counter AJAX spinner wasn't offset by 3 pixels from the character counter's loader text. It's now also changed to 0.5 character widths.
 	* Resolved a typo where the description placeholders didn't blur on focus on Firefox on the SEO Settings page.
-	* TODO Resolved an issue where the canonical URL placeholder wasn't populated for Quick Edit (post and term).
 	* Resolved an issue where the Classic Editor's Primary Term selection label's cursor wasn't a pointer in WP 6.5 and later.
 	* Resolved an issue where horizontal scrolling bars would appear when the inputted title is wider than the screen when measured from the container.
 	* Resolved a long-standing regression where WordPress 5.3 changed the checkbox mark from a colorable item to an immutable image, so it was no longer green or red colored for The SEO Framework's default and warned settings, respectively. Thanks to this fix, Firefox is now also fully supported (it doesn't natively support checkbox colors), although it might be more demanding of your device to render the checkboxes.
@@ -345,6 +353,7 @@ Punt:
 	* Resolved an issue where the floating title parts didn't align properly when dealing with subpixel alignment.
 	* Resolved an issue where the floating title parts repositioned or (un)trimmed only when passing the `782px` screen width boundary, while they ought to be recalculated with every screen size change.
 	* Resolved an issue where the floating title prefix (e.g., `Private: `) didn't trim when the site title was removed.
+* **Note:** WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
 
 **For translators:**
 
@@ -357,6 +366,7 @@ Punt:
 	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
 	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 	* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
+	* Method `tsf()->description()->excerpt()->get_excerpt()` is now available. It's an alias of `get_post_excerpt()`, which is marked for deprecation due to being mislabeled.
 	* JS Event `tsf-updated-block-editor` is now available.
 	* JS Event `tsf-updated-block-editor-${type}` is now available.
 	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
@@ -373,7 +383,8 @@ Punt:
 	* Added the Dashicons depdency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
 * **Removed:**
 	* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
-	* Element `tsf-notice-wrap` is gone. We've long been relying on `wp-header-end` instead.
+	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
+	* TODO (change course) Redundant alias `.tsf-set-primary-term` for element `.tsf-primary-term-selector` is gone.
 * **Other:**
 	* Removed support for `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.

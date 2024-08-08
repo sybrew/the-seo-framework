@@ -3166,9 +3166,9 @@ final class Deprecated {
 	public function fetch_excerpt( $post = null ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '5.0.0', 'tsf()->description()->excerpt()->get_post_excerpt()' );
+		$tsf->_deprecated_function( 'tsf()->fetch_excerpt()', '5.0.0', 'tsf()->description()->excerpt()->get_excerpt()' );
 
-		return $tsf->description()->excerpt()->get_post_excerpt(
+		return $tsf->description()->excerpt()->get_excerpt(
 			$post ? [ 'id' => \get_post( $post )->ID ?? '' ] : null,
 		);
 	}

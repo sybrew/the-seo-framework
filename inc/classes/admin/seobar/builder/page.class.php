@@ -493,7 +493,7 @@ final class Page extends Main {
 				return $item;
 			} elseif ( ! empty( $this->query_cache['post']->post_excerpt ) ) {
 				// FIXME: This is not necessarily true if the field is filtered...
-				// TODO test if filter "the_seo_framework_fetched_description_excerpt" is used?
+				// TODO test if filter "the_seo_framework_description_excerpt" is used?
 				// Use something like the robots generator...? Ugh, here we go again.
 				$item['assess']['base'] = $cache['assess']['excerpt'];
 			}

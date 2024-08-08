@@ -48,7 +48,24 @@ class Excerpt {
 	/**
 	 * Returns a description excerpt.
 	 *
+	 * @since 5.0.7
+	 * @alias
+	 *
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
+	 * @return string
+	 */
+	public static function get_excerpt( $args = null ) {
+		return isset( $args )
+			? static::get_excerpt_from_args( $args )
+			: static::get_excerpt_from_query();
+	}
+
+	/**
+	 * Returns a description excerpt.
+	 *
 	 * @since 5.0.0
+	 * @TODO deprecate 5.1: use get_excerpt() instead.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -165,7 +182,7 @@ class Excerpt {
 		if ( $in_the_loop ) {
 			if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
 				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
-				// See https://wpvulndb.com/vulnerabilities/9445. We won't parse HTMl tags unless WordPress adds native support.
+				// See https://wpscan.com/vulnerability/8bc4cf95-79f7-4d92-b320-a841ab7e6a6f/. We won't parse HTML tags unless WordPress adds native support.
 				$excerpt = $object->description ?? '';
 			} elseif ( Query::is_author() ) {
 				$excerpt = Format\HTML::extract_content( \get_the_author_meta(

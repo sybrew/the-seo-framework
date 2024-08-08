@@ -9,7 +9,7 @@
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
- * Requires at least: 5.9
+ * Requires at least: 6.0
  * Requires PHP: 7.4.0
  *
  * @package   The_SEO_Framework\Bootstrap

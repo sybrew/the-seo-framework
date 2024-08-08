@@ -153,7 +153,7 @@ class Description {
 		$excerpt = (string) \apply_filters_deprecated(
 			'the_seo_framework_fetched_description_excerpt',
 			[
-				Description\Excerpt::get_post_excerpt( $args ),
+				Description\Excerpt::get_excerpt( $args ),
 				0,
 				$args,
 			],

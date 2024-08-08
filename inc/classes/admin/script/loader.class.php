@@ -723,13 +723,13 @@ class Loader {
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',
 			];
-			$deps = [ 'tsf', 'tsf-ays', 'wp-hooks', 'wp-element', 'wp-components', 'wp-url', 'wp-api-fetch', 'react', 'wp-util' ];
+			$deps = [ 'tsf', 'tsf-ays', 'wp-hooks', 'wp-element', 'wp-components', 'wp-data', 'wp-util' ];
 		} else {
 			$vars = [
 				'id'   => 'tsf-pt',
 				'name' => 'pt',
 			];
-			$deps = [ 'jquery', 'tsf', 'tsf-post', 'tsf-tt', 'wp-util' ];
+			$deps = [ 'tsf', 'tsf-post', 'tsf-tt', 'wp-util' ];
 		}
 
 		return [
