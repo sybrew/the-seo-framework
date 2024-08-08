@@ -3,18 +3,13 @@
  */
 .notice.tsf-notice {
 	position: relative;
-	padding-right: 38px;
+	padding-inline-end: 38px;
 	clear: both;
-}
-
-body.rtl .notice.tsf-notice {
-	padding-right: 12px;
-	padding-left: 38px;
 }
 
 .tsf-notice.tsf-show-icon p:before {
 	content: '';
-	margin-right: 12px;
+	margin-inline-end: 12px;
 	background: 0 0;
 	display: inline-block;
 	font: 400 14px/16px dashicons;
@@ -25,11 +20,6 @@ body.rtl .notice.tsf-notice {
 	width: 16px;
 	line-height: 14px;
 	-webkit-font-smoothing: antialiased;
-}
-
-body.rtl .tsf-notice.tsf-show-icon p:before {
-	margin-right: 0px;
-	margin-left: 12px;
 }
 
 .error.tsf-notice.tsf-show-icon p:before {
@@ -58,7 +48,7 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 .tsf-notice .tsf-dismiss {
 	position: absolute;
 	top: 0;
-	right: 0;
+	inset-inline-end: 0;
 	border: none;
 	margin: 0;
 	padding: 10px;
@@ -66,11 +56,6 @@ body.rtl .tsf-notice.tsf-show-icon p:before {
 	color: #787c82;
 	cursor: pointer;
 	text-decoration: none;
-}
-
-body.rtl .tsf-notice .tsf-dismiss {
-	right: initial;
-	left: 0;
 }
 
 .tsf-dismiss:hover {
@@ -101,13 +86,7 @@ body.rtl .tsf-notice .tsf-dismiss {
 @media screen and ( max-width: 782px ) {
 	.notice.tsf-notice,
 	.wp-core-ui .notice.tsf-notice {
-		padding-right: 46px;
-	}
-
-	body.rtl .notice.tsf-notice,
-	body.rtl.wp-core-ui .notice.tsf-notice {
-		padding-right: 10px;
-		padding-left: 46px;
+		padding-inline-end: 46px;
 	}
 }
 

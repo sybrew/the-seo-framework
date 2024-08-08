@@ -333,6 +333,8 @@ Punt:
 	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
 	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
 	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
+	* Reduced the admin stylesheet payload by implementing modern logical declarations.
+	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
 	* TODO (change course) The Primary Term selector for the Classic Editor has been rewritten for performance and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
 		* Moreover, the selector and its tooltip now only show up when you can select a primary term, decluttering the interface for most sites.
 		* Additionally, the selector tooltip has been moved down when "Add new {term_label}" is shown.

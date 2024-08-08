@@ -12,14 +12,10 @@
 .tsf-primary-term-selector {
 	margin: 0;
 	padding: 0;
-	float: right;
+	float: inline-end;
 	line-height: inherit;
 	display: block;
 	cursor: pointer;
-}
-
-body.rtl .tsf-primary-term-selector {
-	float: left;
 }
 
 .tsf-primary-term-selector input {
@@ -30,7 +26,6 @@ body.rtl .tsf-primary-term-selector {
 	line-height: inherit;
 	margin: 0;
 	padding: 0;
-	pointer-events: none;
 }
 
 .tsf-primary-term-selector input:checked:before {
@@ -43,12 +38,7 @@ body.rtl .tsf-primary-term-selector {
 .tsf-primary-term-selector-help-wrap {
 	position: absolute;
 	top: 0;
-	right: 25px;
-}
-
-body.rtl .tsf-primary-term-selector-help-wrap {
-	left: 25px;
-	right: initial;
+	inset-inline-end: 12px; /* .tabs-panels padding */
 }
 
 @media screen and ( max-width: 782px ) {

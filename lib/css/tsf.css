@@ -23,14 +23,9 @@
 	height: 0;
 	display: inline-block;
 	position: absolute;
-	left: 0;
+	inset-inline-start: 0;
 	color: transparent;
 	white-space: pre;
-}
-
-body.rtl .tsf-title-offset {
-	left: initial;
-	right: 0;
 }
 
 .tsf-title-placeholder-additions,
@@ -41,17 +36,11 @@ body.rtl .tsf-title-offset {
 	user-select: none;
 	box-sizing: content-box;
 	top: 0;
-	left: 0;
+	inset-inline-start: 0;
 	overflow: hidden;
 	white-space: pre;
 	text-overflow: ellipsis;
 	will-change: left, right;
-}
-
-body.rtl .tsf-title-placeholder-additions,
-body.rtl .tsf-title-placeholder-prefix {
-	left: initial;
-	right: 0;
 }
 
 .tsf-title-placeholder-additions {
@@ -251,12 +240,7 @@ input.tsf-disabled {
  * Start AJAX
  */
 .tsf-counter-wrap .tsf-ajax {
-	margin-left: .5ch;
-}
-
-body.rtl .tsf-counter-wrap .tsf-ajax {
-	margin-left: 0;
-	margin-right: .5ch;
+	margin-inline-start: .5ch;
 }
 
 .tsf-ajax:before {
@@ -293,13 +277,7 @@ body.rtl .tsf-counter-wrap .tsf-ajax {
 
 .tsf-set-image-button.button,
 .tsf-remove-image-button.button {
-	margin-right: 8px;
-}
-
-body.rtl .tsf-set-image-button.button,
-body.rtl .tsf-remove-image-button.button {
-	margin-right: 0;
-	margin-left: 8px;
+	margin-inline-end: 8px;
 }
 
 .tsf-image-preview {

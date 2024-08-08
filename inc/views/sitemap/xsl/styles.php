@@ -60,12 +60,8 @@ $styles = <<<'CSS'
 	}
 	h1 img {
 		vertical-align: bottom;
-		margin-right: 1.4rem;
+		margin-inline-end: 1.4rem;
 		image-rendering: -webkit-optimize-contrast;
-	}
-	.rtl h1 img {
-		margin-right: unset;
-		margin-left: 1.4rem;
 	}
 	#description {
 		background-color: <xsl:value-of select="$colorMain" />;
@@ -98,11 +94,8 @@ $styles = <<<'CSS'
 		overflow-wrap: anywhere;
 	}
 	th {
-		text-align: left;
+		text-align: start;
 		border-bottom: 1px solid <xsl:value-of select="$colorAccent" />;
-	}
-	.rtl th {
-		text-align: right;
 	}
 	tr:nth-of-type(2n) {
 		background-color: #eaeaea;

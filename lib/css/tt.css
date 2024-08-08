@@ -90,15 +90,8 @@ a.tsf-tooltip-item {
 .tsf-tooltip-text ol,
 .tsf-tooltip-text ul {
 	/* Padding is removed by WP via common.css, so we don't have to. */
-	margin-left: 1.25em;
+	margin-inline-start: 1.25em;
 	color: inherit;
-}
-
-body.rtl .tsf-tooltip-text ol,
-body.rtl .tsf-tooltip-text ul {
-	/* Padding is removed by WP via common.css, so we don't have to. */
-	margin-left: 0;
-	margin-right: 1.25em;
 }
 
 .tsf-tooltip-arrow {
