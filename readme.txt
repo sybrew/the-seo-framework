@@ -297,6 +297,9 @@ TODO jr dot nl/?calendar=$test doesn't invoke aqp?
 
 TODO introduce css --vars
 
+TODO add TikTok social profile hint? eh...
+	-> Also, there appears to be a specific format: https://support.google.com/business/answer/13580646.
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -335,11 +338,9 @@ Punt:
 	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
 	* Reduced the admin stylesheet payload by implementing modern logical declarations.
 	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
-	* TODO (change course) The Primary Term selector for the Classic Editor has been rewritten for performance and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
-		* Moreover, the selector and its tooltip now only show up when you can select a primary term, decluttering the interface for most sites.
-		* Additionally, the selector tooltip has been moved down when "Add new {term_label}" is shown.
-			* With some languages, the "Most Used" tab would overlap with the tooltip icon. This won't occur with ["Add New Category"'s widest translation](https://translate.wordpress.org/projects/wp/6.5.x/ka/default/?filters%5Boriginal_id%5D=18061902&filters%5Bstatus%5D=either&filters%5Btranslation_id%5D=118594442), 'ახალი კატეგორიის დამატება'.
-			* The current user must be able to edit the terms of the taxonomy for the "Add new {term_label}" to be displayed.
+	* The Primary Term selector for the Classic Editor has been rewritten for accessibility, performance, and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
+		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes.
+	* The SEO meta box tab labels are now inline whenever possible.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.

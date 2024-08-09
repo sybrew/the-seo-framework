@@ -22,28 +22,3 @@ use \The_SEO_Framework\Admin\Settings\Layout\HTML;
 	);
 	?>
 </script>
-
-<script type=text/html id=tmpl-tsf-primary-term-selector-help>
-	<span class=tsf-primary-term-selector-help-wrap id="tsf-primary-term-selector-help-{{data.taxonomySlug}}">
-		<?php
-		HTML::make_info( sprintf(
-			/* translators: %s = term name */
-			\esc_html__( 'The buttons below are for primary %s selection.', 'autodescription' ),
-			'{{data.taxonomy.i18n.name}}',
-		) );
-		?>
-	</span>
-</script>
-
-<script type=text/html id=tmpl-tsf-primary-term-selector-help-above>
-	<span class=tsf-primary-term-selector-help-wrap id="tsf-primary-term-selector-help-{{data.taxonomySlug}}">
-		<?php
-		HTML::make_info( sprintf(
-			/* translators: %s = term name */
-			\esc_html__( 'The buttons above are for primary %s selection.', 'autodescription' ),
-			'{{data.taxonomy.i18n.name}}',
-		) );
-		?>
-	</span>
-</script>
-<?php

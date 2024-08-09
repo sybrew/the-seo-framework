@@ -51,7 +51,7 @@ class Compatibility {
 		if ( ! static::get_active_conflicting_plugin_types( true )['seo_tools'] ) return;
 
 		Admin\Notice\Persistent::register_notice(
-			\__( 'Multiple SEO tools have been detected. You should only use one.', 'autodescription' ),
+			\__( 'Multiple SEO plugins have been detected. You should only use one.', 'autodescription' ),
 			'seo-plugin-conflict',
 			[ 'type' => 'warning' ],
 			[

@@ -32,5 +32,5 @@ use \The_SEO_Framework\Helper\Query;
 printf(
 	'<div id=%s data-post-id=%d class=hidden></div>',
 	'tsf-gutenberg-data-holder',
-	Query::get_the_real_id() // phpcs:ignore, WordPress.Security.EscapeOutput -- printf casts to int.
+	Query::get_the_real_id(), // phpcs:ignore, WordPress.Security.EscapeOutput -- printf casts to int.
 );

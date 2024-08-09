@@ -5,40 +5,21 @@
 	margin-top: 8px;
 }
 
-.tsf-is-primary-term {
-	font-weight: 600;
-}
-
-.tsf-primary-term-selector {
-	margin: 0;
-	padding: 0;
-	float: inline-end;
-	line-height: inherit;
+.tsf-primary-term-selector-wrap :is( label, select ) {
 	display: block;
-	cursor: pointer;
 }
 
-.tsf-primary-term-selector input {
-	vertical-align: middle;
-	height: 14px;
-	width: 14px;
-	min-width: 14px;
-	line-height: inherit;
-	margin: 0;
-	padding: 0;
+.tsf-primary-term-selector-wrap {
+	margin: 6px 0 6px;
 }
 
-.tsf-primary-term-selector input:checked:before {
-	width: 6px;
-	height: 6px;
-	margin: 3px;
-	line-height: inherit;
+.tabs-panel + .tsf-primary-term-selector-wrap {
+	margin-top: 10px;
 }
 
-.tsf-primary-term-selector-help-wrap {
-	position: absolute;
-	top: 0;
-	inset-inline-end: 12px; /* .tabs-panels padding */
+.tsf-primary-term-selector-wrap select {
+	margin: 6px 0;
+	width: 100%;
 }
 
 @media screen and ( max-width: 782px ) {

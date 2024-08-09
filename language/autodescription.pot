@@ -924,7 +924,7 @@ msgid "by Sybre Waaijer"
 msgstr ""
 
 #: inc/classes/helper/compatibility.class.php:54
-msgid "Multiple SEO tools have been detected. You should only use one."
+msgid "Multiple SEO plugins have been detected. You should only use one."
 msgstr ""
 
 #: inc/classes/helper/guidelines.class.php:209

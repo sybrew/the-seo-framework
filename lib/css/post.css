@@ -141,7 +141,7 @@ input.tsf-flex-nav-tab-radio {
 
 .tsf-flex-nav-tab {
 	flex-direction: row;
-	max-width: 125px;
+	max-width: max-content;
 }
 
 .tsf-flex-nav-tab-label {
@@ -154,6 +154,7 @@ input.tsf-flex-nav-tab-radio {
 	align-content: space-around;
 	position: relative;
 	cursor: pointer;
+	gap: 4px;
 }
 
 .tsf-flex-nav-dashicon,

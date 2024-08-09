@@ -701,21 +701,11 @@ class Loader {
 			$taxonomies[ $_t->name ] = [
 				'name'    => $_t->name,
 				'primary' => $primary_term_id, // if 0, it'll use hints from the interface.
+				'i18n'    => [
+					/* translators: %s = term name */
+					'selectPrimary' => sprintf( \esc_html__( 'Select primary %s', 'autodescription' ), $singular_name ),
+				],
 			];
-			if ( $gutenberg ) {
-				$taxonomies[ $_t->name ]['i18n'] = [
-					/* translators: %s = term name */
-					'selectPrimary' => sprintf( \esc_html__( 'Select Primary %s', 'autodescription' ), $singular_name ),
-				];
-			} else {
-				$taxonomies[ $_t->name ]['i18n'] = [
-					/* translators: %s = term name */
-					'makePrimary' => sprintf( \esc_html__( 'Make primary %s', 'autodescription' ), strtolower( $singular_name ) ),
-					/* translators: %s = term name */
-					'primary'     => sprintf( \esc_html__( 'Primary %s', 'autodescription' ), strtolower( $singular_name ) ),
-					'name'        => strtolower( $singular_name ),
-				];
-			}
 		}
 
 		if ( $gutenberg ) {
