@@ -221,6 +221,10 @@ class Setup {
 				'max_image_preview'        => 'large', // Max image-preview size. 'none', 'standard', 'large'.
 				'max_video_preview'        => -1,      // Max video-preview size. -1 = unlimited, 0 = disabled, R>0 = seconds.
 
+				// Robots.txt blocks.
+				'robotstxt_block_ai'  => 0, // Blocks large learning models from training on the site content.
+				'robotstxt_block_seo' => 0, // Block SEO crawlers like Ahrefs, Moz, and SEMRush.
+
 				// Robots home.
 				'homepage_noindex'   => 0, // Homepage robots noindex.
 				'homepage_nofollow'  => 0, // Homepage robots noarchive.

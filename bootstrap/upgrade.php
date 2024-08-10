@@ -208,7 +208,7 @@ function _upgrade( $previous_version ) {
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
 	// When a user upgrades beyond this range, they aren't expected to roll back.
-	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4200', '4270', '5001', '5050' ];
+	$versions = [ '1', '2701', '2802', '2900', '3001', '3103', '3300', '4051', '4103', '4110', '4200', '4270', '5001', '5050', '5070' ];
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
@@ -942,5 +942,18 @@ function _do_upgrade_5050() {
 			'sitemap_cron_prerender',
 			Data\Plugin::get_option( 'ping_use_cron_prerender' ) ?: 0,
 		);
+	}
+}
+
+/**
+ * Registers new options 'robotstxt_block_ai' and 'robotstxt_block_seo'.
+ *
+ * @since 5.0.7
+ */
+function _do_upgrade_5070() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5070' ) {
+		Data\Plugin::update_option( 'robotstxt_block_ai', 0 );
+		Data\Plugin::update_option( 'robotstxt_block_seo', 0 );
 	}
 }

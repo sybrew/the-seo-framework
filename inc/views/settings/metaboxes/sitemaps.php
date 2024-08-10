@@ -220,10 +220,14 @@ switch ( $instance ) :
 		break;
 
 	case 'robots':
-		$show_settings = true;
-		$robots_url    = RobotsTXT\Utils::get_robots_txt_url();
+		$robots_url = RobotsTXT\Utils::get_robots_txt_url();
 
 		HTML::header_title( \__( 'Robots.txt Settings', 'autodescription' ) );
+
+		HTML::description( \__( 'The robots.txt output is the first thing search engines look for before crawling your site. If you add the sitemap location in that output, then search engines may automatically access and index the sitemap.', 'autodescription' ) );
+		HTML::description( \__( 'If you do not add the sitemap location to the robots.txt output, you should notify search engines manually through webmaster-interfaces provided by the search engines.', 'autodescription' ) );
+
+		echo '<hr>';
 
 		if ( RobotsTXT\Utils::has_root_robots_txt() ) {
 			HTML::attention_description(
@@ -256,21 +260,14 @@ switch ( $instance ) :
 			}
 		}
 
-		HTML::description( \__( 'The robots.txt output is the first thing search engines look for before crawling your site. If you add the sitemap location in that output, then search engines may automatically access and index the sitemap.', 'autodescription' ) );
-		HTML::description( \__( 'If you do not add the sitemap location to the robots.txt output, you should notify search engines manually through webmaster-interfaces provided by the search engines.', 'autodescription' ) );
-
-		echo '<hr>';
-
-		if ( $show_settings ) {
-			HTML::header_title( \__( 'Sitemap Hinting', 'autodescription' ) );
-			HTML::wrap_fields(
-				Input::make_checkbox( [
-					'id'    => 'sitemaps_robots',
-					'label' => \__( 'Add sitemap location to robots.txt?', 'autodescription' ),
-				] ),
-				true,
-			);
-		}
+		HTML::header_title( \__( 'Sitemap Hinting', 'autodescription' ) );
+		HTML::wrap_fields(
+			Input::make_checkbox( [
+				'id'    => 'sitemaps_robots',
+				'label' => \__( 'Add sitemap location to robots.txt?', 'autodescription' ),
+			] ),
+			true,
+		);
 
 		if ( $robots_url ) {
 			HTML::description_noesc( sprintf(

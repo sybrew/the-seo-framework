@@ -169,7 +169,7 @@ final class Plugin {
 		if ( $robots )
 			\add_meta_box(
 				'autodescription-robots-settings',
-				\esc_html__( 'Robots Meta Settings', 'autodescription' ),
+				\esc_html__( 'Robots Settings', 'autodescription' ),
 				[ static::class, '_robots_metabox' ],
 				$settings_page_hook,
 				'main',
@@ -451,6 +451,15 @@ final class Plugin {
 	 */
 	public static function _robots_metabox_no_tab( $args ) {
 		Template::output_view( 'settings/metaboxes/robots', 'no', $args );
+	}
+
+	/**
+	 * Robots Meta Box Robots.txt Tab output.
+	 *
+	 * @since 5.0.7
+	 */
+	public static function _robots_metabox_robotstxt_tab() {
+		Template::output_view( 'settings/metaboxes/robots', 'robotstxt' );
 	}
 
 	/**

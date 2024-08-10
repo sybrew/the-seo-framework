@@ -135,7 +135,7 @@ class Utils {
 			if ( ! Data\Plugin::get_option( 'title_strip_tags' ) )
 				$functions[] = 'strip_tags';
 
-			foreach ( $filters as $filter ) {
+			foreach ( ( $filters ?? [] ) as $filter ) {
 				foreach ( $functions as $function ) {
 					// Only grab 10 of these. Yes, one might transform still on the 11th.
 					$it = 10;

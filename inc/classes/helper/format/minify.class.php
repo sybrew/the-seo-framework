@@ -38,8 +38,8 @@ namespace The_SEO_Framework\Helper\Format;
 class Minify {
 
 	/**
-	 * Minifies JavaScript that doesn't contain comments.
-	 * JS with comments will be corrupted using this method.
+	 * Minifies JavaScript that doesn't contain comments or text.
+	 * JS with comments or text will be corrupted using this method.
 	 *
 	 * @since 5.0.5
 	 *

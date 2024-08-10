@@ -223,6 +223,8 @@ class Plugin {
 			'prev_next_frontpage'          => 'checkbox',
 			'prev_next_posts'              => 'checkbox',
 			'pta'                          => 'pta_meta',
+			'robotstxt_block_ai'           => 'checkbox',
+			'robotstxt_block_seo'          => 'checkbox',
 			'search_noarchive'             => 'checkbox',
 			'search_nofollow'              => 'checkbox',
 			'search_noindex'               => 'checkbox',

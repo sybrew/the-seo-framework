@@ -383,7 +383,7 @@ switch ( $instance ) :
 		HTML::attention_description_noesc( Markdown::convert(
 			sprintf(
 				/* translators: backticks are code wraps. Markdown! */
-				\esc_html__( "Exclusions don't block search engines. When a post type is publicly queryable and shouldn't be indexed, consider applying `noindex` via Robots Meta Settings to purge it from search engines.", 'autodescription' ),
+				\esc_html__( "Exclusions don't block search engines. When a post type is publicly queryable and shouldn't be indexed, consider applying `noindex` via Robots Settings to purge it from search engines.", 'autodescription' ),
 				'#autodescription-robots-settings',
 			),
 			[ 'code' ],

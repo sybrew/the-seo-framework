@@ -242,8 +242,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO add toggle to block GPTBot (and other bots) via robots.txt.
-
 TODO In Polylang 3.5.x (and 3.6), unsetting " Hide URL language information for default language" will cause the robots.txt URLs to add extraneous language prefixes. The sitemap endpoints still work on their correct URL, however.
 	-> It's also incorrect if the homepage URL isn't of the DEFAULT language. Still, that causes the site to malfunction altogether.
 		-> What homepage URL?
@@ -258,6 +256,7 @@ TODO when double-clicking the submit button, we process the settings submission 
 	-> The second time it'll state nothing has changed, and this is what the user then sees.
 
 TODO new translations are available.
+TODO add that TSF is an independent project that doesn't need to hit profit margins; ergo, it's made for the benefit of its users, not the creator.
 
 TODO note the var_dump()
 
@@ -281,9 +280,6 @@ TODO: expand WPML string translation for TSF metadata
 		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
 	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
 
-TODO add robots.txt settings
-	-> Specifically, to block ChatGPT bot.
-
 TODO to the snippets zipper, wrap the plugin inside its namesake folder so that WordPress won't assume the location based on filename, which can be appended (1) to if downloaded for a second time.
 
 TODO test image type support and warn users about Facebook not supporting webp (etc.)?
@@ -300,6 +296,9 @@ TODO introduce css --vars
 TODO add TikTok social profile hint? eh...
 	-> Also, there appears to be a specific format: https://support.google.com/business/answer/13580646.
 
+TODO regression: the "popular categories" are no longer listened for changes.
+	-> This is caused by jQuery being dumb with events.
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -310,17 +309,18 @@ Punt:
 
 **For everyone:**
 
+* **Upgraded:** Now uses TSF database version `5070`
+	* Two new options are available: `robotstxt_block_ai` and `robotstxt_block_seo`.
 * **Added:**
 	* For WPML Multilingual Plugin, the following fields are automatically registered with their String Translation tool under domain `admin_texts_autodescription-site-settings`. Please note that these are only shown when they have a value inputted via the SEO Settings page:
 		* **Homepage:** title, description, social image URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings]homepage_*`.
 		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
+	* You can now block AI language model trainers and SEO analysis crawlers from using your content via the "Robots Settings."
 	* TODO Added a canonical URL input field for the homepage.
 	* TODO Added a redirect URL input field for the homepage.
 * **Improved:**
-	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
-		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
 	* The image selection button and preview icon animations are now twice as fast.
@@ -338,9 +338,13 @@ Punt:
 	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
 	* Reduced the admin stylesheet payload by implementing modern logical declarations.
 	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
+	* The SEO meta box tab labels are now inline when there's enough space.
+* **Changed:**
+	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
+		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
 	* The Primary Term selector for the Classic Editor has been rewritten for accessibility, performance, and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
 		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes.
-	* The SEO meta box tab labels are now inline whenever possible.
+	* The "Robots Meta Settings" are now called "Robots Settings" because we added a tab for AI blocking via Robots.txt (when available).
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -364,41 +368,52 @@ Punt:
 
 **For developers:**
 
-* **Added:**
-	* Filter `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
-	* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
-	* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
-	* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
-	* Method `tsf()->description()->excerpt()->get_excerpt()` is now available. It's an alias of `get_post_excerpt()`, which is marked for deprecation due to being mislabeled.
-	* JS Event `tsf-updated-block-editor` is now available.
-	* JS Event `tsf-updated-block-editor-${type}` is now available.
-	* JS file `utils.js` is now available and considered "common;" it contains two public methods: `debounce` and `delay`.
-	* JS file `ui.js` is now available and considered "common;" it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
-* **Changed:**
-	* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
-	* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
-	* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
-	* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
-	* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
+* **PHP API notes:**
+	* **Added:**
+		* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
+		* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
+		* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
+		* Method `tsf()->description()->excerpt()->get_excerpt()` is now available. It's an alias of `get_post_excerpt()`, which is marked for deprecation due to being mislabeled.
+	* **Changed:**
+		* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
+		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
+		* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
+		* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
+	* **Removed:**
+		* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
+	* **Fixed:**
+		* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
+		* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
+			* Its first parameter has been removed and now always uses the current locale.
+			* Use `tsf()->open_graph()->get_locale()` instead.
+		* `tsf()->schema()->entities` now report the correct class names.
+		* TODO  Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL.
+		* The `schema.org/WebPage` type reference is resetted now when regenerated.
+* **JavaScript API notes:**
+	* **Added:**
+		* JS Event `tsf-updated-block-editor` is now available.
+		* JS Event `tsf-updated-block-editor-${type}` is now available.
+		* JS file `utils.js` is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
+		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
+	* **Changed:**
+		* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
+* **Option notes:**
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `robotstxt_block_ai`. Default 0.
+		* Added index `robotstxt_block_seo`. Default 0.
+	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
+		* `the_seo_framework_robots` is now available. It's used to create a map of robots directives to generate.
+			* In effect, `the_seo_framework_robots_txt_pre` and `the_seo_framework_robots_txt_pro` are marked for deprecation.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
 	* Removed the jQuery dependency for scripts `tsf`, `tsf-post`, and `tsf-media` by refactoring animations to vanilla JS and CSS.
 	* Added the Dashicons depdency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
-* **Removed:**
-	* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
-	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
-	* TODO (change course) Redundant alias `.tsf-set-primary-term` for element `.tsf-primary-term-selector` is gone.
 * **Other:**
-	* Removed support for `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
-	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
-* **Fixed:**
-	* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
-	* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
-		* Its first parameter has been removed and now always uses the current locale.
-		* Use `tsf()->open_graph()->get_locale()` instead.
-	*  `tsf()->schema()->entities` now report the correct class names.
-	* TODO  Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL.
-	* The `schema.org/WebPage` type reference is resetted now when regenerated.
+	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
+	* Removed support for obsolete `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 
 ### 5.0.6
 

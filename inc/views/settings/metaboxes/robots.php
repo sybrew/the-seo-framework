@@ -84,13 +84,13 @@ switch ( $instance ) :
 		];
 
 		$tabs = [
-			'general' => [
+			'general'   => [
 				'name'     => \__( 'General', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_robots_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 				'args'     => '',
 			],
-			'index'   => [
+			'index'     => [
 				'name'     => \__( 'Indexing', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_robots_metabox_no_tab' ],
 				'dashicon' => 'filter',
@@ -101,7 +101,7 @@ switch ( $instance ) :
 					'robots'       => $robots['noindex'],
 				],
 			],
-			'follow'  => [
+			'follow'    => [
 				'name'     => \__( 'Following', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_robots_metabox_no_tab' ],
 				'dashicon' => 'editor-unlink',
@@ -112,7 +112,7 @@ switch ( $instance ) :
 					'robots'       => $robots['nofollow'],
 				],
 			],
-			'archive' => [
+			'archive'   => [
 				'name'     => \__( 'Archiving', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_robots_metabox_no_tab' ],
 				'dashicon' => 'download',
@@ -122,6 +122,11 @@ switch ( $instance ) :
 					'taxonomies'   => $taxonomies,
 					'robots'       => $robots['noarchive'],
 				],
+			],
+			'robotstxt' => [
+				'name'     => 'Robots.txt',
+				'callback' => [ Admin\Settings\Plugin::class, '_robots_metabox_robotstxt_tab' ],
+				'dashicon' => 'editor-alignleft',
 			],
 		];
 
@@ -324,7 +329,7 @@ switch ( $instance ) :
 
 		$ro_name_wrapped = HTML::code_wrap( $ro_value );
 
-		HTML::header_title( \__( 'Robots Settings', 'autodescription' ) );
+		HTML::header_title( \__( 'Robots Meta Settings', 'autodescription' ) );
 		HTML::description( $ro_i18n );
 		?>
 		<hr>
@@ -443,4 +448,92 @@ switch ( $instance ) :
 		}
 
 		HTML::wrap_fields( $checkboxes, true );
+		break;
+	case 'robotstxt':
+		$robots_url = RobotsTXT\Utils::get_robots_txt_url();
+
+		HTML::header_title( \__( 'Robots.txt Settings', 'autodescription' ) );
+
+		HTML::description( \__( 'When good web crawlers want to visit your site, they will first look for robots.txt to learn what they may access.', 'autodescription' ) );
+
+		// More info for when we expand these settings:
+		// HTML::description( \__( 'Anyone can see the output of robots.txt. So, do not use robots.txt to hide your information or sensitive parts of your website.', 'autodescription' ) );
+		// HTML::description( \__( 'Without robots.txt, the crawler may assume an error and may not crawl your website.', 'autodescription' ) );
+
+		if ( $robots_url ) {
+			HTML::description_noesc( sprintf(
+				'<a href="%s" target=_blank rel=noopener>%s</a>',
+				\esc_url( $robots_url, [ 'https', 'http' ] ),
+				\esc_html__( 'View the robots.txt output.', 'autodescription' ),
+			) );
+		}
+
+		echo '<hr>';
+
+		if ( RobotsTXT\Utils::has_root_robots_txt() ) {
+			HTML::attention_description(
+				\__( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' )
+			);
+			echo '<hr>';
+		} elseif ( ! $robots_url ) {
+			if ( Data\Blog::is_subdirectory_installation() ) {
+				HTML::attention_description(
+					\__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
+				);
+				echo '<hr>';
+			} elseif ( ! Query\Utils::using_pretty_permalinks() ) {
+				HTML::attention_description(
+					\__( "Note: You're using the plain permalink structure; so, no robots.txt file can be generated.", 'autodescription' )
+				);
+				HTML::description_noesc(
+					Markdown::convert(
+						sprintf(
+							/* translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is! */
+							\esc_html__( 'Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`.', 'autodescription' ),
+							\esc_url( \admin_url( 'options-permalink.php' ), [ 'https', 'http' ] ),
+							'/%category%/%postname%/',
+						),
+						[ 'code', 'a' ],
+						[ 'a_internal' => false ], // open in new window.
+					)
+				);
+				echo '<hr>';
+			}
+		}
+
+		if ( RobotsTXT\Utils::get_user_agents( 'ai' ) ) {
+			$info = HTML::make_info(
+				\__( 'Discover which AI crawlers are being blocked.', 'autodescription' ),
+				'https://kb.theseoframework.com/?p=256#default-blocklist-ai',
+				false,
+			);
+
+			HTML::wrap_fields(
+				Input::make_checkbox( [
+					'id'          => 'robotstxt_block_ai',
+					'label'       => \esc_html__( 'Block AI crawlers?', 'autodescription' ) . " $info",
+					'description' => \esc_html__( 'This blocks many crawlers that use your content to train language models.', 'autodescription' ),
+					'escape'      => false,
+				] ),
+				true,
+			);
+		}
+
+		if ( RobotsTXT\Utils::get_user_agents( 'seo' ) ) {
+			$info = HTML::make_info(
+				\__( 'Discover which SEO crawlers are being blocked.', 'autodescription' ),
+				'https://kb.theseoframework.com/?p=256#default-blocklist-seo',
+				false,
+			);
+
+			HTML::wrap_fields(
+				Input::make_checkbox( [
+					'id'          => 'robotstxt_block_seo',
+					'label'       => \esc_html__( 'Block SEO marketing crawlers?', 'autodescription' ) . " $info",
+					'description' => \esc_html__( 'This blocks many crawlers that analyze your site for ranking insights that might benefit competitors.', 'autodescription' ),
+					'escape'      => false,
+				] ),
+				true,
+			);
+		}
 endswitch;
