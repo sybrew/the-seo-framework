@@ -150,7 +150,7 @@ class Utils {
 	}
 
 	/**
-	 * Detects presence of robots.txt in root folder.
+	 * Checks if a Robots.txt file exists in the root directory of the WordPress installation.
 	 * Memoizes the return value.
 	 *
 	 * @since 5.0.0
