@@ -351,6 +351,7 @@ Punt:
 	* The Primary Term selector for the Classic Editor has been rewritten for accessibility, performance, and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
 		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes.
 	* The "Robots Meta Settings" are now called "Robots Settings" because we added a tab for AI blocking via Robots.txt (when available).
+	* TODO The "Robots" meta settings for the homepage is now called "Visibility" settings, because it now includes a canonical URL and redirect URL input field.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -403,6 +404,7 @@ Punt:
 		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
 	* **Changed:**
 		* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
+			* With that, for all affected functions, we removed `@function` JSDoc annotation, since that's now redundant.
 		* `tsf.selectByValue()` now also tries to select by label, which is tried together with the content.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
