@@ -111,7 +111,7 @@ class Schema {
 		 * Use this only to adjust write dynamic references.
 		 * Use `the_seo_framework_schema_graph_data` for direct alteration instead.
 		 *
-		 * @since 5.0.0
+		 * @since 5.0.7
 		 * @param array[]    $graph A sequential list of graph entities.
 		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                          Is null when the query is autodetermined.

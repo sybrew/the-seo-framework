@@ -48,8 +48,6 @@
 	background-color: #4f94d4;
 }
 
-/* END Character Counters */
-
 /* START Pixel Counters */
 
 /* Temporarily fix for SEO settings page. Remove me TSF 6.0 */
@@ -126,5 +124,3 @@
 .tsf-description-pixel-counter-shadow {
 	font-size: 13px;
 }
-
-/* END Pixel Counters */

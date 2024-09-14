@@ -142,13 +142,15 @@ class Arrays {
 	}
 
 	/**
-	 * Computes a difference between arrays, recursively. Much like `array_diff_associative()`, but then
-	 * for multidimensionals.
+	 * Computes a difference between arrays, recursively. Much like `array_diff_assoc()`, but then for multidimensionals.
+	 *
+	 * Unlike `array_diff_assoc()`, this method considers out of order arrays as equal.
+	 * So, [ 1, 2 ] and [ 2, 1 ] are considered equal. This is helpful for associative array comparison, like with options.
 	 *
 	 * This is the only correct function of kind that exists, made bespoke by Sybre for TSF.
 	 *
 	 * @link <https://3v4l.org/CuItX> Test it here.
-	 * TODO consider array_reduce()?
+	 * TODO consider array_reduce() for improved performance?
 	 *
 	 * @since 5.0.7
 	 *

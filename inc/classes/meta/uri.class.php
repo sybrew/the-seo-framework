@@ -406,6 +406,7 @@ class URI {
 
 		$url = \get_term_link( $term_id, $taxonomy );
 
+		// get_term_link() can return WP_Error.
 		if ( empty( $url ) || ! \is_string( $url ) )
 			return '';
 

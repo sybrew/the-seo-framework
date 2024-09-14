@@ -252,6 +252,8 @@ TODO In Polylang 3.5 or 3.6, they reversed the order of columns (another bug) wh
 
 TODO add cornerstone as a non-html page builder.
 
+TODO disable Avada's SEO settings.
+
 TODO when double-clicking the submit button, we process the settings submission twice.
 	-> The second time it'll state nothing has changed, and this is what the user then sees.
 
@@ -280,6 +282,8 @@ TODO: expand WPML string translation for TSF metadata
 		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
 	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
 
+TODO translatepress multilingual sitemap? Is this possible? See backlogged emails with them.
+
 TODO to the snippets zipper, wrap the plugin inside its namesake folder so that WordPress won't assume the location based on filename, which can be appended (1) to if downloaded for a second time.
 
 TODO test image type support and warn users about Facebook not supporting webp (etc.)?
@@ -298,6 +302,8 @@ TODO add TikTok social profile hint? eh...
 
 TODO regression: the "popular categories" are no longer listened for changes.
 	-> This is caused by jQuery being dumb with events.
+
+TODO the locale on the frontend is now loaded "just in time."
 
 Punt:
 - remove jQuery dependencies in UI?
@@ -397,6 +403,7 @@ Punt:
 		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
 	* **Changed:**
 		* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
+		* `tsf.selectByValue()` now also tries to select by label, which is tried together with the content.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Added index `robotstxt_block_ai`. Default 0.

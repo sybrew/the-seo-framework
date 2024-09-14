@@ -35,7 +35,7 @@ spl_autoload_register( 'The_SEO_Framework\_autoload_classes', true, true );
 
 /**
  * Loads plugin locale 'autodescription'.
- * Files located in plugin folder `../autodescription/language/`
+ * Files located in plugin folder `../autodescription/language/`.
  *
  * @hook plugins_loaded 4
  * @since 2.8.0

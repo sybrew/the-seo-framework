@@ -1,0 +1,4 @@
+Contact: https://github.com/sybrew/the-seo-framework/security/advisories/new
+Preferred-Languages: en
+Security-Review: https://www.wordfence.com/threat-intel/vulnerabilities/researchers/sybre-waaijer # The SEO Framework's dev is the security researcher.
+SBOM: not applicable

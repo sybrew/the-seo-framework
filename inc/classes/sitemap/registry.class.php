@@ -52,6 +52,7 @@ class Registry {
 	/**
 	 * Initializes sitemap output.
 	 *
+	 * @hook parse_request 15
 	 * @since 4.0.0
 	 * @since 4.0.2 Can now parse non-ASCII URLs. No longer only lowercases raw URIs.
 	 * @since 5.0.0 Is now static.

@@ -169,6 +169,7 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+		HTML::description( \__( 'This option does not affect the homepage; it uses a different one.', 'autodescription' ) );
 		?>
 		<hr>
 		<?php

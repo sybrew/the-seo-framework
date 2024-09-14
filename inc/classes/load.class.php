@@ -62,7 +62,7 @@ final class Load extends Pool {
 	private static $instance;
 
 	/**
-	 * Instance getter.
+	 * Returns the current and only instance -- sets it up if it doesn't exist.
 	 *
 	 * @since 5.0.0
 	 * @access private
