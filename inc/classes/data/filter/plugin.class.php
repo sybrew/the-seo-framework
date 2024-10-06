@@ -178,6 +178,8 @@ class Plugin {
 			'homepage_noarchive'           => 'checkbox',
 			'homepage_nofollow'            => 'checkbox',
 			'homepage_noindex'             => 'checkbox',
+			'homepage_canonical'           => 'fully_qualified_url',
+			'homepage_redirect'            => 'fully_qualified_url',
 			'homepage_og_description'      => 'metadata_text',
 			'homepage_og_title'            => 'metadata_text',
 			'homepage_social_image_id'     => 'absolute_integer',

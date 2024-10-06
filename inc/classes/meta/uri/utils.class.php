@@ -11,6 +11,8 @@ namespace The_SEO_Framework\Meta\URI;
 use function \The_SEO_Framework\{
 	memo,
 	umemo,
+	get_query_type_from_args,
+	normalize_generation_args,
 };
 
 use \The_SEO_Framework\{
@@ -107,6 +109,7 @@ class Utils {
 	 * Slashes the root (home) URL.
 	 *
 	 * @since 5.0.0
+	 * @todo shouldn't this have been "contextual_trailingslashit"?
 	 *
 	 * @param string $url The root URL.
 	 * @return string The root URL plausibly with added slashes.
@@ -480,5 +483,48 @@ class Utils {
 			return "$url&$query{$fragment}";
 
 		return "$url?$query{$fragment}";
+	}
+
+
+	/**
+	 * Returns the permalink structure for the given query.
+	 * Does not support pagination or endpoint masks.
+	 *
+	 * This method is meant for canonical URL prediction in JavaScript.
+	 *
+	 * @since 5.0.7
+	 *
+	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @return string The URL permastructure for the given query.
+	 */
+	public static function get_url_permastruct( $args ) {
+		global $wp_rewrite;
+
+		normalize_generation_args( $args );
+
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$permastruct = $wp_rewrite->front;
+				} else {
+					$permastruct = \is_post_type_hierarchical( Query::get_post_type_real_id( $args['id'] ) )
+						? $wp_rewrite->get_page_permastruct()
+						: "{$wp_rewrite->root}{$wp_rewrite->permalink_structure}";
+				}
+				break;
+			case 'homeblog':
+				$permastruct = $wp_rewrite->front;
+				break;
+			case 'term':
+				$permastruct = $wp_rewrite->get_extra_permastruct( $args['tax'] );
+				break;
+			case 'pta':
+				$permastruct = $wp_rewrite->get_extra_permastruct( $args['pta'] );
+				break;
+			case 'user':
+				$permastruct = $wp_rewrite->get_author_permastruct();
+		}
+
+		return '/' . ltrim( \user_trailingslashit( $permastruct ?? '' ), '/' );
 	}
 }

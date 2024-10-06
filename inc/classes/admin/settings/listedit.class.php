@@ -192,7 +192,8 @@ final class ListEdit extends Admin\Lists\Table {
 			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS,
 		);
 
-		$meta = Data\Plugin\Post::get_meta( $post_id );
+		$meta        = Data\Plugin\Post::get_meta( $post_id );
+		$is_homepage = Query::is_static_front_page( $generator_args['id'] );
 
 		// NB: The indexes correspond to `autodescription-list[index]` field input names.
 		$data = [
@@ -203,9 +204,7 @@ final class ListEdit extends Admin\Lists\Table {
 				'value' => $meta['_genesis_description'],
 			],
 			'canonical'   => [
-				'value'       => $meta['_genesis_canonical_uri'],
-				// var_dump() figure out how to make it work seamlessly with noindex.
-				'placeholder' => Meta\URI::get_generated_url( $generator_args ),
+				'value' => $meta['_genesis_canonical_uri'],
 			],
 			'noindex'     => [
 				'value'    => $meta['_genesis_noindex'],
@@ -223,7 +222,8 @@ final class ListEdit extends Admin\Lists\Table {
 				'default'  => empty( $r_defaults['noarchive'] ) ? 'archive' : 'noarchive',
 			],
 			'redirect'    => [
-				'value' => $meta['redirect'],
+				'value'       => $meta['redirect'],
+				'placeholder' => $is_homepage ? \esc_url( Data\Plugin::get_option( 'homepage_redirect' ) ) : '',
 			],
 		];
 
@@ -254,7 +254,7 @@ final class ListEdit extends Admin\Lists\Table {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
-		if ( Query::is_static_front_page( $generator_args['id'] ) ) {
+		if ( $is_homepage ) {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) \strlen( Data\Plugin::get_option( 'homepage_title' ) );
 			$default_title       = $_has_home_title
@@ -270,6 +270,13 @@ final class ListEdit extends Admin\Lists\Table {
 				? Meta\Description::get_custom_description( $generator_args )
 				: Meta\Description::get_generated_description( $generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
+
+			// var_dump() figure out how to make it work seamlessly with noindex.
+			$_has_home_canonical     = (bool) Data\Plugin::get_option( 'homepage_canonical' );
+			$default_canonical       = $_has_home_canonical
+				? Meta\URI::get_custom_canonical_url( $generator_args )
+				: Meta\URI::get_generated_url( $generator_args );
+			$is_canonical_ref_locked = $_has_home_canonical;
 		} else {
 			$default_title       = Meta\Title::get_bare_generated_title( $generator_args );
 			$addition            = Meta\Title::get_addition();
@@ -278,21 +285,29 @@ final class ListEdit extends Admin\Lists\Table {
 
 			$default_description = Meta\Description::get_generated_description( $generator_args );
 			$is_desc_ref_locked  = false;
+
+			$is_canonical_ref_locked = false;
+			$default_canonical       = Meta\URI::get_generated_url( $generator_args );
 		}
 
-		$post_data  = [
+		$post_data      = [
 			'isFront' => Query::is_static_front_page( $generator_args['id'] ),
 		];
-		$title_data = [
+		$title_data     = [
 			'refTitleLocked'    => $is_title_ref_locked,
 			'defaultTitle'      => \esc_html( $default_title ),
 			'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
 			'additionValue'     => \esc_html( $addition ),
 			'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 		];
-		$desc_data  = [
+		$desc_data      = [
 			'refDescriptionLocked' => $is_desc_ref_locked,
 			'defaultDescription'   => $default_description,
+		];
+		$canonical_data = [
+			'refCanonicalLocked' => $is_canonical_ref_locked,
+			'defaultCanonical'   => \esc_url( $default_canonical ),
+			'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
 		];
 
 		printf(
@@ -315,6 +330,13 @@ final class ListEdit extends Admin\Lists\Table {
 			sprintf( 'tsfLeDescriptionData[%s]', (int) $post_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leDescription' => $desc_data ] )
+		);
+		printf(
+			// '<span class=hidden id=%s data-le-canonical="%s"></span>',
+			'<span class=hidden id=%s %s></span>',
+			sprintf( 'tsfLeCanonicalData[%s]', (int) $post_id ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			HTML::make_data_attributes( [ 'leCanonical' => $canonical_data ] )
 		);
 
 		if ( $this->doing_ajax )
@@ -365,9 +387,7 @@ final class ListEdit extends Admin\Lists\Table {
 				'value' => $meta['description'],
 			],
 			'canonical'   => [
-				'value'       => $meta['canonical'],
-				// var_dump() figure out how to make it work seamlessly with noindex.
-				'placeholder' => Meta\URI::get_generated_url( $generator_args ),
+				'value' => $meta['canonical'],
 			],
 			'noindex'     => [
 				'value'    => $meta['noindex'],
@@ -425,7 +445,7 @@ final class ListEdit extends Admin\Lists\Table {
 			)
 			: '';
 
-		$title_data = [
+		$title_data     = [
 			'refTitleLocked'    => false,
 			'defaultTitle'      => \esc_html( Meta\Title::get_bare_generated_title( $generator_args ) ),
 			'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
@@ -433,9 +453,14 @@ final class ListEdit extends Admin\Lists\Table {
 			'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
 			'termPrefix'        => $term_prefix,
 		];
-		$desc_data  = [
+		$desc_data      = [
 			'refDescriptionLocked' => false,
 			'defaultDescription'   => Meta\Description::get_generated_description( $generator_args ),
+		];
+		$canonical_data = [
+			'refCanonicalLocked' => false,
+			'defaultCanonical'   => \esc_url( Meta\URI::get_generated_url( $generator_args ) ),
+			'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
 		];
 
 		$container .= sprintf(
@@ -449,6 +474,12 @@ final class ListEdit extends Admin\Lists\Table {
 			sprintf( 'tsfLeDescriptionData[%s]', (int) $term_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leDescription' => $desc_data ] )
+		);
+		$container .= sprintf(
+			'<span class=hidden id=%s %s></span>',
+			sprintf( 'tsfLeCanonicalData[%s]', (int) $term_id ),
+			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			HTML::make_data_attributes( [ 'leCanonical' => $canonical_data ] )
 		);
 
 		if ( $this->doing_ajax )

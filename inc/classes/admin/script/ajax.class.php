@@ -49,6 +49,7 @@ final class AJAX {
 	/**
 	 * Clears persistent notice on user request (clicked Dismiss icon) via AJAX.
 	 *
+	 * @hook wp_ajax_tsf_dismiss_notice 10
 	 * @since 4.1.0
 	 * @since 4.2.0 Now cleans response header.
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
@@ -85,6 +86,7 @@ final class AJAX {
 	/**
 	 * Handles counter option update on AJAX request for users that can edit posts.
 	 *
+	 * @hook wp_ajax_tsf_update_counter 10
 	 * @since 3.1.0 Introduced in 2.6.0, but the name changed.
 	 * @since 4.2.0 1. Now uses wp.ajax instead of $.ajax.
 	 *              2. No longer tests if settings-saving was successful.
@@ -132,13 +134,14 @@ final class AJAX {
 	 *
 	 * Copied from WordPress Core wp_ajax_crop_image.
 	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
-	 *               - This was set to 'edit_post' in WP 4.7? trac ticket got lost, probably for (invalid) security reasons.
-	 *                 In any case, that's still incorrect, and I gave up on communicating this;
-	 *                 We're not editing the image, we're creating a new one!
+	 *              - This was set to 'edit_post' in WP 4.7? trac ticket got lost, probably for (invalid) security reasons.
+	 *                In any case, that's still incorrect, and I gave up on communicating this;
+	 *                We're not editing the image, we're creating a new one!
 	 *           2. It now only accepts TSF own AJAX nonces.
 	 *           3. It now only accepts context 'tsf-image'
 	 *           4. It no longer accepts a default context.
 	 *
+	 * @hook wp_ajax_tsf_crop_image 10
 	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
 	 * @since 4.2.0 Now cleans response header.
 	 * @since 4.2.5 1. Backported cropping support for WebP (WP 5.9).
@@ -256,11 +259,13 @@ final class AJAX {
 	}
 
 	/**
-	 * Gets an SEO Bar for AJAX during edit-post.
+	 * Gets a various post data for Gutenberg / Block Editor on save.
 	 *
+	 * @hook wp_ajax_tsf_update_post_data 10
 	 * @since 4.0.0
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
+	 * @since 5.0.7 Now relays the 'edit_post' capability check to the reference handler.
 	 * @access private
 	 */
 	public static function get_post_data() {
@@ -268,12 +273,9 @@ final class AJAX {
 		Helper\Headers::clean_response_header();
 
 		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
-		Utils::check_ajax_capability_referer( 'edit_posts' );
+		$post_id = \absint( $_POST['post_id'] ?? 0 );
 
-		$post_id = \absint( $_POST['post_id'] );
-
-		if ( ! $post_id || ! \current_user_can( 'edit_post', $post_id ) )
-			\wp_send_json_error();
+		Utils::check_ajax_capability_referer( 'edit_post', $post_id );
 
 		$_get_defaults = [
 			'seobar'          => false,

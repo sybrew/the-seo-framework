@@ -225,12 +225,15 @@ class Setup {
 				'robotstxt_block_ai'  => 0, // Blocks large learning models from training on the site content.
 				'robotstxt_block_seo' => 0, // Block SEO crawlers like Ahrefs, Moz, and SEMRush.
 
-				// Robots home.
+				// Homepage visibility.
 				'homepage_noindex'   => 0, // Homepage robots noindex.
 				'homepage_nofollow'  => 0, // Homepage robots noarchive.
 				'homepage_noarchive' => 0, // Homepage robots nofollow.
 
-				// Home meta.
+				'homepage_canonical' => '', // Homepage canonical URL.
+				'homepage_redirect'  => '', // Homepage redirect URL.
+
+				// Homepage meta.
 				'homepage_title'         => '', // Homepage Title string.
 				'homepage_tagline'       => 1,  // Homepage add blog Tagline.
 				'homepage_description'   => '', // Homepage Description string.

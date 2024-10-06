@@ -53,8 +53,8 @@ $tw_suported_cards = Meta\Twitter::get_supported_cards();
 
 $image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 
-$canonical_placeholder = Meta\URI::get_generated_url( $generator_args );
-$robots_defaults       = Meta\Robots::get_generated_meta(
+$default_canonical = Meta\URI::get_generated_url( $generator_args );
+$robots_defaults   = Meta\Robots::get_generated_meta(
 	$generator_args,
 	[ 'noindex', 'nofollow', 'noarchive' ],
 	ROBOTS_IGNORE_SETTINGS,
@@ -381,7 +381,20 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_attr( $canonical_placeholder ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off />
+				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_attr( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off />
+				<?php
+				Input::output_js_canonical_data(
+					'autodescription-meta[canonical]',
+					[
+						'state' => [
+							'refCanonicalLocked' => false,
+							'defaultCanonical'   => \esc_url( $default_canonical ),
+							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+						],
+					],
+				);
+				?>
 			</td>
 		</tr>
 
@@ -395,7 +408,7 @@ Input::output_js_social_data(
 					'https://developers.google.com/search/docs/advanced/robots/robots_meta_tag#directives',
 				);
 				?>
-				</th>
+			</th>
 			<td>
 				<?php
 				foreach ( $robots_settings as $_s ) {

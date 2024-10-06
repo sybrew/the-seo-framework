@@ -455,7 +455,6 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @uses static::is_archive()
 	 *
 	 * @param mixed $author Optional. User ID, nickname, nicename, or array of User IDs, nicknames, and nicenames
 	 * @return bool
@@ -518,7 +517,6 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @uses static::is_archive()
 	 *
 	 * @param mixed $category Optional. Category ID, name, slug, or array of Category IDs, names, and slugs.
 	 * @return bool
@@ -611,7 +609,6 @@ class Query {
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @api not used internally, polar opposite of is_single().
-	 * @uses static::is_singular()
 	 *
 	 * @param int|string|array $page Optional. Page ID, title, slug, or array of such. Default empty.
 	 * @return bool
@@ -699,7 +696,6 @@ class Query {
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, which is more reliable.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @uses The_SEO_Framework_Query::is_single_admin()
 	 *
 	 * @param int|string|array $post Optional. Post ID, title, slug, or array of such. Default empty.
 	 * @return bool
@@ -743,7 +739,6 @@ class Query {
 	 * @since 4.0.0 No longer processes integers as input.
 	 * @since 4.2.4 No longer tests type of $post_types.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @uses static::is_singular_admin()
 	 *
 	 * @param string|string[] $post_types Optional. Post type or array of post types. Default empty string.
 	 * @return bool Post Type is singular
@@ -810,7 +805,6 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @uses static::is_archive()
 	 *
 	 * @param mixed $tag Optional. Tag ID, name, slug, or array of Tag IDs, names, and slugs.
 	 * @return bool

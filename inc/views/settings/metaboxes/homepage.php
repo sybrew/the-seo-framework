@@ -69,24 +69,24 @@ switch ( $instance ) :
 		<hr>
 		<?php
 		$tabs = [
-			'general'   => [
+			'general'    => [
 				'name'     => \__( 'General', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_homepage_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
-			'additions' => [
+			'additions'  => [
 				'name'     => \__( 'Additions', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_homepage_metabox_additions_tab' ],
 				'dashicon' => 'plus-alt2',
 			],
-			'social'    => [
+			'social'     => [
 				'name'     => \__( 'Social', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_homepage_metabox_social_tab' ],
 				'dashicon' => 'share',
 			],
-			'robots'    => [
-				'name'     => \__( 'Robots', 'autodescription' ),
-				'callback' => [ Admin\Settings\Plugin::class, '_homepage_metabox_robots_tab' ],
+			'visibility' => [
+				'name'     => \__( 'Visibility', 'autodescription' ),
+				'callback' => [ Admin\Settings\Plugin::class, '_homepage_metabox_visibility_tab' ],
 				'dashicon' => 'visibility',
 			],
 		];
@@ -123,7 +123,7 @@ switch ( $instance ) :
 		<p class=tsf-title-wrap>
 			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
 			<?php
-			$_post_meta_title = $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
+			$meta_title_post = $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
 			Input::output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
@@ -131,9 +131,9 @@ switch ( $instance ) :
 					'state' => [
 						'refTitleLocked'      => false, // This field is the mother of all references.
 						'defaultTitle'        => \esc_html(
-							coalesce_strlen( $_post_meta_title ) ?? Meta\Title::get_bare_generated_title( $generator_args )
+							coalesce_strlen( $meta_title_post ) ?? Meta\Title::get_bare_generated_title( $generator_args )
 						),
-						'_defaultTitleLocked' => (bool) \strlen( $_post_meta_title ), // Underscored index because it's non-standard API.
+						'_defaultTitleLocked' => (bool) \strlen( $meta_title_post ), // Underscored index because it's non-standard API.
 						'addAdditions'        => Meta\Title\Conditions::use_branding( $generator_args ),
 						'useSocialTagline'    => Meta\Title\Conditions::use_branding( $generator_args, true ),
 						'additionValue'       => \esc_html( Meta\Title::get_addition_for_front_page() ),
@@ -502,16 +502,56 @@ switch ( $instance ) :
 		}
 		break;
 
-	case 'robots':
+	case 'visibility':
 		if ( $home_id ) {
+			$canonical_post = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $home_id );
+			$redirect_post  = Data\Plugin\Post::get_meta_item( 'redirect', $home_id );
+
 			$noindex_post   = Data\Plugin\Post::get_meta_item( '_genesis_noindex', $home_id );
 			$nofollow_post  = Data\Plugin\Post::get_meta_item( '_genesis_nofollow', $home_id );
 			$noarchive_post = Data\Plugin\Post::get_meta_item( '_genesis_noarchive', $home_id );
 		} else {
+			$canonical_post = '';
+			$redirect_post  = '';
+
 			$noindex_post   = '';
 			$nofollow_post  = '';
 			$noarchive_post = '';
 		}
+
+		$default_canonical = $canonical_post ?: Meta\URI::get_generated_url( $generator_args );
+
+		?>
+		<p>
+			<label for="<?php Input::field_id( 'homepage_canonical' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Canonical URL', 'autodescription' ); ?></strong>
+				<?php
+					echo ' ';
+					HTML::make_info(
+						\__( 'This urges search engines to go to the outputted URL.', 'autodescription' ),
+						'https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls',
+					);
+				?>
+				<?php
+				Input::output_js_canonical_data(
+					Input::get_field_id( 'homepage_canonical' ),
+					[
+						'state' => [
+							'refCanonicalLocked' => false, // This is the motherfield.
+							'defaultCanonical'   => \esc_url( $default_canonical ),
+							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+						],
+					],
+				);
+				?>
+			</label>
+		</p>
+		<p>
+			<input type=url name="<?php Input::field_name( 'homepage_canonical' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_canonical' ); ?>" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_canonical' ) ) ?>" autocomplete=off />
+		</p>
+
+		<hr>
+		<?php
 
 		$checked_home = '';
 		/**
@@ -635,4 +675,23 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+		?>
+		<hr>
+
+		<p>
+			<label for="<?php Input::field_id( 'homepage_redirect' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( '301 Redirect URL', 'autodescription' ); ?></strong>
+				<?php
+					echo ' ';
+					HTML::make_info(
+						\__( 'This will force visitors to go to another URL.', 'autodescription' ),
+						'https://developers.google.com/search/docs/advanced/crawling/301-redirects',
+					);
+				?>
+			</label>
+		</p>
+		<p>
+			<input type=url name="<?php Input::field_name( 'homepage_redirect' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_redirect' ); ?>" placeholder="<?= \esc_url( $redirect_post ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_redirect' ) ) ?>" autocomplete=off />
+		</p>
+		<?php
 endswitch;

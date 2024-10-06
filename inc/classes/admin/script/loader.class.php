@@ -72,6 +72,7 @@ class Loader {
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 			$scripts[] = static::get_social_scripts();
+			$scripts[] = static::get_canonical_scripts();
 			$scripts[] = static::get_primaryterm_scripts();
 			$scripts[] = static::get_ays_scripts();
 
@@ -88,6 +89,7 @@ class Loader {
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 			$scripts[] = static::get_social_scripts();
+			$scripts[] = static::get_canonical_scripts();
 			$scripts[] = static::get_ays_scripts();
 
 			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
@@ -96,6 +98,7 @@ class Loader {
 			$scripts[] = static::get_list_edit_scripts();
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
+			$scripts[] = static::get_canonical_scripts();
 
 			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
@@ -109,6 +112,7 @@ class Loader {
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 			$scripts[] = static::get_social_scripts();
+			$scripts[] = static::get_canonical_scripts();
 			$scripts[] = static::get_ays_scripts();
 
 			// Always load unconditionally, options may enable the counters dynamically.
@@ -326,7 +330,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf', 'tsf-tt', 'tsf-utils' ],
+				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf', 'tsf-tt', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -360,7 +364,7 @@ class Loader {
 			[
 				'id'       => 'tsf-settings',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util' ],
+				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util' ],
 				'autoload' => true,
 				'name'     => 'settings',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -424,7 +428,7 @@ class Loader {
 			[
 				'id'       => 'tsf-post',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
+				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -443,6 +447,11 @@ class Loader {
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,
 						],
+						'nonces' => [
+							'edit_post' => [
+								$id => Utils::create_ajax_capability_nonce( 'edit_post', $id ),
+							],
+						],
 					],
 				],
 			],
@@ -460,13 +469,12 @@ class Loader {
 	 */
 	public static function get_term_edit_scripts() {
 
+		$id       = Query::get_the_real_id();
 		$taxonomy = Query::get_current_taxonomy();
 
 		$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
 
-		if ( Meta\Title\Conditions::use_generated_archive_prefix(
-			\get_term( Query::get_the_real_id(), $taxonomy )
-		) ) {
+		if ( Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $id, $taxonomy ) ) ) {
 			$term_prefix = sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
@@ -489,7 +497,7 @@ class Loader {
 			[
 				'id'       => 'tsf-term',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-tt', 'tsf' ],
+				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-tt', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'term',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -500,6 +508,11 @@ class Loader {
 						'params' => [
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'termPrefix'              => Utils::decode_entities( $term_prefix ),
+						],
+						'nonces' => [
+							'edit_term' => [
+								$id => Utils::create_ajax_capability_nonce( 'edit_term', $id ),
+							],
 						],
 					],
 				],
@@ -671,6 +684,41 @@ class Loader {
 			'name'     => 'social',
 			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 			'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+		];
+	}
+
+	/**
+	 * Returns Canonical scripts params.
+	 *
+	 * @since 5.0.7
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_canonical_scripts() {
+		global $wp_rewrite;
+
+		return [
+			'id'       => 'tsf-canonical',
+			'type'     => 'js',
+			'deps'     => [ 'tsf', 'tsf-utils' ],
+			'autoload' => true,
+			'name'     => 'canonical',
+			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			'l10n'     => [
+				'name' => 'tsfCanonicalL10n',
+				'data' => [
+					'params' => [
+						'usingPermalinks' => $wp_rewrite->using_permalinks(),
+						'rootUrl'         => \home_url( '/' ),
+						'rewrite'         => [
+							'code'         => $wp_rewrite->rewritecode,
+							'replace'      => $wp_rewrite->rewritereplace,
+							'queryReplace' => $wp_rewrite->queryreplace,
+						],
+					],
+				],
+			],
 		];
 	}
 

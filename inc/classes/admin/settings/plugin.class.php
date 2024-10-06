@@ -500,13 +500,13 @@ final class Plugin {
 	}
 
 	/**
-	 * Homepage meta box Robots Tab Output
+	 * Homepage meta box Visibility Output
 	 *
-	 * @since 4.0.0
+	 * @since 5.0.7
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
-	public static function _homepage_metabox_robots_tab() {
-		Template::output_view( 'settings/metaboxes/homepage', 'robots' );
+	public static function _homepage_metabox_visibility_tab() {
+		Template::output_view( 'settings/metaboxes/homepage', 'visibility' );
 	}
 
 	/**

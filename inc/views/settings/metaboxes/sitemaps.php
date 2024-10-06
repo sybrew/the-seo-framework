@@ -97,10 +97,10 @@ switch ( $instance ) :
 
 		if ( $has_sitemap_plugin ) {
 			echo '<hr>';
-			HTML::attention_description( \__( 'Note: Another active sitemap plugin has been detected. This means that the sitemap functionality has been superseded and these settings have no effect.', 'autodescription' ) );
+			HTML::attention_description( \__( 'Note: Another active sitemap plugin has been detected, so the sitemap functionality has been replaced and these settings have no effect.', 'autodescription' ) );
 		} elseif ( $sitemap_detected ) {
 			echo '<hr>';
-			HTML::attention_description( \__( 'Note: A sitemap has been detected in the root folder of your website. This means that these settings have no effect.', 'autodescription' ) );
+			HTML::attention_description( \__( 'Note: A sitemap has been detected in the root folder of your website, so these settings have no effect.', 'autodescription' ) );
 		}
 		?>
 		<hr>
@@ -231,13 +231,13 @@ switch ( $instance ) :
 
 		if ( RobotsTXT\Utils::has_root_robots_txt() ) {
 			HTML::attention_description(
-				\__( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' )
+				\__( 'Note: A robots.txt file has been detected in the root folder of your website, so these settings have no effect.', 'autodescription' )
 			);
 			echo '<hr>';
 		} elseif ( ! $robots_url ) {
 			if ( Data\Blog::is_subdirectory_installation() ) {
 				HTML::attention_description(
-					\__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
+					\__( 'Note: This site is installed in a subdirectory, so robots.txt files cannot be generated or used.', 'autodescription' )
 				);
 				echo '<hr>';
 			} elseif ( ! Query\Utils::using_pretty_permalinks() ) {

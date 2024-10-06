@@ -115,6 +115,9 @@ $robots_settings = [
 				<span class=title><?php \esc_html_e( 'Canonical URL', 'autodescription' ); ?></span>
 				<span class=tsf-inline-input>
 					<input type=url id=autodescription-quick[canonical] name=autodescription-quick[canonical] value />
+					<?php
+					Input::output_js_canonical_data( 'autodescription-quick[canonical]', [] );
+					?>
 				</span>
 			</label>
 			<div class="inline-edit-group wp-clearfix">

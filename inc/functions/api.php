@@ -287,6 +287,8 @@ namespace The_SEO_Framework {
 	/**
 	 * Determines the type of request from the arguments.
 	 *
+	 * Hint: Use `tsf()->query()->is_static_front_page()` to determine if 'single' is the frontpage.
+	 *
 	 * @since 5.0.0
 	 *
 	 * @param array $args The query arguments. Expects indexes 'id', 'tax', 'pta', and 'uid'.
@@ -301,12 +303,12 @@ namespace The_SEO_Framework {
 			if ( $args['pta'] )
 				return 'pta';
 
-			return 'homeblog'; // "homeblog" isn't single, the "Your homepage displays > A static page > Posts page" is single!
+			return 'homeblog'; // "homeblog" isn't single, has no id, and is the frontpage.
 		} elseif ( $args['tax'] ) {
 			return 'term';
 		}
 
-		return 'single'; // page, post, product, etc.
+		return 'single'; // page, post, product, frontpage, etc.
 	}
 
 	/**

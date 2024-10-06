@@ -435,9 +435,9 @@ switch ( $instance ) :
 		<?php
 
 		// Fetch image placeholder.
-		if ( $is_static_front_page && Data\Plugin::get_option( 'homepage_social_image_url' ) ) {
+		if ( $is_static_front_page ) {
 			$image_placeholder = Data\Plugin::get_option( 'homepage_social_image_url' )
-								?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+							  ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 		} else {
 			$image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 		}
@@ -475,7 +475,18 @@ switch ( $instance ) :
 		break;
 
 	case 'visibility':
-		$canonical_placeholder = Meta\URI::get_generated_url( $generator_args );
+		if ( $is_static_front_page ) {
+			$_has_home_canonical = (bool) \strlen( Data\Plugin::get_option( 'homepage_canonical' ) );
+
+			// When the homepage title is set, we can safely get the custom field.
+			$default_canonical    = $_has_home_canonical
+				? Meta\URI::get_custom_canonical_url( $generator_args )
+				: Meta\URI::get_generated_url( $generator_args );
+			$canonical_ref_locked = $_has_home_canonical;
+		} else {
+			$default_canonical    = Meta\URI::get_generated_url( $generator_args );
+			$canonical_ref_locked = false;
+		}
 
 		// Get robots defaults.
 		$r_defaults = Meta\Robots::get_generated_meta(
@@ -528,7 +539,20 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class=large-text type=url name="autodescription[_genesis_canonical_uri]" id=autodescription_canonical placeholder="<?= \esc_url( $canonical_placeholder ) ?>" value="<?= \esc_url( $meta['_genesis_canonical_uri'] ) ?>" autocomplete=off />
+				<input class=large-text type=url name="autodescription[_genesis_canonical_uri]" id=autodescription_canonical placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( $meta['_genesis_canonical_uri'] ) ?>" autocomplete=off />
+				<?php
+					Input::output_js_canonical_data(
+						'autodescription_canonical',
+						[
+							'state' => [
+								'refCanonicalLocked' => $canonical_ref_locked,
+								'defaultCanonical'   => \esc_url( $default_canonical ),
+								'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+								'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+							],
+						],
+					);
+				?>
 			</div>
 		</div>
 

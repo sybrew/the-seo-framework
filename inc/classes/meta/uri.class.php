@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
 	umemo,
+	get_query_type_from_args,
 	normalize_generation_args,
 };
 
@@ -133,7 +134,8 @@ class URI {
 	}
 
 	/**
-	 * Returns the generated canonical URL.
+	 * Returns the generated 'canonical' URL.
+	 * Because this isn't 'canonical', we're not ascribing that name.
 	 * Memoizes if $args is null.
 	 *
 	 * @since 5.0.0
@@ -157,7 +159,14 @@ class URI {
 	 */
 	public static function get_custom_canonical_url_from_query() {
 
-		if ( Query::is_singular() ) {
+		if ( Query::is_real_front_page() ) {
+			if ( Query::is_static_front_page() ) {
+				$url = Data\Plugin::get_option( 'homepage_canonical' )
+					?: Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri' );
+			} else {
+				$url = Data\Plugin::get_option( 'homepage_canonical' );
+			}
+		} elseif ( Query::is_singular() ) {
 			$url = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri' );
 		} elseif ( Query::is_editable_term() ) {
 			$url = Data\Plugin\Term::get_meta_item( 'canonical' );
@@ -167,8 +176,8 @@ class URI {
 
 		if ( empty( $url ) ) return '';
 
-		if ( Meta\URI\Utils::url_matches_blog_domain( $url ) )
-			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
+		if ( URI\Utils::url_matches_blog_domain( $url ) )
+			$url = URI\Utils::set_preferred_url_scheme( $url );
 
 		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
@@ -185,18 +194,29 @@ class URI {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$url = Data\Plugin\Term::get_meta_item( 'canonical', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$url = Data\Plugin\PTA::get_meta_item( 'canonical', $args['pta'] );
-		} elseif ( $args['id'] ) {
-			$url = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $args['id'] );
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$url = Data\Plugin::get_option( 'homepage_canonical' )
+						?: Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $args['id'] );
+				} else {
+					$url = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $args['id'] );
+				}
+				break;
+			case 'term':
+				$url = Data\Plugin\Term::get_meta_item( 'canonical', $args['id'] );
+				break;
+			case 'homeblog':
+				$url = Data\Plugin::get_option( 'homepage_canonical' );
+				break;
+			case 'pta':
+				$url = Data\Plugin\PTA::get_meta_item( 'canonical', $args['pta'] );
 		}
 
 		if ( empty( $url ) ) return '';
 
-		if ( Meta\URI\Utils::url_matches_blog_domain( $url ) )
-			$url = Meta\URI\Utils::set_preferred_url_scheme( $url );
+		if ( URI\Utils::url_matches_blog_domain( $url ) )
+			$url = URI\Utils::set_preferred_url_scheme( $url );
 
 		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
@@ -243,19 +263,28 @@ class URI {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$url = static::get_bare_term_url( $args['id'], $args['tax'] );
-		} elseif ( $args['pta'] ) {
-			$url = static::get_bare_pta_url( $args['pta'] );
-		} elseif ( $args['uid'] ) {
-			$url = static::get_bare_author_url( $args['uid'] );
-		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-			$url = static::get_bare_front_page_url();
-		} elseif ( $args['id'] ) {
-			$url = static::get_bare_singular_url( $args['id'] );
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$url = static::get_bare_front_page_url();
+				} else {
+					$url = static::get_bare_singular_url( $args['id'] );
+				}
+				break;
+			case 'term':
+				$url = static::get_bare_term_url( $args['id'], $args['tax'] );
+				break;
+			case 'homeblog':
+				$url = static::get_bare_front_page_url();
+				break;
+			case 'pta':
+				$url = static::get_bare_pta_url( $args['pta'] );
+				break;
+			case 'user':
+				$url = static::get_bare_author_url( $args['uid'] );
 		}
 
-		return $url ?? '' ?: '';
+		return $url ?: '';
 	}
 
 	/**
@@ -727,15 +756,33 @@ class URI {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( $args['tax'] ) {
-				$url = Data\Plugin\Term::get_meta_item( 'redirect', $args['id'] );
-			} elseif ( $args['pta'] ) {
-				$url = Data\Plugin\PTA::get_meta_item( 'redirect', $args['pta'] );
-			} elseif ( $args['id'] ) {
-				$url = Data\Plugin\Post::get_meta_item( 'redirect', $args['id'] );
+			switch ( get_query_type_from_args( $args ) ) {
+				case 'single':
+					if ( Query::is_static_front_page( $args['id'] ) ) {
+						$url = Data\Plugin::get_option( 'homepage_redirect' )
+							?: Data\Plugin\Post::get_meta_item( 'redirect', $args['id'] );
+					} else {
+						$url = Data\Plugin\Post::get_meta_item( 'redirect', $args['id'] );
+					}
+					break;
+				case 'term':
+					$url = Data\Plugin\Term::get_meta_item( 'redirect', $args['id'] );
+					break;
+				case 'homeblog':
+					$url = Data\Plugin::get_option( 'homepage_redirect' );
+					break;
+				case 'pta':
+					$url = Data\Plugin\PTA::get_meta_item( 'redirect', $args['pta'] );
 			}
 		} else {
-			if ( Query::is_singular() ) {
+			if ( Query::is_real_front_page() ) {
+				if ( Query::is_static_front_page() ) {
+					$url = Data\Plugin::get_option( 'homepage_redirect' )
+						?: Data\Plugin\Post::get_meta_item( 'redirect' );
+				} else {
+					$url = Data\Plugin::get_option( 'homepage_redirect' );
+				}
+			} elseif ( Query::is_singular() ) {
 				$url = Data\Plugin\Post::get_meta_item( 'redirect' );
 			} elseif ( Query::is_editable_term() ) {
 				$url = Data\Plugin\Term::get_meta_item( 'redirect' );

@@ -39,7 +39,6 @@ use \The_SEO_Framework\{
  *              2. Now unbinds wc_page_no_robots filter.
  *              3. Now modifies the SEO Bar.
  * @access private
- * @uses \is_product()
  */
 function _init_wc_compat() {
 	// Adjust the product link acknowledging the primary category.

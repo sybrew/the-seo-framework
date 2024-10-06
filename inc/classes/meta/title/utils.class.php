@@ -158,7 +158,6 @@ class Utils {
 	 * @since 3.1.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @internal Only to be used within Meta\Title::get_bare_unfiltered_generated_title()
-	 * @uses $this->remove_default_title_filters()
 	 */
 	public static function reset_default_title_filters() {
 		static::remove_default_title_filters( true );

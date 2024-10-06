@@ -170,8 +170,6 @@ function _init_tsf() {
  *              3. No longer loads interfaces automatically.
  * @since 4.2.0 Now supports mixed class case.
  * @since 5.0.0 Now supports trait loading.
- * @uses THE_SEO_FRAMEWORK_DIR_PATH_TRAIT
- * @uses THE_SEO_FRAMEWORK_DIR_PATH_CLASS
  * @access private
  *
  * @NOTE 'The_SEO_Framework\' is a reserved namespace. Using it outside of this

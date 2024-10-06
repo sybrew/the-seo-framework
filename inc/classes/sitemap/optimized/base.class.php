@@ -67,6 +67,7 @@ class Base extends Main {
 	 * it will not conflict, since a unique caching key is generated for each language.
 	 * TODO consider expanding this feature for multilingual sites?
 	 *
+	 * @hook tsf_sitemap_cron_hook_before 10
 	 * @since 4.1.2
 	 * @since 4.2.1 Now no longer lowers the PHP execution time limit from unlimited to 3 minutes.
 	 * @since 5.0.0 1. Can now prerender sitemap on a $sitemap_id basis.

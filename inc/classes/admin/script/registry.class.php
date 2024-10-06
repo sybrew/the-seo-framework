@@ -230,7 +230,6 @@ class Registry {
 	 * A better name would've been "collect"...
 	 *
 	 * @since 3.1.0
-	 * @uses static::$scripts
 	 * @see $this->forward_known_scripts()
 	 * @see $this->autoload_known_scripts()
 	 *
@@ -291,7 +290,6 @@ class Registry {
 	 * Registers and enqueues known scripts.
 	 *
 	 * @since 3.2.2
-	 * @uses static::forward_known_script();
 	 *
 	 * @param string $id   The script ID.
 	 * @param string $type The script type.
@@ -311,8 +309,6 @@ class Registry {
 	 *
 	 * @since 3.2.2
 	 * @since 5.0.0 Is now static.
-	 * @uses static::$scripts
-	 * @uses static::egister_script()
 	 */
 	private static function forward_known_scripts() {
 		// Register them first to accommodate for dependencies.
@@ -327,8 +323,6 @@ class Registry {
 	 *
 	 * @since 3.2.2
 	 * @since 5.0.0 Is now static.
-	 * @uses static::$scripts
-	 * @uses static::load_script()
 	 */
 	private static function autoload_known_scripts() {
 		foreach ( static::$scripts as $s ) {

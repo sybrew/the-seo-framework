@@ -32,7 +32,8 @@ use \The_SEO_Framework\{
 
 /**
  * Interprets anything you send here into Form HTML. Or so it should.
- * Meant for the SEO Settings page, only.
+ * Meant for the SEO Settings, Post Edit, and Term Edit.
+ * The `*field_*()` functions are meant for the SEO Settings only.
  *
  * @since 4.2.0
  * @since 5.0.0 1. Moved from `\The_SEO_Framework\Interpreters`.
@@ -45,9 +46,6 @@ class Input {
 
 	/**
 	 * Helper function that constructs id attributes for use in form fields.
-	 *
-	 * One-liner I forwent:
-	 * return \THE_SEO_FRAMEWORK_SITE_OPTIONS . '['. implode( '][', $id ) . ']';
 	 *
 	 * @since 4.2.0
 	 *
@@ -68,7 +66,6 @@ class Input {
 	 * Echo constructed id attributes in form fields.
 	 *
 	 * @since 4.2.0
-	 * @uses static::get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string|string[] $id The field id, or a map of indexes therefor.
 	 */
@@ -97,7 +94,6 @@ class Input {
 	 * Alias of field_id.
 	 *
 	 * @since 4.2.0
-	 * @uses static::get_field_name() Construct name attributes for use in form fields.
 	 * @ignore
 	 *
 	 * @param string|string[] $name The field name, or a map of indexes therefor.
@@ -272,6 +268,25 @@ class Input {
 					'<span id="tsf-description-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s ></span>',
 				],
 			),
+			[
+				\esc_attr( $id ),
+				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				HTML::make_data_attributes( $data ),
+			],
+		);
+	}
+
+	/**
+	 * Outputs reference canonical HTML elements for JavaScript for a specific ID.
+	 *
+	 * @since 5.0.7
+	 *
+	 * @param string $id   The canonical URL input ID.
+	 * @param array  $data The input data.
+	 */
+	public static function output_js_canonical_data( $id, $data ) {
+		vprintf(
+			'<span id="tsf-canonical-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s ></span>',
 			[
 				\esc_attr( $id ),
 				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.

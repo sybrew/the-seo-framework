@@ -35,11 +35,11 @@ use \The_SEO_Framework\Admin\Script\AJAX;
 // Admin AJAX for notice dismissal.
 \add_action( 'wp_ajax_tsf_dismiss_notice', [ AJAX::class, 'dismiss_notice' ] );
 
-// Admin AJAX for TSF Cropper
+// Admin AJAX for cropping images.
 \add_action( 'wp_ajax_tsf_crop_image', [ AJAX::class, 'crop_image' ] );
 
 // Admin AJAX for counter options.
 \add_action( 'wp_ajax_tsf_update_counter', [ AJAX::class, 'update_counter_type' ] );
 
-// Admin AJAX for Gutenberg SEO Bar update.
+// Admin AJAX for Gutenberg data update.
 \add_action( 'wp_ajax_tsf_update_post_data', [ AJAX::class, 'get_post_data' ] );

@@ -5849,7 +5849,7 @@ final class Deprecated {
 
 	/**
 	 * Whether the current blog is spam or deleted.
-	 * Multisite Only.
+	 * Multisite only.
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Deprecated.

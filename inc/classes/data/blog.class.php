@@ -136,7 +136,7 @@ class Blog {
 
 	/**
 	 * Whether the current blog is spam or deleted.
-	 * Multisite Only.
+	 * Multisite only.
 	 *
 	 * @since 5.0.0
 	 *
@@ -169,7 +169,7 @@ class Blog {
 			(bool) \strlen( ltrim(
 				parse_url(
 					\get_option( 'home' ),
-					\PHP_URL_PATH
+					\PHP_URL_PATH,
 				) ?? '',
 				' \\/',
 			) )

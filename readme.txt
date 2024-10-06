@@ -294,8 +294,11 @@ TODO when zooming in on iOS, the touch registration no longer aligns with the to
 	-> This will probably involve some annoying relative offset vs screen width maths.
 
 TODO jr dot nl/?calendar=$test doesn't invoke aqp?
+	-> Probably some other plugin mangles the request before AQP touches it.
+		-> Ask for list of plugins?
 
 TODO introduce css --vars
+	-> Applying colors would be a nice starting point.
 
 TODO add TikTok social profile hint? eh...
 	-> Also, there appears to be a specific format: https://support.google.com/business/answer/13580646.
@@ -304,6 +307,28 @@ TODO regression: the "popular categories" are no longer listened for changes.
 	-> This is caused by jQuery being dumb with events.
 
 TODO the locale on the frontend is now loaded "just in time."
+	-> We'd have to change "The SEO Framework <by> Sybre Waaijer" (hard code?)
+
+TODO code style: make function() function () in JS for consistency with PHP.
+
+TODO remove HTML4 closers in admin? It's definitly 5.
+	-> Also remove HTML4 support on the front-end? How many themes are still using 4?
+
+TODO use new PHPdoc for array entries:
+	`@param array $data {
+		An array of something.
+
+		@type string $param1 Explanation
+		@type bool   $param2 Explanation
+	}`
+TODO the correct indentation for comments seems to be 4 per tab (+1 initial)
+
+TODO LinkedIn Post Inspector recommends the "Author" tag, which is often ambiguously described. We could opt-in this feature via the Social Sharing settings, stating that LinkedIn uses it.
+
+TODO add ignore for Asgaros forums. See https://wordpress.org/support/topic/canonical-on-forum/.
+
+TODO enqueueUnregisteredInputTrigger -> alias enqueueTriggerUnregisteredInput
+	- The latter has a better relation with the other method's name.
 
 Punt:
 - remove jQuery dependencies in UI?
@@ -315,7 +340,7 @@ Punt:
 
 **For everyone:**
 
-* **Upgraded:** Now uses TSF database version `5070`
+* **Upgraded:** Now uses TSF database version `5071`
 	* Two new options are available: `robotstxt_block_ai` and `robotstxt_block_seo`.
 * **Added:**
 	* For WPML Multilingual Plugin, the following fields are automatically registered with their String Translation tool under domain `admin_texts_autodescription-site-settings`. Please note that these are only shown when they have a value inputted via the SEO Settings page:
@@ -324,8 +349,12 @@ Punt:
 		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
 	* You can now block AI language model trainers and SEO analysis crawlers from using your content via the "Robots Settings."
-	* TODO Added a canonical URL input field for the homepage.
-	* TODO Added a redirect URL input field for the homepage.
+	* Added a canonical URL input field for the homepage.
+	* Added a redirect URL input field for the homepage.
+	* TSF now dynamically updates the example canonical URL when editing a post, editing a term, and TODO when editing a post or term via quick-edit.
+		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
+			* TODO We might need to invoke more database requests to fetch the category slugs? -> PT already has a handler for this, no?
+				-> We could freeze it to the last category selected if we run out of time for the release.
 * **Improved:**
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
@@ -336,8 +365,6 @@ Punt:
 	* The plugin now better conveys where to modify the homepage's title "additions."
 	* The canonical URL placeholder is now populated for Quick Edit.
 		* TODO and it responds to changes like it would on a page edit screen.
-	* TODO The canonical URL placeholder is now updated when changing the slug on the Classic Editor.
-	* TODO The canonical URL placeholder is now updated when changing the slug on term edit.
 	* After saving a page in Gutenberg, the SEO Bar (if displayed) fades in much quicker now.
 	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
 	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
@@ -367,6 +394,8 @@ Punt:
 	* Resolved an issue where the floating title parts didn't align properly when dealing with subpixel alignment.
 	* Resolved an issue where the floating title parts repositioned or (un)trimmed only when passing the `782px` screen width boundary, while they ought to be recalculated with every screen size change.
 	* Resolved an issue where the floating title prefix (e.g., `Private: `) didn't trim when the site title was removed.
+	* When setting '0' as a password via quick-edit, WordPress actually doesn't consider it a valid password. So, TSF now won't reflect this via its quick-edit interface either.
+		* We already considered this behavior for the Classic and Block editor.
 * **Note:** WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
 
 **For translators:**
@@ -402,14 +431,21 @@ Punt:
 		* JS Event `tsf-updated-block-editor-${type}` is now available.
 		* JS file `utils.js` is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
 		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
+		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
+		* jQuery Event `tsf-updated-gutenberg-${type}` now also respond to `'slug'` type changes.
+			* But this event is deprecated. Use the JS Event `tsf-updated-block-editor-${type}` instead.
 	* **Changed:**
 		* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
 			* With that, for all affected functions, we removed `@function` JSDoc annotation, since that's now redundant.
 		* `tsf.selectByValue()` now also tries to select by label, which is tried together with the content.
+	* **Deprecated:**
+		* `tsf-updated-gutenberg-${type}` is now deprecated. Use JS Event `tsf-updated-block-editor-${type}` instead.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Added index `robotstxt_block_ai`. Default 0.
 		* Added index `robotstxt_block_seo`. Default 0.
+		* Added index `homepage_redirect`. Default empty.
+		* Added index `homepage_canonical`. Default empty.
 	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
 * **Filter notes:**
 	* **Added:**

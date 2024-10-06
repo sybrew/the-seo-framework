@@ -473,18 +473,18 @@ switch ( $instance ) :
 
 		if ( RobotsTXT\Utils::has_root_robots_txt() ) {
 			HTML::attention_description(
-				\__( 'Note: A robots.txt file has been detected in the root folder of your website. This means these settings have no effect.', 'autodescription' )
+				\__( 'Note: A robots.txt file has been detected in the root folder of your website, so these settings have no effect.', 'autodescription' )
 			);
 			echo '<hr>';
 		} elseif ( ! $robots_url ) {
 			if ( Data\Blog::is_subdirectory_installation() ) {
 				HTML::attention_description(
-					\__( "Note: robots.txt files can't be generated or used on subdirectory installations.", 'autodescription' )
+					\__( 'Note: This site is installed in a subdirectory, so robots.txt files cannot be generated or used.', 'autodescription' )
 				);
 				echo '<hr>';
 			} elseif ( ! Query\Utils::using_pretty_permalinks() ) {
 				HTML::attention_description(
-					\__( "Note: You're using the plain permalink structure; so, no robots.txt file can be generated.", 'autodescription' )
+					\__( 'Note: This site is using the plain permalink structure, so no robots.txt file can be generated.', 'autodescription' )
 				);
 				HTML::description_noesc(
 					Markdown::convert(

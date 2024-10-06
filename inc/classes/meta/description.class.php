@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
 	coalesce_strlen,
+	get_query_type_from_args,
 	memo,
 	normalize_generation_args,
 };
@@ -255,19 +256,23 @@ class Description {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$desc = Data\Plugin\Term::get_meta_item( 'description', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$desc = Data\Plugin\PTA::get_meta_item( 'description', $args['pta'] );
-		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-			if ( $args['id'] ) {
-				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
-			} else {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
+						 ?? Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
+				} else {
+					$desc = Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
+				}
+				break;
+			case 'term':
+				$desc = Data\Plugin\Term::get_meta_item( 'description', $args['id'] );
+				break;
+			case 'homeblog':
 				$desc = Data\Plugin::get_option( 'homepage_description' );
-			}
-		} elseif ( $args['id'] ) {
-			$desc = Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
+				break;
+			case 'pta':
+				$desc = Data\Plugin\PTA::get_meta_item( 'description', $args['pta'] );
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )

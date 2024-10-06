@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function \The_SEO_Framework\{
 	memo,
+	get_query_type_from_args,
 	normalize_generation_args,
 };
 
@@ -122,6 +123,7 @@ class Breadcrumbs {
 			$list = static::get_404_breadcrumb_list();
 		}
 
+		// The ?? operator is redundant here, but the query might be mangled.
 		return $list ?? [];
 	}
 
@@ -138,19 +140,28 @@ class Breadcrumbs {
 	 */
 	private static function get_breadcrumb_list_from_args( $args ) {
 
-		if ( $args['tax'] ) {
-			$list = static::get_term_breadcrumb_list( $args['id'], $args['tax'] );
-		} elseif ( $args['pta'] ) {
-			$list = static::get_pta_breadcrumb_list( $args['pta'] );
-		} elseif ( $args['uid'] ) {
-			$list = static::get_author_breadcrumb_list( $args['uid'] );
-		} elseif ( Query::is_real_front_page_by_id( $args['id'] ) ) {
-			$list = static::get_front_page_breadcrumb_list();
-		} elseif ( $args['id'] ) {
-			$list = static::get_singular_breadcrumb_list( $args['id'] );
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$list = static::get_front_page_breadcrumb_list();
+				} else {
+					$list = static::get_singular_breadcrumb_list( $args['id'] );
+				}
+				break;
+			case 'term':
+				$list = static::get_term_breadcrumb_list( $args['id'], $args['tax'] );
+				break;
+			case 'homeblog':
+				$list = static::get_front_page_breadcrumb_list();
+				break;
+			case 'pta':
+				$list = static::get_pta_breadcrumb_list( $args['pta'] );
+				break;
+			case 'user':
+				$list = static::get_author_breadcrumb_list( $args['uid'] );
 		}
 
-		return $list ?? [];
+		return $list;
 	}
 
 	/**

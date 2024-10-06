@@ -302,19 +302,23 @@ class Title {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$title = Data\Plugin\Term::get_meta_item( 'doctitle', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$title = Data\Plugin\PTA::get_meta_item( 'doctitle', $args['pta'] );
-		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-			if ( $args['id'] ) {
-				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
-					  ?? Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
-			} else {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
+						  ?? Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
+				} else {
+					$title = Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
+				}
+				break;
+			case 'term':
+				$title = Data\Plugin\Term::get_meta_item( 'doctitle', $args['id'] );
+				break;
+			case 'homeblog':
 				$title = Data\Plugin::get_option( 'homepage_title' );
-			}
-		} elseif ( $args['id'] ) {
-			$title = Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
+				break;
+			case 'pta':
+				$title = Data\Plugin\PTA::get_meta_item( 'doctitle', $args['pta'] );
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
@@ -811,7 +815,7 @@ class Title {
 					$seplocation = static::get_addition_location_for_front_page();
 					break;
 			}
-
+			// This clause and the above switch work in conjunction to set $addition efficiently.
 			if ( ! isset( $addition, $seplocation ) ) {
 				$addition    = static::get_addition();
 				$seplocation = static::get_addition_location();
