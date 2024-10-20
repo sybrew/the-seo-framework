@@ -563,7 +563,7 @@ class Plugin {
 			min(
 				50000,
 				\absint( $value ) ?: $old_value,
-			)
+			),
 		);
 	}
 

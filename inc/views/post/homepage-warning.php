@@ -34,7 +34,7 @@ namespace The_SEO_Framework;
 			<div class="tsf-flex-setting-input-item tsf-flex">
 				<span>
 					<?php
-					\esc_html_e( 'The SEO Settings can overwrite the fields below.', 'autodescription' );
+					\esc_html_e( 'The fields below may be overwritten by the Homepage Settings found on the SEO Settings page.', 'autodescription' );
 					if ( \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) ) {
 						echo ' &mdash; ';
 						printf(

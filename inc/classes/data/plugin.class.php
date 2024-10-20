@@ -41,14 +41,14 @@ class Plugin {
 
 	/**
 	 * @since 5.0.0
-	 * @var array Holds 'all' TSF's options/settings. Updates in real time.
+	 * @var ?array Holds 'all' TSF's options/settings.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_OPTIONS
 	 */
 	private static $options_memo;
 
 	/**
 	 * @since 5.0.0
-	 * @var array Holds 'all' TSF's site cache. Updates in real time.
+	 * @var ?array Holds 'all' TSF's site cache.
 	 * @uses \THE_SEO_FRAMEWORK_SITE_CACHE
 	 */
 	private static $site_cache_memo;
@@ -58,12 +58,11 @@ class Plugin {
 	 *
 	 * @hook "update_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" 0
 	 * @since 5.0.0
-	 * @access private
 	 */
 	public static function flush_cache() {
-		static::$options_memo    = null;
-		static::$site_cache_memo = null;
-		Plugin\PTA::flush_cache();
+		static::refresh_static_properties();
+		// PTA is stored in the default plugin options.
+		Plugin\PTA::refresh_static_properties();
 	}
 
 	/**
@@ -104,9 +103,9 @@ class Plugin {
 		if ( isset( static::$options_memo ) )
 			return static::$options_memo;
 
-		$is_headless = is_headless( 'settings' );
+		static::register_automated_refresh( 'options_memo' );
 
-		static::register_automated_refresh( 'options' );
+		$is_headless = is_headless( 'settings' );
 
 		/**
 		 * @since 2.0.0
@@ -136,6 +135,8 @@ class Plugin {
 	 * @since 2.9.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.2 Now falls back to default for merge: If the option disappears for some reason, we won't crash.
+	 * @since 5.0.7 No longer considers headlessness. The headless filters are ought
+	 *              to stay in place throughout the request, affecting `get_option()`.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -149,12 +150,10 @@ class Plugin {
 			\is_array( $option ) ? $option : [ $option => $value ],
 		);
 
-		// If the current request is headless, do not update the state.
-		// The next request may have filtered this value, or the update was blocked.
-		if ( ! is_headless( 'settings' ) )
-			static::$options_memo = null;
-
-		Plugin\PTA::flush_cache();
+		// Selectively reset one property.
+		static::$options_memo = null;
+		// But reset everything for PTA, because those rely entirely on the plugin options.
+		Plugin\PTA::refresh_static_properties();
 
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $options, true );
 	}
@@ -185,7 +184,7 @@ class Plugin {
 		if ( isset( static::$site_cache_memo ) )
 			return static::$site_cache_memo;
 
-		static::register_automated_refresh( 'site_cache' );
+		static::register_automated_refresh( 'site_cache_memo' );
 
 		return static::$site_cache_memo =
 			   \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE )
@@ -211,7 +210,7 @@ class Plugin {
 			\is_array( $cache ) ? $cache : [ $cache => $value ],
 		);
 
-		static::$site_cache_memo = $site_cache;
+		static::$site_cache_memo = null;
 
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );
 	}
@@ -232,7 +231,7 @@ class Plugin {
 		foreach ( (array) $cache as $key )
 			unset( $site_cache[ $key ] );
 
-		static::$site_cache_memo = $site_cache;
+		static::$site_cache_memo = null;
 
 		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );
 	}

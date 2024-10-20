@@ -10,9 +10,10 @@ namespace The_SEO_Framework\Data\Plugin;
 
 use function \The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Helper\{
-	Query,
-	Taxonomy,
+use \The_SEO_Framework\{
+	Helper\Query,
+	Helper\Taxonomy,
+	Traits\Property_Refresher,
 };
 
 /**
@@ -36,10 +37,12 @@ use \The_SEO_Framework\Helper\{
  * Holds a collection of Term data interface methods for TSF.
  *
  * @since 5.0.0
+ * @since 5.0.7 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->term() instead.
  */
 class Term {
+	use Property_Refresher;
 
 	/**
 	 * @since 5.0.0
@@ -98,6 +101,9 @@ class Term {
 
 		if ( isset( static::$meta_memo[ $term_id ] ) )
 			return static::$meta_memo[ $term_id ];
+
+		// Code smell: the empty test is for performance since the memo can be bypassed by input vars.
+		empty( static::$meta_memo ) and static::register_automated_refresh( 'meta_memo' );
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
 		if ( empty( $term_id ) || ! Taxonomy::is_supported( \get_term( $term_id )->taxonomy ?? '' ) )

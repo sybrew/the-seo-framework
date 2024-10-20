@@ -14,6 +14,7 @@ use \The_SEO_Framework\{
 	Data,
 	Helper\Post_Type,
 	Helper\Query,
+	Traits\Property_Refresher,
 };
 
 /**
@@ -37,27 +38,18 @@ use \The_SEO_Framework\{
  * Holds a collection of Post Type Archive data interface methods for TSF.
  *
  * @since 5.0.0
+ * @since 5.0.7 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->pta() instead.
  */
 class PTA {
+	use Property_Refresher;
 
 	/**
 	 * @since 5.0.0
 	 * @var array[] Stored pta meta data.
 	 */
 	private static $meta_memo = [];
-
-	/**
-	 * Flushes all PTA runtime cache.
-	 *
-	 * @since 5.0.0
-	 * @access private
-	 * @see \The_SEO_Framework\Data\Option::update_option()
-	 */
-	public static function flush_cache() {
-		static::$meta_memo = [];
-	}
 
 	/**
 	 * Returns a single post type archive item's value.
@@ -92,7 +84,8 @@ class PTA {
 	 *              2. Removed the second `$use_cache` parameter.
 	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 *              4. Renamed from `get_post_type_archive_meta`.
-	 * @since 5.0.7 Now returns the default meta if the PTA isn't supported.
+	 * @since 5.0.7 1. Now returns the default meta if the PTA isn't supported.
+	 *              2. Now registers `meta_memo` for automated refreshes.
 	 *
 	 * @param string $post_type The post type.
 	 * @return array The post type archive's meta item's values.
@@ -103,6 +96,9 @@ class PTA {
 
 		if ( isset( static::$meta_memo[ $post_type ] ) )
 			return static::$meta_memo[ $post_type ];
+
+		// Code smell: the empty test is for performance since the memo can be bypassed by input vars.
+		empty( static::$meta_memo ) and static::register_automated_refresh( 'meta_memo' );
 
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post_type ) || ! Post_Type::is_supported( $post_type ) )

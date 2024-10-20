@@ -14,6 +14,7 @@ use \The_SEO_Framework\{
 	Data,
 	Helper\Post_Type,
 	Helper\Query,
+	Traits\Property_Refresher,
 };
 
 /**
@@ -37,10 +38,12 @@ use \The_SEO_Framework\{
  * Holds a collection of Post data interface methods for TSF.
  *
  * @since 5.0.0
+ * @since 5.0.7 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->post() instead.
  */
 class Post {
+	use Property_Refresher;
 
 	/**
 	 * @since 5.0.0
@@ -106,6 +109,9 @@ class Post {
 
 		if ( isset( static::$meta_memo[ $post_id ] ) )
 			return static::$meta_memo[ $post_id ];
+
+		// Code smell: the empty test is for performance since the memo can be bypassed by input vars.
+		empty( static::$meta_memo ) and static::register_automated_refresh( 'meta_memo' );
 
 		// We test post type support for "post_query"-queries might get past this point.
 		if ( empty( $post_id ) || ! Post_Type::is_supported( \get_post( $post_id )->post_type ) )
@@ -306,6 +312,9 @@ class Post {
 
 		if ( isset( static::$pt_memo[ $post_id ][ $taxonomy ] ) )
 			return static::$pt_memo[ $post_id ][ $taxonomy ] ?: null;
+
+		// Code smell: the empty test is for performance since the memo can be bypassed by input vars.
+		empty( static::$pt_memo ) and static::register_automated_refresh( 'pt_memo' );
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$pt_memo ) > 69 )

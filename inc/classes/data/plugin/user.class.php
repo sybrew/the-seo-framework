@@ -10,7 +10,10 @@ namespace The_SEO_Framework\Data\Plugin;
 
 use function \The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Helper\Query;
+use \The_SEO_Framework\{
+	Helper\Query,
+	Traits\Property_Refresher,
+};
 
 /**
  * The SEO Framework plugin
@@ -33,10 +36,12 @@ use \The_SEO_Framework\Helper\Query;
  * Holds a collection of User data interface methods for TSF.
  *
  * @since 5.0.0
+ * @since 5.0.7 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->user() instead.
  */
 class User {
+	use Property_Refresher;
 
 	/**
 	 * @since 5.0.0
@@ -131,6 +136,9 @@ class User {
 
 		if ( isset( static::$meta_memo[ $user_id ] ) )
 			return static::$meta_memo[ $user_id ];
+
+		// Code smell: the empty test is for performance since the memo can be bypassed by input vars.
+		empty( static::$meta_memo ) and static::register_automated_refresh( 'meta_memo' );
 
 		// TODO test if user exists via get_userdata()?
 		// That is expensive; the user object is not created when fetching meta.

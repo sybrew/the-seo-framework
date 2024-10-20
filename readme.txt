@@ -330,6 +330,12 @@ TODO add ignore for Asgaros forums. See https://wordpress.org/support/topic/cano
 TODO enqueueUnregisteredInputTrigger -> alias enqueueTriggerUnregisteredInput
 	- The latter has a better relation with the other method's name.
 
+TODO patch WP Core bug https://core.trac.wordpress.org/ticket/51912 using https://wp-kama.com/handbook/sitemap/bag-404-pagination.
+	-> We can probably mend this inside the generator.
+	-> Report back to user: https://wordpress.org/support/topic/sitemap-404-error-15/.
+
+TODO check if bbPress/BuddyPress needs breadcrumb support?
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -415,8 +421,10 @@ Punt:
 		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
 		* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
 		* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
+		* `The_SEO_Framework\Data\Plugin::update_option()` (`tsf()->data()->plugin()->update_option()`) no longer considers headlessness. The headless filters are ought to stay in place throughout the request, affecting `get_option()`.
 	* **Removed:**
 		* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
+			* It may come back one day, but we have no plans for that just yet.
 	* **Fixed:**
 		* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
 		* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
@@ -425,6 +433,11 @@ Punt:
 		* `tsf()->schema()->entities` now report the correct class names.
 		* TODO  Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL.
 		* The `schema.org/WebPage` type reference is resetted now when regenerated.
+		* When switching blogs on multisite, all data memoization for TSF's options and site cache now actually flush via trait `The_SEO_Framework\Traits\Property_Refresher`.
+			* Due to a name change of properties during development, this was accidentally disabled.
+			* This did work as intended for default options.
+			* This feature resolves edge-cases we have yet to encounter, but it could affect post filtering when fetching data from a different blog inside a network.
+			* We also added PTA, Post, Term, and User settings to the refresher, which were previously omitted for performance reasons, which we've now mitigated.
 * **JavaScript API notes:**
 	* **Added:**
 		* JS Event `tsf-updated-block-editor` is now available.

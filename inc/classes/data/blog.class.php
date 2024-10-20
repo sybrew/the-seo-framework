@@ -13,10 +13,7 @@ use function \The_SEO_Framework\{
 	umemo,
 };
 
-use \The_SEO_Framework\{
-	Data, // Yes, it is legal to import the same namespace.
-	Traits\Property_Refresher,
-};
+use \The_SEO_Framework\Data; // Yes, it is legal to import the same namespace.
 
 /**
  * The SEO Framework plugin
@@ -39,11 +36,11 @@ use \The_SEO_Framework\{
  * Holds a collection of data helper methods for the blog.
  *
  * @since 5.0.0
+ * @since 5.0.7 Removed the unused Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->blog() instead.
  */
 class Blog {
-	use Property_Refresher;
 
 	/**
 	 * Fetches public blogname (site title).

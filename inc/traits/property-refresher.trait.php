@@ -8,8 +8,6 @@ namespace The_SEO_Framework\Traits;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\has_run;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -41,23 +39,34 @@ trait Property_Refresher {
 
 	/**
 	 * @since 5.0.0
-	 * @var array A list of properties marked for refresh.
+	 * @since 5.0.7 Renamed from `marked_for_refresh`.
+	 * @access protected
+	 * @var bool[] An associative list of properties marked for refresh.
 	 */
-	protected static $marked_for_refresh = [];
+	protected static $registered_for_refresh = [];
+
+	/**
+	 * @since 5.0.7
+	 * @access protected
+	 * @var ?bool Whether the refresh has been registered.
+	 */
+	protected static $registered_refresh;
 
 	/**
 	 * Registers automated refreshes.
 	 *
 	 * @since 5.0.0
+	 * @since 5.0.7 No longer relies on "has_run" checks.
+	 * @access public
+	 *
 	 * @param string $property The property that's marked for refresh.
 	 */
 	protected static function register_automated_refresh( $property ) {
 
-		static::$marked_for_refresh[ $property ] = 0b1;
+		static::$registered_for_refresh[ $property ] ??= true;
 
-		if ( has_run( __CLASS__ . __METHOD__ ) ) return;
-
-		\add_action( 'switch_blog', [ __CLASS__, '_do_switch_blog_flush' ], 10, 2 );
+		static::$registered_refresh
+			??= \add_action( 'switch_blog', [ __CLASS__, '_do_switch_blog_flush' ], 10, 2 );
 	}
 
 	/**
@@ -65,6 +74,7 @@ trait Property_Refresher {
 	 *
 	 * @hook switch_blog 10
 	 * @since 5.0.0
+	 * @access public
 	 *
 	 * @param int $new_site_id New site ID.
 	 * @param int $old_site_id Old site ID.
@@ -80,10 +90,14 @@ trait Property_Refresher {
 	 * Refreshes all static properties.
 	 *
 	 * @since 5.0.0
+	 * @access protected
 	 */
 	public static function refresh_static_properties() {
-		foreach ( get_class_vars( __CLASS__ ) as $key => $initial )
-			if ( isset( static::$marked_for_refresh[ $key ], static::${$key} ) )
-				static::${$key} = $initial;
+
+		// Get the class properties with their default values.
+		$class_vars = get_class_vars( __CLASS__ );
+
+		foreach ( static::$registered_for_refresh as $property => $marked )
+			static::${$property} = $class_vars[ $property ];
 	}
 }
