@@ -30,7 +30,14 @@ use \The_SEO_Framework\Helper\{
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This is not necessarily a WordPress query. Test it inline.
+// Load the plugin's text domain first.
+\load_plugin_textdomain(
+	'autodescription',
+	false,
+	\dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language',
+);
+
+// Output noindex headers when an XMLRPC request is detected. There are no hooks, test inline.
 if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST )
 	Headers::output_robots_noindex_headers();
 

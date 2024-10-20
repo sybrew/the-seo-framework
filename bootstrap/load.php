@@ -28,30 +28,9 @@ namespace The_SEO_Framework;
 // Always load autoloader -- plugin (de)activation rely on these. We prepend because we safely assume ours is fastest.
 spl_autoload_register( 'The_SEO_Framework\_autoload_classes', true, true );
 
-\add_action( 'plugins_loaded', 'The_SEO_Framework\_init_locale', 4 );
 \add_action( 'plugins_loaded', 'The_SEO_Framework\_load_tsf', 5 );
 \add_action( 'activate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, 'The_SEO_Framework\_do_plugin_activation' );
 \add_action( 'deactivate_' . \THE_SEO_FRAMEWORK_PLUGIN_BASENAME, 'The_SEO_Framework\_do_plugin_deactivation' );
-
-/**
- * Loads plugin locale 'autodescription'.
- * Files located in plugin folder `../autodescription/language/`.
- *
- * @hook plugins_loaded 4
- * @since 2.8.0
- * @since 4.0.2 Now points to the correct plugin folder for fallback MO-file loading (which was never used).
- * @access private
- */
-function _init_locale() {
-	/**
-	 * @since 1.0.0
-	 */
-	\load_plugin_textdomain(
-		'autodescription',
-		false,
-		\dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language',
-	);
-}
 
 /**
  * Loads all of TSF.
