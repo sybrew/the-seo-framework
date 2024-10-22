@@ -439,8 +439,8 @@ class Loader {
 						'states' => [
 							'isPrivate'       => Data\Post::is_private( $id ),
 							'isProtected'     => Data\Post::is_password_protected( $id ),
-							'isGutenbergPage' => Query::is_block_editor(),
-							'id'              => (int) $id,
+							'isGutenbergPage' => Query::is_block_editor(), /* FIXME: this must be a parameter... */
+							'id'              => $id, /* FIXME: this must be a parameter... */
 						],
 						'params' => [
 							'isFront'                 => $is_static_front_page,
@@ -507,6 +507,8 @@ class Loader {
 					'data' => [
 						'params' => [
 							'additionsForcedDisabled' => $additions_forced_disabled,
+							'id'                      => $id,
+							'taxonomy'                => $taxonomy,
 							'termPrefix'              => Utils::decode_entities( $term_prefix ),
 						],
 						'nonces' => [

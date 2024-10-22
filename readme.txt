@@ -336,6 +336,8 @@ TODO patch WP Core bug https://core.trac.wordpress.org/ticket/51912 using https:
 
 TODO check if bbPress/BuddyPress needs breadcrumb support?
 
+TODO the title prefix doesn't appear to work in quick-edit for Terms.
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -378,6 +380,7 @@ Punt:
 	* Reduced the admin stylesheet payload by implementing modern logical declarations.
 	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
 	* The SEO meta box tab labels are now inline when there's enough space.
+	* The quick-edit default indexing state now updates to the post password or private status accordingly.
 * **Changed:**
 	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
 		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
@@ -447,6 +450,10 @@ Punt:
 		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
 		* jQuery Event `tsf-updated-gutenberg-${type}` now also respond to `'slug'` type changes.
 			* But this event is deprecated. Use the JS Event `tsf-updated-block-editor-${type}` instead.
+		* `tsfTerm.taxonomy` is now available.
+	* **Improved:**
+		* Removed redundant lookups and processing in quick-edit by testing if we're editing a post or taxonomy.
+		* Updating the Post's password in the Classic Editor no longer triggers 3 updates sequentially.
 	* **Changed:**
 		* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
 			* With that, for all affected functions, we removed `@function` JSDoc annotation, since that's now redundant.

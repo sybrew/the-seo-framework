@@ -209,7 +209,7 @@ final class ListEdit extends Admin\Lists\Table {
 			'noindex'     => [
 				'value'    => $meta['_genesis_noindex'],
 				'isSelect' => true,
-				'default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex',
+				'default'  => empty( $r_defaults['noindex'] ) ? 'index' : 'noindex', // aka defaultUnprotected
 			],
 			'nofollow'    => [
 				'value'    => $meta['_genesis_nofollow'],
@@ -230,6 +230,8 @@ final class ListEdit extends Admin\Lists\Table {
 		/**
 		 * Tip: Prefix the indexes with your (plugin) name to prevent collisions.
 		 * The index corresponds to field with the ID `autodescription-quick[%s]`, where %s is the index.
+		 *
+		 * Do not modify the structure or remove existing indexes!
 		 *
 		 * @since 4.0.5
 		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
@@ -271,7 +273,6 @@ final class ListEdit extends Admin\Lists\Table {
 				: Meta\Description::get_generated_description( $generator_args );
 			$is_desc_ref_locked  = $_has_home_desc;
 
-			// var_dump() figure out how to make it work seamlessly with noindex.
 			$_has_home_canonical     = (bool) Data\Plugin::get_option( 'homepage_canonical' );
 			$default_canonical       = $_has_home_canonical
 				? Meta\URI::get_custom_canonical_url( $generator_args )
@@ -288,10 +289,20 @@ final class ListEdit extends Admin\Lists\Table {
 
 			$is_canonical_ref_locked = false;
 			$default_canonical       = Meta\URI::get_generated_url( $generator_args );
+
+			// Homepage cannot have an author.
+			if ( str_contains( \get_option( 'permalink_structure' ), '%author%' ) ) {
+				$author_id = Query::get_post_author_id( $generator_args['id'] );
+				if ( $author_id ) {
+					// Don't use get_the_author_meta(). See WP Core \get_author_posts_url().
+					$author_nicename = \get_userdata( $author_id )->user_nicename ?? '';
+				}
+			}
 		}
 
 		$post_data      = [
-			'isFront' => Query::is_static_front_page( $generator_args['id'] ),
+			'isFront'        => Query::is_static_front_page( $generator_args['id'] ),
+			'authorNiceName' => $author_nicename ?? '',
 		];
 		$title_data     = [
 			'refTitleLocked'    => $is_title_ref_locked,
@@ -308,6 +319,7 @@ final class ListEdit extends Admin\Lists\Table {
 			'refCanonicalLocked' => $is_canonical_ref_locked,
 			'defaultCanonical'   => \esc_url( $default_canonical ),
 			'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+			'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
 		];
 
 		printf(
@@ -461,6 +473,7 @@ final class ListEdit extends Admin\Lists\Table {
 			'refCanonicalLocked' => false,
 			'defaultCanonical'   => \esc_url( Meta\URI::get_generated_url( $generator_args ) ),
 			'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+			'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
 		];
 
 		$container .= sprintf(

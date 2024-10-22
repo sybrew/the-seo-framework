@@ -139,6 +139,9 @@ $robots_settings = [
 								1  => $_setting['force_off'],
 							],
 							'selected' => 0,
+							'data'     => [
+								'defaultI18n' => $_default_i18n,
+							],
 						] );
 						// phpcs:enable, WordPress.Security.EscapeOutput
 					echo '</label>';
